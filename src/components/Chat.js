@@ -1,13 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {Avatar, Fade, IconButton} from "@material-ui/core";
+import {Avatar, IconButton} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, MoreVert, Search, Send} from "@material-ui/icons";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
-import CloseIcon from "@material-ui/icons/Close";
 
 export default function Chat(props) {
 

@@ -36,7 +36,7 @@ function ChatMessage(props) {
                     if (duration) {
                         const percentage = (currentTime * 100) / duration
 
-                        if (percentage === 100) {
+                        if (percentage >= 100) {
                             setProgress(0);
                             setCurrentDuration(formatDuration(0));
                             setPlaying(false);
