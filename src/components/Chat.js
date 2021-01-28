@@ -7,6 +7,7 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
+import {avatarStyles} from "../AvatarStyles";
 
 export default function Chat(props) {
 
@@ -183,11 +184,13 @@ export default function Chat(props) {
         //return senderWaId === contact?.wa_id ? contact?.waba_payload?.profile?.name : "Me";
     };
 
+    const avatarClasses = avatarStyles();
+
     return (
         <div className="chat">
 
             <div className="chat__header">
-                <Avatar>{contact?.initials}</Avatar>
+                <Avatar className={avatarClasses.green}>{contact?.initials}</Avatar>
 
                 <div className="chat__headerInfo">
                     <h3>{contact?.waba_payload?.profile?.name}</h3>
