@@ -8,13 +8,17 @@ import '../styles/InputRange.css';
 import PauseIcon from '@material-ui/icons/Pause';
 import HeadsetIcon from '@material-ui/icons/Headset';
 import { makeStyles } from '@material-ui/core/styles';
-import {green} from "@material-ui/core/colors";
+import {green, orange} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
     green: {
         color: '#fff',
         backgroundColor: green[500],
     },
+    orange: {
+        color: '#fff',
+        backgroundColor: orange[500],
+    }
 }));
 
 const playIconStyles = {
@@ -114,7 +118,7 @@ function ChatMessage(props) {
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
                 <audio ref={audio} src={`${BASE_URL}media/${props.voice ?? props.audio}`} preload="metadata" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                <Avatar className={classes.green}>
+                <Avatar className={props.voice !== undefined ? classes.green : classes.orange}>
                     {props.voice !== undefined ? <span>{props.name ? props.name[0] : ""}</span> : <HeadsetIcon/>}
                 </Avatar>
             </span>
