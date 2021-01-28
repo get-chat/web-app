@@ -37,15 +37,18 @@ function ChatMessage(props) {
         }
     };
 
+    const hasAnyAudio = props.voice !== undefined || props.audio !== undefined;
+
     useEffect(() => {
-        // Consider subscribing only if there is voice or audio
-        const token = PubSub.subscribe(topic, mySubscriber);
-        return () => {
-            PubSub.unsubscribe(token);
+        // Subscribing only if there is voice or audio
+        if (hasAnyAudio) {
+            const token = PubSub.subscribe(topic, mySubscriber);
+            return () => {
+                PubSub.unsubscribe(token);
+            }
         }
     }, []);
 
-    // This method is to be called from parent component
     const pauseVoice = () => {
         if (audio.current && range.current && !audio.current.paused) {
             audio.current.pause();
@@ -123,7 +126,7 @@ function ChatMessage(props) {
             {props.mediaURL !== undefined &&
             <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
             }
-            {(props.voice !== undefined || props.audio !== undefined) &&
+            {hasAnyAudio &&
             <span className="chat__voice">
                 <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
                 <IconButton onClick={() => playVoice()}>
