@@ -39,6 +39,13 @@ function ChatMessage(props) {
 
     const hasAnyAudio = props.voice !== undefined || props.audio !== undefined;
 
+    const pauseVoice = () => {
+        if (audio.current && range.current && !audio.current.paused) {
+            audio.current.pause();
+            setPlaying(false);
+        }
+    };
+
     useEffect(() => {
         // Subscribing only if there is voice or audio
         if (hasAnyAudio) {
@@ -47,14 +54,7 @@ function ChatMessage(props) {
                 PubSub.unsubscribe(token);
             }
         }
-    }, []);
-
-    const pauseVoice = () => {
-        if (audio.current && range.current && !audio.current.paused) {
-            audio.current.pause();
-            setPlaying(false);
-        }
-    };
+    }, [hasAnyAudio, mySubscriber]);
 
     const playVoice = () => {
         if (audio.current && range.current) {
