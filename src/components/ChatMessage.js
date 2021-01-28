@@ -1,15 +1,58 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import Moment from "react-moment";
-import {IconButton, LinearProgress} from "@material-ui/core";
+import {IconButton} from "@material-ui/core";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import {BASE_URL} from "../Constants";
+import '../styles/InputRange.css';
 
 function ChatMessage(props) {
 
     const [progress, setProgress] = useState(0);
+    const audio = useRef(null);
+    const range = useRef(null);
+
+    const playVoice = () => {
+        if (audio.current && range.current) {
+            if (!audio.current.paused) {
+                audio.current.pause();
+            } else {
+                audio.current.play();
+            }
+
+            const interval = setInterval(function () {
+                const duration = audio.current.duration;
+                const currentTime = audio.current.currentTime;
+                if (duration) {
+                    const percentage = (currentTime * 100) / duration
+
+                    if (percentage === 100) {
+                        setProgress(0);
+                        clearInterval(interval);
+                    } else {
+                        setProgress(percentage);
+                    }
+                }
+
+                if (audio.current.paused) {
+                    clearInterval(interval);
+                }
+            }, 300);
+        }
+    }
+
+    const changeDuration = (value) => {
+        if (audio.current && range.current && audio.current.duration !== Infinity) {
+            setProgress(value);
+            const nextCurrentTime = audio.current.duration / value;
+            if (nextCurrentTime !== Infinity) {
+                audio.current.currentTime = nextCurrentTime;
+            }
+        }
+    }
 
     let playIconStyles = {
-        fontSize: '32px'
+        fontSize: '38px'
     };
 
     let iconStyles = {
@@ -26,11 +69,12 @@ function ChatMessage(props) {
             }
             {props.voice !== undefined &&
                 <span className="chat__voice">
-                    <IconButton onClick={() => props.onPlayVoice(props.voice)}>
+                    <IconButton onClick={() => playVoice()}>
                         <PlayArrowIcon style={playIconStyles} />
                     </IconButton>
 
-                    <LinearProgress variant="determinate" value={progress} />
+                    <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
+                    <audio ref={audio} src={`${BASE_URL}media/${props.voice}`} preload="metadata" />
                 </span>
             }
             {props.message ?? '\u00A0'}
