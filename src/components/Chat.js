@@ -214,6 +214,7 @@ export default function Chat(props) {
                         message={message.waba_payload?.text?.body}
                         mediaURL={message.waba_payload?.image?.link}
                         voice={message.waba_payload?.voice?.id}
+                        audio={message.waba_payload?.audio?.id}
                         timestamp={message.waba_payload.timestamp}
                         isSeen={message.seen}
                         isFromUs={message.from_us}

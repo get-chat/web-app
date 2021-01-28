@@ -6,6 +6,24 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import {BASE_URL} from "../Constants";
 import '../styles/InputRange.css';
 import PauseIcon from '@material-ui/icons/Pause';
+import HeadsetIcon from '@material-ui/icons/Headset';
+import { makeStyles } from '@material-ui/core/styles';
+import {green} from "@material-ui/core/colors";
+
+const useStyles = makeStyles((theme) => ({
+    green: {
+        color: '#fff',
+        backgroundColor: green[500],
+    },
+}));
+
+const playIconStyles = {
+    fontSize: '38px'
+};
+
+const iconStyles = {
+    fontSize: '15px'
+};
 
 function ChatMessage(props) {
 
@@ -72,13 +90,7 @@ function ChatMessage(props) {
         }
     }
 
-    let playIconStyles = {
-        fontSize: '38px'
-    };
-
-    let iconStyles = {
-        fontSize: '15px'
-    };
+    const classes = useStyles();
 
     const dateFormat = 'H:mm';
 
@@ -88,7 +100,7 @@ function ChatMessage(props) {
             {props.mediaURL !== undefined &&
             <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
             }
-            {props.voice !== undefined &&
+            {props.voice !== undefined | props.audio !== undefined &&
             <span className="chat__voice">
                 <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
                 <IconButton onClick={() => playVoice()}>
@@ -100,8 +112,12 @@ function ChatMessage(props) {
                     }
                 </IconButton>
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-                <audio ref={audio} src={`${BASE_URL}media/${props.voice}`} preload="metadata" onLoadedMetadata={event => console.log(event.target.duration)} />
-                <Avatar>{props.name ? props.name[0] : ""}</Avatar>
+                <audio ref={audio} src={`${BASE_URL}media/${props.voice ?? props.audio}`} preload="metadata" onLoadedMetadata={event => console.log(event.target.duration)} />
+
+                <Avatar className={classes.green}>
+                    {props.voice !== undefined ? <span>{props.name ? props.name[0] : ""}</span> : <HeadsetIcon/>}
+
+                </Avatar>
             </span>
             }
             {props.message ?? '\u00A0'}
