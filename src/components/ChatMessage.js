@@ -22,7 +22,6 @@ function ChatMessage(props) {
                 audio.current.pause();
                 setPlaying(false);
             } else {
-                audio.current.currentTime = 2000;
                 audio.current.play();
                 setPlaying(true);
             }
