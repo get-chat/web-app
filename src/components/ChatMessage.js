@@ -100,7 +100,7 @@ function ChatMessage(props) {
             {props.mediaURL !== undefined &&
             <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
             }
-            {props.voice !== undefined | props.audio !== undefined &&
+            {(props.voice !== undefined || props.audio !== undefined) &&
             <span className="chat__voice">
                 <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
                 <IconButton onClick={() => playVoice()}>
@@ -116,7 +116,6 @@ function ChatMessage(props) {
 
                 <Avatar className={classes.green}>
                     {props.voice !== undefined ? <span>{props.name ? props.name[0] : ""}</span> : <HeadsetIcon/>}
-
                 </Avatar>
             </span>
             }
