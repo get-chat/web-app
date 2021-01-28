@@ -54,7 +54,7 @@ function ChatMessage(props) {
                 PubSub.unsubscribe(token);
             }
         }
-    }, [hasAnyAudio, mySubscriber]);
+    }, []);
 
     const playVoice = () => {
         if (audio.current && range.current) {
