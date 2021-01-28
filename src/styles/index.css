@@ -1,0 +1,36 @@
+html, body {
+  overflow-y: hidden;
+}
+
+body {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  font-size: 16px;
+  font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Arial', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+input[type="text"], textarea {
+  line-height: 1.5rem;
+}
+
+svg {
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  monospace !important;
+}

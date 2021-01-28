@@ -1,25 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Login from "./components/Login";
+import {ThemeProvider} from '@material-ui/styles';
+import {BrowserRouter as Router, Route, Switch as RouteSwitch} from "react-router-dom";
+import Main from "./components/Main";
+import AppTheme from "./AppTheme";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    return (
+        <ThemeProvider theme={AppTheme}>
+            <div className="app">
+                <Router>
+                    <RouteSwitch>
+                        <Route path={["/main/chat/:waId", "/main"]} component={Main} />
+                        <Route path="/" component={Login} />
+                    </RouteSwitch>
+                </Router>
+            </div>
+        </ThemeProvider>
+    );
 }
 
 export default App;
