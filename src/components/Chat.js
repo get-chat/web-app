@@ -184,11 +184,6 @@ export default function Chat(props) {
         //return senderWaId === contact?.wa_id ? contact?.waba_payload?.profile?.name : "Me";
     };
 
-    const playVoice = (voiceId) => {
-        const audio = new Audio(`${BASE_URL}media/${voiceId}`);
-        audio.play();
-    };
-
     return (
         <div className="chat">
 
@@ -220,7 +215,6 @@ export default function Chat(props) {
                         message={message.waba_payload?.text?.body}
                         mediaURL={message.waba_payload?.image?.link}
                         voice={message.waba_payload?.voice?.id}
-                        onPlayVoice={(voiceId) => playVoice(voiceId)}
                         timestamp={message.waba_payload.timestamp}
                         isSeen={message.seen}
                         isFromUs={message.from_us}
