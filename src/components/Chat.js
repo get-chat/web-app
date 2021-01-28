@@ -211,6 +211,7 @@ export default function Chat(props) {
             </div>
 
             <div className="chat__body" ref={messagesContainer}>
+                <div className="chat__empty"/>
                 {messages.map((message, index) => (
                     <ChatMessage
                         key={index}
