@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import Moment from "react-moment";
 import {Avatar, IconButton} from "@material-ui/core";
@@ -9,6 +9,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
+import PubSub from 'pubsub-js';
 
 const playIconStyles = {
     fontSize: '38px'
@@ -27,12 +28,41 @@ function ChatMessage(props) {
     const range = useRef(null);
     const duration = useRef(null);
 
+    const topic = 'chat_message';
+
+    const mySubscriber = function (msg, data) {
+        //console.log(msg, data);
+        if (data === 'pause') {
+            pauseVoice();
+        }
+    };
+
+    useEffect(() => {
+        // Consider subscribing only if there is voice or audio
+        const token = PubSub.subscribe(topic, mySubscriber);
+        return () => {
+            PubSub.unsubscribe(token);
+        }
+    }, []);
+
+    // This method is to be called from parent component
+    const pauseVoice = () => {
+        if (audio.current && range.current && !audio.current.paused) {
+            audio.current.pause();
+            setPlaying(false);
+        }
+    };
+
     const playVoice = () => {
         if (audio.current && range.current) {
             if (!audio.current.paused) {
                 audio.current.pause();
                 setPlaying(false);
             } else {
+
+                // Testing
+                PubSub.publishSync(topic, 'pause');
+
                 audio.current.play();
                 setPlaying(true);
             }
