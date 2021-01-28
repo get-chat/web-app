@@ -55,14 +55,25 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    width: 300px;
-    max-height: 100%;
+    margin: 0 -4px;
 }
 
-.chat__voice > .MuiLinearProgress-root {
-    flex: 1;
-    margin-left: 10px;
+.chat__voice > .MuiIconButton-root {
+    padding: 6px;
+    margin-right: 5px;
+}
+
+.chat__voice__range {
+    box-sizing: border-box;
+    display: block;
+    height: 21px;
+    background-color: initial!important;
+    border: none;
+    outline: none;
+    /*-webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;*/
+    margin-left: 5px;
 }
 
 .chat__name {
