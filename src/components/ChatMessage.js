@@ -22,30 +22,36 @@ function ChatMessage(props) {
                 audio.current.pause();
                 setPlaying(false);
             } else {
+                audio.current.currentTime = 2000;
                 audio.current.play();
                 setPlaying(true);
             }
 
             const interval = setInterval(function () {
-                const duration = audio.current.duration;
-                const currentTime = audio.current.currentTime;
+                if (audio.current && range.current) {
+                    const duration = audio.current.duration;
+                    const currentTime = audio.current.currentTime;
 
-                setCurrentDuration(formatDuration(currentTime));
+                    setCurrentDuration(formatDuration(currentTime));
 
-                if (duration) {
-                    const percentage = (currentTime * 100) / duration
+                    if (duration) {
+                        const percentage = (currentTime * 100) / duration
 
-                    if (percentage === 100) {
-                        setProgress(0);
-                        setCurrentDuration(formatDuration(0));
-                        setPlaying(false);
-                        clearInterval(interval);
-                    } else {
-                        setProgress(percentage);
+                        if (percentage === 100) {
+                            setProgress(0);
+                            setCurrentDuration(formatDuration(0));
+                            setPlaying(false);
+                            clearInterval(interval);
+                        } else {
+                            setProgress(percentage);
+                        }
                     }
-                }
 
-                if (audio.current.paused) {
+                    if (audio.current.paused) {
+                        clearInterval(interval);
+                    }
+                } else {
+                    // In case component is reloaded
                     clearInterval(interval);
                 }
             }, 300);
@@ -95,7 +101,7 @@ function ChatMessage(props) {
                     }
                 </IconButton>
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-                <audio ref={audio} src={`${BASE_URL}media/${props.voice}`} preload="metadata" />
+                <audio ref={audio} src={`${BASE_URL}media/${props.voice}`} preload="metadata" onLoadedMetadata={event => console.log(event.target.duration)} />
                 <Avatar>{props.name ? props.name[0] : ""}</Avatar>
             </span>
             }
