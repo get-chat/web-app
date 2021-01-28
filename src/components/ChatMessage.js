@@ -1,7 +1,7 @@
 import React, {useRef, useState} from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import Moment from "react-moment";
-import {IconButton} from "@material-ui/core";
+import {Avatar, IconButton} from "@material-ui/core";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import {BASE_URL} from "../Constants";
 import '../styles/InputRange.css';
@@ -96,6 +96,7 @@ function ChatMessage(props) {
                 </IconButton>
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
                 <audio ref={audio} src={`${BASE_URL}media/${props.voice}`} preload="metadata" />
+                <Avatar>{props.name ? props.name[0] : ""}</Avatar>
             </span>
             }
             {props.message ?? '\u00A0'}

@@ -59,6 +59,10 @@
     margin: 0 -4px;
 }
 
+.chat__voice > .MuiAvatar-root {
+    margin: 0 4px 0 15px;
+}
+
 .chat__voice > .MuiIconButton-root {
     padding: 6px;
     margin-right: 5px;
