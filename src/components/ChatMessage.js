@@ -63,7 +63,7 @@ function ChatMessage(props) {
                 setPlaying(false);
             } else {
 
-                // Testing
+                // Pause others
                 PubSub.publishSync(topic, 'pause');
 
                 audio.current.play();
