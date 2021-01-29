@@ -17,10 +17,15 @@ class ChatMessageClass {
         this.videoId = payload.video?.id;
         this.voiceId = payload.voice?.id;
         this.audioId = payload.audio?.id;
+        this.caption = payload.image?.caption ?? payload.video?.caption;
     };
 
     hasMediaToPreview() {
-        return this.imageLink !== undefined && this.videoId !== undefined;
+        return this.imageLink !== undefined || this.videoId !== undefined;
+    }
+
+    hasAnyAudio() {
+        return this.voiceId !== undefined || this.audioId !== undefined;
     }
 
     generateMediaLink(id) {
@@ -39,3 +44,5 @@ class ChatMessageClass {
         return this.generateMediaLink(this.audioId);
     }
 }
+
+export default ChatMessageClass;

@@ -3,7 +3,6 @@ import DoneAll from "@material-ui/icons/DoneAll";
 import Moment from "react-moment";
 import {Avatar, IconButton} from "@material-ui/core";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import {BASE_URL} from "../Constants";
 import '../styles/InputRange.css';
 import PauseIcon from '@material-ui/icons/Pause';
 import HeadsetIcon from '@material-ui/icons/Headset';
@@ -22,6 +21,8 @@ const iconStyles = {
 
 function ChatMessage(props) {
 
+    const data = props.messageData;
+
     const [isPlaying, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [currentDuration, setCurrentDuration] = useState("0:00");
@@ -38,8 +39,6 @@ function ChatMessage(props) {
         }
     };
 
-    const hasAnyAudio = props.voice !== undefined || props.audio !== undefined;
-
     const pauseVoice = () => {
         if (audio.current && range.current && !audio.current.paused) {
             audio.current.pause();
@@ -49,7 +48,7 @@ function ChatMessage(props) {
 
     useEffect(() => {
         // Subscribing only if there is voice or audio
-        if (hasAnyAudio) {
+        if (data.hasAnyAudio()) {
             const token = PubSub.subscribe(topic, mySubscriber);
             return () => {
                 PubSub.unsubscribe(token);
@@ -121,45 +120,38 @@ function ChatMessage(props) {
 
     const dateFormat = 'H:mm';
 
-    const hasMediaToPreview = props.mediaURL !== undefined || props.video !== undefined;
-
     return(
-        <div className={"chat__message" + (hasMediaToPreview ? " hasMedia" : "") + (props.isFromUs === true ? (props.isFromUs === true ? " chat__seen" : "") + " chat__receiver" : "")}>
+        <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "")}>
             <span className="chat__name">{props.name}</span>
-            {props.mediaURL !== undefined &&
-            <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
+            {data.imageLink !== undefined &&
+            <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data.imageLink)} />
             }
-            {props.video !== undefined &&
-            <div className="chat__videoWrapper" onClick={() => props.onPreview(`${BASE_URL}media/${props.video}`, true)}>
-                <video className="chat__media" src={`${BASE_URL}media/${props.video}`} preload="metadata" />
+            {data.videoId !== undefined &&
+            <div className="chat__videoWrapper" onClick={() => props.onPreview(data.generateVideoLink(), true)}>
+                <video className="chat__media" src={data.generateVideoLink()} preload="metadata" />
                 <span className="chat__videoWrapper__iconWrapper">
                     <PlayArrowIcon fontSize={"large"} style={{ fill: "white", fontSize: 40 }} />
                 </span>
             </div>
             }
-            {hasAnyAudio &&
+            {data.hasAnyAudio() &&
             <span className="chat__voice">
                 <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
                 <IconButton onClick={() => playVoice()}>
-                    {isPlaying
-                        ?
-                        <PauseIcon style={playIconStyles}/>
-                        :
-                        <PlayArrowIcon style={playIconStyles}/>
-                    }
+                    {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
                 </IconButton>
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-                <audio ref={audio} src={`${BASE_URL}media/${props.voice ?? props.audio}`} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
+                <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                <Avatar className={props.voice !== undefined ? avatarClasses.green : avatarClasses.orange}>
-                    {props.voice !== undefined ? <span>{props.name ? props.name[0] : ""}</span> : <HeadsetIcon/>}
+                <Avatar className={data.voiceId !== undefined ? avatarClasses.green : avatarClasses.orange}>
+                    {data.voiceId !== undefined ? <span>{props.name ? props.name[0] : ""}</span> : <HeadsetIcon/>}
                 </Avatar>
             </span>
             }
-            {(props.message ?? props.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((props.message ?? props.caption))}} /> : '\u00A0'}
+            {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
             <span className="chat__message__info">
-                <span className="chat__timestamp"><Moment date={props.timestamp} format={dateFormat} unix /></span>
-                {props.isFromUs === true &&
+                <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
+                {data.isFromUs === true &&
                 <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
                 }
             </span>

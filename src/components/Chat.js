@@ -8,6 +8,7 @@ import axios from "axios";
 import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
+import ChatMessageClass from "../ChatMessageClass";
 
 export default function Chat(props) {
 
@@ -15,7 +16,7 @@ export default function Chat(props) {
     const fileInput = useRef(null);
     const [isLoaded, setLoaded] = useState(false);
     const [contact, setContact] = useState();
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState({});
     const [input, setInput] = useState("");
     const [selectedFile, setSelectedFile] = useState();
     const {waId} = useParams();
@@ -83,7 +84,16 @@ export default function Chat(props) {
         }))
             .then((response) => {
                 console.log("Messages", response.data);
-                setMessages(response.data.results.reverse());
+                //setMessages(response.data.results.reverse());
+
+                const preparedMessages = {};
+                response.data.results.reverse().map((message, index) => {
+                    const prepared = new ChatMessageClass(message);
+                    preparedMessages[prepared.id] = prepared;
+                });
+
+                setMessages(preparedMessages);
+
                 setLoaded(true);
             })
             .catch((error) => {
@@ -108,22 +118,6 @@ export default function Chat(props) {
             }, getConfig())
                 .then((response) => {
                     console.log(response.data);
-
-                    /*let currentMessages = messages;
-                    currentMessages.push({
-                        customer_wa_id: "0",
-                        from_us: true,
-                        seen: false,
-                        waba_payload: {
-                            to: waId,
-                            timestamp: "1610094612.9268332",
-                            id: "0",
-                            text: {
-                                body: input.trim()
-                            }
-                        }
-                    })
-                    setMessages(currentMessages);*/
 
                     getMessages();
 
@@ -209,22 +203,14 @@ export default function Chat(props) {
 
             <div className="chat__body" ref={messagesContainer}>
                 <div className="chat__empty"/>
-                {messages.map((message, index) => (
+
+                { Object.entries(messages).map((message, index) =>
                     <ChatMessage
-                        key={index}
-                        waId={message.customer_wa_id}
-                        name={getSenderName(message)}
-                        message={message.waba_payload?.text?.body}
-                        mediaURL={message.waba_payload?.image?.link}
-                        voice={message.waba_payload?.voice?.id}
-                        audio={message.waba_payload?.audio?.id}
-                        video={message.waba_payload?.video?.id}
-                        caption={message.waba_payload?.image?.caption ?? message.waba_payload?.video?.caption}
-                        timestamp={message.waba_payload.timestamp}
-                        isSeen={message.seen}
-                        isFromUs={message.from_us}
+                        key={message[0]}
+                        name={getSenderName(message[1])}
+                        messageData={message[1]}
                         onPreview={(URL, isVideo) => props.previewMedia(URL, isVideo)} />
-                ))}
+                )}
             </div>
 
             <div className="chat__footer">
