@@ -60,7 +60,7 @@ function Main() {
                         <img className="app__imagePreview__image" src={imagePreviewURL} alt="Preview"/>
                         }
                         {videoPreviewURL &&
-                        <video className="app__imagePreview__video" src={videoPreviewURL} controls />
+                        <video className="app__imagePreview__video" src={videoPreviewURL} controls autoPlay={true} />
                         }
                     </div>
                 </div>
