@@ -24,14 +24,15 @@ export default function Chat(props) {
     useEffect(() => {
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
-                const { currentTarget: target } = event;
-                target.scroll({ top: target.scrollHeight /*, behavior: 'smooth'*/ });
+                if( event.target.parentNode.id === "chat__body" ) {
+                    const {currentTarget: target} = event;
+                    target.scroll({top: target.scrollHeight /*, behavior: 'smooth'*/});
+                }
             });
         }
     }, []);
 
     useEffect(() => {
-
         setLoaded(false);
 
         // Clear values for next route
@@ -201,7 +202,7 @@ export default function Chat(props) {
                 </div>
             </div>
 
-            <div className="chat__body" ref={messagesContainer}>
+            <div id="chat__body" className="chat__body" ref={messagesContainer}>
                 <div className="chat__empty"/>
 
                 { Object.entries(messages).map((message, index) =>
