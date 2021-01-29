@@ -36,7 +36,7 @@ export default function Chat(props) {
         // Clear values for next route
         setContact(null);
         setMessages([]);
-        props.previewImage(null);
+        props.previewMedia(null);
 
         if (!waId) {
             console.log('waId is empty.');
@@ -218,10 +218,11 @@ export default function Chat(props) {
                         mediaURL={message.waba_payload?.image?.link}
                         voice={message.waba_payload?.voice?.id}
                         audio={message.waba_payload?.audio?.id}
+                        video={message.waba_payload?.video?.id}
                         timestamp={message.waba_payload.timestamp}
                         isSeen={message.seen}
                         isFromUs={message.from_us}
-                        onPreview={(URL) => props.previewImage(URL)} />
+                        onPreview={(URL, isVideo) => props.previewMedia(URL, isVideo)} />
                 ))}
             </div>
 

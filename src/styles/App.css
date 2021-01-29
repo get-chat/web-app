@@ -119,7 +119,7 @@ a {
     padding: 30px;
 }
 
-img.app__imagePreview__image {
+.app__imagePreview__image, .app__imagePreview__video {
     background-color: white;
     max-height: 100%;
     max-width: 100%;

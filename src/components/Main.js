@@ -7,12 +7,29 @@ import CloseIcon from "@material-ui/icons/Close";
 function Main() {
 
     const [checked, setChecked] = React.useState(false);
-    const [isImagePreviewVisible, setImagePreviewVisible] = useState(false);
+    const [isMediaPreviewVisible, setMediaPreviewVisible] = useState(false);
     const [imagePreviewURL, setImagePreviewURL] = useState();
+    const [videoPreviewURL, setVideoPreviewURL] = useState();
 
-    const previewImage = (imagePreviewURL) => {
-        setImagePreviewURL(imagePreviewURL);
-        setImagePreviewVisible(imagePreviewURL !== null && imagePreviewURL !== undefined);
+    const hideImageOrVideoPreview = () => {
+        setImagePreviewURL(null);
+        setVideoPreviewURL(null);
+        setMediaPreviewVisible(false);
+    }
+
+    const previewMedia = (mediaURL, isVideo) => {
+        if (!mediaURL) {
+            hideImageOrVideoPreview();
+            return false;
+        }
+
+        if (isVideo) {
+            setVideoPreviewURL(mediaURL);
+        } else {
+            setImagePreviewURL(mediaURL);
+        }
+
+        setMediaPreviewVisible(true);
     }
 
     useEffect(() => {
@@ -23,17 +40,22 @@ function Main() {
         <Fade in={checked}>
             <div className="app__body">
                 <Sidebar />
-                <Chat previewImage={(URL) => previewImage(URL)} />
+                <Chat previewMedia={(URL, isVideo) => previewMedia(URL, isVideo)} />
 
-                {isImagePreviewVisible === true &&
+                {isMediaPreviewVisible === true &&
                 <div className="app__imagePreview">
                     <div className="app__imagePreview__header">
-                        <IconButton className="app__imagePreview__close" onClick={() => previewImage(null)}>
+                        <IconButton className="app__imagePreview__close" onClick={() => hideImageOrVideoPreview()}>
                             <CloseIcon fontSize="large" />
                         </IconButton>
                     </div>
-                    <div className="app__imagePreview__container" onClick={() => previewImage(null)}>
-                        <img className="app__imagePreview__image" src={imagePreviewURL} alt="Preview" />
+                    <div className="app__imagePreview__container" onClick={() => hideImageOrVideoPreview()}>
+                        {imagePreviewURL &&
+                        <img className="app__imagePreview__image" src={imagePreviewURL} alt="Preview"/>
+                        }
+                        {videoPreviewURL &&
+                        <video className="app__imagePreview__video" src={videoPreviewURL} controls />
+                        }
                     </div>
                 </div>
                 }

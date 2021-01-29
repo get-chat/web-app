@@ -126,6 +126,9 @@ function ChatMessage(props) {
             {props.mediaURL !== undefined &&
             <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
             }
+            {props.video !== undefined &&
+                <video className="chat__media" src={`${BASE_URL}media/${props.video}`} preload="metadata" onClick={() => props.onPreview(`${BASE_URL}media/${props.video}`, true)} />
+            }
             {hasAnyAudio &&
             <span className="chat__voice">
                 <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
