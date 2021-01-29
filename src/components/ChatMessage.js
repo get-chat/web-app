@@ -127,7 +127,12 @@ function ChatMessage(props) {
             <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
             }
             {props.video !== undefined &&
-                <video className="chat__media" src={`${BASE_URL}media/${props.video}`} preload="metadata" onClick={() => props.onPreview(`${BASE_URL}media/${props.video}`, true)} />
+            <div className="chat__videoWrapper" onClick={() => props.onPreview(`${BASE_URL}media/${props.video}`, true)}>
+                <video className="chat__media" src={`${BASE_URL}media/${props.video}`} preload="metadata" />
+                <span className="chat__videoWrapper__iconWrapper">
+                    <PlayArrowIcon fontSize={"large"} style={{ fill: "white", fontSize: 40 }} />
+                </span>
+            </div>
             }
             {hasAnyAudio &&
             <span className="chat__voice">

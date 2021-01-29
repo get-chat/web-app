@@ -51,6 +51,21 @@
     cursor: pointer;
 }
 
+.chat__videoWrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+.chat__videoWrapper > .chat__videoWrapper__iconWrapper {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50px;
+}
+
 .chat__voice {
     position: relative;
     display: flex;
