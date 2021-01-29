@@ -123,10 +123,10 @@ function ChatMessage(props) {
         <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "")}>
             <span className="chat__name">{props.name}</span>
             {data.imageLink !== undefined &&
-            <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data.imageLink)} />
+            <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
             }
             {data.videoId !== undefined &&
-            <div className="chat__videoWrapper" onClick={() => props.onPreview(data.generateVideoLink(), true)}>
+            <div className="chat__videoWrapper" onClick={() => props.onPreview(data)}>
                 <video className="chat__media" src={data.generateVideoLink()} preload="metadata" />
                 <span className="chat__videoWrapper__iconWrapper">
                     <PlayArrowIcon fontSize={"large"} style={{ fill: "white", fontSize: 40 }} />

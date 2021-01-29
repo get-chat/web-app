@@ -210,7 +210,7 @@ export default function Chat(props) {
                         key={message[0]}
                         name={getSenderName(message[1])}
                         messageData={message[1]}
-                        onPreview={(URL, isVideo) => props.previewMedia(URL, isVideo)} />
+                        onPreview={(chatMessage) => props.previewMedia(chatMessage)} />
                 )}
             </div>
 
