@@ -40,6 +40,10 @@
     max-width: 70%;
 }
 
+.chat__message.hasMedia {
+    width: min-content;
+}
+
 .chat__message a {
     color: #4fc3f7;
 }
@@ -58,6 +62,7 @@
 .chat__videoWrapper {
     position: relative;
     cursor: pointer;
+    display: table;
 }
 
 .chat__videoWrapper > .chat__videoWrapper__iconWrapper {

@@ -121,8 +121,10 @@ function ChatMessage(props) {
 
     const dateFormat = 'H:mm';
 
+    const hasMediaToPreview = props.mediaURL !== undefined || props.video !== undefined;
+
     return(
-        <div className={"chat__message" + (props.isFromUs === true ? (props.isFromUs === true ? " chat__seen" : "") + " chat__receiver" : "")}>
+        <div className={"chat__message" + (hasMediaToPreview ? " hasMedia" : "") + (props.isFromUs === true ? (props.isFromUs === true ? " chat__seen" : "") + " chat__receiver" : "")}>
             <span className="chat__name">{props.name}</span>
             {props.mediaURL !== undefined &&
             <img className="chat__media" src={props.mediaURL} alt={props.message} onClick={() => props.onPreview(props.mediaURL)} />
@@ -154,7 +156,7 @@ function ChatMessage(props) {
                 </Avatar>
             </span>
             }
-            {props.message ? <span dangerouslySetInnerHTML={{__html: formatMessage(props.message)}} /> : '\u00A0'}
+            {(props.message ?? props.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((props.message ?? props.caption))}} /> : '\u00A0'}
             <span className="chat__message__info">
                 <span className="chat__timestamp"><Moment date={props.timestamp} format={dateFormat} unix /></span>
                 {props.isFromUs === true &&
