@@ -50,7 +50,8 @@ export default function Login() {
 
         // Check if username or password is empty
         if (username.trim() === "" || password.trim() === "") {
-            alert("Empty");
+            // TODO: Display error on UI
+            console.log("Empty credentials");
             return false;
         }
 
