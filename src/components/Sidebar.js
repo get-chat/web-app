@@ -6,7 +6,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import {SearchOutlined} from "@material-ui/icons";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {getConfig, setToken} from "../Helpers";
+import {clearToken, getConfig, setToken} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
 
@@ -18,7 +18,7 @@ function Sidebar() {
     const [anchorEl, setAnchorEl] = useState(null);
 
     const clearUserSession = () => {
-        setToken(null);
+        clearToken();
         history.push("/");
     }
 
@@ -36,10 +36,6 @@ function Sidebar() {
     };
 
     useEffect(() => {
-
-        // Testing
-        //setToken("invalid");
-
         axios.get(`${BASE_URL}contacts/`, getConfig())
             .then((response) => {
                 console.log("Contacts", response.data)
@@ -54,7 +50,6 @@ function Sidebar() {
                     }
                 }
             });
-
     }, []);
 
     return(

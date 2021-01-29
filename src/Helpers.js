@@ -13,8 +13,14 @@ const getConfig = (params) => {
     }
 }
 
+const STORAGE_TAG_TOKEN = "token";
+
 const setToken = (token) => {
-    localStorage.setItem("token", token);
+    localStorage.setItem(STORAGE_TAG_TOKEN, token);
+}
+
+const clearToken = () => {
+    localStorage.removeItem(STORAGE_TAG_TOKEN);
 }
 
 function linkify(inputText) {
@@ -40,4 +46,4 @@ const formatMessage = (message) => {
     return linkify(formatted);
 }
 
-export {getToken, getConfig, setToken, formatMessage};
+export {getToken, getConfig, setToken, clearToken, formatMessage};
