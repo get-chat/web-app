@@ -10,6 +10,7 @@ import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
 import {formatMessage} from "../Helpers";
+import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -30,8 +31,6 @@ function ChatMessage(props) {
     const range = useRef(null);
     const duration = useRef(null);
 
-    const topic = 'chat_message';
-
     const mySubscriber = function (msg, data) {
         //console.log(msg, data);
         if (data === 'pause') {
@@ -49,7 +48,7 @@ function ChatMessage(props) {
     useEffect(() => {
         // Subscribing only if there is voice or audio
         if (data.hasAnyAudio()) {
-            const token = PubSub.subscribe(topic, mySubscriber);
+            const token = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE, mySubscriber);
             return () => {
                 PubSub.unsubscribe(token);
             }
@@ -64,7 +63,7 @@ function ChatMessage(props) {
             } else {
 
                 // Pause others
-                PubSub.publishSync(topic, 'pause');
+                PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
                 audio.current.play();
                 setPlaying(true);

@@ -4,6 +4,7 @@ import Chat from "./Chat";
 import {Fade, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
+import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 
 function Main() {
 
@@ -11,8 +12,6 @@ function Main() {
     const [isMediaPreviewVisible, setMediaPreviewVisible] = useState(false);
     const [imagePreviewURL, setImagePreviewURL] = useState();
     const [videoPreviewURL, setVideoPreviewURL] = useState();
-
-    const topic = 'chat_message';
 
     const hideImageOrVideoPreview = () => {
         setImagePreviewURL(null);
@@ -27,7 +26,7 @@ function Main() {
         }
 
         // Pause any playing audios
-        PubSub.publishSync(topic, 'pause');
+        PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
         if (isVideo) {
             setVideoPreviewURL(mediaURL);

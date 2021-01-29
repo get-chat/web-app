@@ -1,3 +1,3 @@
-const BASE_URL = 'https://whatsapp.kondz.io/api/v1/';
+export const BASE_URL = 'https://whatsapp.kondz.io/api/v1/';
 
-export {BASE_URL};
+export const EVENT_TOPIC_CHAT_MESSAGE = "chat_message";
