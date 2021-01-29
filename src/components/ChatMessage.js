@@ -10,6 +10,7 @@ import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
+import {formatMessage} from "../Helpers";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -153,7 +154,7 @@ function ChatMessage(props) {
                 </Avatar>
             </span>
             }
-            {props.message ?? '\u00A0'}
+            {props.message ? <span dangerouslySetInnerHTML={{__html: formatMessage(props.message)}} /> : '\u00A0'}
             <span className="chat__message__info">
                 <span className="chat__timestamp"><Moment date={props.timestamp} format={dateFormat} unix /></span>
                 {props.isFromUs === true &&

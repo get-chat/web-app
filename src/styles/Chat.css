@@ -40,6 +40,10 @@
     max-width: 70%;
 }
 
+.chat__message a {
+    color: #4fc3f7;
+}
+
 .chat__media {
     border-radius: 6px;
     display: block;
