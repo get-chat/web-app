@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "./Sidebar";
 import Chat from "./Chat";
-import {Fade, IconButton} from "@material-ui/core";
+import {Avatar, Fade, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
@@ -40,6 +40,12 @@ function Main() {
                 {chatMessageToPreview &&
                 <div className="app__imagePreview">
                     <div className="app__imagePreview__header">
+
+                        <Avatar>?</Avatar>
+                        <div className="app_imagePreview__header__senderInfo">
+                            <h3>{chatMessageToPreview.waId}</h3>
+                        </div>
+
                         <IconButton className="app__imagePreview__close" onClick={() => hideImageOrVideoPreview()}>
                             <CloseIcon fontSize="large" />
                         </IconButton>

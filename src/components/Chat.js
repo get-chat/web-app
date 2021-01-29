@@ -175,8 +175,7 @@ export default function Chat(props) {
     }
 
     const getSenderName = (message) => {
-        return message.sender?.username ?? (!message.from_us ? contact?.waba_payload?.profile?.name : "Me");
-        //return senderWaId === contact?.wa_id ? contact?.waba_payload?.profile?.name : "Me";
+        return message.senderObject?.username ?? (!message.isFromUs ? contact?.waba_payload?.profile?.name : "Us");
     };
 
     const avatarClasses = avatarStyles();
