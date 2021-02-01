@@ -23,10 +23,22 @@ export default function Chat(props) {
     const {waId} = useParams();
 
     useEffect(() => {
+        if (messagesContainer) {
+            messagesContainer.current.addEventListener('DOMNodeInserted', event => {
+                if(event.target.parentNode.id === "chat__body") {
+                    const {currentTarget: target} = event;
+                    target.scroll({top: target.scrollHeight /*, behavior: 'smooth'*/});
+                }
+            });
+        }
+    }, []);
+
+    useEffect(() => {
         function handleScroll(e) {
-            if (e.target.scrollTop === 0 && isLoaded && !isLoadingMoreMessages) {
+            const threshold = 0;
+            if (e.target.scrollTop <= threshold && isLoaded && !isLoadingMoreMessages) {
                 setLoadingMoreMessages(true);
-                getMessages(getMessagesCount());
+                getMessages(getObjLength(messages));
             }
         }
 
@@ -40,15 +52,18 @@ export default function Chat(props) {
     }, [messages, isLoaded, isLoadingMoreMessages]);
 
     useEffect(() => {
-        if (messagesContainer) {
-            messagesContainer.current.addEventListener('DOMNodeInserted', event => {
-                if(event.target.parentNode.id === "chat__body") {
-                    const {currentTarget: target} = event;
-                    target.scroll({top: target.scrollHeight /*, behavior: 'smooth'*/});
-                }
-            });
+        let intervalId = 0;
+        if (getObjLength(messages) > 0) {
+            intervalId = setInterval(() => {
+                getNewMessagesTemp();
+            }, 2500);
+
+            console.log("Interval is set");
         }
-    }, []);
+        return () => {
+            clearInterval(intervalId);
+        }
+    }, [messages]);
 
     useEffect(() => {
         setLoaded(false);
@@ -63,9 +78,6 @@ export default function Chat(props) {
             return false;
         }
 
-        console.log("Interval is set");
-        let intervalId = 0;
-
         axios.get(`${BASE_URL}contacts/${waId}/`, getConfig())
             .then((response) => {
                 console.log("Contact", response.data);
@@ -74,19 +86,10 @@ export default function Chat(props) {
                 // Contact information is loaded, now load messages
                 getMessages();
 
-                // TODO: It conflicts with infinite scrolling feature
-                intervalId = setInterval(() => {
-                    getNewMessagesTemp();
-                }, 2500);
-
             })
             .catch((error) => {
                 // TODO: Handle errors
             });
-
-        return () => {
-            clearInterval(intervalId);
-        }
     }, [waId]);
 
     useEffect(() => {
@@ -97,8 +100,8 @@ export default function Chat(props) {
         }
     }, [selectedFile]);
 
-    const getMessagesCount = () => {
-        return Object.keys(messages).length;
+    const getObjLength = (obj) => {
+        return Object.keys(obj).length;
     }
 
     const getMessages = (offset) => {
@@ -116,17 +119,19 @@ export default function Chat(props) {
                     preparedMessages[prepared.id] = prepared;
                 });
 
-                // To persist scroll position, we store current scroll information
-                const prevScrollTop = messagesContainer.current.scrollTop;
-                const prevScrollHeight = messagesContainer.current.scrollHeight;
+                if (getObjLength(preparedMessages) > 0) {
+                    // To persist scroll position, we store current scroll information
+                    const prevScrollTop = messagesContainer.current.scrollTop;
+                    const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-                setMessages((prevState =>
-                        Object.assign(preparedMessages, prevState)
-                ));
+                    setMessages((prevState =>
+                            Object.assign(preparedMessages, prevState)
+                    ));
 
-                // Persisting scroll position by calculating container height difference
-                const nextScrollHeight = messagesContainer.current.scrollHeight;
-                messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
+                    // Persisting scroll position by calculating container height difference
+                    const nextScrollHeight = messagesContainer.current.scrollHeight;
+                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
+                }
 
                 setLoaded(true);
                 setLoadingMoreMessages(false);
@@ -158,6 +163,7 @@ export default function Chat(props) {
                 setMessages((prevState =>
                         Object.assign(prevState, preparedNewMessages)
                 ));
+
             })
             .catch((error) => {
                 // TODO: Handle errors
