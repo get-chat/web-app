@@ -21,6 +21,28 @@ export default function Chat(props) {
     const [selectedFile, setSelectedFile] = useState();
     const {waId} = useParams();
 
+    const getMessagesCount = () => {
+        return Object.keys(messages).length;
+    }
+
+    useEffect(() => {
+        function handleScroll(e) {
+            if (e.target.scrollTop === 0) {
+                //console.log("Scrolled to top");
+                console.log(getMessagesCount());
+                getMessages(getMessagesCount());
+            }
+        }
+
+        if (messagesContainer) {
+            messagesContainer.current.addEventListener("scroll", handleScroll);
+        }
+
+        return () => {
+            messagesContainer.current.removeEventListener("scroll", handleScroll);
+        }
+    }, [messages]);
+
     useEffect(() => {
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
@@ -56,9 +78,10 @@ export default function Chat(props) {
                 // Contact information is loaded, now load messages
                 getMessages();
 
-                intervalId = setInterval(() => {
+                // TODO: It conflicts with infinite scrolling feature
+                /*intervalId = setInterval(() => {
                     getMessages();
-                }, 2500);
+                }, 2500);*/
 
             })
             .catch((error) => {
@@ -78,10 +101,10 @@ export default function Chat(props) {
         }
     }, [selectedFile]);
 
-    const getMessages = () => {
+    const getMessages = (offset) => {
         axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
-            offset: 0,
-            limit: 100
+            offset: offset ?? 0,
+            limit: 20
         }))
             .then((response) => {
                 console.log("Messages", response.data);
@@ -93,7 +116,9 @@ export default function Chat(props) {
                     preparedMessages[prepared.id] = prepared;
                 });
 
-                setMessages(preparedMessages);
+                setMessages((prevState =>
+                    Object.assign(preparedMessages, prevState)
+                ));
 
                 setLoaded(true);
             })
