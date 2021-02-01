@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {Avatar, IconButton} from "@material-ui/core";
+import {Avatar, CircularProgress, IconButton} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, MoreVert, Search, Send} from "@material-ui/icons";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
@@ -15,21 +15,17 @@ export default function Chat(props) {
     const messagesContainer = useRef(null);
     const fileInput = useRef(null);
     const [isLoaded, setLoaded] = useState(false);
+    const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [contact, setContact] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState("");
     const [selectedFile, setSelectedFile] = useState();
     const {waId} = useParams();
 
-    const getMessagesCount = () => {
-        return Object.keys(messages).length;
-    }
-
     useEffect(() => {
         function handleScroll(e) {
-            if (e.target.scrollTop === 0) {
-                //console.log("Scrolled to top");
-                console.log(getMessagesCount());
+            if (e.target.scrollTop === 0 && isLoaded && !isLoadingMoreMessages) {
+                setLoadingMoreMessages(true);
                 getMessages(getMessagesCount());
             }
         }
@@ -41,12 +37,12 @@ export default function Chat(props) {
         return () => {
             messagesContainer.current.removeEventListener("scroll", handleScroll);
         }
-    }, [messages]);
+    }, [messages, isLoaded, isLoadingMoreMessages]);
 
     useEffect(() => {
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
-                if( event.target.parentNode.id === "chat__body" ) {
+                if(event.target.parentNode.id === "chat__body") {
                     const {currentTarget: target} = event;
                     target.scroll({top: target.scrollHeight /*, behavior: 'smooth'*/});
                 }
@@ -79,9 +75,9 @@ export default function Chat(props) {
                 getMessages();
 
                 // TODO: It conflicts with infinite scrolling feature
-                /*intervalId = setInterval(() => {
-                    getMessages();
-                }, 2500);*/
+                intervalId = setInterval(() => {
+                    getNewMessagesTemp();
+                }, 2500);
 
             })
             .catch((error) => {
@@ -101,6 +97,10 @@ export default function Chat(props) {
         }
     }, [selectedFile]);
 
+    const getMessagesCount = () => {
+        return Object.keys(messages).length;
+    }
+
     const getMessages = (offset) => {
         axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
             offset: offset ?? 0,
@@ -116,11 +116,48 @@ export default function Chat(props) {
                     preparedMessages[prepared.id] = prepared;
                 });
 
+                // To persist scroll position, we store current scroll information
+                const prevScrollTop = messagesContainer.current.scrollTop;
+                const prevScrollHeight = messagesContainer.current.scrollHeight;
+
                 setMessages((prevState =>
-                    Object.assign(preparedMessages, prevState)
+                        Object.assign(preparedMessages, prevState)
                 ));
 
+                // Persisting scroll position by calculating container height difference
+                const nextScrollHeight = messagesContainer.current.scrollHeight;
+                messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
+
                 setLoaded(true);
+                setLoadingMoreMessages(false);
+            })
+            .catch((error) => {
+                setLoadingMoreMessages(false);
+
+                // TODO: Handle errors
+            });
+    }
+
+    // Temporary solution, will be replaced with socket
+    const getNewMessagesTemp = () => {
+        axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
+            offset: 0,
+            limit: 20
+        }))
+            .then((response) => {
+                console.log("Interval: Messages", response.data);
+
+                const preparedNewMessages = {};
+                response.data.results.reverse().map((message, index) => {
+                    if (messages[message.waba_payload?.id] === undefined) {
+                        const prepared = new ChatMessageClass(message);
+                        preparedNewMessages[prepared.id] = prepared;
+                    }
+                });
+
+                setMessages((prevState =>
+                        Object.assign(prevState, preparedNewMessages)
+                ));
             })
             .catch((error) => {
                 // TODO: Handle errors
@@ -227,6 +264,9 @@ export default function Chat(props) {
             </div>
 
             <div id="chat__body" className="chat__body" ref={messagesContainer}>
+                <div className="chat__body__loadingMore" hidden={!isLoadingMoreMessages}>
+                    <CircularProgress />
+                </div>
                 <div className="chat__empty"/>
 
                 { Object.entries(messages).map((message, index) =>
