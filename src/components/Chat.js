@@ -160,10 +160,11 @@ export default function Chat(props) {
                     }
                 });
 
-                setMessages((prevState =>
-                        Object.assign(prevState, preparedNewMessages)
-                ));
-
+                if (getObjLength(preparedNewMessages) > 0) {
+                    setMessages((prevState =>
+                            Object.assign(prevState, preparedNewMessages)
+                    ));
+                }
             })
             .catch((error) => {
                 // TODO: Handle errors
