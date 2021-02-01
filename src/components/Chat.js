@@ -34,6 +34,8 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
+        // Consider replacing this with IntersectionObserver
+        // Browser support should be considered: https://caniuse.com/intersectionobserver
         function handleScroll(e) {
             const threshold = 0;
             if (isScrollable(e.target) && e.target.scrollTop <= threshold) {
