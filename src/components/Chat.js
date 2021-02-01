@@ -9,6 +9,7 @@ import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
 import ChatMessageClass from "../ChatMessageClass";
+import {AttachmentTypesMenu} from "./AttachmentTypesMenu";
 
 export default function Chat(props) {
 
@@ -307,6 +308,8 @@ export default function Chat(props) {
                 <IconButton onClick={handleAttachmentClick}>
                     <AttachFile />
                 </IconButton>
+
+                {/*<AttachmentTypesMenu />*/}
 
                 <form className="chat__mediaForm">
                     <input
