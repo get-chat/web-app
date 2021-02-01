@@ -109,8 +109,8 @@ function ChatMessage(props) {
         if (audio.current && range.current && audio.current.duration !== Infinity) {
             setProgress(value);
             const nextCurrentTime = audio.current.duration / value;
-            if (nextCurrentTime !== Infinity) {
-                audio.current.currentTime = nextCurrentTime;
+            if (nextCurrentTime !== Infinity && !isNaN(nextCurrentTime)) {
+                audio.current.currentTime = parseFloat(nextCurrentTime);
             }
         }
     }
