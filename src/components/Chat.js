@@ -122,7 +122,6 @@ export default function Chat(props) {
         }))
             .then((response) => {
                 console.log("Messages", response.data);
-                //setMessages(response.data.results.reverse());
 
                 const preparedMessages = {};
                 response.data.results.reverse().map((message, index) => {
@@ -174,6 +173,7 @@ export default function Chat(props) {
 
                 if (getObjLength(preparedNewMessages) > 0) {
                     setMessages((prevState => {
+                            console.log("New data set: ", { ...prevState, ...preparedNewMessages});
                             return { ...prevState, ...preparedNewMessages}
                         }
                     ));
@@ -203,8 +203,7 @@ export default function Chat(props) {
                 .then((response) => {
                     console.log(response.data);
 
-                    getMessages();
-
+                    getNewMessagesTemp();
                 })
                 .catch((error) => {
                     // TODO: Handle errors
@@ -227,7 +226,7 @@ export default function Chat(props) {
                 .then((response) => {
                     console.log(response.data);
 
-                    getMessages();
+                    getNewMessagesTemp();
                 })
                 .catch((error) => {
                     // TODO: Handle errors
