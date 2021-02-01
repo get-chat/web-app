@@ -36,9 +36,12 @@ export default function Chat(props) {
     useEffect(() => {
         function handleScroll(e) {
             const threshold = 0;
-            if (e.target.scrollTop <= threshold && isLoaded && !isLoadingMoreMessages) {
-                setLoadingMoreMessages(true);
-                getMessages(getObjLength(messages));
+            if (isScrollable(e.target) && e.target.scrollTop <= threshold) {
+                console.log("Scrolled to top");
+                if (isLoaded && !isLoadingMoreMessages) {
+                    setLoadingMoreMessages(true);
+                    getMessages(getObjLength(messages));
+                }
             }
         }
 
@@ -100,6 +103,14 @@ export default function Chat(props) {
         }
     }, [selectedFile]);
 
+    const isScrollable = (el) => {
+        const hasScrollableContent = el.scrollHeight > el.clientHeight;
+        const overflowYStyle = window.getComputedStyle(el).overflowY;
+        const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
+
+        return hasScrollableContent && !isOverflowHidden;
+    }
+
     const getObjLength = (obj) => {
         return Object.keys(obj).length;
     }
@@ -107,7 +118,7 @@ export default function Chat(props) {
     const getMessages = (offset) => {
         axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
             offset: offset ?? 0,
-            limit: 20
+            limit: 30
         }))
             .then((response) => {
                 console.log("Messages", response.data);
@@ -124,8 +135,9 @@ export default function Chat(props) {
                     const prevScrollTop = messagesContainer.current.scrollTop;
                     const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-                    setMessages((prevState =>
-                            Object.assign(preparedMessages, prevState)
+                    setMessages((prevState => {
+                            return { ...preparedMessages, ...prevState }
+                        }
                     ));
 
                     // Persisting scroll position by calculating container height difference
@@ -147,7 +159,7 @@ export default function Chat(props) {
     const getNewMessagesTemp = () => {
         axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
             offset: 0,
-            limit: 20
+            limit: 30
         }))
             .then((response) => {
                 console.log("Interval: Messages", response.data);
@@ -161,9 +173,11 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedNewMessages) > 0) {
-                    setMessages((prevState =>
-                            Object.assign(prevState, preparedNewMessages)
+                    setMessages((prevState => {
+                            return { ...prevState, ...preparedNewMessages}
+                        }
                     ));
+
                 }
             })
             .catch((error) => {
