@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {Avatar, CircularProgress, Fade, IconButton} from "@material-ui/core";
+import {Avatar, CircularProgress, IconButton, Zoom} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, MoreVert, Search, Send} from "@material-ui/icons";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
@@ -317,11 +317,11 @@ export default function Chat(props) {
             </div>
 
             <div id="chat__body" className="chat__body" ref={messagesContainer}>
-                <Fade in={isLoadingMoreMessages}>
+                <Zoom in={isLoadingMoreMessages}>
                     <div className="chat__body__loadingMore">
                         <CircularProgress size={28} />
                     </div>
-                </Fade>
+                </Zoom>
                 <div className="chat__empty"/>
 
                 { Object.entries(messages).map((message, index) =>

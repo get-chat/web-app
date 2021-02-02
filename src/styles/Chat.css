@@ -172,6 +172,7 @@
     border-radius: 40px;
     background-color: white;
     box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
+    z-index: 9;
 }
 
 .chat__empty {
