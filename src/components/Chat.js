@@ -299,7 +299,7 @@ export default function Chat(props) {
 
             <div id="chat__body" className="chat__body" ref={messagesContainer}>
                 <div className="chat__body__loadingMore" hidden={!isLoadingMoreMessages}>
-                    <CircularProgress />
+                    <CircularProgress size={28} />
                 </div>
                 <div className="chat__empty"/>
 

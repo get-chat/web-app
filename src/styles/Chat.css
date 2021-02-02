@@ -168,10 +168,10 @@
     left: 50%;
     transform: translate(-50%);
     margin-top: 15px;
-    /*padding: 6px;
+    padding: 10px 10px 4px 10px;
     border-radius: 40px;
     background-color: white;
-    box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);*/
+    box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
 }
 
 .chat__empty {
