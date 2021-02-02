@@ -9,12 +9,12 @@ function SidebarChat(props) {
     const dateFormat = 'H:mm';
 
     return(
-        <Link to={ `/main/chat/${props.id}` }>
-            <div id={props.id} className="sidebarChat">
-                <Avatar>{props.initials}</Avatar>
+        <Link to={ `/main/chat/${props.chatData.waId}` }>
+            <div id={props.chatData.waId} className="sidebarChat">
+                <Avatar>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
-                    <h2>{props.name}</h2>
-                    <p><Moment date={props.lastMessage} format={dateFormat} unix /></p>
+                    <h2>{props.chatData.name}</h2>
+                    <p><Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix /></p>
                 </div>
             </div>
         </Link>

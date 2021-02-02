@@ -1,21 +1,21 @@
 import {BASE_URL} from "./Constants";
 
-class ChatMessageClass {
+export class ChatMessageClass {
 
-    constructor(message, contactName) {
-        const payload = message.waba_payload;
+    constructor(data, contactName) {
+        const payload = data.waba_payload;
 
         this.id = payload.id;
         this.to = payload.to;
-        this.waId = message.customer_wa_id;
-        this.senderObject = message.sender;
-        this.username = message.sender?.username;
+        this.waId = data.customer_wa_id;
+        this.senderObject = data.sender;
+        this.username = data.sender?.username;
         this.senderName = this.username ?? (!this.isFromUs ? contactName : "Us");
         this.initials = this.senderName ? this.senderName[0] : "?";
-        this.isFromUs = message.from_us;
+        this.isFromUs = data.from_us;
         this.text = payload.text?.body;
         this.timestamp = payload.timestamp;
-        this.isSeen = message.seen;
+        this.isSeen = data.seen;
         this.imageLink = payload.image?.link;
         this.videoId = payload.video?.id;
         this.voiceId = payload.voice?.id;

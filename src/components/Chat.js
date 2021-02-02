@@ -9,7 +9,6 @@ import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
 import ChatMessageClass from "../ChatMessageClass";
-import {AttachmentTypesMenu} from "./AttachmentTypesMenu";
 
 export default function Chat(props) {
 
@@ -26,7 +25,7 @@ export default function Chat(props) {
     useEffect(() => {
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
-                if(event.target.parentNode.id === "chat__body") {
+                if (event.target.parentNode.id === "chat__body") {
                     const {currentTarget: target} = event;
                     target.scroll({top: target.scrollHeight /*, behavior: 'smooth'*/});
                 }

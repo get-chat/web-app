@@ -9,12 +9,13 @@ import axios from "axios";
 import {clearToken, getConfig, setToken} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
+import ContactClass from "../ContactClass";
 
 function Sidebar() {
 
     const history = useHistory();
 
-    const[chats, setChats] = useState([]);
+    const[chats, setChats] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
 
     const clearUserSession = () => {
@@ -39,7 +40,16 @@ function Sidebar() {
         axios.get(`${BASE_URL}contacts/`, getConfig())
             .then((response) => {
                 console.log("Contacts", response.data)
-                setChats(response.data.results)
+                //setChats(response.data.results)
+
+                const preparedChats = {};
+                response.data.results.reverse().map((contact, index) => {
+                    const prepared = new ContactClass(contact);
+                    preparedChats[prepared.waId] = prepared;
+                });
+
+                setChats(preparedChats);
+
             })
             .catch((error) => {
                 console.log(error);
@@ -74,9 +84,12 @@ function Sidebar() {
             </div>
 
             <div className="sidebar__chats">
-                {chats.map((chat, index) => (
-                    <SidebarChat key={index} id={chat.waba_payload.wa_id} initials={chat.initials} name={chat.waba_payload.profile.name} lastMessage={chat.last_message} photoURL="" />
-                ))}
+                { Object.entries(chats).map((chat, index) =>
+                    <SidebarChat
+                        key={chat[0]}
+                        chatData={chat[1]}
+                    />
+                )}
             </div>
 
             <Menu
