@@ -268,7 +268,7 @@ export default function Chat(props) {
         <div className="chat">
 
             <div className="chat__header">
-                <Avatar className={avatarClasses.green}>{contact?.initials}</Avatar>
+                <Avatar className={avatarClasses[contact?.initials]}>{contact?.initials}</Avatar>
 
                 <div className="chat__headerInfo">
                     <h3>{contact?.waba_payload?.profile?.name}</h3>
