@@ -13,6 +13,7 @@ import ContactClass from "../ContactClass";
 import SubjectIcon from '@material-ui/icons/Subject';
 import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
+import TemplateMessageClass from "../TemplateMessageClass";
 
 export default function Chat(props) {
 
@@ -26,6 +27,7 @@ export default function Chat(props) {
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState("");
     const [selectedFile, setSelectedFile] = useState();
+    const [templates, setTemplates] = useState({});
     const {waId} = useParams();
 
     useEffect(() => {
@@ -37,6 +39,10 @@ export default function Chat(props) {
                 }
             });
         }
+
+        // Loading template messages
+        getTemplates();
+
     }, []);
 
     useEffect(() => {
@@ -223,12 +229,31 @@ export default function Chat(props) {
         }
     }
 
+    const getTemplates = () => {
+        axios.get( `${BASE_URL}templates/`, getConfig())
+            .then((response) => {
+                console.log("Templates: ", response.data);
+
+                const preparedTemplates = {};
+                response.data.results.map((template, index) => {
+                    const prepared = new TemplateMessageClass(template);
+                    preparedTemplates[prepared.name] = prepared;
+                });
+
+                setTemplates(preparedTemplates);
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+            });
+    }
+
     // TODO: Modify this function later
     const sendTemplateMessage = (templateMessage) => {
         if (isLoaded) {
             axios.post( `${BASE_URL}messages/${waId}/`, {
                 text: {
-                    body: templateMessage.message
+                    body: templateMessage.text
                 }
             }, getConfig())
                 .then((response) => {
@@ -375,7 +400,7 @@ export default function Chat(props) {
             }
 
             {(isTemplateMessagesVisible || isExpired) &&
-            <TemplateMessages onSend={(templateMessage) => sendTemplateMessage(templateMessage)} />
+            <TemplateMessages templatesData={templates} onSend={(templateMessage) => sendTemplateMessage(templateMessage)} />
             }
 
             {!waId &&
