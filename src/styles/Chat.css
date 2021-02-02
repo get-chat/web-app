@@ -188,6 +188,13 @@
     padding: 0 10px;
 }
 
+.chat__footer.expired {
+    height: auto!important;
+    align-items: normal;
+    flex-direction: column;
+    padding: 15px;
+}
+
 .chat__footer > .chat__mediaForm {
     display: none;
 }
@@ -217,6 +224,30 @@
 .chat__footer > .MuiSvgIcon-root {
     /*padding: 10px;*/
     color: gray;
+}
+
+.chat__footer__expiredWarning {
+    font-size: 14px;
+    color: gray;
+}
+
+.chat__footer__templateMessages {
+    flex: 1 1;
+    margin-top: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
+}
+
+.chat__footer__templateMessages .chat__message {
+    margin-bottom: 15px!important;
+}
+
+.chat__footer__templateMessages .chat__message:last-child {
+    margin-bottom: 0!important;
 }
 
 .chat__default {

@@ -10,6 +10,7 @@ import {BASE_URL} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
+import SubjectIcon from '@material-ui/icons/Subject';
 
 export default function Chat(props) {
 
@@ -17,6 +18,7 @@ export default function Chat(props) {
     const fileInput = useRef(null);
     const [isLoaded, setLoaded] = useState(false);
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
+    const [isExpired, setExpired] = useState(false);
     const [contact, setContact] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState("");
@@ -303,33 +305,67 @@ export default function Chat(props) {
                 )}
             </div>
 
-            <div className="chat__footer">
-                <IconButton>
-                    <InsertEmoticon />
-                </IconButton>
-                <IconButton onClick={handleAttachmentClick}>
-                    <AttachFile />
-                </IconButton>
 
-                {/*<AttachmentTypesMenu />*/}
 
-                <form className="chat__mediaForm">
-                    <input
-                        type="file"
-                        //value={selectedFile}
-                        onChange={(e) => setSelectedFile(e.target.files[0])}
-                        ref={fileInput} />
-                </form>
+            {isExpired
+                ?
+                <div className="chat__footer expired">
 
-                <form>
-                    <input value={input} onChange={e => setInput(e.target.value)} placeholder="Type a message" type="text" />
-                    <button onClick={sendMessage} type="submit">Send a message</button>
-                </form>
+                    <p className="chat__footer__expiredWarning">This chat has expired. You need to answer with template messages.</p>
 
-                <IconButton onClick={sendMessage}>
-                    <Send />
-                </IconButton>
-            </div>
+                    <div className="chat__footer__templateMessages">
+
+                        <div className="templateMessage chat__message chat__receiver">
+                            <span className="templateMessage__message">This is a dummy template message.</span>
+                        </div>
+
+                        <div className="templateMessage chat__message chat__receiver">
+                            <span className="templateMessage__message">This is another dummy template message.</span>
+                        </div>
+
+                        <div className="templateMessage chat__message chat__receiver">
+                            <span className="templateMessage__message">This is another dummy template message as well.</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                :
+
+                <div className="chat__footer">
+
+                    <IconButton>
+                        <InsertEmoticon/>
+                    </IconButton>
+                    <IconButton onClick={handleAttachmentClick}>
+                        <AttachFile />
+                    </IconButton>
+                    <IconButton>
+                        <SubjectIcon />
+                    </IconButton>
+
+                    {/*<AttachmentTypesMenu />*/}
+
+                    <form className="chat__mediaForm">
+                        <input
+                            type="file"
+                            //value={selectedFile}
+                            onChange={(e) => setSelectedFile(e.target.files[0])}
+                            ref={fileInput} />
+                    </form>
+
+                    <form>
+                        <input value={input} onChange={e => setInput(e.target.value)} placeholder="Type a message" type="text" />
+                        <button onClick={sendMessage} type="submit">Send a message</button>
+                    </form>
+
+                    <IconButton onClick={sendMessage}>
+                        <Send />
+                    </IconButton>
+
+                </div>
+            }
 
             {!waId &&
             <div className="chat__default">
