@@ -35,9 +35,9 @@ function TemplateMessages() {
             <div className="templateMessages">
 
                 { Object.entries(templateMessages).map((message, index) =>
-                    <div className="templateMessageWrapper">
+                    <div key={message[0]} className="templateMessageWrapper">
 
-                        <div key={message[0]} className="templateMessages__message chat__message chat__receiver">
+                        <div className="templateMessages__message chat__message chat__receiver">
                             <span className="templateMessage__message">{message[1].message}</span>
                         </div>
 

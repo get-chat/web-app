@@ -266,6 +266,10 @@ export default function Chat(props) {
         }
     }
 
+    const toggleTemplateMessages = () => {
+        setTemplateMessagesVisible((prevState => !prevState));
+    }
+
     const getSenderName = (message) => {
         return message.senderObject?.username ?? (!message.isFromUs ? contact.name : "Us");
     };
@@ -323,7 +327,7 @@ export default function Chat(props) {
                     <IconButton onClick={handleAttachmentClick}>
                         <AttachFile />
                     </IconButton>
-                    <IconButton onClick={() => setTemplateMessagesVisible((prevState => !prevState))}>
+                    <IconButton onClick={toggleTemplateMessages}>
                         <SubjectIcon />
                     </IconButton>
 
