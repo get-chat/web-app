@@ -265,6 +265,7 @@
 
 .templateMessages__message {
     margin-right: 15px;
+    background-color: #d7edf4!important;
 }
 
 .chat__default {
