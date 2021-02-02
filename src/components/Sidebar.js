@@ -6,7 +6,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import {SearchOutlined} from "@material-ui/icons";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {clearToken, getConfig, setToken} from "../Helpers";
+import {clearToken, getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
 import ContactClass from "../ContactClass";
@@ -43,7 +43,7 @@ function Sidebar() {
                 //setChats(response.data.results)
 
                 const preparedChats = {};
-                response.data.results.reverse().map((contact, index) => {
+                response.data.results.map((contact) => {
                     const prepared = new ContactClass(contact);
                     preparedChats[prepared.waId] = prepared;
                 });
@@ -84,7 +84,7 @@ function Sidebar() {
             </div>
 
             <div className="sidebar__chats">
-                { Object.entries(chats).map((chat, index) =>
+                { Object.entries(chats).map((chat) =>
                     <SidebarChat
                         key={chat[0]}
                         chatData={chat[1]}
