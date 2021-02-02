@@ -29,6 +29,36 @@ const prepareStylesObject = () => {
     return obj;
 }
 
-const avatarStyles = makeStyles((theme) => (prepareStylesObject()));
+// In case generating colors is needed again, this can be enabled
+//const avatarStyles = makeStyles((theme) => (prepareStylesObject()));
+
+const avatarStyles = makeStyles((theme) => ({
+    "A": {"color": "#fff", "backgroundColor": "#9D8060"},
+    "B": {"color": "#fff", "backgroundColor": "#60E8C0"},
+    "C": {"color": "#fff", "backgroundColor": "#245120"},
+    "D": {"color": "#fff", "backgroundColor": "#E7B980"},
+    "E": {"color": "#fff", "backgroundColor": "#AB21E0"},
+    "F": {"color": "#fff", "backgroundColor": "#6E8A40"},
+    "G": {"color": "#fff", "backgroundColor": "#31F2A0"},
+    "H": {"color": "#fff", "backgroundColor": "#F55B00"},
+    "I": {"color": "#fff", "backgroundColor": "#B8C360"},
+    "J": {"color": "#fff", "backgroundColor": "#7C2BC0"},
+    "K": {"color": "#fff", "backgroundColor": "#3F9420"},
+    "L": {"color": "#fff", "backgroundColor": "#02FC80"},
+    "M": {"color": "#fff", "backgroundColor": "#C664E0"},
+    "N": {"color": "#fff", "backgroundColor": "#89CD40"},
+    "O": {"color": "#fff", "backgroundColor": "#4D35A0"},
+    "P": {"color": "#fff", "backgroundColor": "#109E00"},
+    "Q": {"color": "#fff", "backgroundColor": "#D40660"},
+    "R": {"color": "#fff", "backgroundColor": "#976EC0"},
+    "S": {"color": "#fff", "backgroundColor": "#5AD720"},
+    "T": {"color": "#fff", "backgroundColor": "#1E3F80"},
+    "U": {"color": "#fff", "backgroundColor": "#E1A7E0"},
+    "V": {"color": "#fff", "backgroundColor": "#A51040"},
+    "W": {"color": "#fff", "backgroundColor": "#6878A0"},
+    "X": {"color": "#fff", "backgroundColor": "#2BE100"},
+    "Y": {"color": "#fff", "backgroundColor": "#EF4960"},
+    "Z": {"color": "#fff", "backgroundColor": "#B2B1C0"}
+}));
 
 export {avatarStyles}
