@@ -9,6 +9,7 @@ import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
 import ChatMessageClass from "../ChatMessageClass";
+import ContactClass from "../ContactClass";
 
 export default function Chat(props) {
 
@@ -86,7 +87,9 @@ export default function Chat(props) {
         axios.get(`${BASE_URL}contacts/${waId}/`, getConfig())
             .then((response) => {
                 console.log("Contact", response.data);
-                setContact(response.data);
+
+                const prepared = new ContactClass(response.data);
+                setContact(prepared);
 
                 // Contact information is loaded, now load messages
                 getMessages();
@@ -271,7 +274,7 @@ export default function Chat(props) {
                 <Avatar className={avatarClasses[contact?.initials]}>{contact?.initials}</Avatar>
 
                 <div className="chat__headerInfo">
-                    <h3>{contact?.waba_payload?.profile?.name}</h3>
+                    <h3>{contact?.name}</h3>
                     {/*<p>Last seen at ...</p>*/}
                 </div>
 
