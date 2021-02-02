@@ -14,7 +14,10 @@ function SidebarChat(props) {
                 <Avatar>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
                     <h2>{props.chatData.name}</h2>
-                    <p><Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix /></p>
+                    <p className="sidebarChat__info__lastMessage"><Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix /></p>
+                    {props.chatData.isExpired &&
+                    <p className="sidebarChat__info__expired">Expired</p>
+                    }
                 </div>
             </div>
         </Link>

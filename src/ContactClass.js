@@ -7,6 +7,7 @@ class ContactClass {
         this.initials = data.initials;
         this.name = payload.profile.name;
         this.lastMessageTimestamp = data.last_message;
+        this.isExpired = true;
     }
 
 }
