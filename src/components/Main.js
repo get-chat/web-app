@@ -31,7 +31,7 @@ function Main() {
         setChecked(true);
     }, []);
 
-    return(
+    return (
         <Fade in={checked}>
             <div className="app__body">
                 <Sidebar />

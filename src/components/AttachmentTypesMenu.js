@@ -21,7 +21,7 @@ export function AttachmentTypesMenu() {
     };
 
 
-    return(
+    return (
         <SpeedDial
             icon={<SpeedDialIcon openIcon={<CloseIcon />} />}
             ariaLabel="Send a file"

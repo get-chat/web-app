@@ -102,7 +102,7 @@ function ChatMessage(props) {
 
     const formatDuration = (s) => {
         s = Math.floor(s);
-        return(s-(s%=60))/60+(9<s?':':':0')+s;
+        return (s-(s%=60))/60+(9<s?':':':0')+s;
     }
 
     const changeDuration = (value) => {
@@ -119,7 +119,7 @@ function ChatMessage(props) {
 
     const dateFormat = 'H:mm';
 
-    return(
+    return (
         <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "")}>
             <span className="chat__name">{props.name}</span>
             {data.imageLink !== undefined &&

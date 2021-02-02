@@ -11,6 +11,8 @@ import {avatarStyles} from "../AvatarStyles";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
 import SubjectIcon from '@material-ui/icons/Subject';
+import ChatFooterExpired from "./ChatFooterExpired";
+import TemplateMessages from "./TemplateMessages";
 
 export default function Chat(props) {
 
@@ -19,6 +21,7 @@ export default function Chat(props) {
     const [isLoaded, setLoaded] = useState(false);
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [isExpired, setExpired] = useState(false);
+    const [isTemplateMessagesVisible, setTemplateMessagesVisible] = useState(false);
     const [contact, setContact] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState("");
@@ -305,31 +308,10 @@ export default function Chat(props) {
                 )}
             </div>
 
-
-
             {isExpired
                 ?
-                <div className="chat__footer expired">
 
-                    <p className="chat__footer__expiredWarning">This chat has expired. You need to answer with template messages.</p>
-
-                    <div className="chat__footer__templateMessages">
-
-                        <div className="templateMessage chat__message chat__receiver">
-                            <span className="templateMessage__message">This is a dummy template message.</span>
-                        </div>
-
-                        <div className="templateMessage chat__message chat__receiver">
-                            <span className="templateMessage__message">This is another dummy template message.</span>
-                        </div>
-
-                        <div className="templateMessage chat__message chat__receiver">
-                            <span className="templateMessage__message">This is another dummy template message as well.</span>
-                        </div>
-
-                    </div>
-
-                </div>
+                <ChatFooterExpired />
 
                 :
 
@@ -341,7 +323,7 @@ export default function Chat(props) {
                     <IconButton onClick={handleAttachmentClick}>
                         <AttachFile />
                     </IconButton>
-                    <IconButton>
+                    <IconButton onClick={() => setTemplateMessagesVisible((prevState => !prevState))}>
                         <SubjectIcon />
                     </IconButton>
 
@@ -365,6 +347,10 @@ export default function Chat(props) {
                     </IconButton>
 
                 </div>
+            }
+
+            {(isTemplateMessagesVisible || isExpired) &&
+            <TemplateMessages />
             }
 
             {!waId &&

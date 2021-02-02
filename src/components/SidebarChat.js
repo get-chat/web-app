@@ -11,7 +11,7 @@ function SidebarChat(props) {
 
     const avatarClasses = avatarStyles();
 
-    return(
+    return (
         <Link to={ `/main/chat/${props.chatData.waId}` }>
             <div id={props.chatData.waId} className="sidebarChat">
                 <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.initials]}>{props.chatData.initials}</Avatar>

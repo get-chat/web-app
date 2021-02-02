@@ -62,7 +62,7 @@ function Sidebar() {
             });
     }, []);
 
-    return(
+    return (
         <div className="sidebar">
             <div className="sidebar__header">
                 <Avatar  src="https://avatars.dicebear.com/api/human/berk.svg" />
