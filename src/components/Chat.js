@@ -267,7 +267,7 @@ export default function Chat(props) {
     }
 
     const getSenderName = (message) => {
-        return message.senderObject?.username ?? (!message.isFromUs ? contact?.waba_payload?.profile?.name : "Us");
+        return message.senderObject?.username ?? (!message.isFromUs ? contact.name : "Us");
     };
 
     const avatarClasses = avatarStyles();
