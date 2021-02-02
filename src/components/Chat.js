@@ -223,6 +223,25 @@ export default function Chat(props) {
         }
     }
 
+    // TODO: Modify this function later
+    const sendTemplateMessage = (templateMessage) => {
+        if (isLoaded) {
+            axios.post( `${BASE_URL}messages/${waId}/`, {
+                text: {
+                    body: templateMessage.message
+                }
+            }, getConfig())
+                .then((response) => {
+                    console.log(response.data);
+
+                    getNewMessagesTemp();
+                })
+                .catch((error) => {
+                    // TODO: Handle errors
+                });
+        }
+    }
+
     const sendFile = (fileURL) => {
         if (isLoaded) {
             axios.post( `${BASE_URL}messages/${waId}/`, {
@@ -356,7 +375,7 @@ export default function Chat(props) {
             }
 
             {(isTemplateMessagesVisible || isExpired) &&
-            <TemplateMessages />
+            <TemplateMessages onSend={(templateMessage) => sendTemplateMessage(templateMessage)} />
             }
 
             {!waId &&

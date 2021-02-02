@@ -1,7 +1,7 @@
 import React from "react";
 import {Button} from "@material-ui/core";
 
-function TemplateMessages() {
+function TemplateMessages(props) {
 
     const templateMessages = {
         a: {
@@ -41,7 +41,7 @@ function TemplateMessages() {
                             <span className="templateMessage__message">{message[1].message}</span>
                         </div>
 
-                        <Button>Send</Button>
+                        <Button onClick={() => props.onSend(message[1])}>Send</Button>
 
                     </div>
                 )}
