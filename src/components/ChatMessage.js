@@ -147,6 +147,11 @@ function ChatMessage(props) {
                 </Avatar>
             </span>
             }
+            {data.documentLink !== undefined &&
+            <div>
+                <a href={data.documentLink} target="_blank">Document</a>
+            </div>
+            }
             {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
             <span className="chat__message__info">
                 <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
