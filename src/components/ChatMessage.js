@@ -127,7 +127,7 @@ function ChatMessage(props) {
             }
             {data.videoLink !== undefined &&
             <div className="chat__videoWrapper" onClick={() => props.onPreview(data)}>
-                <video className="chat__media" src={data.generateVideoLink()} preload="metadata" />
+                <video className="chat__media" src={data.generateVideoLink()} preload="none" />
                 <span className="chat__videoWrapper__iconWrapper">
                     <PlayArrowIcon fontSize={"large"} style={{ fill: "white", fontSize: 40 }} />
                 </span>

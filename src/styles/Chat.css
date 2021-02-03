@@ -57,6 +57,7 @@
     /*max-width: 250px;*/
     object-fit: cover;
     cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.6);
 }
 
 .chat__videoWrapper {
