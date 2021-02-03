@@ -116,6 +116,14 @@ video.chat__media {
     margin-left: 5px;
 }
 
+.chat__document {
+    border-radius: 6px;
+    display: block;
+    margin: 0 -4px 4px -4px;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 10px 6px;
+}
+
 .chat__name {
     position: absolute;
     top: -15px;

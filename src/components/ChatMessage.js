@@ -148,8 +148,8 @@ function ChatMessage(props) {
             </span>
             }
             {data.documentLink !== undefined &&
-            <div>
-                <a href={data.documentLink} target="_blank">Document</a>
+            <div className="chat__document">
+                <a href={data.documentLink} target="_blank">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</a>
             </div>
             }
             {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}

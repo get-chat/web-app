@@ -22,11 +22,13 @@ export class ChatMessageClass {
         this.videoLink = payload.video?.link;
         this.documentId = payload.document?.id;
         this.documentLink = payload.document?.link;
+        this.documentFileName = payload.document?.filename;
+        this.documentCaption = payload.document?.caption;
         this.voiceId = payload.voice?.id;
         this.voiceLink = payload.voice?.link;
         this.audioId = payload.audio?.id;
         this.audioLink = payload.audio?.link;
-        this.caption = payload.image?.caption ?? payload.video?.caption;
+        this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption;
     };
 
     hasMediaToPreview() {
