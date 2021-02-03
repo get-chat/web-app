@@ -124,6 +124,10 @@ video.chat__media {
     padding: 10px 6px;
 }
 
+.chat__document > a {
+    color: #4a4a4a;
+}
+
 .chat__name {
     position: absolute;
     top: -15px;
