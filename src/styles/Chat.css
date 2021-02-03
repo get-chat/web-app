@@ -57,6 +57,9 @@
     /*max-width: 250px;*/
     object-fit: cover;
     cursor: pointer;
+}
+
+video.chat__media {
     background-color: rgba(0, 0, 0, 0.6);
 }
 
