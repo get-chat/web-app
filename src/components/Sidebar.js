@@ -65,7 +65,7 @@ function Sidebar() {
     return (
         <div className="sidebar">
             <div className="sidebar__header">
-                <Avatar  src="https://avatars.dicebear.com/api/human/berk.svg" />
+                <Avatar>?</Avatar>
                 <div className="sidebar__headerRight">
                     <IconButton>
                         <ChatIcon />
