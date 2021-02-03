@@ -295,6 +295,7 @@ export default function Chat(props) {
 
     const uploadFile = () => {
         console.log(selectedFile);
+        return false;
 
         if (isLoaded) {
             const formData = new FormData();
@@ -312,6 +313,8 @@ export default function Chat(props) {
                         targetType = 'image';
                     } else if (selectedFileType.includes('video')) {
                         targetType = 'video';
+                    } else if (selectedFileType.includes('audio')) {
+                        targetType = 'audio';
                     } else {
                         targetType = 'document';
                     }

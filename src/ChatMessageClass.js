@@ -34,7 +34,7 @@ export class ChatMessageClass {
     }
 
     hasAnyAudio() {
-        return this.voiceId !== undefined || this.audioId !== undefined;
+        return this.voiceId !== undefined || this.voiceLink !== undefined || this.audioId !== undefined || this.audioLink !== undefined;
     }
 
     generateMediaLink(id) {
