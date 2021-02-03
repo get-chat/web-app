@@ -1,3 +1,5 @@
+import moment from "moment";
+
 class ContactClass {
 
     constructor(data) {
@@ -7,24 +9,18 @@ class ContactClass {
         this.initials = data.initials;
         this.name = payload.profile.name;
         this.lastMessageTimestamp = data.last_message;
-
-        const pastHours = this.getPastHoursAfterLastMessage();
-        this.isExpired = pastHours >= 24;
-
-        // TODO: Change it to data from server
-        //this.isExpired = Math.random() < 0.5;
+        this.isExpired = this.checkIfExpired();
     }
 
     getPastHoursAfterLastMessage() {
-        return 0;
-
-        /*const lastMessageDate = new Date(this.lastMessageTimestamp * 1000);
-        const milliseconds = Math.abs(lastMessageDate - new Date());
-        const hours = milliseconds / 36e5;
-
-        console.log(hours);*/
+        const momentDate = moment.unix(this.lastMessageTimestamp);
+        const curDate = moment(new Date());
+        return curDate.diff(momentDate, 'hours');
     }
 
+    checkIfExpired() {
+        return this.getPastHoursAfterLastMessage() >= 24;
+    }
 }
 
 export default ContactClass;
