@@ -11,6 +11,7 @@ import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
 import {formatMessage} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 const playIconStyles = {
     fontSize: '38px'
@@ -149,6 +150,7 @@ function ChatMessage(props) {
             }
             {data.documentLink !== undefined &&
             <div className="chat__document">
+                <InsertDriveFileIcon fontSize="small" />
                 <a href={data.documentLink} target="_blank">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</a>
             </div>
             }

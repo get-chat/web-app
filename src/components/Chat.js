@@ -295,7 +295,6 @@ export default function Chat(props) {
 
     const uploadFile = () => {
         console.log(selectedFile);
-        return false;
 
         if (isLoaded) {
             const formData = new FormData();
