@@ -125,7 +125,7 @@ function ChatMessage(props) {
             {data.imageLink !== undefined &&
             <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
             }
-            {data.videoId !== undefined &&
+            {data.videoLink !== undefined &&
             <div className="chat__videoWrapper" onClick={() => props.onPreview(data)}>
                 <video className="chat__media" src={data.generateVideoLink()} preload="metadata" />
                 <span className="chat__videoWrapper__iconWrapper">

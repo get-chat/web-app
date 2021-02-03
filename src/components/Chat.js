@@ -113,8 +113,6 @@ export default function Chat(props) {
 
     useEffect(() => {
         if (selectedFile) {
-            console.log(selectedFile);
-
             uploadFile();
         }
     }, [selectedFile]);
@@ -177,7 +175,7 @@ export default function Chat(props) {
             limit: 30
         }))
             .then((response) => {
-                console.log("Interval: Messages", response.data);
+                //console.log("Interval: Messages", response.data);
 
                 const preparedNewMessages = {};
                 response.data.results.reverse().map((message, index) => {
@@ -189,7 +187,6 @@ export default function Chat(props) {
 
                 if (getObjLength(preparedNewMessages) > 0) {
                     setMessages((prevState => {
-                            console.log("New data set: ", { ...prevState, ...preparedNewMessages});
                             return { ...prevState, ...preparedNewMessages}
                         }
                     ));
@@ -267,16 +264,20 @@ export default function Chat(props) {
         }
     }
 
-    const sendFile = (fileURL) => {
+    const sendFile = (fileURL, type) => {
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/${waId}/`, {
+
+            const body = {
                 recipient_type: 'individual',
                 to: waId,
-                type: 'image',
-                image: {
-                    link: fileURL
-                }
-            }, getConfig())
+                type: type
+            };
+
+            body[type] = {
+                link: fileURL
+            }
+
+            axios.post( `${BASE_URL}messages/${waId}/`, body, getConfig())
                 .then((response) => {
                     console.log(response.data);
 
@@ -293,6 +294,8 @@ export default function Chat(props) {
     }
 
     const uploadFile = () => {
+        console.log(selectedFile);
+
         if (isLoaded) {
             const formData = new FormData();
             //formData.append("file_name", file.name);
@@ -302,7 +305,19 @@ export default function Chat(props) {
                 .then((response) => {
                     console.log(response.data)
 
-                    sendFile(response.data.file);
+                    const selectedFileType = selectedFile.type;
+                    let targetType = null;
+
+                    if (selectedFileType.includes('image')) {
+                        targetType = 'image';
+                    } else if (selectedFileType.includes('video')) {
+                        targetType = 'video';
+                    } else {
+                        targetType = 'document';
+                    }
+
+                    sendFile(response.data.file, targetType);
+
                 })
                 .catch((error) => {
                     // TODO: Handle errors

@@ -51,10 +51,10 @@ function Main() {
                         </IconButton>
                     </div>
                     <div className="app__imagePreview__container" onClick={() => hideImageOrVideoPreview()}>
-                        {chatMessageToPreview.imageLink &&
-                        <img className="app__imagePreview__image" src={chatMessageToPreview.imageLink} alt="Preview"/>
+                        {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink) &&
+                        <img className="app__imagePreview__image" src={chatMessageToPreview.generateImageLink()} alt="Preview"/>
                         }
-                        {chatMessageToPreview.videoId &&
+                        {(chatMessageToPreview.videoId || chatMessageToPreview.videoLink) &&
                         <video className="app__imagePreview__video" src={chatMessageToPreview.generateVideoLink()} controls autoPlay={true} />
                         }
                     </div>

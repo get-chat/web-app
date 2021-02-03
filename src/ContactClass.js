@@ -8,8 +8,21 @@ class ContactClass {
         this.name = payload.profile.name;
         this.lastMessageTimestamp = data.last_message;
 
+        const pastHours = this.getPastHoursAfterLastMessage();
+        this.isExpired = pastHours >= 24;
+
         // TODO: Change it to data from server
-        this.isExpired = Math.random() < 0.5;
+        //this.isExpired = Math.random() < 0.5;
+    }
+
+    getPastHoursAfterLastMessage() {
+        return 0;
+
+        /*const lastMessageDate = new Date(this.lastMessageTimestamp * 1000);
+        const milliseconds = Math.abs(lastMessageDate - new Date());
+        const hours = milliseconds / 36e5;
+
+        console.log(hours);*/
     }
 
 }

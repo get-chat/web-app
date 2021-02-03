@@ -16,10 +16,16 @@ export class ChatMessageClass {
         this.text = payload.text?.body;
         this.timestamp = payload.timestamp;
         this.isSeen = data.seen;
+        this.imageId = payload.image?.id;
         this.imageLink = payload.image?.link;
         this.videoId = payload.video?.id;
+        this.videoLink = payload.video?.link;
+        this.documentId = payload.document?.id;
+        this.documentLink = payload.document?.link;
         this.voiceId = payload.voice?.id;
+        this.voiceLink = payload.voice?.link;
         this.audioId = payload.audio?.id;
+        this.audioLink = payload.audio?.link;
         this.caption = payload.image?.caption ?? payload.video?.caption;
     };
 
@@ -35,16 +41,24 @@ export class ChatMessageClass {
         return `${BASE_URL}media/${id}`;
     }
 
+    generateImageLink() {
+        return this.imageLink ?? this.generateMediaLink(this.imageId);
+    }
+
     generateVideoLink() {
-        return this.generateMediaLink(this.videoId);
+        return this.videoLink ?? this.generateMediaLink(this.videoId);
+    }
+
+    generateDocumentLink() {
+        return this.documentLink ?? this.generateMediaLink(this.documentId);
     }
 
     generateVoiceLink() {
-        return this.generateMediaLink(this.voiceId);
+        return this.voiceLink ?? this.generateMediaLink(this.voiceId);
     }
 
     generateAudioLink() {
-        return this.generateMediaLink(this.audioId);
+        return this.audioLink ?? this.generateMediaLink(this.audioId);
     }
 }
 
