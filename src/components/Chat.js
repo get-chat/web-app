@@ -255,13 +255,23 @@ export default function Chat(props) {
     const sendTemplateMessage = (templateMessage) => {
         if (isLoaded) {
             axios.post( `${BASE_URL}messages/${waId}/`, {
+                type: 'template',
                 template: {
                     namespace: templateMessage.namespace,
                     name: templateMessage.name,
                     language: {
                         code: templateMessage.language,
                         policy: 'deterministic'
-                    }
+                    },
+                    /*components: [{
+                        type: 'body',
+                        parameters: [
+                            {
+                                type: 'text',
+                                text: templateMessage.text
+                            }
+                        ]
+                    }]*/
                 }
             }, getConfig())
                 .then((response) => {
@@ -412,6 +422,8 @@ export default function Chat(props) {
                         messageData={message[1]}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)} />
                 )}
+
+                <div className="chat__body__empty" />
             </div>
 
             {isExpired

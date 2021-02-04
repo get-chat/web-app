@@ -186,6 +186,12 @@ a.chat__document:hover {
     padding: 30px 30px 0 30px;
     overflow-y: auto;
     border-left: 1px solid rgba(0, 0, 0, 0.05);
+    min-height: 0;
+}
+
+.chat__body__empty {
+    content: '';
+    flex: 0 0 5px;
 }
 
 .chat__body__loadingMore {
