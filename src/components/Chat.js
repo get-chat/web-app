@@ -294,7 +294,7 @@ export default function Chat(props) {
             });
     }
 
-    const sendFile = (fileURL, type) => {
+    const sendFile = (fileURL, type, filename, mimeType) => {
         if (isLoaded) {
 
             const body = {
@@ -304,7 +304,9 @@ export default function Chat(props) {
             };
 
             body[type] = {
-                link: fileURL
+                link: fileURL,
+                filename: filename,
+                mime_type: mimeType
             }
 
             axios.post( `${BASE_URL}messages/${waId}/`, body, getConfig())
@@ -331,24 +333,27 @@ export default function Chat(props) {
             //formData.append("file_name", file.name);
             formData.append("file_encoded", selectedFile);
 
+            const selectedFileType = selectedFile.type;
+            let targetType;
+
+            if (selectedFileType.includes('image')) {
+                targetType = 'image';
+            } else if (selectedFileType.includes('video')) {
+                targetType = 'video';
+            } else if (selectedFileType.includes('audio')) {
+                targetType = 'audio';
+            } else {
+                targetType = 'document';
+            }
+
+            const filename = selectedFile.name;
+            const mimeType = selectedFile.type;
+
             axios.post(`${BASE_URL}media/`, formData, getConfig())
                 .then((response) => {
                     console.log(response.data)
 
-                    const selectedFileType = selectedFile.type;
-                    let targetType = null;
-
-                    if (selectedFileType.includes('image')) {
-                        targetType = 'image';
-                    } else if (selectedFileType.includes('video')) {
-                        targetType = 'video';
-                    } else if (selectedFileType.includes('audio')) {
-                        targetType = 'audio';
-                    } else {
-                        targetType = 'document';
-                    }
-
-                    sendFile(response.data.file, targetType);
+                    sendFile(response.data.file, targetType, filename, mimeType);
 
                 })
                 .catch((error) => {
