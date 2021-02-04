@@ -13,10 +13,13 @@ function TemplateMessages(props) {
                     <div key={message[0]} className="templateMessageWrapper">
 
                         <div className="templateMessages__message chat__message chat__receiver">
+                            <span className={"templateMessage__status " + message[1].status}>{message[1].status}</span>
                             <span className="templateMessage__message">{message[1].text}</span>
                         </div>
 
+                        {message[1].status === "approved" &&
                         <Button onClick={() => props.onSend(message[1])}>Send</Button>
+                        }
 
                     </div>
                 )}

@@ -88,6 +88,7 @@ export default function Chat(props) {
         // Clear values for next route
         setContact(null);
         setMessages([]);
+        setTemplateMessagesVisible(false);
         props.previewMedia(null);
 
         if (!waId) {

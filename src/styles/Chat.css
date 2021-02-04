@@ -285,9 +285,32 @@ video.chat__media {
     display: flex;
 }
 
+.templateMessageWrapper > button {
+    margin-left: 15px;
+}
+
 .templateMessages__message {
-    margin-right: 15px;
     background-color: #d7edf4!important;
+}
+
+.templateMessage__status {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-align: end;
+}
+
+.rejected {
+    color: #ff0015;
+}
+
+.submitted {
+    color: #ffaa00;
+}
+
+.approved {
+    color: #48bc00;
 }
 
 .chat__default {
