@@ -121,7 +121,8 @@ video.chat__media {
     margin-left: 5px;
 }
 
-.chat__document {
+a.chat__document {
+    color: #4a4a4a;
     border-radius: 6px;
     margin: 0 -4px 4px -4px;
     background-color: rgba(0, 0, 0, 0.05);
@@ -129,9 +130,12 @@ video.chat__media {
     display: flex;
 }
 
-.chat__document > a {
+a.chat__document:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.chat__document .chat__document__filename {
     margin-left: 5px;
-    color: #4a4a4a;
 }
 
 .chat__name {
