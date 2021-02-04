@@ -101,6 +101,7 @@ export default function Chat(props) {
 
                 const prepared = new ContactClass(response.data);
                 setContact(prepared);
+                setExpired(prepared.isExpired);
 
                 // Contact information is loaded, now load messages
                 getMessages();
