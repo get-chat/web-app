@@ -30,6 +30,14 @@ export default function Chat(props) {
     const [templates, setTemplates] = useState({});
     const {waId} = useParams();
 
+    let cancelToken;
+    let source;
+
+    const generateCancelToken = () => {
+        cancelToken = axios.CancelToken;
+        source = cancelToken.source();
+    }
+
     useEffect(() => {
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
@@ -43,6 +51,10 @@ export default function Chat(props) {
         // Loading template messages
         getTemplates();
 
+        return () => {
+            // Cancelling ongoing requests
+            source.cancel();
+        }
     }, []);
 
     useEffect(() => {
@@ -85,6 +97,9 @@ export default function Chat(props) {
     useEffect(() => {
         setLoaded(false);
 
+        // Generating cancel token
+        generateCancelToken();
+
         // Clear values for next route
         setContact(null);
         setMessages([]);
@@ -96,7 +111,7 @@ export default function Chat(props) {
             return false;
         }
 
-        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig())
+        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, source.token))
             .then((response) => {
                 console.log("Contact", response.data);
 
@@ -111,6 +126,11 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
             });
+
+        return () => {
+            // Cancelling ongoing requests
+            source.cancel();
+        }
     }, [waId]);
 
     useEffect(() => {
@@ -132,10 +152,12 @@ export default function Chat(props) {
     }
 
     const getMessages = (offset) => {
-        axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
-            offset: offset ?? 0,
-            limit: 30
-        }))
+        axios.get( `${BASE_URL}messages/${waId}/`,
+            getConfig({
+                offset: offset ?? 0,
+                limit: 30,
+            }, source.token)
+        )
             .then((response) => {
                 console.log("Messages", response.data);
 
@@ -172,10 +194,12 @@ export default function Chat(props) {
 
     // Temporary solution, will be replaced with socket
     const getNewMessagesTemp = () => {
-        axios.get( `${BASE_URL}messages/${waId}/`, getConfig({
-            offset: 0,
-            limit: 30
-        }))
+        axios.get( `${BASE_URL}messages/${waId}/`,
+            getConfig({
+                offset: 0,
+                limit: 30
+            })
+        )
             .then((response) => {
                 //console.log("Interval: Messages", response.data);
 
@@ -338,7 +362,7 @@ export default function Chat(props) {
     }
 
     const getSenderName = (message) => {
-        return message.senderObject?.username ?? (!message.isFromUs ? contact.name : "Us");
+        return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
     };
 
     const avatarClasses = avatarStyles();

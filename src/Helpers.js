@@ -2,14 +2,15 @@ const getToken = () => {
     return localStorage.getItem("token");
 }
 
-const getConfig = (params) => {
+const getConfig = (params, cancelToken) => {
     return {
         params,
         headers: {
             'Authorization': 'Token ' + getToken(),
             'Content-Type': 'application/json',
             'Accept': 'application/json'
-        }
+        },
+        cancelToken: cancelToken
     }
 }
 
