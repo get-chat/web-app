@@ -1,6 +1,7 @@
 class TemplateMessageClass {
 
     constructor(data) {
+        this.namespace = data.namespace;
         this.name = data.name;
         this.category = data.category;
         this.components = data.components;

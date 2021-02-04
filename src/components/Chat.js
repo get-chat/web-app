@@ -228,6 +228,30 @@ export default function Chat(props) {
         }
     }
 
+    // TODO: Modify this function later
+    const sendTemplateMessage = (templateMessage) => {
+        if (isLoaded) {
+            axios.post( `${BASE_URL}messages/${waId}/`, {
+                template: {
+                    namespace: templateMessage.namespace,
+                    name: templateMessage.name,
+                    language: {
+                        code: templateMessage.language,
+                        policy: 'deterministic'
+                    }
+                }
+            }, getConfig())
+                .then((response) => {
+                    console.log(response.data);
+
+                    getNewMessagesTemp();
+                })
+                .catch((error) => {
+                    // TODO: Handle errors
+                });
+        }
+    }
+
     const getTemplates = () => {
         axios.get( `${BASE_URL}templates/`, getConfig())
             .then((response) => {
@@ -245,25 +269,6 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
             });
-    }
-
-    // TODO: Modify this function later
-    const sendTemplateMessage = (templateMessage) => {
-        if (isLoaded) {
-            axios.post( `${BASE_URL}messages/${waId}/`, {
-                text: {
-                    body: templateMessage.text
-                }
-            }, getConfig())
-                .then((response) => {
-                    console.log(response.data);
-
-                    getNewMessagesTemp();
-                })
-                .catch((error) => {
-                    // TODO: Handle errors
-                });
-        }
     }
 
     const sendFile = (fileURL, type) => {
