@@ -341,10 +341,14 @@ export default function Chat(props) {
         <div className="chat">
 
             <div className="chat__header">
-                <Avatar className={avatarClasses[contact?.initials]}>{contact?.initials}</Avatar>
+                <Avatar className={contact?.isExpired ? '' : avatarClasses[contact?.initials]}>{contact?.initials}</Avatar>
 
                 <div className="chat__headerInfo">
                     <h3>{contact?.name}</h3>
+                    {contact?.isExpired &&
+                    <p className="chat__header__expired">Expired</p>
+                    }
+
                     {/*<p>Last seen at ...</p>*/}
                 </div>
 
