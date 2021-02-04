@@ -228,7 +228,6 @@ export default function Chat(props) {
         }
     }
 
-    // TODO: Modify this function later
     const sendTemplateMessage = (templateMessage) => {
         if (isLoaded) {
             axios.post( `${BASE_URL}messages/${waId}/`, {
