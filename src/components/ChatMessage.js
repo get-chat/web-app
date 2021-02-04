@@ -143,7 +143,7 @@ function ChatMessage(props) {
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
                 <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                <Avatar className={data.voiceId !== undefined ? avatarClasses.green : avatarClasses.orange}>
+                <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[props.name[0] ?? ""] : avatarClasses.orange}>
                     {data.voiceId !== undefined ? <span>{props.name ? props.name[0] : ""}</span> : <HeadsetIcon/>}
                 </Avatar>
             </span>

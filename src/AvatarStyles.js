@@ -25,6 +25,7 @@ const prepareStylesObject = () => {
             backgroundColor: '#' + intToRGB(hashCode(curLetter.repeat(6)))
         };
     }
+    obj["orange"] = {"color": "#fff", "backgroundColor": "#ff9a10"};
 
     return obj;
 }
@@ -58,7 +59,8 @@ const avatarStyles = makeStyles((theme) => ({
     "W": {"color": "#fff", "backgroundColor": "#6878A0"},
     "X": {"color": "#fff", "backgroundColor": "#2BE100"},
     "Y": {"color": "#fff", "backgroundColor": "#EF4960"},
-    "Z": {"color": "#fff", "backgroundColor": "#B2B1C0"}
+    "Z": {"color": "#fff", "backgroundColor": "#B2B1C0"},
+    "orange": {"color": "#fff", "backgroundColor": "#ff9a10"}
 }));
 
 export {avatarStyles}
