@@ -11,7 +11,7 @@ import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
 import ContactClass from "../ContactClass";
 
-function Sidebar() {
+function Sidebar(props) {
 
     const history = useHistory();
 
@@ -88,6 +88,7 @@ function Sidebar() {
                     <SidebarChat
                         key={chat[0]}
                         chatData={chat[1]}
+                        unseenMessages={props.unseenMessages}
                     />
                 )}
             </div>

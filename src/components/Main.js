@@ -4,12 +4,16 @@ import Chat from "./Chat";
 import {Avatar, Fade, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
+import axios from "axios";
+import {getConfig} from "../Helpers";
+import UnseenMessageClass from "../UnseenMessageClass";
 
 function Main() {
 
     const [checked, setChecked] = React.useState(false);
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
+    const [unseenMessages, setUnseenMessages] = useState({});
 
     const hideImageOrVideoPreview = () => {
         setChatMessageToPreview(null);
@@ -29,12 +33,52 @@ function Main() {
 
     useEffect(() => {
         setChecked(true);
+
+        // Get unseen messages
+        getUnseenMessages();
+
+        let intervalId = 0;
+        intervalId = setInterval(() => {
+            getUnseenMessages();
+        }, 2500);
+
+        console.log("Interval is set");
+
+        return () => {
+            clearInterval(intervalId);
+        }
     }, []);
+
+    const getUnseenMessages = () => {
+        axios.get( `${BASE_URL}unseen_messages/`,
+            getConfig({
+                offset: 0,
+                limit: 30
+            })
+        )
+            .then((response) => {
+                //console.log('Unseen messages', response.data);
+
+                const preparedUnseenMessages = {};
+                response.data.map((unseenMessage, index) => {
+                    const prepared = new UnseenMessageClass(unseenMessage);
+                    preparedUnseenMessages[prepared.waId] = prepared;
+                });
+
+                setUnseenMessages(preparedUnseenMessages);
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+            });
+    }
 
     return (
         <Fade in={checked}>
             <div className="app__body">
-                <Sidebar />
+                <Sidebar
+                    unseenMessages={unseenMessages}
+                />
                 <Chat previewMedia={(chatMessage) => previewMedia(chatMessage)} />
 
                 {chatMessageToPreview &&

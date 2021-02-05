@@ -17,7 +17,16 @@ function SidebarChat(props) {
                 <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.initials]}>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
                     <h2>{props.chatData.name}</h2>
-                    <p className="sidebarChat__info__lastMessage"><Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix /></p>
+                    <p className="sidebarChat__info__lastMessage">
+                        {(props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0
+                            ?
+                            <span className="sidebarChat__info__lastMessage__new">
+                                {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
+                            </span>
+                            :
+                            <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix />
+                        }
+                    </p>
                     {props.chatData.isExpired &&
                     <p className="sidebarChat__info__expired">Expired</p>
                     }
