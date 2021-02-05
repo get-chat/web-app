@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {Avatar, CircularProgress, IconButton, Zoom} from "@material-ui/core";
+import {Avatar, CircularProgress, IconButton, Snackbar, Zoom} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, MoreVert, Search, Send} from "@material-ui/icons";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
@@ -14,6 +14,7 @@ import SubjectIcon from '@material-ui/icons/Subject';
 import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import TemplateMessageClass from "../TemplateMessageClass";
+import {Alert} from "@material-ui/lab";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'image;'
@@ -34,6 +35,8 @@ export default function Chat(props) {
     const [selectedFile, setSelectedFile] = useState();
     const [templates, setTemplates] = useState({});
     const {waId} = useParams();
+
+    const [isErrorVisible, setErrorVisible] = React.useState(false);
 
     let cancelToken;
     let source;
@@ -96,6 +99,8 @@ export default function Chat(props) {
             })
             .catch((error) => {
                 // TODO: Handle errors
+
+                displayError();
             });
 
         return () => {
@@ -201,6 +206,8 @@ export default function Chat(props) {
                 setLoadingMoreMessages(false);
 
                 // TODO: Handle errors
+
+                displayError();
             });
     }
 
@@ -233,6 +240,8 @@ export default function Chat(props) {
             })
             .catch((error) => {
                 // TODO: Handle errors
+
+                displayError();
             });
     }
 
@@ -258,6 +267,8 @@ export default function Chat(props) {
                 })
                 .catch((error) => {
                     // TODO: Handle errors
+
+                    displayError();
                 });
 
             setInput("");
@@ -293,6 +304,8 @@ export default function Chat(props) {
                 })
                 .catch((error) => {
                     // TODO: Handle errors
+
+                    displayError();
                 });
         }
     }
@@ -313,6 +326,8 @@ export default function Chat(props) {
             })
             .catch((error) => {
                 // TODO: Handle errors
+
+                displayError();
             });
     }
 
@@ -343,6 +358,8 @@ export default function Chat(props) {
                 })
                 .catch((error) => {
                     // TODO: Handle errors
+
+                    displayError();
                 });
         }
     }
@@ -384,6 +401,8 @@ export default function Chat(props) {
                 })
                 .catch((error) => {
                     // TODO: Handle errors
+
+                    displayError();
                 });
         }
     }
@@ -411,6 +430,22 @@ export default function Chat(props) {
     };
 
     const avatarClasses = avatarStyles();
+
+    const displayError = () => {
+        setErrorVisible(true);
+    }
+
+    const handleClick = () => {
+        setErrorVisible(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setErrorVisible(false);
+    };
 
     return (
         <div className="chat">
@@ -508,6 +543,12 @@ export default function Chat(props) {
                 <p>Choose a contact to start a conversation</p>
             </div>
             }
+
+            <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    An error has occurred.
+                </Alert>
+            </Snackbar>
 
         </div>
     )
