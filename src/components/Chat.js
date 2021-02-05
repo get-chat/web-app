@@ -1,21 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {Avatar, CircularProgress, IconButton, Snackbar, Zoom} from "@material-ui/core";
-import {AttachFile, InsertEmoticon, MoreVert, Search, Send} from "@material-ui/icons";
+import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
-import {avatarStyles} from "../AvatarStyles";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
-import SubjectIcon from '@material-ui/icons/Subject';
 import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import ChatFooter from "./ChatFooter";
+import ChatHeader from "./ChatHeader";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'image;'
@@ -412,15 +410,9 @@ export default function Chat(props) {
         return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
     };
 
-    const avatarClasses = avatarStyles();
-
     const displayError = () => {
         setErrorVisible(true);
     }
-
-    const handleClick = () => {
-        setErrorVisible(true);
-    };
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -433,27 +425,9 @@ export default function Chat(props) {
     return (
         <div className="chat">
 
-            <div className="chat__header">
-                <Avatar className={contact?.isExpired ? '' : avatarClasses[contact?.initials]}>{contact?.initials}</Avatar>
-
-                <div className="chat__headerInfo">
-                    <h3>{contact?.name}</h3>
-                    {contact?.isExpired &&
-                    <p className="chat__header__expired">Expired</p>
-                    }
-
-                    {/*<p>Last seen at ...</p>*/}
-                </div>
-
-                <div className="chat__headerRight">
-                    <IconButton>
-                        <Search />
-                    </IconButton>
-                    <IconButton>
-                        <MoreVert />
-                    </IconButton>
-                </div>
-            </div>
+            <ChatHeader
+                contact={contact}
+            />
 
             <div id="chat__body" className="chat__body" ref={messagesContainer}>
                 <Zoom in={isLoadingMoreMessages}>
