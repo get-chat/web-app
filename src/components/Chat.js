@@ -420,7 +420,8 @@ export default function Chat(props) {
                         key={message[0]}
                         name={getSenderName(message[1])}
                         messageData={message[1]}
-                        onPreview={(chatMessage) => props.previewMedia(chatMessage)} />
+                        onPreview={(chatMessage) => props.previewMedia(chatMessage)}
+                        templates={templates} />
                 )}
 
                 <div className="chat__body__empty" />

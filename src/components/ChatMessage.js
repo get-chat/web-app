@@ -158,7 +158,13 @@ function ChatMessage(props) {
                 <span className="chat__document__filename">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</span>
             </a>
             }
+
             {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
+
+            {data.templateNamespace !== undefined &&
+                <span dangerouslySetInnerHTML={{__html: props.templates[data.templateName]?.text }} />
+            }
+
             <span className="chat__message__info">
                 <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
                 {data.isFromUs === true &&

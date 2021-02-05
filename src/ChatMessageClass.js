@@ -29,6 +29,9 @@ export class ChatMessageClass {
         this.audioId = payload.audio?.id;
         this.audioLink = payload.audio?.link;
         this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption;
+        this.templateName = payload.template?.name;
+        this.templateNamespace = payload.template?.namespace;
+        this.templateLanguage = payload.template?.language?.code;
     };
 
     hasMediaToPreview() {
