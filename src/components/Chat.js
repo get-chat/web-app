@@ -15,6 +15,11 @@ import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import TemplateMessageClass from "../TemplateMessageClass";
 
+const TYPE_IMAGE = 'image';
+const TYPE_VIDEO = 'image;'
+const TYPE_AUDIO = 'audio';
+const TYPE_DOCUMENT = 'document';
+
 export default function Chat(props) {
 
     const messagesContainer = useRef(null);
@@ -320,8 +325,12 @@ export default function Chat(props) {
 
             body[type] = {
                 link: fileURL,
-                filename: filename,
                 mime_type: mimeType
+            }
+
+            // filename param is not accepted for images
+            if (type !== TYPE_IMAGE) {
+                body[type]['filename'] = filename;
             }
 
             axios.post( `${BASE_URL}messages/${waId}/`, body, getConfig())
@@ -352,13 +361,13 @@ export default function Chat(props) {
             let targetType;
 
             if (selectedFileType.includes('image')) {
-                targetType = 'image';
+                targetType = TYPE_IMAGE;
             } else if (selectedFileType.includes('video')) {
-                targetType = 'video';
+                targetType = TYPE_VIDEO;
             } else if (selectedFileType.includes('audio')) {
-                targetType = 'audio';
+                targetType = TYPE_AUDIO;
             } else {
-                targetType = 'document';
+                targetType = TYPE_DOCUMENT;
             }
 
             const filename = selectedFile.name;
