@@ -113,7 +113,8 @@ export default function Chat(props) {
                 console.log("Scrolled to top");
                 if (isLoaded && !isLoadingMoreMessages) {
                     setLoadingMoreMessages(true);
-                    getMessages(getObjLength(messages));
+                    console.log();
+                    getMessages(messages[Object.keys(messages)[0]]?.timestamp /*getObjLength(messages)*/);
                 }
             }
         }
@@ -161,10 +162,11 @@ export default function Chat(props) {
         return Object.keys(obj).length;
     }
 
-    const getMessages = (offset) => {
+    const getMessages = (firstMessageTimestamp) => {
         axios.get( `${BASE_URL}messages/${waId}/`,
             getConfig({
-                offset: offset ?? 0,
+                //offset: offset ?? 0,
+                before_time: firstMessageTimestamp,
                 limit: 30,
             }, source.token)
         )
