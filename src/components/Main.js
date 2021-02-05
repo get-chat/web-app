@@ -92,9 +92,7 @@ function Main() {
             })
         )
             .then((response) => {
-                //console.log('Unseen messages', response.data);
-
-                let hasAnyNewMessages = false;
+                console.log('Unseen messages', response.data);
 
                 const preparedUnseenMessages = {};
                 response.data.map((unseenMessage, index) => {
@@ -103,6 +101,7 @@ function Main() {
                 });
 
                 if (willNotify) {
+                    let hasAnyNewMessages = false;
                     setUnseenMessages((prevState => {
                             Object.entries(preparedUnseenMessages).map((unseen, index) => {
                                 const unseenWaId = unseen[0]
@@ -123,6 +122,8 @@ function Main() {
                     if (hasAnyNewMessages) {
                         showNotification("New messages", "You have new messages!");
                     }
+                } else {
+                    setUnseenMessages(preparedUnseenMessages);
                 }
 
             })
