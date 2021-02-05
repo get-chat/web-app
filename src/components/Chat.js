@@ -388,7 +388,21 @@ export default function Chat(props) {
         }
     }
 
+    /*useEffect(() => {
+        const elem = messagesContainer.current;
+
+    }, [isTemplateMessagesVisible]);*/
+
     const toggleTemplateMessages = () => {
+        // If messages container is already scrolled to bottom
+        /*const elem = messagesContainer.current;
+        const offset = 5;
+
+        let willScroll = false;
+        if (elem.offsetHeight + elem.scrollTop >= (elem.scrollHeight - offset)) {
+            willScroll = true;
+        }*/
+
         setTemplateMessagesVisible((prevState => !prevState));
     }
 
