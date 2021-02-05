@@ -15,6 +15,7 @@ import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
+import ChatFooter from "./ChatFooter";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'image;'
@@ -24,7 +25,6 @@ const TYPE_DOCUMENT = 'document';
 export default function Chat(props) {
 
     const messagesContainer = useRef(null);
-    const fileInput = useRef(null);
     const [isLoaded, setLoaded] = useState(false);
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [isExpired, setExpired] = useState(false);
@@ -364,10 +364,6 @@ export default function Chat(props) {
         }
     }
 
-    const handleAttachmentClick = () => {
-        fileInput.current.click();
-    }
-
     const uploadFile = () => {
         console.log(selectedFile);
 
@@ -411,19 +407,6 @@ export default function Chat(props) {
         const elem = messagesContainer.current;
 
     }, [isTemplateMessagesVisible]);*/
-
-    const toggleTemplateMessages = () => {
-        // If messages container is already scrolled to bottom
-        /*const elem = messagesContainer.current;
-        const offset = 5;
-
-        let willScroll = false;
-        if (elem.offsetHeight + elem.scrollTop >= (elem.scrollHeight - offset)) {
-            willScroll = true;
-        }*/
-
-        setTemplateMessagesVisible((prevState => !prevState));
-    }
 
     const getSenderName = (message) => {
         return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
@@ -499,38 +482,12 @@ export default function Chat(props) {
 
                 :
 
-                <div className="chat__footer">
-
-                    <IconButton>
-                        <InsertEmoticon/>
-                    </IconButton>
-                    <IconButton onClick={handleAttachmentClick}>
-                        <AttachFile />
-                    </IconButton>
-                    <IconButton onClick={toggleTemplateMessages}>
-                        <SubjectIcon />
-                    </IconButton>
-
-                    {/*<AttachmentTypesMenu />*/}
-
-                    <form className="chat__mediaForm">
-                        <input
-                            type="file"
-                            //value={selectedFile}
-                            onChange={(e) => setSelectedFile(e.target.files[0])}
-                            ref={fileInput} />
-                    </form>
-
-                    <form>
-                        <textarea value={input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) sendMessage(e)}} onChange={e => setInput(e.target.value)} placeholder="Type a message" />
-                        <button onClick={sendMessage} type="submit">Send a message</button>
-                    </form>
-
-                    <IconButton onClick={sendMessage}>
-                        <Send />
-                    </IconButton>
-
-                </div>
+                <ChatFooter
+                    input={input}
+                    sendMessage={(e) => sendMessage(e)}
+                    setSelectedFile={setSelectedFile}
+                    setInput={setInput}
+                    setTemplateMessagesVisible={setTemplateMessagesVisible} />
             }
 
             {(isTemplateMessagesVisible || isExpired) &&
