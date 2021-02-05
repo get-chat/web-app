@@ -162,7 +162,7 @@ function ChatMessage(props) {
             {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
 
             {data.templateNamespace !== undefined &&
-                <span dangerouslySetInnerHTML={{__html: props.templates[data.templateName]?.text }} />
+                <span dangerouslySetInnerHTML={{__html: formatMessage(props.templates[data.templateName]?.text) }} />
             }
 
             <span className="chat__message__info">

@@ -113,12 +113,14 @@ export default function Chat(props) {
             }
         }
 
+        const messagesContainerCopy = messagesContainer.current;
+
         if (messagesContainer && isLoaded) {
-            messagesContainer.current.addEventListener("scroll", handleScroll);
+            messagesContainerCopy.addEventListener("scroll", handleScroll);
         }
 
         return () => {
-            messagesContainer.current.removeEventListener("scroll", handleScroll);
+            messagesContainerCopy.removeEventListener("scroll", handleScroll);
         }
     }, [messages, isLoaded, isLoadingMoreMessages]);
 

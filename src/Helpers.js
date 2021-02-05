@@ -43,6 +43,8 @@ function linkify(inputText) {
 }
 
 const formatMessage = (message) => {
+    if (!message) return;
+
     let formatted = message.replaceAll('\n', '<br/>');
     return linkify(formatted);
 }
