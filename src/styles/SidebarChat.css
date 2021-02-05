@@ -5,6 +5,10 @@
     border-bottom: 1px solid #f5f5f5;
 }
 
+.sidebarChat.activeChat {
+    background-color: #f5f5f5;
+}
+
 .sidebarChat:hover {
     background-color: #f5f5f5;
 }

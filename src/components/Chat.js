@@ -98,7 +98,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError();
+                displayError(error);
             });
 
         return () => {
@@ -215,7 +215,7 @@ export default function Chat(props) {
 
                 // TODO: Handle errors
 
-                displayError();
+                displayError(error);
             });
     }
 
@@ -252,7 +252,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError();
+                displayError(error);
             });
     }
 
@@ -279,7 +279,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError();
+                    displayError(error);
                 });
 
             setInput("");
@@ -316,7 +316,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError();
+                    displayError(error);
                 });
         }
     }
@@ -334,7 +334,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError();
+                displayError(error);
             });
     }
 
@@ -355,7 +355,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError();
+                displayError(error);
             });
     }
 
@@ -387,7 +387,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError();
+                    displayError(error);
                 });
         }
     }
@@ -426,7 +426,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError();
+                    displayError(error);
                 });
         }
     }
@@ -440,8 +440,10 @@ export default function Chat(props) {
         return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
     };
 
-    const displayError = () => {
-        setErrorVisible(true);
+    const displayError = (error) => {
+        if (!axios.isCancel(error)) {
+            setErrorVisible(true);
+        }
     }
 
     const handleClose = (event, reason) => {

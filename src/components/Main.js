@@ -8,8 +8,11 @@ import {BASE_URL, EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import UnseenMessageClass from "../UnseenMessageClass";
+import {useParams} from "react-router-dom";
 
 function Main() {
+
+    const {waId} = useParams();
 
     const [checked, setChecked] = React.useState(false);
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
@@ -31,6 +34,35 @@ function Main() {
         setChatMessageToPreview(chatMessage);
     }
 
+    const showNotification = (title, body, icon) => {
+        function showNot() {
+            // eslint-disable-next-line no-unused-vars
+            const notification = new Notification(title, {
+                body: body,
+                icon: icon
+            });
+        }
+        if (!window.Notification) {
+            console.log('Browser does not support notifications.');
+        } else {
+            // Check if permission is already granted
+            if (Notification.permission === 'granted') {
+                showNot();
+            } else {
+                // request permission from user
+                Notification.requestPermission().then(function (p) {
+                    if (p === 'granted') {
+                        showNot();
+                    } else {
+                        console.log('User blocked notifications.');
+                    }
+                }).catch(function (err) {
+                    console.error(err);
+                });
+            }
+        }
+    }
+
     useEffect(() => {
         setChecked(true);
 
@@ -38,26 +70,31 @@ function Main() {
         getUnseenMessages();
 
         let intervalId = 0;
-        intervalId = setInterval(() => {
-            getUnseenMessages();
-        }, 2500);
 
-        console.log("Interval is set");
+        if (waId) {
+            intervalId = setInterval(() => {
+                getUnseenMessages(true);
+            }, 2500);
+
+            console.log("Interval is set");
+        }
 
         return () => {
             clearInterval(intervalId);
         }
-    }, []);
+    }, [waId]);
 
-    const getUnseenMessages = () => {
+    const getUnseenMessages = (willNotify) => {
         axios.get( `${BASE_URL}unseen_messages/`,
             getConfig({
                 offset: 0,
-                limit: 30
+                limit: 50 // TODO: Could it be zero?
             })
         )
             .then((response) => {
                 //console.log('Unseen messages', response.data);
+
+                let hasAnyNewMessages = false;
 
                 const preparedUnseenMessages = {};
                 response.data.map((unseenMessage, index) => {
@@ -65,7 +102,28 @@ function Main() {
                     preparedUnseenMessages[prepared.waId] = prepared;
                 });
 
-                setUnseenMessages(preparedUnseenMessages);
+                if (willNotify) {
+                    setUnseenMessages((prevState => {
+                            Object.entries(preparedUnseenMessages).map((unseen, index) => {
+                                const unseenWaId = unseen[0]
+                                const number = unseen[1].unseenMessages;
+                                if (unseenWaId !== waId) {
+                                    // TODO: Consider a new contact (last part of the condition)
+                                    if ((prevState[unseenWaId] && number > prevState[unseenWaId].unseenMessages) /*|| (!prevState[unseenWaId] && number > 0)*/) {
+                                        hasAnyNewMessages = true;
+                                    }
+                                }
+                            });
+
+                            return preparedUnseenMessages;
+                        }
+                    ));
+
+                    // Display a notification
+                    if (hasAnyNewMessages) {
+                        showNotification("New messages", "You have new messages!");
+                    }
+                }
 
             })
             .catch((error) => {
