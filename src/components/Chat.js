@@ -38,6 +38,9 @@ export default function Chat(props) {
         source = cancelToken.source();
     }
 
+    // Generating cancel token
+    generateCancelToken();
+
     useEffect(() => {
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
@@ -58,47 +61,10 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
-        // Consider replacing this with IntersectionObserver
-        // Browser support should be considered: https://caniuse.com/intersectionobserver
-        function handleScroll(e) {
-            const threshold = 0;
-            if (isScrollable(e.target) && e.target.scrollTop <= threshold) {
-                console.log("Scrolled to top");
-                if (isLoaded && !isLoadingMoreMessages) {
-                    setLoadingMoreMessages(true);
-                    getMessages(getObjLength(messages));
-                }
-            }
-        }
-
-        if (messagesContainer) {
-            messagesContainer.current.addEventListener("scroll", handleScroll);
-        }
-
-        return () => {
-            messagesContainer.current.removeEventListener("scroll", handleScroll);
-        }
-    }, [messages, isLoaded, isLoadingMoreMessages]);
-
-    useEffect(() => {
-        let intervalId = 0;
-        if (getObjLength(messages) > 0) {
-            intervalId = setInterval(() => {
-                getNewMessagesTemp();
-            }, 2500);
-
-            console.log("Interval is set");
-        }
-        return () => {
-            clearInterval(intervalId);
-        }
-    }, [messages]);
-
-    useEffect(() => {
         setLoaded(false);
 
         // Generating cancel token
-        generateCancelToken();
+        //generateCancelToken();
 
         // Clear values for next route
         setContact(null);
@@ -132,6 +98,45 @@ export default function Chat(props) {
             source.cancel();
         }
     }, [waId]);
+
+    useEffect(() => {
+        console.warn(source);
+
+        // Consider replacing this with IntersectionObserver
+        // Browser support should be considered: https://caniuse.com/intersectionobserver
+        function handleScroll(e) {
+            const threshold = 0;
+            if (isScrollable(e.target) && e.target.scrollTop <= threshold) {
+                console.log("Scrolled to top");
+                if (isLoaded && !isLoadingMoreMessages) {
+                    setLoadingMoreMessages(true);
+                    getMessages(getObjLength(messages));
+                }
+            }
+        }
+
+        if (messagesContainer && isLoaded) {
+            messagesContainer.current.addEventListener("scroll", handleScroll);
+        }
+
+        return () => {
+            messagesContainer.current.removeEventListener("scroll", handleScroll);
+        }
+    }, [messages, isLoaded, isLoadingMoreMessages]);
+
+    useEffect(() => {
+        let intervalId = 0;
+        if (getObjLength(messages) > 0) {
+            intervalId = setInterval(() => {
+                getNewMessagesTemp();
+            }, 2500);
+
+            console.log("Interval is set");
+        }
+        return () => {
+            clearInterval(intervalId);
+        }
+    }, [messages]);
 
     useEffect(() => {
         if (selectedFile) {
