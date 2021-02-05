@@ -16,7 +16,7 @@ import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
 
 const TYPE_IMAGE = 'image';
-const TYPE_VIDEO = 'video;'
+const TYPE_VIDEO = 'video';
 const TYPE_AUDIO = 'audio';
 const TYPE_DOCUMENT = 'document';
 
@@ -374,7 +374,7 @@ export default function Chat(props) {
             }
 
             // filename param is not accepted for images
-            if (type !== TYPE_IMAGE) {
+            if (type !== TYPE_IMAGE && type !== TYPE_VIDEO) {
                 body[type]['filename'] = filename;
             }
 
