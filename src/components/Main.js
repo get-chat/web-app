@@ -92,7 +92,7 @@ function Main() {
             })
         )
             .then((response) => {
-                console.log('Unseen messages', response.data);
+                //console.log('Unseen messages', response.data);
 
                 const preparedUnseenMessages = {};
                 response.data.map((unseenMessage, index) => {
