@@ -17,7 +17,7 @@
     background-color: white;
     border-radius: 10px;
     box-shadow: -1px 4px 10px -6px rgba(0, 0, 0, 0.7);
-    padding: 20px 30px;
+    padding: 20px 30px 30px 30px;
 }
 
 @media only screen and (max-width: 750px) {
@@ -64,4 +64,8 @@
     bottom: 0;
     background-color: white;
     border-radius: 10px;
+}
+
+.login__body .MuiAlert-root {
+    margin-top: 15px;
 }

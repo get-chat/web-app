@@ -67,7 +67,7 @@ a {
     color: inherit;
 }
 
-.MuiSvgIcon-root {
+.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root) {
     color: #919191;
 }
 

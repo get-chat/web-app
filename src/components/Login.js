@@ -6,6 +6,7 @@ import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {clearToken, getConfig, getToken, setToken} from "../Helpers";
+import {Alert} from "@material-ui/lab";
 
 const BASE_URL = 'https://whatsapp.kondz.io/api/v1/';
 
@@ -23,7 +24,8 @@ export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoggingIn, setLoggingIn] = useState(false);
-    const[isValidatingToken, setValidatingToken] = useState(false);
+    const [isValidatingToken, setValidatingToken] = useState(false);
+    const [loginError, setLoginError] = useState();
 
     const history = useHistory();
 
@@ -71,6 +73,7 @@ export default function Login() {
 
             // Hide the loading animation
             setLoggingIn(false);
+            setLoginError(undefined);
 
             // Handle the error
             if (error.response) {
@@ -78,12 +81,18 @@ export default function Login() {
                 console.log(error.response.data);
                 console.log(error.response.status);
                 console.log(error.response.headers);
+
+                setLoginError("Incorrect username or password.");
             } else if (error.request) {
                 // The request was made but no response was received
                 console.log(error.request);
+
+                setLoginError("An error has occurred.");
             } else {
                 // Something happened in setting up the request that triggered an Error
                 console.log('Error', error.message);
+
+                setLoginError("An error has occurred.");
             }
         })
     }
@@ -107,6 +116,10 @@ export default function Login() {
                         <h2>Welcome</h2>
                         <p>We are validating your session, please wait.</p>
                     </div>
+                    }
+
+                    {loginError &&
+                    <Alert severity="error">{loginError}</Alert>
                     }
                 </div>
             </Fade>
