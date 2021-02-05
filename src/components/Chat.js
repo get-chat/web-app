@@ -462,7 +462,7 @@ export default function Chat(props) {
                     </form>
 
                     <form>
-                        <input value={input} onChange={e => setInput(e.target.value)} placeholder="Type a message" type="text" />
+                        <textarea value={input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) sendMessage(e)}} onChange={e => setInput(e.target.value)} placeholder="Type a message" />
                         <button onClick={sendMessage} type="submit">Send a message</button>
                     </form>
 
