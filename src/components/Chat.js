@@ -4,7 +4,7 @@ import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {getConfig} from "../Helpers";
+import {getConfig, getLastMessageAndExtractTimestamp} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -199,6 +199,16 @@ export default function Chat(props) {
 
                 setLoaded(true);
                 setLoadingMoreMessages(false);
+
+                // TODO: Check unread messages first and then decide to do it or not
+                // Mark messages as seen
+                if (!firstMessageTimestamp) {
+                    // firstMessageTimestamp is not passed only for initial request
+                    // Mark messages as seen
+                    const lastMessageTimestamp = getLastMessageAndExtractTimestamp(preparedMessages);
+                    markAsSeen(lastMessageTimestamp);
+                }
+
             })
             .catch((error) => {
                 setLoadingMoreMessages(false);
@@ -215,7 +225,7 @@ export default function Chat(props) {
             getConfig({
                 offset: 0,
                 limit: 30
-            })
+            }, source.token)
         )
             .then((response) => {
                 //console.log("Interval: Messages", response.data);
@@ -234,6 +244,9 @@ export default function Chat(props) {
                         }
                     ));
 
+                    // Mark messages as seen
+                    const lastNewMessageTimestamp = getLastMessageAndExtractTimestamp(preparedNewMessages);
+                    markAsSeen(lastNewMessageTimestamp);
                 }
             })
             .catch((error) => {
@@ -306,6 +319,23 @@ export default function Chat(props) {
                     displayError();
                 });
         }
+    }
+
+    const markAsSeen = (timestamp) => {
+        console.log('Marking as seen', timestamp);
+
+        axios.post( `${BASE_URL}mark_as_seen/`, {
+            timestamp: timestamp,
+            customer_wa_id: waId
+        }, getConfig(undefined, source.token))
+            .then((response) => {
+                //console.log(response.data);
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+
+                displayError();
+            });
     }
 
     const getTemplates = () => {
