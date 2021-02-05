@@ -16,7 +16,7 @@ import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
 
 const TYPE_IMAGE = 'image';
-const TYPE_VIDEO = 'image;'
+const TYPE_VIDEO = 'video;'
 const TYPE_AUDIO = 'audio';
 const TYPE_DOCUMENT = 'document';
 
