@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {IconButton} from "@material-ui/core";
+import {IconButton, Tooltip} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SubjectIcon from "@material-ui/icons/Subject";
 
@@ -27,15 +27,23 @@ function ChatFooter(props) {
     return (
         <div className="chat__footer">
 
-            <IconButton>
-                <InsertEmoticon/>
-            </IconButton>
-            <IconButton onClick={handleAttachmentClick}>
-                <AttachFile />
-            </IconButton>
-            <IconButton onClick={toggleTemplateMessages}>
-                <SubjectIcon />
-            </IconButton>
+            <Tooltip title="Emoji">
+                <IconButton>
+                    <InsertEmoticon/>
+                </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Attachment">
+                <IconButton onClick={handleAttachmentClick}>
+                    <AttachFile />
+                </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Templates">
+                <IconButton onClick={toggleTemplateMessages}>
+                    <SubjectIcon />
+                </IconButton>
+            </Tooltip>
 
             {/*<AttachmentTypesMenu />*/}
 
