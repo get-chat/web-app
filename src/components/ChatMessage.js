@@ -40,7 +40,6 @@ function ChatMessage(props) {
     const duration = useRef(null);
 
     const mySubscriber = function (msg, data) {
-        //console.log(msg, data);
         if (data === 'pause') {
             pauseVoice();
         }
