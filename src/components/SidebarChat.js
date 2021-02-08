@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
 import {Avatar} from "@material-ui/core";
 import {Link, useParams} from "react-router-dom";
@@ -9,6 +9,9 @@ import moment from "moment";
 function SidebarChat(props) {
 
     const [timeLeft, setTimeLeft] = useState();
+    const {waId} = useParams();
+    const dateFormat = 'H:mm';
+    const avatarClasses = avatarStyles();
 
     useEffect(() => {
 
@@ -44,18 +47,12 @@ function SidebarChat(props) {
 
         let intervalId = setInterval(() => {
             calculateRemaining();
-        }, 2500);
+        }, 30000);
 
         return () => {
             clearInterval(intervalId);
         }
     }, [props.chatData.lastMessageTimestamp]);
-
-    const {waId} = useParams();
-
-    const dateFormat = 'H:mm';
-
-    const avatarClasses = avatarStyles();
 
     return (
         <Link to={ `/main/chat/${props.chatData.waId}` }>
