@@ -1,11 +1,55 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/SidebarChat.css';
 import {Avatar} from "@material-ui/core";
 import {Link, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
+import moment from "moment";
 
 function SidebarChat(props) {
+
+    const [timeLeft, setTimeLeft] = useState();
+
+    useEffect(() => {
+
+        function calculateRemaining() {
+            const momentDate = moment.unix(props.chatData.lastMessageTimestamp);
+            momentDate.add(1, 'day');
+            const curDate = moment(new Date());
+
+            const hours = momentDate.diff(curDate, 'hours');
+
+            let suffix;
+
+            if (hours > 0) {
+                if (hours === 1) {
+                    suffix = ' hour';
+                } else {
+                    suffix = ' hours';
+                }
+                setTimeLeft(hours + suffix);
+            } else {
+                if (hours > 1) {
+                    suffix = ' minutes';
+                } else {
+                    suffix = ' minute';
+                }
+                const minutes = momentDate.diff(curDate, 'minutes');
+                setTimeLeft(minutes + suffix);
+            }
+        }
+
+        // Initial
+        calculateRemaining();
+
+        let intervalId = setInterval(() => {
+            calculateRemaining();
+        }, 2500);
+
+        return () => {
+            clearInterval(intervalId);
+        }
+    }, [props.chatData.lastMessageTimestamp]);
 
     const {waId} = useParams();
 
@@ -29,9 +73,16 @@ function SidebarChat(props) {
                             <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix />
                         }
                     </p>
-                    {props.chatData.isExpired &&
-                    <p className="sidebarChat__info__expired">Expired</p>
+
+                    {props.chatData.isExpired
+                        ?
+                        <p className="sidebarChat__info__expired">Expired</p>
+                        :
+                        <p className="sidebarChat__info__timeLeft">
+                            {timeLeft} left
+                        </p>
                     }
+
                 </div>
             </div>
         </Link>

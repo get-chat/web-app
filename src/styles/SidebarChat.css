@@ -40,6 +40,11 @@
     color: #a9a92a;
 }
 
+.sidebarChat__info__timeLeft {
+    font-size: 12px;
+    color: #00b9d9;
+}
+
 .sidebarChat__info {
     margin-left: 15px;
 }
