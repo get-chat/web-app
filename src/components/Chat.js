@@ -131,6 +131,14 @@ export default function Chat(props) {
     }, [messages, isLoaded, isLoadingMoreMessages]);
 
     useEffect(() => {
+        // Scrolling to bottom on initial load
+        if (templates) {
+            const target = messagesContainer.current;
+            target.scroll({top: target.scrollHeight});
+        }
+    }, [templates]);
+
+    useEffect(() => {
         let intervalId = 0;
         if (getObjLength(messages) > 0) {
             intervalId = setInterval(() => {
@@ -277,6 +285,19 @@ export default function Chat(props) {
                     // TODO: Handle errors
 
                     displayError(error);
+
+                    // TODO: Switch to expired mode, if status code is: XXX
+
+                    console.log(error);
+                    console.log(error.response);
+
+                    if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    }
+
                 });
 
             setInput("");
