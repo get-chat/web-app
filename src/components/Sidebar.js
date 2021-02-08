@@ -51,7 +51,7 @@ function Sidebar(props) {
     const getContacts = () => {
         axios.get(`${BASE_URL}contacts/`, getConfig())
             .then((response) => {
-                console.log("Contacts", response.data)
+                //console.log("Contacts", response.data)
 
                 const preparedChats = {};
                 response.data.results.map((contact) => {
