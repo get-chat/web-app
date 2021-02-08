@@ -136,11 +136,11 @@ export default function Chat(props) {
 
     useEffect(() => {
         // Scrolling to bottom on initial load
-        if (templates) {
+        if (!isLoadingTemplates) {
             const target = messagesContainer.current;
             target.scroll({top: target.scrollHeight});
         }
-    }, [templates]);
+    }, [isLoadingTemplates]);
 
     useEffect(() => {
         let intervalId = 0;

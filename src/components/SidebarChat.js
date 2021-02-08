@@ -32,12 +32,12 @@ function SidebarChat(props) {
                 }
                 setTimeLeft(hours + suffix);
             } else {
-                if (hours > 1) {
+                const minutes = momentDate.diff(curDate, 'minutes');
+                if (minutes > 1) {
                     suffix = ' minutes';
                 } else {
                     suffix = ' minute';
                 }
-                const minutes = momentDate.diff(curDate, 'minutes');
                 setTimeLeft(minutes + suffix);
             }
         }
