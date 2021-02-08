@@ -27,19 +27,19 @@ function ChatFooter(props) {
     return (
         <div className="chat__footer">
 
-            <Tooltip title="Emoji">
+            <Tooltip title="Emoji" placement="top">
                 <IconButton>
                     <InsertEmoticon/>
                 </IconButton>
             </Tooltip>
 
-            <Tooltip title="Attachment">
+            <Tooltip title="Attachment" placement="top">
                 <IconButton onClick={handleAttachmentClick}>
                     <AttachFile />
                 </IconButton>
             </Tooltip>
 
-            <Tooltip title="Templates">
+            <Tooltip title="Templates" placement="top">
                 <IconButton onClick={toggleTemplateMessages}>
                     <SubjectIcon />
                 </IconButton>
@@ -60,9 +60,11 @@ function ChatFooter(props) {
                 <button onClick={props.sendMessage} type="submit">Send a message</button>
             </form>
 
-            <IconButton onClick={props.sendMessage}>
-                <Send />
-            </IconButton>
+            <Tooltip title="Send" placement="top">
+                <IconButton onClick={props.sendMessage}>
+                    <Send />
+                </IconButton>
+            </Tooltip>
 
         </div>
     )
