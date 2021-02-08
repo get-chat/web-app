@@ -34,7 +34,8 @@ export default function Chat(props) {
     const [templates, setTemplates] = useState({});
     const {waId} = useParams();
 
-    const [isErrorVisible, setErrorVisible] = React.useState(false);
+    const [isErrorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
     let cancelToken;
     let source;
@@ -453,6 +454,7 @@ export default function Chat(props) {
 
     const displayError = (error) => {
         if (!axios.isCancel(error)) {
+            setErrorMessage(error.response?.data?.reason ?? 'An error has occurred.');
             setErrorVisible(true);
         }
     }
@@ -494,11 +496,8 @@ export default function Chat(props) {
 
             {isExpired
                 ?
-
                 <ChatFooterExpired />
-
                 :
-
                 <ChatFooter
                     input={input}
                     sendMessage={(e) => sendMessage(e)}
@@ -520,7 +519,7 @@ export default function Chat(props) {
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
-                    An error has occurred.
+                    {errorMessage}
                 </Alert>
             </Snackbar>
 
