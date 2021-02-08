@@ -9,7 +9,7 @@ function ChatHeader(props) {
 
     return (
         <div className="chat__header">
-            <Avatar className={props.contact?.isExpired ? '' : avatarClasses[props.contact?.initials]}>{props.contact?.initials}</Avatar>
+            <Avatar className={props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]}>{props.contact?.initials}</Avatar>
 
             <div className="chat__headerInfo">
                 <h3>{props.contact?.name}</h3>

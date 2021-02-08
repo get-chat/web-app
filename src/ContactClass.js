@@ -21,6 +21,10 @@ class ContactClass {
     checkIfExpired() {
         return this.getPastHoursAfterLastMessage() >= 24;
     }
+
+    getAvatarClassName() {
+        return this.initials ? this.initials[0] : '';
+    }
 }
 
 export default ContactClass;

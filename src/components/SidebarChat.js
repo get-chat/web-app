@@ -57,7 +57,7 @@ function SidebarChat(props) {
     return (
         <Link to={ `/main/chat/${props.chatData.waId}` }>
             <div id={props.chatData.waId} className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat' : '')}>
-                <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.initials]}>{props.chatData.initials}</Avatar>
+                <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
                     <h2>{props.chatData.name}</h2>
                     <p className="sidebarChat__info__lastMessage">

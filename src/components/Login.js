@@ -21,8 +21,8 @@ export default function Login() {
 
     const classes = useStyles();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [isValidatingToken, setValidatingToken] = useState(false);
     const [loginError, setLoginError] = useState();
@@ -51,7 +51,7 @@ export default function Login() {
         e.preventDefault();
 
         // Check if username or password is empty
-        if (username.trim() === "" || password.trim() === "") {
+        if (username.trim() === '' || password.trim() === '') {
             // TODO: Display error on UI
             console.log("Empty credentials");
             return false;

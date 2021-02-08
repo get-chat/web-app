@@ -147,7 +147,7 @@ function Main() {
                 <div className="app__imagePreview">
                     <div className="app__imagePreview__header">
 
-                        <Avatar className={avatarClasses[chatMessageToPreview.preparedInitials]}>{chatMessageToPreview.preparedInitials}</Avatar>
+                        <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
                         <div className="app_imagePreview__header__senderInfo">
                             <h3>{chatMessageToPreview.preparedName}</h3>
                         </div>

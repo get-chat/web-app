@@ -29,14 +29,14 @@ export default function Chat(props) {
     const [isTemplateMessagesVisible, setTemplateMessagesVisible] = useState(false);
     const [contact, setContact] = useState();
     const [messages, setMessages] = useState({});
-    const [input, setInput] = useState("");
+    const [input, setInput] = useState('');
     const [selectedFile, setSelectedFile] = useState();
 
     const [templates, setTemplates] = useState({});
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 
     const [isErrorVisible, setErrorVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
 
     const {waId} = useParams();
 
@@ -268,7 +268,7 @@ export default function Chat(props) {
     const sendMessage = (e) => {
         e.preventDefault();
 
-        if (input.trim() === "") {
+        if (input.trim() === '') {
             return false;
         }
 
@@ -302,7 +302,7 @@ export default function Chat(props) {
 
                 });
 
-            setInput("");
+            setInput('');
         }
     }
 
