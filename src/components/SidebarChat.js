@@ -67,7 +67,9 @@ function SidebarChat(props) {
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
                             </span>
                             :
-                            <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix />
+                            <span>
+                                Last message at <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix />
+                            </span>
                         }
                     </p>
 
