@@ -288,14 +288,12 @@ export default function Chat(props) {
 
                     // TODO: Switch to expired mode, if status code is: XXX
 
-                    console.log(error);
-                    console.log(error.response);
 
                     if (error.response) {
                         // Request made and server responded
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
+                        if (error.response.status === 453) {
+                            setExpired(true);
+                        }
                     }
 
                 });
