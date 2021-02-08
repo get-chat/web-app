@@ -9,6 +9,7 @@ import axios from "axios";
 import {getConfig} from "../Helpers";
 import UnseenMessageClass from "../UnseenMessageClass";
 import {useParams} from "react-router-dom";
+import {avatarStyles} from "../AvatarStyles";
 
 function Main() {
 
@@ -17,6 +18,8 @@ function Main() {
     const [checked, setChecked] = React.useState(false);
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [unseenMessages, setUnseenMessages] = useState({});
+
+    const avatarClasses = avatarStyles();
 
     const hideImageOrVideoPreview = () => {
         setChatMessageToPreview(null);
@@ -144,7 +147,7 @@ function Main() {
                 <div className="app__imagePreview">
                     <div className="app__imagePreview__header">
 
-                        <Avatar>{chatMessageToPreview.preparedInitials}</Avatar>
+                        <Avatar className={avatarClasses[chatMessageToPreview.preparedInitials]}>{chatMessageToPreview.preparedInitials}</Avatar>
                         <div className="app_imagePreview__header__senderInfo">
                             <h3>{chatMessageToPreview.preparedName}</h3>
                         </div>

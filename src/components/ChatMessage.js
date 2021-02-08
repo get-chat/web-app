@@ -26,7 +26,7 @@ function ChatMessage(props) {
     const data = props.messageData;
 
     const generateInitials = () => {
-        return props.name? props.name[0] : "";
+        return (props.name? props.name[0] : "")?.toUpperCase();
     }
 
     data.preparedName = props.name;
