@@ -31,11 +31,14 @@ export default function Chat(props) {
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState("");
     const [selectedFile, setSelectedFile] = useState();
+
     const [templates, setTemplates] = useState({});
-    const {waId} = useParams();
+    const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 
     const [isErrorVisible, setErrorVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
+
+    const {waId} = useParams();
 
     let cancelToken;
     let source;
@@ -367,6 +370,7 @@ export default function Chat(props) {
                 });
 
                 setTemplates(preparedTemplates);
+                setLoadingTemplates(false);
 
             })
             .catch((error) => {
@@ -507,7 +511,10 @@ export default function Chat(props) {
             }
 
             {(isTemplateMessagesVisible || isExpired) &&
-            <TemplateMessages templatesData={templates} onSend={(templateMessage) => sendTemplateMessage(templateMessage)} />
+            <TemplateMessages
+                templatesData={templates}
+                onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
+                isLoadingTemplates={isLoadingTemplates} />
             }
 
             {!waId &&
