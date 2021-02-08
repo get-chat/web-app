@@ -69,9 +69,6 @@ export default function Chat(props) {
     useEffect(() => {
         setLoaded(false);
 
-        // Generating cancel token
-        //generateCancelToken();
-
         // Clear values for next route
         setContact(null);
         setMessages([]);
@@ -430,11 +427,6 @@ export default function Chat(props) {
                 });
         }
     }
-
-    /*useEffect(() => {
-        const elem = messagesContainer.current;
-
-    }, [isTemplateMessagesVisible]);*/
 
     const getSenderName = (message) => {
         return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
