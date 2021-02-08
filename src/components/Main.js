@@ -144,9 +144,9 @@ function Main() {
                 <div className="app__imagePreview">
                     <div className="app__imagePreview__header">
 
-                        <Avatar>?</Avatar>
+                        <Avatar>{chatMessageToPreview.preparedInitials}</Avatar>
                         <div className="app_imagePreview__header__senderInfo">
-                            <h3>{chatMessageToPreview.waId}</h3>
+                            <h3>{chatMessageToPreview.preparedName}</h3>
                         </div>
 
                         <IconButton className="app__imagePreview__close" onClick={() => hideImageOrVideoPreview()}>

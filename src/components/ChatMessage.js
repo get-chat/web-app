@@ -25,6 +25,13 @@ function ChatMessage(props) {
 
     const data = props.messageData;
 
+    const generateInitials = () => {
+        return props.name? props.name[0] : "";
+    }
+
+    data.preparedName = props.name;
+    data.preparedInitials = generateInitials();
+
     const [isPlaying, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
     const [currentDuration, setCurrentDuration] = useState("0:00");
@@ -116,10 +123,6 @@ function ChatMessage(props) {
         }
     }
 
-    const generateInitials = () => {
-        return props.name? props.name[0] : "";
-    }
-
     const avatarClasses = avatarStyles();
 
     const dateFormat = 'H:mm';
@@ -147,8 +150,8 @@ function ChatMessage(props) {
                 <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
                 <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[generateInitials()] : avatarClasses.orange}>
-                    {data.voiceId !== undefined ? <span>{generateInitials()}</span> : <HeadsetIcon/>}
+                <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.preparedInitials] : avatarClasses.orange}>
+                    {data.voiceId !== undefined ? <span>{data.preparedInitials}</span> : <HeadsetIcon/>}
                 </Avatar>
             </span>
             }
