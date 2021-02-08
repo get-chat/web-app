@@ -37,10 +37,21 @@ function Sidebar(props) {
     };
 
     useEffect(() => {
+        getContacts();
+
+        const intervalId = setInterval(() => {
+            getContacts();
+        }, 5000);
+
+        return () => {
+            clearInterval(intervalId);
+        }
+    }, []);
+
+    const getContacts = () => {
         axios.get(`${BASE_URL}contacts/`, getConfig())
             .then((response) => {
                 console.log("Contacts", response.data)
-                //setChats(response.data.results)
 
                 const preparedChats = {};
                 response.data.results.map((contact) => {
@@ -53,6 +64,8 @@ function Sidebar(props) {
             })
             .catch((error) => {
                 console.log(error);
+
+                // TODO: Move this to a common interceptor
                 if (error.response) {
                     if (error.response.status === 401) {
                         // Invalid token
@@ -60,7 +73,7 @@ function Sidebar(props) {
                     }
                 }
             });
-    }, []);
+    }
 
     return (
         <div className="sidebar">
