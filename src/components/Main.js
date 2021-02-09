@@ -4,12 +4,13 @@ import Chat from "./Chat";
 import {Avatar, Fade, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {BASE_URL, EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import UnseenMessageClass from "../UnseenMessageClass";
 import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
+import SearchMessage from "./SearchMessage";
 
 function Main() {
 
@@ -18,6 +19,7 @@ function Main() {
     const [checked, setChecked] = React.useState(false);
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [unseenMessages, setUnseenMessages] = useState({});
+    const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
 
     const avatarClasses = avatarStyles();
 
@@ -65,6 +67,17 @@ function Main() {
             }
         }
     }
+
+    const mySubscriber = function (msg, data) {
+        setSearchMessagesVisible(data);
+    };
+
+    useEffect(() => {
+        const token = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, mySubscriber);
+        return () => {
+            PubSub.unsubscribe(token);
+        }
+    }, []);
 
     useEffect(() => {
         setChecked(true);
@@ -138,10 +151,12 @@ function Main() {
     return (
         <Fade in={checked}>
             <div className="app__body">
-                <Sidebar
-                    unseenMessages={unseenMessages}
-                />
+                <Sidebar unseenMessages={unseenMessages} />
                 <Chat previewMedia={(chatMessage) => previewMedia(chatMessage)} />
+
+                {isSearchMessagesVisible &&
+                <SearchMessage />
+                }
 
                 {chatMessageToPreview &&
                 <div className="app__imagePreview">

@@ -52,11 +52,11 @@
     }
 }
 
-@media only screen and (max-width: 750px) {
+/*@media only screen and (max-width: 750px) {
     .app__body {
         display: inherit;
     }
-}
+}*/
 
 h1, h2, h3, h4, h5 {
     font-weight: 600;
