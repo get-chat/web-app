@@ -10,7 +10,7 @@ function TemplateMessages(props) {
     return (
         <div className="templateMessagesOuter">
 
-            {/*<SearchBar />*/}
+            <SearchBar />
 
             {props.isLoadingTemplates
                 ?

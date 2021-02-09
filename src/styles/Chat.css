@@ -281,13 +281,18 @@ a.chat__document:hover {
     border-left: 1px solid lightgray;
 }
 
+.templateMessagesOuter .searchBar__search {
+    background-color: rgba(0, 0, 0, 0.17);
+    border-radius: 10px 10px 0 0;
+}
+
 .templateMessages {
     flex: 1 1;
     max-height: 290px;
     overflow-y: auto;
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-radius: 0 0 10px 10px;
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
