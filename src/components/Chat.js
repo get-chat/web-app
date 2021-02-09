@@ -14,6 +14,7 @@ import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
+import {getPastHoursByTimestamp} from "../DateHelpers";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -256,6 +257,21 @@ export default function Chat(props) {
                     // Mark messages as seen
                     const lastNewMessageTimestamp = getLastMessageAndExtractTimestamp(preparedNewMessages);
                     markAsSeen(lastNewMessageTimestamp);
+
+                    // TODO: Implement a better solution after switching to websockets
+                    // Check if there is a new message from customer, if yes then chat is not expired
+                    if (isExpired) {
+                        for (const msgId in preparedNewMessages) {
+                            const msg = preparedNewMessages[msgId];
+                            console.log(msg.isFromUs);
+                            if (msg.isFromUs === false) {
+                                if (getPastHoursByTimestamp(msg.timestamp) < 24) {
+                                    setExpired(false);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             })
             .catch((error) => {

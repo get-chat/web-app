@@ -49,9 +49,13 @@ const formatMessage = (message) => {
     return linkify(formatted);
 }
 
+const getLastMessage = (messagesObject) => {
+    return messagesObject[Object.keys(messagesObject)[Object.keys(messagesObject).length-1]];
+}
+
 const getLastMessageAndExtractTimestamp = (messagesObject) => {
-    const last = messagesObject[Object.keys(messagesObject)[Object.keys(messagesObject).length-1]];
+    const last = getLastMessage(messagesObject);
     return last ? parseInt(last.timestamp) : -1;
 }
 
-export {getToken, getConfig, setToken, clearToken, formatMessage, getLastMessageAndExtractTimestamp};
+export {getToken, getConfig, setToken, clearToken, formatMessage, getLastMessage, getLastMessageAndExtractTimestamp};

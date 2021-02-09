@@ -1,4 +1,4 @@
-import moment from "moment";
+import {getPastHoursByTimestamp} from "./DateHelpers";
 
 class ContactClass {
 
@@ -13,9 +13,7 @@ class ContactClass {
     }
 
     getPastHoursAfterLastMessage() {
-        const momentDate = moment.unix(this.lastMessageTimestamp);
-        const curDate = moment(new Date());
-        return curDate.diff(momentDate, 'hours');
+        return getPastHoursByTimestamp(this.lastMessageTimestamp);
     }
 
     checkIfExpired() {

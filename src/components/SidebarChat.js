@@ -19,7 +19,6 @@ function SidebarChat(props) {
             const momentDate = moment.unix(props.chatData.lastMessageTimestamp);
             momentDate.add(1, 'day');
             const curDate = moment(new Date());
-
             const hours = momentDate.diff(curDate, 'hours');
 
             let suffix;
