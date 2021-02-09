@@ -1,7 +1,7 @@
 import React, {useRef} from 'react';
 import {IconButton, Tooltip} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
-import SubjectIcon from "@material-ui/icons/Subject";
+import SmsIcon from '@material-ui/icons/Sms';
 
 function ChatFooter(props) {
 
@@ -41,7 +41,7 @@ function ChatFooter(props) {
 
             <Tooltip title="Templates" placement="top">
                 <IconButton onClick={toggleTemplateMessages}>
-                    <SubjectIcon />
+                    <SmsIcon />
                 </IconButton>
             </Tooltip>
 

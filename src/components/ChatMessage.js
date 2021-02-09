@@ -13,6 +13,7 @@ import {formatMessage} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
+import SmsIcon from '@material-ui/icons/Sms';
 
 const playIconStyles = {
     fontSize: '38px'
@@ -173,14 +174,15 @@ function ChatMessage(props) {
                 }
 
                 {data.type === TYPE_STICKER &&
-                /*<span>Sticker</span>*/
-                    <span>
-                        <NoteIcon />
-                    </span>
+                <span>
+                    <NoteIcon fontSize="small" />
+                </span>
                 }
 
                 {data.type === TYPE_TEMPLATE &&
-                <span className="chat__templateHeader">Template message:<br/></span>
+                <span className="chat__templateHeader">
+                    <SmsIcon />Template message:<br/>
+                </span>
                 }
 
                 {data.type === TYPE_TEMPLATE &&

@@ -161,6 +161,13 @@ a.chat__document:hover {
     color: #6e858c;
 }
 
+.chat__templateHeader .MuiSvgIcon-root {
+    color: #6e858c!important;
+    width: 0.6em;
+    height: 0.6em;
+    margin-right: 5px;
+}
+
 .chat__templateMsg {
     background-color: #d7edf4!important;
 }
