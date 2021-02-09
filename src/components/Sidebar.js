@@ -10,6 +10,7 @@ import {clearToken, getConfig} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
 import ContactClass from "../ContactClass";
+import SearchBar from "./SearchBar";
 
 function Sidebar(props) {
 
@@ -89,12 +90,7 @@ function Sidebar(props) {
                 </div>
             </div>
 
-            <div className="sidebar__search">
-                <div className="sidebar__searchContainer">
-                    <SearchOutlined />
-                    <input placeholder="Search" type="text" />
-                </div>
-            </div>
+            <SearchBar />
 
             <div className="sidebar__chats">
                 { Object.entries(chats).map((chat) =>

@@ -4,6 +4,7 @@ import {IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
+import SearchBar from "./SearchBar";
 
 function SearchMessage(props) {
 
@@ -20,6 +21,8 @@ function SearchMessage(props) {
 
                 <h3>Search For Messages</h3>
             </div>
+
+            <SearchBar />
 
             <div className="searchMessage__body">
 
