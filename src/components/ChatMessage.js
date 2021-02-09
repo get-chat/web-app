@@ -168,11 +168,11 @@ function ChatMessage(props) {
             <span className="chat__templateHeader">Template message:<br/></span>
             }
 
-            {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
-
             {data.type === TYPE_TEMPLATE &&
                 <span dangerouslySetInnerHTML={{__html: formatMessage(props.templates[data.templateName]?.text) }} />
             }
+
+            {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
 
             <span className="chat__message__info">
                 <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
