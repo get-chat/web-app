@@ -197,6 +197,8 @@ function ChatMessage(props) {
                     <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
                     }
                 </span>
+
+                <div style={{clear: "both"}} />
             </div>
         </div>
     )
