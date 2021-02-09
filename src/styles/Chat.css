@@ -150,6 +150,11 @@ a.chat__document:hover {
     background-color: #dcf8c6;
 }
 
+.chat__templateHeader {
+    font-size: x-small;
+    color: #6e858c;
+}
+
 .chat__templateMsg {
     background-color: #d7edf4!important;
 }
