@@ -29,6 +29,8 @@ export class ChatMessageClass {
         this.voiceLink = payload.voice?.link;
         this.audioId = payload.audio?.id;
         this.audioLink = payload.audio?.link;
+        this.stickerId = payload.sticker?.id;
+        this.stickerLink = payload.sticker?.stickerLink;
         this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption;
         this.templateName = payload.template?.name;
         this.templateNamespace = payload.template?.namespace;
@@ -65,6 +67,10 @@ export class ChatMessageClass {
 
     generateAudioLink() {
         return this.audioLink ?? this.generateMediaLink(this.audioId);
+    }
+
+    generateStickerLink() {
+        return this.stickerLink ?? this.generateMediaLink(this.stickerId);
     }
 }
 

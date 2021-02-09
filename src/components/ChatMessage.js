@@ -22,6 +22,7 @@ const iconStyles = {
 };
 
 const TYPE_TEMPLATE = 'template';
+const TYPE_STICKER = 'sticker';
 
 function ChatMessage(props) {
 
@@ -162,6 +163,10 @@ function ChatMessage(props) {
                 <InsertDriveFileIcon fontSize="small" />
                 <span className="chat__document__filename">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</span>
             </a>
+            }
+
+            {data.type === TYPE_STICKER &&
+            <img className="chat__media" src={data.generateStickerLink()} alt={data.caption} />
             }
 
             {data.type === TYPE_TEMPLATE &&
