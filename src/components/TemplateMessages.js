@@ -1,7 +1,6 @@
 import React from "react";
 import {Button} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
-import SearchBar from "./SearchBar";
 
 function TemplateMessages(props) {
 
@@ -10,7 +9,7 @@ function TemplateMessages(props) {
     return (
         <div className="templateMessagesOuter">
 
-            <SearchBar />
+            {/*<SearchBar />*/}
 
             {props.isLoadingTemplates
                 ?

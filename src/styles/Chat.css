@@ -292,7 +292,7 @@ a.chat__document:hover {
     overflow-y: auto;
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px; /*0 0 10px 10px;*/
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
