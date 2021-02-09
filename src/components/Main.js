@@ -68,12 +68,12 @@ function Main() {
         }
     }
 
-    const mySubscriber = function (msg, data) {
+    const onSearchMessagesVisibilityEvent = function (msg, data) {
         setSearchMessagesVisible(data);
     };
 
     useEffect(() => {
-        const token = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, mySubscriber);
+        const token = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
         return () => {
             PubSub.unsubscribe(token);
         }

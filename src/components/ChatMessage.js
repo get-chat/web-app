@@ -42,7 +42,7 @@ function ChatMessage(props) {
     const range = useRef(null);
     const duration = useRef(null);
 
-    const mySubscriber = function (msg, data) {
+    const onChatMessageEvent = function (msg, data) {
         if (data === 'pause') {
             pauseVoice();
         }
@@ -58,7 +58,7 @@ function ChatMessage(props) {
     useEffect(() => {
         // Subscribing only if there is voice or audio
         if (data.hasAnyAudio()) {
-            const token = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE, mySubscriber);
+            const token = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE, onChatMessageEvent);
             return () => {
                 PubSub.unsubscribe(token);
             }
