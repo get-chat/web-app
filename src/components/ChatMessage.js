@@ -21,6 +21,8 @@ const iconStyles = {
     fontSize: '15px'
 };
 
+const TYPE_TEMPLATE = 'template';
+
 function ChatMessage(props) {
 
     const data = props.messageData;
@@ -128,7 +130,7 @@ function ChatMessage(props) {
     const dateFormat = 'H:mm';
 
     return (
-        <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : '') + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : '') + " chat__receiver" : "")}>
+        <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
             <span className="chat__name">{props.name}</span>
             {data.imageLink !== undefined &&
             <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />

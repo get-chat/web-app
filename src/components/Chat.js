@@ -490,9 +490,7 @@ export default function Chat(props) {
     return (
         <div className="chat">
 
-            <ChatHeader
-                contact={contact}
-            />
+            <ChatHeader contact={contact} />
 
             <div id="chat__body" className="chat__body" ref={messagesContainer}>
                 <Zoom in={isLoadingMoreMessages}>

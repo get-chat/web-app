@@ -18,7 +18,7 @@ function TemplateMessages(props) {
                     {Object.entries(templates).map((message, index) =>
                         <div key={message[0]} className="templateMessageWrapper">
 
-                            <div className="templateMessages__message chat__message chat__receiver">
+                            <div className="chat__templateMsg chat__message chat__receiver">
                                 <span
                                     className={"templateMessage__status " + message[1].status}>{message[1].status}</span>
                                 <span className="templateMessage__message">{message[1].text}</span>

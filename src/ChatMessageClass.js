@@ -8,6 +8,7 @@ export class ChatMessageClass {
         this.id = payload.id;
         this.to = payload.to;
         this.waId = data.customer_wa_id;
+        this.type = payload.type;
         this.senderObject = data.sender;
         this.username = data.sender?.username;
         this.senderName = this.username ?? (!this.isFromUs ? contactName : "Us");

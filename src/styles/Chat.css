@@ -150,6 +150,10 @@ a.chat__document:hover {
     background-color: #dcf8c6;
 }
 
+.chat__templateMsg {
+    background-color: #d7edf4!important;
+}
+
 .chat__message__info {
     float: right;
 }
@@ -300,10 +304,6 @@ a.chat__document:hover {
 
 .templateMessageWrapper > button {
     margin-left: 15px;
-}
-
-.templateMessages__message {
-    background-color: #d7edf4!important;
 }
 
 .templateMessage__status {
