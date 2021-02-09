@@ -12,6 +12,7 @@ import PubSub from 'pubsub-js';
 import {formatMessage} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import NoteIcon from '@material-ui/icons/Note';
 
 const playIconStyles = {
     fontSize: '38px'
@@ -131,21 +132,27 @@ function ChatMessage(props) {
     const dateFormat = 'H:mm';
 
     return (
-        <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
-            <span className="chat__name">{props.name}</span>
-            {data.imageLink !== undefined &&
-            <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
+        <div className="chat__message__outer">
+
+            {data.type === TYPE_STICKER &&
+            <img className="chat__media chat__sticker" src={data.generateStickerLink()} alt={data.caption} />
             }
-            {data.videoLink !== undefined &&
-            <div className="chat__videoWrapper" onClick={() => props.onPreview(data)}>
-                <video className="chat__media" src={data.generateVideoLink()} preload="none" />
-                <span className="chat__videoWrapper__iconWrapper">
+
+            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
+                <span className="chat__name">{props.name}</span>
+                {data.imageLink !== undefined &&
+                <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
+                }
+                {data.videoLink !== undefined &&
+                <div className="chat__videoWrapper" onClick={() => props.onPreview(data)}>
+                    <video className="chat__media" src={data.generateVideoLink()} preload="none" />
+                    <span className="chat__videoWrapper__iconWrapper">
                     <PlayArrowIcon fontSize={"large"} style={{ fill: "white", fontSize: 40 }} />
                 </span>
-            </div>
-            }
-            {data.hasAnyAudio() &&
-            <span className="chat__voice">
+                </div>
+                }
+                {data.hasAnyAudio() &&
+                <span className="chat__voice">
                 <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
                 <IconButton onClick={() => playVoice()}>
                     {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
@@ -157,34 +164,38 @@ function ChatMessage(props) {
                     {data.voiceId !== undefined ? <span>{data.preparedInitials}</span> : <HeadsetIcon/>}
                 </Avatar>
             </span>
-            }
-            {data.documentLink !== undefined &&
-            <a href={data.documentLink} target="_blank" className="chat__document">
-                <InsertDriveFileIcon fontSize="small" />
-                <span className="chat__document__filename">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</span>
-            </a>
-            }
-
-            {data.type === TYPE_STICKER &&
-            <img className="chat__media" src={data.generateStickerLink()} alt={data.caption} />
-            }
-
-            {data.type === TYPE_TEMPLATE &&
-            <span className="chat__templateHeader">Template message:<br/></span>
-            }
-
-            {data.type === TYPE_TEMPLATE &&
-                <span dangerouslySetInnerHTML={{__html: formatMessage(props.templates[data.templateName]?.text) }} />
-            }
-
-            {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
-
-            <span className="chat__message__info">
-                <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
-                {data.isFromUs === true &&
-                <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
                 }
-            </span>
+                {data.documentLink !== undefined &&
+                <a href={data.documentLink} target="_blank" className="chat__document">
+                    <InsertDriveFileIcon fontSize="small" />
+                    <span className="chat__document__filename">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</span>
+                </a>
+                }
+
+                {data.type === TYPE_STICKER &&
+                /*<span>Sticker</span>*/
+                    <span>
+                        <NoteIcon />
+                    </span>
+                }
+
+                {data.type === TYPE_TEMPLATE &&
+                <span className="chat__templateHeader">Template message:<br/></span>
+                }
+
+                {data.type === TYPE_TEMPLATE &&
+                <span dangerouslySetInnerHTML={{__html: formatMessage(props.templates[data.templateName]?.text) }} />
+                }
+
+                {(data.text ?? data.caption) ? <span dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
+
+                <span className="chat__message__info">
+                <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
+                    {data.isFromUs === true &&
+                    <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
+                    }
+                </span>
+            </div>
         </div>
     )
 }
