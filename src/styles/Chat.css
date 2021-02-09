@@ -191,6 +191,25 @@ a.chat__document:hover {
     fill: #4fc3f7;
 }
 
+.chat__message__more {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 4px;
+    cursor: pointer;
+    background: rgb(215,219,215);
+    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, rgba(255,255,255,1) 35%);
+    border-radius: 0 10px 10px 0;
+}
+
+.chat__message.chat__receiver .chat__message__more {
+    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #dcf8c6 35%);
+}
+
+.chat__message.chat__templateMsg .chat__message__more {
+    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #d7edf4 35%);
+}
+
 .chat__headerRight {
     display: flex;
     justify-content: space-between;

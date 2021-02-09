@@ -14,6 +14,7 @@ import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const playIconStyles = {
     fontSize: '38px'
@@ -140,6 +141,11 @@ function ChatMessage(props) {
             }
 
             <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
+
+                {/*<div className="chat__message__more">
+                    <ExpandMoreIcon />
+                </div>*/}
+
                 <span className="chat__name">{props.name}</span>
                 {data.imageLink !== undefined &&
                 <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
