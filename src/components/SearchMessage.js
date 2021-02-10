@@ -9,45 +9,43 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import ChatMessageClass from "../ChatMessageClass";
+import SearchMessageResult from "./SearchMessageResult";
 
 function SearchMessage(props) {
 
-    const [keyword, setKeyword] = useState();
+    const [results, setResults] = useState({});
     const {waId} = useParams();
 
-    let cancelToken;
-    let source;
-
-    const generateCancelToken = () => {
-        cancelToken = axios.CancelToken;
-        source = cancelToken.source();
-    }
-
-    // Generating cancel token
-    generateCancelToken();
+    useEffect(() => {
+        setResults({});
+    }, [waId]);
 
     const hideSearchMessages = () => {
         PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
     }
 
-    useEffect(() => {
-        // Cancelling previous request
-        // TODO: Add a promise to continue with next request
-        source.cancel();
-        if (keyword && keyword.trim().length > 0) {
-            search(keyword.trim());
-        }
-    }, [keyword]);
+    let cancelToken;
 
-    const search = (_keyword) => {
-        console.log(_keyword);
+    const search = async (keyword) => {
+        // Check if there are any previous pending requests
+        if (cancelToken !== undefined) {
+            cancelToken.cancel("Operation canceled due to new request.");
+        }
+
+        // Generate a token
+        cancelToken = axios.CancelToken.source();
+
+        if (keyword.trim().length === 0) {
+            setResults({});
+            return false;
+        }
 
         axios.get( `${BASE_URL}messages/${waId}/`,
             getConfig({
                 //offset: offset ?? 0,
                 limit: 30,
-                keyword: _keyword
-            }, source.token)
+                keyword: keyword
+            }, cancelToken.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
@@ -58,27 +56,44 @@ function SearchMessage(props) {
                     preparedMessages[prepared.id] = prepared;
                 });
 
+                setResults(preparedMessages);
+
             })
             .catch((error) => {
                 // TODO: Handle errors
+
+                if (axios.isCancel(error)) {
+                    console.error("Cancelled");
+                }
 
                 //displayError(error);
             });
     }
 
+    const goToMessage = (id) => {
+        console.log(id);
+    }
+
     return (
         <div className="searchMessage">
             <div className="searchMessage__header">
-                <IconButton onClick={() => hideSearchMessages()}>
+                <IconButton onClick={hideSearchMessages}>
                     <CloseIcon />
                 </IconButton>
 
                 <h3>Search For Messages</h3>
             </div>
 
-            <SearchBar onChange={setKeyword} />
+            <SearchBar onChange={search} />
 
             <div className="searchMessage__body">
+
+                { Object.entries(results).map((message, index) =>
+                    <SearchMessageResult
+                        key={message[0]}
+                        messageData={message[1]}
+                        onClick={(id) => goToMessage(id)}/>
+                )}
 
             </div>
         </div>
