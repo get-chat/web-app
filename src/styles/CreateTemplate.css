@@ -5,6 +5,11 @@
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
+.createTemplate > h3 {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
 .createTemplate .MuiFormControl-root {
     margin-bottom: 15px;
 }

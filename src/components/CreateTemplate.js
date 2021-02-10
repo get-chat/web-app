@@ -22,6 +22,8 @@ function CreateTemplate() {
     return(
         <div className="createTemplate">
 
+            <h3>Create a template</h3>
+
             <TextField
                 label="Name"
                 variant="outlined"
