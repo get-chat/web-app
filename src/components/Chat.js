@@ -111,6 +111,10 @@ export default function Chat(props) {
     }, [waId]);
 
     useEffect(() => {
+        props.setChosenContact(contact);
+    }, [contact]);
+
+    useEffect(() => {
         // Consider replacing this with IntersectionObserver
         // Browser support should be considered: https://caniuse.com/intersectionobserver
         function handleScroll(e) {

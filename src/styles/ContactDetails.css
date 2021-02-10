@@ -18,10 +18,40 @@
 }
 
 .contactDetails__body {
-    background-color: white;
+    background-color: #ededed;
     flex: 1 1;
     position: relative;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+}
+
+.contactDetails__body__section {
+    padding: 20px;
+    margin-bottom: 10px;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.contactDetails__body__section > h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.contactDetails__body__section > span {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.contactDetails__body__avatarContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.contactDetails__body__avatar {
+    height: 200px!important;
+    width: 200px!important;
+    margin-bottom: 15px;
+    font-size: 5rem!important;
 }

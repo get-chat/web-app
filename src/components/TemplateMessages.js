@@ -61,8 +61,7 @@ function TemplateMessages(props) {
                         <div key={message[0]} className="templateMessageWrapper">
 
                             <div className="chat__templateMsg chat__message chat__receiver">
-                                <span
-                                    className={"templateMessage__status " + message[1].status}>{message[1].status}</span>
+                                {/*<span className={"templateMessage__status " + message[1].status}>{message[1].status}</span>*/}
                                 <span className="templateMessage__message">{message[1].text}</span>
                             </div>
 

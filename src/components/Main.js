@@ -27,6 +27,7 @@ function Main() {
     const [unseenMessages, setUnseenMessages] = useState({});
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
+    const [chosenContact, setChosenContact] = useState();
 
     const avatarClasses = avatarStyles();
 
@@ -178,14 +179,14 @@ function Main() {
         <Fade in={checked}>
             <div className="app__body">
                 <Sidebar unseenMessages={unseenMessages} />
-                <Chat previewMedia={(chatMessage) => previewMedia(chatMessage)} />
+                <Chat setChosenContact={setChosenContact} previewMedia={(chatMessage) => previewMedia(chatMessage)} />
 
                 {isSearchMessagesVisible &&
                 <SearchMessage />
                 }
 
                 {isContactDetailsVisible &&
-                <ContactDetails />
+                <ContactDetails contactData={chosenContact} />
                 }
 
                 {chatMessageToPreview &&
