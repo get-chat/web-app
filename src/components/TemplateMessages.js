@@ -9,6 +9,10 @@ function TemplateMessages(props) {
     return (
         <div className="templateMessagesOuter">
 
+            <div className="templateMessagesOuter__items">
+                <Button>Create a template</Button>
+            </div>
+
             {/*<SearchBar />*/}
 
             {props.isLoadingTemplates

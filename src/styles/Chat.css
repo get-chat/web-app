@@ -326,6 +326,13 @@ a.chat__document:hover {
     border-radius: 10px 10px 0 0;
 }
 
+.templateMessagesOuter__items {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
 .templateMessages {
     flex: 1 1;
     max-height: 290px;
