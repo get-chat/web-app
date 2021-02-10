@@ -1,9 +1,8 @@
-import React, {useState} from "react";
-import {Button, makeStyles, Modal} from "@material-ui/core";
+import React from "react";
+import {Button} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
-import CreateTemplate from "./CreateTemplate";
 
-const useStyles = makeStyles((theme) => ({
+/*const useStyles = makeStyles((theme) => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
@@ -15,13 +14,13 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
-}));
+}));*/
 
 function TemplateMessages(props) {
 
     const templates = props.templatesData;
 
-    const [modalOpen, setModalOpen] = useState(false);
+    /*const [modalOpen, setModalOpen] = useState(false);
 
     const handleOpen = () => {
         setModalOpen(true);
@@ -31,12 +30,12 @@ function TemplateMessages(props) {
         setModalOpen(false);
     };
 
-    const classes = useStyles();
+    const classes = useStyles();*/
 
     return (
         <div className="templateMessagesOuter">
 
-            <Modal
+            {/*<Modal
                 open={modalOpen}
                 onClose={handleClose}
                 aria-labelledby="simple-modal-title"
@@ -47,8 +46,8 @@ function TemplateMessages(props) {
             </Modal>
 
             <div className="templateMessagesOuter__items">
-                <Button onClick={() => setModalOpen(true)}>Create a template</Button>
-            </div>
+                <Button onClick={handleOpen}>Create a template</Button>
+            </div>*/}
 
             {/*<SearchBar />*/}
 
