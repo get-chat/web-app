@@ -77,10 +77,20 @@ function Main() {
 
     const onSearchMessagesVisibilityEvent = function (msg, data) {
         setSearchMessagesVisible(data);
+
+        // Hide other sections
+        if (data === true) {
+            setContactDetailsVisible(false);
+        }
     };
 
     const onContactDetailsVisibilityEvent = function (msg, data) {
         setContactDetailsVisible(data);
+
+        // Hide other sections
+        if (data === true) {
+            setSearchMessagesVisible(false);
+        }
     };
 
     useEffect(() => {
