@@ -394,7 +394,10 @@ export default function Chat(props) {
                 const preparedTemplates = {};
                 response.data.results.map((template, index) => {
                     const prepared = new TemplateMessageClass(template);
-                    preparedTemplates[prepared.name] = prepared;
+
+                    if (prepared.status === "approved") {
+                        preparedTemplates[prepared.name] = prepared;
+                    }
                 });
 
                 setTemplates(preparedTemplates);
