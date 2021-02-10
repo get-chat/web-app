@@ -192,6 +192,7 @@ a.chat__document:hover {
 }
 
 .chat__message__more {
+    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -200,6 +201,7 @@ a.chat__document:hover {
     background: rgb(215,219,215);
     background: linear-gradient(90deg, rgba(215,219,215,0) 0%, rgba(255,255,255,1) 35%);
     border-radius: 0 10px 10px 0;
+    transition: all 1s;
 }
 
 .chat__message.chat__receiver .chat__message__more {
@@ -208,6 +210,10 @@ a.chat__document:hover {
 
 .chat__message.chat__templateMsg .chat__message__more {
     background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #d7edf4 35%);
+}
+
+.chat__message:hover .chat__message__more {
+    display: block;
 }
 
 .chat__headerRight {

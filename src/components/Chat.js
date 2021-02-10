@@ -15,6 +15,7 @@ import {Alert} from "@material-ui/lab";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
 import {getPastHoursByTimestamp} from "../DateHelpers";
+import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -173,6 +174,10 @@ export default function Chat(props) {
 
     const getObjLength = (obj) => {
         return Object.keys(obj).length;
+    }
+
+    const displayOptionsMenu = (chatMessage) => {
+
     }
 
     const getMessages = (firstMessageTimestamp) => {
@@ -506,7 +511,8 @@ export default function Chat(props) {
                         name={getSenderName(message[1])}
                         messageData={message[1]}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
-                        templates={templates} />
+                        templates={templates}
+                        onOptionsClick={(chatMessage) => displayOptionsMenu(chatMessage)} />
                 )}
 
                 <div className="chat__body__empty" />
@@ -537,6 +543,8 @@ export default function Chat(props) {
                 <p>Choose a contact to start a conversation</p>
             </div>
             }
+
+            <ChatMessageOptionsMenu />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">

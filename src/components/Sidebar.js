@@ -109,7 +109,8 @@ function Sidebar(props) {
                 transformOrigin={{ vertical: "top", horizontal: "right" }}
                 keepMounted
                 open={Boolean(anchorEl)}
-                onClose={hideMenu}>
+                onClose={hideMenu}
+                elevation={3}>
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
 
