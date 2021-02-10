@@ -198,6 +198,7 @@ a.chat__document:hover {
     right: 0;
     padding: 4px;
     cursor: pointer;
+    z-index: 3;
     background: rgb(215,219,215);
     background: linear-gradient(90deg, rgba(215,219,215,0) 0%, rgba(255,255,255,1) 35%);
     border-radius: 0 10px 10px 0;
@@ -227,9 +228,10 @@ a.chat__document:hover {
     display: flex;
     flex-direction: column;
     flex: 1;
-    background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+    background-image: url("../assets/images/background.png");
     background-repeat: repeat;
     background-position: center;
+    background-size: 500px;
     padding: 30px 30px 0 30px;
     overflow-y: auto;
     border-left: 1px solid rgba(0, 0, 0, 0.05);
