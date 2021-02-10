@@ -142,7 +142,7 @@ function ChatMessage(props) {
 
             <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
-                <div className="chat__message__more" onClick={props.onOptionsClick(data)}>
+                <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
                     <ExpandMoreIcon />
                 </div>
 

@@ -1,29 +1,23 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Menu, MenuItem} from "@material-ui/core";
 
-function ChatMessageOptionsMenu() {
-
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const displayMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+function ChatMessageOptionsMenu(props) {
 
     const hideMenu = () => {
-        setAnchorEl(null);
+        props.setMenuAnchorEl(null);
     };
 
     return (
         <Menu
-            anchorEl={anchorEl}
+            anchorEl={props.menuAnchorEl}
             getContentAnchorEl={null}
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
             keepMounted
-            open={Boolean(anchorEl)}
+            open={Boolean(props.menuAnchorEl)}
             onClose={hideMenu}
             elevation={3}>
-            <MenuItem>Logout</MenuItem>
+            <MenuItem>Delete</MenuItem>
         </Menu>
     )
 }

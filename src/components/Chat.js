@@ -176,8 +176,12 @@ export default function Chat(props) {
         return Object.keys(obj).length;
     }
 
-    const displayOptionsMenu = (chatMessage) => {
+    const [menuAnchorEl, setMenuAnchorEl] = useState();
 
+    const displayOptionsMenu = (event, chatMessage) => {
+        // We need to use parent because menu view gets hidden
+        setMenuAnchorEl(event.currentTarget.parentElement);
+        console.log(chatMessage.id);
     }
 
     const getMessages = (firstMessageTimestamp) => {
@@ -512,7 +516,7 @@ export default function Chat(props) {
                         messageData={message[1]}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                         templates={templates}
-                        onOptionsClick={(chatMessage) => displayOptionsMenu(chatMessage)} />
+                        onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />
                 )}
 
                 <div className="chat__body__empty" />
@@ -544,7 +548,7 @@ export default function Chat(props) {
             </div>
             }
 
-            <ChatMessageOptionsMenu />
+            <ChatMessageOptionsMenu menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
