@@ -97,6 +97,9 @@ function Main() {
 
         return () => {
             clearInterval(intervalId);
+
+            // Hide search messages container
+            setSearchMessagesVisible(false);
         }
     }, [waId]);
 

@@ -15,7 +15,7 @@ function ChatHeader(props) {
 
     return (
         <div className="chat__header">
-            <Avatar className={props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]}>{props.contact?.initials}</Avatar>
+            <Avatar className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")}>{props.contact?.initials}</Avatar>
 
             <div className="chat__headerInfo">
                 <h3>{props.contact?.name}</h3>
@@ -25,6 +25,12 @@ function ChatHeader(props) {
                 {props.contact?.isExpired &&
                 <p className="chat__header__expired">Expired</p>
                 }
+            </div>
+
+            <div className="chat__headerInfo_2">
+                <span className="chat__headerInfo_2__waId">
+                    {props.contact?.waId ? '+' + props.contact?.waId : ''}
+                </span>
             </div>
 
             <div className="chat__headerRight">
