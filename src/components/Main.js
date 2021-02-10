@@ -4,13 +4,19 @@ import Chat from "./Chat";
 import {Avatar, Fade, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {BASE_URL, EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
+import {
+    BASE_URL,
+    EVENT_TOPIC_CHAT_MESSAGE,
+    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
+} from "../Constants";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import UnseenMessageClass from "../UnseenMessageClass";
 import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
+import ContactDetails from "./ContactDetails";
 
 function Main() {
 
@@ -20,6 +26,7 @@ function Main() {
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [unseenMessages, setUnseenMessages] = useState({});
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
+    const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
 
     const avatarClasses = avatarStyles();
 
@@ -72,10 +79,16 @@ function Main() {
         setSearchMessagesVisible(data);
     };
 
+    const onContactDetailsVisibilityEvent = function (msg, data) {
+        setContactDetailsVisible(data);
+    };
+
     useEffect(() => {
-        const token = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
+        const token1 = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
+        const token2 = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
         return () => {
-            PubSub.unsubscribe(token);
+            PubSub.unsubscribe(token1);
+            PubSub.unsubscribe(token2);
         }
     }, []);
 
@@ -159,6 +172,10 @@ function Main() {
 
                 {isSearchMessagesVisible &&
                 <SearchMessage />
+                }
+
+                {isContactDetailsVisible &&
+                <ContactDetails />
                 }
 
                 {chatMessageToPreview &&

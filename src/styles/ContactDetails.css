@@ -1,0 +1,27 @@
+.contactDetails {
+    display: flex;
+    flex-direction: column;
+    flex: 0.40 1;
+    border-left: 1px solid lightgray;
+}
+
+.contactDetails__header {
+    display: flex;
+    align-items: center;
+    padding: 4px 15px;
+}
+
+.contactDetails__header > h3 {
+    margin-left: 10px;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.contactDetails__body {
+    background-color: white;
+    flex: 1 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}

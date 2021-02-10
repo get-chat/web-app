@@ -2,7 +2,7 @@ import React from 'react';
 import {Avatar, IconButton} from "@material-ui/core";
 import {MoreVert, Search} from "@material-ui/icons";
 import {avatarStyles} from "../AvatarStyles";
-import {EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
+import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 
 function ChatHeader(props) {
@@ -13,9 +13,13 @@ function ChatHeader(props) {
         PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, true);
     }
 
+    const showContactDetails = () => {
+        PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, true);
+    }
+
     return (
         <div className="chat__header">
-            <Avatar className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")}>{props.contact?.initials}</Avatar>
+            <Avatar className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")} onClick={showContactDetails}>{props.contact?.initials}</Avatar>
 
             <div className="chat__headerInfo">
                 <h3>{props.contact?.name}</h3>
@@ -34,7 +38,7 @@ function ChatHeader(props) {
             </div>
 
             <div className="chat__headerRight">
-                <IconButton onClick={() => showSearchMessages()}>
+                <IconButton onClick={showSearchMessages}>
                     <Search />
                 </IconButton>
                 <IconButton>
