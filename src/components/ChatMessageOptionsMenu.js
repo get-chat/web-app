@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Menu, MenuItem} from "@material-ui/core";
 
 function ChatMessageOptionsMenu(props) {
@@ -16,8 +16,15 @@ function ChatMessageOptionsMenu(props) {
             keepMounted
             open={Boolean(props.menuAnchorEl)}
             onClose={hideMenu}
-            elevation={3}>
+            elevation={3}
+            disableAutoFocusItem={true}>
+
             <MenuItem>Delete</MenuItem>
+
+            {(props.optionsChatMessage && props.optionsChatMessage.isFromUs) &&
+            <MenuItem>Another option for outgoing messages</MenuItem>
+            }
+
         </Menu>
     )
 }

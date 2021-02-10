@@ -176,11 +176,14 @@ export default function Chat(props) {
         return Object.keys(obj).length;
     }
 
+    const [optionsChatMessage, setOptionsChatMessage] = useState();
     const [menuAnchorEl, setMenuAnchorEl] = useState();
 
     const displayOptionsMenu = (event, chatMessage) => {
         // We need to use parent because menu view gets hidden
         setMenuAnchorEl(event.currentTarget.parentElement);
+        setOptionsChatMessage(chatMessage);
+
         console.log(chatMessage.id);
     }
 
@@ -548,7 +551,10 @@ export default function Chat(props) {
             </div>
             }
 
-            <ChatMessageOptionsMenu menuAnchorEl={menuAnchorEl} setMenuAnchorEl={setMenuAnchorEl} />
+            <ChatMessageOptionsMenu
+                menuAnchorEl={menuAnchorEl}
+                setMenuAnchorEl={setMenuAnchorEl}
+                optionsChatMessage={optionsChatMessage} />
 
             <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
