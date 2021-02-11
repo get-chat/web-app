@@ -16,6 +16,7 @@ import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from "moment";
+import ChatMessageClass from "../ChatMessageClass";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -24,9 +25,6 @@ const playIconStyles = {
 const iconStyles = {
     fontSize: '15px'
 };
-
-const TYPE_TEMPLATE = 'template';
-const TYPE_STICKER = 'sticker';
 
 function ChatMessage(props) {
 
@@ -156,11 +154,12 @@ function ChatMessage(props) {
             </div>
             }
 
-            {data.type === TYPE_STICKER &&
+            {data.type === ChatMessageClass.TYPE_STICKER &&
             <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
             }
 
-            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
+            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") +
+            (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
                     <ExpandMoreIcon />
@@ -178,40 +177,40 @@ function ChatMessage(props) {
                 </span>
                 </div>
                 }
-                {data.hasAnyAudio() &&
+                {data.type === ChatMessageClass.TYPE_VOICE &&
                 <span className="chat__voice">
-                <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
-                <IconButton onClick={() => playVoice()}>
-                    {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
-                </IconButton>
-                <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-                <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
+                    <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
+                    <IconButton onClick={() => playVoice()}>
+                        {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
+                    </IconButton>
+                    <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
+                    <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.preparedInitials] : avatarClasses.orange}>
-                    {data.voiceId !== undefined ? <span>{data.preparedInitials}</span> : <HeadsetIcon/>}
-                </Avatar>
-            </span>
+                    <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.preparedInitials] : avatarClasses.orange}>
+                        {data.voiceId !== undefined ? <span>{data.preparedInitials}</span> : <HeadsetIcon/>}
+                    </Avatar>
+                </span>
                 }
-                {data.documentLink !== undefined &&
+                {data.type === ChatMessageClass.TYPE_DOCUMENT &&
                 <a href={data.documentLink} target="_blank" className="chat__document">
                     <InsertDriveFileIcon fontSize="small" />
                     <span className="chat__document__filename">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</span>
                 </a>
                 }
 
-                {data.type === TYPE_STICKER &&
+                {data.type === ChatMessageClass.TYPE_STICKER &&
                 <span>
                     <NoteIcon fontSize="small" />
                 </span>
                 }
 
-                {data.type === TYPE_TEMPLATE &&
+                {data.type === ChatMessageClass.TYPE_TEMPLATE &&
                 <span className="chat__templateHeader">
                     <SmsIcon />Template message:<br/>
                 </span>
                 }
 
-                {data.type === TYPE_TEMPLATE &&
+                {data.type === ChatMessageClass.TYPE_TEMPLATE &&
                 <span dangerouslySetInnerHTML={{__html: formatMessage(props.templates[data.templateName]?.text) }} />
                 }
 

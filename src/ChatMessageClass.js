@@ -2,6 +2,14 @@ import {BASE_URL} from "./Constants";
 
 export class ChatMessageClass {
 
+    static TYPE_IMAGE = 'image';
+    static TYPE_VIDEO = 'video';
+    static TYPE_VOICE = 'voice';
+    static TYPE_AUDIO = 'audio';
+    static TYPE_DOCUMENT = 'document';
+    static TYPE_STICKER = 'sticker';
+    static TYPE_TEMPLATE = 'template';
+
     constructor(data, contactName) {
         const payload = data.waba_payload;
 
