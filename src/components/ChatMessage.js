@@ -136,8 +136,14 @@ function ChatMessage(props) {
     return (
         <div className="chat__message__outer">
 
+            <div className="chat__message__dateContainer">
+                <span className="chat__message__dateContainer__indicator">
+                    <Moment date={data.timestamp} format="dddd" unix />
+                </span>
+            </div>
+
             {data.type === TYPE_STICKER &&
-            <img className="chat__media chat__sticker" src={data.generateStickerLink()} alt={data.caption} />
+            <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
             }
 
             <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") + (data.type === TYPE_TEMPLATE ? " chat__templateMsg" : "")}>

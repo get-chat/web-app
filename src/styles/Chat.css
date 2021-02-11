@@ -87,6 +87,10 @@ video.chat__media {
     margin-bottom: 22px;
 }
 
+.chat__sticker.outgoing {
+    margin-left: auto;
+}
+
 .chat__videoWrapper {
     position: relative;
     cursor: pointer;
@@ -420,4 +424,21 @@ a.chat__document:hover {
     font-size: 18px;
     color: gray;
     margin-bottom: 0;
+}
+
+.chat__message__dateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+.chat__message__dateContainer__indicator {
+    font-size: 12px;
+    border-radius: 10px;
+    padding: 5px 10px;
+    box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
+    background-color: #e1f5feeb;
+    /*text-transform: uppercase;*/
 }
