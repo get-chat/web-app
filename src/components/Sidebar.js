@@ -3,7 +3,6 @@ import '../styles/Sidebar.css';
 import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import {SearchOutlined} from "@material-ui/icons";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
 import {clearToken, getConfig} from "../Helpers";
@@ -16,8 +15,9 @@ function Sidebar(props) {
 
     const history = useHistory();
 
-    const[chats, setChats] = useState({});
+    const [chats, setChats] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
+    const [keyword, setKeyword] = useState("");
 
     const clearUserSession = () => {
         clearToken();
@@ -48,6 +48,12 @@ function Sidebar(props) {
             clearInterval(intervalId);
         }
     }, []);
+
+    const search = async (_keyword) => {
+        setKeyword(_keyword);
+
+        console.log(_keyword);
+    }
 
     const getContacts = () => {
         axios.get(`${BASE_URL}contacts/`, getConfig())
@@ -90,7 +96,7 @@ function Sidebar(props) {
                 </div>
             </div>
 
-            <SearchBar />
+            <SearchBar onChange={(_keyword) => search(_keyword)} />
 
             <div className="sidebar__chats">
                 { Object.entries(chats).map((chat) =>
