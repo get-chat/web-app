@@ -12,7 +12,7 @@ function App() {
             <div className="app">
                 <Router>
                     <RouteSwitch>
-                        <Route path={["/main/chat/:waId", "/main"]} component={Main} />
+                        <Route path={["/main/chat/:waId", "/main/chat/:waId/message/:msgId", "/main"]} component={Main} />
                         <Route path="/" component={Login} />
                     </RouteSwitch>
                 </Router>

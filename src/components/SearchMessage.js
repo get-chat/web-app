@@ -3,7 +3,7 @@ import '../styles/SearchMessage.css';
 import {IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {BASE_URL, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import SearchBar from "./SearchBar";
 import {useParams} from "react-router-dom";
 import axios from "axios";
@@ -67,7 +67,7 @@ function SearchMessage(props) {
     }
 
     const goToMessage = (id) => {
-        console.log(id);
+        PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, id);
     }
 
     return (
@@ -86,6 +86,7 @@ function SearchMessage(props) {
                 { Object.entries(results).map((message, index) =>
                     <SearchMessageResult
                         key={message[0]}
+                        waId={waId}
                         messageData={message[1]}
                         onClick={(id) => goToMessage(id)}/>
                 )}

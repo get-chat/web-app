@@ -5,7 +5,7 @@ import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {getConfig, getLastMessageAndExtractTimestamp, getObjLength} from "../Helpers";
-import {BASE_URL} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
 import ChatFooterExpired from "./ChatFooterExpired";
@@ -17,6 +17,7 @@ import ChatHeader from "./ChatHeader";
 import {getPastHoursByTimestamp} from "../DateHelpers";
 import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
 import moment from "moment";
+import PubSub from "pubsub-js";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -135,6 +136,23 @@ export default function Chat(props) {
     }, [isLoadingTemplates]);
 
     useEffect(() => {
+        const onGoToMessageId = function (msg, data) {
+            const msgId = data;
+            if (messagesContainer && msgId) {
+                if (messages[msgId]) {
+                    console.log("Exists");
+
+                    //messagesContainer.current
+
+                } else {
+                    console.log("Load and then scroll");
+                }
+            }
+        }
+
+        // Subscribe for scrolling to message event
+        const token = PubSub.subscribe(EVENT_TOPIC_GO_TO_MSG_ID, onGoToMessageId);
+
         let intervalId = 0;
         if (getObjLength(messages) > 0) {
             intervalId = setInterval(() => {
@@ -144,6 +162,9 @@ export default function Chat(props) {
             console.log("Interval is set");
         }
         return () => {
+            // Unsubscribe
+            PubSub.unsubscribe(token);
+
             clearInterval(intervalId);
         }
     }, [messages]);

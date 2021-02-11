@@ -5,6 +5,7 @@ const dateFormat = 'H:mm';
 
 function SearchMessageResult(props) {
 
+    const waId = props.waId;
     const data = props.messageData;
 
     return(
