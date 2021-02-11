@@ -250,7 +250,7 @@ a.chat__document:hover {
     background-repeat: repeat;
     background-position: center;
     background-size: 500px;
-    padding: 30px 30px 0 30px;
+    padding: 10px 30px 0 30px;
     overflow-y: auto;
     border-left: 1px solid rgba(0, 0, 0, 0.05);
     min-height: 0;

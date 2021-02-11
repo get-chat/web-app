@@ -144,7 +144,7 @@ function ChatMessage(props) {
     }
 
     return (
-        <div className="chat__message__outer">
+        <div id={'message_' + data.id} className="chat__message__outer">
 
             {props.displayDate &&
             <div className="chat__message__dateContainer">

@@ -142,7 +142,8 @@ export default function Chat(props) {
                 if (messages[msgId]) {
                     console.log("Exists");
 
-                    //messagesContainer.current
+                    const child = messagesContainer.current.querySelector('#message_' + msgId);
+                    child.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
                 } else {
                     console.log("Load and then scroll");
