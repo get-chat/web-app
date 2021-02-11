@@ -34,6 +34,7 @@
 .chat__header__expired {
     font-size: 12px;
     color: #a9a92a !important;
+    margin-top: -2px;
 }
 
 .chat__headerInfo_2 {
@@ -430,14 +431,14 @@ a.chat__document:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 15px;
-    margin-bottom: 25px;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .chat__message__dateContainer__indicator {
     font-size: 12px;
     border-radius: 10px;
-    padding: 5px 10px;
+    padding: 8px 10px;
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
     background-color: #e1f5feeb;
     /*text-transform: uppercase;*/

@@ -16,6 +16,7 @@ import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
 import {getPastHoursByTimestamp} from "../DateHelpers";
 import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
+import moment from "moment";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -512,6 +513,8 @@ export default function Chat(props) {
         setErrorVisible(false);
     };
 
+    let lastPrintedDate;
+
     return (
         <div className="chat">
 
@@ -525,15 +528,32 @@ export default function Chat(props) {
                 </Zoom>
                 <div className="chat__empty"/>
 
-                { Object.entries(messages).map((message, index) =>
-                    <ChatMessage
+                { Object.entries(messages).map((message, index) => {
+
+                    let willDisplayDate = false;
+                    if (lastPrintedDate === undefined) {
+                        willDisplayDate = true;
+                        lastPrintedDate = moment.unix(message[1].timestamp);
+                    } else {
+                        const curMsgDate = moment.unix(message[1].timestamp);
+                        if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
+                            willDisplayDate = true;
+                        }
+
+                        lastPrintedDate = curMsgDate;
+                    }
+
+                    // TODO: Clear lastPrintedDate after this loop
+
+                    return (<ChatMessage
                         key={message[0]}
                         name={getSenderName(message[1])}
                         messageData={message[1]}
+                        displayDate={willDisplayDate}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                         templates={templates}
-                        onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />
-                )}
+                        onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />)
+                })}
 
                 <div className="chat__body__empty" />
             </div>

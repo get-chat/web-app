@@ -15,6 +15,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import moment from "moment";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -133,14 +134,27 @@ function ChatMessage(props) {
 
     const dateFormat = 'H:mm';
 
+    const getIndicatorDateFormat = () => {
+        const pastWeek = moment(new Date()).subtract(1, 'week');
+        const msgDate = moment.unix(data.timestamp);
+
+        if (msgDate.isBefore(pastWeek)) {
+            return 'd.M.yyyy';
+        } else {
+            return 'dddd';
+        }
+    }
+
     return (
         <div className="chat__message__outer">
 
+            {props.displayDate &&
             <div className="chat__message__dateContainer">
                 <span className="chat__message__dateContainer__indicator">
-                    <Moment date={data.timestamp} format="dddd" unix />
+                    <Moment date={data.timestamp} format={getIndicatorDateFormat()} unix/>
                 </span>
             </div>
+            }
 
             {data.type === TYPE_STICKER &&
             <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
