@@ -5,6 +5,7 @@ import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../Constants";
 import '../styles/ContactDetails.css';
 import Moment from "react-moment";
+import {avatarStyles} from "../AvatarStyles";
 
 // TODO: Provide a better date format depends on date
 const dateFormat = 'dddd, H:mm';
@@ -16,6 +17,8 @@ function ContactDetails(props)  {
     const hideContactDetails = () => {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
     }
+
+    const avatarClasses = avatarStyles();
 
     return (
         <div className="contactDetails">
@@ -32,7 +35,7 @@ function ContactDetails(props)  {
 
                 <div className="contactDetails__body__section">
                     <div className="contactDetails__body__avatarContainer">
-                        <Avatar className="contactDetails__body__avatar">{data.initials}</Avatar>
+                        <Avatar className={avatarClasses[data.getAvatarClassName()] + " contactDetails__body__avatar"}>{data.initials}</Avatar>
                     </div>
 
                     <h3>{data.name}</h3>

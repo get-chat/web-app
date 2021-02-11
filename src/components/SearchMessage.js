@@ -83,14 +83,12 @@ function SearchMessage(props) {
             <SearchBar onChange={search} />
 
             <div className="searchMessage__body">
-
                 { Object.entries(results).map((message, index) =>
                     <SearchMessageResult
                         key={message[0]}
                         messageData={message[1]}
                         onClick={(id) => goToMessage(id)}/>
                 )}
-
             </div>
         </div>
     )
