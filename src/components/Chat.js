@@ -86,23 +86,8 @@ export default function Chat(props) {
             return false;
         }
 
-        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, source.token))
-            .then((response) => {
-                console.log("Contact", response.data);
-
-                const prepared = new ContactClass(response.data);
-                setContact(prepared);
-                setExpired(prepared.isExpired);
-
-                // Contact information is loaded, now load messages
-                getMessages();
-
-            })
-            .catch((error) => {
-                // TODO: Handle errors
-
-                displayError(error);
-            });
+        // Load contact and messages
+        getContact(true);
 
         return () => {
             // Cancelling ongoing requests
@@ -189,6 +174,28 @@ export default function Chat(props) {
         setOptionsChatMessage(chatMessage);
 
         console.log(chatMessage.id);
+    }
+
+    const getContact = (loadMessages) => {
+        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, source.token))
+            .then((response) => {
+                console.log("Contact", response.data);
+
+                const prepared = new ContactClass(response.data);
+                setContact(prepared);
+                setExpired(prepared.isExpired);
+
+                // Contact information is loaded, now load messages
+                if (loadMessages !== undefined && loadMessages === true) {
+                    getMessages();
+                }
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+
+                displayError(error);
+            });
     }
 
     const getMessages = (firstMessageTimestamp) => {
@@ -282,7 +289,10 @@ export default function Chat(props) {
                             console.log(msg.isFromUs);
                             if (msg.isFromUs === false) {
                                 if (getPastHoursByTimestamp(msg.timestamp) < 24) {
-                                    setExpired(false);
+                                    //setExpired(false);
+
+                                    // isExpired will be updated here in promise
+                                    getContact(false);
                                     break;
                                 }
                             }
