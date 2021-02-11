@@ -44,7 +44,7 @@ function SearchMessage(props) {
             getConfig({
                 //offset: offset ?? 0,
                 limit: 30,
-                keyword: keyword
+                search: keyword
             }, cancelToken.token)
         )
             .then((response) => {
@@ -61,10 +61,6 @@ function SearchMessage(props) {
             })
             .catch((error) => {
                 // TODO: Handle errors
-
-                if (axios.isCancel(error)) {
-                    console.error("Cancelled");
-                }
 
                 //displayError(error);
             });
