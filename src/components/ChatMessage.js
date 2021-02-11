@@ -139,7 +139,7 @@ function ChatMessage(props) {
         const msgDate = moment.unix(data.timestamp);
 
         if (msgDate.isBefore(pastWeek)) {
-            return 'd.M.yyyy';
+            return 'MMMM d, yyyy';
         } else {
             return 'dddd';
         }
