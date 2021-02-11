@@ -13,7 +13,8 @@ function SearchMessageResult(props) {
                 <Moment unix format={dateFormat}>{data.timestamp}</Moment>
             </div>
             <div className="searchResult__message__body">
-                {data.text}
+                <span className="searchResult__message__body__type">{data.type}</span>
+                <span className="searchResult__message__body__text">{data.text}</span>
             </div>
         </div>
     )
