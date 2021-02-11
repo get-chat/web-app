@@ -530,6 +530,10 @@ export default function Chat(props) {
 
                 { Object.entries(messages).map((message, index) => {
 
+                    if (index === 0) {
+                        lastPrintedDate = undefined;
+                    }
+
                     let willDisplayDate = false;
                     if (lastPrintedDate === undefined) {
                         willDisplayDate = true;
@@ -543,8 +547,6 @@ export default function Chat(props) {
                         lastPrintedDate = curMsgDate;
                     }
 
-                    // TODO: Clear lastPrintedDate after this loop
-
                     return (<ChatMessage
                         key={message[0]}
                         name={getSenderName(message[1])}
@@ -553,7 +555,7 @@ export default function Chat(props) {
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                         templates={templates}
                         onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />)
-                })}
+                }) }
 
                 <div className="chat__body__empty" />
             </div>
