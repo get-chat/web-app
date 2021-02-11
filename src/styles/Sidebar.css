@@ -24,9 +24,19 @@
     font-size: 24px !important;
 }
 
-.sidebar__chats {
+.sidebar__results {
     flex: 1;
     background-color: white;
     overflow-y: auto;
     /*border-bottom-left-radius: 10px;*/
+}
+
+.sidebar__results > h3 {
+    padding: 10px 15px;
+    font-weight: 400;
+    color: #009688;
+}
+
+.sidebar__results__chats {
+    margin-bottom: 20px;
 }

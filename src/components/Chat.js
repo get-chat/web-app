@@ -4,7 +4,7 @@ import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {getConfig, getLastMessageAndExtractTimestamp} from "../Helpers";
+import {getConfig, getLastMessageAndExtractTimestamp, getObjLength} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -159,10 +159,6 @@ export default function Chat(props) {
         const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
 
         return hasScrollableContent && !isOverflowHidden;
-    }
-
-    const getObjLength = (obj) => {
-        return Object.keys(obj).length;
     }
 
     const [optionsChatMessage, setOptionsChatMessage] = useState();

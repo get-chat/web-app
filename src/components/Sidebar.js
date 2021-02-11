@@ -5,7 +5,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {clearToken, getConfig} from "../Helpers";
+import {clearToken, getConfig, getObjLength} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
 import ContactClass from "../ContactClass";
@@ -18,6 +18,7 @@ function Sidebar(props) {
     const [chats, setChats] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
+    const [contactResults, setContactResults] = useState({});
 
     const clearUserSession = () => {
         clearToken();
@@ -98,14 +99,31 @@ function Sidebar(props) {
 
             <SearchBar onChange={(_keyword) => search(_keyword)} />
 
-            <div className="sidebar__chats">
-                { Object.entries(chats).map((chat) =>
-                    <SidebarChat
-                        key={chat[0]}
-                        chatData={chat[1]}
-                        unseenMessages={props.unseenMessages}
-                    />
-                )}
+            <div className="sidebar__results">
+
+                {keyword.trim().length > 0 &&
+                <h3>Chats</h3>
+                }
+
+                <div className="sidebar__results__chats">
+                    { Object.entries(chats).map((chat) =>
+                        <SidebarChat
+                            key={chat[0]}
+                            chatData={chat[1]}
+                            unseenMessages={props.unseenMessages}
+                        />
+                    )}
+                </div>
+
+                {(keyword.trim().length > 0 && getObjLength(contactResults) > 0) &&
+                <h3>Contacts</h3>
+                }
+
+                {(keyword.trim().length > 0 && getObjLength(contactResults) > 0) &&
+                <div className="sidebar__results__contacts">
+
+                </div>
+                }
             </div>
 
             <Menu

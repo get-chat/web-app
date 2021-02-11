@@ -24,6 +24,10 @@ const clearToken = () => {
     localStorage.removeItem(STORAGE_TAG_TOKEN);
 }
 
+const getObjLength = (obj) => {
+    return Object.keys(obj).length;
+}
+
 function linkify(inputText) {
     let replacedText, replacePattern1, replacePattern2, replacePattern3;
 
@@ -58,4 +62,4 @@ const getLastMessageAndExtractTimestamp = (messagesObject) => {
     return last ? parseInt(last.timestamp) : -1;
 }
 
-export {getToken, getConfig, setToken, clearToken, formatMessage, getLastMessage, getLastMessageAndExtractTimestamp};
+export {getToken, getConfig, setToken, clearToken, formatMessage, getLastMessage, getLastMessageAndExtractTimestamp, getObjLength};
