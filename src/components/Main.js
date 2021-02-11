@@ -128,7 +128,7 @@ function Main() {
     }, [waId]);
 
     const getUnseenMessages = (willNotify) => {
-        axios.get( `${BASE_URL}unseen_messages/`,
+        axios.get( `${BASE_URL}chats/`,
             getConfig({
                 offset: 0,
                 limit: 50 // TODO: Could it be zero?
