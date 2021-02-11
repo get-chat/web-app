@@ -53,6 +53,13 @@ const formatMessage = (message) => {
     return linkify(formatted);
 }
 
+const markOccurrences = (message, sub) => {
+    if (!message) return;
+
+    const reg = new RegExp('('+sub+')', 'gi');
+    return message.replace(reg, '<span class="searchOccurrence">$1</span>');
+}
+
 const getLastMessage = (messagesObject) => {
     return messagesObject[Object.keys(messagesObject)[Object.keys(messagesObject).length-1]];
 }
@@ -62,4 +69,4 @@ const getLastMessageAndExtractTimestamp = (messagesObject) => {
     return last ? parseInt(last.timestamp) : -1;
 }
 
-export {getToken, getConfig, setToken, clearToken, formatMessage, getLastMessage, getLastMessageAndExtractTimestamp, getObjLength};
+export {getToken, getConfig, setToken, clearToken, formatMessage, markOccurrences, getLastMessage, getLastMessageAndExtractTimestamp, getObjLength};

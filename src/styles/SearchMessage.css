@@ -50,3 +50,8 @@
 .searchResult__message__body__type {
     margin-right: 15px;
 }
+
+.searchOccurrence {
+    font-weight: 600;
+    color: #009688;
+}

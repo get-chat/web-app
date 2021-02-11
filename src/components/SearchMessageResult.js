@@ -1,11 +1,11 @@
 import React from 'react';
 import Moment from "react-moment";
+import {markOccurrences} from "../Helpers";
 
 const dateFormat = 'H:mm';
 
 function SearchMessageResult(props) {
 
-    const waId = props.waId;
     const data = props.messageData;
 
     return(
@@ -15,7 +15,7 @@ function SearchMessageResult(props) {
             </div>
             <div className="searchResult__message__body">
                 <span className="searchResult__message__body__type">{data.type}</span>
-                <span className="searchResult__message__body__text">{data.text}</span>
+                <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: markOccurrences(data.text, props.keyword)}} />
             </div>
         </div>
     )

@@ -14,6 +14,7 @@ import SearchMessageResult from "./SearchMessageResult";
 function SearchMessage(props) {
 
     const [results, setResults] = useState({});
+    const [keyword, setKeyword] = useState("");
     const {waId} = useParams();
 
     useEffect(() => {
@@ -26,7 +27,9 @@ function SearchMessage(props) {
 
     let cancelToken;
 
-    const search = async (keyword) => {
+    const search = async (_keyword) => {
+        setKeyword(_keyword);
+
         // Check if there are any previous pending requests
         if (cancelToken !== undefined) {
             cancelToken.cancel("Operation canceled due to new request.");
@@ -35,7 +38,7 @@ function SearchMessage(props) {
         // Generate a token
         cancelToken = axios.CancelToken.source();
 
-        if (keyword.trim().length === 0) {
+        if (_keyword.trim().length === 0) {
             setResults({});
             return false;
         }
@@ -44,14 +47,14 @@ function SearchMessage(props) {
             getConfig({
                 //offset: offset ?? 0,
                 limit: 30,
-                search: keyword
+                search: _keyword
             }, cancelToken.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
 
                 const preparedMessages = {};
-                response.data.results.reverse().map((message, index) => {
+                response.data.results.map((message, index) => {
                     const prepared = new ChatMessageClass(message);
                     preparedMessages[prepared.id] = prepared;
                 });
@@ -88,6 +91,7 @@ function SearchMessage(props) {
                         key={message[0]}
                         waId={waId}
                         messageData={message[1]}
+                        keyword={keyword}
                         onClick={(id) => goToMessage(id)}/>
                 )}
             </div>
