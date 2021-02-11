@@ -10,6 +10,7 @@ import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
 import ContactClass from "../ContactClass";
 import SearchBar from "./SearchBar";
+import SidebarContactResult from "./SidebarContactResult";
 
 function Sidebar(props) {
 
@@ -121,7 +122,12 @@ function Sidebar(props) {
 
                 {(keyword.trim().length > 0 && getObjLength(contactResults) > 0) &&
                 <div className="sidebar__results__contacts">
-
+                    { Object.entries(contactResults).map((contactResult) =>
+                        <SidebarContactResult
+                            key={contactResult[0]}
+                            chatData={contactResult[1]}
+                        />
+                    )}
                 </div>
                 }
             </div>
