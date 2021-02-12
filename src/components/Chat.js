@@ -4,7 +4,7 @@ import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {getConfig, getLastMessageAndExtractTimestamp, getObjLength} from "../Helpers";
+import {getConfig, getFirstMessage, getLastMessage, getLastMessageAndExtractTimestamp, getObjLength} from "../Helpers";
 import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -23,6 +23,8 @@ const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
 const TYPE_AUDIO = 'audio';
 const TYPE_DOCUMENT = 'document';
+
+const SCROLL_BOTTOM_OFFSET = 30;
 
 export default function Chat(props) {
 
@@ -62,7 +64,7 @@ export default function Chat(props) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
                 if (event.target.parentNode.id === "chat__body") {
                     const {currentTarget: target} = event;
-                    target.scroll({top: target.scrollHeight /*, behavior: 'smooth'*/});
+                    target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
                 }
             });
         }
@@ -108,12 +110,23 @@ export default function Chat(props) {
         // Browser support should be considered: https://caniuse.com/intersectionobserver
         function handleScroll(e) {
             const threshold = 0;
-            if (isScrollable(e.target) && e.target.scrollTop <= threshold) {
-                console.log("Scrolled to top");
-                if (isLoaded && !isLoadingMoreMessages) {
-                    setLoadingMoreMessages(true);
-                    console.log();
-                    getMessages(undefined, messages[Object.keys(messages)[0]]?.timestamp /*getObjLength(messages)*/);
+            if (isScrollable(e.target)) {
+                if (e.target.scrollTop <= threshold) {
+                    //console.log("Scrolled to top");
+                    if (isLoaded && !isLoadingMoreMessages) {
+                        setLoadingMoreMessages(true);
+                        getMessages(undefined, getFirstMessage(messages)?.timestamp);
+                    }
+                } else {
+                    const el = e.target;
+                    // TODO: Make sure user scrolls
+                    if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+                        //console.log('Scrolled to bottom');
+                        if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
+                            setLoadingMoreMessages(true);
+                            getMessages(undefined, undefined, undefined, getLastMessage(messages)?.timestamp, true, false);
+                        }
+                    }
                 }
             }
         }
@@ -133,7 +146,7 @@ export default function Chat(props) {
         // Scrolling to bottom on initial load
         if (!isLoadingTemplates) {
             const target = messagesContainer.current;
-            target.scroll({top: target.scrollHeight});
+            target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
         }
     }, [isLoadingTemplates]);
 
@@ -153,6 +166,8 @@ export default function Chat(props) {
                         scrollToChild(msgId);
                     } else {
                         console.log("This message will be loaded.");
+
+                        // TODO: Cancel other messages requests first
 
                         // Load messages since clicked results
                         getMessages(() => {
@@ -218,9 +233,7 @@ export default function Chat(props) {
 
                 // Contact information is loaded, now load messages
                 if (loadMessages !== undefined && loadMessages === true) {
-                    getMessages(() => {
-                        setAtBottom(true);
-                    });
+                    getMessages();
                 }
 
             })
@@ -245,14 +258,23 @@ export default function Chat(props) {
             .then((response) => {
                 console.log("Messages", response.data);
 
+                const count = response.data.count;
+                const previous = response.data.previous;
+                const next = response.data.next;
+
                 if (sinceTime && isInitialWithSinceTime === true) {
-                    const count = response.data.count;
-                    if (count > limit) {
+                    if (next) { /*count > limit*/
                         setAtBottom(false);
                         getMessages(promise, beforeTime, count - limit, sinceTime, false, true);
                         return false;
                     }
                 }
+
+                const hasNewerToLoad = previous != null && typeof previous !== typeof undefined;
+
+                console.log(hasNewerToLoad);
+
+                setAtBottom(!hasNewerToLoad);
 
                 const preparedMessages = {};
                 response.data.results.reverse().map((message, index) => {
@@ -265,18 +287,21 @@ export default function Chat(props) {
                     const prevScrollTop = messagesContainer.current.scrollTop;
                     const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-                    if (replaceAll) {
-                        setMessages(preparedMessages);
-                    } else {
-                        setMessages((prevState => {
-                                return {...preparedMessages, ...prevState}
-                            }
-                        ));
-                    }
+                    setMessages((prevState => {
+                        if (replaceAll) {
+                            return preparedMessages;
+                        }
+
+                        if (sinceTime) {
+                            return {...prevState, ...preparedMessages}
+                        }
+
+                        return {...preparedMessages, ...prevState}
+                    }));
 
                     // Persisting scroll position by calculating container height difference
                     const nextScrollHeight = messagesContainer.current.scrollHeight;
-                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
+                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
                 }
 
                 setLoaded(true);

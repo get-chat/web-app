@@ -56,12 +56,16 @@ const formatMessage = (message) => {
 const markOccurrences = (message, sub) => {
     if (!message) return;
 
-    const reg = new RegExp('('+sub+')', 'gi');
+    const reg = new RegExp('(' + sub + ')', 'gi');
     return message.replace(reg, '<span class="searchOccurrence">$1</span>');
 }
 
+const getFirstMessage = (messagesObject) => {
+    return messagesObject[Object.keys(messagesObject)[0]];
+}
+
 const getLastMessage = (messagesObject) => {
-    return messagesObject[Object.keys(messagesObject)[Object.keys(messagesObject).length-1]];
+    return messagesObject[Object.keys(messagesObject)[Object.keys(messagesObject).length - 1]];
 }
 
 const getLastMessageAndExtractTimestamp = (messagesObject) => {
@@ -69,4 +73,15 @@ const getLastMessageAndExtractTimestamp = (messagesObject) => {
     return last ? parseInt(last.timestamp) : -1;
 }
 
-export {getToken, getConfig, setToken, clearToken, formatMessage, markOccurrences, getLastMessage, getLastMessageAndExtractTimestamp, getObjLength};
+export {
+    getToken,
+    getConfig,
+    setToken,
+    clearToken,
+    formatMessage,
+    markOccurrences,
+    getFirstMessage,
+    getLastMessage,
+    getLastMessageAndExtractTimestamp,
+    getObjLength
+};
