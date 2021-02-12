@@ -17,6 +17,7 @@ import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import moment from "moment";
 import ChatMessageClass from "../ChatMessageClass";
+import MessageDateIndicator from "./MessageDateIndicator";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -147,11 +148,9 @@ function ChatMessage(props) {
         <div id={'message_' + data.id} className="chat__message__outer">
 
             {props.displayDate &&
-            <div className="chat__message__dateContainer">
-                <span className="chat__message__dateContainer__indicator">
-                    <Moment date={data.timestamp} format={getIndicatorDateFormat()} unix/>
-                </span>
-            </div>
+            <MessageDateIndicator
+                timestamp={data.timestamp}
+                format={getIndicatorDateFormat()} />
             }
 
             {data.type === ChatMessageClass.TYPE_STICKER &&
