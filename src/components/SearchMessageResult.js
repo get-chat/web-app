@@ -9,7 +9,7 @@ function SearchMessageResult(props) {
     const data = props.messageData;
 
     return(
-        <div className="searchResult__message" onClick={() => props.onClick(data.id)}>
+        <div className="searchResult__message" onClick={() => props.onClick(data)}>
             <div className="searchResult__message__header">
                 <Moment unix format={dateFormat}>{data.timestamp}</Moment>
             </div>

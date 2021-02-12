@@ -137,7 +137,8 @@ export default function Chat(props) {
 
     useEffect(() => {
         const onGoToMessageId = function (msg, data) {
-            const msgId = data;
+            const msgId = data.id;
+            const timestamp = data.timestamp;
             if (messagesContainer && msgId) {
                 if (messages[msgId]) {
                     console.log("Exists");
@@ -147,6 +148,9 @@ export default function Chat(props) {
 
                 } else {
                     console.log("Load and then scroll");
+
+                    // Load messages since clicked results
+                    getMessages(undefined, timestamp);
                 }
             }
         }
@@ -217,11 +221,12 @@ export default function Chat(props) {
             });
     }
 
-    const getMessages = (firstMessageTimestamp) => {
+    const getMessages = (beforeTime, sinceTime) => {
         axios.get( `${BASE_URL}messages/${waId}/`,
             getConfig({
                 //offset: offset ?? 0,
-                before_time: firstMessageTimestamp,
+                before_time: beforeTime,
+                since_time: sinceTime,
                 limit: 30,
             }, source.token)
         )
@@ -254,8 +259,8 @@ export default function Chat(props) {
 
                 // TODO: Check unread messages first and then decide to do it or not
                 // Mark messages as seen
-                if (!firstMessageTimestamp) {
-                    // firstMessageTimestamp is not passed only for initial request
+                if (!beforeTime && !sinceTime) {
+                    // beforeTime is not passed only for initial request
                     // Mark messages as seen
                     const lastMessageTimestamp = getLastMessageAndExtractTimestamp(preparedMessages);
                     markAsSeen(lastMessageTimestamp);

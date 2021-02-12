@@ -69,8 +69,8 @@ function SearchMessage(props) {
             });
     }
 
-    const goToMessage = (id) => {
-        PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, id);
+    const goToMessage = (data) => {
+        PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
     }
 
     return (
@@ -92,7 +92,7 @@ function SearchMessage(props) {
                         waId={waId}
                         messageData={message[1]}
                         keyword={keyword}
-                        onClick={(id) => goToMessage(id)}/>
+                        onClick={(chatMessage) => goToMessage(chatMessage)}/>
                 )}
             </div>
         </div>
