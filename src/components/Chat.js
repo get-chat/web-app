@@ -42,6 +42,8 @@ export default function Chat(props) {
     const [isErrorVisible, setErrorVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const [isAtBottom, setAtBottom] = useState(false);
+
     const {waId} = useParams();
 
     let cancelToken;
@@ -111,7 +113,7 @@ export default function Chat(props) {
                 if (isLoaded && !isLoadingMoreMessages) {
                     setLoadingMoreMessages(true);
                     console.log();
-                    getMessages(messages[Object.keys(messages)[0]]?.timestamp /*getObjLength(messages)*/);
+                    getMessages(undefined, messages[Object.keys(messages)[0]]?.timestamp /*getObjLength(messages)*/);
                 }
             }
         }
@@ -135,22 +137,28 @@ export default function Chat(props) {
         }
     }, [isLoadingTemplates]);
 
+    const scrollToChild = (msgId) => {
+        const child = messagesContainer.current.querySelector('#message_' + msgId);
+        child.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     useEffect(() => {
         const onGoToMessageId = function (msg, data) {
             const msgId = data.id;
             const timestamp = data.timestamp;
-            if (messagesContainer && msgId) {
-                if (messages[msgId]) {
-                    console.log("Exists");
+            if (messagesContainer) {
+                if (msgId) {
+                    if (messages[msgId]) {
+                        console.log("This message is already loaded.");
+                        scrollToChild(msgId);
+                    } else {
+                        console.log("This message will be loaded.");
 
-                    const child = messagesContainer.current.querySelector('#message_' + msgId);
-                    child.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-                } else {
-                    console.log("Load and then scroll");
-
-                    // Load messages since clicked results
-                    getMessages(undefined, timestamp, undefined, true);
+                        // Load messages since clicked results
+                        getMessages(() => {
+                            scrollToChild(msgId);
+                        }, undefined, undefined, timestamp, true, true);
+                    }
                 }
             }
         }
@@ -172,7 +180,7 @@ export default function Chat(props) {
 
             clearInterval(intervalId);
         }
-    }, [messages]);
+    }, [messages, isAtBottom]);
 
     useEffect(() => {
         if (selectedFile) {
@@ -210,7 +218,9 @@ export default function Chat(props) {
 
                 // Contact information is loaded, now load messages
                 if (loadMessages !== undefined && loadMessages === true) {
-                    getMessages();
+                    getMessages(() => {
+                        setAtBottom(true);
+                    });
                 }
 
             })
@@ -221,17 +231,12 @@ export default function Chat(props) {
             });
     }
 
-    const getMessages = (beforeTime, sinceTime, offset, replaceAll) => {
-
-        /*if (sinceTime) {
-            beforeTime = sinceTime + 1;
-        }*/
-
+    const getMessages = (promise, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
         axios.get( `${BASE_URL}messages/${waId}/`,
             getConfig({
-                //offset: offset ?? 0,
+                offset: offset ?? 0,
                 before_time: beforeTime,
                 since_time: sinceTime,
                 limit: limit,
@@ -240,13 +245,14 @@ export default function Chat(props) {
             .then((response) => {
                 console.log("Messages", response.data);
 
-                /*if (sinceTime) {
+                if (sinceTime && isInitialWithSinceTime === true) {
                     const count = response.data.count;
                     if (count > limit) {
-                        //getMessages(beforeTime, sinceTime, count, true);
+                        setAtBottom(false);
+                        getMessages(promise, beforeTime, count - limit, sinceTime, false, true);
                         return false;
                     }
-                }*/
+                }
 
                 const preparedMessages = {};
                 response.data.results.reverse().map((message, index) => {
@@ -285,6 +291,11 @@ export default function Chat(props) {
                     markAsSeen(lastMessageTimestamp);
                 }
 
+                // Promise
+                if (promise) {
+                    promise();
+                }
+
             })
             .catch((error) => {
                 setLoadingMoreMessages(false);
@@ -305,6 +316,11 @@ export default function Chat(props) {
         )
             .then((response) => {
                 //console.log("Interval: Messages", response.data);
+
+                // Display newest messages only if it is scrolled to bottom
+                if (!isAtBottom) {
+                    return false;
+                }
 
                 const preparedNewMessages = {};
                 response.data.results.reverse().map((message, index) => {
