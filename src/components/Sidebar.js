@@ -40,27 +40,27 @@ function Sidebar(props) {
     };
 
     useEffect(() => {
-        getContacts();
+        getChats();
 
         const intervalId = setInterval(() => {
-            getContacts();
+            getChats();
         }, 5000);
 
         return () => {
             clearInterval(intervalId);
         }
-    }, []);
+    }, [keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
-
-        console.log(_keyword);
     }
 
-    const getContacts = () => {
-        axios.get(`${BASE_URL}chats/`, getConfig())
+    const getChats = () => {
+        axios.get(`${BASE_URL}chats/`, getConfig({
+            search: keyword
+        }))
             .then((response) => {
-                console.log("Chats", response.data)
+                //console.log("Chats", response.data)
 
                 const preparedChats = {};
                 response.data.results.map((contact) => {
