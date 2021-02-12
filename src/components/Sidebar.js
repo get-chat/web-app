@@ -40,13 +40,19 @@ function Sidebar(props) {
     };
 
     useEffect(() => {
-        getChats();
+        // Generate a token
+        const cancelToken = axios.CancelToken.source();
+
+        getChats(cancelToken);
 
         const intervalId = setInterval(() => {
-            getChats();
+            getChats(cancelToken);
         }, 5000);
 
         return () => {
+            if (cancelToken !== undefined) {
+                cancelToken.cancel("Operation canceled due to new request.");
+            }
             clearInterval(intervalId);
         }
     }, [keyword]);
@@ -55,10 +61,12 @@ function Sidebar(props) {
         setKeyword(_keyword);
     }
 
-    const getChats = () => {
-        axios.get(`${BASE_URL}chats/`, getConfig({
-            search: keyword
-        }))
+    const getChats = (cancelToken) => {
+        axios.get(`${BASE_URL}chats/`,
+            getConfig({
+                search: keyword
+            }, cancelToken.token)
+        )
             .then((response) => {
                 //console.log("Chats", response.data)
 
