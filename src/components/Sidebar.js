@@ -8,9 +8,9 @@ import axios from "axios";
 import {clearToken, getConfig, getObjLength} from "../Helpers";
 import {BASE_URL} from "../Constants";
 import {useHistory} from "react-router-dom";
-import ContactClass from "../ContactClass";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
+import ChatClass from "../ChatClass";
 
 function Sidebar(props) {
 
@@ -58,18 +58,17 @@ function Sidebar(props) {
     }
 
     const getContacts = () => {
-        axios.get(`${BASE_URL}contacts/`, getConfig())
+        axios.get(`${BASE_URL}chats/`, getConfig())
             .then((response) => {
-                //console.log("Contacts", response.data)
+                console.log("Chats", response.data)
 
                 const preparedChats = {};
                 response.data.results.map((contact) => {
-                    const prepared = new ContactClass(contact);
+                    const prepared = new ChatClass(contact);
                     preparedChats[prepared.waId] = prepared;
                 });
 
                 setChats(preparedChats);
-
             })
             .catch((error) => {
                 console.log(error);
