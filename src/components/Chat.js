@@ -24,7 +24,7 @@ const TYPE_VIDEO = 'video';
 const TYPE_AUDIO = 'audio';
 const TYPE_DOCUMENT = 'document';
 
-const SCROLL_BOTTOM_OFFSET = 30;
+const SCROLL_BOTTOM_OFFSET = 15;
 
 export default function Chat(props) {
 
@@ -64,7 +64,7 @@ export default function Chat(props) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
                 if (event.target.parentNode.id === "chat__body") {
                     const {currentTarget: target} = event;
-                    target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
+                    //target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
                 }
             });
         }
@@ -85,6 +85,7 @@ export default function Chat(props) {
         setContact(null);
         setMessages([]);
         setTemplateMessagesVisible(false);
+        setAtBottom(false);
         props.previewMedia(null);
 
         if (!waId) {
@@ -142,13 +143,13 @@ export default function Chat(props) {
         }
     }, [messages, isLoaded, isLoadingMoreMessages]);
 
-    useEffect(() => {
-        // Scrolling to bottom on initial load
+    /*useEffect(() => {
+        // Scrolling to bottom on initial templates load
         if (!isLoadingTemplates) {
             const target = messagesContainer.current;
             target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
         }
-    }, [isLoadingTemplates]);
+    }, [isLoadingTemplates]);*/
 
     const scrollToChild = (msgId) => {
         const child = messagesContainer.current.querySelector('#message_' + msgId);
@@ -265,14 +266,14 @@ export default function Chat(props) {
                 if (sinceTime && isInitialWithSinceTime === true) {
                     if (next) { /*count > limit*/
                         setAtBottom(false);
-                        getMessages(promise, beforeTime, count - limit, sinceTime, false, true);
+                        getMessages(promise, beforeTime, count - limit, sinceTime, false, replaceAll);
                         return false;
                     }
                 }
 
                 const hasNewerToLoad = previous != null && typeof previous !== typeof undefined;
 
-                console.log(hasNewerToLoad);
+                console.log("Has newer to load:", hasNewerToLoad);
 
                 setAtBottom(!hasNewerToLoad);
 
@@ -300,8 +301,12 @@ export default function Chat(props) {
                     }));
 
                     // Persisting scroll position by calculating container height difference
-                    const nextScrollHeight = messagesContainer.current.scrollHeight;
-                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
+                    if (sinceTime) {
+                        messagesContainer.current.scrollTop = prevScrollTop;
+                    } else {
+                        const nextScrollHeight = messagesContainer.current.scrollHeight;
+                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
+                    }
                 }
 
                 setLoaded(true);
