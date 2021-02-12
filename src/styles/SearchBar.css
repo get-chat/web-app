@@ -31,3 +31,20 @@
 .searchBar__searchContainer > input:focus {
     outline: none;
 }
+
+/*
+.searchBar__searchContainer > span {
+    display: inline-block;
+}
+
+.searchBar__searchContainer > input:placeholder-shown ~ span {
+    display: none;
+}
+
+.searchBar__searchContainer > .searchBar__searchContainer__searchIcon {
+    display: none;
+}
+
+.searchBar__searchContainer > input:placeholder-shown ~ .searchBar__searchContainer__searchIcon {
+    display: block;
+}*/

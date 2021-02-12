@@ -11,7 +11,7 @@ function SearchBar(props) {
     return (
         <div className="searchBar__search">
             <div className="searchBar__searchContainer">
-                <SearchOutlined />
+                <SearchOutlined className="searchBar__searchContainer__searchIcon" />
                 <input placeholder="Search" type="text" onChange={handleChange} />
             </div>
         </div>
