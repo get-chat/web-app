@@ -187,7 +187,7 @@ a.chat__document:hover {
 }
 
 .chat__templateMsg {
-    background-color: #d7edf4!important;
+    background-color: #f4f0d7!important;
 }
 
 .chat__message__info {
@@ -228,7 +228,7 @@ a.chat__document:hover {
 }
 
 .chat__message.chat__templateMsg .chat__message__more {
-    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #d7edf4 35%);
+    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #f4f0d7 35%);
 }
 
 .chat__message:hover .chat__message__more {
