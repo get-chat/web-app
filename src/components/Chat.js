@@ -552,6 +552,9 @@ export default function Chat(props) {
 
                 { Object.entries(messages).map((message, index) => {
 
+                    // Message date is created here and passed to ChatMessage for a better performance
+                    const curMsgDate = moment.unix(message[1].timestamp);
+
                     if (index === 0) {
                         lastPrintedDate = undefined;
                     }
@@ -561,7 +564,7 @@ export default function Chat(props) {
                         willDisplayDate = true;
                         lastPrintedDate = moment.unix(message[1].timestamp);
                     } else {
-                        const curMsgDate = moment.unix(message[1].timestamp);
+                        //const curMsgDate = moment.unix(message[1].timestamp);
                         if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
                             willDisplayDate = true;
                         }
@@ -574,6 +577,7 @@ export default function Chat(props) {
                         name={getSenderName(message[1])}
                         messageData={message[1]}
                         displayDate={willDisplayDate}
+                        date={curMsgDate}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                         templates={templates}
                         onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />)

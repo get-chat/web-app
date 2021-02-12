@@ -134,7 +134,7 @@ function ChatMessage(props) {
 
     const getIndicatorDateFormat = () => {
         const pastWeek = moment(new Date()).subtract(1, 'week');
-        const msgDate = moment.unix(data.timestamp);
+        const msgDate = props.date; //moment.unix(data.timestamp);
 
         if (msgDate.isBefore(pastWeek)) {
             return 'MMMM d, yyyy';
