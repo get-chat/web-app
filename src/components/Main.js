@@ -138,7 +138,7 @@ function Main() {
                 //console.log('Unseen messages', response.data);
 
                 const preparedUnseenMessages = {};
-                response.data.map((unseenMessage, index) => {
+                response.data.results.map((unseenMessage, index) => {
                     const prepared = new UnseenMessageClass(unseenMessage);
                     preparedUnseenMessages[prepared.waId] = prepared;
                 });

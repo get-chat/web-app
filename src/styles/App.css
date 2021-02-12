@@ -1,7 +1,7 @@
 * {
     margin: 0;
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
 /* width */
@@ -17,7 +17,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 /* Handle on hover */

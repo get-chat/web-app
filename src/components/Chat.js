@@ -150,7 +150,7 @@ export default function Chat(props) {
                     console.log("Load and then scroll");
 
                     // Load messages since clicked results
-                    getMessages(undefined, timestamp);
+                    getMessages(undefined, timestamp, undefined, true);
                 }
             }
         }
@@ -221,17 +221,32 @@ export default function Chat(props) {
             });
     }
 
-    const getMessages = (beforeTime, sinceTime) => {
+    const getMessages = (beforeTime, sinceTime, offset, replaceAll) => {
+
+        /*if (sinceTime) {
+            beforeTime = sinceTime + 1;
+        }*/
+
+        const limit = 30;
+
         axios.get( `${BASE_URL}messages/${waId}/`,
             getConfig({
                 //offset: offset ?? 0,
                 before_time: beforeTime,
                 since_time: sinceTime,
-                limit: 30,
+                limit: limit,
             }, source.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
+
+                /*if (sinceTime) {
+                    const count = response.data.count;
+                    if (count > limit) {
+                        //getMessages(beforeTime, sinceTime, count, true);
+                        return false;
+                    }
+                }*/
 
                 const preparedMessages = {};
                 response.data.results.reverse().map((message, index) => {
@@ -244,10 +259,14 @@ export default function Chat(props) {
                     const prevScrollTop = messagesContainer.current.scrollTop;
                     const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-                    setMessages((prevState => {
-                            return { ...preparedMessages, ...prevState }
-                        }
-                    ));
+                    if (replaceAll) {
+                        setMessages(preparedMessages);
+                    } else {
+                        setMessages((prevState => {
+                                return {...preparedMessages, ...prevState}
+                            }
+                        ));
+                    }
 
                     // Persisting scroll position by calculating container height difference
                     const nextScrollHeight = messagesContainer.current.scrollHeight;
