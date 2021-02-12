@@ -111,6 +111,7 @@ function Sidebar(props) {
                             key={chat[0]}
                             chatData={chat[1]}
                             unseenMessages={props.unseenMessages}
+                            keyword={keyword}
                         />
                     )}
                 </div>

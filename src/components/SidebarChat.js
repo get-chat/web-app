@@ -5,6 +5,7 @@ import {Link, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
+import {markOccurrences} from "../Helpers";
 
 function SidebarChat(props) {
 
@@ -58,7 +59,12 @@ function SidebarChat(props) {
             <div id={props.chatData.waId} className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat' : '')}>
                 <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
-                    <h2>{props.chatData.name}</h2>
+                    {(props.keyword !== undefined && props.keyword.trim().length > 0)
+                        ?
+                        <h2 dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
+                        :
+                        <h2>{props.chatData.name}</h2>
+                    }
                     <p className="sidebarChat__info__lastMessage">
                         {((props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
                             ?
@@ -66,9 +72,7 @@ function SidebarChat(props) {
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
                             </span>
                             :
-                            <span>
-                                Last message at <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix />
-                            </span>
+                            <span>Last message at <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix /></span>
                         }
                     </p>
 
