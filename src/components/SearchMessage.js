@@ -43,8 +43,9 @@ function SearchMessage(props) {
             return false;
         }
 
-        axios.get( `${BASE_URL}messages/${waId}/`,
+        axios.get( `${BASE_URL}messages/`,
             getConfig({
+                wa_id: waId,
                 //offset: offset ?? 0,
                 limit: 30,
                 search: _keyword

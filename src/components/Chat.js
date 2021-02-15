@@ -284,8 +284,9 @@ export default function Chat(props) {
     const getMessages = (promise, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
-        axios.get( `${BASE_URL}messages/${waId}/`,
+        axios.get( `${BASE_URL}messages/`,
             getConfig({
+                wa_id: waId,
                 offset: offset ?? 0,
                 before_time: beforeTime,
                 since_time: sinceTime,
@@ -383,8 +384,9 @@ export default function Chat(props) {
 
     // Temporary solution, will be replaced with socket
     const getNewMessagesTemp = () => {
-        axios.get( `${BASE_URL}messages/${waId}/`,
+        axios.get( `${BASE_URL}messages/`,
             getConfig({
+                wa_id: waId,
                 offset: 0,
                 limit: 30
             }, source.token)
@@ -450,7 +452,8 @@ export default function Chat(props) {
         console.log('You typed: ', input);
 
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/${waId}/`, {
+            axios.post( `${BASE_URL}messages/`, {
+                wa_id: waId,
                 text: {
                     body: input.trim()
                 }
@@ -483,7 +486,8 @@ export default function Chat(props) {
 
     const sendTemplateMessage = (templateMessage) => {
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/${waId}/`, {
+            axios.post( `${BASE_URL}messages/`, {
+                wa_id: waId,
                 type: 'template',
                 template: {
                     namespace: templateMessage.namespace,
@@ -577,7 +581,9 @@ export default function Chat(props) {
                 body[type]['filename'] = filename;
             }
 
-            axios.post( `${BASE_URL}messages/${waId}/`, body, getConfig())
+            axios.post( `${BASE_URL}messages/`, body, getConfig({
+                wa_id: waId
+            }))
                 .then((response) => {
                     console.log(response.data);
 
