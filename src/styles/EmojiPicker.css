@@ -10,10 +10,9 @@
 }
 
 .emoji-mart-category-label span {
-    background: none;
-    background-color: inherit;
+    background: #ededed none;
     font-size: 14px;
-    padding: 20px 6px 5px 6px;
+    padding: 15px 6px 5px 6px;
     color: rgba(0, 0, 0, 0.46);
 }
 
@@ -63,4 +62,12 @@ button.emoji-mart-emoji {
 
 .emoji-mart-category .emoji-mart-emoji:hover:before {
     background-color: inherit;
+}
+
+.emoji-mart-anchor-bar {
+    background-color: #009688!important;
+}
+
+.emoji-mart-anchor.emoji-mart-anchor-selected {
+    color: #009688!important;
 }
