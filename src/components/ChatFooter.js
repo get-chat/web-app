@@ -90,7 +90,6 @@ function ChatFooter(props) {
                     <Send />
                 </IconButton>
             </Tooltip>
-1
         </div>
     )
 }
