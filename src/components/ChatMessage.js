@@ -133,24 +133,12 @@ function ChatMessage(props) {
 
     const dateFormat = 'H:mm';
 
-    const getIndicatorDateFormat = () => {
-        const pastWeek = moment(new Date()).subtract(1, 'week');
-        const msgDate = props.date; //moment.unix(data.timestamp);
-
-        if (msgDate.isBefore(pastWeek)) {
-            return 'MMMM d, yyyy';
-        } else {
-            return 'dddd';
-        }
-    }
-
     return (
         <div id={'message_' + data.id} className="chat__message__outer">
 
             {props.displayDate &&
             <MessageDateIndicator
-                timestamp={data.timestamp}
-                format={getIndicatorDateFormat()} />
+                timestamp={data.timestamp} />
             }
 
             {data.type === ChatMessageClass.TYPE_STICKER &&
