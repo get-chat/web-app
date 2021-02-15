@@ -289,18 +289,22 @@ a.chat__document:hover {
     flex: 1 1 auto;
 }
 
+.chat__footerOuter {
+    border-left: 1px solid lightgray;
+}
+
 .chat__footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 62px;
     /*border-top: 1px solid lightgray;*/
-    border-left: 1px solid lightgray;
     padding: 0 10px;
 }
 
 .chat__footer__emojiPicker {
     flex: 1 0 100%;
+    margin-bottom: -6px;
 }
 
 .chat__footer.expired {
