@@ -160,7 +160,6 @@ export default function Chat(props) {
             if (isLoaded) {
                 clearTimeout(timeoutToken);
                 timeoutToken = setTimeout(function () {
-                    console.log('worked');
                     prepareFixedDateIndicator(dateIndicators, el);
                 }, 25);
             }
@@ -648,7 +647,7 @@ export default function Chat(props) {
         <div className="chat">
             <ChatHeader contact={contact} />
 
-            <Zoom in={(isLoaded && !isLoadingMoreMessages)}>
+            <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">
                     <MessageDateIndicator text={fixedDateIndicatorText} />
                 </div>
