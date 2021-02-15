@@ -48,7 +48,12 @@
 }
 
 .searchResult__message__body__type {
-    margin-right: 15px;
+    margin-right: 10px;
+}
+
+.searchResult__message__body__type .MuiSvgIcon-root {
+    width: 0.75em;
+    height: 0.75em;
 }
 
 .searchOccurrence {

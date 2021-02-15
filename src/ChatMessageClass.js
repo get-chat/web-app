@@ -2,6 +2,7 @@ import {BASE_URL} from "./Constants";
 
 export class ChatMessageClass {
 
+    static TYPE_TEXT = 'text';
     static TYPE_IMAGE = 'image';
     static TYPE_VIDEO = 'video';
     static TYPE_VOICE = 'voice';
@@ -32,14 +33,14 @@ export class ChatMessageClass {
         this.documentId = payload.document?.id;
         this.documentLink = payload.document?.link;
         this.documentFileName = payload.document?.filename;
-        this.documentCaption = payload.document?.caption;
+        //this.documentCaption = payload.document?.caption;
         this.voiceId = payload.voice?.id;
         this.voiceLink = payload.voice?.link;
         this.audioId = payload.audio?.id;
         this.audioLink = payload.audio?.link;
         this.stickerId = payload.sticker?.id;
         this.stickerLink = payload.sticker?.stickerLink;
-        this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption;
+        this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption ?? payload.document?.caption;
         this.templateName = payload.template?.name;
         this.templateNamespace = payload.template?.namespace;
         this.templateLanguage = payload.template?.language?.code;
