@@ -299,6 +299,10 @@ a.chat__document:hover {
     padding: 0 10px;
 }
 
+.chat__footer__emojiPicker {
+    flex: 1 0 100%;
+}
+
 .chat__footer.expired {
     height: auto!important;
     align-items: normal;

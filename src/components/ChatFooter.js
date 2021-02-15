@@ -1,13 +1,19 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {IconButton, Tooltip} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import {NimblePicker} from "emoji-mart";
+import 'emoji-mart/css/emoji-mart.css';
+import '../styles/EmojiPicker.css';
+import data from 'emoji-mart/data/facebook.json';
 
 function ChatFooter(props) {
 
     const fileInput = useRef(null);
+
+    const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
     const handleAttachmentClick = (acceptValue) => {
         fileInput.current.setAttribute('accept', acceptValue);
@@ -28,15 +34,26 @@ function ChatFooter(props) {
     }
 
     return (
-        <div className="chat__footer">
+        <div className="chat__footerOuter">
 
-            <Tooltip title="Emoji" placement="top">
-                <IconButton>
-                    <InsertEmoticon/>
-                </IconButton>
-            </Tooltip>
+            {isEmojiPickerVisible &&
+            <div className="chat__footer__emojiPicker">
+                <NimblePicker
+                    set='facebook'
+                    data={data}
+                    showPreview={false}
+                    emojiSize={32} />
+            </div>
+            }
 
-            <span className="chat__footer__attachmentContainer">
+            <div className="chat__footer">
+                <Tooltip title="Emoji" placement="top">
+                    <IconButton onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
+                        <InsertEmoticon/>
+                    </IconButton>
+                </Tooltip>
+
+                <span className="chat__footer__attachmentContainer">
                 <Tooltip title="Attachment" placement="right">
                     <IconButton>
                         <AttachFile />
@@ -64,32 +81,33 @@ function ChatFooter(props) {
                 </div>
             </span>
 
-            <Tooltip title="Templates" placement="top">
-                <IconButton onClick={toggleTemplateMessages}>
-                    <SmsIcon />
-                </IconButton>
-            </Tooltip>
+                <Tooltip title="Templates" placement="top">
+                    <IconButton onClick={toggleTemplateMessages}>
+                        <SmsIcon />
+                    </IconButton>
+                </Tooltip>
 
-            {/*<AttachmentTypesMenu />*/}
+                {/*<AttachmentTypesMenu />*/}
 
-            <form className="chat__mediaForm">
-                <input
-                    type="file"
-                    //value={selectedFile}
-                    onChange={(e) => props.setSelectedFile(e.target.files[0])}
-                    ref={fileInput} />
-            </form>
+                <form className="chat__mediaForm">
+                    <input
+                        type="file"
+                        //value={selectedFile}
+                        onChange={(e) => props.setSelectedFile(e.target.files[0])}
+                        ref={fileInput} />
+                </form>
 
-            <form>
-                <textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />
-                <button onClick={props.sendMessage} type="submit">Send a message</button>
-            </form>
+                <form>
+                    <textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />
+                    <button onClick={props.sendMessage} type="submit">Send a message</button>
+                </form>
 
-            <Tooltip title="Send" placement="top">
-                <IconButton onClick={props.sendMessage}>
-                    <Send />
-                </IconButton>
-            </Tooltip>
+                <Tooltip title="Send" placement="top">
+                    <IconButton onClick={props.sendMessage}>
+                        <Send />
+                    </IconButton>
+                </Tooltip>
+            </div>
         </div>
     )
 }

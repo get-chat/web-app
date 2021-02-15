@@ -1,0 +1,66 @@
+.emoji-mart {
+    width: 100%!important;
+    border: none;
+    border-radius: 0;
+    background: none;
+}
+
+.emoji-mart-scroll {
+    padding: 0 10px 10px 10px;
+}
+
+.emoji-mart-category-label span {
+    background: none;
+    background-color: inherit;
+    font-size: 14px;
+    padding: 20px 6px 5px 6px;
+    color: rgba(0, 0, 0, 0.46);
+}
+
+.emoji-mart-search {
+    padding: 5px 10px 0;
+}
+
+.emoji-mart-search-icon {
+    display: none;
+}
+
+.emoji-mart-search input {
+    border-radius: 20px;
+    border: none;
+    background-color: #e6e6e6;
+    padding: 10px 20px;
+}
+
+.emoji-mart-anchor {
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.35);
+}
+
+button.emoji-mart-emoji {
+    outline: none;
+}
+
+.emoji-mart-category .emoji-mart-emoji span:hover {
+    cursor: pointer;
+}
+
+.emoji-mart-anchors svg, .emoji-mart-anchors img {
+    width: 20px;
+    height: 20px;
+}
+
+.emoji-mart-anchor:focus { outline: 0 }
+.emoji-mart-anchor:hover,
+.emoji-mart-anchor:focus,
+.emoji-mart-anchor-selected {
+    color: rgba(0, 0, 0, 0.45);
+}
+
+.emoji-mart-preview {
+    display: none;
+}
+
+.emoji-mart-category .emoji-mart-emoji:hover:before {
+    background-color: inherit;
+}
