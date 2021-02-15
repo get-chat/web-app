@@ -368,7 +368,7 @@ a.chat__document:hover {
 }
 
 .chat__footer__attachmentContainer__options__document {
-    background-color: #5f66cd!important;
+    background: linear-gradient(0deg, #5f66cd 50%, #5157ae 50%)!important;
 }
 
 .chat__footer__attachmentContainer__options__document .MuiSvgIcon-root {
@@ -376,7 +376,7 @@ a.chat__document:hover {
 }
 
 .chat__footer__attachmentContainer__options__imageAndVideo {
-    background-color: #bf59cf!important;
+    background: linear-gradient(0deg, #bf59cf 50%, #ac44cf 50%)!important;
 }
 
 .chat__footer__attachmentContainer__options__imageAndVideo .MuiSvgIcon-root {

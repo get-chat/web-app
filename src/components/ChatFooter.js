@@ -36,7 +36,7 @@ function ChatFooter(props) {
             </Tooltip>
 
             <span className="chat__footer__attachmentContainer">
-                <Tooltip title="Attachment" placement="top">
+                <Tooltip title="Attachment" placement="right">
                     <IconButton onClick={handleAttachmentClick}>
                         <AttachFile />
                     </IconButton>
