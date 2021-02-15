@@ -46,13 +46,17 @@ function ChatFooter(props) {
                 <div className="chat__footer__attachmentContainer__options">
 
                     <Tooltip title="Documents" placement="right">
-                        <IconButton className="chat__footer__attachmentContainer__options__document" onClick={() => handleAttachmentClick('application/*')}>
+                        <IconButton
+                            className="chat__footer__attachmentContainer__options__document"
+                            onClick={() => handleAttachmentClick('application/*')}>
                             <InsertDriveFileIcon/>
                         </IconButton>
                     </Tooltip>
 
                     <Tooltip title="Images & Videos" placement="right">
-                        <IconButton className="chat__footer__attachmentContainer__options__imageAndVideo" onClick={() => handleAttachmentClick('image/*, video/*')}>
+                        <IconButton
+                            className="chat__footer__attachmentContainer__options__imageAndVideo"
+                            onClick={() => handleAttachmentClick('image/*, video/*')}>
                             <ImageIcon/>
                         </IconButton>
                     </Tooltip>
