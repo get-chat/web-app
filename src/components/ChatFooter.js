@@ -9,7 +9,8 @@ function ChatFooter(props) {
 
     const fileInput = useRef(null);
 
-    const handleAttachmentClick = () => {
+    const handleAttachmentClick = (acceptValue) => {
+        fileInput.current.setAttribute('accept', acceptValue);
         fileInput.current.click();
     }
 
@@ -37,7 +38,7 @@ function ChatFooter(props) {
 
             <span className="chat__footer__attachmentContainer">
                 <Tooltip title="Attachment" placement="right">
-                    <IconButton onClick={handleAttachmentClick}>
+                    <IconButton>
                         <AttachFile />
                     </IconButton>
                 </Tooltip>
@@ -45,13 +46,13 @@ function ChatFooter(props) {
                 <div className="chat__footer__attachmentContainer__options">
 
                     <Tooltip title="Documents" placement="right">
-                        <IconButton className="chat__footer__attachmentContainer__options__document">
+                        <IconButton className="chat__footer__attachmentContainer__options__document" onClick={() => handleAttachmentClick('application/*')}>
                             <InsertDriveFileIcon/>
                         </IconButton>
                     </Tooltip>
 
                     <Tooltip title="Images & Videos" placement="right">
-                        <IconButton className="chat__footer__attachmentContainer__options__imageAndVideo">
+                        <IconButton className="chat__footer__attachmentContainer__options__imageAndVideo" onClick={() => handleAttachmentClick('image/*, video/*')}>
                             <ImageIcon/>
                         </IconButton>
                     </Tooltip>
@@ -85,7 +86,7 @@ function ChatFooter(props) {
                     <Send />
                 </IconButton>
             </Tooltip>
-
+1
         </div>
     )
 }
