@@ -86,6 +86,7 @@ video.chat__media {
     width: auto;
     object-fit: contain;
     margin-bottom: 22px;
+    cursor: default!important;
 }
 
 .chat__sticker.outgoing {
