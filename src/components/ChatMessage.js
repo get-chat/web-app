@@ -15,7 +15,6 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import moment from "moment";
 import ChatMessageClass from "../ChatMessageClass";
 import MessageDateIndicator from "./MessageDateIndicator";
 

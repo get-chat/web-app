@@ -337,11 +337,18 @@ export default function Chat(props) {
                     }));
 
                     // Persisting scroll position by calculating container height difference
-                    if (sinceTime) {
+                    /*if (sinceTime) {
                         messagesContainer.current.scrollTop = prevScrollTop;
                     } else {
                         const nextScrollHeight = messagesContainer.current.scrollHeight;
                         messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
+                    }*/
+
+                    if (!sinceTime || replaceAll) {
+                        const nextScrollHeight = messagesContainer.current.scrollHeight;
+                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
+                    } else if (sinceTime) {
+                        messagesContainer.current.scrollTop = prevScrollTop;
                     }
                 }
 
@@ -359,7 +366,9 @@ export default function Chat(props) {
 
                 // Promise
                 if (promise) {
-                    promise();
+                    setTimeout(function () {
+                        promise();
+                    }, 50);
                 }
 
             })
