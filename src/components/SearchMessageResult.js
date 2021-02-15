@@ -53,7 +53,7 @@ function SearchMessageResult(props) {
                     <NoteIcon />
                     }
 
-                    {data.type === ChatMessageClass.TYPE_DOCUMENT &&
+                    {data.type === ChatMessageClass.TYPE_TEMPLATE &&
                     <SmsIcon />
                     }
                 </span>

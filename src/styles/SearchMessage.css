@@ -56,6 +56,13 @@
     height: 0.75em;
 }
 
+/*.searchResult__message__body__text {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}*/
+
 .searchOccurrence {
     font-weight: 600;
     color: #009688;
