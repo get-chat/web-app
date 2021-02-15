@@ -231,9 +231,9 @@ a.chat__document:hover {
     background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #f4f0d7 35%);
 }
 
-.chat__message:hover .chat__message__more {
+/*.chat__message:hover .chat__message__more {
     display: block;
-}
+}*/
 
 .chat__headerRight {
     display: flex;
