@@ -420,7 +420,6 @@ export default function Chat(props) {
                     if (isExpired) {
                         for (const msgId in preparedNewMessages) {
                             const msg = preparedNewMessages[msgId];
-                            console.log(msg.isFromUs);
                             if (msg.isFromUs === false) {
                                 if (getPastHoursByTimestamp(msg.timestamp) < 24) {
                                     //setExpired(false);
