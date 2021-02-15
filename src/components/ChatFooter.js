@@ -2,6 +2,8 @@ import React, {useRef} from 'react';
 import {IconButton, Tooltip} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
+import ImageIcon from '@material-ui/icons/Image';
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 
 function ChatFooter(props) {
 
@@ -33,11 +35,29 @@ function ChatFooter(props) {
                 </IconButton>
             </Tooltip>
 
-            <Tooltip title="Attachment" placement="top">
-                <IconButton onClick={handleAttachmentClick}>
-                    <AttachFile />
-                </IconButton>
-            </Tooltip>
+            <span className="chat__footer__attachmentContainer">
+                <Tooltip title="Attachment" placement="top">
+                    <IconButton onClick={handleAttachmentClick}>
+                        <AttachFile />
+                    </IconButton>
+                </Tooltip>
+
+                <div className="chat__footer__attachmentContainer__options">
+
+                    <Tooltip title="Documents" placement="right">
+                        <IconButton className="chat__footer__attachmentContainer__options__document">
+                            <InsertDriveFileIcon/>
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Images & Videos" placement="right">
+                        <IconButton className="chat__footer__attachmentContainer__options__imageAndVideo">
+                            <ImageIcon/>
+                        </IconButton>
+                    </Tooltip>
+
+                </div>
+            </span>
 
             <Tooltip title="Templates" placement="top">
                 <IconButton onClick={toggleTemplateMessages}>

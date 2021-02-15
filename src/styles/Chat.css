@@ -344,6 +344,45 @@ a.chat__document:hover {
     color: gray;
 }
 
+.chat__footer__attachmentContainer {
+    position: relative;
+}
+
+.chat__footer__attachmentContainer:hover .chat__footer__attachmentContainer__options, .chat__footer__attachmentContainer__options:hover {
+    display: block;
+}
+
+.chat__footer__attachmentContainer__options {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0 15px 9px 15px;
+    margin-bottom: 48px;
+}
+
+.chat__footer__attachmentContainer__options .MuiButtonBase-root {
+    box-shadow: -1px 4px 12px -6px rgba(0, 0, 0, 0.85);
+    margin-bottom: 15px;
+}
+
+.chat__footer__attachmentContainer__options__document {
+    background-color: #5f66cd!important;
+}
+
+.chat__footer__attachmentContainer__options__document .MuiSvgIcon-root {
+    color: white!important;
+}
+
+.chat__footer__attachmentContainer__options__imageAndVideo {
+    background-color: #bf59cf!important;
+}
+
+.chat__footer__attachmentContainer__options__imageAndVideo .MuiSvgIcon-root {
+    color: white!important;
+}
+
 .templateMessagesOuter {
     padding: 5px 15px 15px 15px;
     border-left: 1px solid lightgray;
