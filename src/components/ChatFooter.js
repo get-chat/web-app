@@ -8,6 +8,7 @@ import {NimblePicker} from "emoji-mart";
 import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
+import CloseIcon from "@material-ui/icons/Close";
 
 function ChatFooter(props) {
 
@@ -47,6 +48,15 @@ function ChatFooter(props) {
             }
 
             <div className="chat__footer">
+
+                {isEmojiPickerVisible &&
+                <Tooltip title="Close" placement="top">
+                    <IconButton onClick={() => setEmojiPickerVisible(false)}>
+                        <CloseIcon />
+                    </IconButton>
+                </Tooltip>
+                }
+
                 <Tooltip title="Emoji" placement="top">
                     <IconButton onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
                         <InsertEmoticon/>
