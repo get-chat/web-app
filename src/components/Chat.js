@@ -171,6 +171,7 @@ export default function Chat(props) {
                         // TODO: Cancel other messages requests first
 
                         // Load messages since clicked results
+                        setLoadingMoreMessages(true);
                         getMessages(() => {
                             scrollToChild(msgId);
                         }, undefined, undefined, timestamp, true, true);
@@ -609,15 +610,15 @@ export default function Chat(props) {
 
     return (
         <div className="chat">
-
             <ChatHeader contact={contact} />
 
+            <Zoom in={isLoadingMoreMessages}>
+                <div className="chat__body__loadingMore">
+                    <CircularProgress size={28} />
+                </div>
+            </Zoom>
+
             <div id="chat__body" className="chat__body" ref={messagesContainer}>
-                <Zoom in={isLoadingMoreMessages}>
-                    <div className="chat__body__loadingMore">
-                        <CircularProgress size={28} />
-                    </div>
-                </Zoom>
                 <div className="chat__empty"/>
 
                 { Object.entries(messages).map((message, index) => {
