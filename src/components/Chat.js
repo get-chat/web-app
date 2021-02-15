@@ -18,6 +18,7 @@ import {getPastHoursByTimestamp} from "../DateHelpers";
 import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
 import moment from "moment";
 import PubSub from "pubsub-js";
+import MessageDateIndicator from "./MessageDateIndicator";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -29,6 +30,7 @@ const SCROLL_BOTTOM_OFFSET = 15;
 export default function Chat(props) {
 
     const messagesContainer = useRef(null);
+    const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
     const [isLoaded, setLoaded] = useState(false);
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [isExpired, setExpired] = useState(false);
@@ -106,20 +108,43 @@ export default function Chat(props) {
         props.setChosenContact(contact);
     }, [contact]);
 
+    const prepareFixedDateIndicator = (dateIndicators, el) => {
+        const curScrollTop = el.scrollTop;
+        let indicatorToShow;
+
+        for (let i = 0; i < dateIndicators.length; i++) {
+            const indicator = dateIndicators[i];
+            if (indicatorToShow === undefined || indicator.offsetTop <= curScrollTop) {
+                indicatorToShow = indicator;
+            } else {
+                break;
+            }
+        }
+
+        if (indicatorToShow) {
+            setFixedDateIndicatorText(indicatorToShow.innerHTML);
+        }
+    }
+
     useEffect(() => {
+        const messagesContainerCopy = messagesContainer.current;
+        const dateIndicators = messagesContainerCopy.querySelectorAll('.chat__message__outer > .chat__message__dateContainer > .chat__message__dateContainer__indicator');
+
+        let timeoutToken;
+
         // Consider replacing this with IntersectionObserver
         // Browser support should be considered: https://caniuse.com/intersectionobserver
         function handleScroll(e) {
             const threshold = 0;
-            if (isScrollable(e.target)) {
-                if (e.target.scrollTop <= threshold) {
+            const el = e.target;
+            if (isScrollable(el)) {
+                if (el.scrollTop <= threshold) {
                     //console.log("Scrolled to top");
                     if (isLoaded && !isLoadingMoreMessages) {
                         setLoadingMoreMessages(true);
                         getMessages(undefined, getFirstMessage(messages)?.timestamp);
                     }
                 } else {
-                    const el = e.target;
                     // TODO: Make sure user scrolls
                     if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
                         //console.log('Scrolled to bottom');
@@ -130,15 +155,26 @@ export default function Chat(props) {
                     }
                 }
             }
-        }
 
-        const messagesContainerCopy = messagesContainer.current;
+            // Second part, to display date
+            if (isLoaded) {
+                clearTimeout(timeoutToken);
+                timeoutToken = setTimeout(function () {
+                    console.log('worked');
+                    prepareFixedDateIndicator(dateIndicators, el);
+                }, 25);
+            }
+        }
 
         if (messagesContainer && isLoaded) {
             messagesContainerCopy.addEventListener("scroll", handleScroll);
+
+            // Display fixed date indicator
+            prepareFixedDateIndicator(dateIndicators, messagesContainerCopy);
         }
 
         return () => {
+            clearTimeout(timeoutToken);
             messagesContainerCopy.removeEventListener("scroll", handleScroll);
         }
     }, [messages, isLoaded, isLoadingMoreMessages]);
@@ -611,6 +647,12 @@ export default function Chat(props) {
     return (
         <div className="chat">
             <ChatHeader contact={contact} />
+
+            <Zoom in={(isLoaded && !isLoadingMoreMessages)}>
+                <div className="chat__body__dateIndicator">
+                    <MessageDateIndicator text={fixedDateIndicatorText} />
+                </div>
+            </Zoom>
 
             <Zoom in={isLoadingMoreMessages}>
                 <div className="chat__body__loadingMore">
