@@ -1,5 +1,6 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from 'emoji-mart/data/all.json'
+import {EMOJI_SET} from "./Constants";
 const { htmlToText } = require('html-to-text');
 
 const getToken = () => {
@@ -61,11 +62,12 @@ const formatMessage = (message) => {
 const replaceEmojis = (message) => {
     const reg = new RegExp('(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])', 'g');
     return message.replace(reg, function (occurrence) {
-        const emojiData = getEmojiDataFromNative(occurrence, 'facebook', data);
+        const emojiData = getEmojiDataFromNative(occurrence, EMOJI_SET, data);
         return Emoji({
             html: true,
             emoji: emojiData,
-            size: 22
+            size: 22,
+            set: EMOJI_SET
         })
     });
 }
