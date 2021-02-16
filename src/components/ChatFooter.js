@@ -4,7 +4,7 @@ import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import {NimblePicker} from "emoji-mart";
+import {Emoji, NimblePicker} from "emoji-mart";
 import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
@@ -35,17 +35,34 @@ function ChatFooter(props) {
         props.setTemplateMessagesVisible((prevState => !prevState));
     }
 
+    function insertAtCursor(el, text) {
+        el.focus() ; // DIV with cursor is 'myInstance1' (Editable DIV)
+        var sel, range;
+        if (window.getSelection) {
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+                var frag = document.createDocumentFragment();
+                frag.appendChild(document.createTextNode(text));
+                range.insertNode(frag);
+            }
+        } else if (document.selection && document.selection.createRange) {
+            document.selection.createRange().text = text;
+        }
+    }
+
     const handleEmojiSelect = (emoji) => {
         console.log(emoji);
 
-        console.log(emoji.html);
-        //emoji.html = true;
-
         if (editable.current) {
-            //editable.current.innerHTML = emoji.html;
+            // TODO: Try to avoid creating an emoji object here, if possible
+            insertAtCursor(editable.current, Emoji({
+                html: true,
+                emoji: emoji.colons,
+                size: 22
+            }));
         }
-
-        //editable.current.write(emoji);
     }
 
     return (
@@ -125,9 +142,9 @@ function ChatFooter(props) {
                 <form>
 
                     <div className="typeBox">
-                        {!props.input &&
+                        {/*{!props.input &&
                         <div className="typeBox__hint">Type a message</div>
-                        }
+                        }*/}
                         <div ref={editable} className="typeBox__editable" contentEditable="true" spellCheck="true" onInput={e => console.log(e.target.value)} />
                     </div>
 
