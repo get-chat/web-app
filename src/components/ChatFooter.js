@@ -9,7 +9,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
-import {EMOJI_SET, EMOJI_SHEET_SIZE, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
+import {EMOJI_SET, EMOJI_SHEET_SIZE, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 
 function ChatFooter(props) {

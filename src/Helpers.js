@@ -2,6 +2,7 @@ import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from 'emoji-mart/data/all.json'
 import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
 const { htmlToText } = require('html-to-text');
+const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
 const getToken = () => {
     return localStorage.getItem("token");
@@ -67,8 +68,9 @@ function containsOnlyEmojis(text) {
 
 const replaceEmojis = (message) => {
     const onlyEmojis = containsOnlyEmojis(message);
-    const reg = new RegExp('(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])', 'g');
-    return message.replace(reg, function (occurrence) {
+    const regex = emojiRegex();
+
+    return message.replace(regex, function (occurrence) {
         const emojiData = getEmojiDataFromNative(occurrence, EMOJI_SET, data);
         if (emojiData) {
             return Emoji({
@@ -79,7 +81,7 @@ const replaceEmojis = (message) => {
                 sheetSize: EMOJI_SHEET_SIZE
             })
         } else {
-            return '';
+            return occurrence;
         }
     });
 }
