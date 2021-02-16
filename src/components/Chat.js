@@ -581,6 +581,7 @@ export default function Chat(props) {
         if (isLoaded) {
 
             const body = {
+                wa_id: waId,
                 recipient_type: 'individual',
                 to: waId,
                 type: type
@@ -596,9 +597,7 @@ export default function Chat(props) {
                 body[type]['filename'] = filename;
             }
 
-            axios.post( `${BASE_URL}messages/`, body, getConfig({
-                wa_id: waId
-            }))
+            axios.post( `${BASE_URL}messages/`, body, getConfig())
                 .then((response) => {
                     console.log(response.data);
 
