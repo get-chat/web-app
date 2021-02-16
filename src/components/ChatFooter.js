@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {IconButton, Tooltip} from "@material-ui/core";
 import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
@@ -10,7 +10,6 @@ import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import {EMOJI_SET} from "../Constants";
-import {translateHTMLInputToText} from "../Helpers";
 
 function ChatFooter(props) {
 
@@ -23,6 +22,13 @@ function ChatFooter(props) {
         fileInput.current.setAttribute('accept', acceptValue);
         fileInput.current.click();
     }
+
+    useEffect(() => {
+        // Clear editable div when message is sent
+        if (props.input === '') {
+            editable.current.innerHTML = '';
+        }
+    }, [editable, props.input]);
 
     const toggleTemplateMessages = () => {
         // If messages container is already scrolled to bottom
