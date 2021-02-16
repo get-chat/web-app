@@ -1,3 +1,6 @@
+import {Emoji, getEmojiDataFromNative} from "emoji-mart";
+import data from 'emoji-mart/data/all.json'
+
 const getToken = () => {
     return localStorage.getItem("token");
 }
@@ -50,7 +53,20 @@ const formatMessage = (message) => {
     if (!message) return;
 
     let formatted = message.replaceAll('\n', '<br/>');
-    return linkify(formatted);
+    formatted = linkify(formatted);
+    return replaceEmojis(formatted);
+}
+
+const replaceEmojis = (message) => {
+    const reg = new RegExp('(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])', 'g');
+    return message.replace(reg, function (occurrence) {
+        const emojiData = getEmojiDataFromNative(occurrence, 'facebook', data);
+        return Emoji({
+            html: true,
+            emoji: emojiData,
+            size: 22
+        })
+    });
 }
 
 const markOccurrences = (message, sub) => {

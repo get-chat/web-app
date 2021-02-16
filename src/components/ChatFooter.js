@@ -13,6 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 function ChatFooter(props) {
 
     const fileInput = useRef(null);
+    const editable = useRef(null);
 
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
@@ -34,6 +35,19 @@ function ChatFooter(props) {
         props.setTemplateMessagesVisible((prevState => !prevState));
     }
 
+    const handleEmojiSelect = (emoji) => {
+        console.log(emoji);
+
+        console.log(emoji.html);
+        //emoji.html = true;
+
+        if (editable.current) {
+            //editable.current.innerHTML = emoji.html;
+        }
+
+        //editable.current.write(emoji);
+    }
+
     return (
         <div className="chat__footerOuter">
 
@@ -43,7 +57,8 @@ function ChatFooter(props) {
                     set='facebook'
                     data={data}
                     showPreview={false}
-                    emojiSize={32} />
+                    emojiSize={32}
+                    onSelect={handleEmojiSelect}/>
             </div>
             }
 
@@ -108,7 +123,15 @@ function ChatFooter(props) {
                 </form>
 
                 <form>
-                    <textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />
+
+                    <div className="typeBox">
+                        {!props.input &&
+                        <div className="typeBox__hint">Type a message</div>
+                        }
+                        <div ref={editable} className="typeBox__editable" contentEditable="true" spellCheck="true" onInput={e => console.log(e.target.value)} />
+                    </div>
+
+                    {/*<textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />*/}
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
 

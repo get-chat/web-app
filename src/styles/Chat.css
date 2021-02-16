@@ -297,7 +297,8 @@ a.chat__document:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 62px;
+    min-height: 62px;
+    max-height: 400px;
     /*border-top: 1px solid lightgray;*/
     padding: 0 10px;
 }
@@ -323,10 +324,13 @@ a.chat__document:hover {
     display: flex;
 }
 
-.chat__footer > form > textarea {
-    height: 25px;
-    max-height: 400px;
-    resize: none;
+.chat__footer > form > textarea, .typeBox {
+    position: relative;
+    background-color: white;
+    height: auto;
+    /*height: 25px;*/
+    /*max-height: 400px;*/
+    /*resize: none;*/
     flex: 1;
     border-radius: 30px;
     padding: 8px 15px;
@@ -335,8 +339,27 @@ a.chat__document:hover {
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
-.chat__footer > form > textarea:focus {
+.chat__footer > form > textarea:focus, .typeBox {
     outline: none;
+    border: none;
+}
+
+.typeBox__hint {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 0;
+    color: #827f80;
+}
+
+[contenteditable] {
+    outline: 1px solid transparent;
+}
+
+.typeBox__editable {
+    position: relative;
+    z-index: 100;
+    width: 100%;
 }
 
 .chat__footer > form > button {
@@ -500,4 +523,8 @@ a.chat__document:hover {
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
     background-color: #e1f5feeb;
     /*text-transform: uppercase;*/
+}
+
+.emoji-mart-emoji {
+    margin-bottom: -4px!important;
 }
