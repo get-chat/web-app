@@ -59,23 +59,35 @@ const formatMessage = (message) => {
     return replaceEmojis(formatted);
 }
 
+function containsOnlyEmojis(text) {
+    const onlyEmojis = text.replace(new RegExp('[\u0000-\u1eeff]', 'g'), '')
+    const visibleChars = text.replace(new RegExp('[\n\r\s]+|( )+', 'g'), '')
+    return onlyEmojis.length === visibleChars.length
+}
+
 const replaceEmojis = (message) => {
+    const onlyEmojis = containsOnlyEmojis(message);
     const reg = new RegExp('(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])', 'g');
     return message.replace(reg, function (occurrence) {
         const emojiData = getEmojiDataFromNative(occurrence, EMOJI_SET, data);
-        return Emoji({
-            html: true,
-            emoji: emojiData,
-            size: 22,
-            set: EMOJI_SET,
-            sheetSize: EMOJI_SHEET_SIZE
-        })
+        if (emojiData) {
+            return Emoji({
+                html: true,
+                emoji: emojiData,
+                size: onlyEmojis ? 44 : 22,
+                set: EMOJI_SET,
+                sheetSize: EMOJI_SHEET_SIZE
+            })
+        } else {
+            return '';
+        }
     });
 }
 
 const translateHTMLInputToText = (html) => {
     let result;
-    const reg = new RegExp('((<span\\b[^>]*\\s\\bstyle=(["\'])([^"]*)\\3[^>]*>)(.*?)</span>)', 'g');
+    //const reg = new RegExp('((<span\\b[^>]*\\s\\bstyle=(["\'])([^"]*)\\3[^>]*>)(.*?)</span>)', 'g');
+    const reg = new RegExp('<img\\s[^>]*?src\\s*=\\s*[\'\\"]([^\'\\"]*?)[\'\\"][^>]*?>', 'g');
     result = html.replace(reg, function (occurrences) {
         // Extract unicode from aria-label
         const matches = occurrences.match(new RegExp('aria-label="\\s*(.*?)\\s*,'), '$1');

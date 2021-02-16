@@ -44,11 +44,22 @@ function ChatFooter(props) {
     }
 
     function insertAtCursor(el, html) {
-        html = html.replace('<span', '<span contentEditable="false"');
-
+        //html = html.replace('<span', '<span contentEditable="false"');
+        html = html.replace('<span', '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"').replace('</span>', '');
         el.focus();
-        document.execCommand('insertHTML', false, html);
-        return false;
+
+        let selection = window.getSelection();
+        let range = selection.getRangeAt(0);
+        range.deleteContents();
+        let node = range.createContextualFragment(html);
+        range.insertNode(node);
+
+        for (let position = 0; position !== html.length; position++) {
+            selection.modify("move", "right", "character");
+        }
+
+        //el.dispatchEvent(new Event('input'));
+        props.setInput(el.innerHTML);
     }
 
     const handleEmojiSelect = (emoji) => {
@@ -148,6 +159,7 @@ function ChatFooter(props) {
                         <div className="typeBox__hint">Type a message</div>
                         }
                         <div
+                            id="typeBox__editable"
                             ref={editable}
                             className="typeBox__editable"
                             contentEditable="true"

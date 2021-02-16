@@ -360,6 +360,7 @@ a.chat__document:hover {
     position: relative;
     z-index: 100;
     width: 100%;
+    min-height: 26px;
     max-height: 350px;
     overflow-y: auto;
 }
@@ -530,6 +531,12 @@ a.chat__document:hover {
 .typeBox .emoji-mart-emoji {
     background-color: transparent!important;
     margin-bottom: -5px!important;
+    display: inline-block;
+    vertical-align: top;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .chat__message .emoji-mart-emoji {
