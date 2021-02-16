@@ -4,7 +4,7 @@ import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
 import ChatFooterExpired from "./ChatFooterExpired";
@@ -96,6 +96,9 @@ export default function Chat(props) {
         setTemplateMessagesVisible(false);
         setAtBottom(false);
         props.previewMedia(null);
+
+        // Close emoji picker
+        PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
 
         if (!waId) {
             console.log('waId is empty.');
@@ -490,6 +493,9 @@ export default function Chat(props) {
                 });
 
             setInput('');
+
+            // Close emoji picker
+            PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
         }
     }
 

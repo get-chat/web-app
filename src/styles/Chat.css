@@ -297,7 +297,7 @@ a.chat__document:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 62px;
+    /*min-height: 62px;*/
     max-height: 400px;
     /*border-top: 1px solid lightgray;*/
     padding: 0 10px;

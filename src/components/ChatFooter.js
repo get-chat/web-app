@@ -9,7 +9,8 @@ import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
-import {EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
+import {EMOJI_SET, EMOJI_SHEET_SIZE, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
+import PubSub from "pubsub-js";
 
 function ChatFooter(props) {
 
@@ -22,6 +23,18 @@ function ChatFooter(props) {
         fileInput.current.setAttribute('accept', acceptValue);
         fileInput.current.click();
     }
+
+    const handleEmojiPickerVisibility = function (msg, data) {
+        setEmojiPickerVisible(data);
+    }
+
+    useEffect(() => {
+        const token = PubSub.subscribe(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, handleEmojiPickerVisibility);
+
+        return () => {
+            PubSub.unsubscribe(token);
+        }
+    }, []);
 
     useEffect(() => {
         // Clear editable div when message is sent
@@ -54,9 +67,8 @@ function ChatFooter(props) {
         let node = range.createContextualFragment(html);
         range.insertNode(node);
 
-        for (let position = 0; position !== html.length; position++) {
-            selection.modify("move", "right", "character");
-        }
+        // Persist cursor position
+        selection.collapseToEnd();
 
         //el.dispatchEvent(new Event('input'));
         props.setInput(el.innerHTML);
