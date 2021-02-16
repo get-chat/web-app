@@ -525,6 +525,11 @@ a.chat__document:hover {
     /*text-transform: uppercase;*/
 }
 
-.emoji-mart-emoji {
+.typeBox .emoji-mart-emoji {
+    background-color: transparent;
+    margin-bottom: -5px!important;
+}
+
+.chat__message .emoji-mart-emoji {
     margin-bottom: -4px!important;
 }

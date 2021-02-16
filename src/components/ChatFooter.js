@@ -35,21 +35,12 @@ function ChatFooter(props) {
         props.setTemplateMessagesVisible((prevState => !prevState));
     }
 
-    function insertAtCursor(el, text) {
-        el.focus() ; // DIV with cursor is 'myInstance1' (Editable DIV)
-        var sel, range;
-        if (window.getSelection) {
-            sel = window.getSelection();
-            if (sel.getRangeAt && sel.rangeCount) {
-                range = sel.getRangeAt(0);
-                range.deleteContents();
-                var frag = document.createDocumentFragment();
-                frag.appendChild(document.createTextNode(text));
-                range.insertNode(frag);
-            }
-        } else if (document.selection && document.selection.createRange) {
-            document.selection.createRange().text = text;
-        }
+    function insertAtCursor(el, html) {
+        html = html.replace('<span', '<span contentEditable="false"');
+
+        el.focus();
+        document.execCommand('insertHTML', false, html);
+        return false;
     }
 
     const handleEmojiSelect = (emoji) => {
@@ -57,11 +48,13 @@ function ChatFooter(props) {
 
         if (editable.current) {
             // TODO: Try to avoid creating an emoji object here, if possible
-            insertAtCursor(editable.current, Emoji({
+            const emojiOutput = Emoji({
                 html: true,
                 emoji: emoji.colons,
-                size: 22
-            }));
+                size: 22,
+                set: 'facebook'
+            });
+            insertAtCursor(editable.current, emojiOutput);
         }
     }
 
@@ -145,7 +138,7 @@ function ChatFooter(props) {
                         {/*{!props.input &&
                         <div className="typeBox__hint">Type a message</div>
                         }*/}
-                        <div ref={editable} className="typeBox__editable" contentEditable="true" spellCheck="true" onInput={e => console.log(e.target.value)} />
+                        <div ref={editable} className="typeBox__editable" contentEditable="true" spellCheck="true" />
                     </div>
 
                     {/*<textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />*/}
