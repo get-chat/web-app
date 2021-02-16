@@ -334,7 +334,7 @@ a.chat__document:hover {
     flex: 1;
     border-radius: 30px;
     padding: 8px 15px;
-    margin: 0 10px;
+    margin: 10px 10px;
     border: none;
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
@@ -360,6 +360,8 @@ a.chat__document:hover {
     position: relative;
     z-index: 100;
     width: 100%;
+    max-height: 350px;
+    overflow-y: auto;
 }
 
 .chat__footer > form > button {
