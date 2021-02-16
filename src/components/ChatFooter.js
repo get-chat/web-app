@@ -28,6 +28,17 @@ function ChatFooter(props) {
         setEmojiPickerVisible(data);
     }
 
+    let timeout;
+    const handleEditableChange = (event) => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(function () {
+            props.setInput(event.target.innerHTML)
+        }, 5);
+    }
+
     useEffect(() => {
         const token = PubSub.subscribe(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, handleEmojiPickerVisibility);
 
@@ -176,7 +187,7 @@ function ChatFooter(props) {
                             className="typeBox__editable"
                             contentEditable="true"
                             spellCheck="true"
-                            onInput={event => props.setInput(event.target.innerHTML)}
+                            onInput={event => handleEditableChange(event)}
                             onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
                         />
                     </div>
