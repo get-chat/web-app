@@ -9,6 +9,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
+import {EMOJI_SET} from "../Constants";
 
 function ChatFooter(props) {
 
@@ -52,7 +53,7 @@ function ChatFooter(props) {
                 html: true,
                 emoji: emoji.colons,
                 size: 22,
-                set: 'facebook'
+                set: EMOJI_SET
             });
             insertAtCursor(editable.current, emojiOutput);
         }
@@ -64,7 +65,7 @@ function ChatFooter(props) {
             {isEmojiPickerVisible &&
             <div className="chat__footer__emojiPicker">
                 <NimblePicker
-                    set='facebook'
+                    set={EMOJI_SET}
                     data={data}
                     showPreview={false}
                     emojiSize={32}
