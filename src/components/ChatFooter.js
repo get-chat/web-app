@@ -136,19 +136,18 @@ function ChatFooter(props) {
                 <form>
 
                     <div className="typeBox">
-                        {/*{!props.input &&
+                        {!props.input &&
                         <div className="typeBox__hint">Type a message</div>
-                        }*/}
+                        }
                         <div
                             ref={editable}
                             className="typeBox__editable"
                             contentEditable="true"
                             spellCheck="true"
-                            onInput={event => props.setInput( translateHTMLInputToText(event.target.innerHTML) )}
+                            onInput={event => props.setInput(event.target.innerHTML)}
+                            onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
                         />
                     </div>
-
-                    {/*<textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />*/}
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
 

@@ -528,7 +528,7 @@ a.chat__document:hover {
 }
 
 .typeBox .emoji-mart-emoji {
-    background-color: transparent;
+    background-color: transparent!important;
     margin-bottom: -5px!important;
 }
 

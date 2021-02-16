@@ -4,7 +4,6 @@ import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {getConfig, getFirstMessage, getLastMessage, getLastMessageAndExtractTimestamp, getObjLength} from "../Helpers";
 import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -19,6 +18,14 @@ import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
 import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
+import {
+    getConfig,
+    getFirstMessage,
+    getLastMessage,
+    getLastMessageAndExtractTimestamp,
+    getObjLength,
+    translateHTMLInputToText
+} from "../Helpers";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -445,17 +452,19 @@ export default function Chat(props) {
     const sendMessage = (e) => {
         e.preventDefault();
 
-        if (input.trim() === '') {
+        const preparedInput = translateHTMLInputToText(input);
+
+        if (preparedInput.trim() === '') {
             return false;
         }
 
-        console.log('You typed: ', input);
+        console.log('You typed: ', preparedInput);
 
         if (isLoaded) {
             axios.post( `${BASE_URL}messages/`, {
                 wa_id: waId,
                 text: {
-                    body: input.trim()
+                    body: preparedInput.trim()
                 }
             }, getConfig())
                 .then((response) => {
