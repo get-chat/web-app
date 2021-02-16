@@ -6,3 +6,4 @@ export const EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY = "search_messages_visibilit
 export const EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY = "contact_details_visibility";
 
 export const EMOJI_SET = 'facebook';
+export const EMOJI_SHEET_SIZE = 64;

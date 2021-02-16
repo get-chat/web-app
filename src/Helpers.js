@@ -1,6 +1,6 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from 'emoji-mart/data/all.json'
-import {EMOJI_SET} from "./Constants";
+import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
 const { htmlToText } = require('html-to-text');
 
 const getToken = () => {
@@ -67,7 +67,8 @@ const replaceEmojis = (message) => {
             html: true,
             emoji: emojiData,
             size: 22,
-            set: EMOJI_SET
+            set: EMOJI_SET,
+            sheetSize: EMOJI_SHEET_SIZE
         })
     });
 }
