@@ -10,6 +10,7 @@ import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import {EMOJI_SET} from "../Constants";
+import {translateHTMLInputToText} from "../Helpers";
 
 function ChatFooter(props) {
 
@@ -45,8 +46,6 @@ function ChatFooter(props) {
     }
 
     const handleEmojiSelect = (emoji) => {
-        console.log(emoji);
-
         if (editable.current) {
             // TODO: Try to avoid creating an emoji object here, if possible
             const emojiOutput = Emoji({
@@ -55,6 +54,7 @@ function ChatFooter(props) {
                 size: 22,
                 set: EMOJI_SET
             });
+
             insertAtCursor(editable.current, emojiOutput);
         }
     }
@@ -139,7 +139,13 @@ function ChatFooter(props) {
                         {/*{!props.input &&
                         <div className="typeBox__hint">Type a message</div>
                         }*/}
-                        <div ref={editable} className="typeBox__editable" contentEditable="true" spellCheck="true" />
+                        <div
+                            ref={editable}
+                            className="typeBox__editable"
+                            contentEditable="true"
+                            spellCheck="true"
+                            onInput={event => props.setInput( translateHTMLInputToText(event.target.innerHTML) )}
+                        />
                     </div>
 
                     {/*<textarea value={props.input} onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}} onChange={e => props.setInput(e.target.value)} placeholder="Type a message" />*/}

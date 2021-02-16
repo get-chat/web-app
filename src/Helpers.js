@@ -1,5 +1,6 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from 'emoji-mart/data/all.json'
+const { htmlToText } = require('html-to-text');
 
 const getToken = () => {
     return localStorage.getItem("token");
@@ -69,6 +70,24 @@ const replaceEmojis = (message) => {
     });
 }
 
+const translateHTMLInputToText = (html) => {
+    let result;
+    const reg = new RegExp('((<span\\b[^>]*\\s\\bstyle=(["\'])([^"]*)\\3[^>]*>)(.*?)</span>)', 'g');
+    result = html.replace(reg, function (occurrences) {
+        // Extract unicode from aria-label
+        const matches = occurrences.match(new RegExp('aria-label="\\s*(.*?)\\s*,'), '$1');
+        if (matches && matches.length >= 1) {
+            return matches[1];
+        }
+        return '';
+    });
+
+    // Convert it to plain text
+    result = htmlToText(result);
+
+    return result;
+}
+
 const markOccurrences = (message, sub) => {
     if (!message) return;
 
@@ -95,6 +114,7 @@ export {
     setToken,
     clearToken,
     formatMessage,
+    translateHTMLInputToText,
     markOccurrences,
     getFirstMessage,
     getLastMessage,
