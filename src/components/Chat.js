@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {CircularProgress, Snackbar, Zoom} from "@material-ui/core";
+import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
@@ -9,8 +9,6 @@ import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
 import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
-import TemplateMessageClass from "../TemplateMessageClass";
-import {Alert} from "@material-ui/lab";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
 import {getPastHoursByTimestamp} from "../DateHelpers";
@@ -47,12 +45,6 @@ export default function Chat(props) {
     const [input, setInput] = useState('');
     const [selectedFile, setSelectedFile] = useState();
 
-    const [templates, setTemplates] = useState({});
-    const [isLoadingTemplates, setLoadingTemplates] = useState(true);
-
-    const [isErrorVisible, setErrorVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-
     const [isAtBottom, setAtBottom] = useState(false);
 
     const {waId} = useParams();
@@ -77,9 +69,6 @@ export default function Chat(props) {
                 }
             });
         }
-
-        // Loading template messages
-        getTemplates();
 
         return () => {
             // Cancelling ongoing requests
@@ -287,7 +276,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError(error);
+                props.displayError(error);
             });
     }
 
@@ -388,7 +377,7 @@ export default function Chat(props) {
 
                 // TODO: Handle errors
 
-                displayError(error);
+                props.displayError(error);
             });
     }
 
@@ -460,7 +449,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError(error);
+                props.displayError(error);
             });
     }
 
@@ -490,7 +479,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError(error);
+                    props.displayError(error);
 
                     // TODO: Switch to expired mode, if status code is: XXX
 
@@ -542,7 +531,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError(error);
+                    props.displayError(error);
                 });
         }
     }
@@ -560,32 +549,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                displayError(error);
-            });
-    }
-
-    const getTemplates = () => {
-        axios.get( `${BASE_URL}templates/`, getConfig())
-            .then((response) => {
-                console.log("Templates: ", response.data);
-
-                const preparedTemplates = {};
-                response.data.results.map((template, index) => {
-                    const prepared = new TemplateMessageClass(template);
-
-                    if (prepared.status === "approved") {
-                        preparedTemplates[prepared.name] = prepared;
-                    }
-                });
-
-                setTemplates(preparedTemplates);
-                setLoadingTemplates(false);
-
-            })
-            .catch((error) => {
-                // TODO: Handle errors
-
-                displayError(error);
+                props.displayError(error);
             });
     }
 
@@ -618,7 +582,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError(error);
+                    props.displayError(error);
                 });
         }
     }
@@ -657,28 +621,13 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    displayError(error);
+                    props.displayError(error);
                 });
         }
     }
 
     const getSenderName = (message) => {
         return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
-    };
-
-    const displayError = (error) => {
-        if (!axios.isCancel(error)) {
-            setErrorMessage(error.response?.data?.reason ?? 'An error has occurred.');
-            setErrorVisible(true);
-        }
-    }
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setErrorVisible(false);
     };
 
     let lastPrintedDate;
@@ -731,7 +680,7 @@ export default function Chat(props) {
                         displayDate={willDisplayDate}
                         date={curMsgDate}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
-                        templates={templates}
+                        templates={props.templates}
                         onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />)
                 }) }
 
@@ -752,9 +701,9 @@ export default function Chat(props) {
 
             {(isTemplateMessagesVisible || isExpired) &&
             <TemplateMessages
-                templatesData={templates}
+                templatesData={props.templates}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
-                isLoadingTemplates={isLoadingTemplates} />
+                isLoadingTemplates={props.isLoadingTemplates} />
             }
 
             {!waId &&
@@ -768,12 +717,6 @@ export default function Chat(props) {
                 menuAnchorEl={menuAnchorEl}
                 setMenuAnchorEl={setMenuAnchorEl}
                 optionsChatMessage={optionsChatMessage} />
-
-            <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="error">
-                    {errorMessage}
-                </Alert>
-            </Snackbar>
 
         </div>
     )

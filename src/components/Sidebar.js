@@ -43,7 +43,7 @@ function Sidebar(props) {
         // Generate a token
         const cancelToken = axios.CancelToken.source();
 
-        getChats(cancelToken);
+        getChats(cancelToken, true);
 
         const intervalId = setInterval(() => {
             getChats(cancelToken);
@@ -61,7 +61,7 @@ function Sidebar(props) {
         setKeyword(_keyword);
     }
 
-    const getChats = (cancelToken) => {
+    const getChats = (cancelToken, isInitial) => {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
                 search: keyword
@@ -77,6 +77,11 @@ function Sidebar(props) {
                 });
 
                 setChats(preparedChats);
+
+                if (isInitial) {
+                    props.setProgress(100);
+                }
+
             })
             .catch((error) => {
                 console.log(error);

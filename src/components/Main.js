@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "./Sidebar";
 import Chat from "./Chat";
-import {Avatar, Fade, IconButton} from "@material-ui/core";
+import {Avatar, Fade, IconButton, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import {
@@ -17,12 +17,24 @@ import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
+import LoadingScreen from "./LoadingScreen";
+import TemplateMessageClass from "../TemplateMessageClass";
+import {Alert} from "@material-ui/lab";
 
 function Main() {
 
     const {waId} = useParams();
 
+    const [progress, setProgress] = useState(20);
     const [checked, setChecked] = React.useState(false);
+
+    const [templates, setTemplates] = useState({});
+    const [isLoadingTemplates, setLoadingTemplates] = useState(true);
+    const [templatesReady, setTemplatesReady] = useState(false);
+
+    const [isErrorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [unseenMessages, setUnseenMessages] = useState({});
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
@@ -30,6 +42,21 @@ function Main() {
     const [chosenContact, setChosenContact] = useState();
 
     const avatarClasses = avatarStyles();
+
+    const displayError = (error) => {
+        if (!axios.isCancel(error)) {
+            setErrorMessage(error.response?.data?.reason ?? 'An error has occurred.');
+            setErrorVisible(true);
+        }
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setErrorVisible(false);
+    };
 
     const hideImageOrVideoPreview = () => {
         setChatMessageToPreview(null);
@@ -95,6 +122,9 @@ function Main() {
     };
 
     useEffect(() => {
+        // Loading template messages
+        getTemplates();
+
         const token1 = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
         const token2 = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
         return () => {
@@ -102,6 +132,14 @@ function Main() {
             PubSub.unsubscribe(token2);
         }
     }, []);
+
+    /*useEffect(() => {
+        if (progress === 99) {
+            setTimeout(function () {
+                setProgress(100);
+            }, 500);
+        }
+    }, [progress]);*/
 
     useEffect(() => {
         setChecked(true);
@@ -126,6 +164,34 @@ function Main() {
             setSearchMessagesVisible(false);
         }
     }, [waId]);
+
+    const getTemplates = () => {
+        axios.get( `${BASE_URL}templates/`, getConfig())
+            .then((response) => {
+                console.log("Templates: ", response.data);
+
+                const preparedTemplates = {};
+                response.data.results.map((template, index) => {
+                    const prepared = new TemplateMessageClass(template);
+
+                    if (prepared.status === "approved") {
+                        preparedTemplates[prepared.name] = prepared;
+                    }
+                });
+
+                setTemplates(preparedTemplates);
+                setLoadingTemplates(false);
+                setTemplatesReady(true);
+
+                setProgress(40);
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+
+                displayError(error);
+            });
+    }
 
     const getUnseenMessages = (willNotify) => {
         axios.get( `${BASE_URL}chats/`,
@@ -178,14 +244,31 @@ function Main() {
             })
             .catch((error) => {
                 // TODO: Handle errors
+
+                displayError(error);
             });
     }
 
     return (
         <Fade in={checked}>
             <div className="app__body">
-                <Sidebar unseenMessages={unseenMessages} />
-                <Chat setChosenContact={setChosenContact} previewMedia={(chatMessage) => previewMedia(chatMessage)} />
+
+                {templatesReady &&
+                <Sidebar
+                    unseenMessages={unseenMessages}
+                    setProgress={setProgress}
+                />
+                }
+
+                {templatesReady &&
+                <Chat
+                    setChosenContact={setChosenContact}
+                    previewMedia={(chatMessage) => previewMedia(chatMessage)}
+                    templates={templates}
+                    isLoadingTemplates={isLoadingTemplates}
+                    displayError={(error) => displayError(error)}
+                />
+                }
 
                 {isSearchMessagesVisible &&
                 <SearchMessage />
@@ -218,6 +301,19 @@ function Main() {
                     </div>
                 </div>
                 }
+
+                <Fade in={progress < 100} timeout={{exit: 1000}}>
+                    <div className="loadingScreenOuter">
+                        <LoadingScreen progress={progress}/>
+                    </div>
+                </Fade>
+
+                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="error">
+                        {errorMessage}
+                    </Alert>
+                </Snackbar>
+
             </div>
         </Fade>
     )
