@@ -11,6 +11,10 @@ export class ChatMessageClass {
     static TYPE_STICKER = 'sticker';
     static TYPE_TEMPLATE = 'template';
 
+    static STATUS_SENT = 'sent';
+    static STATUS_DELIVERED = 'delivered';
+    static STATUS_READ = 'read';
+
     constructor(data, contactName) {
         const payload = data.waba_payload;
         const statuses = data.waba_statuses;
@@ -87,8 +91,30 @@ export class ChatMessageClass {
         return this.stickerLink ?? this.generateMediaLink(this.stickerId);
     }
 
-    isSeenByReceiver() {
-        return this.readTimestamp && this.deliveredTimestamp && this.readTimestamp > this.deliveredTimestamp
+    getStatus() {
+        if (this.deliveredTimestamp) {
+            if (this.readTimestamp && this.readTimestamp > this.deliveredTimestamp) {
+                return ChatMessageClass.STATUS_READ;
+            }
+
+            return ChatMessageClass.STATUS_DELIVERED;
+        }
+
+        // We don't check if sent timestamp exists, this might be null right after sending message to bridge API
+        return ChatMessageClass.STATUS_SENT;
+    }
+
+    isDelivered() {
+        return this.getStatus() === ChatMessageClass.STATUS_DELIVERED;
+    }
+
+    isRead() {
+        return this.getStatus() === ChatMessageClass.STATUS_READ;
+    }
+
+    isDeliveredOrRead() {
+        const status = this.getStatus();
+        return status === ChatMessageClass.STATUS_DELIVERED || status === ChatMessageClass.STATUS_READ;
     }
 }
 

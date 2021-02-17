@@ -145,7 +145,7 @@ function ChatMessage(props) {
             <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
             }
 
-            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeenByReceiver() ? " chat__seen" : "") + " chat__receiver" : "") +
+            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "") + " chat__receiver" : "") +
             (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
@@ -204,12 +204,13 @@ function ChatMessage(props) {
                 {(data.text ?? data.caption) ? <span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}
 
                 <span className="chat__message__info">
-                <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
-                    {(data.isFromUs === true && !data.deliveredTimestamp) &&
+                    <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
+
+                    {(data.isFromUs === true && !data.isDeliveredOrRead()) &&
                     <DoneIcon className="chat__iconDone" color="inherit" style={iconStyles} />
                     }
 
-                    {(data.isFromUs === true && data.deliveredTimestamp) &&
+                    {(data.isFromUs === true && data.isDeliveredOrRead()) &&
                     <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
                     }
                 </span>
