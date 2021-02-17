@@ -71,6 +71,7 @@ const replaceEmojis = (message) => {
     const regex = emojiRegex();
 
     return message.replace(regex, function (occurrence) {
+        // TODO: Finding emoji data is too slow, find an alternative or improve it
         const emojiData = getEmojiDataFromNative(occurrence, EMOJI_SET, data);
         if (emojiData) {
             return Emoji({
