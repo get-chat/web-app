@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
+import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
 import {Avatar, IconButton} from "@material-ui/core";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -144,7 +145,7 @@ function ChatMessage(props) {
             <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
             }
 
-            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeen === true ? " chat__seen" : "") + " chat__receiver" : "") +
+            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isSeenByReceiver() ? " chat__seen" : "") + " chat__receiver" : "") +
             (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
@@ -204,7 +205,11 @@ function ChatMessage(props) {
 
                 <span className="chat__message__info">
                 <span className="chat__timestamp"><Moment date={data.timestamp} format={dateFormat} unix /></span>
-                    {data.isFromUs === true &&
+                    {(data.isFromUs === true && !data.deliveredTimestamp) &&
+                    <DoneIcon className="chat__iconDone" color="inherit" style={iconStyles} />
+                    }
+
+                    {(data.isFromUs === true && data.deliveredTimestamp) &&
                     <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
                     }
                 </span>

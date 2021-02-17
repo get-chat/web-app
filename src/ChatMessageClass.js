@@ -86,6 +86,10 @@ export class ChatMessageClass {
     generateStickerLink() {
         return this.stickerLink ?? this.generateMediaLink(this.stickerId);
     }
+
+    isSeenByReceiver() {
+        return this.readTimestamp && this.deliveredTimestamp && this.readTimestamp > this.deliveredTimestamp
+    }
 }
 
 export default ChatMessageClass;
