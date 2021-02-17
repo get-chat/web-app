@@ -45,10 +45,19 @@
 .searchResult__message__body {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
+    word-break: break-all;
 }
 
-.searchResult__message__body__type {
+/*.searchResult__message__body__type {
     margin-right: 10px;
+}*/
+
+.searchResult__message__body__type .MuiSvgIcon-root {
+    margin-right: 10px;
+}
+
+.searchResult__message__body__type .chat__seen .chat__iconDoneAll * {
+    fill: #4fc3f7;
 }
 
 .searchResult__message__body__type .MuiSvgIcon-root {

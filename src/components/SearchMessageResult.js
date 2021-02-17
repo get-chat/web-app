@@ -10,6 +10,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from "@material-ui/icons/Note";
 import DoneAll from "@material-ui/icons/DoneAll";
 import SmsIcon from "@material-ui/icons/Sms";
+import DoneIcon from "@material-ui/icons/Done";
 
 const dateFormat = 'H:mm';
 
@@ -25,8 +26,15 @@ function SearchMessageResult(props) {
             <div className="searchResult__message__body">
 
                 <span className="searchResult__message__body__type">
-                    {data.type === ChatMessageClass.TYPE_TEXT &&
-                    <DoneAll />
+                    {data.isFromUs === true && data.type === ChatMessageClass.TYPE_TEXT &&
+                    <span className={data.isRead() ? 'chat__seen' : ''}>
+                        {data.isDeliveredOrRead()
+                            ?
+                            <DoneAll className="chat__iconDoneAll" />
+                            :
+                            <DoneIcon />
+                        }
+                    </span>
                     }
 
                     {data.type === ChatMessageClass.TYPE_IMAGE &&
