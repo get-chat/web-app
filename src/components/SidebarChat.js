@@ -11,8 +11,14 @@ function SidebarChat(props) {
 
     const [timeLeft, setTimeLeft] = useState();
     const {waId} = useParams();
-    const dateFormat = 'H:mm';
     const avatarClasses = avatarStyles();
+
+    const calendarStrings = {
+        lastDay: '[Yesterday at] LT',
+        sameDay: '[Today at] LT',
+        lastWeek: 'dddd [at] LT',
+        sameElse: 'MMMM d, yyyy'
+    };
 
     useEffect(() => {
 
@@ -72,7 +78,7 @@ function SidebarChat(props) {
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
                             </span>
                             :
-                            <span>Last message at <Moment date={props.chatData.lastMessageTimestamp} format={dateFormat} unix /></span>
+                            <span>Last message: <Moment date={props.chatData.lastMessageTimestamp} calendar={calendarStrings} unix /></span>
                         }
                     </p>
 

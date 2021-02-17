@@ -22,7 +22,7 @@
 .sidebarChat__info__lastMessage {
     color: gray;
     margin-bottom: 0;
-    font-size: 14px;
+    font-size: 12px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
