@@ -1,5 +1,5 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
-import data from 'emoji-mart/data/all.json'
+import data from './EmojiData.json'; //from 'emoji-mart/data/all.json'
 import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
