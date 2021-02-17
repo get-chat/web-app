@@ -409,9 +409,18 @@ export default function Chat(props) {
                     return false;
                 }
 
+                function isStatusDifferent(msgJSON, existMsg) {
+                    const statuses = msgJSON.waba_statuses;
+                    return statuses.sent !== existMsg.sentTimestamp
+                        || statuses.delivered !== existMsg.deliveredTimestamp
+                        || statuses.read !== existMsg.readTimestamp
+                }
+
                 const preparedNewMessages = {};
                 response.data.results.reverse().map((message, index) => {
-                    if (messages[message.waba_payload?.id] === undefined) {
+                    const id = message.waba_payload?.id;
+                    const existingMsg = messages[id];
+                    if (existingMsg === undefined || isStatusDifferent(message, existingMsg)) {
                         const prepared = new ChatMessageClass(message);
                         preparedNewMessages[prepared.id] = prepared;
                     }
