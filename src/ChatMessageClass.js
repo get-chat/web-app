@@ -13,6 +13,7 @@ export class ChatMessageClass {
 
     constructor(data, contactName) {
         const payload = data.waba_payload;
+        const statuses = data.waba_statuses;
 
         this.id = payload.id;
         this.to = payload.to;
@@ -44,6 +45,10 @@ export class ChatMessageClass {
         this.templateName = payload.template?.name;
         this.templateNamespace = payload.template?.namespace;
         this.templateLanguage = payload.template?.language?.code;
+
+        this.deliveredTimestamp = statuses.delivered;
+        this.readTimestamp = statuses.read;
+        this.sentTimestamp = statuses.sent;
     };
 
     hasMediaToPreview() {
