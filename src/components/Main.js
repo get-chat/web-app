@@ -157,7 +157,13 @@ function Main() {
                                 }
                             });
 
-                            return preparedUnseenMessages;
+                            // When state is a JSON object, it is unable to understand whether it is different or same and renders again
+                            // So we check if new state is actually different than previous state
+                            if (JSON.stringify(preparedUnseenMessages) !== JSON.stringify(prevState)) {
+                                return preparedUnseenMessages;
+                            } else {
+                                return prevState;
+                            }
                         }
                     ));
 
