@@ -46,7 +46,8 @@ export default function Chat(props) {
     const [input, setInput] = useState('');
     const [selectedFile, setSelectedFile] = useState();
 
-    const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(true);
+    const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(false);
+    const [previewSendMediaData, setPreviewSendMediaData] = useState();
 
     const [isAtBottom, setAtBottom] = useState(false);
 
@@ -594,6 +595,11 @@ export default function Chat(props) {
     const uploadFile = () => {
         console.log(selectedFile);
 
+        // Testing
+        setPreviewSendMediaData(selectedFile);
+        setPreviewSendMediaVisible(true);
+        return false;
+
         if (isLoaded) {
             const formData = new FormData();
             //formData.append("file_name", file.name);
@@ -700,7 +706,7 @@ export default function Chat(props) {
                     sendMessage={(e) => sendMessage(e)}
                     setSelectedFile={setSelectedFile}
                     setInput={setInput}
-                    setTemplateMessagesVisible={setTemplateMessagesVisible} />
+                    setTemplateMessagesVisible={setTemplateMessagesVisible}/>
             }
 
             {(isTemplateMessagesVisible || isExpired) &&
@@ -723,7 +729,9 @@ export default function Chat(props) {
                 optionsChatMessage={optionsChatMessage} />
 
             {isPreviewSendMediaVisible &&
-            <PreviewSendMedia/>
+            <PreviewSendMedia
+                data={previewSendMediaData}
+            />
             }
 
         </div>

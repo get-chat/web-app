@@ -33,6 +33,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 25px;
+}
+
+.previewSendMedia__preview__image {
+    background-color: white;
+    max-height: 100%;
+    max-width: 100%;
+    align-self: center;
 }
 
 .previewSendMedia__caption {

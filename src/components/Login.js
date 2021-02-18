@@ -7,8 +7,7 @@ import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {clearToken, getConfig, getToken, setToken} from "../Helpers";
 import {Alert} from "@material-ui/lab";
-
-const BASE_URL = 'https://whatsapp.kondz.io/api/v1/';
+import {BASE_URL} from "../Constants";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
