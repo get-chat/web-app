@@ -91,7 +91,10 @@ export default function Chat(props) {
         setMessages([]);
         setTemplateMessagesVisible(false);
         setAtBottom(false);
-        //setPreviewSendMediaVisible(false);
+
+        setPreviewSendMediaVisible(false);
+        setPreviewSendMediaData(null);
+
         props.previewMedia(null);
 
         // Close emoji picker
