@@ -600,12 +600,14 @@ export default function Chat(props) {
         setPreviewSendMediaVisible(true);
         return false;
 
-        if (isLoaded) {
+        const file = selectedFile[0];
+
+        if (isLoaded && file) {
             const formData = new FormData();
             //formData.append("file_name", file.name);
-            formData.append("file_encoded", selectedFile);
+            formData.append("file_encoded", file);
 
-            const selectedFileType = selectedFile.type;
+            const selectedFileType = file.type;
             let targetType;
 
             if (selectedFileType.includes('image')) {
@@ -618,8 +620,8 @@ export default function Chat(props) {
                 targetType = TYPE_DOCUMENT;
             }
 
-            const filename = selectedFile.name;
-            const mimeType = selectedFile.type;
+            const filename = file.name;
+            const mimeType = file.type;
 
             axios.post(`${BASE_URL}media/`, formData, getConfig())
                 .then((response) => {

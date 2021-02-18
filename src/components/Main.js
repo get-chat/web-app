@@ -149,13 +149,11 @@ function Main() {
 
         let intervalId = 0;
 
-        if (waId) {
-            intervalId = setInterval(() => {
-                getUnseenMessages(true);
-            }, 2500);
+        intervalId = setInterval(() => {
+            getUnseenMessages(true);
+        }, 2500);
 
-            console.log("Interval is set");
-        }
+        console.log("Interval is set");
 
         return () => {
             clearInterval(intervalId);

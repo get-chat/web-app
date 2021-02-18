@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import '../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
-import {TextField} from "@material-ui/core";
+import {IconButton, TextField} from "@material-ui/core";
 import ChosenFile from "../ChosenFile";
 import {getObjLength} from "../Helpers";
+import {Send} from "@material-ui/icons";
 
 function PreviewSendMedia(props) {
 
@@ -39,8 +40,8 @@ function PreviewSendMedia(props) {
 
             <div className="previewSendMedia__preview">
                 {chosenFile &&
-                <div className="previewSendMedia__preview__imageWrapper">
-                    <img className="previewSendMedia__preview__image" src={chosenFile.fileURL} />
+                <div className="previewSendMedia__preview__imageWrapper" style={{backgroundImage: "url(" + chosenFile.fileURL + ")"}}>
+                    {/*<img className="previewSendMedia__preview__image" src={chosenFile.fileURL} />*/}
                 </div>
                 }
             </div>
@@ -50,13 +51,23 @@ function PreviewSendMedia(props) {
             </div>
 
             <div className="previewSendMedia__footer">
-                { Object.entries(preparedFiles).map((file, index) => {
-                    return (
-                        <span key={file[0]} className="previewSendMedia__footer__thumbnail">
+
+                <div className="previewSendMedia__footer__inner">
+                    { Object.entries(preparedFiles).map((file, index) => {
+                        return (
+                            <span key={file[0]} className="previewSendMedia__footer__thumbnail">
                             <img className="previewSendMedia__footer__thumbnail__image" src={file[1].fileURL} />
                         </span>
-                    )
-                }) }
+                        )
+                    }) }
+                </div>
+
+                <div className="previewSendMedia__footer__sendWrapper">
+                    <IconButton className="previewSendMedia__footer__send">
+                        <Send />
+                    </IconButton>
+                </div>
+
             </div>
         </div>
     )
