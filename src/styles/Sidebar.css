@@ -40,3 +40,7 @@
 .sidebar__results__chats {
     margin-bottom: 20px;
 }
+
+.sidebar__results__chats__noResult {
+    padding: 10px 15px;
+}

@@ -127,6 +127,16 @@ function Sidebar(props) {
                             keyword={keyword}
                         />
                     )}
+
+                    { Object.keys(chats).length === 0 &&
+                    <span className="sidebar__results__chats__noResult">
+                        {keyword.trim().length > 0 ?
+                            <span>No chats found for: <span className="searchOccurrence">{keyword}</span></span>
+                            :
+                            <span>You don't have any chats yet.</span>
+                        }
+                    </span>
+                    }
                 </div>
 
                 {(keyword.trim().length > 0 && getObjLength(contactResults) > 0) &&

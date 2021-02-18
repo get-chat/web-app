@@ -5,9 +5,10 @@
     right: 0;
     bottom: 0;
     background-color: #e6e6e6;
-    z-index: 10;
+    z-index: 150;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 .previewSendMedia__header {
     background-color: #00bfa5;
@@ -29,11 +30,15 @@
 }
 
 .previewSendMedia__preview {
-    flex: 1 1;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 25px;
+}
+
+.previewSendMedia__preview__imageWrapper {
+    position: relative;
 }
 
 .previewSendMedia__preview__image {
@@ -51,6 +56,17 @@
     background-color: #d9d9d9;
     padding: 15px 25px;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.previewSendMedia__footer__thumbnail {
+    cursor: pointer;
+}
+
+.previewSendMedia__footer__thumbnail__image {
+    height: 100px;
+    width: 100px;
+    margin: 10px;
 }

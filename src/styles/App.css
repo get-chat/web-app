@@ -161,3 +161,8 @@ a {
 .wordBreak {
     word-break: break-all;
 }
+
+.searchOccurrence {
+    font-weight: 600;
+    color: #009688;
+}

@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import '../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
 import {TextField} from "@material-ui/core";
+import ChosenFile from "../ChosenFile";
+import {getObjLength} from "../Helpers";
 
 function PreviewSendMedia(props) {
 
@@ -14,7 +16,18 @@ function PreviewSendMedia(props) {
     }
 
     useEffect(() => {
-        setChosenFile(URL.createObjectURL(props.data[0]));
+        const prepared = {};
+        Object.entries(props.data).map((file, index) => {
+            prepared[file[0]] = new ChosenFile(file[1]);
+        });
+
+        setPreparedFiles(prepared);
+
+        // Preview first one
+        if (getObjLength(prepared) > 0) {
+            setChosenFile(prepared[0]);
+        }
+
     }, [props.data]);
 
     return (
@@ -25,7 +38,11 @@ function PreviewSendMedia(props) {
             </div>
 
             <div className="previewSendMedia__preview">
-                <img className="previewSendMedia__preview__image" src={chosenFile} />
+                {chosenFile &&
+                <div className="previewSendMedia__preview__imageWrapper">
+                    <img className="previewSendMedia__preview__image" src={chosenFile.fileURL} />
+                </div>
+                }
             </div>
 
             <div className="previewSendMedia__caption">
@@ -33,7 +50,13 @@ function PreviewSendMedia(props) {
             </div>
 
             <div className="previewSendMedia__footer">
-                {JSON.stringify(props.data)}
+                { Object.entries(preparedFiles).map((file, index) => {
+                    return (
+                        <span key={file[0]} className="previewSendMedia__footer__thumbnail">
+                            <img className="previewSendMedia__footer__thumbnail__image" src={file[1].fileURL} />
+                        </span>
+                    )
+                }) }
             </div>
         </div>
     )
