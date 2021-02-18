@@ -24,6 +24,7 @@ import {
     getObjLength,
     translateHTMLInputToText
 } from "../Helpers";
+import PreviewSendMedia from "./PreviewSendMedia";
 
 const TYPE_IMAGE = 'image';
 const TYPE_VIDEO = 'video';
@@ -44,6 +45,8 @@ export default function Chat(props) {
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
     const [selectedFile, setSelectedFile] = useState();
+
+    const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(true);
 
     const [isAtBottom, setAtBottom] = useState(false);
 
@@ -84,6 +87,7 @@ export default function Chat(props) {
         setMessages([]);
         setTemplateMessagesVisible(false);
         setAtBottom(false);
+        //setPreviewSendMediaVisible(false);
         props.previewMedia(null);
 
         // Close emoji picker
@@ -717,6 +721,10 @@ export default function Chat(props) {
                 menuAnchorEl={menuAnchorEl}
                 setMenuAnchorEl={setMenuAnchorEl}
                 optionsChatMessage={optionsChatMessage} />
+
+            {isPreviewSendMediaVisible &&
+            <PreviewSendMedia/>
+            }
 
         </div>
     )

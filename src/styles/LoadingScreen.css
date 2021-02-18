@@ -4,13 +4,19 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: white;
+    background-color: #f0f0f0;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 30px 60px;
     z-index: 500;
 }
 
 .loadingScreen__progressContainer {
     width: 100%;
+    max-width: 400px;
+}
+
+.loadingScreen__progressContainer .MuiLinearProgress-root {
+    height: 3px;
 }

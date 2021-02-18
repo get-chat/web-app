@@ -1,0 +1,32 @@
+.previewSendMedia {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e6e6e6;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+.previewSendMedia__header {
+    background-color: #00bfa5;
+    color: white;
+    box-sizing: border-box;
+    display: flex;
+    flex: none;
+    align-items: center;
+    height: 49px;
+    padding: 0 20px;
+    font-size: 18px;
+}
+
+.previewSendMedia__header .MuiSvgIcon-root {
+    color: rgba(255, 255, 255, 0.7)!important;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.previewSendMedia__preview {
+    flex: 1 1;
+}
