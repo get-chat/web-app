@@ -4,7 +4,13 @@ import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {BASE_URL, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_GO_TO_MSG_ID} from "../Constants";
+import {
+    ATTACHMENT_TYPE_IMAGE,
+    ATTACHMENT_TYPE_VIDEO,
+    BASE_URL,
+    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+    EVENT_TOPIC_GO_TO_MSG_ID
+} from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
 import ChatFooterExpired from "./ChatFooterExpired";
@@ -17,6 +23,7 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
+    getAttachmentTypeByMimeType,
     getConfig,
     getFirstMessage,
     getLastMessage,
@@ -25,11 +32,7 @@ import {
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
-
-const TYPE_IMAGE = 'image';
-const TYPE_VIDEO = 'video';
-const TYPE_AUDIO = 'audio';
-const TYPE_DOCUMENT = 'document';
+import ChosenFile from "../ChosenFile";
 
 const SCROLL_BOTTOM_OFFSET = 15;
 
@@ -44,7 +47,7 @@ export default function Chat(props) {
     const [contact, setContact] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFiles, setSelectedFiles] = useState();
 
     const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(false);
     const [previewSendMediaData, setPreviewSendMediaData] = useState();
@@ -239,10 +242,10 @@ export default function Chat(props) {
     }, [messages, isAtBottom]);
 
     useEffect(() => {
-        if (selectedFile) {
-            uploadFile();
+        if (selectedFiles) {
+            handleChosenFiles();
         }
-    }, [selectedFile]);
+    }, [selectedFiles]);
 
     const isScrollable = (el) => {
         const hasScrollableContent = el.scrollHeight > el.clientHeight;
@@ -558,7 +561,7 @@ export default function Chat(props) {
             });
     }
 
-    const sendFile = (fileURL, type, filename, mimeType) => {
+    const sendFile = (fileURL, type, filename, mimeType, caption) => {
         if (isLoaded) {
 
             const body = {
@@ -570,11 +573,12 @@ export default function Chat(props) {
 
             body[type] = {
                 link: fileURL,
-                mime_type: mimeType
+                mime_type: mimeType,
+                caption: caption
             }
 
             // filename param is not accepted for images
-            if (type !== TYPE_IMAGE && type !== TYPE_VIDEO) {
+            if (type !== ATTACHMENT_TYPE_IMAGE && type !== ATTACHMENT_TYPE_VIDEO) {
                 body[type]['filename'] = filename;
             }
 
@@ -592,49 +596,52 @@ export default function Chat(props) {
         }
     }
 
-    const uploadFile = () => {
-        console.log(selectedFile);
+    const handleChosenFiles = () => {
+        if (getObjLength(selectedFiles) > 0) {
+            const preparedFiles = {};
+            Object.entries(selectedFiles).map((file, index) => {
+                preparedFiles[file[0]] = new ChosenFile(file[0], file[1]);
+            });
 
-        // Testing
-        setPreviewSendMediaData(selectedFile);
-        setPreviewSendMediaVisible(true);
-        return false;
+            setPreviewSendMediaData(preparedFiles);
+            setPreviewSendMediaVisible(true);
+        }
+    }
 
-        const file = selectedFile[0];
+    const sendHandledChosenFiles = (preparedFiles) => {
+        if (isLoaded && preparedFiles) {
 
-        if (isLoaded && file) {
-            const formData = new FormData();
-            //formData.append("file_name", file.name);
-            formData.append("file_encoded", file);
+            console.log(preparedFiles);
 
-            const selectedFileType = file.type;
-            let targetType;
+            // Sending all files in a loop
+            Object.entries(preparedFiles).map((curFile, index) => {
+                const file = curFile[1].file;
+                const caption = curFile[1].caption;
 
-            if (selectedFileType.includes('image')) {
-                targetType = TYPE_IMAGE;
-            } else if (selectedFileType.includes('video')) {
-                targetType = TYPE_VIDEO;
-            } else if (selectedFileType.includes('audio')) {
-                targetType = TYPE_AUDIO;
-            } else {
-                targetType = TYPE_DOCUMENT;
-            }
+                const formData = new FormData();
+                //formData.append("file_name", file.name);
+                formData.append("file_encoded", file);
 
-            const filename = file.name;
-            const mimeType = file.type;
+                const selectedFileType = file.type;
+                let targetType = getAttachmentTypeByMimeType(selectedFileType);
 
-            axios.post(`${BASE_URL}media/`, formData, getConfig())
-                .then((response) => {
-                    console.log(response.data)
+                const filename = file.name;
+                const mimeType = file.type;
 
-                    sendFile(response.data.file, targetType, filename, mimeType);
+                axios.post(`${BASE_URL}media/`, formData, getConfig())
+                    .then((response) => {
+                        console.log(response.data)
 
-                })
-                .catch((error) => {
-                    // TODO: Handle errors
+                        // Convert parameters to a ChosenFile object
+                        sendFile(response.data.file, targetType, filename, mimeType, caption);
 
-                    props.displayError(error);
-                });
+                    })
+                    .catch((error) => {
+                        // TODO: Handle errors
+
+                        props.displayError(error);
+                    });
+            });
         }
     }
 
@@ -706,7 +713,7 @@ export default function Chat(props) {
                 <ChatFooter
                     input={input}
                     sendMessage={(e) => sendMessage(e)}
-                    setSelectedFile={setSelectedFile}
+                    setSelectedFile={setSelectedFiles}
                     setInput={setInput}
                     setTemplateMessagesVisible={setTemplateMessagesVisible}/>
             }
@@ -733,6 +740,8 @@ export default function Chat(props) {
             {isPreviewSendMediaVisible &&
             <PreviewSendMedia
                 data={previewSendMediaData}
+                setPreviewSendMediaVisible={setPreviewSendMediaVisible}
+                sendHandledChosenFiles={sendHandledChosenFiles}
             />
             }
 

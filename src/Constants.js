@@ -9,3 +9,10 @@ export const EVENT_TOPIC_EMOJI_PICKER_VISIBILITY = "emoji_picker_visibility";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
+
+export const ATTACHMENT_TYPE_IMAGE = 'image';
+export const ATTACHMENT_TYPE_VIDEO = 'video';
+export const ATTACHMENT_TYPE_AUDIO = 'audio';
+export const ATTACHMENT_TYPE_DOCUMENT = 'document';
+
+export const EMPTY_IMAGE_BASE64 = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";

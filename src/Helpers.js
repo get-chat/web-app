@@ -1,6 +1,12 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from './EmojiData.json'; //from 'emoji-mart/data/all.json'
-import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
+import {
+    ATTACHMENT_TYPE_AUDIO, ATTACHMENT_TYPE_DOCUMENT,
+    ATTACHMENT_TYPE_IMAGE,
+    ATTACHMENT_TYPE_VIDEO,
+    EMOJI_SET,
+    EMOJI_SHEET_SIZE
+} from "./Constants";
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
@@ -126,6 +132,21 @@ const getLastMessageAndExtractTimestamp = (messagesObject) => {
     return last ? parseInt(last.timestamp) : -1;
 }
 
+const getAttachmentTypeByMimeType = (mimeType) => {
+    let attachmentType;
+    if (mimeType.includes('image')) {
+        attachmentType = ATTACHMENT_TYPE_IMAGE;
+    } else if (mimeType.includes('video')) {
+        attachmentType = ATTACHMENT_TYPE_VIDEO;
+    } else if (mimeType.includes('audio')) {
+        attachmentType = ATTACHMENT_TYPE_AUDIO;
+    } else {
+        attachmentType = ATTACHMENT_TYPE_DOCUMENT;
+    }
+
+    return attachmentType;
+}
+
 export {
     getToken,
     getConfig,
@@ -137,5 +158,6 @@ export {
     getFirstMessage,
     getLastMessage,
     getLastMessageAndExtractTimestamp,
-    getObjLength
+    getObjLength,
+    getAttachmentTypeByMimeType
 };

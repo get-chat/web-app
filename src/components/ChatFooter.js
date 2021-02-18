@@ -9,7 +9,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
-import {EMOJI_SET, EMOJI_SHEET_SIZE, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
+import {EMOJI_SET, EMOJI_SHEET_SIZE, EMPTY_IMAGE_BASE64, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 
 function ChatFooter(props) {
@@ -69,7 +69,7 @@ function ChatFooter(props) {
 
     function insertAtCursor(el, html) {
         //html = html.replace('<span', '<span contentEditable="false"');
-        html = html.replace('<span', '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"').replace('</span>', '');
+        html = html.replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"').replace('</span>', '');
         el.focus();
 
         let selection = window.getSelection();

@@ -47,12 +47,12 @@
     background-position: center;
 }
 
-.previewSendMedia__preview__image {
+/*.previewSendMedia__preview__image {
     background-color: white;
     max-height: 100%;
     max-width: 100%;
     align-self: center;
-}
+}*/
 
 .previewSendMedia__caption {
     padding: 40px 140px;
@@ -69,6 +69,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    overflow-x: auto;
 }
 
 .previewSendMedia__footer__sendWrapper {
@@ -99,5 +100,22 @@
     object-fit: cover;
     box-shadow: -1px 4px 6px -6px rgba(0, 0, 0, 0.4);
     background-color: white;
+}
+
+.previewSendMedia__footer__thumbnail.chosenFile .previewSendMedia__footer__thumbnail__image {
     padding: 3px;
+}
+
+.previewSendMedia__preview__videoWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.previewSendMedia__preview__video {
+    max-width: 100%;
+    height: fit-content;
 }
