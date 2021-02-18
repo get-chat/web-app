@@ -17,8 +17,9 @@
     flex: none;
     align-items: center;
     height: 49px;
-    padding: 0 20px;
+    padding: 0 25px;
     font-size: 18px;
+    font-weight: 600;
 }
 
 .previewSendMedia__header .MuiSvgIcon-root {
@@ -29,4 +30,19 @@
 
 .previewSendMedia__preview {
     flex: 1 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.previewSendMedia__caption {
+    padding: 40px 100px;
+}
+
+.previewSendMedia__footer {
+    background-color: #d9d9d9;
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
