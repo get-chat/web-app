@@ -1,6 +1,6 @@
 import {getAttachmentTypeByMimeType} from "./Helpers";
 
-class ChosenFile {
+class ChosenFileClass {
     constructor(key, data) {
         this.key = key;
         this.fileURL = URL.createObjectURL(data);
@@ -11,4 +11,4 @@ class ChosenFile {
     }
 }
 
-export default ChosenFile;
+export default ChosenFileClass;

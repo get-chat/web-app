@@ -1,10 +1,10 @@
-import ChosenFile from "./ChosenFile";
+import ChosenFileClass from "./ChosenFileClass";
 
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
     Object.entries(selectedFiles).map((file, index) => {
         console.log(file[1].type)
-        preparedFiles[file[0]] = new ChosenFile(file[0], file[1]);
+        preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1]);
     });
 
     return preparedFiles;

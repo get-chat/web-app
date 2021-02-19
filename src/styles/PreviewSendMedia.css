@@ -100,6 +100,8 @@
     justify-content: center;
     border: 3px solid transparent;
     margin: 0 1px;
+    height: 75px;
+    width: 75px;
 }
 
 .previewSendMedia__footer__thumbnail.chosenFile {
@@ -108,10 +110,24 @@
 }
 
 .previewSendMedia__footer__thumbnail__image {
-    height: 75px;
-    width: 75px;
+    height: 100%;
+    width: 100%;
     object-fit: cover;
     background-color: white;
+}
+
+.previewSendMedia__footer__thumbnail__iconWrapper {
+    height: 100%;
+    width: 100%;
+    background-color: #ededed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.previewSendMedia__footer__thumbnail__iconWrapper .MuiSvgIcon-root {
+    height: 1.5em;
+    width: 1.5em;
 }
 
 .previewSendMedia__footer__addMoreWrapper {

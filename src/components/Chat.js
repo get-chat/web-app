@@ -5,6 +5,8 @@ import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {
+    ATTACHMENT_TYPE_AUDIO,
+    ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
     BASE_URL,
@@ -579,11 +581,15 @@ export default function Chat(props) {
             body[type] = {
                 link: fileURL,
                 mime_type: mimeType,
-                caption: caption
             }
 
-            // filename param is not accepted for images
-            if (type !== ATTACHMENT_TYPE_IMAGE && type !== ATTACHMENT_TYPE_VIDEO) {
+            // caption param is accepted for only images and videos
+            if (type === ATTACHMENT_TYPE_IMAGE || type === ATTACHMENT_TYPE_VIDEO) {
+                body[type]['caption'] = caption;
+            }
+
+            // filename param is accepted for documents
+            if (type === ATTACHMENT_TYPE_DOCUMENT) {
                 body[type]['filename'] = filename;
             }
 

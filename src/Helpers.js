@@ -154,9 +154,16 @@ const getAttachmentTypeByMimeType = (mimeType) => {
             return ATTACHMENT_TYPE_VIDEO;
         }
     } else if (mimeType.includes('audio')) {
-        const supportedAudioTypes = ['audio/aac', 'audio/mp4', 'audio/amr', 'audio/mpeg'];
-        if (stringContainsAnyInArray(mimeType, supportedAudioTypes)) {
+        // OGG is an exception
+        if (mimeType.includes('audio/ogg')) {
+            // TODO: Check codec here
             return ATTACHMENT_TYPE_AUDIO;
+        } else {
+            // If not OGG
+            const supportedAudioTypes = ['audio/aac', 'audio/mp4', 'audio/amr', 'audio/mpeg'];
+            if (stringContainsAnyInArray(mimeType, supportedAudioTypes)) {
+                return ATTACHMENT_TYPE_AUDIO;
+            }
         }
     }
 

@@ -164,7 +164,7 @@ function ChatMessage(props) {
                 </span>
                 </div>
                 }
-                {data.type === ChatMessageClass.TYPE_VOICE &&
+                {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
                 <span className="chat__voice">
                     <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
                     <IconButton onClick={() => playVoice()}>
@@ -173,7 +173,7 @@ function ChatMessage(props) {
                     <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
                     <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                    <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.preparedInitials] : avatarClasses.orange}>
+                    <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.preparedInitials] : avatarClasses.orange + " audioMessageAvatar"}>
                         {data.voiceId !== undefined ? <span>{data.preparedInitials}</span> : <HeadsetIcon/>}
                     </Avatar>
                 </span>

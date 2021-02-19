@@ -117,6 +117,10 @@ video.chat__media {
     margin: 0 -4px;
 }
 
+.chat__voice > .MuiAvatar-root.audioMessageAvatar .MuiSvgIcon-root {
+    color: white!important;
+}
+
 .chat__voice > .MuiAvatar-root {
     margin: 0 4px 0 15px;
 }

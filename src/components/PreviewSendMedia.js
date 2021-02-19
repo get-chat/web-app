@@ -5,9 +5,17 @@ import {ButtonBase, IconButton, TextField} from "@material-ui/core";
 import {getLastObject, getObjLength} from "../Helpers";
 import Send from "@material-ui/icons/Send";
 import AddIcon from '@material-ui/icons/Add';
-import {ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO, EMPTY_IMAGE_BASE64} from "../Constants";
+import {
+    ATTACHMENT_TYPE_AUDIO,
+    ATTACHMENT_TYPE_DOCUMENT,
+    ATTACHMENT_TYPE_IMAGE,
+    ATTACHMENT_TYPE_VIDEO,
+    EMPTY_IMAGE_BASE64
+} from "../Constants";
 import FileInput from "./FileInput";
 import {prepareSelectedFiles} from "../FileHelpers";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 
 function PreviewSendMedia(props) {
 
@@ -152,9 +160,15 @@ function PreviewSendMedia(props) {
                 }
             </div>
 
+            {(chosenFile && (chosenFile.attachmentType === ATTACHMENT_TYPE_IMAGE || chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO)) &&
             <div className="previewSendMedia__caption">
-                <TextField value={currentCaption} onChange={e => setCurrentCaption(e.target.value)} label="Add a caption..." size="medium" fullWidth={true} />
+                <TextField value={currentCaption}
+                           onChange={e => setCurrentCaption(e.target.value)}
+                           label="Add a caption..."
+                           size="medium"
+                           fullWidth={true}/>
             </div>
+            }
 
             <div className="previewSendMedia__footer">
 
@@ -164,11 +178,26 @@ function PreviewSendMedia(props) {
                             <span key={file[0]}
                                   className={"previewSendMedia__footer__thumbnail" + (chosenFile === file[1] ? " chosenFile" : "")}
                                   onClick={() => changePreview(file[0])}>
-                            <img
-                                className="previewSendMedia__footer__thumbnail__image"
-                                src={file[1].attachmentType === ATTACHMENT_TYPE_IMAGE ? file[1].fileURL : EMPTY_IMAGE_BASE64}
-                                alt="Thumbnail"
-                            />
+
+                                {(file[1].attachmentType === ATTACHMENT_TYPE_IMAGE || file[1].attachmentType === ATTACHMENT_TYPE_VIDEO) &&
+                                <img
+                                    className="previewSendMedia__footer__thumbnail__image"
+                                    src={file[1].attachmentType === ATTACHMENT_TYPE_IMAGE ? file[1].fileURL : EMPTY_IMAGE_BASE64}
+                                    alt="Thumbnail"
+                                />
+                                }
+
+                                {(file[1].attachmentType === ATTACHMENT_TYPE_DOCUMENT) &&
+                                <span className="previewSendMedia__footer__thumbnail__iconWrapper">
+                                    <InsertDriveFileIcon />
+                                </span>
+                                }
+
+                                {(file[1].attachmentType === ATTACHMENT_TYPE_AUDIO) &&
+                                <span className="previewSendMedia__footer__thumbnail__iconWrapper">
+                                    <AudiotrackIcon />
+                                </span>
+                                }
                         </span>
                         )
                     }) }
