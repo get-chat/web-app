@@ -7,12 +7,13 @@ import Send from "@material-ui/icons/Send";
 import AddIcon from '@material-ui/icons/Add';
 import {ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO, EMPTY_IMAGE_BASE64} from "../Constants";
 import FileInput from "./FileInput";
+import {prepareSelectedFiles} from "../FileHelpers";
 
 function PreviewSendMedia(props) {
-    const data = props.data;
 
     const fileInput = useRef(null);
 
+    const [data, setData] = useState({});
     const [chosenFile, setChosenFile] = useState();
     const [captions, setCaptions] = useState({});
     const [currentCaption, setCurrentCaption] = useState("");
@@ -44,6 +45,21 @@ function PreviewSendMedia(props) {
         // Hide
         props.setPreviewSendMediaVisible(false);
     }
+
+    const handleSelectedFiles = (selectedFiles) => {
+        console.log(selectedFiles);
+
+        if (getObjLength(selectedFiles) > 0) {
+            const preparedFiles = prepareSelectedFiles(selectedFiles);
+
+            // Updating data with new files
+            setData({...data, ...preparedFiles});
+        }
+    }
+
+    useEffect(() => {
+        setData(props.data);
+    }, []);
 
     useEffect(() => {
         if (chosenFile && data) {
@@ -145,7 +161,7 @@ function PreviewSendMedia(props) {
                     </ButtonBase>
 
                     <div className="hidden">
-                        <FileInput innerRef={fileInput} accept={props.accept} setSelectedFile={props.setSelectedFile} />
+                        <FileInput innerRef={fileInput} accept={props.accept} handleSelectedFiles={handleSelectedFiles} />
                     </div>
 
                 </div>

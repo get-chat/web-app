@@ -6,7 +6,7 @@ function FileInput(props) {
         <input
             ref={props.innerRef}
             type="file"
-            onChange={(e) => props.setSelectedFile(prevState => {return {...prevState, ...e.target.files}} )}
+            onChange={(e) => props.handleSelectedFiles(e.target.files)}
             multiple={true}
             onClick={(event)=> {
                 event.target.value = null

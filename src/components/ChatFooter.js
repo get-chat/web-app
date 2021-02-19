@@ -167,7 +167,10 @@ function ChatFooter(props) {
                 </Tooltip>
 
                 <div className="hidden">
-                    <FileInput innerRef={fileInput} accept={props.accept} setSelectedFile={props.setSelectedFile} />
+                    <FileInput
+                        innerRef={fileInput}
+                        accept={props.accept}
+                        handleSelectedFiles={(files) => props.setSelectedFiles(prevState => { return {...prevState, ...files} })} />
                 </div>
 
                 <form>

@@ -32,7 +32,7 @@ import {
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
-import ChosenFile from "../ChosenFile";
+import {prepareSelectedFiles} from "../FileHelpers";
 
 const SCROLL_BOTTOM_OFFSET = 15;
 
@@ -603,10 +603,7 @@ export default function Chat(props) {
 
     const handleChosenFiles = () => {
         if (getObjLength(selectedFiles) > 0) {
-            const preparedFiles = {};
-            Object.entries(selectedFiles).map((file, index) => {
-                preparedFiles[file[0]] = new ChosenFile(file[0], file[1]);
-            });
+            const preparedFiles = prepareSelectedFiles(selectedFiles);
 
             setPreviewSendMediaData(preparedFiles);
             setPreviewSendMediaVisible(true);
@@ -716,7 +713,7 @@ export default function Chat(props) {
                 <ChatFooter
                     input={input}
                     sendMessage={(e) => sendMessage(e)}
-                    setSelectedFile={setSelectedFiles}
+                    setSelectedFiles={setSelectedFiles}
                     setInput={setInput}
                     setTemplateMessagesVisible={setTemplateMessagesVisible}
                     accept={accept}

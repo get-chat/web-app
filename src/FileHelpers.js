@@ -1,3 +1,14 @@
+import ChosenFile from "./ChosenFile";
+
+export const prepareSelectedFiles = (selectedFiles) => {
+    const preparedFiles = {};
+    Object.entries(selectedFiles).map((file, index) => {
+        preparedFiles[file[0]] = new ChosenFile(file[0], file[1]);
+    });
+
+    return preparedFiles;
+}
+
 const getVideoCover = (file, seekTo = 0.0) => {
     console.log("getting video cover for file: ", file);
     return new Promise((resolve, reject) => {

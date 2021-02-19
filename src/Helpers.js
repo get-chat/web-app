@@ -37,7 +37,7 @@ const clearToken = () => {
 }
 
 const getObjLength = (obj) => {
-    return Object.keys(obj).length;
+    return obj ? Object.keys(obj).length : 0;
 }
 
 function linkify(inputText) {
