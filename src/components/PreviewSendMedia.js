@@ -39,6 +39,23 @@ function PreviewSendMedia(props) {
     }
 
     useEffect(() => {
+        const handleKey = (event) => {
+            if (event.keyCode === 27) { // Escape
+                hidePreview();
+            } else if (event.keyCode === 37) { // Left arrow
+
+            } else if (event.keyCode === 39) { // Right arrow
+
+            }
+        };
+        document.addEventListener('keydown', handleKey);
+
+        return () => {
+            document.removeEventListener('keydown', handleKey);
+        };
+    }, []);
+
+    useEffect(() => {
         if (chosenFile) {
             setCaptions(prevState => {
                 const newState = {};
