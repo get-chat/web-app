@@ -171,7 +171,7 @@ function ChatFooter(props) {
                     <input
                         type="file"
                         //value={selectedFile}
-                        onChange={(e) => props.setSelectedFile(e.target.files)}
+                        onChange={(e) => props.setSelectedFile(prevState => {return {...prevState, ...e.target.files}} )}
                         ref={fileInput}
                         multiple={true}
                         onClick={(event)=> {
