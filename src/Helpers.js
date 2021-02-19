@@ -132,19 +132,35 @@ const getLastMessageAndExtractTimestamp = (messagesObject) => {
     return last ? parseInt(last.timestamp) : -1;
 }
 
-const getAttachmentTypeByMimeType = (mimeType) => {
-    let attachmentType;
-    if (mimeType.includes('image')) {
-        attachmentType = ATTACHMENT_TYPE_IMAGE;
-    } else if (mimeType.includes('video')) {
-        attachmentType = ATTACHMENT_TYPE_VIDEO;
-    } else if (mimeType.includes('audio')) {
-        attachmentType = ATTACHMENT_TYPE_AUDIO;
-    } else {
-        attachmentType = ATTACHMENT_TYPE_DOCUMENT;
+const stringContainsAnyInArray = (string, array) => {
+    for (let i = 0; i < array.length; i++) {
+        if (string.includes(array[i])) {
+            return true;
+        }
     }
 
-    return attachmentType;
+    return false;
+}
+
+const getAttachmentTypeByMimeType = (mimeType) => {
+    if (mimeType.includes('image')) {
+        const supportedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (stringContainsAnyInArray(mimeType, supportedImageTypes)) {
+            return ATTACHMENT_TYPE_IMAGE;
+        }
+    } else if (mimeType.includes('video')) {
+        const supportedVideoTypes = ['video/mp4', 'video/3gpp'];
+        if (stringContainsAnyInArray(mimeType, supportedVideoTypes)) {
+            return ATTACHMENT_TYPE_VIDEO;
+        }
+    } else if (mimeType.includes('audio')) {
+        const supportedAudioTypes = ['audio/aac', 'audio/mp4', 'audio/amr', 'audio/mpeg'];
+        if (stringContainsAnyInArray(mimeType, supportedAudioTypes)) {
+            return ATTACHMENT_TYPE_AUDIO;
+        }
+    }
+
+    return ATTACHMENT_TYPE_DOCUMENT;
 }
 
 export {

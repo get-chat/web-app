@@ -146,7 +146,7 @@ function ChatFooter(props) {
                     <Tooltip title="Documents" placement="right">
                         <IconButton
                             className="chat__footer__attachmentContainer__options__document"
-                            onClick={() => handleAttachmentClick('application/*')}>
+                            onClick={() => handleAttachmentClick('*.*')}>
                             <InsertDriveFileIcon/>
                         </IconButton>
                     </Tooltip>
@@ -154,7 +154,7 @@ function ChatFooter(props) {
                     <Tooltip title="Images & Videos" placement="right">
                         <IconButton
                             className="chat__footer__attachmentContainer__options__imageAndVideo"
-                            onClick={() => handleAttachmentClick('image/*, video/*')}>
+                            onClick={() => handleAttachmentClick('image/jpeg, image/png, image/webp, video/mp4, video/3gpp')}>
                             <ImageIcon/>
                         </IconButton>
                     </Tooltip>
