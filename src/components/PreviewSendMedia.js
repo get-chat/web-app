@@ -63,8 +63,6 @@ function PreviewSendMedia(props) {
                     nextIndex++;
                 });
 
-                console.log('new', newState);
-
                 return {...{}, ...newState};
             });
         }

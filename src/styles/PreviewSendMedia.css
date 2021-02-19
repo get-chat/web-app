@@ -111,6 +111,7 @@
     height: 75px;
     width: 75px;
     object-fit: cover;
+    background-color: white;
 }
 
 .previewSendMedia__footer__addMoreWrapper {
