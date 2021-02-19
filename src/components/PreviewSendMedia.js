@@ -7,6 +7,7 @@ import {Send} from "@material-ui/icons";
 import {ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO, EMPTY_IMAGE_BASE64} from "../Constants";
 
 function PreviewSendMedia(props) {
+    const data = props.data;
 
     const [chosenFile, setChosenFile] = useState();
     const [captions, setCaptions] = useState({});
@@ -17,11 +18,13 @@ function PreviewSendMedia(props) {
     }
 
     const changePreview = (index) => {
-        setChosenFile(props.data[index]);
+        if (index >= 0 && getObjLength(data) > index) {
+            setChosenFile(data[index]);
+        }
     }
 
     const send = () => {
-        const finalData = props.data;
+        const finalData = data;
 
         // Inject captions
         const finalPreparedData = {};
@@ -39,21 +42,24 @@ function PreviewSendMedia(props) {
     }
 
     useEffect(() => {
-        const handleKey = (event) => {
-            if (event.keyCode === 27) { // Escape
-                hidePreview();
-            } else if (event.keyCode === 37) { // Left arrow
+        if (chosenFile && data) {
+            const handleKey = (event) => {
+                if (event.keyCode === 27) { // Escape
+                    hidePreview();
+                } else if (event.keyCode === 37) { // Left arrow
+                    changePreview(parseInt(chosenFile.key) - 1);
+                } else if (event.keyCode === 39) { // Right arrow
+                    changePreview(parseInt(chosenFile.key) + 1);
+                }
+            };
 
-            } else if (event.keyCode === 39) { // Right arrow
+            document.addEventListener('keydown', handleKey);
 
-            }
-        };
-        document.addEventListener('keydown', handleKey);
-
-        return () => {
-            document.removeEventListener('keydown', handleKey);
-        };
-    }, []);
+            return () => {
+                document.removeEventListener('keydown', handleKey);
+            };
+        }
+    }, [chosenFile, data]);
 
     useEffect(() => {
         if (chosenFile) {
@@ -68,13 +74,13 @@ function PreviewSendMedia(props) {
 
     useEffect(() => {
         // Preview first one
-        if (getObjLength(props.data) > 0) {
+        if (getObjLength(data) > 0) {
             changePreview(0)
         }
 
         setCaptions({});
 
-    }, [props.data]);
+    }, [data]);
 
     useEffect(() => {
         if (chosenFile) {
@@ -116,7 +122,7 @@ function PreviewSendMedia(props) {
             <div className="previewSendMedia__footer">
 
                 <div className="previewSendMedia__footer__inner">
-                    { Object.entries(props.data).map((file, index) => {
+                    { Object.entries(data).map((file, index) => {
                         return (
                             <span key={file[0]}
                                   className={"previewSendMedia__footer__thumbnail" + (chosenFile === file[1] ? " chosenFile" : "")}
