@@ -96,17 +96,14 @@ function PreviewSendMedia(props) {
             </div>
 
             <div className="previewSendMedia__preview">
-                {(chosenFile && chosenFile.attachmentType === ATTACHMENT_TYPE_IMAGE) &&
-                <div className="previewSendMedia__preview__imageWrapper" style={{backgroundImage: "url(" + chosenFile.fileURL + ")"}}>
-                    {/*<img className="previewSendMedia__preview__image" src={chosenFile.fileURL} />*/}
-                </div>
-                }
-
-                {(chosenFile && chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO) &&
-                <div className="previewSendMedia__preview__videoWrapper">
+                <div className="previewSendMedia__preview__wrapper">
+                    {(chosenFile && chosenFile.attachmentType === ATTACHMENT_TYPE_IMAGE) &&
+                    <img className="previewSendMedia__preview__image" src={chosenFile.fileURL} alt="Preview" />
+                    }
+                    {(chosenFile && chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO) &&
                     <video className="previewSendMedia__preview__video" src={chosenFile.fileURL} controls={true} />
+                    }
                 </div>
-                }
 
                 {(chosenFile && chosenFile.attachmentType !== ATTACHMENT_TYPE_IMAGE && chosenFile.attachmentType !== ATTACHMENT_TYPE_VIDEO) &&
                 <div>
