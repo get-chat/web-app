@@ -614,10 +614,8 @@ export default function Chat(props) {
     const sendHandledChosenFiles = (preparedFiles) => {
         if (isLoaded && preparedFiles) {
 
-            console.log(preparedFiles);
-
             // Sending all files in a loop
-            Object.entries(preparedFiles).map((curFile, index) => {
+            Object.entries(preparedFiles).reverse().map((curFile, index) => {
                 const file = curFile[1].file;
                 const caption = curFile[1].caption;
 
