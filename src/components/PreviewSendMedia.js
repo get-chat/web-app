@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import '../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
 import {ButtonBase, IconButton, TextField} from "@material-ui/core";
-import {getObjLength} from "../Helpers";
+import {getLastObject, getObjLength} from "../Helpers";
 import Send from "@material-ui/icons/Send";
 import AddIcon from '@material-ui/icons/Add';
 import {ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO, EMPTY_IMAGE_BASE64} from "../Constants";
@@ -53,17 +53,41 @@ function PreviewSendMedia(props) {
             const preparedFiles = prepareSelectedFiles(selectedFiles);
 
             // Updating data with new files
-            setData({...data, ...preparedFiles});
+            setData(prevState => {
+                const newState = prevState;
+                let nextIndex = parseInt(getLastObject(newState).key) + 1;
+                Object.entries(preparedFiles).map((curPreparedFile, index) => {
+                    const preparedFile = curPreparedFile[1];
+                    preparedFile.key = nextIndex.toString();
+                    newState[nextIndex] = preparedFile;
+                    nextIndex++;
+                });
+
+                console.log('new', newState);
+
+                return {...{}, ...newState};
+            });
         }
     }
 
     useEffect(() => {
         setData(props.data);
+        setCaptions({});
+
+        return () => {
+            // Clear data
+            props.setData({});
+        }
     }, []);
 
     useEffect(() => {
         if (chosenFile && data) {
             const handleKey = (event) => {
+                // If any element is focused, ignore key
+                if (document.activeElement.tagName === "INPUT") {
+                    return false;
+                }
+
                 if (event.keyCode === 27) { // Escape
                     hidePreview();
                 } else if (event.keyCode === 37) { // Left arrow
@@ -94,11 +118,9 @@ function PreviewSendMedia(props) {
 
     useEffect(() => {
         // Preview first one
-        if (getObjLength(data) > 0) {
+        if (!chosenFile && getObjLength(data) > 0) {
             changePreview(0)
         }
-
-        setCaptions({});
 
     }, [data]);
 

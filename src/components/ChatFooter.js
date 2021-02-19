@@ -22,6 +22,8 @@ function ChatFooter(props) {
 
     const handleAttachmentClick = (acceptValue) => {
         props.setAccept(acceptValue);
+
+        fileInput.current.setAttribute('accept', acceptValue);
         fileInput.current.click();
     }
 
@@ -169,7 +171,6 @@ function ChatFooter(props) {
                 <div className="hidden">
                     <FileInput
                         innerRef={fileInput}
-                        accept={props.accept}
                         handleSelectedFiles={(files) => props.setSelectedFiles(prevState => { return {...prevState, ...files} })} />
                 </div>
 

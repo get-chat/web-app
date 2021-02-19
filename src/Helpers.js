@@ -119,16 +119,16 @@ const markOccurrences = (message, sub) => {
     return message.replace(reg, '<span class="searchOccurrence">$1</span>');
 }
 
-const getFirstMessage = (messagesObject) => {
-    return messagesObject[Object.keys(messagesObject)[0]];
+const getFirstObject = (jsonObject) => {
+    return jsonObject[Object.keys(jsonObject)[0]];
 }
 
-const getLastMessage = (messagesObject) => {
-    return messagesObject[Object.keys(messagesObject)[Object.keys(messagesObject).length - 1]];
+const getLastObject = (jsonObject) => {
+    return jsonObject[Object.keys(jsonObject)[Object.keys(jsonObject).length - 1]];
 }
 
 const getLastMessageAndExtractTimestamp = (messagesObject) => {
-    const last = getLastMessage(messagesObject);
+    const last = getLastObject(messagesObject);
     return last ? parseInt(last.timestamp) : -1;
 }
 
@@ -155,8 +155,8 @@ export {
     formatMessage,
     translateHTMLInputToText,
     markOccurrences,
-    getFirstMessage,
-    getLastMessage,
+    getFirstObject,
+    getLastObject,
     getLastMessageAndExtractTimestamp,
     getObjLength,
     getAttachmentTypeByMimeType

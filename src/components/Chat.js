@@ -25,9 +25,9 @@ import MessageDateIndicator from "./MessageDateIndicator";
 import {
     getAttachmentTypeByMimeType,
     getConfig,
-    getFirstMessage,
-    getLastMessage,
+    getFirstObject,
     getLastMessageAndExtractTimestamp,
+    getLastObject,
     getObjLength,
     translateHTMLInputToText
 } from "../Helpers";
@@ -154,7 +154,7 @@ export default function Chat(props) {
                     //console.log("Scrolled to top");
                     if (isLoaded && !isLoadingMoreMessages) {
                         setLoadingMoreMessages(true);
-                        getMessages(undefined, getFirstMessage(messages)?.timestamp);
+                        getMessages(undefined, getFirstObject(messages)?.timestamp);
                     }
                 } else {
                     // TODO: Make sure user scrolls
@@ -162,7 +162,7 @@ export default function Chat(props) {
                         //console.log('Scrolled to bottom');
                         if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
                             setLoadingMoreMessages(true);
-                            getMessages(undefined, undefined, undefined, getLastMessage(messages)?.timestamp, true, false);
+                            getMessages(undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
                         }
                     }
                 }
@@ -614,7 +614,7 @@ export default function Chat(props) {
         if (isLoaded && preparedFiles) {
 
             // Sending all files in a loop
-            Object.entries(preparedFiles).reverse().map((curFile, index) => {
+            Object.entries(preparedFiles).map((curFile, index) => {
                 const file = curFile[1].file;
                 const caption = curFile[1].caption;
 
@@ -742,6 +742,7 @@ export default function Chat(props) {
             {isPreviewSendMediaVisible &&
             <PreviewSendMedia
                 data={previewSendMediaData}
+                setData={setPreviewSendMediaData}
                 setPreviewSendMediaVisible={setPreviewSendMediaVisible}
                 sendHandledChosenFiles={sendHandledChosenFiles}
                 accept={accept}
