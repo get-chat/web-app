@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import '../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
-import {IconButton, TextField} from "@material-ui/core";
+import {ButtonBase, IconButton, TextField} from "@material-ui/core";
 import {getObjLength} from "../Helpers";
-import {Send} from "@material-ui/icons";
+import Send from "@material-ui/icons/Send";
+import AddIcon from '@material-ui/icons/Add';
 import {ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO, EMPTY_IMAGE_BASE64} from "../Constants";
+import FileInput from "./FileInput";
 
 function PreviewSendMedia(props) {
     const data = props.data;
+
+    const fileInput = useRef(null);
 
     const [chosenFile, setChosenFile] = useState();
     const [captions, setCaptions] = useState({});
@@ -132,6 +136,18 @@ function PreviewSendMedia(props) {
                         </span>
                         )
                     }) }
+
+                    <ButtonBase className="previewSendMedia__footer__addMoreWrapper" onClick={() => fileInput.current?.click()}>
+                        <div className="previewSendMedia__footer__addMore">
+                            <AddIcon/>
+                            <span>Add more</span>
+                        </div>
+                    </ButtonBase>
+
+                    <div className="hidden">
+                        <FileInput innerRef={fileInput} accept={props.accept} setSelectedFile={props.setSelectedFile} />
+                    </div>
+
                 </div>
 
                 <div className="previewSendMedia__footer__sendWrapper">

@@ -11,6 +11,7 @@ import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import {EMOJI_SET, EMOJI_SHEET_SIZE, EMPTY_IMAGE_BASE64, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
+import FileInput from "./FileInput";
 
 function ChatFooter(props) {
 
@@ -20,7 +21,7 @@ function ChatFooter(props) {
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
     const handleAttachmentClick = (acceptValue) => {
-        fileInput.current.setAttribute('accept', acceptValue);
+        props.setAccept(acceptValue);
         fileInput.current.click();
     }
 
@@ -165,23 +166,11 @@ function ChatFooter(props) {
                     </IconButton>
                 </Tooltip>
 
-                {/*<AttachmentTypesMenu />*/}
-
-                <form className="chat__mediaForm">
-                    <input
-                        type="file"
-                        //value={selectedFile}
-                        onChange={(e) => props.setSelectedFile(prevState => {return {...prevState, ...e.target.files}} )}
-                        ref={fileInput}
-                        multiple={true}
-                        onClick={(event)=> {
-                            event.target.value = null
-                        }}
-                    />
-                </form>
+                <div className="hidden">
+                    <FileInput innerRef={fileInput} accept={props.accept} setSelectedFile={props.setSelectedFile} />
+                </div>
 
                 <form>
-
                     <div className="typeBox">
                         {!props.input &&
                         <div className="typeBox__hint">Type a message</div>

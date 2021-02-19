@@ -315,10 +315,6 @@ a.chat__document:hover {
     padding: 15px;
 }
 
-.chat__footer > .chat__mediaForm {
-    display: none;
-}
-
 .chat__footer > form {
     flex: 1;
     display: flex;

@@ -47,7 +47,9 @@ export default function Chat(props) {
     const [contact, setContact] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
+
     const [selectedFiles, setSelectedFiles] = useState();
+    const [accept, setAccept] = useState("");
 
     const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(false);
     const [previewSendMediaData, setPreviewSendMediaData] = useState();
@@ -716,7 +718,9 @@ export default function Chat(props) {
                     sendMessage={(e) => sendMessage(e)}
                     setSelectedFile={setSelectedFiles}
                     setInput={setInput}
-                    setTemplateMessagesVisible={setTemplateMessagesVisible}/>
+                    setTemplateMessagesVisible={setTemplateMessagesVisible}
+                    accept={accept}
+                    setAccept={setAccept} />
             }
 
             {(isTemplateMessagesVisible || isExpired) &&
@@ -743,6 +747,7 @@ export default function Chat(props) {
                 data={previewSendMediaData}
                 setPreviewSendMediaVisible={setPreviewSendMediaVisible}
                 sendHandledChosenFiles={sendHandledChosenFiles}
+                accept={accept}
             />
             }
 
