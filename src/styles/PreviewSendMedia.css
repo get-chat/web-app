@@ -96,12 +96,14 @@
 .previewSendMedia__footer__thumbnail {
     margin: 3px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .previewSendMedia__footer__thumbnail__image {
     height: 75px;
     width: 75px;
-    margin: 10px 3px;
     object-fit: cover;
     box-shadow: -1px 4px 6px -6px rgba(0, 0, 0, 0.4);
     background-color: white;
