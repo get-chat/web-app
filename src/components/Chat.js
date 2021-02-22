@@ -287,7 +287,7 @@ export default function Chat(props) {
     const getContact = (loadMessages) => {
         axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, source.token))
             .then((response) => {
-                console.log("Contact", response.data);
+                //console.log("Contact", response.data);
 
                 const prepared = new ContactClass(response.data);
                 setContact(prepared);
@@ -319,7 +319,7 @@ export default function Chat(props) {
             }, source.token)
         )
             .then((response) => {
-                console.log("Messages", response.data);
+                //console.log("Messages", response.data);
 
                 const count = response.data.count;
                 const previous = response.data.previous;
