@@ -13,7 +13,7 @@ import {
     EMPTY_IMAGE_BASE64
 } from "../Constants";
 import FileInput from "./FileInput";
-import {prepareSelectedFiles} from "../FileHelpers";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 
@@ -137,8 +137,12 @@ function PreviewSendMedia(props) {
     }, [chosenFile, captions]);
 
     return (
-        <div className="previewSendMedia">
+        <div
+            className="previewSendMedia"
+            onDrop={(event) => handleSelectedFiles(getDroppedFiles(event))}
+            onDragOver={(event) => handleDragOver(event)}>
             <div className="previewSendMedia__header">
+
                 <CloseIcon onClick={hidePreview}/>
                 <span>Preview</span>
             </div>

@@ -10,7 +10,7 @@ export const prepareSelectedFiles = (selectedFiles) => {
     return preparedFiles;
 }
 
-export const handleDropFiles = (event, setSelectedFiles) => {
+export const getDroppedFiles = (event) => {
     event.preventDefault();
 
     console.log('File(s) dropped');
@@ -32,7 +32,7 @@ export const handleDropFiles = (event, setSelectedFiles) => {
         }
     }*/
 
-    setSelectedFiles({...{}, ...event.dataTransfer.files});
+    return {...{}, ...event.dataTransfer.files};
 }
 
 export const handleDragOver = (event) => {
