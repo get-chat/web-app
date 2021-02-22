@@ -81,9 +81,8 @@ export default function Chat(props) {
             });
         }
 
+        // Handle files dragged and dropped to sidebar chat
         const handleFilesDropped = function (msg, data) {
-            console.log('Dropped files');
-
             setSelectedFiles(data);
         }
 
@@ -109,7 +108,7 @@ export default function Chat(props) {
         setAtBottom(false);
 
         setPreviewSendMediaVisible(false);
-        setPreviewSendMediaData(null);
+        setPreviewSendMediaData(undefined);
 
         props.previewMedia(null);
 

@@ -77,7 +77,7 @@ function SidebarChat(props) {
         history.push(`/main/chat/${props.chatData.waId}`);
 
         // Sending files via eventbus
-        PubSub.publishSync(EVENT_TOPIC_DROPPED_FILES, files);
+            PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
     }
 
     return (
