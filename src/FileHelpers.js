@@ -10,12 +10,12 @@ export const prepareSelectedFiles = (selectedFiles) => {
     return preparedFiles;
 }
 
-export const handleDropFiles = (event) => {
+export const handleDropFiles = (event, setSelectedFiles) => {
     event.preventDefault();
 
-    let i;
     console.log('File(s) dropped');
 
+    /*let i;
     if (event.dataTransfer.items) {
         // Use DataTransferItemList interface to access the file(s)
         for (i = 0; i < event.dataTransfer.items.length; i++) {
@@ -30,7 +30,9 @@ export const handleDropFiles = (event) => {
         for (i = 0; i < event.dataTransfer.files.length; i++) {
             console.log('... file[' + i + '].name = ' + event.dataTransfer.files[i].name);
         }
-    }
+    }*/
+
+    setSelectedFiles({...{}, ...event.dataTransfer.files});
 }
 
 export const handleDragOver = (event) => {

@@ -658,7 +658,7 @@ export default function Chat(props) {
     let lastPrintedDate;
 
     return (
-        <div className="chat" onDrop={(event) => handleDropFiles(event)} onDragOver={(event) => handleDragOver(event)}>
+        <div className="chat" onDrop={(event) => handleDropFiles(event, setSelectedFiles)} onDragOver={(event) => handleDragOver(event)}>
             <ChatHeader contact={contact} />
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
