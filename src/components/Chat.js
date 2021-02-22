@@ -81,9 +81,21 @@ export default function Chat(props) {
             });
         }
 
+        const handleFilesDropped = function (msg, data) {
+            console.log('Dropped files');
+
+            setSelectedFiles(data);
+        }
+
+        // Listen for file drop events
+        const token = PubSub.subscribe(EVENT_TOPIC_DROPPED_FILES, handleFilesDropped);
+
         return () => {
             // Cancelling ongoing requests
             source.cancel();
+
+            // Unsubscribe
+            PubSub.unsubscribe(token);
         }
     }, []);
 
@@ -111,15 +123,6 @@ export default function Chat(props) {
 
         // Load contact and messages
         getContact(true);
-
-        const handleFilesDropped = function (msg, data) {
-            console.log('Dropped files');
-
-            setSelectedFiles(data);
-        }
-
-        // Listen for file drop events
-        PubSub.subscribe(EVENT_TOPIC_DROPPED_FILES, handleFilesDropped);
 
         return () => {
             // Cancelling ongoing requests
