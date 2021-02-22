@@ -34,7 +34,7 @@ import {
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
-import {prepareSelectedFiles} from "../FileHelpers";
+import {handleDragOver, handleDropFiles, prepareSelectedFiles} from "../FileHelpers";
 
 const SCROLL_BOTTOM_OFFSET = 15;
 
@@ -658,7 +658,7 @@ export default function Chat(props) {
     let lastPrintedDate;
 
     return (
-        <div className="chat">
+        <div className="chat" onDrop={(event) => handleDropFiles(event)} onDragOver={(event) => handleDragOver(event)}>
             <ChatHeader contact={contact} />
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>

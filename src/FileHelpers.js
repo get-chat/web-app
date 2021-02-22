@@ -10,6 +10,33 @@ export const prepareSelectedFiles = (selectedFiles) => {
     return preparedFiles;
 }
 
+export const handleDropFiles = (event) => {
+    event.preventDefault();
+
+    let i;
+    console.log('File(s) dropped');
+
+    if (event.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        for (i = 0; i < event.dataTransfer.items.length; i++) {
+            // If dropped items aren't files, reject them
+            if (event.dataTransfer.items[i].kind === 'file') {
+                const file = event.dataTransfer.items[i].getAsFile();
+                console.log('... file[' + i + '].name = ' + file.name);
+            }
+        }
+    } else {
+        // Use DataTransfer interface to access the file(s)
+        for (i = 0; i < event.dataTransfer.files.length; i++) {
+            console.log('... file[' + i + '].name = ' + event.dataTransfer.files[i].name);
+        }
+    }
+}
+
+export const handleDragOver = (event) => {
+    event.preventDefault();
+}
+
 const getVideoCover = (file, seekTo = 0.0) => {
     console.log("getting video cover for file: ", file);
     return new Promise((resolve, reject) => {
