@@ -9,7 +9,7 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL,
+    BASE_URL, EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID
 } from "../Constants";
@@ -111,6 +111,15 @@ export default function Chat(props) {
 
         // Load contact and messages
         getContact(true);
+
+        const handleFilesDropped = function (msg, data) {
+            console.log('Dropped files');
+
+            setSelectedFiles(data);
+        }
+
+        // Listen for file drop events
+        PubSub.subscribe(EVENT_TOPIC_DROPPED_FILES, handleFilesDropped);
 
         return () => {
             // Cancelling ongoing requests

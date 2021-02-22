@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
 import {Avatar} from "@material-ui/core";
-import {Link, useParams} from "react-router-dom";
+import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
 import {markOccurrences} from "../Helpers";
+import {getDroppedFiles, handleDragOver} from "../FileHelpers";
+import PubSub from "pubsub-js";
+import {EVENT_TOPIC_DROPPED_FILES} from "../Constants";
 
 function SidebarChat(props) {
+
+    const history = useHistory();
 
     const [timeLeft, setTimeLeft] = useState();
     const {waId} = useParams();
@@ -60,9 +65,29 @@ function SidebarChat(props) {
         }
     }, [props.chatData.lastMessageTimestamp]);
 
+    const handleDroppedFiles = (event) => {
+        if (props.chatData.isExpired) {
+
+        }
+
+        // Preparing dropped files
+        const files = getDroppedFiles(event);
+
+        // Switching to related chat
+        history.push(`/main/chat/${props.chatData.waId}`);
+
+        // Sending files via eventbus
+        PubSub.publishSync(EVENT_TOPIC_DROPPED_FILES, files);
+    }
+
     return (
         <Link to={ `/main/chat/${props.chatData.waId}` }>
-            <div id={props.chatData.waId} className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat' : '')}>
+            <div
+                id={props.chatData.waId}
+                className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat' : '')}
+                onDrop={(event) => handleDroppedFiles(event)}
+                onDragOver={(event) => handleDragOver(event)}>
+
                 <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
                     {(props.keyword !== undefined && props.keyword.trim().length > 0)
