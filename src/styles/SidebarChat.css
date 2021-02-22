@@ -30,17 +30,22 @@
     font-weight: 400;
     font-size: 16px;
     flex: 1;
+    margin-bottom: 5px;
 }
 
 .sidebarChat__info__nameWrapper__lastMessageDate {
     font-size: 12px;
 }
 
+.sidebarChat:hover .sidebarChat__info__waId {
+    display: inline-block;
+}
+
 .sidebarChat__info__waId {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.45);
     display: none;
-    margin-bottom: 5px;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-left: 5px;
 }
 
 .sidebarChat__info__lastMessage {

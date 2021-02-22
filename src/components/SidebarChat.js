@@ -77,7 +77,7 @@ function SidebarChat(props) {
         history.push(`/main/chat/${props.chatData.waId}`);
 
         // Sending files via eventbus
-            PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
+        PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
     }
 
     return (
@@ -92,12 +92,16 @@ function SidebarChat(props) {
                 <div className="sidebarChat__info">
 
                     <div className="sidebarChat__info__nameWrapper">
-                        {(props.keyword !== undefined && props.keyword.trim().length > 0)
-                            ?
-                            <h2 dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
-                            :
-                            <h2>{props.chatData.name}</h2>
-                        }
+                        <h2>
+                            {(props.keyword !== undefined && props.keyword.trim().length > 0)
+                                ?
+                                <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
+                                :
+                                <span>{props.chatData.name}</span>
+                            }
+
+                            <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>
+                        </h2>
 
                         <Moment
                             className="sidebarChat__info__nameWrapper__lastMessageDate"
@@ -105,8 +109,6 @@ function SidebarChat(props) {
                             calendar={calendarStrings}
                             unix />
                     </div>
-
-                    <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>
 
                     <span className="sidebarChat__info__lastMessage">
                         {((props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/) &&
