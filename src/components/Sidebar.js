@@ -72,7 +72,7 @@ function Sidebar(props) {
             }, cancelToken.token)
         )
             .then((response) => {
-                //console.log("Chats", response.data)
+                console.log("Chats", response.data)
 
                 const preparedChats = {};
                 response.data.results.map((contact) => {

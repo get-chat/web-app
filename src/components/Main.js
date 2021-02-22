@@ -4,12 +4,6 @@ import Chat from "./Chat";
 import {Avatar, Fade, IconButton, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {
-    BASE_URL,
-    EVENT_TOPIC_CHAT_MESSAGE,
-    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
-} from "../Constants";
 import axios from "axios";
 import {getConfig} from "../Helpers";
 import {useParams} from "react-router-dom";
@@ -19,6 +13,12 @@ import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
+import {
+    BASE_URL,
+    EVENT_TOPIC_CHAT_MESSAGE,
+    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
+} from "../Constants";
 
 function Main() {
 

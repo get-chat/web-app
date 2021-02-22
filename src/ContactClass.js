@@ -8,7 +8,7 @@ class ContactClass {
         this.waId = data.wa_id;
         this.initials = data.initials;
         this.name = payload.profile.name;
-        this.lastMessageTimestamp = data.last_message;
+        this.lastMessageTimestamp = data.last_message_timestamp;
         this.isExpired = this.checkIfExpired();
     }
 
