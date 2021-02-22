@@ -15,6 +15,7 @@
 }
 
 .sidebarChat .MuiAvatar-root {
+    align-self: baseline;
     height: 50px;
     width: 50px;
 }
@@ -30,7 +31,6 @@
     font-weight: 400;
     font-size: 16px;
     flex: 1;
-    margin-bottom: 5px;
 }
 
 .sidebarChat__info__nameWrapper__lastMessageDate {
@@ -49,9 +49,10 @@
 }
 
 .sidebarChat__info__lastMessage {
-    color: gray;
-    margin-bottom: 0;
-    font-size: 12px;
+    display: block;
+    margin-bottom: 5px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;

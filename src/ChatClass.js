@@ -4,12 +4,16 @@ class ChatClass {
 
     constructor(data) {
         const contact = data.contact;
-        const payload = contact.waba_payload;
+        const lastMessage = data.last_message;
+        const contactPayload = contact.waba_payload;
+        const lastMessagePayload = lastMessage?.waba_payload;
 
-        this.waId = payload.wa_id;
+        this.waId = contactPayload.wa_id;
         this.initials = contact.initials;
-        this.name = payload.profile.name;
-        this.lastMessageTimestamp = contact.last_message;
+        this.name = contactPayload.profile.name;
+        this.unseenMessages = data.unseen_messages;
+        this.lastMessageTimestamp = lastMessagePayload?.timestamp;
+        this.lastMessageBody = lastMessagePayload?.text?.body;
         this.isExpired = this.checkIfExpired();
     }
 

@@ -7,16 +7,20 @@ import SidebarChat from "./SidebarChat";
 import axios from "axios";
 import {clearToken, getConfig, getObjLength} from "../Helpers";
 import {BASE_URL} from "../Constants";
-import {useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../ChatClass";
+import UnseenMessageClass from "../UnseenMessageClass";
 
 function Sidebar(props) {
+
+    const {waId} = useParams();
 
     const history = useHistory();
 
     const [chats, setChats] = useState({});
+    const [unseenMessages, setUnseenMessages] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [contactResults, setContactResults] = useState({});
@@ -82,6 +86,46 @@ function Sidebar(props) {
                     props.setProgress(100);
                 }
 
+                const willNotify = !isInitial;
+
+                const preparedUnseenMessages = {};
+                response.data.results.map((unseenMessage, index) => {
+                    const prepared = new UnseenMessageClass(unseenMessage);
+                    preparedUnseenMessages[prepared.waId] = prepared;
+                });
+
+                if (willNotify) {
+                    let hasAnyNewMessages = false;
+                    setUnseenMessages((prevState => {
+                            Object.entries(preparedUnseenMessages).map((unseen, index) => {
+                                const unseenWaId = unseen[0]
+                                const number = unseen[1].unseenMessages;
+                                if (unseenWaId !== waId) {
+                                    // TODO: Consider a new contact (last part of the condition)
+                                    if ((prevState[unseenWaId] && number > prevState[unseenWaId].unseenMessages) /*|| (!prevState[unseenWaId] && number > 0)*/) {
+                                        hasAnyNewMessages = true;
+                                    }
+                                }
+                            });
+
+                            // When state is a JSON object, it is unable to understand whether it is different or same and renders again
+                            // So we check if new state is actually different than previous state
+                            if (JSON.stringify(preparedUnseenMessages) !== JSON.stringify(prevState)) {
+                                return preparedUnseenMessages;
+                            } else {
+                                return prevState;
+                            }
+                        }
+                    ));
+
+                    // Display a notification
+                    if (hasAnyNewMessages) {
+                        props.showNotification("New messages", "You have new messages!");
+                    }
+                } else {
+                    setUnseenMessages(preparedUnseenMessages);
+                }
+
             })
             .catch((error) => {
                 console.log(error);
@@ -123,7 +167,7 @@ function Sidebar(props) {
                         <SidebarChat
                             key={chat[0]}
                             chatData={chat[1]}
-                            unseenMessages={props.unseenMessages}
+                            unseenMessages={unseenMessages}
                             keyword={keyword}
                         />
                     )}

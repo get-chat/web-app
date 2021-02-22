@@ -12,7 +12,6 @@ import {
 } from "../Constants";
 import axios from "axios";
 import {getConfig} from "../Helpers";
-import UnseenMessageClass from "../UnseenMessageClass";
 import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
@@ -36,7 +35,6 @@ function Main() {
     const [errorMessage, setErrorMessage] = useState('');
 
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
-    const [unseenMessages, setUnseenMessages] = useState({});
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
@@ -81,6 +79,7 @@ function Main() {
                 body: body,
                 icon: icon
             });
+            /*notification.onclick = function (event) {}*/
         }
         if (!window.Notification) {
             console.log('Browser does not support notifications.');
@@ -144,20 +143,7 @@ function Main() {
     useEffect(() => {
         setChecked(true);
 
-        // Get unseen messages
-        getUnseenMessages();
-
-        let intervalId = 0;
-
-        intervalId = setInterval(() => {
-            getUnseenMessages(true);
-        }, 2500);
-
-        console.log("Interval is set");
-
         return () => {
-            clearInterval(intervalId);
-
             // Hide search messages container
             setSearchMessagesVisible(false);
         }
@@ -191,70 +177,14 @@ function Main() {
             });
     }
 
-    const getUnseenMessages = (willNotify) => {
-        axios.get( `${BASE_URL}chats/`,
-            getConfig({
-                offset: 0,
-                limit: 50 // TODO: Could it be zero?
-            })
-        )
-            .then((response) => {
-                //console.log('Unseen messages', response.data);
-
-                const preparedUnseenMessages = {};
-                response.data.results.map((unseenMessage, index) => {
-                    const prepared = new UnseenMessageClass(unseenMessage);
-                    preparedUnseenMessages[prepared.waId] = prepared;
-                });
-
-                if (willNotify) {
-                    let hasAnyNewMessages = false;
-                    setUnseenMessages((prevState => {
-                            Object.entries(preparedUnseenMessages).map((unseen, index) => {
-                                const unseenWaId = unseen[0]
-                                const number = unseen[1].unseenMessages;
-                                if (unseenWaId !== waId) {
-                                    // TODO: Consider a new contact (last part of the condition)
-                                    if ((prevState[unseenWaId] && number > prevState[unseenWaId].unseenMessages) /*|| (!prevState[unseenWaId] && number > 0)*/) {
-                                        hasAnyNewMessages = true;
-                                    }
-                                }
-                            });
-
-                            // When state is a JSON object, it is unable to understand whether it is different or same and renders again
-                            // So we check if new state is actually different than previous state
-                            if (JSON.stringify(preparedUnseenMessages) !== JSON.stringify(prevState)) {
-                                return preparedUnseenMessages;
-                            } else {
-                                return prevState;
-                            }
-                        }
-                    ));
-
-                    // Display a notification
-                    if (hasAnyNewMessages) {
-                        showNotification("New messages", "You have new messages!");
-                    }
-                } else {
-                    setUnseenMessages(preparedUnseenMessages);
-                }
-
-            })
-            .catch((error) => {
-                // TODO: Handle errors
-
-                displayError(error);
-            });
-    }
-
     return (
         <Fade in={checked}>
             <div className="app__body">
 
                 {templatesReady &&
                 <Sidebar
-                    unseenMessages={unseenMessages}
                     setProgress={setProgress}
+                    showNotification={showNotification}
                 />
                 }
 

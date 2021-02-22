@@ -111,9 +111,14 @@ function SidebarChat(props) {
                     </div>
 
                     <span className="sidebarChat__info__lastMessage">
-                        {((props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/) &&
-                        <span className="sidebarChat__info__lastMessage__new">
+                        {((props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
+                            ?
+                            <span className="sidebarChat__info__lastMessage__new">
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
+                            </span>
+                            :
+                            <span className="sidebarChat__info__lastMessage__body">
+                                {props.chatData.lastMessageBody}
                             </span>
                         }
                     </span>
