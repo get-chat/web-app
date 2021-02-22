@@ -3,7 +3,6 @@ import ChosenFileClass from "./ChosenFileClass";
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
     Object.entries(selectedFiles).map((file, index) => {
-        console.log(file[1].type)
         preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1]);
     });
 
@@ -12,8 +11,6 @@ export const prepareSelectedFiles = (selectedFiles) => {
 
 export const getDroppedFiles = (event) => {
     event.preventDefault();
-
-    console.log('File(s) dropped');
 
     /*let i;
     if (event.dataTransfer.items) {
