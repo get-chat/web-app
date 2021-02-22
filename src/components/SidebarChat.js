@@ -19,10 +19,10 @@ function SidebarChat(props) {
     const avatarClasses = avatarStyles();
 
     const calendarStrings = {
-        lastDay: '[Yesterday at] LT',
-        sameDay: '[Today at] LT',
-        lastWeek: 'dddd [at] LT',
-        sameElse: 'MMMM d, yyyy'
+        lastDay: '[Yesterday]',
+        sameDay: 'LT',
+        lastWeek: 'dddd',
+        sameElse: 'MMM d, yyyy'
     };
 
     useEffect(() => {
@@ -90,22 +90,31 @@ function SidebarChat(props) {
 
                 <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
-                    {(props.keyword !== undefined && props.keyword.trim().length > 0)
-                        ?
-                        <h2 dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
-                        :
-                        <h2>{props.chatData.name}</h2>
-                    }
-                    <p className="sidebarChat__info__lastMessage">
-                        {((props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
+
+                    <div className="sidebarChat__info__nameWrapper">
+                        {(props.keyword !== undefined && props.keyword.trim().length > 0)
                             ?
-                            <span className="sidebarChat__info__lastMessage__new">
+                            <h2 dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
+                            :
+                            <h2>{props.chatData.name}</h2>
+                        }
+
+                        <Moment
+                            className="sidebarChat__info__nameWrapper__lastMessageDate"
+                            date={props.chatData.lastMessageTimestamp}
+                            calendar={calendarStrings}
+                            unix />
+                    </div>
+
+                    <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>
+
+                    <span className="sidebarChat__info__lastMessage">
+                        {((props.unseenMessages[props.chatData.waId]?.unseenMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/) &&
+                        <span className="sidebarChat__info__lastMessage__new">
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
                             </span>
-                            :
-                            <span>Last message: <Moment date={props.chatData.lastMessageTimestamp} calendar={calendarStrings} unix /></span>
                         }
-                    </p>
+                    </span>
 
                     {props.chatData.isExpired
                         ?
