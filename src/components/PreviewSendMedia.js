@@ -25,6 +25,7 @@ function PreviewSendMedia(props) {
     const [chosenFile, setChosenFile] = useState();
     const [captions, setCaptions] = useState({});
     const [currentCaption, setCurrentCaption] = useState("");
+    const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
 
     const hidePreview = () => {
         props.setPreviewSendMediaVisible(false);
@@ -139,6 +140,7 @@ function PreviewSendMedia(props) {
     return (
         <div
             className="previewSendMedia"
+            /*onDragEnter={() => setDragOverlayVisible(true)}*/
             onDrop={(event) => handleSelectedFiles(getDroppedFiles(event))}
             onDragOver={(event) => handleDragOver(event)}>
             <div className="previewSendMedia__header">
@@ -226,6 +228,15 @@ function PreviewSendMedia(props) {
                 </div>
 
             </div>
+
+            {isDragOverlayVisible &&
+            <div className="previewSendMedia__dragOverlay" onDragLeave={() => setDragOverlayVisible(false)}>
+                <div className="previewSendMedia__dragOverlay__innerWrapper">
+                    Drag and drop here
+                </div>
+            </div>
+            }
+
         </div>
     )
 }
