@@ -124,7 +124,7 @@ function ChatFooter(props) {
     }
 
     return (
-        <div className="chat__footerOuter">
+        <div className="chat__footerOuter" onDrop={(event) => event.preventDefault()}>
 
             {isEmojiPickerVisible &&
             <div className="chat__footer__emojiPicker">
@@ -196,6 +196,7 @@ function ChatFooter(props) {
 
                 <form>
                     <div className="typeBox">
+
                         {!props.input &&
                         <div className="typeBox__hint">Type a message</div>
                         }
@@ -206,10 +207,12 @@ function ChatFooter(props) {
                             contentEditable="true"
                             onPaste={(event) => handlePaste(event)}
                             onCopy={(event) => handleCopy(event)}
+                            onDrop={(event) => event.preventDefault()}
                             spellCheck="true"
                             onInput={event => handleEditableChange(event)}
                             onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
                         />
+
                     </div>
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>

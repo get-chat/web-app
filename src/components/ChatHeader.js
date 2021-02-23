@@ -18,7 +18,7 @@ function ChatHeader(props) {
     }
 
     return (
-        <div className="chat__header">
+        <div className="chat__header" onDrop={(event) => event.preventDefault()}>
             <Avatar className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")} onClick={showContactDetails}>{props.contact?.initials}</Avatar>
 
             <div className="chat__headerInfo">

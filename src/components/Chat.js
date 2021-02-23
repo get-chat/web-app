@@ -688,7 +688,7 @@ export default function Chat(props) {
                 </div>
             </Zoom>
 
-            <div id="chat__body" className="chat__body" ref={messagesContainer}>
+            <div id="chat__body" className="chat__body" ref={messagesContainer} onDrop={(event) => event.preventDefault()}>
                 <div className="chat__empty"/>
 
                 { Object.entries(messages).map((message, index) => {
