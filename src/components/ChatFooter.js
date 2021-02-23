@@ -103,6 +103,15 @@ function ChatFooter(props) {
         }
     }
 
+    const handlePaste = (event) => {
+        /*const text = event.clipboardData.getData('text/plain');
+        console.log(event.clipboardData);
+
+        if (!text) {
+            event.preventDefault();
+        }*/
+    }
+
     return (
         <div className="chat__footerOuter">
 
@@ -184,6 +193,7 @@ function ChatFooter(props) {
                             ref={editable}
                             className="typeBox__editable"
                             contentEditable="true"
+                            onPaste={(event) => handlePaste(event)}
                             spellCheck="true"
                             onInput={event => handleEditableChange(event)}
                             onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
