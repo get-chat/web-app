@@ -5,7 +5,7 @@ import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {markOccurrences} from "../Helpers";
+import {markOccurrences, replaceEmojis} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_DROPPED_FILES} from "../Constants";
@@ -117,9 +117,9 @@ function SidebarChat(props) {
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
                             </span>
                             :
-                            <span className="sidebarChat__info__lastMessage__body">
-                                {props.chatData.lastMessageBody}
-                            </span>
+                            <span
+                                className="sidebarChat__info__lastMessage__body"
+                                dangerouslySetInnerHTML={{__html: replaceEmojis(props.chatData.lastMessageBody, false) }} />
                         }
                     </span>
 
