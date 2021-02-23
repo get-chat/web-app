@@ -662,12 +662,20 @@ export default function Chat(props) {
         }
     }
 
+    const handleDrop = (event) => {
+        if (waId) {
+            setSelectedFiles(getDroppedFiles(event));
+        } else {
+            event.preventDefault();
+        }
+    }
+
     let lastPrintedDate;
 
     return (
         <div
             className="chat"
-            onDrop={(event) => setSelectedFiles(getDroppedFiles(event))}
+            onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
 
             <ChatHeader contact={contact} />

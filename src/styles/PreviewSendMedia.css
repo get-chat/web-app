@@ -58,6 +58,12 @@
     max-height: 100%;
 }
 
+.previewSendMedia__preview__iframe {
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
 .previewSendMedia__caption {
     padding: 40px 140px;
 }

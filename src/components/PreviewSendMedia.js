@@ -178,7 +178,11 @@ function PreviewSendMedia(props) {
                     {/*<img className="previewSendMedia__preview__image" src={ chosenFileContent } alt="Preview"/>
                     {chosenFileContent}*/}
 
-                    <img src={chosenFileContent} />
+                    {/*<img src={chosenFileContent} />*/}
+
+
+                    <iframe className="previewSendMedia__preview__iframe" src={chosenFile.fileURL}/>
+
 
                 </div>
                 }
