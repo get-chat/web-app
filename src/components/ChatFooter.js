@@ -12,11 +12,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import {EMOJI_SET, EMOJI_SHEET_SIZE, EMPTY_IMAGE_BASE64, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 import FileInput from "./FileInput";
+import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
 
 function ChatFooter(props) {
 
     const fileInput = useRef(null);
     const editable = useRef(null);
+    const dummyEditable = useRef(null);
 
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
@@ -71,6 +73,8 @@ function ChatFooter(props) {
     }
 
     function insertAtCursor(el, html) {
+        if (!html) return;
+
         //html = html.replace('<span', '<span contentEditable="false"');
         html = html.replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"').replace('</span>', '');
         el.focus();
@@ -104,12 +108,22 @@ function ChatFooter(props) {
     }
 
     const handlePaste = (event) => {
-        /*const text = event.clipboardData.getData('text/plain');
-        console.log(event.clipboardData);
+        let text = (event.originalEvent || event).clipboardData.getData('text/plain');
+        text = replaceEmojis(text, true);
 
-        if (!text) {
-            event.preventDefault();
-        }*/
+        insertAtCursor(editable.current, text);
+
+        event.preventDefault();
+
+        //document.execCommand("insertHTML", false, text);
+    }
+
+    const handleCopy = (event) => {
+        let data = getSelectionHtml();
+        data = translateHTMLInputToText(data);
+        event.clipboardData.setData('text', data);
+
+        event.preventDefault();
     }
 
     return (
@@ -194,6 +208,7 @@ function ChatFooter(props) {
                             className="typeBox__editable"
                             contentEditable="true"
                             onPaste={(event) => handlePaste(event)}
+                            onCopy={(event) => handleCopy(event)}
                             spellCheck="true"
                             onInput={event => handleEditableChange(event)}
                             onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
@@ -201,6 +216,8 @@ function ChatFooter(props) {
                     </div>
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
+
+                <div ref={dummyEditable} contentEditable={"true"} />
 
                 <Tooltip title="Send" placement="top">
                     <IconButton onClick={props.sendMessage}>
