@@ -18,7 +18,6 @@ function ChatFooter(props) {
 
     const fileInput = useRef(null);
     const editable = useRef(null);
-    const dummyEditable = useRef(null);
 
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
@@ -214,8 +213,6 @@ function ChatFooter(props) {
                     </div>
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
-
-                <div ref={dummyEditable} contentEditable={"true"} />
 
                 <Tooltip title="Send" placement="top">
                     <IconButton onClick={props.sendMessage}>
