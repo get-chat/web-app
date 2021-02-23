@@ -662,10 +662,6 @@ export default function Chat(props) {
         }
     }
 
-    const getSenderName = (message) => {
-        return message?.senderObject?.username ?? (!message?.isFromUs ? contact?.name : "Us");
-    };
-
     let lastPrintedDate;
 
     return (
@@ -715,7 +711,6 @@ export default function Chat(props) {
 
                     return (<ChatMessage
                         key={message[0]}
-                        name={getSenderName(message[1])}
                         messageData={message[1]}
                         displayDate={willDisplayDate}
                         date={curMsgDate}

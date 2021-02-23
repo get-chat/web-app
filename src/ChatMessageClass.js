@@ -15,19 +15,20 @@ export class ChatMessageClass {
     static STATUS_DELIVERED = 'delivered';
     static STATUS_READ = 'read';
 
-    constructor(data, contactName) {
+    constructor(data) {
         const payload = data.waba_payload;
         const statuses = data.waba_statuses;
 
         this.id = payload.id;
         this.to = payload.to;
         this.waId = data.customer_wa_id;
+        this.isFromUs = data.from_us;
+        this.contact = data.contact;
         this.type = payload.type;
         this.senderObject = data.sender;
         this.username = data.sender?.username;
-        this.senderName = this.username ?? (!this.isFromUs ? contactName : "Us");
+        this.senderName = this.getSenderName();
         this.initials = this.senderName ? this.senderName[0] : "?";
-        this.isFromUs = data.from_us;
         this.text = payload.text?.body;
         this.timestamp = payload.timestamp;
         this.isSeen = data.seen;
@@ -54,6 +55,21 @@ export class ChatMessageClass {
         this.readTimestamp = statuses.read;
         this.sentTimestamp = statuses.sent;
     };
+
+    getSenderName() {
+        if (this.senderObject) {
+            const firstName = this.senderObject.first_name;
+            const lastName = this.senderObject.last_name;
+
+            if (firstName || lastName) {
+                return firstName + (lastName ? ' ' + lastName : '');
+            } else {
+                return this.username;
+            }
+        }
+
+        return this.senderObject?.username ?? (!this.isFromUs ? this.contact?.waba_payload?.profile?.name : "Us");
+    }
 
     hasMediaToPreview() {
         return this.imageLink !== undefined || this.videoId !== undefined;

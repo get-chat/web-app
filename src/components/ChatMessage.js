@@ -32,10 +32,9 @@ function ChatMessage(props) {
     const data = props.messageData;
 
     const generateInitials = () => {
-        return (props.name? props.name[0] : '')?.toUpperCase();
+        return (data.senderName? data.senderName[0] : '')?.toUpperCase();
     }
 
-    data.preparedName = props.name;
     data.preparedInitials = generateInitials();
     data.preparedAvatarClassName = data.preparedInitials ? data.preparedInitials[0] : '';
 
@@ -152,7 +151,7 @@ function ChatMessage(props) {
                     <ExpandMoreIcon />
                 </div>
 
-                <span className="chat__name">{props.name}</span>
+                <span className="chat__name">{data.senderName}</span>
                 {data.imageLink !== undefined &&
                 <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
                 }
