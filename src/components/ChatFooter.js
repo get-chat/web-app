@@ -114,8 +114,6 @@ function ChatFooter(props) {
         insertAtCursor(editable.current, text);
 
         event.preventDefault();
-
-        //document.execCommand("insertHTML", false, text);
     }
 
     const handleCopy = (event) => {
