@@ -13,7 +13,7 @@ import {
     EMPTY_IMAGE_BASE64
 } from "../Constants";
 import FileInput from "./FileInput";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
+import {b64toBlob, convertToBase64, getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 
@@ -26,6 +26,8 @@ function PreviewSendMedia(props) {
     const [captions, setCaptions] = useState({});
     const [currentCaption, setCurrentCaption] = useState("");
     const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
+
+    const [chosenFileContent, setChosenFileContent] = useState('');
 
     const hidePreview = () => {
         props.setPreviewSendMediaVisible(false);
@@ -106,6 +108,18 @@ function PreviewSendMedia(props) {
 
             document.addEventListener('keydown', handleKey);
 
+
+
+            // PDF Preview
+            /*if (chosenFile && chosenFile.file.type.includes('application/pdf')) {
+                convertToBase64(chosenFile.file, function (result) {
+                    console.log(result);
+                    const blob = b64toBlob(result, 'application/pdf');
+                    const url = URL.createObjectURL(blob);
+                    setChosenFileContent(url);
+                })
+            }*/
+
             return () => {
                 document.removeEventListener('keydown', handleKey);
             };
@@ -158,6 +172,16 @@ function PreviewSendMedia(props) {
                     <video className="previewSendMedia__preview__video" src={chosenFile.fileURL} controls={true} />
                     }
                 </div>
+
+                {(chosenFile && chosenFile.file.type.includes('application/pdf')) &&
+                <div className="previewSendMedia__preview__wrapper">
+                    {/*<img className="previewSendMedia__preview__image" src={ chosenFileContent } alt="Preview"/>
+                    {chosenFileContent}*/}
+
+                    <img src={chosenFileContent} />
+
+                </div>
+                }
 
                 {(chosenFile && chosenFile.attachmentType !== ATTACHMENT_TYPE_IMAGE && chosenFile.attachmentType !== ATTACHMENT_TYPE_VIDEO) &&
                 <div>
