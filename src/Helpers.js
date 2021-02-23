@@ -72,10 +72,10 @@ function containsOnlyEmojis(text) {
     return onlyEmojis.length === visibleChars.length
 }
 
-const replaceEmojis = (message, checkIfOnlyEmojis) => {
+const replaceEmojis = (message, ignoreOnlyEmojis) => {
     if (!message) return;
 
-    const onlyEmojis = checkIfOnlyEmojis ? containsOnlyEmojis(message) : false;
+    const onlyEmojis = !ignoreOnlyEmojis ? containsOnlyEmojis(message) : false;
     const regex = emojiRegex();
 
     return message.replace(regex, function (occurrence) {

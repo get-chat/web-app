@@ -71,7 +71,7 @@ function SearchMessageResult(props) {
                     }
                 </span>
 
-                <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), false)}} />
+                <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), true)}} />
             </div>
         </div>
     )

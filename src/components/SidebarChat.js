@@ -119,7 +119,7 @@ function SidebarChat(props) {
                             :
                             <span
                                 className="sidebarChat__info__lastMessage__body"
-                                dangerouslySetInnerHTML={{__html: replaceEmojis(props.chatData.lastMessageBody, false) }} />
+                                dangerouslySetInnerHTML={{__html: replaceEmojis(props.chatData.lastMessageBody, true) }} />
                         }
                     </span>
 
