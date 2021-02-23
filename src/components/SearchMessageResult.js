@@ -1,6 +1,6 @@
 import React from 'react';
 import Moment from "react-moment";
-import {markOccurrences} from "../Helpers";
+import {markOccurrences, replaceEmojis} from "../Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import ImageIcon from '@material-ui/icons/Image';
 import VideocamIcon from '@material-ui/icons/Videocam';
@@ -71,7 +71,7 @@ function SearchMessageResult(props) {
                     }
                 </span>
 
-                <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: markOccurrences(data.text ?? data.caption, props.keyword)}} />
+                <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), false)}} />
             </div>
         </div>
     )
