@@ -58,10 +58,9 @@
     max-height: 100%;
 }
 
-.previewSendMedia__preview__iframe {
-    border: none;
-    height: 100%;
-    width: 100%;
+.previewSendMedia__preview__pdf {
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .previewSendMedia__caption {

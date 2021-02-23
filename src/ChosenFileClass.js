@@ -8,6 +8,7 @@ class ChosenFileClass {
         this.attachmentType = getAttachmentTypeByMimeType(data.type);
         this.type = data.type;
         this.caption = '';
+        this.isPDF = this.type.includes('application/pdf')
     }
 }
 

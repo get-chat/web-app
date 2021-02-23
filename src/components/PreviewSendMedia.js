@@ -13,9 +13,11 @@ import {
     EMPTY_IMAGE_BASE64
 } from "../Constants";
 import FileInput from "./FileInput";
-import {b64toBlob, convertToBase64, getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import AudiotrackIcon from "@material-ui/icons/Audiotrack";
+
+import {Document, Page, pdfjs} from "react-pdf";
 
 function PreviewSendMedia(props) {
 
@@ -26,8 +28,6 @@ function PreviewSendMedia(props) {
     const [captions, setCaptions] = useState({});
     const [currentCaption, setCurrentCaption] = useState("");
     const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
-
-    const [chosenFileContent, setChosenFileContent] = useState('');
 
     const hidePreview = () => {
         props.setPreviewSendMediaVisible(false);
@@ -80,6 +80,9 @@ function PreviewSendMedia(props) {
     }
 
     useEffect(() => {
+        // For PDF previews
+        pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
         setData(props.data);
         setCaptions({});
 
@@ -107,18 +110,6 @@ function PreviewSendMedia(props) {
             };
 
             document.addEventListener('keydown', handleKey);
-
-
-
-            // PDF Preview
-            /*if (chosenFile && chosenFile.file.type.includes('application/pdf')) {
-                convertToBase64(chosenFile.file, function (result) {
-                    console.log(result);
-                    const blob = b64toBlob(result, 'application/pdf');
-                    const url = URL.createObjectURL(blob);
-                    setChosenFileContent(url);
-                })
-            }*/
 
             return () => {
                 document.removeEventListener('keydown', handleKey);
@@ -171,23 +162,16 @@ function PreviewSendMedia(props) {
                     {(chosenFile && chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO) &&
                     <video className="previewSendMedia__preview__video" src={chosenFile.fileURL} controls={true} />
                     }
+                    {(chosenFile && chosenFile.isPDF) &&
+                    <Document
+                        className="previewSendMedia__preview__pdf"
+                        file={chosenFile.fileURL}>
+                        <Page pageNumber={1} scale={0.75} />
+                    </Document>
+                    }
                 </div>
 
-                {(chosenFile && chosenFile.file.type.includes('application/pdf')) &&
-                <div className="previewSendMedia__preview__wrapper">
-                    {/*<img className="previewSendMedia__preview__image" src={ chosenFileContent } alt="Preview"/>
-                    {chosenFileContent}*/}
-
-                    {/*<img src={chosenFileContent} />*/}
-
-
-                    <iframe className="previewSendMedia__preview__iframe" src={chosenFile.fileURL}/>
-
-
-                </div>
-                }
-
-                {(chosenFile && chosenFile.attachmentType !== ATTACHMENT_TYPE_IMAGE && chosenFile.attachmentType !== ATTACHMENT_TYPE_VIDEO) &&
+                {(chosenFile && chosenFile.attachmentType !== ATTACHMENT_TYPE_IMAGE && chosenFile.attachmentType !== ATTACHMENT_TYPE_VIDEO && !chosenFile.isPDF) &&
                 <div>
                     {chosenFile.attachmentType}, <span className="searchOccurrence">{chosenFile.file?.name}</span>
                 </div>
