@@ -231,9 +231,10 @@ export default function Chat(props) {
 
                         // Load messages since clicked results
                         setLoadingMoreMessages(true);
-                        getMessages(() => {
+                        const callback = () => {
                             scrollToChild(msgId);
-                        }, undefined, undefined, timestamp, true, true);
+                        };
+                        getMessages(callback, undefined, undefined, timestamp, true, true);
                     }
                 }
             }
@@ -305,7 +306,7 @@ export default function Chat(props) {
             });
     }
 
-    const getMessages = (promise, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
+    const getMessages = (callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
         axios.get( `${BASE_URL}messages/`,
@@ -327,7 +328,7 @@ export default function Chat(props) {
                 if (sinceTime && isInitialWithSinceTime === true) {
                     if (next) { /*count > limit*/
                         setAtBottom(false);
-                        getMessages(promise, beforeTime, count - limit, sinceTime, false, replaceAll);
+                        getMessages(callback, beforeTime, count - limit, sinceTime, false, replaceAll);
                         return false;
                     }
                 }
@@ -390,9 +391,9 @@ export default function Chat(props) {
                 }
 
                 // Promise
-                if (promise) {
+                if (callback) {
                     setTimeout(function () {
-                        promise();
+                        callback();
                     }, 50);
                 }
 
@@ -506,11 +507,8 @@ export default function Chat(props) {
 
                     props.displayError(error);
 
-                    // TODO: Switch to expired mode, if status code is: XXX
-
-
                     if (error.response) {
-                        // Request made and server responded
+                        // Switch to expired mode if status code is 453
                         if (error.response.status === 453) {
                             setExpired(true);
                         }
@@ -578,7 +576,7 @@ export default function Chat(props) {
             });
     }
 
-    const sendFile = (fileURL, chosenFile) => {
+    const sendFile = (fileURL, chosenFile, callback) => {
         if (isLoaded) {
             const caption = chosenFile.caption;
             const type = chosenFile.attachmentType;
@@ -613,11 +611,18 @@ export default function Chat(props) {
                     console.log(response.data);
 
                     getNewMessagesTemp();
+
+                    // Send next request
+                    callback();
+
                 })
                 .catch((error) => {
                     // TODO: Handle errors
 
                     props.displayError(error);
+
+                    // Send next when it fails, a retry can be considered
+                    callback();
                 });
         }
     }
@@ -634,6 +639,8 @@ export default function Chat(props) {
     const sendHandledChosenFiles = (preparedFiles) => {
         if (isLoaded && preparedFiles) {
 
+            const requests = [];
+
             // Sending all files in a loop
             Object.entries(preparedFiles).forEach((curFile) => {
                 const curChosenFile = curFile[1];
@@ -642,20 +649,45 @@ export default function Chat(props) {
                 const formData = new FormData();
                 formData.append("file_encoded", file);
 
-                axios.post(`${BASE_URL}media/`, formData, getConfig())
+                requests.push({
+                    formData: formData,
+                    chosenFile: curChosenFile
+                });
+            });
+
+            let requestIndex = 0;
+
+            const sendRequest = (request) => {
+                const sendNextRequest = () => {
+                    // Call next request
+                    requestIndex++;
+                    const nextRequest = requests[requestIndex];
+                    if (nextRequest) {
+                        sendRequest(nextRequest);
+                    }
+                }
+
+                axios.post(`${BASE_URL}media/`, request.formData, getConfig())
                     .then((response) => {
-                        console.log(response.data)
+                        console.log(response.data);
 
                         // Convert parameters to a ChosenFile object
-                        sendFile(response.data.file, curChosenFile);
+                        sendFile(response.data.file, request.chosenFile, function () {
+                            sendNextRequest();
+                        });
 
                     })
                     .catch((error) => {
                         // TODO: Handle errors
 
                         props.displayError(error);
+
+                        // Send next when it fails, a retry can be considered
+                        sendNextRequest();
                     });
-            });
+            }
+
+            sendRequest(requests[requestIndex]);
         }
     }
 
