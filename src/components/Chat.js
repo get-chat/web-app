@@ -659,7 +659,6 @@ export default function Chat(props) {
 
             const sendRequest = (request) => {
                 const sendNextRequest = () => {
-                    // Call next request
                     requestIndex++;
                     const nextRequest = requests[requestIndex];
                     if (nextRequest) {
