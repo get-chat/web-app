@@ -339,7 +339,7 @@ export default function Chat(props) {
                 setAtBottom(!hasNewerToLoad);
 
                 const preparedMessages = {};
-                response.data.results.reverse().map((message, index) => {
+                response.data.results.reverse().forEach((message) => {
                     const prepared = new ChatMessageClass(message);
                     preparedMessages[prepared.id] = prepared;
                 });
@@ -432,7 +432,7 @@ export default function Chat(props) {
                 }
 
                 const preparedNewMessages = {};
-                response.data.results.reverse().map((message, index) => {
+                response.data.results.reverse().forEach((message) => {
                     const id = message.waba_payload?.id;
                     const existingMsg = messages[id];
 
@@ -635,7 +635,7 @@ export default function Chat(props) {
         if (isLoaded && preparedFiles) {
 
             // Sending all files in a loop
-            Object.entries(preparedFiles).map((curFile, index) => {
+            Object.entries(preparedFiles).forEach((curFile) => {
                 const curChosenFile = curFile[1];
                 const file = curChosenFile.file;
 

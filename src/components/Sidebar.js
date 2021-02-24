@@ -75,7 +75,7 @@ function Sidebar(props) {
                 //console.log("Chats", response.data)
 
                 const preparedChats = {};
-                response.data.results.map((contact) => {
+                response.data.results.forEach((contact) => {
                     const prepared = new ChatClass(contact);
                     preparedChats[prepared.waId] = prepared;
                 });
@@ -89,7 +89,7 @@ function Sidebar(props) {
                 const willNotify = !isInitial;
 
                 const preparedUnseenMessages = {};
-                response.data.results.map((unseenMessage, index) => {
+                response.data.results.forEach((unseenMessage) => {
                     const prepared = new UnseenMessageClass(unseenMessage);
                     preparedUnseenMessages[prepared.waId] = prepared;
                 });
@@ -97,7 +97,7 @@ function Sidebar(props) {
                 if (willNotify) {
                     let hasAnyNewMessages = false;
                     setUnseenMessages((prevState => {
-                            Object.entries(preparedUnseenMessages).map((unseen, index) => {
+                            Object.entries(preparedUnseenMessages).forEach((unseen) => {
                                 const unseenWaId = unseen[0]
                                 const number = unseen[1].unseenMessages;
                                 if (unseenWaId !== waId) {

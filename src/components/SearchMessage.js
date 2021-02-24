@@ -55,7 +55,7 @@ function SearchMessage(props) {
                 console.log("Messages", response.data);
 
                 const preparedMessages = {};
-                response.data.results.map((message, index) => {
+                response.data.results.forEach((message) => {
                     const prepared = new ChatMessageClass(message);
                     preparedMessages[prepared.id] = prepared;
                 });
@@ -87,7 +87,7 @@ function SearchMessage(props) {
             <SearchBar onChange={search} />
 
             <div className="searchMessage__body">
-                { Object.entries(results).map((message, index) =>
+                { Object.entries(results).map((message) =>
                     <SearchMessageResult
                         key={message[0]}
                         waId={waId}

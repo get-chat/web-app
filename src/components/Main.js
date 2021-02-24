@@ -155,7 +155,7 @@ function Main() {
                 //console.log("Templates: ", response.data);
 
                 const preparedTemplates = {};
-                response.data.results.map((template, index) => {
+                response.data.results.forEach((template) => {
                     const prepared = new TemplateMessageClass(template);
 
                     if (prepared.status === "approved") {

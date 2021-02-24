@@ -10,7 +10,7 @@ import * as musicMetadata from "music-metadata-browser";
 
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
-    Object.entries(selectedFiles).map((file, index) => {
+    Object.entries(selectedFiles).forEach((file) => {
         preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1]);
     });
 

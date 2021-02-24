@@ -48,7 +48,7 @@ function PreviewSendMedia(props) {
 
         // Inject captions
         const finalPreparedData = {};
-        Object.entries(finalData).map((curChosenFile, index) => {
+        Object.entries(finalData).forEach((curChosenFile) => {
             const copyCurChosenFile = curChosenFile[1];
             copyCurChosenFile.caption = captions[copyCurChosenFile.key] ?? '';
             finalPreparedData[copyCurChosenFile.key] = copyCurChosenFile;
@@ -71,7 +71,7 @@ function PreviewSendMedia(props) {
             setData(prevState => {
                 const newState = prevState;
                 let nextIndex = parseInt(getLastObject(newState).key) + 1;
-                Object.entries(preparedFiles).map((curPreparedFile, index) => {
+                Object.entries(preparedFiles).forEach((curPreparedFile) => {
                     const preparedFile = curPreparedFile[1];
                     preparedFile.key = nextIndex.toString();
                     newState[nextIndex] = preparedFile;
@@ -205,7 +205,7 @@ function PreviewSendMedia(props) {
             <div className="previewSendMedia__footer">
 
                 <div className="previewSendMedia__footer__inner">
-                    { Object.entries(data).map((file, index) => {
+                    { Object.entries(data).map((file) => {
                         return (
                             <span key={file[0]}
                                   className={"previewSendMedia__footer__thumbnail" + (chosenFile === file[1] ? " chosenFile" : "")}
