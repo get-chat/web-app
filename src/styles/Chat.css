@@ -59,6 +59,10 @@
     max-width: 70%;
 }
 
+.chat__message.hiddenSender {
+    margin-top: -17px;
+}
+
 .chat__message.hasMedia {
     width: min-content;
 }
@@ -178,7 +182,7 @@ a.chat__document:hover {
     top: -15px;
     font-size: x-small;
     font-weight: 600;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .chat__receiver .chat__name {

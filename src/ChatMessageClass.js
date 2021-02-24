@@ -22,6 +22,7 @@ export class ChatMessageClass {
         this.id = payload.id;
         this.to = payload.to;
         this.waId = data.customer_wa_id;
+        this.senderWaId = payload.from;
         this.isFromUs = data.from_us;
         this.contact = data.contact;
         this.type = payload.type;
@@ -55,6 +56,10 @@ export class ChatMessageClass {
         this.readTimestamp = statuses.read;
         this.sentTimestamp = statuses.sent;
     };
+
+    getUniqueSender() {
+        return this.username ?? this.senderWaId;
+    }
 
     getSenderName() {
         if (this.senderObject) {

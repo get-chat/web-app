@@ -699,6 +699,7 @@ export default function Chat(props) {
     }
 
     let lastPrintedDate;
+    let lastSenderWaId;
 
     return (
         <div
@@ -730,6 +731,7 @@ export default function Chat(props) {
 
                     if (index === 0) {
                         lastPrintedDate = undefined;
+                        lastSenderWaId = undefined;
                     }
 
                     let willDisplayDate = false;
@@ -745,10 +747,24 @@ export default function Chat(props) {
                         lastPrintedDate = curMsgDate;
                     }
 
+                    let willDisplaySender = false;
+                    const curSenderWaId = message[1].getUniqueSender();
+                    if (lastSenderWaId === undefined) {
+                        willDisplaySender = true;
+                        lastSenderWaId = message[1].getUniqueSender();
+                    } else {
+                        if (lastSenderWaId !== curSenderWaId) {
+                            willDisplaySender = true;
+                        }
+
+                        lastSenderWaId = message[1].getUniqueSender();
+                    }
+
                     return (<ChatMessage
                         key={message[0]}
                         messageData={message[1]}
                         displayDate={willDisplayDate}
+                        displaySender={willDisplaySender}
                         date={curMsgDate}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                         templates={props.templates}

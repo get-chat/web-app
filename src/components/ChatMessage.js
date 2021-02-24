@@ -144,14 +144,21 @@ function ChatMessage(props) {
             <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
             }
 
-            <div className={"chat__message" + (data.hasMediaToPreview() ? " hasMedia" : "") + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "") + " chat__receiver" : "") +
-            (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
+            <div className={"chat__message"
+                + (data.hasMediaToPreview() ? " hasMedia" : "")
+                + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "")
+                + " chat__receiver" : "")
+                + (!props.displaySender ? " hiddenSender" : "")
+                + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
                     <ExpandMoreIcon />
                 </div>
 
+                {props.displaySender &&
                 <span className="chat__name">{data.senderName}</span>
+                }
+
                 {data.imageLink !== undefined &&
                 <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
                 }
