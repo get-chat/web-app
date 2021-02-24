@@ -16,8 +16,8 @@
 
 .sidebarChat .MuiAvatar-root {
     align-self: baseline;
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
 }
 
 .sidebarChat__info__nameWrapper {
