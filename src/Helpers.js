@@ -144,7 +144,7 @@ const stringContainsAnyInArray = (string, array) => {
     return false;
 }
 
-const getAttachmentTypeByMimeType = (mimeType) => {
+const getAttachmentTypeByFile = (mimeType) => {
     if (mimeType.includes('image')) {
         const supportedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
         if (stringContainsAnyInArray(mimeType, supportedImageTypes)) {
@@ -204,6 +204,6 @@ export {
     getLastObject,
     getLastMessageAndExtractTimestamp,
     getObjLength,
-    getAttachmentTypeByMimeType,
+    getAttachmentTypeByFile,
     getSelectionHtml
 };

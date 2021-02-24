@@ -5,11 +5,11 @@ import ChatMessage from "./ChatMessage";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import {
-    ATTACHMENT_TYPE_AUDIO,
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL, EVENT_TOPIC_DROPPED_FILES,
+    BASE_URL,
+    EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID
 } from "../Constants";
@@ -25,7 +25,6 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
-    getAttachmentTypeByMimeType,
     getConfig,
     getFirstObject,
     getLastMessageAndExtractTimestamp,
@@ -34,7 +33,7 @@ import {
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
-import {handleDragOver, getDroppedFiles, prepareSelectedFiles} from "../FileHelpers";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
 
 const SCROLL_BOTTOM_OFFSET = 15;
 
@@ -639,8 +638,7 @@ export default function Chat(props) {
                 //formData.append("file_name", file.name);
                 formData.append("file_encoded", file);
 
-                const selectedFileType = file.type;
-                let targetType = getAttachmentTypeByMimeType(selectedFileType);
+                let targetType = curFile[1].attachmentType;
 
                 const filename = file.name;
                 const mimeType = file.type;
