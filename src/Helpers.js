@@ -144,7 +144,8 @@ const stringContainsAnyInArray = (string, array) => {
     return false;
 }
 
-const getAttachmentTypeByFile = (mimeType) => {
+const getAttachmentTypeByFile = (file) => {
+    const mimeType = file.type;
     if (mimeType.includes('image')) {
         const supportedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
         if (stringContainsAnyInArray(mimeType, supportedImageTypes)) {
