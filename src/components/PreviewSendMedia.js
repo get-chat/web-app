@@ -10,7 +10,7 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    EMPTY_IMAGE_BASE64
+    EMPTY_IMAGE_BASE64, EVENT_TOPIC_RELOAD_PREVIEW
 } from "../Constants";
 import FileInput from "./FileInput";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
@@ -18,6 +18,8 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 
 import {Document, Page, pdfjs} from "react-pdf";
+import PubSub from "pubsub-js";
+import {useForceUpdate} from "../hooks/useForceUpdate";
 
 function PreviewSendMedia(props) {
 
@@ -28,6 +30,8 @@ function PreviewSendMedia(props) {
     const [captions, setCaptions] = useState({});
     const [currentCaption, setCurrentCaption] = useState("");
     const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
+
+    const forceUpdate = useForceUpdate();
 
     const hidePreview = () => {
         props.setPreviewSendMediaVisible(false);
@@ -86,9 +90,19 @@ function PreviewSendMedia(props) {
         setData(props.data);
         setCaptions({});
 
+        const reloadPreview = (msg, data) => {
+            // Just to rerender
+            forceUpdate();
+        }
+
+        // Force async codec information
+        const token = PubSub.subscribe(EVENT_TOPIC_RELOAD_PREVIEW, reloadPreview);
+
         return () => {
             // Clear data
             props.setData({});
+
+            PubSub.unsubscribe(token);
         }
     }, []);
 

@@ -1,12 +1,7 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from './EmojiData.json'; //from 'emoji-mart/data/all.json'
-import {
-    ATTACHMENT_TYPE_AUDIO, ATTACHMENT_TYPE_DOCUMENT,
-    ATTACHMENT_TYPE_IMAGE,
-    ATTACHMENT_TYPE_VIDEO,
-    EMOJI_SET,
-    EMOJI_SHEET_SIZE
-} from "./Constants";
+import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
+
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
@@ -134,7 +129,7 @@ const getLastMessageAndExtractTimestamp = (messagesObject) => {
     return last ? parseInt(last.timestamp) : -1;
 }
 
-const stringContainsAnyInArray = (string, array) => {
+export const stringContainsAnyInArray = (string, array) => {
     for (let i = 0; i < array.length; i++) {
         if (string.includes(array[i])) {
             return true;
@@ -142,35 +137,6 @@ const stringContainsAnyInArray = (string, array) => {
     }
 
     return false;
-}
-
-const getAttachmentTypeByFile = (file) => {
-    const mimeType = file.type;
-    if (mimeType.includes('image')) {
-        const supportedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
-        if (stringContainsAnyInArray(mimeType, supportedImageTypes)) {
-            return ATTACHMENT_TYPE_IMAGE;
-        }
-    } else if (mimeType.includes('video')) {
-        const supportedVideoTypes = ['video/mp4', 'video/3gpp'];
-        if (stringContainsAnyInArray(mimeType, supportedVideoTypes)) {
-            return ATTACHMENT_TYPE_VIDEO;
-        }
-    } else if (mimeType.includes('audio')) {
-        // OGG is an exception
-        if (mimeType.includes('audio/ogg')) {
-            // TODO: Check codec here
-            return ATTACHMENT_TYPE_AUDIO;
-        } else {
-            // If not OGG
-            const supportedAudioTypes = ['audio/aac', 'audio/mp4', 'audio/amr', 'audio/mpeg'];
-            if (stringContainsAnyInArray(mimeType, supportedAudioTypes)) {
-                return ATTACHMENT_TYPE_AUDIO;
-            }
-        }
-    }
-
-    return ATTACHMENT_TYPE_DOCUMENT;
 }
 
 const getSelectionHtml = () => {
@@ -205,6 +171,5 @@ export {
     getLastObject,
     getLastMessageAndExtractTimestamp,
     getObjLength,
-    getAttachmentTypeByFile,
     getSelectionHtml
 };

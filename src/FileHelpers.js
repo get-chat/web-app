@@ -1,4 +1,12 @@
 import ChosenFileClass from "./ChosenFileClass";
+import {
+    ATTACHMENT_TYPE_AUDIO,
+    ATTACHMENT_TYPE_DOCUMENT,
+    ATTACHMENT_TYPE_IMAGE,
+    ATTACHMENT_TYPE_VIDEO
+} from "./Constants";
+import {stringContainsAnyInArray} from "./Helpers";
+import * as musicMetadata from "music-metadata-browser";
 
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
@@ -30,6 +38,48 @@ export const getDroppedFiles = (event) => {
     }*/
 
     return {...{}, ...event.dataTransfer.files};
+}
+
+export const getAttachmentTypeByFile = (file, callback) => {
+    const mimeType = file.type;
+    if (mimeType.includes('image')) {
+        const supportedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (stringContainsAnyInArray(mimeType, supportedImageTypes)) {
+            return ATTACHMENT_TYPE_IMAGE;
+        }
+    } else if (mimeType.includes('video')) {
+        const supportedVideoTypes = ['video/mp4', 'video/3gpp'];
+        if (stringContainsAnyInArray(mimeType, supportedVideoTypes)) {
+            return ATTACHMENT_TYPE_VIDEO;
+        }
+    } else if (mimeType.includes('audio')) {
+        // OGG is an exception
+        if (mimeType.includes('audio/ogg')) {
+
+            // Get codec information async
+            musicMetadata.parseBlob(file).then(metadata => {
+                const codec = metadata?.format?.codec;
+                // OGG files with Opus codec are supported
+                if (codec && codec.toLowerCase().includes('opus')) {
+                    callback(ATTACHMENT_TYPE_AUDIO);
+                } else {
+                    // Base OGG files are not supported
+                    callback(ATTACHMENT_TYPE_DOCUMENT);
+                }
+            });
+
+            return ATTACHMENT_TYPE_DOCUMENT;
+
+        } else {
+            // If not OGG
+            const supportedAudioTypes = ['audio/aac', 'audio/mp4', 'audio/amr', 'audio/mpeg'];
+            if (stringContainsAnyInArray(mimeType, supportedAudioTypes)) {
+                return ATTACHMENT_TYPE_AUDIO;
+            }
+        }
+    }
+
+    return ATTACHMENT_TYPE_DOCUMENT;
 }
 
 export const convertToBase64 = (file, callback) => {

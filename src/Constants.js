@@ -7,6 +7,7 @@ export const EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY = "search_messages_visibilit
 export const EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY = "contact_details_visibility";
 export const EVENT_TOPIC_EMOJI_PICKER_VISIBILITY = "emoji_picker_visibility";
 export const EVENT_TOPIC_DROPPED_FILES = "dropped_files";
+export const EVENT_TOPIC_RELOAD_PREVIEW = "reload_preview";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
