@@ -19,6 +19,7 @@ import {
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
+import Moment from "react-moment";
 
 function Main() {
 
@@ -40,6 +41,13 @@ function Main() {
     const [chosenContact, setChosenContact] = useState();
 
     const avatarClasses = avatarStyles();
+
+    const calendarStrings = {
+        lastDay: '[Yesterday at] LT',
+        sameDay: '[Today at] LT',
+        lastWeek: 'dddd [at] LT',
+        sameElse: 'MMMM d, yyyy'
+    };
 
     const displayError = (error) => {
         if (!axios.isCancel(error)) {
@@ -212,7 +220,8 @@ function Main() {
 
                         <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
                         <div className="app_imagePreview__header__senderInfo">
-                            <h3>{chatMessageToPreview.preparedName}</h3>
+                            <h3>{chatMessageToPreview.senderName}</h3>
+                            <span><Moment calendar={calendarStrings} date={chatMessageToPreview.timestamp} unix /></span>
                         </div>
 
                         <IconButton className="app__imagePreview__close" onClick={() => hideImageOrVideoPreview()}>

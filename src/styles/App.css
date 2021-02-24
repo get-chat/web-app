@@ -132,6 +132,13 @@ a {
     margin-bottom: 0;
 }
 
+.app_imagePreview__header__senderInfo > span {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-top: 0!important;
+    display: block;
+}
+
 .app__imagePreview__header > .MuiAvatar-root {
     margin-left: 15px;
 }
