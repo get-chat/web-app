@@ -578,8 +578,13 @@ export default function Chat(props) {
             });
     }
 
-    const sendFile = (fileURL, type, filename, mimeType, caption) => {
+    const sendFile = (fileURL, chosenFile) => {
         if (isLoaded) {
+            const caption = chosenFile.caption;
+            const type = chosenFile.attachmentType;
+            const file = chosenFile.file;
+            const filename = file.name;
+            const mimeType = file.type;
 
             const body = {
                 wa_id: waId,
@@ -631,24 +636,18 @@ export default function Chat(props) {
 
             // Sending all files in a loop
             Object.entries(preparedFiles).map((curFile, index) => {
-                const file = curFile[1].file;
-                const caption = curFile[1].caption;
+                const curChosenFile = curFile[1];
+                const file = curChosenFile.file;
 
                 const formData = new FormData();
-                //formData.append("file_name", file.name);
                 formData.append("file_encoded", file);
-
-                let targetType = curFile[1].attachmentType;
-
-                const filename = file.name;
-                const mimeType = file.type;
 
                 axios.post(`${BASE_URL}media/`, formData, getConfig())
                     .then((response) => {
                         console.log(response.data)
 
                         // Convert parameters to a ChosenFile object
-                        sendFile(response.data.file, targetType, filename, mimeType, caption);
+                        sendFile(response.data.file, curChosenFile);
 
                     })
                     .catch((error) => {
