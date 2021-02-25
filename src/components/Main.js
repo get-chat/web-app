@@ -126,11 +126,26 @@ function Main() {
         // Loading template messages
         getTemplates();
 
+        // EventBus
         const token1 = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
         const token2 = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
+
+        // WebSocket, consider a separate env variable for ws address
+        const ws = new WebSocket(BASE_URL.replace('https', 'wss'));
+
+        ws.onopen = function (event) {
+            console.log('Connected to websocket server.');
+        }
+
+        ws.onmessage = function (event) {
+            console.log('New message:', event.data);
+        }
+
         return () => {
             PubSub.unsubscribe(token1);
             PubSub.unsubscribe(token2);
+
+            ws.close();
         }
     }, []);
 
