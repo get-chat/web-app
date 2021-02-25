@@ -230,6 +230,11 @@ function PreviewSendMedia(props) {
                                     <AudiotrackIcon />
                                 </span>
                                 }
+
+                                <IconButton className="previewSendMedia__footer__thumbnail__delete">
+                                    <CloseIcon />
+                                </IconButton>
+
                         </span>
                         )
                     }) }
@@ -242,7 +247,7 @@ function PreviewSendMedia(props) {
                     </ButtonBase>
 
                     <div className="hidden">
-                        <FileInput innerRef={fileInput} accept={props.accept} handleSelectedFiles={handleSelectedFiles} />
+                        <FileInput innerRef={fileInput} accept="*.*" handleSelectedFiles={handleSelectedFiles} />
                     </div>
 
                 </div>

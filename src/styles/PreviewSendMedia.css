@@ -99,6 +99,7 @@
 }
 
 .previewSendMedia__footer__thumbnail {
+    position: relative;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -137,6 +138,25 @@
 
 .previewSendMedia__footer__addMoreWrapper {
     margin-left: 4px!important;
+}
+
+.previewSendMedia__footer__thumbnail__delete {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.2)!important;
+    position: absolute!important;
+    top: 0;
+    right: 0;
+    padding: 2px!important;
+}
+
+.previewSendMedia__footer__thumbnail__delete:hover {
+    background-color: rgba(0, 0, 0, 0.4)!important;
+}
+
+.previewSendMedia__footer__thumbnail__delete .MuiSvgIcon-root {
+    height: 0.6em;
+    width: 0.6em;
+    color: white!important;
 }
 
 .previewSendMedia__footer__addMore {
