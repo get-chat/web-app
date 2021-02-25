@@ -32,7 +32,7 @@ function ChatMessage(props) {
     const data = props.messageData;
 
     const generateInitials = () => {
-        return (data.senderName? data.senderName[0] : '')?.toUpperCase();
+        return (data.senderName ? data.senderName[0] : '')?.toUpperCase();
     }
 
     data.preparedInitials = generateInitials();

@@ -11,7 +11,7 @@ import {
     BASE_URL,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
-    EVENT_TOPIC_GO_TO_MSG_ID
+    EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_NEW_CHAT_MESSAGES
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -50,7 +50,7 @@ export default function Chat(props) {
     const [input, setInput] = useState('');
 
     const [selectedFiles, setSelectedFiles] = useState();
-    const [accept, setAccept] = useState("");
+    const [accept, setAccept] = useState('');
 
     const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(false);
     const [previewSendMediaData, setPreviewSendMediaData] = useState();
@@ -69,6 +69,24 @@ export default function Chat(props) {
 
     // Generating cancel token
     generateCancelToken();
+
+    const prepareFixedDateIndicator = (dateIndicators, el) => {
+        const curScrollTop = el.scrollTop;
+        let indicatorToShow;
+
+        for (let i = 0; i < dateIndicators.length; i++) {
+            const indicator = dateIndicators[i];
+            if (indicatorToShow === undefined || indicator.offsetTop <= curScrollTop) {
+                indicatorToShow = indicator;
+            } else {
+                break;
+            }
+        }
+
+        if (indicatorToShow) {
+            setFixedDateIndicatorText(indicatorToShow.innerHTML);
+        }
+    }
 
     useEffect(() => {
         if (messagesContainer) {
@@ -132,24 +150,6 @@ export default function Chat(props) {
         props.setChosenContact(contact);
     }, [contact]);
 
-    const prepareFixedDateIndicator = (dateIndicators, el) => {
-        const curScrollTop = el.scrollTop;
-        let indicatorToShow;
-
-        for (let i = 0; i < dateIndicators.length; i++) {
-            const indicator = dateIndicators[i];
-            if (indicatorToShow === undefined || indicator.offsetTop <= curScrollTop) {
-                indicatorToShow = indicator;
-            } else {
-                break;
-            }
-        }
-
-        if (indicatorToShow) {
-            setFixedDateIndicatorText(indicatorToShow.innerHTML);
-        }
-    }
-
     useEffect(() => {
         const messagesContainerCopy = messagesContainer.current;
         const dateIndicators = messagesContainerCopy.querySelectorAll('.chat__message__outer > .chat__message__dateContainer > .chat__message__dateContainer__indicator');
@@ -202,6 +202,36 @@ export default function Chat(props) {
         }
     }, [messages, isLoaded, isLoadingMoreMessages]);
 
+    useEffect(() => {
+
+        const onNewMessages = function (msg, data) {
+            if (data && isLoaded && isAtBottom) {
+                const preparedMessages = {};
+                Object.entries(data).forEach((message) => {
+                    const msgId = message[0];
+                    const chatMessage = message[1];
+
+                    if (waId === chatMessage.waId) {
+                        preparedMessages[msgId] = chatMessage;
+                    }
+                });
+
+                if (getObjLength(preparedMessages) > 0) {
+                    console.log(preparedMessages);
+                    setMessages(prevState => {
+                        return {...prevState, ...preparedMessages};
+                    });
+                }
+            }
+        }
+
+        const token = PubSub.subscribe(EVENT_TOPIC_NEW_CHAT_MESSAGES, onNewMessages);
+
+        return () => {
+            PubSub.unsubscribe(token);
+        }
+    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isAtBottom]);
+
     /*useEffect(() => {
         // Scrolling to bottom on initial templates load
         if (!isLoadingTemplates) {
@@ -243,19 +273,20 @@ export default function Chat(props) {
         // Subscribe for scrolling to message event
         const token = PubSub.subscribe(EVENT_TOPIC_GO_TO_MSG_ID, onGoToMessageId);
 
-        let intervalId = 0;
+        /*let intervalId = 0;
         if (getObjLength(messages) > 0) {
             intervalId = setInterval(() => {
                 getNewMessagesTemp();
             }, 2500);
 
             console.log("Interval is set");
-        }
+        }*/
+
         return () => {
             // Unsubscribe
             PubSub.unsubscribe(token);
 
-            clearInterval(intervalId);
+            //clearInterval(intervalId);
         }
     }, [messages, isAtBottom]);
 
@@ -297,7 +328,6 @@ export default function Chat(props) {
                 if (loadMessages !== undefined && loadMessages === true) {
                     getMessages();
                 }
-
             })
             .catch((error) => {
                 // TODO: Handle errors
@@ -319,7 +349,7 @@ export default function Chat(props) {
             }, source.token)
         )
             .then((response) => {
-                console.log("Messages", response.data);
+                //console.log("Messages", response.data);
 
                 const count = response.data.count;
                 const previous = response.data.previous;

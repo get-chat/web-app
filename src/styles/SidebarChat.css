@@ -65,6 +65,13 @@
     color: #212529;
 }
 
+.sidebarChat__info__lastMessage__body .MuiSvgIcon-root {
+    color: rgba(0, 0, 0, 0.3)!important;
+    height: 0.85em;
+    width: 0.85em;
+    margin-left: -2px;
+}
+
 .sidebarChat__info__expired {
     font-size: 12px;
     color: #a9a92a;

@@ -17,7 +17,7 @@ import {
     BASE_URL,
     CALENDAR_NORMAL,
     EVENT_TOPIC_CHAT_MESSAGE,
-    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
+    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
 import Moment from "react-moment";
@@ -156,8 +156,10 @@ function Main() {
                         const preparedContacts = {};
                         contacts.forEach((contact) => {
                             preparedContacts[contact.wa_id] = {
-                                waId: contact.wa_id,
-                                profile: contact.profile
+                                wa_id: contact.wa_id,
+                                waba_payload: {
+                                    profile: contact.profile
+                                }
                             }
                         });
 
@@ -175,7 +177,8 @@ function Main() {
                             preparedMessages[message.id] = new ChatMessageClass(msgData);
                         });
 
-                        console.log(preparedMessages);
+                        //console.log(preparedMessages);
+                        PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                     }
                 }
 

@@ -2,16 +2,10 @@ import React from 'react';
 import Moment from "react-moment";
 import {markOccurrences, replaceEmojis} from "../Helpers";
 import ChatMessageClass from "../ChatMessageClass";
-import ImageIcon from '@material-ui/icons/Image';
-import VideocamIcon from '@material-ui/icons/Videocam';
-import MicIcon from '@material-ui/icons/Mic';
-import AudiotrackIcon from '@material-ui/icons/Audiotrack';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import NoteIcon from "@material-ui/icons/Note";
 import DoneAll from "@material-ui/icons/DoneAll";
-import SmsIcon from "@material-ui/icons/Sms";
 import DoneIcon from "@material-ui/icons/Done";
 import {CALENDAR_NORMAL} from "../Constants";
+import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 
 function SearchMessageResult(props) {
 
@@ -36,33 +30,7 @@ function SearchMessageResult(props) {
                     </span>
                     }
 
-                    {data.type === ChatMessageClass.TYPE_IMAGE &&
-                    <ImageIcon />
-                    }
-
-                    {data.type === ChatMessageClass.TYPE_VIDEO &&
-                    <VideocamIcon />
-                    }
-
-                    {data.type === ChatMessageClass.TYPE_VOICE &&
-                    <MicIcon />
-                    }
-
-                    {data.type === ChatMessageClass.TYPE_AUDIO &&
-                    <AudiotrackIcon />
-                    }
-
-                    {data.type === ChatMessageClass.TYPE_DOCUMENT &&
-                    <InsertDriveFileIcon />
-                    }
-
-                    {data.type === ChatMessageClass.TYPE_STICKER &&
-                    <NoteIcon />
-                    }
-
-                    {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                    <SmsIcon />
-                    }
+                    <ChatMessageTypeIcon type={data.type} />
                 </span>
 
                 <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), true)}} />

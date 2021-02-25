@@ -16,6 +16,7 @@ export class ChatMessageClass {
     static STATUS_READ = 'read';
 
     constructor(data) {
+        console.log(data);
         const payload = data.waba_payload;
         const statuses = data.waba_statuses;
 
@@ -34,19 +35,19 @@ export class ChatMessageClass {
         this.timestamp = payload.timestamp;
         this.isSeen = data.seen;
         this.imageId = payload.image?.id;
-        this.imageLink = payload.image?.link;
+        this.imageLink = payload.image?.link ?? (this.imageId ? this.generateImageLink() : undefined);
         this.videoId = payload.video?.id;
-        this.videoLink = payload.video?.link;
+        this.videoLink = payload.video?.link ?? (this.videoId ? this.generateVideoLink() : undefined);
         this.documentId = payload.document?.id;
-        this.documentLink = payload.document?.link;
+        this.documentLink = payload.document?.link ?? (this.documentId ? this.generateDocumentLink() : undefined);
         this.documentFileName = payload.document?.filename;
         //this.documentCaption = payload.document?.caption;
         this.voiceId = payload.voice?.id;
-        this.voiceLink = payload.voice?.link;
+        this.voiceLink = payload.voice?.link ?? (this.voiceId ? this.generateVoiceLink() : undefined);
         this.audioId = payload.audio?.id;
-        this.audioLink = payload.audio?.link;
+        this.audioLink = payload.audio?.link ?? (this.audioId ? this.generateAudioLink() : undefined);
         this.stickerId = payload.sticker?.id;
-        this.stickerLink = payload.sticker?.stickerLink;
+        this.stickerLink = payload.sticker?.stickerLink ?? (this.stickerId ? this.generateStickerLink() : undefined);
         this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption ?? payload.document?.caption;
         this.templateName = payload.template?.name;
         this.templateNamespace = payload.template?.namespace;

@@ -9,6 +9,8 @@ import {markOccurrences, replaceEmojis} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
+import ChatMessageClass from "../ChatMessageClass";
+import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 
 function SidebarChat(props) {
 
@@ -110,9 +112,14 @@ function SidebarChat(props) {
                                 {props.unseenMessages[props.chatData.waId]?.unseenMessages} new message(s)
                             </span>
                             :
-                            <span
-                                className="sidebarChat__info__lastMessage__body"
-                                dangerouslySetInnerHTML={{__html: replaceEmojis(props.chatData.lastMessageBody, true) }} />
+                            <span className="sidebarChat__info__lastMessage__body">
+                                {props.chatData.lastMessage?.type === ChatMessageClass.TYPE_TEXT
+                                    ?
+                                    <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.chatData.lastMessageBody, true) }} />
+                                    :
+                                    <ChatMessageTypeIcon type={props.chatData.lastMessage?.type} />
+                                }
+                            </span>
                         }
                     </span>
 

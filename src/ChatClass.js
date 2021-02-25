@@ -13,6 +13,7 @@ class ChatClass {
         this.name = contactPayload.profile.name;
         this.unseenMessages = data.unseen_messages;
         this.lastMessageTimestamp = lastMessagePayload?.timestamp ?? contact?.last_message_timestamp;
+        this.lastMessage = lastMessagePayload;
         this.lastMessageBody = lastMessagePayload?.text?.body;
         this.isExpired = this.checkIfExpired();
     }
