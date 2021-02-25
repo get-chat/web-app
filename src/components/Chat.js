@@ -319,7 +319,7 @@ export default function Chat(props) {
             }, source.token)
         )
             .then((response) => {
-                //console.log("Messages", response.data);
+                console.log("Messages", response.data);
 
                 const count = response.data.count;
                 const previous = response.data.previous;

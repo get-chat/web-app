@@ -5,7 +5,7 @@ import {Avatar, Fade, IconButton, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig} from "../Helpers";
+import {getConfig, getToken} from "../Helpers";
 import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
@@ -21,6 +21,7 @@ import {
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
 import Moment from "react-moment";
+import ChatMessageClass from "../ChatMessageClass";
 
 function Main() {
 
@@ -131,14 +132,56 @@ function Main() {
         const token2 = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
 
         // WebSocket, consider a separate env variable for ws address
-        const ws = new WebSocket(BASE_URL.replace('https', 'wss'));
+        const ws = new WebSocket('wss://websockets.whatsapp.kondz.io/');
 
         ws.onopen = function (event) {
             console.log('Connected to websocket server.');
+
+            ws.send(JSON.stringify({token: getToken()}));
         }
 
         ws.onmessage = function (event) {
             console.log('New message:', event.data);
+
+            try {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'waba_webhook') {
+                    const wabaPayload = data.waba_payload;
+                    const contacts = wabaPayload?.contacts;
+                    const messages = wabaPayload?.messages;
+
+                    if (contacts && messages) {
+                        // Prepare contacts
+                        const preparedContacts = {};
+                        contacts.forEach((contact) => {
+                            preparedContacts[contact.wa_id] = {
+                                waId: contact.wa_id,
+                                profile: contact.profile
+                            }
+                        });
+
+                        // Prepare messages and match with related contacts
+                        const preparedMessages = {};
+                        messages.forEach((message) => {
+                            const msgData = {
+                                contact: preparedContacts[message.from],
+                                customer_wa_id: message.from,
+                                from_us: false, // This might change later
+                                waba_payload: message,
+                                waba_statuses: {}
+                            };
+
+                            preparedMessages[message.id] = new ChatMessageClass(msgData);
+                        });
+
+                        console.log(preparedMessages);
+                    }
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
         }
 
         return () => {
