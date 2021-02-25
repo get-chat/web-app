@@ -75,7 +75,7 @@ export default function Chat(props) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
                 if (event.target.parentNode.id === "chat__body") {
                     const {currentTarget: target} = event;
-                    target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
+                    target.scroll({top: target.scrollHeight - target.offsetHeight - SCROLL_BOTTOM_OFFSET});
                 }
             });
         }
