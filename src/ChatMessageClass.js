@@ -16,7 +16,6 @@ export class ChatMessageClass {
     static STATUS_READ = 'read';
 
     constructor(data) {
-        console.log(data);
         const payload = data.waba_payload;
         const statuses = data.waba_statuses;
 

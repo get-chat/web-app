@@ -217,7 +217,6 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedMessages) > 0) {
-                    console.log(preparedMessages);
                     setMessages(prevState => {
                         return {...prevState, ...preparedMessages};
                     });
