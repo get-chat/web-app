@@ -118,11 +118,9 @@ function SidebarChat(props) {
 
                     {props.chatData.isExpired
                         ?
-                        <p className="sidebarChat__info__expired">Expired</p>
+                        <span className="sidebarChat__info__expired">Expired</span>
                         :
-                        <p className="sidebarChat__info__timeLeft">
-                            {timeLeft} left
-                        </p>
+                        <span className="sidebarChat__info__timeLeft">{timeLeft} left</span>
                     }
 
                 </div>
