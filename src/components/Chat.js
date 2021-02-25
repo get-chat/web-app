@@ -57,6 +57,8 @@ export default function Chat(props) {
 
     const [isAtBottom, setAtBottom] = useState(false);
 
+    const [lastMessageId, setLastMessageId] = useState();
+
     const {waId} = useParams();
 
     let cancelToken;
@@ -205,7 +207,7 @@ export default function Chat(props) {
     useEffect(() => {
 
         const onNewMessages = function (msg, data) {
-            if (data && isLoaded && isAtBottom) {
+            if (data && isLoaded) {
                 const preparedMessages = {};
                 Object.entries(data).forEach((message) => {
                     const msgId = message[0];
@@ -217,9 +219,19 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedMessages) > 0) {
-                    setMessages(prevState => {
-                        return {...prevState, ...preparedMessages};
-                    });
+                    const lastMessage = getLastObject(preparedMessages);
+
+                    if (isAtBottom) {
+                        setMessages(prevState => {
+                            return {...prevState, ...preparedMessages};
+                        });
+
+                        const lastMessageTimestamp = lastMessage.timestamp;
+                        markAsSeen(lastMessageTimestamp);
+                    }
+
+                    // Update last message id
+                    setLastMessageId(lastMessage.id);
                 }
             }
         }
@@ -230,6 +242,13 @@ export default function Chat(props) {
             PubSub.unsubscribe(token);
         }
     }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isAtBottom]);
+
+    useEffect(() => {
+        const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
+        console.log("Has newer to load:", hasNewerToLoad);
+        setAtBottom(!hasNewerToLoad);
+
+    }, [messages, lastMessageId]);
 
     /*useEffect(() => {
         // Scrolling to bottom on initial templates load
@@ -325,7 +344,9 @@ export default function Chat(props) {
 
                 // Contact information is loaded, now load messages
                 if (loadMessages !== undefined && loadMessages === true) {
-                    getMessages();
+                    getMessages(function (preparedMessages) {
+                        setLastMessageId(getLastObject(preparedMessages)?.id);
+                    });
                 }
             })
             .catch((error) => {
@@ -348,10 +369,15 @@ export default function Chat(props) {
             }, source.token)
         )
             .then((response) => {
-                //console.log("Messages", response.data);
+                console.log("Messages", response.data);
+                //console.log("Count", response.data.count);
+                //console.log("Next", response.data.next);
+                //console.log("Previous", response.data.previous);
+                //console.log("Before", beforeTime);
+                //console.log("Since", sinceTime);
 
                 const count = response.data.count;
-                const previous = response.data.previous;
+                //const previous = response.data.previous;
                 const next = response.data.next;
 
                 if (sinceTime && isInitialWithSinceTime === true) {
@@ -361,12 +387,6 @@ export default function Chat(props) {
                         return false;
                     }
                 }
-
-                const hasNewerToLoad = previous != null && typeof previous !== typeof undefined;
-
-                console.log("Has newer to load:", hasNewerToLoad);
-
-                setAtBottom(!hasNewerToLoad);
 
                 const preparedMessages = {};
                 response.data.results.reverse().forEach((message) => {
@@ -422,7 +442,7 @@ export default function Chat(props) {
                 // Promise
                 if (callback) {
                     setTimeout(function () {
-                        callback();
+                        callback(preparedMessages);
                     }, 50);
                 }
 
