@@ -14,7 +14,8 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
-    BASE_URL, CALENDAR_NORMAL,
+    BASE_URL,
+    CALENDAR_NORMAL,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
