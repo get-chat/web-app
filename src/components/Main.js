@@ -14,7 +14,7 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
-    BASE_URL,
+    BASE_URL, CALENDAR_NORMAL,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
@@ -41,13 +41,6 @@ function Main() {
     const [chosenContact, setChosenContact] = useState();
 
     const avatarClasses = avatarStyles();
-
-    const calendarStrings = {
-        lastDay: '[Yesterday at] LT',
-        sameDay: '[Today at] LT',
-        lastWeek: 'dddd [at] LT',
-        sameElse: 'MMMM d, yyyy'
-    };
 
     const displayError = (error) => {
         if (!axios.isCancel(error)) {
@@ -221,7 +214,7 @@ function Main() {
                         <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
                         <div className="app_imagePreview__header__senderInfo">
                             <h3>{chatMessageToPreview.senderName}</h3>
-                            <span><Moment calendar={calendarStrings} date={chatMessageToPreview.timestamp} unix /></span>
+                            <span><Moment calendar={CALENDAR_NORMAL} date={chatMessageToPreview.timestamp} unix /></span>
                         </div>
 
                         <IconButton className="app__imagePreview__close" onClick={() => hideImageOrVideoPreview()}>

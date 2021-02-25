@@ -1,14 +1,8 @@
 import React from "react";
 import Moment from "react-moment";
+import {CALENDAR_SHORT_DAYS} from "../Constants";
 
 function MessageDateIndicator(props) {
-
-    const calendarStrings = {
-        lastDay: '[Yesterday]',
-        sameDay: '[Today]',
-        lastWeek: 'dddd',
-        sameElse: 'MMMM d, yyyy'
-    };
 
     return (
         <div className="chat__message__dateContainer">
@@ -17,7 +11,7 @@ function MessageDateIndicator(props) {
                     ?
                     <span dangerouslySetInnerHTML={{__html: props.text}} />
                     :
-                    <Moment calendar={calendarStrings} date={props.timestamp} unix />
+                    <Moment calendar={CALENDAR_SHORT_DAYS} date={props.timestamp} unix />
                 }
             </span>
         </div>

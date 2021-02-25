@@ -11,22 +11,16 @@ import NoteIcon from "@material-ui/icons/Note";
 import DoneAll from "@material-ui/icons/DoneAll";
 import SmsIcon from "@material-ui/icons/Sms";
 import DoneIcon from "@material-ui/icons/Done";
+import {CALENDAR_NORMAL} from "../Constants";
 
 function SearchMessageResult(props) {
 
     const data = props.messageData;
 
-    const calendarStrings = {
-        lastDay: '[Yesterday at] LT',
-        sameDay: '[Today at] LT',
-        lastWeek: 'dddd [at] LT',
-        sameElse: 'MMMM d, yyyy'
-    };
-
     return(
         <div className="searchResult__message" onClick={() => props.onClick(data)}>
             <div className="searchResult__message__header">
-                <Moment unix calendar={calendarStrings} date={data.timestamp} />
+                <Moment unix calendar={CALENDAR_NORMAL} date={data.timestamp} />
             </div>
             <div className="searchResult__message__body">
 

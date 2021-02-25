@@ -18,3 +18,24 @@ export const ATTACHMENT_TYPE_AUDIO = 'audio';
 export const ATTACHMENT_TYPE_DOCUMENT = 'document';
 
 export const EMPTY_IMAGE_BASE64 = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+export const CALENDAR_NORMAL = {
+    lastDay: '[Yesterday at] LT',
+    sameDay: '[Today at] LT',
+    lastWeek: 'dddd [at] LT',
+    sameElse: 'MMMM d, yyyy'
+};
+
+export const CALENDAR_SHORT = {
+    lastDay: '[Yesterday]',
+    sameDay: 'LT',
+    lastWeek: 'dddd',
+    sameElse: 'MMM d, yyyy'
+};
+
+export const CALENDAR_SHORT_DAYS = {
+    lastDay: '[Yesterday]',
+    sameDay: '[Today]',
+    lastWeek: 'dddd',
+    sameElse: 'MMMM d, yyyy'
+};

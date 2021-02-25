@@ -8,7 +8,7 @@ import moment from "moment";
 import {markOccurrences, replaceEmojis} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_DROPPED_FILES} from "../Constants";
+import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
 
 function SidebarChat(props) {
 
@@ -17,13 +17,6 @@ function SidebarChat(props) {
     const [timeLeft, setTimeLeft] = useState();
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
-
-    const calendarStrings = {
-        lastDay: '[Yesterday]',
-        sameDay: 'LT',
-        lastWeek: 'dddd',
-        sameElse: 'MMM d, yyyy'
-    };
 
     useEffect(() => {
 
@@ -106,7 +99,7 @@ function SidebarChat(props) {
                         <Moment
                             className="sidebarChat__info__nameWrapper__lastMessageDate"
                             date={props.chatData.lastMessageTimestamp}
-                            calendar={calendarStrings}
+                            calendar={CALENDAR_SHORT}
                             unix />
                     </div>
 
