@@ -124,6 +124,10 @@ const getLastObject = (jsonObject) => {
     return jsonObject[Object.keys(jsonObject)[Object.keys(jsonObject).length - 1]];
 }
 
+const getObjectByIndex = (jsonObject, index) => {
+    return jsonObject[Object.keys(jsonObject)[index]];
+}
+
 const getLastMessageAndExtractTimestamp = (messagesObject) => {
     const last = getLastObject(messagesObject);
     return last ? parseInt(last.timestamp) : -1;
@@ -169,6 +173,7 @@ export {
     markOccurrences,
     getFirstObject,
     getLastObject,
+    getObjectByIndex,
     getLastMessageAndExtractTimestamp,
     getObjLength,
     getSelectionHtml

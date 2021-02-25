@@ -98,8 +98,11 @@
     color: white!important;
 }
 
-.previewSendMedia__footer__thumbnail {
+.previewSendMedia__footer__thumbnailOuter {
     position: relative;
+}
+
+.previewSendMedia__footer__thumbnail {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -141,12 +144,16 @@
 }
 
 .previewSendMedia__footer__thumbnail__delete {
-    display: none;
+    display: none!important;
     background-color: rgba(0, 0, 0, 0.2)!important;
     position: absolute!important;
-    top: 0;
-    right: 0;
+    top: 8px;
+    right: 8px;
     padding: 2px!important;
+}
+
+.previewSendMedia__footer__thumbnailOuter:hover .previewSendMedia__footer__thumbnail__delete {
+    display: initial!important;
 }
 
 .previewSendMedia__footer__thumbnail__delete:hover {

@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import '../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
 import {ButtonBase, IconButton, TextField} from "@material-ui/core";
-import {getLastObject, getObjLength} from "../Helpers";
+import {getFirstObject, getLastObject, getObjLength} from "../Helpers";
 import Send from "@material-ui/icons/Send";
 import AddIcon from '@material-ui/icons/Add';
 import {
@@ -38,8 +38,33 @@ function PreviewSendMedia(props) {
     }
 
     const changePreview = (index) => {
-        if (index >= 0 && getObjLength(data) > index) {
+        if (index >= 0 && data[index] !== undefined) {
             setChosenFile(data[index]);
+        }
+    }
+
+    const deleteByIndex = (index) => {
+        const dataSize = getObjLength(data);
+        if (index >= 0 && data[index] !== undefined) {
+            if (dataSize === 1) {
+                props.setPreviewSendMediaVisible(false);
+            } else {
+                let nextState = {};
+                setData(prevState => {
+                    delete prevState[index];
+                    nextState = {...{}, ...prevState};
+                    return nextState;
+                });
+
+                if (chosenFile && chosenFile.key === index) {
+                    changePreview(getFirstObject(nextState).key);
+                }
+
+                setCaptions(prevState => {
+                    delete prevState[index];
+                    return prevState;
+                });
+            }
         }
     }
 
@@ -207,35 +232,37 @@ function PreviewSendMedia(props) {
                 <div className="previewSendMedia__footer__inner">
                     { Object.entries(data).map((file) => {
                         return (
-                            <span key={file[0]}
-                                  className={"previewSendMedia__footer__thumbnail" + (chosenFile === file[1] ? " chosenFile" : "")}
-                                  onClick={() => changePreview(file[0])}>
+                            <span key={file[0]} className="previewSendMedia__footer__thumbnailOuter">
+                                <span
+                                    className={"previewSendMedia__footer__thumbnail" + (chosenFile === file[1] ? " chosenFile" : "")}
+                                    onClick={() => changePreview(file[0])}>
 
-                                {(file[1].attachmentType === ATTACHMENT_TYPE_IMAGE || file[1].attachmentType === ATTACHMENT_TYPE_VIDEO) &&
-                                <img
-                                    className="previewSendMedia__footer__thumbnail__image"
-                                    src={file[1].attachmentType === ATTACHMENT_TYPE_IMAGE ? file[1].fileURL : EMPTY_IMAGE_BASE64}
-                                    alt="Thumbnail"
-                                />
-                                }
+                                    {(file[1].attachmentType === ATTACHMENT_TYPE_IMAGE || file[1].attachmentType === ATTACHMENT_TYPE_VIDEO) &&
+                                    <img
+                                        className="previewSendMedia__footer__thumbnail__image"
+                                        src={file[1].attachmentType === ATTACHMENT_TYPE_IMAGE ? file[1].fileURL : EMPTY_IMAGE_BASE64}
+                                        alt="Thumbnail"
+                                    />
+                                    }
 
-                                {(file[1].attachmentType === ATTACHMENT_TYPE_DOCUMENT) &&
-                                <span className="previewSendMedia__footer__thumbnail__iconWrapper">
-                                    <InsertDriveFileIcon />
+                                    {(file[1].attachmentType === ATTACHMENT_TYPE_DOCUMENT) &&
+                                    <span className="previewSendMedia__footer__thumbnail__iconWrapper">
+                                        <InsertDriveFileIcon />
+                                    </span>
+                                    }
+
+                                    {(file[1].attachmentType === ATTACHMENT_TYPE_AUDIO) &&
+                                    <span className="previewSendMedia__footer__thumbnail__iconWrapper">
+                                        <AudiotrackIcon />
+                                    </span>
+                                    }
                                 </span>
-                                }
 
-                                {(file[1].attachmentType === ATTACHMENT_TYPE_AUDIO) &&
-                                <span className="previewSendMedia__footer__thumbnail__iconWrapper">
-                                    <AudiotrackIcon />
-                                </span>
-                                }
-
-                                <IconButton className="previewSendMedia__footer__thumbnail__delete">
+                                <IconButton onClick={() => deleteByIndex(file[0])} className="previewSendMedia__footer__thumbnail__delete">
                                     <CloseIcon />
                                 </IconButton>
 
-                        </span>
+                            </span>
                         )
                     }) }
 
