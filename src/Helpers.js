@@ -171,6 +171,15 @@ const getBaseURL = () => {
     return windowLocation.protocol + "//" + windowLocation.host + "/";
 }
 
+const getWebSocketURL = () => {
+    const baseURL = getBaseURL();
+    if (baseURL.includes('localhost')) {
+        return 'wss://websockets.whatsapp.kondz.io/';
+    } else {
+        return baseURL.replace('https://', 'wss://websockets.').replace('http://', 'wss://websockets.');
+    }
+}
+
 export {
     getToken,
     getConfig,
@@ -187,5 +196,6 @@ export {
     extractTimestampFromMessage,
     getObjLength,
     getSelectionHtml,
-    getBaseURL
+    getBaseURL,
+    getWebSocketURL
 };

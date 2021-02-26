@@ -5,7 +5,7 @@ import {Avatar, Fade, IconButton, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getBaseURL, getConfig, getToken} from "../Helpers";
+import {getBaseURL, getConfig, getToken, getWebSocketURL} from "../Helpers";
 import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
@@ -131,18 +131,8 @@ function Main() {
         const token1 = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
         const token2 = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
 
-        console.log(getBaseURL());
-
-        const baseURL = getBaseURL();
-        let webSocketURL;
-        if (baseURL.includes('localhost')) {
-            webSocketURL = 'wss://websockets.whatsapp.kondz.io/';
-        } else {
-            webSocketURL = baseURL.replace('https', 'wss').replace('http', 'wss');
-        }
-
         // WebSocket, consider a separate env variable for ws address
-        const ws = new WebSocket(webSocketURL);
+        const ws = new WebSocket(getWebSocketURL());
 
         ws.onopen = function (event) {
             console.log('Connected to websocket server.');
