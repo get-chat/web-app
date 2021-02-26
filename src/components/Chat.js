@@ -329,8 +329,6 @@ export default function Chat(props) {
         // We need to use parent because menu view gets hidden
         setMenuAnchorEl(event.currentTarget.parentElement);
         setOptionsChatMessage(chatMessage);
-
-        console.log(chatMessage.id);
     }
 
     const getContact = (loadMessages) => {
@@ -370,11 +368,6 @@ export default function Chat(props) {
         )
             .then((response) => {
                 console.log("Messages", response.data);
-                //console.log("Count", response.data.count);
-                //console.log("Next", response.data.next);
-                //console.log("Previous", response.data.previous);
-                //console.log("Before", beforeTime);
-                //console.log("Since", sinceTime);
 
                 const count = response.data.count;
                 //const previous = response.data.previous;
