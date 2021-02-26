@@ -166,6 +166,11 @@ const getSelectionHtml = () => {
     return html;
 }
 
+const getBaseURL = () => {
+    const windowLocation = window.location;
+    return windowLocation.protocol + "//" + windowLocation.host + "/";
+}
+
 export {
     getToken,
     getConfig,
@@ -181,5 +186,6 @@ export {
     getLastMessageAndExtractTimestamp,
     extractTimestampFromMessage,
     getObjLength,
-    getSelectionHtml
+    getSelectionHtml,
+    getBaseURL
 };
