@@ -146,7 +146,16 @@ function Main() {
             try {
                 const data = JSON.parse(event.data);
 
-                if (data.type === 'waba_webhook') {
+                if (data.type === 'message' && data.message) {
+                    const preparedMessages = {};
+                    const messageObj = new ChatMessageClass(data.message);
+                    preparedMessages[messageObj.id] = messageObj;
+
+                    PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                }
+
+                // Switched to event type: message
+                /*if (data.type === 'waba_webhook') {
                     const wabaPayload = data.waba_payload;
                     const contacts = wabaPayload?.contacts;
                     const messages = wabaPayload?.messages;
@@ -180,7 +189,7 @@ function Main() {
                         //console.log(preparedMessages);
                         PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                     }
-                }
+                }*/
 
             } catch (error) {
                 console.error(error);
