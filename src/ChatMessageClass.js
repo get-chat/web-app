@@ -19,6 +19,9 @@ export class ChatMessageClass {
         const payload = data.waba_payload;
         const statuses = data.waba_statuses;
 
+        // Temp
+        this.payload = payload;
+
         this.id = payload.id;
         this.to = payload.to;
         this.waId = data.customer_wa_id;
@@ -31,7 +34,7 @@ export class ChatMessageClass {
         this.senderName = this.getSenderName();
         this.initials = this.senderName ? this.senderName[0] : "?";
         this.text = payload.text?.body;
-        this.timestamp = payload.timestamp;
+        this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
         this.isSeen = data.seen;
         this.imageId = payload.image?.id;
         this.imageLink = payload.image?.link ?? (this.imageId ? this.generateImageLink() : undefined);

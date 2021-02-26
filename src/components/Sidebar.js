@@ -6,12 +6,13 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
 import {clearToken, getConfig, getObjLength} from "../Helpers";
-import {BASE_URL} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../ChatClass";
 import UnseenMessageClass from "../UnseenMessageClass";
+import PubSub from "pubsub-js";
 
 function Sidebar(props) {
 
@@ -43,23 +44,82 @@ function Sidebar(props) {
         setAnchorEl(null);
     };
 
+    let cancelToken;
+
     useEffect(() => {
         // Generate a token
-        const cancelToken = axios.CancelToken.source();
+        cancelToken = axios.CancelToken.source();
 
         getChats(cancelToken, true);
 
-        const intervalId = setInterval(() => {
+        /*const intervalId = setInterval(() => {
             getChats(cancelToken);
-        }, 5000);
+        }, 5000);*/
 
         return () => {
             if (cancelToken !== undefined) {
                 cancelToken.cancel("Operation canceled due to new request.");
             }
-            clearInterval(intervalId);
+            //clearInterval(intervalId);
         }
     }, [keyword]);
+
+    useEffect(() => {
+        // New messages
+        const onNewMessages = function (msg, data) {
+            // We don't need to update if chats are filtered
+            if (keyword.trim().length === 0) {
+                let willMakeRequest = false;
+
+                setChats(prevState => {
+                    const nextState = prevState;
+                    let changedAny = false;
+
+                    Object.entries(data).forEach((message) => {
+                        //const msgId = message[0];
+                        const chatMessage = message[1];
+                        const waId = chatMessage.waId;
+
+                        // Chats are ordered by incoming message date
+                        if (!chatMessage.isFromUs) {
+                            if (!nextState.hasOwnProperty(waId)) {
+                                willMakeRequest = true;
+
+                                // Create a chat here
+                                //nextState[waId] = new ChatClass({});
+                            } else {
+                                changedAny = true;
+
+                                // Update existing chat
+                                nextState[waId].setLastMessage(chatMessage.payload);
+                            }
+                        }
+                    });
+
+                    if (changedAny) {
+                        // Sorting
+                        let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
+                        sortedNextState = Object.fromEntries(sortedNextState);
+
+                        return {...{}, ...sortedNextState};
+                    } else {
+                        return prevState;
+                    }
+                });
+
+                // We do this to generate new (missing) chat
+                if (willMakeRequest) {
+                    getChats(cancelToken, false);
+                }
+            }
+        }
+
+        const newChatMessagesEventToken = PubSub.subscribe(EVENT_TOPIC_NEW_CHAT_MESSAGES, onNewMessages);
+
+        return () => {
+            PubSub.unsubscribe(newChatMessagesEventToken);
+        }
+    }, [chats, keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
@@ -76,11 +136,15 @@ function Sidebar(props) {
 
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
+                    console.log(contact);
                     const prepared = new ChatClass(contact);
                     preparedChats[prepared.waId] = prepared;
                 });
 
                 setChats(preparedChats);
+
+                // In case param is undefined
+                isInitial = isInitial === true;
 
                 if (isInitial) {
                     props.setProgress(100);

@@ -8,10 +8,12 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL, EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+    BASE_URL,
+    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
-    EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_NEW_CHAT_MESSAGES
+    EVENT_TOPIC_GO_TO_MSG_ID,
+    EVENT_TOPIC_NEW_CHAT_MESSAGES
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -19,7 +21,6 @@ import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
-import {getPastHoursByTimestamp} from "../DateHelpers";
 import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
 import moment from "moment";
 import PubSub from "pubsub-js";

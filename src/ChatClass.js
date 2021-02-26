@@ -12,10 +12,16 @@ class ChatClass {
         this.initials = contact.initials;
         this.name = contactPayload.profile.name;
         this.unseenMessages = data.unseen_messages;
-        this.lastMessageTimestamp = lastMessagePayload?.timestamp ?? contact?.last_message_timestamp;
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = lastMessagePayload?.text?.body;
+        this.lastMessageTimestamp = parseInt(lastMessagePayload?.timestamp ?? contact?.last_message_timestamp);
         this.isExpired = this.checkIfExpired();
+    }
+
+    setLastMessage(lastMessagePayload) {
+        this.lastMessage = lastMessagePayload;
+        this.lastMessageBody = this.lastMessage?.text?.body;
+        this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
     }
 
     getPastHoursAfterLastMessage() {
