@@ -118,6 +118,9 @@ function Sidebar(props) {
                             preparedUnseenMessages[chatMessageWaId].unseenMessages++;
 
                             setUnseenMessages({...{}, ...preparedUnseenMessages});
+
+                            // Display a notification
+                            props.showNotification("New messages", "You have new messages!");
                         }
                     }
                 });
