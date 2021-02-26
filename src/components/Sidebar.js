@@ -71,41 +71,54 @@ function Sidebar(props) {
             if (keyword.trim().length === 0) {
                 let willMakeRequest = false;
 
-                setChats(prevState => {
-                    const nextState = prevState;
-                    let changedAny = false;
+                const nextState = chats;
+                let changedAny = false;
 
-                    Object.entries(data).forEach((message) => {
-                        //const msgId = message[0];
-                        const chatMessage = message[1];
-                        const waId = chatMessage.waId;
+                Object.entries(data).forEach((message) => {
+                    //const msgId = message[0];
+                    const chatMessage = message[1];
+                    const chatMessageWaId = chatMessage.waId;
 
-                        // Chats are ordered by incoming message date
-                        if (!chatMessage.isFromUs) {
-                            if (!nextState.hasOwnProperty(waId)) {
-                                willMakeRequest = true;
+                    // Chats are ordered by incoming message date
+                    if (!chatMessage.isFromUs) {
+                        if (!nextState.hasOwnProperty(chatMessageWaId)) {
+                            willMakeRequest = true;
 
-                                // Create a chat here
-                                //nextState[waId] = new ChatClass({});
-                            } else {
-                                changedAny = true;
+                            // Create a chat here
+                            //nextState[chatMessageWaId] = new ChatClass({});
+                        } else {
+                            changedAny = true;
 
-                                // Update existing chat
-                                nextState[waId].setLastMessage(chatMessage.payload);
-                            }
+                            // Update existing chat
+                            nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
                         }
-                    });
 
-                    if (changedAny) {
-                        // Sorting
-                        let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
-                        sortedNextState = Object.fromEntries(sortedNextState);
+                        // Unseen
+                        if (waId !== chatMessageWaId) {
+                            const preparedUnseenMessages = unseenMessages;
+                            if (unseenMessages[chatMessageWaId] === undefined) {
+                                const unseenMsg = new UnseenMessageClass({});
+                                unseenMsg.waId = chatMessageWaId;
+                                unseenMsg.unseenMessages = 0;
 
-                        return {...{}, ...sortedNextState};
-                    } else {
-                        return prevState;
+                                preparedUnseenMessages[chatMessageWaId] = unseenMsg;
+                            }
+
+                            // Increase number of unseen messages
+                            preparedUnseenMessages[chatMessageWaId].unseenMessages++;
+
+                            setUnseenMessages({...{}, ...preparedUnseenMessages});
+                        }
                     }
                 });
+
+                if (changedAny) {
+                    // Sorting
+                    let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
+                    sortedNextState = Object.fromEntries(sortedNextState);
+
+                    setChats({...{}, ...sortedNextState});
+                }
 
                 // We do this to generate new (missing) chat
                 if (willMakeRequest) {
@@ -119,7 +132,7 @@ function Sidebar(props) {
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
-    }, [chats, keyword]);
+    }, [waId, chats, unseenMessages, keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
@@ -136,7 +149,6 @@ function Sidebar(props) {
 
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
-                    console.log(contact);
                     const prepared = new ChatClass(contact);
                     preparedChats[prepared.waId] = prepared;
                 });
