@@ -54,7 +54,7 @@
     border-radius: 10px;
     width: fit-content;
     background-color: #ffffff;
-    margin-top: 15px;
+    /*margin-top: 15px;*/
     margin-bottom: 25px;
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
     max-width: 70%;
@@ -178,16 +178,15 @@ a.chat__document:hover {
 }
 
 .chat__name {
-    /*white-space: nowrap;*/
-    position: absolute;
-    top: -15px;
+    display: block;
+    margin: 0 10px;
     font-size: x-small;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.75);
 }
 
-.chat__receiver .chat__name {
-    right: 10px;
+.outgoing .chat__name {
+    text-align: right;
 }
 
 .chat__templateHeader {
