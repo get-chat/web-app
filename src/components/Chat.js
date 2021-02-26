@@ -558,7 +558,7 @@ export default function Chat(props) {
                 .then((response) => {
                     console.log(response.data);
 
-                    getNewMessagesTemp();
+                    //getNewMessagesTemp();
                 })
                 .catch((error) => {
                     // TODO: Handle errors
@@ -607,7 +607,7 @@ export default function Chat(props) {
                 .then((response) => {
                     console.log(response.data);
 
-                    getNewMessagesTemp();
+                    //getNewMessagesTemp();
                 })
                 .catch((error) => {
                     // TODO: Handle errors
@@ -668,7 +668,7 @@ export default function Chat(props) {
                 .then((response) => {
                     console.log(response.data);
 
-                    getNewMessagesTemp();
+                    //getNewMessagesTemp();
 
                     // Send next request
                     callback();
