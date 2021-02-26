@@ -25,6 +25,7 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
+    extractTimestampFromMessage,
     getConfig,
     getFirstObject,
     getLastMessageAndExtractTimestamp,
@@ -226,7 +227,7 @@ export default function Chat(props) {
                             return {...prevState, ...preparedMessages};
                         });
 
-                        const lastMessageTimestamp = lastMessage.timestamp;
+                        const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
                         markAsSeen(lastMessageTimestamp);
                     }
 

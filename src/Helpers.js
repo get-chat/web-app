@@ -130,7 +130,11 @@ const getObjectByIndex = (jsonObject, index) => {
 
 const getLastMessageAndExtractTimestamp = (messagesObject) => {
     const last = getLastObject(messagesObject);
-    return last ? parseInt(last.timestamp) : -1;
+    return extractTimestampFromMessage(last);
+}
+
+const extractTimestampFromMessage = (message) => {
+    return message ? parseInt(message.timestamp) : -1;
 }
 
 export const stringContainsAnyInArray = (string, array) => {
@@ -175,6 +179,7 @@ export {
     getLastObject,
     getObjectByIndex,
     getLastMessageAndExtractTimestamp,
+    extractTimestampFromMessage,
     getObjLength,
     getSelectionHtml
 };
