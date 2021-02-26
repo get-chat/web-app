@@ -140,18 +140,18 @@ function ChatMessage(props) {
                 timestamp={data.timestamp} />
             }
 
-            {props.displaySender &&
+            {(props.displaySender || props.displayDate) &&
             <span className="chat__name">{data.senderName}</span>
             }
 
             {data.type === ChatMessageClass.TYPE_STICKER &&
-            <img className={"chat__media chat__sticker" + (data.isFromUs === true ? " outgoing" : "")} src={data.generateStickerLink()} alt={data.caption} />
+            <img className="chat__media chat__sticker" src={data.generateStickerLink()} alt={data.caption} />
             }
 
             <div className={"chat__message"
                 + (data.hasMediaToPreview() ? " hasMedia" : "")
                 + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "") + " chat__receiver" : "")
-                + (!props.displaySender ? " hiddenSender" : "")
+                + (!props.displaySender && !props.displayDate ? " hiddenSender" : "")
                 + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>

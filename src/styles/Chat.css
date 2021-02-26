@@ -94,7 +94,7 @@ video.chat__media {
     cursor: default!important;
 }
 
-.chat__sticker.outgoing {
+.outgoing .chat__sticker {
     margin-left: auto;
 }
 
