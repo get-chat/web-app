@@ -351,20 +351,9 @@ export default function Chat(props) {
         // Subscribe for scrolling to message event
         const token = PubSub.subscribe(EVENT_TOPIC_GO_TO_MSG_ID, onGoToMessageId);
 
-        /*let intervalId = 0;
-        if (getObjLength(messages) > 0) {
-            intervalId = setInterval(() => {
-                getNewMessagesTemp();
-            }, 2500);
-
-            console.log("Interval is set");
-        }*/
-
         return () => {
             // Unsubscribe
             PubSub.unsubscribe(token);
-
-            //clearInterval(intervalId);
         }
     }, [messages, isAtBottom]);
 
@@ -529,8 +518,6 @@ export default function Chat(props) {
             }, getConfig())
                 .then((response) => {
                     console.log(response.data);
-
-                    //getNewMessagesTemp();
                 })
                 .catch((error) => {
                     // TODO: Handle errors
@@ -578,8 +565,6 @@ export default function Chat(props) {
             }, getConfig())
                 .then((response) => {
                     console.log(response.data);
-
-                    //getNewMessagesTemp();
                 })
                 .catch((error) => {
                     // TODO: Handle errors
@@ -639,8 +624,6 @@ export default function Chat(props) {
             axios.post( `${BASE_URL}messages/`, body, getConfig())
                 .then((response) => {
                     console.log(response.data);
-
-                    //getNewMessagesTemp();
 
                     // Send next request
                     callback();
