@@ -35,7 +35,7 @@ import {
 import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
 
-const SCROLL_BOTTOM_OFFSET = 15;
+const SCROLL_OFFSET = 15;
 
 export default function Chat(props) {
 
@@ -95,7 +95,7 @@ export default function Chat(props) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
                 if (event.target.parentNode.id === "chat__body") {
                     const {currentTarget: target} = event;
-                    target.scroll({top: target.scrollHeight - target.offsetHeight - SCROLL_BOTTOM_OFFSET});
+                    target.scroll({top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET});
                 }
             });
         }
@@ -254,13 +254,28 @@ export default function Chat(props) {
         // Scrolling to bottom on initial templates load
         if (!isLoadingTemplates) {
             const target = messagesContainer.current;
-            target.scroll({top: target.scrollHeight - SCROLL_BOTTOM_OFFSET});
+            target.scroll({top: target.scrollHeight - SCROLL_OFFSET});
         }
     }, [isLoadingTemplates]);*/
 
     const scrollToChild = (msgId) => {
-        const child = messagesContainer.current.querySelector('#message_' + msgId);
-        child.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(function () {
+            const child = messagesContainer.current.querySelector('#message_' + msgId);
+            let _offset = 25;
+            if (child) {
+                let targetOffsetTop = child.offsetTop - _offset;
+                if (targetOffsetTop < SCROLL_OFFSET) targetOffsetTop = SCROLL_OFFSET;
+                messagesContainer.current.scroll({top: targetOffsetTop, behavior: "smooth"});
+
+                child.classList.add('blink');
+
+                setTimeout(function () {
+                    if (child) {
+                        child.classList.remove('blink');
+                    }
+                }, 1000);
+            }
+        }, 100);
     }
 
     useEffect(() => {
@@ -409,12 +424,12 @@ export default function Chat(props) {
                         messagesContainer.current.scrollTop = prevScrollTop;
                     } else {
                         const nextScrollHeight = messagesContainer.current.scrollHeight;
-                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
+                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_OFFSET;
                     }*/
 
                     if (!sinceTime || replaceAll) {
                         const nextScrollHeight = messagesContainer.current.scrollHeight;
-                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_BOTTOM_OFFSET;
+                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_OFFSET;
                     } else if (sinceTime) {
                         messagesContainer.current.scrollTop = prevScrollTop;
                     }

@@ -58,6 +58,11 @@
     margin-bottom: 25px;
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
     max-width: 70%;
+    transition: opacity 1s ease;
+}
+
+.blink .chat__message {
+    opacity: 0.3;
 }
 
 .chat__message.hiddenSender {
