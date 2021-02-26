@@ -8,6 +8,7 @@ export const EVENT_TOPIC_EMOJI_PICKER_VISIBILITY = "emoji_picker_visibility";
 export const EVENT_TOPIC_DROPPED_FILES = "dropped_files";
 export const EVENT_TOPIC_RELOAD_PREVIEW = "reload_preview";
 export const EVENT_TOPIC_NEW_CHAT_MESSAGES = "new_chat_messages";
+export const EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE = "chat_message_status_change";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;

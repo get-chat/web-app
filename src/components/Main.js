@@ -16,7 +16,7 @@ import {Alert} from "@material-ui/lab";
 import {
     BASE_URL,
     CALENDAR_NORMAL,
-    EVENT_TOPIC_CHAT_MESSAGE,
+    EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
@@ -154,42 +154,33 @@ function Main() {
                     PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                 }
 
-                // Switched to event type: message
-                /*if (data.type === 'waba_webhook') {
+                if (data.type === 'waba_webhook') {
                     const wabaPayload = data.waba_payload;
-                    const contacts = wabaPayload?.contacts;
-                    const messages = wabaPayload?.messages;
+                    const statuses = wabaPayload?.statuses;
 
-                    if (contacts && messages) {
-                        // Prepare contacts
-                        const preparedContacts = {};
-                        contacts.forEach((contact) => {
-                            preparedContacts[contact.wa_id] = {
-                                wa_id: contact.wa_id,
-                                waba_payload: {
-                                    profile: contact.profile
-                                }
+                    if (statuses) {
+                        const preparedStatuses = {};
+                        statuses.forEach((statusObj) => {
+                            if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
+                                preparedStatuses[statusObj.id] = {};
+                            }
+
+                            if (statusObj.status === 'sent') {
+                                preparedStatuses[statusObj.id].sentTimestamp = statusObj.timestamp;
+                            }
+
+                            if (statusObj.status === 'delivered') {
+                                preparedStatuses[statusObj.id].deliveredTimestamp = statusObj.timestamp;
+                            }
+
+                            if (statusObj.status === 'read') {
+                                preparedStatuses[statusObj.id].readTimestamp = statusObj.timestamp;
                             }
                         });
 
-                        // Prepare messages and match with related contacts
-                        const preparedMessages = {};
-                        messages.forEach((message) => {
-                            const msgData = {
-                                contact: preparedContacts[message.from],
-                                customer_wa_id: message.from,
-                                from_us: false, // This might change later
-                                waba_payload: message,
-                                waba_statuses: {}
-                            };
-
-                            preparedMessages[message.id] = new ChatMessageClass(msgData);
-                        });
-
-                        //console.log(preparedMessages);
-                        PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                        PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, preparedStatuses);
                     }
-                }*/
+                }
 
             } catch (error) {
                 console.error(error);

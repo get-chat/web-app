@@ -8,7 +8,7 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL,
+    BASE_URL, EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_NEW_CHAT_MESSAGES
@@ -207,6 +207,7 @@ export default function Chat(props) {
 
     useEffect(() => {
 
+        // New messages
         const onNewMessages = function (msg, data) {
             if (data && isLoaded) {
                 const preparedMessages = {};
@@ -237,10 +238,53 @@ export default function Chat(props) {
             }
         }
 
-        const token = PubSub.subscribe(EVENT_TOPIC_NEW_CHAT_MESSAGES, onNewMessages);
+        const newChatMessagesEventToken = PubSub.subscribe(EVENT_TOPIC_NEW_CHAT_MESSAGES, onNewMessages);
+
+        // Status changes
+        const onMessageStatusChange = function (msg, data) {
+            if (data && isLoaded) {
+
+                // TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
+                setMessages(prevState => {
+                    const newState = prevState;
+                    let changedAny = false;
+
+                    Object.entries(data).forEach((status) => {
+                        const statusMsgId = status[0];
+                        const statusObj = status[1];
+
+                        if (newState[statusMsgId]) {
+                            if (statusObj.sentTimestamp) {
+                                changedAny = true;
+                                newState[statusMsgId].sentTimestamp = statusObj.sentTimestamp;
+                            }
+
+                            if (statusObj.deliveredTimestamp) {
+                                changedAny = true;
+                                newState[statusMsgId].deliveredTimestamp = statusObj.deliveredTimestamp;
+                            }
+
+                            if (statusObj.readTimestamp) {
+                                changedAny = true;
+                                newState[statusMsgId].readTimestamp = statusObj.readTimestamp;
+                            }
+                        }
+                    });
+
+                    if (changedAny) {
+                        return {...{}, ...newState};
+                    } else {
+                        return prevState;
+                    }
+                });
+            }
+        }
+
+        const chatMessageStatusChangeEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, onMessageStatusChange);
 
         return () => {
-            PubSub.unsubscribe(token);
+            PubSub.unsubscribe(newChatMessagesEventToken);
+            PubSub.unsubscribe(chatMessageStatusChangeEventToken);
         }
     }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isAtBottom]);
 
