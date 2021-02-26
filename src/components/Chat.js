@@ -12,7 +12,7 @@ import {
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
-    EVENT_TOPIC_GO_TO_MSG_ID,
+    EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_MARKED_AS_SEEN,
     EVENT_TOPIC_NEW_CHAT_MESSAGES
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
@@ -584,6 +584,8 @@ export default function Chat(props) {
         }, getConfig(undefined, source.token))
             .then((response) => {
                 //console.log(response.data);
+
+                PubSub.publish(EVENT_TOPIC_MARKED_AS_SEEN, waId);
             })
             .catch((error) => {
                 // TODO: Handle errors

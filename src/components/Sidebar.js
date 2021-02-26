@@ -6,7 +6,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
 import {clearToken, getConfig, getObjLength} from "../Helpers";
-import {BASE_URL, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_MARKED_AS_SEEN, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
@@ -52,17 +52,31 @@ function Sidebar(props) {
 
         getChats(cancelToken, true);
 
-        /*const intervalId = setInterval(() => {
-            getChats(cancelToken);
-        }, 5000);*/
-
         return () => {
             if (cancelToken !== undefined) {
                 cancelToken.cancel("Operation canceled due to new request.");
             }
-            //clearInterval(intervalId);
         }
     }, [keyword]);
+
+    useEffect(() => {
+        const onMarkedAsSeen = function (msg, data) {
+            const relatedWaId = data;
+
+            setUnseenMessages(prevState => {
+                const nextState = prevState;
+                delete nextState[relatedWaId];
+
+                return {...{}, ...nextState};
+            });
+        }
+
+        const markedAsSeenEventToken = PubSub.subscribe(EVENT_TOPIC_MARKED_AS_SEEN, onMarkedAsSeen);
+
+        return () => {
+            PubSub.unsubscribe(markedAsSeenEventToken);
+        }
+    }, [unseenMessages]);
 
     useEffect(() => {
         // New messages
@@ -97,11 +111,7 @@ function Sidebar(props) {
                         if (waId !== chatMessageWaId) {
                             const preparedUnseenMessages = unseenMessages;
                             if (unseenMessages[chatMessageWaId] === undefined) {
-                                const unseenMsg = new UnseenMessageClass({});
-                                unseenMsg.waId = chatMessageWaId;
-                                unseenMsg.unseenMessages = 0;
-
-                                preparedUnseenMessages[chatMessageWaId] = unseenMsg;
+                                preparedUnseenMessages[chatMessageWaId] = new UnseenMessageClass(chatMessageWaId, 0);
                             }
 
                             // Increase number of unseen messages
@@ -166,7 +176,9 @@ function Sidebar(props) {
 
                 const preparedUnseenMessages = {};
                 response.data.results.forEach((unseenMessage) => {
-                    const prepared = new UnseenMessageClass(unseenMessage);
+                    const unseenWaId = unseenMessage.contact.waba_payload.wa_id;
+                    const unseenAmount = unseenMessage.unseen_messages;
+                    const prepared = new UnseenMessageClass(unseenWaId, unseenAmount);
                     preparedUnseenMessages[prepared.waId] = prepared;
                 });
 
