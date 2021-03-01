@@ -28,7 +28,17 @@ function VoiceRecord(props) {
 
     const requestMicrophonePermission = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({audio: true})
+
+            const constraints = {
+                audio: {
+                    sampleRate: 48000,
+                    channelCount: 1,
+                    volume: 1.0
+                },
+                video: false
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
                 .then(function (stream) {
                     startVoiceRecord(stream);
                 })
