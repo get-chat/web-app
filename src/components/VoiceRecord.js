@@ -33,7 +33,8 @@ function VoiceRecord(props) {
                 audio: {
                     sampleRate: 48000,
                     channelCount: 1,
-                    volume: 1.0
+                    volume: 1.0,
+                    noiseSuppression: true
                 },
                 video: false
             };

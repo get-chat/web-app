@@ -29,7 +29,13 @@ class VoiceRecorder {
         const _this = this;
 
         this.mediaRecorder.onstop = function (event) {
-            const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
+            let contentType = 'audio/ogg; codecs=opus';
+
+            /*if (!MediaRecorder.isTypeSupported(contentType)) {
+                contentType = '';
+            }*/
+
+            const blob = new Blob(chunks, { 'type': contentType });
             chunks = [];
 
             const file = new File([blob], 'voice', { type: blob.type });
