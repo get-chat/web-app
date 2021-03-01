@@ -816,9 +816,9 @@ export default function Chat(props) {
                 :
                 <ChatFooter
                     input={input}
+                    setInput={setInput}
                     sendMessage={(e) => sendMessage(e)}
                     setSelectedFiles={setSelectedFiles}
-                    setInput={setInput}
                     setTemplateMessagesVisible={setTemplateMessagesVisible}
                     accept={accept}
                     setAccept={setAccept} />

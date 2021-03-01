@@ -233,17 +233,20 @@ function ChatFooter(props) {
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
 
-                <Tooltip title="Send" placement="top">
-                    <IconButton onClick={props.sendMessage}>
-                        <Send />
-                    </IconButton>
-                </Tooltip>
-
-                <Tooltip title="Voice" placement="top">
-                    <IconButton onClick={requestMicrophonePermission}>
-                        <MicIcon />
-                    </IconButton>
-                </Tooltip>
+                {(props.input && props.input.length > 0)
+                    ?
+                    <Tooltip title="Send" placement="top">
+                        <IconButton onClick={props.sendMessage}>
+                            <Send/>
+                        </IconButton>
+                    </Tooltip>
+                    :
+                    <Tooltip title="Voice" placement="top">
+                        <IconButton onClick={requestMicrophonePermission}>
+                            <MicIcon/>
+                        </IconButton>
+                    </Tooltip>
+                }
             </div>
         </div>
     )
