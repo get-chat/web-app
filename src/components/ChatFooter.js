@@ -10,13 +10,17 @@ import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
-import {EMOJI_SET, EMOJI_SHEET_SIZE, EMPTY_IMAGE_BASE64, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
+import {
+    EMOJI_SET,
+    EMOJI_SHEET_SIZE,
+    EMPTY_IMAGE_BASE64,
+    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+    EVENT_TOPIC_REQUEST_MIC_PERMISSION
+} from "../Constants";
 import PubSub from "pubsub-js";
 import FileInput from "./FileInput";
-import {displaySeconds, getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
-import VoiceRecorder from "../VoiceRecorder";
-import DoneIcon from "@material-ui/icons/Done";
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
+import VoiceRecord from "./VoiceRecord";
 
 function ChatFooter(props) {
 
@@ -25,9 +29,8 @@ function ChatFooter(props) {
 
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
-    const voiceRecorder = useRef(new VoiceRecorder());
+
     const [isRecording, setRecording] = useState(false);
-    const [timer, setTimer] = useState(0);
 
     const handleAttachmentClick = (acceptValue) => {
         props.setAccept(acceptValue);
@@ -141,63 +144,6 @@ function ChatFooter(props) {
         }
     }
 
-    const requestMicrophonePermission = () => {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({audio: true})
-                .then(function (stream) {
-                    startVoiceRecord(stream);
-                })
-                .catch(function (err) {
-                    console.log('Permission denied');
-                    // TODO: Display information
-                });
-        } else {
-            console.log('Not supported on your browser.');
-        }
-    }
-
-    const startVoiceRecord = (stream) => {
-        // If it is already recording, return
-        if (voiceRecorder.current?.isRecording()) return;
-
-        let intervalId;
-
-        // Start recording
-        voiceRecorder.current?.start(
-            stream,
-            function () {
-                setRecording(true);
-
-                // Update timer every second
-                intervalId = setInterval(function () {
-                    setTimer(prevState => prevState + 1);
-                }, 1000);
-            },
-            function (audioURL) {
-                setRecording(false);
-
-                console.log(audioURL);
-
-                // Stop timer
-                clearInterval(intervalId);
-                setTimer(0);
-            }
-        );
-    }
-
-    const stopVoiceRecord = () => {
-        voiceRecorder.current?.stop();
-    }
-
-    const sendVoiceRecord = () => {
-        stopVoiceRecord();
-
-        setTimeout(function () {
-            const audioURL = voiceRecorder.current.lastAudioURL;
-            console.log('Send: ' + audioURL);
-        }, 1000);
-    }
-
     const hasInput = () => {
         return props.input && props.input.length > 0;
     }
@@ -298,35 +244,25 @@ function ChatFooter(props) {
                 </form>
 
                 {hasInput() &&
-                    <Tooltip title="Send" placement="top">
-                        <IconButton onClick={props.sendMessage}>
-                            <Send/>
-                        </IconButton>
-                    </Tooltip>
+                <Tooltip title="Send" placement="top">
+                    <IconButton onClick={props.sendMessage}>
+                        <Send/>
+                    </IconButton>
+                </Tooltip>
                 }
 
                 {(!hasInput() && !isRecording) &&
-                    <Tooltip title="Voice" placement="top">
-                    <IconButton onClick={requestMicrophonePermission}>
-                    <MicIcon/>
+                <Tooltip title="Voice" placement="top">
+                    <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, true)}>
+                        <MicIcon/>
                     </IconButton>
-                    </Tooltip>
+                </Tooltip>
                 }
 
-                {isRecording &&
-                <div className="voiceRecord">
-                    <IconButton onClick={stopVoiceRecord} className="voiceRecord__cancelButton">
-                        <CloseIcon />
-                    </IconButton>
-
-                    <FiberManualRecordIcon className="voiceRecord__recordIcon" />
-                    <span className="voiceRecord__timer">{ displaySeconds(timer) }</span>
-
-                    <IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
-                        <DoneIcon />
-                    </IconButton>
+                <div className={!isRecording ? 'hidden' : ''}>
+                    <VoiceRecord
+                        setRecording={setRecording}/>
                 </div>
-                }
             </div>
         </div>
     )
