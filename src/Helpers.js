@@ -5,11 +5,11 @@ import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
-const getToken = () => {
+export const getToken = () => {
     return localStorage.getItem("token");
 }
 
-const getConfig = (params, cancelToken) => {
+export const getConfig = (params, cancelToken) => {
     return {
         params,
         headers: {
@@ -23,15 +23,15 @@ const getConfig = (params, cancelToken) => {
 
 const STORAGE_TAG_TOKEN = "token";
 
-const setToken = (token) => {
+export const setToken = (token) => {
     localStorage.setItem(STORAGE_TAG_TOKEN, token);
 }
 
-const clearToken = () => {
+export const clearToken = () => {
     localStorage.removeItem(STORAGE_TAG_TOKEN);
 }
 
-const getObjLength = (obj) => {
+export const getObjLength = (obj) => {
     return obj ? Object.keys(obj).length : 0;
 }
 
@@ -53,7 +53,7 @@ function linkify(inputText) {
     return replacedText;
 }
 
-const formatMessage = (message) => {
+export const formatMessage = (message) => {
     if (!message) return;
 
     let formatted = message.replaceAll('\n', '<br/>');
@@ -67,7 +67,7 @@ function containsOnlyEmojis(text) {
     return onlyEmojis.length === visibleChars.length
 }
 
-const replaceEmojis = (message, ignoreOnlyEmojis) => {
+export const replaceEmojis = (message, ignoreOnlyEmojis) => {
     if (!message) return;
 
     const onlyEmojis = !ignoreOnlyEmojis ? containsOnlyEmojis(message) : false;
@@ -90,7 +90,7 @@ const replaceEmojis = (message, ignoreOnlyEmojis) => {
     });
 }
 
-const translateHTMLInputToText = (html) => {
+export const translateHTMLInputToText = (html) => {
     let result;
     //const reg = new RegExp('((<span\\b[^>]*\\s\\bstyle=(["\'])([^"]*)\\3[^>]*>)(.*?)</span>)', 'g');
     const reg = new RegExp('<img\\s[^>]*?src\\s*=\\s*[\'\\"]([^\'\\"]*?)[\'\\"][^>]*?>', 'g');
@@ -109,31 +109,31 @@ const translateHTMLInputToText = (html) => {
     return result;
 }
 
-const markOccurrences = (message, sub) => {
+export const markOccurrences = (message, sub) => {
     if (!message) return;
 
     const reg = new RegExp('(' + sub + ')', 'gi');
     return message.replace(reg, '<span class="searchOccurrence">$1</span>');
 }
 
-const getFirstObject = (jsonObject) => {
+export const getFirstObject = (jsonObject) => {
     return jsonObject[Object.keys(jsonObject)[0]];
 }
 
-const getLastObject = (jsonObject) => {
+export const getLastObject = (jsonObject) => {
     return jsonObject[Object.keys(jsonObject)[Object.keys(jsonObject).length - 1]];
 }
 
-const getObjectByIndex = (jsonObject, index) => {
+export const getObjectByIndex = (jsonObject, index) => {
     return jsonObject[Object.keys(jsonObject)[index]];
 }
 
-const getLastMessageAndExtractTimestamp = (messagesObject) => {
+export const getLastMessageAndExtractTimestamp = (messagesObject) => {
     const last = getLastObject(messagesObject);
     return extractTimestampFromMessage(last);
 }
 
-const extractTimestampFromMessage = (message) => {
+export const extractTimestampFromMessage = (message) => {
     return message ? parseInt(message.timestamp) : -1;
 }
 
@@ -147,7 +147,7 @@ export const stringContainsAnyInArray = (string, array) => {
     return false;
 }
 
-const getSelectionHtml = () => {
+export const getSelectionHtml = () => {
     let html = "";
     if (typeof window.getSelection != "undefined") {
         const sel = window.getSelection();
@@ -166,12 +166,12 @@ const getSelectionHtml = () => {
     return html;
 }
 
-const getBaseURL = () => {
+export const getBaseURL = () => {
     const windowLocation = window.location;
     return windowLocation.protocol + "//" + windowLocation.host + "/";
 }
 
-const getWebSocketURL = () => {
+export const getWebSocketURL = () => {
     const baseURL = getBaseURL();
     if (baseURL.includes('localhost')) {
         return 'wss://websockets.whatsapp.kondz.io/';
@@ -179,23 +179,3 @@ const getWebSocketURL = () => {
         return baseURL.replace('https://', 'wss://websockets.').replace('http://', 'wss://websockets.');
     }
 }
-
-export {
-    getToken,
-    getConfig,
-    setToken,
-    clearToken,
-    formatMessage,
-    replaceEmojis,
-    translateHTMLInputToText,
-    markOccurrences,
-    getFirstObject,
-    getLastObject,
-    getObjectByIndex,
-    getLastMessageAndExtractTimestamp,
-    extractTimestampFromMessage,
-    getObjLength,
-    getSelectionHtml,
-    getBaseURL,
-    getWebSocketURL
-};
