@@ -15,6 +15,7 @@ import PubSub from "pubsub-js";
 import FileInput from "./FileInput";
 import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
 import VoiceRecorder from "../VoiceRecorder";
+import DoneIcon from "@material-ui/icons/Done";
 
 function ChatFooter(props) {
 
@@ -24,6 +25,7 @@ function ChatFooter(props) {
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 
     const voiceRecorder = useRef(new VoiceRecorder());
+    const [isRecording, setRecording] = useState(false);
 
     const handleAttachmentClick = (acceptValue) => {
         props.setAccept(acceptValue);
@@ -143,11 +145,25 @@ function ChatFooter(props) {
     }
 
     const startVoiceRecording = (stream) => {
-        voiceRecorder.current.start(stream);
+        // If it is already recording, return
+        if (voiceRecorder.current?.isRecording()) return;
+
+        // Start recording
+        voiceRecorder.current?.start(
+            stream,
+            function () {
+                setRecording(true);
+            },
+            function (audioURL) {
+                setRecording(false);
+
+                console.log(audioURL);
+            }
+        );
     }
 
     const stopVoiceRecording = () => {
-        voiceRecorder.current.stop();
+        voiceRecorder.current?.stop();
     }
 
     return (
@@ -257,6 +273,18 @@ function ChatFooter(props) {
                             <MicIcon/>
                         </IconButton>
                     </Tooltip>
+                }
+
+                {isRecording &&
+                <div className="voiceRecord">
+                    <IconButton onClick={stopVoiceRecording} className="voiceRecord__cancelButton">
+                        <CloseIcon />
+                    </IconButton>
+
+                    <IconButton className="voiceRecord__sendButton">
+                        <DoneIcon />
+                    </IconButton>
+                </div>
                 }
             </div>
         </div>

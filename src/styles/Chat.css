@@ -558,3 +558,25 @@ a.chat__document:hover {
 .chat__message .emoji-mart-emoji {
     margin-bottom: -4px!important;
 }
+
+.voiceRecord {
+    display: flex;
+    flex-direction: row;
+}
+
+.voiceRecord__cancelButton {
+    background-color: rgba(255, 0, 0, 0.1)!important;
+    margin-right: 10px!important;
+}
+
+.voiceRecord__cancelButton .MuiSvgIcon-root {
+    color: red!important;
+}
+
+.voiceRecord__sendButton {
+    background-color: rgba(0, 255, 0, 0.1)!important;
+}
+
+.voiceRecord__sendButton .MuiSvgIcon-root {
+    color: green!important;
+}
