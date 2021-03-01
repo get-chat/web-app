@@ -179,3 +179,11 @@ export const getWebSocketURL = () => {
         return baseURL.replace('https://', 'wss://websockets.').replace('http://', 'wss://websockets.');
     }
 }
+
+export const displaySeconds = (seconds) => {
+    const format = val => `0${Math.floor(val)}`.slice(-2);
+    //const hours = seconds / 3600;
+    const minutes = (seconds % 3600) / 60;
+
+    return [minutes, seconds % 60].map(format).join(':');
+}

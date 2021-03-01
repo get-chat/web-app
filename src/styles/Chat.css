@@ -585,12 +585,14 @@ a.chat__document:hover {
 
 .voiceRecord__recordIcon {
     color: red!important;
-    margin-right: 5px;
+    margin-right: 2px;
 }
 
 .voiceRecord__timer {
     font-size: 16px;
     color: rgba(0, 0, 0, 0.4);
     margin-right: 20px;
+    min-width: 48px;
+    text-align: center;
 }
 

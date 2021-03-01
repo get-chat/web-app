@@ -13,7 +13,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import {EMOJI_SET, EMOJI_SHEET_SIZE, EMPTY_IMAGE_BASE64, EVENT_TOPIC_EMOJI_PICKER_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 import FileInput from "./FileInput";
-import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
+import {displaySeconds, getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
 import VoiceRecorder from "../VoiceRecorder";
 import DoneIcon from "@material-ui/icons/Done";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
@@ -27,6 +27,7 @@ function ChatFooter(props) {
 
     const voiceRecorder = useRef(new VoiceRecorder());
     const [isRecording, setRecording] = useState(false);
+    const [timer, setTimer] = useState(0);
 
     const handleAttachmentClick = (acceptValue) => {
         props.setAccept(acceptValue);
@@ -99,6 +100,10 @@ function ChatFooter(props) {
     }
 
     const handleEmojiSelect = (emoji) => {
+        if (isRecording) {
+            return;
+        }
+
         if (editable.current) {
             // TODO: Try to avoid creating an emoji object here, if possible
             const emojiOutput = Emoji({
@@ -130,6 +135,12 @@ function ChatFooter(props) {
         event.preventDefault();
     }
 
+    const handleFocus = (event) => {
+        if (isRecording) {
+            event.target.blur();
+        }
+    }
+
     const requestMicrophonePermission = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({audio: true})
@@ -149,16 +160,27 @@ function ChatFooter(props) {
         // If it is already recording, return
         if (voiceRecorder.current?.isRecording()) return;
 
+        let intervalId;
+
         // Start recording
         voiceRecorder.current?.start(
             stream,
             function () {
                 setRecording(true);
+
+                // Update timer every second
+                intervalId = setInterval(function () {
+                    setTimer(prevState => prevState + 1);
+                }, 1000);
             },
             function (audioURL) {
                 setRecording(false);
 
                 console.log(audioURL);
+
+                // Stop timer
+                clearInterval(intervalId);
+                setTimer(0);
             }
         );
     }
@@ -262,6 +284,7 @@ function ChatFooter(props) {
                             ref={editable}
                             className="typeBox__editable"
                             contentEditable="true"
+                            onFocus={(event) => handleFocus(event)}
                             onPaste={(event) => handlePaste(event)}
                             onCopy={(event) => handleCopy(event)}
                             onDrop={(event) => event.preventDefault()}
@@ -297,7 +320,7 @@ function ChatFooter(props) {
                     </IconButton>
 
                     <FiberManualRecordIcon className="voiceRecord__recordIcon" />
-                    <span className="voiceRecord__timer">0:00</span>
+                    <span className="voiceRecord__timer">{ displaySeconds(timer) }</span>
 
                     <IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
                         <DoneIcon />
