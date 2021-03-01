@@ -562,11 +562,13 @@ a.chat__document:hover {
 .voiceRecord {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .voiceRecord__cancelButton {
     background-color: rgba(255, 0, 0, 0.1)!important;
-    margin-right: 10px!important;
+    margin-right: 20px!important;
 }
 
 .voiceRecord__cancelButton .MuiSvgIcon-root {
@@ -580,3 +582,15 @@ a.chat__document:hover {
 .voiceRecord__sendButton .MuiSvgIcon-root {
     color: green!important;
 }
+
+.voiceRecord__recordIcon {
+    color: red!important;
+    margin-right: 5px;
+}
+
+.voiceRecord__timer {
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-right: 20px;
+}
+

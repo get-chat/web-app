@@ -16,6 +16,7 @@ import FileInput from "./FileInput";
 import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
 import VoiceRecorder from "../VoiceRecorder";
 import DoneIcon from "@material-ui/icons/Done";
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 function ChatFooter(props) {
 
@@ -133,7 +134,7 @@ function ChatFooter(props) {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({audio: true})
                 .then(function (stream) {
-                    startVoiceRecording(stream);
+                    startVoiceRecord(stream);
                 })
                 .catch(function (err) {
                     console.log('Permission denied');
@@ -144,7 +145,7 @@ function ChatFooter(props) {
         }
     }
 
-    const startVoiceRecording = (stream) => {
+    const startVoiceRecord = (stream) => {
         // If it is already recording, return
         if (voiceRecorder.current?.isRecording()) return;
 
@@ -162,8 +163,21 @@ function ChatFooter(props) {
         );
     }
 
-    const stopVoiceRecording = () => {
+    const stopVoiceRecord = () => {
         voiceRecorder.current?.stop();
+    }
+
+    const sendVoiceRecord = () => {
+        stopVoiceRecord();
+
+        setTimeout(function () {
+            const audioURL = voiceRecorder.current.lastAudioURL;
+            console.log('Send: ' + audioURL);
+        }, 1000);
+    }
+
+    const hasInput = () => {
+        return props.input && props.input.length > 0;
     }
 
     return (
@@ -260,28 +274,32 @@ function ChatFooter(props) {
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
 
-                {(props.input && props.input.length > 0)
-                    ?
+                {hasInput() &&
                     <Tooltip title="Send" placement="top">
                         <IconButton onClick={props.sendMessage}>
                             <Send/>
                         </IconButton>
                     </Tooltip>
-                    :
+                }
+
+                {(!hasInput() && !isRecording) &&
                     <Tooltip title="Voice" placement="top">
-                        <IconButton onClick={requestMicrophonePermission}>
-                            <MicIcon/>
-                        </IconButton>
+                    <IconButton onClick={requestMicrophonePermission}>
+                    <MicIcon/>
+                    </IconButton>
                     </Tooltip>
                 }
 
                 {isRecording &&
                 <div className="voiceRecord">
-                    <IconButton onClick={stopVoiceRecording} className="voiceRecord__cancelButton">
+                    <IconButton onClick={stopVoiceRecord} className="voiceRecord__cancelButton">
                         <CloseIcon />
                     </IconButton>
 
-                    <IconButton className="voiceRecord__sendButton">
+                    <FiberManualRecordIcon className="voiceRecord__recordIcon" />
+                    <span className="voiceRecord__timer">0:00</span>
+
+                    <IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
                         <DoneIcon />
                     </IconButton>
                 </div>
