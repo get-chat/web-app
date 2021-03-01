@@ -674,7 +674,6 @@ export default function Chat(props) {
 
     const sendHandledChosenFiles = (preparedFiles) => {
         if (isLoaded && preparedFiles) {
-
             const requests = [];
 
             // Sending all files in a loop
@@ -820,8 +819,10 @@ export default function Chat(props) {
                     sendMessage={(e) => sendMessage(e)}
                     setSelectedFiles={setSelectedFiles}
                     setTemplateMessagesVisible={setTemplateMessagesVisible}
+                    sendHandledChosenFiles={sendHandledChosenFiles}
                     accept={accept}
-                    setAccept={setAccept} />
+                    setAccept={setAccept}
+                    displayError={props.displayError} />
             }
 
             {(isTemplateMessagesVisible || isExpired) &&

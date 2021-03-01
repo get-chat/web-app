@@ -17,7 +17,7 @@ import {
     BASE_URL,
     CALENDAR_NORMAL,
     EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_NEW_CHAT_MESSAGES,
+    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
 import Moment from "react-moment";
@@ -49,6 +49,11 @@ function Main() {
             setErrorMessage(error.response?.data?.reason ?? 'An error has occurred.');
             setErrorVisible(true);
         }
+    }
+
+    const displayCustomError = (errorMessage) => {
+        setErrorMessage(errorMessage);
+        setErrorVisible(true);
     }
 
     const handleClose = (event, reason) => {
@@ -123,13 +128,18 @@ function Main() {
         }
     };
 
+    const onDisplayError = function (msg, data) {
+        displayCustomError(data);
+    };
+
     useEffect(() => {
         // Loading template messages
         getTemplates();
 
         // EventBus
-        const token1 = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
-        const token2 = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
+        const searchmessagesVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
+        const contactDetailsVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
+        const displayErrorEventToken = PubSub.subscribe(EVENT_TOPIC_DISPLAY_ERROR, onDisplayError);
 
         // WebSocket, consider a separate env variable for ws address
         const ws = new WebSocket(getWebSocketURL());
@@ -188,8 +198,9 @@ function Main() {
         }
 
         return () => {
-            PubSub.unsubscribe(token1);
-            PubSub.unsubscribe(token2);
+            PubSub.unsubscribe(searchmessagesVisibilityEventToken);
+            PubSub.unsubscribe(contactDetailsVisibilityEventToken);
+            PubSub.unsubscribe(displayErrorEventToken);
 
             ws.close();
         }

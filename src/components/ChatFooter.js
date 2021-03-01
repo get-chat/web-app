@@ -261,7 +261,8 @@ function ChatFooter(props) {
 
                 <div className={!isRecording ? 'hidden' : ''}>
                     <VoiceRecord
-                        setRecording={setRecording}/>
+                        setRecording={setRecording}
+                        sendHandledChosenFiles={props.sendHandledChosenFiles} />
                 </div>
             </div>
         </div>

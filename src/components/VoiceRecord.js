@@ -6,7 +6,7 @@ import {displaySeconds} from "../Helpers";
 import DoneIcon from "@material-ui/icons/Done";
 import '../styles/VoiceRecord.css';
 import VoiceRecorder from "../VoiceRecorder";
-import {EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../Constants";
+import {EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../Constants";
 import PubSub from "pubsub-js";
 
 function VoiceRecord(props) {
@@ -34,10 +34,13 @@ function VoiceRecord(props) {
                 })
                 .catch(function (err) {
                     console.log('Permission denied');
-                    // TODO: Display information
+
+                    PubSub.publish(EVENT_TOPIC_DISPLAY_ERROR, 'You must grant microphone permission.');
                 });
         } else {
             console.log('Not supported on your browser.');
+
+            PubSub.publish(EVENT_TOPIC_DISPLAY_ERROR, 'This feature is not supported on your browser.');
         }
     }
 
@@ -78,8 +81,14 @@ function VoiceRecord(props) {
         stopVoiceRecord();
 
         setTimeout(function () {
-            const audioURL = voiceRecorder.current.lastAudioURL;
-            console.log('Send: ' + audioURL);
+            const chosenFile = voiceRecorder.current.lastAudioChosenFile;
+
+            // Send
+            if (chosenFile) {
+                props.sendHandledChosenFiles({0: voiceRecorder.current.lastAudioChosenFile});
+            } else {
+                console.log('Audio file is missing');
+            }
         }, 1000);
     }
 

@@ -11,7 +11,7 @@ import * as musicMetadata from "music-metadata-browser";
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
     Object.entries(selectedFiles).forEach((file) => {
-        preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1]);
+        preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1], true);
     });
 
     return preparedFiles;
@@ -56,17 +56,21 @@ export const getAttachmentTypeByFile = (file, callback) => {
         // OGG is an exception
         if (mimeType.includes('audio/ogg')) {
 
-            // Get codec information async
-            musicMetadata.parseBlob(file).then(metadata => {
-                const codec = metadata?.format?.codec;
-                // OGG files with Opus codec are supported
-                if (codec && codec.toLowerCase().includes('opus')) {
-                    callback(ATTACHMENT_TYPE_AUDIO);
-                } else {
-                    // Base OGG files are not supported
-                    callback(ATTACHMENT_TYPE_DOCUMENT);
-                }
-            });
+            // This will be skipped for voice recording, we know what is type
+            if (callback !== undefined) {
+
+                // Get codec information async
+                musicMetadata.parseBlob(file).then(metadata => {
+                    const codec = metadata?.format?.codec;
+                    // OGG files with Opus codec are supported
+                    if (codec && codec.toLowerCase().includes('opus')) {
+                        callback(ATTACHMENT_TYPE_AUDIO);
+                    } else {
+                        // Base OGG files are not supported
+                        callback(ATTACHMENT_TYPE_DOCUMENT);
+                    }
+                })
+            }
 
             return ATTACHMENT_TYPE_DOCUMENT;
 
