@@ -14,6 +14,7 @@ import {EMOJI_SET, EMOJI_SHEET_SIZE, EMPTY_IMAGE_BASE64, EVENT_TOPIC_EMOJI_PICKE
 import PubSub from "pubsub-js";
 import FileInput from "./FileInput";
 import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
+import VoiceRecorder from "../VoiceRecorder";
 
 function ChatFooter(props) {
 
@@ -21,6 +22,8 @@ function ChatFooter(props) {
     const editable = useRef(null);
 
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
+
+    const voiceRecorder = useRef(new VoiceRecorder());
 
     const handleAttachmentClick = (acceptValue) => {
         props.setAccept(acceptValue);
@@ -125,18 +128,26 @@ function ChatFooter(props) {
     }
 
     const requestMicrophonePermission = () => {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(function(stream) {
-                startVoiceRecording();
-            })
-            .catch(function(err) {
-                console.log('Permission denied');
-                // TODO: Display information
-            });
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({audio: true})
+                .then(function (stream) {
+                    startVoiceRecording(stream);
+                })
+                .catch(function (err) {
+                    console.log('Permission denied');
+                    // TODO: Display information
+                });
+        } else {
+            console.log('Not supported on your browser.');
+        }
     }
 
-    const startVoiceRecording = () => {
+    const startVoiceRecording = (stream) => {
+        voiceRecorder.current.start(stream);
+    }
 
+    const stopVoiceRecording = () => {
+        voiceRecorder.current.stop();
     }
 
     return (
