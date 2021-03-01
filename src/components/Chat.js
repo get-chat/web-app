@@ -211,6 +211,8 @@ export default function Chat(props) {
         // New messages
         const onNewMessages = function (msg, data) {
             if (data && isLoaded) {
+                let hasAnyIncomingMsg = false;
+
                 const preparedMessages = {};
                 Object.entries(data).forEach((message) => {
                     const msgId = message[0];
@@ -218,6 +220,10 @@ export default function Chat(props) {
 
                     if (waId === chatMessage.waId) {
                         preparedMessages[msgId] = chatMessage;
+
+                        if (!chatMessage.isFromUs) {
+                            hasAnyIncomingMsg = true;
+                        }
                     }
                 });
 
@@ -229,8 +235,22 @@ export default function Chat(props) {
                             return {...prevState, ...preparedMessages};
                         });
 
-                        const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
-                        markAsSeen(lastMessageTimestamp);
+                        if (hasAnyIncomingMsg) {
+                            const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
+                            markAsSeen(lastMessageTimestamp);
+
+                            // Update contact
+                            setContact(prevState => {
+                                const nextState = prevState;
+                                nextState.lastMessageTimestamp = lastMessageTimestamp;
+                                nextState.isExpired = false;
+
+                                return nextState;
+                            });
+
+                            // Chat is not expired anymore
+                            setExpired(false);
+                        }
                     }
 
                     // Update last message id
@@ -273,7 +293,7 @@ export default function Chat(props) {
                     });
 
                     if (changedAny) {
-                        return {...{}, ...newState};
+                        return {...newState};
                     } else {
                         return prevState;
                     }
@@ -287,7 +307,7 @@ export default function Chat(props) {
             PubSub.unsubscribe(newChatMessagesEventToken);
             PubSub.unsubscribe(chatMessageStatusChangeEventToken);
         }
-    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isAtBottom]);
+    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom]);
 
     useEffect(() => {
         const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);

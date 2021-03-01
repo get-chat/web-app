@@ -37,7 +37,7 @@ export const getDroppedFiles = (event) => {
         }
     }*/
 
-    return {...{}, ...event.dataTransfer.files};
+    return {...event.dataTransfer.files};
 }
 
 export const getAttachmentTypeByFile = (file, callback) => {

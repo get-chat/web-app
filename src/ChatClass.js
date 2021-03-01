@@ -22,6 +22,7 @@ class ChatClass {
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = this.lastMessage?.text?.body;
         this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
+        this.isExpired = this.checkIfExpired();
     }
 
     getPastHoursAfterLastMessage() {

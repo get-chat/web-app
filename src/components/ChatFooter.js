@@ -207,7 +207,7 @@ function ChatFooter(props) {
                 <div className="hidden">
                     <FileInput
                         innerRef={fileInput}
-                        handleSelectedFiles={ (files) => props.setSelectedFiles({...{}, ...files}) } />
+                        handleSelectedFiles={ (files) => props.setSelectedFiles({...files}) } />
                 </div>
 
                 <form>

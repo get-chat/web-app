@@ -51,13 +51,17 @@ function SidebarChat(props) {
         // Initial
         calculateRemaining();
 
-        let intervalId = setInterval(() => {
-            calculateRemaining();
-        }, 30000);
+        let intervalId;
+        if (!props.chatData.isExpired) {
+            intervalId = setInterval(() => {
+                calculateRemaining();
+            }, 30000);
+        }
 
         return () => {
             clearInterval(intervalId);
         }
+
     }, [props.chatData.lastMessageTimestamp]);
 
     const handleDroppedFiles = (event) => {

@@ -67,7 +67,7 @@ function Sidebar(props) {
                 const nextState = prevState;
                 delete nextState[relatedWaId];
 
-                return {...{}, ...nextState};
+                return {...nextState};
             });
         }
 
@@ -117,7 +117,7 @@ function Sidebar(props) {
                             // Increase number of unseen messages
                             preparedUnseenMessages[chatMessageWaId].unseenMessages++;
 
-                            setUnseenMessages({...{}, ...preparedUnseenMessages});
+                            setUnseenMessages({...preparedUnseenMessages});
 
                             // Display a notification
                             props.showNotification("New messages", "You have new messages!");
@@ -130,7 +130,7 @@ function Sidebar(props) {
                     let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
                     sortedNextState = Object.fromEntries(sortedNextState);
 
-                    setChats({...{}, ...sortedNextState});
+                    setChats({...sortedNextState});
                 }
 
                 // We do this to generate new (missing) chat

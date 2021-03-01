@@ -52,7 +52,7 @@ function PreviewSendMedia(props) {
                 let nextState = {};
                 setData(prevState => {
                     delete prevState[index];
-                    nextState = {...{}, ...prevState};
+                    nextState = {...prevState};
                     return nextState;
                 });
 
@@ -103,7 +103,7 @@ function PreviewSendMedia(props) {
                     nextIndex++;
                 });
 
-                return {...{}, ...newState};
+                return {...newState};
             });
         }
     }
