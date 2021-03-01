@@ -50,7 +50,6 @@
 
 .sidebarChat__info__lastMessage {
     display: block;
-    margin-bottom: 5px;
     color: rgba(0, 0, 0, 0.6);
     font-size: 14px;
     text-overflow: ellipsis;
@@ -80,6 +79,11 @@
 .sidebarChat__info__timeLeft {
     font-size: 12px;
     color: #00b9d9;
+}
+
+.sidebarChat__info__expired, .sidebarChat__info__timeLeft {
+    display: block;
+    margin-top: 5px;
 }
 
 .sidebarChat__info {
