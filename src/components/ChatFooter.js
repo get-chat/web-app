@@ -4,6 +4,7 @@ import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import MicIcon from '@material-ui/icons/Mic';
 import {Emoji, NimblePicker} from "emoji-mart";
 import 'emoji-mart/css/emoji-mart.css';
 import '../styles/EmojiPicker.css';
@@ -123,6 +124,21 @@ function ChatFooter(props) {
         event.preventDefault();
     }
 
+    const requestMicrophonePermission = () => {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+                startVoiceRecording();
+            })
+            .catch(function(err) {
+                console.log('Permission denied');
+                // TODO: Display information
+            });
+    }
+
+    const startVoiceRecording = () => {
+
+    }
+
     return (
         <div className="chat__footerOuter" onDrop={(event) => event.preventDefault()}>
 
@@ -220,6 +236,12 @@ function ChatFooter(props) {
                 <Tooltip title="Send" placement="top">
                     <IconButton onClick={props.sendMessage}>
                         <Send />
+                    </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Voice" placement="top">
+                    <IconButton onClick={requestMicrophonePermission}>
+                        <MicIcon />
                     </IconButton>
                 </Tooltip>
             </div>
