@@ -38,7 +38,6 @@ function VoiceRecord(props) {
     }, [waId]);
 
     const cancelVoiceRecord = () => {
-        console.log(timerIntervalId);
         voiceRecorder.current?.cancel();
 
         onVoiceRecordStop();
