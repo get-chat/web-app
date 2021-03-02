@@ -159,7 +159,7 @@ function ChatMessage(props) {
                 </div>
 
                 {data.contextId !== undefined &&
-                <div className="chat__message__context" onClick={() => props.goToMessageId(data.contextId, 0)}>
+                <div className="chat__message__context" onClick={() => props.goToMessageId(data.contextId, data.contextTimestamp)}>
                     {data.contextId}
                 </div>
                 }

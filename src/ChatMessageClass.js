@@ -65,6 +65,7 @@ export class ChatMessageClass {
 
         this.contextFrom = payload.context?.from;
         this.contextId = payload.context?.id;
+        this.contextTimestamp = data.contextTimestamp ?? 0;
 
         this.deliveredTimestamp = statuses.delivered;
         this.readTimestamp = statuses.read;
