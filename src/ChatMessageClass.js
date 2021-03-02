@@ -66,14 +66,8 @@ export class ChatMessageClass {
         this.contextFrom = payload.context?.from;
         this.contextId = payload.context?.id;
 
-        if (payload.context) {
-            // TODO: Change data to context data later
-            const contextData = {...data};
-            contextData.contextFrom = undefined;
-            contextData.contextId = undefined;
-            contextData.waba_payload.context = undefined;
-
-            this.contextMessage = new ChatMessageClass(data);
+        if (data.context) {
+            this.contextMessage = new ChatMessageClass(data.context);
         }
 
         this.deliveredTimestamp = statuses.delivered;
