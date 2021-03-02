@@ -204,7 +204,7 @@ export default function Chat(props) {
             clearTimeout(timeoutToken);
             messagesContainerCopy.removeEventListener("scroll", handleScroll);
         }
-    }, [messages, isLoaded, isLoadingMoreMessages]);
+    }, [messages, isLoaded, isLoadingMoreMessages, isAtBottom]);
 
     useEffect(() => {
 
