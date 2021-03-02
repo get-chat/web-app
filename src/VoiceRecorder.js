@@ -6,7 +6,12 @@ class VoiceRecorder {
     constructor() {
         this.mediaRecorder = undefined;
         this.lastAudioChosenFile = undefined;
-        this.willConvert = false;
+        this.contentType = 'audio/ogg; codecs=opus';
+
+        if (!MediaRecorder.isTypeSupported(this.contentType)) {
+            this.contentType = 'audio/webm';
+            this.willConvert = true;
+        }
     }
 
     start(stream, startCallback, stopCallback) {
@@ -30,14 +35,7 @@ class VoiceRecorder {
         const _this = this;
 
         this.mediaRecorder.onstop = function (event) {
-            let contentType = 'audio/ogg; codecs=opus';
-
-            if (!MediaRecorder.isTypeSupported(contentType)) {
-                contentType = 'audio/webm';
-                _this.willConvert = true;
-            }
-
-            const blob = new Blob(chunks, { 'type': contentType });
+            const blob = new Blob(chunks, { 'type': this.contentType });
             chunks = [];
 
             const file = new File([blob], 'voice', { type: blob.type });
