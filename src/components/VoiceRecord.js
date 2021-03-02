@@ -100,7 +100,7 @@ function VoiceRecord(props) {
                 onVoiceRecordStop();
             },
             function (audioFile) {
-                console.log(audioFile);
+                //console.log(audioFile);
             }
         );
     }
