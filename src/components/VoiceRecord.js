@@ -72,14 +72,15 @@ function VoiceRecord(props) {
                     setTimer(prevState => prevState + 1);
                 }, 1000);
             },
-            function (audioURL) {
+            function () {
                 props.setRecording(false);
-
-                console.log(audioURL);
 
                 // Stop timer
                 clearInterval(intervalId);
                 setTimer(0);
+            },
+            function (audioFile) {
+                console.log(audioFile);
             }
         );
     }

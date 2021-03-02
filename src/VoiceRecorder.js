@@ -1,42 +1,41 @@
 import ChosenFileClass from "./ChosenFileClass";
 import {ATTACHMENT_TYPE_AUDIO} from "./Constants";
 
+import { Mp3MediaRecorder } from 'mp3-mediarecorder';
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import Mp3RecorderWorker from 'worker-loader!./worker';
+
 class VoiceRecorder {
 
     constructor() {
         this.mediaRecorder = undefined;
         this.lastAudioChosenFile = undefined;
-        this.contentType = 'audio/ogg; codecs=opus';
-
-        if (!MediaRecorder.isTypeSupported(this.contentType)) {
-            this.contentType = 'audio/webm';
-            this.willConvert = true;
-        }
     }
 
-    start(stream, startCallback, stopCallback) {
+    start(stream, startCallback, stopCallback, dataAvailableCallback) {
         // Clear previous audio url if exists
         this.lastAudioChosenFile = undefined;
 
         // Create a media recorder with given stream
-        this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder = new Mp3MediaRecorder(
+            stream, // MediaStream instance
+            { worker: Mp3RecorderWorker() }
+        );
 
-        let chunks = [];
-        this.mediaRecorder.ondataavailable = function (event) {
-            chunks.push(event.data);
-        }
-
-        this.mediaRecorder.onstart = function (event) {
+        this.mediaRecorder.onstart = () => {
             if (startCallback) {
                 startCallback();
             }
         }
 
         const _this = this;
+        this.mediaRecorder.ondataavailable = (event) => {
+            console.log('ondataavailable', event.data);
+            //setRecordings((prevRecordings) => [...prevRecordings, URL.createObjectURL(event.data)]);
 
-        this.mediaRecorder.onstop = function (event) {
-            const blob = new Blob(chunks, { 'type': this.contentType });
-            chunks = [];
+            console.log(event.data);
+
+            const blob = event.data;
 
             const file = new File([blob], 'voice', { type: blob.type });
             const chosenFile = new ChosenFileClass(0, file);
@@ -46,12 +45,20 @@ class VoiceRecorder {
 
             _this.lastAudioChosenFile = chosenFile;
 
+            if (dataAvailableCallback) {
+                dataAvailableCallback();
+            }
+        };
+
+        this.mediaRecorder.onstop = () => {
+            console.log('onstop');
+
             stream.getTracks().forEach(track => track.stop());
 
             if (stopCallback) {
-                stopCallback(file);
+                stopCallback();
             }
-        }
+        };
 
         // Start recording
         this.mediaRecorder.start();
