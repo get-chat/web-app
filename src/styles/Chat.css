@@ -77,6 +77,16 @@
     color: #4fc3f7;
 }
 
+.chat__message__context {
+    cursor: pointer;
+    border-radius: 4px;
+    border-left: 4px solid #009688;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    margin: 0 -4px 4px -4px;
+    font-size: 12px;
+}
+
 .chat__media {
     border-radius: 6px;
     display: block;

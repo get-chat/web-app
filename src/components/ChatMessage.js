@@ -158,6 +158,12 @@ function ChatMessage(props) {
                     <ExpandMoreIcon />
                 </div>
 
+                {data.contextId !== undefined &&
+                <div className="chat__message__context" onClick={() => props.goToMessageId(data.contextId, 0)}>
+                    {data.contextId}
+                </div>
+                }
+
                 {data.imageLink !== undefined &&
                 <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
                 }

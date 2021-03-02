@@ -86,7 +86,7 @@ export const getAttachmentTypeByFile = (file, callback) => {
     return ATTACHMENT_TYPE_DOCUMENT;
 }
 
-export const convertToBase64 = (file, callback) => {
+/*export const convertToBase64 = (file, callback) => {
     const fileReader = new FileReader();
     let base64;
 
@@ -97,9 +97,9 @@ export const convertToBase64 = (file, callback) => {
     };
 
     fileReader.readAsDataURL(file);
-}
+}*/
 
-export const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+/*export const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
     const byteCharacters = atob(b64Data);
     const byteArrays = [];
 
@@ -116,13 +116,13 @@ export const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
     }
 
     return new Blob(byteArrays, {type: contentType});
-}
+}*/
 
 export const handleDragOver = (event) => {
     event.preventDefault();
 }
 
-const getVideoCover = (file, seekTo = 0.0) => {
+/*const getVideoCover = (file, seekTo = 0.0) => {
     console.log("getting video cover for file: ", file);
     return new Promise((resolve, reject) => {
         // load the file to a video player
@@ -159,9 +159,9 @@ const getVideoCover = (file, seekTo = 0.0) => {
                         resolve(blob);
                     },
                     "image/jpeg",
-                    0.75 /* quality */
+                    0.75 /!* quality *!/
                 );
             });
         });
     });
-}
+}*/

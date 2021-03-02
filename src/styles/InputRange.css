@@ -8,7 +8,7 @@ input[type=range]:focus {
     outline: none;
 }
 input[type=range]::-webkit-slider-runnable-track {
-    background: rgba(230, 230, 230, 0.78);
+    background: rgba(0, 0, 0, 0.1);
     border: 0.2px solid rgba(1, 1, 1, 0);
     border-radius: 1.3px;
     width: 100%;
@@ -29,7 +29,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     background: #e6e6e6;
 }
 input[type=range]::-moz-range-track {
-    background: rgba(230, 230, 230, 0.78);
+    background: rgba(0, 0, 0, 0.1);
     border: 0.2px solid rgba(1, 1, 1, 0);
     border-radius: 1.3px;
     width: 100%;
@@ -59,7 +59,7 @@ input[type=range]::-ms-fill-lower {
     border-radius: 2.6px;
 }
 input[type=range]::-ms-fill-upper {
-    background: rgba(230, 230, 230, 0.78);
+    background: rgba(0, 0, 0, 0.1);
     border: 0.2px solid rgba(1, 1, 1, 0);
     border-radius: 2.6px;
 }
@@ -74,7 +74,7 @@ input[type=range]::-ms-thumb {
     /*Needed to keep the Edge thumb centred*/
 }
 input[type=range]:focus::-ms-fill-lower {
-    background: rgba(230, 230, 230, 0.78);
+    background: rgba(0, 0, 0, 0.1);
 }
 input[type=range]:focus::-ms-fill-upper {
     background: #e6e6e6;

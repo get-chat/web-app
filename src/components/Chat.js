@@ -344,29 +344,34 @@ export default function Chat(props) {
         }, 100);
     }
 
+    const goToMessageId = (msgId, timestamp) => {
+        if (messagesContainer.current) {
+            if (msgId) {
+                if (messages[msgId]) {
+                    console.log("This message is already loaded.");
+                    scrollToChild(msgId);
+                } else {
+                    console.log("This message will be loaded.");
+
+                    // TODO: Cancel other messages requests first
+
+                    // Load messages since clicked results
+                    setLoadingMoreMessages(true);
+                    const callback = () => {
+                        scrollToChild(msgId);
+                    };
+                    getMessages(callback, undefined, undefined, timestamp, true, true);
+                }
+            }
+        }
+    }
+
     useEffect(() => {
         const onGoToMessageId = function (msg, data) {
             const msgId = data.id;
             const timestamp = data.timestamp;
-            if (messagesContainer) {
-                if (msgId) {
-                    if (messages[msgId]) {
-                        console.log("This message is already loaded.");
-                        scrollToChild(msgId);
-                    } else {
-                        console.log("This message will be loaded.");
 
-                        // TODO: Cancel other messages requests first
-
-                        // Load messages since clicked results
-                        setLoadingMoreMessages(true);
-                        const callback = () => {
-                            scrollToChild(msgId);
-                        };
-                        getMessages(callback, undefined, undefined, timestamp, true, true);
-                    }
-                }
-            }
+            goToMessageId(msgId, timestamp);
         }
 
         // Subscribe for scrolling to message event
@@ -803,6 +808,7 @@ export default function Chat(props) {
                         date={curMsgDate}
                         onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                         templates={props.templates}
+                        goToMessageId={goToMessageId}
                         onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)} />)
                 }) }
 
