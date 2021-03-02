@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
@@ -8,13 +8,18 @@ import '../styles/VoiceRecord.css';
 import VoiceRecorder from "../VoiceRecorder";
 import {EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../Constants";
 import PubSub from "pubsub-js";
+import {useParams} from "react-router-dom";
+
+let timerIntervalId;
 
 function VoiceRecord(props) {
 
     const voiceRecorder = useRef(new VoiceRecorder());
     const [timer, setTimer] = useState(0);
 
-    useState(() => {
+    const {waId} = useParams();
+
+    useEffect(() => {
         const onRequestMicPermission = function (msg, data) {
             requestMicrophonePermission();
         }
@@ -23,8 +28,29 @@ function VoiceRecord(props) {
 
         return () => {
             PubSub.unsubscribe(token);
+
+            cancelVoiceRecord();
         }
     }, []);
+
+    useEffect(() => {
+        cancelVoiceRecord();
+    }, [waId]);
+
+    const cancelVoiceRecord = () => {
+        console.log(timerIntervalId);
+        voiceRecorder.current?.cancel();
+
+        onVoiceRecordStop();
+    }
+
+    const onVoiceRecordStop = () => {
+        props.setRecording(false);
+
+        // Stop timer
+        clearInterval(timerIntervalId);
+        setTimer(0);
+    }
 
     const requestMicrophonePermission = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -59,8 +85,6 @@ function VoiceRecord(props) {
         // If it is already recording, return
         if (voiceRecorder.current?.isRecording()) return;
 
-        let intervalId;
-
         // Start recording
         voiceRecorder.current?.start(
             stream,
@@ -68,16 +92,12 @@ function VoiceRecord(props) {
                 props.setRecording(true);
 
                 // Update timer every second
-                intervalId = setInterval(function () {
+                timerIntervalId = setInterval(function () {
                     setTimer(prevState => prevState + 1);
                 }, 1000);
             },
             function () {
-                props.setRecording(false);
-
-                // Stop timer
-                clearInterval(intervalId);
-                setTimer(0);
+                onVoiceRecordStop();
             },
             function (audioFile) {
                 console.log(audioFile);

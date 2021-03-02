@@ -61,6 +61,21 @@ class VoiceRecorder {
         this.mediaRecorder.stop();
     }
 
+    cancel() {
+        if (this.mediaRecorder) {
+            this.mediaRecorder.onstart = undefined;
+            this.mediaRecorder.ondataavailable = undefined;
+            this.mediaRecorder.onstop = undefined;
+
+            if (this.isRecording()) {
+                const stream = this.mediaRecorder.stream;
+                this.mediaRecorder.stop();
+
+                stream.getTracks().forEach(track => track.stop());
+            }
+        }
+    }
+
     getState() {
         return this.mediaRecorder?.state;
     }
