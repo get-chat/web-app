@@ -141,68 +141,91 @@ function Main() {
         const contactDetailsVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
         const displayErrorEventToken = PubSub.subscribe(EVENT_TOPIC_DISPLAY_ERROR, onDisplayError);
 
-        // WebSocket, consider a separate env variable for ws address
-        const ws = new WebSocket(getWebSocketURL());
+        const CODE_NORMAL = 1000;
+        let ws;
 
-        ws.onopen = function (event) {
-            console.log('Connected to websocket server.');
+        const connect = () => {
+            console.log('Connecting to websocket server');
 
-            ws.send(JSON.stringify({token: getToken()}));
-        }
+            // WebSocket, consider a separate env variable for ws address
+            ws = new WebSocket(getWebSocketURL());
 
-        ws.onmessage = function (event) {
-            console.log('New message:', event.data);
+            ws.onopen = function (event) {
+                console.log('Connected to websocket server.');
 
-            try {
-                const data = JSON.parse(event.data);
+                ws.send(JSON.stringify({token: getToken()}));
+            }
 
-                if (data.type === 'message' && data.message) {
-                    const preparedMessages = {};
-                    const messageObj = new ChatMessageClass(data.message);
-                    preparedMessages[messageObj.id] = messageObj;
+            ws.onclose = function (event) {
+                if (event.code !== CODE_NORMAL) {
+                    console.log('Retrying connection to websocket server in 1 second.');
 
-                    PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                    setTimeout(function () {
+                        connect();
+                    }, 1000);
                 }
+            }
 
-                if (data.type === 'waba_webhook') {
-                    const wabaPayload = data.waba_payload;
-                    const statuses = wabaPayload?.statuses;
+            ws.onerror = function (event) {
+                ws.close();
+            }
 
-                    if (statuses) {
-                        const preparedStatuses = {};
-                        statuses.forEach((statusObj) => {
-                            if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
-                                preparedStatuses[statusObj.id] = {};
-                            }
+            ws.onmessage = function (event) {
+                console.log('New message:', event.data);
 
-                            if (statusObj.status === 'sent') {
-                                preparedStatuses[statusObj.id].sentTimestamp = statusObj.timestamp;
-                            }
+                try {
+                    const data = JSON.parse(event.data);
 
-                            if (statusObj.status === 'delivered') {
-                                preparedStatuses[statusObj.id].deliveredTimestamp = statusObj.timestamp;
-                            }
+                    if (data.type === 'message' && data.message) {
+                        const preparedMessages = {};
+                        const messageObj = new ChatMessageClass(data.message);
+                        preparedMessages[messageObj.id] = messageObj;
 
-                            if (statusObj.status === 'read') {
-                                preparedStatuses[statusObj.id].readTimestamp = statusObj.timestamp;
-                            }
-                        });
-
-                        PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, preparedStatuses);
+                        PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                     }
-                }
 
-            } catch (error) {
-                console.error(error);
+                    if (data.type === 'waba_webhook') {
+                        const wabaPayload = data.waba_payload;
+                        const statuses = wabaPayload?.statuses;
+
+                        if (statuses) {
+                            const preparedStatuses = {};
+                            statuses.forEach((statusObj) => {
+                                if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
+                                    preparedStatuses[statusObj.id] = {};
+                                }
+
+                                if (statusObj.status === 'sent') {
+                                    preparedStatuses[statusObj.id].sentTimestamp = statusObj.timestamp;
+                                }
+
+                                if (statusObj.status === 'delivered') {
+                                    preparedStatuses[statusObj.id].deliveredTimestamp = statusObj.timestamp;
+                                }
+
+                                if (statusObj.status === 'read') {
+                                    preparedStatuses[statusObj.id].readTimestamp = statusObj.timestamp;
+                                }
+                            });
+
+                            PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, preparedStatuses);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                }
             }
         }
+
+        connect();
 
         return () => {
             PubSub.unsubscribe(searchmessagesVisibilityEventToken);
             PubSub.unsubscribe(contactDetailsVisibilityEventToken);
             PubSub.unsubscribe(displayErrorEventToken);
 
-            ws.close();
+            ws.close(CODE_NORMAL);
         }
     }, []);
 
