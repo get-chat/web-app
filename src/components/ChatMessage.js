@@ -18,6 +18,7 @@ import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../ChatMessageClass";
 import MessageDateIndicator from "./MessageDateIndicator";
+import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -159,8 +160,18 @@ function ChatMessage(props) {
                 </div>
 
                 {data.contextId !== undefined &&
-                <div className="chat__message__context" onClick={() => props.goToMessageId(data.contextId, data.contextTimestamp)}>
-                    {data.contextId}
+                <div className="chat__message__context" onClick={() => props.goToMessageId(data.contextId, data.contextMessage?.timestamp)}>
+                    <div className="chat__message__context__info">
+                        <span className="chat__message__context__info__sender">
+                            {data.contextMessage?.senderName}
+                        </span>
+                        <span className="chat__message__context__info__message">
+                            <ChatMessageTypeIcon type={data.type} />
+                            {data.contextMessage?.text}
+                            {data.contextMessage?.caption}
+                        </span>
+                    </div>
+                    {/*<div>Image</div>*/}
                 </div>
                 }
 
