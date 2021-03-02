@@ -3,7 +3,7 @@ import {ATTACHMENT_TYPE_AUDIO} from "./Constants";
 
 import { Mp3MediaRecorder } from 'mp3-mediarecorder';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Mp3RecorderWorker from 'worker-loader!./worker';
+import Mp3RecorderWorker from 'worker-loader!./recorder/worker';
 
 class VoiceRecorder {
 
@@ -30,11 +30,6 @@ class VoiceRecorder {
 
         const _this = this;
         this.mediaRecorder.ondataavailable = (event) => {
-            console.log('ondataavailable', event.data);
-            //setRecordings((prevRecordings) => [...prevRecordings, URL.createObjectURL(event.data)]);
-
-            console.log(event.data);
-
             const blob = event.data;
 
             const file = new File([blob], 'voice', { type: blob.type });
@@ -51,8 +46,6 @@ class VoiceRecorder {
         };
 
         this.mediaRecorder.onstop = () => {
-            console.log('onstop');
-
             stream.getTracks().forEach(track => track.stop());
 
             if (stopCallback) {
