@@ -20,13 +20,16 @@
 .searchBar__searchContainer > .MuiSvgIcon-root {
     color: gray;
     margin: 10px;
+    height: 0.8em;
+    width: 0.8em;
 }
 
 .searchBar__searchContainer > input {
     flex: 1;
     border: none;
     background-color: transparent;
-    margin: 0 10px;
+    margin: 0 10px 0 calc(15px + 0.2em);
+    font-size: 14px;
 }
 
 .searchBar__searchContainer > input:focus {

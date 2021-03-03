@@ -42,5 +42,6 @@
 }
 
 .sidebar__results__chats__noResult {
+    font-size: 14px;
     padding: 10px 15px;
 }
