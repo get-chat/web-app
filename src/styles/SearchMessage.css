@@ -60,7 +60,7 @@
 }
 
 .searchResult__message__body__type .chat__seen .chat__iconDoneAll * {
-    fill: #4fc3f7;
+    fill: var(--color-light-blue);
 }
 
 /*.searchResult__message__body__text {

@@ -74,7 +74,7 @@
 }
 
 .chat__message a {
-    color: #4fc3f7;
+    color: var(--color-light-blue);
 }
 
 .chat__media {
@@ -227,7 +227,7 @@ a.chat__document:hover {
 }
 
 .chat__seen .chat__iconDoneAll * {
-    fill: #4fc3f7;
+    fill: var(--color-light-blue);
 }
 
 .chat__message__more {
