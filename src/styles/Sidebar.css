@@ -34,7 +34,7 @@
 .sidebar__results > h3 {
     padding: 10px 15px;
     font-weight: 400;
-    color: #009688;
+    color: var(--color-primary);
 }
 
 .sidebar__results__chats {

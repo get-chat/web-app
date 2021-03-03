@@ -42,7 +42,7 @@
     width: 100%;
     height: 127px;
     content: "";
-    background-color: #009688;
+    background-color: var(--color-primary);
 }*/
 
 .app__body {
@@ -172,5 +172,5 @@ a {
 
 .searchOccurrence {
     font-weight: 600;
-    color: #009688;
+    color: var(--color-primary);
 }

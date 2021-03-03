@@ -3,7 +3,7 @@
     flex-direction: row;
     cursor: pointer;
     border-radius: 4px;
-    border-left: 4px solid #009688;
+    border-left: 4px solid var(--color-primary);
     background-color: rgba(0, 0, 0, 0.07);
     margin: 0 -4px 4px -4px;
     font-size: 12px;
@@ -17,7 +17,7 @@
 }
 
 .chat__message__context__info__sender {
-    color: #009688;
+    color: var(--color-primary);
     font-weight: 600;
 }
 

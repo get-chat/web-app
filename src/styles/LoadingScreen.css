@@ -26,6 +26,6 @@
     cursor: pointer;
     margin-top: 20px;
     font-size: 18px;
-    color: #009688;
+    color: var(--color-primary);
     padding: 10px;
 }

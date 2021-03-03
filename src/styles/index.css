@@ -1,3 +1,7 @@
+:root {
+  --color-primary: #009688;
+}
+
 html, body {
   overflow-y: hidden;
 }
