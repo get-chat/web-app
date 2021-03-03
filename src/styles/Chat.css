@@ -332,8 +332,8 @@ a.chat__document:hover {
 
 .chat__body__dateIndicator {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 10px;
+    right: 10px;
     top: 0;
     transform: translate(-50%);
     margin-top: 48px;
@@ -566,8 +566,7 @@ a.chat__document:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin: 20px 10px 30px 10px;
 }
 
 .chat__message__dateContainer__indicator {
