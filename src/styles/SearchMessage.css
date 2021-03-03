@@ -53,16 +53,14 @@
 }*/
 
 .searchResult__message__body__type .MuiSvgIcon-root {
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-left: 0!important;
+    width: 0.75em;
+    height: 0.75em;
 }
 
 .searchResult__message__body__type .chat__seen .chat__iconDoneAll * {
     fill: #4fc3f7;
-}
-
-.searchResult__message__body__type .MuiSvgIcon-root {
-    width: 0.75em;
-    height: 0.75em;
 }
 
 /*.searchResult__message__body__text {

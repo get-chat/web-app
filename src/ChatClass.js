@@ -14,6 +14,8 @@ class ChatClass {
         this.unseenMessages = data.unseen_messages;
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = lastMessagePayload?.text?.body;
+        this.lastMessageCaption = lastMessagePayload?.image?.caption ?? lastMessagePayload?.video?.caption ?? lastMessagePayload?.audio?.caption ?? lastMessagePayload?.document?.caption;
+        this.lastMessageType = lastMessagePayload?.type;
         this.lastMessageTimestamp = parseInt(lastMessagePayload?.timestamp ?? contact?.last_message_timestamp);
         this.isExpired = this.checkIfExpired();
     }

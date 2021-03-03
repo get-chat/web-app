@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Menu, MenuItem} from "@material-ui/core";
 
 function ChatMessageOptionsMenu(props) {

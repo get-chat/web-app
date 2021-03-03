@@ -5,12 +5,11 @@ import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {markOccurrences, replaceEmojis} from "../Helpers";
+import {markOccurrences} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
-import ChatMessageClass from "../ChatMessageClass";
-import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
+import ChatMessageShortContent from "./ChatMessageShortContent";
 
 function SidebarChat(props) {
 
@@ -117,12 +116,10 @@ function SidebarChat(props) {
                             </span>
                             :
                             <span className="sidebarChat__info__lastMessage__body">
-                                {props.chatData.lastMessage?.type === ChatMessageClass.TYPE_TEXT
-                                    ?
-                                    <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.chatData.lastMessageBody, true) }} />
-                                    :
-                                    <ChatMessageTypeIcon type={props.chatData.lastMessage?.type} />
-                                }
+                                <ChatMessageShortContent
+                                    type={props.chatData.lastMessageType}
+                                    text={props.chatData.lastMessageBody}
+                                    caption={props.chatData.lastMessageCaption} />
                             </span>
                         }
                     </span>

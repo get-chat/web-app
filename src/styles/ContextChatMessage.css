@@ -49,3 +49,7 @@
     border-bottom-right-radius: 4px;
     object-fit: cover;
 }
+
+.chat__message__context .chatMessageTypeLabel {
+    font-weight: 600;
+}

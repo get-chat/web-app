@@ -69,6 +69,11 @@
     height: 0.85em;
     width: 0.85em;
     margin-left: -2px;
+    margin-right: 5px;
+}
+
+.sidebarChat__info__lastMessage__body .chatMessageTypeLabel {
+    font-weight: 600;
 }
 
 .sidebarChat__info__expired {
