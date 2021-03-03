@@ -19,6 +19,7 @@ function ChatMessageTypeIcon(props) {
             <VideocamIcon />
             }
 
+            {props.type === ChatMessageClass.TYPE_VOICE &&
             <MicIcon />
             }
 
