@@ -166,8 +166,8 @@ a {
     align-self: center;
 }
 
-.MuiSnackbar-root {
-    box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
+.MuiSnackbar-root .MuiAlert-root {
+    box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.2);
 }
 
 .wordBreak {
