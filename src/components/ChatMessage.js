@@ -166,7 +166,7 @@ function ChatMessage(props) {
                             {data.contextMessage?.senderName}
                         </span>
                         <span className="chat__message__context__info__message">
-                            <ChatMessageTypeIcon type={data.type} />
+                            <ChatMessageTypeIcon type={data.contextMessage?.type} />
                             {data.contextMessage?.text}
                             {data.contextMessage?.caption}
                         </span>
