@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     padding: 30px 60px;
     z-index: 500;
 }
@@ -19,4 +20,12 @@
 
 .loadingScreen__progressContainer .MuiLinearProgress-root {
     height: 3px;
+}
+
+.loadingScreen__skip {
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #009688;
+    padding: 10px;
 }

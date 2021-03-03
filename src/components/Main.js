@@ -330,12 +330,14 @@ function Main() {
 
                 <Fade in={progress < 100} timeout={{exit: 1000}}>
                     <div className="loadingScreenOuter">
-                        <LoadingScreen progress={progress}/>
+                        <LoadingScreen
+                            progress={progress}
+                            setProgress={setProgress} />
                     </div>
                 </Fade>
 
                 <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error">
+                    <Alert onClose={handleClose} severity="error" elevation={4}>
                         {errorMessage}
                     </Alert>
                 </Snackbar>
