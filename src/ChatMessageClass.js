@@ -63,6 +63,8 @@ export class ChatMessageClass {
         this.templateNamespace = payload.template?.namespace;
         this.templateLanguage = payload.template?.language?.code;
 
+        this.isForwarded = payload.context?.forwarded ?? false;
+
         this.contextFrom = payload.context?.from;
         this.contextId = payload.context?.id;
 

@@ -19,6 +19,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../ChatMessageClass";
 import MessageDateIndicator from "./MessageDateIndicator";
 import ContextChatMessage from "./ContextChatMessage";
+import ReplyIcon from '@material-ui/icons/Reply';
 
 const playIconStyles = {
     fontSize: '38px'
@@ -158,6 +159,13 @@ function ChatMessage(props) {
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
                     <ExpandMoreIcon />
                 </div>
+
+                {data.isForwarded &&
+                <div className="chat__forwarded">
+                    <ReplyIcon />
+                    <span>Forwarded</span>
+                </div>
+                }
 
                 {data.contextMessage !== undefined &&
                 <ContextChatMessage
