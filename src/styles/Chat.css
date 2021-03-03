@@ -215,6 +215,7 @@ a.chat__document:hover {
 }
 
 .chat__timestamp {
+    color: rgba(0, 0, 0, 0.6);
     margin-left: 10px;
     font-size: x-small;
 }
