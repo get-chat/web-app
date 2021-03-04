@@ -25,6 +25,7 @@ function BusinessProfile(props) {
                 setAddress(data.address);
                 setDescription(data.description);
                 setEmail(data.email);
+                setVertical(data.vertical);
 
                 setLoaded(true);
 
@@ -121,7 +122,7 @@ function BusinessProfile(props) {
                                     label={verticalOption}
                                     value={verticalOption}
                                     checked={vertical === verticalOption}
-                                    onSelect={() => setVertical(verticalOption)}
+                                    onChange={() => setVertical(verticalOption)}
                                     control={<Radio />} />
                             )}
 
