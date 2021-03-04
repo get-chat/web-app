@@ -104,6 +104,30 @@ a {
     background-color: rgba(0, 0, 0, 0.05)!important;
 }
 
+.MuiPaper-rounded {
+    border-radius: 10px!important;
+}
+
+.MuiDialogTitle-root {
+    padding: 15px 20px 10px 20px!important;
+}
+
+.MuiDialogTitle-root .MuiTypography-root {
+    font-size: 18px;
+}
+
+.MuiDialogContent-root {
+    padding: 5px 20px!important;
+}
+
+.MuiDialogActions-root {
+    padding: 10px!important;
+}
+
+.MuiDialogContentText-root {
+    font-size: 14px!important;
+}
+
 .app__imagePreview {
     position: absolute;
     display: flex;

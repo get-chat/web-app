@@ -6,6 +6,11 @@ import {getConfig, getLastKey, getObjLength} from "../Helpers";
 import {CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 function BusinessProfile(props) {
 
@@ -16,6 +21,18 @@ function BusinessProfile(props) {
     const [vertical, setVertical] = useState('');
     const [websites, setWebsites] = useState({});
     const [about, setAbout] = useState('');
+
+    const [websiteKeyToDelete, setWebsiteKeyToDelete] = useState();
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     const getBusinessProfile = () => {
         axios.get(`${BASE_URL}settings/business/profile/`, getConfig())
@@ -144,10 +161,15 @@ function BusinessProfile(props) {
         });
     }
 
-    const removeWebsite = (key) => {
+    const askToRemoveWebsite = (key) => {
+        setWebsiteKeyToDelete(key);
+        handleClickOpen();
+    }
+
+    const removeWebsite = () => {
         setWebsites(prevState => {
             const nextState = prevState;
-            delete nextState[key];
+            delete nextState[websiteKeyToDelete];
 
             const newObj = {};
             Object.entries(nextState).forEach((websiteEntry, index) => {
@@ -156,6 +178,8 @@ function BusinessProfile(props) {
 
             return {...newObj};
         });
+
+        handleClose();
     }
 
     return (
@@ -212,7 +236,7 @@ function BusinessProfile(props) {
                                     <Button
                                         typeof="button"
                                         color="secondary"
-                                        onClick={() => removeWebsite(website[0])}>Delete</Button>
+                                        onClick={() => askToRemoveWebsite(website[0])}>Delete</Button>
                                     }
                                 </div>
                             )}
@@ -223,6 +247,28 @@ function BusinessProfile(props) {
                         <Button className="businessProfile__submit" type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
                     </form>
                 </div>
+
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description">
+
+                    <DialogTitle id="alert-dialog-title">{"Are you sure?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Are you sure you want to delete this website?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} color="secondary">
+                            No
+                        </Button>
+                        <Button onClick={removeWebsite} color="primary" autoFocus>
+                            Yes, delete
+                        </Button>
+                    </DialogActions>
+                </Dialog>
 
                 {!isLoaded &&
                 <div className="businessProfile__loading">
