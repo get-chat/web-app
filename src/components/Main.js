@@ -22,6 +22,7 @@ import {
 } from "../Constants";
 import Moment from "react-moment";
 import ChatMessageClass from "../ChatMessageClass";
+import BusinessProfile from "./BusinessProfile";
 
 function Main() {
 
@@ -302,6 +303,8 @@ function Main() {
                 {isContactDetailsVisible &&
                 <ContactDetails contactData={chosenContact} />
                 }
+
+                {/*<BusinessProfile />*/}
 
                 {chatMessageToPreview &&
                 <div className="app__imagePreview">
