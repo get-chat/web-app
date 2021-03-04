@@ -13,7 +13,7 @@ function BusinessProfile(props) {
     const [address, setAddress] = useState('');
     const [description, setDescription] = useState('');
     const [email, setEmail] = useState('');
-    const [vertical, setVertical] = useState({});
+    const [vertical, setVertical] = useState('');
 
     const getBusinessProfile = () => {
         axios.get(`${BASE_URL}settings/business/profile/`, getConfig())
@@ -41,12 +41,12 @@ function BusinessProfile(props) {
             address: address,
             description: description,
             email: email,
-            vertical: vertical
+            vertical: vertical,
+            websites: []
         }, getConfig())
             .then((response) => {
-                //console.log(response.data);
+                console.log(response.data);
 
-                console.log('Updated');
             })
             .catch((error) => {
                 // TODO: Handle errors
@@ -57,17 +57,35 @@ function BusinessProfile(props) {
 
     useEffect(() => {
         getBusinessProfile();
+
+        const handleKey = (event) => {
+            // If any element is focused, ignore key
+            if (document.activeElement.tagName === "INPUT") {
+                return false;
+            }
+
+            if (event.keyCode === 27) { // Escape
+                props.setBusinessProfileVisible(false);
+            }
+        };
+
+        document.addEventListener('keydown', handleKey);
+
+        return () => {
+            document.removeEventListener('keydown', handleKey);
+        }
     }, []);
 
     return (
         <div className="businessProfileOuter">
-            <div className="businessProfile">
 
+            <IconButton className="businessProfileOuter__closeIcon" onClick={() => props.setBusinessProfileVisible(false)}>
+                <CloseIcon />
+            </IconButton>
+
+            <div className="businessProfile">
                 <div className="businessProfile__header">
                     <h2>Business Profile</h2>
-                    <IconButton>
-                        <CloseIcon />
-                    </IconButton>
                 </div>
 
                 {isLoaded

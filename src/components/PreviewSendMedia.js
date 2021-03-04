@@ -152,7 +152,7 @@ function PreviewSendMedia(props) {
 
             return () => {
                 document.removeEventListener('keydown', handleKey);
-            };
+            }
         }
     }, [chosenFile, data]);
 

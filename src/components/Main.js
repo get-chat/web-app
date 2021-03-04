@@ -46,6 +46,8 @@ function Main() {
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
 
+    const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
+
     const avatarClasses = avatarStyles();
 
     const displayError = (error) => {
@@ -307,7 +309,11 @@ function Main() {
                 <ContactDetails contactData={chosenContact} />
                 }
 
-                <BusinessProfile displayError={displayError} />
+                {isBusinessProfileVisible &&
+                <BusinessProfile
+                    displayError={displayError}
+                    setBusinessProfileVisible={setBusinessProfileVisible} />
+                }
 
                 {chatMessageToPreview &&
                 <div className="app__imagePreview">
