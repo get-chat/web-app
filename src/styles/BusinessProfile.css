@@ -55,6 +55,9 @@
 }
 
 .businessProfile__fields .MuiButton-label {
-    margin-top: 10px;
     font-size: 18px;
+}
+
+.businessProfile__fields .MuiButtonBase-root.MuiButton-text {
+    margin-top: 20px;
 }

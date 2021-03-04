@@ -84,7 +84,7 @@ a {
     display: none;
 }
 
-.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root) {
+.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root) {
     color: #919191;
 }
 

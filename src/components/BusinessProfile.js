@@ -3,7 +3,7 @@ import '../styles/BusinessProfile.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
-import {IconButton, TextField} from "@material-ui/core";
+import {FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -76,6 +76,25 @@ function BusinessProfile(props) {
         }
     }, []);
 
+    const chips = [
+        "Automotive", "Beauty, Spa and Salon",
+        "Clothing and Apparel",
+        "Education",
+        "Entertainment",
+        "Event Planning and Service",
+        "Finance and Banking",
+        "Food and Grocery",
+        "Public Service",
+        "Hotel and Lodging",
+        "Medical and Health",
+        "Non-profit",
+        "Professional Services",
+        "Shopping and Retail",
+        "Travel and Transportation",
+        "Restaurant",
+        "Other"
+    ];
+
     return (
         <div className="businessProfileOuter">
 
@@ -88,20 +107,28 @@ function BusinessProfile(props) {
                     <h2>Business Profile</h2>
                 </div>
 
-                {isLoaded
-                    ?
-                    <div className="businessProfile__fields">
-                        <form onSubmit={updateBusinessProfile}>
-                            <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} />
-                            <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} />
-                            <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} />
+                <div className="businessProfile__fields">
+                    <form onSubmit={updateBusinessProfile}>
+                        <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} />
+                        <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} />
+                        <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} />
 
-                            <Button type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
-                        </form>
-                    </div>
-                    :
-                    <span>Loading</span>
-                }
+                        <RadioGroup row={true}>
+
+                            {chips.map((chip, index) =>
+                                <FormControlLabel
+                                    key={index}
+                                    label={chip}
+                                    value={chip}
+                                    control={<Radio />} />
+                            )}
+
+                        </RadioGroup>
+
+                        <Button type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
+                    </form>
+                </div>
+
             </div>
         </div>
     )
