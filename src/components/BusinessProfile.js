@@ -15,6 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 function BusinessProfile(props) {
 
     const [isLoaded, setLoaded] = useState(false);
+    const [isUpdating, setUpdating] = useState(false);
     const [address, setAddress] = useState('');
     const [description, setDescription] = useState('');
     const [email, setEmail] = useState('');
@@ -67,6 +68,8 @@ function BusinessProfile(props) {
     const updateBusinessProfile = async event => {
         event.preventDefault();
 
+        setUpdating(true);
+
         axios.patch( `${BASE_URL}settings/business/profile/`, {
             address: address,
             description: description,
@@ -77,9 +80,14 @@ function BusinessProfile(props) {
             .then((response) => {
                 console.log(response.data);
 
+                // Update about
+                updateAbout(event);
+
             })
             .catch((error) => {
-                props.displayError(error);
+                console.log(error);
+
+                setUpdating(false);
 
                 props.displayError(error);
             });
@@ -99,6 +107,27 @@ function BusinessProfile(props) {
             })
             .catch((error) => {
                 console.log(error);
+
+                props.displayError(error);
+            });
+    }
+
+    const updateAbout = async event => {
+        event.preventDefault();
+
+        axios.patch( `${BASE_URL}settings/profile/about/`, {
+            text: about
+        }, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                setUpdating(false);
+
+            })
+            .catch((error) => {
+                console.log(error);
+
+                setUpdating(false);
 
                 props.displayError(error);
             });
@@ -244,7 +273,7 @@ function BusinessProfile(props) {
                             <Button type="button" color="primary" onClick={addWebsite} disableElevation>Add another website</Button>
                         </div>
 
-                        <Button className="businessProfile__submit" type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
+                        <Button className="businessProfile__submit" type="submit" color="primary" fullWidth={true} disabled={isUpdating} disableElevation>Update</Button>
                     </form>
                 </div>
 
