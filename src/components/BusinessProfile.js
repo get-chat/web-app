@@ -76,7 +76,7 @@ function BusinessProfile(props) {
         }
     }, []);
 
-    const chips = [
+    const verticalOptions = [
         "Automotive", "Beauty, Spa and Salon",
         "Clothing and Apparel",
         "Education",
@@ -115,11 +115,13 @@ function BusinessProfile(props) {
 
                         <RadioGroup row={true}>
 
-                            {chips.map((chip, index) =>
+                            {verticalOptions.map((verticalOption, index) =>
                                 <FormControlLabel
                                     key={index}
-                                    label={chip}
-                                    value={chip}
+                                    label={verticalOption}
+                                    value={verticalOption}
+                                    checked={vertical === verticalOption}
+                                    onSelect={() => setVertical(verticalOption)}
                                     control={<Radio />} />
                             )}
 
