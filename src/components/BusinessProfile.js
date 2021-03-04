@@ -108,9 +108,10 @@ function BusinessProfile(props) {
     const addWebsite = () => {
         setWebsites((prevState) => {
             const nextState = prevState;
-            nextState[getObjLength(nextState)] = "";
+            const keys = Object.keys(nextState);
+            nextState[parseInt(keys[keys.length - 1]) + 1] = "";
             return {...nextState};
-        })
+        });
     }
 
     const updateWebsite = (event, key) => {
@@ -118,7 +119,21 @@ function BusinessProfile(props) {
             const nextState = prevState;
             nextState[key] = event.target.value;
             return {...nextState};
-        })
+        });
+    }
+
+    const removeWebsite = (key) => {
+        setWebsites(prevState => {
+            const nextState = prevState;
+            delete nextState[key];
+
+            const newObj = {};
+            Object.entries(nextState).forEach((websiteEntry, index) => {
+                newObj[index] = websiteEntry[1];
+            });
+
+            return {...newObj};
+        });
     }
 
     return (
@@ -160,16 +175,25 @@ function BusinessProfile(props) {
 
                         <div className="businessProfile__fields__websites">
                             {Object.entries(websites).map((website, index) =>
-                                <TextField
-                                    key={website[0]}
-                                    value={website[1]}
-                                    label={"Website " + (parseInt(website[0]) + 1)}
-                                    size="medium"
-                                    fullWidth={true}
-                                    onChange={(event) => updateWebsite(event, website[0])}/>
+
+                                <div key={website[0]} className="businessProfile__fields__websites__wrapper">
+                                    <TextField
+                                        value={website[1]}
+                                        label={"Website " + (parseInt(website[0]) + 1)}
+                                        size="medium"
+                                        fullWidth={true}
+                                        onChange={(event) => updateWebsite(event, website[0])}/>
+
+                                    {getObjLength(websites) > 1 &&
+                                    <Button
+                                        typeof="button"
+                                        color="secondary"
+                                        onClick={() => removeWebsite(website[0])}>Delete</Button>
+                                    }
+                                </div>
                             )}
 
-                            <Button type="button" color="primary" onClick={addWebsite} disableElevation>Add</Button>
+                            <Button type="button" color="primary" onClick={addWebsite} disableElevation>Add another website</Button>
                         </div>
 
                         <Button className="businessProfile__submit" type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>

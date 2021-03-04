@@ -105,3 +105,17 @@
     align-self: flex-end;
     justify-self: flex-end;
 }
+
+.businessProfile__fields__websites__wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.businessProfile__fields__websites__wrapper .MuiButtonBase-root.MuiButton-text {
+    margin-top: 0;
+}
+
+.businessProfile__fields__websites__wrapper .MuiFormControl-root {
+    margin-bottom: 5px;
+}
