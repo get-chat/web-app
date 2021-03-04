@@ -231,6 +231,11 @@ function Sidebar(props) {
             });
     }
 
+    const displayBusinessProfile = () => {
+        setAnchorEl(null);
+        props.setBusinessProfileVisible(true);
+    }
+
     return (
         <div className="sidebar">
             <div className="sidebar__header">
@@ -300,7 +305,7 @@ function Sidebar(props) {
                 onClose={hideMenu}
                 elevation={3}>
                 <MenuItem>Edit profile</MenuItem>
-                <MenuItem onClick={() => props.setBusinessProfileVisible(true)}>Business profile</MenuItem>
+                <MenuItem onClick={displayBusinessProfile}>Business profile</MenuItem>
                 <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>

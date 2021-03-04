@@ -3,7 +3,7 @@ import '../styles/BusinessProfile.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
-import {FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
+import {CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -109,10 +109,13 @@ function BusinessProfile(props) {
                 </div>
 
                 <div className="businessProfile__fields">
+
                     <form onSubmit={updateBusinessProfile}>
                         <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} />
                         <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} />
                         <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} />
+
+                        <h5>Vertical</h5>
 
                         <RadioGroup row={true}>
 
@@ -131,6 +134,12 @@ function BusinessProfile(props) {
                         <Button type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
                     </form>
                 </div>
+
+                {!isLoaded &&
+                <div className="businessProfile__loading">
+                    <CircularProgress color="primary" />
+                </div>
+                }
 
             </div>
         </div>

@@ -10,8 +10,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /*background-color: rgba(0, 0, 0, 0.5);*/
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 11;
     padding: 20px 40px;
 }
@@ -20,6 +19,11 @@
     position: absolute!important;
     top: 20px;
     right: 20px;
+    background-color: rgba(255, 255, 255, 0.1)!important;
+}
+
+.businessProfileOuter__closeIcon .MuiSvgIcon-root {
+    color: white!important;
 }
 
 .businessProfile {
@@ -28,10 +32,11 @@
     flex-direction: column;
     justify-content: space-between;
     background-color: white;
-    /*box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.3);*/
+    box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
     width: 1000px;
     max-width: 100%;
-    padding: 20px 30px;
+    padding: 20px 40px;
 }
 
 .businessProfile__header {
@@ -40,10 +45,6 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-}
-
-.businessProfile__header h2 {
-    flex: 1 1;
 }
 
 .businessProfile__fields {
@@ -60,4 +61,32 @@
 
 .businessProfile__fields .MuiButtonBase-root.MuiButton-text {
     margin-top: 20px;
+}
+
+.businessProfile__fields .MuiTypography-body1 {
+    font-size: 14px;
+}
+
+.businessProfile__loading {
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+}
+
+.MuiFormControlLabel-root {
+    margin-right: 20px!important;
+}
+
+.businessProfile h5 {
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
