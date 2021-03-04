@@ -42,7 +42,7 @@ export default function Login() {
 
                     // TODO: Make sure the response is Unauthorized
                     clearToken();
-                })
+                });
         }
     }, []);
 
@@ -59,7 +59,7 @@ export default function Login() {
         // Display the loading animation
         setLoggingIn(true);
 
-        axios.post(BASE_URL + 'auth/token/', {
+        axios.post(`${BASE_URL}auth/token/`, {
             username : username,
             password : password
         }).then((response) => {
