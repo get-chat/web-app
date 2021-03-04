@@ -288,6 +288,7 @@ function Main() {
                 <Sidebar
                     setProgress={setProgress}
                     showNotification={showNotification}
+                    setBusinessProfileVisible={setBusinessProfileVisible}
                 />
                 }
 

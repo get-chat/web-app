@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/Sidebar.css';
-import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {Avatar, Divider, IconButton, Menu, MenuItem} from "@material-ui/core";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
@@ -299,6 +299,9 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
+                <MenuItem>Edit profile</MenuItem>
+                <MenuItem onClick={() => props.setBusinessProfileVisible(true)}>Business profile</MenuItem>
+                <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
 
