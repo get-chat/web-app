@@ -22,6 +22,7 @@ function BusinessProfile(props) {
     const [vertical, setVertical] = useState('');
     const [websites, setWebsites] = useState({});
     const [about, setAbout] = useState('');
+    const [profilePhoto, setProfilePhoto] = useState();
 
     const [websiteKeyToDelete, setWebsiteKeyToDelete] = useState();
 
@@ -102,7 +103,7 @@ function BusinessProfile(props) {
 
                 setAbout(profile?.about?.text);
 
-                setLoaded(true);
+                getProfilePhoto();
 
             })
             .catch((error) => {
@@ -128,6 +129,25 @@ function BusinessProfile(props) {
                 console.log(error);
 
                 setUpdating(false);
+
+                props.displayError(error);
+            });
+    }
+
+    const getProfilePhoto = () => {
+        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                const profilePhotoData = btoa(unescape(encodeURIComponent(response.data)));
+
+                setProfilePhoto(profilePhotoData);
+
+                setLoaded(true);
+
+            })
+            .catch((error) => {
+                console.log(error);
 
                 props.displayError(error);
             });
@@ -224,6 +244,8 @@ function BusinessProfile(props) {
                 </div>
 
                 <div className="businessProfile__fields">
+
+                    {/*<img src={"data:image/png;base64," + profilePhoto} alt="Profile photo" />*/}
 
                     <form onSubmit={updateBusinessProfile}>
                         <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} />

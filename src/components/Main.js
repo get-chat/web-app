@@ -235,14 +235,6 @@ function Main() {
         }
     }, []);
 
-    /*useEffect(() => {
-        if (progress === 99) {
-            setTimeout(function () {
-                setProgress(100);
-            }, 500);
-        }
-    }, [progress]);*/
-
     useEffect(() => {
         setChecked(true);
 
@@ -255,7 +247,7 @@ function Main() {
     const getTemplates = () => {
         axios.get( `${BASE_URL}templates/`, getConfig())
             .then((response) => {
-                //console.log("Templates: ", response.data);
+                console.log("Templates: ", response.data);
 
                 const preparedTemplates = {};
                 response.data.results.forEach((template) => {
