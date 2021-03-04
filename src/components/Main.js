@@ -5,7 +5,7 @@ import {Avatar, Fade, IconButton, Snackbar} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getBaseURL, getConfig, getToken, getWebSocketURL} from "../Helpers";
+import {getConfig, getToken, getWebSocketURL} from "../Helpers";
 import {useParams} from "react-router-dom";
 import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
@@ -16,8 +16,11 @@ import {Alert} from "@material-ui/lab";
 import {
     BASE_URL,
     CALENDAR_NORMAL,
-    EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_NEW_CHAT_MESSAGES,
+    EVENT_TOPIC_CHAT_MESSAGE,
+    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
+    EVENT_TOPIC_DISPLAY_ERROR,
+    EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
 import Moment from "react-moment";
@@ -304,7 +307,7 @@ function Main() {
                 <ContactDetails contactData={chosenContact} />
                 }
 
-                {/*<BusinessProfile />*/}
+                <BusinessProfile />
 
                 {chatMessageToPreview &&
                 <div className="app__imagePreview">
