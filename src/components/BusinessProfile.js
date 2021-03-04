@@ -15,6 +15,7 @@ function BusinessProfile(props) {
     const [email, setEmail] = useState('');
     const [vertical, setVertical] = useState('');
     const [websites, setWebsites] = useState({});
+    const [about, setAbout] = useState('');
 
     const getBusinessProfile = () => {
         axios.get(`${BASE_URL}settings/business/profile/`, getConfig())
@@ -35,12 +36,14 @@ function BusinessProfile(props) {
 
                 setWebsites({...websitesArray});
 
-                setLoaded(true);
+                // Load about
+                getAbout();
 
             })
             .catch((error) => {
-                // TODO: Display error
                 console.log(error);
+
+                props.displayError(error);
             });
     }
 
@@ -59,7 +62,26 @@ function BusinessProfile(props) {
 
             })
             .catch((error) => {
-                // TODO: Handle errors
+                props.displayError(error);
+
+                props.displayError(error);
+            });
+    }
+
+    const getAbout = () => {
+        axios.get(`${BASE_URL}settings/profile/about/`, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                const profile = response.data.settings?.profile;
+
+                setAbout(profile?.about?.text);
+
+                setLoaded(true);
+
+            })
+            .catch((error) => {
+                console.log(error);
 
                 props.displayError(error);
             });
@@ -151,6 +173,8 @@ function BusinessProfile(props) {
                 <div className="businessProfile__fields">
 
                     <form onSubmit={updateBusinessProfile}>
+                        <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} />
+
                         <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} />
                         <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} />
                         <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} />
