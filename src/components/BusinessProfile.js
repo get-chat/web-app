@@ -250,23 +250,16 @@ function BusinessProfile(props) {
 
                 <Dialog
                     open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description">
-
-                    <DialogTitle id="alert-dialog-title">{"Are you sure?"}</DialogTitle>
+                    onClose={handleClose}>
+                    <DialogTitle>{"Are you sure?"}</DialogTitle>
                     <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
+                        <DialogContentText>
                             Are you sure you want to delete this website?
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="secondary">
-                            No
-                        </Button>
-                        <Button onClick={removeWebsite} color="primary" autoFocus>
-                            Yes, delete
-                        </Button>
+                        <Button onClick={handleClose} color="secondary">No</Button>
+                        <Button onClick={removeWebsite} color="primary" autoFocus>Yes, delete</Button>
                     </DialogActions>
                 </Dialog>
 
