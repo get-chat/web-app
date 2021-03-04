@@ -307,7 +307,7 @@ function Main() {
                 <ContactDetails contactData={chosenContact} />
                 }
 
-                <BusinessProfile />
+                <BusinessProfile displayError={displayError} />
 
                 {chatMessageToPreview &&
                 <div className="app__imagePreview">
