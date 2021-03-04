@@ -128,6 +128,11 @@ export const getObjectByIndex = (jsonObject, index) => {
     return jsonObject[Object.keys(jsonObject)[index]];
 }
 
+export const getLastKey = (jsonObject) => {
+    const keys = Object.keys(jsonObject);
+    return keys[keys.length - 1];
+}
+
 export const getLastMessageAndExtractTimestamp = (messagesObject) => {
     const last = getLastObject(messagesObject);
     return extractTimestampFromMessage(last);

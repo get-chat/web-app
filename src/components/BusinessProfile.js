@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import '../styles/BusinessProfile.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig, getObjLength} from "../Helpers";
+import {getConfig, getLastKey, getObjLength} from "../Helpers";
 import {CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
@@ -108,8 +108,8 @@ function BusinessProfile(props) {
     const addWebsite = () => {
         setWebsites((prevState) => {
             const nextState = prevState;
-            const keys = Object.keys(nextState);
-            nextState[parseInt(keys[keys.length - 1]) + 1] = "";
+            const nextKey = parseInt(getLastKey(websites)) + 1;
+            nextState[nextKey] = "";
             return {...nextState};
         });
     }
