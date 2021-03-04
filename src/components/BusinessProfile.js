@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import '../styles/BusinessProfile.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers";
+import {getConfig, getObjLength} from "../Helpers";
 import {CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
@@ -28,18 +28,19 @@ function BusinessProfile(props) {
                 setEmail(data.email);
                 setVertical(data.vertical);
 
-                let websites = data.websites;
-                if (websites.length === 0) {
-                    websites = [""];
+                let websitesArray = data.websites;
+                if (websitesArray.length === 0) {
+                    websitesArray = [""];
                 }
 
-                setWebsites(Object.fromEntries(websites));
+                setWebsites({...websitesArray});
 
                 setLoaded(true);
 
             })
             .catch((error) => {
                 // TODO: Display error
+                console.log(error);
             });
     }
 
@@ -51,7 +52,7 @@ function BusinessProfile(props) {
             description: description,
             email: email,
             vertical: vertical,
-            websites: []
+            websites: Object.values(websites)
         }, getConfig())
             .then((response) => {
                 console.log(response.data);
@@ -106,7 +107,17 @@ function BusinessProfile(props) {
 
     const addWebsite = () => {
         setWebsites((prevState) => {
-            return prevState.concat([""]);
+            const nextState = prevState;
+            nextState[getObjLength(nextState)] = "";
+            return {...nextState};
+        })
+    }
+
+    const updateWebsite = (event, key) => {
+        setWebsites(prevState => {
+            const nextState = prevState;
+            nextState[key] = event.target.value;
+            return {...nextState};
         })
     }
 
@@ -149,7 +160,13 @@ function BusinessProfile(props) {
 
                         <div className="businessProfile__fields__websites">
                             {Object.entries(websites).map((website, index) =>
-                                <TextField value={website[1]} key={index} label={"Website " + (index + 1)} size="medium" fullWidth={true} />
+                                <TextField
+                                    key={website[0]}
+                                    value={website[1]}
+                                    label={"Website " + (parseInt(website[0]) + 1)}
+                                    size="medium"
+                                    fullWidth={true}
+                                    onChange={(event) => updateWebsite(event, website[0])}/>
                             )}
 
                             <Button type="button" color="primary" onClick={addWebsite} disableElevation>Add</Button>
