@@ -14,6 +14,7 @@ function BusinessProfile(props) {
     const [description, setDescription] = useState('');
     const [email, setEmail] = useState('');
     const [vertical, setVertical] = useState('');
+    const [websites, setWebsites] = useState({});
 
     const getBusinessProfile = () => {
         axios.get(`${BASE_URL}settings/business/profile/`, getConfig())
@@ -26,6 +27,13 @@ function BusinessProfile(props) {
                 setDescription(data.description);
                 setEmail(data.email);
                 setVertical(data.vertical);
+
+                let websites = data.websites;
+                if (websites.length === 0) {
+                    websites = [""];
+                }
+
+                setWebsites(Object.fromEntries(websites));
 
                 setLoaded(true);
 
@@ -96,6 +104,12 @@ function BusinessProfile(props) {
         "Other"
     ];
 
+    const addWebsite = () => {
+        setWebsites((prevState) => {
+            return prevState.concat([""]);
+        })
+    }
+
     return (
         <div className="businessProfileOuter">
 
@@ -117,7 +131,7 @@ function BusinessProfile(props) {
 
                         <h5>Vertical</h5>
 
-                        <RadioGroup row={true}>
+                        <RadioGroup row={true} className="businessProfile__fields__verticalOptions">
 
                             {verticalOptions.map((verticalOption, index) =>
                                 <FormControlLabel
@@ -131,7 +145,17 @@ function BusinessProfile(props) {
 
                         </RadioGroup>
 
-                        <Button type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
+                        <h5>Websites</h5>
+
+                        <div className="businessProfile__fields__websites">
+                            {Object.entries(websites).map((website, index) =>
+                                <TextField value={website[1]} key={index} label={"Website " + (index + 1)} size="medium" fullWidth={true} />
+                            )}
+
+                            <Button type="button" color="primary" onClick={addWebsite} disableElevation>Add</Button>
+                        </div>
+
+                        <Button className="businessProfile__submit" type="submit" color="primary" fullWidth={true} disableElevation>Update</Button>
                     </form>
                 </div>
 
