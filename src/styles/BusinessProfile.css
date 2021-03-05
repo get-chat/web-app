@@ -48,6 +48,13 @@
     margin-bottom: 20px;
 }
 
+.businessProfile .MuiAvatar-root {
+    height: 150px;
+    width: 150px;
+    align-self: center;
+    margin-bottom: 20px;
+}
+
 .businessProfile__fields {
     width: 100%;
 }

@@ -9,8 +9,8 @@ export const getToken = () => {
     return localStorage.getItem("token");
 }
 
-export const getConfig = (params, cancelToken) => {
-    return {
+export const getConfig = (params, cancelToken, responseType) => {
+    const config = {
         params,
         headers: {
             'Authorization': 'Token ' + getToken(),
@@ -19,6 +19,12 @@ export const getConfig = (params, cancelToken) => {
         },
         cancelToken: cancelToken
     }
+
+    if (responseType !== undefined) {
+        config.responseType = responseType;
+    }
+
+    return config;
 }
 
 const STORAGE_TAG_TOKEN = "token";

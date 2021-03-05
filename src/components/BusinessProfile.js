@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import '../styles/BusinessProfile.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig, getLastKey, getObjLength} from "../Helpers";
-import {CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
+import {Avatar, CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import Dialog from '@material-ui/core/Dialog';
@@ -27,6 +27,8 @@ function BusinessProfile(props) {
     const [websiteKeyToDelete, setWebsiteKeyToDelete] = useState();
 
     const [open, setOpen] = React.useState(false);
+
+    const imageElement = useRef();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -135,16 +137,12 @@ function BusinessProfile(props) {
     }
 
     const getProfilePhoto = () => {
-        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig())
+        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, undefined, 'arraybuffer'))
             .then((response) => {
-                console.log(response.data);
-
-                const profilePhotoData = btoa(unescape(encodeURIComponent(response.data)));
-
-                setProfilePhoto(profilePhotoData);
+                const base64 = Buffer.from(response.data, 'binary').toString('base64');
+                setProfilePhoto(base64);
 
                 setLoaded(true);
-
             })
             .catch((error) => {
                 console.log(error);
@@ -243,9 +241,9 @@ function BusinessProfile(props) {
                     <h2>Business Profile</h2>
                 </div>
 
-                <div className="businessProfile__fields">
+                <Avatar src={"data:image/png;base64," + profilePhoto} />
 
-                    <img src={"data:image/png;base64," + profilePhoto} alt="Profile photo" />
+                <div className="businessProfile__fields">
 
                     <form onSubmit={updateBusinessProfile}>
                         <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} />
