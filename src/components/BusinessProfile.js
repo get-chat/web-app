@@ -245,7 +245,7 @@ function BusinessProfile(props) {
 
                 <div className="businessProfile__fields">
 
-                    {/*<img src={"data:image/png;base64," + profilePhoto} alt="Profile photo" />*/}
+                    <img src={"data:image/png;base64," + profilePhoto} alt="Profile photo" />
 
                     <form onSubmit={updateBusinessProfile}>
                         <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} />
