@@ -10,14 +10,39 @@ function SendTemplateMessage(props) {
     const [params, setParams] = useState({});
 
     useEffect(() => {
-        const prepared = {};
+        const preparedParams = {};
         const components = {...template.components};
 
         // TODO: Complete
-        Object.entries(components).forEach((param, paramIndex) => {
+        Object.entries(components).forEach((paramEntry, paramIndex) => {
+            const key = paramEntry[0];
+            const param = paramEntry[1];
 
+            if (param.type === "BODY") {
+                const paramText = param.text;
+                const templateParamsArray = getTemplateParams(paramText);
+
+                templateParamsArray.map((extractedParam, extractedParamIndex) => {
+                    if (preparedParams[key] === undefined) {
+                        preparedParams[key] = {};
+                    }
+                    preparedParams[key][templateParamToInteger(extractedParam)] = "";
+                });
+            }
         });
+
+        setParams(preparedParams);
+
     }, []);
+
+    const updateParam = (event, index, paramKey) => {
+        setParams(prevState => {
+            const nextState = prevState;
+            nextState[index][paramKey] = event.target.value;
+
+            return nextState;
+        })
+    }
 
     return (
         <div className="sendTemplateMessage">
@@ -42,7 +67,13 @@ function SendTemplateMessage(props) {
                             {comp.text}
                             <div>
                                 {getTemplateParams(comp.text).map((param, paramIndex) =>
-                                <TextField className="templateMessage__param" key={paramIndex} label={templateParamToInteger(param)} fullWidth={true} />
+                                <TextField
+                                    value={params[index] ? params[index][templateParamToInteger(param)] : ''}
+                                    onChange={(event) => updateParam(event, index, templateParamToInteger(param))}
+                                    className="templateMessage__param"
+                                    key={paramIndex}
+                                    label={templateParamToInteger(param)}
+                                    fullWidth={true} />
                                 )}
                             </div>
                         </div>
