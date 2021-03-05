@@ -84,6 +84,18 @@ a {
     display: none;
 }
 
+.bold {
+    font-weight: 600;
+}
+
+.lowercase {
+    text-transform: lowercase;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root) {
     color: #919191;
 }

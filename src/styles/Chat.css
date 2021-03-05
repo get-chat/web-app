@@ -575,3 +575,7 @@ a.chat__document:hover {
 .chat__message .emoji-mart-emoji {
     margin-bottom: -4px!important;
 }
+
+.templateType {
+    color: rgba(0, 0, 0, 0.6);
+}

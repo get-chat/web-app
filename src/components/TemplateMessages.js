@@ -62,7 +62,18 @@ function TemplateMessages(props) {
 
                             <div className="chat__templateMsg chat__message chat__receiver">
                                 {/*<span className={"templateMessage__status " + message[1].status}>{message[1].status}</span>*/}
-                                <span className="templateMessage__message">{message[1].text}</span>
+                                <div className="templateMessage__message">
+                                    {/*{message[1].text}*/}
+
+                                    {/*{JSON.stringify(message[1].components)}*/}
+
+                                    {message[1].components.map((comp, index) =>
+                                        <div key={index}>
+                                            <span className="templateType bold lowercase">{comp.type}:</span> {comp.text ?? comp.format ?? JSON.stringify(comp.buttons)}
+                                        </div>
+                                    )}
+
+                                </div>
                             </div>
 
                             {message[1].status === "approved" &&
