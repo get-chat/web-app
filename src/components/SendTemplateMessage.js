@@ -1,11 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 import '../styles/SendTemplateMessage.css';
-import {getTemplateParams} from "../Helpers";
+import {getTemplateParams, templateParamToInteger} from "../Helpers";
 
 function SendTemplateMessage(props) {
 
     const template = props.data;
+
+    const [params, setParams] = useState({});
+
+    useEffect(() => {
+        const prepared = {};
+        const components = {...template.components};
+
+        // TODO: Complete
+        Object.entries(components).forEach((param, paramIndex) => {
+
+        });
+    }, []);
 
     return (
         <div className="sendTemplateMessage">
@@ -30,7 +42,7 @@ function SendTemplateMessage(props) {
                             {comp.text}
                             <div>
                                 {getTemplateParams(comp.text).map((param, paramIndex) =>
-                                <TextField className="templateMessage__param" key={paramIndex} label={param} fullWidth={true} />
+                                <TextField className="templateMessage__param" key={paramIndex} label={templateParamToInteger(param)} fullWidth={true} />
                                 )}
                             </div>
                         </div>
