@@ -13,7 +13,7 @@ import {
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_MARKED_AS_SEEN,
-    EVENT_TOPIC_NEW_CHAT_MESSAGES
+    EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -596,6 +596,11 @@ export default function Chat(props) {
                     // TODO: Handle errors
 
                     props.displayError(error);
+
+                    if (error.response) {
+                        const errors = error.response.data?.waba_response?.errors;
+                        PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+                    }
                 });
         }
     }

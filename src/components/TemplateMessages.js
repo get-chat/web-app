@@ -1,26 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
+import {Alert, AlertTitle} from "@material-ui/lab";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import SendTemplateMessage from "./SendTemplateMessage";
-
-/*const useStyles = makeStyles((theme) => ({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-}));*/
+import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR} from "../Constants";
+import PubSub from "pubsub-js";
 
 function TemplateMessages(props) {
 
@@ -29,30 +16,39 @@ function TemplateMessages(props) {
     const [chosenTemplate, setChosenTemplate] = useState();
     const [isDialogVisible, setDialogVisible] = useState(false);
 
+    const [errors, setErrors] = useState();
+
     const showDialog = () => {
+        setErrors(undefined);
         setDialogVisible(true);
     };
 
     const hideDialog = () => {
+        setErrors(undefined);
         setDialogVisible(false);
     };
-
-    /*const [modalOpen, setModalOpen] = useState(false);
-
-    const handleOpen = () => {
-        setModalOpen(true);
-    };
-
-    const handleClose = () => {
-        setModalOpen(false);
-    };
-
-    const classes = useStyles();*/
 
     const chooseTemplate = (template) => {
         setChosenTemplate(template);
         showDialog();
     }
+
+    const send = () => {
+        props.onSend(chosenTemplate);
+        //hideDialog();
+    }
+
+    useEffect(() => {
+        const onSendTemplateMessageError = function (msg, data) {
+            setErrors(data);
+        }
+
+        const sendTemplateMessageErrorEventToken = PubSub.subscribe(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, onSendTemplateMessageError);
+
+        return () => {
+            PubSub.unsubscribe(sendTemplateMessageErrorEventToken);
+        }
+    }, []);
 
     return (
         <div className="templateMessagesOuter">
@@ -94,10 +90,21 @@ function TemplateMessages(props) {
                 <DialogTitle>{"Send a template message"}</DialogTitle>
                 <DialogContent>
                     <SendTemplateMessage data={chosenTemplate} />
+
+                    {errors &&
+                    <div>
+                        {errors.map((err, index) =>
+                            <Alert severity="error">
+                                <AlertTitle>{err.title}</AlertTitle>
+                                {err.details}
+                            </Alert>
+                        )}
+                    </div>
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Cancel</Button>
-                    <Button onClick={hideDialog} color="primary" autoFocus>Send</Button>
+                    <Button onClick={send} color="primary" autoFocus>Send</Button>
                 </DialogActions>
             </Dialog>
 

@@ -31,11 +31,11 @@ function SendTemplateMessage(props) {
                     </div>
                     }
 
-                    {comp.buttons &&
+                    {comp.type === "BUTTONS" &&
                     <div className="sendTemplateMessage__component__buttons sendTemplateMessage__section">
                         <h6>Buttons</h6>
                         {comp.buttons.map((button, buttonIndex) =>
-                            <Button color="primary">
+                            <Button key={buttonIndex} color="primary">
                                 {button.text}<br/>
                                 {/*{button.type}*/}
                             </Button>
