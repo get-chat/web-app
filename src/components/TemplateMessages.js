@@ -56,21 +56,6 @@ function TemplateMessages(props) {
 
     return (
         <div className="templateMessagesOuter">
-
-            {/*<Modal
-                open={modalOpen}
-                onClose={handleClose}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                className={classes.modal}
-            >
-                <CreateTemplate />
-            </Modal>
-
-            <div className="templateMessagesOuter__items">
-                <Button onClick={handleOpen}>Create a template</Button>
-            </div>*/}
-
             {/*<SearchBar />*/}
 
             {props.isLoadingTemplates
@@ -85,16 +70,11 @@ function TemplateMessages(props) {
                             <div className="chat__templateMsg chat__message chat__receiver">
                                 {/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
                                 <div className="templateMessage__message">
-                                    {/*{template[1].text}*/}
-
-                                    {/*{JSON.stringify(template[1].components)}*/}
-
                                     {template[1].components.map((comp, index) =>
                                         <div key={index}>
                                             <span className="templateType bold lowercase">{comp.type}:</span> {comp.text ?? comp.format ?? JSON.stringify(comp.buttons)}
                                         </div>
                                     )}
-
                                 </div>
                             </div>
 
@@ -113,12 +93,7 @@ function TemplateMessages(props) {
                 onClose={hideDialog}>
                 <DialogTitle>{"Send a template message"}</DialogTitle>
                 <DialogContent>
-                    {/*<DialogContentText>
-                        Send this template:
-                    </DialogContentText>*/}
-
                     <SendTemplateMessage data={chosenTemplate} />
-
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Cancel</Button>

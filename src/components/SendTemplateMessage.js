@@ -15,7 +15,7 @@ function SendTemplateMessage(props) {
 
                     {comp.type === "HEADER" &&
                     <div className="sendTemplateMessage__component__header sendTemplateMessage__section">
-                        <h5>Body</h5>
+                        <h6>Header</h6>
                         <div>
                             {comp.format}
                         </div>
@@ -24,7 +24,7 @@ function SendTemplateMessage(props) {
 
                     {comp.type === "BODY" &&
                     <div className="sendTemplateMessage__component__body sendTemplateMessage__section">
-                        <h5>Body</h5>
+                        <h6>Body</h6>
                         <div>
                             {comp.text}
                         </div>
@@ -33,7 +33,7 @@ function SendTemplateMessage(props) {
 
                     {comp.buttons &&
                     <div className="sendTemplateMessage__component__buttons sendTemplateMessage__section">
-                        <h5>Buttons</h5>
+                        <h6>Buttons</h6>
                         {comp.buttons.map((button, buttonIndex) =>
                             <Button color="primary">
                                 {button.text}<br/>
