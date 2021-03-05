@@ -53,6 +53,12 @@
     width: 150px;
     align-self: center;
     margin-bottom: 20px;
+    cursor: pointer;
+    transition: opacity linear .1s;
+}
+
+.businessProfile .MuiAvatar-root:hover {
+    opacity: 0.75;
 }
 
 .businessProfile__fields {

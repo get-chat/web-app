@@ -11,6 +11,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FileInput from "./FileInput";
 
 function BusinessProfile(props) {
 
@@ -28,7 +29,7 @@ function BusinessProfile(props) {
 
     const [open, setOpen] = React.useState(false);
 
-    const imageElement = useRef();
+    const fileInput = useRef();
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -241,11 +242,13 @@ function BusinessProfile(props) {
                     <h2>Business Profile</h2>
                 </div>
 
-                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : ""} />
+                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : ""} onClick={() => fileInput.current.click()} />
 
                 <div className="businessProfile__fields">
 
                     <form onSubmit={updateBusinessProfile}>
+                        <FileInput innerRef={fileInput} handleSelectedFiles={(file) => console.log(file)} accept="application/image" multiple={false} />
+
                         <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} />
 
                         <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} />
