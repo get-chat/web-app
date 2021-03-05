@@ -1,0 +1,23 @@
+.sendTemplateMessage {
+
+}
+
+.sendTemplateMessage__title {
+    margin-bottom: 20px;
+}
+
+.sendTemplateMessage h5 {
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+}
+
+.sendTemplateMessage__section {
+    padding: 15px 20px;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+    margin-bottom: 20px;
+}
+
+.sendTemplateMessage__section .MuiButtonBase-root {
+    margin-right: 10px;
+}

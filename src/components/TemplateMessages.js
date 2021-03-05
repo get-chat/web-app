@@ -1,6 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Dialog from "@material-ui/core/Dialog";
+import SendTemplateMessage from "./SendTemplateMessage";
 
 /*const useStyles = makeStyles((theme) => ({
     modal: {
@@ -20,6 +26,17 @@ function TemplateMessages(props) {
 
     const templates = props.templatesData;
 
+    const [chosenTemplate, setChosenTemplate] = useState();
+    const [isDialogVisible, setDialogVisible] = useState(false);
+
+    const showDialog = () => {
+        setDialogVisible(true);
+    };
+
+    const hideDialog = () => {
+        setDialogVisible(false);
+    };
+
     /*const [modalOpen, setModalOpen] = useState(false);
 
     const handleOpen = () => {
@@ -31,6 +48,11 @@ function TemplateMessages(props) {
     };
 
     const classes = useStyles();*/
+
+    const chooseTemplate = (template) => {
+        setChosenTemplate(template);
+        showDialog();
+    }
 
     return (
         <div className="templateMessagesOuter">
@@ -57,17 +79,17 @@ function TemplateMessages(props) {
                 :
                 <div className="templateMessages">
 
-                    {Object.entries(templates).map((message, index) =>
-                        <div key={message[0]} className="templateMessageWrapper">
+                    {Object.entries(templates).map((template, index) =>
+                        <div key={template[0]} className="templateMessageWrapper">
 
                             <div className="chat__templateMsg chat__message chat__receiver">
-                                {/*<span className={"templateMessage__status " + message[1].status}>{message[1].status}</span>*/}
+                                {/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
                                 <div className="templateMessage__message">
-                                    {/*{message[1].text}*/}
+                                    {/*{template[1].text}*/}
 
-                                    {/*{JSON.stringify(message[1].components)}*/}
+                                    {/*{JSON.stringify(template[1].components)}*/}
 
-                                    {message[1].components.map((comp, index) =>
+                                    {template[1].components.map((comp, index) =>
                                         <div key={index}>
                                             <span className="templateType bold lowercase">{comp.type}:</span> {comp.text ?? comp.format ?? JSON.stringify(comp.buttons)}
                                         </div>
@@ -76,8 +98,8 @@ function TemplateMessages(props) {
                                 </div>
                             </div>
 
-                            {message[1].status === "approved" &&
-                            <Button onClick={() => props.onSend(message[1])}>Send</Button>
+                            {template[1].status === "approved" &&
+                            <Button onClick={() => chooseTemplate(template[1]) /*props.onSend(template[1])*/}>Send</Button>
                             }
 
                         </div>
@@ -85,6 +107,25 @@ function TemplateMessages(props) {
 
                 </div>
             }
+
+            <Dialog
+                open={isDialogVisible}
+                onClose={hideDialog}>
+                <DialogTitle>{"Send a template message"}</DialogTitle>
+                <DialogContent>
+                    {/*<DialogContentText>
+                        Send this template:
+                    </DialogContentText>*/}
+
+                    <SendTemplateMessage data={chosenTemplate} />
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={hideDialog} color="secondary">Cancel</Button>
+                    <Button onClick={hideDialog} color="primary" autoFocus>Send</Button>
+                </DialogActions>
+            </Dialog>
+
         </div>
     )
 }

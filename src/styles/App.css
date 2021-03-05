@@ -7,7 +7,7 @@
 /* width */
 ::-webkit-scrollbar {
     width: 5px;
-    height: 10px;
+    height: 5px;
     background: transparent;
 }
 
@@ -125,7 +125,7 @@ a {
 }
 
 .MuiDialogTitle-root .MuiTypography-root {
-    font-size: 18px;
+    font-size: 18px!important;
 }
 
 .MuiDialogContent-root {
@@ -137,7 +137,11 @@ a {
 }
 
 .MuiDialogContentText-root {
-    font-size: 14px!important;
+    font-size: 15px!important;
+}
+
+.MuiDialogActions-root .MuiButton-label {
+    font-size: 15px!important;
 }
 
 .app__imagePreview {
