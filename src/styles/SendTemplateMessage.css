@@ -21,3 +21,7 @@
 .sendTemplateMessage__section .MuiButtonBase-root {
     margin-right: 10px;
 }
+
+.templateMessage__param {
+    margin-top: 10px!important;
+}

@@ -1,6 +1,7 @@
 import React from "react";
-import {Button} from "@material-ui/core";
+import {Button, TextField} from "@material-ui/core";
 import '../styles/SendTemplateMessage.css';
+import {getTemplateParams} from "../Helpers";
 
 function SendTemplateMessage(props) {
 
@@ -27,6 +28,11 @@ function SendTemplateMessage(props) {
                         <h6>Body</h6>
                         <div>
                             {comp.text}
+                            <div>
+                                {getTemplateParams(comp.text).map((param, paramIndex) =>
+                                <TextField className="templateMessage__param" key={paramIndex} label={param} fullWidth={true} />
+                                )}
+                            </div>
                         </div>
                     </div>
                     }

@@ -198,3 +198,7 @@ export const displaySeconds = (seconds) => {
 
     return [minutes, seconds % 60].map(format).join(':');
 }
+
+export const getTemplateParams = (text) => {
+    return text.match(/\{{(.*?)\}}/g);
+}
