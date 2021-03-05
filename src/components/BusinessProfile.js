@@ -152,6 +152,29 @@ function BusinessProfile(props) {
             });
     }
 
+    const updateProfilePhoto = async (file) => {
+        const formData = new FormData();
+        formData.append("file_encoded", file);
+
+        axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                setUpdating(false);
+
+                // Display new photo
+                getProfilePhoto();
+
+            })
+            .catch((error) => {
+                console.log(error);
+
+                setUpdating(false);
+
+                props.displayError(error);
+            });
+    }
+
     useEffect(() => {
         getBusinessProfile();
 
@@ -242,12 +265,12 @@ function BusinessProfile(props) {
                     <h2>Business Profile</h2>
                 </div>
 
-                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : ""} onClick={() => fileInput.current.click()} />
+                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={() => fileInput.current.click()}>?</Avatar>
 
                 <div className="businessProfile__fields">
 
                     <form onSubmit={updateBusinessProfile}>
-                        <FileInput innerRef={fileInput} handleSelectedFiles={(file) => console.log(file)} accept="application/image" multiple={false} />
+                        <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
 
                         <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} />
 
