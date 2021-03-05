@@ -241,7 +241,7 @@ function BusinessProfile(props) {
                     <h2>Business Profile</h2>
                 </div>
 
-                <Avatar src={"data:image/png;base64," + profilePhoto} />
+                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : ""} />
 
                 <div className="businessProfile__fields">
 
