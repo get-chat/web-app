@@ -154,7 +154,7 @@ function BusinessProfile(props) {
 
     const updateProfilePhoto = async (file) => {
         const formData = new FormData();
-        formData.append("file_encoded", file);
+        formData.append("file_encoded", file[0]);
 
         axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig())
             .then((response) => {
