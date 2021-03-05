@@ -27,17 +27,17 @@ function BusinessProfile(props) {
 
     const [websiteKeyToDelete, setWebsiteKeyToDelete] = useState();
 
-    const [open, setOpen] = React.useState(false);
+    const [isDialogVisible, setDialogVisible] = React.useState(false);
+
+    const showDialog = () => {
+        setDialogVisible(true);
+    };
+
+    const hideDialog = () => {
+        setDialogVisible(false);
+    };
 
     const fileInput = useRef();
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const getBusinessProfile = () => {
         axios.get(`${BASE_URL}settings/business/profile/`, getConfig())
@@ -234,7 +234,7 @@ function BusinessProfile(props) {
 
     const askToRemoveWebsite = (key) => {
         setWebsiteKeyToDelete(key);
-        handleClickOpen();
+        showDialog();
     }
 
     const removeWebsite = () => {
@@ -250,7 +250,7 @@ function BusinessProfile(props) {
             return {...newObj};
         });
 
-        handleClose();
+        hideDialog();
     }
 
     return (
@@ -324,8 +324,8 @@ function BusinessProfile(props) {
                 </div>
 
                 <Dialog
-                    open={open}
-                    onClose={handleClose}>
+                    open={isDialogVisible}
+                    onClose={hideDialog}>
                     <DialogTitle>{"Are you sure?"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
@@ -333,7 +333,7 @@ function BusinessProfile(props) {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose} color="secondary">No</Button>
+                        <Button onClick={hideDialog} color="secondary">No</Button>
                         <Button onClick={removeWebsite} color="primary" autoFocus>Yes, delete</Button>
                     </DialogActions>
                 </Dialog>
