@@ -27,7 +27,7 @@ function BusinessProfile(props) {
 
     const [websiteKeyToDelete, setWebsiteKeyToDelete] = useState();
 
-    const [isDialogVisible, setDialogVisible] = React.useState(false);
+    const [isDialogVisible, setDialogVisible] = useState(false);
 
     const showDialog = () => {
         setDialogVisible(true);

@@ -32,7 +32,10 @@ function Main() {
     const {waId} = useParams();
 
     const [progress, setProgress] = useState(20);
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = useState(false);
+
+    const [currentUser, setCurrentUser] = useState();
+    const [isAdmin, setAdmin] = useState(false);
 
     const [templates, setTemplates] = useState({});
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
@@ -139,8 +142,8 @@ function Main() {
     };
 
     useEffect(() => {
-        // Loading template messages
-        getTemplates();
+        // Retrieve current user, this will trigger other requests
+        retrieveCurrentUser();
 
         // EventBus
         const searchmessagesVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
@@ -244,6 +247,29 @@ function Main() {
         }
     }, [waId]);
 
+    const retrieveCurrentUser = () => {
+        axios.get( `${BASE_URL}users/current/`, getConfig())
+            .then((response) => {
+                console.log("User: ", response.data);
+
+                setCurrentUser(response.data);
+
+                const tempIsAdmin = response.data?.profile?.role === "admin";
+                setAdmin(tempIsAdmin);
+
+                setProgress(30);
+
+                // Trigger next request
+                getTemplates();
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+
+                displayError(error);
+            });
+    }
+
     const getTemplates = () => {
         axios.get( `${BASE_URL}templates/`, getConfig())
             .then((response) => {
@@ -262,7 +288,7 @@ function Main() {
                 setLoadingTemplates(false);
                 setTemplatesReady(true);
 
-                setProgress(40);
+                setProgress(50);
 
             })
             .catch((error) => {
@@ -278,6 +304,7 @@ function Main() {
 
                 {templatesReady &&
                 <Sidebar
+                    currentUser={currentUser}
                     setProgress={setProgress}
                     showNotification={showNotification}
                     setBusinessProfileVisible={setBusinessProfileVisible}

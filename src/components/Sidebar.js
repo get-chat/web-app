@@ -239,7 +239,9 @@ function Sidebar(props) {
     return (
         <div className="sidebar">
             <div className="sidebar__header">
-                <Avatar>?</Avatar>
+                <Avatar>
+                    {props.currentUser ? props.currentUser.username[0].toUpperCase() : ''}
+                </Avatar>
                 <div className="sidebar__headerRight">
                     <IconButton>
                         <ChatIcon />

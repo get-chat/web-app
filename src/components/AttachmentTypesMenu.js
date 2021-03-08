@@ -1,12 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import CloseIcon from "@material-ui/icons/Close";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import {SpeedDialAction} from "@material-ui/lab";
 
 export function AttachmentTypesMenu() {
-    const [open, setOpen] = React.useState(false);
-    const [hidden, setHidden] = React.useState(false);
+    const [open, setOpen] = useState(false);
+    const [hidden, setHidden] = useState(false);
 
     const handleVisibility = () => {
         setHidden((prevHidden) => !prevHidden);
