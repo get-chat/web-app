@@ -16,8 +16,24 @@ function SendTemplateMessage(props) {
         Object.entries(components).forEach((paramEntry, paramIndex) => {
             const key = paramEntry[0];
             const component = paramEntry[1];
+            const componentType = component.type;
 
-            if (component.type === "BODY") {
+            if (componentType === "HEADER") {
+                if (component.format === "IMAGE") {
+                    if (preparedParams[key] === undefined) {
+                        preparedParams[key] = {};
+                    }
+
+                    preparedParams[key] = {
+                        0: {
+                            type: "image",
+                            image: {
+                                link: "",
+                            }
+                        }
+                    };
+                }
+            } else if (componentType === "BODY") {
                 const paramText = component.text;
                 const templateParamsArray = getTemplateParams(paramText);
 
@@ -55,18 +71,19 @@ function SendTemplateMessage(props) {
             const component = paramEntry[1];
 
             if (params[key]) {
-                const localizableParams = [];
                 const paramsArray = Object.values(params[key]);
+
+                /*const localizableParams = [];
                 paramsArray.forEach((paramArrayItem) => {
                     localizableParams.push({
                         "default": paramArrayItem.text
                     })
-                });
+                });*/
 
                 preparedParams[component.type] = {
                     type: component.type.toLowerCase(),
                     parameters: paramsArray,
-                    localizable_params: localizableParams
+                    //localizable_params: localizableParams
                 };
             }
         });
