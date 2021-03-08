@@ -140,8 +140,8 @@ function SendTemplateMessage(props) {
                         <h6>Buttons</h6>
                         {comp.buttons.map((button, buttonIndex) =>
                             <Button key={buttonIndex} color="primary">
-                                {button.text}<br/>
-                                {/*{button.type}*/}
+                                {button.text}
+                                {/*<br/>{button.type}*/}
                             </Button>
                         )}
                     </div>

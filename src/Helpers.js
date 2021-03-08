@@ -207,3 +207,35 @@ export const getTemplateParams = (text) => {
 export const templateParamToInteger = (templateParam) => {
     return templateParam.match(/\d+/);
 }
+
+export const insertTemplateBodyParameters = (text, params) => {
+    if (!text || !params) {
+        return;
+    }
+
+    for (let i = 0; i < params.length; i++) {
+        const component = params[i];
+
+        if (component.type === "body") {
+            component.parameters.forEach((param, index) => {
+                text = text.replace(`{{${index+1}}}`, param.text);
+            });
+
+            break;
+        }
+    }
+
+    return text;
+}
+
+export const getTemplateHeaderImageByParams = (params) => {
+    if (!params) return;
+
+    for (let i = 0; i < params.length; i++) {
+        const component = params[i];
+
+        if (component.type === "header") {
+            return component['parameters']?.[0]?.image?.link;
+        }
+    }
+}
