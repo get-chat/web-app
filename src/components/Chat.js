@@ -578,15 +578,15 @@ export default function Chat(props) {
                         code: templateMessage.language,
                         policy: 'deterministic'
                     },
-                    /*components: [{
+                    components: [{
                         type: 'body',
                         parameters: [
-                            {
+                            /*{
                                 type: 'text',
                                 text: templateMessage.text
-                            }
+                            }*/
                         ]
-                    }]*/
+                    }]
                 }
             }, getConfig())
                 .then((response) => {
