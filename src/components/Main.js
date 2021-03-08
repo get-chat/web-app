@@ -254,6 +254,7 @@ function Main() {
 
                 setCurrentUser(response.data);
 
+                // Check if role is admin
                 const tempIsAdmin = response.data?.profile?.role === "admin";
                 setAdmin(tempIsAdmin);
 
@@ -313,6 +314,7 @@ function Main() {
 
                 {templatesReady &&
                 <Chat
+                    isAdmin={isAdmin}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
