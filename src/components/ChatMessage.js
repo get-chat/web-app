@@ -220,15 +220,12 @@ function ChatMessage(props) {
 
                 {data.type === ChatMessageClass.TYPE_TEMPLATE &&
                 <div className="chat__templateContent">
-
                     {/*<span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage(templateData?.text) }} />*/}
-
                     {Object.values(templateData.components).map((component, index) =>
                         <div key={index}>
-
-                            {component.type === "BODY" &&
+                            {component.type === "HEADER" &&
                             <span>
-                                {component.text}
+                                {component.format}
                             </span>
                             }
 
@@ -245,10 +242,8 @@ function ChatMessage(props) {
                                 )}
                             </div>
                             }
-
                         </div>
                     )}
-
                 </div>
                 }
 
