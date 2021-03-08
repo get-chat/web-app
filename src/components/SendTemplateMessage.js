@@ -133,7 +133,7 @@ function SendTemplateMessage(props) {
                 </div>
             )}
 
-            <Button onClick={send}>Send</Button>
+            <Button onClick={send}>Send (Test)</Button>
 
         </div>
     )

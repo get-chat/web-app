@@ -94,7 +94,7 @@ function TemplateMessages(props) {
                         send={send}/>
 
                     {errors &&
-                    <div>
+                    <div className="templateMessagesDialogErrors">
                         {errors.map((err, index) =>
                             <Alert key={index} severity="error">
                                 <AlertTitle>{err.title}</AlertTitle>
