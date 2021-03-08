@@ -200,7 +200,9 @@ export const displaySeconds = (seconds) => {
 }
 
 export const getTemplateParams = (text) => {
-    return text.match(/\{{(.*?)\}}/g);
+    if (!text) return [];
+    const matches = text.match(/\{{(.*?)\}}/g);
+    return matches ? matches : [];
 }
 
 export const templateParamToInteger = (templateParam) => {
