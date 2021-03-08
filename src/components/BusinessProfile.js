@@ -3,7 +3,16 @@ import '../styles/BusinessProfile.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig, getLastKey, getObjLength} from "../Helpers";
-import {Avatar, CircularProgress, FormControlLabel, IconButton, Radio, RadioGroup, TextField} from "@material-ui/core";
+import {
+    Avatar,
+    CircularProgress, FormControl,
+    FormControlLabel,
+    IconButton, InputLabel, MenuItem,
+    Radio,
+    RadioGroup,
+    Select,
+    TextField
+} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 import Dialog from '@material-ui/core/Dialog';
@@ -278,10 +287,19 @@ function BusinessProfile(props) {
                         <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} />
                         <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} />
 
-                        <h5>Vertical</h5>
+                        <FormControl fullWidth={true}>
+                            <InputLabel id="vertical-label">Age</InputLabel>
+                            <Select value={vertical} onChange={(event) => setVertical(event.target.value)} labelId="vertical-label">
+                                <MenuItem value="">None</MenuItem>
 
+                                {verticalOptions.map((verticalOption, index) =>
+                                    <MenuItem key={index} value={verticalOption}>{verticalOption}</MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+
+                        {/*<h5>Vertical</h5>
                         <RadioGroup row={true} className="businessProfile__fields__verticalOptions">
-
                             {verticalOptions.map((verticalOption, index) =>
                                 <FormControlLabel
                                     key={index}
@@ -291,8 +309,7 @@ function BusinessProfile(props) {
                                     onChange={() => setVertical(verticalOption)}
                                     control={<Radio />} />
                             )}
-
-                        </RadioGroup>
+                        </RadioGroup>*/}
 
                         <h5>Websites</h5>
 
