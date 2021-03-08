@@ -33,8 +33,8 @@ function TemplateMessages(props) {
         showDialog();
     }
 
-    const send = () => {
-        props.onSend(chosenTemplate);
+    const send = (template) => {
+        props.onSend(template ?? chosenTemplate);
         //hideDialog();
     }
 
@@ -89,12 +89,14 @@ function TemplateMessages(props) {
                 onClose={hideDialog}>
                 <DialogTitle>{"Send a template message"}</DialogTitle>
                 <DialogContent>
-                    <SendTemplateMessage data={chosenTemplate} />
+                    <SendTemplateMessage
+                        data={chosenTemplate}
+                        send={send}/>
 
                     {errors &&
                     <div>
                         {errors.map((err, index) =>
-                            <Alert severity="error">
+                            <Alert key={index} severity="error">
                                 <AlertTitle>{err.title}</AlertTitle>
                                 {err.details}
                             </Alert>
@@ -104,7 +106,7 @@ function TemplateMessages(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Cancel</Button>
-                    <Button onClick={send} color="primary" autoFocus>Send</Button>
+                    <Button onClick={(template) => send(template)} color="primary" autoFocus>Send</Button>
                 </DialogActions>
             </Dialog>
 

@@ -13,7 +13,6 @@ function SendTemplateMessage(props) {
         const preparedParams = {};
         const components = {...template.components};
 
-        // TODO: Complete
         Object.entries(components).forEach((paramEntry, paramIndex) => {
             const key = paramEntry[0];
             const component = paramEntry[1];
@@ -48,13 +47,39 @@ function SendTemplateMessage(props) {
     }
 
     const send = () => {
-        const finalData = template;
+        const preparedParams = {};
+        const components = {...template.components};
 
-        Object.entries(params).forEach((paramEntry) => {
-            finalData.components[paramEntry[0]].params = paramEntry[1];
+        Object.entries(components).forEach((paramEntry, paramIndex) => {
+            const key = paramEntry[0];
+            const component = paramEntry[1];
+
+            if (params[key]) {
+                const localizableParams = [];
+                const paramsArray = Object.values(params[key]);
+                paramsArray.forEach((paramArrayItem) => {
+                    localizableParams.push({
+                        "default": paramArrayItem.text
+                    })
+                });
+
+                preparedParams[component.type] = {
+                    type: component.type,
+                    parameters: paramsArray,
+                    localizable_params: localizableParams
+                };
+            }
         });
 
-        console.log(finalData);
+        const finalData = template;
+        finalData.params = Object.values(preparedParams);
+
+        // TODO: Change this later
+        props.send(finalData);
+
+        /*Object.entries(params).forEach((paramEntry) => {
+            finalData.components[paramEntry[0]].params = paramEntry[1];
+        });*/
     }
 
     return (
@@ -80,13 +105,13 @@ function SendTemplateMessage(props) {
                             {comp.text}
                             <div>
                                 {getTemplateParams(comp.text).map((param, paramIndex) =>
-                                <TextField
-                                    value={params[index] ? params[index][templateParamToInteger(param)].text : ''}
-                                    onChange={(event) => updateParam(event, index, templateParamToInteger(param))}
-                                    className="templateMessage__param"
-                                    key={paramIndex}
-                                    label={templateParamToInteger(param)}
-                                    fullWidth={true} />
+                                    <TextField
+                                        value={params[index] ? params[index][templateParamToInteger(param)].text : ''}
+                                        onChange={(event) => updateParam(event, index, templateParamToInteger(param))}
+                                        className="templateMessage__param"
+                                        key={paramIndex}
+                                        label={templateParamToInteger(param)}
+                                        fullWidth={true} />
                                 )}
                             </div>
                         </div>
