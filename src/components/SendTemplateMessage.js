@@ -64,7 +64,7 @@ function SendTemplateMessage(props) {
                 });
 
                 preparedParams[component.type] = {
-                    type: component.type,
+                    type: component.type.toLowerCase(),
                     parameters: paramsArray,
                     localizable_params: localizableParams
                 };
