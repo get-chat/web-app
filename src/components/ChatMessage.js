@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
-import {Avatar, IconButton} from "@material-ui/core";
+import {Avatar, Button, IconButton} from "@material-ui/core";
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import '../styles/InputRange.css';
 import PauseIcon from '@material-ui/icons/Pause';
@@ -32,6 +32,7 @@ const iconStyles = {
 function ChatMessage(props) {
 
     const data = props.messageData;
+    const templateData = data.type === ChatMessageClass.TYPE_TEMPLATE ? props.templates[data.templateName] : undefined;
 
     const generateInitials = () => {
         return (data.senderName ? data.senderName[0] : '')?.toUpperCase();
@@ -218,7 +219,37 @@ function ChatMessage(props) {
                 }
 
                 {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                <span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage(props.templates[data.templateName]?.text) }} />
+                <div className="chat__templateContent">
+
+                    {/*<span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage(templateData?.text) }} />*/}
+
+                    {Object.values(templateData.components).map((component, index) =>
+                        <div key={index}>
+
+                            {component.type === "BODY" &&
+                            <span>
+                                {component.text}
+                            </span>
+                            }
+
+                            {component.type === "BODY" &&
+                            <span>
+                                {component.text}
+                            </span>
+                            }
+
+                            {component.type === "BUTTONS" &&
+                            <div className="chat__templateContent__buttons">
+                                {component.buttons.map((button, buttonIndex) =>
+                                    <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
+                                )}
+                            </div>
+                            }
+
+                        </div>
+                    )}
+
+                </div>
                 }
 
                 {(data.text ?? data.caption) ? <span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption))}} /> : '\u00A0'}

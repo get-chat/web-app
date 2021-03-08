@@ -210,6 +210,10 @@ a.chat__document:hover {
     background-color: #f4f0d7!important;
 }
 
+.chat__templateContent__buttons {
+    margin-top: 10px;
+}
+
 .chat__message__info {
     float: right;
 }
