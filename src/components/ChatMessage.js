@@ -220,12 +220,8 @@ function ChatMessage(props) {
 
                 {data.type === ChatMessageClass.TYPE_TEMPLATE &&
                 <div className="chat__templateContent">
-                    {/*<span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage(templateData?.text) }} />*/}
                     {Object.values(templateData.components).map((component, index) =>
                         <div key={index}>
-
-                            {/*{JSON.stringify(component)}*/}
-
                             {component.type === "HEADER" &&
                             <div className="chat__templateContent__header">
                                 {component.format === "IMAGE" &&
@@ -235,9 +231,7 @@ function ChatMessage(props) {
                             }
 
                             {component.type === "BODY" &&
-                            <div>
-                                {insertTemplateBodyParameters(component.text, data.templateParameters)}
-                            </div>
+                            <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.text, data.templateParameters) }} />
                             }
 
                             {component.type === "BUTTONS" &&

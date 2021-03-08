@@ -209,9 +209,9 @@ export const templateParamToInteger = (templateParam) => {
 }
 
 export const insertTemplateBodyParameters = (text, params) => {
-    if (!text || !params) {
-        return;
-    }
+    if (!text) return;
+
+    if (!params) return text;
 
     for (let i = 0; i < params.length; i++) {
         const component = params[i];

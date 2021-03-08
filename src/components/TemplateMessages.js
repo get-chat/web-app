@@ -91,7 +91,7 @@ function TemplateMessages(props) {
                 <DialogContent>
                     <SendTemplateMessage
                         data={chosenTemplate}
-                        send={send}/>
+                        send={(template) => send(template)}/>
 
                     {errors &&
                     <div className="templateMessagesDialogErrors">
@@ -106,7 +106,7 @@ function TemplateMessages(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Cancel</Button>
-                    <Button onClick={(template) => send(template)} color="primary" autoFocus>Send</Button>
+                    <Button onClick={() => send()} color="primary" autoFocus>Send</Button>
                 </DialogActions>
             </Dialog>
 

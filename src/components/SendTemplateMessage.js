@@ -20,10 +20,6 @@ function SendTemplateMessage(props) {
 
             if (componentType === "HEADER") {
                 if (component.format === "IMAGE") {
-                    if (preparedParams[key] === undefined) {
-                        preparedParams[key] = {};
-                    }
-
                     preparedParams[key] = {
                         0: {
                             type: "image",
