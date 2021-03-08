@@ -34,6 +34,7 @@ export class ChatMessageClass {
         this.senderName = this.getSenderName();
         this.initials = this.senderName ? this.senderName[0] : "?";
         this.text = payload.text?.body;
+        this.buttonText = payload?.button?.text;
         this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
         this.isSeen = data.seen;
 

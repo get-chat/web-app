@@ -28,7 +28,7 @@ function SendTemplateMessage(props) {
                         0: {
                             type: "image",
                             image: {
-                                link: "",
+                                link: "https://pbs.twimg.com/media/D2scHivWsAEtJsE.jpg" //""
                             }
                         }
                     };
