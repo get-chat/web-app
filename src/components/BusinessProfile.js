@@ -17,8 +17,27 @@ function BusinessProfile(props) {
     const [about, setAbout] = useState('');
     const [profilePhoto, setProfilePhoto] = useState();
 
+    let cancelToken;
+    let source;
+
+    const generateCancelToken = () => {
+        cancelToken = axios.CancelToken;
+        source = cancelToken.source();
+    }
+
+    useEffect(() => {
+        // Generating cancel token
+        generateCancelToken();
+
+        getBusinessProfile();
+
+        return () => {
+            source.cancel();
+        }
+    }, []);
+
     const getBusinessProfile = () => {
-        axios.get(`${BASE_URL}settings/business/profile/`, getConfig())
+        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelToken))
             .then((response) => {
                 console.log(response.data);
 
@@ -48,7 +67,7 @@ function BusinessProfile(props) {
     }
 
     const getAbout = () => {
-        axios.get(`${BASE_URL}settings/profile/about/`, getConfig())
+        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelToken))
             .then((response) => {
                 console.log(response.data);
 
@@ -67,7 +86,7 @@ function BusinessProfile(props) {
     }
 
     const getProfilePhoto = () => {
-        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, undefined, 'arraybuffer'))
+        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelToken, 'arraybuffer'))
             .then((response) => {
                 const base64 = Buffer.from(response.data, 'binary').toString('base64');
                 setProfilePhoto(base64);
@@ -80,10 +99,6 @@ function BusinessProfile(props) {
                 props.displayError(error);
             });
     }
-
-    useEffect(() => {
-        getBusinessProfile();
-    }, []);
 
     return(
         <div className="sidebarBusinessProfile">
