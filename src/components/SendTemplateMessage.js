@@ -1,13 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 import '../styles/SendTemplateMessage.css';
-import {getTemplateParams, templateParamToInteger} from "../Helpers";
+import {getConfig, getTemplateParams, templateParamToInteger} from "../Helpers";
+import FileInput from "./FileInput";
+import axios from "axios";
+import {BASE_URL} from "../Constants";
 
 function SendTemplateMessage(props) {
 
     const template = props.data;
 
     const [params, setParams] = useState({});
+    const [headerImageURL, setHeaderImageURL] = useState('');
+
+    const headerImageFileInput = useRef();
 
     useEffect(() => {
         const preparedParams = {};
@@ -95,6 +101,33 @@ function SendTemplateMessage(props) {
         });*/
     }
 
+    const handleChosenImage = (file) => {
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file_encoded", file[0]);
+
+        axios.post(`${BASE_URL}media/`, formData, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                const fileURL = response.data.file;
+                setHeaderImageURL(fileURL);
+
+                // Update data
+                setParams(prevState => {
+                    // TODO: Do this in a better way depends on template headers complexity
+                    prevState[0][0]['image']['link'] = fileURL;
+
+                    return prevState;
+                });
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+            });
+    }
+
     return (
         <div className="sendTemplateMessage">
             <h4 className="sendTemplateMessage__title">{template.name}</h4>
@@ -108,7 +141,10 @@ function SendTemplateMessage(props) {
                         <div>
                             {comp.format === "IMAGE"
                                 ?
-                                <Button color="primary">Choose an image</Button>
+                                <div>
+                                    <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
+                                    <Button color="primary" onClick={() => headerImageFileInput.current.click()}>Choose an image</Button>
+                                </div>
                                 :
                                 <span>{comp.format}</span>
                             }

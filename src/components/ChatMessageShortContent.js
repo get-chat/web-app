@@ -9,14 +9,14 @@ function ChatMessageShortContent(props) {
         <span>
             <ChatMessageTypeIcon type={props.type}/>
 
-            {props.type === ChatMessageClass.TYPE_TEXT
+            {(props.type === ChatMessageClass.TYPE_TEXT || props.type === ChatMessageClass.TYPE_BUTTON)
                 ?
-                <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.text, true)}} />
+                <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.text ?? props.buttonText, true)}} />
                 :
                 <span>
                     {(props.caption && props.caption.length > 0)
                         ?
-                        <span>{props.caption}</span>
+                        <span dangerouslySetInnerHTML={{__html: props.caption}} />
                         :
                         <ChatMessageTypeLabel type={props.type}/>
                     }

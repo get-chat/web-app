@@ -130,6 +130,7 @@ function SidebarChat(props) {
                             <span className="sidebarChat__info__lastMessage__body">
                                 <ChatMessageShortContent
                                     type={props.chatData.lastMessageType}
+                                    buttonText={props.chatData.lastMessageButtonText}
                                     text={props.chatData.lastMessageBody}
                                     caption={props.chatData.lastMessageCaption} />
                             </span>

@@ -10,6 +10,7 @@ export class ChatMessageClass {
     static TYPE_DOCUMENT = 'document';
     static TYPE_STICKER = 'sticker';
     static TYPE_TEMPLATE = 'template';
+    static TYPE_BUTTON = 'button';
 
     static STATUS_SENT = 'sent';
     static STATUS_DELIVERED = 'delivered';
