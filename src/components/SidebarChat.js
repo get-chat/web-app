@@ -15,6 +15,7 @@ function SidebarChat(props) {
 
     const history = useHistory();
 
+    const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
@@ -39,11 +40,22 @@ function SidebarChat(props) {
             } else {
                 const minutes = momentDate.diff(curDate, 'minutes');
                 if (minutes > 1) {
-                    suffix = ' minutes';
+                    if (minutes > 1) {
+                        suffix = ' minutes';
+                    } else {
+                        suffix = ' minute';
+                    }
+                    setTimeLeft(minutes + suffix);
                 } else {
-                    suffix = ' minute';
+                    const seconds = momentDate.diff(curDate, 'seconds');
+                    if (seconds > 1) {
+                        suffix = ' minute';
+                        setTimeLeft(minutes + suffix);
+                    } else {
+                        // Expired
+                        setExpired(true);
+                    }
                 }
-                setTimeLeft(minutes + suffix);
             }
         }
 
@@ -51,7 +63,7 @@ function SidebarChat(props) {
         calculateRemaining();
 
         let intervalId;
-        if (!props.chatData.isExpired) {
+        if (!isExpired) {
             intervalId = setInterval(() => {
                 calculateRemaining();
             }, 30000);
@@ -61,10 +73,10 @@ function SidebarChat(props) {
             clearInterval(intervalId);
         }
 
-    }, [props.chatData.lastMessageTimestamp]);
+    }, [isExpired, props.chatData.lastMessageTimestamp]);
 
     const handleDroppedFiles = (event) => {
-        if (props.chatData.isExpired) {
+        if (isExpired) {
 
         }
 
@@ -86,7 +98,7 @@ function SidebarChat(props) {
                 onDrop={(event) => handleDroppedFiles(event)}
                 onDragOver={(event) => handleDragOver(event)}>
 
-                <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                <Avatar className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                 <div className="sidebarChat__info">
 
                     <div className="sidebarChat__info__nameWrapper">
@@ -124,7 +136,7 @@ function SidebarChat(props) {
                         }
                     </span>
 
-                    {props.chatData.isExpired
+                    {isExpired
                         ?
                         <span className="sidebarChat__info__expired">Expired</span>
                         :
