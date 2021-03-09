@@ -309,6 +309,7 @@ function Main() {
                     setProgress={setProgress}
                     showNotification={showNotification}
                     setBusinessProfileVisible={setBusinessProfileVisible}
+                    displayError={(error) => displayError(error)}
                 />
                 }
 

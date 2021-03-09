@@ -305,7 +305,10 @@ function Sidebar(props) {
             </div>
 
             {isProfileVisible &&
-            <BusinessProfile currentUser={props.currentUser} onHide={() => setProfileVisible(false)} />
+            <BusinessProfile
+                currentUser={props.currentUser}
+                onHide={() => setProfileVisible(false)}
+                displayError={props.displayError}/>
             }
 
             <Menu

@@ -288,7 +288,7 @@ function EditBusinessProfile(props) {
                         <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} />
 
                         <FormControl fullWidth={true}>
-                            <InputLabel id="vertical-label">Age</InputLabel>
+                            <InputLabel id="vertical-label">Vertical</InputLabel>
                             <Select value={vertical} onChange={(event) => setVertical(event.target.value)} labelId="vertical-label">
                                 <MenuItem value="">None</MenuItem>
 
