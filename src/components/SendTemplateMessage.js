@@ -142,8 +142,13 @@ function SendTemplateMessage(props) {
                             {comp.format === "IMAGE"
                                 ?
                                 <div>
+                                    <div>
+                                        {headerImageURL &&
+                                        <img src={headerImageURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />
+                                        }
+                                    </div>
                                     <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
-                                    <Button color="primary" onClick={() => headerImageFileInput.current.click()}>Choose an image</Button>
+                                    <Button color="primary" onClick={() => headerImageFileInput.current.click()}>Upload an header image</Button>
                                 </div>
                                 :
                                 <span>{comp.format}</span>

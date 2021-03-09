@@ -25,3 +25,11 @@
 .templateMessagesDialogErrors .MuiAlert-root {
     margin-bottom: 5px!important;
 }
+
+.sendTemplateMessage__component__header__preview {
+    max-height: 100px;
+    max-width: 250px;
+    object-fit: contain;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
