@@ -13,7 +13,7 @@ import {
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_MARKED_AS_SEEN,
-    EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR
+    EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSAGE
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import ContactClass from "../ContactClass";
@@ -591,6 +591,10 @@ export default function Chat(props) {
             }, getConfig())
                 .then((response) => {
                     console.log(response.data);
+
+                    // Hide dialog by this event
+                    PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
+
                 })
                 .catch((error) => {
                     // TODO: Handle errors

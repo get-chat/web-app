@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Dialog from "@material-ui/core/Dialog";
 import SendTemplateMessage from "./SendTemplateMessage";
-import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR} from "../Constants";
+import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSAGE} from "../Constants";
 import PubSub from "pubsub-js";
 
 function TemplateMessages(props) {
@@ -16,6 +16,7 @@ function TemplateMessages(props) {
     const [chosenTemplate, setChosenTemplate] = useState();
     const [isDialogVisible, setDialogVisible] = useState(false);
 
+    const [isSending, setSending] = useState(false);
     const [errors, setErrors] = useState();
 
     const sendButtonRef = useRef();
@@ -41,18 +42,28 @@ function TemplateMessages(props) {
     }
 
     const sendByRef = () => {
+        setSending(true);
         sendButtonRef.current?.click();
     }
 
     useEffect(() => {
         const onSendTemplateMessageError = function (msg, data) {
             setErrors(data);
+            setSending(false);
         }
 
         const sendTemplateMessageErrorEventToken = PubSub.subscribe(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, onSendTemplateMessageError);
 
+        const onSentTemplateMessage = function (msg, data) {
+            hideDialog();
+            setSending(false);
+        }
+
+        const sentTemplateMessageEventToken = PubSub.subscribe(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, onSentTemplateMessage);
+
         return () => {
             PubSub.unsubscribe(sendTemplateMessageErrorEventToken);
+            PubSub.unsubscribe(sentTemplateMessageEventToken);
         }
     }, []);
 
@@ -113,7 +124,7 @@ function TemplateMessages(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Cancel</Button>
-                    <Button onClick={sendByRef} color="primary" autoFocus>Send</Button>
+                    <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus>Send</Button>
                 </DialogActions>
             </Dialog>
 

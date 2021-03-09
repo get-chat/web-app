@@ -204,7 +204,7 @@ function SendTemplateMessage(props) {
                 </div>
             )}
 
-            <Button innerRef={props.sendButtonInnerRef} onClick={send}>Send</Button>
+            <Button innerRef={props.sendButtonInnerRef} onClick={send} className="hidden">Send</Button>
         </div>
     )
 }

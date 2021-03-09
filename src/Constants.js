@@ -13,6 +13,7 @@ export const EVENT_TOPIC_MARKED_AS_SEEN = "marked_as_seen";
 export const EVENT_TOPIC_REQUEST_MIC_PERMISSION = "request_mic_permission";
 export const EVENT_TOPIC_DISPLAY_ERROR = "display_error";
 export const EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR = "send_template_message_error";
+export const EVENT_TOPIC_SENT_TEMPLATE_MESSAGE = "sent_template_message";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
