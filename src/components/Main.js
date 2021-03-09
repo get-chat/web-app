@@ -305,6 +305,7 @@ function Main() {
 
                 {templatesReady &&
                 <Sidebar
+                    isAdmin={isAdmin}
                     currentUser={currentUser}
                     setProgress={setProgress}
                     showNotification={showNotification}
