@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Button} from "@material-ui/core";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -18,6 +18,8 @@ function TemplateMessages(props) {
 
     const [errors, setErrors] = useState();
 
+    const sendButtonRef = useRef();
+
     const showDialog = () => {
         setErrors(undefined);
         setDialogVisible(true);
@@ -36,6 +38,10 @@ function TemplateMessages(props) {
     const send = (template) => {
         props.onSend(template ?? chosenTemplate);
         //hideDialog();
+    }
+
+    const sendByRef = () => {
+        sendButtonRef.current?.click();
     }
 
     useEffect(() => {
@@ -91,7 +97,8 @@ function TemplateMessages(props) {
                 <DialogContent>
                     <SendTemplateMessage
                         data={chosenTemplate}
-                        send={(template) => send(template)}/>
+                        send={(template) => send(template)}
+                        sendButtonInnerRef={sendButtonRef} />
 
                     {errors &&
                     <div className="templateMessagesDialogErrors">
@@ -106,7 +113,7 @@ function TemplateMessages(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Cancel</Button>
-                    <Button onClick={() => send()} color="primary" autoFocus>Send</Button>
+                    <Button onClick={sendByRef} color="primary" autoFocus>Send</Button>
                 </DialogActions>
             </Dialog>
 
