@@ -14,6 +14,7 @@ import ChatClass from "../ChatClass";
 import UnseenMessageClass from "../UnseenMessageClass";
 import PubSub from "pubsub-js";
 import {avatarStyles} from "../AvatarStyles";
+import BusinessProfile from "./BusinessProfile";
 
 function Sidebar(props) {
 
@@ -26,6 +27,7 @@ function Sidebar(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [contactResults, setContactResults] = useState({});
+    const [isProfileVisible, setProfileVisible] = useState(false);
 
     const avatarClasses = avatarStyles();
 
@@ -299,6 +301,10 @@ function Sidebar(props) {
                 </div>
                 }
             </div>
+
+            {isProfileVisible &&
+            <BusinessProfile/>
+            }
 
             <Menu
                 anchorEl={anchorEl}

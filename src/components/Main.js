@@ -25,7 +25,7 @@ import {
 } from "../Constants";
 import Moment from "react-moment";
 import ChatMessageClass from "../ChatMessageClass";
-import BusinessProfile from "./BusinessProfile";
+import EditBusinessProfile from "./EditBusinessProfile";
 
 function Main() {
 
@@ -332,7 +332,7 @@ function Main() {
                 }
 
                 {isBusinessProfileVisible &&
-                <BusinessProfile
+                <EditBusinessProfile
                     isAdmin={isAdmin}
                     displayError={displayError}
                     setBusinessProfileVisible={setBusinessProfileVisible} />

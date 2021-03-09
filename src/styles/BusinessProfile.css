@@ -1,135 +1,24 @@
-.businessProfileOuter {
+.sidebarBusinessProfile {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 11;
-    padding: 20px 40px;
-}
-
-.businessProfileOuter__closeIcon {
-    position: absolute!important;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(255, 255, 255, 0.1)!important;
-}
-
-.businessProfileOuter__closeIcon .MuiSvgIcon-root {
-    color: white!important;
-}
-
-.businessProfile {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     background-color: white;
-    box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.4);
-    border-radius: 10px;
-    width: 1000px;
-    max-width: 100%;
-    padding: 20px 40px;
-    overflow-y: auto;
 }
 
-.businessProfile__header {
+.sidebarBusinessProfile__header {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.businessProfile .MuiAvatar-root {
-    height: 150px;
-    width: 150px;
-    align-self: center;
-    font-size: 70px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: opacity linear .1s;
-}
-
-.businessProfile .MuiAvatar-root:hover {
-    opacity: 0.75;
-}
-
-.businessProfile__fields {
-    width: 100%;
-}
-
-.businessProfile__fields .MuiFormControl-root {
-    margin-bottom: 20px;
-}
-
-.businessProfile__submit .MuiButton-label {
+    background-color: var(--color-primary-light);
+    padding: 4px 15px;
+    color: white;
     font-size: 18px;
 }
-
-.businessProfile__fields .MuiButtonBase-root.MuiButton-text {
-    margin-top: 20px;
+.sidebarBusinessProfile__header .MuiButtonBase-root {
+    margin-right: 10px;
 }
 
-.businessProfile__fields .MuiTypography-body1 {
-    font-size: 15px;
-}
-
-.businessProfile__loading {
-    border-radius: 10px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 15;
-}
-
-.MuiFormControlLabel-root {
-    margin-right: 20px!important;
-}
-
-.businessProfile h5 {
-    color: rgba(0, 0, 0, 0.5);
-    margin-top: 15px;
-    margin-bottom: 10px;
-}
-
-.businessProfile__fields__verticalOptions {
-    margin-bottom: 20px;
-}
-
-.businessProfile__fields__websites {
-    display: flex;
-    flex-direction: column;
-}
-
-.businessProfile__fields__websites .MuiButtonBase-root {
-    align-self: flex-end;
-    justify-self: flex-end;
-}
-
-.businessProfile__fields__websites__wrapper {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-}
-
-.businessProfile__fields__websites__wrapper .MuiButtonBase-root.MuiButton-text {
-    margin-top: 5px;
-}
-
-.businessProfile__fields__websites__wrapper .MuiFormControl-root {
-    margin-bottom: 5px;
+.sidebarBusinessProfile__header .MuiSvgIcon-root {
+    color: white!important;
 }
