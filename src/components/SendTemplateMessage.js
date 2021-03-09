@@ -12,6 +12,7 @@ function SendTemplateMessage(props) {
 
     const [params, setParams] = useState({});
     const [headerImageURL, setHeaderImageURL] = useState('');
+    const [isUploading, setUploading] = useState(false);
 
     const headerImageFileInput = useRef();
 
@@ -117,6 +118,8 @@ function SendTemplateMessage(props) {
         const formData = new FormData();
         formData.append("file_encoded", file[0]);
 
+        setUploading(true);
+
         axios.post(`${BASE_URL}media/`, formData, getConfig())
             .then((response) => {
                 console.log(response.data);
@@ -124,9 +127,13 @@ function SendTemplateMessage(props) {
                 const fileURL = response.data.file;
                 setHeaderImageURL(fileURL);
 
+                setUploading(false);
+
             })
             .catch((error) => {
                 // TODO: Handle errors
+
+                setUploading(false);
             });
     }
 
@@ -150,7 +157,7 @@ function SendTemplateMessage(props) {
                                         }
                                     </div>
                                     <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
-                                    <Button color="primary" onClick={() => headerImageFileInput.current.click()}>Upload an header image</Button>
+                                    <Button color="primary" onClick={() => headerImageFileInput.current.click()} disabled={isUploading}>Upload an header image</Button>
                                     {headerImageURL &&
                                     <Button color="secondary" onClick={() => setHeaderImageURL('')}>Delete</Button>
                                     }
