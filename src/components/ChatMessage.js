@@ -225,7 +225,7 @@ function ChatMessage(props) {
                             {component.type === "HEADER" &&
                             <div className="chat__templateContent__header">
                                 {component.format === "IMAGE" &&
-                                    <img src={getTemplateHeaderImageByParams(data.templateParameters)} />
+                                    <img src={getTemplateHeaderImageByParams(data.templateParameters)} alt="Template header" />
                                 }
                             </div>
                             }
