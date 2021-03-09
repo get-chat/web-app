@@ -106,7 +106,12 @@ function SendTemplateMessage(props) {
                     <div className="sendTemplateMessage__component__header sendTemplateMessage__section">
                         <h6>Header</h6>
                         <div>
-                            {comp.format}
+                            {comp.format === "IMAGE"
+                                ?
+                                <Button color="primary">Choose an image</Button>
+                                :
+                                <span>{comp.format}</span>
+                            }
                         </div>
                     </div>
                     }
@@ -135,7 +140,7 @@ function SendTemplateMessage(props) {
                     <div className="sendTemplateMessage__component__buttons sendTemplateMessage__section">
                         <h6>Buttons</h6>
                         {comp.buttons.map((button, buttonIndex) =>
-                            <Button key={buttonIndex} color="primary">
+                            <Button key={buttonIndex} color="primary" disabled={true}>
                                 {button.text}
                                 {/*<br/>{button.type}*/}
                             </Button>
