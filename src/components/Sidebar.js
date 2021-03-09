@@ -13,6 +13,7 @@ import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../ChatClass";
 import UnseenMessageClass from "../UnseenMessageClass";
 import PubSub from "pubsub-js";
+import {avatarStyles} from "../AvatarStyles";
 
 function Sidebar(props) {
 
@@ -25,6 +26,8 @@ function Sidebar(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [contactResults, setContactResults] = useState({});
+
+    const avatarClasses = avatarStyles();
 
     const clearUserSession = () => {
         clearToken();
@@ -239,7 +242,7 @@ function Sidebar(props) {
     return (
         <div className="sidebar">
             <div className="sidebar__header">
-                <Avatar>
+                <Avatar className={props.currentUser ? avatarClasses[props.currentUser.username[0].toUpperCase()] : ''}>
                     {props.currentUser ? props.currentUser.username[0].toUpperCase() : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
