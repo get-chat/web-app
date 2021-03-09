@@ -60,7 +60,9 @@ function SendTemplateMessage(props) {
         // Update params when header image changes
         setParams(prevState => {
             // TODO: Do this in a better way depends on template headers complexity
-            prevState[0][0]['image']['link'] = headerImageURL;
+            if (prevState[0] && prevState[0][0] && prevState[0][0]['image']) {
+                prevState[0][0]['image']['link'] = headerImageURL;
+            }
 
             return prevState;
         });
