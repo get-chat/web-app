@@ -333,6 +333,7 @@ function Main() {
 
                 {isBusinessProfileVisible &&
                 <BusinessProfile
+                    isAdmin={isAdmin}
                     displayError={displayError}
                     setBusinessProfileVisible={setBusinessProfileVisible} />
                 }
