@@ -55,6 +55,16 @@ function SendTemplateMessage(props) {
 
     }, []);
 
+    useEffect(() => {
+        // Update params when header image changes
+        setParams(prevState => {
+            // TODO: Do this in a better way depends on template headers complexity
+            prevState[0][0]['image']['link'] = headerImageURL;
+
+            return prevState;
+        });
+    }, [headerImageURL, params]);
+
     const updateParam = (event, index, paramKey) => {
         setParams(prevState => {
             const nextState = prevState;
@@ -114,14 +124,6 @@ function SendTemplateMessage(props) {
                 const fileURL = response.data.file;
                 setHeaderImageURL(fileURL);
 
-                // Update data
-                setParams(prevState => {
-                    // TODO: Do this in a better way depends on template headers complexity
-                    prevState[0][0]['image']['link'] = fileURL;
-
-                    return prevState;
-                });
-
             })
             .catch((error) => {
                 // TODO: Handle errors
@@ -149,6 +151,9 @@ function SendTemplateMessage(props) {
                                     </div>
                                     <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
                                     <Button color="primary" onClick={() => headerImageFileInput.current.click()}>Upload an header image</Button>
+                                    {headerImageURL &&
+                                    <Button color="secondary" onClick={() => setHeaderImageURL('')}>Delete</Button>
+                                    }
                                 </div>
                                 :
                                 <span>{comp.format}</span>
