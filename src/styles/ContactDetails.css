@@ -14,7 +14,7 @@
 .contactDetails__header > h3 {
     margin-left: 10px;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .contactDetails__body {
@@ -30,7 +30,7 @@
     padding: 20px;
     margin-bottom: 10px;
     background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 3px var(--shadow-light);
 }
 
 .contactDetails__body__section > h3 {

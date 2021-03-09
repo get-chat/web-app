@@ -7,15 +7,22 @@ function BusinessProfile(props) {
     return(
         <div className="sidebarBusinessProfile">
             <div className="sidebarBusinessProfile__header">
-                <IconButton>
+                <IconButton onClick={props.onHide}>
                     <ArrowBack />
                 </IconButton>
 
-                <span>Profile</span>
+                <h3>Profile</h3>
             </div>
 
-            <div className="sidebarBusinessProfile__content">
-
+            <div className="sidebarBusinessProfile__body">
+                <div className="sidebarBusinessProfile__body__section">
+                    {props.currentUser &&
+                    <div>
+                        <h3>{props.currentUser.username}</h3>
+                        <span>{props.currentUser.first_name + ' ' + props.currentUser.last_name}</span>
+                    </div>
+                    }
+                </div>
             </div>
         </div>
     )

@@ -96,6 +96,10 @@ a {
     text-transform: uppercase;
 }
 
+.cursorPointer {
+    cursor: pointer;
+}
+
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root) {
     color: #919191;
 }

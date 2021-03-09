@@ -244,7 +244,9 @@ function Sidebar(props) {
     return (
         <div className="sidebar">
             <div className="sidebar__header">
-                <Avatar className={props.currentUser ? avatarClasses[props.currentUser.username[0].toUpperCase()] : ''}>
+                <Avatar
+                    onClick={() => setProfileVisible(true)}
+                    className={"cursorPointer " + (props.currentUser ? avatarClasses[props.currentUser.username[0].toUpperCase()] : '')}>
                     {props.currentUser ? props.currentUser.username[0].toUpperCase() : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
@@ -303,7 +305,7 @@ function Sidebar(props) {
             </div>
 
             {isProfileVisible &&
-            <BusinessProfile/>
+            <BusinessProfile currentUser={props.currentUser} onHide={() => setProfileVisible(false)} />
             }
 
             <Menu
