@@ -5,7 +5,7 @@ import {ArrowBack, Edit} from "@material-ui/icons";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
-import FileInput from "./FileInput";
+import {avatarStyles} from "../AvatarStyles";
 
 function BusinessProfile(props) {
 
@@ -26,6 +26,8 @@ function BusinessProfile(props) {
     const generateCancelToken = () => {
         cancelTokenSource = axios.CancelToken.source();
     }
+
+    const avatarClasses = avatarStyles();
 
     useEffect(() => {
         // Generating cancel token
@@ -140,6 +142,10 @@ function BusinessProfile(props) {
                 <div className="sidebarBusinessProfile__body__section">
                     {props.currentUser &&
                     <div>
+                        <div className="sidebarBusinessProfile__body__avatarContainer">
+                            <Avatar className={avatarClasses[props.currentUser.username[0].toUpperCase()]}>{props.currentUser.username[0].toUpperCase()}</Avatar>
+                        </div>
+
                         <h3>{props.currentUser.username}</h3>
                         <span>{props.currentUser.first_name + ' ' + props.currentUser.last_name}</span>
                     </div>
@@ -162,10 +168,10 @@ function BusinessProfile(props) {
                     <div className="sidebarBusinessProfile__body__section__subSection">
                         <div>
 
-                            <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
+                            {/*<FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />*/}
 
                             <div className="sidebarBusinessProfile__body__avatarContainer">
-                                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={() => fileInput.current.click()}>?</Avatar>
+                                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined}>?</Avatar>
                             </div>
 
                             <h5>About</h5>
