@@ -321,14 +321,20 @@ a.chat__document:hover {
 .chat__body__loadingMore {
     position: absolute;
     top: 0;
-    left: 50%;
-    transform: translate(-50%);
+    left: 0;
+    right: 0;
     margin-top: 63px;
+    z-index: 9;
+    display: flex;
+    justify-content: center;
+}
+
+.chat__body__loadingMore__wrapper {
+    width: auto;
     padding: 10px 10px 4px 10px;
     border-radius: 40px;
     background-color: white;
     box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
-    z-index: 9;
 }
 
 .chat__body__dateIndicator {
@@ -336,7 +342,6 @@ a.chat__document:hover {
     left: 10px;
     right: 10px;
     top: 0;
-    transform: translate(-50%);
     margin-top: 48px;
     z-index: 8;
 }

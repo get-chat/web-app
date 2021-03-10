@@ -762,9 +762,11 @@ export default function Chat(props) {
                 </div>
             </Zoom>
 
-            <Zoom in={isLoadingMoreMessages}>
+            <Zoom in={!isLoaded || isLoadingMoreMessages}>
                 <div className="chat__body__loadingMore">
-                    <CircularProgress size={28} />
+                    <div className="chat__body__loadingMore__wrapper">
+                        <CircularProgress size={28} />
+                    </div>
                 </div>
             </Zoom>
 
