@@ -192,19 +192,19 @@ function SendTemplateMessage(props) {
                                 )}
                             </div>
                         </div>
-                    </div>
 
-                    {comp.type === "BUTTONS" &&
-                    <div className="sendTemplateMessage__component__buttons sendTemplateMessage__section">
-                        <h6>Buttons</h6>
-                        {comp.buttons.map((button, buttonIndex) =>
-                            <Button key={buttonIndex} color="primary" disabled={true}>
-                                {button.text}
-                                {/*<br/>{button.type}*/}
-                            </Button>
-                        )}
+                        {comp.type === "BUTTONS" &&
+                        <div>
+                            {comp.buttons.map((button, buttonIndex) =>
+                                <Button key={buttonIndex} color="primary" disabled={true}>
+                                    {button.text}
+                                    {/*<br/>{button.type}*/}
+                                </Button>
+                            )}
+                        </div>
+                        }
+
                     </div>
-                    }
 
                 </div>
             )}
