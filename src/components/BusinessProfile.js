@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import '../styles/BusinessProfile.css';
 import {Avatar, IconButton} from "@material-ui/core";
-import {ArrowBack} from "@material-ui/icons";
+import {ArrowBack, Edit} from "@material-ui/icons";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
@@ -147,7 +147,12 @@ function BusinessProfile(props) {
                 </div>
 
                 <div className="sidebarBusinessProfile__body__section">
-                    <h3>Business Profile</h3>
+                    <div className="sidebarBusinessProfile__body__section__header">
+                        <h3>Business Profile</h3>
+                        <IconButton>
+                            <Edit />
+                        </IconButton>
+                    </div>
 
                     {!isLoaded &&
                     <div>Loading</div>

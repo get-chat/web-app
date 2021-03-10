@@ -64,3 +64,15 @@
     width: 200px;
     margin-bottom: 15px;
 }
+
+.sidebarBusinessProfile__body__section__header {
+    display: flex;
+}
+
+.sidebarBusinessProfile__body__section__header h3 {
+    flex: 1 1;
+}
+
+.sidebarBusinessProfile__body__section__header .MuiButtonBase-root {
+    margin-top: -11px;
+}
