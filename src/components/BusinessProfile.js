@@ -1,14 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import '../styles/BusinessProfile.css';
-import {IconButton} from "@material-ui/core";
+import {Avatar, IconButton} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
+import FileInput from "./FileInput";
 
 function BusinessProfile(props) {
 
     const [isLoaded, setLoaded] = useState(false);
+    const [isUpdating, setUpdating] = useState(false);
     const [address, setAddress] = useState('');
     const [description, setDescription] = useState('');
     const [email, setEmail] = useState('');
@@ -17,12 +19,12 @@ function BusinessProfile(props) {
     const [about, setAbout] = useState('');
     const [profilePhoto, setProfilePhoto] = useState();
 
-    let cancelToken;
-    let source;
+    const fileInput = useRef();
+
+    let cancelTokenSource;
 
     const generateCancelToken = () => {
-        cancelToken = axios.CancelToken;
-        source = cancelToken.source();
+        cancelTokenSource = axios.CancelToken.source();
     }
 
     useEffect(() => {
@@ -32,12 +34,13 @@ function BusinessProfile(props) {
         getBusinessProfile();
 
         return () => {
-            source.cancel();
+            cancelTokenSource.cancel();
         }
     }, []);
 
     const getBusinessProfile = () => {
-        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelToken))
+        console.log(cancelTokenSource);
+        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelTokenSource.token))
             .then((response) => {
                 console.log(response.data);
 
@@ -67,7 +70,7 @@ function BusinessProfile(props) {
     }
 
     const getAbout = () => {
-        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelToken))
+        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelTokenSource.token))
             .then((response) => {
                 console.log(response.data);
 
@@ -86,7 +89,7 @@ function BusinessProfile(props) {
     }
 
     const getProfilePhoto = () => {
-        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelToken, 'arraybuffer'))
+        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelTokenSource.token, 'arraybuffer'))
             .then((response) => {
                 const base64 = Buffer.from(response.data, 'binary').toString('base64');
                 setProfilePhoto(base64);
@@ -95,6 +98,29 @@ function BusinessProfile(props) {
             })
             .catch((error) => {
                 console.log(error);
+
+                props.displayError(error);
+            });
+    }
+
+    const updateProfilePhoto = async (file) => {
+        const formData = new FormData();
+        formData.append("file_encoded", file[0]);
+
+        axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelTokenSource.token))
+            .then((response) => {
+                console.log(response.data);
+
+                setUpdating(false);
+
+                // Display new photo
+                getProfilePhoto();
+
+            })
+            .catch((error) => {
+                console.log(error);
+
+                setUpdating(false);
 
                 props.displayError(error);
             });
@@ -130,6 +156,13 @@ function BusinessProfile(props) {
                     {isLoaded &&
                     <div className="sidebarBusinessProfile__body__section__subSection">
                         <div>
+
+                            <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
+
+                            <div className="sidebarBusinessProfile__body__avatarContainer">
+                                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={() => fileInput.current.click()}>?</Avatar>
+                            </div>
+
                             <h5>About</h5>
                             {about}
                         </div>

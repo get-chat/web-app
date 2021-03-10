@@ -53,3 +53,14 @@
 .sidebarBusinessProfile__body__section__subSection h5 {
     color: rgba(0, 0, 0, 0.5);
 }
+
+.sidebarBusinessProfile__body__avatarContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.sidebarBusinessProfile__body__avatarContainer .MuiAvatar-root {
+    height: 200px;
+    width: 200px;
+    margin-bottom: 15px;
+}
