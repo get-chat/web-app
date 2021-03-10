@@ -1,12 +1,12 @@
 .sidebarBusinessProfile {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: #ededed;
-    overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .sidebarBusinessProfile__header {
@@ -25,6 +25,12 @@
 
 .sidebarBusinessProfile__header .MuiSvgIcon-root {
     color: white!important;
+}
+
+.sidebarBusinessProfile__body {
+    flex: 1 1;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .sidebarBusinessProfile__body__section {
