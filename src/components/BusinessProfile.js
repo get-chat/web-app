@@ -149,7 +149,7 @@ function BusinessProfile(props) {
                 <div className="sidebarBusinessProfile__body__section">
                     <div className="sidebarBusinessProfile__body__section__header">
                         <h3>Business Profile</h3>
-                        <IconButton>
+                        <IconButton onClick={props.displayEditBusinessProfile}>
                             <Edit />
                         </IconButton>
                     </div>
