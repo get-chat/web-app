@@ -152,7 +152,7 @@ a {
     font-weight: 600!important;
 }
 
-.app__imagePreview {
+.app__mediaPreview {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -166,7 +166,7 @@ a {
     z-index: 10;
 }
 
-.app__imagePreview__header {
+.app__mediaPreview__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -191,15 +191,15 @@ a {
     display: block;
 }
 
-.app__imagePreview__header > .MuiAvatar-root {
+.app__mediaPreview__header > .MuiAvatar-root {
     margin-left: 15px;
 }
 
-.app__imagePreview__header > .MuiButtonBase-root {
+.app__mediaPreview__header > .MuiButtonBase-root {
     margin: 4px 15px 4px auto;
 }
 
-.app__imagePreview__container {
+.app__mediaPreview__container {
     flex: 1 1;
     width: -webkit-fill-available;
     width: -moz-available;
@@ -211,7 +211,7 @@ a {
     padding: 30px;
 }
 
-.app__imagePreview__image, .app__imagePreview__video {
+.app__mediaPreview__image, .app__mediaPreview__video {
     background-color: white;
     max-height: 100%;
     max-width: 100%;

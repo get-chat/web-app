@@ -108,15 +108,15 @@ export class ChatMessageClass {
     }
 
     generateMediaLink(id) {
-        return `${BASE_URL}media/${id}`;
+        return id ? `${BASE_URL}media/${id}` : undefined;
     }
 
-    generateImageLink() {
-        return this.imageLink ?? this.generateMediaLink(this.imageId);
+    generateImageLink(includeTemplateHeader) {
+        return this.imageLink ?? this.generateMediaLink(this.imageId) ?? (includeTemplateHeader === true ? this.getHeaderFileLink('image') : undefined);
     }
 
-    generateVideoLink() {
-        return this.videoLink ?? this.generateMediaLink(this.videoId);
+    generateVideoLink(includeTemplateHeader) {
+        return this.videoLink ?? this.generateMediaLink(this.videoId) ?? (includeTemplateHeader === true ? this.getHeaderFileLink('video') : undefined);
     }
 
     generateDocumentLink() {
@@ -159,6 +159,26 @@ export class ChatMessageClass {
     isDeliveredOrRead() {
         const status = this.getStatus();
         return status === ChatMessageClass.STATUS_DELIVERED || status === ChatMessageClass.STATUS_READ;
+    }
+
+    getHeaderFileLink(type) {
+        if (this.type === ChatMessageClass.TYPE_TEMPLATE) {
+            for (let i = 0; i < this.templateParameters.length; i++) {
+                const component = this.templateParameters[i];
+
+                if (component.type === "header") {
+                    for (let j = 0; j < component.parameters.length; j++) {
+                        const param = component.parameters[j];
+
+                        if (param.type === type) {
+                            return param[type]?.link;
+                        }
+                    }
+                }
+            }
+        }
+
+        return undefined;
     }
 }
 

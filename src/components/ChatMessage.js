@@ -10,7 +10,7 @@ import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
-import {formatMessage, getTemplateHeaderFileByParams, insertTemplateBodyParameters} from "../Helpers";
+import {formatMessage, insertTemplateBodyParameters} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
@@ -21,6 +21,7 @@ import MessageDateIndicator from "./MessageDateIndicator";
 import ContextChatMessage from "./ContextChatMessage";
 import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageVideo from "./ChatMessageVideo";
+import ChatMessageImage from "./ChatMessageImage";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -175,12 +176,12 @@ function ChatMessage(props) {
                     goToMessageId={props.goToMessageId} />
                 }
 
-                {data.imageLink !== undefined &&
-                <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
+                {data.type === ChatMessageClass.TYPE_IMAGE &&
+                <ChatMessageImage data={data} source={data.generateImageLink()} onPreview={() => props.onPreview(data)} />
                 }
 
-                {data.videoLink !== undefined &&
-                <ChatMessageVideo data={data} source={props.data.generateVideoLink()} onPreview={() => props.onPreview(data)} />
+                {data.type === ChatMessageClass.TYPE_VIDEO &&
+                <ChatMessageVideo data={data} source={data.generateVideoLink()} onPreview={() => props.onPreview(data)} />
                 }
 
                 {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
@@ -223,16 +224,16 @@ function ChatMessage(props) {
                                 {component.type === "HEADER" &&
                                 <div className="chat__templateContent__header">
                                     {component.format === "IMAGE" &&
-                                    <img className="chat__media" src={getTemplateHeaderFileByParams(data.templateParameters, 'image')} alt="Template header" />
+                                    <img className="chat__media" src={data.getHeaderFileLink('image')} alt="Template header" />
                                     }
                                     {component.format === "VIDEO" &&
                                     <ChatMessageVideo
                                         data={data}
-                                        source={getTemplateHeaderFileByParams(data.templateParameters, 'video')}
+                                        source={data.getHeaderFileLink('video')}
                                         onPreview={() => props.onPreview(data)} />
                                     }
                                     {component.format === "DOCUMENT" &&
-                                    <a href={getTemplateHeaderFileByParams(data.templateParameters, 'document')} target="_blank">Document</a>
+                                    <a href={data.getHeaderFileLink('document')} target="_blank">Document</a>
                                     }
                                     {component.format === "TEXT" &&
                                     <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />

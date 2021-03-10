@@ -330,8 +330,8 @@ function Main() {
                 }
 
                 {chatMessageToPreview &&
-                <div className="app__imagePreview">
-                    <div className="app__imagePreview__header">
+                <div className="app__mediaPreview">
+                    <div className="app__mediaPreview__header">
 
                         <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
                         <div className="app_imagePreview__header__senderInfo">
@@ -339,16 +339,16 @@ function Main() {
                             <span><Moment calendar={CALENDAR_NORMAL} date={chatMessageToPreview.timestamp} unix /></span>
                         </div>
 
-                        <IconButton className="app__imagePreview__close" onClick={() => hideImageOrVideoPreview()}>
+                        <IconButton className="app__mediaPreview__close" onClick={() => hideImageOrVideoPreview()}>
                             <CloseIcon fontSize="large" />
                         </IconButton>
                     </div>
-                    <div className="app__imagePreview__container" onClick={() => hideImageOrVideoPreview()}>
-                        {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink) &&
-                        <img className="app__imagePreview__image" src={chatMessageToPreview.generateImageLink()} alt="Preview"/>
+                    <div className="app__mediaPreview__container" onClick={() => hideImageOrVideoPreview()}>
+                        {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink || chatMessageToPreview.getHeaderFileLink('image')) &&
+                        <img className="app__mediaPreview__image" src={chatMessageToPreview.generateImageLink(true)} alt="Preview"/>
                         }
-                        {(chatMessageToPreview.videoId || chatMessageToPreview.videoLink) &&
-                        <video className="app__imagePreview__video" src={chatMessageToPreview.generateVideoLink()} controls autoPlay={true} />
+                        {(chatMessageToPreview.videoId || chatMessageToPreview.videoLink || chatMessageToPreview.getHeaderFileLink('video')) &&
+                        <video className="app__mediaPreview__video" src={chatMessageToPreview.generateVideoLink(true)} controls autoPlay={true} />
                         }
                     </div>
                 </div>

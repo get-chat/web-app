@@ -227,15 +227,3 @@ export const insertTemplateBodyParameters = (componentType, text, params) => {
 
     return text;
 }
-
-export const getTemplateHeaderFileByParams = (params, type) => {
-    if (!params) return;
-
-    for (let i = 0; i < params.length; i++) {
-        const component = params[i];
-
-        if (component.type === "header") {
-            return component['parameters']?.[0]?.[type]?.link;
-        }
-    }
-}
