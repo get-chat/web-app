@@ -5,6 +5,8 @@
     right: 0;
     bottom: 0;
     background-color: #ededed;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .sidebarBusinessProfile__header {
@@ -23,11 +25,6 @@
 
 .sidebarBusinessProfile__header .MuiSvgIcon-root {
     color: white!important;
-}
-
-.sidebarBusinessProfile__body {
-    overflow-x: hidden;
-    overflow-y: auto;
 }
 
 .sidebarBusinessProfile__body__section {
