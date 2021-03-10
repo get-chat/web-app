@@ -1,10 +1,11 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import '../styles/BusinessProfile.css';
-import {Avatar, IconButton} from "@material-ui/core";
-import {ArrowBack, Edit} from "@material-ui/icons";
+import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import {ArrowBack} from "@material-ui/icons";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
+import FileInput from "./FileInput";
 import {avatarStyles} from "../AvatarStyles";
 
 function BusinessProfile(props) {
@@ -21,18 +22,14 @@ function BusinessProfile(props) {
 
     const fileInput = useRef();
 
-    let cancelTokenSource;
+    let cancelTokenSource = useMemo(() => {
+        return axios.CancelToken.source();
+    }, []);
 
-    const generateCancelToken = () => {
-        cancelTokenSource = axios.CancelToken.source();
-    }
 
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
-        // Generating cancel token
-        generateCancelToken();
-
         getBusinessProfile();
 
         return () => {
@@ -41,7 +38,6 @@ function BusinessProfile(props) {
     }, []);
 
     const getBusinessProfile = () => {
-        console.log(cancelTokenSource);
         axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelTokenSource.token))
             .then((response) => {
                 console.log(response.data);
@@ -71,6 +67,34 @@ function BusinessProfile(props) {
             });
     }
 
+    const updateBusinessProfile = async event => {
+        event.preventDefault();
+
+        setUpdating(true);
+
+        axios.patch( `${BASE_URL}settings/business/profile/`, {
+            address: address,
+            description: description,
+            email: email,
+            vertical: vertical,
+            websites: Object.values(websites)
+        }, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                // Update about
+                updateAbout(event);
+
+            })
+            .catch((error) => {
+                console.log(error);
+
+                setUpdating(false);
+
+                props.displayError(error);
+            });
+    }
+
     const getAbout = () => {
         axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelTokenSource.token))
             .then((response) => {
@@ -85,6 +109,27 @@ function BusinessProfile(props) {
             })
             .catch((error) => {
                 console.log(error);
+
+                props.displayError(error);
+            });
+    }
+
+    const updateAbout = async event => {
+        event.preventDefault();
+
+        axios.patch( `${BASE_URL}settings/profile/about/`, {
+            text: about
+        }, getConfig())
+            .then((response) => {
+                console.log(response.data);
+
+                setUpdating(false);
+
+            })
+            .catch((error) => {
+                console.log(error);
+
+                setUpdating(false);
 
                 props.displayError(error);
             });
@@ -128,6 +173,25 @@ function BusinessProfile(props) {
             });
     }
 
+    const verticalOptions = [
+        "Automotive", "Beauty, Spa and Salon",
+        "Clothing and Apparel",
+        "Education",
+        "Entertainment",
+        "Event Planning and Service",
+        "Finance and Banking",
+        "Food and Grocery",
+        "Public Service",
+        "Hotel and Lodging",
+        "Medical and Health",
+        "Non-profit",
+        "Professional Services",
+        "Shopping and Retail",
+        "Travel and Transportation",
+        "Restaurant",
+        "Other"
+    ];
+
     return(
         <div className="sidebarBusinessProfile">
             <div className="sidebarBusinessProfile__header">
@@ -155,9 +219,6 @@ function BusinessProfile(props) {
                 <div className="sidebarBusinessProfile__body__section">
                     <div className="sidebarBusinessProfile__body__section__header">
                         <h3>Business Profile</h3>
-                        <IconButton onClick={props.displayEditBusinessProfile}>
-                            <Edit />
-                        </IconButton>
                     </div>
 
                     {!isLoaded &&
@@ -166,33 +227,37 @@ function BusinessProfile(props) {
 
                     {isLoaded &&
                     <div className="sidebarBusinessProfile__body__section__subSection">
-                        <div>
 
-                            {/*<FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />*/}
+                        <div className="sidebarBusinessProfile__body__avatarContainer">
+                            <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
+                            <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={() => fileInput.current.click()}>?</Avatar>
+                        </div>
 
-                            <div className="sidebarBusinessProfile__body__avatarContainer">
-                                <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined}>?</Avatar>
+                        <form onSubmit={updateBusinessProfile}>
+                            <div>
+                                <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} disabled={!props.isAdmin} />
+                                <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} disabled={!props.isAdmin} />
+                                <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} disabled={!props.isAdmin} />
+                                <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} disabled={!props.isAdmin} />
+
+                                <FormControl fullWidth={true} disabled={!props.isAdmin}>
+                                    <InputLabel id="vertical-label">Vertical</InputLabel>
+                                    <Select value={vertical} onChange={(event) => setVertical(event.target.value)} labelId="vertical-label">
+                                        <MenuItem value="">None</MenuItem>
+
+                                        {verticalOptions.map((verticalOption, index) =>
+                                            <MenuItem key={index} value={verticalOption}>{verticalOption}</MenuItem>
+                                        )}
+                                    </Select>
+                                </FormControl>
                             </div>
 
-                            <h5>About</h5>
-                            {about}
-                        </div>
-                        <div>
-                            <h5>Address</h5>
-                            {address}
-                        </div>
-                        <div>
-                            <h5>Description</h5>
-                            {description}
-                        </div>
-                        <div>
-                            <h5>E-mail</h5>
-                            {email}
-                        </div>
-                        <div>
-                            <h5>Vertical</h5>
-                            {vertical}
-                        </div>
+                            {props.isAdmin &&
+                            <div className="sidebarBusinessProfile__body__section__subSection__action">
+                                <Button type="submit" disabled={isUpdating} color="primary" size="large">Update</Button>
+                            </div>
+                            }
+                        </form>
                     </div>
                     }
                 </div>

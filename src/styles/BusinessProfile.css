@@ -41,7 +41,7 @@
     font-weight: 400;
 }
 
-.sidebarBusinessProfile__body__section span, .sidebarBusinessProfile__body__section__subSection > div {
+.sidebarBusinessProfile__body__section span:not(.MuiButton-label), .sidebarBusinessProfile__body__section__subSection > div {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
 }
@@ -64,16 +64,28 @@
     width: 200px;
     margin-bottom: 15px;
     font-size: 5rem!important;
+    cursor: pointer;
+    transition: opacity linear .1s;
+}
+
+.sidebarBusinessProfile__body__avatarContainer .MuiAvatar-root:hover {
+    opacity: 0.75;
 }
 
 .sidebarBusinessProfile__body__section__header {
     display: flex;
+    margin-bottom: 15px;
 }
 
 .sidebarBusinessProfile__body__section__header h3 {
     flex: 1 1;
 }
 
-.sidebarBusinessProfile__body__section__header .MuiButtonBase-root {
-    margin-top: -11px;
+.sidebarBusinessProfile__body__section .MuiFormControl-root {
+    margin-bottom: 20px;
+}
+
+.sidebarBusinessProfile__body__section__subSection__action {
+    display: flex;
+    justify-content: flex-end;
 }
