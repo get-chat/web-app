@@ -180,7 +180,7 @@ function ChatMessage(props) {
                 }
 
                 {data.videoLink !== undefined &&
-                <ChatMessageVideo data={data} onPreview={() => props.onPreview(data)} />
+                <ChatMessageVideo data={data} source={props.data.generateVideoLink()} onPreview={() => props.onPreview(data)} />
                 }
 
                 {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
@@ -212,45 +212,48 @@ function ChatMessage(props) {
                 }
 
                 {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                <span className="chat__templateHeader">
-                    <SmsIcon />Template message:<br/>
-                </span>
-                }
+                <div className="chat__template">
+                    <span className="chat__templateHeader">
+                        <SmsIcon />Template message:<br/>
+                    </span>
 
-                {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                <div className="chat__templateContent">
-                    {Object.values(templateData.components).map((component, index) =>
-                        <div key={index}>
-                            {component.type === "HEADER" &&
-                            <div className="chat__templateContent__header">
-                                {component.format === "IMAGE" &&
-                                <img className="chat__media" src={getTemplateHeaderFileByParams(data.templateParameters, 'image')} alt="Template header" />
+                    <div className="chat__templateContent">
+                        {Object.values(templateData.components).map((component, index) =>
+                            <div key={index}>
+                                {component.type === "HEADER" &&
+                                <div className="chat__templateContent__header">
+                                    {component.format === "IMAGE" &&
+                                    <img className="chat__media" src={getTemplateHeaderFileByParams(data.templateParameters, 'image')} alt="Template header" />
+                                    }
+                                    {component.format === "VIDEO" &&
+                                    <ChatMessageVideo
+                                        data={data}
+                                        source={getTemplateHeaderFileByParams(data.templateParameters, 'video')}
+                                        onPreview={() => props.onPreview(data)} />
+                                    }
+                                    {component.format === "DOCUMENT" &&
+                                    <a href={getTemplateHeaderFileByParams(data.templateParameters, 'document')} target="_blank">Document</a>
+                                    }
+                                    {component.format === "TEXT" &&
+                                    <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
+                                    }
+                                </div>
                                 }
-                                {component.format === "VIDEO" &&
-                                <ChatMessageVideo data={data} onPreview={() => props.onPreview(data)} />
-                                }
-                                {component.format === "DOCUMENT" &&
-                                <a href={getTemplateHeaderFileByParams(data.templateParameters, 'document')} target="_blank">Document</a>
-                                }
-                                {component.format === "TEXT" &&
+
+                                {component.type === "BODY" &&
                                 <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
                                 }
-                            </div>
-                            }
 
-                            {component.type === "BODY" &&
-                            <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
-                            }
-
-                            {component.type === "BUTTONS" &&
-                            <div className="chat__templateContent__buttons">
-                                {component.buttons.map((button, buttonIndex) =>
-                                    <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
-                                )}
+                                {component.type === "BUTTONS" &&
+                                <div className="chat__templateContent__buttons">
+                                    {component.buttons.map((button, buttonIndex) =>
+                                        <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
+                                    )}
+                                </div>
+                                }
                             </div>
-                            }
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
                 }
 
