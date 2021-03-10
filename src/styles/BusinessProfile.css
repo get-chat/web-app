@@ -64,11 +64,11 @@
     width: 200px;
     margin-bottom: 15px;
     font-size: 5rem!important;
-    cursor: pointer;
     transition: opacity linear .1s;
 }
 
-.sidebarBusinessProfile__body__avatarContainer .MuiAvatar-root:hover {
+.sidebarBusinessProfile__body__avatarContainer.editable .MuiAvatar-root:hover {
+    cursor: pointer;
     opacity: 0.75;
 }
 
@@ -77,7 +77,10 @@
     margin-bottom: 15px;
 }
 
-.sidebarBusinessProfile__body__section__header h3 {
+.sidebarBusinessProfile__body__section__header h5 {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-primary);
     flex: 1 1;
 }
 

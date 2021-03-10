@@ -25,7 +25,6 @@ import {
 } from "../Constants";
 import Moment from "react-moment";
 import ChatMessageClass from "../ChatMessageClass";
-import EditBusinessProfile from "./EditBusinessProfile";
 
 function Main() {
 
@@ -48,8 +47,6 @@ function Main() {
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
-
-    const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
 
     const avatarClasses = avatarStyles();
 
@@ -309,7 +306,6 @@ function Main() {
                     currentUser={currentUser}
                     setProgress={setProgress}
                     showNotification={showNotification}
-                    setBusinessProfileVisible={setBusinessProfileVisible}
                     displayError={(error) => displayError(error)}
                 />
                 }
@@ -331,13 +327,6 @@ function Main() {
 
                 {isContactDetailsVisible &&
                 <ContactDetails contactData={chosenContact} />
-                }
-
-                {isBusinessProfileVisible &&
-                <EditBusinessProfile
-                    isAdmin={isAdmin}
-                    displayError={displayError}
-                    setBusinessProfileVisible={setBusinessProfileVisible} />
                 }
 
                 {chatMessageToPreview &&

@@ -192,6 +192,10 @@ function BusinessProfile(props) {
         "Other"
     ];
 
+    const handleBusinessProfileAvatarClick = () => {
+        if (props.isAdmin) fileInput.current.click();
+    }
+
     return(
         <div className="sidebarBusinessProfile">
             <div className="sidebarBusinessProfile__header">
@@ -218,27 +222,27 @@ function BusinessProfile(props) {
 
                 <div className="sidebarBusinessProfile__body__section">
                     <div className="sidebarBusinessProfile__body__section__header">
-                        <h3>Business Profile</h3>
+                        <h5>Business Profile</h5>
                     </div>
 
                     {!isLoaded &&
-                    <div>Loading</div>
+                    <span>Loading</span>
                     }
 
                     {isLoaded &&
                     <div className="sidebarBusinessProfile__body__section__subSection">
 
-                        <div className="sidebarBusinessProfile__body__avatarContainer">
+                        <div className={"sidebarBusinessProfile__body__avatarContainer" + (props.isAdmin ? " editable" : "")}>
                             <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
-                            <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={() => fileInput.current.click()}>?</Avatar>
+                            <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={handleBusinessProfileAvatarClick}>?</Avatar>
                         </div>
 
                         <form onSubmit={updateBusinessProfile}>
                             <div>
-                                <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} disabled={!props.isAdmin} />
-                                <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} disabled={!props.isAdmin} />
-                                <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} disabled={!props.isAdmin} />
-                                <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} disabled={!props.isAdmin} />
+                                <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
 
                                 <FormControl fullWidth={true} disabled={!props.isAdmin}>
                                     <InputLabel id="vertical-label">Vertical</InputLabel>

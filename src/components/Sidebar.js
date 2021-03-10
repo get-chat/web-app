@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/Sidebar.css';
-import {Avatar, Divider, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
@@ -43,11 +43,11 @@ function Sidebar(props) {
 
     const displayMenu = (event) => {
         setAnchorEl(event.currentTarget);
-    };
+    }
 
     const hideMenu = () => {
         setAnchorEl(null);
-    };
+    }
 
     let cancelToken;
 
@@ -322,9 +322,8 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
-                <MenuItem>Edit profile</MenuItem>
-                <MenuItem onClick={displayEditBusinessProfile}>Business profile</MenuItem>
-                <Divider />
+                {/*<MenuItem>Edit profile</MenuItem>
+                <Divider />*/}
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
 

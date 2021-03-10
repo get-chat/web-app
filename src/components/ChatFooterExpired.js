@@ -1,5 +1,4 @@
 import React from "react";
-import TemplateMessages from "./TemplateMessages";
 
 function ChatFooterExpired() {
     return (
