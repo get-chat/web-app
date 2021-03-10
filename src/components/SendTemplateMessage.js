@@ -11,10 +11,10 @@ function SendTemplateMessage(props) {
     const template = props.data;
 
     const [params, setParams] = useState({});
-    const [headerImageURL, setHeaderImageURL] = useState('');
+    const [headerFileURL, setHeaderFileURL] = useState('');
     const [isUploading, setUploading] = useState(false);
 
-    const headerImageFileInput = useRef();
+    const headerFileInput = useRef();
 
     useEffect(() => {
         const preparedParams = {};
@@ -26,35 +26,18 @@ function SendTemplateMessage(props) {
             const componentType = component.type;
 
             if (componentType === "HEADER") {
-                if (component.format === "IMAGE") {
+                if (component.format === "IMAGE" || component.format === "VIDEO" || component.format === "DOCUMENT") {
+                    const format = component.format.toLowerCase();
                     preparedParams[key] = {
-                        0: {
-                            type: "image",
-                            image: {
-                                link: ""
-                            }
-                        }
+                        0: { type: format }
                     };
-                } else if (component.format === "VIDEO") {
-                    preparedParams[key] = {
-                        0: {
-                            type: "video",
-                            video: {
-                                link: ""
-                            }
-                        }
-                    };
-                } else if (component.format === "DOCUMENT") {
-                    preparedParams[key] = {
-                        0: {
-                            type: "document",
-                            document: {
-                                link: ""
-                            }
-                        }
-                    };
+
+                    preparedParams[key][0][format] = { link: "" };
                 }
             }
+
+            console.log(component.format);
+            console.log(preparedParams);
 
             const paramText = component.text;
             const templateParamsArray = getTemplateParams(paramText);
@@ -79,12 +62,16 @@ function SendTemplateMessage(props) {
         setParams(prevState => {
             // TODO: Do this in a better way depends on template headers complexity
             if (prevState[0] && prevState[0][0] && prevState[0][0]['image']) {
-                prevState[0][0]['image']['link'] = headerImageURL;
+                prevState[0][0]['image']['link'] = headerFileURL;
+            } else if (prevState[0] && prevState[0][0] && prevState[0][0]['video']) {
+                prevState[0][0]['video']['link'] = headerFileURL;
+            } else if (prevState[0] && prevState[0][0] && prevState[0][0]['document']) {
+                prevState[0][0]['document']['link'] = headerFileURL;
             }
 
             return prevState;
         });
-    }, [headerImageURL, params]);
+    }, [headerFileURL, params]);
 
     const updateParam = (event, index, paramKey) => {
         setParams(prevState => {
@@ -145,7 +132,7 @@ function SendTemplateMessage(props) {
                 console.log(response.data);
 
                 const fileURL = response.data.file;
-                setHeaderImageURL(fileURL);
+                setHeaderFileURL(fileURL);
 
                 setUploading(false);
 
@@ -155,6 +142,12 @@ function SendTemplateMessage(props) {
 
                 setUploading(false);
             });
+    }
+
+    const getMimetypeByFormat = (format) => {
+        if (format === "IMAGE") return "image/jpeg, image/png";
+        if (format === "VIDEO") return "video/mp4, video/3gpp";
+        if (format === "DOCUMENT") return "*/*";
     }
 
     return (
@@ -168,17 +161,20 @@ function SendTemplateMessage(props) {
                         <h6>{comp.type}</h6>
                         <div>
 
-                            {comp.format === "IMAGE" &&
+                            {(comp.format === "IMAGE" || comp.format === "VIDEO" || comp.format === "DOCUMENT") &&
                             <div>
                                 <div>
-                                    {headerImageURL &&
-                                    <img src={headerImageURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />
+                                    {headerFileURL &&
+                                    <div>
+                                        <a href={headerFileURL} target="_blank">{headerFileURL}</a>
+                                        {/*<img src={headerFileURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />*/}
+                                    </div>
                                     }
                                 </div>
-                                <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
-                                <Button color="primary" onClick={() => headerImageFileInput.current.click()} disabled={isUploading}>Upload an header image</Button>
-                                {headerImageURL &&
-                                <Button color="secondary" onClick={() => setHeaderImageURL('')}>Delete</Button>
+                                <FileInput innerRef={headerFileInput} multiple={false} accept={getMimetypeByFormat(comp.format)} handleSelectedFiles={handleChosenImage} />
+                                <Button color="primary" onClick={() => headerFileInput.current.click()} disabled={isUploading}>Upload {comp.format.toLowerCase()}</Button>
+                                {headerFileURL &&
+                                <Button color="secondary" onClick={() => setHeaderFileURL('')}>Delete</Button>
                                 }
                             </div>
                             }
