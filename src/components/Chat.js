@@ -63,12 +63,10 @@ export default function Chat(props) {
 
     const {waId} = useParams();
 
-    let cancelToken;
-    let source;
+    let cancelTokenSource;
 
     const generateCancelToken = () => {
-        cancelToken = axios.CancelToken;
-        source = cancelToken.source();
+        cancelTokenSource = axios.CancelToken.source();
     }
 
     // Generating cancel token
@@ -112,7 +110,7 @@ export default function Chat(props) {
 
         return () => {
             // Cancelling ongoing requests
-            source.cancel();
+            cancelTokenSource.cancel();
 
             // Unsubscribe
             PubSub.unsubscribe(token);
@@ -146,7 +144,7 @@ export default function Chat(props) {
 
         return () => {
             // Cancelling ongoing requests
-            source.cancel();
+            cancelTokenSource.cancel();
         }
     }, [waId]);
 
@@ -407,7 +405,7 @@ export default function Chat(props) {
     }
 
     const getContact = (loadMessages) => {
-        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, source.token))
+        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, cancelTokenSource.token))
             .then((response) => {
                 //console.log("Contact", response.data);
 
@@ -439,7 +437,7 @@ export default function Chat(props) {
                 before_time: beforeTime,
                 since_time: sinceTime,
                 limit: limit,
-            }, source.token)
+            }, cancelTokenSource.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
@@ -615,7 +613,7 @@ export default function Chat(props) {
         axios.post( `${BASE_URL}mark_as_seen/`, {
             timestamp: timestamp,
             customer_wa_id: waId
-        }, getConfig(undefined, source.token))
+        }, getConfig(undefined, cancelTokenSource.token))
             .then((response) => {
                 //console.log(response.data);
 

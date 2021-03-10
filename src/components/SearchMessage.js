@@ -25,18 +25,18 @@ function SearchMessage(props) {
         PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
     }
 
-    let cancelToken;
+    let cancelTokenSource;
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
 
         // Check if there are any previous pending requests
-        if (cancelToken !== undefined) {
-            cancelToken.cancel("Operation canceled due to new request.");
+        if (cancelTokenSource !== undefined) {
+            cancelTokenSource.cancel("Operation canceled due to new request.");
         }
 
         // Generate a token
-        cancelToken = axios.CancelToken.source();
+        cancelTokenSource = axios.CancelToken.source();
 
         if (_keyword.trim().length === 0) {
             setResults({});
@@ -49,7 +49,7 @@ function SearchMessage(props) {
                 //offset: offset ?? 0,
                 limit: 30,
                 search: _keyword
-            }, cancelToken.token)
+            }, cancelTokenSource.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
