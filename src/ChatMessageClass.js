@@ -100,7 +100,7 @@ export class ChatMessageClass {
     }
 
     hasMediaToPreview() {
-        return this.imageLink !== undefined || this.videoId !== undefined;
+        return this.imageLink !== undefined || this.videoId !== undefined || this.getHeaderFileLink('image') || this.getHeaderFileLink('video');
     }
 
     hasAnyAudio() {
@@ -163,15 +163,17 @@ export class ChatMessageClass {
 
     getHeaderFileLink(type) {
         if (this.type === ChatMessageClass.TYPE_TEMPLATE) {
-            for (let i = 0; i < this.templateParameters.length; i++) {
-                const component = this.templateParameters[i];
+            if (this.templateParameters) {
+                for (let i = 0; i < this.templateParameters.length; i++) {
+                    const component = this.templateParameters[i];
 
-                if (component.type === "header") {
-                    for (let j = 0; j < component.parameters.length; j++) {
-                        const param = component.parameters[j];
+                    if (component.type === "header") {
+                        for (let j = 0; j < component.parameters.length; j++) {
+                            const param = component.parameters[j];
 
-                        if (param.type === type) {
-                            return param[type]?.link;
+                            if (param.type === type) {
+                                return param[type]?.link;
+                            }
                         }
                     }
                 }

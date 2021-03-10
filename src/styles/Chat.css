@@ -197,8 +197,10 @@ a.chat__document:hover {
 }
 
 .chat__templateHeader {
+    display: block;
     font-size: x-small;
     color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 5px;
 }
 
 .chat__templateHeader .MuiSvgIcon-root {
@@ -224,8 +226,6 @@ a.chat__document:hover {
 
 .chat__templateContent__header img {
     align-self: center;
-    cursor: default!important;
-    object-fit: cover;
 }
 
 .chat__message__info {

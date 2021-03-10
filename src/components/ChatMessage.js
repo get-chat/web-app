@@ -224,7 +224,7 @@ function ChatMessage(props) {
                                 {component.type === "HEADER" &&
                                 <div className="chat__templateContent__header">
                                     {component.format === "IMAGE" &&
-                                    <img className="chat__media" src={data.getHeaderFileLink('image')} alt="Template header" />
+                                    <ChatMessageImage data={data} source={data.getHeaderFileLink('image')} onPreview={() => props.onPreview(data)} />
                                     }
                                     {component.format === "VIDEO" &&
                                     <ChatMessageVideo
