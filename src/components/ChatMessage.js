@@ -229,6 +229,9 @@ function ChatMessage(props) {
                                 {component.format === "VIDEO" &&
                                 <ChatMessageVideo data={data} onPreview={() => props.onPreview(data)} />
                                 }
+                                {component.format === "DOCUMENT" &&
+                                <a href={getTemplateHeaderFileByParams(data.templateParameters, 'document')} target="_blank">Document</a>
+                                }
                                 {component.format === "TEXT" &&
                                 <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
                                 }
