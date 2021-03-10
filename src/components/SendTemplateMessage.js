@@ -36,20 +36,20 @@ function SendTemplateMessage(props) {
                         }
                     };
                 }
-            } else if (componentType === "BODY") {
-                const paramText = component.text;
-                const templateParamsArray = getTemplateParams(paramText);
-
-                templateParamsArray.map((extractedParam, extractedParamIndex) => {
-                    if (preparedParams[key] === undefined) {
-                        preparedParams[key] = {};
-                    }
-                    preparedParams[key][templateParamToInteger(extractedParam)] = {
-                        type: "text",
-                        text: ""
-                    };
-                });
             }
+
+            const paramText = component.text;
+            const templateParamsArray = getTemplateParams(paramText);
+
+            templateParamsArray.map((extractedParam, extractedParamIndex) => {
+                if (preparedParams[key] === undefined) {
+                    preparedParams[key] = {};
+                }
+                preparedParams[key][templateParamToInteger(extractedParam)] = {
+                    type: "text",
+                    text: ""
+                };
+            });
         });
 
         setParams(preparedParams);
@@ -146,35 +146,25 @@ function SendTemplateMessage(props) {
             {template.components.map((comp, index) =>
                 <div key={index} className="sendTemplateMessage__component">
 
-                    {comp.type === "HEADER" &&
-                    <div className="sendTemplateMessage__component__header sendTemplateMessage__section">
-                        <h6>Header</h6>
+                    <div className="sendTemplateMessage__section">
+                        <h6>{comp.type}</h6>
                         <div>
-                            {comp.format === "IMAGE"
-                                ?
+
+                            {comp.format === "IMAGE" &&
+                            <div>
                                 <div>
-                                    <div>
-                                        {headerImageURL &&
-                                        <img src={headerImageURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />
-                                        }
-                                    </div>
-                                    <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
-                                    <Button color="primary" onClick={() => headerImageFileInput.current.click()} disabled={isUploading}>Upload an header image</Button>
                                     {headerImageURL &&
-                                    <Button color="secondary" onClick={() => setHeaderImageURL('')}>Delete</Button>
+                                    <img src={headerImageURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />
                                     }
                                 </div>
-                                :
-                                <span>{comp.format}</span>
+                                <FileInput innerRef={headerImageFileInput} multiple={false} accept="image/jpeg, image/png" handleSelectedFiles={handleChosenImage} />
+                                <Button color="primary" onClick={() => headerImageFileInput.current.click()} disabled={isUploading}>Upload an header image</Button>
+                                {headerImageURL &&
+                                <Button color="secondary" onClick={() => setHeaderImageURL('')}>Delete</Button>
+                                }
+                            </div>
                             }
-                        </div>
-                    </div>
-                    }
 
-                    {comp.type === "BODY" &&
-                    <div className="sendTemplateMessage__component__body sendTemplateMessage__section">
-                        <h6>Body</h6>
-                        <div>
                             {comp.text}
                             <div>
                                 {getTemplateParams(comp.text).map((param, paramIndex) =>
@@ -189,7 +179,6 @@ function SendTemplateMessage(props) {
                             </div>
                         </div>
                     </div>
-                    }
 
                     {comp.type === "BUTTONS" &&
                     <div className="sendTemplateMessage__component__buttons sendTemplateMessage__section">
