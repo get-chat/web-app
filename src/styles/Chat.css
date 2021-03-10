@@ -104,9 +104,11 @@ video.chat__media {
 }
 
 .chat__videoWrapper {
+    align-self: center;
     position: relative;
     cursor: pointer;
     display: table;
+    width: fit-content;
 }
 
 .chat__videoWrapper > .chat__videoWrapper__iconWrapper {

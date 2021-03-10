@@ -10,7 +10,7 @@ import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
-import {formatMessage, getTemplateHeaderImageByParams, insertTemplateBodyParameters} from "../Helpers";
+import {formatMessage, getTemplateHeaderFileByParams, insertTemplateBodyParameters} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
@@ -20,6 +20,7 @@ import ChatMessageClass from "../ChatMessageClass";
 import MessageDateIndicator from "./MessageDateIndicator";
 import ContextChatMessage from "./ContextChatMessage";
 import ReplyIcon from '@material-ui/icons/Reply';
+import ChatMessageVideo from "./ChatMessageVideo";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -152,10 +153,10 @@ function ChatMessage(props) {
             }
 
             <div className={"chat__message"
-                + (data.hasMediaToPreview() ? " hasMedia" : "")
-                + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "") + " chat__receiver" : "")
-                + (!props.displaySender && !props.displayDate ? " hiddenSender" : "")
-                + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
+            + (data.hasMediaToPreview() ? " hasMedia" : "")
+            + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "") + " chat__receiver" : "")
+            + (!props.displaySender && !props.displayDate ? " hiddenSender" : "")
+            + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 
                 <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
                     <ExpandMoreIcon />
@@ -177,14 +178,11 @@ function ChatMessage(props) {
                 {data.imageLink !== undefined &&
                 <img className="chat__media" src={data.imageLink} alt={data.caption} onClick={() => props.onPreview(data)} />
                 }
+
                 {data.videoLink !== undefined &&
-                <div className="chat__videoWrapper" onClick={() => props.onPreview(data)}>
-                    <video className="chat__media" src={data.generateVideoLink()} preload="none" />
-                    <span className="chat__videoWrapper__iconWrapper">
-                    <PlayArrowIcon fontSize={"large"} style={{ fill: "white", fontSize: 40 }} />
-                </span>
-                </div>
+                <ChatMessageVideo data={data} onPreview={() => props.onPreview(data)} />
                 }
+
                 {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
                 <span className="chat__voice">
                     <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
@@ -199,6 +197,7 @@ function ChatMessage(props) {
                     </Avatar>
                 </span>
                 }
+
                 {data.type === ChatMessageClass.TYPE_DOCUMENT &&
                 <a href={data.documentLink} target="_blank" className="chat__document">
                     <InsertDriveFileIcon fontSize="small" />
@@ -225,7 +224,10 @@ function ChatMessage(props) {
                             {component.type === "HEADER" &&
                             <div className="chat__templateContent__header">
                                 {component.format === "IMAGE" &&
-                                    <img className="chat__media" src={getTemplateHeaderImageByParams(data.templateParameters)} alt="Template header" />
+                                <img className="chat__media" src={getTemplateHeaderFileByParams(data.templateParameters, 'image')} alt="Template header" />
+                                }
+                                {component.format === "VIDEO" &&
+                                <ChatMessageVideo data={data} onPreview={() => props.onPreview(data)} />
                                 }
                                 {component.format === "TEXT" &&
                                 <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />

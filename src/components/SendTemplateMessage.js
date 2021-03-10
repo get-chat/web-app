@@ -35,6 +35,24 @@ function SendTemplateMessage(props) {
                             }
                         }
                     };
+                } else if (component.format === "VIDEO") {
+                    preparedParams[key] = {
+                        0: {
+                            type: "video",
+                            video: {
+                                link: ""
+                            }
+                        }
+                    };
+                } else if (component.format === "DOCUMENT") {
+                    preparedParams[key] = {
+                        0: {
+                            type: "document",
+                            document: {
+                                link: ""
+                            }
+                        }
+                    };
                 }
             }
 
