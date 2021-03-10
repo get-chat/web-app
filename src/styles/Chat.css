@@ -216,15 +216,14 @@ a.chat__document:hover {
 
 .chat__templateContent__header {
     display: flex;
-    justify-content: center;
-    object-fit: contain;
+    flex-direction: column;
+    font-weight: 600;
 }
 
 .chat__templateContent__header img {
+    align-self: center;
     cursor: default!important;
-    /*max-height: 60px;
-    max-width: 100%;
-    margin-bottom: 15px;*/
+    object-fit: cover;
 }
 
 .chat__message__info {

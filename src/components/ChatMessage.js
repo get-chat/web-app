@@ -227,11 +227,14 @@ function ChatMessage(props) {
                                 {component.format === "IMAGE" &&
                                     <img className="chat__media" src={getTemplateHeaderImageByParams(data.templateParameters)} alt="Template header" />
                                 }
+                                {component.format === "TEXT" &&
+                                <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
+                                }
                             </div>
                             }
 
                             {component.type === "BODY" &&
-                            <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.text, data.templateParameters) }} />
+                            <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
                             }
 
                             {component.type === "BUTTONS" &&

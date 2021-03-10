@@ -208,7 +208,7 @@ export const templateParamToInteger = (templateParam) => {
     return templateParam.match(/\d+/);
 }
 
-export const insertTemplateBodyParameters = (text, params) => {
+export const insertTemplateBodyParameters = (componentType, text, params) => {
     if (!text) return;
 
     if (!params) return text;
@@ -216,7 +216,7 @@ export const insertTemplateBodyParameters = (text, params) => {
     for (let i = 0; i < params.length; i++) {
         const component = params[i];
 
-        if (component.type === "body") {
+        if (component.type === componentType.toLowerCase()) {
             component.parameters.forEach((param, index) => {
                 text = text.replace(`{{${index+1}}}`, param.text);
             });
