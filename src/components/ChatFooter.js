@@ -181,11 +181,13 @@ function ChatFooter(props) {
                 </Tooltip>
                 }
 
-                <Tooltip title="Emoji" placement="top"  className="desktopOnly">
+                <div className="desktopOnly">
+                <Tooltip title="Emoji" placement="top">
                     <IconButton onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
                         <InsertEmoticon/>
                     </IconButton>
                 </Tooltip>
+                </div>
 
                 <div className="chat__footer__attachmentContainer desktopOnly">
                     <Tooltip title="Attachment" placement="right">

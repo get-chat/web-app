@@ -1,3 +1,7 @@
+.loadingScreenOuter {
+    z-index: 500;
+}
+
 .loadingScreen {
     position: absolute;
     top: 0;
@@ -10,7 +14,6 @@
     justify-content: center;
     flex-direction: column;
     padding: 30px 60px;
-    z-index: 500;
 }
 
 .loadingScreen__progressContainer {
