@@ -417,6 +417,11 @@ a.chat__document:hover {
     transform: translateY(-50%);
     z-index: 0;
     color: #827f80;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding-right: 25px;
 }
 
 [contenteditable] {

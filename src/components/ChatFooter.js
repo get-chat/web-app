@@ -165,11 +165,13 @@ function ChatFooter(props) {
 
             <div className="chat__footer">
 
-                <Tooltip title="More" className="mobileOnly">
-                    <IconButton className="chat_footer__moreButton">
-                        <Add />
-                    </IconButton>
-                </Tooltip>
+                <div className="mobileOnly">
+                    <Tooltip title="More">
+                        <IconButton className="chat_footer__moreButton">
+                            <Add />
+                        </IconButton>
+                    </Tooltip>
+                </div>
 
                 {isEmojiPickerVisible &&
                 <Tooltip title="Close" placement="top">
@@ -185,7 +187,7 @@ function ChatFooter(props) {
                     </IconButton>
                 </Tooltip>
 
-                <span className="chat__footer__attachmentContainer desktopOnly">
+                <div className="chat__footer__attachmentContainer desktopOnly">
                     <Tooltip title="Attachment" placement="right">
                         <IconButton>
                             <AttachFile />
@@ -209,7 +211,7 @@ function ChatFooter(props) {
                             </IconButton>
                         </Tooltip>
                     </div>
-                </span>
+                </div>
 
                 <Tooltip title="Templates" placement="top" className="desktopOnly">
                     <IconButton onClick={toggleTemplateMessages}>
