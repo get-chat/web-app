@@ -15,7 +15,7 @@
 }
 
 .chat__header__backButton {
-    margin-right: 5px!important;
+    margin-right: 5px !important;
 }
 
 .chat__headerInfo {
@@ -348,6 +348,17 @@ a.chat__document:hover {
     top: 0;
     margin-top: 48px;
     z-index: 8;
+    pointer-events: none;
+}
+
+.chat__body__dateIndicator .chat__message__dateContainer {
+    margin-bottom: 0 !important;
+}
+
+.chat__body__dateIndicator .chat__message__dateContainer__indicator {
+    pointer-events: auto;
+    background-color: #e1f5fe;
+    box-shadow: -1px 6px 10px -6px rgba(0, 0, 0, 0.4);
 }
 
 .chat__empty {
@@ -370,7 +381,7 @@ a.chat__document:hover {
 }
 
 .chat_footer__moreButton {
-    margin-right: 10px!important;
+    margin-right: 10px !important;
 }
 
 .chat__footer__emojiPicker {
