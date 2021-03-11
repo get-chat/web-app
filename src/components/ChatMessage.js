@@ -10,9 +10,8 @@ import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
-import {formatMessage, insertTemplateBodyParameters} from "../Helpers";
+import {formatMessage, insertTemplateComponentParameters} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -234,13 +233,13 @@ function ChatMessage(props) {
                                     <ChatMessageDocument data={data} />
                                     }
                                     {component.format === "TEXT" &&
-                                    <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
+                                    <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
                                     }
                                 </div>
                                 }
 
                                 {component.type === "BODY" &&
-                                <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
+                                <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
                                 }
 
                                 {component.type === "BUTTONS" &&
