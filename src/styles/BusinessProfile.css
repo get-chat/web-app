@@ -11,6 +11,7 @@
 }
 
 .sidebarBusinessProfile__header {
+    height: var(--header-height);
     display: flex;
     align-items: center;
     background-color: var(--color-primary-light);

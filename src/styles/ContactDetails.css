@@ -7,6 +7,7 @@
 }
 
 .contactDetails__header {
+    height: var(--header-height);
     display: flex;
     align-items: center;
     padding: 4px 15px;

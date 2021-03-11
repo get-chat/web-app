@@ -6,6 +6,7 @@
 }
 
 .chat__header {
+    height: var(--header-height);
     display: flex;
     align-items: center;
     padding: 4px 15px;
@@ -298,7 +299,6 @@ a.chat__document:hover {
 .chat__headerRight {
     display: flex;
     justify-content: space-between;
-    min-width: 100px;
 }
 
 .chat__body {

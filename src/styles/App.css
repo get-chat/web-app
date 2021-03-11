@@ -239,6 +239,10 @@ a {
     }
 
     .desktopOnly {
-        display: none!important;
+        display: none !important;
+    }
+
+    .MuiIconButton-root {
+        padding: 8px !important;
     }
 }

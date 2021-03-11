@@ -4,6 +4,7 @@
     --color-light-blue: #4fc3f7;
     --gray-light: #ededed;
     --shadow-light: rgba(0, 0, 0, 0.08);
+    --header-height: 56px;
 }
 
 *, *:before, *:after {
@@ -14,7 +15,7 @@
 }
 
 html, body {
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 body {
