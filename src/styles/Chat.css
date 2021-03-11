@@ -169,7 +169,6 @@ a.chat__document {
     background-color: rgba(0, 0, 0, 0.05);
     padding: 10px 6px;
     display: flex;
-    font-weight: 400;
 }
 
 a.chat__document:hover {
@@ -222,7 +221,6 @@ a.chat__document:hover {
 .chat__templateContent__header {
     display: flex;
     flex-direction: column;
-    font-weight: 600;
 }
 
 .chat__templateContent__header img {

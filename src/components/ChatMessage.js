@@ -234,7 +234,7 @@ function ChatMessage(props) {
                                     <ChatMessageDocument data={data} />
                                     }
                                     {component.format === "TEXT" &&
-                                    <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
+                                    <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
                                     }
                                 </div>
                                 }
