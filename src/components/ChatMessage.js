@@ -22,6 +22,7 @@ import ContextChatMessage from "./ContextChatMessage";
 import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageImage from "./ChatMessageImage";
+import ChatMessageDocument from "./ChatMessageDocument";
 
 const playIconStyles = {
     fontSize: '38px'
@@ -200,10 +201,7 @@ function ChatMessage(props) {
                 }
 
                 {data.type === ChatMessageClass.TYPE_DOCUMENT &&
-                <a href={data.documentLink} target="_blank" className="chat__document">
-                    <InsertDriveFileIcon fontSize="small" />
-                    <span className="chat__document__filename">{data.documentCaption ?? (data.documentFileName ?? 'Document')}</span>
-                </a>
+                <ChatMessageDocument data={data} />
                 }
 
                 {data.type === ChatMessageClass.TYPE_STICKER &&
@@ -233,7 +231,7 @@ function ChatMessage(props) {
                                         onPreview={() => props.onPreview(data)} />
                                     }
                                     {component.format === "DOCUMENT" &&
-                                    <a href={data.getHeaderFileLink('document')} target="_blank">Document</a>
+                                    <ChatMessageDocument data={data} />
                                     }
                                     {component.format === "TEXT" &&
                                     <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateBodyParameters(component.type, component.text, data.templateParameters) }} />
