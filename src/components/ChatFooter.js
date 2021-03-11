@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {IconButton, Tooltip} from "@material-ui/core";
-import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
+import {Add, AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
@@ -164,6 +164,12 @@ function ChatFooter(props) {
             }
 
             <div className="chat__footer">
+
+                <Tooltip title="More" className="mobileOnly">
+                    <IconButton className="chat_footer__moreButton">
+                        <Add />
+                    </IconButton>
+                </Tooltip>
 
                 {isEmojiPickerVisible &&
                 <Tooltip title="Close" placement="top">

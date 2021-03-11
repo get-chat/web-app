@@ -5,20 +5,6 @@
     position: relative;
 }
 
-@media only screen and (max-width: 750px) {
-    .chat {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    .chat:not(.chatOpen) {
-        display: none;
-    }
-}
-
 .chat__header {
     display: flex;
     align-items: center;
@@ -383,6 +369,10 @@ a.chat__document:hover {
     background-color: var(--gray-light);
 }
 
+.chat_footer__moreButton {
+    margin-right: 10px!important;
+}
+
 .chat__footer__emojiPicker {
     flex: 1 0 100%;
     margin-bottom: -6px;
@@ -496,6 +486,7 @@ a.chat__document:hover {
 }
 
 .templateMessagesOuter {
+    background-color: var(--gray-light);
     padding: 5px 15px 15px 15px;
     border-left: 1px solid lightgray;
 }
@@ -540,6 +531,10 @@ a.chat__document:hover {
 
 .templateMessageWrapper > button {
     margin-left: 15px;
+}
+
+.templateMessage__message {
+    word-break: break-all;
 }
 
 .templateMessage__status {
@@ -621,4 +616,34 @@ a.chat__document:hover {
 
 .templateType {
     color: rgba(0, 0, 0, 0.6);
+}
+
+@media only screen and (max-width: 750px) {
+    .chat {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .chat:not(.chatOpen) {
+        display: none;
+    }
+
+    .chat__header {
+        padding: 4px 10px;
+    }
+
+    .chat__body {
+        padding: 10px 10px 0 10px;
+    }
+
+    .chat__message {
+        max-width: 90%;
+    }
+
+    .typeBox {
+        margin: 10px 10px 10px 0;
+    }
 }
