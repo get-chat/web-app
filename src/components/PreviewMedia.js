@@ -15,7 +15,7 @@ function PreviewMedia(props) {
         <div className="app__mediaPreview">
             <div className="app__mediaPreview__header">
 
-                <IconButton className="app__mediaPreview__close" onClick={props.hideImageOrVideoPrevie}>
+                <IconButton className="app__mediaPreview__close" onClick={props.hideImageOrVideoPreview}>
                     <CloseIcon />
                 </IconButton>
 
