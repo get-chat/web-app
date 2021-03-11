@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "./Sidebar";
 import Chat from "./Chat";
-import {Avatar, Fade, IconButton, Snackbar} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
 import {getConfig, getToken, getWebSocketURL} from "../Helpers";
 import {useParams} from "react-router-dom";
-import {avatarStyles} from "../AvatarStyles";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
@@ -15,7 +13,6 @@ import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
     BASE_URL,
-    CALENDAR_NORMAL,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
@@ -23,8 +20,8 @@ import {
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
-import Moment from "react-moment";
 import ChatMessageClass from "../ChatMessageClass";
+import PreviewMedia from "./PreviewMedia";
 
 function Main() {
 
@@ -47,8 +44,6 @@ function Main() {
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
-
-    const avatarClasses = avatarStyles();
 
     const displayError = (error) => {
         if (!axios.isCancel(error)) {
@@ -330,30 +325,9 @@ function Main() {
                 }
 
                 {chatMessageToPreview &&
-                <div className="app__mediaPreview">
-                    <div className="app__mediaPreview__header">
-
-                        <IconButton className="app__mediaPreview__close" onClick={() => hideImageOrVideoPreview()}>
-                            <CloseIcon />
-                        </IconButton>
-
-                        <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
-
-                        <div className="app_imagePreview__header__senderInfo">
-                            <h3>{chatMessageToPreview.senderName}</h3>
-                            <span><Moment calendar={CALENDAR_NORMAL} date={chatMessageToPreview.timestamp} unix /></span>
-                        </div>
-
-                    </div>
-                    <div className="app__mediaPreview__container" onClick={() => hideImageOrVideoPreview()}>
-                        {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink || chatMessageToPreview.getHeaderFileLink('image')) &&
-                        <img className="app__mediaPreview__image" src={chatMessageToPreview.generateImageLink(true)} alt="Preview"/>
-                        }
-                        {(chatMessageToPreview.videoId || chatMessageToPreview.videoLink || chatMessageToPreview.getHeaderFileLink('video')) &&
-                        <video className="app__mediaPreview__video" src={chatMessageToPreview.generateVideoLink(true)} controls autoPlay={true} />
-                        }
-                    </div>
-                </div>
+                <PreviewMedia
+                    data={chatMessageToPreview}
+                    hideImageOrVideoPreview={hideImageOrVideoPreview} />
                 }
 
                 <Fade in={progress < 100} timeout={{exit: 1000}}>

@@ -1,0 +1,42 @@
+import React from "react";
+import {Avatar, IconButton} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import Moment from "react-moment";
+import {CALENDAR_NORMAL} from "../Constants";
+import {avatarStyles} from "../AvatarStyles";
+
+function PreviewMedia(props) {
+
+    const chatMessageToPreview = props.data;
+
+    const avatarClasses = avatarStyles();
+
+    return (
+        <div className="app__mediaPreview">
+            <div className="app__mediaPreview__header">
+
+                <IconButton className="app__mediaPreview__close" onClick={props.hideImageOrVideoPrevie}>
+                    <CloseIcon />
+                </IconButton>
+
+                <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
+
+                <div className="app_imagePreview__header__senderInfo">
+                    <h3>{chatMessageToPreview.senderName}</h3>
+                    <span><Moment calendar={CALENDAR_NORMAL} date={chatMessageToPreview.timestamp} unix /></span>
+                </div>
+
+            </div>
+            <div className="app__mediaPreview__container" onClick={props.hideImageOrVideoPreview}>
+                {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink || chatMessageToPreview.getHeaderFileLink('image')) &&
+                <img className="app__mediaPreview__image" src={chatMessageToPreview.generateImageLink(true)} alt="Preview"/>
+                }
+                {(chatMessageToPreview.videoId || chatMessageToPreview.videoLink || chatMessageToPreview.getHeaderFileLink('video')) &&
+                <video className="app__mediaPreview__video" src={chatMessageToPreview.generateVideoLink(true)} controls autoPlay={true} />
+                }
+            </div>
+        </div>
+    )
+}
+
+export default PreviewMedia;
