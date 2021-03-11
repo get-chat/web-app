@@ -21,6 +21,10 @@ function TemplateMessages(props) {
 
     const sendButtonRef = useRef();
 
+    useEffect(() => {
+        setDialogVisible(false);
+    }, [props.waId]);
+
     const showDialog = () => {
         setErrors(undefined);
         setDialogVisible(true);

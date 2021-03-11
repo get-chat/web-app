@@ -842,6 +842,7 @@ export default function Chat(props) {
 
             {(isTemplateMessagesVisible || isExpired) &&
             <TemplateMessages
+                waId={waId}
                 templatesData={props.templates}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
                 isLoadingTemplates={props.isLoadingTemplates} />
