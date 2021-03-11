@@ -234,7 +234,7 @@ function BusinessProfile(props) {
 
                         <div className={"sidebarBusinessProfile__body__avatarContainer" + (props.isAdmin ? " editable" : "")}>
                             <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
-                            <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={handleBusinessProfileAvatarClick}>?</Avatar>
+                            <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={handleBusinessProfileAvatarClick} />
                         </div>
 
                         <form onSubmit={updateBusinessProfile}>
