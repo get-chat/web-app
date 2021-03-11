@@ -13,14 +13,23 @@
         right: 0;
         bottom: 0;
     }
+
+    .chat:not(.chatOpen) {
+        display: none;
+    }
 }
 
 .chat__header {
     display: flex;
     align-items: center;
     padding: 4px 15px;
+    background-color: var(--gray-light);
     /*border-bottom: 1px solid lightgray;*/
     border-left: 1px solid lightgray;
+}
+
+.chat__header__backButton {
+    margin-right: 5px!important;
 }
 
 .chat__headerInfo {
@@ -371,6 +380,7 @@ a.chat__document:hover {
     max-height: 400px;
     /*border-top: 1px solid lightgray;*/
     padding: 0 10px;
+    background-color: var(--gray-light);
 }
 
 .chat__footer__emojiPicker {

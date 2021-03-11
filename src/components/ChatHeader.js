@@ -1,11 +1,14 @@
 import React from 'react';
 import {Avatar, IconButton} from "@material-ui/core";
-import {MoreVert, Search} from "@material-ui/icons";
+import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {avatarStyles} from "../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
+import {useHistory} from "react-router-dom";
 
 function ChatHeader(props) {
+
+    const history = useHistory();
 
     const avatarClasses = avatarStyles();
 
@@ -17,8 +20,19 @@ function ChatHeader(props) {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, true);
     }
 
+    const closeChat = () => {
+        history.push("/main");
+    }
+
     return (
         <div className="chat__header" onDrop={(event) => event.preventDefault()}>
+
+            <div className="mobileOnly">
+                <IconButton className="chat__header__backButton" onClick={closeChat}>
+                    <ArrowBack />
+                </IconButton>
+            </div>
+
             <Avatar className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")} onClick={showContactDetails}>{props.contact?.initials}</Avatar>
 
             <div className="chat__headerInfo">

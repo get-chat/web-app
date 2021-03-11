@@ -750,7 +750,7 @@ export default function Chat(props) {
 
     return (
         <div
-            className="chat"
+            className={"chat" + (waId ? " chatOpen" : "")}
             onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
 

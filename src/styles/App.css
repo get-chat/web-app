@@ -65,8 +65,16 @@
     }
 }
 
+.mobileOnly {
+    display: none;
+}
+
 @media only screen and (max-width: 750px) {
     .app__body {
+        display: inherit;
+    }
+
+    .mobileOnly {
         display: inherit;
     }
 }
