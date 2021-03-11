@@ -654,4 +654,12 @@ a.chat__document:hover {
     .chat__message {
         max-width: 90%;
     }
+
+    .chat__footer .MuiIconButton-root {
+        padding: 8px;
+    }
+
+    .typeBox {
+        margin: 10px 5px;
+    }
 }
