@@ -5,17 +5,6 @@
     border-left: 1px solid lightgray;
 }
 
-@media only screen and (max-width: 750px) {
-    .searchMessage {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 10;
-    }
-}
-
 .searchMessage__header {
     display: flex;
     align-items: center;
@@ -81,3 +70,18 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }*/
+
+@media only screen and (max-width: 750px) {
+    .searchMessage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+    }
+
+    .searchMessage__header {
+        padding: 4px 10px;
+    }
+}
