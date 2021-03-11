@@ -157,20 +157,22 @@ a {
 }
 
 .app__mediaPreview__header {
+    height: var(--header-height);
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    padding: 4px 15px;
     background-color: white;
 }
 
 .app_imagePreview__header__senderInfo {
     flex: 1 1;
-    padding-left: 20px;
+    padding-left: 15px;
 }
 
 .app_imagePreview__header__senderInfo > h3 {
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 0;
 }
 
@@ -181,12 +183,8 @@ a {
     display: block;
 }
 
-.app__mediaPreview__header > .MuiAvatar-root {
-    margin-left: 15px;
-}
-
-.app__mediaPreview__header > .MuiButtonBase-root {
-    margin: 4px 15px 4px auto;
+.app__mediaPreview__header .MuiIconButton-root {
+    margin-right: 5px;
 }
 
 .app__mediaPreview__container {
@@ -240,6 +238,10 @@ a {
 
     .desktopOnly {
         display: none !important;
+    }
+
+    .app__mediaPreview__header {
+        padding: 4px 10px;
     }
 
     .MuiIconButton-root {

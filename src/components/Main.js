@@ -333,15 +333,17 @@ function Main() {
                 <div className="app__mediaPreview">
                     <div className="app__mediaPreview__header">
 
+                        <IconButton className="app__mediaPreview__close" onClick={() => hideImageOrVideoPreview()}>
+                            <CloseIcon />
+                        </IconButton>
+
                         <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
+
                         <div className="app_imagePreview__header__senderInfo">
                             <h3>{chatMessageToPreview.senderName}</h3>
                             <span><Moment calendar={CALENDAR_NORMAL} date={chatMessageToPreview.timestamp} unix /></span>
                         </div>
 
-                        <IconButton className="app__mediaPreview__close" onClick={() => hideImageOrVideoPreview()}>
-                            <CloseIcon fontSize="large" />
-                        </IconButton>
                     </div>
                     <div className="app__mediaPreview__container" onClick={() => hideImageOrVideoPreview()}>
                         {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink || chatMessageToPreview.getHeaderFileLink('image')) &&
