@@ -3,12 +3,14 @@
     flex-direction: column;
     flex: 0.40 1;
     border-left: 1px solid lightgray;
+    z-index: 10;
 }
 
 .contactDetails__header {
     display: flex;
     align-items: center;
     padding: 4px 15px;
+    background-color: var(--gray-light);
 }
 
 .contactDetails__header > h3 {
@@ -54,4 +56,14 @@
     width: 200px!important;
     margin-bottom: 15px;
     font-size: 5rem!important;
+}
+
+@media only screen and (max-width: 750px) {
+    .contactDetails {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
 }
