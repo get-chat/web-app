@@ -386,6 +386,7 @@ a.chat__document:hover {
 .chat__footer__emojiPicker {
     flex: 1 0 100%;
     margin-bottom: -6px;
+    background-color: var(--gray-light);
 }
 
 .chat__footer.expired {

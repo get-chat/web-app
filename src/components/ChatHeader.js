@@ -46,7 +46,7 @@ function ChatHeader(props) {
             </div>
 
             <div className="chat__headerInfo_2">
-                <span className="chat__headerInfo_2__waId">
+                <span className="chat__headerInfo_2__waId desktopOnly">
                     {props.contact?.waId ? '+' + props.contact?.waId : ''}
                 </span>
             </div>

@@ -173,41 +173,39 @@ function ChatFooter(props) {
                 </Tooltip>
                 }
 
-                <Tooltip title="Emoji" placement="top">
+                <Tooltip title="Emoji" placement="top"  className="desktopOnly">
                     <IconButton onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
                         <InsertEmoticon/>
                     </IconButton>
                 </Tooltip>
 
-                <span className="chat__footer__attachmentContainer">
-                <Tooltip title="Attachment" placement="right">
-                    <IconButton>
-                        <AttachFile />
-                    </IconButton>
-                </Tooltip>
-
-                <div className="chat__footer__attachmentContainer__options">
-
-                    <Tooltip title="Documents" placement="right">
-                        <IconButton
-                            className="chat__footer__attachmentContainer__options__document"
-                            onClick={() => handleAttachmentClick('*.*')}>
-                            <InsertDriveFileIcon/>
+                <span className="chat__footer__attachmentContainer desktopOnly">
+                    <Tooltip title="Attachment" placement="right">
+                        <IconButton>
+                            <AttachFile />
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Images & Videos" placement="right">
-                        <IconButton
-                            className="chat__footer__attachmentContainer__options__imageAndVideo"
-                            onClick={() => handleAttachmentClick('image/jpeg, image/png, image/webp, video/mp4, video/3gpp')}>
-                            <ImageIcon/>
-                        </IconButton>
-                    </Tooltip>
+                    <div className="chat__footer__attachmentContainer__options">
+                        <Tooltip title="Documents" placement="right">
+                            <IconButton
+                                className="chat__footer__attachmentContainer__options__document"
+                                onClick={() => handleAttachmentClick('*.*')}>
+                                <InsertDriveFileIcon/>
+                            </IconButton>
+                        </Tooltip>
 
-                </div>
-            </span>
+                        <Tooltip title="Images & Videos" placement="right">
+                            <IconButton
+                                className="chat__footer__attachmentContainer__options__imageAndVideo"
+                                onClick={() => handleAttachmentClick('image/jpeg, image/png, image/webp, video/mp4, video/3gpp')}>
+                                <ImageIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                </span>
 
-                <Tooltip title="Templates" placement="top">
+                <Tooltip title="Templates" placement="top" className="desktopOnly">
                     <IconButton onClick={toggleTemplateMessages}>
                         <SmsIcon />
                     </IconButton>
