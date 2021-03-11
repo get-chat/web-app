@@ -380,10 +380,6 @@ a.chat__document:hover {
     background-color: var(--gray-light);
 }
 
-.chat_footer__moreButton {
-    margin-right: 10px !important;
-}
-
 .chat__footer__emojiPicker {
     flex: 1 0 100%;
     margin-bottom: -6px;
@@ -657,9 +653,5 @@ a.chat__document:hover {
 
     .chat__message {
         max-width: 90%;
-    }
-
-    .typeBox {
-        margin: 10px 10px 10px 0;
     }
 }

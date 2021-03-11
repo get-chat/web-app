@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {IconButton, Tooltip} from "@material-ui/core";
-import {Add, AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
+import {AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
@@ -165,13 +165,13 @@ function ChatFooter(props) {
 
             <div className="chat__footer">
 
-                <div className="mobileOnly">
+                {/*<div className="mobileOnly">
                     <Tooltip title="More">
                         <IconButton className="chat_footer__moreButton">
                             <Add />
                         </IconButton>
                     </Tooltip>
-                </div>
+                </div>*/}
 
                 {isEmojiPickerVisible &&
                 <Tooltip title="Close" placement="top">
@@ -181,13 +181,11 @@ function ChatFooter(props) {
                 </Tooltip>
                 }
 
-                <div className="desktopOnly">
                 <Tooltip title="Emoji" placement="top">
                     <IconButton onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
                         <InsertEmoticon/>
                     </IconButton>
                 </Tooltip>
-                </div>
 
                 <div className="chat__footer__attachmentContainer desktopOnly">
                     <Tooltip title="Attachment" placement="right">
