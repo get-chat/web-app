@@ -10,6 +10,7 @@
     flex-direction: column;
     overflow: hidden;
 }
+
 .previewSendMedia__header {
     background-color: #00bfa5;
     color: white;
@@ -24,7 +25,7 @@
 }
 
 .previewSendMedia__header .MuiSvgIcon-root {
-    color: rgba(255, 255, 255, 0.7)!important;
+    color: rgba(255, 255, 255, 0.7) !important;
     margin-right: 20px;
     cursor: pointer;
 }
@@ -89,13 +90,13 @@
 }
 
 .previewSendMedia__footer__send {
-    padding: 20px!important;
-    background-color: #09e85e!important;
+    padding: 20px !important;
+    background-color: #09e85e !important;
     box-shadow: -1px 4px 10px -6px rgba(0, 0, 0, 0.4);
 }
 
 .previewSendMedia__footer__send .MuiSvgIcon-root {
-    color: white!important;
+    color: white !important;
 }
 
 .previewSendMedia__footer__thumbnailOuter {
@@ -128,7 +129,7 @@
 .previewSendMedia__footer__thumbnail__iconWrapper {
     height: 100%;
     width: 100%;
-    background-color: #ededed;
+    background-color: var(--gray-light);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,30 +141,30 @@
 }
 
 .previewSendMedia__footer__addMoreWrapper {
-    margin-left: 4px!important;
+    margin-left: 4px !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete {
-    display: none!important;
-    background-color: rgba(0, 0, 0, 0.2)!important;
-    position: absolute!important;
+    display: none !important;
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    position: absolute !important;
     top: 8px;
     right: 8px;
-    padding: 2px!important;
+    padding: 2px !important;
 }
 
 .previewSendMedia__footer__thumbnailOuter:hover .previewSendMedia__footer__thumbnail__delete {
-    display: initial!important;
+    display: initial !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete:hover {
-    background-color: rgba(0, 0, 0, 0.4)!important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete .MuiSvgIcon-root {
     height: 0.6em;
     width: 0.6em;
-    color: white!important;
+    color: white !important;
 }
 
 .previewSendMedia__footer__addMore {
@@ -180,7 +181,7 @@
 }
 
 .previewSendMedia__footer__addMore .MuiSvgIcon-root {
-    color: var(--color-primary)!important;
+    color: var(--color-primary) !important;
     height: 1.25em;
     width: 1.25em;
     margin-bottom: 3px;

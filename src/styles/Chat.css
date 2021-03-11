@@ -5,6 +5,16 @@
     position: relative;
 }
 
+@media only screen and (max-width: 750px) {
+    .chat {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
 .chat__header {
     display: flex;
     align-items: center;
@@ -96,7 +106,7 @@ video.chat__media {
     width: auto;
     object-fit: contain;
     margin-bottom: 22px;
-    cursor: default!important;
+    cursor: default !important;
 }
 
 .outgoing .chat__sticker {
@@ -130,7 +140,7 @@ video.chat__media {
 }
 
 .chat__voice > .MuiAvatar-root.audioMessageAvatar .MuiSvgIcon-root {
-    color: white!important;
+    color: white !important;
 }
 
 .chat__voice > .MuiAvatar-root {
@@ -153,7 +163,7 @@ video.chat__media {
     box-sizing: border-box;
     display: block;
     height: 21px;
-    background-color: initial!important;
+    background-color: initial !important;
     border: none;
     outline: none;
     /*-webkit-appearance: none;
@@ -204,14 +214,14 @@ a.chat__document:hover {
 }
 
 .chat__templateHeader .MuiSvgIcon-root {
-    color: rgba(0, 0, 0, 0.4)!important;
+    color: rgba(0, 0, 0, 0.4) !important;
     width: 0.6em;
     height: 0.6em;
     margin-right: 5px;
 }
 
 .chat__templateMsg {
-    background-color: #f4f0d7!important;
+    background-color: #f4f0d7 !important;
 }
 
 .chat__templateContent__buttons {
@@ -255,18 +265,18 @@ a.chat__document:hover {
     padding: 4px;
     cursor: pointer;
     z-index: 3;
-    background: rgb(215,219,215);
-    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, rgba(255,255,255,1) 35%);
+    background: rgb(215, 219, 215);
+    background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, rgba(255, 255, 255, 1) 35%);
     border-radius: 0 10px 10px 0;
     transition: all 1s;
 }
 
 .chat__message.chat__receiver .chat__message__more {
-    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #dcf8c6 35%);
+    background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #dcf8c6 35%);
 }
 
 .chat__message.chat__templateMsg .chat__message__more {
-    background: linear-gradient(90deg, rgba(215,219,215,0) 0%, #f4f0d7 35%);
+    background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #f4f0d7 35%);
 }
 
 /*.chat__message:hover .chat__message__more {
@@ -283,7 +293,7 @@ a.chat__document:hover {
 }
 
 .chat__forwarded .MuiSvgIcon-root {
-    color: rgba(0, 0, 0, 0.3)!important;
+    color: rgba(0, 0, 0, 0.3) !important;
     transform: scale(-1, 1);
     height: 0.7em;
     width: 0.7em;
@@ -369,7 +379,7 @@ a.chat__document:hover {
 }
 
 .chat__footer.expired {
-    height: auto!important;
+    height: auto !important;
     align-items: normal;
     flex-direction: column;
     padding: 15px;
@@ -459,19 +469,19 @@ a.chat__document:hover {
 }
 
 .chat__footer__attachmentContainer__options__document {
-    background: linear-gradient(0deg, #5f66cd 50%, #5157ae 50%)!important;
+    background: linear-gradient(0deg, #5f66cd 50%, #5157ae 50%) !important;
 }
 
 .chat__footer__attachmentContainer__options__document .MuiSvgIcon-root {
-    color: white!important;
+    color: white !important;
 }
 
 .chat__footer__attachmentContainer__options__imageAndVideo {
-    background: linear-gradient(0deg, #bf59cf 50%, #ac44cf 50%)!important;
+    background: linear-gradient(0deg, #bf59cf 50%, #ac44cf 50%) !important;
 }
 
 .chat__footer__attachmentContainer__options__imageAndVideo .MuiSvgIcon-root {
-    color: white!important;
+    color: white !important;
 }
 
 .templateMessagesOuter {
@@ -502,15 +512,15 @@ a.chat__document:hover {
 }
 
 .templateMessages .templateMessageWrapper {
-    margin-bottom: 15px!important;
+    margin-bottom: 15px !important;
 }
 
 .templateMessages .templateMessageWrapper:last-child {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
 }
 
 .templateMessages .templateMessageWrapper .chat__message {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
 }
 
 .templateMessageWrapper {
@@ -552,7 +562,7 @@ a.chat__document:hover {
     right: 0;
     bottom: 0;
     padding: 30px;
-    background-color: #ededed;
+    background-color: var(--gray-light);
     border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -584,8 +594,8 @@ a.chat__document:hover {
 }
 
 .typeBox .emoji-mart-emoji {
-    background-color: transparent!important;
-    margin-bottom: -5px!important;
+    background-color: transparent !important;
+    margin-bottom: -5px !important;
     display: inline-block;
     vertical-align: top;
     -webkit-user-select: text;
@@ -595,7 +605,7 @@ a.chat__document:hover {
 }
 
 .chat__message .emoji-mart-emoji {
-    margin-bottom: -4px!important;
+    margin-bottom: -4px !important;
 }
 
 .templateType {

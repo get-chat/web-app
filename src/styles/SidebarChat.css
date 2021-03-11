@@ -65,7 +65,7 @@
 }
 
 .sidebarChat__info__lastMessage__body .MuiSvgIcon-root {
-    color: rgba(0, 0, 0, 0.3)!important;
+    color: rgba(0, 0, 0, 0.3) !important;
     height: 0.85em;
     width: 0.85em;
     margin-left: -2px;

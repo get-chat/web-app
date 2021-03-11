@@ -6,7 +6,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ededed;
+    background-color: var(--gray-light);
 }
 
 .sidebarBusinessProfile__header {
@@ -17,6 +17,7 @@
     color: white;
     font-size: 18px;
 }
+
 .sidebarBusinessProfile__header h3 {
     margin-left: 10px;
     font-weight: 400;
@@ -24,7 +25,7 @@
 }
 
 .sidebarBusinessProfile__header .MuiSvgIcon-root {
-    color: white!important;
+    color: white !important;
 }
 
 .sidebarBusinessProfile__body {
@@ -66,7 +67,7 @@
     height: 200px;
     width: 200px;
     margin-bottom: 15px;
-    font-size: 5rem!important;
+    font-size: 5rem !important;
     transition: opacity linear .1s;
 }
 

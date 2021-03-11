@@ -6,24 +6,24 @@
 }
 
 .voiceRecord__cancelButton {
-    background-color: rgba(255, 0, 0, 0.1)!important;
-    margin-right: 20px!important;
+    background-color: rgba(255, 0, 0, 0.1) !important;
+    margin-right: 20px !important;
 }
 
 .voiceRecord__cancelButton .MuiSvgIcon-root {
-    color: red!important;
+    color: red !important;
 }
 
 .voiceRecord__sendButton {
-    background-color: rgba(0, 255, 0, 0.1)!important;
+    background-color: rgba(0, 255, 0, 0.1) !important;
 }
 
 .voiceRecord__sendButton .MuiSvgIcon-root {
-    color: green!important;
+    color: green !important;
 }
 
 .voiceRecord__recordIcon {
-    color: red!important;
+    color: red !important;
     margin-right: 2px;
 }
 

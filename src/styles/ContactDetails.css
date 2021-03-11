@@ -18,7 +18,7 @@
 }
 
 .contactDetails__body {
-    background-color: #ededed;
+    background-color: var(--gray-light);
     flex: 1 1;
     position: relative;
     display: flex;
