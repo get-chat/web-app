@@ -35,7 +35,7 @@ function SearchMessageResult(props) {
                     <ChatMessageTypeIcon type={data.type} />
                 </span>
 
-                    <span className="searchResult__message__body__text inlineFlex whiteSpacePreWrap" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), true)}} />
+                    <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), true)}} />
                 </div>
             </div>
         </ListItem>
