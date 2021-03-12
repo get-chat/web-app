@@ -165,21 +165,11 @@ function ChatFooter(props) {
 
             <div className="chat__footer">
 
-                {isEmojiPickerVisible &&
-                <Tooltip title="Close" placement="top">
-                    <IconButton onClick={() => setEmojiPickerVisible(false)}>
-                        <CloseIcon />
-                    </IconButton>
-                </Tooltip>
-                }
-
-                {!isEmojiPickerVisible &&
                 <Tooltip title="Emoji" placement="top">
-                    <IconButton onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
+                    <IconButton className={isEmojiPickerVisible ? "activeIconButton" : ""} onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
                         <InsertEmoticon/>
                     </IconButton>
                 </Tooltip>
-                }
 
                 <div className="chat__footer__attachmentContainer desktopOnly">
                     <Tooltip title="Attachment" placement="right">

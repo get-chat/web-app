@@ -216,6 +216,10 @@ a {
     color: var(--color-primary);
 }
 
+.activeIconButton .MuiSvgIcon-root {
+    color: var(--color-light-blue) !important;
+}
+
 @media only screen and (max-width: 1500px) {
     .app__body {
         height: 100vh;
