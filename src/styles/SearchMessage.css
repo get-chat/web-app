@@ -28,16 +28,20 @@
     overflow-y: auto;
 }
 
+.searchMessage__body .MuiListItem-root {
+    padding: 0;
+}
+
 .searchResult__message {
-    background-color: white;
+    flex: 1 1;
     cursor: pointer;
     padding: 10px 15px;
     border-bottom: 1px solid #f5f5f5;
 }
 
-.searchResult__message:hover {
+/*.searchResult__message:hover {
     background-color: #f5f5f5;
-}
+}*/
 
 .searchResult__message__header {
     font-size: 12px;

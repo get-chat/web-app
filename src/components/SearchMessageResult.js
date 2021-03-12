@@ -6,17 +6,19 @@ import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from "@material-ui/icons/Done";
 import {CALENDAR_NORMAL} from "../Constants";
 import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
+import {ListItem} from "@material-ui/core";
 
 function SearchMessageResult(props) {
 
     const data = props.messageData;
 
     return(
-        <div className="searchResult__message" onClick={() => props.onClick(data)}>
-            <div className="searchResult__message__header">
-                <Moment unix calendar={CALENDAR_NORMAL} date={data.timestamp} />
-            </div>
-            <div className="searchResult__message__body">
+        <ListItem button onClick={() => props.onClick(data)}>
+            <div className="searchResult__message">
+                <div className="searchResult__message__header">
+                    <Moment unix calendar={CALENDAR_NORMAL} date={data.timestamp} />
+                </div>
+                <div className="searchResult__message__body">
 
                 <span className="searchResult__message__body__type">
                     {data.isFromUs === true && data.type === ChatMessageClass.TYPE_TEXT &&
@@ -33,9 +35,10 @@ function SearchMessageResult(props) {
                     <ChatMessageTypeIcon type={data.type} />
                 </span>
 
-                <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), true)}} />
+                    <span className="searchResult__message__body__text" dangerouslySetInnerHTML={{__html: replaceEmojis(markOccurrences(data.text ?? data.caption, props.keyword), true)}} />
+                </div>
             </div>
-        </div>
+        </ListItem>
     )
 }
 
