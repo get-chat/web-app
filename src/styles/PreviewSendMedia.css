@@ -207,3 +207,23 @@
     align-items: center;
     justify-content: center;
 }
+
+@media only screen and (max-width: 1500px) {
+    .previewSendMedia__caption {
+        padding: 40px 30px;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .previewSendMedia__caption {
+        padding: 40px 20px;
+    }
+
+    .previewSendMedia__header {
+        padding: 0 20px;
+    }
+
+    .previewSendMedia__footer__sendWrapper {
+        right: 20px;
+    }
+}
