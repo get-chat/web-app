@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/SearchMessage.css';
 import {IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
@@ -26,18 +26,18 @@ function SearchMessage(props) {
         PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
     }
 
-    let cancelTokenSource;
+    let cancelTokenSourceRef = useRef();
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
 
         // Check if there are any previous pending requests
-        if (cancelTokenSource !== undefined) {
-            cancelTokenSource.cancel("Operation canceled due to new request.");
+        if (cancelTokenSourceRef.current) {
+            cancelTokenSourceRef.current.cancel("Operation canceled due to new request.");
         }
 
         // Generate a token
-        cancelTokenSource = axios.CancelToken.source();
+        cancelTokenSourceRef.current = axios.CancelToken.source();
 
         if (_keyword.trim().length === 0) {
             setResults({});
@@ -50,7 +50,7 @@ function SearchMessage(props) {
                 //offset: offset ?? 0,
                 limit: 30,
                 search: _keyword
-            }, cancelTokenSource.token)
+            }, cancelTokenSourceRef.current.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
