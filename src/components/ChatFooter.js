@@ -165,14 +165,6 @@ function ChatFooter(props) {
 
             <div className="chat__footer">
 
-                <div className="mobileOnly">
-                    <Tooltip title="More">
-                        <IconButton className="chat_footer__moreButton">
-                            <Add />
-                        </IconButton>
-                    </Tooltip>
-                </div>
-
                 {isEmojiPickerVisible &&
                 <Tooltip title="Close" placement="top">
                     <IconButton onClick={() => setEmojiPickerVisible(false)}>
@@ -250,6 +242,16 @@ function ChatFooter(props) {
                     </div>
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
+
+                {!hasInput() &&
+                <div className="mobileOnly">
+                    <Tooltip title="More">
+                        <IconButton className="chat_footer__moreButton">
+                            <Add/>
+                        </IconButton>
+                    </Tooltip>
+                </div>
+                }
 
                 {hasInput() &&
                 <Tooltip title="Send" placement="top">
