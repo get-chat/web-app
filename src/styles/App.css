@@ -211,14 +211,6 @@ a {
     word-break: break-all;
 }
 
-.inlineFlex {
-    display: inline-flex;
-}
-
-.whiteSpacePreWrap {
-    white-space: pre-wrap;
-}
-
 .searchOccurrence {
     font-weight: 600;
     color: var(--color-primary);

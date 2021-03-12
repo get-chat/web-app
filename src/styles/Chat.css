@@ -433,7 +433,6 @@ a.chat__document:hover {
 
 .typeBox .emoji-mart-emoji {
     background-color: transparent !important;
-    margin-bottom: -5px !important;
     display: inline-block;
     vertical-align: top;
     -webkit-user-select: text;
