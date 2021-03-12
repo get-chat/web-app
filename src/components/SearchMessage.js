@@ -10,6 +10,7 @@ import axios from "axios";
 import {getConfig} from "../Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
+import {isMobile} from 'react-device-detect';
 
 function SearchMessage(props) {
 
@@ -72,6 +73,10 @@ function SearchMessage(props) {
 
     const goToMessage = (data) => {
         PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
+
+        if (isMobile) {
+            hideSearchMessages();
+        }
     }
 
     return (

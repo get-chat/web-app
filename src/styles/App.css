@@ -189,6 +189,7 @@ a {
 
 .app__mediaPreview__container {
     flex: 1 1;
+    /*noinspection CssInvalidPropertyValue*/
     width: -webkit-fill-available;
     width: -moz-available;
     display: flex;
@@ -246,5 +247,9 @@ a {
 
     .MuiIconButton-root {
         padding: 8px !important;
+    }
+
+    .MuiDialogTitle-root .MuiTypography-root {
+        font-size: 16px !important;
     }
 }
