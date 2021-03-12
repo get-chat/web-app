@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/Sidebar.css';
 import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -49,17 +49,17 @@ function Sidebar(props) {
         setAnchorEl(null);
     }
 
-    let cancelToken;
+    let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
         // Generate a token
-        cancelToken = axios.CancelToken.source();
+        cancelTokenSourceRef.current = axios.CancelToken.source();
 
-        getChats(cancelToken, true);
+        getChats(cancelTokenSourceRef.current, true);
 
         return () => {
-            if (cancelToken !== undefined) {
-                cancelToken.cancel("Operation canceled due to new request.");
+            if (cancelTokenSourceRef.current) {
+                cancelTokenSourceRef.current.cancel("Operation canceled due to new request.");
             }
         }
     }, [keyword]);
@@ -140,7 +140,7 @@ function Sidebar(props) {
 
                 // We do this to generate new (missing) chat
                 if (willMakeRequest) {
-                    getChats(cancelToken, false);
+                    getChats(cancelTokenSourceRef.current, false);
                 }
             }
         }
@@ -156,11 +156,11 @@ function Sidebar(props) {
         setKeyword(_keyword);
     }
 
-    const getChats = (cancelToken, isInitial) => {
+    const getChats = (cancelTokenSource, isInitial) => {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
                 search: keyword
-            }, cancelToken.token)
+            }, cancelTokenSource.token)
         )
             .then((response) => {
                 //console.log("Chats", response.data)
