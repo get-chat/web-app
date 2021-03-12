@@ -646,6 +646,8 @@ a.chat__document:hover {
     .chat__header {
         padding: 4px 10px;
         border-left: none;
+        box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
+        z-index: 1;
     }
 
     .chat__body {
