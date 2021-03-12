@@ -206,7 +206,7 @@ function ChatFooter(props) {
                 </div>
 
                 <Tooltip title="Templates" placement="top" className="desktopOnly">
-                    <IconButton onClick={toggleTemplateMessages}>
+                    <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
                         <SmsIcon />
                     </IconButton>
                 </Tooltip>
