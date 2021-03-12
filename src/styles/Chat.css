@@ -645,10 +645,12 @@ a.chat__document:hover {
 
     .chat__header {
         padding: 4px 10px;
+        border-left: none;
     }
 
     .chat__body {
         padding: 10px 10px 0 10px;
+        border-left: none;
     }
 
     .chat__message {
@@ -661,5 +663,9 @@ a.chat__document:hover {
 
     .typeBox {
         margin: 10px 5px;
+    }
+
+    .chat__footerOuter {
+        border-left: none;
     }
 }
