@@ -16,6 +16,8 @@ function TemplateMessages(props) {
     const [chosenTemplate, setChosenTemplate] = useState();
     const [isDialogVisible, setDialogVisible] = useState(false);
 
+    const dialogContent = useRef();
+
     const [isSending, setSending] = useState(false);
     const [errors, setErrors] = useState();
 
@@ -54,6 +56,11 @@ function TemplateMessages(props) {
         const onSendTemplateMessageError = function (msg, data) {
             setErrors(data);
             setSending(false);
+
+            // Scroll to bottom
+            if (dialogContent) {
+                dialogContent.current.scrollTop = dialogContent.current.scrollHeight;
+            }
         }
 
         const sendTemplateMessageErrorEventToken = PubSub.subscribe(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, onSendTemplateMessageError);
@@ -69,7 +76,7 @@ function TemplateMessages(props) {
             PubSub.unsubscribe(sendTemplateMessageErrorEventToken);
             PubSub.unsubscribe(sentTemplateMessageEventToken);
         }
-    }, []);
+    }, [dialogContent]);
 
     return (
         <div className="templateMessagesOuter">
@@ -109,7 +116,7 @@ function TemplateMessages(props) {
                 open={isDialogVisible}
                 onClose={hideDialog}>
                 <DialogTitle>{"Send a template message"}</DialogTitle>
-                <DialogContent>
+                <DialogContent ref={dialogContent}>
                     <SendTemplateMessage
                         data={chosenTemplate}
                         send={(template) => send(template)}
