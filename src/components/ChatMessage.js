@@ -233,13 +233,13 @@ function ChatMessage(props) {
                                     <ChatMessageDocument data={data} />
                                     }
                                     {component.format === "TEXT" &&
-                                    <div className="bold wordBreak inlineFlex" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
+                                    <div className="bold wordBreak inlineFlex whiteSpacePreWrap" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
                                     }
                                 </div>
                                 }
 
                                 {component.type === "BODY" &&
-                                <div className="wordBreak inlineFlex" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
+                                <div className="wordBreak inlineFlex whiteSpacePreWrap" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
                                 }
 
                                 {component.type === "BUTTONS" &&
@@ -255,7 +255,7 @@ function ChatMessage(props) {
                 </div>
                 }
 
-                {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreak inlineFlex" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
+                {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreak inlineFlex whiteSpacePreWrap" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
 
                 <span className="chat__message__info">
                     <span className="chat__timestamp">

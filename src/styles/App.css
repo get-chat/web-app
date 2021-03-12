@@ -213,6 +213,9 @@ a {
 
 .inlineFlex {
     display: inline-flex;
+}
+
+.whiteSpacePreWrap {
     white-space: pre-wrap;
 }
 
