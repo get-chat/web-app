@@ -420,8 +420,8 @@ a.chat__document:hover {
 
 .typeBox__hint {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    /*top: 50%;
+    transform: translateY(-50%);*/
     z-index: 0;
     color: #827f80;
     overflow: hidden;
