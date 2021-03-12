@@ -22,23 +22,23 @@ function BusinessProfile(props) {
 
     const fileInput = useRef();
 
-    let cancelTokenSource = useMemo(() => {
-        return axios.CancelToken.source();
-    }, []);
-
+    const cancelTokenSourceRef = useRef();
 
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
+        // Generate a token
+        cancelTokenSourceRef.current = axios.CancelToken.source();
+
         getBusinessProfile();
 
         return () => {
-            cancelTokenSource.cancel();
+            cancelTokenSourceRef.current.cancel();
         }
     }, []);
 
     const getBusinessProfile = () => {
-        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelTokenSource.token))
+        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log(response.data);
 
@@ -96,7 +96,7 @@ function BusinessProfile(props) {
     }
 
     const getAbout = () => {
-        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelTokenSource.token))
+        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log(response.data);
 
@@ -136,7 +136,7 @@ function BusinessProfile(props) {
     }
 
     const getProfilePhoto = () => {
-        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelTokenSource.token, 'arraybuffer'))
+        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelTokenSourceRef.current.token, 'arraybuffer'))
             .then((response) => {
                 const base64 = Buffer.from(response.data, 'binary').toString('base64');
                 setProfilePhoto(base64);
@@ -154,7 +154,7 @@ function BusinessProfile(props) {
         const formData = new FormData();
         formData.append("file_encoded", file[0]);
 
-        axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelTokenSource.token))
+        axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log(response.data);
 
