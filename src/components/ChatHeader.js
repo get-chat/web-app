@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/ChatHeader.css';
 import {Avatar, IconButton} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {avatarStyles} from "../AvatarStyles";
