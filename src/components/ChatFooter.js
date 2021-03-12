@@ -154,6 +154,11 @@ function ChatFooter(props) {
         setMoreVisible(true);
     }
 
+    const hideMore = () =>{
+        props.setTemplateMessagesVisible(false);
+        setMoreVisible(false)
+    }
+
     const ACCEPT_IMAGE_AND_VIDEO = 'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
     const ACCEPT_DOCUMENT = '*.*';
 
@@ -278,7 +283,7 @@ function ChatFooter(props) {
             {isMoreVisible &&
             <div className="chat__footerMore">
 
-                <IconButton onClick={() => setMoreVisible(false)}>
+                <IconButton onClick={hideMore}>
                     <CloseIcon/>
                 </IconButton>
 

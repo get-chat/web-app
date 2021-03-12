@@ -442,9 +442,10 @@ a.chat__document:hover {
     user-select: text;
 }
 
-.chat__message .emoji-mart-emoji {
+/*.chat__message .emoji-mart-emoji {
+    margin-top: -3px;
     margin-bottom: -4px !important;
-}
+}*/
 
 .templateType {
     color: rgba(0, 0, 0, 0.6);

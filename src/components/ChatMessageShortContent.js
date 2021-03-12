@@ -11,12 +11,12 @@ function ChatMessageShortContent(props) {
 
             {(props.type === ChatMessageClass.TYPE_TEXT || props.type === ChatMessageClass.TYPE_BUTTON)
                 ?
-                <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.text ?? props.buttonText, true)}} />
+                <span className="inlineFlex" dangerouslySetInnerHTML={{__html: replaceEmojis(props.text ?? props.buttonText, true)}} />
                 :
                 <span>
                     {(props.caption && props.caption.length > 0)
                         ?
-                        <span dangerouslySetInnerHTML={{__html: props.caption}} />
+                        <span className="inlineFlex" dangerouslySetInnerHTML={{__html: props.caption}} />
                         :
                         <ChatMessageTypeLabel type={props.type}/>
                     }
