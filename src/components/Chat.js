@@ -836,6 +836,7 @@ export default function Chat(props) {
                     setInput={setInput}
                     sendMessage={(e) => sendMessage(e)}
                     setSelectedFiles={setSelectedFiles}
+                    isTemplateMessagesVisible={isTemplateMessagesVisible}
                     setTemplateMessagesVisible={setTemplateMessagesVisible}
                     sendHandledChosenFiles={sendHandledChosenFiles}
                     accept={accept}

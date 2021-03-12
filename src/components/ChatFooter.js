@@ -28,7 +28,7 @@ function ChatFooter(props) {
     const editable = useRef(null);
 
     const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
-
+    const [isMoreVisible, setMoreVisible] = useState(false);
 
     const [isRecording, setRecording] = useState(false);
 
@@ -148,6 +148,14 @@ function ChatFooter(props) {
         return props.input && props.input.length > 0;
     }
 
+    const showMore = () => {
+        setEmojiPickerVisible(false);
+        setMoreVisible(true);
+    }
+
+    const ACCEPT_IMAGE_AND_VIDEO = 'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
+    const ACCEPT_DOCUMENT = '*.*';
+
     return (
         <div className="chat__footerOuter" onDrop={(event) => event.preventDefault()}>
 
@@ -182,7 +190,7 @@ function ChatFooter(props) {
                         <Tooltip title="Documents" placement="right">
                             <IconButton
                                 className="chat__footer__attachmentContainer__options__document"
-                                onClick={() => handleAttachmentClick('*.*')}>
+                                onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}>
                                 <InsertDriveFileIcon/>
                             </IconButton>
                         </Tooltip>
@@ -190,7 +198,7 @@ function ChatFooter(props) {
                         <Tooltip title="Images & Videos" placement="right">
                             <IconButton
                                 className="chat__footer__attachmentContainer__options__imageAndVideo"
-                                onClick={() => handleAttachmentClick('image/jpeg, image/png, image/webp, video/mp4, video/3gpp')}>
+                                onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}>
                                 <ImageIcon/>
                             </IconButton>
                         </Tooltip>
@@ -236,7 +244,7 @@ function ChatFooter(props) {
                 {!hasInput() &&
                 <div className="mobileOnly">
                     <Tooltip title="More">
-                        <IconButton className="chat_footer__moreButton">
+                        <IconButton className="chat_footer__moreButton" onClick={showMore}>
                             <Add/>
                         </IconButton>
                     </Tooltip>
@@ -265,6 +273,31 @@ function ChatFooter(props) {
                         sendHandledChosenFiles={props.sendHandledChosenFiles} />
                 </div>
             </div>
+
+            {isMoreVisible &&
+            <div className="chat__footerMore">
+
+                <IconButton onClick={() => setMoreVisible(false)}>
+                    <CloseIcon/>
+                </IconButton>
+
+                <IconButton
+                    onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}>
+                    <InsertDriveFileIcon/>
+                </IconButton>
+
+                <IconButton
+                    onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}>
+                    <ImageIcon/>
+                </IconButton>
+
+                <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
+                    <SmsIcon/>
+                </IconButton>
+
+            </div>
+            }
+
         </div>
     )
 }
