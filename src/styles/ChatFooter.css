@@ -25,6 +25,7 @@
     align-items: normal;
     flex-direction: column;
     padding: 15px;
+    border-left: 1px solid lightgray;
 }
 
 .chat__footer > form {
@@ -147,6 +148,11 @@
 
 @media only screen and (max-width: 750px) {
     .chat__footerOuter {
+        border-left: none;
+    }
+
+    .chat__footer.expired {
+        padding: 10px 15px;
         border-left: none;
     }
 

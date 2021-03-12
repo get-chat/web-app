@@ -319,7 +319,7 @@ a.chat__document:hover {
 
 .templateMessagesOuter {
     background-color: var(--gray-light);
-    padding: 5px 15px 15px 15px;
+    padding: 0 15px 15px 15px;
     border-left: 1px solid lightgray;
 }
 
