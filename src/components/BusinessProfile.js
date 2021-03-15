@@ -141,12 +141,20 @@ function BusinessProfile(props) {
                 const base64 = Buffer.from(response.data, 'binary').toString('base64');
                 setProfilePhoto(base64);
 
+                // Finish
                 setLoaded(true);
             })
             .catch((error) => {
                 console.log(error);
 
-                props.displayError(error);
+                // No photo
+                if (error.response.status && error.response.status === 404) {
+
+                    // Finish
+                    setLoaded(true);
+                } else {
+                    props.displayError(error);
+                }
             });
     }
 
