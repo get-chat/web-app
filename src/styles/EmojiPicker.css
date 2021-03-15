@@ -9,6 +9,10 @@
     padding: 0 10px 10px 10px;
 }
 
+.emoji-mart-no-results-label {
+    font-family: var(--font-family);
+}
+
 .emoji-mart-category-label span {
     background: var(--gray-light) none;
     font-size: 13px;
