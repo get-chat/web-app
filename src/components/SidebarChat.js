@@ -59,6 +59,8 @@ function SidebarChat(props) {
             }
         }
 
+        setExpired(props.chatData.isExpired);
+
         // Initial
         calculateRemaining();
 
@@ -73,7 +75,7 @@ function SidebarChat(props) {
             clearInterval(intervalId);
         }
 
-    }, [isExpired, props.chatData.lastMessageTimestamp]);
+    }, [isExpired, props.chatData.isExpired, props.chatData.lastMessageTimestamp]);
 
     const handleDroppedFiles = (event) => {
         if (isExpired) {
