@@ -216,41 +216,48 @@ function ChatMessage(props) {
                     </span>
 
                     <div className="chat__templateContent">
-                        {Object.values(templateData.components).map((component, index) =>
-                            <div key={index}>
-                                {component.type === "HEADER" &&
-                                <div className="chat__templateContent__header">
-                                    {component.format === "IMAGE" &&
-                                    <ChatMessageImage data={data} source={data.getHeaderFileLink('image')} onPreview={() => props.onPreview(data)} />
-                                    }
-                                    {component.format === "VIDEO" &&
-                                    <ChatMessageVideo
-                                        data={data}
-                                        source={data.getHeaderFileLink('video')}
-                                        onPreview={() => props.onPreview(data)} />
-                                    }
-                                    {component.format === "DOCUMENT" &&
-                                    <ChatMessageDocument data={data} />
-                                    }
-                                    {component.format === "TEXT" &&
-                                    <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
-                                    }
-                                </div>
-                                }
+                        {templateData !== undefined
+                            ?
+                            <div>
+                                {Object.values(templateData.components).map((component, index) =>
+                                    <div key={index}>
+                                        {component.type === "HEADER" &&
+                                        <div className="chat__templateContent__header">
+                                            {component.format === "IMAGE" &&
+                                            <ChatMessageImage data={data} source={data.getHeaderFileLink('image')} onPreview={() => props.onPreview(data)} />
+                                            }
+                                            {component.format === "VIDEO" &&
+                                            <ChatMessageVideo
+                                                data={data}
+                                                source={data.getHeaderFileLink('video')}
+                                                onPreview={() => props.onPreview(data)} />
+                                            }
+                                            {component.format === "DOCUMENT" &&
+                                            <ChatMessageDocument data={data} />
+                                            }
+                                            {component.format === "TEXT" &&
+                                            <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
+                                            }
+                                        </div>
+                                        }
 
-                                {component.type === "BODY" &&
-                                <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
-                                }
+                                        {component.type === "BODY" &&
+                                        <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
+                                        }
 
-                                {component.type === "BUTTONS" &&
-                                <div className="chat__templateContent__buttons">
-                                    {component.buttons.map((button, buttonIndex) =>
-                                        <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
-                                    )}
-                                </div>
-                                }
+                                        {component.type === "BUTTONS" &&
+                                        <div className="chat__templateContent__buttons">
+                                            {component.buttons.map((button, buttonIndex) =>
+                                                <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
+                                            )}
+                                        </div>
+                                        }
+                                    </div>
+                                )}
                             </div>
-                        )}
+                            :
+                            <div>Missing template</div>
+                        }
                     </div>
                 </div>
                 }
