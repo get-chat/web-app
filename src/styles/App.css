@@ -256,4 +256,20 @@ a {
     .MuiDialogTitle-root .MuiTypography-root {
         font-size: 16px !important;
     }
+
+    .MuiDialog-paper {
+        margin: 16px !important;
+    }
+
+    .MuiDialog-paperScrollPaper {
+        max-height: calc(100% - 32px) !important;
+    }
+
+    .MuiDialogTitle-root {
+        padding: 15px 15px 10px 15px !important;
+    }
+
+    .MuiDialogContent-root {
+        padding: 5px 15px !important;
+    }
 }

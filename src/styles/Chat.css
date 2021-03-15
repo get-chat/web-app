@@ -475,4 +475,8 @@ a.chat__document:hover {
     .templateMessagesOuter {
         border-left: none;
     }
+
+    .templateMessages {
+        max-height: 200px;
+    }
 }
