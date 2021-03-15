@@ -5,7 +5,7 @@ import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
 import {getConfig, getToken, getWebSocketURL} from "../Helpers";
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
@@ -44,6 +44,8 @@ function Main() {
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
+
+    const history = useHistory();
 
     const setProgress = (value) => {
         _setProgress(prevState => {
@@ -87,14 +89,19 @@ function Main() {
         setChatMessageToPreview(chatMessage);
     }
 
-    const showNotification = (title, body, icon) => {
+    const showNotification = (title, body, chatWaId, icon) => {
         function showNot() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
                 body: body,
                 icon: icon
             });
-            /*notification.onclick = function (event) {}*/
+
+            if (waId) {
+                notification.onclick = function (event) {
+                    history.push(`/main/chat/${chatWaId}`);
+                }
+            }
         }
         if (!window.Notification) {
             console.log('Browser does not support notifications.');

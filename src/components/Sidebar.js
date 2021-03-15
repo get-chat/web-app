@@ -125,7 +125,7 @@ function Sidebar(props) {
                             setUnseenMessages({...preparedUnseenMessages});
 
                             // Display a notification
-                            props.showNotification("New messages", "You have new messages!");
+                            props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                         }
                     }
                 });
@@ -192,6 +192,8 @@ function Sidebar(props) {
 
                 if (willNotify) {
                     let hasAnyNewMessages = false;
+                    let chatMessageWaId;
+
                     setUnseenMessages((prevState => {
                             Object.entries(preparedUnseenMessages).forEach((unseen) => {
                                 const unseenWaId = unseen[0]
@@ -200,6 +202,9 @@ function Sidebar(props) {
                                     // TODO: Consider a new contact (last part of the condition)
                                     if ((prevState[unseenWaId] && number > prevState[unseenWaId].unseenMessages) /*|| (!prevState[unseenWaId] && number > 0)*/) {
                                         hasAnyNewMessages = true;
+
+                                        // There can be multiple unseen chats, we take first one
+                                        if (chatMessageWaId === unseenWaId) chatMessageWaId = unseenWaId;
                                     }
                                 }
                             });
@@ -216,7 +221,7 @@ function Sidebar(props) {
 
                     // Display a notification
                     if (hasAnyNewMessages) {
-                        props.showNotification("New messages", "You have new messages!");
+                        props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                     }
                 } else {
                     setUnseenMessages(preparedUnseenMessages);
