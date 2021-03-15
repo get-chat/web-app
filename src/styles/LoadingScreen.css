@@ -26,6 +26,7 @@
 }
 
 .loadingScreen__skip {
+    display: inline-block;
     cursor: pointer;
     margin-top: 20px;
     font-size: 18px;

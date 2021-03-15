@@ -27,7 +27,10 @@ function LoadingScreen(props) {
             </div>
 
             {isSkipVisible &&
-            <span className="loadingScreen__skip" onClick={skip}>Skip</span>
+            <div>
+                {/*<span className="loadingScreen__skip" onClick={window.location.reload}>Reload</span>*/}
+                <span className="loadingScreen__skip" onClick={skip}>Skip</span>
+            </div>
             }
         </div>
     )

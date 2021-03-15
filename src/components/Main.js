@@ -27,7 +27,7 @@ function Main() {
 
     const {waId} = useParams();
 
-    const [progress, setProgress] = useState(20);
+    const [progress, _setProgress] = useState(20);
     const [checked, setChecked] = useState(false);
 
     const [currentUser, setCurrentUser] = useState();
@@ -44,6 +44,12 @@ function Main() {
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
+
+    const setProgress = (value) => {
+        _setProgress(prevState => {
+            return value > prevState ? value : prevState;
+        })
+    }
 
     const displayError = (error) => {
         if (!axios.isCancel(error)) {
