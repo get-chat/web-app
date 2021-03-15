@@ -22,6 +22,7 @@ import {
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
+import logo from '../assets/images/logo.png';
 
 function Main() {
 
@@ -89,12 +90,12 @@ function Main() {
         setChatMessageToPreview(chatMessage);
     }
 
-    const showNotification = (title, body, chatWaId, icon) => {
+    const showNotification = (title, body, chatWaId) => {
         function showNot() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
                 body: body,
-                icon: icon
+                icon: logo
             });
 
             if (waId) {
