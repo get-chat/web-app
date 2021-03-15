@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../styles/ChatHeader.css';
-import {Avatar, IconButton} from "@material-ui/core";
+import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {avatarStyles} from "../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
@@ -11,6 +11,16 @@ function ChatHeader(props) {
 
     const history = useHistory();
 
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const displayMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const hideMenu = () => {
+        setAnchorEl(null);
+    }
+
     const avatarClasses = avatarStyles();
 
     const showSearchMessages = () => {
@@ -19,6 +29,11 @@ function ChatHeader(props) {
 
     const showContactDetails = () => {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, true);
+    }
+
+    const showContactDetailsAndHideMenu = () => {
+        showContactDetails();
+        hideMenu();
     }
 
     const closeChat = () => {
@@ -56,10 +71,23 @@ function ChatHeader(props) {
                 <IconButton onClick={showSearchMessages}>
                     <Search />
                 </IconButton>
-                <IconButton>
+                <IconButton onClick={displayMenu}>
                     <MoreVert />
                 </IconButton>
             </div>
+
+            <Menu
+                anchorEl={anchorEl}
+                getContentAnchorEl={null}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={hideMenu}
+                elevation={3}>
+                <MenuItem onClick={showContactDetailsAndHideMenu}>Contact details</MenuItem>
+            </Menu>
+
         </div>
     )
 }
