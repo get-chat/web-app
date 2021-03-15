@@ -11,9 +11,10 @@
 
 .emoji-mart-category-label span {
     background: var(--gray-light) none;
-    font-size: 14px;
+    font-size: 13px;
     padding: 15px 6px 5px 6px;
     color: rgba(0, 0, 0, 0.46);
+    font-family: var(--font-family);
 }
 
 .emoji-mart-search {
@@ -29,6 +30,7 @@
     border: none;
     background-color: #e6e6e6;
     padding: 10px 20px;
+    font-family: var(--font-family);
 }
 
 .emoji-mart-anchor {

@@ -5,6 +5,7 @@
     --gray-light: #ededed;
     --shadow-light: rgba(0, 0, 0, 0.08);
     --header-height: 56px;
+    --font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Arial', sans-serif;
 }
 
 *, *:before, *:after {
@@ -27,7 +28,7 @@ body {
     color: #212529;
     text-align: left;
     font-size: 16px;
-    font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Arial', sans-serif !important;
+    font-family: var(--font-family) !important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
