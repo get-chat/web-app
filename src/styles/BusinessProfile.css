@@ -63,6 +63,18 @@
 .sidebarBusinessProfile__body__avatarContainer {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sidebarBusinessProfile__body__avatarContainer .MuiButton-root {
+    margin-bottom: 15px;
+}
+
+.sidebarBusinessProfile__body__avatarDeleteContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
 .sidebarBusinessProfile__body__avatarContainer .MuiAvatar-root {

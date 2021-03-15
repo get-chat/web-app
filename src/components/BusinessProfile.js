@@ -78,7 +78,7 @@ function BusinessProfile(props) {
             email: email,
             vertical: vertical,
             websites: Object.values(websites)
-        }, getConfig())
+        }, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log(response.data);
 
@@ -119,7 +119,7 @@ function BusinessProfile(props) {
 
         axios.patch( `${BASE_URL}settings/profile/about/`, {
             text: about
-        }, getConfig())
+        }, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log(response.data);
 
@@ -176,6 +176,18 @@ function BusinessProfile(props) {
                 console.log(error);
 
                 setUpdating(false);
+
+                props.displayError(error);
+            });
+    }
+
+    const deleteProfilePhoto = () => {
+        axios.delete(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                setProfilePhoto(undefined);
+            })
+            .catch((error) => {
+                console.log(error);
 
                 props.displayError(error);
             });
@@ -243,6 +255,10 @@ function BusinessProfile(props) {
                         <div className={"sidebarBusinessProfile__body__avatarContainer" + (props.isAdmin ? " editable" : "")}>
                             <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
                             <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={handleBusinessProfileAvatarClick} />
+
+                            {profilePhoto &&
+                            <Button onClick={deleteProfilePhoto} color="secondary">Delete profile photo</Button>
+                            }
                         </div>
 
                         <form onSubmit={updateBusinessProfile}>
