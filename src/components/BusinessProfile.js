@@ -236,6 +236,10 @@ function BusinessProfile(props) {
 
                         <h3>{props.currentUser.username}</h3>
                         <span>{props.currentUser.first_name + ' ' + props.currentUser.last_name}</span>
+
+                        <div className="sidebarBusinessProfile__body__changePasswordContainer">
+                            <Button onClick={() => props.setChangePasswordDialogVisible(true)} color="secondary">Change password</Button>
+                        </div>
                     </div>
                     }
                 </div>

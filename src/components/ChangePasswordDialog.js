@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import '../styles/ChangePasswordDialog.css';
 import {Button, Dialog, TextField} from "@material-ui/core";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -18,8 +18,29 @@ function ChangePasswordDialog(props) {
     const [isRequesting, setRequesting] = useState(false);
     const [isSuccess, setSuccess] = useState(false);
 
+    const timeoutRef = useRef(0);
+
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        }
+    }, [timeoutRef]);
+
     const close = () => {
+        // Close dialog
         props.setOpen(false);
+
+        timeoutRef.current = setTimeout(function () {
+            // Reset states
+            setCurrentPassword('');
+            setNewPassword('');
+            setNewPasswordRepeat('');
+            setError(undefined);
+            setRequesting(false);
+            setSuccess(false);
+        }, 300);
     }
 
     const changePassword = async () => {

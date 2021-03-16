@@ -317,7 +317,8 @@ function Sidebar(props) {
                 currentUser={props.currentUser}
                 onHide={() => setProfileVisible(false)}
                 displayError={props.displayError}
-                displayEditBusinessProfile={displayEditBusinessProfile} />
+                displayEditBusinessProfile={displayEditBusinessProfile}
+                setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
             }
 
             <Menu
