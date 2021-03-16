@@ -13,7 +13,7 @@ function App() {
                 <Router>
                     <RouteSwitch>
                         <Route path={["/main/chat/:waId", "/main/chat/:waId/message/:msgId", "/main"]} component={Main} />
-                        <Route path={["/login/error/case/:errorCase", "/"]} component={Login} />
+                        <Route path={["/login/error/:errorCase", "/"]} component={Login} />
                     </RouteSwitch>
                 </Router>
             </div>

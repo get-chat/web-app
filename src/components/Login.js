@@ -35,6 +35,10 @@ export default function Login() {
     const history = useHistory();
 
     useEffect(() => {
+        if (errorCase) {
+            setLoginError(errorMessages[errorCase]);
+        }
+
         const token = getToken();
         if (token) {
             setValidatingToken(true);
@@ -125,10 +129,6 @@ export default function Login() {
 
                     {loginError &&
                     <Alert severity="error">{loginError}</Alert>
-                    }
-
-                    {errorCase &&
-                    <Alert severity="error">{errorMessages[errorCase]}</Alert>
                     }
                 </div>
             </Fade>

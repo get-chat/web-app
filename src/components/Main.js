@@ -70,7 +70,7 @@ function Main() {
         clearToken();
 
         if (errorCase) {
-            history.push(`/login/error/case/${errorCase}`);
+            history.push(`/login/error/${errorCase}`);
         } else {
             history.push("/");
         }
