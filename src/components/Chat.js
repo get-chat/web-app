@@ -66,34 +66,12 @@ export default function Chat(props) {
 
     const {waId} = useParams();
 
-    let cancelTokenSource;
-
-    const generateCancelToken = () => {
-        cancelTokenSource = axios.CancelToken.source();
-    }
-
-    // Generating cancel token
-    generateCancelToken();
-
-    const prepareFixedDateIndicator = (dateIndicators, el) => {
-        const curScrollTop = el.scrollTop;
-        let indicatorToShow;
-
-        for (let i = 0; i < dateIndicators.length; i++) {
-            const indicator = dateIndicators[i];
-            if (indicatorToShow === undefined || indicator.offsetTop <= curScrollTop) {
-                indicatorToShow = indicator;
-            } else {
-                break;
-            }
-        }
-
-        if (indicatorToShow) {
-            setFixedDateIndicatorText(indicatorToShow.innerHTML);
-        }
-    }
+    const cancelTokenSourceRef = useRef();
 
     useEffect(() => {
+        // Generate a token
+        cancelTokenSourceRef.current = axios.CancelToken.source();
+
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
                 if (event.target.parentNode.id === "chat__body") {
@@ -113,7 +91,7 @@ export default function Chat(props) {
 
         return () => {
             // Cancelling ongoing requests
-            cancelTokenSource.cancel();
+            cancelTokenSourceRef.current.cancel();
 
             // Unsubscribe
             PubSub.unsubscribe(token);
@@ -147,7 +125,10 @@ export default function Chat(props) {
 
         return () => {
             // Cancelling ongoing requests
-            cancelTokenSource.cancel();
+            cancelTokenSourceRef.current.cancel();
+
+            // Generate a new token, because component is not destroyed
+            cancelTokenSourceRef.current = axios.CancelToken.source();
         }
     }, [waId]);
 
@@ -325,6 +306,24 @@ export default function Chat(props) {
         }
     }, [isLoadingTemplates]);*/
 
+    const prepareFixedDateIndicator = (dateIndicators, el) => {
+        const curScrollTop = el.scrollTop;
+        let indicatorToShow;
+
+        for (let i = 0; i < dateIndicators.length; i++) {
+            const indicator = dateIndicators[i];
+            if (indicatorToShow === undefined || indicator.offsetTop <= curScrollTop) {
+                indicatorToShow = indicator;
+            } else {
+                break;
+            }
+        }
+
+        if (indicatorToShow) {
+            setFixedDateIndicatorText(indicatorToShow.innerHTML);
+        }
+    }
+
     const scrollToChild = (msgId) => {
         setTimeout(function () {
             const child = messagesContainer.current.querySelector('#message_' + msgId);
@@ -408,7 +407,7 @@ export default function Chat(props) {
     }
 
     const getContact = (loadMessages) => {
-        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, cancelTokenSource.token))
+        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 //console.log("Contact", response.data);
 
@@ -440,7 +439,7 @@ export default function Chat(props) {
                 before_time: beforeTime,
                 since_time: sinceTime,
                 limit: limit,
-            }, cancelTokenSource.token)
+            }, cancelTokenSourceRef.current.token)
         )
             .then((response) => {
                 console.log("Messages", response.data);
@@ -616,7 +615,7 @@ export default function Chat(props) {
         axios.post( `${BASE_URL}mark_as_seen/`, {
             timestamp: timestamp,
             customer_wa_id: waId
-        }, getConfig(undefined, cancelTokenSource.token))
+        }, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 //console.log(response.data);
 
