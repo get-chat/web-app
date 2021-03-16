@@ -2,12 +2,10 @@ import React from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
-import {Button} from "@material-ui/core";
 import '../styles/InputRange.css';
 import '../AvatarStyles';
-import {formatMessage, insertTemplateComponentParameters} from "../Helpers";
+import {formatMessage} from "../Helpers";
 import NoteIcon from '@material-ui/icons/Note';
-import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../ChatMessageClass";
 import MessageDateIndicator from "./MessageDateIndicator";
@@ -17,6 +15,7 @@ import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageDocument from "./ChatMessageDocument";
 import ChatMessageVoice from "./ChatMessageVoice";
+import ChatMessageTemplate from "./ChatMessageTemplate";
 
 const iconStyles = {
     fontSize: '15px'
@@ -91,56 +90,7 @@ function ChatMessage(props) {
                 }
 
                 {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                <div className="chat__template">
-                    <span className="chat__templateHeader">
-                        <SmsIcon />Template message:<br/>
-                    </span>
-
-                    <div className="chat__templateContent">
-                        {templateData !== undefined
-                            ?
-                            <div>
-                                {Object.values(templateData.components).map((component, index) =>
-                                    <div key={index}>
-                                        {component.type === "HEADER" &&
-                                        <div className="chat__templateContent__header">
-                                            {component.format === "IMAGE" &&
-                                            <ChatMessageImage data={data} source={data.getHeaderFileLink('image')} onPreview={() => props.onPreview(data)} />
-                                            }
-                                            {component.format === "VIDEO" &&
-                                            <ChatMessageVideo
-                                                data={data}
-                                                source={data.getHeaderFileLink('video')}
-                                                onPreview={() => props.onPreview(data)} />
-                                            }
-                                            {component.format === "DOCUMENT" &&
-                                            <ChatMessageDocument data={data} />
-                                            }
-                                            {component.format === "TEXT" &&
-                                            <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
-                                            }
-                                        </div>
-                                        }
-
-                                        {component.type === "BODY" &&
-                                        <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
-                                        }
-
-                                        {component.type === "BUTTONS" &&
-                                        <div className="chat__templateContent__buttons">
-                                            {component.buttons.map((button, buttonIndex) =>
-                                                <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
-                                            )}
-                                        </div>
-                                        }
-                                    </div>
-                                )}
-                            </div>
-                            :
-                            <div>Missing template</div>
-                        }
-                    </div>
-                </div>
+                <ChatMessageTemplate data={data} templateData={templateData} />
                 }
 
                 {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
