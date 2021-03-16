@@ -15,6 +15,7 @@ import UnseenMessageClass from "../UnseenMessageClass";
 import PubSub from "pubsub-js";
 import {avatarStyles} from "../AvatarStyles";
 import BusinessProfile from "./BusinessProfile";
+import ChangePasswordDialog from "./ChangePasswordDialog";
 
 function Sidebar(props) {
 
@@ -28,6 +29,7 @@ function Sidebar(props) {
     const [keyword, setKeyword] = useState("");
     const [contactResults, setContactResults] = useState({});
     const [isProfileVisible, setProfileVisible] = useState(false);
+    const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
 
     const avatarClasses = avatarStyles();
 
@@ -331,6 +333,10 @@ function Sidebar(props) {
                 <Divider />*/}
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
+
+            <ChangePasswordDialog
+                open={isChangePasswordDialogVisible}
+                setOpen={setChangePasswordDialogVisible} />
 
         </div>
     )
