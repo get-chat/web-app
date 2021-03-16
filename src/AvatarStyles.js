@@ -60,6 +60,16 @@ const avatarStyles = makeStyles((theme) => ({
     "X": {"color": "#fff", "backgroundColor": "#2BE100"},
     "Y": {"color": "#fff", "backgroundColor": "#EF4960"},
     "Z": {"color": "#fff", "backgroundColor": "#B2B1C0"},
+    "0": {"color": "#fff", "backgroundColor": "#635ae9"},
+    "1": {"color": "#fff", "backgroundColor": "#0d6d6a"},
+    "2": {"color": "#fff", "backgroundColor": "#8c409b"},
+    "3": {"color": "#fff", "backgroundColor": "#b6c136"},
+    "4": {"color": "#fff", "backgroundColor": "#8f3554"},
+    "5": {"color": "#fff", "backgroundColor": "#367aa4"},
+    "6": {"color": "#fff", "backgroundColor": "#6b9b4d"},
+    "7": {"color": "#fff", "backgroundColor": "#db8254"},
+    "8": {"color": "#fff", "backgroundColor": "#ff5c5c"},
+    "9": {"color": "#fff", "backgroundColor": "#857708"},
     "orange": {"color": "#fff", "backgroundColor": "#ff9a10"}
 }));
 

@@ -4,7 +4,7 @@ import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, T
 import {ArrowBack} from "@material-ui/icons";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers";
+import {generateInitialsHelper, getConfig} from "../Helpers";
 import FileInput from "./FileInput";
 import {avatarStyles} from "../AvatarStyles";
 
@@ -231,7 +231,7 @@ function BusinessProfile(props) {
                     {props.currentUser &&
                     <div>
                         <div className="sidebarBusinessProfile__body__avatarContainer">
-                            <Avatar className={avatarClasses[props.currentUser.username[0].toUpperCase()]}>{props.currentUser.username[0].toUpperCase()}</Avatar>
+                            <Avatar className={avatarClasses[generateInitialsHelper(props.currentUser.username)?.[0]]}>{generateInitialsHelper(props.currentUser.username)}</Avatar>
                         </div>
 
                         <h3>{props.currentUser.username}</h3>

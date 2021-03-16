@@ -5,7 +5,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {clearToken, getConfig, getObjLength} from "../Helpers";
+import {clearToken, generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
 import {BASE_URL, EVENT_TOPIC_MARKED_AS_SEEN, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
@@ -251,8 +251,8 @@ function Sidebar(props) {
             <div className="sidebar__header">
                 <Avatar
                     onClick={() => setProfileVisible(true)}
-                    className={"cursorPointer " + (props.currentUser ? avatarClasses[props.currentUser.username[0].toUpperCase()] : '')}>
-                    {props.currentUser ? props.currentUser.username[0].toUpperCase() : ''}
+                    className={"cursorPointer " + (props.currentUser ? avatarClasses[generateInitialsHelper(props.currentUser.username)?.[0]] : '')}>
+                    {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
                     <IconButton>

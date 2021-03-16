@@ -1,4 +1,5 @@
 import {getPastHoursByTimestamp} from "./DateHelpers";
+import {generateInitialsHelper} from "./Helpers";
 
 class ChatClass {
 
@@ -9,8 +10,8 @@ class ChatClass {
         const lastMessagePayload = lastMessage?.waba_payload;
 
         this.waId = contactPayload.wa_id;
-        this.initials = contact.initials;
         this.name = contactPayload.profile.name;
+        this.initials = this.generateInitials(); //contact.initials;
         this.unseenMessages = data.unseen_messages;
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = lastMessagePayload?.text?.body;
@@ -19,6 +20,14 @@ class ChatClass {
         this.lastMessageType = lastMessagePayload?.type;
         this.lastMessageTimestamp = parseInt(lastMessagePayload?.timestamp ?? contact?.last_message_timestamp);
         this.isExpired = this.checkIfExpired();
+    }
+
+    generateInitials = () => {
+        return generateInitialsHelper(this.name);
+    }
+
+    getAvatarClassName() {
+        return this.initials ? this.initials[0] : '';
     }
 
     setLastMessage(lastMessagePayload) {
@@ -34,10 +43,6 @@ class ChatClass {
 
     checkIfExpired() {
         return this.getPastHoursAfterLastMessage() >= 24;
-    }
-
-    getAvatarClassName() {
-        return this.initials ? this.initials[0] : '';
     }
 }
 

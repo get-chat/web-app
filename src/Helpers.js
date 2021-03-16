@@ -122,6 +122,10 @@ export const markOccurrences = (message, sub) => {
     return message.replace(reg, '<span class="searchOccurrence">$1</span>');
 }
 
+export const generateInitialsHelper = (name) => {
+    return (name ? name.replace(/[^a-z\d\s]+/gi, '').trim()[0] : '')?.toUpperCase();
+}
+
 export const getFirstObject = (jsonObject) => {
     return jsonObject[Object.keys(jsonObject)[0]];
 }

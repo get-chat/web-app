@@ -10,7 +10,7 @@ import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
 import {avatarStyles} from "../AvatarStyles";
 import PubSub from 'pubsub-js';
-import {formatMessage, insertTemplateComponentParameters} from "../Helpers";
+import {formatMessage, generateInitialsHelper, insertTemplateComponentParameters} from "../Helpers";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
@@ -35,13 +35,6 @@ function ChatMessage(props) {
 
     const data = props.messageData;
     const templateData = data.type === ChatMessageClass.TYPE_TEMPLATE ? props.templates[data.templateName] : undefined;
-
-    const generateInitials = () => {
-        return (data.senderName ? data.senderName.text.replace(/[^a-z\d\s]+/gi, '').trim()[0] : '')?.toUpperCase();
-    }
-
-    data.preparedInitials = generateInitials();
-    data.preparedAvatarClassName = data.preparedInitials ? data.preparedInitials[0] : '';
 
     const [isPlaying, setPlaying] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -193,8 +186,8 @@ function ChatMessage(props) {
                     <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
                     <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-                    <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.preparedInitials] : avatarClasses.orange + " audioMessageAvatar"}>
-                        {data.voiceId !== undefined ? <span>{data.preparedInitials}</span> : <HeadsetIcon/>}
+                    <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.initials] : avatarClasses.orange + " audioMessageAvatar"}>
+                        {data.voiceId !== undefined ? <span>{data.initials}</span> : <HeadsetIcon/>}
                     </Avatar>
                 </span>
                 }

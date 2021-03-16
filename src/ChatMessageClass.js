@@ -1,4 +1,5 @@
 import {BASE_URL} from "./Constants";
+import {generateInitialsHelper} from "./Helpers";
 
 export class ChatMessageClass {
 
@@ -33,7 +34,7 @@ export class ChatMessageClass {
         this.senderObject = data.sender;
         this.username = data.sender?.username;
         this.senderName = this.getSenderName();
-        this.initials = this.senderName ? this.senderName[0] : "?";
+        this.initials = this.generateInitials(); //this.senderName ? this.senderName[0] : "?";
         this.text = payload.text?.body;
         this.buttonText = payload?.button?.text;
         this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
@@ -97,6 +98,14 @@ export class ChatMessageClass {
         }
 
         return this.senderObject?.username ?? (!this.isFromUs ? this.contact?.waba_payload?.profile?.name : "Us");
+    }
+
+    generateInitials = () => {
+        return generateInitialsHelper(this.senderName);
+    }
+
+    getAvatarClassName() {
+        return this.initials ? this.initials[0] : '';
     }
 
     hasMediaToPreview() {
