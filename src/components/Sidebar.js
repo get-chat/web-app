@@ -257,9 +257,9 @@ function Sidebar(props) {
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
-                    <IconButton>
+                    {/*<IconButton>
                         <ChatIcon />
-                    </IconButton>
+                    </IconButton>*/}
                     <IconButton onClick={displayMenu}>
                         <MoreVertIcon />
                     </IconButton>
