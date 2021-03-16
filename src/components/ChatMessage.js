@@ -37,7 +37,7 @@ function ChatMessage(props) {
     const templateData = data.type === ChatMessageClass.TYPE_TEMPLATE ? props.templates[data.templateName] : undefined;
 
     const generateInitials = () => {
-        return (data.senderName ? data.senderName[0] : '')?.toUpperCase();
+        return (data.senderName ? data.senderName.text.replace(/[^a-z\d\s]+/gi, '').trim()[0] : '')?.toUpperCase();
     }
 
     data.preparedInitials = generateInitials();
