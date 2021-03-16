@@ -7,7 +7,7 @@ import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
 
-function ChatVoice(props) {
+function ChatMessageVoice(props) {
 
     const data = props.data;
 
@@ -123,4 +123,4 @@ function ChatVoice(props) {
     )
 }
 
-export default ChatVoice;
+export default ChatMessageVoice;

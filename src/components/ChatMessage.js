@@ -16,7 +16,7 @@ import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageDocument from "./ChatMessageDocument";
-import ChatVoice from "./ChatVoice";
+import ChatMessageVoice from "./ChatMessageVoice";
 
 const iconStyles = {
     fontSize: '15px'
@@ -77,7 +77,7 @@ function ChatMessage(props) {
                 }
 
                 {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
-                <ChatVoice data={data} />
+                <ChatMessageVoice data={data} />
                 }
 
                 {data.type === ChatMessageClass.TYPE_DOCUMENT &&
