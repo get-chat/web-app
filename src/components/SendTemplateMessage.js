@@ -171,8 +171,6 @@ function SendTemplateMessage(props) {
                                             <AlertTitle>Uploaded successfully</AlertTitle>
                                             <a href={headerFileURL} target="_blank">{headerFileURL}</a>
                                         </Alert>
-
-                                        {/*<img src={headerFileURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />*/}
                                     </div>
                                     }
                                 </div>
@@ -203,7 +201,6 @@ function SendTemplateMessage(props) {
                             {comp.buttons.map((button, buttonIndex) =>
                                 <Button key={buttonIndex} color="primary" disabled={true}>
                                     {button.text}
-                                    {/*<br/>{button.type}*/}
                                 </Button>
                             )}
                         </div>
