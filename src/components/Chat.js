@@ -556,7 +556,6 @@ export default function Chat(props) {
                             setExpired(true);
                         }
                     }
-
                 });
 
             setInput('');
@@ -578,15 +577,7 @@ export default function Chat(props) {
                         code: templateMessage.language,
                         policy: 'deterministic'
                     },
-                    components: templateMessage.params /*[{
-                        type: 'body',
-                        parameters: [
-                            {
-                                type: 'text',
-                                text: templateMessage.text
-                            }
-                        ]
-                    }]*/
+                    components: templateMessage.params
                 }
             }, getConfig())
                 .then((response) => {
