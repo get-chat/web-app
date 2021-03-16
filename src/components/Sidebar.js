@@ -1,13 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../styles/Sidebar.css';
 import {Avatar, Divider, IconButton, Menu, MenuItem} from "@material-ui/core";
-import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {clearToken, generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
+import {generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
 import {BASE_URL, EVENT_TOPIC_MARKED_AS_SEEN, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
-import {useHistory, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../ChatClass";
@@ -21,8 +20,6 @@ function Sidebar(props) {
 
     const {waId} = useParams();
 
-    const history = useHistory();
-
     const [chats, setChats] = useState({});
     const [unseenMessages, setUnseenMessages] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
@@ -33,13 +30,8 @@ function Sidebar(props) {
 
     const avatarClasses = avatarStyles();
 
-    const clearUserSession = () => {
-        clearToken();
-        history.push("/");
-    }
-
     const logOut = () => {
-        clearUserSession();
+        props.clearUserSession();
         hideMenu();
     }
 
@@ -237,7 +229,7 @@ function Sidebar(props) {
                 if (error.response) {
                     if (error.response.status === 401) {
                         // Invalid token
-                        clearUserSession();
+                        props.clearUserSession();
                     }
                 }
             });

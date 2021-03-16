@@ -4,7 +4,7 @@ import Chat from "./Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getToken, getWebSocketURL} from "../Helpers";
+import {clearToken, getConfig, getToken, getWebSocketURL} from "../Helpers";
 import {useHistory, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -64,6 +64,16 @@ function Main() {
     const displayCustomError = (errorMessage) => {
         setErrorMessage(errorMessage);
         setErrorVisible(true);
+    }
+
+    const clearUserSession = (errorCase) => {
+        clearToken();
+
+        if (errorCase) {
+            history.push(`/login/error/case/${errorCase}`);
+        } else {
+            history.push("/");
+        }
     }
 
     const handleClose = (event, reason) => {
@@ -260,8 +270,15 @@ function Main() {
 
                 setCurrentUser(response.data);
 
+                const role = response.data?.profile?.role;
+
+                // Only admins and users can access
+                if (role !== "admin" && role !== "user") {
+                    clearUserSession("incorrectRole");
+                }
+
                 // Check if role is admin
-                const tempIsAdmin = response.data?.profile?.role === "admin";
+                const tempIsAdmin = role === "admin";
                 setAdmin(tempIsAdmin);
 
                 setProgress(30);
@@ -316,6 +333,7 @@ function Main() {
                     setProgress={setProgress}
                     showNotification={showNotification}
                     displayError={(error) => displayError(error)}
+                    clearUserSession={clearUserSession}
                 />
                 }
 

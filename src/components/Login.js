@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import '../styles/Login.css';
 import {Backdrop, CircularProgress, Fade, TextField} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useParams} from 'react-router-dom';
 import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import {clearToken, getConfig, getToken, setToken} from "../Helpers";
 import {Alert} from "@material-ui/lab";
 import {BASE_URL} from "../Constants";
@@ -17,6 +17,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login() {
+
+    const {errorCase} = useParams();
+
+    const errorMessages = {
+        "incorrectRole": "Only admins and users can access to our web app."
+    };
 
     const classes = useStyles();
 
@@ -119,6 +125,10 @@ export default function Login() {
 
                     {loginError &&
                     <Alert severity="error">{loginError}</Alert>
+                    }
+
+                    {errorCase &&
+                    <Alert severity="error">{errorMessages[errorCase]}</Alert>
                     }
                 </div>
             </Fade>
