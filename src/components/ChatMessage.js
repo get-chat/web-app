@@ -1,17 +1,11 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
-import {Avatar, Button, IconButton} from "@material-ui/core";
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import {Button} from "@material-ui/core";
 import '../styles/InputRange.css';
-import PauseIcon from '@material-ui/icons/Pause';
-import HeadsetIcon from '@material-ui/icons/Headset';
 import '../AvatarStyles';
-import {avatarStyles} from "../AvatarStyles";
-import PubSub from 'pubsub-js';
-import {formatMessage, generateInitialsHelper, insertTemplateComponentParameters} from "../Helpers";
-import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
+import {formatMessage, insertTemplateComponentParameters} from "../Helpers";
 import NoteIcon from '@material-ui/icons/Note';
 import SmsIcon from '@material-ui/icons/Sms';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -22,10 +16,7 @@ import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageDocument from "./ChatMessageDocument";
-
-const playIconStyles = {
-    fontSize: '38px'
-};
+import ChatVoice from "./ChatVoice";
 
 const iconStyles = {
     fontSize: '15px'
@@ -35,98 +26,6 @@ function ChatMessage(props) {
 
     const data = props.messageData;
     const templateData = data.type === ChatMessageClass.TYPE_TEMPLATE ? props.templates[data.templateName] : undefined;
-
-    const [isPlaying, setPlaying] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const [currentDuration, setCurrentDuration] = useState("0:00");
-    const audio = useRef(null);
-    const range = useRef(null);
-    const duration = useRef(null);
-
-    const onChatMessageEvent = function (msg, data) {
-        if (data === 'pause') {
-            pauseVoice();
-        }
-    };
-
-    const pauseVoice = () => {
-        if (audio.current && range.current && !audio.current.paused) {
-            audio.current.pause();
-            setPlaying(false);
-        }
-    };
-
-    useEffect(() => {
-        // Subscribing only if there is voice or audio
-        if (data.hasAnyAudio()) {
-            const token = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE, onChatMessageEvent);
-            return () => {
-                PubSub.unsubscribe(token);
-            }
-        }
-    }, []);
-
-    const playVoice = () => {
-        if (audio.current && range.current) {
-            if (!audio.current.paused) {
-                audio.current.pause();
-                setPlaying(false);
-            } else {
-
-                // Pause others
-                PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
-
-                audio.current.play();
-                setPlaying(true);
-            }
-
-            const interval = setInterval(function () {
-                if (audio.current && range.current) {
-                    const duration = audio.current.duration;
-                    const currentTime = audio.current.currentTime;
-
-                    setCurrentDuration(formatDuration(currentTime));
-
-                    if (duration) {
-                        const percentage = (currentTime * 100) / duration
-
-                        if (percentage >= 100) {
-                            setProgress(0);
-                            setCurrentDuration(formatDuration(0));
-                            setPlaying(false);
-                            clearInterval(interval);
-                        } else {
-                            setProgress(percentage);
-                        }
-                    }
-
-                    if (audio.current.paused) {
-                        clearInterval(interval);
-                    }
-                } else {
-                    // In case component is reloaded
-                    clearInterval(interval);
-                }
-            }, 300);
-        }
-    }
-
-    const formatDuration = (s) => {
-        s = Math.floor(s);
-        return (s-(s%=60))/60+(9<s?':':':0')+s;
-    }
-
-    const changeDuration = (value) => {
-        if (audio.current && range.current && audio.current.duration !== Infinity) {
-            setProgress(value);
-            const nextCurrentTime = audio.current.duration / value;
-            if (nextCurrentTime !== Infinity && !isNaN(nextCurrentTime)) {
-                audio.current.currentTime = parseFloat(nextCurrentTime);
-            }
-        }
-    }
-
-    const avatarClasses = avatarStyles();
 
     const dateFormat = 'H:mm';
 
@@ -178,18 +77,7 @@ function ChatMessage(props) {
                 }
 
                 {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
-                <span className="chat__voice">
-                    <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
-                    <IconButton onClick={() => playVoice()}>
-                        {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
-                    </IconButton>
-                    <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-                    <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
-
-                    <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.initials] : avatarClasses.orange + " audioMessageAvatar"}>
-                        {data.voiceId !== undefined ? <span>{data.initials}</span> : <HeadsetIcon/>}
-                    </Avatar>
-                </span>
+                <ChatVoice data={data} />
                 }
 
                 {data.type === ChatMessageClass.TYPE_DOCUMENT &&
