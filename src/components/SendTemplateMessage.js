@@ -5,6 +5,7 @@ import {getConfig, getTemplateParams, templateParamToInteger} from "../Helpers";
 import FileInput from "./FileInput";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
+import {Alert, AlertTitle} from "@material-ui/lab";
 
 function SendTemplateMessage(props) {
 
@@ -166,13 +167,17 @@ function SendTemplateMessage(props) {
                                 <div>
                                     {headerFileURL &&
                                     <div>
-                                        <a href={headerFileURL} target="_blank">{headerFileURL}</a>
+                                        <Alert severity="success">
+                                            <AlertTitle>Uploaded successfully</AlertTitle>
+                                            <a href={headerFileURL} target="_blank">{headerFileURL}</a>
+                                        </Alert>
+
                                         {/*<img src={headerFileURL} className="sendTemplateMessage__component__header__preview" alt="Header image preview" />*/}
                                     </div>
                                     }
                                 </div>
                                 <FileInput innerRef={headerFileInput} multiple={false} accept={getMimetypeByFormat(comp.format)} handleSelectedFiles={handleChosenImage} />
-                                <Button color="primary" onClick={() => headerFileInput.current.click()} disabled={isUploading}>Upload {comp.format.toLowerCase()}</Button>
+                                <Button color="primary" onClick={() => headerFileInput.current.click()} disabled={isUploading}>Upload {headerFileURL ? "another " : ""}{comp.format.toLowerCase()}</Button>
                                 {headerFileURL &&
                                 <Button color="secondary" onClick={() => setHeaderFileURL('')}>Delete</Button>
                                 }

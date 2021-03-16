@@ -15,8 +15,8 @@
     margin-bottom: 20px;
 }
 
-.sendTemplateMessage__section a {
-    color: var(--color-light-blue);
+.sendTemplateMessage__section .MuiAlert-root {
+    margin-bottom: 10px;
 }
 
 .sendTemplateMessage__section .MuiButtonBase-root {
