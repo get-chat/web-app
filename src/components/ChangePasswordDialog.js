@@ -71,7 +71,7 @@ function ChangePasswordDialog(props) {
 
         }).catch((error) => {
             setRequesting(false);
-            setError("An error has occurred.");
+            setError(error.response?.data?.reason ?? "An error has occurred.");
         });
     }
 
