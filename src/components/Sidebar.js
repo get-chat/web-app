@@ -229,7 +229,7 @@ function Sidebar(props) {
                 if (error.response) {
                     if (error.response.status === 401) {
                         // Invalid token
-                        props.clearUserSession();
+                        props.clearUserSession("invalidToken");
                     }
                 }
             });
