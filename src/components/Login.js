@@ -21,7 +21,8 @@ export default function Login() {
     const {errorCase} = useParams();
 
     const errorMessages = {
-        "incorrectRole": "Only admins and users can access to our web app."
+        "incorrectRole": "Only admins and users can access to our web app.",
+        "notLoggedIn": "You are not logged in."
     };
 
     const classes = useStyles();

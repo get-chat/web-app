@@ -158,6 +158,10 @@ function Main() {
     };
 
     useEffect(() => {
+        if (!getToken()) {
+            clearUserSession("notLoggedIn");
+        }
+
         // Retrieve current user, this will trigger other requests
         retrieveCurrentUser();
 
