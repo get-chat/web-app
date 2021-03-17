@@ -22,7 +22,8 @@ export default function Login() {
 
     const errorMessages = {
         "incorrectRole": "Only admins and users can access to our web app.",
-        "notLoggedIn": "You are not logged in."
+        "notLoggedIn": "You are not logged in.",
+        "invalidToken": "Invalid token."
     };
 
     const classes = useStyles();
