@@ -292,8 +292,6 @@ function Main() {
 
             })
             .catch((error) => {
-                // TODO: Handle errors
-
                 // TODO: Move this to a common interceptor
                 if (error.response) {
                     if (error.response.status === 401) {
