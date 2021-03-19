@@ -137,7 +137,7 @@ a.chat__document:hover {
     margin-left: 5px;
 }
 
-.chat__receiver {
+.chat__outgoing {
     margin-left: auto;
     background-color: #dcf8c6;
 }
@@ -201,7 +201,7 @@ a.chat__document:hover {
     margin-left: 5px;
 }
 
-.chat__seen .chat__iconDoneAll * {
+.chat__received .chat__iconDoneAll * {
     fill: var(--color-light-blue);
 }
 
@@ -219,7 +219,7 @@ a.chat__document:hover {
     transition: all 1s;
 }
 
-.chat__message.chat__receiver .chat__message__more {
+.chat__message.chat__outgoing .chat__message__more {
     background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #dcf8c6 35%);
 }
 

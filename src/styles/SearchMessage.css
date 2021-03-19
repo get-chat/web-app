@@ -69,7 +69,7 @@ searchResult__message__body__text {
     height: 0.75em;
 }
 
-.searchResult__message__body__type .chat__seen .chat__iconDoneAll * {
+.searchResult__message__body__type .chat__received .chat__iconDoneAll * {
     fill: var(--color-light-blue);
 }
 
