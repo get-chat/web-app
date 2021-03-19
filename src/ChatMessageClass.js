@@ -38,7 +38,7 @@ export class ChatMessageClass {
         this.text = payload.text?.body;
         this.buttonText = payload?.button?.text;
         this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
-        this.isSeen = data.seen;
+        this.isReceived = data.received;
 
         this.imageId = payload.image?.id;
         this.imageLink = payload.image?.link ?? (this.imageId ? this.generateImageLink() : undefined);

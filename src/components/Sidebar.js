@@ -5,12 +5,12 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
 import {generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
-import {BASE_URL, EVENT_TOPIC_MARKED_AS_SEEN, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
+import {BASE_URL, EVENT_TOPIC_MARKED_AS_RECEIVED, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
 import {useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../ChatClass";
-import UnseenMessageClass from "../UnseenMessageClass";
+import NewMessageClass from "../NewMessageClass";
 import PubSub from "pubsub-js";
 import {avatarStyles} from "../AvatarStyles";
 import BusinessProfile from "./BusinessProfile";
@@ -21,7 +21,7 @@ function Sidebar(props) {
     const {waId} = useParams();
 
     const [chats, setChats] = useState({});
-    const [unseenMessages, setUnseenMessages] = useState({});
+    const [newMessages, setNewMessages] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [contactResults, setContactResults] = useState({});
@@ -59,10 +59,10 @@ function Sidebar(props) {
     }, [keyword]);
 
     useEffect(() => {
-        const onMarkedAsSeen = function (msg, data) {
+        const onMarkedAsReceived = function (msg, data) {
             const relatedWaId = data;
 
-            setUnseenMessages(prevState => {
+            setNewMessages(prevState => {
                 const nextState = prevState;
                 delete nextState[relatedWaId];
 
@@ -70,12 +70,12 @@ function Sidebar(props) {
             });
         }
 
-        const markedAsSeenEventToken = PubSub.subscribe(EVENT_TOPIC_MARKED_AS_SEEN, onMarkedAsSeen);
+        const markedAsReceivedEventToken = PubSub.subscribe(EVENT_TOPIC_MARKED_AS_RECEIVED, onMarkedAsReceived);
 
         return () => {
-            PubSub.unsubscribe(markedAsSeenEventToken);
+            PubSub.unsubscribe(markedAsReceivedEventToken);
         }
-    }, [unseenMessages]);
+    }, [newMessages]);
 
     useEffect(() => {
         // New messages
@@ -106,17 +106,17 @@ function Sidebar(props) {
                             nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
                         }
 
-                        // Unseen
+                        // New messages
                         if (waId !== chatMessageWaId) {
-                            const preparedUnseenMessages = unseenMessages;
-                            if (unseenMessages[chatMessageWaId] === undefined) {
-                                preparedUnseenMessages[chatMessageWaId] = new UnseenMessageClass(chatMessageWaId, 0);
+                            const preparedNewMessages = newMessages;
+                            if (newMessages[chatMessageWaId] === undefined) {
+                                preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
                             }
 
-                            // Increase number of unseen messages
-                            preparedUnseenMessages[chatMessageWaId].unseenMessages++;
+                            // Increase number of new messages
+                            preparedNewMessages[chatMessageWaId].newMessages++;
 
-                            setUnseenMessages({...preparedUnseenMessages});
+                            setNewMessages({...preparedNewMessages});
 
                             // Display a notification
                             props.showNotification("New messages", "You have new messages!", chatMessageWaId);
@@ -144,7 +144,7 @@ function Sidebar(props) {
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
-    }, [waId, chats, unseenMessages, keyword]);
+    }, [waId, chats, newMessages, keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
@@ -176,37 +176,37 @@ function Sidebar(props) {
 
                 const willNotify = !isInitial;
 
-                const preparedUnseenMessages = {};
-                response.data.results.forEach((unseenMessage) => {
-                    const unseenWaId = unseenMessage.contact.waba_payload.wa_id;
-                    const unseenAmount = unseenMessage.unseen_messages;
-                    const prepared = new UnseenMessageClass(unseenWaId, unseenAmount);
-                    preparedUnseenMessages[prepared.waId] = prepared;
+                const preparedNewMessages = {};
+                response.data.results.forEach((newMessage) => {
+                    const newWaId = newMessage.contact.waba_payload.wa_id;
+                    const newAmount = newMessage.new_messages;
+                    const prepared = new NewMessageClass(newWaId, newAmount);
+                    preparedNewMessages[prepared.waId] = prepared;
                 });
 
                 if (willNotify) {
                     let hasAnyNewMessages = false;
                     let chatMessageWaId;
 
-                    setUnseenMessages((prevState => {
-                            Object.entries(preparedUnseenMessages).forEach((unseen) => {
-                                const unseenWaId = unseen[0]
-                                const number = unseen[1].unseenMessages;
-                                if (unseenWaId !== waId) {
+                    setNewMessages((prevState => {
+                            Object.entries(preparedNewMessages).forEach((newMsg) => {
+                                const newMsgWaId = newMsg[0]
+                                const number = newMsg[1].newMessages;
+                                if (newMsgWaId !== waId) {
                                     // TODO: Consider a new contact (last part of the condition)
-                                    if ((prevState[unseenWaId] && number > prevState[unseenWaId].unseenMessages) /*|| (!prevState[unseenWaId] && number > 0)*/) {
+                                    if ((prevState[newMsgWaId] && number > prevState[newMsgWaId].newMessages) /*|| (!prevState[newMsgWaId] && number > 0)*/) {
                                         hasAnyNewMessages = true;
 
-                                        // There can be multiple unseen chats, we take first one
-                                        if (chatMessageWaId === unseenWaId) chatMessageWaId = unseenWaId;
+                                        // There can be multiple new chats, we take first one
+                                        if (chatMessageWaId === newMsgWaId) chatMessageWaId = newMsgWaId;
                                     }
                                 }
                             });
 
                             // When state is a JSON object, it is unable to understand whether it is different or same and renders again
                             // So we check if new state is actually different than previous state
-                            if (JSON.stringify(preparedUnseenMessages) !== JSON.stringify(prevState)) {
-                                return preparedUnseenMessages;
+                            if (JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)) {
+                                return preparedNewMessages;
                             } else {
                                 return prevState;
                             }
@@ -218,7 +218,7 @@ function Sidebar(props) {
                         props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                     }
                 } else {
-                    setUnseenMessages(preparedUnseenMessages);
+                    setNewMessages(preparedNewMessages);
                 }
 
             })
@@ -271,7 +271,7 @@ function Sidebar(props) {
                         <SidebarChat
                             key={chat[0]}
                             chatData={chat[1]}
-                            unseenMessages={unseenMessages}
+                            newMessages={newMessages}
                             keyword={keyword}
                         />
                     )}
