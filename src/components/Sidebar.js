@@ -15,6 +15,8 @@ import PubSub from "pubsub-js";
 import {avatarStyles} from "../AvatarStyles";
 import BusinessProfile from "./BusinessProfile";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+import ChatMessageClass from "../ChatMessageClass";
+import SearchMessageResult from "./SearchMessageResult";
 
 function Sidebar(props) {
 
@@ -24,6 +26,7 @@ function Sidebar(props) {
     const [newMessages, setNewMessages] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
+    const [chatMessages, setChatMessages] = useState({});
     const [contactResults, setContactResults] = useState({});
     const [isProfileVisible, setProfileVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
@@ -50,6 +53,10 @@ function Sidebar(props) {
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
         getChats(cancelTokenSourceRef.current, true);
+
+        if (keyword.trim().length > 0) {
+            searchMessages(cancelTokenSourceRef.current);
+        }
 
         return () => {
             if (cancelTokenSourceRef.current) {
@@ -78,7 +85,7 @@ function Sidebar(props) {
     }, [newMessages]);
 
     useEffect(() => {
-        // New messages
+        // New chatMessages
         const onNewMessages = function (msg, data) {
             // We don't need to update if chats are filtered
             if (keyword.trim().length === 0) {
@@ -106,20 +113,20 @@ function Sidebar(props) {
                             nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
                         }
 
-                        // New messages
+                        // New chatMessages
                         if (waId !== chatMessageWaId) {
                             const preparedNewMessages = newMessages;
                             if (newMessages[chatMessageWaId] === undefined) {
                                 preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
                             }
 
-                            // Increase number of new messages
+                            // Increase number of new chatMessages
                             preparedNewMessages[chatMessageWaId].newMessages++;
 
                             setNewMessages({...preparedNewMessages});
 
                             // Display a notification
-                            props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                            props.showNotification("New chatMessages", "You have new chatMessages!", chatMessageWaId);
                         }
                     }
                 });
@@ -215,7 +222,7 @@ function Sidebar(props) {
 
                     // Display a notification
                     if (hasAnyNewMessages) {
-                        props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                        props.showNotification("New chatMessages", "You have new chatMessages!", chatMessageWaId);
                     }
                 } else {
                     setNewMessages(preparedNewMessages);
@@ -233,6 +240,39 @@ function Sidebar(props) {
                     }
                 }
             });
+    }
+
+    const searchMessages = (cancelTokenSource) => {
+        axios.get( `${BASE_URL}messages/`,
+            getConfig({
+                //offset: offset ?? 0,
+                limit: 30,
+                search: keyword
+            }, cancelTokenSource.token)
+        )
+            .then((response) => {
+                console.log("Messages", response.data);
+
+                const preparedMessages = {};
+                response.data.results.forEach((message) => {
+                    const prepared = new ChatMessageClass(message);
+                    preparedMessages[prepared.id] = prepared;
+                });
+
+                setChatMessages(preparedMessages);
+
+                console.log(preparedMessages);
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+
+                //displayError(error);
+            });
+    }
+
+    const goToMessage = (chatMessage) => {
+        console.log(chatMessage.waId);
     }
 
     const displayEditBusinessProfile = () => {
@@ -298,6 +338,23 @@ function Sidebar(props) {
                             key={contactResult[0]}
                             chatData={contactResult[1]}
                         />
+                    )}
+                </div>
+                }
+
+                {(keyword.trim().length > 0 && getObjLength(chatMessages) > 0) &&
+                <h3>Messages</h3>
+                }
+
+                {(keyword.trim().length > 0 && getObjLength(chatMessages) > 0) &&
+                <div className="sidebar__results__messages">
+                    { Object.entries(chatMessages).map((message) =>
+                        <SearchMessageResult
+                            key={message[0]}
+                            waId={waId}
+                            messageData={message[1]}
+                            keyword={keyword}
+                            onClick={(chatMessage) => goToMessage(chatMessage)}/>
                     )}
                 </div>
                 }

@@ -48,6 +48,10 @@
     padding: 10px 15px;
 }
 
+.sidebar__results__messages .MuiListItem-root {
+    padding: 0;
+}
+
 @media only screen and (max-width: 750px) {
     .sidebar {
         position: absolute;
