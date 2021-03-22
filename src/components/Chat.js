@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
-import {useParams} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import axios from "axios";
 import {
     ATTACHMENT_TYPE_DOCUMENT,
@@ -65,6 +65,8 @@ export default function Chat(props) {
     const [lastMessageId, setLastMessageId] = useState();
 
     const {waId} = useParams();
+
+    const location = useLocation();
 
     const cancelTokenSourceRef = useRef();
 
@@ -419,6 +421,12 @@ export default function Chat(props) {
                 if (loadMessages !== undefined && loadMessages === true) {
                     getMessages(function (preparedMessages) {
                         setLastMessageId(getLastObject(preparedMessages)?.id);
+
+                        // Scroll to message if goToMessageId is defined
+                        const goToMessage = location.goToMessage;
+                        if (goToMessage !== undefined) {
+                            goToMessageId(goToMessage.id, goToMessage.timestamp);
+                        }
                     });
                 }
             })

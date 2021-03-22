@@ -5,8 +5,13 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
 import {generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
-import {BASE_URL, EVENT_TOPIC_MARKED_AS_RECEIVED, EVENT_TOPIC_NEW_CHAT_MESSAGES} from "../Constants";
-import {useParams} from "react-router-dom";
+import {
+    BASE_URL,
+    EVENT_TOPIC_GO_TO_MSG_ID,
+    EVENT_TOPIC_MARKED_AS_RECEIVED,
+    EVENT_TOPIC_NEW_CHAT_MESSAGES
+} from "../Constants";
+import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../ChatClass";
@@ -30,6 +35,8 @@ function Sidebar(props) {
     const [contactResults, setContactResults] = useState({});
     const [isProfileVisible, setProfileVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
+
+    const history = useHistory();
 
     const avatarClasses = avatarStyles();
 
@@ -272,7 +279,14 @@ function Sidebar(props) {
     }
 
     const goToMessage = (chatMessage) => {
-        console.log(chatMessage.waId);
+        if (waId !== chatMessage.waId) {
+            history.push({
+                'pathname': `/main/chat/${chatMessage.waId}`,
+                'goToMessage': chatMessage,
+            });
+        } else {
+            PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, chatMessage);
+        }
     }
 
     const displayEditBusinessProfile = () => {
