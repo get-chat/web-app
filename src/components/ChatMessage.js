@@ -46,7 +46,7 @@ function ChatMessage(props) {
 
             <div className={"chat__message"
             + (data.hasMediaToPreview() ? " hasMedia" : "")
-            + (data.isFromUs === true ? (data.isRead() ? " chat__seen" : "") + " chat__receiver" : "")
+            + (data.isFromUs === true ? (data.isRead() ? " chat__received" : "") + " chat__outgoing" : "")
             + (!props.displaySender && !props.displayDate ? " hiddenSender" : "")
             + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")}>
 

@@ -12,7 +12,7 @@ class ChatClass {
         this.waId = contactPayload.wa_id;
         this.name = contactPayload.profile.name;
         this.initials = this.generateInitials(); //contact.initials;
-        this.unseenMessages = data.unseen_messages;
+        this.newMessages = data.new_messages;
 
         this.setLastMessage(lastMessagePayload);
     }

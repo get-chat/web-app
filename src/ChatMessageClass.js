@@ -38,7 +38,7 @@ export class ChatMessageClass {
         this.text = payload.text?.body;
         this.buttonText = payload?.button?.text;
         this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
-        this.isSeen = data.seen;
+        //this.isReceived = data.received;
 
         this.imageId = payload.image?.id;
         this.imageLink = payload.image?.link ?? (this.imageId ? this.generateImageLink() : undefined);
@@ -145,11 +145,11 @@ export class ChatMessageClass {
     }
 
     getStatus() {
-        if (this.deliveredTimestamp) {
-            if (this.readTimestamp && this.readTimestamp > this.deliveredTimestamp) {
-                return ChatMessageClass.STATUS_READ;
-            }
+        if (this.readTimestamp) {
+            return ChatMessageClass.STATUS_READ;
+        }
 
+        if (this.deliveredTimestamp) {
             return ChatMessageClass.STATUS_DELIVERED;
         }
 

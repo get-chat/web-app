@@ -22,7 +22,7 @@ function SearchMessageResult(props) {
 
                 <span className="searchResult__message__body__type">
                     {data.isFromUs === true && data.type === ChatMessageClass.TYPE_TEXT &&
-                    <span className={data.isRead() ? 'chat__seen' : ''}>
+                    <span className={data.isRead() ? 'chat__received' : ''}>
                         {data.isDeliveredOrRead()
                             ?
                             <DoneAll className="chat__iconDoneAll" />

@@ -13,7 +13,7 @@ import {
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID,
-    EVENT_TOPIC_MARKED_AS_SEEN,
+    EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
     EVENT_TOPIC_SENT_TEMPLATE_MESSAGE
@@ -219,7 +219,7 @@ export default function Chat(props) {
 
                         if (hasAnyIncomingMsg) {
                             const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
-                            markAsSeen(lastMessageTimestamp);
+                            markAsReceived(lastMessageTimestamp);
 
                             // Update contact
                             setContact(prevState => {
@@ -499,12 +499,11 @@ export default function Chat(props) {
                 setLoadingMoreMessages(false);
 
                 // TODO: Check unread messages first and then decide to do it or not
-                // Mark messages as seen
                 if (!beforeTime && !sinceTime) {
                     // beforeTime is not passed only for initial request
-                    // Mark messages as seen
+                    // Mark messages as received
                     const lastMessageTimestamp = getLastMessageAndExtractTimestamp(preparedMessages);
-                    markAsSeen(lastMessageTimestamp);
+                    markAsReceived(lastMessageTimestamp);
                 }
 
                 // Promise
@@ -600,17 +599,17 @@ export default function Chat(props) {
         }
     }
 
-    const markAsSeen = (timestamp) => {
-        console.log('Marking as seen', timestamp);
+    const markAsReceived = (timestamp) => {
+        console.log('Marking as received', timestamp);
 
-        axios.post( `${BASE_URL}mark_as_seen/`, {
+        axios.post( `${BASE_URL}mark_as_received/`, {
             timestamp: timestamp,
             customer_wa_id: waId
         }, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 //console.log(response.data);
 
-                PubSub.publish(EVENT_TOPIC_MARKED_AS_SEEN, waId);
+                PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
             })
             .catch((error) => {
                 // TODO: Handle errors
