@@ -63,7 +63,7 @@
 
 .sidebarChat__info__lastMessage__new {
     font-weight: 600;
-    color: #212529;
+    color: var(--default-text-color);
 }
 
 .sidebarChat__info__lastMessage__body .MuiSvgIcon-root {

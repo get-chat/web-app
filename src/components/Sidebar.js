@@ -354,6 +354,7 @@ function Sidebar(props) {
                             waId={waId}
                             messageData={message[1]}
                             keyword={keyword}
+                            displaySender={true}
                             onClick={(chatMessage) => goToMessage(chatMessage)}/>
                     )}
                 </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../styles/SearchMessageResult.css';
 import Moment from "react-moment";
 import {markOccurrences, replaceEmojis} from "../Helpers";
 import ChatMessageClass from "../ChatMessageClass";
@@ -17,6 +18,10 @@ function SearchMessageResult(props) {
             <div className="searchResult__message">
                 <div className="searchResult__message__header">
                     <Moment unix calendar={CALENDAR_NORMAL} date={data.timestamp} />
+
+                    {props.displaySender === true &&
+                    <h3>{data.senderName}</h3>
+                    }
                 </div>
                 <div className="searchResult__message__body">
 
