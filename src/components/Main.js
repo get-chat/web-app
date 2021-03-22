@@ -166,7 +166,7 @@ function Main() {
         retrieveCurrentUser();
 
         // EventBus
-        const searchmessagesVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
+        const searchMessagesVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
         const contactDetailsVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
         const displayErrorEventToken = PubSub.subscribe(EVENT_TOPIC_DISPLAY_ERROR, onDisplayError);
 
@@ -250,7 +250,7 @@ function Main() {
         connect();
 
         return () => {
-            PubSub.unsubscribe(searchmessagesVisibilityEventToken);
+            PubSub.unsubscribe(searchMessagesVisibilityEventToken);
             PubSub.unsubscribe(contactDetailsVisibilityEventToken);
             PubSub.unsubscribe(displayErrorEventToken);
 
