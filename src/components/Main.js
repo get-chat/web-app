@@ -4,8 +4,8 @@ import Chat from "./Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {clearToken, getConfig, getToken, getWebSocketURL} from "../Helpers";
-import {useHistory, useParams} from "react-router-dom";
+import {clearToken, getConfig, getToken, getWebSocketURL, setToken} from "../Helpers";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
@@ -47,6 +47,7 @@ function Main() {
     const [chosenContact, setChosenContact] = useState();
 
     const history = useHistory();
+    const location = useLocation();
 
     const setProgress = (value) => {
         _setProgress(prevState => {
@@ -66,14 +67,21 @@ function Main() {
         setErrorVisible(true);
     }
 
-    const clearUserSession = (errorCase) => {
+    const clearUserSession = (errorCase, nextPath) => {
         clearToken();
 
+        let path;
+
         if (errorCase) {
-            history.push(`/login/error/${errorCase}`);
+            path = `/login/error/${errorCase}`;
         } else {
-            history.push("/");
+            path = "/";
         }
+
+        history.push({
+            'pathname': path,
+            'nextPath': nextPath
+        });
     }
 
     const handleClose = (event, reason) => {
@@ -159,7 +167,7 @@ function Main() {
 
     useEffect(() => {
         if (!getToken()) {
-            clearUserSession("notLoggedIn");
+            clearUserSession("notLoggedIn", location.pathname);
         }
 
         // Retrieve current user, this will trigger other requests
@@ -278,7 +286,7 @@ function Main() {
 
                 // Only admins and users can access
                 if (role !== "admin" && role !== "user") {
-                    clearUserSession("incorrectRole");
+                    clearUserSession("incorrectRole", location.pathname);
                 }
 
                 // Check if role is admin
@@ -296,7 +304,7 @@ function Main() {
                 if (error.response) {
                     if (error.response.status === 401) {
                         // Invalid token
-                        clearUserSession("invalidToken");
+                        clearUserSession("invalidToken", location.pathname);
                     }
                 }
 
