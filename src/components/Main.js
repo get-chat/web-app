@@ -109,6 +109,13 @@ function Main() {
     }
 
     const showNotification = (title, body, chatWaId) => {
+        // Android web app interface
+
+        /* eslint-disable no-undef */
+        if (typeof AndroidWebInterface !== 'undefined') {
+            AndroidWebInterface.displayNotification(title, body, chatWaId);
+        }
+
         function showNot() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
