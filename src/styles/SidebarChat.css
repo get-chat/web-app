@@ -103,7 +103,7 @@
 }
 
 @media only screen and (max-width: 750px) {
-    /*.sidebarChat:hover {
-        background-color: inherit;
-    }*/
+    .sidebarChat:hover .sidebarChat__info__waId {
+        display: none;
+    }
 }
