@@ -52,6 +52,10 @@
     padding: 0;
 }
 
+.sidebar__menu__refresh {
+    display: none !important;
+}
+
 @media only screen and (max-width: 750px) {
     .sidebar {
         position: absolute;
@@ -63,5 +67,9 @@
 
     .sidebar__header {
         padding: 4px 10px;
+    }
+
+    .sidebar__menu__refresh {
+        display: flex !important;
     }
 }
