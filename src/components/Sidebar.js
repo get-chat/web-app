@@ -392,6 +392,7 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
+                <MenuItem className="mobileOnly" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={() => setChangePasswordDialogVisible(true)}>Change password</MenuItem>
                 <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
