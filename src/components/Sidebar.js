@@ -133,7 +133,7 @@ function Sidebar(props) {
                             setNewMessages({...preparedNewMessages});
 
                             // Display a notification
-                            props.showNotification("New chatMessages", "You have new chatMessages!", chatMessageWaId);
+                            props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                         }
                     }
                 });
@@ -229,7 +229,7 @@ function Sidebar(props) {
 
                     // Display a notification
                     if (hasAnyNewMessages) {
-                        props.showNotification("New chatMessages", "You have new chatMessages!", chatMessageWaId);
+                        props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                     }
                 } else {
                     setNewMessages(preparedNewMessages);
