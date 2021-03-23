@@ -108,12 +108,15 @@ function Main() {
         setChatMessageToPreview(chatMessage);
     }
 
+    const goToChatByWaId = (_waId) => {
+        history.push(`/main/chat/${_waId}`);
+    }
+
     const showNotification = (title, body, chatWaId) => {
         // Android web app interface
 
-        /* eslint-disable no-undef */
-        if (typeof AndroidWebInterface !== 'undefined') {
-            AndroidWebInterface.displayNotification(title, body, chatWaId);
+        if (window.AndroidWebInterface) {
+            window.AndroidWebInterface.displayNotification(title, body, chatWaId);
         }
 
         function showNot() {
@@ -125,7 +128,7 @@ function Main() {
 
             if (waId) {
                 notification.onclick = function (event) {
-                    history.push(`/main/chat/${chatWaId}`);
+                    goToChatByWaId(chatWaId);
                 }
             }
         }
@@ -173,6 +176,9 @@ function Main() {
     };
 
     useEffect(() => {
+        // We assign this method to window, to be able to call it from outside (eg: mobile app)
+        window.goToChatByWaId = goToChatByWaId;
+
         if (!getToken()) {
             clearUserSession("notLoggedIn", location.pathname);
         }
