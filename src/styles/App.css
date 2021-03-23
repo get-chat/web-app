@@ -229,7 +229,7 @@ a {
 }
 
 .mobileOnly {
-    display: none;
+    display: none!important;
 }
 
 @media only screen and (max-width: 750px) {
@@ -238,7 +238,7 @@ a {
     }
 
     .mobileOnly {
-        display: inherit;
+        display: inherit!important;
     }
 
     .desktopOnly {
