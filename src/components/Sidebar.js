@@ -272,8 +272,6 @@ function Sidebar(props) {
 
             })
             .catch((error) => {
-                // TODO: Handle errors
-
                 //displayError(error);
             });
     }
