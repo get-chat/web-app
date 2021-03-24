@@ -22,6 +22,7 @@ import BusinessProfile from "./BusinessProfile";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
+import {isMobile} from 'react-device-detect';
 
 function Sidebar(props) {
 
@@ -292,6 +293,12 @@ function Sidebar(props) {
         props.setBusinessProfileVisible(true);
     }
 
+    const goToSettings = () => {
+        if (window.AndroidWebInterface) {
+            window.AndroidWebInterface.goToSettings();
+        }
+    }
+
     return (
         <div className="sidebar">
             <div className="sidebar__header">
@@ -394,6 +401,9 @@ function Sidebar(props) {
                 elevation={3}>
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={() => setChangePasswordDialogVisible(true)}>Change password</MenuItem>
+                {isMobile &&
+                <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
+                }
                 <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
