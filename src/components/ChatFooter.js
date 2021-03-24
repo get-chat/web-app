@@ -38,6 +38,10 @@ function ChatFooter(props) {
 
         fileInput.current.setAttribute('accept', acceptValue);
         fileInput.current.click();
+
+        if (window.AndroidWebInterface) {
+            window.AndroidWebInterface.requestPermissions();
+        }
     }
 
     const handleEmojiPickerVisibility = function (msg, data) {

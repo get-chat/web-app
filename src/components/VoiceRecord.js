@@ -72,6 +72,10 @@ function VoiceRecord(props) {
                     console.log('Permission denied');
 
                     PubSub.publish(EVENT_TOPIC_DISPLAY_ERROR, 'You must grant microphone permission.');
+
+                    if (window.AndroidWebInterface) {
+                        window.AndroidWebInterface.requestPermissions();
+                    }
                 });
         } else {
             console.log('Not supported on your browser.');
