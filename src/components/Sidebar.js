@@ -294,6 +294,7 @@ function Sidebar(props) {
     }
 
     const goToSettings = () => {
+        setAnchorEl(null);
         if (window.AndroidWebInterface) {
             window.AndroidWebInterface.goToSettings();
         }
