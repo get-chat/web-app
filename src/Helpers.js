@@ -11,6 +11,7 @@ export const getToken = () => {
 
 export const getConfig = (params, cancelToken, responseType) => {
     const config = {
+        withCredentials: false,
         params,
         headers: {
             'Authorization': 'Token ' + getToken(),
