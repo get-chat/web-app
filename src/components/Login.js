@@ -7,7 +7,7 @@ import axios from 'axios';
 import {makeStyles} from '@material-ui/core/styles';
 import {clearToken, getConfig, getToken, setToken} from "../Helpers";
 import {Alert} from "@material-ui/lab";
-import {BASE_URL} from "../Constants";
+import {BASE_URL, VERSION} from "../Constants";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -129,6 +129,8 @@ export default function Login(props) {
 
             <Fade in={true}>
                 <div className="login__body">
+                    <span className="login__body__version">Version: { VERSION }</span>
+
                     <h2>Welcome</h2>
                     <p>Please login to start</p>
 

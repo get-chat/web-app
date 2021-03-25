@@ -69,3 +69,9 @@
 .login__body .MuiAlert-root {
     margin-top: 15px;
 }
+
+.login__body__version {
+    float: right;
+    font-size: 12px;
+    color: gray;
+}
