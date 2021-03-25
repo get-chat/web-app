@@ -40,6 +40,10 @@ export default function Login(props) {
     useEffect(() => {
         if (errorCase) {
             setLoginError(errorMessages[errorCase]);
+
+            if (errorCase === "invalidToken") {
+                logoutToClearSession();
+            }
         }
 
         const token = getToken();
@@ -107,6 +111,17 @@ export default function Login(props) {
                 setLoginError("An error has occurred.");
             }
         })
+    }
+
+    const logoutToClearSession = () => {
+        axios.get( `${BASE_URL}auth/logout/`, getConfig())
+            .then((response) => {
+                console.log("Logout: ", response.data);
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     return (

@@ -4,7 +4,7 @@ import Chat from "./Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {clearToken, getConfig, getToken, getWebSocketURL, setToken} from "../Helpers";
+import {clearToken, getConfig, getToken, getWebSocketURL} from "../Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
