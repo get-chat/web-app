@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import '../styles/LoadingScreen.css';
+import {VERSION} from "../Constants";
 
 function LoadingScreen(props) {
 
@@ -32,6 +33,8 @@ function LoadingScreen(props) {
                 <span className="loadingScreen__skip" onClick={skip}>Skip</span>
             </div>
             }
+
+            <span className="loadingScreen__version">Version: { VERSION }</span>
         </div>
     )
 }
