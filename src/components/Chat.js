@@ -409,7 +409,7 @@ export default function Chat(props) {
     }
 
     const getContact = (loadMessages) => {
-        axios.get(`${BASE_URL}contacts/${waId}/`, getConfig(undefined, cancelTokenSourceRef.current.token))
+        axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 //console.log("Contact", response.data);
 
