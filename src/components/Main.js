@@ -114,7 +114,6 @@ function Main() {
 
     const showNotification = (title, body, chatWaId) => {
         // Android web app interface
-
         if (window.AndroidWebInterface) {
             window.AndroidWebInterface.displayNotification(title, body, chatWaId);
         }

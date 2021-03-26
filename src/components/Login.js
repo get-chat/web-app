@@ -83,6 +83,11 @@ export default function Login(props) {
             // Store token in local storage
             setToken(response.data.token);
 
+            // Android web interface
+            if (window.AndroidWebInterface) {
+                window.AndroidWebInterface.registerUserToken(response.data.token ?? "");
+            }
+
             // Redirect to main route
             history.push(location.nextPath ?? "/main");
         }).catch((error) => {
