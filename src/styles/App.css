@@ -114,6 +114,18 @@ a {
     margin-left: 5px;
 }
 
+.mr-3 {
+    margin-right: 15px;
+}
+
+.mr-2 {
+    margin-right: 10px;
+}
+
+.mr-1 {
+    margin-right: 5px;
+}
+
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root) {
     color: #919191;
 }

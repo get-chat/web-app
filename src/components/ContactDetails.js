@@ -62,14 +62,16 @@ function ContactDetails(props)  {
                         key={providerData.contact_provider.id}>
 
                         <div className="contactDetails__body__section__title mb-3">
-                            {providerData.contact_provider.type === "google" &&
-                                <img src={googleLogo} alt="Google" />
-                            }
-                            {providerData.contact_provider.name}
+                            <div className="contactDetails__body__section__providerTitle">
+                                {providerData.contact_provider.type === "google" &&
+                                <img className="mr-1" src={googleLogo} alt="Google" />
+                                }
+                                {providerData.contact_provider.name}
+                            </div>
                         </div>
 
                         <div className="contactDetails__body__section__content mb-2">
-                            <div>Phone number</div>
+                            <div className="contactDetails__body__section__subtitle">Phone number</div>
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
                                     <div key={phoneNumberIndex}>
@@ -84,7 +86,7 @@ function ContactDetails(props)  {
                         </div>
 
                         <div className="contactDetails__body__section__content">
-                            <div>E-mail</div>
+                            <div className="contactDetails__body__section__subtitle">E-mail</div>
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.email_addresses?.map((emailAddress, emailAddressIndex) =>
                                     <div key={emailAddressIndex}>
