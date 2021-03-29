@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../styles/SidebarChat.css';
 import {Avatar, ListItem} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
@@ -22,8 +22,16 @@ function SidebarChat(props) {
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
 
+    const cancelTokenSourceRef = useRef();
+
     useEffect(() => {
+        cancelTokenSourceRef.current = axios.CancelToken.source();
+
         getContactDetails();
+
+        return () => {
+            cancelTokenSourceRef.current.cancel();
+        }
     }, []);
 
     useEffect(() => {
@@ -80,12 +88,11 @@ function SidebarChat(props) {
         return () => {
             clearInterval(intervalId);
         }
-
     }, [isExpired, props.chatData.isExpired, props.chatData.lastMessageTimestamp]);
 
     // TODO: Cancel token
     const getContactDetails = () => {
-        axios.get( `${BASE_URL}contacts/${props.chatData.waId}`, getConfig())
+        axios.get( `${BASE_URL}contacts/${props.chatData.waId}`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log("Contact: ", response.data);
 
@@ -122,7 +129,7 @@ function SidebarChat(props) {
                     onDrop={(event) => handleDroppedFiles(event)}
                     onDragOver={(event) => handleDragOver(event)}>
 
-                    <Avatar className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                    <Avatar src={contactProviderResults?.[0]?.avatar} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                     <div className="sidebarChat__info">
 
                         <div className="sidebarChat__info__nameWrapper">
