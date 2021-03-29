@@ -46,6 +46,8 @@ function Main() {
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
 
+    const [contactProvidersData, setContactProvidersData] = useState({});
+
     const history = useHistory();
     const location = useLocation();
 
@@ -348,6 +350,21 @@ function Main() {
             .catch((error) => {
                 // TODO: Handle errors
 
+                displayError(error);
+            });
+    }
+
+    const getContactData = (personWaId) => {
+        axios.get( `${BASE_URL}contacts/${personWaId}`, getConfig())
+            .then((response) => {
+                console.log("Contact: ", response.data);
+
+                setContactProvidersData(prevState => {
+                    prevState[personWaId] = response.data.contact_provider_results;
+                    return prevState;
+                })
+            })
+            .catch((error) => {
                 displayError(error);
             });
     }
