@@ -5,20 +5,26 @@ import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {markOccurrences} from "../Helpers";
+import {getConfig, markOccurrences} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
-import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
+import {BASE_URL, CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
 import ChatMessageShortContent from "./ChatMessageShortContent";
+import axios from "axios";
 
 function SidebarChat(props) {
 
     const history = useHistory();
 
+    const [contactProviderResults, setContactProviderResults] = useState([]);
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
+
+    useEffect(() => {
+        getContactDetails();
+    }, []);
 
     useEffect(() => {
 
@@ -77,9 +83,24 @@ function SidebarChat(props) {
 
     }, [isExpired, props.chatData.isExpired, props.chatData.lastMessageTimestamp]);
 
+    // TODO: Cancel token
+    const getContactDetails = () => {
+        axios.get( `${BASE_URL}contacts/${props.chatData.waId}`, getConfig())
+            .then((response) => {
+                console.log("Contact: ", response.data);
+
+                setContactProviderResults(response.data.contact_provider_results);
+
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     const handleDroppedFiles = (event) => {
         if (isExpired) {
-
+            event.preventDefault();
+            return;
         }
 
         // Preparing dropped files
@@ -110,7 +131,7 @@ function SidebarChat(props) {
                                     ?
                                     <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
                                     :
-                                    <span>{props.chatData.name}</span>
+                                    <span>{contactProviderResults?.[0]?.name ?? props.chatData.name}</span>
                                 }
 
                                 <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>
