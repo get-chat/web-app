@@ -2,13 +2,10 @@ import React, {useEffect} from 'react';
 import {Avatar, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../Constants";
+import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../Constants";
 import '../styles/ContactDetails.css';
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
-
-// TODO: Provide a better date format depends on date
-const dateFormat = 'dddd, H:mm';
 
 function ContactDetails(props)  {
 
@@ -43,7 +40,7 @@ function ContactDetails(props)  {
                     </div>
 
                     <h3>{props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name}</h3>
-                    <span>Last message: <Moment unix format={dateFormat}>{props.contactData.lastMessageTimestamp}</Moment></span>
+                    <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
                 </div>
 
                 <div className="contactDetails__body__section">
