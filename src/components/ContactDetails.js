@@ -47,6 +47,35 @@ function ContactDetails(props)  {
                     <span>{'+' + props.contactData.waId}</span>
                 </div>
 
+                {props.contactProvidersData[props.contactData.waId]?.map((providerData, index) =>
+                    <div
+                        className="contactDetails__body__section"
+                        key={providerData.contact_provider.id}>
+
+                        <div>
+                            {providerData.contact_provider.name}
+                            {providerData.contact_provider.type === "google" &&
+                                <span>GOOGLE ICON</span>
+                            }
+                        </div>
+
+                        <div>Phone number</div>
+                        <div>
+                            {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
+                                <div key={phoneNumberIndex}>
+                                    <span>+</span>
+                                    <span>{phoneNumber.phone_number}</span>
+                                    {phoneNumber.description !== undefined &&
+                                        <span>{phoneNumber.description}</span>
+                                    }
+                                </div>
+                            )}
+                        </div>
+
+                        {/*{JSON.stringify(providerData)}*/}
+                    </div>
+                )}
+
             </div>
             }
         </div>
