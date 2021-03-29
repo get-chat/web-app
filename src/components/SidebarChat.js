@@ -1,37 +1,27 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
 import {Avatar, ListItem} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {getConfig, markOccurrences} from "../Helpers";
+import {markOccurrences} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
-import {BASE_URL, CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
+import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
 import ChatMessageShortContent from "./ChatMessageShortContent";
-import axios from "axios";
 
 function SidebarChat(props) {
 
     const history = useHistory();
 
-    const [contactProviderResults, setContactProviderResults] = useState([]);
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
 
-    const cancelTokenSourceRef = useRef();
-
     useEffect(() => {
-        cancelTokenSourceRef.current = axios.CancelToken.source();
-
-        getContactDetails();
-
-        return () => {
-            cancelTokenSourceRef.current.cancel();
-        }
+        props.retrieveContactData(props.chatData.waId);
     }, []);
 
     useEffect(() => {
@@ -89,18 +79,6 @@ function SidebarChat(props) {
         }
     }, [isExpired, props.chatData.isExpired, props.chatData.lastMessageTimestamp]);
 
-    const getContactDetails = () => {
-        axios.get( `${BASE_URL}contacts/${props.chatData.waId}`, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Contact: ", response.data);
-
-                setContactProviderResults(response.data.contact_provider_results);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }
-
     const handleDroppedFiles = (event) => {
         if (isExpired) {
             event.preventDefault();
@@ -126,7 +104,7 @@ function SidebarChat(props) {
                     onDrop={(event) => handleDroppedFiles(event)}
                     onDragOver={(event) => handleDragOver(event)}>
 
-                    <Avatar src={contactProviderResults?.[0]?.avatar} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                    <Avatar src={props.contactProvidersData?.[props.chatData.waId]?.[0]?.avatar} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                     <div className="sidebarChat__info">
 
                         <div className="sidebarChat__info__nameWrapper">
@@ -135,7 +113,7 @@ function SidebarChat(props) {
                                     ?
                                     <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
                                     :
-                                    <span>{contactProviderResults?.[0]?.name ?? props.chatData.name}</span>
+                                    <span>{props.contactProvidersData?.[props.chatData.waId]?.name ?? props.chatData.name}</span>
                                 }
 
                                 <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>

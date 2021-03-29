@@ -354,14 +354,19 @@ function Main() {
             });
     }
 
-    const getContactData = (personWaId) => {
+    const retrieveContactData = (personWaId) => {
+        if (contactProvidersData?.[personWaId] !== undefined) {
+            // Already retrieved
+            return;
+        }
+
         axios.get( `${BASE_URL}contacts/${personWaId}`, getConfig())
             .then((response) => {
                 console.log("Contact: ", response.data);
 
                 setContactProvidersData(prevState => {
                     prevState[personWaId] = response.data.contact_provider_results;
-                    return prevState;
+                    return {...prevState};
                 })
             })
             .catch((error) => {
@@ -381,7 +386,8 @@ function Main() {
                     showNotification={showNotification}
                     displayError={(error) => displayError(error)}
                     clearUserSession={clearUserSession}
-                />
+                    contactProvidersData={contactProvidersData}
+                    retrieveContactData={retrieveContactData} />
                 }
 
                 {templatesReady &&
@@ -392,7 +398,8 @@ function Main() {
                     templates={templates}
                     isLoadingTemplates={isLoadingTemplates}
                     displayError={(error) => displayError(error)}
-                />
+                    contactProvidersData={contactProvidersData}
+                    retrieveContactData={retrieveContactData} />
                 }
 
                 {isSearchMessagesVisible &&

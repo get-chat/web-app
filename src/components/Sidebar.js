@@ -333,7 +333,8 @@ function Sidebar(props) {
                             chatData={chat[1]}
                             newMessages={newMessages}
                             keyword={keyword}
-                        />
+                            contactProvidersData={props.contactProvidersData}
+                            retrieveContactData={props.retrieveContactData} />
                     )}
 
                     { Object.keys(chats).length === 0 &&
@@ -375,7 +376,7 @@ function Sidebar(props) {
                             messageData={message[1]}
                             keyword={keyword}
                             displaySender={true}
-                            onClick={(chatMessage) => goToMessage(chatMessage)}/>
+                            onClick={(chatMessage) => goToMessage(chatMessage)} />
                     )}
                 </div>
                 }

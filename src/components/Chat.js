@@ -754,7 +754,10 @@ export default function Chat(props) {
             onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
 
-            <ChatHeader contact={contact} />
+            <ChatHeader
+                contact={contact}
+                contactProvidersData={props.contactProvidersData}
+                retrieveContactData={props.retrieveContactData} />
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">
