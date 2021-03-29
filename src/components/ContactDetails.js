@@ -6,6 +6,7 @@ import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../Consta
 import '../styles/ContactDetails.css';
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
+import googleLogo from '../assets/images/ic-google.png';
 
 function ContactDetails(props)  {
 
@@ -40,10 +41,18 @@ function ContactDetails(props)  {
                     </div>
 
                     <h3>{props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name}</h3>
+
+                    {props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0] !== undefined &&
+                        <div className="contactDetails__body__job">
+                            <span>{props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0]?.job_title}</span> at <span>{props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0]?.company_name}</span>
+                        </div>
+                    }
+
                     <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
                 </div>
 
                 <div className="contactDetails__body__section">
+                    <div className="contactDetails__body__section__title">Whatsapp Phone Number</div>
                     <span>{'+' + props.contactData.waId}</span>
                 </div>
 
@@ -52,27 +61,41 @@ function ContactDetails(props)  {
                         className="contactDetails__body__section"
                         key={providerData.contact_provider.id}>
 
-                        <div>
-                            {providerData.contact_provider.name}
+                        <div className="contactDetails__body__section__title mb-3">
                             {providerData.contact_provider.type === "google" &&
-                                <span>GOOGLE ICON</span>
+                                <img src={googleLogo} alt="Google" />
                             }
+                            {providerData.contact_provider.name}
                         </div>
 
-                        <div>Phone number</div>
-                        <div>
-                            {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
-                                <div key={phoneNumberIndex}>
-                                    <span>+</span>
-                                    <span>{phoneNumber.phone_number}</span>
-                                    {phoneNumber.description !== undefined &&
-                                        <span>{phoneNumber.description}</span>
-                                    }
-                                </div>
-                            )}
+                        <div className="contactDetails__body__section__content mb-2">
+                            <div>Phone number</div>
+                            <div>
+                                {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
+                                    <div key={phoneNumberIndex}>
+                                        <span>+</span>
+                                        <span>{phoneNumber.phone_number}</span>
+                                        {phoneNumber.description !== undefined &&
+                                        <span>({phoneNumber.description})</span>
+                                        }
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
-                        {/*{JSON.stringify(providerData)}*/}
+                        <div className="contactDetails__body__section__content">
+                            <div>E-mail</div>
+                            <div>
+                                {providerData.email_addresses?.map((emailAddress, emailAddressIndex) =>
+                                    <div key={emailAddressIndex}>
+                                        <span>{emailAddress.email_address}</span>
+                                        {emailAddress.description !== undefined &&
+                                        <span>({emailAddress.description})</span>
+                                        }
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 )}
 

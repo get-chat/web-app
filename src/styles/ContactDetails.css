@@ -38,13 +38,23 @@
 
 .contactDetails__body__section > h3 {
     font-size: 20px;
-    margin-bottom: 5px;
     font-weight: 400;
 }
 
 .contactDetails__body__section > span {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
+}
+
+.contactDetails__body__section__title, .contactDetails__body__section__content {
+    font-size: 14px;
+}
+
+.contactDetails__body__section__title img {
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+    margin-right: 5px;
 }
 
 .contactDetails__body__avatarContainer {
@@ -57,6 +67,13 @@
     width: 200px!important;
     margin-bottom: 15px;
     font-size: 5rem!important;
+}
+
+.contactDetails__body__job {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 10px;
 }
 
 @media only screen and (max-width: 750px) {
