@@ -41,7 +41,7 @@
     font-weight: 400;
 }
 
-.contactDetails__body__section > span {
+.contactDetails__body__section > span, .contactDetails__body__section__content__sub {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
 }

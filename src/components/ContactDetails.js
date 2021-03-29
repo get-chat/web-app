@@ -70,13 +70,13 @@ function ContactDetails(props)  {
 
                         <div className="contactDetails__body__section__content mb-2">
                             <div>Phone number</div>
-                            <div>
+                            <div className="contactDetails__body__section__content__sub">
                                 {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
                                     <div key={phoneNumberIndex}>
                                         <span>+</span>
                                         <span>{phoneNumber.phone_number}</span>
                                         {phoneNumber.description !== undefined &&
-                                        <span>({phoneNumber.description})</span>
+                                        <span className="ml-1">({phoneNumber.description})</span>
                                         }
                                     </div>
                                 )}
@@ -85,12 +85,12 @@ function ContactDetails(props)  {
 
                         <div className="contactDetails__body__section__content">
                             <div>E-mail</div>
-                            <div>
+                            <div className="contactDetails__body__section__content__sub">
                                 {providerData.email_addresses?.map((emailAddress, emailAddressIndex) =>
                                     <div key={emailAddressIndex}>
                                         <span>{emailAddress.email_address}</span>
                                         {emailAddress.description !== undefined &&
-                                        <span>({emailAddress.description})</span>
+                                        <span className="ml-1">({emailAddress.description})</span>
                                         }
                                     </div>
                                 )}
