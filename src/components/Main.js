@@ -407,7 +407,10 @@ function Main() {
                 }
 
                 {isContactDetailsVisible &&
-                <ContactDetails contactData={chosenContact} />
+                <ContactDetails
+                    contactData={chosenContact}
+                    contactProvidersData={contactProvidersData}
+                    retrieveContactData={retrieveContactData} />
                 }
 
                 {chatMessageToPreview &&

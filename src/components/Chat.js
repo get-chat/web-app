@@ -71,6 +71,8 @@ export default function Chat(props) {
     const cancelTokenSourceRef = useRef();
 
     useEffect(() => {
+        props.retrieveContactData(waId);
+
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 

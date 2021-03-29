@@ -104,7 +104,7 @@ function SidebarChat(props) {
                     onDrop={(event) => handleDroppedFiles(event)}
                     onDragOver={(event) => handleDragOver(event)}>
 
-                    <Avatar src={props.contactProvidersData?.[props.chatData.waId]?.[0]?.avatar} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                    <Avatar src={props.contactProvidersData[props.chatData.waId]?.[0]?.avatar} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
                     <div className="sidebarChat__info">
 
                         <div className="sidebarChat__info__nameWrapper">
@@ -113,7 +113,7 @@ function SidebarChat(props) {
                                     ?
                                     <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
                                     :
-                                    <span>{props.contactProvidersData?.[props.chatData.waId]?.name ?? props.chatData.name}</span>
+                                    <span>{props.contactProvidersData[props.chatData.waId]?.name ?? props.chatData.name}</span>
                                 }
 
                                 <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>

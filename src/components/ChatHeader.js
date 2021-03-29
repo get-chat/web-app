@@ -53,12 +53,12 @@ function ChatHeader(props) {
             </div>
 
             <Avatar
-                src={props.contactProvidersData?.[props.contact?.waId]?.[0]?.avatar}
+                src={props.contactProvidersData[props.contact?.waId]?.[0]?.avatar}
                 className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")}
                 onClick={showContactDetails}>{props.contact?.initials}</Avatar>
 
             <div className="chat__headerInfo">
-                <h3>{props.contactProvidersData?.[props.contact?.waId]?.[0]?.name ?? props.contact?.name}</h3>
+                <h3>{props.contactProvidersData[props.contact?.waId]?.[0]?.name ?? props.contact?.name}</h3>
 
                 {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
 

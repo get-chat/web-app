@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Avatar, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
@@ -12,13 +12,15 @@ const dateFormat = 'dddd, H:mm';
 
 function ContactDetails(props)  {
 
-    const data = props.contactData;
-
     const hideContactDetails = () => {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
     }
 
     const avatarClasses = avatarStyles();
+
+    useEffect(() => {
+        props.retrieveContactData(props.contactData.waId);
+    }, []);
 
     return (
         <div className="contactDetails">
@@ -30,20 +32,22 @@ function ContactDetails(props)  {
                 <h3>Contact Details</h3>
             </div>
 
-            {data &&
+            {props.contactData &&
             <div className="contactDetails__body">
 
                 <div className="contactDetails__body__section">
                     <div className="contactDetails__body__avatarContainer">
-                        <Avatar className={avatarClasses[data.getAvatarClassName()] + " contactDetails__body__avatar"}>{data.initials}</Avatar>
+                        <Avatar
+                            src={props.contactProvidersData[props.contactData.waId]?.[0]?.avatar}
+                            className={avatarClasses[props.contactData.getAvatarClassName()] + " contactDetails__body__avatar"}>{props.contactData.initials}</Avatar>
                     </div>
 
-                    <h3>{data.name}</h3>
-                    <span>Last message: <Moment unix format={dateFormat}>{data.lastMessageTimestamp}</Moment></span>
+                    <h3>{props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name}</h3>
+                    <span>Last message: <Moment unix format={dateFormat}>{props.contactData.lastMessageTimestamp}</Moment></span>
                 </div>
 
                 <div className="contactDetails__body__section">
-                    <span>{'+' + data.waId}</span>
+                    <span>{'+' + props.contactData.waId}</span>
                 </div>
 
             </div>
