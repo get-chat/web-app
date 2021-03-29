@@ -35,7 +35,6 @@ function SidebarChat(props) {
     }, []);
 
     useEffect(() => {
-
         function calculateRemaining() {
             const momentDate = moment.unix(props.chatData.lastMessageTimestamp);
             momentDate.add(1, 'day');
@@ -90,14 +89,12 @@ function SidebarChat(props) {
         }
     }, [isExpired, props.chatData.isExpired, props.chatData.lastMessageTimestamp]);
 
-    // TODO: Cancel token
     const getContactDetails = () => {
         axios.get( `${BASE_URL}contacts/${props.chatData.waId}`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log("Contact: ", response.data);
 
                 setContactProviderResults(response.data.contact_provider_results);
-
             })
             .catch((error) => {
                 console.error(error);
