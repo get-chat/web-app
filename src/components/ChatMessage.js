@@ -37,7 +37,7 @@ function ChatMessage(props) {
             }
 
             {(props.displaySender || props.displayDate) &&
-            <span className="chat__name">{data.senderName}</span>
+            <span className="chat__name">{data.isFromUs === true ? data.senderName : (props.contactProvidersData[data.waId]?.[0]?.name ?? data.senderName)}</span>
             }
 
             {data.type === ChatMessageClass.TYPE_STICKER &&
