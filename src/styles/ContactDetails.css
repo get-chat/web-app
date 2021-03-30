@@ -29,6 +29,10 @@
     overflow-y: auto;
 }
 
+.contactDetails__body a {
+    color: var(--color-light-blue);
+}
+
 .contactDetails__body__section {
     padding: 20px;
     margin-bottom: 10px;
