@@ -75,8 +75,8 @@ function ContactDetails(props)  {
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
                                     <div key={phoneNumberIndex}>
-                                        <span>+</span>
-                                        <span>{phoneNumber.phone_number}</span>
+                                        <a href={"tel:+" + phoneNumber.phone_number}><span>+</span>
+                                            <span>{phoneNumber.phone_number}</span></a>
                                         {phoneNumber.description &&
                                         <span className="ml-1">({phoneNumber.description})</span>
                                         }
