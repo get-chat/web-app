@@ -77,7 +77,7 @@ function ContactDetails(props)  {
                                     <div key={phoneNumberIndex}>
                                         <span>+</span>
                                         <span>{phoneNumber.phone_number}</span>
-                                        {phoneNumber.description !== undefined &&
+                                        {phoneNumber.description &&
                                         <span className="ml-1">({phoneNumber.description})</span>
                                         }
                                     </div>
@@ -91,7 +91,7 @@ function ContactDetails(props)  {
                                 {providerData.email_addresses?.map((emailAddress, emailAddressIndex) =>
                                     <div key={emailAddressIndex}>
                                         <span>{emailAddress.email_address}</span>
-                                        {emailAddress.description !== undefined &&
+                                        {emailAddress.description &&
                                         <span className="ml-1">({emailAddress.description})</span>
                                         }
                                     </div>
