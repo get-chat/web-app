@@ -36,7 +36,7 @@ function ContactDetails(props)  {
                 <div className="contactDetails__body__section">
                     <div className="contactDetails__body__avatarContainer">
                         <Avatar
-                            src={props.contactProvidersData[props.contactData.waId]?.[0]?.avatar}
+                            src={props.contactProvidersData[props.contactData.waId]?.[0]?.large_avatar}
                             className={avatarClasses[props.contactData.getAvatarClassName()] + " contactDetails__body__avatar"}>{props.contactData.initials}</Avatar>
                     </div>
 
