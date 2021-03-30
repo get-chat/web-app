@@ -17,6 +17,7 @@ function SidebarChat(props) {
 
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
+    const [remainingSeconds, setRemainingSeconds] = useState();
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
 
@@ -30,6 +31,9 @@ function SidebarChat(props) {
             momentDate.add(1, 'day');
             const curDate = moment(new Date());
             const hours = momentDate.diff(curDate, 'hours');
+            const seconds = momentDate.diff(curDate, 'seconds');
+
+            setRemainingSeconds(seconds);
 
             let suffix;
 
@@ -50,7 +54,6 @@ function SidebarChat(props) {
                     }
                     setTimeLeft(minutes + suffix);
                 } else {
-                    const seconds = momentDate.diff(curDate, 'seconds');
                     if (seconds > 1) {
                         suffix = ' minute';
                         setTimeLeft(minutes + suffix);
@@ -100,7 +103,7 @@ function SidebarChat(props) {
             <ListItem button>
                 <div
                     id={props.chatData.waId}
-                    className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat' : '')}
+                    className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat ' : '') + (isExpired ? 'expired ' : (remainingSeconds < 3600 ? 'almostExpired ' : ''))}
                     onDrop={(event) => handleDroppedFiles(event)}
                     onDragOver={(event) => handleDragOver(event)}>
 
@@ -143,12 +146,12 @@ function SidebarChat(props) {
                         }
                     </span>
 
-                        {isExpired
+                        {/*{isExpired
                             ?
                             <span className="sidebarChat__info__expired">Inactive</span>
                             :
                             <span className="sidebarChat__info__timeLeft">{timeLeft} left</span>
-                        }
+                        }*/}
 
                     </div>
                 </div>
