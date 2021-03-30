@@ -62,13 +62,17 @@
 
 .sidebarChat__info__lastMessage {
     display: block;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.9);
     font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
     max-width: 100%;
     width: 220px;
+}
+
+.sidebarChat.expired .sidebarChat__info__lastMessage {
+    color: rgba(0, 0, 0, 0.4);
 }
 
 .sidebarChat__info__lastMessage__new {
