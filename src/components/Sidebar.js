@@ -23,6 +23,7 @@ import ChangePasswordDialog from "./ChangePasswordDialog";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobile} from 'react-device-detect';
+import ChatIcon from '@material-ui/icons/Chat';
 
 function Sidebar(props) {
 
@@ -300,6 +301,9 @@ function Sidebar(props) {
         }
     }
 
+    const displayContacts = () => {
+    }
+
     return (
         <div className="sidebar">
             <div className="sidebar__header">
@@ -309,9 +313,9 @@ function Sidebar(props) {
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
-                    {/*<IconButton>
+                    <IconButton onClick={displayContacts}>
                         <ChatIcon />
-                    </IconButton>*/}
+                    </IconButton>
                     <IconButton onClick={displayMenu}>
                         <MoreVertIcon />
                     </IconButton>
