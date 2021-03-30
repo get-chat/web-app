@@ -52,25 +52,26 @@ function ChatHeader(props) {
                 </IconButton>
             </div>
 
-            <Avatar
-                src={props.contactProvidersData[props.contact?.waId]?.[0]?.avatar}
-                className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")}
-                onClick={showContactDetails}>{props.contact?.initials}</Avatar>
+            <div className="chat__header__clickable" onClick={showContactDetails}>
+                <Avatar
+                    src={props.contactProvidersData[props.contact?.waId]?.[0]?.avatar}
+                    className={(props.contact?.isExpired ? '' : avatarClasses[props.contact?.getAvatarClassName()]) + (" chat__header__avatar")}>{props.contact?.initials}</Avatar>
 
-            <div className="chat__headerInfo">
-                <h3>{props.contactProvidersData[props.contact?.waId]?.[0]?.name ?? props.contact?.name}</h3>
+                <div className="chat__headerInfo">
+                    <h3>{props.contactProvidersData[props.contact?.waId]?.[0]?.name ?? props.contact?.name}</h3>
 
-                {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
+                    {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
 
-                {props.contact?.isExpired &&
-                <p className="chat__header__expired">Expired</p>
-                }
-            </div>
+                    {props.contact?.isExpired &&
+                    <p className="chat__header__expired">Expired</p>
+                    }
+                </div>
 
-            <div className="chat__headerInfo_2">
+                <div className="chat__headerInfo_2">
                 <span className="chat__headerInfo_2__waId desktopOnly">
                     {props.contact?.waId ? '+' + props.contact?.waId : ''}
                 </span>
+                </div>
             </div>
 
             <div className="chat__headerRight">
