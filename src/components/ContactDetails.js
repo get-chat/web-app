@@ -90,7 +90,7 @@ function ContactDetails(props)  {
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.email_addresses?.map((emailAddress, emailAddressIndex) =>
                                     <div key={emailAddressIndex}>
-                                        <span>{emailAddress.email_address}</span>
+                                        <a href={"mailto:" + emailAddress.email_address}>{emailAddress.email_address}</a>
                                         {emailAddress.description &&
                                         <span className="ml-1">({emailAddress.description})</span>
                                         }
