@@ -37,6 +37,7 @@ function Sidebar(props) {
     const [chatMessages, setChatMessages] = useState({});
     const [contactResults, setContactResults] = useState({});
     const [isProfileVisible, setProfileVisible] = useState(false);
+    const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
 
     const history = useHistory();
@@ -387,7 +388,10 @@ function Sidebar(props) {
                 }
             </div>
 
-            <Contacts />
+            {isContactsVisible &&
+            <Contacts
+                displayError={props.displayError} />
+            }
 
             {isProfileVisible &&
             <BusinessProfile
