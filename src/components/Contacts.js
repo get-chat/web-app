@@ -75,7 +75,10 @@ function Contacts(props) {
 
             <div className="contacts__body">
                 { Object.entries(contacts).map((contact, index) =>
-                    <Contact key={index} data={contact[1]} />
+                    <Contact
+                        key={index}
+                        data={contact[1]}
+                        displayError={props.displayError} />
                 )}
             </div>
 

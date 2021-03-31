@@ -177,6 +177,9 @@ function Main() {
     };
 
     useEffect(() => {
+        // Display custom errors in any component
+        window.displayCustomError = displayCustomError;
+
         // We assign this method to window, to be able to call it from outside (eg: mobile app)
         window.goToChatByWaId = goToChatByWaId;
 
