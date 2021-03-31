@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
+import SearchBar from "./SearchBar";
 
 function Contacts(props) {
 
@@ -37,6 +38,8 @@ function Contacts(props) {
 
     return (
         <div>
+            <SearchBar
+                onChange={setKeyword} />
 
         </div>
     )

@@ -304,6 +304,7 @@ function Sidebar(props) {
     }
 
     const displayContacts = () => {
+        setContactsVisible(true);
     }
 
     return (
