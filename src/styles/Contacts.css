@@ -1,0 +1,37 @@
+.contacts {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--gray-light);
+    z-index: 10;
+}
+
+.contacts__header {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    background-color: var(--color-primary-light);
+    padding: 4px 15px;
+    color: white;
+    font-size: 18px;
+}
+
+.contacts__header h3 {
+    margin-left: 10px;
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.contacts__header .MuiSvgIcon-root {
+    color: white !important;
+}
+
+.contacts__body {
+    flex: 1 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

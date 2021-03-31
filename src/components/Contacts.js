@@ -1,8 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
+import '../styles/Contacts.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
 import SearchBar from "./SearchBar";
+import {IconButton} from "@material-ui/core";
+import {ArrowBack} from "@material-ui/icons";
 
 function Contacts(props) {
 
@@ -37,7 +40,15 @@ function Contacts(props) {
     }
 
     return (
-        <div>
+        <div className="contacts">
+            <div className="contacts__header">
+                <IconButton onClick={props.onHide}>
+                    <ArrowBack />
+                </IconButton>
+
+                <h3>Contacts</h3>
+            </div>
+
             <SearchBar
                 onChange={setKeyword} />
 
