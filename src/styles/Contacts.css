@@ -35,3 +35,7 @@
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.contacts__body .MuiListItem-root {
+    padding: 0;
+}

@@ -1,14 +1,18 @@
 import React from "react";
-import {Avatar} from "@material-ui/core";
+import '../styles/Contact.css';
+import {Avatar, ListItem} from "@material-ui/core";
 
 function Contact(props) {
     return (
-        <div>
-            <Avatar src={props.data.avatar}>{props.data.initials}</Avatar>
-            <div>
-                {props.data.name}
-                {JSON.stringify(props.data)}
-            </div>
+        <div className="contactWrapper">
+            <ListItem button>
+                <div className="contact">
+                    <Avatar src={props.data.avatar}>{props.data.initials}</Avatar>
+                    <div className="contact__info">
+                        <h2>{props.data.name}</h2>
+                    </div>
+                </div>
+            </ListItem>
         </div>
     )
 }
