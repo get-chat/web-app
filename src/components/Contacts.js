@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 import {IconButton} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import Contact from "./Contact";
+import ContactClass from "../ContactClass";
 
 function Contacts(props) {
 
@@ -44,7 +45,12 @@ function Contacts(props) {
             .then((response) => {
                 console.log("Contacts list", response.data);
 
-                setContacts(response.data.results);
+                const preparedContacts = {};
+                response.data.results.forEach((contact, contactIndex) => {
+                    preparedContacts[contactIndex] = new ContactClass(contact);
+                });
+
+                setContacts(preparedContacts);
 
             })
             .catch((error) => {
@@ -68,8 +74,8 @@ function Contacts(props) {
                 onChange={setKeyword} />
 
             <div className="contacts__body">
-                { Object.entries(contacts).map((contact) =>
-                    <Contact key={contact.id} data={contact} />
+                { Object.entries(contacts).map((contact, index) =>
+                    <Contact key={index} data={contact[1]} />
                 )}
             </div>
 
