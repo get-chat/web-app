@@ -15,9 +15,17 @@ function Contact(props) {
                     <div className="contact__info">
                         <h2>{props.data.name}</h2>
 
-                        <div className="contact__info__details">
-                            <span>{props.data.phoneNumbers?.length} phone number(s)</span>
+                        {(props.data.phoneNumbers && props.data.phoneNumbers.length > 0) &&
+                        <div className="contact__info__phoneNumber">
+                            {props.data.phoneNumbers[0].phone_number}
                         </div>
+                        }
+
+                        {(props.data.phoneNumbers && props.data.phoneNumbers.length > 1) &&
+                        <div className="contact__info__otherPhoneNumbers">
+                            <span>{props.data.phoneNumbers?.length - 1} more phone numbers</span>
+                        </div>
+                        }
                     </div>
                 </div>
             </ListItem>
