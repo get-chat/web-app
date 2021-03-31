@@ -11,6 +11,26 @@
     border-bottom: 1px solid #f5f5f5;
 }
 
+.contact .MuiAvatar-root {
+    align-self: baseline;
+    height: 50px;
+    width: 50px;
+}
+
+.contact__avatarWrapper {
+    position: relative;
+}
+
+.contact__avatarWrapper .contactProviderHeader {
+    display: flex;
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    padding: 3px;
+    background-color: white;
+    border-radius: 10px;
+}
+
 .contact__info {
     flex: 1 1;
     margin-left: 15px;
@@ -19,4 +39,12 @@
 .contact__info h2 {
     font-weight: 600;
     font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.contact__info__details {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.8);
 }
