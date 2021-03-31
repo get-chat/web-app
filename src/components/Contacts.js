@@ -44,7 +44,7 @@ function Contacts(props) {
             .then((response) => {
                 console.log("Contacts list", response.data);
 
-                setContacts(response.data);
+                setContacts(response.data.results);
 
             })
             .catch((error) => {
@@ -68,8 +68,8 @@ function Contacts(props) {
                 onChange={setKeyword} />
 
             <div className="contacts__body">
-                { Object.entries(contacts).map((message) =>
-                    <Contact />
+                { Object.entries(contacts).map((contact) =>
+                    <Contact key={contact.id} data={contact} />
                 )}
             </div>
 

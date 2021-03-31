@@ -391,6 +391,7 @@ function Sidebar(props) {
 
             {isContactsVisible &&
             <Contacts
+                onHide={() => setContactsVisible(false)}
                 displayError={props.displayError} />
             }
 

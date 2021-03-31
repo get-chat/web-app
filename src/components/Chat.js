@@ -19,7 +19,7 @@ import {
     EVENT_TOPIC_SENT_TEMPLATE_MESSAGE
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
-import ContactClass from "../ContactClass";
+import PersonClass from "../PersonClass";
 import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import ChatFooter from "./ChatFooter";
@@ -50,7 +50,7 @@ export default function Chat(props) {
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [isExpired, setExpired] = useState(false);
     const [isTemplateMessagesVisible, setTemplateMessagesVisible] = useState(false);
-    const [contact, setContact] = useState();
+    const [person, setPerson] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
 
@@ -106,7 +106,7 @@ export default function Chat(props) {
         setLoaded(false);
 
         // Clear values for next route
-        setContact(null);
+        setPerson(null);
         setMessages([]);
         setTemplateMessagesVisible(false);
         setAtBottom(false);
@@ -125,7 +125,7 @@ export default function Chat(props) {
         }
 
         // Load contact and messages
-        getContact(true);
+        getPerson(true);
 
         return () => {
             // Cancelling ongoing requests
@@ -137,8 +137,8 @@ export default function Chat(props) {
     }, [waId]);
 
     useEffect(() => {
-        props.setChosenContact(contact);
-    }, [contact]);
+        props.setChosenContact(person);
+    }, [person]);
 
     useEffect(() => {
         const messagesContainerCopy = messagesContainer.current;
@@ -226,7 +226,7 @@ export default function Chat(props) {
                             markAsReceived(lastMessageTimestamp);
 
                             // Update contact
-                            setContact(prevState => {
+                            setPerson(prevState => {
                                 const nextState = prevState;
                                 nextState.lastMessageTimestamp = lastMessageTimestamp;
                                 nextState.isExpired = false;
@@ -410,16 +410,16 @@ export default function Chat(props) {
         setOptionsChatMessage(chatMessage);
     }
 
-    const getContact = (loadMessages) => {
+    const getPerson = (loadMessages) => {
         axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelTokenSourceRef.current.token))
             .then((response) => {
-                //console.log("Contact", response.data);
+                //console.log("Person", response.data);
 
-                const prepared = new ContactClass(response.data);
-                setContact(prepared);
+                const prepared = new PersonClass(response.data);
+                setPerson(prepared);
                 setExpired(prepared.isExpired);
 
-                // Contact information is loaded, now load messages
+                // Person information is loaded, now load messages
                 if (loadMessages !== undefined && loadMessages === true) {
                     getMessages(function (preparedMessages) {
                         setLastMessageId(getLastObject(preparedMessages)?.id);
@@ -757,7 +757,7 @@ export default function Chat(props) {
             onDragOver={(event) => handleDragOver(event)}>
 
             <ChatHeader
-                contact={contact}
+                person={person}
                 contactProvidersData={props.contactProvidersData}
                 retrieveContactData={props.retrieveContactData} />
 
