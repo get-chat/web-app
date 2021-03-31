@@ -24,6 +24,7 @@ import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobile} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
+import Contacts from "./Contacts";
 
 function Sidebar(props) {
 
@@ -385,6 +386,8 @@ function Sidebar(props) {
                 </div>
                 }
             </div>
+
+            <Contacts />
 
             {isProfileVisible &&
             <BusinessProfile
