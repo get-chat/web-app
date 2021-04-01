@@ -446,6 +446,7 @@ export default function Chat(props) {
                         setExpired(true);
                         setLoaded(true);
                         setLoadingMoreMessages(false);
+                        setAtBottom(true);
                     } else {
                         // To prevent missing data on refresh
                         history.push("/main")
