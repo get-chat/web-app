@@ -41,7 +41,7 @@ function Contacts(props) {
 
     const findContacts = () => {
         axios.get(`${BASE_URL}contacts/`, getConfig({
-            search: keyword
+            search: keyword?.trim()
         }, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log("Contacts list", response.data);
@@ -74,7 +74,7 @@ function Contacts(props) {
             <SearchBar
                 onChange={setKeyword} />
 
-            { keyword.length === 0
+            { keyword?.length === 0
                 ?
                 <div className="contacts__body">
                     <span className="contacts__body__hint">Enter a keyword to start searching</span>
