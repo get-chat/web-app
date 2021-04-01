@@ -27,12 +27,21 @@ function BusinessProfile(props) {
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
+        const handleKey = (event) => {
+            if (event.keyCode === 27) { // Escape
+                props.onHide();
+            }
+        }
+
+        document.addEventListener('keydown', handleKey);
+
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
         getBusinessProfile();
 
         return () => {
+            document.removeEventListener('keydown', handleKey);
             cancelTokenSourceRef.current.cancel();
         }
     }, []);
