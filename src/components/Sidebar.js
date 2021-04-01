@@ -110,14 +110,15 @@ function Sidebar(props) {
                     const chatMessage = message[1];
                     const chatMessageWaId = chatMessage.waId;
 
+                    // New chat, incoming or outgoing message
+                    // Check if chat with waId already exists
+                    if (!nextState.hasOwnProperty(chatMessageWaId)) {
+                        willMakeRequest = true;
+                    }
+
                     // Chats are ordered by incoming message date
                     if (!chatMessage.isFromUs) {
-                        if (!nextState.hasOwnProperty(chatMessageWaId)) {
-                            willMakeRequest = true;
-
-                            // Create a chat here
-                            //nextState[chatMessageWaId] = new ChatClass({});
-                        } else {
+                        if (nextState.hasOwnProperty(chatMessageWaId)) {
                             changedAny = true;
 
                             // Update existing chat
@@ -142,6 +143,7 @@ function Sidebar(props) {
                     }
                 });
 
+                // If anything has changed, sort chats
                 if (changedAny) {
                     // Sorting
                     let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);

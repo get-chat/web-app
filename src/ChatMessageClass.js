@@ -27,8 +27,8 @@ export class ChatMessageClass {
         this.id = payload.id;
         this.to = payload.to;
         this.waId = data.customer_wa_id;
-        this.senderWaId = payload.from;
         this.isFromUs = data.from_us;
+        this.senderWaId = payload.from;
         this.contact = data.contact;
         this.type = payload.type;
         this.senderObject = data.sender;
