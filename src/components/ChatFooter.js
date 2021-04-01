@@ -48,13 +48,13 @@ function ChatFooter(props) {
         setEmojiPickerVisible(data);
     }
 
-    let timeout;
+    let timeout = useRef();
     const handleEditableChange = (event) => {
-        if (timeout) {
-            clearTimeout(timeout);
+        if (timeout.current) {
+            clearTimeout(timeout.current);
         }
 
-        timeout = setTimeout(function () {
+        timeout.current = setTimeout(function () {
             props.setInput(event.target.innerHTML)
         }, 5);
     }
