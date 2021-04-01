@@ -39,3 +39,10 @@
 .contacts__body .MuiListItem-root {
     padding: 0;
 }
+
+.contacts__body__hint {
+    display: block;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+}

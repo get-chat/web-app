@@ -73,15 +73,21 @@ function Contacts(props) {
             <SearchBar
                 onChange={setKeyword} />
 
-            <div className="contacts__body">
-                { Object.entries(contacts).map((contact, index) =>
-                    <Contact
-                        key={index}
-                        data={contact[1]}
-                        displayError={props.displayError} />
-                )}
-            </div>
-
+            { keyword.length === 0
+                ?
+                <div className="contacts__body">
+                    <span className="contacts__body__hint">Enter a keyword to start searching</span>
+                </div>
+                :
+                <div className="contacts__body">
+                    { Object.entries(contacts).map((contact, index) =>
+                        <Contact
+                            key={index}
+                            data={contact[1]}
+                            displayError={props.displayError} />
+                    )}
+                </div>
+            }
         </div>
     )
 }
