@@ -38,20 +38,26 @@ function Contacts(props) {
         }
     }, []);
 
+    let timeout = useRef();
+
     useEffect(() => {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
-        findContacts();
+        setLoading(true);
+
+        timeout.current = setTimeout(function () {
+            findContacts();
+        }, 500);
 
         return () => {
             cancelTokenSourceRef.current.cancel();
+            clearTimeout(timeout.current);
+            setLoading(false);
         }
     }, [keyword]);
 
     const findContacts = () => {
-        setLoading(true);
-
         axios.get(`${BASE_URL}contacts/`, getConfig({
             search: keyword?.trim()
         }, cancelTokenSourceRef.current.token))
