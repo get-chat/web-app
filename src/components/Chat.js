@@ -435,7 +435,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -529,7 +529,7 @@ export default function Chat(props) {
 
                 // TODO: Handle errors
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -557,7 +557,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    props.displayError(error);
+                    window.displayError(error);
 
                     if (error.response) {
                         // Switch to expired mode if status code is 453
@@ -599,7 +599,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    props.displayError(error);
+                    window.displayError(error);
 
                     if (error.response) {
                         const errors = error.response.data?.waba_response?.errors;
@@ -624,7 +624,7 @@ export default function Chat(props) {
             .catch((error) => {
                 // TODO: Handle errors
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -669,7 +669,7 @@ export default function Chat(props) {
                 .catch((error) => {
                     // TODO: Handle errors
 
-                    props.displayError(error);
+                    window.displayError(error);
 
                     // Send next when it fails, a retry can be considered
                     callback();
@@ -728,7 +728,7 @@ export default function Chat(props) {
                     .catch((error) => {
                         // TODO: Handle errors
 
-                        props.displayError(error);
+                        window.displayError(error);
 
                         // Send next when it fails, a retry can be considered
                         sendNextRequest();
@@ -846,8 +846,7 @@ export default function Chat(props) {
                     setTemplateMessagesVisible={setTemplateMessagesVisible}
                     sendHandledChosenFiles={sendHandledChosenFiles}
                     accept={accept}
-                    setAccept={setAccept}
-                    displayError={props.displayError} />
+                    setAccept={setAccept} />
             }
 
             {(isTemplateMessagesVisible || isExpired) &&

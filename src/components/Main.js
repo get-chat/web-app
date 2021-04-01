@@ -180,6 +180,9 @@ function Main() {
         // Display custom errors in any component
         window.displayCustomError = displayCustomError;
 
+        // Display Axios errors in any component
+        window.displayError = displayError;
+
         // We assign this method to window, to be able to call it from outside (eg: mobile app)
         window.goToChatByWaId = goToChatByWaId;
 
@@ -387,7 +390,6 @@ function Main() {
                     currentUser={currentUser}
                     setProgress={setProgress}
                     showNotification={showNotification}
-                    displayError={(error) => displayError(error)}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData} />
@@ -400,7 +402,6 @@ function Main() {
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
                     isLoadingTemplates={isLoadingTemplates}
-                    displayError={(error) => displayError(error)}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData} />
                 }

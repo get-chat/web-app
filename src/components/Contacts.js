@@ -57,7 +57,7 @@ function Contacts(props) {
             .catch((error) => {
                 console.log(error);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -85,7 +85,6 @@ function Contacts(props) {
                         <Contact
                             key={index}
                             data={contact[1]}
-                            displayError={props.displayError}
                             setVerifying={setVerifying} />
                     )}
 

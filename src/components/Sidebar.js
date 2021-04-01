@@ -391,8 +391,7 @@ function Sidebar(props) {
 
             {isContactsVisible &&
             <Contacts
-                onHide={() => setContactsVisible(false)}
-                displayError={props.displayError} />
+                onHide={() => setContactsVisible(false)} />
             }
 
             {isProfileVisible &&
@@ -400,7 +399,6 @@ function Sidebar(props) {
                 isAdmin={props.isAdmin}
                 currentUser={props.currentUser}
                 onHide={() => setProfileVisible(false)}
-                displayError={props.displayError}
                 displayEditBusinessProfile={displayEditBusinessProfile}
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
             }

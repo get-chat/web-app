@@ -63,7 +63,7 @@ function BusinessProfile(props) {
             .catch((error) => {
                 console.log(error);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -91,7 +91,7 @@ function BusinessProfile(props) {
 
                 setUpdating(false);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -110,7 +110,7 @@ function BusinessProfile(props) {
             .catch((error) => {
                 console.log(error);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -131,7 +131,7 @@ function BusinessProfile(props) {
 
                 setUpdating(false);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -153,7 +153,7 @@ function BusinessProfile(props) {
                     // Finish
                     setLoaded(true);
                 } else {
-                    props.displayError(error);
+                    window.displayError(error);
                 }
             });
     }
@@ -177,7 +177,7 @@ function BusinessProfile(props) {
 
                 setUpdating(false);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 
@@ -189,7 +189,7 @@ function BusinessProfile(props) {
             .catch((error) => {
                 console.log(error);
 
-                props.displayError(error);
+                window.displayError(error);
             });
     }
 

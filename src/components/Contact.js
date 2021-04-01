@@ -63,7 +63,7 @@ function Contact(props) {
             })
             .catch((error) => {
                 console.log(error);
-                props.displayError(error);
+                window.displayError(error);
 
                 props.setVerifying(false);
             });
