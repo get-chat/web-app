@@ -54,7 +54,7 @@ function Contact(props) {
 
                 if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
                     history.push({
-                        pathname: `/main/chat/${waId}99`,
+                        pathname: `/main/chat/${waId}`,
                         person: {
                             name: props.data.name,
                             initials: props.data.initials,
