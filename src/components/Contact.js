@@ -53,7 +53,13 @@ function Contact(props) {
                 console.log("Verify", response.data);
 
                 if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
-                    history.push(`/main/chat/${waId}`);
+                    history.push({
+                        pathname: `/main/chat/${waId}`,
+                        name: props.data.name,
+                        initials: props.data.initials,
+                        avatar: props.data.avatar,
+                        waId: waId
+                    });
                 } else {
                     window.displayCustomError("There is no WhatsApp account connected to this phone number.");
                 }

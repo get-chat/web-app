@@ -415,9 +415,9 @@ export default function Chat(props) {
             .then((response) => {
                 //console.log("Person", response.data);
 
-                const prepared = new PersonClass(response.data);
-                setPerson(prepared);
-                setExpired(prepared.isExpired);
+                const preparedPerson = new PersonClass(response.data);
+                setPerson(preparedPerson);
+                setExpired(preparedPerson.isExpired);
 
                 // Person information is loaded, now load messages
                 if (loadMessages !== undefined && loadMessages === true) {
@@ -433,9 +433,21 @@ export default function Chat(props) {
                 }
             })
             .catch((error) => {
-                // TODO: Handle errors
+                if (error.response?.status === 404) {
+                    // TODO: Handle person not found
+                    const preparedPerson = new PersonClass({});
+                    preparedPerson.name = location.name;
+                    preparedPerson.initials = location.initials;
+                    preparedPerson.waId = waId;
 
-                window.displayError(error);
+                    setPerson(preparedPerson);
+
+                    setExpired(true);
+                    setLoaded(true);
+                    setLoadingMoreMessages(false);
+                } else {
+                    window.displayError(error);
+                }
             });
     }
 

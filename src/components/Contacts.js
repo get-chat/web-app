@@ -18,12 +18,21 @@ function Contacts(props) {
     let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
+        const handleKey = (event) => {
+            if (event.keyCode === 27) { // Escape
+                props.onHide();
+            }
+        }
+
+        document.addEventListener('keydown', handleKey);
+
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
         findContacts();
 
         return () => {
+            document.removeEventListener('keydown', handleKey);
             cancelTokenSourceRef.current.cancel();
         }
     }, []);

@@ -63,7 +63,7 @@ function ChatHeader(props) {
                     {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
 
                     {props.person?.isExpired &&
-                    <p className="chat__header__expired">Expired</p>
+                    <p className="chat__header__expired">Inactive</p>
                     }
                 </div>
 
