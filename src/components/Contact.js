@@ -18,6 +18,10 @@ function Contact(props) {
     useEffect(() => {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
+
+        return () => {
+            props.setVerifying(false);
+        }
     }, []);
 
     const handleClick = () => {
@@ -38,6 +42,8 @@ function Contact(props) {
     }
 
     const verifyContact = (waId) => {
+        props.setVerifying(true);
+
         axios.post( `${BASE_URL}contacts/verify/`, {
             blocking: "wait",
             contacts: [addPlusToPhoneNumber(waId)],
@@ -52,10 +58,14 @@ function Contact(props) {
                     window.displayCustomError("There is no WhatsApp account connected to this phone number.");
                 }
 
+                props.setVerifying(false);
+
             })
             .catch((error) => {
                 console.log(error);
                 props.displayError(error);
+
+                props.setVerifying(false);
             });
     }
 

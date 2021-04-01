@@ -4,7 +4,7 @@ import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
 import SearchBar from "./SearchBar";
-import {IconButton} from "@material-ui/core";
+import {CircularProgress, IconButton} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import Contact from "./Contact";
 import ContactClass from "../ContactClass";
@@ -13,6 +13,7 @@ function Contacts(props) {
 
     const [keyword, setKeyword] = useState("");
     const [contacts, setContacts] = useState({});
+    const [isVerifying, setVerifying] = useState(false);
 
     let cancelTokenSourceRef = useRef();
 
@@ -84,8 +85,15 @@ function Contacts(props) {
                         <Contact
                             key={index}
                             data={contact[1]}
-                            displayError={props.displayError} />
+                            displayError={props.displayError}
+                            setVerifying={setVerifying} />
                     )}
+
+                    {isVerifying &&
+                    <div className="contacts__body__loading">
+                        <CircularProgress color="inherit" />
+                    </div>
+                    }
                 </div>
             }
         </div>
