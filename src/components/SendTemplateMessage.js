@@ -37,9 +37,6 @@ function SendTemplateMessage(props) {
                 }
             }
 
-            console.log(component.format);
-            console.log(preparedParams);
-
             const paramText = component.text;
             const templateParamsArray = getTemplateParams(paramText);
 
