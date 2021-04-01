@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
-import {useLocation, useParams} from "react-router-dom";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 import axios from "axios";
 import {
     ATTACHMENT_TYPE_DOCUMENT,
@@ -66,6 +66,7 @@ export default function Chat(props) {
 
     const {waId} = useParams();
 
+    const history = useHistory();
     const location = useLocation();
 
     const cancelTokenSourceRef = useRef();
@@ -434,17 +435,21 @@ export default function Chat(props) {
             })
             .catch((error) => {
                 if (error.response?.status === 404) {
-                    // TODO: Handle person not found
-                    const preparedPerson = new PersonClass({});
-                    preparedPerson.name = location.name;
-                    preparedPerson.initials = location.initials;
-                    preparedPerson.waId = waId;
+                    if (location.person) {
+                        const preparedPerson = new PersonClass({});
+                        preparedPerson.name = location.person.name;
+                        preparedPerson.initials = location.person.initials;
+                        preparedPerson.waId = waId;
 
-                    setPerson(preparedPerson);
+                        setPerson(preparedPerson);
 
-                    setExpired(true);
-                    setLoaded(true);
-                    setLoadingMoreMessages(false);
+                        setExpired(true);
+                        setLoaded(true);
+                        setLoadingMoreMessages(false);
+                    } else {
+                        // To prevent missing data on refresh
+                        history.push("/main")
+                    }
                 } else {
                     window.displayError(error);
                 }

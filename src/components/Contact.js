@@ -54,11 +54,13 @@ function Contact(props) {
 
                 if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
                     history.push({
-                        pathname: `/main/chat/${waId}`,
-                        name: props.data.name,
-                        initials: props.data.initials,
-                        avatar: props.data.avatar,
-                        waId: waId
+                        pathname: `/main/chat/${waId}99`,
+                        person: {
+                            name: props.data.name,
+                            initials: props.data.initials,
+                            avatar: props.data.avatar,
+                            waId: waId
+                        }
                     });
                 } else {
                     window.displayCustomError("There is no WhatsApp account connected to this phone number.");
