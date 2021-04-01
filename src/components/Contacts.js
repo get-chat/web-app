@@ -44,11 +44,13 @@ function Contacts(props) {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
-        setLoading(true);
+        if (keyword?.length > 0) {
+            setLoading(true);
 
-        timeout.current = setTimeout(function () {
-            findContacts();
-        }, 500);
+            timeout.current = setTimeout(function () {
+                findContacts();
+            }, 500);
+        }
 
         return () => {
             cancelTokenSourceRef.current.cancel();
@@ -92,7 +94,8 @@ function Contacts(props) {
             </div>
 
             <SearchBar
-                onChange={setKeyword} />
+                onChange={setKeyword}
+                isLoading={isLoading} />
 
             { keyword?.length === 0
                 ?

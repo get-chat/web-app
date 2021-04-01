@@ -1,6 +1,7 @@
 import React from 'react';
 import {SearchOutlined} from "@material-ui/icons";
 import '../styles/SearchBar.css';
+import {CircularProgress} from "@material-ui/core";
 
 function SearchBar(props) {
 
@@ -11,7 +12,13 @@ function SearchBar(props) {
     return (
         <div className="searchBar__search">
             <div className="searchBar__searchContainer">
-                <SearchOutlined className="searchBar__searchContainer__searchIcon" />
+                {props.isLoading === true
+                    ?
+                    <CircularProgress/>
+                    :
+                    <SearchOutlined className="searchBar__searchContainer__searchIcon"/>
+                }
+
                 <input placeholder="Search" type="text" onChange={handleChange} />
             </div>
         </div>
