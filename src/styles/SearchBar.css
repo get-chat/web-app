@@ -8,6 +8,7 @@
 }
 
 .searchBar__searchContainer {
+    position: relative;
     display: flex;
     align-items: center;
     background-color: white;
@@ -28,11 +29,17 @@
     padding: 10px;
 }
 
+.searchBar__searchContainer > .MuiSvgIcon-root, .searchBar__searchContainer > .MuiCircularProgress-root {
+    position: absolute;
+    left: 0;
+}
+
 .searchBar__searchContainer > input {
     flex: 1;
     border: none;
     background-color: transparent;
-    margin: 0 10px 0 calc(15px + 0.2em);
+    margin: 0 10px 0 63px;
+    /*margin: 0 10px 0 calc(15px + 0.2em);*/
     font-size: 14px;
 }
 
