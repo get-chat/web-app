@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers";
+import {getConfig, getObjLength} from "../Helpers";
 import SearchBar from "./SearchBar";
 import {CircularProgress, IconButton} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
@@ -13,6 +13,7 @@ function Contacts(props) {
 
     const [keyword, setKeyword] = useState("");
     const [contacts, setContacts] = useState({});
+    const [isLoading, setLoading] = useState(false);
     const [isVerifying, setVerifying] = useState(false);
 
     let cancelTokenSourceRef = useRef();
@@ -49,6 +50,8 @@ function Contacts(props) {
     }, [keyword]);
 
     const findContacts = () => {
+        setLoading(true);
+
         axios.get(`${BASE_URL}contacts/`, getConfig({
             search: keyword?.trim()
         }, cancelTokenSourceRef.current.token))
@@ -62,11 +65,13 @@ function Contacts(props) {
 
                 setContacts(preparedContacts);
 
+                setLoading(false);
+
             })
             .catch((error) => {
                 console.log(error);
-
                 window.displayError(error);
+                setLoading(false);
             });
     }
 
@@ -101,6 +106,11 @@ function Contacts(props) {
                     <div className="contacts__body__loading">
                         <CircularProgress color="inherit" />
                     </div>
+                    }
+
+                    {(getObjLength(contacts) === 0 && !isLoading) &&
+                    <span className="contacts__body__hint">No contacts found for <span
+                        className="searchOccurrence">{keyword}</span></span>
                     }
                 </div>
             }
