@@ -108,7 +108,8 @@ function Contacts(props) {
                         <Contact
                             key={index}
                             data={contact[1]}
-                            setVerifying={setVerifying} />
+                            setVerifying={setVerifying}
+                            onHide={props.onHide} />
                     )}
 
                     {isVerifying &&

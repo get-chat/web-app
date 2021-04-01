@@ -6,6 +6,7 @@ import {useHistory} from "react-router-dom";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {addPlusToPhoneNumber, getConfig} from "../Helpers";
+import {isMobileOnly} from 'react-device-detect';
 
 function Contact(props) {
 
@@ -62,6 +63,12 @@ function Contact(props) {
                             waId: waId
                         }
                     });
+
+                    // Hide contacts on mobile
+                    if (isMobileOnly) {
+                        props.onHide();
+                    }
+
                 } else {
                     window.displayCustomError("There is no WhatsApp account connected to this phone number.");
                 }
