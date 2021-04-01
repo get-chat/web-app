@@ -16,6 +16,8 @@ function SearchMessage(props) {
 
     const [results, setResults] = useState({});
     const [keyword, setKeyword] = useState("");
+    const [isLoading, setLoading] = useState(false);
+
     const {waId} = useParams();
 
     useEffect(() => {
@@ -44,6 +46,8 @@ function SearchMessage(props) {
             return false;
         }
 
+        setLoading(true);
+
         axios.get( `${BASE_URL}messages/`,
             getConfig({
                 wa_id: waId,
@@ -63,11 +67,12 @@ function SearchMessage(props) {
 
                 setResults(preparedMessages);
 
+                setLoading(false);
+
             })
             .catch((error) => {
-                // TODO: Handle errors
-
-                //displayError(error);
+                window.displayError(error);
+                setLoading(false);
             });
     }
 
@@ -89,7 +94,9 @@ function SearchMessage(props) {
                 <h3>Search For Messages</h3>
             </div>
 
-            <SearchBar onChange={search} />
+            <SearchBar
+                onChange={search}
+                isLoading={isLoading} />
 
             <div className="searchMessage__body">
                 { Object.entries(results).map((message) =>
