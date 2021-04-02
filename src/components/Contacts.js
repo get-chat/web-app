@@ -4,7 +4,7 @@ import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig, getObjLength} from "../Helpers";
 import SearchBar from "./SearchBar";
-import {CircularProgress, IconButton, ListItem} from "@material-ui/core";
+import {Button, CircularProgress, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import DialpadIcon from '@material-ui/icons/Dialpad';
 import Contact from "./Contact";
@@ -16,6 +16,7 @@ function Contacts(props) {
     const [contacts, setContacts] = useState({});
     const [isLoading, setLoading] = useState(false);
     const [isVerifying, setVerifying] = useState(false);
+    const [isPhoneNumberFormVisible, setPhoneNumberFormVisible] = useState(false);
 
     let cancelTokenSourceRef = useRef();
 
@@ -95,14 +96,26 @@ function Contacts(props) {
             </div>
 
             <div className="contacts__startByPhoneNumberWrapper">
-                <div className="contacts__startByPhoneNumber">
+                <div className="contacts__startByPhoneNumber" onClick={() => setPhoneNumberFormVisible(prevState => !prevState)}>
                     <ListItem button>
                         <div className="contacts__startByPhoneNumber__inner">
                             <DialpadIcon />
-                            <span>Start a chat by phone number</span>
+                            <span>Start a chat with a phone number</span>
                         </div>
                     </ListItem>
                 </div>
+
+                {isPhoneNumberFormVisible &&
+                <div className="contacts__startByPhoneNumberWrapper__formWrapper">
+                    <TextField
+                        label="Phone number"
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">+</InputAdornment>,
+                        }}
+                    />
+                    <Button color="primary">Start</Button>
+                </div>
+                }
             </div>
 
             <SearchBar

@@ -52,6 +52,16 @@
     padding: 20px 15px;
 }
 
+.contacts__startByPhoneNumberWrapper__formWrapper {
+    display: flex;
+    padding: 10px 15px;
+}
+
+.contacts__startByPhoneNumberWrapper__formWrapper .MuiTextField-root {
+    flex: 1;
+    margin-right: 15px;
+}
+
 .contacts__startByPhoneNumber__inner .MuiSvgIcon-root {
     height: 0.8em;
     width: 0.8em;
