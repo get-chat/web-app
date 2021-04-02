@@ -116,7 +116,7 @@ function Contacts(props) {
                     </div>
                     }
 
-                    {(getObjLength(contacts) === 0 && !isLoading) &&
+                    {(keyword?.length > 0 && getObjLength(contacts) === 0 && !isLoading) &&
                     <span className="contacts__body__hint">No contacts found for <span
                         className="searchOccurrence">{keyword}</span></span>
                     }
