@@ -157,8 +157,7 @@ function BusinessProfile(props) {
                 console.log(error);
 
                 // No photo
-                if (error.response.status && error.response.status === 404) {
-
+                if (error?.response?.status === 404) {
                     // Finish
                     setLoaded(true);
                 } else {
