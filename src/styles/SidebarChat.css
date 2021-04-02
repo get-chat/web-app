@@ -78,7 +78,7 @@
 
 .sidebarChat__info__lastMessage__new {
     font-weight: 600;
-    color: var(--default-text-color);
+    color: var(--color-primary);
 }
 
 .sidebarChat__info__lastMessage__body .MuiSvgIcon-root {
