@@ -4,8 +4,9 @@ import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig, getObjLength} from "../Helpers";
 import SearchBar from "./SearchBar";
-import {CircularProgress, IconButton} from "@material-ui/core";
+import {CircularProgress, IconButton, ListItem} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
+import DialpadIcon from '@material-ui/icons/Dialpad';
 import Contact from "./Contact";
 import ContactClass from "../ContactClass";
 
@@ -93,34 +94,45 @@ function Contacts(props) {
                 <h3>Contacts</h3>
             </div>
 
+            <div className="contacts__startByPhoneNumberWrapper">
+                <div className="contacts__startByPhoneNumber">
+                    <ListItem button>
+                        <div className="contacts__startByPhoneNumber__inner">
+                            <DialpadIcon />
+                            <span>Start a chat by phone number</span>
+                        </div>
+                    </ListItem>
+                </div>
+            </div>
+
             <SearchBar
                 onChange={setKeyword}
                 isLoading={isLoading} />
 
-                <div className="contacts__body">
-                    {keyword?.length === 0 &&
-                    <span className="contacts__body__hint">Enter a keyword to start searching</span>
-                    }
+            <div className="contacts__body">
+                {keyword?.length === 0 &&
+                <span className="contacts__body__hint">Enter a keyword to start searching</span>
+                }
 
-                    { Object.entries(contacts).map((contact, index) =>
-                        <Contact
-                            key={index}
-                            data={contact[1]}
-                            setVerifying={setVerifying}
-                            onHide={props.onHide} />
-                    )}
+                { Object.entries(contacts).map((contact, index) =>
+                    <Contact
+                        key={index}
+                        data={contact[1]}
+                        setVerifying={setVerifying}
+                        onHide={props.onHide} />
+                )}
 
-                    {isVerifying &&
-                    <div className="contacts__body__loading">
-                        <CircularProgress color="inherit" />
-                    </div>
-                    }
-
-                    {(keyword?.length > 0 && getObjLength(contacts) === 0 && !isLoading) &&
-                    <span className="contacts__body__hint">No contacts found for <span
-                        className="searchOccurrence">{keyword}</span></span>
-                    }
+                {isVerifying &&
+                <div className="contacts__body__loading">
+                    <CircularProgress color="inherit" />
                 </div>
+                }
+
+                {(keyword?.length > 0 && getObjLength(contacts) === 0 && !isLoading) &&
+                <span className="contacts__body__hint">No contacts found for <span
+                    className="searchOccurrence">{keyword}</span></span>
+                }
+            </div>
             }
         </div>
     )

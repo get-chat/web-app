@@ -30,6 +30,31 @@
     color: white !important;
 }
 
+.contacts__startByPhoneNumberWrapper {
+    background-color: white;
+}
+
+.contacts__startByPhoneNumber {
+    background-color: var(--color-primary-transparent);
+    color: var(--color-primary);
+}
+
+.contacts__startByPhoneNumber .MuiListItem-root {
+    padding: 0;
+}
+
+.contacts__startByPhoneNumber__inner {
+    flex: 1;
+    padding: 20px 15px;
+}
+
+.contacts__startByPhoneNumber__inner .MuiSvgIcon-root {
+    height: 0.8em;
+    width: 0.8em;
+    color: var(--color-primary) !important;
+    margin-right: 10px;
+}
+
 .contacts__body {
     position: relative;
     flex: 1 1;
