@@ -95,7 +95,7 @@ function SidebarChat(props) {
             <ListItem button>
                 <div
                     id={props.chatData.waId}
-                    className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat ' : '') + (isExpired ? 'expired ' : (remainingSeconds < 3600 ? 'almostExpired ' : ''))}
+                    className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat ' : '') + (isExpired ? 'expired ' : (remainingSeconds < 8 * 60 * 60 ? 'almostExpired ' : ''))}
                     onDrop={(event) => handleDroppedFiles(event)}
                     onDragOver={(event) => handleDragOver(event)}>
 
