@@ -38,24 +38,16 @@ function SidebarChat(props) {
             let suffix;
 
             if (hours > 0) {
-                if (hours === 1) {
-                    suffix = ' hour';
-                } else {
-                    suffix = ' hours';
-                }
+                suffix = 'h';
                 setTimeLeft(hours + suffix);
             } else {
                 const minutes = momentDate.diff(curDate, 'minutes');
                 if (minutes > 1) {
-                    if (minutes > 1) {
-                        suffix = ' minutes';
-                    } else {
-                        suffix = ' minute';
-                    }
+                    suffix = 'm';
                     setTimeLeft(minutes + suffix);
                 } else {
                     if (seconds > 1) {
-                        suffix = ' minute';
+                        suffix = 'm';
                         setTimeLeft(minutes + suffix);
                     } else {
                         // Expired
@@ -122,33 +114,36 @@ function SidebarChat(props) {
                                 <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>
                             </h2>
 
-                            <Moment
-                                className="sidebarChat__info__nameWrapper__lastMessageDate"
-                                date={props.chatData.lastMessageTimestamp}
-                                calendar={CALENDAR_SHORT}
-                                unix />
+                            <div className="sidebarChat__info__date">
+                                <Moment
+                                    className="sidebarChat__info__nameWrapper__lastMessageDate"
+                                    date={props.chatData.lastMessageTimestamp}
+                                    calendar={CALENDAR_SHORT}
+                                    unix />
+
+                                {!isExpired &&
+                                <span className="sidebarChat__info__date__timeLeft">{timeLeft} left</span>
+                                }
+                            </div>
+
                         </div>
 
-                        <span className="sidebarChat__info__lastMessage">
-                        {((props.newMessages[props.chatData.waId]?.newMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
-                            ?
-                            <span className="sidebarChat__info__lastMessage__new">
+                        <div className="sidebarChat__info__lastMessage">
+                            {((props.newMessages[props.chatData.waId]?.newMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
+                                ?
+                                <span className="sidebarChat__info__lastMessage__new">
                                 {props.newMessages[props.chatData.waId]?.newMessages} new message(s)
                             </span>
-                            :
-                            <span className="sidebarChat__info__lastMessage__body">
+                                :
+                                <span className="sidebarChat__info__lastMessage__body">
                                 <ChatMessageShortContent
                                     type={props.chatData.lastMessageType}
                                     buttonText={props.chatData.lastMessageButtonText}
                                     text={props.chatData.lastMessageBody}
                                     caption={props.chatData.lastMessageCaption} />
                             </span>
-                        }
-                    </span>
-
-                        {!isExpired &&
-                            <span className="sidebarChat__info__timeLeft">{timeLeft} left</span>
-                        }
+                            }
+                        </div>
 
                     </div>
                 </div>
