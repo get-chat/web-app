@@ -42,6 +42,10 @@
 .contacts__startByPhoneNumber .MuiListItem-root {
     padding: 0;
 }
+.contacts__startByPhoneNumber .MuiListItem-root:hover {
+    background-color: var(--color-primary-transparent-darker);
+}
+
 
 .contacts__startByPhoneNumber__inner {
     flex: 1;
