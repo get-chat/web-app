@@ -133,7 +133,6 @@ function Contacts(props) {
                     className="searchOccurrence">{keyword}</span></span>
                 }
             </div>
-            }
         </div>
     )
 }
