@@ -59,6 +59,7 @@ function Contacts(props) {
             setLoading(true);
 
             timeout.current = setTimeout(function () {
+                findPersons();
                 findContacts();
             }, 500);
         }
@@ -92,6 +93,10 @@ function Contacts(props) {
                 window.displayError(error);
                 setLoading(false);
             });
+    }
+
+    const findPersons = () => {
+
     }
 
     const verifyPhoneNumber = (data, waId) => {
@@ -181,6 +186,10 @@ function Contacts(props) {
             <div className="contacts__body">
                 {keyword?.length === 0 &&
                 <span className="contacts__body__hint">Enter a keyword to start searching for contacts</span>
+                }
+
+                {keyword?.trim()?.length > 0 &&
+                <h3>Contacts</h3>
                 }
 
                 { Object.entries(contacts).map((contact, index) =>
