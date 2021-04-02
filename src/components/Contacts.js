@@ -97,13 +97,11 @@ function Contacts(props) {
                 onChange={setKeyword}
                 isLoading={isLoading} />
 
-            { keyword?.length === 0
-                ?
                 <div className="contacts__body">
+                    {keyword?.length === 0 &&
                     <span className="contacts__body__hint">Enter a keyword to start searching</span>
-                </div>
-                :
-                <div className="contacts__body">
+                    }
+
                     { Object.entries(contacts).map((contact, index) =>
                         <Contact
                             key={index}
