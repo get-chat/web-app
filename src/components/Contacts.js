@@ -11,11 +11,13 @@ import Contact from "./Contact";
 import ContactClass from "../ContactClass";
 import {isMobileOnly} from "react-device-detect";
 import {useHistory} from "react-router-dom";
+import PersonClass from "../PersonClass";
 
 function Contacts(props) {
 
     const [keyword, setKeyword] = useState("");
     const [contacts, setContacts] = useState({});
+    const [persons, setPersons] = useState({});
     const [isLoading, setLoading] = useState(false);
     const [isVerifying, setVerifying] = useState(false);
     const [isPhoneNumberFormVisible, setPhoneNumberFormVisible] = useState(false);
@@ -96,7 +98,31 @@ function Contacts(props) {
     }
 
     const findPersons = () => {
+        // TODO: Remove this, when this endpoint works
 
+        return;
+
+        axios.get(`${BASE_URL}persons/`, getConfig({
+            search: keyword?.trim()
+        }, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Persons list", response.data);
+
+                const preparedPersons = {};
+                response.data.results.forEach((person, personIndex) => {
+                    preparedPersons[personIndex] = new PersonClass(person);
+                });
+
+                setPersons(preparedPersons);
+
+                setLoading(false);
+
+            })
+            .catch((error) => {
+                console.log(error);
+                window.displayError(error);
+                setLoading(false);
+            });
     }
 
     const verifyPhoneNumber = (data, waId) => {
@@ -188,7 +214,19 @@ function Contacts(props) {
                 <span className="contacts__body__hint">Enter a keyword to start searching for contacts</span>
                 }
 
-                {keyword?.trim()?.length > 0 &&
+                {(keyword?.trim()?.length > 0 && getObjLength(persons) > 0) &&
+                <h3>Persons</h3>
+                }
+
+                { Object.entries(persons).map((person, index) =>
+                    <Contact
+                        key={index}
+                        data={person[1]}
+                        verifyPhoneNumber={verifyPhoneNumber}
+                        onHide={props.onHide} />
+                )}
+
+                {(keyword?.trim()?.length > 0 && getObjLength(contacts) > 0) &&
                 <h3>Contacts</h3>
                 }
 
