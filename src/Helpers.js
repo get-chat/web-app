@@ -253,3 +253,18 @@ export const addPlusToPhoneNumber = (phoneNumber) => {
         return `+${phoneNumber}`;
     }
 }
+
+export const removeWhitespaces = (text) => {
+    return text.replace(/ /g,'');
+}
+
+export const removeHyphens = (text) => {
+    return text.replace(/-/g, '');
+}
+
+export const preparePhoneNumber = (phoneNumber) => {
+    phoneNumber = removeHyphens(phoneNumber);
+    phoneNumber = removeWhitespaces(phoneNumber);
+
+    return phoneNumber;
+}

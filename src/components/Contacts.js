@@ -2,13 +2,15 @@ import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig, getObjLength} from "../Helpers";
+import {addPlusToPhoneNumber, getConfig, getObjLength, preparePhoneNumber, removeWhitespaces} from "../Helpers";
 import SearchBar from "./SearchBar";
 import {Button, CircularProgress, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import DialpadIcon from '@material-ui/icons/Dialpad';
 import Contact from "./Contact";
 import ContactClass from "../ContactClass";
+import {isMobileOnly} from "react-device-detect";
+import {useHistory} from "react-router-dom";
 
 function Contacts(props) {
 
@@ -17,8 +19,12 @@ function Contacts(props) {
     const [isLoading, setLoading] = useState(false);
     const [isVerifying, setVerifying] = useState(false);
     const [isPhoneNumberFormVisible, setPhoneNumberFormVisible] = useState(false);
+    const [phoneNumber, setPhoneNumber] = useState("")
 
     let cancelTokenSourceRef = useRef();
+    let verifyPhoneNumberCancelTokenSourceRef = useRef();
+
+    const history = useHistory();
 
     useEffect(() => {
         const handleKey = (event) => {
@@ -32,11 +38,14 @@ function Contacts(props) {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
+        verifyPhoneNumberCancelTokenSourceRef.current = axios.CancelToken.source();
+
         findContacts();
 
         return () => {
             document.removeEventListener('keydown', handleKey);
             cancelTokenSourceRef.current.cancel();
+            verifyPhoneNumberCancelTokenSourceRef.current.cancel();
         }
     }, []);
 
@@ -85,6 +94,52 @@ function Contacts(props) {
             });
     }
 
+    const verifyPhoneNumber = (data, waId) => {
+        setVerifying(true);
+
+        axios.post( `${BASE_URL}contacts/verify/`, {
+            blocking: "wait",
+            contacts: [addPlusToPhoneNumber(waId)],
+            force_check: true
+        }, getConfig(undefined, verifyPhoneNumberCancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Verify", response.data);
+
+                if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
+                    history.push({
+                        pathname: `/main/chat/${waId}`,
+                        person: {
+                            name: data?.name,
+                            initials: data?.initials,
+                            avatar: data?.avatar,
+                            waId: waId
+                        }
+                    });
+
+                    // Hide contacts on mobile
+                    if (isMobileOnly) {
+                        props.onHide();
+                    }
+
+                } else {
+                    window.displayCustomError("There is no WhatsApp account connected to this phone number.");
+                }
+
+                setVerifying(false);
+
+            })
+            .catch((error) => {
+                console.log(error);
+                window.displayError(error);
+
+                setVerifying(false);
+            });
+    }
+
+    const startChatWithPhoneNumber = () => {
+        verifyPhoneNumber(undefined, preparePhoneNumber(phoneNumber));
+    }
+
     return (
         <div className="contacts">
             <div className="contacts__header">
@@ -112,8 +167,8 @@ function Contacts(props) {
                         InputProps={{
                             startAdornment: <InputAdornment position="start">+</InputAdornment>,
                         }}
-                    />
-                    <Button color="primary">Start</Button>
+                        onChange={event => setPhoneNumber(event.target.value)} />
+                    <Button color="primary" onClick={startChatWithPhoneNumber}>Start</Button>
                 </div>
                 }
             </div>
@@ -132,7 +187,7 @@ function Contacts(props) {
                     <Contact
                         key={index}
                         data={contact[1]}
-                        setVerifying={setVerifying}
+                        verifyPhoneNumber={verifyPhoneNumber}
                         onHide={props.onHide} />
                 )}
 

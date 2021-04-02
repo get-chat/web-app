@@ -1,29 +1,11 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useState} from "react";
 import '../styles/Contact.css';
 import {Avatar, ListItem} from "@material-ui/core";
 import ContactProviderHeader from "./ContactProviderHeader";
-import {useHistory} from "react-router-dom";
-import axios from "axios";
-import {BASE_URL} from "../Constants";
-import {addPlusToPhoneNumber, getConfig} from "../Helpers";
-import {isMobileOnly} from 'react-device-detect';
 
 function Contact(props) {
 
     const [phoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
-
-    const history = useHistory();
-
-    let cancelTokenSourceRef = useRef();
-
-    useEffect(() => {
-        // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
-
-        return () => {
-            props.setVerifying(false);
-        }
-    }, []);
 
     const handleClick = () => {
         if (props.data.phoneNumbers && props.data.phoneNumbers.length > 0) {
@@ -39,49 +21,7 @@ function Contact(props) {
     }
 
     const goToChat = (waId) => {
-        verifyContact(waId);
-    }
-
-    const verifyContact = (waId) => {
-        props.setVerifying(true);
-
-        axios.post( `${BASE_URL}contacts/verify/`, {
-            blocking: "wait",
-            contacts: [addPlusToPhoneNumber(waId)],
-            force_check: true
-        }, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Verify", response.data);
-
-                if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
-                    history.push({
-                        pathname: `/main/chat/${waId}`,
-                        person: {
-                            name: props.data.name,
-                            initials: props.data.initials,
-                            avatar: props.data.avatar,
-                            waId: waId
-                        }
-                    });
-
-                    // Hide contacts on mobile
-                    if (isMobileOnly) {
-                        props.onHide();
-                    }
-
-                } else {
-                    window.displayCustomError("There is no WhatsApp account connected to this phone number.");
-                }
-
-                props.setVerifying(false);
-
-            })
-            .catch((error) => {
-                console.log(error);
-                window.displayError(error);
-
-                props.setVerifying(false);
-            });
+        props.verifyPhoneNumber(props.data, waId);
     }
 
     return (
