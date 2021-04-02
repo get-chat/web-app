@@ -92,7 +92,7 @@ function Contacts(props) {
                     <ArrowBack />
                 </IconButton>
 
-                <h3>Contacts</h3>
+                <h3>New chat</h3>
             </div>
 
             <div className="contacts__startByPhoneNumberWrapper">
@@ -119,12 +119,13 @@ function Contacts(props) {
             </div>
 
             <SearchBar
+                placeholder="Search for contacts"
                 onChange={setKeyword}
                 isLoading={isLoading} />
 
             <div className="contacts__body">
                 {keyword?.length === 0 &&
-                <span className="contacts__body__hint">Enter a keyword to start searching</span>
+                <span className="contacts__body__hint">Enter a keyword to start searching for contacts</span>
                 }
 
                 { Object.entries(contacts).map((contact, index) =>

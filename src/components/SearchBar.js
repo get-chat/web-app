@@ -19,7 +19,7 @@ function SearchBar(props) {
                     <SearchOutlined className="searchBar__searchContainer__searchIcon"/>
                 }
 
-                <input placeholder="Search" type="text" onChange={handleChange} />
+                <input placeholder={props.placeholder ?? "Search"} type="text" onChange={handleChange} />
             </div>
         </div>
     )
