@@ -110,13 +110,6 @@
     color: var(--color-primary);
 }
 
-/*.sidebarChat__info__date .MuiSvgIcon-root {
-    height: 0.5em;
-    width: 0.5em;
-    color: var(--color-primary) !important;
-    margin-right: 2px;
-}*/
-
 .sidebarChat__info__date__timeLeft {
     margin-left: 5px;
 }
