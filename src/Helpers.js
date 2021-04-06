@@ -5,8 +5,32 @@ import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
+const STORAGE_TAG_TOKEN = "token";
+
 export const getToken = () => {
-    return localStorage.getItem("token");
+    return localStorage.getItem(STORAGE_TAG_TOKEN);
+}
+
+export const storeToken = (token) => {
+    localStorage.setItem(STORAGE_TAG_TOKEN, token);
+}
+
+export const clearToken = () => {
+    localStorage.removeItem(STORAGE_TAG_TOKEN);
+}
+
+const STORAGE_TAG_CONTACT_PROVIDERS_DATA = "contact_providers_data"
+
+export const getContactProvidersData = () => {
+    return JSON.parse(localStorage.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA)) ?? {};
+}
+
+export const storeContactProvidersData = (data) => {
+    localStorage.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA, JSON.stringify(data));
+}
+
+export const clearContactProvidersData = () => {
+    localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
 }
 
 export const getConfig = (params, cancelToken, responseType) => {
@@ -26,26 +50,6 @@ export const getConfig = (params, cancelToken, responseType) => {
     }
 
     return config;
-}
-
-const STORAGE_TAG_TOKEN = "token";
-
-export const setToken = (token) => {
-    localStorage.setItem(STORAGE_TAG_TOKEN, token);
-}
-
-export const clearToken = () => {
-    localStorage.removeItem(STORAGE_TAG_TOKEN);
-}
-
-const STORAGE_TAG_CONTACT_PROVIDERS_DATA = "contact_providers_data"
-
-export const setContactProvidersData = (data) => {
-    localStorage.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA, data);
-}
-
-export const clearContactProvidersData = () => {
-    localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
 }
 
 export const getObjLength = (obj) => {

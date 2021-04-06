@@ -4,7 +4,14 @@ import Chat from "./Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {clearToken, getConfig, getToken, getWebSocketURL} from "../Helpers";
+import {
+    clearContactProvidersData,
+    clearToken,
+    getConfig, getContactProvidersData,
+    getToken,
+    getWebSocketURL,
+    storeContactProvidersData
+} from "../Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -46,7 +53,7 @@ function Main() {
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
 
-    const [contactProvidersData, setContactProvidersData] = useState({});
+    const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
 
     const history = useHistory();
     const location = useLocation();
@@ -71,6 +78,7 @@ function Main() {
 
     const clearUserSession = (errorCase, nextPath) => {
         clearToken();
+        clearContactProvidersData();
 
         let path;
 
@@ -294,6 +302,10 @@ function Main() {
             setSearchMessagesVisible(false);
         }
     }, [waId]);
+
+    useEffect(() => {
+        storeContactProvidersData(contactProvidersData);
+    }, [contactProvidersData]);
 
     const retrieveCurrentUser = () => {
         axios.get( `${BASE_URL}users/current/`, getConfig())
