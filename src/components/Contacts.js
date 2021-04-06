@@ -38,13 +38,7 @@ function Contacts(props) {
 
         document.addEventListener('keydown', handleKey);
 
-        // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
-
         verifyPhoneNumberCancelTokenSourceRef.current = axios.CancelToken.source();
-
-        findPersons();
-        findContacts();
 
         return () => {
             document.removeEventListener('keydown', handleKey);
@@ -59,14 +53,11 @@ function Contacts(props) {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
-        if (keyword?.length > 0) {
-            setLoading(true);
+        setLoading(true);
 
-            timeout.current = setTimeout(function () {
-                findPersons();
-                findContacts();
-            }, 500);
-        }
+        timeout.current = setTimeout(function () {
+            findPersons();
+        }, 500);
 
         return () => {
             cancelTokenSourceRef.current.cancel();
@@ -74,30 +65,6 @@ function Contacts(props) {
             setLoading(false);
         }
     }, [keyword]);
-
-    const findContacts = () => {
-        axios.get(`${BASE_URL}contacts/`, getConfig({
-            search: keyword?.trim()
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Contacts list", response.data);
-
-                const preparedContacts = {};
-                response.data.results.forEach((contact, contactIndex) => {
-                    preparedContacts[contactIndex] = new ContactClass(contact);
-                });
-
-                setContacts(preparedContacts);
-
-                setLoading(false);
-
-            })
-            .catch((error) => {
-                console.log(error);
-                window.displayError(error);
-                setLoading(false);
-            });
-    }
 
     const findPersons = () => {
         axios.get(`${BASE_URL}persons/`, getConfig({
@@ -112,6 +79,30 @@ function Contacts(props) {
                 });
 
                 setPersons(preparedPersons);
+
+                findContacts();
+
+            })
+            .catch((error) => {
+                console.log(error);
+                window.displayError(error);
+                setLoading(false);
+            });
+    }
+
+    const findContacts = () => {
+        axios.get(`${BASE_URL}contacts/`, getConfig({
+            search: keyword?.trim()
+        }, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Contacts list", response.data);
+
+                const preparedContacts = {};
+                response.data.results.forEach((contact, contactIndex) => {
+                    preparedContacts[contactIndex] = new ContactClass(contact);
+                });
+
+                setContacts(preparedContacts);
 
                 setLoading(false);
 
@@ -217,7 +208,8 @@ function Contacts(props) {
                         key={index}
                         data={person[1]}
                         verifyPhoneNumber={verifyPhoneNumber}
-                        onHide={props.onHide} />
+                        onHide={props.onHide}
+                        contactProvidersData={props.contactProvidersData} />
                 )}
 
                 {getObjLength(contacts) > 0 &&

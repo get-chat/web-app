@@ -393,6 +393,7 @@ function Sidebar(props) {
 
             {isContactsVisible &&
             <Contacts
+                contactProvidersData={props.contactProvidersData}
                 onHide={() => setContactsVisible(false)} />
             }
 
