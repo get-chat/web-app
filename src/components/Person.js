@@ -2,6 +2,7 @@ import React from "react";
 import '../styles/Contact.css';
 import {Avatar, ListItem} from "@material-ui/core";
 import {avatarStyles} from "../AvatarStyles";
+import ContactProviderHeader from "./ContactProviderHeader";
 
 function Person(props) {
 
@@ -25,6 +26,7 @@ function Person(props) {
                             className={avatarClasses[props.data.getAvatarClassName()]}>
                             {props.data.initials}
                         </Avatar>
+                        <ContactProviderHeader type="whatsapp"/>
                     </div>
                     <div className="contact__info">
                         <h2>{props.contactProvidersData[props.data.waId]?.[0]?.name ?? props.data.name}</h2>
