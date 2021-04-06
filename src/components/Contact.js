@@ -30,16 +30,19 @@ function Contact(props) {
                 <div className="contact" onClick={handleClick}>
                     <div className="contact__avatarWrapper">
                         <Avatar src={props.data.avatar}>{props.data.initials}</Avatar>
-                        <ContactProviderHeader type={props.data.contactProvider} />
+
+                        {props.data.contactProvider !== undefined &&
+                        <ContactProviderHeader type={props.data.contactProvider}/>
+                        }
                     </div>
                     <div className="contact__info">
                         <h2>{props.data.name}</h2>
 
                         {(props.data.phoneNumbers && props.data.phoneNumbers.length > 0)
                             ?
-                        <div className="contact__info__phoneNumber">
-                            {props.data.phoneNumbers[0].phone_number}
-                        </div>
+                            <div className="contact__info__phoneNumber">
+                                {props.data.phoneNumbers[0].phone_number}
+                            </div>
                             :
                             <div className="contact__info__missingPhoneNumber">There is no phone number</div>
                         }

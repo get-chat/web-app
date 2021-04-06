@@ -12,6 +12,7 @@ import ContactClass from "../ContactClass";
 import {isMobileOnly} from "react-device-detect";
 import {useHistory} from "react-router-dom";
 import PersonClass from "../PersonClass";
+import Person from "./Person";
 
 function Contacts(props) {
 
@@ -207,16 +208,12 @@ function Contacts(props) {
                 isLoading={isLoading} />
 
             <div className="contacts__body">
-                {keyword?.length === 0 &&
-                <span className="contacts__body__hint">Enter a keyword to start searching for contacts</span>
-                }
-
                 {getObjLength(persons) > 0 &&
                 <h3>Persons</h3>
                 }
 
                 { Object.entries(persons).map((person, index) =>
-                    <Contact
+                    <Person
                         key={index}
                         data={person[1]}
                         verifyPhoneNumber={verifyPhoneNumber}
