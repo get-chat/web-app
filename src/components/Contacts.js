@@ -42,6 +42,7 @@ function Contacts(props) {
 
         verifyPhoneNumberCancelTokenSourceRef.current = axios.CancelToken.source();
 
+        findPersons();
         findContacts();
 
         return () => {
@@ -98,10 +99,6 @@ function Contacts(props) {
     }
 
     const findPersons = () => {
-        // TODO: Remove this, when this endpoint works
-
-        return;
-
         axios.get(`${BASE_URL}persons/`, getConfig({
             search: keyword?.trim()
         }, cancelTokenSourceRef.current.token))
@@ -214,7 +211,7 @@ function Contacts(props) {
                 <span className="contacts__body__hint">Enter a keyword to start searching for contacts</span>
                 }
 
-                {(keyword?.trim()?.length > 0 && getObjLength(persons) > 0) &&
+                {getObjLength(persons) > 0 &&
                 <h3>Persons</h3>
                 }
 
@@ -226,7 +223,7 @@ function Contacts(props) {
                         onHide={props.onHide} />
                 )}
 
-                {(keyword?.trim()?.length > 0 && getObjLength(contacts) > 0) &&
+                {getObjLength(contacts) > 0 &&
                 <h3>Contacts</h3>
                 }
 
