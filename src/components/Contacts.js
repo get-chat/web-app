@@ -2,10 +2,10 @@ import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {addPlusToPhoneNumber, getConfig, getObjLength, preparePhoneNumber, removeWhitespaces} from "../Helpers";
+import {addPlusToPhoneNumber, getConfig, getObjLength, preparePhoneNumber} from "../Helpers";
 import SearchBar from "./SearchBar";
-import {Button, CircularProgress, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
-import {ArrowBack} from "@material-ui/icons";
+import {Button, CircularProgress, Collapse, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
+import {ArrowBack, ExpandLess, ExpandMore} from "@material-ui/icons";
 import DialpadIcon from '@material-ui/icons/Dialpad';
 import Contact from "./Contact";
 import ContactClass from "../ContactClass";
@@ -22,7 +22,9 @@ function Contacts(props) {
     const [isLoading, setLoading] = useState(false);
     const [isVerifying, setVerifying] = useState(false);
     const [isPhoneNumberFormVisible, setPhoneNumberFormVisible] = useState(false);
-    const [phoneNumber, setPhoneNumber] = useState("")
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [isPersonsVisible, setPersonsVisible] = useState(true)
+    const [isContactsVisible, setContactsVisible] = useState(true);
 
     let cancelTokenSourceRef = useRef();
     let verifyPhoneNumberCancelTokenSourceRef = useRef();
@@ -200,29 +202,53 @@ function Contacts(props) {
 
             <div className="contacts__body">
                 {getObjLength(persons) > 0 &&
-                <h3>Persons</h3>
+                <div className="contacts__body__headerWrapper">
+                    <h3>Persons</h3>
+                    <IconButton onClick={() => setPersonsVisible(prevState => !prevState)}>
+                        {isPersonsVisible
+                            ?
+                            <ExpandLess />
+                            :
+                            <ExpandMore />
+                        }
+                    </IconButton>
+                </div>
                 }
 
-                { Object.entries(persons).map((person, index) =>
-                    <Person
-                        key={index}
-                        data={person[1]}
-                        verifyPhoneNumber={verifyPhoneNumber}
-                        onHide={props.onHide}
-                        contactProvidersData={props.contactProvidersData} />
-                )}
+                <Collapse in={isPersonsVisible}>
+                    { Object.entries(persons).map((person, index) =>
+                        <Person
+                            key={index}
+                            data={person[1]}
+                            verifyPhoneNumber={verifyPhoneNumber}
+                            onHide={props.onHide}
+                            contactProvidersData={props.contactProvidersData} />
+                    )}
+                </Collapse>
 
                 {getObjLength(contacts) > 0 &&
-                <h3>Contacts</h3>
+                <div className="contacts__body__headerWrapper">
+                    <h3>Contacts</h3>
+                    <IconButton onClick={() => setContactsVisible(prevState => !prevState)}>
+                        {isContactsVisible
+                            ?
+                            <ExpandLess />
+                            :
+                            <ExpandMore />
+                        }
+                    </IconButton>
+                </div>
                 }
 
-                { Object.entries(contacts).map((contact, index) =>
-                    <Contact
-                        key={index}
-                        data={contact[1]}
-                        verifyPhoneNumber={verifyPhoneNumber}
-                        onHide={props.onHide} />
-                )}
+                <Collapse in={isContactsVisible}>
+                    { Object.entries(contacts).map((contact, index) =>
+                        <Contact
+                            key={index}
+                            data={contact[1]}
+                            verifyPhoneNumber={verifyPhoneNumber}
+                            onHide={props.onHide} />
+                    )}
+                </Collapse>
 
                 {isVerifying &&
                 <div className="contacts__body__loading">

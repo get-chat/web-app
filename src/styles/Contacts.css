@@ -76,10 +76,22 @@
     overflow-y: auto;
 }
 
-.contacts__body > h3 {
+.contacts__body__headerWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.contacts__body__headerWrapper > h3 {
+    flex: 1;
     padding: 10px 15px;
     font-weight: 400;
     color: var(--color-primary);
+}
+
+.contacts__body__headerWrapper .MuiButtonBase-root {
+    padding: 6px;
 }
 
 .contacts__body .MuiListItem-root {
