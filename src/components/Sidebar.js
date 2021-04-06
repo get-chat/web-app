@@ -422,10 +422,10 @@ function Sidebar(props) {
                 elevation={3}>
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={() => setChangePasswordDialogVisible(true)}>Change password</MenuItem>
+                <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
                 {isMobile &&
                 <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
                 }
-                <MenuItem onClick={forceClearContactProvidersData}>Clear contacts cache</MenuItem>
                 <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
