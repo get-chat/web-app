@@ -38,6 +38,16 @@ export const clearToken = () => {
     localStorage.removeItem(STORAGE_TAG_TOKEN);
 }
 
+const STORAGE_TAG_CONTACT_PROVIDERS_DATA = "contact_providers_data"
+
+export const setContactProvidersData = (data) => {
+    localStorage.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA, data);
+}
+
+export const clearContactProvidersData = () => {
+    localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
+}
+
 export const getObjLength = (obj) => {
     return obj ? Object.keys(obj).length : 0;
 }
