@@ -4,7 +4,7 @@ import {Avatar, Divider, IconButton, Menu, MenuItem} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
+import {clearContactProvidersData, generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -47,6 +47,11 @@ function Sidebar(props) {
     const logOut = () => {
         props.clearUserSession();
         hideMenu();
+    }
+
+    const forceClearContactProvidersData = () => {
+        clearContactProvidersData();
+        window.location.reload();
     }
 
     const displayMenu = (event) => {
@@ -420,6 +425,7 @@ function Sidebar(props) {
                 {isMobile &&
                 <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
                 }
+                <MenuItem onClick={forceClearContactProvidersData}>Clear contacts cache</MenuItem>
                 <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
