@@ -470,7 +470,7 @@ export default function Chat(props) {
             }, cancelTokenSourceRef.current.token)
         )
             .then((response) => {
-                console.log("Messages", response.data);
+                //console.log("Messages", response.data);
 
                 const count = response.data.count;
                 //const previous = response.data.previous;
