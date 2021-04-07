@@ -1,37 +1,10 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from './EmojiData.json'; //from 'emoji-mart/data/all.json'
 import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
+import {getToken} from "./StorageHelper";
 
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
-
-const STORAGE_TAG_TOKEN = "token";
-
-export const getToken = () => {
-    return localStorage.getItem(STORAGE_TAG_TOKEN);
-}
-
-export const storeToken = (token) => {
-    localStorage.setItem(STORAGE_TAG_TOKEN, token);
-}
-
-export const clearToken = () => {
-    localStorage.removeItem(STORAGE_TAG_TOKEN);
-}
-
-const STORAGE_TAG_CONTACT_PROVIDERS_DATA = "contact_providers_data"
-
-export const getContactProvidersData = () => {
-    return JSON.parse(localStorage.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA)) ?? {};
-}
-
-export const storeContactProvidersData = (data) => {
-    localStorage.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA, JSON.stringify(data));
-}
-
-export const clearContactProvidersData = () => {
-    localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
-}
 
 export const getConfig = (params, cancelToken, responseType) => {
     const config = {

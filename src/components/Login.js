@@ -5,9 +5,10 @@ import Button from '@material-ui/core/Button';
 import {useHistory, useLocation, useParams} from 'react-router-dom';
 import axios from 'axios';
 import {makeStyles} from '@material-ui/core/styles';
-import {clearToken, getConfig, getToken, storeToken} from "../Helpers";
+import {getConfig} from "../Helpers";
 import {Alert} from "@material-ui/lab";
 import {BASE_URL, VERSION} from "../Constants";
+import {clearToken, getToken, storeToken} from "../StorageHelper";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {

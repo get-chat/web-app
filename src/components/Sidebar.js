@@ -4,7 +4,7 @@ import {Avatar, Divider, IconButton, Menu, MenuItem} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {clearContactProvidersData, generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
+import {generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -25,6 +25,7 @@ import SearchMessageResult from "./SearchMessageResult";
 import {isMobile} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "./Contacts";
+import {clearContactProvidersData} from "../StorageHelper";
 
 function Sidebar(props) {
 

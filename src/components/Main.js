@@ -5,12 +5,7 @@ import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
 import {
-    clearContactProvidersData,
-    clearToken,
-    getConfig, getContactProvidersData,
-    getToken,
-    getWebSocketURL,
-    storeContactProvidersData
+    getConfig, getWebSocketURL
 } from "../Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
@@ -30,6 +25,12 @@ import {
 import ChatMessageClass from "../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
 import logo from '../assets/images/logo.png';
+import {
+    clearContactProvidersData,
+    clearToken,
+    getContactProvidersData, getToken,
+    storeContactProvidersData
+} from "../StorageHelper";
 
 function Main() {
 
