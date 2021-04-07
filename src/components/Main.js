@@ -4,9 +4,7 @@ import Chat from "./Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {
-    getConfig, getWebSocketURL
-} from "../Helpers";
+import {getConfig, getWebSocketURL} from "../Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -28,8 +26,9 @@ import logo from '../assets/images/logo.png';
 import {
     clearContactProvidersData,
     clearToken,
-    getContactProvidersData, getContactProvidersDataTime, getToken,
-    storeContactProvidersData, storeContactProvidersDataTime
+    getContactProvidersData,
+    getToken,
+    storeContactProvidersData
 } from "../StorageHelper";
 
 function Main() {
@@ -305,18 +304,13 @@ function Main() {
     }, [waId]);
 
     useEffect(() => {
-        const storedAt = getContactProvidersDataTime();
-        if (!storedAt) {
-            storeContactProvidersDataTime((new Date()).getTime());
-        }
-
         storeContactProvidersData(contactProvidersData);
     }, [contactProvidersData]);
 
     const retrieveCurrentUser = () => {
         axios.get( `${BASE_URL}users/current/`, getConfig())
             .then((response) => {
-                console.log("User: ", response.data);
+                //console.log("User: ", response.data);
 
                 setCurrentUser(response.data);
 
