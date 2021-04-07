@@ -19,7 +19,7 @@ export const getContactProvidersData = () => {
     const storedAt = getContactProvidersDataTime();
     if (storedAt) {
         const hoursPast = Math.floor((now - storedAt) / 1000 / 60 / 60);
-        if (hoursPast > 8) {
+        if (hoursPast > 24) {
             clearContactProvidersDataTime();
             clearContactProvidersData();
         }
