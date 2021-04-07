@@ -28,8 +28,8 @@ import logo from '../assets/images/logo.png';
 import {
     clearContactProvidersData,
     clearToken,
-    getContactProvidersData, getToken,
-    storeContactProvidersData
+    getContactProvidersData, getContactProvidersDataTime, getToken,
+    storeContactProvidersData, storeContactProvidersDataTime
 } from "../StorageHelper";
 
 function Main() {
@@ -305,6 +305,11 @@ function Main() {
     }, [waId]);
 
     useEffect(() => {
+        const storedAt = getContactProvidersDataTime();
+        if (!storedAt) {
+            storeContactProvidersDataTime((new Date()).getTime());
+        }
+
         storeContactProvidersData(contactProvidersData);
     }, [contactProvidersData]);
 
