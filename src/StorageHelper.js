@@ -15,17 +15,7 @@ export const clearToken = () => {
 }
 
 export const getContactProvidersData = () => {
-    const now = (new Date()).getTime();
-    const storedAt = getContactProvidersDataTime();
-    if (storedAt) {
-        const hoursPast = Math.floor((now - storedAt) / 1000 / 60 / 60);
-        if (hoursPast > 24) {
-            clearContactProvidersDataTime();
-            clearContactProvidersData();
-        }
-    } else {
-        storeContactProvidersDataTime(now);
-    }
+    clearContactProvidersDataIfExpired();
 
     return JSON.parse(localStorage.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA)) ?? {};
 }
@@ -48,4 +38,18 @@ export const storeContactProvidersDataTime = (time) => {
 
 export const clearContactProvidersDataTime = () => {
     localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME);
+}
+
+const clearContactProvidersDataIfExpired = () => {
+    const now = (new Date()).getTime();
+    const storedAt = getContactProvidersDataTime();
+    if (storedAt) {
+        const hoursPast = Math.floor((now - storedAt) / 1000 / 60 / 60);
+        if (hoursPast > 24) {
+            clearContactProvidersDataTime();
+            clearContactProvidersData();
+        }
+    } else {
+        storeContactProvidersDataTime(now);
+    }
 }
