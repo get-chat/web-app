@@ -115,17 +115,18 @@ function SidebarChat(props) {
                             </h2>
 
                             <div className="sidebarChat__info__date">
+                                {props.chatData.lastMessageTimestamp &&
                                 <Moment
                                     className="sidebarChat__info__nameWrapper__lastMessageDate"
                                     date={props.chatData.lastMessageTimestamp}
                                     calendar={CALENDAR_SHORT}
                                     unix />
+                                }
 
                                 {!isExpired &&
                                 <span className="sidebarChat__info__date__timeLeft">{timeLeft} left</span>
                                 }
                             </div>
-
                         </div>
 
                         <div className="sidebarChat__info__lastMessage">
