@@ -7,6 +7,7 @@ import '../styles/ContactDetails.css';
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import googleLogo from '../assets/images/ic-google.png';
+import hubspotLogo from '../assets/images/ic-hubspot.png';
 
 function ContactDetails(props)  {
 
@@ -64,7 +65,10 @@ function ContactDetails(props)  {
                         <div className="contactDetails__body__section__title mb-3">
                             <div className="contactDetails__body__section__providerTitle">
                                 {providerData.contact_provider.type === "google" &&
-                                <img className="mr-1" src={googleLogo} alt="Google" />
+                                <img className="mr-1" src={googleLogo} alt={providerData.contact_provider.name} />
+                                }
+                                {providerData.contact_provider.type === "hubspot" &&
+                                <img className="mr-1" src={hubspotLogo} alt={providerData.contact_provider.name} />
                                 }
                                 {providerData.contact_provider.name}
                             </div>
