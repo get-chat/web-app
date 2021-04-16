@@ -117,6 +117,8 @@ function Contacts(props) {
     }
 
     const verifyPhoneNumber = (data, waId) => {
+        waId = preparePhoneNumber(waId);
+
         setVerifying(true);
 
         axios.post( `${BASE_URL}contacts/verify/`, {
@@ -158,10 +160,6 @@ function Contacts(props) {
             });
     }
 
-    const startChatWithPhoneNumber = () => {
-        verifyPhoneNumber(undefined, preparePhoneNumber(phoneNumber));
-    }
-
     return (
         <div className="contacts">
             <div className="contacts__header">
@@ -190,7 +188,7 @@ function Contacts(props) {
                             startAdornment: <InputAdornment position="start">+</InputAdornment>,
                         }}
                         onChange={event => setPhoneNumber(event.target.value)} />
-                    <Button color="primary" onClick={startChatWithPhoneNumber}>Start</Button>
+                    <Button color="primary" onClick={() => verifyPhoneNumber(phoneNumber)}>Start</Button>
                 </div>
                 }
             </div>
