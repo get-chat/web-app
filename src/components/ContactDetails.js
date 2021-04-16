@@ -8,6 +8,7 @@ import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import googleLogo from '../assets/images/ic-google.png';
 import hubspotLogo from '../assets/images/ic-hubspot.png';
+import {addPlus} from "../Helpers";
 
 function ContactDetails(props)  {
 
@@ -79,8 +80,8 @@ function ContactDetails(props)  {
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
                                     <div key={phoneNumberIndex}>
-                                        <a href={"tel:" + phoneNumber.phone_number}>
-                                            <span>{phoneNumber.phone_number}</span></a>
+                                        <a href={"tel:" + addPlus(phoneNumber.phone_number)}>
+                                            <span>{addPlus(phoneNumber.phone_number)}</span></a>
                                         {phoneNumber.description &&
                                         <span className="ml-1">({phoneNumber.description})</span>
                                         }

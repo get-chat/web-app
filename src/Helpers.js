@@ -241,15 +241,15 @@ export const addPlusToPhoneNumber = (phoneNumber) => {
     }
 }
 
-export const removeWhitespaces = (text) => {
+const removeWhitespaces = (text) => {
     return text.replace(/ /g,'');
 }
 
-export const removeHyphens = (text) => {
+const removeHyphens = (text) => {
     return text.replace(/-/g, '');
 }
 
-export const removePluses = (text) => {
+const removePluses = (text) => {
     return text.replace(/\+/g,'');
 }
 
@@ -259,4 +259,8 @@ export const preparePhoneNumber = (phoneNumber) => {
     phoneNumber = removePluses(phoneNumber);
 
     return phoneNumber;
+}
+
+export const addPlus = (phoneNumber) => {
+    return phoneNumber?.includes('+') ? phoneNumber : '+' + phoneNumber;
 }
