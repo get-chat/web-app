@@ -6,6 +6,7 @@ import {avatarStyles} from "../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 import {useHistory} from "react-router-dom";
+import {addPlus} from "../Helpers";
 
 function ChatHeader(props) {
 
@@ -69,7 +70,7 @@ function ChatHeader(props) {
 
                 <div className="chat__headerInfo_2">
                 <span className="chat__headerInfo_2__waId desktopOnly">
-                    {props.person?.waId ? '+' + props.person?.waId : ''}
+                    {props.person?.waId ? addPlus(props.person?.waId) : ''}
                 </span>
                 </div>
             </div>

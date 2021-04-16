@@ -231,16 +231,6 @@ export const insertTemplateComponentParameters = (component, params) => {
     return text;
 }
 
-export const addPlusToPhoneNumber = (phoneNumber) => {
-    if (!phoneNumber || phoneNumber.length === 0) return phoneNumber;
-
-    if (phoneNumber[0] === '+') {
-        return phoneNumber;
-    } else {
-        return `+${phoneNumber}`;
-    }
-}
-
 const removeWhitespaces = (text) => {
     return text.replace(/ /g,'');
 }
@@ -262,5 +252,5 @@ export const preparePhoneNumber = (phoneNumber) => {
 }
 
 export const addPlus = (phoneNumber) => {
-    return phoneNumber?.includes('+') ? phoneNumber : '+' + phoneNumber;
+    return phoneNumber?.includes('+') ? phoneNumber : `+${phoneNumber}`;
 }

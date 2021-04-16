@@ -5,7 +5,7 @@ import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {markOccurrences} from "../Helpers";
+import {addPlus, markOccurrences} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
@@ -111,7 +111,7 @@ function SidebarChat(props) {
                                     <span>{props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name}</span>
                                 }
 
-                                <span className="sidebarChat__info__waId">{'+' + props.chatData.waId}</span>
+                                <span className="sidebarChat__info__waId">{addPlus(props.chatData.waId)}</span>
                             </h2>
 
                             <div className="sidebarChat__info__date">

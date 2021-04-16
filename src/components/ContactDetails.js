@@ -55,7 +55,7 @@ function ContactDetails(props)  {
 
                 <div className="contactDetails__body__section">
                     <div className="contactDetails__body__section__title">Whatsapp Phone Number</div>
-                    <a href={"tel:+" + props.contactData.waId}>{'+' + props.contactData.waId}</a>
+                    <a href={"tel:+" + props.contactData.waId}>{addPlus(props.contactData.waId)}</a>
                 </div>
 
                 {props.contactProvidersData[props.contactData.waId]?.map((providerData, index) =>
