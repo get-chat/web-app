@@ -254,3 +254,16 @@ export const preparePhoneNumber = (phoneNumber) => {
 export const addPlus = (phoneNumber) => {
     return phoneNumber?.includes('+') ? phoneNumber : `+${phoneNumber}`;
 }
+
+export const extractAvatarFromContactProviderData = (contactProviderData) => {
+    if (contactProviderData) {
+        for (let i = 0; i < getObjLength(contactProviderData); i++) {
+            const data = contactProviderData[i];
+            if (data?.avatar) {
+                return data.avatar;
+            }
+        }
+    }
+
+    return undefined;
+}
