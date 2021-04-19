@@ -219,11 +219,31 @@ function Main() {
                 console.log('Connected to websocket server.');
 
                 ws.send(JSON.stringify({token: getToken()}));
+
+                console.log(socketClosedAt);
+
+                if (socketClosedAt) {
+                    const now = new Date();
+                    const differenceInMinutes = Math.abs(now.getTime() - socketClosedAt.getTime()) / 1000 / 60;
+
+                    console.log(differenceInMinutes);
+
+                    // If window was blurred for more than 3 hours
+                    if (differenceInMinutes >= 5) {
+                        window.location.reload();
+                    } else {
+                        socketClosedAt = undefined;
+                    }
+                }
             }
+
+            let socketClosedAt;
 
             ws.onclose = function (event) {
                 if (event.code !== CODE_NORMAL) {
                     console.log('Retrying connection to websocket server in 1 second.');
+
+                    socketClosedAt = new Date();
 
                     setTimeout(function () {
                         connect();
