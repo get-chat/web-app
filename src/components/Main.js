@@ -222,8 +222,6 @@ function Main() {
 
                 ws.send(JSON.stringify({token: getToken()}));
 
-                console.log(socketClosedAt);
-
                 if (socketClosedAt) {
                     const now = new Date();
                     const differenceInMinutes = Math.abs(now.getTime() - socketClosedAt.getTime()) / 1000 / 60;
