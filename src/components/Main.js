@@ -209,6 +209,8 @@ function Main() {
         const CODE_NORMAL = 1000;
         let ws;
 
+        let socketClosedAt;
+
         const connect = () => {
             console.log('Connecting to websocket server');
 
@@ -236,8 +238,6 @@ function Main() {
                     }
                 }
             }
-
-            let socketClosedAt;
 
             ws.onclose = function (event) {
                 if (event.code !== CODE_NORMAL) {
