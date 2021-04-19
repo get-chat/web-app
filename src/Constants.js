@@ -31,19 +31,19 @@ export const CALENDAR_NORMAL = {
     lastDay: '[Yesterday at] H:mm', // LT
     sameDay: '[Today at] H:mm',
     lastWeek: 'dddd [at] H:mm',
-    sameElse: 'MMMM d, yyyy'
+    sameElse: 'MMMM D, yyyy'
 };
 
 export const CALENDAR_SHORT = {
     lastDay: '[Yesterday]',
     sameDay: 'H:mm',
     lastWeek: 'dddd',
-    sameElse: 'MMM d, yyyy'
+    sameElse: 'MMM D, yyyy'
 };
 
 export const CALENDAR_SHORT_DAYS = {
     lastDay: '[Yesterday]',
     sameDay: '[Today]',
     lastWeek: 'dddd',
-    sameElse: 'MMMM d, yyyy'
+    sameElse: 'MMMM D, yyyy'
 };
