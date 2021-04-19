@@ -44,6 +44,8 @@
 }
 
 .sidebar__results__chats__noResult {
+    display: block;
+    color: rgba(0, 0, 0, 0.6);
     font-size: 14px;
     padding: 10px 15px;
 }
