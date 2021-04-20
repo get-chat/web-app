@@ -267,3 +267,7 @@ export const extractAvatarFromContactProviderData = (contactProviderData) => {
 
     return undefined;
 }
+
+export const hasInternetConnection = () => {
+    return navigator.onLine;
+}

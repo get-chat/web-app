@@ -34,7 +34,7 @@ import {
     getFirstObject,
     getLastMessageAndExtractTimestamp,
     getLastObject,
-    getObjLength,
+    getObjLength, hasInternetConnection,
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
@@ -553,6 +553,12 @@ export default function Chat(props) {
 
     const sendMessage = (e) => {
         e.preventDefault();
+
+        // Check if has internet connection
+        if (!hasInternetConnection()) {
+            window.displayCustomError('Check your internet connection.');
+            return false;
+        }
 
         const preparedInput = translateHTMLInputToText(input);
 
