@@ -19,9 +19,17 @@
     transition: opacity 1s ease;
 }
 
-.chat__message.chat__failed {
+/*.chat__message.chat__failed {
     background-color: red !important;
     color: white !important;
+}*/
+
+.chat__message__failed__info {
+    font-size: 12px;
+    color: red;
+    text-align: right;
+    margin-top: -25px;
+    margin-bottom: 25px;
 }
 
 .blink .chat__message {

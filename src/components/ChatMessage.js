@@ -112,6 +112,10 @@ function ChatMessage(props) {
 
                 <div style={{clear: "both"}} />
             </div>
+
+            {data.isFailed &&
+                <div className="chat__message__failed__info">Failed to send. Will retry automatically.</div>
+            }
         </div>
     )
 }
