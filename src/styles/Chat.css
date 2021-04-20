@@ -19,6 +19,11 @@
     transition: opacity 1s ease;
 }
 
+.chat__message.chat__failed {
+    background-color: red !important;
+    color: white !important;
+}
+
 .blink .chat__message {
     opacity: 0.3;
 }
