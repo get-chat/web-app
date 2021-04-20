@@ -432,6 +432,7 @@ function Main() {
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
                     isLoadingTemplates={isLoadingTemplates}
+                    clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData} />
                 }

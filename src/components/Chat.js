@@ -587,6 +587,8 @@ export default function Chat(props) {
                         // Switch to expired mode if status code is 453
                         if (error.response.status === 453) {
                             setExpired(true);
+                        } else if (error.response.status === 401) {
+                            props.clearUserSession("invalidToken");
                         }
                     }
                 });
