@@ -79,6 +79,8 @@ export class ChatMessageClass {
         this.deliveredTimestamp = statuses.delivered;
         this.readTimestamp = statuses.read;
         this.sentTimestamp = statuses.sent;
+
+        this.isFailed = false;
     };
 
     getUniqueSender() {
