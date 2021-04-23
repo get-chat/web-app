@@ -778,14 +778,15 @@ export default function Chat(props) {
 
     return (
         <div
-            className={"chat" + (waId ? " chatOpen" : "")}
+            className={"chat" + (waId ? " chatOpen" : "") + (props.isChatOnly ? " chatFullWidth" : "")}
             onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
 
             <ChatHeader
                 person={person}
                 contactProvidersData={props.contactProvidersData}
-                retrieveContactData={props.retrieveContactData} />
+                retrieveContactData={props.retrieveContactData}
+                isChatOnly={props.isChatOnly} />
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">

@@ -5,6 +5,10 @@
     position: relative;
 }
 
+.chat.chatFullWidth {
+    flex: 1;
+}
+
 .chat__message {
     position: relative;
     font-size: 14px;

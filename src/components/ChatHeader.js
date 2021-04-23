@@ -47,11 +47,13 @@ function ChatHeader(props) {
     return (
         <div className="chat__header" onDrop={(event) => event.preventDefault()}>
 
+            {!props.isChatOnly &&
             <div className="mobileOnly">
                 <IconButton className="chat__header__backButton" onClick={closeChat}>
-                    <ArrowBack />
+                    <ArrowBack/>
                 </IconButton>
             </div>
+            }
 
             <div className="chat__header__clickable" onClick={showContactDetails}>
                 <Avatar

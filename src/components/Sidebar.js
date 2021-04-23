@@ -316,7 +316,7 @@ function Sidebar(props) {
     }
 
     return (
-        <div className="sidebar">
+        <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
                 <Avatar
                     onClick={() => setProfileVisible(true)}

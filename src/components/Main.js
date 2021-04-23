@@ -31,6 +31,10 @@ import {
     storeContactProvidersData
 } from "../StorageHelper";
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 function Main() {
 
     const {waId} = useParams();
@@ -57,6 +61,13 @@ function Main() {
 
     const history = useHistory();
     const location = useLocation();
+    const query = useQuery();
+
+    const checkIsChatOnly = () => {
+        return query.get('chatonly') === '1';
+    }
+
+    const [isChatOnly,] = useState(checkIsChatOnly());
 
     const setProgress = (value) => {
         _setProgress(prevState => {
@@ -123,6 +134,8 @@ function Main() {
     }
 
     const showNotification = (title, body, chatWaId) => {
+        if (isChatOnly) return;
+
         // Android web app interface
         if (window.AndroidWebInterface) {
             window.AndroidWebInterface.displayNotification(title, body, chatWaId);
@@ -422,7 +435,8 @@ function Main() {
                     showNotification={showNotification}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
-                    retrieveContactData={retrieveContactData} />
+                    retrieveContactData={retrieveContactData}
+                    isChatOnly={isChatOnly} />
                 }
 
                 {templatesReady &&
@@ -434,7 +448,8 @@ function Main() {
                     isLoadingTemplates={isLoadingTemplates}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
-                    retrieveContactData={retrieveContactData} />
+                    retrieveContactData={retrieveContactData}
+                    isChatOnly={isChatOnly} />
                 }
 
                 {isSearchMessagesVisible &&
