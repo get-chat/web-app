@@ -123,7 +123,7 @@ function Sidebar(props) {
                     }
 
                     // Chats are ordered by incoming message date
-                    if (!chatMessage.isFromUs) {
+                    //if (!chatMessage.isFromUs) {
                         if (nextState.hasOwnProperty(chatMessageWaId)) {
                             changedAny = true;
 
@@ -146,7 +146,7 @@ function Sidebar(props) {
                             // Display a notification
                             props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                         }
-                    }
+                    //}
                 });
 
                 // If anything has changed, sort chats
