@@ -362,6 +362,15 @@ a.chat__document:hover {
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
+.templateMessages__emptyInfo {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.templateMessages__emptyInfo a {
+    color: var(--color-primary);
+}
+
 .templateMessages .templateMessageWrapper {
     margin-bottom: 15px !important;
 }

@@ -90,7 +90,7 @@ function TemplateMessages(props) {
                 <div className="templateMessages">
 
                     {getObjLength(templates) === 0 &&
-                    <div>No template messages have been registered yet.</div>
+                    <div className="templateMessages__emptyInfo">No templates have been registered yet. <a href="https://hub.360dialog.com/dashboard/home" target="_blank">Click here</a> to register your first template.</div>
                     }
 
                     {Object.entries(templates).map((template, index) =>
