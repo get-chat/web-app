@@ -367,7 +367,7 @@ a.chat__document:hover {
     color: rgba(0, 0, 0, 0.8);
 }
 
-.templateMessages__emptyInfo a {
+.templateMessages__create  a {
     color: var(--color-primary);
 }
 
