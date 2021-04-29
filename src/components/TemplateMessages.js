@@ -8,6 +8,7 @@ import Dialog from "@material-ui/core/Dialog";
 import SendTemplateMessage from "./SendTemplateMessage";
 import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSAGE} from "../Constants";
 import PubSub from "pubsub-js";
+import {getObjLength} from "../Helpers";
 
 function TemplateMessages(props) {
 
@@ -87,6 +88,10 @@ function TemplateMessages(props) {
                 <Alert severity="info">Loading template messages...</Alert>
                 :
                 <div className="templateMessages">
+
+                    {getObjLength(templates) === 0 &&
+                    <div>No template messages have been registered yet.</div>
+                    }
 
                     {Object.entries(templates).map((template, index) =>
                         <div key={template[0]} className="templateMessageWrapper">
