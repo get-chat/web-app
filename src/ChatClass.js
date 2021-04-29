@@ -14,6 +14,8 @@ class ChatClass {
         this.initials = this.generateInitials(); //contact.initials;
         this.newMessages = data.new_messages;
 
+        this.lastReceivedMessageTimestamp = parseInt(contact.last_message_timestamp);
+
         this.setLastMessage(lastMessagePayload);
 
         // Use last message timestamp from contact object, if last message does not exist
@@ -35,11 +37,16 @@ class ChatClass {
         this.lastMessageCaption = lastMessagePayload?.image?.caption ?? lastMessagePayload?.video?.caption ?? lastMessagePayload?.audio?.caption ?? lastMessagePayload?.document?.caption;
         this.lastMessageType = lastMessagePayload?.type;
         this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
+
+        if (this.lastMessage?.hasOwnProperty("from")) {
+            this.lastReceivedMessageTimestamp = this.lastMessageTimestamp;
+        }
+
         this.isExpired = this.checkIfExpired();
     }
 
     getPastHoursAfterLastMessage() {
-        return getPastHoursByTimestamp(this.lastMessageTimestamp);
+        return getPastHoursByTimestamp(this.lastReceivedMessageTimestamp);
     }
 
     checkIfExpired() {

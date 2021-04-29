@@ -27,7 +27,7 @@ function SidebarChat(props) {
 
     useEffect(() => {
         function calculateRemaining() {
-            const momentDate = moment.unix(props.chatData.lastMessageTimestamp);
+            const momentDate = moment.unix(props.chatData.lastReceivedMessageTimestamp);
             momentDate.add(1, 'day');
             const curDate = moment(new Date());
             const hours = momentDate.diff(curDate, 'hours');
