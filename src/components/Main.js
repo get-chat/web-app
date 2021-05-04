@@ -87,7 +87,7 @@ function Main() {
         setErrorVisible(true);
     }
 
-    const clearUserSession = (errorCase, nextPath) => {
+    const clearUserSession = (errorCase, nextLocation) => {
         clearToken();
         clearContactProvidersData();
 
@@ -101,7 +101,8 @@ function Main() {
 
         history.push({
             'pathname': path,
-            'nextPath': nextPath
+            'nextPath': nextLocation?.pathname,
+            'search': nextLocation?.search
         });
     }
 
@@ -208,7 +209,7 @@ function Main() {
         window.goToChatByWaId = goToChatByWaId;
 
         if (!getToken()) {
-            clearUserSession("notLoggedIn", location.pathname);
+            clearUserSession("notLoggedIn", location);
         }
 
         // Retrieve current user, this will trigger other requests
@@ -349,7 +350,7 @@ function Main() {
 
                 // Only admins and users can access
                 if (role !== "admin" && role !== "user") {
-                    clearUserSession("incorrectRole", location.pathname);
+                    clearUserSession("incorrectRole", location);
                 }
 
                 // Check if role is admin
@@ -367,7 +368,8 @@ function Main() {
                 if (error.response) {
                     if (error.response.status === 401) {
                         // Invalid token
-                        clearUserSession("invalidToken", location.pathname);
+                        console.log(location)
+                        clearUserSession("invalidToken", location);
                     }
                 }
 

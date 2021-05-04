@@ -90,7 +90,7 @@ export default function Login(props) {
             }
 
             // Redirect to main route
-            history.push(location.nextPath ?? "/main");
+            history.push((location.nextPath ?? "/main") + (location.search ?? ""));
         }).catch((error) => {
 
             // Hide the loading animation
