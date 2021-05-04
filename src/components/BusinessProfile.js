@@ -60,7 +60,7 @@ function BusinessProfile(props) {
 
                 let websitesArray = data.websites;
                 if (websitesArray.length === 0) {
-                    websitesArray = [""];
+                    websitesArray = [];
                 }
 
                 setWebsites({...websitesArray});
