@@ -238,6 +238,10 @@ function BusinessProfile(props) {
                 <div className="sidebarBusinessProfile__body__section">
                     {props.currentUser &&
                     <div>
+                        <div className="sidebarBusinessProfile__body__section__header">
+                            <h5>Personal Profile</h5>
+                        </div>
+
                         <div className="sidebarBusinessProfile__body__avatarContainer">
                             <Avatar className={avatarClasses[generateInitialsHelper(props.currentUser.username)?.[0]]}>{generateInitialsHelper(props.currentUser.username)}</Avatar>
                         </div>

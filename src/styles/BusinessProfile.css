@@ -94,7 +94,7 @@
     margin-top: 10px;
 }
 
-.sidebarBusinessProfile__body__section__header {
+.sidebarBusinessProfile__body__section__header, .sidebarBusinessProfile__body__section__header {
     display: flex;
     margin-bottom: 15px;
 }
