@@ -32,6 +32,7 @@
 .searchBar__searchContainer > .MuiSvgIcon-root, .searchBar__searchContainer > .MuiCircularProgress-root {
     position: absolute;
     left: 0;
+    margin-top: auto;
 }
 
 .searchBar__searchContainer > input {
