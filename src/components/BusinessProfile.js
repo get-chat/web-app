@@ -272,7 +272,7 @@ function BusinessProfile(props) {
                             <FileInput innerRef={fileInput} handleSelectedFiles={(file) => updateProfilePhoto(file)} accept="image/jpeg, image/png" multiple={false} />
                             <Avatar src={profilePhoto ? "data:image/png;base64," + profilePhoto : undefined} onClick={handleBusinessProfileAvatarClick} />
 
-                            {profilePhoto &&
+                            {(profilePhoto && props.isAdmin) &&
                             <Button onClick={deleteProfilePhoto} color="secondary">Delete profile photo</Button>
                             }
                         </div>
