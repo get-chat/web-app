@@ -156,8 +156,8 @@ function SidebarChat(props) {
                     <div className="sidebarChatTags">
                         {/*<h6>Tags</h6>*/}
                         <div className="sidebarChatTags__tags">
-                            {props.chatData.tags.map((tag) =>
-                                <Chip size="small" label={"#" + tag} />
+                            {props.chatData.tags.map((tag, index) =>
+                                <Chip key={index} size="small" label={"#" + tag.name} />
                             )}
                         </div>
                     </div>
