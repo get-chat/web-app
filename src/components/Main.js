@@ -342,7 +342,7 @@ function Main() {
     const retrieveCurrentUser = () => {
         axios.get( `${BASE_URL}users/current/`, getConfig())
             .then((response) => {
-                //console.log("User: ", response.data);
+                console.log("User: ", response.data);
 
                 setCurrentUser(response.data);
 

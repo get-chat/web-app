@@ -184,7 +184,7 @@ function Sidebar(props) {
             }, cancelTokenSource.token)
         )
             .then((response) => {
-                //console.log("Chats", response.data)
+                console.log("Chats", response.data)
 
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
@@ -363,7 +363,24 @@ function Sidebar(props) {
                 }
 
                 <div className="sidebar__results__chats">
-                    { Object.entries(chats).map((chat) =>
+                    { Object.entries(chats)
+                        .filter((chat) => {
+                            switch (tabValue) {
+                                case "all": {
+                                    return chat;
+                                }
+                                case "me": {
+                                    break;
+                                }
+                                case "group": {
+                                    break;
+                                }
+                                default: {
+                                    break;
+                                }
+                            }
+                        })
+                        .map((chat) =>
                         <SidebarChat
                             key={chat[0]}
                             chatData={chat[1]}

@@ -20,6 +20,10 @@ class ChatClass {
 
         // Use last message timestamp from contact object, if last message does not exist
         this.lastMessageTimestamp = this.lastMessageTimestamp ? this.lastMessageTimestamp : parseInt(contact.last_message_timestamp);
+
+        this.assignedGroup = data.assigned_group;
+        this.assignedTo = data.assigned_to;
+        this.tags = data.tags;
     }
 
     generateInitials = () => {
