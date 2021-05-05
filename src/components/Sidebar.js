@@ -344,7 +344,7 @@ function Sidebar(props) {
                 <Tabs
                     textColor="primary"
                     indicatorColor="primary"
-                    variant="scrollable"
+                    variant={"fullWidth"}
                     value={tabValue}
                     scrollButtons="auto"
                     onChange={handleTabChange}>

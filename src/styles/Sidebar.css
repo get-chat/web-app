@@ -26,6 +26,14 @@
     font-size: 24px !important;
 }
 
+.sidebar__tabs {
+    display: grid;
+}
+
+.sidebar__tabs .MuiTab-root {
+    min-width: 150px !important;
+}
+
 .sidebar__results {
     flex: 1;
     background-color: white;
