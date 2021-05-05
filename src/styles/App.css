@@ -154,6 +154,10 @@ a {
     text-transform: none !important;
 }
 
+.MuiTabScrollButton-root.Mui-disabled {
+    opacity: 0.3 !important;
+}
+
 .MuiAvatar-root .MuiSvgIcon-root {
     color: inherit;
 }
