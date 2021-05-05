@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {IconButton} from "@material-ui/core";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import {displaySeconds} from "../Helpers";
@@ -9,6 +9,7 @@ import VoiceRecorder from "../VoiceRecorder";
 import {EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../Constants";
 import PubSub from "pubsub-js";
 import {useParams} from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 let timerIntervalId;
 
@@ -18,6 +19,16 @@ function VoiceRecord(props) {
     const [timer, setTimer] = useState(0);
 
     const {waId} = useParams();
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     useEffect(() => {
         const onRequestMicPermission = function (msg, data) {
@@ -76,6 +87,11 @@ function VoiceRecord(props) {
                     if (window.AndroidWebInterface) {
                         window.AndroidWebInterface.requestPermissions();
                     }
+
+                    // Check if iframe
+                    if (window.self !== window.top) {
+                        setOpen(true);
+                    }
                 });
         } else {
             console.log('Not supported on your browser.');
@@ -127,6 +143,11 @@ function VoiceRecord(props) {
         }, 1000);
     }
 
+    const goToInbox = () => {
+        window.open(window.location.href, '_blank');
+        handleClose();
+    }
+
     return (
         <div className="voiceRecord">
             <IconButton onClick={stopVoiceRecord} className="voiceRecord__cancelButton">
@@ -139,6 +160,26 @@ function VoiceRecord(props) {
             <IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
                 <DoneIcon />
             </IconButton>
+
+            <Dialog
+                open={open}
+                onClose={handleClose}>
+                <DialogTitle>Oops!</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        You must open the inbox in a new tab to access this feature.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="secondary">
+                        Close
+                    </Button>
+                    <Button onClick={goToInbox} color="primary" autoFocus>
+                        Go to inbox
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </div>
     )
 }
