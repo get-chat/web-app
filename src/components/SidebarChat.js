@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
-import {Avatar, ListItem} from "@material-ui/core";
+import {Avatar, Chip, ListItem} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
@@ -95,58 +95,74 @@ function SidebarChat(props) {
             <ListItem button>
                 <div
                     id={props.chatData.waId}
-                    className={'sidebarChat ' + (waId === props.chatData.waId ? 'activeChat ' : '') + (isExpired ? 'expired ' : (remainingSeconds < 8 * 60 * 60 ? 'almostExpired ' : ''))}
+                    className={'sidebarChatWrapper ' + (waId === props.chatData.waId ? 'activeChat ' : '') + (isExpired ? 'expired ' : (remainingSeconds < 8 * 60 * 60 ? 'almostExpired ' : ''))}
                     onDrop={(event) => handleDroppedFiles(event)}
                     onDragOver={(event) => handleDragOver(event)}>
 
-                    <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
-                    <div className="sidebarChat__info">
+                    <div className="sidebarChat">
 
-                        <div className="sidebarChat__info__nameWrapper">
-                            <h2>
-                                {(props.keyword !== undefined && props.keyword.trim().length > 0)
-                                    ?
-                                    <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
-                                    :
-                                    <span>{props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name}</span>
-                                }
+                        <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                        <div className="sidebarChat__info">
 
-                                <span className="sidebarChat__info__waId">{addPlus(props.chatData.waId)}</span>
-                            </h2>
+                            <div className="sidebarChat__info__nameWrapper">
+                                <h2>
+                                    {(props.keyword !== undefined && props.keyword.trim().length > 0)
+                                        ?
+                                        <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
+                                        :
+                                        <span>{props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name}</span>
+                                    }
 
-                            <div className="sidebarChat__info__date">
-                                {props.chatData.lastMessageTimestamp &&
-                                <Moment
-                                    className="sidebarChat__info__nameWrapper__lastMessageDate"
-                                    date={props.chatData.lastMessageTimestamp}
-                                    calendar={CALENDAR_SHORT}
-                                    unix />
-                                }
+                                    <span className="sidebarChat__info__waId">{addPlus(props.chatData.waId)}</span>
+                                </h2>
 
-                                {!isExpired &&
-                                <span className="sidebarChat__info__date__timeLeft">{timeLeft} left</span>
-                                }
+                                <div className="sidebarChat__info__date">
+                                    {props.chatData.lastMessageTimestamp &&
+                                    <Moment
+                                        className="sidebarChat__info__nameWrapper__lastMessageDate"
+                                        date={props.chatData.lastMessageTimestamp}
+                                        calendar={CALENDAR_SHORT}
+                                        unix />
+                                    }
+
+                                    {!isExpired &&
+                                    <span className="sidebarChat__info__date__timeLeft">{timeLeft} left</span>
+                                    }
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="sidebarChat__info__lastMessage">
-                            {((props.newMessages[props.chatData.waId]?.newMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
-                                ?
-                                <span className="sidebarChat__info__lastMessage__new">
+                            <div className="sidebarChat__info__lastMessage">
+                                {((props.newMessages[props.chatData.waId]?.newMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
+                                    ?
+                                    <span className="sidebarChat__info__lastMessage__new">
                                     {props.newMessages[props.chatData.waId]?.newMessages} new message(s)
                                 </span>
-                                :
-                                <span className="sidebarChat__info__lastMessage__body">
+                                    :
+                                    <span className="sidebarChat__info__lastMessage__body">
                                     <ChatMessageShortContent
                                         type={props.chatData.lastMessageType}
                                         buttonText={props.chatData.lastMessageButtonText}
                                         text={props.chatData.lastMessageBody}
                                         caption={props.chatData.lastMessageCaption} />
                                 </span>
-                            }
+                                }
+                            </div>
+
                         </div>
 
                     </div>
+
+                    {props.chatData.tags?.length > 0 &&
+                    <div className="sidebarChatTags">
+                        {/*<h6>Tags</h6>*/}
+                        <div className="sidebarChatTags__tags">
+                            {props.chatData.tags.map((tag) =>
+                                <Chip size="small" label={"#" + tag} />
+                            )}
+                        </div>
+                    </div>
+                    }
+
                 </div>
             </ListItem>
         </Link>
