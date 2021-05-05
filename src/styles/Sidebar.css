@@ -28,6 +28,7 @@
 
 .sidebar__tabs {
     display: grid;
+    background-color: #f5f5f5;
 }
 
 .sidebar__tabs .MuiTab-root {
