@@ -150,6 +150,10 @@ a {
     font-size: 14px !important;
 }
 
+.MuiTab-root {
+    text-transform: none !important;
+}
+
 .MuiAvatar-root .MuiSvgIcon-root {
     color: inherit;
 }

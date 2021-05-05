@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../styles/Sidebar.css';
-import {Avatar, Divider, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {Avatar, Divider, IconButton, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
@@ -40,6 +40,7 @@ function Sidebar(props) {
     const [isProfileVisible, setProfileVisible] = useState(false);
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
+    const [tabValue, setTabValue] = useState("all")
 
     const history = useHistory();
 
@@ -124,28 +125,28 @@ function Sidebar(props) {
 
                     // Chats are ordered by incoming message date
                     //if (!chatMessage.isFromUs) {
-                        if (nextState.hasOwnProperty(chatMessageWaId)) {
-                            changedAny = true;
+                    if (nextState.hasOwnProperty(chatMessageWaId)) {
+                        changedAny = true;
 
-                            // Update existing chat
-                            nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
+                        // Update existing chat
+                        nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
+                    }
+
+                    // New chatMessages
+                    if (waId !== chatMessageWaId) {
+                        const preparedNewMessages = newMessages;
+                        if (newMessages[chatMessageWaId] === undefined) {
+                            preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
                         }
 
-                        // New chatMessages
-                        if (waId !== chatMessageWaId) {
-                            const preparedNewMessages = newMessages;
-                            if (newMessages[chatMessageWaId] === undefined) {
-                                preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
-                            }
+                        // Increase number of new chatMessages
+                        preparedNewMessages[chatMessageWaId].newMessages++;
 
-                            // Increase number of new chatMessages
-                            preparedNewMessages[chatMessageWaId].newMessages++;
+                        setNewMessages({...preparedNewMessages});
 
-                            setNewMessages({...preparedNewMessages});
-
-                            // Display a notification
-                            props.showNotification("New messages", "You have new messages!", chatMessageWaId);
-                        }
+                        // Display a notification
+                        props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                    }
                     //}
                 });
 
@@ -315,6 +316,10 @@ function Sidebar(props) {
         setContactsVisible(true);
     }
 
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
+    }
+
     return (
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
@@ -334,6 +339,22 @@ function Sidebar(props) {
             </div>
 
             <SearchBar onChange={(_keyword) => search(_keyword)} />
+
+            <div className="sidebar__tabs">
+                <Tabs
+                    textColor="primary"
+                    indicatorColor="primary"
+                    variant="scrollable"
+                    value={tabValue}
+                    scrollButtons="auto"
+                    onChange={handleTabChange}>
+
+                    <Tab label={"All"} value={"all"} />
+                    <Tab label={"Assigned to me"} value={"me"} />
+                    <Tab label={"Assigned to group"} value={"group"} />
+
+                </Tabs>
+            </div>
 
             <div className="sidebar__results">
 
