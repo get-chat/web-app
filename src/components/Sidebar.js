@@ -376,6 +376,9 @@ function Sidebar(props) {
                                     break;
                                 }
                                 case "group": {
+                                    if (props.currentUser.assignedGroup !== undefined && props.currentUser.groups?.includes(props.currentUser.assignedGroup)) {
+                                        return chat;
+                                    }
                                     break;
                                 }
                                 default: {
