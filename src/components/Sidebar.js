@@ -370,6 +370,9 @@ function Sidebar(props) {
                                     return chat;
                                 }
                                 case "me": {
+                                    if (chat[1].assignedTo === props.currentUser.username) {
+                                        return chat;
+                                    }
                                     break;
                                 }
                                 case "group": {
