@@ -62,11 +62,8 @@
     width: 0.8em;
 }
 
-.sidebarChat__info__tags__multiple > span {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 400;
-    vertical-align: middle;
+.sidebarChat__info__tags .MuiSvgIcon-root.multiple {
+    filter: drop-shadow(2px -2px 0 rgba(0, 0, 0, 0.5));
 }
 
 .sidebarChat:hover .sidebarChat__info__waId {

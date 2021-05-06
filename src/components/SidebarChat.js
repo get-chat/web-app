@@ -116,15 +116,7 @@ function SidebarChat(props) {
 
                                     {props.chatData.tags?.length > 0 &&
                                     <div className="sidebarChat__info__tags">
-                                        {props.chatData.tags.length > 1
-                                            ?
-                                            <div className="sidebarChat__info__tags__multiple">
-                                                <LabelIcon style={{fill: props.chatData.tags[0].web_inbox_color}} />
-                                                <span style={{color: props.chatData.tags[0].web_inbox_color}}>+{props.chatData.tags.length - 1}</span>
-                                            </div>
-                                            :
-                                            <LabelIcon style={{fill: props.chatData.tags[0].web_inbox_color}} />
-                                        }
+                                        <LabelIcon className={props.chatData.tags.length > 1 ? "multiple" : ""} style={{fill: props.chatData.tags[0].web_inbox_color}} />
                                     </div>
                                     }
 
