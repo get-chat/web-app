@@ -24,8 +24,6 @@ class ChatClass {
         this.assignedGroup = data.assigned_group;
         this.assignedTo = data.assigned_to;
         this.tags = data.tags;
-
-        console.log(this.tags);
     }
 
     generateInitials = () => {
