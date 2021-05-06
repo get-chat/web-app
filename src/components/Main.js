@@ -45,6 +45,8 @@ function Main() {
     const [currentUser, setCurrentUser] = useState();
     const [isAdmin, setAdmin] = useState(false);
 
+    const [chats, setChats] = useState({});
+
     const [templates, setTemplates] = useState({});
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
     const [templatesReady, setTemplatesReady] = useState(false);
@@ -432,6 +434,8 @@ function Main() {
                 {templatesReady &&
                 <Sidebar
                     isAdmin={isAdmin}
+                    chats={chats}
+                    setChats={setChats}
                     currentUser={currentUser}
                     setProgress={setProgress}
                     showNotification={showNotification}
@@ -462,7 +466,8 @@ function Main() {
                 <ContactDetails
                     contactData={chosenContact}
                     contactProvidersData={contactProvidersData}
-                    retrieveContactData={retrieveContactData} />
+                    retrieveContactData={retrieveContactData}
+                    chats={chats} />
                 }
 
                 {chatMessageToPreview &&

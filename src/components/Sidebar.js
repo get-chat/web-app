@@ -30,8 +30,6 @@ import {clearContactProvidersData} from "../StorageHelper";
 function Sidebar(props) {
 
     const {waId} = useParams();
-
-    const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
@@ -109,7 +107,7 @@ function Sidebar(props) {
             if (keyword.trim().length === 0) {
                 let willMakeRequest = false;
 
-                const nextState = chats;
+                const nextState = props.chats;
                 let changedAny = false;
 
                 Object.entries(data).forEach((message) => {
@@ -156,7 +154,7 @@ function Sidebar(props) {
                     let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
                     sortedNextState = Object.fromEntries(sortedNextState);
 
-                    setChats({...sortedNextState});
+                    props.setChats({...sortedNextState});
                 }
 
                 // We do this to generate new (missing) chat
@@ -171,7 +169,7 @@ function Sidebar(props) {
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
-    }, [waId, chats, newMessages, keyword]);
+    }, [waId, props.chats, newMessages, keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
@@ -192,7 +190,7 @@ function Sidebar(props) {
                     preparedChats[prepared.waId] = prepared;
                 });
 
-                setChats(preparedChats);
+                props.setChats(preparedChats);
 
                 // In case param is undefined
                 isInitial = isInitial === true;
@@ -363,7 +361,7 @@ function Sidebar(props) {
                 }
 
                 <div className="sidebar__results__chats">
-                    { Object.entries(chats)
+                    { Object.entries(props.chats)
                         .filter((chat) => {
                             switch (tabValue) {
                                 case "all": {
@@ -403,7 +401,7 @@ function Sidebar(props) {
                             retrieveContactData={props.retrieveContactData} />
                     )}
 
-                    { Object.keys(chats).length === 0 &&
+                    { Object.keys(props.chats).length === 0 &&
                     <span className="sidebar__results__chats__noResult">
                         {keyword.trim().length > 0 ?
                             <span>No chats found for: <span className="searchOccurrence">{keyword}</span></span>

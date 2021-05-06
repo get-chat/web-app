@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Avatar, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
@@ -9,8 +9,11 @@ import {avatarStyles} from "../AvatarStyles";
 import googleLogo from '../assets/images/ic-google.png';
 import hubspotLogo from '../assets/images/ic-hubspot.png';
 import {addPlus} from "../Helpers";
+import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {
+
+    const [tags, setTags] = useState([]);
 
     const hideContactDetails = () => {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
@@ -20,7 +23,15 @@ function ContactDetails(props)  {
 
     useEffect(() => {
         props.retrieveContactData(props.contactData.waId);
+        setTags(getTagsByWaId());
     }, []);
+
+    const getTagsByWaId = () => {
+        const waId = props.contactData.waId;
+        const chat = props.chats[waId];
+
+        return chat?.tags;
+    }
 
     return (
         <div className="contactDetails">
@@ -51,6 +62,16 @@ function ContactDetails(props)  {
                     }
 
                     <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
+
+                    {tags?.length > 0 &&
+                    <div>
+                        {tags.map((tag, index) =>
+                            <div key={index}>
+                                <LabelIcon style={{fill: tag.web_inbox_color}} />
+                            </div>
+                        )}
+                    </div>
+                    }
                 </div>
 
                 <div className="contactDetails__body__section">
