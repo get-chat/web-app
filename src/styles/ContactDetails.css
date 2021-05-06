@@ -91,6 +91,24 @@
     margin-bottom: 10px;
 }
 
+.contactDetails__body__tags__tag {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.contactDetails__body__tags__tag .MuiSvgIcon-root {
+    margin-right: 5px;
+    vertical-align: baseline;
+}
+
+.contactDetails__body__tags__tag > span {
+    display: inline-block;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 @media only screen and (max-width: 750px) {
     .contactDetails {
         position: absolute;

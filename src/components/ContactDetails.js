@@ -64,10 +64,11 @@ function ContactDetails(props)  {
                     <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
 
                     {tags?.length > 0 &&
-                    <div>
+                    <div className="contactDetails__body__tags mt-3">
                         {tags.map((tag, index) =>
-                            <div key={index}>
+                            <div className="contactDetails__body__tags__tag" key={index}>
                                 <LabelIcon style={{fill: tag.web_inbox_color}} />
+                                <span>{tag.name}</span>
                             </div>
                         )}
                     </div>
