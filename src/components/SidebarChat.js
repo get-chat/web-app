@@ -117,8 +117,8 @@ function SidebarChat(props) {
                                     {props.chatData.tags?.length > 0 &&
                                     <div className="sidebarChat__info__tags">
                                         {props.chatData.tags.map((tag, index) =>
-                                            <Tooltip title={tag.name}>
-                                                <LabelIcon key={index} style={{fill: tag.web_inbox_color}} />
+                                            <Tooltip title={tag.name} key={index}>
+                                                <LabelIcon style={{fill: tag.web_inbox_color}} />
                                             </Tooltip>
                                         )}
                                     </div>
@@ -145,17 +145,18 @@ function SidebarChat(props) {
                             <div className="sidebarChat__info__lastMessage">
                                 {((props.newMessages[props.chatData.waId]?.newMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
                                     ?
-                                    <span className="sidebarChat__info__lastMessage__new">
-                                    {props.newMessages[props.chatData.waId]?.newMessages} new message(s)
-                                </span>
+                                    <div className="sidebarChat__info__lastMessage__new">
+                                        {props.newMessages[props.chatData.waId]?.newMessages} new message(s)
+                                    </div>
                                     :
-                                    <span className="sidebarChat__info__lastMessage__body">
-                                    <ChatMessageShortContent
-                                        type={props.chatData.lastMessageType}
-                                        buttonText={props.chatData.lastMessageButtonText}
-                                        text={props.chatData.lastMessageBody}
-                                        caption={props.chatData.lastMessageCaption} />
-                                </span>
+                                    <div className="sidebarChat__info__lastMessage__body">
+                                        <ChatMessageShortContent
+                                            type={props.chatData.lastMessageType}
+                                            buttonText={props.chatData.lastMessageButtonText}
+                                            text={props.chatData.lastMessageBody}
+                                            caption={props.chatData.lastMessageCaption}
+                                            isLastMessageFromUs={props.chatData.isLastMessageFromUs } />
+                                    </div>
                                 }
                             </div>
 

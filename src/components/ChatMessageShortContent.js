@@ -2,11 +2,16 @@ import React from "react";
 import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 import ChatMessageTypeLabel from "./ChatMessageTypeLabel";
 import {replaceEmojis} from "../Helpers";
+import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageClass from "../ChatMessageClass";
 
 function ChatMessageShortContent(props) {
     return (
-        <span>
+        <div>
+            {props.isLastMessageFromUs &&
+                <ReplyIcon className="replyIcon" />
+            }
+
             <ChatMessageTypeIcon type={props.type}/>
 
             {(props.type === ChatMessageClass.TYPE_TEXT || props.type === ChatMessageClass.TYPE_BUTTON)
@@ -22,7 +27,7 @@ function ChatMessageShortContent(props) {
                     }
                 </span>
             }
-        </span>
+        </div>
     )
 }
 

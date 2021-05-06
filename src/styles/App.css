@@ -281,6 +281,13 @@ a {
     color: var(--color-primary);
 }
 
+.replyIcon {
+    height: 0.6em !important;
+    width: 0.6em !important;
+    vertical-align: middle;
+    margin-top: -3px;
+}
+
 .activeIconButton .MuiSvgIcon-root {
     color: var(--color-light-blue) !important;
 }

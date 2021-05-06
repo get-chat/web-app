@@ -43,6 +43,9 @@ class ChatClass {
         this.lastMessageCaption = lastMessagePayload?.image?.caption ?? lastMessagePayload?.video?.caption ?? lastMessagePayload?.audio?.caption ?? lastMessagePayload?.document?.caption;
         this.lastMessageType = lastMessagePayload?.type;
         this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
+        this.isLastMessageFromUs = lastMessagePayload?.hasOwnProperty('to');
+
+        console.log(this.isLastMessageFromUs);
 
         if (this.lastMessage?.hasOwnProperty("from")) {
             this.lastReceivedMessageTimestamp = this.lastMessageTimestamp;
