@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
-import {Avatar, ListItem, Tooltip} from "@material-ui/core";
+import {Avatar, ListItem} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import Moment from "react-moment";
@@ -116,11 +116,15 @@ function SidebarChat(props) {
 
                                     {props.chatData.tags?.length > 0 &&
                                     <div className="sidebarChat__info__tags">
-                                        {props.chatData.tags.map((tag, index) =>
-                                            <Tooltip title={tag.name} key={index}>
-                                                <LabelIcon style={{fill: tag.web_inbox_color}} />
-                                            </Tooltip>
-                                        )}
+                                        {props.chatData.tags.length > 1
+                                            ?
+                                            <div className="sidebarChat__info__tags__multiple">
+                                                <LabelIcon style={{fill: props.chatData.tags[0].web_inbox_color}} />
+                                                <span style={{color: props.chatData.tags[0].web_inbox_color}}>+{props.chatData.tags.length - 1}</span>
+                                            </div>
+                                            :
+                                            <LabelIcon style={{fill: props.chatData.tags[0].web_inbox_color}} />
+                                        }
                                     </div>
                                     }
 

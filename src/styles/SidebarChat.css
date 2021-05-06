@@ -58,9 +58,15 @@
 }
 
 .sidebarChat__info__tags .MuiSvgIcon-root {
-    height: 0.7em;
-    width: 0.7em;
-    transform: scaleX(-1);
+    height: 0.8em;
+    width: 0.8em;
+}
+
+.sidebarChat__info__tags__multiple > span {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 400;
+    vertical-align: middle;
 }
 
 .sidebarChat:hover .sidebarChat__info__waId {
