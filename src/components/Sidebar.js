@@ -376,8 +376,15 @@ function Sidebar(props) {
                                     break;
                                 }
                                 case "group": {
-                                    if (props.currentUser.assignedGroup !== undefined && props.currentUser.groups?.includes(props.currentUser.assignedGroup)) {
-                                        return chat;
+                                    if (chat[1].assignedGroup && props.currentUser.groups) {
+                                        const assignedGroupId = chat[1].assignedGroup.id;
+                                        for (let i = 0; i < props.currentUser.groups.length; i++) {
+                                            const group = props.currentUser.groups[i];
+
+                                            if (group?.id === assignedGroupId) {
+                                                return chat;
+                                            }
+                                        }
                                     }
                                     break;
                                 }
