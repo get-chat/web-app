@@ -344,14 +344,14 @@ function Sidebar(props) {
                 <Tabs
                     textColor="primary"
                     indicatorColor="primary"
-                    variant={"scrollable"}
+                    variant={"fullWidth"}
                     value={tabValue}
                     scrollButtons="auto"
                     onChange={handleTabChange}>
 
                     <Tab label={"All"} value={"all"} />
-                    <Tab label={"Assigned to me"} value={"me"} />
-                    <Tab label={"Assigned to group"} value={"group"} />
+                    <Tab label={"Me"} value={"me"} />
+                    <Tab label={"Group"} value={"group"} />
 
                 </Tabs>
             </div>
