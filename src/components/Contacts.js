@@ -188,7 +188,7 @@ function Contacts(props) {
                             startAdornment: <InputAdornment position="start">+</InputAdornment>,
                         }}
                         onChange={event => setPhoneNumber(event.target.value)} />
-                    <Button color="primary" onClick={() => verifyPhoneNumber(phoneNumber)}>Start</Button>
+                    <Button color="primary" onClick={() => verifyPhoneNumber(undefined, phoneNumber)}>Start</Button>
                 </div>
                 }
             </div>
