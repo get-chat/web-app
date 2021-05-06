@@ -114,6 +114,16 @@ function SidebarChat(props) {
                                         <span>{props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name}</span>
                                     }
 
+                                    {props.chatData.tags?.length > 0 &&
+                                    <div className="sidebarChat__info__tags">
+                                        {props.chatData.tags.map((tag, index) =>
+                                            <Tooltip title={tag.name}>
+                                                <LabelIcon key={index} style={{fill: tag.web_inbox_color}} />
+                                            </Tooltip>
+                                        )}
+                                    </div>
+                                    }
+
                                     <span className="sidebarChat__info__waId">{addPlus(props.chatData.waId)}</span>
                                 </h2>
 
@@ -152,19 +162,6 @@ function SidebarChat(props) {
                         </div>
 
                     </div>
-
-                    {props.chatData.tags?.length > 0 &&
-                    <div className="sidebarChatTags">
-                        <div className="sidebarChatTags__tags">
-                            {props.chatData.tags.map((tag, index) =>
-                                <Tooltip title={tag.name}>
-                                    <LabelIcon key={index} style={{fill: tag.web_inbox_color}} />
-                                </Tooltip>
-                                /*<Chip key={index} size="small" label={"#" + tag.name} />*/
-                            )}
-                        </div>
-                    </div>
-                    }
 
                 </div>
             </ListItem>

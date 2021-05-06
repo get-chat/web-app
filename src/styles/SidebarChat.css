@@ -52,6 +52,17 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
+.sidebarChat__info__tags {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.sidebarChat__info__tags .MuiSvgIcon-root {
+    height: 0.7em;
+    width: 0.7em;
+    transform: scaleX(-1);
+}
+
 .sidebarChat:hover .sidebarChat__info__waId {
     display: inline-block;
 }
@@ -65,7 +76,7 @@
 }
 
 .sidebarChat__info__lastMessage {
-    color: rgba(0, 0, 0, 0.9);
+    color: rgba(0, 0, 0, 0.7);
     font-size: 14px;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -128,32 +139,6 @@
 
 .sidebar__results__chats .MuiListItem-root {
     padding: 0;
-}
-
-.sidebarChatTags {
-    padding: 0 15px 10px 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebarChatTags__tags {
-    display: flex;
-    flex-wrap: wrap;
-    /*margin-top: 5px;*/
-}
-
-.sidebarChatTags__tags > * {
-    margin-right: 5px;
-}
-
-.sidebarChatTags__tags .MuiChip-root {
-    max-width: 200px;
-    background-color: var(--color-primary-transparent);
-    color: var(--color-primary);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: inherit;
-    margin-top: 5px;
 }
 
 @media only screen and (max-width: 750px) {
