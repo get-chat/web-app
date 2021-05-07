@@ -275,22 +275,35 @@ function Main() {
                 try {
                     const data = JSON.parse(event.data);
 
-                    if (data.type === 'message' && data.message) {
-                        const preparedMessages = {};
-                        const messageObj = new ChatMessageClass(data.message);
-                        preparedMessages[messageObj.id] = messageObj;
-
-                        PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-                    }
-
                     if (data.type === 'waba_webhook') {
                         const wabaPayload = data.waba_payload;
+
+                        // Incoming messages
+                        const incomingMessages = wabaPayload?.incoming_messages;
+
+                        if (incomingMessages) {
+                            const preparedMessages = {};
+
+                            incomingMessages.forEach((message) => {
+                                const messageObj = new ChatMessageClass(message);
+                                preparedMessages[messageObj.id] = messageObj;
+                            })
+
+                            PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                        }
 
                         // Outgoing messages
                         const outgoingMessages = wabaPayload?.outgoing_messages;
 
                         if (outgoingMessages) {
-                            // Handle
+                            const preparedMessages = {};
+
+                            outgoingMessages.forEach((message) => {
+                                const messageObj = new ChatMessageClass(message);
+                                preparedMessages[messageObj.id] = messageObj;
+                            })
+
+                            PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                         }
 
                         // Statuses
