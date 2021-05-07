@@ -43,8 +43,6 @@ class ChatClass {
         this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
         this.isLastMessageFromUs = lastMessagePayload?.hasOwnProperty('to');
 
-        console.log(this.isLastMessageFromUs);
-
         if (this.lastMessage?.hasOwnProperty("from")) {
             this.lastReceivedMessageTimestamp = this.lastMessageTimestamp;
         }
