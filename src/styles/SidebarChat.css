@@ -66,16 +66,19 @@
     filter: drop-shadow(2px -2px 0 rgba(0, 0, 0, 0.5));
 }
 
-.sidebarChat:hover .sidebarChat__info__waId {
+.sidebarChat:hover .sidebarChat_waId {
     display: inline-block;
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
 }
 
-.sidebarChat__info__waId {
+.sidebarChat_waId {
     display: none;
-    font-size: 12px;
+    font-size: 10px;
     color: rgba(0, 0, 0, 0.45);
     margin-left: 5px;
-    font-weight: 400;
+    font-weight: 600;
 }
 
 .sidebarChat__info__lastMessage {
@@ -95,6 +98,12 @@
 .sidebarChat__info__lastMessage__new {
     font-weight: 600;
     color: var(--color-primary);
+}
+
+.sidebarChat__info__lastMessage__body {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .sidebarChat__info__lastMessage__body .MuiSvgIcon-root {
@@ -145,7 +154,7 @@
 }
 
 @media only screen and (max-width: 750px) {
-    .sidebarChat:hover .sidebarChat__info__waId {
+    .sidebarChat:hover .sidebarChat_waId {
         display: none;
     }
 }

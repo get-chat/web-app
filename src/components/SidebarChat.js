@@ -128,8 +128,6 @@ function SidebarChat(props) {
                                         </Tooltip>
                                     </div>
                                     }
-
-                                    <span className="sidebarChat__info__waId">{addPlus(props.chatData.waId)}</span>
                                 </h2>
 
                                 <div className="sidebarChat__info__date">
@@ -166,6 +164,8 @@ function SidebarChat(props) {
                             </div>
 
                         </div>
+
+                        <span className="sidebarChat_waId">{addPlus(props.chatData.waId)}</span>
 
                     </div>
 
