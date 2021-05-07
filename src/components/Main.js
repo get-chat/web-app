@@ -285,6 +285,15 @@ function Main() {
 
                     if (data.type === 'waba_webhook') {
                         const wabaPayload = data.waba_payload;
+
+                        // Outgoing messages
+                        const outgoingMessages = wabaPayload?.outgoing_messages;
+
+                        if (outgoingMessages) {
+                            // Handle
+                        }
+
+                        // Statuses
                         const statuses = wabaPayload?.statuses;
 
                         if (statuses) {
