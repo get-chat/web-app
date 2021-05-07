@@ -287,7 +287,9 @@ function Main() {
                             incomingMessages.forEach((message) => {
                                 const messageObj = new ChatMessageClass(message);
                                 preparedMessages[messageObj.id] = messageObj;
-                            })
+
+                                // TODO: Update sidebar chat name if needed
+                            });
 
                             PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                         }
@@ -301,7 +303,7 @@ function Main() {
                             outgoingMessages.forEach((message) => {
                                 const messageObj = new ChatMessageClass(message);
                                 preparedMessages[messageObj.id] = messageObj;
-                            })
+                            });
 
                             PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
                         }

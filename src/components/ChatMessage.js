@@ -91,7 +91,7 @@ function ChatMessage(props) {
                 }
 
                 {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                <ChatMessageTemplate data={data} templateData={templateData} />
+                <ChatMessageTemplate data={data} templateData={templateData} onPreview={() => props.onPreview(data)} />
                 }
 
                 {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
