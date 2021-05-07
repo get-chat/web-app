@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
-import {Avatar, ListItem} from "@material-ui/core";
+import {Avatar, ListItem, Tooltip} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import Moment from "react-moment";
@@ -19,11 +19,18 @@ function SidebarChat(props) {
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const [remainingSeconds, setRemainingSeconds] = useState();
+    const [tagNames, setTagNames] = useState([]);
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
         props.retrieveContactData(props.chatData.waId);
+
+        const preparedTagNames = [];
+        props.chatData.tags?.forEach((tag) => {
+            preparedTagNames.push(tag.name);
+        });
+        setTagNames(preparedTagNames);
     }, []);
 
     useEffect(() => {
@@ -116,7 +123,9 @@ function SidebarChat(props) {
 
                                     {props.chatData.tags?.length > 0 &&
                                     <div className="sidebarChat__info__tags">
-                                        <LabelIcon className={props.chatData.tags.length > 1 ? "multiple" : ""} style={{fill: props.chatData.tags[0].web_inbox_color}} />
+                                        <Tooltip title={tagNames.join(', ')}>
+                                            <LabelIcon className={props.chatData.tags.length > 1 ? "multiple" : ""} style={{fill: props.chatData.tags[0].web_inbox_color}} />
+                                        </Tooltip>
                                     </div>
                                     }
 
