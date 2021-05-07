@@ -343,6 +343,9 @@ function Main() {
         return () => {
             // Hide search messages container
             setSearchMessagesVisible(false);
+
+            // Hide contact details
+            setContactDetailsVisible(false);
         }
     }, [waId]);
 
