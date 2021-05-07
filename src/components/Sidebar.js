@@ -143,7 +143,9 @@ function Sidebar(props) {
                         setNewMessages({...preparedNewMessages});
 
                         // Display a notification
-                        props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                        if (!chatMessage.isFromUs) {
+                            props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                        }
                     }
                     //}
                 });
