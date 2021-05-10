@@ -57,6 +57,7 @@
     color: rgba(0, 0, 0, 0.6);
     font-size: 14px;
     padding: 10px 15px;
+    word-break: break-all;
 }
 
 .sidebar__results__messages .MuiListItem-root {

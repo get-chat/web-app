@@ -144,6 +144,12 @@ function ChatFooter(props) {
     }
 
     const handleFocus = (event) => {
+        if (props.isExpired) {
+            event.target.blur();
+            props.setTemplateMessagesVisible(true);
+            return;
+        }
+
         if (isRecording) {
             event.target.blur();
         }
