@@ -133,7 +133,7 @@ function Sidebar(props) {
                             const chat = nextState[chatMessageWaId];
                             if (chat) {
                                 const chatName = chat.name;
-                                if (containsLetters(chatName)) {
+                                if (!containsLetters(chatName)) {
                                     nextState[chatMessageWaId].name = chatMessage.senderName;
                                 }
                             }
