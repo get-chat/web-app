@@ -26,6 +26,11 @@ class ChatClass {
         this.tags = data.tags;
     }
 
+    setName(name) {
+        this.name = name;
+        this.initials = this.generateInitials();
+    }
+
     generateInitials = () => {
         return generateInitialsHelper(this.name);
     }

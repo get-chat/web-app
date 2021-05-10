@@ -130,11 +130,12 @@ function Sidebar(props) {
 
                         // Incoming
                         if (!chatMessage.isFromUs) {
+                            // Update name and initials on incoming message if name is missing
                             const chat = nextState[chatMessageWaId];
                             if (chat) {
                                 const chatName = chat.name;
                                 if (!containsLetters(chatName)) {
-                                    nextState[chatMessageWaId].name = chatMessage.senderName;
+                                    nextState[chatMessageWaId].setName(chatMessage.senderName);
                                 }
                             }
                         }
