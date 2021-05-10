@@ -16,8 +16,8 @@ import {
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-    EVENT_TOPIC_DISPLAY_ERROR,
-    EVENT_TOPIC_NEW_CHAT_MESSAGES,
+    EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_DROPPED_FILES,
+    EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_NEW_INCOMING_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
@@ -287,11 +287,10 @@ function Main() {
                             incomingMessages.forEach((message) => {
                                 const messageObj = new ChatMessageClass(message);
                                 preparedMessages[messageObj.id] = messageObj;
-
-                                // TODO: Update sidebar chat name if needed
                             });
 
                             PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                            PubSub.publish(EVENT_TOPIC_NEW_INCOMING_CHAT_MESSAGES, preparedMessages);
                         }
 
                         // Outgoing messages
@@ -355,7 +354,15 @@ function Main() {
     useEffect(() => {
         setChecked(true);
 
+        const onNewIncomingMessages = function (msg, preparedMessages) {
+            console.log("INCOMING", preparedMessages);
+        }
+
+        const token = PubSub.subscribe(EVENT_TOPIC_NEW_INCOMING_CHAT_MESSAGES, onNewIncomingMessages);
+
         return () => {
+            PubSub.unsubscribe(token);
+
             // Hide search messages container
             setSearchMessagesVisible(false);
 
