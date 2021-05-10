@@ -354,8 +354,14 @@ function Main() {
     useEffect(() => {
         setChecked(true);
 
-        const onNewIncomingMessages = function (msg, preparedMessages) {
-            console.log("INCOMING", preparedMessages);
+        const onNewIncomingMessages = function (msg, messages) {
+            Object.entries(messages).map((message, index) => {
+                const waId = message[1].waId;
+                const chat = chats[waId];
+                if (chat) {
+                    const chatName = chat.name;
+                }
+            })
         }
 
         const token = PubSub.subscribe(EVENT_TOPIC_NEW_INCOMING_CHAT_MESSAGES, onNewIncomingMessages);
