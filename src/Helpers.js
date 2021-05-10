@@ -255,6 +255,11 @@ export const addPlus = (phoneNumber) => {
     return phoneNumber?.includes('+') ? phoneNumber : `+${phoneNumber}`;
 }
 
+export const containsLetters = (text) => {
+    const regExp = /[a-zA-Z]/g;
+    return regExp.test(text);
+}
+
 export const extractAvatarFromContactProviderData = (contactProviderData) => {
     if (contactProviderData) {
         for (let i = 0; i < getObjLength(contactProviderData); i++) {

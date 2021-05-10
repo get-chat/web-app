@@ -4,7 +4,7 @@ import Chat from "./Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getWebSocketURL} from "../Helpers";
+import {containsLetters, getConfig, getWebSocketURL} from "../Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -354,12 +354,30 @@ function Main() {
     useEffect(() => {
         setChecked(true);
 
+        return () => {
+            // Hide search messages container
+            setSearchMessagesVisible(false);
+
+            // Hide contact details
+            setContactDetailsVisible(false);
+        }
+    }, [waId]);
+
+    useEffect(() => {
         const onNewIncomingMessages = function (msg, messages) {
             Object.entries(messages).map((message, index) => {
                 const waId = message[1].waId;
                 const chat = chats[waId];
                 if (chat) {
                     const chatName = chat.name;
+                    if (containsLetters(chatName)) {
+                        setChats(prevState => {
+                            chat.name = message[1].senderName;
+                            prevState[waId] = chat;
+
+                            return prevState;
+                        })
+                    }
                 }
             })
         }
@@ -368,14 +386,8 @@ function Main() {
 
         return () => {
             PubSub.unsubscribe(token);
-
-            // Hide search messages container
-            setSearchMessagesVisible(false);
-
-            // Hide contact details
-            setContactDetailsVisible(false);
         }
-    }, [waId]);
+    }, [chats, waId]);
 
     useEffect(() => {
         storeContactProvidersData(contactProvidersData);
