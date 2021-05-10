@@ -4,7 +4,7 @@ import {Avatar, Divider, IconButton, Menu, MenuItem, Tab, Tabs} from "@material-
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
+import {containsLetters, generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -122,12 +122,22 @@ function Sidebar(props) {
                     }
 
                     // Chats are ordered by incoming message date
-                    //if (!chatMessage.isFromUs) {
                     if (nextState.hasOwnProperty(chatMessageWaId)) {
                         changedAny = true;
 
                         // Update existing chat
                         nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
+
+                        // Incoming
+                        if (!chatMessage.isFromUs) {
+                            const chat = nextState[chatMessageWaId];
+                            if (chat) {
+                                const chatName = chat.name;
+                                if (containsLetters(chatName)) {
+                                    nextState[chatMessageWaId].name = chatMessage.senderName;
+                                }
+                            }
+                        }
                     }
 
                     // New chatMessages
@@ -147,7 +157,6 @@ function Sidebar(props) {
                             props.showNotification("New messages", "You have new messages!", chatMessageWaId);
                         }
                     }
-                    //}
                 });
 
                 // If anything has changed, sort chats
