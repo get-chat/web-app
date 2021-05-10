@@ -10,8 +10,9 @@ class ChatClass {
         const lastMessagePayload = lastMessage?.waba_payload;
 
         this.waId = contactPayload.wa_id;
-        this.name = contactPayload.profile.name;
-        this.initials = this.generateInitials(); //contact.initials;
+
+        this.setName(contactPayload.profile.name);
+
         this.newMessages = data.new_messages;
 
         this.lastReceivedMessageTimestamp = parseInt(contact.last_message_timestamp);
