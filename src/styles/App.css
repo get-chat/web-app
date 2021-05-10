@@ -289,7 +289,7 @@ a {
 }
 
 .activeIconButton .MuiSvgIcon-root {
-    color: var(--color-light-blue) !important;
+    color: var(--color-primary-light) !important;
 }
 
 @media only screen and (max-width: 1500px) {

@@ -20,7 +20,6 @@ import {
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import PersonClass from "../PersonClass";
-import ChatFooterExpired from "./ChatFooterExpired";
 import TemplateMessages from "./TemplateMessages";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
@@ -34,7 +33,8 @@ import {
     getFirstObject,
     getLastMessageAndExtractTimestamp,
     getLastObject,
-    getObjLength, hasInternetConnection,
+    getObjLength,
+    hasInternetConnection,
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
@@ -860,23 +860,19 @@ export default function Chat(props) {
                 <div className="chat__body__empty" />
             </div>
 
-            {isExpired
-                ?
-                <ChatFooterExpired />
-                :
-                <ChatFooter
-                    input={input}
-                    setInput={setInput}
-                    sendMessage={(e) => sendMessage(e)}
-                    setSelectedFiles={setSelectedFiles}
-                    isTemplateMessagesVisible={isTemplateMessagesVisible}
-                    setTemplateMessagesVisible={setTemplateMessagesVisible}
-                    sendHandledChosenFiles={sendHandledChosenFiles}
-                    accept={accept}
-                    setAccept={setAccept} />
-            }
+            <ChatFooter
+                isExpired={isExpired}
+                input={input}
+                setInput={setInput}
+                sendMessage={(e) => sendMessage(e)}
+                setSelectedFiles={setSelectedFiles}
+                isTemplateMessagesVisible={isTemplateMessagesVisible}
+                setTemplateMessagesVisible={setTemplateMessagesVisible}
+                sendHandledChosenFiles={sendHandledChosenFiles}
+                accept={accept}
+                setAccept={setAccept} />
 
-            {(isTemplateMessagesVisible || isExpired) &&
+            {isTemplateMessagesVisible &&
             <TemplateMessages
                 waId={waId}
                 templatesData={props.templates}

@@ -183,16 +183,20 @@ function ChatFooter(props) {
 
             <div className="chat__footer">
 
+                {!props.isExpired &&
                 <Tooltip title="Emoji" placement="top">
-                    <IconButton className={isEmojiPickerVisible ? "activeIconButton" : ""} onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
+                    <IconButton className={isEmojiPickerVisible ? "activeIconButton" : ""}
+                                onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
                         <InsertEmoticon/>
                     </IconButton>
                 </Tooltip>
+                }
 
+                {!props.isExpired &&
                 <div className="chat__footer__attachmentContainer desktopOnly">
                     <Tooltip title="Attachment" placement="right">
                         <IconButton>
-                            <AttachFile />
+                            <AttachFile/>
                         </IconButton>
                     </Tooltip>
 
@@ -214,8 +218,9 @@ function ChatFooter(props) {
                         </Tooltip>
                     </div>
                 </div>
+                }
 
-                <Tooltip title="Templates" placement="top" className="desktopOnly">
+                <Tooltip title="Templates" placement="top" className={!props.isExpired ? "desktopOnly" : ""}>
                     <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
                         <SmsIcon />
                     </IconButton>
@@ -228,10 +233,17 @@ function ChatFooter(props) {
                 </div>
 
                 <form>
-                    <div className="typeBox">
+                    <div className={"typeBox " + (props.isExpired ? "expired" : "")}>
 
                         {!props.input &&
-                        <div className="typeBox__hint">Type a message</div>
+                        <div className="typeBox__hint">
+                            {props.isExpired
+                                ?
+                                <span>This chat has expired. You need to answer with template messages.</span>
+                                :
+                                <span>Type a message</span>
+                            }
+                        </div>
                         }
                         <div
                             id="typeBox__editable"
@@ -251,7 +263,7 @@ function ChatFooter(props) {
                     <button onClick={props.sendMessage} type="submit">Send a message</button>
                 </form>
 
-                {!hasInput() &&
+                {(!hasInput() && !props.isExpired) &&
                 <div className="mobileOnly">
                     <Tooltip title="More">
                         <IconButton className="chat_footer__moreButton" onClick={showMore}>
@@ -269,7 +281,7 @@ function ChatFooter(props) {
                 </Tooltip>
                 }
 
-                {(!hasInput() && !isRecording) &&
+                {(!props.isExpired && !hasInput() && !isRecording) &&
                 <Tooltip title="Voice" placement="top">
                     <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, true)}>
                         <MicIcon/>

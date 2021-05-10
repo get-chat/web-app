@@ -48,6 +48,10 @@
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
+.typeBox.expired {
+    opacity: .7;
+}
+
 .chat__footer > form > textarea:focus, .typeBox {
     outline: none;
     border: none;
