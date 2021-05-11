@@ -6,7 +6,7 @@ import LabelIcon from '@material-ui/icons/Label';
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {addPlus, extractAvatarFromContactProviderData, markOccurrences} from "../Helpers";
+import {addPlus, extractAvatarFromContactProviderData, generateInitialsHelper, markOccurrences} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
@@ -162,12 +162,20 @@ function SidebarChat(props) {
                                     </div>
                                 }
                             </div>
-
                         </div>
-
-                        <span className="sidebarChat_waId">{addPlus(props.chatData.waId)}</span>
-
                     </div>
+
+                    {(props.chatData.assignedTo || props.chatData.assignedGroup) &&
+                    <div className="sidebarChat__footer">
+                        {props.chatData.assignedTo &&
+                        <Tooltip title={'Assigned to: ' + props.chatData.assignedTo.username}>
+                            <Avatar>{generateInitialsHelper(props.chatData.assignedTo?.username)}</Avatar>
+                        </Tooltip>
+                        }
+                    </div>
+                    }
+
+                    <span className="sidebarChat__waId">{addPlus(props.chatData.waId)}</span>
 
                 </div>
             </ListItem>

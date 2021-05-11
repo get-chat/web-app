@@ -1,4 +1,5 @@
 .sidebarChatWrapper {
+    position: relative;
     flex: 1 1;
     display: flex;
     flex-direction: column;
@@ -66,14 +67,14 @@
     filter: drop-shadow(2px -2px 0 rgba(0, 0, 0, 0.5));
 }
 
-.sidebarChat:hover .sidebarChat_waId {
-    display: inline-block;
+.sidebarChatWrapper:hover .sidebarChat__waId {
+    /*display: inline-block;*/
     position: absolute;
     bottom: 5px;
     right: 15px;
 }
 
-.sidebarChat_waId {
+.sidebarChat__waId {
     display: none;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.45);
@@ -153,8 +154,21 @@
     padding: 0;
 }
 
+.sidebarChat__footer {
+    padding: 0 15px 10px 15px;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -10px;
+}
+
+.sidebarChat__footer .MuiAvatar-root {
+    height: 21px;
+    width: 21px;
+    font-size: 12px;
+}
+
 @media only screen and (max-width: 750px) {
-    .sidebarChat:hover .sidebarChat_waId {
+    .sidebarChat:hover .sidebarChat__waId {
         display: none;
     }
 }
