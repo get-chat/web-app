@@ -3,6 +3,7 @@ import '../styles/SidebarChat.css';
 import {Avatar, ListItem, Tooltip} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
+import GroupIcon from '@material-ui/icons/Group';
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
@@ -112,10 +113,18 @@ function SidebarChat(props) {
                         <div className="sidebarChat__avatarWrapper">
                             <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
 
-                            {props.chatData.assignedTo &&
+                            {(props.tabCase === 'all' && props.chatData.assignedTo) &&
                             <Tooltip title={'Assigned to: ' + props.chatData.assignedTo.username}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
                                     {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
+                                </Avatar>
+                            </Tooltip>
+                            }
+
+                            {(props.tabCase === 'all' && !props.chatData.assignedTo && props.chatData.assignedGroup) &&
+                            <Tooltip title={'Assigned to group: ' + props.chatData.assignedGroup.name}>
+                                <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedGroupInitials()]}>
+                                    <GroupIcon />
                                 </Avatar>
                             </Tooltip>
                             }

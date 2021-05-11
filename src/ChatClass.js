@@ -67,6 +67,10 @@ class ChatClass {
     generateAssignedToInitials() {
         return this.assignedTo?.username?.[0]?.toUpperCase();
     }
+
+    generateAssignedGroupInitials() {
+        return this.assignedGroup?.name?.[0]?.toUpperCase();
+    }
 }
 
 export default ChatClass;

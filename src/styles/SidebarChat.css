@@ -48,6 +48,12 @@
     box-shadow: 0 1px 3px var(--shadow-light);
 }
 
+.sidebarChat__avatarWrapper .MuiAvatar-root.sidebarChat__avatarWrapper__assignee .MuiSvgIcon-root {
+    color: white !important;
+    height: 0.5em;
+    width: 0.5em;
+}
+
 .sidebarChat__info__nameWrapper {
     display: flex;
     flex-direction: row;

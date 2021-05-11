@@ -38,7 +38,7 @@ function Sidebar(props) {
     const [isProfileVisible, setProfileVisible] = useState(false);
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
-    const [tabValue, setTabValue] = useState("all")
+    const [tabCase, setTabCase] = useState("all")
 
     const history = useHistory();
 
@@ -333,7 +333,7 @@ function Sidebar(props) {
     }
 
     const handleTabChange = (event, newValue) => {
-        setTabValue(newValue);
+        setTabCase(newValue);
     }
 
     return (
@@ -361,7 +361,7 @@ function Sidebar(props) {
                     textColor="primary"
                     indicatorColor="primary"
                     variant={"fullWidth"}
-                    value={tabValue}
+                    value={tabCase}
                     scrollButtons="auto"
                     onChange={handleTabChange}>
 
@@ -381,7 +381,7 @@ function Sidebar(props) {
                 <div className="sidebar__results__chats">
                     { Object.entries(props.chats)
                         .filter((chat) => {
-                            switch (tabValue) {
+                            switch (tabCase) {
                                 case "all": {
                                     return chat;
                                 }
@@ -416,7 +416,8 @@ function Sidebar(props) {
                             newMessages={newMessages}
                             keyword={keyword}
                             contactProvidersData={props.contactProvidersData}
-                            retrieveContactData={props.retrieveContactData} />
+                            retrieveContactData={props.retrieveContactData}
+                            tabCase={tabCase} />
                     )}
 
                     { Object.keys(props.chats).length === 0 &&
