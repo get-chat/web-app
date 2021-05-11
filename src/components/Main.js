@@ -144,15 +144,17 @@ function Main() {
             window.AndroidWebInterface.displayNotification(title, body, chatWaId);
         }
 
-        function showNot() {
+        function displayNtf() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
                 body: body,
                 icon: logo
             });
 
-            if (waId) {
-                notification.onclick = function (event) {
+            notification.onclick = function (event) {
+                window.focus();
+
+                if (waId) {
                     goToChatByWaId(chatWaId);
                 }
             }
@@ -162,12 +164,12 @@ function Main() {
         } else {
             // Check if permission is already granted
             if (Notification.permission === 'granted') {
-                showNot();
+                displayNtf();
             } else {
                 // request permission from user
                 Notification.requestPermission().then(function (p) {
                     if (p === 'granted') {
-                        showNot();
+                        displayNtf();
                     } else {
                         console.log('User blocked notifications.');
                     }
