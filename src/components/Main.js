@@ -136,7 +136,7 @@ function Main() {
         history.push(`/main/chat/${_waId}`);
     }
 
-    const showNotification = (title, body, chatWaId) => {
+    const displayNotification = (title, body, chatWaId) => {
         if (isChatOnly) return;
 
         // Android web app interface
@@ -463,7 +463,7 @@ function Main() {
                     setChats={setChats}
                     currentUser={currentUser}
                     setProgress={setProgress}
-                    showNotification={showNotification}
+                    displayNotification={displayNotification}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}

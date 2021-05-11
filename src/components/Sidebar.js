@@ -161,7 +161,7 @@ function Sidebar(props) {
 
                         // Display a notification
                         if (!chatMessage.isFromUs) {
-                            props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                            props.displayNotification("New messages", "You have new messages!", chatMessageWaId);
                         }
                     }
                 });
@@ -258,7 +258,7 @@ function Sidebar(props) {
 
                     // Display a notification
                     if (hasAnyNewMessages) {
-                        props.showNotification("New messages", "You have new messages!", chatMessageWaId);
+                        props.displayNotification("New messages", "You have new messages!", chatMessageWaId);
                     }
                 } else {
                     setNewMessages(preparedNewMessages);
