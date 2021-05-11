@@ -9,7 +9,7 @@ import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
-    EVENT_TOPIC_NEW_CHAT_MESSAGES
+    EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_UPDATE_PERSON_NAME
 } from "../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
@@ -140,7 +140,7 @@ function Sidebar(props) {
 
                                     // Check if current chat
                                     if (waId === chatMessageWaId) {
-                                        // TODO: Send an event to Chat component to update person
+                                        PubSub.publish(EVENT_TOPIC_UPDATE_PERSON_NAME, chatMessage.senderName);
                                     }
                                 }
                             }
