@@ -63,6 +63,10 @@ class ChatClass {
     checkIfExpired() {
         return this.getPastHoursAfterLastMessage() >= 24;
     }
+
+    generateAssignedToInitials() {
+        return this.assignedTo?.username?.[0]?.toUpperCase();
+    }
 }
 
 export default ChatClass;

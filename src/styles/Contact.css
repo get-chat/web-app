@@ -29,6 +29,7 @@
     padding: 3px;
     background-color: white;
     border-radius: 10px;
+    box-shadow: 0 1px 3px var(--shadow-light);
 }
 
 .contact__info__phoneNumber {

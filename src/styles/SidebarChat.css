@@ -34,6 +34,20 @@
     width: 50px;
 }
 
+.sidebarChat__avatarWrapper {
+    position: relative;
+}
+
+.sidebarChat__avatarWrapper .MuiAvatar-root.sidebarChat__avatarWrapper__assignee {
+    position: absolute;
+    bottom: -3px;
+    right: -3px;
+    height: 21px;
+    width: 21px;
+    font-size: 12px;
+    box-shadow: 0 1px 3px var(--shadow-light);
+}
+
 .sidebarChat__info__nameWrapper {
     display: flex;
     flex-direction: row;
@@ -152,19 +166,6 @@
 
 .sidebar__results__chats .MuiListItem-root {
     padding: 0;
-}
-
-.sidebarChat__footer {
-    padding: 0 15px 10px 15px;
-    display: flex;
-    justify-content: flex-end;
-    margin-top: -10px;
-}
-
-.sidebarChat__footer .MuiAvatar-root {
-    height: 21px;
-    width: 21px;
-    font-size: 12px;
 }
 
 @media only screen and (max-width: 750px) {

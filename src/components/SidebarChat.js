@@ -109,7 +109,18 @@ function SidebarChat(props) {
 
                     <div className="sidebarChat">
 
-                        <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                        <div className="sidebarChat__avatarWrapper">
+                            <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+
+                            {props.chatData.assignedTo &&
+                            <Tooltip title={'Assigned to: ' + props.chatData.assignedTo.username}>
+                                <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
+                                    {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
+                                </Avatar>
+                            </Tooltip>
+                            }
+                        </div>
+
                         <div className="sidebarChat__info">
 
                             <div className="sidebarChat__info__nameWrapper">
@@ -164,16 +175,6 @@ function SidebarChat(props) {
                             </div>
                         </div>
                     </div>
-
-                    {(props.chatData.assignedTo || props.chatData.assignedGroup) &&
-                    <div className="sidebarChat__footer">
-                        {props.chatData.assignedTo &&
-                        <Tooltip title={'Assigned to: ' + props.chatData.assignedTo.username}>
-                            <Avatar>{generateInitialsHelper(props.chatData.assignedTo?.username)}</Avatar>
-                        </Tooltip>
-                        }
-                    </div>
-                    }
 
                     <span className="sidebarChat__waId">{addPlus(props.chatData.waId)}</span>
 
