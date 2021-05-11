@@ -135,7 +135,13 @@ function Sidebar(props) {
                             if (chat) {
                                 const chatName = chat.name;
                                 if (!containsLetters(chatName)) {
+                                    // Update sidebar chat name
                                     nextState[chatMessageWaId].setName(chatMessage.senderName);
+
+                                    // Check if current chat
+                                    if (waId === chatMessageWaId) {
+                                        // TODO: Send an event to Chat component to update person
+                                    }
                                 }
                             }
                         }
