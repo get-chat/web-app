@@ -308,7 +308,7 @@ export default function Chat(props) {
             setPerson(prevState => {
                 prevState?.setName(name);
                 // Assign object to a new instance to trigger change
-                return Object.assign(new PersonClass({}), prevState);
+                return Object.assign(PersonClass.newInstance(), prevState);
             });
         }
 

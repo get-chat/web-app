@@ -34,6 +34,10 @@ class PersonClass {
     getAvatarClassName() {
         return this.initials ? this.initials[0] : '';
     }
+
+    static newInstance() {
+        return new PersonClass({});
+    }
 }
 
 export default PersonClass;
