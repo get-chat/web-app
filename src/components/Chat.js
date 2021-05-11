@@ -16,7 +16,7 @@ import {
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
-    EVENT_TOPIC_SENT_TEMPLATE_MESSAGE
+    EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, EVENT_TOPIC_UPDATE_PERSON_NAME
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import PersonClass from "../PersonClass";
@@ -194,7 +194,6 @@ export default function Chat(props) {
     }, [messages, isLoaded, isLoadingMoreMessages, isAtBottom]);
 
     useEffect(() => {
-
         // New messages
         const onNewMessages = function (msg, data) {
             if (data && isLoaded) {
@@ -302,6 +301,23 @@ export default function Chat(props) {
         setAtBottom(!hasNewerToLoad);
 
     }, [messages, lastMessageId]);
+
+    useEffect(() => {
+        const onUpdatePersonName = function (msg, data) {
+            const name = data;
+            setPerson(prevState => {
+                prevState?.setName(name);
+                // Assign object to a new instance to trigger change
+                return Object.assign(new PersonClass({}), prevState);
+            });
+        }
+
+        const updatePersonNameTokenEventToken = PubSub.subscribe(EVENT_TOPIC_UPDATE_PERSON_NAME, onUpdatePersonName);
+
+        return () => {
+            PubSub.unsubscribe(updatePersonNameTokenEventToken);
+        }
+    }, [person]);
 
     /*useEffect(() => {
         // Scrolling to bottom on initial templates load
