@@ -110,7 +110,7 @@
 }
 
 .contactDetails__body__assignees {
-    padding: 10px 15px;
+    padding: 5px 10px;
     border: 2px solid var(--gray-light);
     border-radius: 10px;
 }
