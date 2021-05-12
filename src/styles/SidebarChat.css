@@ -88,7 +88,7 @@
 }
 
 .sidebarChatWrapper:hover .sidebarChat__waId {
-    /*display: inline-block;*/
+    display: inline-block;
     position: absolute;
     bottom: 5px;
     right: 15px;
