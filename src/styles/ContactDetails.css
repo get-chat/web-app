@@ -109,6 +109,21 @@
     overflow: hidden;
 }
 
+.contactDetails__body__assignees {
+    padding: 10px 15px;
+    border: 2px solid var(--gray-light);
+    border-radius: 10px;
+}
+
+.contactDetails__body__assignees > div {
+    padding: 5px 0;
+}
+
+.contactDetails__body__assignees .MuiSvgIcon-root {
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
 @media only screen and (max-width: 750px) {
     .contactDetails {
         position: absolute;

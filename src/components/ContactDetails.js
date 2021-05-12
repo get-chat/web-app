@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
+import PersonIcon from '@material-ui/icons/Person';
+import GroupIcon from '@material-ui/icons/Group';
 import PubSub from "pubsub-js";
 import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../Constants";
 import '../styles/ContactDetails.css';
@@ -54,9 +56,9 @@ function ContactDetails(props)  {
                     <h3>{props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name}</h3>
 
                     {props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0] !== undefined &&
-                        <div className="contactDetails__body__job">
-                            <span>{props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0]?.job_title}</span> at <span>{props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0]?.company_name}</span>
-                        </div>
+                    <div className="contactDetails__body__job">
+                        <span>{props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0]?.job_title}</span> at <span>{props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0]?.company_name}</span>
+                    </div>
                     }
 
                     <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
@@ -66,9 +68,27 @@ function ContactDetails(props)  {
                         {chat?.tags.map((tag, index) =>
                             <div className="contactDetails__body__tags__tag" key={index}>
                                 <LabelIcon style={{fill: tag.web_inbox_color}} />
-                                <span>{tag.name}</span>
+                                <span className="bold">{tag.name}</span>
                             </div>
                         )}
+                    </div>
+                    }
+
+                    {(chat?.assignedTo || chat?.assignedGroup) &&
+                    <div className="contactDetails__body__assignees mt-3">
+                        {chat?.assignedTo &&
+                        <div>
+                            <PersonIcon />
+                            Assigned to: <span className="bold">{chat?.assignedTo.username}</span>
+                        </div>
+                        }
+
+                        {chat?.assignedGroup &&
+                        <div>
+                            <GroupIcon />
+                            Assigned to group: <span className="bold">{chat?.assignedGroup.name}</span>
+                        </div>
+                        }
                     </div>
                     }
                 </div>
