@@ -148,7 +148,7 @@ function Sidebar(props) {
                     }
 
                     // New chatMessages
-                    if (waId !== chatMessageWaId || document.visibilityState === 'hidden') {
+                    if (!chatMessage.isFromUs && (waId !== chatMessageWaId || document.visibilityState === 'hidden')) {
                         const preparedNewMessages = newMessages;
                         if (newMessages[chatMessageWaId] === undefined) {
                             preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
