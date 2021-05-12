@@ -71,6 +71,23 @@ class ChatClass {
     generateAssignedGroupInitials() {
         return this.assignedGroup?.name?.[0]?.toUpperCase();
     }
+
+    generateAssignmentInformation() {
+        let info = '';
+        if (this.assignedToUser) {
+            info = 'Assigned to: ' + this.assignedToUser.username;
+        }
+
+        if (this.assignedGroup) {
+            if (info) {
+                info += '<br/>';
+            }
+
+            info += 'Assigned group: ' + this.assignedGroup.name;
+        }
+
+        return info;
+    }
 }
 
 export default ChatClass;
