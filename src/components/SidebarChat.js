@@ -116,8 +116,8 @@ function SidebarChat(props) {
                                 {props.chatData.initials}
                             </Avatar>
 
-                            {(props.chatData.assignedTo && ((props.tabCase === 'all') || (props.tabCase === 'group'))) &&
-                            <Tooltip title={'Assigned to: ' + props.chatData.assignedTo.username}>
+                            {(props.chatData.assignedToUser && ((props.tabCase === 'all') || (props.tabCase === 'group'))) &&
+                            <Tooltip title={'Assigned to: ' + props.chatData.assignedToUser.username}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
                                     {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
                                 </Avatar>
@@ -125,7 +125,7 @@ function SidebarChat(props) {
                             }
 
                             {(props.chatData.assignedGroup
-                                && ((props.tabCase === 'all' && !props.chatData.assignedTo) || (props.tabCase === 'me') || (props.tabCase === 'group' && !props.chatData.assignedTo))) &&
+                                && ((props.tabCase === 'all' && !props.chatData.assignedToUser) || (props.tabCase === 'me') || (props.tabCase === 'group' && !props.chatData.assignedToUser))) &&
                             <Tooltip title={'Assigned to group: ' + props.chatData.assignedGroup.name}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedGroupInitials()]}>
                                     <GroupIcon />

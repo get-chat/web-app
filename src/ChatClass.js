@@ -23,7 +23,7 @@ class ChatClass {
         this.lastMessageTimestamp = this.lastMessageTimestamp ? this.lastMessageTimestamp : parseInt(contact.last_message_timestamp);
 
         this.assignedGroup = data.assigned_group;
-        this.assignedTo = data.assigned_to;
+        this.assignedToUser = data.assigned_to_user;
         this.tags = data.tags;
     }
 
@@ -65,7 +65,7 @@ class ChatClass {
     }
 
     generateAssignedToInitials() {
-        return this.assignedTo?.username?.[0]?.toUpperCase();
+        return this.assignedToUser?.username?.[0]?.toUpperCase();
     }
 
     generateAssignedGroupInitials() {

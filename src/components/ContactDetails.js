@@ -74,12 +74,12 @@ function ContactDetails(props)  {
                     </div>
                     }
 
-                    {(chat?.assignedTo || chat?.assignedGroup) &&
+                    {(chat?.assignedToUser || chat?.assignedGroup) &&
                     <div className="contactDetails__body__assignees mt-3">
-                        {chat?.assignedTo &&
+                        {chat?.assignedToUser &&
                         <div>
                             <PersonIcon />
-                            Assigned to: <span className="bold">{chat?.assignedTo.username}</span>
+                            Assigned to: <span className="bold">{chat?.assignedToUser.username}</span>
                         </div>
                         }
 
