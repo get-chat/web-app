@@ -80,7 +80,7 @@ class ChatClass {
 
         if (this.assignedGroup) {
             if (info) {
-                info += '<br/>';
+                info += ', ';
             }
 
             info += 'Assigned group: ' + this.assignedGroup.name;
