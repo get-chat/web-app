@@ -86,7 +86,7 @@ function ContactDetails(props)  {
                         {chat?.assignedGroup &&
                         <div>
                             <GroupIcon />
-                            Assigned to group: <span className="bold">{chat?.assignedGroup.name}</span>
+                            Assigned group: <span className="bold">{chat?.assignedGroup.name}</span>
                         </div>
                         }
                     </div>

@@ -126,7 +126,7 @@ function SidebarChat(props) {
 
                             {(props.chatData.assignedGroup
                                 && ((props.tabCase === 'all' && !props.chatData.assignedToUser) || (props.tabCase === 'me') || (props.tabCase === 'group' && !props.chatData.assignedToUser))) &&
-                            <Tooltip title={'Assigned to group: ' + props.chatData.assignedGroup.name}>
+                            <Tooltip title={'Assigned group: ' + props.chatData.assignedGroup.name}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedGroupInitials()]}>
                                     <GroupIcon />
                                 </Avatar>
