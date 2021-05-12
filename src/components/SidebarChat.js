@@ -116,7 +116,7 @@ function SidebarChat(props) {
                                 {props.chatData.initials}
                             </Avatar>
 
-                            {(props.chatData.assignedToUser && ((props.tabCase === 'all') || (props.tabCase === 'me' && !props.chatData.assignedGroup) || (props.tabCase === 'group'))) &&
+                            {(props.chatData.assignedToUser && ((props.tabCase === 'all') || (props.tabCase === 'group'))) &&
                             <Tooltip title={props.chatData.generateAssignmentInformation()}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
                                     {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
