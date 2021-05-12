@@ -13,7 +13,7 @@ import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {
 
-    const [tags, setTags] = useState([]);
+    const [chat, setChat] = useState({});
 
     const hideContactDetails = () => {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
@@ -23,14 +23,12 @@ function ContactDetails(props)  {
 
     useEffect(() => {
         props.retrieveContactData(props.contactData.waId);
-        setTags(getTagsByWaId());
+        setChat(getChatByWaId());
     }, []);
 
-    const getTagsByWaId = () => {
+    const getChatByWaId = () => {
         const waId = props.contactData.waId;
-        const chat = props.chats[waId];
-
-        return chat?.tags;
+        return props.chats[waId];
     }
 
     return (
@@ -63,9 +61,9 @@ function ContactDetails(props)  {
 
                     <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
 
-                    {tags?.length > 0 &&
+                    {chat?.tags?.length > 0 &&
                     <div className="contactDetails__body__tags mt-3">
-                        {tags.map((tag, index) =>
+                        {chat?.tags.map((tag, index) =>
                             <div className="contactDetails__body__tags__tag" key={index}>
                                 <LabelIcon style={{fill: tag.web_inbox_color}} />
                                 <span>{tag.name}</span>
