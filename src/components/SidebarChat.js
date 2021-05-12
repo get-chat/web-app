@@ -113,7 +113,7 @@ function SidebarChat(props) {
                         <div className="sidebarChat__avatarWrapper">
                             <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])} className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
 
-                            {(props.tabCase === 'all' && props.chatData.assignedTo) &&
+                            {(props.chatData.assignedTo && (props.tabCase === 'all')) &&
                             <Tooltip title={'Assigned to: ' + props.chatData.assignedTo.username}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
                                     {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
@@ -121,7 +121,7 @@ function SidebarChat(props) {
                             </Tooltip>
                             }
 
-                            {(props.tabCase === 'all' && !props.chatData.assignedTo && props.chatData.assignedGroup) &&
+                            {(props.chatData.assignedGroup && (props.tabCase === 'all' && !props.chatData.assignedTo)) &&
                             <Tooltip title={'Assigned to group: ' + props.chatData.assignedGroup.name}>
                                 <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedGroupInitials()]}>
                                     <GroupIcon />
