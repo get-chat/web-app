@@ -11,10 +11,15 @@ function ChatTags(props) {
 
     useEffect(() => {
         retrieveChat();
+        listTags();
     }, []);
 
     const close = () => {
         props.setOpen(false);
+    }
+
+    const onDeleteTag = () => {
+
     }
 
     const retrieveChat = () => {
@@ -29,17 +34,31 @@ function ChatTags(props) {
             });
     }
 
+    const listTags = () => {
+        axios.get( `${BASE_URL}tags/`, getConfig())
+            .then((response) => {
+                console.log("Tags: ", response.data);
+
+                setAllTags(response.data.results);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     return (
         <Dialog open={props.open} onClose={close}>
             <DialogTitle>Chat tags</DialogTitle>
             <DialogContent>
-                <div>You can add or remove tags for this chat</div>
+                <div className="mb-3">You can add or remove tags for this chat</div>
 
                 {chat?.tags &&
                 <div>
                     <h5>Current tags</h5>
                     {chat.tags.map((tag) =>
-                        <Chip label={tag.name} />
+                        <Chip
+                            onDelete={onDeleteTag}
+                            label={tag.name} />
                     )}
                 </div>
                 }
