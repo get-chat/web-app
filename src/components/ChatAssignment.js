@@ -23,6 +23,7 @@ function ChatAssignment(props) {
     const [assignedGroup, setAssignedGroup] = useState();
 
     useEffect(() => {
+        retrieveChat();
         listUsers();
         listGroups();
     }, []);
@@ -31,7 +32,7 @@ function ChatAssignment(props) {
         props.setOpen(false);
     }
 
-    const getChat = () => {
+    const retrieveChat = () => {
 
     }
 
