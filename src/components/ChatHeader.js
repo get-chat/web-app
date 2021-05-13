@@ -45,6 +45,11 @@ function ChatHeader(props) {
         hideMenu();
     }
 
+    const showChatTagsAndHideMenu = () => {
+        props.setChatTagsVisible(true);
+        hideMenu();
+    }
+
     const closeChat = () => {
         history.push("/main");
     }
@@ -102,6 +107,7 @@ function ChatHeader(props) {
                 elevation={3}>
                 <MenuItem onClick={showContactDetailsAndHideMenu}>Contact details</MenuItem>
                 <MenuItem onClick={showChatAssignmentAndHideMenu}>Assign chat</MenuItem>
+                <MenuItem onClick={showChatTagsAndHideMenu}>Change tags</MenuItem>
             </Menu>
 
         </div>
