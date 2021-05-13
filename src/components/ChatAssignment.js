@@ -12,15 +12,18 @@ import {
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
+import '../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {
 
     const [users, setUsers] = useState([]);
+    const [groups, setGroups] = useState([]);
     const [assignedToUser, setAssignedToUser] = useState();
     const [assignedGroup, setAssignedGroup] = useState();
 
     useEffect(() => {
         listUsers();
+        listGroups();
     }, []);
 
     const close = () => {
@@ -39,14 +42,30 @@ function ChatAssignment(props) {
             });
     }
 
+    const listGroups = () => {
+        axios.get( `${BASE_URL}groups/`, getConfig())
+            .then((response) => {
+                console.log("Groups: ", response.data);
+
+                setGroups(response.data.results);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     const handleUserChange = (event) => {
         setAssignedToUser(event.target.value);
+    }
+
+    const handleGroupChange = (event) => {
+        setAssignedGroup(event.target.value);
     }
 
     return (
         <Dialog open={props.open} onClose={close}>
             <DialogTitle>Assign chat</DialogTitle>
-            <DialogContent>
+            <DialogContent className="chatAssignment">
 
                 <div className="mb-3">You can assign this chat to a user or a group.</div>
 
@@ -59,6 +78,19 @@ function ChatAssignment(props) {
                         onChange={handleUserChange}>
                         {users?.map((user) =>
                             <MenuItem key={user.id} value={user.id}>{user.username}</MenuItem>
+                        )}
+                    </Select>
+                </FormControl>
+
+                <FormControl fullWidth={true}>
+                    <InputLabel id="assign-group-select-label">Group</InputLabel>
+                    <Select
+                        labelId="assign-group-select-label"
+                        id="assign-group-select"
+                        value={assignedGroup}
+                        onChange={handleGroupChange}>
+                        {groups?.map((group) =>
+                            <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
                         )}
                     </Select>
                 </FormControl>
