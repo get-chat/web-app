@@ -33,7 +33,15 @@ function ChatAssignment(props) {
     }
 
     const retrieveChat = () => {
+        axios.get( `${BASE_URL}chats/${props.waId}`, getConfig())
+            .then((response) => {
+                console.log("Chat: ", response.data);
 
+                setChat(response.data);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
     }
 
     const listUsers = () => {
