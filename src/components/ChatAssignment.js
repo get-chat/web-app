@@ -16,6 +16,7 @@ import '../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {
 
+    const [chat, setChat] = useState();
     const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [assignedToUser, setAssignedToUser] = useState();
@@ -28,6 +29,10 @@ function ChatAssignment(props) {
 
     const close = () => {
         props.setOpen(false);
+    }
+
+    const getChat = () => {
+
     }
 
     const listUsers = () => {
