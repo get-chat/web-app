@@ -16,6 +16,8 @@ import {getConfig} from "../Helpers";
 function ChatAssignment(props) {
 
     const [users, setUsers] = useState([]);
+    const [assignedToUser, setAssignedToUser] = useState();
+    const [assignedGroup, setAssignedGroup] = useState();
 
     useEffect(() => {
         listUsers();
@@ -38,7 +40,7 @@ function ChatAssignment(props) {
     }
 
     const handleUserChange = (event) => {
-        console.log(event.target.value);
+        setAssignedToUser(event.target.value);
     }
 
     return (
@@ -46,14 +48,18 @@ function ChatAssignment(props) {
             <DialogTitle>Assign chat</DialogTitle>
             <DialogContent>
 
+                <div className="mb-3">You can assign this chat to a user or a group.</div>
+
                 <FormControl fullWidth={true}>
-                    <InputLabel id="demo-simple-select-label">User</InputLabel>
+                    <InputLabel id="assign-user-select-label">User</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={""}
+                        labelId="assign-user-select-label"
+                        id="assign-user-select"
+                        value={assignedToUser}
                         onChange={handleUserChange}>
-                        <MenuItem value={1}>User</MenuItem>
+                        {users?.map((user) =>
+                            <MenuItem key={user.id} value={user.id}>{user.username}</MenuItem>
+                        )}
                     </Select>
                 </FormControl>
 
