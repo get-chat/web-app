@@ -40,6 +40,11 @@ function ChatHeader(props) {
         hideMenu();
     }
 
+    const showChatAssignmentAndHideMenu = () => {
+        props.setChatAssignmentVisible(true);
+        hideMenu();
+    }
+
     const closeChat = () => {
         history.push("/main");
     }
@@ -96,6 +101,7 @@ function ChatHeader(props) {
                 onClose={hideMenu}
                 elevation={3}>
                 <MenuItem onClick={showContactDetailsAndHideMenu}>Contact details</MenuItem>
+                <MenuItem onClick={showChatAssignmentAndHideMenu}>Assign</MenuItem>
             </Menu>
 
         </div>

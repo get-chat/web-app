@@ -802,7 +802,8 @@ export default function Chat(props) {
                 person={person}
                 contactProvidersData={props.contactProvidersData}
                 retrieveContactData={props.retrieveContactData}
-                isChatOnly={props.isChatOnly} />
+                isChatOnly={props.isChatOnly}
+                setChatAssignmentVisible={props.setChatAssignmentVisible} />
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">

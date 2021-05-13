@@ -58,7 +58,7 @@ function Main() {
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
-    const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(true);
+    const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
 
     const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
@@ -487,7 +487,8 @@ function Main() {
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
-                    isChatOnly={isChatOnly} />
+                    isChatOnly={isChatOnly}
+                    setChatAssignmentVisible={setChatAssignmentVisible} />
                 }
 
                 {isSearchMessagesVisible &&
