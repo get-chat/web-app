@@ -87,14 +87,14 @@
     filter: drop-shadow(2px -2px 0 rgba(0, 0, 0, 0.5));
 }
 
-.sidebarChatWrapper:hover .sidebarChat__waId {
+.sidebarChatWrapper:hover .sidebarChatWrapper__waId {
     display: inline-block;
     position: absolute;
     bottom: 5px;
     right: 15px;
 }
 
-.sidebarChat__waId {
+.sidebarChatWrapper__waId {
     display: none;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.45);
@@ -175,7 +175,7 @@
 }
 
 @media only screen and (max-width: 750px) {
-    .sidebarChat:hover .sidebarChat__waId {
+    .sidebarChat:hover .sidebarChatWrapper__waId {
         display: none;
     }
 }

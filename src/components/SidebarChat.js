@@ -189,7 +189,7 @@ function SidebarChat(props) {
                         </div>
                     </div>
 
-                    <span className="sidebarChat__waId">{addPlus(props.chatData.waId)}</span>
+                    <span className="sidebarChatWrapper__waId">{addPlus(props.chatData.waId)}</span>
 
                 </div>
             </ListItem>
