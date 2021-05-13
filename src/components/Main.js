@@ -58,7 +58,7 @@ function Main() {
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
-    const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
+    const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(true);
     const [chosenContact, setChosenContact] = useState();
 
     const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
@@ -503,7 +503,10 @@ function Main() {
                 }
 
                 {isChatAssignmentVisible &&
-                <ChatAssignment waId={waId} />
+                <ChatAssignment
+                    waId={waId}
+                    open={isChatAssignmentVisible}
+                    setOpen={setChatAssignmentVisible} />
                 }
 
                 {chatMessageToPreview &&
