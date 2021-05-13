@@ -30,6 +30,7 @@ import {
     getToken,
     storeContactProvidersData
 } from "../StorageHelper";
+import ChatAssignment from "./ChatAssignment";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -57,6 +58,7 @@ function Main() {
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
+    const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
     const [chosenContact, setChosenContact] = useState();
 
     const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
@@ -361,6 +363,9 @@ function Main() {
 
             // Hide contact details
             setContactDetailsVisible(false);
+
+            // Hide chat assignment
+            setChatAssignmentVisible(false);
         }
     }, [waId]);
 
@@ -495,6 +500,10 @@ function Main() {
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
                     chats={chats} />
+                }
+
+                {isChatAssignmentVisible &&
+                <ChatAssignment waId={waId} />
                 }
 
                 {chatMessageToPreview &&
