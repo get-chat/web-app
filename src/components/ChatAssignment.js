@@ -16,7 +16,6 @@ import '../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {
 
-    const [chat, setChat] = useState();
     const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [assignedToUser, setAssignedToUser] = useState('null');
@@ -33,25 +32,29 @@ function ChatAssignment(props) {
         props.setOpen(false);
     }
 
-    const retrieveChat = () => {
-        axios.get( `${BASE_URL}chats/${props.waId}`, getConfig())
+    const retrieveChatAssignment = () => {
+        axios.get( `${BASE_URL}chats/assignment/${props.waId}/`, getConfig())
             .then((response) => {
-                console.log("Chat: ", response.data);
+                console.log("Assignment: ", response.data);
 
-                setChat(response.data);
+                setAssignedToUser(response.data.assigned_to_user ?? 'null');
+                setAssignedGroup(response.data.assigned_group ?? 'null');
             })
             .catch((error) => {
                 window.displayError(error);
             });
     }
 
-    const retrieveChatAssignment = () => {
-        axios.get( `${BASE_URL}chats/assignment/${props.waId}`, getConfig())
+    const updateChatAssignment = () => {
+        axios.put( `${BASE_URL}chats/assignment/${props.waId}/`, {
+            'wa_id': props.waId,
+            'assigned_to_user': assignedToUser === 'null' ? null : assignedToUser,
+            'assigned_group': assignedGroup === 'null' ? null : assignedGroup,
+        }, getConfig())
             .then((response) => {
                 console.log("Assignment: ", response.data);
 
-                setAssignedToUser(response.data.assigned_to_user ?? 'null');
-                setAssignedGroup(response.data.assigned_group ?? 'null');
+                close();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -128,7 +131,7 @@ function ChatAssignment(props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={close} color="secondary">Close</Button>
-                <Button color="primary">Update</Button>
+                <Button color="primary" onClick={updateChatAssignment}>Update</Button>
             </DialogActions>
         </Dialog>
     )
