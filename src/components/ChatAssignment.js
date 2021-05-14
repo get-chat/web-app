@@ -22,14 +22,23 @@ function ChatAssignment(props) {
     const [assignedGroup, setAssignedGroup] = useState('null');
 
     useEffect(() => {
-        //retrieveChat();
-        retrieveChatAssignment();
         listUsers();
         listGroups();
+        retrieveChatAssignment();
     }, []);
 
     const close = () => {
         props.setOpen(false);
+    }
+
+    const retrieveChat = () => {
+        axios.get( `${BASE_URL}chats/${props.waId}/`, getConfig())
+            .then((response) => {
+                console.log("Chat: ", response.data);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
     }
 
     const retrieveChatAssignment = () => {
@@ -53,6 +62,8 @@ function ChatAssignment(props) {
         }, getConfig())
             .then((response) => {
                 console.log("Assignment: ", response.data);
+
+                retrieveChat();
 
                 close();
             })
