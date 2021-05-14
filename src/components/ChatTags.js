@@ -7,7 +7,7 @@ import '../styles/ChatTags.css';
 
 function ChatTags(props) {
 
-    const [chat, setChat] = useState([]);
+    const [chat, setChat] = useState();
     const [allTags, setAllTags] = useState([]);
 
     useEffect(() => {
@@ -59,7 +59,7 @@ function ChatTags(props) {
 
                 {chat?.tags &&
                 <div className="chatTags__tags">
-                    <h5 className="mb-2">Current tags</h5>
+                    <h5 className="mb-1">Current tags</h5>
                     <div>
                         {chat.tags.map((tag) =>
                             <Chip
@@ -72,10 +72,26 @@ function ChatTags(props) {
                 }
 
                 {allTags &&
-                <div className="chatTags__tags">
-                    <h5 className="mb-2">All tags</h5>
+                <div className="chatTags__tags mt-3">
+                    <h5 className="mb-1">All tags</h5>
                     <div>
-                        {allTags.map((tag) =>
+                        {allTags.filter((tag) => {
+                            if (chat?.tags) {
+                                let found = false;
+                                for (let i = 0; i < chat.tags.length; i++) {
+                                    const curTag = chat.tags[i];
+                                    if (curTag.id === tag.id) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) {
+                                    return tag;
+                                }
+                            } else {
+                                return tag;
+                            }
+                        }).map((tag) =>
                             <Chip
                                 key={tag.id}
                                 label={tag.name}
