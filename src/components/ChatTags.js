@@ -16,6 +16,14 @@ function ChatTags(props) {
         retrieveChat();
     }, []);
 
+    useEffect(() => {
+        props.setChats(prevState => {
+            prevState[props.waId].tags = chatTags;
+            console.log(chatTags);
+            return {...prevState};
+        });
+    }, [chatTags]);
+
     const close = () => {
         props.setOpen(false);
     }
@@ -25,10 +33,7 @@ function ChatTags(props) {
     }
 
     const onClickTag = (tag) => {
-        setChatTags(prevState => {
-            prevState.push(tag);
-            return [].concat(prevState);
-        });
+        createTag(tag);
     }
 
     const retrieveChat = () => {
@@ -61,8 +66,33 @@ function ChatTags(props) {
             });
     }
 
+    const createTag = (tag) => {
+        axios.post( `${BASE_URL}chat_tagging/`, {
+            tag: tag.id,
+            chat: props.waId
+        }, getConfig())
+            .then((response) => {
+                console.log("Created tag: ", response.data);
+
+                setChatTags(prevState => {
+                    const nextState = prevState.filter((curTag) => {
+                        return curTag.id !== tag.id;
+                    });
+
+                    tag.tagging_id = response.data.id;
+
+                    nextState.push(tag);
+
+                    return nextState;
+                });
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     const deleteTag = (tag) => {
-        axios.delete( `${BASE_URL}chats/tagging/${tag.tagging_id}`, getConfig())
+        axios.delete( `${BASE_URL}chat_tagging/${tag.tagging_id}`, getConfig())
             .then((response) => {
                 console.log("Deleted tag: ", response.data);
 
@@ -70,7 +100,7 @@ function ChatTags(props) {
                     return prevState.filter((curTag) => {
                         return curTag.id !== tag.id;
                     });
-                })
+                });
             })
             .catch((error) => {
                 window.displayError(error);
@@ -131,7 +161,7 @@ function ChatTags(props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={close} color="secondary">Close</Button>
-                <Button color="primary">Update</Button>
+                {/*<Button color="primary">Update</Button>*/}
             </DialogActions>
 
             {isLoading &&

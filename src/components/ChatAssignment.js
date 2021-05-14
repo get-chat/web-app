@@ -54,7 +54,7 @@ function ChatAssignment(props) {
     }
 
     const retrieveChatAssignment = () => {
-        axios.get( `${BASE_URL}chats/assignment/${props.waId}/`, getConfig())
+        axios.get( `${BASE_URL}chat_assignment/${props.waId}/`, getConfig())
             .then((response) => {
                 console.log("Assignment: ", response.data);
 
@@ -69,7 +69,7 @@ function ChatAssignment(props) {
     }
 
     const updateChatAssignment = () => {
-        axios.put( `${BASE_URL}chats/assignment/${props.waId}/`, {
+        axios.put( `${BASE_URL}chat_assignment/${props.waId}/`, {
             'wa_id': props.waId,
             'assigned_to_user': assignedToUser === 'null' ? null : assignedToUser,
             'assigned_group': assignedGroup === 'null' ? null : assignedGroup,
