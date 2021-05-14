@@ -510,7 +510,9 @@ function Main() {
                 <ChatAssignment
                     waId={waId}
                     open={isChatAssignmentVisible}
-                    setOpen={setChatAssignmentVisible} />
+                    setOpen={setChatAssignmentVisible}
+                    chats={chats}
+                    setChats={setChats} />
                 }
 
                 {isChatTagsVisible &&
@@ -518,6 +520,8 @@ function Main() {
                     waId={waId}
                     open={isChatTagsVisible}
                     setOpen={setChatTagsVisible}
+                    chats={chats}
+                    setChats={setChats}
                 />
                 }
 

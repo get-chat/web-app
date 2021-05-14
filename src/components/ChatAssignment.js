@@ -35,6 +35,19 @@ function ChatAssignment(props) {
         axios.get( `${BASE_URL}chats/${props.waId}/`, getConfig())
             .then((response) => {
                 console.log("Chat: ", response.data);
+
+                // Update chats data
+                const chat = response.data;
+                if (chat) {
+                    props.setChats(prevState => {
+                        prevState[props.waId].assignedToUser = chat.assigned_to_user;
+                        prevState[props.waId].assignedGroup = chat.assigned_group;
+
+                        return {...prevState};
+                    })
+                }
+
+                close();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -63,9 +76,8 @@ function ChatAssignment(props) {
             .then((response) => {
                 console.log("Assignment: ", response.data);
 
+                // Retrieve chat and update chats data
                 retrieveChat();
-
-                close();
             })
             .catch((error) => {
                 window.displayError(error);
