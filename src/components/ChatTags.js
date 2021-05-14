@@ -8,6 +8,7 @@ import '../styles/ChatTags.css';
 function ChatTags(props) {
 
     const [chat, setChat] = useState();
+    const [chatTags, setChatTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
 
     useEffect(() => {
@@ -19,12 +20,15 @@ function ChatTags(props) {
         props.setOpen(false);
     }
 
-    const onDeleteTag = (id) => {
+    const onDeleteTag = (tag) => {
 
     }
 
-    const onClickTag = (id) => {
-
+    const onClickTag = (tag) => {
+        setChatTags(prevState => {
+            prevState.push(tag);
+            return [].concat(prevState);
+        });
     }
 
     const retrieveChat = () => {
@@ -33,6 +37,7 @@ function ChatTags(props) {
                 console.log("Chat: ", response.data);
 
                 setChat(response.data);
+                setChatTags(response.data.tags);
             })
             .catch((error) => {
                 window.displayError(error);
@@ -57,15 +62,15 @@ function ChatTags(props) {
             <DialogContent>
                 <div className="mb-3">You can add or remove tags for this chat</div>
 
-                {chat?.tags &&
+                {chatTags &&
                 <div className="chatTags__tags">
-                    <h5 className="mb-1">Current tags</h5>
+                    <h5>Current tags</h5>
                     <div>
-                        {chat.tags.map((tag) =>
+                        {chatTags.map((tag) =>
                             <Chip
                                 key={tag.id}
                                 label={tag.name}
-                                onDelete={() => onDeleteTag(tag.id)} />
+                                onDelete={() => onDeleteTag(tag)} />
                         )}
                     </div>
                 </div>
@@ -73,13 +78,13 @@ function ChatTags(props) {
 
                 {allTags &&
                 <div className="chatTags__tags mt-3">
-                    <h5 className="mb-1">All tags</h5>
+                    <h5>All tags</h5>
                     <div>
                         {allTags.filter((tag) => {
-                            if (chat?.tags) {
+                            if (chatTags) {
                                 let found = false;
-                                for (let i = 0; i < chat.tags.length; i++) {
-                                    const curTag = chat.tags[i];
+                                for (let i = 0; i < chatTags.length; i++) {
+                                    const curTag = chatTags[i];
                                     if (curTag.id === tag.id) {
                                         found = true;
                                         break;
@@ -96,7 +101,7 @@ function ChatTags(props) {
                                 key={tag.id}
                                 label={tag.name}
                                 clickable
-                                onClick={() => onClickTag(tag.id)} />
+                                onClick={() => onClickTag(tag)} />
                         )}
                     </div>
                 </div>
