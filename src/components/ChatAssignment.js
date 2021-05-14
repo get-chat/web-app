@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
-    Button,
+    Button, CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -16,6 +16,7 @@ import '../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {
 
+    const [isLoading, setLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [assignedToUser, setAssignedToUser] = useState('null');
@@ -23,8 +24,6 @@ function ChatAssignment(props) {
 
     useEffect(() => {
         listUsers();
-        listGroups();
-        retrieveChatAssignment();
     }, []);
 
     const close = () => {
@@ -61,6 +60,8 @@ function ChatAssignment(props) {
 
                 setAssignedToUser(response.data.assigned_to_user ?? 'null');
                 setAssignedGroup(response.data.assigned_group ?? 'null');
+
+                setLoading(false);
             })
             .catch((error) => {
                 window.displayError(error);
@@ -90,6 +91,9 @@ function ChatAssignment(props) {
                 console.log("Users: ", response.data);
 
                 setUsers(response.data.results);
+
+                // Next
+                listGroups();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -102,6 +106,9 @@ function ChatAssignment(props) {
                 console.log("Groups: ", response.data);
 
                 setGroups(response.data.results);
+
+                // Next
+                retrieveChatAssignment();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -117,7 +124,7 @@ function ChatAssignment(props) {
     }
 
     return (
-        <Dialog open={props.open} onClose={close}>
+        <Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
             <DialogTitle>Assign chat</DialogTitle>
             <DialogContent className="chatAssignment">
 
@@ -156,6 +163,13 @@ function ChatAssignment(props) {
                 <Button onClick={close} color="secondary">Close</Button>
                 <Button color="primary" onClick={updateChatAssignment}>Update</Button>
             </DialogActions>
+
+            {isLoading &&
+            <div className="chatAssignmentWrapper__loading">
+                <CircularProgress size={28} />
+            </div>
+            }
+
         </Dialog>
     )
 }
