@@ -19,11 +19,14 @@ function ChatAssignment(props) {
     const [chat, setChat] = useState();
     const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
+    const [currentAssignedToUser, setCurrentAssignedToUser] = useState();
+    const [currentAssignedGroup, setCurrentAssignedGroup] = useState();
     const [assignedToUser, setAssignedToUser] = useState();
     const [assignedGroup, setAssignedGroup] = useState();
 
     useEffect(() => {
         retrieveChat();
+        retrieveChatAssignment();
         listUsers();
         listGroups();
     }, []);
@@ -38,6 +41,19 @@ function ChatAssignment(props) {
                 console.log("Chat: ", response.data);
 
                 setChat(response.data);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
+    const retrieveChatAssignment = () => {
+        axios.get( `${BASE_URL}chats/assignment/${props.waId}`, getConfig())
+            .then((response) => {
+                console.log("Assignment: ", response.data);
+
+                setCurrentAssignedToUser(response.data.assigned_to_user);
+                setCurrentAssignedGroup(response.data.assigned_group);
             })
             .catch((error) => {
                 window.displayError(error);
