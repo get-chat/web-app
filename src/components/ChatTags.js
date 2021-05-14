@@ -32,7 +32,7 @@ function ChatTags(props) {
     }
 
     const retrieveChat = () => {
-        axios.get( `${BASE_URL}chats/${props.waId}`, getConfig())
+        axios.get( `${BASE_URL}chats/${props.waId}/`, getConfig())
             .then((response) => {
                 console.log("Chat: ", response.data);
 
@@ -55,6 +55,18 @@ function ChatTags(props) {
                 setAllTags(response.data.results);
 
                 setLoading(false);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
+    const deleteTag = (tag) => {
+        axios.delete( `${BASE_URL}chats/tagging/${tag.id}`, getConfig())
+            .then((response) => {
+                console.log("Deleted tag: ", response.data);
+
+
             })
             .catch((error) => {
                 window.displayError(error);
