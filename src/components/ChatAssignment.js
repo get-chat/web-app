@@ -19,13 +19,11 @@ function ChatAssignment(props) {
     const [chat, setChat] = useState();
     const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
-    const [currentAssignedToUser, setCurrentAssignedToUser] = useState();
-    const [currentAssignedGroup, setCurrentAssignedGroup] = useState();
-    const [assignedToUser, setAssignedToUser] = useState();
-    const [assignedGroup, setAssignedGroup] = useState();
+    const [assignedToUser, setAssignedToUser] = useState('null');
+    const [assignedGroup, setAssignedGroup] = useState('null');
 
     useEffect(() => {
-        retrieveChat();
+        //retrieveChat();
         retrieveChatAssignment();
         listUsers();
         listGroups();
@@ -52,8 +50,8 @@ function ChatAssignment(props) {
             .then((response) => {
                 console.log("Assignment: ", response.data);
 
-                setCurrentAssignedToUser(response.data.assigned_to_user);
-                setCurrentAssignedGroup(response.data.assigned_group);
+                setAssignedToUser(response.data.assigned_to_user ?? 'null');
+                setAssignedGroup(response.data.assigned_group ?? 'null');
             })
             .catch((error) => {
                 window.displayError(error);
@@ -106,6 +104,7 @@ function ChatAssignment(props) {
                         id="assign-user-select"
                         value={assignedToUser}
                         onChange={handleUserChange}>
+                        <MenuItem value="null">Unassigned</MenuItem>
                         {users?.map((user) =>
                             <MenuItem key={user.id} value={user.id}>{user.username}</MenuItem>
                         )}
@@ -119,6 +118,7 @@ function ChatAssignment(props) {
                         id="assign-group-select"
                         value={assignedGroup}
                         onChange={handleGroupChange}>
+                        <MenuItem value="null">Unassigned</MenuItem>
                         {groups?.map((group) =>
                             <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
                         )}
