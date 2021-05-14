@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
+import {Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
@@ -7,13 +7,13 @@ import '../styles/ChatTags.css';
 
 function ChatTags(props) {
 
+    const [isLoading, setLoading] = useState(true);
     const [chat, setChat] = useState();
     const [chatTags, setChatTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
 
     useEffect(() => {
         retrieveChat();
-        listTags();
     }, []);
 
     const close = () => {
@@ -38,6 +38,9 @@ function ChatTags(props) {
 
                 setChat(response.data);
                 setChatTags(response.data.tags);
+
+                // Next
+                listTags();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -50,6 +53,8 @@ function ChatTags(props) {
                 console.log("Tags: ", response.data);
 
                 setAllTags(response.data.results);
+
+                setLoading(false);
             })
             .catch((error) => {
                 window.displayError(error);
@@ -57,13 +62,13 @@ function ChatTags(props) {
     }
 
     return (
-        <Dialog open={props.open} onClose={close}>
+        <Dialog open={props.open} onClose={close} className="chatTagsWrapper">
             <DialogTitle>Chat tags</DialogTitle>
             <DialogContent>
                 <div className="mb-3">You can add or remove tags for this chat</div>
 
                 {chatTags &&
-                <div className="chatTags__tags">
+                <div className="chatTags__tags current">
                     <h5>Current tags</h5>
                     <div>
                         {chatTags.map((tag) =>
@@ -112,6 +117,13 @@ function ChatTags(props) {
                 <Button onClick={close} color="secondary">Close</Button>
                 <Button color="primary">Update</Button>
             </DialogActions>
+
+            {isLoading &&
+            <div className="chatTagsWrapper__loading">
+                <CircularProgress size={28} />
+            </div>
+            }
+
         </Dialog>
     )
 }
