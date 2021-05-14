@@ -272,8 +272,12 @@ a {
     align-self: center;
 }
 
-.wordBreak {
+.wordBreakAll {
     word-break: break-all;
+}
+
+.wordBreakWord {
+    word-break: break-word;
 }
 
 .searchOccurrence {

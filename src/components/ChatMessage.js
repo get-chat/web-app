@@ -94,7 +94,7 @@ function ChatMessage(props) {
                 <ChatMessageTemplate data={data} templateData={templateData} onPreview={() => props.onPreview(data)} />
                 }
 
-                {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreak" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
+                {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreakWord" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
 
                 <span className="chat__message__info">
                     <span className="chat__timestamp">

@@ -38,13 +38,13 @@ function ChatMessageTemplate(props) {
                                     <ChatMessageDocument data={data} />
                                     }
                                     {component.format === "TEXT" &&
-                                    <div className="bold wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
+                                    <div className="bold wordBreakAll" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
                                     }
                                 </div>
                                 }
 
                                 {component.type === "BODY" &&
-                                <div className="wordBreak" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
+                                <div className="wordBreakAll" dangerouslySetInnerHTML={{ __html: insertTemplateComponentParameters(component, data.templateParameters) }} />
                                 }
 
                                 {component.type === "BUTTONS" &&
