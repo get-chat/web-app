@@ -6,7 +6,7 @@ import {getConfig} from "../Helpers";
 
 function ChatTags(props) {
 
-    const [chat, setChat] = useState();
+    const [chat, setChat] = useState([]);
     const [allTags, setAllTags] = useState([]);
 
     useEffect(() => {
@@ -57,6 +57,7 @@ function ChatTags(props) {
                     <h5>Current tags</h5>
                     {chat.tags.map((tag) =>
                         <Chip
+                            key={tag.id}
                             onDelete={onDeleteTag}
                             label={tag.name} />
                     )}
@@ -67,7 +68,9 @@ function ChatTags(props) {
                 <div>
                     <h5>All tags</h5>
                     {allTags.map((tag) =>
-                        <Chip label={tag.name} />
+                        <Chip
+                            key={tag.id}
+                            label={tag.name} />
                     )}
                 </div>
                 }
