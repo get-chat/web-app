@@ -21,7 +21,7 @@ function ChatTags(props) {
     }
 
     const onDeleteTag = (tag) => {
-
+        deleteTag(tag);
     }
 
     const onClickTag = (tag) => {
@@ -62,11 +62,15 @@ function ChatTags(props) {
     }
 
     const deleteTag = (tag) => {
-        axios.delete( `${BASE_URL}chats/tagging/${tag.id}`, getConfig())
+        axios.delete( `${BASE_URL}chats/tagging/${tag.tagging_id}`, getConfig())
             .then((response) => {
                 console.log("Deleted tag: ", response.data);
 
-
+                setChatTags(prevState => {
+                    return prevState.filter((curTag) => {
+                        return curTag.id !== tag.id;
+                    });
+                })
             })
             .catch((error) => {
                 window.displayError(error);
