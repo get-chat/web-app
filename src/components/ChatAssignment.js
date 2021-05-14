@@ -123,6 +123,29 @@ function ChatAssignment(props) {
         setAssignedGroup(event.target.value);
     }
 
+    const prepareUserLabel = (user) => {
+        let label = '';
+        if (user.first_name) {
+            label = user.first_name;
+        }
+
+        if (user.last_name) {
+            if (label) {
+                label += ' ';
+            }
+
+            label += user.last_name;
+        }
+
+        if (label) {
+            label += ` (${user.username})`;
+        } else {
+            label = user.username;
+        }
+
+        return label;
+    }
+
     return (
         <Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
             <DialogTitle>Assign chat</DialogTitle>
@@ -139,7 +162,7 @@ function ChatAssignment(props) {
                         onChange={handleUserChange}>
                         <MenuItem value="null">Unassigned</MenuItem>
                         {users?.map((user) =>
-                            <MenuItem key={user.id} value={user.id}>{user.username}</MenuItem>
+                            <MenuItem key={user.id} value={user.id}>{prepareUserLabel(user)}</MenuItem>
                         )}
                     </Select>
                 </FormControl>
