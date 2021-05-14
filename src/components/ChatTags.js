@@ -3,6 +3,7 @@ import {Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle} from "@
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
+import '../styles/ChatTags.css';
 
 function ChatTags(props) {
 
@@ -18,7 +19,11 @@ function ChatTags(props) {
         props.setOpen(false);
     }
 
-    const onDeleteTag = () => {
+    const onDeleteTag = (id) => {
+
+    }
+
+    const onClickTag = (id) => {
 
     }
 
@@ -53,25 +58,31 @@ function ChatTags(props) {
                 <div className="mb-3">You can add or remove tags for this chat</div>
 
                 {chat?.tags &&
-                <div>
-                    <h5>Current tags</h5>
-                    {chat.tags.map((tag) =>
-                        <Chip
-                            key={tag.id}
-                            onDelete={onDeleteTag}
-                            label={tag.name} />
-                    )}
+                <div className="chatTags__tags">
+                    <h5 className="mb-2">Current tags</h5>
+                    <div>
+                        {chat.tags.map((tag) =>
+                            <Chip
+                                key={tag.id}
+                                label={tag.name}
+                                onDelete={() => onDeleteTag(tag.id)} />
+                        )}
+                    </div>
                 </div>
                 }
 
                 {allTags &&
-                <div>
-                    <h5>All tags</h5>
-                    {allTags.map((tag) =>
-                        <Chip
-                            key={tag.id}
-                            label={tag.name} />
-                    )}
+                <div className="chatTags__tags">
+                    <h5 className="mb-2">All tags</h5>
+                    <div>
+                        {allTags.map((tag) =>
+                            <Chip
+                                key={tag.id}
+                                label={tag.name}
+                                clickable
+                                onClick={() => onClickTag(tag.id)} />
+                        )}
+                    </div>
                 </div>
                 }
 
