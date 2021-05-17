@@ -29,10 +29,11 @@
 .sidebar__clearFilter {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    background-color: var(--color-primary);
+    padding: 15px 15px;
+    background-color: var(--color-primary-light);
     color: white;
     cursor: pointer;
+    font-size: 16px;
 }
 
 .sidebar__clearFilter .MuiSvgIcon-root {
