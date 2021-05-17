@@ -346,6 +346,10 @@ function Sidebar(props) {
         setTabCase(newValue);
     }
 
+    const clearFilter = () => {
+        props.setFilterTag(undefined);
+    }
+
     return (
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
@@ -365,6 +369,12 @@ function Sidebar(props) {
             </div>
 
             <SearchBar onChange={(_keyword) => search(_keyword)} />
+
+            {props.filterTag &&
+            <div className="sidebar__clearFilter" onClick={clearFilter}>
+                Clear filter
+            </div>
+            }
 
             <div className="sidebar__tabs">
                 <Tabs
