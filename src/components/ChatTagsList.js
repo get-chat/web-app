@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
+import {CircularProgress, Dialog, DialogContent, DialogTitle} from "@material-ui/core";
 
 function ChatTagsList(props) {
 
@@ -11,6 +12,10 @@ function ChatTagsList(props) {
     useEffect(() => {
         listTags();
     }, []);
+
+    const close = () => {
+        props.setOpen(false);
+    }
 
     const listTags = () => {
         axios.get( `${BASE_URL}tags/`, getConfig())
@@ -27,17 +32,29 @@ function ChatTagsList(props) {
     }
 
     return (
-        <div>
-            {tags &&
-            <div>
-                {tags.map((tag) =>
+        <Dialog open={props.open} onClose={close} className="chatTagsListWrapper">
+            <DialogTitle>Chat tags</DialogTitle>
+            <DialogContent>
+                <div className="mb-3">List of all tags</div>
+
+                {tags &&
                 <div>
-                    {tag.name}
+                    {tags.map((tag) =>
+                        <div>
+                            {tag.name}
+                        </div>
+                    )}
                 </div>
-                )}
+                }
+            </DialogContent>
+
+            {isLoading &&
+            <div className="chatTagsListWrapper__loading">
+                <CircularProgress size={28} />
             </div>
             }
-        </div>
+
+        </Dialog>
     )
 }
 
