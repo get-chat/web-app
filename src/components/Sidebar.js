@@ -28,7 +28,6 @@ import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "./Contacts";
 import {clearContactProvidersData} from "../StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
-import LabelIcon from "@material-ui/icons/Label";
 
 function Sidebar(props) {
 
@@ -365,9 +364,6 @@ function Sidebar(props) {
                     <IconButton onClick={displayContacts}>
                         <ChatIcon />
                     </IconButton>
-                    <IconButton onClick={showChatTagsList}>
-                        <LabelIcon />
-                    </IconButton>
                     <IconButton onClick={displayMenu}>
                         <MoreVertIcon />
                     </IconButton>
@@ -536,6 +532,8 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
+                <MenuItem onClick={showChatTagsList}>Tags</MenuItem>
+                <Divider />
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={showChangePassword}>Change password</MenuItem>
                 <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
