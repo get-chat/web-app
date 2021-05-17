@@ -42,7 +42,7 @@ function ChatTagsList(props) {
         <Dialog open={props.open} onClose={close} className="chatTagsListWrapper">
             <DialogTitle>Tags</DialogTitle>
             <DialogContent className="chatTagsListWrapper">
-                <div className="mb-3">List of all tags</div>
+                <div className="mb-3">You can filter chats by tags.</div>
 
                 {tags &&
                 <div>
