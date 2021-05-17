@@ -47,7 +47,7 @@ function ChatTagsList(props) {
                 {tags &&
                 <div>
                     {tags.map((tag) =>
-                        <ListItem button onClick={() => handleClick(tag)}>
+                        <ListItem key={tag.id} button onClick={() => handleClick(tag)}>
                             <div className="chatTagsListWrapper__tag">
                                 <LabelIcon style={{fill: tag.web_inbox_color}} />
                                 {tag.name}
