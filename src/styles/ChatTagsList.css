@@ -13,3 +13,16 @@
     bottom: 0;
     background-color: white;
 }
+
+.chatTagsListWrapper .MuiListItem-root {
+    border-radius: 10px;
+    margin-top: 5px;
+}
+
+.chatTagsListWrapper__tag {
+    font-size: 16px;
+}
+
+.chatTagsListWrapper__tag .MuiSvgIcon-root {
+    margin-right: 10px;
+}

@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
-import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
+import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, ListItem} from "@material-ui/core";
 import '../styles/ChatTagsList.css';
+import LabelIcon from "@material-ui/icons/Label";
 
 function ChatTagsList(props) {
 
@@ -34,16 +35,19 @@ function ChatTagsList(props) {
 
     return (
         <Dialog open={props.open} onClose={close} className="chatTagsListWrapper">
-            <DialogTitle>Chat tags</DialogTitle>
-            <DialogContent>
+            <DialogTitle>Tags</DialogTitle>
+            <DialogContent className="chatTagsListWrapper">
                 <div className="mb-3">List of all tags</div>
 
                 {tags &&
                 <div>
                     {tags.map((tag) =>
-                        <div>
-                            {tag.name}
-                        </div>
+                        <ListItem button>
+                            <div className="chatTagsListWrapper__tag">
+                                <LabelIcon style={{fill: tag.web_inbox_color}} />
+                                {tag.name}
+                            </div>
+                        </ListItem>
                     )}
                 </div>
                 }
