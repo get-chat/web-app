@@ -391,13 +391,17 @@ function Sidebar(props) {
                 <div className="sidebar__results__chats">
                     { Object.entries(props.chats)
                         .filter((chat) => {
+                            const curChat = chat[1];
+
                             if (props.filterTag) {
-                                if (!chat.tags) {
+                                if (!curChat.tags) {
                                     return false;
                                 }
                                 let hasTag = false;
-                                for (let i = 0; i < chat.tags.length; i++) {
-                                    const curTag = chat.tags[i];
+                                console.log(curChat.tags.length);
+                                for (let i = 0; i < curChat.tags.length; i++) {
+                                    const curTag = curChat.tags[i];
+                                    console.log(curTag);
                                     if (curTag.id === props.filterTag) {
                                         hasTag = true;
                                         break;
@@ -411,14 +415,14 @@ function Sidebar(props) {
                                     return true;
                                 }
                                 case "me": {
-                                    if (chat[1].assignedToUser?.id === props.currentUser.id) {
+                                    if (curChat.assignedToUser?.id === props.currentUser.id) {
                                         return true;
                                     }
                                     break;
                                 }
                                 case "group": {
-                                    if (chat[1].assignedGroup && props.currentUser.groups) {
-                                        const assignedGroupId = chat[1].assignedGroup.id;
+                                    if (curChat.assignedGroup && props.currentUser.groups) {
+                                        const assignedGroupId = curChat.assignedGroup.id;
                                         for (let i = 0; i < props.currentUser.groups.length; i++) {
                                             const group = props.currentUser.groups[i];
 
