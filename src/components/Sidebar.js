@@ -26,6 +26,7 @@ import {isMobile} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "./Contacts";
 import {clearContactProvidersData} from "../StorageHelper";
+import CloseIcon from "@material-ui/icons/Close";
 
 function Sidebar(props) {
 
@@ -372,6 +373,7 @@ function Sidebar(props) {
 
             {props.filterTag &&
             <div className="sidebar__clearFilter" onClick={clearFilter}>
+                <CloseIcon />
                 Clear filter
             </div>
             }
