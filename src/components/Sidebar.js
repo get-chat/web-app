@@ -489,6 +489,8 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
+                <MenuItem onClick={() => props.setChatTagsListVisible(true)}>Tags</MenuItem>
+                <Divider />
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={() => setChangePasswordDialogVisible(true)}>Change password</MenuItem>
                 <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>

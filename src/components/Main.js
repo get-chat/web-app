@@ -478,7 +478,8 @@ function Main() {
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
-                    isChatOnly={isChatOnly} />
+                    isChatOnly={isChatOnly}
+                    setChatTagsListVisible={setChatTagsListVisible} />
                 }
 
                 {templatesReady &&

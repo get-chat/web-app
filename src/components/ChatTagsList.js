@@ -3,6 +3,7 @@ import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
 import {CircularProgress, Dialog, DialogContent, DialogTitle} from "@material-ui/core";
+import '../styles/ChatTagsList.css';
 
 function ChatTagsList(props) {
 
