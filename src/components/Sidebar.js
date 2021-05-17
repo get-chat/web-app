@@ -9,7 +9,8 @@ import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
-    EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_UPDATE_PERSON_NAME
+    EVENT_TOPIC_NEW_CHAT_MESSAGES,
+    EVENT_TOPIC_UPDATE_PERSON_NAME
 } from "../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "./SearchBar";
@@ -378,7 +379,8 @@ function Sidebar(props) {
             {props.filterTag &&
             <div className="sidebar__clearFilter" onClick={clearFilter}>
                 <CloseIcon />
-                Clear filter:&nbsp;<span className="bold">{props.filterTag.name}</span>
+                Clear filter:&nbsp;
+                <span className="bold">{props.filterTag.name}</span>
             </div>
             }
 
