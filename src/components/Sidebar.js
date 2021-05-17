@@ -391,13 +391,28 @@ function Sidebar(props) {
                 <div className="sidebar__results__chats">
                     { Object.entries(props.chats)
                         .filter((chat) => {
+                            if (props.filterTag) {
+                                if (!chat.tags) {
+                                    return false;
+                                }
+                                let hasTag = false;
+                                for (let i = 0; i < chat.tags.length; i++) {
+                                    const curTag = chat.tags[i];
+                                    if (curTag.id === props.filterTag) {
+                                        hasTag = true;
+                                        break;
+                                    }
+                                }
+                                if (!hasTag) return false;
+                            }
+
                             switch (tabCase) {
                                 case "all": {
-                                    return chat;
+                                    return true;
                                 }
                                 case "me": {
                                     if (chat[1].assignedToUser?.id === props.currentUser.id) {
-                                        return chat;
+                                        return true;
                                     }
                                     break;
                                 }
@@ -408,7 +423,7 @@ function Sidebar(props) {
                                             const group = props.currentUser.groups[i];
 
                                             if (group?.id === assignedGroupId) {
-                                                return chat;
+                                                return true;
                                             }
                                         }
                                     }
