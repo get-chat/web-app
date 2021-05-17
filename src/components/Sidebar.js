@@ -403,15 +403,14 @@ function Sidebar(props) {
                         .filter((chat) => {
                             const curChat = chat[1];
 
+                            // Filter by tag
                             if (props.filterTag) {
                                 if (!curChat.tags) {
                                     return false;
                                 }
                                 let hasTag = false;
-                                console.log(curChat.tags.length);
                                 for (let i = 0; i < curChat.tags.length; i++) {
                                     const curTag = curChat.tags[i];
-                                    console.log(curTag);
                                     if (curTag.id === props.filterTag) {
                                         hasTag = true;
                                         break;
@@ -420,6 +419,7 @@ function Sidebar(props) {
                                 if (!hasTag) return false;
                             }
 
+                            // Filter by case
                             switch (tabCase) {
                                 case "all": {
                                     return true;
