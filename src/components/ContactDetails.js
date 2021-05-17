@@ -66,7 +66,10 @@ function ContactDetails(props)  {
                     {chat?.tags?.length > 0 &&
                     <div className="contactDetails__body__tags mt-3">
                         {chat?.tags.map((tag, index) =>
-                            <div className="contactDetails__body__tags__tag" key={index}>
+                            <div
+                                className="contactDetails__body__tags__tag"
+                                key={index}
+                                onClick={() => props.setFilterTag(tag)}>
                                 <LabelIcon style={{fill: tag.web_inbox_color}} />
                                 <span className="bold">{tag.name}</span>
                             </div>

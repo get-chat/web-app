@@ -92,6 +92,7 @@
 }
 
 .contactDetails__body__tags__tag {
+    cursor: pointer;
     display: inline-block;
     margin-right: 10px;
 }

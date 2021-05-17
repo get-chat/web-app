@@ -509,7 +509,9 @@ function Main() {
                     contactData={chosenContact}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
-                    chats={chats} />
+                    chats={chats}
+                    filterTag={filterTag}
+                    setFilterTag={setFilterTag} />
                 }
 
                 {isChatAssignmentVisible &&
