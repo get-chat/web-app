@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
-import {CircularProgress, Dialog, DialogContent, DialogTitle} from "@material-ui/core";
+import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import '../styles/ChatTagsList.css';
 
 function ChatTagsList(props) {
@@ -48,6 +48,9 @@ function ChatTagsList(props) {
                 </div>
                 }
             </DialogContent>
+            <DialogActions>
+                <Button onClick={close} color="secondary">Close</Button>
+            </DialogActions>
 
             {isLoading &&
             <div className="chatTagsListWrapper__loading">
