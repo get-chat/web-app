@@ -33,6 +33,11 @@ function ChatTagsList(props) {
             });
     }
 
+    const handleClick = (tag) => {
+        props.setFilterTag(tag.id);
+        close();
+    }
+
     return (
         <Dialog open={props.open} onClose={close} className="chatTagsListWrapper">
             <DialogTitle>Tags</DialogTitle>
@@ -42,7 +47,7 @@ function ChatTagsList(props) {
                 {tags &&
                 <div>
                     {tags.map((tag) =>
-                        <ListItem button>
+                        <ListItem button onClick={() => handleClick(tag)}>
                             <div className="chatTagsListWrapper__tag">
                                 <LabelIcon style={{fill: tag.web_inbox_color}} />
                                 {tag.name}

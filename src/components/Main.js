@@ -49,6 +49,7 @@ function Main() {
     const [isAdmin, setAdmin] = useState(false);
 
     const [chats, setChats] = useState({});
+    const [filterTag, setFilterTag] = useState();
 
     const [templates, setTemplates] = useState({});
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
@@ -472,6 +473,8 @@ function Main() {
                     isAdmin={isAdmin}
                     chats={chats}
                     setChats={setChats}
+                    filterTag={filterTag}
+                    setFilterTag={setFilterTag}
                     currentUser={currentUser}
                     setProgress={setProgress}
                     displayNotification={displayNotification}
@@ -533,6 +536,8 @@ function Main() {
                     waId={waId}
                     open={isChatTagsListVisible}
                     setOpen={setChatTagsListVisible}
+                    filterTag={filterTag}
+                    setFilterTag={setFilterTag}
                 />
                 }
 

@@ -328,6 +328,16 @@ function Sidebar(props) {
         }
     }
 
+    const showChangePassword = () => {
+        setAnchorEl(null);
+        setChangePasswordDialogVisible(true);
+    }
+
+    const showChatTagsList = () => {
+        setAnchorEl(null);
+        props.setChatTagsListVisible(true);
+    }
+
     const displayContacts = () => {
         setContactsVisible(true);
     }
@@ -489,10 +499,10 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
-                <MenuItem onClick={() => props.setChatTagsListVisible(true)}>Tags</MenuItem>
+                <MenuItem onClick={showChatTagsList}>Tags</MenuItem>
                 <Divider />
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
-                <MenuItem onClick={() => setChangePasswordDialogVisible(true)}>Change password</MenuItem>
+                <MenuItem onClick={showChangePassword}>Change password</MenuItem>
                 <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
                 {isMobile &&
                 <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
