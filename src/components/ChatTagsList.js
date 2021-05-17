@@ -34,7 +34,7 @@ function ChatTagsList(props) {
     }
 
     const handleClick = (tag) => {
-        props.setFilterTag(tag.id);
+        props.setFilterTag(tag);
         close();
     }
 

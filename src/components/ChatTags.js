@@ -111,7 +111,7 @@ function ChatTags(props) {
         <Dialog open={props.open} onClose={close} className="chatTagsWrapper">
             <DialogTitle>Chat tags</DialogTitle>
             <DialogContent>
-                <div className="mb-3">You can add or remove tags for this chat</div>
+                <div className="mb-3">You can add or remove tags for this chat.</div>
 
                 {chatTags &&
                 <div className="chatTags__tags current">

@@ -378,7 +378,7 @@ function Sidebar(props) {
             {props.filterTag &&
             <div className="sidebar__clearFilter" onClick={clearFilter}>
                 <CloseIcon />
-                Clear filter
+                Clear filter:&nbsp;<span className="bold">{props.filterTag.name}</span>
             </div>
             }
 
@@ -417,7 +417,7 @@ function Sidebar(props) {
                                 let hasTag = false;
                                 for (let i = 0; i < curChat.tags.length; i++) {
                                     const curTag = curChat.tags[i];
-                                    if (curTag.id === props.filterTag) {
+                                    if (curTag.id === props.filterTag.id) {
                                         hasTag = true;
                                         break;
                                     }
