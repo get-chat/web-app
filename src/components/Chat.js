@@ -789,6 +789,25 @@ export default function Chat(props) {
         }
     }
 
+    const listChatAssignmentEvents = (beforeTime, offset, sinceTime) => {
+        const limit = 30
+
+        axios.get(`${BASE_URL}chat_assignment_events/${waId}/`, getConfig({
+            wa_id: waId,
+            offset: offset ?? 0,
+            before_time: beforeTime,
+            since_time: sinceTime,
+            limit: limit,
+        }, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Assignment history", response.data);
+
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     let lastPrintedDate;
     let lastSenderWaId;
 
