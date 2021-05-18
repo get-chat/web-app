@@ -488,6 +488,10 @@ export default function Chat(props) {
             .then((response) => {
                 //console.log("Messages", response.data);
 
+                // List assignment and tagging histories
+                listChatAssignmentEvents(beforeTime, sinceTime);
+                listChatTaggingEvents(beforeTime, sinceTime);
+
                 const count = response.data.count;
                 //const previous = response.data.previous;
                 const next = response.data.next;
@@ -790,7 +794,7 @@ export default function Chat(props) {
     }
 
     const listChatAssignmentEvents = (beforeTime, sinceTime) => {
-        axios.get(`${BASE_URL}chat_assignment_events/${waId}/`, getConfig({
+        axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
             wa_id: waId,
             before_time: beforeTime,
             since_time: sinceTime,
@@ -805,7 +809,7 @@ export default function Chat(props) {
     }
 
     const listChatTaggingEvents = (beforeTime, sinceTime) => {
-        axios.get(`${BASE_URL}chat_tagging_events/${waId}/`, getConfig({
+        axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
             wa_id: waId,
             before_time: beforeTime,
             since_time: sinceTime,
