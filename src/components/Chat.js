@@ -802,6 +802,16 @@ export default function Chat(props) {
             .then((response) => {
                 console.log("Assignment history", response.data);
 
+                setMessages(prevState => {
+                    const preparedMessages = {};
+                    response.data.results.reverse().forEach((assignmentEvent) => {
+                        const prepared = new ChatMessageClass();
+                        preparedMessages[prepared.id] = prepared;
+                    });
+
+                    let nextState = {...prevState, ...preparedMessages}
+                    return nextState;
+                });
             })
             .catch((error) => {
                 window.displayError(error);
