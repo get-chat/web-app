@@ -16,6 +16,7 @@ import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageDocument from "./ChatMessageDocument";
 import ChatMessageVoice from "./ChatMessageVoice";
 import ChatMessageTemplate from "./ChatMessageTemplate";
+import ChatAssignmentEvent from "./ChatAssignmentEvent";
 
 const iconStyles = {
     fontSize: '15px'
@@ -36,85 +37,105 @@ function ChatMessage(props) {
                 timestamp={data.timestamp} />
             }
 
-            {(props.displaySender || props.displayDate) &&
-            <span className="chat__name">{data.isFromUs === true ? data.senderName : (props.contactProvidersData[data.waId]?.[0]?.name ?? data.senderName)}</span>
+            {data.assignmentEvent &&
+            <ChatAssignmentEvent data={data.assignmentEvent} />
             }
 
-            {data.type === ChatMessageClass.TYPE_STICKER &&
-            <img className="chat__media chat__sticker" src={data.generateStickerLink()} alt={data.caption} />
+            {data.taggingEvent &&
+            <div>
+
+            </div>
             }
 
-            <div className={"chat__message"
-            + (data.hasMediaToPreview() ? " hasMedia" : "")
-            + (data.isFromUs === true ? (data.isRead() ? " chat__received" : "") + " chat__outgoing" : "")
-            + (!props.displaySender && !props.displayDate ? " hiddenSender" : "")
-            + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")
-            + (data.isFailed ? " chat__failed" : "")}>
-
-                <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
-                    <ExpandMoreIcon />
-                </div>
-
-                {data.isForwarded &&
-                <div className="chat__forwarded">
-                    <ReplyIcon />
-                    <span>Forwarded</span>
-                </div>
-                }
-
-                {data.contextMessage !== undefined &&
-                <ContextChatMessage
-                    contextMessage={data.contextMessage}
-                    goToMessageId={props.goToMessageId} />
-                }
-
-                {data.type === ChatMessageClass.TYPE_IMAGE &&
-                <ChatMessageImage data={data} source={data.generateImageLink()} onPreview={() => props.onPreview(data)} />
-                }
-
-                {data.type === ChatMessageClass.TYPE_VIDEO &&
-                <ChatMessageVideo data={data} source={data.generateVideoLink()} onPreview={() => props.onPreview(data)} />
-                }
-
-                {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
-                <ChatMessageVoice data={data} />
-                }
-
-                {data.type === ChatMessageClass.TYPE_DOCUMENT &&
-                <ChatMessageDocument data={data} />
+            {(!data.assignmentEvent && !data.taggingEvent) &&
+            <div>
+                {(props.displaySender || props.displayDate) &&
+                <span
+                    className="chat__name">{data.isFromUs === true ? data.senderName : (props.contactProvidersData[data.waId]?.[0]?.name ?? data.senderName)}</span>
                 }
 
                 {data.type === ChatMessageClass.TYPE_STICKER &&
-                <span>
-                    <NoteIcon fontSize="small" />
+                <img className="chat__media chat__sticker" src={data.generateStickerLink()} alt={data.caption}/>
+                }
+
+                <div className={"chat__message"
+                + (data.hasMediaToPreview() ? " hasMedia" : "")
+                + (data.isFromUs === true ? (data.isRead() ? " chat__received" : "") + " chat__outgoing" : "")
+                + (!props.displaySender && !props.displayDate ? " hiddenSender" : "")
+                + (data.type === ChatMessageClass.TYPE_TEMPLATE ? " chat__templateMsg" : "")
+                + (data.isFailed ? " chat__failed" : "")}>
+
+                    <div className="chat__message__more" onClick={(event => props.onOptionsClick(event, data))}>
+                        <ExpandMoreIcon/>
+                    </div>
+
+                    {data.isForwarded &&
+                    <div className="chat__forwarded">
+                        <ReplyIcon/>
+                        <span>Forwarded</span>
+                    </div>
+                    }
+
+                    {data.contextMessage !== undefined &&
+                    <ContextChatMessage
+                        contextMessage={data.contextMessage}
+                        goToMessageId={props.goToMessageId}/>
+                    }
+
+                    {data.type === ChatMessageClass.TYPE_IMAGE &&
+                    <ChatMessageImage data={data} source={data.generateImageLink()}
+                                      onPreview={() => props.onPreview(data)}/>
+                    }
+
+                    {data.type === ChatMessageClass.TYPE_VIDEO &&
+                    <ChatMessageVideo data={data} source={data.generateVideoLink()}
+                                      onPreview={() => props.onPreview(data)}/>
+                    }
+
+                    {(data.type === ChatMessageClass.TYPE_VOICE || data.type === ChatMessageClass.TYPE_AUDIO) &&
+                    <ChatMessageVoice data={data}/>
+                    }
+
+                    {data.type === ChatMessageClass.TYPE_DOCUMENT &&
+                    <ChatMessageDocument data={data}/>
+                    }
+
+                    {data.type === ChatMessageClass.TYPE_STICKER &&
+                    <span>
+                    <NoteIcon fontSize="small"/>
                 </span>
-                }
+                    }
 
-                {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                <ChatMessageTemplate data={data} templateData={templateData} onPreview={() => props.onPreview(data)} />
-                }
+                    {data.type === ChatMessageClass.TYPE_TEMPLATE &&
+                    <ChatMessageTemplate data={data} templateData={templateData}
+                                         onPreview={() => props.onPreview(data)}/>
+                    }
 
-                {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreakWord" dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}} /> : '\u00A0'}
+                    {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreakWord"
+                                                                            dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}}/> : '\u00A0'}
 
-                <span className="chat__message__info">
+                    <span className="chat__message__info">
                     <span className="chat__timestamp">
-                        <Moment date={data.timestamp} format={dateFormat} unix />
+                        <Moment date={data.timestamp} format={dateFormat} unix/>
                     </span>
 
-                    {(data.isFromUs === true && !data.isDeliveredOrRead()) &&
-                    <DoneIcon className="chat__iconDone" color="inherit" style={iconStyles} />
-                    }
+                        {(data.isFromUs === true && !data.isDeliveredOrRead()) &&
+                        <DoneIcon className="chat__iconDone" color="inherit" style={iconStyles}/>
+                        }
 
-                    {(data.isFromUs === true && data.isDeliveredOrRead()) &&
-                    <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles} />
-                    }
+                        {(data.isFromUs === true && data.isDeliveredOrRead()) &&
+                        <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles}/>
+                        }
                 </span>
 
-                <div style={{clear: "both"}} />
-            </div>
+                    <div style={{clear: "both"}}/>
+                </div>
 
-            {data.isFailed &&
+                {data.isFailed &&
                 <div className="chat__message__failed__info">Failed to send. Will retry automatically.</div>
+                }
+
+            </div>
             }
         </div>
     )

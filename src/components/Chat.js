@@ -488,10 +488,6 @@ export default function Chat(props) {
             .then((response) => {
                 //console.log("Messages", response.data);
 
-                // List assignment and tagging histories
-                listChatAssignmentEvents(beforeTime, sinceTime);
-                listChatTaggingEvents(beforeTime, sinceTime);
-
                 const count = response.data.count;
                 //const previous = response.data.previous;
                 const next = response.data.next;
@@ -542,6 +538,10 @@ export default function Chat(props) {
                         messagesContainer.current.scrollTop = prevScrollTop;
                     }
                 }
+
+                // List assignment and tagging histories
+                listChatAssignmentEvents(beforeTime, sinceTime);
+                listChatTaggingEvents(beforeTime, sinceTime);
 
                 setLoaded(true);
                 setLoadingMoreMessages(false);
@@ -806,7 +806,7 @@ export default function Chat(props) {
                     const preparedMessages = {};
                     response.data.results.reverse().forEach((assignmentEvent) => {
                         const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
-                        preparedMessages[prepared.id] = prepared;
+                        preparedMessages['assignmentEvent_' + prepared.timestamp] = prepared;
                     });
 
                     let nextState = {...prevState, ...preparedMessages}
