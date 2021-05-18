@@ -85,6 +85,20 @@ export class ChatMessageClass {
         this.isFailed = false;
     };
 
+    static fromAssignmentEvent(assignmentEvent) {
+        const message = new ChatMessageClass();
+        message.assignmentEvent = assignmentEvent;
+        message.timestamp = assignmentEvent.timestamp;
+        return message;
+    }
+
+    static fromTaggingEvent(taggingEvent) {
+        const message = new ChatMessageClass();
+        message.taggingEvent = taggingEvent;
+        message.timestamp = taggingEvent.timestamp;
+        return message;
+    }
+
     getUniqueSender() {
         return this.username ?? this.senderWaId;
     }

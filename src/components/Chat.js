@@ -805,11 +805,12 @@ export default function Chat(props) {
                 setMessages(prevState => {
                     const preparedMessages = {};
                     response.data.results.reverse().forEach((assignmentEvent) => {
-                        const prepared = new ChatMessageClass();
+                        const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
                         preparedMessages[prepared.id] = prepared;
                     });
 
                     let nextState = {...prevState, ...preparedMessages}
+                    // TODO: Sort by timestamp
                     return nextState;
                 });
             })
