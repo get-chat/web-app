@@ -789,7 +789,7 @@ export default function Chat(props) {
         }
     }
 
-    const listChatAssignmentEvents = (beforeTime, offset, sinceTime) => {
+    const listChatAssignmentEvents = (beforeTime, sinceTime) => {
         axios.get(`${BASE_URL}chat_assignment_events/${waId}/`, getConfig({
             wa_id: waId,
             before_time: beforeTime,
@@ -797,6 +797,21 @@ export default function Chat(props) {
         }, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log("Assignment history", response.data);
+
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
+    const listChatTaggingEvents = (beforeTime, sinceTime) => {
+        axios.get(`${BASE_URL}chat_tagging_events/${waId}/`, getConfig({
+            wa_id: waId,
+            before_time: beforeTime,
+            since_time: sinceTime,
+        }, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Tagging history", response.data);
 
             })
             .catch((error) => {
