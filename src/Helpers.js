@@ -276,3 +276,8 @@ export const extractAvatarFromContactProviderData = (contactProviderData) => {
 export const hasInternetConnection = () => {
     return navigator.onLine;
 }
+
+export const sortMessagesAsc = (messages) => {
+    let sortedNextState = Object.entries(messages).sort((a, b) => a[1].timestamp - b[1].timestamp);
+    return Object.fromEntries(sortedNextState);
+}

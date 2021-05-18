@@ -34,7 +34,7 @@ import {
     getLastMessageAndExtractTimestamp,
     getLastObject,
     getObjLength,
-    hasInternetConnection,
+    hasInternetConnection, sortMessagesAsc,
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
@@ -810,8 +810,7 @@ export default function Chat(props) {
                     });
 
                     let nextState = {...prevState, ...preparedMessages}
-                    // TODO: Sort by timestamp
-                    return nextState;
+                    return sortMessagesAsc(nextState);
                 });
             })
             .catch((error) => {
