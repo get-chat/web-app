@@ -827,6 +827,16 @@ export default function Chat(props) {
             .then((response) => {
                 console.log("Tagging history", response.data);
 
+                setMessages(prevState => {
+                    const preparedMessages = {};
+                    response.data.results.reverse().forEach((taggingEvent) => {
+                        const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
+                        preparedMessages['assignmentEvent_' + prepared.timestamp] = prepared;
+                    });
+
+                    let nextState = {...prevState, ...preparedMessages}
+                    return sortMessagesAsc(nextState);
+                });
             })
             .catch((error) => {
                 window.displayError(error);

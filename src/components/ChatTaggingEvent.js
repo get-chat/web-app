@@ -4,7 +4,13 @@ import '../styles/ChatTaggingEvent.css';
 function ChatTaggingEvent(props) {
     return (
         <div className="chatTaggingEvent">
-            {JSON.stringify(props.data)}
+            <div className="chatTaggingEvent__content">
+                <div className="chatTaggingEvent__content__title">
+                    <span className="bold">{props.data.done_by?.username}</span> has changed tags.
+                </div>
+
+                {/*{JSON.stringify(props.data)}*/}
+            </div>
         </div>
     )
 }

@@ -17,6 +17,7 @@ import ChatMessageDocument from "./ChatMessageDocument";
 import ChatMessageVoice from "./ChatMessageVoice";
 import ChatMessageTemplate from "./ChatMessageTemplate";
 import ChatAssignmentEvent from "./ChatAssignmentEvent";
+import ChatTaggingEvent from "./ChatTaggingEvent";
 
 const iconStyles = {
     fontSize: '15px'
@@ -42,9 +43,7 @@ function ChatMessage(props) {
             }
 
             {data.taggingEvent &&
-            <div>
-
-            </div>
+            <ChatTaggingEvent data={data.taggingEvent} />
             }
 
             {(!data.assignmentEvent && !data.taggingEvent) &&
