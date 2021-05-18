@@ -12,13 +12,13 @@ function ChatAssignmentEvent(props) {
 
                 {props.data.assigned_to_user_set &&
                 <div>
-                    assigned to user: {props.data.assigned_to_user_set.username}
+                    assigned to user: <span className="bold">{props.data.assigned_to_user_set.username}</span>
                 </div>
                 }
 
                 {props.data.assigned_group_set &&
                 <div>
-                    assigned to group: {props.data.assigned_group_set.name}
+                    assigned to group: <span className="bold">{props.data.assigned_group_set.name}</span>
                 </div>
                 }
 
