@@ -1,7 +1,11 @@
 import React from "react";
 import '../styles/ChatAssignmentEvent.css';
+import Moment from "react-moment";
 
 function ChatAssignmentEvent(props) {
+
+    const dateFormat = 'H:mm';
+
     return (
         <div className="chatAssignmentEvent">
             <div className="chatAssignmentEvent__content">
@@ -32,6 +36,10 @@ function ChatAssignmentEvent(props) {
                     cleared assigned group
                 </div>
                 }
+
+                <div className="chatAssignmentEvent__content__timestamp">
+                    <Moment date={props.data.timestamp} format={dateFormat} unix/>
+                </div>
             </div>
         </div>
     )
