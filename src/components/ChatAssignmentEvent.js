@@ -8,7 +8,6 @@ function ChatAssignmentEvent(props) {
                 <div className="chatAssignmentEvent__content__title">
                     <span className="bold">{props.data.done_by?.username}</span> has changed chat assignments.
                 </div>
-                {/*{JSON.stringify(props.data)}*/}
 
                 {props.data.assigned_to_user_set &&
                 <div>
