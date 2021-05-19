@@ -540,11 +540,11 @@ export default function Chat(props) {
                 }
 
                 if (!beforeTime) {
-                    beforeTime = getLastObject(messages).timestamp;
+                    beforeTime = getLastObject(preparedMessages).timestamp;
                 }
 
                 if (!sinceTime) {
-                    sinceTime = getFirstObject(messages).timestamp;
+                    sinceTime = getFirstObject(preparedMessages).timestamp;
                 }
 
                 // List assignment and tagging histories
