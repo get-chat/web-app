@@ -157,7 +157,7 @@ export default function Chat(props) {
                     //console.log("Scrolled to top");
                     if (isLoaded && !isLoadingMoreMessages) {
                         setLoadingMoreMessages(true);
-                        getMessages(undefined, getFirstObject(messages)?.timestamp);
+                        getMessages(false, undefined, getFirstObject(messages)?.timestamp);
                     }
                 } else {
                     // TODO: Make sure user scrolls
@@ -165,7 +165,7 @@ export default function Chat(props) {
                         //console.log('Scrolled to bottom');
                         if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
                             setLoadingMoreMessages(true);
-                            getMessages(undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
+                            getMessages(false, undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
                         }
                     }
                 }
@@ -381,7 +381,7 @@ export default function Chat(props) {
                     const callback = () => {
                         scrollToChild(msgId);
                     };
-                    getMessages(callback, undefined, undefined, timestamp, true, true);
+                    getMessages(false, callback, undefined, undefined, timestamp, true, true);
                 }
             }
         }
@@ -438,7 +438,7 @@ export default function Chat(props) {
 
                 // Person information is loaded, now load messages
                 if (loadMessages !== undefined && loadMessages === true) {
-                    getMessages(function (preparedMessages) {
+                    getMessages(true, function (preparedMessages) {
                         setLastMessageId(getLastObject(preparedMessages)?.id);
 
                         // Scroll to message if goToMessageId is defined
@@ -473,7 +473,7 @@ export default function Chat(props) {
             });
     }
 
-    const getMessages = (callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
+    const getMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
         axios.get( `${BASE_URL}messages/`,
@@ -495,7 +495,7 @@ export default function Chat(props) {
                 if (sinceTime && isInitialWithSinceTime === true) {
                     if (next) { /*count > limit*/
                         setAtBottom(false);
-                        getMessages(callback, beforeTime, count - limit, sinceTime, false, replaceAll);
+                        getMessages(false, callback, beforeTime, count - limit, sinceTime, false, replaceAll);
                         return false;
                     }
                 }
@@ -546,12 +546,18 @@ export default function Chat(props) {
                 console.log("BEFORE", beforeTime);
                 console.log("NEXT", next);*/
 
-                if (!beforeTime) {
-                    beforeTime = getLastObject(preparedMessages).timestamp;
+                const lastMessage = getLastObject(preparedMessages);
+
+                if (isInitial) {
+                    beforeTime = undefined;
+                } else {
+                    if (!beforeTime) {
+                        beforeTime = lastMessage?.timestamp;
+                    }
                 }
 
                 if (!sinceTime) {
-                    sinceTime = getFirstObject(preparedMessages).timestamp;
+                    sinceTime = getFirstObject(preparedMessages)?.timestamp;
                 }
 
                 // List assignment and tagging histories
