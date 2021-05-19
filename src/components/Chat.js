@@ -539,9 +539,16 @@ export default function Chat(props) {
                     }
                 }
 
-                /*if (!beforeTime) {
+                // Debugging
+                /*console.log("IS AT BOTTOM", isAtBottom);
+                console.log("INITIAL", isInitial);
+                console.log("SINCE", sinceTime);
+                console.log("BEFORE", beforeTime);
+                console.log("NEXT", next);*/
+
+                if (!beforeTime) {
                     beforeTime = getLastObject(preparedMessages).timestamp;
-                }*/
+                }
 
                 if (!sinceTime) {
                     sinceTime = getFirstObject(preparedMessages).timestamp;
@@ -595,10 +602,16 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedMessages) > 0) {
+                    const prevScrollTop = messagesContainer.current.scrollTop;
+                    const prevScrollHeight = messagesContainer.current.scrollHeight;
+
                     setMessages(prevState => {
                         let nextState = {...prevState, ...preparedMessages}
                         return sortMessagesAsc(nextState);
                     });
+
+                    const nextScrollHeight = messagesContainer.current.scrollHeight;
+                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
                 }
             })
             .catch((error) => {
@@ -622,10 +635,16 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedMessages) > 0) {
+                    const prevScrollTop = messagesContainer.current.scrollTop;
+                    const prevScrollHeight = messagesContainer.current.scrollHeight;
+
                     setMessages(prevState => {
                         let nextState = {...prevState, ...preparedMessages}
                         return sortMessagesAsc(nextState);
                     });
+
+                    const nextScrollHeight = messagesContainer.current.scrollHeight;
+                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
                 }
             })
             .catch((error) => {
