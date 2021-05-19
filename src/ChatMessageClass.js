@@ -88,6 +88,7 @@ export class ChatMessageClass {
     static fromAssignmentEvent(assignmentEvent) {
         const message = new ChatMessageClass();
         message.id = 'assignmentEvent_' + assignmentEvent.timestamp;
+        message.waId = assignmentEvent.wa_id;
         message.assignmentEvent = assignmentEvent;
         message.timestamp = assignmentEvent.timestamp;
         return message;
@@ -96,6 +97,7 @@ export class ChatMessageClass {
     static fromTaggingEvent(taggingEvent) {
         const message = new ChatMessageClass();
         message.id = 'taggingEvent_' + taggingEvent.timestamp;
+        message.waId = taggingEvent.wa_id;
         message.taggingEvent = taggingEvent;
         message.timestamp = taggingEvent.timestamp;
         return message;
