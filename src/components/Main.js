@@ -340,6 +340,16 @@ function Main() {
 
                             PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, preparedStatuses);
                         }
+
+                        const chatAssignment = wabaPayload?.chat_assignment;
+
+                        if (chatAssignment) {
+                            const preparedMessages = {};
+                            const prepared = ChatMessageClass.fromAssignmentEvent(chatAssignment);
+                            preparedMessages[prepared.id] = prepared;
+
+                            PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                        }
                     }
 
                 } catch (error) {
