@@ -539,9 +539,9 @@ export default function Chat(props) {
                     }
                 }
 
-                if (!beforeTime) {
+                /*if (!beforeTime) {
                     beforeTime = getLastObject(preparedMessages).timestamp;
-                }
+                }*/
 
                 if (!sinceTime) {
                     sinceTime = getFirstObject(preparedMessages).timestamp;
