@@ -814,7 +814,7 @@ export default function Chat(props) {
                     const preparedMessages = {};
                     response.data.results.reverse().forEach((assignmentEvent) => {
                         const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
-                        preparedMessages['assignmentEvent_' + prepared.timestamp] = prepared;
+                        preparedMessages[prepared.id] = prepared;
                     });
 
                     let nextState = {...prevState, ...preparedMessages}
@@ -839,7 +839,7 @@ export default function Chat(props) {
                     const preparedMessages = {};
                     response.data.results.reverse().forEach((taggingEvent) => {
                         const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
-                        preparedMessages['assignmentEvent_' + prepared.timestamp] = prepared;
+                        preparedMessages[prepared.id] = prepared;
                     });
 
                     let nextState = {...prevState, ...preparedMessages}
