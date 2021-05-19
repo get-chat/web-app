@@ -579,6 +579,60 @@ export default function Chat(props) {
             });
     }
 
+    const listChatAssignmentEvents = (beforeTime, sinceTime) => {
+        axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
+            wa_id: waId,
+            before_time: beforeTime,
+            since_time: sinceTime,
+        }, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Assignment history", response.data);
+
+                const preparedMessages = {};
+                response.data.results.reverse().forEach((assignmentEvent) => {
+                    const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
+                    preparedMessages[prepared.id] = prepared;
+                });
+
+                if (getObjLength(preparedMessages) > 0) {
+                    setMessages(prevState => {
+                        let nextState = {...prevState, ...preparedMessages}
+                        return sortMessagesAsc(nextState);
+                    });
+                }
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
+    const listChatTaggingEvents = (beforeTime, sinceTime) => {
+        axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
+            wa_id: waId,
+            before_time: beforeTime,
+            since_time: sinceTime,
+        }, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                console.log("Tagging history", response.data);
+
+                const preparedMessages = {};
+                response.data.results.reverse().forEach((taggingEvent) => {
+                    const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
+                    preparedMessages[prepared.id] = prepared;
+                });
+
+                if (getObjLength(preparedMessages) > 0) {
+                    setMessages(prevState => {
+                        let nextState = {...prevState, ...preparedMessages}
+                        return sortMessagesAsc(nextState);
+                    });
+                }
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     const sendMessage = (e) => {
         e.preventDefault();
 
@@ -799,56 +853,6 @@ export default function Chat(props) {
         } else {
             event.preventDefault();
         }
-    }
-
-    const listChatAssignmentEvents = (beforeTime, sinceTime) => {
-        axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
-            wa_id: waId,
-            before_time: beforeTime,
-            since_time: sinceTime,
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Assignment history", response.data);
-
-                setMessages(prevState => {
-                    const preparedMessages = {};
-                    response.data.results.reverse().forEach((assignmentEvent) => {
-                        const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
-                        preparedMessages[prepared.id] = prepared;
-                    });
-
-                    let nextState = {...prevState, ...preparedMessages}
-                    return sortMessagesAsc(nextState);
-                });
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
-    }
-
-    const listChatTaggingEvents = (beforeTime, sinceTime) => {
-        axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
-            wa_id: waId,
-            before_time: beforeTime,
-            since_time: sinceTime,
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Tagging history", response.data);
-
-                setMessages(prevState => {
-                    const preparedMessages = {};
-                    response.data.results.reverse().forEach((taggingEvent) => {
-                        const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
-                        preparedMessages[prepared.id] = prepared;
-                    });
-
-                    let nextState = {...prevState, ...preparedMessages}
-                    return sortMessagesAsc(nextState);
-                });
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
     }
 
     let lastPrintedDate;
