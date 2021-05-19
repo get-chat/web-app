@@ -539,6 +539,14 @@ export default function Chat(props) {
                     }
                 }
 
+                if (!beforeTime) {
+                    beforeTime = getLastObject(messages).timestamp;
+                }
+
+                if (!sinceTime) {
+                    sinceTime = getFirstObject(messages).timestamp;
+                }
+
                 // List assignment and tagging histories
                 listChatAssignmentEvents(beforeTime, sinceTime);
                 listChatTaggingEvents(beforeTime, sinceTime);
