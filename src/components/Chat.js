@@ -8,7 +8,7 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL,
+    BASE_URL, EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
@@ -289,9 +289,21 @@ export default function Chat(props) {
 
         const chatMessageStatusChangeEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, onMessageStatusChange);
 
+        // Chat assignment
+        const onChatAssignment = function (msg, data) {
+            if (isAtBottom) {
+                setMessages(prevState => {
+                    return {...prevState, ...data};
+                });
+            }
+        }
+
+        const chatAssignmentEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_ASSIGNMENT, onChatAssignment);
+
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
             PubSub.unsubscribe(chatMessageStatusChangeEventToken);
+            PubSub.unsubscribe(chatAssignmentEventToken);
         }
     }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom]);
 
