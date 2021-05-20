@@ -17,6 +17,7 @@ export const EVENT_TOPIC_DISPLAY_ERROR = "display_error";
 export const EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR = "send_template_message_error";
 export const EVENT_TOPIC_SENT_TEMPLATE_MESSAGE = "sent_template_message";
 export const EVENT_TOPIC_UPDATE_PERSON_NAME = "update_person_name";
+export const EVENT_TOPIC_CHAT_ASSIGNMENT = "chat_assignment";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;

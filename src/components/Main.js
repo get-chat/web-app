@@ -12,7 +12,7 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
-    BASE_URL,
+    BASE_URL, EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
@@ -348,7 +348,7 @@ function Main() {
                             const prepared = ChatMessageClass.fromAssignmentEvent(chatAssignment);
                             preparedMessages[prepared.id] = prepared;
 
-                            PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                            PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
                         }
                     }
 
