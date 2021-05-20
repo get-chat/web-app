@@ -237,6 +237,8 @@ export default function Chat(props) {
                             // Chat is not expired anymore
                             setExpired(false);
                         }
+                    } else {
+                        // TODO: Display a button to scroll down
                     }
 
                     // Update last message id
@@ -299,6 +301,8 @@ export default function Chat(props) {
                     setMessages(prevState => {
                         return {...prevState, ...data};
                     });
+                } else {
+                    // TODO: Display a button to scroll down
                 }
             }
         }
