@@ -1037,7 +1037,8 @@ export default function Chat(props) {
             {isScrollButtonVisible &&
             <Fab
                 onClick={handleScrollButtonClick}
-                className="chat__scrollButton">
+                className="chat__scrollButton"
+                size="small">
                 <ArrowDownward />
             </Fab>
             }
