@@ -231,6 +231,7 @@ export default function Chat(props) {
 
                         if (!isCurrentlyLastMessageVisible) {
                             persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                            displayScrollButton();
                         }
 
                         if (hasAnyIncomingMsg) {
@@ -250,7 +251,7 @@ export default function Chat(props) {
                             setExpired(false);
                         }
                     } else {
-                        // TODO: Display a button to scroll down
+                        displayScrollButton();
                     }
 
                     // Update last message id
@@ -320,9 +321,10 @@ export default function Chat(props) {
 
                     if (!isCurrentlyLastMessageVisible) {
                         persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                        displayScrollButton();
                     }
                 } else {
-                    // TODO: Display a button to scroll down
+                    displayScrollButton();
                 }
             }
         }
@@ -389,6 +391,21 @@ export default function Chat(props) {
     const isLastMessageVisible = () => {
         const el = messagesContainer.current;
         return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET;
+    }
+
+    const displayScrollButton = () => {
+        setScrollButtonVisible(true);
+    }
+
+    const handleScrollButtonClick = () => {
+        if (isAtBottom) {
+            const el = messagesContainer.current;
+            el.scroll({top: el.scrollHeight - el.offsetHeight - SCROLL_OFFSET, behavior: "smooth"});
+        } else {
+            getMessages(false, undefined, undefined, undefined, undefined, false, true);
+        }
+
+        setScrollButtonVisible(false);
     }
 
     const persistScrollStateFromBottom = (prevScrollHeight, prevScrollTop, offset) => {
@@ -1019,9 +1036,9 @@ export default function Chat(props) {
 
             {isScrollButtonVisible &&
             <Fab
-                color="primary"
+                onClick={handleScrollButtonClick}
                 className="chat__scrollButton">
-                <ArrowDownward/>
+                <ArrowDownward />
             </Fab>
             }
 

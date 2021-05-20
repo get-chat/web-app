@@ -274,11 +274,11 @@ a.chat__document:hover {
     position: absolute !important;
     bottom: 80px;
     right: 20px;
-    background-color: var(--color-primary-light) !important;
+    background-color: white !important;
 }
 
 .chat__scrollButton .MuiSvgIcon-root {
-    color: white !important;
+    color: var(--color-primary-light) !important;
 }
 
 .chat__body {
