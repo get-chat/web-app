@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {CircularProgress, Zoom} from "@material-ui/core";
+import {CircularProgress, Fab, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import axios from "axios";
@@ -39,6 +39,7 @@ import {
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
+import {ArrowDownward} from "@material-ui/icons";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -46,6 +47,7 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 export default function Chat(props) {
 
     const messagesContainer = useRef(null);
+
     const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
     const [isLoaded, setLoaded] = useState(false);
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
@@ -54,6 +56,7 @@ export default function Chat(props) {
     const [person, setPerson] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
+    const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 
     const [selectedFiles, setSelectedFiles] = useState();
     const [accept, setAccept] = useState('');
@@ -1011,7 +1014,16 @@ export default function Chat(props) {
                 }) }
 
                 <div className="chat__body__empty" />
+
             </div>
+
+            {isScrollButtonVisible &&
+            <Fab
+                color="primary"
+                className="chat__scrollButton">
+                <ArrowDownward/>
+            </Fab>
+            }
 
             <ChatFooter
                 isExpired={isExpired}
