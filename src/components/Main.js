@@ -376,7 +376,7 @@ function Main() {
                                 if (prevState.hasOwnProperty(prepared.waId)) {
                                     if (chatTagging.action === "added") {
                                         prevState[prepared.waId].tags.push(prepared.taggingEvent.tag);
-                                    } else {
+                                    } else if (chatTagging.action === "removed") {
                                         prevState[prepared.waId].tags = prevState[prepared.waId].tags.filter((tag) => {
                                             return tag.id !== prepared.taggingEvent.tag.id;
                                         });
