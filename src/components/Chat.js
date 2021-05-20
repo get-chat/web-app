@@ -9,7 +9,7 @@ import {
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
     BASE_URL, EVENT_TOPIC_CHAT_ASSIGNMENT,
-    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -331,10 +331,38 @@ export default function Chat(props) {
 
         const chatAssignmentEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_ASSIGNMENT, onChatAssignment);
 
+        // Chat tagging
+        const onChatAssignmentOrChatTagging = function (msg, data) {
+            // This event always has a single message
+            const prepared = getFirstObject(data);
+            if (waId === prepared.waId) {
+                if (isAtBottom) {
+                    const prevScrollTop = messagesContainer.current.scrollTop;
+                    const prevScrollHeight = messagesContainer.current.scrollHeight;
+                    const isCurrentlyLastMessageVisible = isLastMessageVisible();
+
+                    // Display as a new message
+                    setMessages(prevState => {
+                        return {...prevState, ...data};
+                    });
+
+                    if (!isCurrentlyLastMessageVisible) {
+                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                        displayScrollButton();
+                    }
+                } else {
+                    displayScrollButton();
+                }
+            }
+        }
+
+        const chatTaggingEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_TAGGING, onChatAssignmentOrChatTagging);
+
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
             PubSub.unsubscribe(chatMessageStatusChangeEventToken);
             PubSub.unsubscribe(chatAssignmentEventToken);
+            PubSub.unsubscribe(chatTaggingEventToken);
         }
     }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom]);
 

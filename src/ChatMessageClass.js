@@ -97,7 +97,7 @@ export class ChatMessageClass {
     static fromTaggingEvent(taggingEvent) {
         const message = new ChatMessageClass();
         message.id = 'taggingEvent_' + taggingEvent.timestamp;
-        message.waId = taggingEvent.wa_id;
+        message.waId = taggingEvent.chat;
         message.taggingEvent = taggingEvent;
         message.timestamp = taggingEvent.timestamp;
         return message;

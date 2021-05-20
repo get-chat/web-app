@@ -14,7 +14,7 @@ import {Alert} from "@material-ui/lab";
 import {
     BASE_URL, EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
-    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -341,6 +341,7 @@ function Main() {
                             PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, preparedStatuses);
                         }
 
+                        // Chat assignment
                         const chatAssignment = wabaPayload?.chat_assignment;
 
                         if (chatAssignment) {
@@ -353,10 +354,34 @@ function Main() {
                             // Update chats
                             setChats(prevState => {
                                 if (prevState.hasOwnProperty(prepared.waId)) {
-                                    console.log(prepared);
-                                    console.log(prepared.assignmentEvent);
                                     prevState[prepared.waId].assignedToUser = prepared.assignmentEvent.assigned_to_user_set;
                                     prevState[prepared.waId].assignedGroup = prepared.assignmentEvent.assigned_group_set;
+                                    return {...prevState};
+                                }
+                            });
+                        }
+
+                        // Chat tagging
+                        const chatTagging = wabaPayload?.chat_tagging;
+
+                        if (chatTagging) {
+                            const preparedMessages = {};
+                            const prepared = ChatMessageClass.fromTaggingEvent(chatTagging);
+                            preparedMessages[prepared.id] = prepared;
+
+                            PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
+
+                            // Update chats
+                            setChats(prevState => {
+                                if (prevState.hasOwnProperty(prepared.waId)) {
+                                    if (chatTagging.action === "added") {
+                                        prevState[prepared.waId].tags.push(prepared.taggingEvent.tag);
+                                    } else {
+                                        prevState[prepared.waId].tags = prevState[prepared.waId].tags.filter((tag) => {
+                                            return tag.id !== prepared.taggingEvent.tag.id;
+                                        });
+                                    }
+
                                     return {...prevState};
                                 }
                             });
