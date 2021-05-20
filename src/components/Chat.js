@@ -292,6 +292,7 @@ export default function Chat(props) {
         // Chat assignment
         const onChatAssignment = function (msg, data) {
             if (isAtBottom) {
+                // Display as a new message
                 setMessages(prevState => {
                     return {...prevState, ...data};
                 });

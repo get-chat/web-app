@@ -349,6 +349,17 @@ function Main() {
                             preparedMessages[prepared.id] = prepared;
 
                             PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
+
+                            // Update chats
+                            setChats(prevState => {
+                                if (prevState.hasOwnProperty(prepared.waId)) {
+                                    console.log(prepared);
+                                    console.log(prepared.assignmentEvent);
+                                    prevState[prepared.waId].assignedToUser = prepared.assignmentEvent.assigned_to_user_set;
+                                    prevState[prepared.waId].assignedGroup = prepared.assignmentEvent.assigned_group_set;
+                                    return {...prevState};
+                                }
+                            });
                         }
                     }
 
