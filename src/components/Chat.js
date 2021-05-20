@@ -291,11 +291,15 @@ export default function Chat(props) {
 
         // Chat assignment
         const onChatAssignment = function (msg, data) {
-            if (isAtBottom) {
-                // Display as a new message
-                setMessages(prevState => {
-                    return {...prevState, ...data};
-                });
+            // This event always has a single message
+            const prepared = getFirstObject(data);
+            if (waId === prepared.waId) {
+                if (isAtBottom) {
+                    // Display as a new message
+                    setMessages(prevState => {
+                        return {...prevState, ...data};
+                    });
+                }
             }
         }
 
