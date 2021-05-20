@@ -41,6 +41,7 @@ import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
 
 const SCROLL_OFFSET = 15;
+const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
 
@@ -219,12 +220,15 @@ export default function Chat(props) {
                     if (isAtBottom) {
                         const prevScrollTop = messagesContainer.current.scrollTop;
                         const prevScrollHeight = messagesContainer.current.scrollHeight;
+                        const isCurrentlyLastMessageVisible = isLastMessageVisible();
 
                         setMessages(prevState => {
                             return {...prevState, ...preparedMessages};
                         });
 
-                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
+                        if (!isCurrentlyLastMessageVisible) {
+                            persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                        }
 
                         if (hasAnyIncomingMsg) {
                             const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
@@ -304,13 +308,16 @@ export default function Chat(props) {
                 if (isAtBottom) {
                     const prevScrollTop = messagesContainer.current.scrollTop;
                     const prevScrollHeight = messagesContainer.current.scrollHeight;
+                    const isCurrentlyLastMessageVisible = isLastMessageVisible();
 
                     // Display as a new message
                     setMessages(prevState => {
                         return {...prevState, ...data};
                     });
 
-                    persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
+                    if (!isCurrentlyLastMessageVisible) {
+                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                    }
                 } else {
                     // TODO: Display a button to scroll down
                 }
@@ -374,6 +381,11 @@ export default function Chat(props) {
         if (indicatorToShow) {
             setFixedDateIndicatorText(indicatorToShow.innerHTML);
         }
+    }
+
+    const isLastMessageVisible = () => {
+        const el = messagesContainer.current;
+        return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET;
     }
 
     const persistScrollStateFromBottom = (prevScrollHeight, prevScrollTop, offset) => {
