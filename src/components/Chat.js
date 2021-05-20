@@ -217,9 +217,14 @@ export default function Chat(props) {
                     const lastMessage = getLastObject(preparedMessages);
 
                     if (isAtBottom) {
+                        const prevScrollTop = messagesContainer.current.scrollTop;
+                        const prevScrollHeight = messagesContainer.current.scrollHeight;
+
                         setMessages(prevState => {
                             return {...prevState, ...preparedMessages};
                         });
+
+                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
 
                         if (hasAnyIncomingMsg) {
                             const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
@@ -297,10 +302,15 @@ export default function Chat(props) {
             const prepared = getFirstObject(data);
             if (waId === prepared.waId) {
                 if (isAtBottom) {
+                    const prevScrollTop = messagesContainer.current.scrollTop;
+                    const prevScrollHeight = messagesContainer.current.scrollHeight;
+
                     // Display as a new message
                     setMessages(prevState => {
                         return {...prevState, ...data};
                     });
+
+                    persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
                 } else {
                     // TODO: Display a button to scroll down
                 }
@@ -364,6 +374,11 @@ export default function Chat(props) {
         if (indicatorToShow) {
             setFixedDateIndicatorText(indicatorToShow.innerHTML);
         }
+    }
+
+    const persistScrollStateFromBottom = (prevScrollHeight, prevScrollTop, offset) => {
+        const nextScrollHeight = messagesContainer.current.scrollHeight;
+        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - offset;
     }
 
     const scrollToChild = (msgId) => {
@@ -548,13 +563,11 @@ export default function Chat(props) {
                     /*if (sinceTime) {
                         messagesContainer.current.scrollTop = prevScrollTop;
                     } else {
-                        const nextScrollHeight = messagesContainer.current.scrollHeight;
-                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_OFFSET;
+                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
                     }*/
 
                     if (!sinceTime || replaceAll) {
-                        const nextScrollHeight = messagesContainer.current.scrollHeight;
-                        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - SCROLL_OFFSET;
+                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
                     } else if (sinceTime) {
                         messagesContainer.current.scrollTop = prevScrollTop;
                     }
@@ -637,8 +650,7 @@ export default function Chat(props) {
                         return sortMessagesAsc(nextState);
                     });
 
-                    const nextScrollHeight = messagesContainer.current.scrollHeight;
-                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
+                    persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
                 }
             })
             .catch((error) => {
@@ -670,8 +682,7 @@ export default function Chat(props) {
                         return sortMessagesAsc(nextState);
                     });
 
-                    const nextScrollHeight = messagesContainer.current.scrollHeight;
-                    messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop;
+                    persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
                 }
             })
             .catch((error) => {
