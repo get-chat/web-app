@@ -580,9 +580,6 @@ export default function Chat(props) {
                 setLoaded(true);
                 setLoadingMoreMessages(false);
 
-                console.log("SINCE", sinceTime);
-                console.log("BEFORE", beforeTime);
-
                 // TODO: Check unread messages first and then decide to do it or not
                 if (isInitial) {
                     // beforeTime is not passed only for initial request
