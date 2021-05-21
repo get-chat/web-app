@@ -37,14 +37,14 @@ function ChatTags(props) {
     }
 
     const makeUniqueTagsArray = (tagsArray) => {
-        const uniqueTagsArray = [];
+        const uniqueTagsArray = {};
         tagsArray.forEach((tag) => {
-            if (!uniqueTagsArray[tag.id]) {
-                uniqueTagsArray.push(tag);
+            if (!uniqueTagsArray.hasOwnProperty(tag.id)) {
+                uniqueTagsArray[tag.id] = tag;
             }
         });
 
-        return uniqueTagsArray;
+        return Object.values(uniqueTagsArray);
     }
 
     const retrieveChat = () => {
