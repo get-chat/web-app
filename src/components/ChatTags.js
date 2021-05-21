@@ -36,6 +36,17 @@ function ChatTags(props) {
         createTag(tag);
     }
 
+    const makeUniqueTagsArray = (tagsArray) => {
+        const uniqueTagsArray = [];
+        tagsArray.forEach((tag) => {
+            if (!uniqueTagsArray[tag.id]) {
+                uniqueTagsArray.push(tag);
+            }
+        });
+
+        return uniqueTagsArray;
+    }
+
     const retrieveChat = () => {
         axios.get( `${BASE_URL}chats/${props.waId}/`, getConfig())
             .then((response) => {
@@ -75,13 +86,14 @@ function ChatTags(props) {
                 console.log("Created tag: ", response.data);
 
                 setChatTags(prevState => {
-                    const nextState = prevState.filter((curTag) => {
+                    let nextState = prevState.filter((curTag) => {
                         return curTag.id !== tag.id;
                     });
 
                     tag.tagging_id = response.data.id;
 
                     nextState.push(tag);
+                    nextState = makeUniqueTagsArray(nextState);
 
                     return nextState;
                 });
@@ -97,9 +109,11 @@ function ChatTags(props) {
                 console.log("Deleted tag: ", response.data);
 
                 setChatTags(prevState => {
-                    return prevState.filter((curTag) => {
+                    let nextState = prevState.filter((curTag) => {
                         return curTag.id !== tag.id;
                     });
+                    nextState = makeUniqueTagsArray(nextState);
+                    return nextState;
                 });
             })
             .catch((error) => {
