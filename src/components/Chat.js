@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import '../styles/Chat.css'
-import {CircularProgress, Fab, Zoom} from "@material-ui/core";
+import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import axios from "axios";
@@ -8,15 +8,18 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL, EVENT_TOPIC_CHAT_ASSIGNMENT,
-    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, EVENT_TOPIC_CHAT_TAGGING,
+    BASE_URL,
+    EVENT_TOPIC_CHAT_ASSIGNMENT,
+    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+    EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
-    EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, EVENT_TOPIC_UPDATE_PERSON_NAME
+    EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
+    EVENT_TOPIC_UPDATE_PERSON_NAME
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import PersonClass from "../PersonClass";
@@ -34,12 +37,12 @@ import {
     getLastMessageAndExtractTimestamp,
     getLastObject,
     getObjLength,
-    hasInternetConnection, sortMessagesAsc,
+    hasInternetConnection,
+    sortMessagesAsc,
     translateHTMLInputToText
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
-import {ArrowDownward} from "@material-ui/icons";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
