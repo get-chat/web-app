@@ -718,8 +718,9 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedMessages) > 0) {
-                    const prevScrollTop = messagesContainer.current.scrollTop;
-                    const prevScrollHeight = messagesContainer.current.scrollHeight;
+                    const el = messagesContainer.current;
+                    const prevScrollTop = el.scrollTop;
+                    const prevScrollHeight = el.scrollHeight;
 
                     setMessages(prevState => {
                         let nextState = {...prevState, ...preparedMessages}
@@ -750,8 +751,9 @@ export default function Chat(props) {
                 });
 
                 if (getObjLength(preparedMessages) > 0) {
-                    const prevScrollTop = messagesContainer.current.scrollTop;
-                    const prevScrollHeight = messagesContainer.current.scrollHeight;
+                    const el = messagesContainer.current;
+                    const prevScrollTop = el.scrollTop;
+                    const prevScrollHeight = el.scrollHeight;
 
                     setMessages(prevState => {
                         let nextState = {...prevState, ...preparedMessages}
