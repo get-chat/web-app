@@ -21,6 +21,10 @@
     font-size: 12px;
 }
 
+.chatTaggingEvent__content__title > div {
+    display: inline-block;
+}
+
 .chatTaggingEvent__content__timestamp {
     color: rgba(0, 0, 0, 0.6);
     margin-top: 5px;

@@ -10,7 +10,12 @@ function ChatAssignmentEvent(props) {
         <div className="chatAssignmentEvent">
             <div className="chatAssignmentEvent__content">
                 <div className="chatAssignmentEvent__content__title">
-                    <span className="bold">{props.data.done_by?.username ?? 'a user'}</span> has changed chat assignments.
+                    {props.data.done_by
+                    ?
+                        <div><span className="bold">{props.data.done_by?.username ?? 'a user'}</span> has changed chat assignments.</div>
+                    :
+                        <div>Chat assignments were changed.</div>
+                    }
                 </div>
 
                 {props.data.assigned_to_user_set &&

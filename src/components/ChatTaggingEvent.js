@@ -10,8 +10,17 @@ function ChatTaggingEvent(props) {
         <div className="chatTaggingEvent">
             <div className="chatTaggingEvent__content">
                 <div className="chatTaggingEvent__content__title">
-                    <span className="bold">{props.data.done_by?.username ?? 'a user'}</span> has {props.data.action} tag: <span
-                    className="bold" style={{color: props.data.tag?.web_inbox_color}}>{props.data.tag?.name}</span>.
+                    {props.data.done_by
+                    ?
+                        <div>
+                            <span className="bold">{props.data.done_by.username}</span> has {props.data.action} tag:
+                        </div>
+                    :
+                        <div>A tag was {props.data.action}:</div>
+                    }
+
+                    &nbsp;
+                    <span className="bold" style={{color: props.data.tag?.web_inbox_color}}>{props.data.tag?.name}</span>.
                 </div>
 
                 <div className="chatTaggingEvent__content__timestamp">
