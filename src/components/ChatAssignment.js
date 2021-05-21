@@ -36,7 +36,8 @@ function ChatAssignment(props) {
                 console.log("Chat: ", response.data);
 
                 // Update chats data
-                const chat = response.data;
+                // Now updated automatically via socket event
+                /*const chat = response.data;
                 if (chat) {
                     props.setChats(prevState => {
                         prevState[props.waId].assignedToUser = chat.assigned_to_user;
@@ -44,7 +45,7 @@ function ChatAssignment(props) {
 
                         return {...prevState};
                     })
-                }
+                }*/
 
                 close();
             })

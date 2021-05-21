@@ -16,14 +16,6 @@ function ChatTags(props) {
         retrieveChat();
     }, []);
 
-    useEffect(() => {
-        props.setChats(prevState => {
-            prevState[props.waId].tags = chatTags;
-            console.log(chatTags);
-            return {...prevState};
-        });
-    }, [chatTags]);
-
     const close = () => {
         props.setOpen(false);
     }
@@ -156,10 +148,10 @@ function ChatTags(props) {
                                     }
                                 }
                                 if (!found) {
-                                    return tag;
+                                    return true;
                                 }
                             } else {
-                                return tag;
+                                return true;
                             }
                         }).map((tag) =>
                             <Chip
