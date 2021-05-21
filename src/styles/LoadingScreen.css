@@ -25,7 +25,7 @@
 .loadingScreen__logoContainer img {
     height: 80px;
     width: 80px;
-    opacity: 0.2;
+    opacity: 0.15;
 }
 
 .loadingScreen__progressContainer, .loadingScreen__logoContainer {

@@ -1074,15 +1074,6 @@ export default function Chat(props) {
 
             </div>
 
-            <Zoom in={isScrollButtonVisible}>
-                <Fab
-                    onClick={handleScrollButtonClick}
-                    className="chat__scrollButton"
-                    size="small">
-                    <ArrowDownward />
-                </Fab>
-            </Zoom>
-
             <ChatFooter
                 isExpired={isExpired}
                 input={input}
@@ -1093,7 +1084,9 @@ export default function Chat(props) {
                 setTemplateMessagesVisible={setTemplateMessagesVisible}
                 sendHandledChosenFiles={sendHandledChosenFiles}
                 accept={accept}
-                setAccept={setAccept} />
+                setAccept={setAccept}
+                isScrollButtonVisible={isScrollButtonVisible}
+                handleScrollButtonClick={handleScrollButtonClick}/>
 
             {isTemplateMessagesVisible &&
             <TemplateMessages

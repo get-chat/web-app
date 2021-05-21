@@ -270,17 +270,6 @@ a.chat__document:hover {
     justify-content: space-between;
 }
 
-.chat__scrollButton {
-    position: absolute !important;
-    bottom: 80px;
-    right: 20px;
-    background-color: white !important;
-}
-
-.chat__scrollButton .MuiSvgIcon-root {
-    color: var(--color-primary-light) !important;
-}
-
 .chat__body {
     position: relative;
     display: flex;

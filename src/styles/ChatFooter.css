@@ -151,6 +151,17 @@
     z-index: 101;
 }
 
+.chat__scrollButton {
+    position: absolute !important;
+    bottom: 80px;
+    right: 20px;
+    background-color: white !important;
+}
+
+.chat__scrollButton .MuiSvgIcon-root {
+    color: var(--color-primary-light) !important;
+}
+
 @media only screen and (max-width: 750px) {
     .chat__footerOuter {
         border-left: none;
