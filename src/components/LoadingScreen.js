@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import '../styles/LoadingScreen.css';
 import {VERSION} from "../Constants";
+import logoBlack from '../assets/images/logo-black.svg';
 
 function LoadingScreen(props) {
 
@@ -23,6 +24,9 @@ function LoadingScreen(props) {
 
     return (
         <div className="loadingScreen">
+            <div className="loadingScreen__logoContainer">
+                <img src={logoBlack} />
+            </div>
             <div className="loadingScreen__progressContainer">
                 <LinearProgress variant="determinate" value={props.progress} />
             </div>

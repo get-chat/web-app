@@ -16,7 +16,19 @@
     padding: 30px 60px;
 }
 
-.loadingScreen__progressContainer {
+.loadingScreen__logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+}
+
+.loadingScreen__logoContainer img {
+    height: 80px;
+    width: 80px;
+    opacity: 0.2;
+}
+
+.loadingScreen__progressContainer, .loadingScreen__logoContainer {
     width: 100%;
     max-width: 400px;
 }
