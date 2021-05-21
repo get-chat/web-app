@@ -149,39 +149,51 @@ export default function Chat(props) {
         const messagesContainerCopy = messagesContainer.current;
         const dateIndicators = messagesContainerCopy.querySelectorAll('.chat__message__outer > .chat__message__dateContainer > .chat__message__dateContainer__indicator');
 
-        let timeoutToken;
+        // To optimize scroll event
+        let debounceTimer;
 
         // Consider replacing this with IntersectionObserver
         // Browser support should be considered: https://caniuse.com/intersectionobserver
         function handleScroll(e) {
-            const threshold = 0;
-            const el = e.target;
-            if (isScrollable(el)) {
-                if (el.scrollTop <= threshold) {
-                    //console.log("Scrolled to top");
-                    if (isLoaded && !isLoadingMoreMessages) {
-                        setLoadingMoreMessages(true);
-                        getMessages(false, undefined, getFirstObject(messages)?.timestamp);
+            if (debounceTimer) {
+                window.clearTimeout(debounceTimer);
+            }
+
+            debounceTimer = setTimeout(function () {
+
+                const threshold = 0;
+                const el = e.target;
+                if (isScrollable(el)) {
+
+                    if (el.scrollHeight - el.scrollTop - el.clientHeight > SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET) {
+                        setScrollButtonVisible(true);
+                    } else if (isAtBottom) {
+                        setScrollButtonVisible(false);
                     }
-                } else {
-                    // TODO: Make sure user scrolls
-                    if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
-                        //console.log('Scrolled to bottom');
-                        if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
+
+                    if (el.scrollTop <= threshold) {
+                        //console.log("Scrolled to top");
+                        if (isLoaded && !isLoadingMoreMessages) {
                             setLoadingMoreMessages(true);
-                            getMessages(false, undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
+                            getMessages(false, undefined, getFirstObject(messages)?.timestamp);
+                        }
+                    } else {
+                        // TODO: Make sure user scrolls
+                        if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+                            //console.log('Scrolled to bottom');
+                            if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
+                                setLoadingMoreMessages(true);
+                                getMessages(false, undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
+                            }
                         }
                     }
                 }
-            }
 
-            // Second part, to display date
-            if (isLoaded) {
-                clearTimeout(timeoutToken);
-                timeoutToken = setTimeout(function () {
+                // Second part, to display date
+                if (isLoaded) {
                     prepareFixedDateIndicator(dateIndicators, el);
-                }, 25);
-            }
+                }
+            }, 100);
         }
 
         if (messagesContainer && isLoaded) {
@@ -192,7 +204,7 @@ export default function Chat(props) {
         }
 
         return () => {
-            clearTimeout(timeoutToken);
+            clearTimeout(debounceTimer);
             messagesContainerCopy.removeEventListener("scroll", handleScroll);
         }
     }, [messages, isLoaded, isLoadingMoreMessages, isAtBottom]);
@@ -433,7 +445,7 @@ export default function Chat(props) {
             getMessages(false, undefined, undefined, undefined, undefined, false, true);
         }
 
-        setScrollButtonVisible(false);
+        //setScrollButtonVisible(false);
     }
 
     const persistScrollStateFromBottom = (prevScrollHeight, prevScrollTop, offset) => {
@@ -1062,14 +1074,14 @@ export default function Chat(props) {
 
             </div>
 
-            {isScrollButtonVisible &&
-            <Fab
-                onClick={handleScrollButtonClick}
-                className="chat__scrollButton"
-                size="small">
-                <ArrowDownward />
-            </Fab>
-            }
+            <Zoom in={isScrollButtonVisible}>
+                <Fab
+                    onClick={handleScrollButtonClick}
+                    className="chat__scrollButton"
+                    size="small">
+                    <ArrowDownward />
+                </Fab>
+            </Zoom>
 
             <ChatFooter
                 isExpired={isExpired}
