@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Fab, IconButton, Tooltip, Zoom} from "@material-ui/core";
+import {Badge, Fab, IconButton, Tooltip, Zoom} from "@material-ui/core";
 import {Add, ArrowDownward, AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
@@ -327,12 +327,22 @@ function ChatFooter(props) {
             }
 
             <Zoom in={props.isScrollButtonVisible}>
-                <Fab
-                    onClick={props.handleScrollButtonClick}
-                    className="chat__scrollButton"
-                    size="small">
-                    <ArrowDownward />
-                </Fab>
+                <Badge
+                    className="chat__scrollButtonWrapper"
+                    color="primary"
+                    badgeContent="1"
+                    invisible={true}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}>
+                    <Fab
+                        onClick={props.handleScrollButtonClick}
+                        className="chat__scrollButton"
+                        size="small">
+                        <ArrowDownward />
+                    </Fab>
+                </Badge>
             </Zoom>
 
         </div>
