@@ -86,6 +86,14 @@ export const getAttachmentTypeByFile = (file, callback) => {
     return ATTACHMENT_TYPE_DOCUMENT;
 }
 
+export const isAudioMimeTypeSupported = (mimeType) => {
+    if (mimeType === 'audio/amr') {
+        return false;
+    }
+
+    return true;
+}
+
 /*export const convertToBase64 = (file, callback) => {
     const fileReader = new FileReader();
     let base64;

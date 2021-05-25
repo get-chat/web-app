@@ -33,6 +33,7 @@ import {
 import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";
+import DownloadUnsupportedFile from "./DownloadUnsupportedFile";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -59,11 +60,16 @@ function Main() {
     const [errorMessage, setErrorMessage] = useState('');
 
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
+
     const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
     const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
     const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
     const [isChatTagsVisible, setChatTagsVisible] = useState(false);
     const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
+    const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] = useState(false);
+
+    const [unsupportedFile, setUnsupportedFile] = useState();
+
     const [chosenContact, setChosenContact] = useState();
 
     const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
@@ -593,6 +599,13 @@ function Main() {
                 <PreviewMedia
                     data={chatMessageToPreview}
                     hideImageOrVideoPreview={hideImageOrVideoPreview} />
+                }
+
+                {isDownloadUnsupportedFileVisible &&
+                <DownloadUnsupportedFile
+                    open={isDownloadUnsupportedFileVisible}
+                    setOpen={setDownloadUnsupportedFileVisible}
+                    data={unsupportedFile} />
                 }
 
                 <Fade in={progress < 100} timeout={{exit: 1000}}>

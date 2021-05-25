@@ -6,6 +6,7 @@ import HeadsetIcon from "@material-ui/icons/Headset";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
+import {isAudioMimeTypeSupported} from "../FileHelpers";
 
 function ChatMessageVoice(props) {
 
@@ -57,8 +58,14 @@ function ChatMessageVoice(props) {
                 // Pause others
                 PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
-                audio.current.play();
-                setPlaying(true);
+                console.log(data.mimeType);
+
+                if (isAudioMimeTypeSupported(data.mimeType)) {
+                    audio.current.play();
+                    setPlaying(true);
+                } else {
+                    alert('test');
+                }
             }
 
             const interval = setInterval(function () {
