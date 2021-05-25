@@ -20,7 +20,7 @@ function DownloadUnsupportedFile(props) {
 
             <DialogContent>
                 <DialogContentText>
-                    This file type is not supported. But you can still download it.
+                    This file type is not supported, however you can still download it.
                 </DialogContentText>
             </DialogContent>
 

@@ -3,7 +3,7 @@ import {
     Button, CircularProgress,
     Dialog,
     DialogActions,
-    DialogContent,
+    DialogContent, DialogContentText,
     DialogTitle,
     FormControl,
     InputLabel, MenuItem,
@@ -152,7 +152,7 @@ function ChatAssignment(props) {
             <DialogTitle>Assign chat</DialogTitle>
             <DialogContent className="chatAssignment">
 
-                <div className="mb-3">You can assign this chat to a user or a group.</div>
+                <DialogContentText>You can assign this chat to a user or a group.</DialogContentText>
 
                 <FormControl fullWidth={true}>
                     <InputLabel id="assign-user-select-label">User</InputLabel>

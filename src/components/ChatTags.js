@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {Button, Chip, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
+import {
+    Button,
+    Chip,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../Helpers";
@@ -117,7 +126,7 @@ function ChatTags(props) {
         <Dialog open={props.open} onClose={close} className="chatTagsWrapper">
             <DialogTitle>Chat tags</DialogTitle>
             <DialogContent>
-                <div className="mb-3">You can add or remove tags for this chat.</div>
+                <DialogContentText>You can add or remove tags for this chat.</DialogContentText>
 
                 {chatTags &&
                 <div className="chatTags__tags current">
