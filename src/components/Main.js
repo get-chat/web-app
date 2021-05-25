@@ -18,7 +18,7 @@ import {
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
-    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, EVENT_TOPIC_UNSUPPORTED_FILE
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
@@ -232,10 +232,16 @@ function Main() {
         // Retrieve current user, this will trigger other requests
         retrieveCurrentUser();
 
+        const onUnsupportedFileEvent = function (msg, data) {
+            setUnsupportedFile(data);
+            setDownloadUnsupportedFileVisible(true);
+        };
+
         // EventBus
         const searchMessagesVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
         const contactDetailsVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
         const displayErrorEventToken = PubSub.subscribe(EVENT_TOPIC_DISPLAY_ERROR, onDisplayError);
+        const unsupportedFileEventToken = PubSub.subscribe(EVENT_TOPIC_UNSUPPORTED_FILE, onUnsupportedFileEvent);
 
         const CODE_NORMAL = 1000;
         let ws;
@@ -406,6 +412,7 @@ function Main() {
             PubSub.unsubscribe(searchMessagesVisibilityEventToken);
             PubSub.unsubscribe(contactDetailsVisibilityEventToken);
             PubSub.unsubscribe(displayErrorEventToken);
+            PubSub.unsubscribe(unsupportedFileEventToken);
 
             ws.close(CODE_NORMAL);
         }

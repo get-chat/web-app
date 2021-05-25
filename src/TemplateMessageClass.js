@@ -9,7 +9,6 @@ class TemplateMessageClass {
         this.language = data.language;
         this.status = data.status;
     }
-
 }
 
 export default TemplateMessageClass;

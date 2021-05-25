@@ -8,7 +8,7 @@ function DownloadUnsupportedFile(props) {
     }
 
     const download = () => {
-
+        window.open(props.data.link, '_blank').focus();
         close();
     }
 

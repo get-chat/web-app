@@ -4,9 +4,10 @@ import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_CHAT_MESSAGE} from "../Constants";
+import {EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_UNSUPPORTED_FILE} from "../Constants";
 import {avatarStyles} from "../AvatarStyles";
 import {isAudioMimeTypeSupported} from "../FileHelpers";
+import UnsupportedFileClass from "../UnsupportedFileClass";
 
 function ChatMessageVoice(props) {
 
@@ -64,7 +65,11 @@ function ChatMessageVoice(props) {
                     audio.current.play();
                     setPlaying(true);
                 } else {
-                    alert('test');
+                    const unsupportedFile = new UnsupportedFileClass({
+                        name: props.data.filename,
+                        link: props.data.audioLink
+                    });
+                    PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
                 }
             }
 
