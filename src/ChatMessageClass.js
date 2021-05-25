@@ -64,6 +64,8 @@ export class ChatMessageClass {
 
         this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption ?? payload.document?.caption;
 
+        this.mimeType = payload.image?.mime_type ?? payload.video?.mime_type ?? payload.audio?.mime_type ?? payload.document?.mime_type;
+
         this.templateName = payload.template?.name;
         this.templateNamespace = payload.template?.namespace;
         this.templateLanguage = payload.template?.language?.code;
