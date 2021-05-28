@@ -110,6 +110,16 @@ function ChatMessage(props) {
                                          onPreview={() => props.onPreview(data)}/>
                     }
 
+                    {data.errors &&
+                    <div className="chat__errors">
+                        {data.errors.map((error) =>
+                            <div className="chat__errors__error">
+                                {error.details}
+                            </div>
+                        )}
+                    </div>
+                    }
+
                     {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreakWord"
                                                                             dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}}/> : '\u00A0'}
 
@@ -125,7 +135,7 @@ function ChatMessage(props) {
                         {(data.isFromUs === true && data.isDeliveredOrRead()) &&
                         <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles}/>
                         }
-                </span>
+                    </span>
 
                     <div style={{clear: "both"}}/>
                 </div>
