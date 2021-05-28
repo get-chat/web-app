@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getAdminPanelURL, getConfig} from "../Helpers";
+import {getConfig, getHubURL} from "../Helpers";
 import {
     Button,
     CircularProgress,
@@ -67,7 +67,7 @@ function ChatTagsList(props) {
                 }
 
                 <div className="mt-3">
-                    <Link href={getAdminPanelURL()} target="_blank">Manage tags</Link>
+                    <Link href={getHubURL()} target="_blank">Manage tags</Link>
                 </div>
 
             </DialogContent>

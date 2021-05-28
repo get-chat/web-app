@@ -177,6 +177,10 @@ export const getAdminPanelURL = () => {
     return BASE_URL.replace('/api/v1', '/admin');
 }
 
+export const getHubURL = () => {
+    return BASE_URL.replace('/api/v1', '/hub');
+}
+
 export const getBaseURL = () => {
     const windowLocation = window.location;
     return windowLocation.protocol + "//" + windowLocation.host + "/";
