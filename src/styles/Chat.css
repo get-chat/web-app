@@ -204,7 +204,7 @@ a.chat__document:hover {
 
 .chat__errors__error {
     font-size: 12px;
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(255, 0, 0, 0.8);
 }
 
 .chat__message__info {
