@@ -1,8 +1,17 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers";
-import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, ListItem} from "@material-ui/core";
+import {getAdminPanelURL, getConfig} from "../Helpers";
+import {
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Link,
+    ListItem
+} from "@material-ui/core";
 import '../styles/ChatTagsList.css';
 import LabelIcon from "@material-ui/icons/Label";
 
@@ -56,6 +65,11 @@ function ChatTagsList(props) {
                     )}
                 </div>
                 }
+
+                <div className="mt-3">
+                    <Link href={getAdminPanelURL()} target="_blank">Manage tags</Link>
+                </div>
+
             </DialogContent>
             <DialogActions>
                 <Button onClick={close} color="secondary">Close</Button>

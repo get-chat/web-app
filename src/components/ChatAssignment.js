@@ -1,17 +1,20 @@
 import React, {useEffect, useState} from "react";
 import {
-    Button, CircularProgress,
+    Button,
+    CircularProgress,
     Dialog,
     DialogActions,
-    DialogContent, DialogContentText,
+    DialogContent,
+    DialogContentText,
     DialogTitle,
     FormControl,
-    InputLabel, Link, MenuItem,
+    InputLabel,
+    MenuItem,
     Select
 } from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getAdminPanelURL, getConfig} from "../Helpers";
+import {getConfig} from "../Helpers";
 import '../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {
@@ -181,10 +184,6 @@ function ChatAssignment(props) {
                         )}
                     </Select>
                 </FormControl>
-
-                <div className="mt-3">
-                    <Link href={getAdminPanelURL()} target="_blank">Manage assignments</Link>
-                </div>
 
             </DialogContent>
             <DialogActions>
