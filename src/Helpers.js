@@ -1,6 +1,6 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
 import data from './EmojiData.json'; //from 'emoji-mart/data/all.json'
-import {EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
+import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
 import {getToken} from "./StorageHelper";
 
 const { htmlToText } = require('html-to-text');
@@ -171,6 +171,10 @@ export const getSelectionHtml = () => {
         }
     }
     return html;
+}
+
+export const getAdminPanelURL = () => {
+    return BASE_URL.replace('/api/v1', '/admin');
 }
 
 export const getBaseURL = () => {

@@ -7,11 +7,11 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle
+    DialogTitle, Link
 } from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers";
+import {getAdminPanelURL, getConfig} from "../Helpers";
 import '../styles/ChatTags.css';
 
 function ChatTags(props) {
@@ -172,6 +172,10 @@ function ChatTags(props) {
                     </div>
                 </div>
                 }
+
+                <div className="mt-3">
+                    <Link href={getAdminPanelURL()} target="_blank">Manage tags</Link>
+                </div>
 
             </DialogContent>
             <DialogActions>
