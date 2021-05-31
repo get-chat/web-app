@@ -16,7 +16,7 @@ import {
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-    EVENT_TOPIC_DISPLAY_ERROR,
+    EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, EVENT_TOPIC_UNSUPPORTED_FILE
 } from "../Constants";
@@ -433,6 +433,25 @@ function Main() {
             setChatAssignmentVisible(false);
         }
     }, [waId]);
+
+    useEffect(() => {
+        const onMarkedAsReceived = function (msg, data) {
+            const relatedWaId = data;
+
+            setNewMessages(prevState => {
+                const nextState = prevState;
+                delete nextState[relatedWaId];
+
+                return {...nextState};
+            });
+        }
+
+        const markedAsReceivedEventToken = PubSub.subscribe(EVENT_TOPIC_MARKED_AS_RECEIVED, onMarkedAsReceived);
+
+        return () => {
+            PubSub.unsubscribe(markedAsReceivedEventToken);
+        }
+    }, [newMessages]);
 
     useEffect(() => {
         storeContactProvidersData(contactProvidersData);

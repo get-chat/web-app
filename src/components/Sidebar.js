@@ -83,25 +83,6 @@ function Sidebar(props) {
     }, [keyword]);
 
     useEffect(() => {
-        const onMarkedAsReceived = function (msg, data) {
-            const relatedWaId = data;
-
-            props.setNewMessages(prevState => {
-                const nextState = prevState;
-                delete nextState[relatedWaId];
-
-                return {...nextState};
-            });
-        }
-
-        const markedAsReceivedEventToken = PubSub.subscribe(EVENT_TOPIC_MARKED_AS_RECEIVED, onMarkedAsReceived);
-
-        return () => {
-            PubSub.unsubscribe(markedAsReceivedEventToken);
-        }
-    }, [props.newMessages]);
-
-    useEffect(() => {
         // New chatMessages
         const onNewMessages = function (msg, data) {
             // We don't need to update if chats are filtered
