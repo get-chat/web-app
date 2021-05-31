@@ -180,6 +180,13 @@ export default function Chat(props) {
                         setScrollButtonVisible(true);
                     } else if (isAtBottom) {
                         setScrollButtonVisible(false);
+
+                        if (currentNewMessages > 0) {
+                            const lastMessage = getLastObject(messages);
+                            if (lastMessage) {
+                                markAsReceived(extractTimestampFromMessage(lastMessage));
+                            }
+                        }
                     }
 
                     if (el.scrollTop <= threshold) {
@@ -218,7 +225,7 @@ export default function Chat(props) {
             clearTimeout(debounceTimer);
             messagesContainerCopy.removeEventListener("scroll", handleScroll);
         }
-    }, [messages, isLoaded, isLoadingMoreMessages, isAtBottom]);
+    }, [messages, isLoaded, isLoadingMoreMessages, isAtBottom, currentNewMessages]);
 
     useEffect(() => {
         // New messages
@@ -881,6 +888,8 @@ export default function Chat(props) {
                 //console.log(response.data);
 
                 PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
+
+                setCurrentNewMessages(0);
             })
             .catch((error) => {
                 // TODO: Handle errors
