@@ -81,12 +81,6 @@ export default function Chat(props) {
     const cancelTokenSourceRef = useRef();
 
     useEffect(() => {
-        if ((props.newMessages[waId]?.newMessages ?? 0) > currentNewMessages) {
-            setCurrentNewMessages(props.newMessages[waId]?.newMessages);
-        }
-    }, [waId, props.newMessages]);
-
-    useEffect(() => {
         props.retrieveContactData(waId);
 
         // Generate a token
@@ -155,6 +149,17 @@ export default function Chat(props) {
     useEffect(() => {
         props.setChosenContact(person);
     }, [person]);
+
+    const getNewMessagesCount = () => {
+        return props.newMessages[waId]?.newMessages ?? 0;
+    }
+
+    useEffect(() => {
+        const newMessagesCount = getNewMessagesCount();
+        if (newMessagesCount > currentNewMessages) {
+            setCurrentNewMessages(newMessagesCount);
+        }
+    }, [waId, props.newMessages]);
 
     useEffect(() => {
         const messagesContainerCopy = messagesContainer.current;
