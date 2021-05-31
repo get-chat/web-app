@@ -1089,6 +1089,8 @@ export default function Chat(props) {
             </div>
 
             <ChatFooter
+                waId={waId}
+                newMessages={props.newMessages}
                 isExpired={isExpired}
                 input={input}
                 setInput={setInput}

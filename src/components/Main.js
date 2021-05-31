@@ -569,6 +569,7 @@ function Main() {
                 {templatesReady &&
                 <Chat
                     isAdmin={isAdmin}
+                    newMessages={newMessages}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
