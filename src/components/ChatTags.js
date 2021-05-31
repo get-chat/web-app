@@ -163,7 +163,7 @@ function ChatTags(props) {
                                 <Chip
                                     key={tag.id}
                                     label={tag.name}
-                                    onDelete={() => onDeleteTag(tag)}/>
+                                    onDelete={() => onDeleteTag(tag)} />
                             )}
                         </div>
                         :
