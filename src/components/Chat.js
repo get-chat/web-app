@@ -67,6 +67,8 @@ export default function Chat(props) {
     const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(false);
     const [previewSendMediaData, setPreviewSendMediaData] = useState();
 
+    const [currentNewMessages, setCurrentNewMessages] = useState(0);
+
     const [isAtBottom, setAtBottom] = useState(false);
 
     const [lastMessageId, setLastMessageId] = useState();
@@ -77,6 +79,12 @@ export default function Chat(props) {
     const location = useLocation();
 
     const cancelTokenSourceRef = useRef();
+
+    useEffect(() => {
+        if ((props.newMessages[waId]?.newMessages ?? 0) > currentNewMessages) {
+            setCurrentNewMessages(props.newMessages[waId]?.newMessages);
+        }
+    }, [waId, props.newMessages]);
 
     useEffect(() => {
         props.retrieveContactData(waId);
@@ -255,6 +263,8 @@ export default function Chat(props) {
                             // Mark new message as received if visible
                             if (canSeeLastMessage(messagesContainer.current)) {
                                 markAsReceived(lastMessageTimestamp);
+                            } else {
+                                setCurrentNewMessages(prevState => prevState+1);
                             }
 
                             // Update contact
@@ -383,7 +393,7 @@ export default function Chat(props) {
             PubSub.unsubscribe(chatAssignmentEventToken);
             PubSub.unsubscribe(chatTaggingEventToken);
         }
-    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom]);
+    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
 
     useEffect(() => {
         const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
@@ -1090,7 +1100,7 @@ export default function Chat(props) {
 
             <ChatFooter
                 waId={waId}
-                newMessages={props.newMessages}
+                currentNewMessages={currentNewMessages}
                 isExpired={isExpired}
                 input={input}
                 setInput={setInput}

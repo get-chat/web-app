@@ -169,10 +169,6 @@ function ChatFooter(props) {
         setMoreVisible(false)
     }
 
-    const getNewMessagesCount = () => {
-        return props.newMessages[props.waId]?.newMessages ?? 0;
-    }
-
     const ACCEPT_IMAGE_AND_VIDEO = 'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
     const ACCEPT_DOCUMENT = '*.*';
 
@@ -334,8 +330,8 @@ function ChatFooter(props) {
                 <Badge
                     className="chat__scrollButtonWrapper"
                     color="primary"
-                    badgeContent={getNewMessagesCount()}
-                    invisible={getNewMessagesCount() === 0}
+                    badgeContent={props.currentNewMessages}
+                    invisible={props.currentNewMessages === 0}
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'left',
