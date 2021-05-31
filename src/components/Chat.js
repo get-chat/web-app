@@ -287,7 +287,7 @@ export default function Chat(props) {
                             setExpired(false);
                         }
                     } else {
-                        displayScrollButton();
+                        setCurrentNewMessages(prevState => prevState+1);
                     }
 
                     // Update last message id
