@@ -156,29 +156,43 @@ function ChatTags(props) {
                 {chatTags &&
                 <div className="chatTags__tags current">
                     <h5>Current tags</h5>
-                    <div>
-                        {chatTags.map((tag) =>
-                            <Chip
-                                key={tag.id}
-                                label={tag.name}
-                                onDelete={() => onDeleteTag(tag)} />
-                        )}
-                    </div>
+                    {chatTags?.length > 0
+                        ?
+                        <div>
+                            {chatTags.map((tag) =>
+                                <Chip
+                                    key={tag.id}
+                                    label={tag.name}
+                                    onDelete={() => onDeleteTag(tag)}/>
+                            )}
+                        </div>
+                        :
+                        <div className="chatTags__tags__empty mt-1">
+                            Empty
+                        </div>
+                    }
                 </div>
                 }
 
                 {allTags &&
                 <div className="chatTags__tags mt-3">
                     <h5>All tags</h5>
-                    <div>
-                        {unusedTags.map((tag) =>
-                            <Chip
-                                key={tag.id}
-                                label={tag.name}
-                                clickable
-                                onClick={() => onClickTag(tag)} />
-                        )}
-                    </div>
+                    {unusedTags?.length > 0
+                        ?
+                        <div>
+                            {unusedTags.map((tag) =>
+                                <Chip
+                                    key={tag.id}
+                                    label={tag.name}
+                                    clickable
+                                    onClick={() => onClickTag(tag)} />
+                            )}
+                        </div>
+                        :
+                        <div className="chatTags__tags__empty mt-1">
+                            Empty
+                        </div>
+                    }
                 </div>
                 }
 
