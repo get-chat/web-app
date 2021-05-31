@@ -50,6 +50,7 @@ function Main() {
     const [isAdmin, setAdmin] = useState(false);
 
     const [chats, setChats] = useState({});
+    const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
 
     const [templates, setTemplates] = useState({});
@@ -532,6 +533,8 @@ function Main() {
                     isAdmin={isAdmin}
                     chats={chats}
                     setChats={setChats}
+                    newMessages={newMessages}
+                    setNewMessages={setNewMessages}
                     filterTag={filterTag}
                     setFilterTag={setFilterTag}
                     currentUser={currentUser}

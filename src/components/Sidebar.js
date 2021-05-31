@@ -32,7 +32,6 @@ import CloseIcon from "@material-ui/icons/Close";
 function Sidebar(props) {
 
     const {waId} = useParams();
-    const [newMessages, setNewMessages] = useState({});
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [chatMessages, setChatMessages] = useState({});
@@ -87,7 +86,7 @@ function Sidebar(props) {
         const onMarkedAsReceived = function (msg, data) {
             const relatedWaId = data;
 
-            setNewMessages(prevState => {
+            props.setNewMessages(prevState => {
                 const nextState = prevState;
                 delete nextState[relatedWaId];
 
@@ -100,7 +99,7 @@ function Sidebar(props) {
         return () => {
             PubSub.unsubscribe(markedAsReceivedEventToken);
         }
-    }, [newMessages]);
+    }, [props.newMessages]);
 
     useEffect(() => {
         // New chatMessages
@@ -151,15 +150,15 @@ function Sidebar(props) {
 
                     // New chatMessages
                     if (!chatMessage.isFromUs && (waId !== chatMessageWaId || document.visibilityState === 'hidden')) {
-                        const preparedNewMessages = newMessages;
-                        if (newMessages[chatMessageWaId] === undefined) {
+                        const preparedNewMessages = props.newMessages;
+                        if (props.newMessages[chatMessageWaId] === undefined) {
                             preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
                         }
 
                         // Increase number of new chatMessages
                         preparedNewMessages[chatMessageWaId].newMessages++;
 
-                        setNewMessages({...preparedNewMessages});
+                        props.setNewMessages({...preparedNewMessages});
 
                         // Display a notification
                         if (!chatMessage.isFromUs) {
@@ -189,7 +188,7 @@ function Sidebar(props) {
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
-    }, [waId, props.chats, newMessages, keyword]);
+    }, [waId, props.chats, props.newMessages, keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
@@ -233,7 +232,7 @@ function Sidebar(props) {
                     let hasAnyNewMessages = false;
                     let chatMessageWaId;
 
-                    setNewMessages((prevState => {
+                    props.setNewMessages((prevState => {
                             Object.entries(preparedNewMessages).forEach((newMsg) => {
                                 const newMsgWaId = newMsg[0]
                                 const number = newMsg[1].newMessages;
@@ -263,7 +262,7 @@ function Sidebar(props) {
                         props.displayNotification("New messages", "You have new messages!", chatMessageWaId);
                     }
                 } else {
-                    setNewMessages(preparedNewMessages);
+                    props.setNewMessages(preparedNewMessages);
                 }
 
             })
@@ -456,7 +455,7 @@ function Sidebar(props) {
                         <SidebarChat
                             key={chat[0]}
                             chatData={chat[1]}
-                            newMessages={newMessages}
+                            newMessages={props.newMessages}
                             keyword={keyword}
                             contactProvidersData={props.contactProvidersData}
                             retrieveContactData={props.retrieveContactData}
