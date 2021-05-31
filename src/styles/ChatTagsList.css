@@ -27,3 +27,8 @@
 .chatTagsListWrapper__tag .MuiSvgIcon-root {
     margin-right: 10px;
 }
+
+.chatTagsList__empty {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.6);
+}

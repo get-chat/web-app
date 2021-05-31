@@ -54,15 +54,25 @@ function ChatTagsList(props) {
                 <div className="mb-3">You can filter chats by tags.</div>
 
                 {tags &&
-                <div>
-                    {tags.map((tag) =>
-                        <ListItem key={tag.id} button onClick={() => handleClick(tag)}>
-                            <div className="chatTagsListWrapper__tag">
-                                <LabelIcon style={{fill: tag.web_inbox_color}} />
-                                {tag.name}
-                            </div>
-                        </ListItem>
-                    )}
+                <div className="chatTagsList">
+                    {tags.length > 0
+                        ?
+                        <div>
+                            {tags.map((tag) =>
+                                <ListItem key={tag.id} button onClick={() => handleClick(tag)}>
+                                    <div className="chatTagsListWrapper__tag">
+                                        <LabelIcon style={{fill: tag.web_inbox_color}} />
+                                        {tag.name}
+                                    </div>
+                                </ListItem>
+                            )}
+                        </div>
+                        :
+                        <div className="chatTagsList__empty">
+                            Empty
+                        </div>
+                    }
+
                 </div>
                 }
 
