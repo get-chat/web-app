@@ -168,7 +168,7 @@ export default function Chat(props) {
                 const el = e.target;
                 if (isScrollable(el)) {
 
-                    if (el.scrollHeight - el.scrollTop - el.clientHeight > SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET) {
+                    if (!canSeeLastMessage(el)) {
                         setScrollButtonVisible(true);
                     } else if (isAtBottom) {
                         setScrollButtonVisible(false);
@@ -252,6 +252,8 @@ export default function Chat(props) {
                         if (hasAnyIncomingMsg) {
                             const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
                             markAsReceived(lastMessageTimestamp);
+
+
 
                             // Update contact
                             setPerson(prevState => {
@@ -439,6 +441,10 @@ export default function Chat(props) {
     // TODO: Change this method to display badge for new messages instead
     const displayScrollButton = () => {
         setScrollButtonVisible(true);
+    }
+
+    const canSeeLastMessage = (element) => {
+        return !(element.scrollHeight - element.scrollTop - element.clientHeight > SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET);
     }
 
     const handleScrollButtonClick = () => {
