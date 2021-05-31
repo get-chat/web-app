@@ -251,9 +251,11 @@ export default function Chat(props) {
 
                         if (hasAnyIncomingMsg) {
                             const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
-                            markAsReceived(lastMessageTimestamp);
 
-
+                            // Mark new message as received if visible
+                            if (canSeeLastMessage(messagesContainer.current)) {
+                                markAsReceived(lastMessageTimestamp);
+                            }
 
                             // Update contact
                             setPerson(prevState => {
