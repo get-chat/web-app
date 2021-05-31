@@ -20,11 +20,35 @@ function ChatTags(props) {
     const [isLoading, setLoading] = useState(true);
     const [chat, setChat] = useState();
     const [chatTags, setChatTags] = useState([]);
+    const [unusedTags, setUnusedTags] = useState([]);
     const [allTags, setAllTags] = useState([]);
 
     useEffect(() => {
         retrieveChat();
     }, []);
+
+    useEffect(() => {
+        const nextState = allTags.filter((tag) => {
+            if (chatTags) {
+                let found = false;
+                for (let i = 0; i < chatTags.length; i++) {
+                    const curTag = chatTags[i];
+                    if (curTag.id === tag.id) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        });
+
+        setUnusedTags(nextState);
+
+    }, [chatTags, allTags]);
 
     const close = () => {
         props.setOpen(false);
@@ -147,23 +171,7 @@ function ChatTags(props) {
                 <div className="chatTags__tags mt-3">
                     <h5>All tags</h5>
                     <div>
-                        {allTags.filter((tag) => {
-                            if (chatTags) {
-                                let found = false;
-                                for (let i = 0; i < chatTags.length; i++) {
-                                    const curTag = chatTags[i];
-                                    if (curTag.id === tag.id) {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                                if (!found) {
-                                    return true;
-                                }
-                            } else {
-                                return true;
-                            }
-                        }).map((tag) =>
+                        {unusedTags.map((tag) =>
                             <Chip
                                 key={tag.id}
                                 label={tag.name}
