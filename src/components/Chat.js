@@ -800,6 +800,13 @@ export default function Chat(props) {
             }, getConfig())
                 .then((response) => {
                     console.log(response.data);
+
+                    // TODO: Display message immediately
+                    /*setMessages(prevState => {
+                        const sentMessage = new ChatMessageClass();
+                        prevState['test_id'] = sentMessage;
+                        return {...prevState};
+                    })*/
                 })
                 .catch((error) => {
                     // TODO: Handle errors
