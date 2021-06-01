@@ -802,11 +802,12 @@ export default function Chat(props) {
                     console.log(response.data);
 
                     // TODO: Display message immediately
-                    /*setMessages(prevState => {
+                    /*const messageId = response.data?.waba_response?.messages?.[0]?.id;
+                    setMessages(prevState => {
                         const sentMessage = new ChatMessageClass();
-                        prevState['test_id'] = sentMessage;
+                        prevState[messageId] = sentMessage;
                         return {...prevState};
-                    })*/
+                    });*/
                 })
                 .catch((error) => {
                     // TODO: Handle errors
