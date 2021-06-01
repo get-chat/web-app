@@ -678,13 +678,6 @@ export default function Chat(props) {
                     }
                 }
 
-                // Debugging
-                /*console.log("IS AT BOTTOM", isAtBottom);
-                console.log("INITIAL", isInitial);
-                console.log("SINCE", sinceTime);
-                console.log("BEFORE", beforeTime);
-                console.log("NEXT", next);*/
-
                 const lastMessage = getLastObject(preparedMessages);
 
                 if (isInitial) {
