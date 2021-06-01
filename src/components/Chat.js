@@ -647,72 +647,26 @@ export default function Chat(props) {
                     preparedMessages[prepared.id] = prepared;
                 });
 
-                if (getObjLength(preparedMessages) > 0) {
-                    // To persist scroll position, we store current scroll information
-                    const prevScrollTop = messagesContainer.current.scrollTop;
-                    const prevScrollHeight = messagesContainer.current.scrollHeight;
-
-                    setMessages((prevState => {
-                        if (replaceAll) {
-                            return preparedMessages;
-                        }
-
-                        if (sinceTime) {
-                            return {...prevState, ...preparedMessages}
-                        }
-
-                        return {...preparedMessages, ...prevState}
-                    }));
-
-                    // Persisting scroll position by calculating container height difference
-                    /*if (sinceTime) {
-                        messagesContainer.current.scrollTop = prevScrollTop;
-                    } else {
-                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
-                    }*/
-
-                    if (!sinceTime || replaceAll) {
-                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
-                    } else if (sinceTime) {
-                        messagesContainer.current.scrollTop = prevScrollTop;
-                    }
-                }
-
                 const lastMessage = getLastObject(preparedMessages);
 
+                // Pagination filters for events
+                let beforeTimeForEvents = beforeTime;
+                let sinceTimeForEvents = sinceTime;
+
                 if (isInitial) {
-                    beforeTime = undefined;
+                    beforeTimeForEvents = undefined;
                 } else {
                     if (!beforeTime) {
-                        beforeTime = lastMessage?.timestamp;
+                        beforeTimeForEvents = lastMessage?.timestamp;
                     }
                 }
 
                 if (!sinceTime) {
-                    sinceTime = getFirstObject(preparedMessages)?.timestamp;
+                    sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
                 }
 
-                // List assignment and tagging histories
-                listChatAssignmentEvents(beforeTime, sinceTime);
-                listChatTaggingEvents(beforeTime, sinceTime);
-
-                setLoaded(true);
-                setLoadingMoreMessages(false);
-
-                // TODO: Check unread messages first and then decide to do it or not
-                if (isInitial) {
-                    // beforeTime is not passed only for initial request
-                    // Mark messages as received
-                    const lastMessageTimestamp = getLastMessageAndExtractTimestamp(preparedMessages);
-                    markAsReceived(lastMessageTimestamp);
-                }
-
-                // Promise
-                if (callback) {
-                    setTimeout(function () {
-                        callback(preparedMessages);
-                    }, 50);
-                }
+                // List assignment events
+                listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
 
             })
             .catch((error) => {
@@ -724,66 +678,97 @@ export default function Chat(props) {
             });
     }
 
-    const listChatAssignmentEvents = (beforeTime, sinceTime) => {
+    const finishLoadingMessages = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime) => {
+
+        if (getObjLength(preparedMessages) > 0) {
+            // To persist scroll position, we store current scroll information
+            const prevScrollTop = messagesContainer.current.scrollTop;
+            const prevScrollHeight = messagesContainer.current.scrollHeight;
+
+            setMessages((prevState => {
+                let nextState;
+                if (replaceAll) {
+                    nextState = preparedMessages;
+                } else {
+                    if (sinceTime) {
+                        nextState = {...prevState, ...preparedMessages}
+                    } else {
+                        nextState = {...preparedMessages, ...prevState}
+                    }
+                }
+
+                return sortMessagesAsc(nextState);
+            }));
+
+            // TODO: Handle scroll
+            if (!sinceTime || replaceAll) {
+                persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
+            } else if (sinceTime) {
+                messagesContainer.current.scrollTop = prevScrollTop;
+            }
+        }
+
+        setLoaded(true);
+        setLoadingMoreMessages(false);
+
+        // TODO: Check unread messages first and then decide to do it or not
+        if (isInitial) {
+            // beforeTime is not passed only for initial request
+            // Mark messages as received
+            const lastMessageTimestamp = getLastMessageAndExtractTimestamp(preparedMessages);
+            markAsReceived(lastMessageTimestamp);
+        }
+
+        // Promise
+        if (callback) {
+            setTimeout(function () {
+                callback(preparedMessages);
+            }, 50);
+        }
+    }
+
+    const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
         axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
             wa_id: waId,
-            before_time: beforeTime,
-            since_time: sinceTime,
+            before_time: beforeTimeForEvents,
+            since_time: sinceTimeForEvents,
         }, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log("Assignment history", response.data);
 
-                const preparedMessages = {};
+                //const preparedMessages = {};
                 response.data.results.reverse().forEach((assignmentEvent) => {
                     const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
                     preparedMessages[prepared.id] = prepared;
                 });
 
-                if (getObjLength(preparedMessages) > 0) {
-                    const el = messagesContainer.current;
-                    const prevScrollTop = el.scrollTop;
-                    const prevScrollHeight = el.scrollHeight;
+                // List chat tagging events
+                listChatTaggingEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
 
-                    setMessages(prevState => {
-                        let nextState = {...prevState, ...preparedMessages}
-                        return sortMessagesAsc(nextState);
-                    });
-
-                    persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
-                }
             })
             .catch((error) => {
                 window.displayError(error);
             });
     }
 
-    const listChatTaggingEvents = (beforeTime, sinceTime) => {
+    const listChatTaggingEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
         axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
             wa_id: waId,
-            before_time: beforeTime,
-            since_time: sinceTime,
+            before_time: beforeTimeForEvents,
+            since_time: sinceTimeForEvents,
         }, cancelTokenSourceRef.current.token))
             .then((response) => {
                 console.log("Tagging history", response.data);
 
-                const preparedMessages = {};
+                //const preparedMessages = {};
                 response.data.results.reverse().forEach((taggingEvent) => {
                     const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
                     preparedMessages[prepared.id] = prepared;
                 });
 
-                if (getObjLength(preparedMessages) > 0) {
-                    const el = messagesContainer.current;
-                    const prevScrollTop = el.scrollTop;
-                    const prevScrollHeight = el.scrollHeight;
+                // Finish loading
+                finishLoadingMessages(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime);
 
-                    setMessages(prevState => {
-                        let nextState = {...prevState, ...preparedMessages}
-                        return sortMessagesAsc(nextState);
-                    });
-
-                    persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
-                }
             })
             .catch((error) => {
                 window.displayError(error);
