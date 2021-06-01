@@ -678,6 +678,7 @@ export default function Chat(props) {
             });
     }
 
+    // Chain: getMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
     const finishLoadingMessages = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime) => {
 
         if (getObjLength(preparedMessages) > 0) {
