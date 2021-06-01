@@ -462,7 +462,6 @@ export default function Chat(props) {
         return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET;
     }
 
-    // TODO: Change this method to display badge for new messages instead
     const displayScrollButton = () => {
         setScrollButtonVisible(true);
     }
