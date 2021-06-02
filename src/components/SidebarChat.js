@@ -26,19 +26,20 @@ function SidebarChat(props) {
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const [remainingSeconds, setRemainingSeconds] = useState();
-    const [tagNames, setTagNames] = useState([]);
     const {waId} = useParams();
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
         props.retrieveContactData(props.chatData.waId);
-
-        const preparedTagNames = [];
-        props.chatData.tags?.forEach((tag) => {
-            preparedTagNames.push(tag.name);
-        });
-        setTagNames(preparedTagNames);
     }, []);
+
+    const generateTagNames = () => {
+        const generatedTagNames = [];
+        props.chatData.tags?.forEach((tag) => {
+            generatedTagNames.push(tag.name);
+        });
+        return generatedTagNames.join(', ');
+    }
 
     useEffect(() => {
         function calculateRemaining() {
@@ -153,7 +154,7 @@ function SidebarChat(props) {
 
                                     {props.chatData.tags?.length > 0 &&
                                     <div className="sidebarChat__info__tags">
-                                        <Tooltip title={tagNames.join(', ')}>
+                                        <Tooltip title={generateTagNames()}>
                                             <LabelIcon className={props.chatData.tags.length > 1 ? "multiple" : ""} style={{fill: props.chatData.tags[0].web_inbox_color}} />
                                         </Tooltip>
                                     </div>
