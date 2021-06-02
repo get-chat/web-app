@@ -520,7 +520,7 @@ function Sidebar(props) {
                 <Divider />
                 }
                 {props.isAdmin &&
-                    <MenuItem component={Link} href={getHubURL()} target="_blank" color="">Admin panel</MenuItem>
+                    <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">Admin panel</MenuItem>
                 }
                 {isMobile &&
                 <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
