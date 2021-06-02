@@ -671,9 +671,6 @@ export default function Chat(props) {
             })
             .catch((error) => {
                 setLoadingMoreMessages(false);
-
-                // TODO: Handle errors
-
                 window.displayError(error);
             });
     }
