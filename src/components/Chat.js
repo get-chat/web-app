@@ -857,6 +857,10 @@ export default function Chat(props) {
                         const errors = error.response.data?.waba_response?.errors;
                         PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
 
+                        if (error.response.status === 500) {
+                            displayFailedMessage(templateMessage.name);
+                        }
+
                         handleIfUnauthorized(error);
                     }
                 });
@@ -928,6 +932,10 @@ export default function Chat(props) {
                     window.displayError(error);
 
                     if (error.response) {
+                        if (error.response.status === 500) {
+                            displayFailedMessage(fileURL);
+                        }
+
                         handleIfUnauthorized(error);
                     }
 
