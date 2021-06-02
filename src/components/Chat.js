@@ -809,9 +809,12 @@ export default function Chat(props) {
                     window.displayError(error);
 
                     if (error.response) {
+                        const status = error.response.status;
                         // Switch to expired mode if status code is 453
-                        if (error.response.status === 453) {
+                        if (status === 453) {
                             setExpired(true);
+                        } else if (status === 500) {
+                            displayFailedMessage(preparedInput.trim());
                         }
 
                         handleIfUnauthorized();
@@ -823,6 +826,18 @@ export default function Chat(props) {
             // Close emoji picker
             PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
         }
+    }
+
+    const displayFailedMessage = (text) => {
+        setMessages(prevState => {
+            const messageId = 'failed_' + (new Date()).getTime();
+            const failedMessage = new ChatMessageClass();
+            failedMessage.id = messageId;
+            failedMessage.text = text;
+            failedMessage.isFromUs = true;
+            prevState[messageId] = failedMessage;
+            return {...prevState};
+        });
     }
 
     const sendTemplateMessage = (templateMessage) => {
