@@ -296,6 +296,10 @@ a {
     color: var(--color-primary-light) !important;
 }
 
+h1 .emoji-mart-emoji, h2 .emoji-mart-emoji, h3 .emoji-mart-emoji {
+    vertical-align: middle;
+}
+
 @media only screen and (max-width: 1500px) {
     .app__body {
         height: 100vh;

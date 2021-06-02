@@ -7,7 +7,13 @@ import GroupIcon from '@material-ui/icons/Group';
 import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import moment from "moment";
-import {addPlus, extractAvatarFromContactProviderData, generateInitialsHelper, markOccurrences} from "../Helpers";
+import {
+    addPlus,
+    extractAvatarFromContactProviderData,
+    generateInitialsHelper,
+    markOccurrences,
+    replaceEmojis
+} from "../Helpers";
 import {getDroppedFiles, handleDragOver} from "../FileHelpers";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../Constants";
@@ -140,9 +146,9 @@ function SidebarChat(props) {
                                 <h2>
                                     {(props.keyword !== undefined && props.keyword.trim().length > 0)
                                         ?
-                                        <span dangerouslySetInnerHTML={{__html: markOccurrences(props.chatData.name, props.keyword)}}/>
+                                        <span dangerouslySetInnerHTML={{__html: markOccurrences(replaceEmojis(props.chatData.name), props.keyword)}}/>
                                         :
-                                        <span>{props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name}</span>
+                                        <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name)}} />
                                     }
 
                                     {props.chatData.tags?.length > 0 &&

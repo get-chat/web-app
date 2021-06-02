@@ -10,7 +10,7 @@ import Moment from "react-moment";
 import {avatarStyles} from "../AvatarStyles";
 import googleLogo from '../assets/images/ic-google.png';
 import hubspotLogo from '../assets/images/ic-hubspot.png';
-import {addPlus} from "../Helpers";
+import {addPlus, replaceEmojis} from "../Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {
@@ -53,7 +53,7 @@ function ContactDetails(props)  {
                             className={avatarClasses[props.contactData.getAvatarClassName()] + " contactDetails__body__avatar"}>{props.contactData.initials}</Avatar>
                     </div>
 
-                    <h3>{props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name}</h3>
+                    <h3 dangerouslySetInnerHTML={{__html: replaceEmojis(props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name)}} />
 
                     {props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0] !== undefined &&
                     <div className="contactDetails__body__job">

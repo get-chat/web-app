@@ -4,7 +4,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
 import '../styles/InputRange.css';
 import '../AvatarStyles';
-import {formatMessage} from "../Helpers";
+import {formatMessage, replaceEmojis} from "../Helpers";
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../ChatMessageClass";
@@ -50,7 +50,8 @@ function ChatMessage(props) {
             <div>
                 {(props.displaySender || props.displayDate) &&
                 <span
-                    className="chat__name">{data.isFromUs === true ? data.senderName : (props.contactProvidersData[data.waId]?.[0]?.name ?? data.senderName)}</span>
+                    className="chat__name"
+                    dangerouslySetInnerHTML={{__html: data.isFromUs === true ? data.senderName : replaceEmojis(props.contactProvidersData[data.waId]?.[0]?.name ?? data.senderName)}} />
                 }
 
                 {data.type === ChatMessageClass.TYPE_STICKER &&

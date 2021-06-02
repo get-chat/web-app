@@ -6,7 +6,7 @@ import {avatarStyles} from "../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import PubSub from "pubsub-js";
 import {useHistory} from "react-router-dom";
-import {addPlus} from "../Helpers";
+import {addPlus, replaceEmojis} from "../Helpers";
 
 function ChatHeader(props) {
 
@@ -71,7 +71,7 @@ function ChatHeader(props) {
                     className={(props.person?.isExpired ? '' : avatarClasses[props.person?.getAvatarClassName()]) + (" chat__header__avatar")}>{props.person?.initials}</Avatar>
 
                 <div className="chat__headerInfo">
-                    <h3>{(props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : '')}</h3>
+                    <h3 dangerouslySetInnerHTML={{__html: replaceEmojis((props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : ''))}} />
 
                     {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
 
