@@ -828,29 +828,6 @@ export default function Chat(props) {
         }
     }
 
-    const displayFailedMessage = (text, willClearInput) => {
-        setMessages(prevState => {
-            const timestamp = (new Date()).getTime();
-            const messageId = 'failed_' + timestamp;
-            const failedMessage = new ChatMessageClass();
-            failedMessage.id = messageId;
-            failedMessage.text = text;
-            failedMessage.isFromUs = true;
-            failedMessage.isFailed = true;
-            failedMessage.timestamp = timestamp;
-            prevState[messageId] = failedMessage;
-            return {...prevState};
-        });
-
-        if (willClearInput === true) {
-            clearInput();
-        }
-    }
-
-    const clearInput = () => {
-        setInput('')
-    }
-
     const sendTemplateMessage = (templateMessage) => {
         if (isLoaded) {
             axios.post( `${BASE_URL}messages/`, {
@@ -886,33 +863,27 @@ export default function Chat(props) {
         }
     }
 
-    const markAsReceived = (timestamp) => {
-        console.log('Marking as received', timestamp);
+    const displayFailedMessage = (text, willClearInput) => {
+        setMessages(prevState => {
+            const timestamp = (new Date()).getTime();
+            const messageId = 'failed_' + timestamp;
+            const failedMessage = new ChatMessageClass();
+            failedMessage.id = messageId;
+            failedMessage.text = text;
+            failedMessage.isFromUs = true;
+            failedMessage.isFailed = true;
+            failedMessage.timestamp = timestamp;
+            prevState[messageId] = failedMessage;
+            return {...prevState};
+        });
 
-        axios.post( `${BASE_URL}mark_as_received/`, {
-            timestamp: timestamp,
-            customer_wa_id: waId
-        }, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                //console.log(response.data);
-
-                PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
-
-                setCurrentNewMessages(0);
-            })
-            .catch((error) => {
-                window.displayError(error);
-
-                if (error.response) {
-                    handleIfUnauthorized(error);
-                }
-            });
+        if (willClearInput === true) {
+            clearInput();
+        }
     }
 
-    const handleIfUnauthorized = (error) => {
-        if (error.response.status === 401) {
-            props.clearUserSession("invalidToken");
-        }
+    const clearInput = () => {
+        setInput('')
     }
 
     const sendFile = (fileURL, chosenFile, callback) => {
@@ -1037,6 +1008,35 @@ export default function Chat(props) {
             setSelectedFiles(getDroppedFiles(event));
         } else {
             event.preventDefault();
+        }
+    }
+
+    const markAsReceived = (timestamp) => {
+        console.log('Marking as received', timestamp);
+
+        axios.post( `${BASE_URL}mark_as_received/`, {
+            timestamp: timestamp,
+            customer_wa_id: waId
+        }, getConfig(undefined, cancelTokenSourceRef.current.token))
+            .then((response) => {
+                //console.log(response.data);
+
+                PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
+
+                setCurrentNewMessages(0);
+            })
+            .catch((error) => {
+                window.displayError(error);
+
+                if (error.response) {
+                    handleIfUnauthorized(error);
+                }
+            });
+    }
+
+    const handleIfUnauthorized = (error) => {
+        if (error.response.status === 401) {
+            props.clearUserSession("invalidToken");
         }
     }
 
