@@ -125,15 +125,15 @@ function ChatMessage(props) {
                                                                             dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}}/> : '\u00A0'}
 
                     <span className="chat__message__info">
-                    <span className="chat__timestamp">
-                        <Moment date={data.timestamp} format={dateFormat} unix/>
-                    </span>
+                        <span className="chat__timestamp">
+                            <Moment date={data.timestamp} format={dateFormat} unix/>
+                        </span>
 
-                        {(data.isFromUs === true && !data.isDeliveredOrRead()) &&
+                        {(!data.isFailed && data.isFromUs === true && !data.isDeliveredOrRead()) &&
                         <DoneIcon className="chat__iconDone" color="inherit" style={iconStyles}/>
                         }
 
-                        {(data.isFromUs === true && data.isDeliveredOrRead()) &&
+                        {(!data.isFailed && data.isFromUs === true && data.isDeliveredOrRead()) &&
                         <DoneAll className="chat__iconDoneAll" color="inherit" style={iconStyles}/>
                         }
                     </span>

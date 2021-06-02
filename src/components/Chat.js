@@ -830,11 +830,14 @@ export default function Chat(props) {
 
     const displayFailedMessage = (text) => {
         setMessages(prevState => {
-            const messageId = 'failed_' + (new Date()).getTime();
+            const timestamp = (new Date()).getTime();
+            const messageId = 'failed_' + timestamp;
             const failedMessage = new ChatMessageClass();
             failedMessage.id = messageId;
             failedMessage.text = text;
             failedMessage.isFromUs = true;
+            failedMessage.isFailed = true;
+            failedMessage.timestamp = timestamp;
             prevState[messageId] = failedMessage;
             return {...prevState};
         });
