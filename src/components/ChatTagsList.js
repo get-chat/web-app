@@ -77,7 +77,7 @@ function ChatTagsList(props) {
                 }
 
                 <div className="mt-3">
-                    <Link href={getHubURL()} target="_blank">Manage tags</Link>
+                    <Link href={getHubURL() + 'main/tag/'} target="_blank">Manage tags</Link>
                 </div>
 
             </DialogContent>
