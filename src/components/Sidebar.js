@@ -1,14 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../styles/Sidebar.css';
-import {Avatar, Divider, IconButton, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {containsLetters, generateInitialsHelper, getConfig, getObjLength} from "../Helpers";
+import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength} from "../Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
-    EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_UPDATE_PERSON_NAME
 } from "../Constants";
@@ -517,6 +516,12 @@ function Sidebar(props) {
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={showChangePassword}>Change password</MenuItem>
                 <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
+                {props.isAdmin &&
+                <Divider />
+                }
+                {props.isAdmin &&
+                    <MenuItem component={Link} href={getHubURL()} target="_blank" color="">Admin panel</MenuItem>
+                }
                 {isMobile &&
                 <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
                 }
