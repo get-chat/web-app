@@ -45,6 +45,11 @@
     font-weight: 600;
 }
 
+.contactDetails__body__section > h3 .emoji-mart-emoji {
+    height: 20px !important;
+    width: 20px !important;
+}
+
 .contactDetails__body__section > span, .contactDetails__body__section__content__sub {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);

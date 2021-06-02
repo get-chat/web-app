@@ -31,6 +31,11 @@
     margin-bottom: 0;
 }
 
+.chat__headerInfo > h3 .emoji-mart-emoji {
+    height: 16px !important;
+    width: 16px !important;
+}
+
 .chat__headerInfo p {
     margin-bottom: 0;
     color: gray;

@@ -171,6 +171,12 @@ a.chat__document:hover {
     text-align: right;
 }
 
+.chat__name .emoji-mart-emoji {
+    height: 12px !important;
+    width: 12px !important;
+    vertical-align: middle;
+}
+
 .chat__templateHeader {
     display: block;
     font-size: x-small;
