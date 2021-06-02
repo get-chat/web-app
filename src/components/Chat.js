@@ -698,7 +698,6 @@ export default function Chat(props) {
                 return sortMessagesAsc(nextState);
             }));
 
-            // TODO: Handle scroll
             if (!sinceTime || replaceAll) {
                 persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
             } else if (sinceTime) {
@@ -807,17 +806,15 @@ export default function Chat(props) {
                     });*/
                 })
                 .catch((error) => {
-                    // TODO: Handle errors
-
                     window.displayError(error);
 
                     if (error.response) {
                         // Switch to expired mode if status code is 453
                         if (error.response.status === 453) {
                             setExpired(true);
-                        } else if (error.response.status === 401) {
-                            props.clearUserSession("invalidToken");
                         }
+
+                        handleIfUnauthorized();
                     }
                 });
 
@@ -851,13 +848,13 @@ export default function Chat(props) {
 
                 })
                 .catch((error) => {
-                    // TODO: Handle errors
-
                     window.displayError(error);
 
                     if (error.response) {
                         const errors = error.response.data?.waba_response?.errors;
                         PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+
+                        handleIfUnauthorized(error);
                     }
                 });
         }
@@ -878,10 +875,18 @@ export default function Chat(props) {
                 setCurrentNewMessages(0);
             })
             .catch((error) => {
-                // TODO: Handle errors
-
                 window.displayError(error);
+
+                if (error.response) {
+                    handleIfUnauthorized(error);
+                }
             });
+    }
+
+    const handleIfUnauthorized = (error) => {
+        if (error.response.status === 401) {
+            props.clearUserSession("invalidToken");
+        }
     }
 
     const sendFile = (fileURL, chosenFile, callback) => {
@@ -982,9 +987,13 @@ export default function Chat(props) {
 
                     })
                     .catch((error) => {
-                        // TODO: Handle errors
-
                         window.displayError(error);
+
+                        if (error.response) {
+                            if (error.response) {
+                                handleIfUnauthorized(error);
+                            }
+                        }
 
                         // Send next when it fails, a retry can be considered
                         sendNextRequest();
