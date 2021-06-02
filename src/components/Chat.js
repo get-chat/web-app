@@ -814,21 +814,21 @@ export default function Chat(props) {
                         if (status === 453) {
                             setExpired(true);
                         } else if (status === 500) {
-                            displayFailedMessage(preparedInput.trim());
+                            displayFailedMessage(preparedInput.trim(), true);
                         }
 
                         handleIfUnauthorized();
                     }
                 });
 
-            setInput('');
+            clearInput();
 
             // Close emoji picker
             PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
         }
     }
 
-    const displayFailedMessage = (text) => {
+    const displayFailedMessage = (text, willClearInput) => {
         setMessages(prevState => {
             const timestamp = (new Date()).getTime();
             const messageId = 'failed_' + timestamp;
@@ -841,6 +841,14 @@ export default function Chat(props) {
             prevState[messageId] = failedMessage;
             return {...prevState};
         });
+
+        if (willClearInput === true) {
+            clearInput();
+        }
+    }
+
+    const clearInput = () => {
+        setInput('')
     }
 
     const sendTemplateMessage = (templateMessage) => {
