@@ -928,9 +928,11 @@ export default function Chat(props) {
 
                 })
                 .catch((error) => {
-                    // TODO: Handle errors
-
                     window.displayError(error);
+
+                    if (error.response) {
+                        handleIfUnauthorized(error);
+                    }
 
                     // Send next when it fails, a retry can be considered
                     callback();
@@ -1061,7 +1063,6 @@ export default function Chat(props) {
                         willDisplayDate = true;
                         lastPrintedDate = moment.unix(message[1].timestamp);
                     } else {
-                        //const curMsgDate = moment.unix(message[1].timestamp);
                         if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
                             willDisplayDate = true;
                         }
@@ -1144,8 +1145,7 @@ export default function Chat(props) {
                 setData={setPreviewSendMediaData}
                 setPreviewSendMediaVisible={setPreviewSendMediaVisible}
                 sendHandledChosenFiles={sendHandledChosenFiles}
-                accept={accept}
-            />
+                accept={accept} />
             }
 
         </div>
