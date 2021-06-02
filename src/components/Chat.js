@@ -813,7 +813,7 @@ export default function Chat(props) {
                         // Switch to expired mode if status code is 453
                         if (status === 453) {
                             setExpired(true);
-                        } else if (status === 500) {
+                        } else if (status === 500 || status === 502) {
                             displayFailedMessage(preparedInput.trim(), true);
                         }
 
@@ -857,7 +857,11 @@ export default function Chat(props) {
                         const errors = error.response.data?.waba_response?.errors;
                         PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
 
-                        if (error.response.status === 500) {
+                        const status = error.response.status;
+
+                        if (status === 453) {
+                            setExpired(true);
+                        } else if (status === 500 || status === 502) {
                             displayFailedMessage(templateMessage.name);
                         }
 
@@ -932,7 +936,11 @@ export default function Chat(props) {
                     window.displayError(error);
 
                     if (error.response) {
-                        if (error.response.status === 500) {
+                        const status = error.response.status;
+
+                        if (status === 453) {
+                            setExpired(true);
+                        } else if (status === 500 || status === 502) {
                             displayFailedMessage(fileURL);
                         }
 
