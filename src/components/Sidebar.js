@@ -183,6 +183,11 @@ function Sidebar(props) {
                 window.clearTimeout(debounceTimer);
             }
 
+            if (keyword) {
+                window.clearTimeout(debounceTimer);
+                return false;
+            }
+
             debounceTimer = setTimeout(function () {
                 const threshold = 0;
                 const el = e.target;
@@ -202,7 +207,7 @@ function Sidebar(props) {
             clearTimeout(debounceTimer);
             chatsContainerCopy.removeEventListener("scroll", handleScroll);
         }
-    }, [props.chats]);
+    }, [props.chats, keyword]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
