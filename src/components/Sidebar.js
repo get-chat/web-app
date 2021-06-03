@@ -158,9 +158,7 @@ function Sidebar(props) {
                 // If anything has changed, sort chats
                 if (changedAny) {
                     // Sorting
-                    let sortedNextState = Object.entries(nextState).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
-                    sortedNextState = Object.fromEntries(sortedNextState);
-
+                    const sortedNextState = sortChats(nextState);
                     props.setChats({...sortedNextState});
                 }
 
@@ -181,6 +179,11 @@ function Sidebar(props) {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
     }, [waId, props.chats, props.newMessages, keyword]);
+
+    const sortChats = (state) => {
+        let sortedState = Object.entries(state).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
+        return Object.fromEntries(sortedState);
+    }
 
     useEffect(() => {
         const chatsContainerCopy = chatsContainer.current;
@@ -322,7 +325,8 @@ function Sidebar(props) {
 
                 props.setChats(prevState => {
                     prevState[chatWaId] = preparedChat;
-                    return {...prevState};
+                    const sortedNextState = sortChats(prevState);
+                    return {...sortedNextState};
                 });
             })
             .catch((error) => {
