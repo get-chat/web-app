@@ -251,10 +251,7 @@ function Sidebar(props) {
 
                 // TODO: Move this to a common interceptor
                 if (error.response) {
-                    if (error.response.status === 401) {
-                        // Invalid token
-                        props.clearUserSession("invalidToken");
-                    }
+                    handleIfUnauthorized(error);
                 }
             });
     }
@@ -282,7 +279,11 @@ function Sidebar(props) {
 
             })
             .catch((error) => {
-                //displayError(error);
+                console.log(error);
+
+                if (error.response) {
+                    handleIfUnauthorized(error);
+                }
             });
     }
 
@@ -294,6 +295,12 @@ function Sidebar(props) {
             });
         } else {
             PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, chatMessage);
+        }
+    }
+
+    const handleIfUnauthorized = (error) => {
+        if (error.response.status === 401) {
+            props.clearUserSession("invalidToken");
         }
     }
 
