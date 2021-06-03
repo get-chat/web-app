@@ -227,7 +227,7 @@ function Sidebar(props) {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
                 search: keyword,
-                limit: 5,
+                limit: 1,
                 offset: offset
             }, cancelTokenSource.token)
         )
@@ -317,12 +317,12 @@ function Sidebar(props) {
             .then((response) => {
                 console.log("Chat: ", response.data);
 
-                const preparedChat = new SidebarChat(response.data);
+                const preparedChat = new ChatClass(response.data);
                 console.log(preparedChat);
 
                 props.setChats(prevState => {
                     prevState[chatWaId] = preparedChat;
-                    return prevState;
+                    return {...prevState};
                 });
             })
             .catch((error) => {
