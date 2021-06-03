@@ -296,7 +296,6 @@ function Sidebar(props) {
             .catch((error) => {
                 console.log(error);
 
-                // TODO: Move this to a common interceptor
                 if (error.response) {
                     handleIfUnauthorized(error);
                 }
@@ -311,6 +310,10 @@ function Sidebar(props) {
             })
             .catch((error) => {
                 window.displayError(error);
+
+                if (error.response) {
+                    handleIfUnauthorized(error);
+                }
             });
     }
 
