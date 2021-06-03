@@ -231,10 +231,10 @@ function Sidebar(props) {
                 });
 
                 props.setChats(prevState => {
-                    if (offset) {
-                        return {...prevState, ...preparedChats};
-                    } else {
+                    if (replaceAll) {
                         return preparedChats;
+                    } else {
+                        return {...prevState, ...preparedChats};
                     }
                 });
 
