@@ -4,7 +4,7 @@ import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@mat
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength} from "../Helpers";
+import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength, isScrollable} from "../Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -170,6 +170,35 @@ function Sidebar(props) {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
     }, [waId, props.chats, props.newMessages, keyword]);
+
+    useEffect(() => {
+        const chatsContainerCopy = chatsContainer.current;
+
+        // To optimize scroll event
+        let debounceTimer;
+
+        function handleScroll(e) {
+            if (debounceTimer) {
+                window.clearTimeout(debounceTimer);
+            }
+
+            debounceTimer = setTimeout(function () {
+                const threshold = 0;
+                const el = e.target;
+
+                if (isScrollable(el)) {
+                    console.log('Scrollable');
+                }
+            }, 100);
+        }
+
+        chatsContainerCopy.addEventListener("scroll", handleScroll);
+
+        return () => {
+            clearTimeout(debounceTimer);
+            chatsContainerCopy.removeEventListener("scroll", handleScroll);
+        }
+    }, [props.chats]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);

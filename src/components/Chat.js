@@ -176,11 +176,10 @@ export default function Chat(props) {
             }
 
             debounceTimer = setTimeout(function () {
-
                 const threshold = 0;
                 const el = e.target;
-                if (isScrollable(el)) {
 
+                if (isScrollable(el)) {
                     if (!canSeeLastMessage(el)) {
                         setScrollButtonVisible(true);
                     } else if (isAtBottom) {
