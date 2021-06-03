@@ -158,6 +158,7 @@ function Sidebar(props) {
                 }
 
                 // We do this to generate new (missing) chat
+                // TODO: Change it to work with pagination
                 if (willMakeRequest) {
                     getChats(cancelTokenSourceRef.current, false);
                 }
@@ -189,6 +190,7 @@ function Sidebar(props) {
                 if (isScrollable(el)) {
                     if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
                         console.log('Scrolled to bottom');
+                        getChats(cancelTokenSourceRef.current, false, getObjLength(props.chats));
                     }
                 }
             }, 100);
@@ -206,11 +208,12 @@ function Sidebar(props) {
         setKeyword(_keyword);
     }
 
-    const getChats = (cancelTokenSource, isInitial) => {
+    const getChats = (cancelTokenSource, isInitial, offset) => {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
                 search: keyword,
-                limit: 10
+                limit: 5,
+                offset: offset
             }, cancelTokenSource.token)
         )
             .then((response) => {
@@ -222,7 +225,13 @@ function Sidebar(props) {
                     preparedChats[prepared.waId] = prepared;
                 });
 
-                props.setChats(preparedChats);
+                props.setChats(prevState => {
+                    if (offset) {
+                        return {...prevState, ...preparedChats};
+                    } else {
+                        return preparedChats;
+                    }
+                });
 
                 // In case param is undefined
                 isInitial = isInitial === true;
