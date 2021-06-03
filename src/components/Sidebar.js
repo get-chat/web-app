@@ -202,7 +202,6 @@ function Sidebar(props) {
 
                 if (isScrollable(el)) {
                     if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
-                        console.log('Scrolled to bottom');
                         getChats(cancelTokenSourceRef.current, false, getObjLength(props.chats), false);
                     }
                 }
@@ -321,7 +320,6 @@ function Sidebar(props) {
                 console.log("Chat: ", response.data);
 
                 const preparedChat = new ChatClass(response.data);
-                console.log(preparedChat);
 
                 props.setChats(prevState => {
                     prevState[chatWaId] = preparedChat;
@@ -356,9 +354,6 @@ function Sidebar(props) {
                 });
 
                 setChatMessages(preparedMessages);
-
-                console.log(preparedMessages);
-
             })
             .catch((error) => {
                 console.log(error);
