@@ -303,6 +303,17 @@ function Sidebar(props) {
             });
     }
 
+    const retrieveChat = (chatWaId) => {
+        axios.get( `${BASE_URL}chats/${chatWaId}/`, getConfig())
+            .then((response) => {
+                console.log("Chat: ", response.data);
+
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     const searchMessages = (cancelTokenSource) => {
         axios.get( `${BASE_URL}messages/`,
             getConfig({
