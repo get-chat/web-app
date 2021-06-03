@@ -189,7 +189,7 @@ function Sidebar(props) {
             }
 
             debounceTimer = setTimeout(function () {
-                const threshold = 0;
+                // const threshold = 0;
                 const el = e.target;
 
                 if (isScrollable(el)) {
