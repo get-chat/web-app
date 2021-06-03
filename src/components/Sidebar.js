@@ -180,11 +180,6 @@ function Sidebar(props) {
         }
     }, [waId, props.chats, props.newMessages, keyword]);
 
-    const sortChats = (state) => {
-        let sortedState = Object.entries(state).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
-        return Object.fromEntries(sortedState);
-    }
-
     useEffect(() => {
         const chatsContainerCopy = chatsContainer.current;
 
@@ -224,6 +219,11 @@ function Sidebar(props) {
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
+    }
+
+    const sortChats = (state) => {
+        let sortedState = Object.entries(state).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
+        return Object.fromEntries(sortedState);
     }
 
     const getChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
