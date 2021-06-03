@@ -37,7 +37,7 @@ import {
     getLastMessageAndExtractTimestamp,
     getLastObject,
     getObjLength,
-    hasInternetConnection,
+    hasInternetConnection, isScrollable,
     sortMessagesAsc,
     translateHTMLInputToText
 } from "../Helpers";
@@ -550,14 +550,6 @@ export default function Chat(props) {
             handleChosenFiles();
         }
     }, [selectedFiles]);
-
-    const isScrollable = (el) => {
-        const hasScrollableContent = el.scrollHeight > el.clientHeight;
-        const overflowYStyle = window.getComputedStyle(el).overflowY;
-        const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
-
-        return hasScrollableContent && !isOverflowHidden;
-    }
 
     const [optionsChatMessage, setOptionsChatMessage] = useState();
     const [menuAnchorEl, setMenuAnchorEl] = useState();

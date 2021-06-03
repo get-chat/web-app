@@ -289,3 +289,11 @@ export const sortMessagesAsc = (messages) => {
     let sortedNextState = Object.entries(messages).sort((a, b) => a[1].timestamp - b[1].timestamp);
     return Object.fromEntries(sortedNextState);
 }
+
+export const isScrollable = (el) => {
+    const hasScrollableContent = el.scrollHeight > el.clientHeight;
+    const overflowYStyle = window.getComputedStyle(el).overflowY;
+    const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;
+
+    return hasScrollableContent && !isOverflowHidden;
+}
