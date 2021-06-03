@@ -69,7 +69,7 @@ function Sidebar(props) {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
-        getChats(cancelTokenSourceRef.current, true);
+        getChats(cancelTokenSourceRef.current, true, undefined, true);
 
         if (keyword.trim().length > 0) {
             searchMessages(cancelTokenSourceRef.current);
@@ -160,7 +160,7 @@ function Sidebar(props) {
                 // We do this to generate new (missing) chat
                 // TODO: Change it to work with pagination
                 if (willMakeRequest) {
-                    getChats(cancelTokenSourceRef.current, false);
+                    getChats(cancelTokenSourceRef.current, false, undefined, false);
                 }
             }
         }
@@ -195,7 +195,7 @@ function Sidebar(props) {
                 if (isScrollable(el)) {
                     if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
                         console.log('Scrolled to bottom');
-                        getChats(cancelTokenSourceRef.current, false, getObjLength(props.chats));
+                        getChats(cancelTokenSourceRef.current, false, getObjLength(props.chats), false);
                     }
                 }
             }, 100);
@@ -213,7 +213,7 @@ function Sidebar(props) {
         setKeyword(_keyword);
     }
 
-    const getChats = (cancelTokenSource, isInitial, offset) => {
+    const getChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
                 search: keyword,
