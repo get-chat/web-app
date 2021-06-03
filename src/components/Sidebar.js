@@ -89,6 +89,8 @@ function Sidebar(props) {
             if (keyword.trim().length === 0) {
                 let willMakeRequest = false;
 
+                const retrieveChatWaIdList = [];
+
                 const nextState = props.chats;
                 let changedAny = false;
 
@@ -101,6 +103,11 @@ function Sidebar(props) {
                     // Check if chat with waId already exists
                     if (!nextState.hasOwnProperty(chatMessageWaId)) {
                         willMakeRequest = true;
+
+                        // Collect waid list to retrieve chats
+                        if (!retrieveChatWaIdList.includes(chatMessageWaId)) {
+                            retrieveChatWaIdList.push(chatMessageWaId);
+                        }
                     }
 
                     // Chats are ordered by incoming message date
@@ -158,9 +165,12 @@ function Sidebar(props) {
                 }
 
                 // We do this to generate new (missing) chat
-                // TODO: Change it to work with pagination
                 if (willMakeRequest) {
-                    getChats(cancelTokenSourceRef.current, false, undefined, false);
+                    retrieveChatWaIdList.forEach((chatMessageWaId) => {
+                        retrieveChat(chatMessageWaId);
+                    })
+
+                    //getChats(cancelTokenSourceRef.current, false, undefined, false);
                 }
             }
         }
@@ -307,6 +317,13 @@ function Sidebar(props) {
             .then((response) => {
                 console.log("Chat: ", response.data);
 
+                const preparedChat = new SidebarChat(response.data);
+                console.log(preparedChat);
+
+                props.setChats(prevState => {
+                    prevState[chatWaId] = preparedChat;
+                    return prevState;
+                });
             })
             .catch((error) => {
                 window.displayError(error);
