@@ -31,6 +31,7 @@ import CloseIcon from "@material-ui/icons/Close";
 function Sidebar(props) {
 
     const {waId} = useParams();
+    const chatsContainer = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [chatMessages, setChatMessages] = useState({});
@@ -388,7 +389,9 @@ function Sidebar(props) {
                 <h3>Chats</h3>
                 }
 
-                <div className="sidebar__results__chats">
+                <div
+                    className="sidebar__results__chats"
+                     ref={chatsContainer}>
                     { Object.entries(props.chats)
                         .filter((chat) => {
                             const curChat = chat[1];
