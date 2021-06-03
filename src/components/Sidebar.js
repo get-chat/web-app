@@ -187,7 +187,9 @@ function Sidebar(props) {
                 const el = e.target;
 
                 if (isScrollable(el)) {
-                    console.log('Scrollable');
+                    if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+                        console.log('Scrolled to bottom');
+                    }
                 }
             }, 100);
         }
@@ -207,7 +209,8 @@ function Sidebar(props) {
     const getChats = (cancelTokenSource, isInitial) => {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
-                search: keyword
+                search: keyword,
+                limit: 10
             }, cancelTokenSource.token)
         )
             .then((response) => {
@@ -412,15 +415,15 @@ function Sidebar(props) {
                 </Tabs>
             </div>
 
-            <div className="sidebar__results">
+            <div
+                className="sidebar__results"
+                ref={chatsContainer}>
 
                 {keyword.trim().length > 0 &&
                 <h3>Chats</h3>
                 }
 
-                <div
-                    className="sidebar__results__chats"
-                     ref={chatsContainer}>
+                <div className="sidebar__results__chats">
                     { Object.entries(props.chats)
                         .filter((chat) => {
                             const curChat = chat[1];
@@ -471,15 +474,15 @@ function Sidebar(props) {
                             }
                         })
                         .map((chat) =>
-                        <SidebarChat
-                            key={chat[0]}
-                            chatData={chat[1]}
-                            newMessages={props.newMessages}
-                            keyword={keyword}
-                            contactProvidersData={props.contactProvidersData}
-                            retrieveContactData={props.retrieveContactData}
-                            tabCase={tabCase} />
-                    )}
+                            <SidebarChat
+                                key={chat[0]}
+                                chatData={chat[1]}
+                                newMessages={props.newMessages}
+                                keyword={keyword}
+                                contactProvidersData={props.contactProvidersData}
+                                retrieveContactData={props.retrieveContactData}
+                                tabCase={tabCase} />
+                        )}
 
                     { Object.keys(props.chats).length === 0 &&
                     <span className="sidebar__results__chats__noResult">
@@ -559,7 +562,7 @@ function Sidebar(props) {
                 <Divider />
                 }
                 {props.isAdmin &&
-                    <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">Admin panel</MenuItem>
+                <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">Admin panel</MenuItem>
                 }
                 {isMobile &&
                 <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
