@@ -144,6 +144,10 @@ export const extractTimestampFromMessage = (message) => {
     return message ? parseInt(message.timestamp) : -1;
 }
 
+export const generateUnixTimestamp = () => {
+    return Math.round(+new Date() / 1000);
+}
+
 export const stringContainsAnyInArray = (string, array) => {
     for (let i = 0; i < array.length; i++) {
         if (string.includes(array[i])) {

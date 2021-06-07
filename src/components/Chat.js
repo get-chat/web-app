@@ -31,7 +31,7 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
-    extractTimestampFromMessage,
+    extractTimestampFromMessage, generateUnixTimestamp,
     getConfig,
     getFirstObject,
     getLastMessageAndExtractTimestamp,
@@ -884,7 +884,7 @@ export default function Chat(props) {
 
     const displayFailedMessage = (text, isStored, willClearInput) => {
         setMessages(prevState => {
-            const timestamp = (new Date()).getTime();
+            const timestamp = generateUnixTimestamp();
             const messageId = 'failed_' + timestamp;
             const failedMessage = new ChatMessageClass();
             failedMessage.id = messageId;
