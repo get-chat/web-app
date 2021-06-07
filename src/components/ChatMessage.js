@@ -142,7 +142,14 @@ function ChatMessage(props) {
                 </div>
 
                 {data.isFailed &&
-                <div className="chat__message__failed__info">Failed to send. Will retry automatically.</div>
+                <div className="chat__message__failed__info">
+                    {data.isStored
+                        ?
+                        <div>Failed to send. Will retry automatically.</div>
+                        :
+                        <div>Failed to send. <span className="bold">Click</span> to retry.</div>
+                    }
+                </div>
                 }
 
             </div>
