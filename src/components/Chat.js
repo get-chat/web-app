@@ -719,7 +719,7 @@ export default function Chat(props) {
         }
 
         // TODO: Delete after testing
-        displayFailedMessage({
+        /*displayFailedMessage({
             "wa_id": "905383192532",
             "type": "template",
             "template": {
@@ -731,7 +731,7 @@ export default function Chat(props) {
                 },
                 "components": []
             }
-        }, false);
+        }, false);*/
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
