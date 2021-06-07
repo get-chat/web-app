@@ -271,7 +271,7 @@ function Sidebar(props) {
                     let hasAnyNewMessages = false;
                     let chatMessageWaId;
 
-                    props.setNewMessages((prevState => {
+                    props.setNewMessages(prevState => {
                             Object.entries(preparedNewMessages).forEach((newMsg) => {
                                 const newMsgWaId = newMsg[0]
                                 const number = newMsg[1].newMessages;
@@ -289,19 +289,21 @@ function Sidebar(props) {
                             // When state is a JSON object, it is unable to understand whether it is different or same and renders again
                             // So we check if new state is actually different than previous state
                             if (JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)) {
-                                return preparedNewMessages;
+                                return {...prevState, ...preparedNewMessages};
                             } else {
                                 return prevState;
                             }
                         }
-                    ));
+                    );
 
                     // Display a notification
                     if (hasAnyNewMessages) {
                         props.displayNotification("New messages", "You have new messages!", chatMessageWaId);
                     }
                 } else {
-                    props.setNewMessages(preparedNewMessages);
+                    props.setNewMessages(prevState => {
+                        return {...prevState, ...preparedNewMessages}
+                    });
                 }
 
             })
