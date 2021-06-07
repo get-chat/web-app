@@ -809,7 +809,8 @@ export default function Chat(props) {
                         if (status === 453) {
                             setExpired(true);
                         } else if (status === 500 || status === 502) {
-                            displayFailedMessage(preparedInput.trim(), true);
+                            const isStored = status === 502;
+                            displayFailedMessage(preparedInput.trim(), isStored, true);
                         }
 
                         handleIfUnauthorized();
@@ -857,7 +858,8 @@ export default function Chat(props) {
                         if (status === 453) {
                             setExpired(true);
                         } else if (status === 500 || status === 502) {
-                            displayFailedMessage(templateMessage.name);
+                            const isStored = status === 502;
+                            displayFailedMessage(templateMessage.name, isStored);
                         }
 
                         handleIfUnauthorized(error);
@@ -866,7 +868,7 @@ export default function Chat(props) {
         }
     }
 
-    const displayFailedMessage = (text, willClearInput) => {
+    const displayFailedMessage = (text, isStored, willClearInput) => {
         setMessages(prevState => {
             const timestamp = (new Date()).getTime();
             const messageId = 'failed_' + timestamp;
@@ -936,7 +938,8 @@ export default function Chat(props) {
                         if (status === 453) {
                             setExpired(true);
                         } else if (status === 500 || status === 502) {
-                            displayFailedMessage(fileURL);
+                            const isStored = status === 502;
+                            displayFailedMessage(fileURL, isStored);
                         }
 
                         handleIfUnauthorized(error);
