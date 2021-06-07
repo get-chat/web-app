@@ -720,9 +720,16 @@ export default function Chat(props) {
 
         // TODO: Delete after testing
         displayFailedMessage({
-            wa_id: waId,
-            text: {
-                body: 'Test failed message'
+            "wa_id": "905383192532",
+            "type": "template",
+            "template": {
+                "namespace": "ef9e3c51_fff7_47fd_82e2_4c1bbfe099c1",
+                "name": "template_03",
+                "language": {
+                    "code": "en_US",
+                    "policy": "deterministic"
+                },
+                "components": []
             }
         }, false);
     }
@@ -790,7 +797,7 @@ export default function Chat(props) {
         if (resendPayload.type === 'text' || resendPayload.text) {
             sendMessage(undefined, resendPayload, successCallback);
         } else if (resendPayload.type === 'template') {
-
+            sendTemplateMessage(undefined, resendPayload, successCallback);
         } else {
             // File
 
@@ -869,9 +876,13 @@ export default function Chat(props) {
         }
     }
 
-    const sendTemplateMessage = (templateMessage) => {
-        if (isLoaded) {
-            const requestBody = {
+    const sendTemplateMessage = (templateMessage, customPayload, callback) => {
+        let requestBody;
+
+        if (customPayload) {
+            requestBody = customPayload;
+        } else {
+            requestBody = {
                 wa_id: waId,
                 type: 'template',
                 template: {
@@ -884,7 +895,9 @@ export default function Chat(props) {
                     components: templateMessage.params
                 }
             };
+        }
 
+        if (isLoaded) {
             axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
                 .then((response) => {
                     console.log(response.data);
@@ -892,6 +905,9 @@ export default function Chat(props) {
                     // Hide dialog by this event
                     PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
 
+                    if (callback) {
+                        callback();
+                    }
                 })
                 .catch((error) => {
                     window.displayError(error);
