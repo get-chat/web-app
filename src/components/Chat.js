@@ -717,6 +717,9 @@ export default function Chat(props) {
                 callback(preparedMessages);
             }, 50);
         }
+
+        // TEST
+        displayFailedMessage("Test", false);
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
@@ -763,6 +766,17 @@ export default function Chat(props) {
             .catch((error) => {
                 window.displayError(error);
             });
+    }
+
+    const resendMessage = (message) => {
+        console.log(message);
+
+        // Delete message if resent successfully
+        setMessages(prevState => {
+            delete prevState[message.id];
+
+            return {...prevState};
+        });
     }
 
     const sendMessage = (e) => {
@@ -1136,7 +1150,8 @@ export default function Chat(props) {
                             goToMessageId={goToMessageId}
                             onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)}
                             contactProvidersData={props.contactProvidersData}
-                            retrieveContactData={props.retrieveContactData} />
+                            retrieveContactData={props.retrieveContactData}
+                            resendMessage={(message) => resendMessage(message)} />
                     )
                 }) }
 

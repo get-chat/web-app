@@ -147,7 +147,7 @@ function ChatMessage(props) {
                         ?
                         <div>Failed to send. Will retry automatically.</div>
                         :
-                        <div>Failed to send. <span className="bold">Click</span> to retry.</div>
+                        <div className="cursorPointer" onClick={() => props.resendMessage(data)}>Failed to send. <span className="bold">Click</span> to retry.</div>
                     }
                 </div>
                 }
