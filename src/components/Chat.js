@@ -893,15 +893,28 @@ export default function Chat(props) {
 
     const displayFailedMessage = (requestBody, isStored, willClearInput) => {
         setMessages(prevState => {
+            let text = '';
+
+            if (requestBody.type === 'text' || requestBody.text) {
+                text = requestBody.text.body;
+            } else if (requestBody.type === 'template') {
+                text = requestBody.template.name;
+            } else {
+                // File
+                text = requestBody.link;
+            }
+
             const timestamp = generateUnixTimestamp();
             const messageId = 'failed_' + timestamp;
             const failedMessage = new ChatMessageClass();
             failedMessage.id = messageId;
-            failedMessage.text = JSON.stringify(requestBody);
+            failedMessage.text = text;
             failedMessage.isFromUs = true;
             failedMessage.isFailed = true;
             failedMessage.isStored = isStored;
             failedMessage.timestamp = timestamp;
+            failedMessage.resendPayload = requestBody;
+
             prevState[messageId] = failedMessage;
             return {...prevState};
         });
