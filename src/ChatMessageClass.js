@@ -85,7 +85,7 @@ export class ChatMessageClass {
         this.sentTimestamp = statuses.sent;
 
         this.errors = payload.errors;
-
+        this.isStored = false;
         this.isFailed = false;
     };
 

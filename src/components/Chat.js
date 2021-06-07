@@ -877,6 +877,7 @@ export default function Chat(props) {
             failedMessage.text = text;
             failedMessage.isFromUs = true;
             failedMessage.isFailed = true;
+            failedMessage.isStored = isStored;
             failedMessage.timestamp = timestamp;
             prevState[messageId] = failedMessage;
             return {...prevState};
