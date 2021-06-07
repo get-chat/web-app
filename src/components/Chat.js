@@ -669,6 +669,9 @@ export default function Chat(props) {
     // Chain: getMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
     const finishLoadingMessages = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime) => {
 
+        // Sort prepared messages
+        preparedMessages = sortMessagesAsc(preparedMessages);
+
         if (getObjLength(preparedMessages) > 0) {
             // To persist scroll position, we store current scroll information
             const prevScrollTop = messagesContainer.current.scrollTop;
@@ -686,6 +689,7 @@ export default function Chat(props) {
                     }
                 }
 
+                // Sort final object
                 return sortMessagesAsc(nextState);
             }));
 
