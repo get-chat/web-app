@@ -87,6 +87,7 @@ export class ChatMessageClass {
         this.errors = payload.errors;
         this.isStored = false;
         this.isFailed = false;
+        this.resendPayload = undefined;
     };
 
     static fromAssignmentEvent(assignmentEvent) {

@@ -718,8 +718,13 @@ export default function Chat(props) {
             }, 50);
         }
 
-        // TEST
-        displayFailedMessage("Test", false);
+        // TODO: Delete after testing
+        displayFailedMessage({
+            wa_id: waId,
+            text: {
+                body: 'Test failed message'
+            }
+        }, false);
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
@@ -797,12 +802,14 @@ export default function Chat(props) {
         console.log('You typed: ', preparedInput);
 
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/`, {
+            const requestBody = {
                 wa_id: waId,
                 text: {
                     body: preparedInput.trim()
                 }
-            }, getConfig())
+            };
+
+            axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
                 .then((response) => {
                     console.log(response.data);
 
@@ -824,7 +831,7 @@ export default function Chat(props) {
                             setExpired(true);
                         } else if (status === 500 || status === 502) {
                             const isStored = status === 502;
-                            displayFailedMessage(preparedInput.trim(), isStored, true);
+                            displayFailedMessage(requestBody, isStored, true);
                         }
 
                         handleIfUnauthorized();
@@ -840,7 +847,7 @@ export default function Chat(props) {
 
     const sendTemplateMessage = (templateMessage) => {
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/`, {
+            const requestBody = {
                 wa_id: waId,
                 type: 'template',
                 template: {
@@ -852,7 +859,9 @@ export default function Chat(props) {
                     },
                     components: templateMessage.params
                 }
-            }, getConfig())
+            };
+
+            axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
                 .then((response) => {
                     console.log(response.data);
 
@@ -873,7 +882,7 @@ export default function Chat(props) {
                             setExpired(true);
                         } else if (status === 500 || status === 502) {
                             const isStored = status === 502;
-                            displayFailedMessage(templateMessage.name, isStored);
+                            displayFailedMessage(requestBody, isStored);
                         }
 
                         handleIfUnauthorized(error);
@@ -882,13 +891,13 @@ export default function Chat(props) {
         }
     }
 
-    const displayFailedMessage = (text, isStored, willClearInput) => {
+    const displayFailedMessage = (requestBody, isStored, willClearInput) => {
         setMessages(prevState => {
             const timestamp = generateUnixTimestamp();
             const messageId = 'failed_' + timestamp;
             const failedMessage = new ChatMessageClass();
             failedMessage.id = messageId;
-            failedMessage.text = text;
+            failedMessage.text = JSON.stringify(requestBody);
             failedMessage.isFromUs = true;
             failedMessage.isFailed = true;
             failedMessage.isStored = isStored;
@@ -914,29 +923,29 @@ export default function Chat(props) {
             const filename = file.name;
             const mimeType = file.type;
 
-            const body = {
+            const requestBody = {
                 wa_id: waId,
                 recipient_type: 'individual',
                 to: waId,
                 type: type
             };
 
-            body[type] = {
+            requestBody[type] = {
                 link: fileURL,
                 mime_type: mimeType,
             }
 
             // caption param is accepted for only images and videos
             if (type === ATTACHMENT_TYPE_IMAGE || type === ATTACHMENT_TYPE_VIDEO) {
-                body[type]['caption'] = caption;
+                requestBody[type]['caption'] = caption;
             }
 
             // filename param is accepted for documents
             if (type === ATTACHMENT_TYPE_DOCUMENT) {
-                body[type]['filename'] = filename;
+                requestBody[type]['filename'] = filename;
             }
 
-            axios.post( `${BASE_URL}messages/`, body, getConfig())
+            axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
                 .then((response) => {
                     console.log(response.data);
 
@@ -954,7 +963,7 @@ export default function Chat(props) {
                             setExpired(true);
                         } else if (status === 500 || status === 502) {
                             const isStored = status === 502;
-                            displayFailedMessage(fileURL, isStored);
+                            displayFailedMessage(requestBody, isStored);
                         }
 
                         handleIfUnauthorized(error);
