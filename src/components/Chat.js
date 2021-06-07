@@ -776,16 +776,29 @@ export default function Chat(props) {
     const resendMessage = (message) => {
         console.log(message);
 
-        // Delete message if resent successfully
-        setMessages(prevState => {
-            delete prevState[message.id];
+        const successCallback = () => {
+            // Delete message if resent successfully
+            setMessages(prevState => {
+                delete prevState[message.id];
 
-            return {...prevState};
-        });
+                return {...prevState};
+            });
+        }
+
+        const resendPayload = message.resendPayload;
+
+        if (resendPayload.type === 'text' || resendPayload.text) {
+            sendMessage(undefined, resendPayload, successCallback);
+        } else if (resendPayload.type === 'template') {
+
+        } else {
+            // File
+
+        }
     }
 
-    const sendMessage = (e) => {
-        e.preventDefault();
+    const sendMessage = (e, customPayload, callback) => {
+        e?.preventDefault();
 
         // Check if has internet connection
         if (!hasInternetConnection()) {
@@ -793,22 +806,29 @@ export default function Chat(props) {
             return false;
         }
 
-        const preparedInput = translateHTMLInputToText(input);
+        let requestBody;
 
-        if (preparedInput.trim() === '') {
-            return false;
-        }
+        if (e) {
+            const preparedInput = translateHTMLInputToText(input);
 
-        console.log('You typed: ', preparedInput);
+            if (preparedInput.trim() === '') {
+                return false;
+            }
 
-        if (isLoaded) {
-            const requestBody = {
+            console.log('You typed: ', preparedInput);
+
+            requestBody = {
                 wa_id: waId,
                 text: {
                     body: preparedInput.trim()
                 }
             };
+        } else if (customPayload) {
+            // Resend payload is being sent
+            requestBody = customPayload;
+        }
 
+        if (isLoaded) {
             axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
                 .then((response) => {
                     console.log(response.data);
@@ -820,6 +840,10 @@ export default function Chat(props) {
                         prevState[messageId] = sentMessage;
                         return {...prevState};
                     });*/
+
+                    if (callback) {
+                        callback();
+                    }
                 })
                 .catch((error) => {
                     window.displayError(error);
