@@ -43,6 +43,7 @@ import {
 } from "../Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
+import SavedResponses from "./SavedResponses";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1240,6 +1241,10 @@ export default function Chat(props) {
                 templatesData={props.templates}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
                 isLoadingTemplates={props.isLoadingTemplates} />
+            }
+
+            {isSavedResponsesVisible &&
+            <SavedResponses />
             }
 
             {!waId &&

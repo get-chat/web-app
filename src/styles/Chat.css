@@ -345,7 +345,7 @@ a.chat__document:hover {
     flex: 1 1 auto;
 }
 
-.templateMessagesOuter {
+.templateMessagesOuter, .savedResponsesOuter {
     background-color: var(--gray-light);
     padding: 0 15px 15px 15px;
     border-left: 1px solid lightgray;
@@ -363,7 +363,7 @@ a.chat__document:hover {
     margin-bottom: 15px;
 }
 
-.templateMessages {
+.templateMessages, .savedResponses {
     flex: 1 1;
     max-height: 290px;
     overflow-y: auto;
