@@ -88,6 +88,10 @@ function ChatFooter(props) {
         props.setTemplateMessagesVisible((prevState => !prevState));
     }
 
+    const toggleSavedResponses = () => {
+        props.setSavedResponsesVisible((prevState => !prevState));
+    }
+
     function insertAtCursor(el, html) {
         if (!html) return;
 
@@ -233,8 +237,8 @@ function ChatFooter(props) {
                     </IconButton>
                 </Tooltip>
 
-                <Tooltip title="Saved Responses" placement="top" className={!props.isExpired ? "desktopOnly" : ""}>
-                    <IconButton>
+                <Tooltip title="Saved Responses" placement="top" className="desktopOnly">
+                    <IconButton onClick={toggleSavedResponses} className={props.isSavedResponsesVisible ? "activeIconButton" : ""}>
                         <NotesIcon />
                     </IconButton>
                 </Tooltip>
@@ -328,6 +332,10 @@ function ChatFooter(props) {
 
                 <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
                     <SmsIcon/>
+                </IconButton>
+
+                <IconButton onClick={toggleSavedResponses} className={props.isSavedResponsesVisible ? "activeIconButton" : ""}>
+                    <NotesIcon/>
                 </IconButton>
 
             </div>

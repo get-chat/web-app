@@ -56,6 +56,7 @@ export default function Chat(props) {
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [isExpired, setExpired] = useState(false);
     const [isTemplateMessagesVisible, setTemplateMessagesVisible] = useState(false);
+    const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
     const [person, setPerson] = useState();
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
@@ -119,6 +120,7 @@ export default function Chat(props) {
         setPerson(null);
         setMessages([]);
         setTemplateMessagesVisible(false);
+        setSavedResponsesVisible(false);
         setAtBottom(false);
 
         setPreviewSendMediaVisible(false);
@@ -1224,6 +1226,8 @@ export default function Chat(props) {
                 setSelectedFiles={setSelectedFiles}
                 isTemplateMessagesVisible={isTemplateMessagesVisible}
                 setTemplateMessagesVisible={setTemplateMessagesVisible}
+                isSavedResponsesVisible={isSavedResponsesVisible}
+                setSavedResponsesVisible={setSavedResponsesVisible}
                 sendHandledChosenFiles={sendHandledChosenFiles}
                 accept={accept}
                 setAccept={setAccept}
