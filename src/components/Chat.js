@@ -800,7 +800,7 @@ export default function Chat(props) {
             sendTemplateMessage(undefined, resendPayload, successCallback);
         } else {
             // File
-
+            sendFile(undefined, undefined, resendPayload, successCallback);
         }
     }
 
@@ -968,15 +968,19 @@ export default function Chat(props) {
         setInput('')
     }
 
-    const sendFile = (fileURL, chosenFile, callback) => {
-        if (isLoaded) {
+    const sendFile = (fileURL, chosenFile, customPayload, callback) => {
+        let requestBody;
+
+        if (customPayload) {
+            requestBody = customPayload;
+        } else {
             const caption = chosenFile.caption;
             const type = chosenFile.attachmentType;
             const file = chosenFile.file;
             const filename = file.name;
             const mimeType = file.type;
 
-            const requestBody = {
+            requestBody = {
                 wa_id: waId,
                 recipient_type: 'individual',
                 to: waId,
@@ -997,14 +1001,15 @@ export default function Chat(props) {
             if (type === ATTACHMENT_TYPE_DOCUMENT) {
                 requestBody[type]['filename'] = filename;
             }
+        }
 
+        if (isLoaded) {
             axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
                 .then((response) => {
                     console.log(response.data);
 
-                    // Send next request
+                    // Send next request (or resend callback)
                     callback();
-
                 })
                 .catch((error) => {
                     window.displayError(error);
@@ -1023,7 +1028,10 @@ export default function Chat(props) {
                     }
 
                     // Send next when it fails, a retry can be considered
-                    callback();
+                    // If custom payload is empty, it means it is resending, so it is just a success callback
+                    if (!customPayload) {
+                        callback();
+                    }
                 });
         }
     }
@@ -1071,7 +1079,7 @@ export default function Chat(props) {
                         console.log(response.data);
 
                         // Convert parameters to a ChosenFile object
-                        sendFile(response.data.file, request.chosenFile, function () {
+                        sendFile(response.data.file, request.chosenFile, undefined, function () {
                             sendNextRequest();
                         });
 
