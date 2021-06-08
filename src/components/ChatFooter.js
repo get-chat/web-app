@@ -4,6 +4,7 @@ import {Add, ArrowDownward, AttachFile, InsertEmoticon, Send} from "@material-ui
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import NotesIcon from '@material-ui/icons/Notes';
 import MicIcon from '@material-ui/icons/Mic';
 import {Emoji, NimblePicker} from "emoji-mart";
 import 'emoji-mart/css/emoji-mart.css';
@@ -229,6 +230,12 @@ function ChatFooter(props) {
                 <Tooltip title="Templates" placement="top" className={!props.isExpired ? "desktopOnly" : ""}>
                     <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
                         <SmsIcon />
+                    </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Saved Responses" placement="top" className={!props.isExpired ? "desktopOnly" : ""}>
+                    <IconButton>
+                        <NotesIcon />
                     </IconButton>
                 </Tooltip>
 
