@@ -717,21 +717,6 @@ export default function Chat(props) {
                 callback(preparedMessages);
             }, 50);
         }
-
-        // TODO: Delete after testing
-        /*displayFailedMessage({
-            "wa_id": "905383192532",
-            "type": "template",
-            "template": {
-                "namespace": "ef9e3c51_fff7_47fd_82e2_4c1bbfe099c1",
-                "name": "template_03",
-                "language": {
-                    "code": "en_US",
-                    "policy": "deterministic"
-                },
-                "components": []
-            }
-        }, false);*/
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
