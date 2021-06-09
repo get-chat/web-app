@@ -235,6 +235,9 @@ function Main() {
         // Display custom errors in any component
         window.displayCustomError = displayCustomError;
 
+        // Display success in any component
+        window.displaySuccess = displaySuccess;
+
         // Display Axios errors in any component
         window.displayError = displayError;
 
