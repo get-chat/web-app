@@ -532,7 +532,7 @@ function Main() {
     }
 
     const getSavedResponses = () => {
-        axios.get( `${BASE_URL}saved_response/`, getConfig())
+        axios.get( `${BASE_URL}saved_responses/`, getConfig())
             .then((response) => {
                 console.log("Saved responses: ", response.data);
 
