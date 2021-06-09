@@ -539,7 +539,6 @@ function Main() {
                 const preparedSavedResponses = {};
                 response.data.results.forEach((savedResponse) => {
                     const prepared = new SavedResponseClass(savedResponse);
-
                     preparedSavedResponses[prepared.id] = prepared;
                 });
 

@@ -373,7 +373,7 @@ a.chat__document:hover {
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
 }
 
-.templateMessages__emptyInfo {
+.templateMessages__emptyInfo, .savedResponses__emptyInfo {
     font-size: 15px;
     color: rgba(0, 0, 0, 0.8);
 }
@@ -382,27 +382,27 @@ a.chat__document:hover {
     color: var(--color-primary);
 }
 
-.templateMessages .templateMessageWrapper {
+.templateMessages .templateMessageWrapper, .savedResponses .savedResponseWrapper {
     margin-bottom: 15px !important;
 }
 
-.templateMessages .templateMessageWrapper:last-child {
+.templateMessages .templateMessageWrapper:last-child, .savedResponses .savedResponseWrapper:last-child {
     margin-bottom: 0 !important;
 }
 
-.templateMessages .templateMessageWrapper .chat__message {
+.templateMessages .templateMessageWrapper .chat__message, .savedResponses .savedResponseWrapper .chat__message {
     margin-bottom: 0 !important;
 }
 
-.templateMessageWrapper {
+.templateMessageWrapper, .savedResponseWrapper {
     display: flex;
 }
 
-.templateMessageWrapper > button {
+.templateMessageWrapper > button, .savedResponseWrapper > button {
     margin-left: 15px;
 }
 
-.templateMessage__message {
+.templateMessage__message, .savedResponse__message {
     word-break: break-all;
 }
 
