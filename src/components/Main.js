@@ -606,6 +606,7 @@ function Main() {
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
                     isLoadingTemplates={isLoadingTemplates}
+                    savedResponses={savedResponses}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}

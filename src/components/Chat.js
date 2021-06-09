@@ -1244,7 +1244,8 @@ export default function Chat(props) {
             }
 
             {isSavedResponsesVisible &&
-            <SavedResponses />
+            <SavedResponses
+                savedResponses={props.savedResponses} />
             }
 
             {!waId &&
