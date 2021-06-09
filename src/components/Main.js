@@ -61,6 +61,8 @@ function Main() {
 
     const [isErrorVisible, setErrorVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isSuccessVisible, setSuccessVisible] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
 
@@ -91,6 +93,11 @@ function Main() {
         _setProgress(prevState => {
             return value > prevState ? value : prevState;
         })
+    }
+
+    const displaySuccess = (message) => {
+        setSuccessMessage(message);
+        setSuccessVisible(true);
     }
 
     const displayError = (error) => {
@@ -559,6 +566,9 @@ function Main() {
             .then((response) => {
                 console.log("Saved responses: ", response.data);
 
+                // Display a success message
+                displaySuccess("Saved as response successfully!");
+
                 // Reload saved responses
                 getSavedResponses();
             })
@@ -691,6 +701,12 @@ function Main() {
                             setProgress={setProgress} />
                     </div>
                 </Fade>
+
+                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={isSuccessVisible} autoHideDuration={6000} onClose={handleClose}>
+                    <Alert onClose={handleClose} severity="success" elevation={4}>
+                        {successMessage}
+                    </Alert>
+                </Snackbar>
 
                 <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="error" elevation={4}>
