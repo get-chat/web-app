@@ -191,7 +191,7 @@ a.chat__document:hover {
     margin-right: 5px;
 }
 
-.chat__templateMsg {
+.chat__message.messageType__template {
     background-color: #f4f0d7 !important;
 }
 
@@ -234,6 +234,7 @@ a.chat__document:hover {
 }
 
 .chat__message__more {
+    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -250,13 +251,13 @@ a.chat__document:hover {
     background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #dcf8c6 35%);
 }
 
-.chat__message.chat__templateMsg .chat__message__more {
+.chat__message.messageType__template .chat__message__more {
     background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #f4f0d7 35%);
 }
 
-/*.chat__message:hover .chat__message__more {
+.chat__message:hover .chat__message__more {
     display: block;
-}*/
+}
 
 .chat__forwarded {
     font-size: 12px;
