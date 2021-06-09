@@ -792,6 +792,15 @@ export default function Chat(props) {
         }
     }
 
+    const sendCustomTextMessage = (text) => {
+        sendMessage(undefined, {
+            wa_id: waId,
+            text: {
+                body: text.trim()
+            }
+        });
+    }
+
     const sendMessage = (e, customPayload, callback) => {
         e?.preventDefault();
 
@@ -1245,7 +1254,8 @@ export default function Chat(props) {
 
             {isSavedResponsesVisible &&
             <SavedResponses
-                savedResponses={props.savedResponses} />
+                savedResponses={props.savedResponses}
+                sendCustomTextMessage={(text) => sendCustomTextMessage(text)} />
             }
 
             {!waId &&

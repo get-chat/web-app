@@ -5,7 +5,7 @@ import {Button} from "@material-ui/core";
 function SavedResponses(props) {
 
     const send = (id) => {
-
+        props.sendCustomTextMessage(props.savedResponses[id].text);
     }
 
     return (
