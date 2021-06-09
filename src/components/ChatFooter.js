@@ -85,10 +85,16 @@ function ChatFooter(props) {
             willScroll = true;
         }*/
 
+        // Hide saved responses first
+        props.setSavedResponsesVisible(false);
+
         props.setTemplateMessagesVisible((prevState => !prevState));
     }
 
     const toggleSavedResponses = () => {
+        // Hide template messages first
+        props.setTemplateMessagesVisible(false);
+
         props.setSavedResponsesVisible((prevState => !prevState));
     }
 
