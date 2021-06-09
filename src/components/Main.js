@@ -55,6 +55,7 @@ function Main() {
     const [filterTag, setFilterTag] = useState();
 
     const [templates, setTemplates] = useState({});
+    const [savedResponses, setSavedResponses] = useState({});
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
     const [templatesReady, setTemplatesReady] = useState(false);
 
@@ -216,6 +217,12 @@ function Main() {
     const onDisplayError = function (msg, data) {
         displayCustomError(data);
     };
+
+    useEffect(() => {
+        if (progress === 100) {
+            getSavedResponses();
+        }
+    }, [progress]);
 
     useEffect(() => {
         // Display custom errors in any component
@@ -527,7 +534,7 @@ function Main() {
     const getSavedResponses = () => {
         axios.get( `${BASE_URL}saved_response/`, getConfig())
             .then((response) => {
-                //console.log("Templates: ", response.data);
+                console.log("Saved responses: ", response.data);
 
                 const preparedSavedResponses = {};
                 response.data.results.forEach((savedResponse) => {
@@ -535,6 +542,8 @@ function Main() {
 
                     preparedSavedResponses[prepared.id] = prepared;
                 });
+
+                setSavedResponses(preparedSavedResponses);
 
                 //setProgress(50);
 
