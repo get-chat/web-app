@@ -243,11 +243,14 @@ function ChatFooter(props) {
                     </IconButton>
                 </Tooltip>
 
+                {!props.isExpired &&
                 <Tooltip title="Saved Responses" placement="top" className="desktopOnly">
-                    <IconButton onClick={toggleSavedResponses} className={props.isSavedResponsesVisible ? "activeIconButton" : ""}>
-                        <NotesIcon />
+                    <IconButton onClick={toggleSavedResponses}
+                                className={props.isSavedResponsesVisible ? "activeIconButton" : ""}>
+                        <NotesIcon/>
                     </IconButton>
                 </Tooltip>
+                }
 
                 <div className="hidden">
                     <FileInput
