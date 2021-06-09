@@ -21,8 +21,8 @@ function ChatMessageOptionsMenu(props) {
 
             <MenuItem>Delete</MenuItem>
 
-            {(props.optionsChatMessage && props.optionsChatMessage.isFromUs) &&
-            <MenuItem>Another option for outgoing messages</MenuItem>
+            {(props.optionsChatMessage && props.optionsChatMessage.type === 'text' && props.optionsChatMessage.isFromUs) &&
+            <MenuItem>Save as response</MenuItem>
             }
 
         </Menu>
