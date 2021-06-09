@@ -1268,7 +1268,8 @@ export default function Chat(props) {
             <ChatMessageOptionsMenu
                 menuAnchorEl={menuAnchorEl}
                 setMenuAnchorEl={setMenuAnchorEl}
-                optionsChatMessage={optionsChatMessage} />
+                optionsChatMessage={optionsChatMessage}
+                createSavedResponse={props.createSavedResponse} />
 
             {isPreviewSendMediaVisible &&
             <PreviewSendMedia

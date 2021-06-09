@@ -548,8 +548,21 @@ function Main() {
 
             })
             .catch((error) => {
-                // TODO: Handle errors
+                displayError(error);
+            });
+    }
 
+    const createSavedResponse = (text) => {
+        axios.post( `${BASE_URL}saved_responses/`, {
+            text: text
+        }, getConfig())
+            .then((response) => {
+                console.log("Saved responses: ", response.data);
+
+                // Reload saved responses
+                getSavedResponses();
+            })
+            .catch((error) => {
                 displayError(error);
             });
     }
@@ -606,6 +619,7 @@ function Main() {
                     templates={templates}
                     isLoadingTemplates={isLoadingTemplates}
                     savedResponses={savedResponses}
+                    createSavedResponse={createSavedResponse}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}

@@ -3,6 +3,12 @@ import {Menu, MenuItem} from "@material-ui/core";
 
 function ChatMessageOptionsMenu(props) {
 
+    const createSavedResponse = () => {
+        if (props.optionsChatMessage) {
+            props.createSavedResponse(props.optionsChatMessage.text);
+        }
+    }
+
     const hideMenu = () => {
         props.setMenuAnchorEl(null);
     };
@@ -22,7 +28,7 @@ function ChatMessageOptionsMenu(props) {
             {/*<MenuItem>Delete</MenuItem>*/}
 
             {(props.optionsChatMessage && props.optionsChatMessage.type === 'text' && props.optionsChatMessage.isFromUs) &&
-            <MenuItem>Save as response</MenuItem>
+            <MenuItem onClick={createSavedResponse}>Save as response</MenuItem>
             }
 
         </Menu>
