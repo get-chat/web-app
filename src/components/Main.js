@@ -34,6 +34,7 @@ import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";
 import DownloadUnsupportedFile from "./DownloadUnsupportedFile";
+import SavedResponseClass from "../SavedResponseClass";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -514,6 +515,28 @@ function Main() {
                 setTemplatesReady(true);
 
                 setProgress(50);
+
+            })
+            .catch((error) => {
+                // TODO: Handle errors
+
+                displayError(error);
+            });
+    }
+
+    const getSavedResponses = () => {
+        axios.get( `${BASE_URL}saved_response/`, getConfig())
+            .then((response) => {
+                //console.log("Templates: ", response.data);
+
+                const preparedSavedResponses = {};
+                response.data.results.forEach((savedResponse) => {
+                    const prepared = new SavedResponseClass(savedResponse);
+
+                    preparedSavedResponses[prepared.id] = prepared;
+                });
+
+                //setProgress(50);
 
             })
             .catch((error) => {
