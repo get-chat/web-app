@@ -229,7 +229,7 @@ function Sidebar(props) {
         axios.get(`${BASE_URL}chats/`,
             getConfig({
                 search: keyword,
-                limit: 25,
+                limit: 18,
                 offset: offset
             }, cancelTokenSource.token)
         )
