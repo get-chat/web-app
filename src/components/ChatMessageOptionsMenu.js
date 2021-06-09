@@ -19,7 +19,7 @@ function ChatMessageOptionsMenu(props) {
             elevation={3}
             disableAutoFocusItem={true}>
 
-            <MenuItem>Delete</MenuItem>
+            {/*<MenuItem>Delete</MenuItem>*/}
 
             {(props.optionsChatMessage && props.optionsChatMessage.type === 'text' && props.optionsChatMessage.isFromUs) &&
             <MenuItem>Save as response</MenuItem>
