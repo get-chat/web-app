@@ -12,13 +12,17 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
-    BASE_URL, EVENT_TOPIC_CHAT_ASSIGNMENT,
+    BASE_URL,
+    EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
-    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+    EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-    EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_MARKED_AS_RECEIVED,
+    EVENT_TOPIC_DISPLAY_ERROR,
+    EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
-    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, EVENT_TOPIC_UNSUPPORTED_FILE
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
+    EVENT_TOPIC_UNSUPPORTED_FILE
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
@@ -59,10 +63,10 @@ function Main() {
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
     const [templatesReady, setTemplatesReady] = useState(false);
 
-    const [isErrorVisible, setErrorVisible] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [isSuccessVisible, setSuccessVisible] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [isErrorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [chatMessageToPreview, setChatMessageToPreview] = useState();
 
@@ -131,7 +135,15 @@ function Main() {
         });
     }
 
-    const handleClose = (event, reason) => {
+    const handleSuccessClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setSuccessVisible(false);
+    };
+
+    const handleErrorClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -722,14 +734,14 @@ function Main() {
                     </div>
                 </Fade>
 
-                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={isSuccessVisible} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="success" elevation={4}>
+                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={isSuccessVisible} autoHideDuration={6000} onClose={handleSuccessClose}>
+                    <Alert onClose={handleSuccessClose} severity="success" elevation={4}>
                         {successMessage}
                     </Alert>
                 </Snackbar>
 
-                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error" elevation={4}>
+                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleErrorClose}>
+                    <Alert onClose={handleErrorClose} severity="error" elevation={4}>
                         {errorMessage}
                     </Alert>
                 </Snackbar>
