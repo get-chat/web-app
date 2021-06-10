@@ -136,10 +136,8 @@ export default function Login(props) {
 
             <Fade in={true}>
                 <div className="login__body">
-                    <span className="login__body__version">Version: { VERSION }</span>
-
                     <div className="login__body__logoWrapper">
-                        <img className="login__body__logo" src={logo} />
+                        <img className="login__body__logo" src={logo} alt="Logo" />
                     </div>
 
                     <h2>Welcome</h2>
@@ -161,6 +159,10 @@ export default function Login(props) {
                     {loginError &&
                     <Alert severity="error">{loginError}</Alert>
                     }
+
+                    <div className="login__body__versionWrapper">
+                        <span className="login__body__version">Version: { VERSION }</span>
+                    </div>
                 </div>
             </Fade>
 
