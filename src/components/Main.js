@@ -183,7 +183,8 @@ function Main() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
                 body: body,
-                icon: logo
+                icon: logo,
+                tag: chatWaId
             });
 
             notification.onclick = function (event) {
