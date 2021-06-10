@@ -4,8 +4,12 @@ import {Button} from "@material-ui/core";
 
 function SavedResponses(props) {
 
-    const send = (id) => {
+    const sendSavedResponse = (id) => {
         props.sendCustomTextMessage(props.savedResponses[id].text);
+    }
+
+    const deleteSavedResponse = (id) => {
+        props.deleteSavedResponse(id);
     }
 
     return (
@@ -26,7 +30,8 @@ function SavedResponses(props) {
                             </div>
                         </div>
 
-                        <Button onClick={() => send(savedResponse[1])}>Send</Button>
+                        <Button onClick={() => sendSavedResponse(savedResponse[1])}>Send</Button>
+                        <Button onClick={() => deleteSavedResponse([1])}>Delete</Button>
 
                     </div>
                 )}

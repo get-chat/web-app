@@ -649,6 +649,7 @@ function Main() {
                     isLoadingTemplates={isLoadingTemplates}
                     savedResponses={savedResponses}
                     createSavedResponse={createSavedResponse}
+                    deleteSavedResponse={deleteSavedResponse}
                     clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
