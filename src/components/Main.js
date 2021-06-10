@@ -39,6 +39,7 @@ import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";
 import DownloadUnsupportedFile from "./DownloadUnsupportedFile";
 import SavedResponseClass from "../SavedResponseClass";
+import moment from "moment";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -184,7 +185,7 @@ function Main() {
             const notification = new Notification(title, {
                 body: body,
                 icon: logo,
-                tag: chatWaId
+                tag: chatWaId + moment().seconds(0).milliseconds(0).toISOString()
             });
 
             notification.onclick = function (event) {
