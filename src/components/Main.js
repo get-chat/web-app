@@ -567,10 +567,26 @@ function Main() {
             text: text
         }, getConfig())
             .then((response) => {
-                console.log("Saved responses: ", response.data);
+                console.log("Created saved response: ", response.data);
 
                 // Display a success message
                 displaySuccess("Saved as response successfully!");
+
+                // Reload saved responses
+                getSavedResponses();
+            })
+            .catch((error) => {
+                displayError(error);
+            });
+    }
+
+    const deleteSavedResponse = (id) => {
+        axios.delete( `${BASE_URL}saved_responses/${id}/`, getConfig())
+            .then((response) => {
+                console.log("Deleted saved response: ", response.data);
+
+                // Display a success message
+                displaySuccess("Deleted response successfully!");
 
                 // Reload saved responses
                 getSavedResponses();
