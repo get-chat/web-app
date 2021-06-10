@@ -30,8 +30,8 @@ function SavedResponses(props) {
                             </div>
                         </div>
 
-                        <Button onClick={() => sendSavedResponse(savedResponse[1])}>Send</Button>
-                        <Button onClick={() => deleteSavedResponse([1])}>Delete</Button>
+                        <Button onClick={() => sendSavedResponse(savedResponse[0])}>Send</Button>
+                        <Button onClick={() => deleteSavedResponse(savedResponse[0])}>Delete</Button>
 
                     </div>
                 )}
