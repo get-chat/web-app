@@ -1,4 +1,5 @@
 .sidebarChatWrapper {
+    background-color: white;
     position: relative;
     flex: 1 1;
     display: flex;
@@ -6,14 +7,6 @@
     cursor: pointer;
     border-bottom: 1px solid #f5f5f5;
     border-left: 4px solid #06c9b3;
-}
-
-.sidebarChat {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex: 1 1;
-    padding: 10px 15px;
 }
 
 .sidebarChatWrapper.expired {
@@ -26,6 +19,22 @@
 
 .sidebarChatWrapper.activeChat {
     background-color: #f5f5f5;
+}
+
+.sidebarChatWrapper.isSelected {
+    background-color: rgb(217, 239, 236) !important;
+}
+
+.sidebarChatWrapper.activeChat.isSelected {
+    background-color: rgb(186, 217, 213) !important;
+}
+
+.sidebarChat {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1 1;
+    padding: 10px 15px;
 }
 
 .sidebarChat .MuiAvatar-root {
