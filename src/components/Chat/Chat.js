@@ -801,7 +801,7 @@ export default function Chat(props) {
         });
     }
 
-    const bulkSendMessage = () => {
+    const bulkSendMessage = (type, payload) => {
         props.setSelectionModeEnabled(true);
     }
 
@@ -1253,7 +1253,6 @@ export default function Chat(props) {
             <TemplateMessages
                 waId={waId}
                 templatesData={props.templates}
-                bulkSendMessage={bulkSendMessage}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
                 onBulkSend={bulkSendMessage}
                 isLoadingTemplates={props.isLoadingTemplates} />

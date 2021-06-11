@@ -310,7 +310,7 @@ function ChatFooter(props) {
 
                 {hasInput() &&
                 <Tooltip title="Bulk Send" placement="top">
-                    <IconButton onClick={props.bulkSendMessage}>
+                    <IconButton onClick={() => props.bulkSendMessage('text')}>
                         <AllInboxIcon/>
                     </IconButton>
                 </Tooltip>

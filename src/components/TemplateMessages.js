@@ -50,8 +50,7 @@ function TemplateMessages(props) {
     }
 
     const bulkSend = (template) => {
-        // TODO: Complete it
-        props.onBulkSend(template ?? chosenTemplate)
+        props.onBulkSend('template', template ?? chosenTemplate)
         hideDialog();
     }
 
