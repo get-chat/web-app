@@ -6,7 +6,7 @@ import ChatMessageClass from "../ChatMessageClass";
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from "@material-ui/icons/Done";
 import {CALENDAR_NORMAL} from "../Constants";
-import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
+import ChatMessageTypeIcon from "./Chat/ChatMessage/ChatMessageTypeIcon";
 import {ListItem} from "@material-ui/core";
 
 function SearchMessageResult(props) {

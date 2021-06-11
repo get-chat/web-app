@@ -1,7 +1,7 @@
 import React from "react";
 import {ATTACHMENT_TYPE_IMAGE} from "../Constants";
 import '../styles/ContextChatMessage.css';
-import ChatMessageShortContent from "./ChatMessageShortContent";
+import ChatMessageShortContent from "./Chat/ChatMessage/ChatMessageShortContent";
 
 function ContextChatMessage(props) {
     return (

@@ -2,22 +2,22 @@ import React from 'react';
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
-import '../styles/InputRange.css';
-import '../AvatarStyles';
-import {formatMessage, replaceEmojis} from "../Helpers";
+import '../../../styles/InputRange.css';
+import '../../../AvatarStyles';
+import {formatMessage, replaceEmojis} from "../../../Helpers";
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChatMessageClass from "../ChatMessageClass";
-import MessageDateIndicator from "./MessageDateIndicator";
-import ContextChatMessage from "./ContextChatMessage";
+import ChatMessageClass from "../../../ChatMessageClass";
+import MessageDateIndicator from "../../MessageDateIndicator";
+import ContextChatMessage from "../../ContextChatMessage";
 import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageDocument from "./ChatMessageDocument";
 import ChatMessageVoice from "./ChatMessageVoice";
 import ChatMessageTemplate from "./ChatMessageTemplate";
-import ChatAssignmentEvent from "./ChatAssignmentEvent";
-import ChatTaggingEvent from "./ChatTaggingEvent";
+import ChatAssignmentEvent from "../../ChatAssignmentEvent";
+import ChatTaggingEvent from "../../ChatTaggingEvent";
 
 const iconStyles = {
     fontSize: '15px'

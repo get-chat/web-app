@@ -1,5 +1,5 @@
 import React from "react";
-import ChatMessageClass from "../ChatMessageClass";
+import ChatMessageClass from "../../../ChatMessageClass";
 
 function ChatMessageTypeLabel(props) {
     return (

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
-import '../styles/Chat.css'
+import '../../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
-import ChatMessage from "./ChatMessage";
+import ChatMessage from "./ChatMessage/ChatMessage";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import axios from "axios";
 import {
@@ -20,16 +20,16 @@ import {
     EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
     EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
     EVENT_TOPIC_UPDATE_PERSON_NAME
-} from "../Constants";
-import ChatMessageClass from "../ChatMessageClass";
-import PersonClass from "../PersonClass";
-import TemplateMessages from "./TemplateMessages";
+} from "../../Constants";
+import ChatMessageClass from "../../ChatMessageClass";
+import PersonClass from "../../PersonClass";
+import TemplateMessages from "../TemplateMessages";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
-import ChatMessageOptionsMenu from "./ChatMessageOptionsMenu";
+import ChatMessageOptionsMenu from "./ChatMessage/ChatMessageOptionsMenu";
 import moment from "moment";
 import PubSub from "pubsub-js";
-import MessageDateIndicator from "./MessageDateIndicator";
+import MessageDateIndicator from "../MessageDateIndicator";
 import {
     extractTimestampFromMessage, generateUnixTimestamp,
     getConfig,
@@ -40,10 +40,10 @@ import {
     hasInternetConnection, isScrollable,
     sortMessagesAsc,
     translateHTMLInputToText
-} from "../Helpers";
-import PreviewSendMedia from "./PreviewSendMedia";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../FileHelpers";
-import SavedResponses from "./SavedResponses";
+} from "../../Helpers";
+import PreviewSendMedia from "../PreviewSendMedia";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../FileHelpers";
+import SavedResponses from "../SavedResponses";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;

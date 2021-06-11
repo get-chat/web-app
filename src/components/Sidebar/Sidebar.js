@@ -1,31 +1,31 @@
 import React, {useEffect, useRef, useState} from 'react';
-import '../styles/Sidebar.css';
+import '../../styles/Sidebar.css';
 import {Avatar, Button, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength, isScrollable} from "../Helpers";
+import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength, isScrollable} from "../../Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_UPDATE_PERSON_NAME
-} from "../Constants";
+} from "../../Constants";
 import {useHistory, useParams} from "react-router-dom";
-import SearchBar from "./SearchBar";
-import SidebarContactResult from "./SidebarContactResult";
-import ChatClass from "../ChatClass";
-import NewMessageClass from "../NewMessageClass";
+import SearchBar from "../SearchBar";
+import SidebarContactResult from "../SidebarContactResult";
+import ChatClass from "../../ChatClass";
+import NewMessageClass from "../../NewMessageClass";
 import PubSub from "pubsub-js";
-import {avatarStyles} from "../AvatarStyles";
+import {avatarStyles} from "../../AvatarStyles";
 import BusinessProfile from "./BusinessProfile";
 import ChangePasswordDialog from "./ChangePasswordDialog";
-import ChatMessageClass from "../ChatMessageClass";
-import SearchMessageResult from "./SearchMessageResult";
+import ChatMessageClass from "../../ChatMessageClass";
+import SearchMessageResult from "../SearchMessageResult";
 import {isMobile} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
-import Contacts from "./Contacts";
-import {clearContactProvidersData} from "../StorageHelper";
+import Contacts from "../Contacts";
+import {clearContactProvidersData} from "../../StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
 
 function Sidebar(props) {
@@ -41,7 +41,7 @@ function Sidebar(props) {
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
-    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(true);
+    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
     const [selectedChats, setSelectedChats] = useState([]);
 
     const history = useHistory();

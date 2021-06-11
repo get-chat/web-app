@@ -8,21 +8,21 @@ import NotesIcon from '@material-ui/icons/Notes';
 import MicIcon from '@material-ui/icons/Mic';
 import {Emoji, NimblePicker} from "emoji-mart";
 import 'emoji-mart/css/emoji-mart.css';
-import '../styles/ChatFooter.css';
-import '../styles/EmojiPicker.css';
+import '../../styles/ChatFooter.css';
+import '../../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import FileInput from "./FileInput";
-import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../Helpers";
-import VoiceRecord from "./VoiceRecord";
+import FileInput from "../FileInput";
+import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../../Helpers";
+import VoiceRecord from "../VoiceRecord";
 import {
     EMOJI_SET,
     EMOJI_SHEET_SIZE,
     EMPTY_IMAGE_BASE64,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_REQUEST_MIC_PERMISSION
-} from "../Constants";
+} from "../../Constants";
 
 function ChatFooter(props) {
 

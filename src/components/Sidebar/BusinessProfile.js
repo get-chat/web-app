@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useState} from "react";
-import '../styles/BusinessProfile.css';
+import '../../styles/BusinessProfile.css';
 import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
 import axios from "axios";
-import {BASE_URL} from "../Constants";
-import {generateInitialsHelper, getConfig} from "../Helpers";
-import FileInput from "./FileInput";
-import {avatarStyles} from "../AvatarStyles";
+import {BASE_URL} from "../../Constants";
+import {generateInitialsHelper, getConfig} from "../../Helpers";
+import FileInput from "../FileInput";
+import {avatarStyles} from "../../AvatarStyles";
 
 function BusinessProfile(props) {
 
