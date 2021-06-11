@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../styles/Sidebar.css';
-import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import {Avatar, Button, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
@@ -41,6 +41,7 @@ function Sidebar(props) {
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
+    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
     const [selectedChats, setSelectedChats] = useState([]);
 
     const history = useHistory();
@@ -467,6 +468,12 @@ function Sidebar(props) {
                 className="sidebar__results"
                 ref={chatsContainer}>
 
+                {isSelectionModeEnabled &&
+                <div>
+                    <Button color="secondary">Clear selections</Button>
+                </div>
+                }
+
                 {keyword.trim().length > 0 &&
                 <h3>Chats</h3>
                 }
@@ -530,7 +537,7 @@ function Sidebar(props) {
                                 contactProvidersData={props.contactProvidersData}
                                 retrieveContactData={props.retrieveContactData}
                                 tabCase={tabCase}
-                                isSelectionModeEnabled={true}
+                                isSelectionModeEnabled={isSelectionModeEnabled}
                                 setSelectedChats={setSelectedChats} />
                         )}
 

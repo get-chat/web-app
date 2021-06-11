@@ -146,7 +146,9 @@ function SidebarChat(props) {
 
                 <div className="sidebarChat">
 
-                    <Checkbox className="sidebarChat__selection" checked={isChecked} color="primary" />
+                    {props.isSelectionModeEnabled &&
+                    <Checkbox className="sidebarChat__selection" checked={isChecked} color="primary"/>
+                    }
 
                     <div className="sidebarChat__avatarWrapper">
                         <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])}
