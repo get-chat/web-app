@@ -1253,6 +1253,7 @@ export default function Chat(props) {
             <TemplateMessages
                 waId={waId}
                 templatesData={props.templates}
+                bulkSendMessage={bulkSendMessage}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
                 isLoadingTemplates={props.isLoadingTemplates} />
             }
