@@ -145,6 +145,7 @@ function TemplateMessages(props) {
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Close</Button>
                     <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus>Send</Button>
+                    <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus>Bulk send</Button>
                 </DialogActions>
             </Dialog>
 
