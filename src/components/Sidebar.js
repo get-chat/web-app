@@ -41,6 +41,8 @@ function Sidebar(props) {
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
+    const [selectedChats, setSelectedChats] = useState([]);
+
     const history = useHistory();
 
     const avatarClasses = avatarStyles();
@@ -64,6 +66,10 @@ function Sidebar(props) {
     }
 
     let cancelTokenSourceRef = useRef();
+
+    useEffect(() => {
+        console.log("Selected chats: ", selectedChats);
+    }, [selectedChats]);
 
     useEffect(() => {
         // Generate a token
@@ -528,7 +534,8 @@ function Sidebar(props) {
                                 contactProvidersData={props.contactProvidersData}
                                 retrieveContactData={props.retrieveContactData}
                                 tabCase={tabCase}
-                                isSelectionModeEnabled={true} />
+                                isSelectionModeEnabled={true}
+                                setSelectedChats={setSelectedChats} />
                         )}
 
                     { Object.keys(props.chats).length === 0 &&

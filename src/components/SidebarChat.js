@@ -110,6 +110,17 @@ function SidebarChat(props) {
     const handleClick = () => {
         if (props.isSelectionModeEnabled) {
             setChecked(prevState => !prevState);
+
+            props.setSelectedChats(prevState => {
+                if (isChecked) {
+                    prevState.remove(props.chatData.waId);
+                } else {
+                    prevState.push(props.chatData.waId);
+                }
+
+                return prevState;
+            });
+
         } else {
             history.push(`/main/chat/${props.chatData.waId}`);
         }
