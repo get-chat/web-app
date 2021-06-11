@@ -107,10 +107,6 @@ function SidebarChat(props) {
         PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
     }
 
-    const handleCheck = (event) => {
-        setChecked(event.target.checked);
-    }
-
     const handleClick = () => {
         if (props.isSelectionModeEnabled) {
             setChecked(prevState => !prevState);
@@ -129,7 +125,7 @@ function SidebarChat(props) {
 
                 <div className="sidebarChat">
 
-                    <Checkbox checked={isChecked} onChange={handleCheck} />
+                    <Checkbox className="sidebarChat__selection" checked={isChecked} />
 
                     <div className="sidebarChat__avatarWrapper">
                         <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])}
