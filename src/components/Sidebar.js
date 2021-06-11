@@ -41,7 +41,7 @@ function Sidebar(props) {
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
-    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
+    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(true);
     const [selectedChats, setSelectedChats] = useState([]);
 
     const history = useHistory();
@@ -420,6 +420,11 @@ function Sidebar(props) {
         props.setFilterTag(undefined);
     }
 
+    const cancelSelection = () => {
+        setSelectionModeEnabled(false);
+        setSelectedChats([]);
+    }
+
     return (
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
@@ -469,8 +474,9 @@ function Sidebar(props) {
                 ref={chatsContainer}>
 
                 {isSelectionModeEnabled &&
-                <div>
-                    <Button color="secondary">Clear selections</Button>
+                <div className="sidebar__results__selectionActions">
+                    <Button color="secondary" onClick={cancelSelection}>Cancel</Button>
+                    <Button color="primary">Send</Button>
                 </div>
                 }
 

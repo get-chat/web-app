@@ -23,7 +23,7 @@ function SidebarChat(props) {
 
     const history = useHistory();
 
-    const [isChecked, setChecked] = useState(false);
+    const [isSelected, setSelected] = useState(false);
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const [remainingSeconds, setRemainingSeconds] = useState();
@@ -33,6 +33,13 @@ function SidebarChat(props) {
     useEffect(() => {
         props.retrieveContactData(props.chatData.waId);
     }, []);
+
+    useEffect(() => {
+        // Set chat unselected, if selection mode is off
+        if (!props.isSelectionModeEnabled) {
+            setSelected(false);
+        }
+    }, [props.isSelectionModeEnabled]);
 
     const generateTagNames = () => {
         const generatedTagNames = [];
@@ -109,14 +116,14 @@ function SidebarChat(props) {
 
     const handleClick = () => {
         if (props.isSelectionModeEnabled) {
-            let newCheckedState;
-            setChecked(prevState => {
-                newCheckedState = !prevState;
-                return newCheckedState;
+            let newSelectedState;
+            setSelected(prevState => {
+                newSelectedState = !prevState;
+                return newSelectedState;
             });
 
             props.setSelectedChats(prevState => {
-                if (newCheckedState) {
+                if (newSelectedState) {
                     if (!prevState.includes(props.chatData.waId)) {
                         prevState.push(props.chatData.waId);
                     }
@@ -139,7 +146,7 @@ function SidebarChat(props) {
                 className={
                     'sidebarChatWrapper '
                     + (waId === props.chatData.waId ? 'activeChat ' : '') + (isExpired ? 'expired ' : (remainingSeconds < 8 * 60 * 60 ? 'almostExpired ' : ''))
-                    + (isChecked ? 'isSelected ' : '')
+                    + (props.isSelectionModeEnabled && isSelected ? 'isSelected ' : '')
                 }
                 onDrop={(event) => handleDroppedFiles(event)}
                 onDragOver={(event) => handleDragOver(event)}>
@@ -147,7 +154,7 @@ function SidebarChat(props) {
                 <div className="sidebarChat">
 
                     {props.isSelectionModeEnabled &&
-                    <Checkbox className="sidebarChat__selection" checked={isChecked} color="primary"/>
+                    <Checkbox className="sidebarChat__selection" checked={isSelected} color="primary"/>
                     }
 
                     <div className="sidebarChat__avatarWrapper">
