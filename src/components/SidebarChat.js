@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
-import {Avatar, ListItem, Tooltip} from "@material-ui/core";
+import {Avatar, Checkbox, ListItem, Tooltip} from "@material-ui/core";
 import {Link, useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import GroupIcon from '@material-ui/icons/Group';
@@ -23,6 +23,7 @@ function SidebarChat(props) {
 
     const history = useHistory();
 
+    const [isChecked, setChecked] = useState(false);
     const [isExpired, setExpired] = useState(props.chatData.isExpired);
     const [timeLeft, setTimeLeft] = useState();
     const [remainingSeconds, setRemainingSeconds] = useState();
@@ -106,6 +107,10 @@ function SidebarChat(props) {
         PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
     }
 
+    const handleCheck = (event) => {
+        setChecked(event.target.checked);
+    };
+
     return (
         <Link to={ `/main/chat/${props.chatData.waId}` }>
             <ListItem button>
@@ -116,6 +121,8 @@ function SidebarChat(props) {
                     onDragOver={(event) => handleDragOver(event)}>
 
                     <div className="sidebarChat">
+
+                        <Checkbox checked={isChecked} onChange={handleCheck} />
 
                         <div className="sidebarChat__avatarWrapper">
                             <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])}
