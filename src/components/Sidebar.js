@@ -68,10 +68,6 @@ function Sidebar(props) {
     let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
-        console.log("Selected chats: ", selectedChats);
-    }, [selectedChats]);
-
-    useEffect(() => {
         // Generate a token
         cancelTokenSourceRef.current = axios.CancelToken.source();
 
