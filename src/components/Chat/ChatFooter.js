@@ -16,6 +16,7 @@ import PubSub from "pubsub-js";
 import FileInput from "../FileInput";
 import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../../Helpers";
 import VoiceRecord from "../VoiceRecord";
+import AllInboxIcon from '@material-ui/icons/AllInbox';
 import {
     EMOJI_SET,
     EMOJI_SHEET_SIZE,
@@ -303,6 +304,14 @@ function ChatFooter(props) {
                 <Tooltip title="Send" placement="top">
                     <IconButton onClick={props.sendMessage}>
                         <Send/>
+                    </IconButton>
+                </Tooltip>
+                }
+
+                {hasInput() &&
+                <Tooltip title="Bulk Send" placement="top">
+                    <IconButton onClick={props.bulkSendMessage}>
+                        <AllInboxIcon/>
                     </IconButton>
                 </Tooltip>
                 }

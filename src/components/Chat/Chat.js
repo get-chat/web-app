@@ -801,6 +801,10 @@ export default function Chat(props) {
         });
     }
 
+    const bulkSendMessage = () => {
+        props.setSelectionModeEnabled(true);
+    }
+
     const sendMessage = (e, customPayload, callback) => {
         e?.preventDefault();
 
@@ -1232,7 +1236,8 @@ export default function Chat(props) {
                 isExpired={isExpired}
                 input={input}
                 setInput={setInput}
-                sendMessage={(e) => sendMessage(e)}
+                sendMessage={sendMessage}
+                bulkSendMessage={bulkSendMessage}
                 setSelectedFiles={setSelectedFiles}
                 isTemplateMessagesVisible={isTemplateMessagesVisible}
                 setTemplateMessagesVisible={setTemplateMessagesVisible}

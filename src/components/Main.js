@@ -84,6 +84,9 @@ function Main() {
 
     const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
 
+    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
+    const [selectedChats, setSelectedChats] = useState([]);
+
     const history = useHistory();
     const location = useLocation();
     const query = useQuery();
@@ -650,7 +653,10 @@ function Main() {
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
                     isChatOnly={isChatOnly}
-                    setChatTagsListVisible={setChatTagsListVisible} />
+                    setChatTagsListVisible={setChatTagsListVisible}
+                    isSelectionModeEnabled={isSelectionModeEnabled}
+                    setSelectionModeEnabled={setSelectionModeEnabled}
+                    setSelectedChats={setSelectedChats} />
                 }
 
                 {templatesReady &&
@@ -669,7 +675,8 @@ function Main() {
                     retrieveContactData={retrieveContactData}
                     isChatOnly={isChatOnly}
                     setChatAssignmentVisible={setChatAssignmentVisible}
-                    setChatTagsVisible={setChatTagsVisible} />
+                    setChatTagsVisible={setChatTagsVisible}
+                    setSelectionModeEnabled={setSelectionModeEnabled} />
                 }
 
                 {isSearchMessagesVisible &&

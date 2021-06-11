@@ -41,9 +41,6 @@ function Sidebar(props) {
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
-    const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
-    const [selectedChats, setSelectedChats] = useState([]);
-
     const history = useHistory();
 
     const avatarClasses = avatarStyles();
@@ -421,8 +418,8 @@ function Sidebar(props) {
     }
 
     const cancelSelection = () => {
-        setSelectionModeEnabled(false);
-        setSelectedChats([]);
+        props.setSelectionModeEnabled(false);
+        props.setSelectedChats([]);
     }
 
     return (
@@ -473,7 +470,7 @@ function Sidebar(props) {
                 className="sidebar__results"
                 ref={chatsContainer}>
 
-                {isSelectionModeEnabled &&
+                {props.isSelectionModeEnabled &&
                 <div className="sidebar__results__selectionActions">
                     <Button color="secondary" onClick={cancelSelection}>Cancel</Button>
                     <Button color="primary">Send</Button>
@@ -543,8 +540,8 @@ function Sidebar(props) {
                                 contactProvidersData={props.contactProvidersData}
                                 retrieveContactData={props.retrieveContactData}
                                 tabCase={tabCase}
-                                isSelectionModeEnabled={isSelectionModeEnabled}
-                                setSelectedChats={setSelectedChats} />
+                                isSelectionModeEnabled={props.isSelectionModeEnabled}
+                                setSelectedChats={props.setSelectedChats} />
                         )}
 
                     { Object.keys(props.chats).length === 0 &&
