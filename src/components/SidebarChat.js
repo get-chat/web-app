@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../styles/SidebarChat.css';
 import {Avatar, Checkbox, ListItem, Tooltip} from "@material-ui/core";
-import {Link, useHistory, useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import GroupIcon from '@material-ui/icons/Group';
 import Moment from "react-moment";
@@ -109,16 +109,22 @@ function SidebarChat(props) {
 
     const handleClick = () => {
         if (props.isSelectionModeEnabled) {
-            setChecked(prevState => !prevState);
+            let newCheckedState;
+            setChecked(prevState => {
+                newCheckedState = !prevState;
+                return newCheckedState;
+            });
 
             props.setSelectedChats(prevState => {
-                if (isChecked) {
-                    prevState.remove(props.chatData.waId);
+                if (newCheckedState) {
+                    if (!prevState.includes(props.chatData.waId)) {
+                        prevState.push(props.chatData.waId);
+                    }
                 } else {
-                    prevState.push(props.chatData.waId);
+                    prevState = prevState.filter(arrayItem => arrayItem !== props.chatData.waId);
                 }
 
-                return prevState;
+                return [...prevState];
             });
 
         } else {
