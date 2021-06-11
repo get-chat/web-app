@@ -1255,6 +1255,7 @@ export default function Chat(props) {
                 templatesData={props.templates}
                 bulkSendMessage={bulkSendMessage}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
+                onBulkSend={bulkSendMessage}
                 isLoadingTemplates={props.isLoadingTemplates} />
             }
 

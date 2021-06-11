@@ -23,6 +23,7 @@ function TemplateMessages(props) {
     const [errors, setErrors] = useState();
 
     const sendButtonRef = useRef();
+    const bulkSendButtonRef = useRef();
 
     useEffect(() => {
         setDialogVisible(false);
@@ -48,9 +49,20 @@ function TemplateMessages(props) {
         //hideDialog();
     }
 
+    const bulkSend = (template) => {
+        // TODO: Complete it
+        props.onBulkSend(template ?? chosenTemplate)
+        hideDialog();
+    }
+
     const sendByRef = () => {
         setSending(true);
         sendButtonRef.current?.click();
+    }
+
+    const bulkSendByRef = () => {
+        setSending(true);
+        bulkSendButtonRef.current?.click();
     }
 
     useEffect(() => {
@@ -129,7 +141,9 @@ function TemplateMessages(props) {
                     <SendTemplateMessage
                         data={chosenTemplate}
                         send={(template) => send(template)}
-                        sendButtonInnerRef={sendButtonRef} />
+                        bulkSend={(template) => bulkSend(template)}
+                        sendButtonInnerRef={sendButtonRef}
+                        bulkSendButtonInnerRef={bulkSendButtonRef} />
 
                     {errors &&
                     <div className="templateMessagesDialogErrors">
@@ -145,7 +159,7 @@ function TemplateMessages(props) {
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Close</Button>
                     <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus>Send</Button>
-                    <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus>Bulk send</Button>
+                    <Button onClick={bulkSendByRef} color="primary" disabled={isSending} autoFocus>Bulk send</Button>
                 </DialogActions>
             </Dialog>
 

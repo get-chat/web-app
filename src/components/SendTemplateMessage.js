@@ -80,7 +80,7 @@ function SendTemplateMessage(props) {
         })
     }
 
-    const send = () => {
+    const send = (isBulk) => {
         const preparedParams = {};
         const components = {...template.components};
 
@@ -109,8 +109,11 @@ function SendTemplateMessage(props) {
         const finalData = template;
         finalData.params = Object.values(preparedParams);
 
-        // TODO: Change this later
-        props.send(finalData);
+        if (isBulk === true) {
+            props.bulkSend(finalData);
+        } else {
+            props.send(finalData);
+        }
 
         /*Object.entries(params).forEach((paramEntry) => {
             finalData.components[paramEntry[0]].params = paramEntry[1];
@@ -209,6 +212,7 @@ function SendTemplateMessage(props) {
             )}
 
             <Button innerRef={props.sendButtonInnerRef} onClick={send} className="hidden">Send</Button>
+            <Button innerRef={props.bulkSendButtonInnerRef} onClick={() => send(true)} className="hidden">Bulk Send</Button>
         </div>
     )
 }
