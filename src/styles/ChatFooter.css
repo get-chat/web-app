@@ -81,7 +81,7 @@
     min-height: 26px;
     max-height: 350px;
     overflow-y: auto;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .chat__footer > form > button {
