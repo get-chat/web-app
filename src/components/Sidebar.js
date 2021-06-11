@@ -527,7 +527,8 @@ function Sidebar(props) {
                                 keyword={keyword}
                                 contactProvidersData={props.contactProvidersData}
                                 retrieveContactData={props.retrieveContactData}
-                                tabCase={tabCase} />
+                                tabCase={tabCase}
+                                isSelectionModeEnabled={true} />
                         )}
 
                     { Object.keys(props.chats).length === 0 &&
