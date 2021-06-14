@@ -423,13 +423,9 @@ function Sidebar(props) {
         props.setSelectedChats([]);
     }
 
-    const setSelectedChats = () => {
-        const chats = [];
-        props.setSelectedChats(chats);
-
+    const finishBulkSendMessage = () => {
         props.setSelectionModeEnabled(false);
-
-        // TODO: Trigger send
+        props.finishBulkSendMessage();
     }
 
     return (
@@ -483,7 +479,7 @@ function Sidebar(props) {
                 {props.isSelectionModeEnabled &&
                 <div className="sidebar__results__selectionActions">
                     <Button color="secondary" onClick={cancelSelection}>Cancel</Button>
-                    <Button color="primary">Send</Button>
+                    <Button color="primary" onClick={finishBulkSendMessage}>Send</Button>
                 </div>
                 }
 

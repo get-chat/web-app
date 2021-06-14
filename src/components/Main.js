@@ -156,6 +156,15 @@ function Main() {
         setErrorVisible(false);
     };
 
+    const finishBulkSendMessage = () => {
+        const recipients = selectedChats;
+        const payload = bulkSendPayload;
+
+        console.log(recipients, payload);
+
+        // TODO: Complete sending
+    }
+
     const hideImageOrVideoPreview = () => {
         setChatMessageToPreview(null);
     }
@@ -657,7 +666,8 @@ function Main() {
                     setChatTagsListVisible={setChatTagsListVisible}
                     isSelectionModeEnabled={isSelectionModeEnabled}
                     setSelectionModeEnabled={setSelectionModeEnabled}
-                    setSelectedChats={setSelectedChats} />
+                    setSelectedChats={setSelectedChats}
+                    finishBulkSendMessage={finishBulkSendMessage} />
                 }
 
                 {templatesReady &&
