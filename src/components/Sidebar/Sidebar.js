@@ -28,6 +28,7 @@ import Contacts from "../Contacts";
 import {clearContactProvidersData} from "../../Helpers/StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
 import {filterChat} from "../../Helpers/SidebarHelper";
+import BulkSendIndicator from "./BulkSendIndicator";
 
 function Sidebar(props) {
 
@@ -565,6 +566,8 @@ function Sidebar(props) {
                 displayEditBusinessProfile={displayEditBusinessProfile}
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
             }
+
+            <BulkSendIndicator />
 
             <Menu
                 anchorEl={anchorEl}

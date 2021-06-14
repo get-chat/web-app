@@ -1,0 +1,13 @@
+.bulkSendIndicator {
+    height: 63px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 15px;
+    border-top: 1px solid lightgray;
+    font-size: 15px;
+}
+
+.bulkSendIndicator .MuiLinearProgress-root {
+    height: 3px;
+}
