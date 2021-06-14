@@ -1,10 +1,10 @@
-import ChosenFileClass from "./ChosenFileClass";
+import ChosenFileClass from "../ChosenFileClass";
 import {
     ATTACHMENT_TYPE_AUDIO,
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO
-} from "./Constants";
+} from "../Constants";
 import {stringContainsAnyInArray} from "./Helpers";
 import * as musicMetadata from "music-metadata-browser";
 

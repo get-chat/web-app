@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import axios from "axios";
 import {BASE_URL} from "../../Constants";
-import {getConfig} from "../../Helpers";
+import {getConfig} from "../../Helpers/Helpers";
 import {Alert, AlertTitle} from "@material-ui/lab";
 
 function ChangePasswordDialog(props) {

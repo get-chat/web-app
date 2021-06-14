@@ -7,7 +7,7 @@ import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILI
 import SearchBar from "./SearchBar";
 import {useParams} from "react-router-dom";
 import axios from "axios";
-import {getConfig} from "../Helpers";
+import {getConfig} from "../Helpers/Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobileOnly} from 'react-device-detect';

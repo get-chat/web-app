@@ -2,7 +2,7 @@ import React from "react";
 import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageDocument from "./ChatMessageDocument";
-import {insertTemplateComponentParameters} from "../../../Helpers";
+import {insertTemplateComponentParameters} from "../../../Helpers/Helpers";
 import {Button} from "@material-ui/core";
 import SmsIcon from "@material-ui/icons/Sms";
 

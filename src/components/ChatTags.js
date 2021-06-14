@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig, getHubURL} from "../Helpers";
+import {getConfig, getHubURL} from "../Helpers/Helpers";
 import '../styles/ChatTags.css';
 
 function ChatTags(props) {

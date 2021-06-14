@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {addPlus, getConfig, getObjLength, preparePhoneNumber} from "../Helpers";
+import {addPlus, getConfig, getObjLength, preparePhoneNumber} from "../Helpers/Helpers";
 import SearchBar from "./SearchBar";
 import {Button, CircularProgress, Collapse, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
 import {ArrowBack, ExpandLess, ExpandMore} from "@material-ui/icons";

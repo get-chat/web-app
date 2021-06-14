@@ -1,6 +1,6 @@
 import {Emoji, getEmojiDataFromNative} from "emoji-mart";
-import data from './EmojiData.json'; //from 'emoji-mart/data/all.json'
-import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "./Constants";
+import data from '../EmojiData.json'; //from 'emoji-mart/data/all.json'
+import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
 import {getToken} from "./StorageHelper";
 
 const { htmlToText } = require('html-to-text');

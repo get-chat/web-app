@@ -1,7 +1,7 @@
 import React from "react";
 import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 import ChatMessageTypeLabel from "./ChatMessageTypeLabel";
-import {replaceEmojis} from "../../../Helpers";
+import {replaceEmojis} from "../../../Helpers/Helpers";
 import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageClass from "../../../ChatMessageClass";
 

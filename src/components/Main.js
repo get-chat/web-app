@@ -4,7 +4,7 @@ import Chat from "./Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getWebSocketURL} from "../Helpers";
+import {getConfig, getWebSocketURL} from "../Helpers/Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -33,7 +33,7 @@ import {
     getContactProvidersData,
     getToken,
     storeContactProvidersData
-} from "../StorageHelper";
+} from "../Helpers/StorageHelper";
 import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";

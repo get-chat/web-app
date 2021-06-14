@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers";
+import {getConfig} from "../Helpers/Helpers";
 import '../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {

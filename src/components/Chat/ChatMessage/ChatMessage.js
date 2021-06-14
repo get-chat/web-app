@@ -4,7 +4,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
 import '../../../styles/InputRange.css';
 import '../../../AvatarStyles';
-import {formatMessage, replaceEmojis} from "../../../Helpers";
+import {formatMessage, replaceEmojis} from "../../../Helpers/Helpers";
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../../../ChatMessageClass";

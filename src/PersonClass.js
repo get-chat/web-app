@@ -1,5 +1,5 @@
-import {getPastHoursByTimestamp} from "./DateHelpers";
-import {generateInitialsHelper} from "./Helpers";
+import {getPastHoursByTimestamp} from "./Helpers/DateHelper";
+import {generateInitialsHelper} from "./Helpers/Helpers";
 
 class PersonClass {
 

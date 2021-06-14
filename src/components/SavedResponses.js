@@ -1,5 +1,5 @@
 import React from "react";
-import {getObjLength} from "../Helpers";
+import {getObjLength} from "../Helpers/Helpers";
 import {Button} from "@material-ui/core";
 
 function SavedResponses(props) {

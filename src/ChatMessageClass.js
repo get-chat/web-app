@@ -1,5 +1,5 @@
 import {BASE_URL} from "./Constants";
-import {generateInitialsHelper} from "./Helpers";
+import {generateInitialsHelper} from "./Helpers/Helpers";
 
 export class ChatMessageClass {
 

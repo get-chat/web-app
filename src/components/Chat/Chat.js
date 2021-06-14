@@ -40,9 +40,9 @@ import {
     hasInternetConnection, isScrollable,
     sortMessagesAsc,
     translateHTMLInputToText
-} from "../../Helpers";
+} from "../../Helpers/Helpers";
 import PreviewSendMedia from "../PreviewSendMedia";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../FileHelpers";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../Helpers/FileHelper";
 import SavedResponses from "../SavedResponses";
 
 const SCROLL_OFFSET = 15;

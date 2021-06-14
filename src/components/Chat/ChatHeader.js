@@ -6,7 +6,7 @@ import {avatarStyles} from "../../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../Constants";
 import PubSub from "pubsub-js";
 import {useHistory} from "react-router-dom";
-import {addPlus, replaceEmojis} from "../../Helpers";
+import {addPlus, replaceEmojis} from "../../Helpers/Helpers";
 
 function ChatHeader(props) {
 

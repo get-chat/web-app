@@ -4,7 +4,7 @@ import {Avatar, Button, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} fr
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength, isScrollable} from "../../Helpers";
+import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength, isScrollable} from "../../Helpers/Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -25,8 +25,9 @@ import SearchMessageResult from "../SearchMessageResult";
 import {isMobile} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "../Contacts";
-import {clearContactProvidersData} from "../../StorageHelper";
+import {clearContactProvidersData} from "../../Helpers/StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
+import {filterChat} from "../../Helpers/SidebarHelper";
 
 function Sidebar(props) {
 
@@ -484,52 +485,8 @@ function Sidebar(props) {
                 <div className="sidebar__results__chats">
                     { Object.entries(props.chats)
                         .filter((chat) => {
-                            const curChat = chat[1];
-
-                            // Filter by tag
-                            if (props.filterTag) {
-                                if (!curChat.tags) {
-                                    return false;
-                                }
-                                let hasTag = false;
-                                for (let i = 0; i < curChat.tags.length; i++) {
-                                    const curTag = curChat.tags[i];
-                                    if (curTag.id === props.filterTag.id) {
-                                        hasTag = true;
-                                        break;
-                                    }
-                                }
-                                if (!hasTag) return false;
-                            }
-
-                            // Filter by case
-                            switch (tabCase) {
-                                case "all": {
-                                    return true;
-                                }
-                                case "me": {
-                                    if (curChat.assignedToUser?.id === props.currentUser.id) {
-                                        return true;
-                                    }
-                                    break;
-                                }
-                                case "group": {
-                                    if (curChat.assignedGroup && props.currentUser.groups) {
-                                        const assignedGroupId = curChat.assignedGroup.id;
-                                        for (let i = 0; i < props.currentUser.groups.length; i++) {
-                                            const group = props.currentUser.groups[i];
-
-                                            if (group?.id === assignedGroupId) {
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                }
-                                default: {
-                                    break;
-                                }
-                            }
+                            // Filter by helper method
+                            return filterChat(props, tabCase, chat[1]);
                         })
                         .map((chat) =>
                             <SidebarChat
