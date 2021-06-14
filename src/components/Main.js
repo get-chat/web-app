@@ -86,6 +86,7 @@ function Main() {
 
     const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
     const [selectedChats, setSelectedChats] = useState([]);
+    const [bulkSendPayload, setBulkSendPayload] = useState();
 
     const history = useHistory();
     const location = useLocation();
@@ -656,7 +657,8 @@ function Main() {
                     setChatTagsListVisible={setChatTagsListVisible}
                     isSelectionModeEnabled={isSelectionModeEnabled}
                     setSelectionModeEnabled={setSelectionModeEnabled}
-                    setSelectedChats={setSelectedChats} />
+                    setSelectedChats={setSelectedChats}
+                    setBulkSendPayload={setBulkSendPayload} />
                 }
 
                 {templatesReady &&
