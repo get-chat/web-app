@@ -40,6 +40,7 @@ import ChatTagsList from "./ChatTagsList";
 import DownloadUnsupportedFile from "./DownloadUnsupportedFile";
 import SavedResponseClass from "../SavedResponseClass";
 import moment from "moment";
+import UserClass from "../UserClass";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -53,6 +54,7 @@ function Main() {
     const [checked, setChecked] = useState(false);
 
     const [currentUser, setCurrentUser] = useState();
+    const [users, setUsers] = useState({});
     const [isAdmin, setAdmin] = useState(false);
 
     const [chats, setChats] = useState({});
@@ -516,6 +518,14 @@ function Main() {
         }))
             .then((response) => {
                 console.log("Users:", response.data);
+
+                const preparedUsers = {};
+                response.data.results.forEach((user) => {
+                    const prepared = new UserClass(user);
+                    preparedUsers[prepared.id] = prepared;
+                });
+
+                setUsers(preparedUsers);
 
                 setProgress(30);
 
