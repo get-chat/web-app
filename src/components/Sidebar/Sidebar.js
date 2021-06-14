@@ -423,6 +423,12 @@ function Sidebar(props) {
         props.setSelectedChats([]);
     }
 
+    const setBulkSendPayload = () => {
+        props.setBulkSendPayload({
+
+        });
+    }
+
     return (
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
