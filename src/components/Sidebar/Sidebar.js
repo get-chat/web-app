@@ -423,10 +423,13 @@ function Sidebar(props) {
         props.setSelectedChats([]);
     }
 
-    const setBulkSendPayload = () => {
-        props.setBulkSendPayload({
+    const setSelectedChats = () => {
+        const chats = [];
+        props.setSelectedChats(chats);
 
-        });
+        props.setSelectionModeEnabled(false);
+
+        // TODO: Trigger send
     }
 
     return (
