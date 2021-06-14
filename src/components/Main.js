@@ -21,7 +21,7 @@ import {
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
-    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
     EVENT_TOPIC_UNSUPPORTED_FILE
 } from "../Constants";
 import ChatMessageClass from "../ChatMessageClass";
@@ -162,7 +162,15 @@ function Main() {
 
         console.log(recipients, payload);
 
+        // TODO: Inject recipients
         // TODO: Complete sending
+        axios.post( `${BASE_URL}messages/`, payload, getConfig())
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
     }
 
     const hideImageOrVideoPreview = () => {
