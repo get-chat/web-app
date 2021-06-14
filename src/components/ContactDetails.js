@@ -82,7 +82,7 @@ function ContactDetails(props)  {
                         {chat?.assignedToUser &&
                         <div>
                             <PersonIcon />
-                            Assigned to: <span className="bold">{chat?.assignedToUser.username}</span>
+                            Assigned to: <span className="bold">{chat?.assignedToUser.username} {(props.users?.[chat?.assignedToUser.id]?.isBot()) ? ' (Bot)' : ''}</span>
                         </div>
                         }
 

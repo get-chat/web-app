@@ -736,7 +736,8 @@ function Main() {
                     retrieveContactData={retrieveContactData}
                     chats={chats}
                     filterTag={filterTag}
-                    setFilterTag={setFilterTag} />
+                    setFilterTag={setFilterTag}
+                    users={users} />
                 }
 
                 {isChatAssignmentVisible &&
