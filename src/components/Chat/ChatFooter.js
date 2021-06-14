@@ -24,6 +24,7 @@ import {
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_REQUEST_MIC_PERMISSION
 } from "../../Constants";
+import ChatMessageClass from "../../ChatMessageClass";
 
 function ChatFooter(props) {
 
@@ -310,7 +311,7 @@ function ChatFooter(props) {
 
                 {hasInput() &&
                 <Tooltip title="Bulk Send" placement="top">
-                    <IconButton onClick={() => props.bulkSendMessage('text')}>
+                    <IconButton onClick={() => props.bulkSendMessage(ChatMessageClass.TYPE_TEXT)}>
                         <AllInboxIcon/>
                     </IconButton>
                 </Tooltip>

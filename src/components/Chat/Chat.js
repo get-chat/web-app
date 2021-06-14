@@ -782,9 +782,9 @@ export default function Chat(props) {
 
         const resendPayload = message.resendPayload;
 
-        if (resendPayload.type === 'text' || resendPayload.text) {
+        if (resendPayload.type === ChatMessageClass.TYPE_TEXT || resendPayload.text) {
             sendMessage(undefined, resendPayload, successCallback);
-        } else if (resendPayload.type === 'template') {
+        } else if (resendPayload.type === ChatMessageClass.TYPE_TEMPLATE) {
             sendTemplateMessage(undefined, resendPayload, successCallback);
         } else {
             // File
@@ -803,6 +803,17 @@ export default function Chat(props) {
 
     const bulkSendMessage = (type, payload) => {
         props.setSelectionModeEnabled(true);
+
+        if (type === ChatMessageClass.TYPE_TEXT) {
+            const preparedInput = translateHTMLInputToText(input).trim();
+            payload = {
+                text: {
+                    body: preparedInput
+                }
+            };
+        }
+
+        props.setBulkSendPayload(payload);
     }
 
     const sendMessage = (e, customPayload, callback) => {
@@ -817,9 +828,9 @@ export default function Chat(props) {
         let requestBody;
 
         if (e) {
-            const preparedInput = translateHTMLInputToText(input);
+            const preparedInput = translateHTMLInputToText(input).trim();
 
-            if (preparedInput.trim() === '') {
+            if (preparedInput === '') {
                 return false;
             }
 
@@ -828,7 +839,7 @@ export default function Chat(props) {
             requestBody = {
                 wa_id: waId,
                 text: {
-                    body: preparedInput.trim()
+                    body: preparedInput
                 }
             };
         } else if (customPayload) {
@@ -936,9 +947,9 @@ export default function Chat(props) {
         setMessages(prevState => {
             let text = '';
 
-            if (requestBody.type === 'text' || requestBody.text) {
+            if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
                 text = requestBody.text.body;
-            } else if (requestBody.type === 'template') {
+            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
                 text = requestBody.template.name;
             } else {
                 // File

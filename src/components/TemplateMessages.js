@@ -9,6 +9,7 @@ import SendTemplateMessage from "./SendTemplateMessage";
 import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSAGE} from "../Constants";
 import PubSub from "pubsub-js";
 import {getObjLength} from "../Helpers/Helpers";
+import ChatMessageClass from "../ChatMessageClass";
 
 function TemplateMessages(props) {
 
@@ -50,7 +51,7 @@ function TemplateMessages(props) {
     }
 
     const bulkSend = (template) => {
-        props.onBulkSend('template', template ?? chosenTemplate)
+        props.onBulkSend(ChatMessageClass.TYPE_TEMPLATE, template ?? chosenTemplate)
         hideDialog();
     }
 

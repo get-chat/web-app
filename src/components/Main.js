@@ -678,7 +678,8 @@ function Main() {
                     isChatOnly={isChatOnly}
                     setChatAssignmentVisible={setChatAssignmentVisible}
                     setChatTagsVisible={setChatTagsVisible}
-                    setSelectionModeEnabled={setSelectionModeEnabled} />
+                    setSelectionModeEnabled={setSelectionModeEnabled}
+                    setBulkSendPayload={setBulkSendPayload} />
                 }
 
                 {isSearchMessagesVisible &&
