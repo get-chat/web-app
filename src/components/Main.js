@@ -510,6 +510,23 @@ function Main() {
         storeContactProvidersData(contactProvidersData);
     }, [contactProvidersData]);
 
+    const listUsers = () => {
+        axios.get( `${BASE_URL}users/`, getConfig({
+            limit: 5000
+        }))
+            .then((response) => {
+                console.log("Users:", response.data);
+
+                setProgress(30);
+
+                // Trigger next request
+                getTemplates();
+            })
+            .catch((error) => {
+                window.displayError(error);
+            });
+    }
+
     const retrieveCurrentUser = () => {
         axios.get( `${BASE_URL}users/current/`, getConfig())
             .then((response) => {
@@ -528,11 +545,10 @@ function Main() {
                 const tempIsAdmin = role === "admin";
                 setAdmin(tempIsAdmin);
 
-                setProgress(30);
+                setProgress(20);
 
                 // Trigger next request
-                getTemplates();
-
+                listUsers();
             })
             .catch((error) => {
                 // TODO: Move this to a common interceptor
