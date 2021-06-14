@@ -11,6 +11,15 @@ class UserClass {
     }
 
     isBot() {
+        if (this.groups) {
+            for (let i = 0; i < this.groups.length; i++) {
+                const group = this.groups[i];
+                if (group.name === 'App integration') {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 }
