@@ -4,7 +4,14 @@ import {Avatar, Button, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} fr
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
-import {containsLetters, generateInitialsHelper, getConfig, getHubURL, getObjLength, isScrollable} from "../../Helpers/Helpers";
+import {
+    containsLetters,
+    generateInitialsHelper,
+    getConfig,
+    getHubURL,
+    getObjLength,
+    isScrollable
+} from "../../Helpers/Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -42,6 +49,8 @@ function Sidebar(props) {
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
+
+    const [isBulkSendIndicatorVisible, setBulkSendIndicatorVisible] = useState(false);
 
     const history = useHistory();
 
@@ -567,7 +576,9 @@ function Sidebar(props) {
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
             }
 
-            <BulkSendIndicator />
+            {isBulkSendIndicatorVisible &&
+            <BulkSendIndicator/>
+            }
 
             <Menu
                 anchorEl={anchorEl}

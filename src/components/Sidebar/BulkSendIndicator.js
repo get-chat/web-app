@@ -4,7 +4,7 @@ import {LinearProgress} from "@material-ui/core";
 
 function BulkSendIndicator(props) {
 
-    const [progress, setProgress] = useState(30);
+    const [progress, setProgress] = useState(0);
 
     return (
         <div className="bulkSendIndicator">
