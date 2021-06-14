@@ -10,6 +10,7 @@ import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSA
 import PubSub from "pubsub-js";
 import {getObjLength} from "../Helpers/Helpers";
 import ChatMessageClass from "../ChatMessageClass";
+import {generateTemplateMessagePayload} from "../Helpers/ChatHelper";
 
 function TemplateMessages(props) {
 
@@ -51,7 +52,8 @@ function TemplateMessages(props) {
     }
 
     const bulkSend = (template) => {
-        props.onBulkSend(ChatMessageClass.TYPE_TEMPLATE, template ?? chosenTemplate)
+        const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
+        props.onBulkSend(ChatMessageClass.TYPE_TEMPLATE, payload);
         hideDialog();
     }
 

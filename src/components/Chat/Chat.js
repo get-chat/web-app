@@ -44,6 +44,7 @@ import {
 import PreviewSendMedia from "../PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../Helpers/FileHelper";
 import SavedResponses from "../SavedResponses";
+import {generateTemplateMessagePayload} from "../../Helpers/ChatHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -894,19 +895,8 @@ export default function Chat(props) {
         if (customPayload) {
             requestBody = customPayload;
         } else {
-            requestBody = {
-                wa_id: waId,
-                type: 'template',
-                template: {
-                    namespace: templateMessage.namespace,
-                    name: templateMessage.name,
-                    language: {
-                        code: templateMessage.language,
-                        policy: 'deterministic'
-                    },
-                    components: templateMessage.params
-                }
-            };
+            requestBody = generateTemplateMessagePayload(templateMessage);
+            requestBody.wa_id = waId;
         }
 
         if (isLoaded) {
