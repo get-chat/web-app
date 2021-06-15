@@ -4,7 +4,7 @@ import Chat from "./Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getWebSocketURL} from "../Helpers/Helpers";
+import {getConfig, getWebSocketURL, preparePhoneNumber} from "../Helpers/Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "./SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -263,6 +263,8 @@ function Main() {
     };
 
     useEffect(() => {
+        listContacts();
+
         // Display custom errors in any component
         window.displayCustomError = displayCustomError;
 
@@ -666,6 +668,35 @@ function Main() {
                     prevState[personWaId] = response.data.contact_provider_results;
                     return {...prevState};
                 })
+            })
+            .catch((error) => {
+                displayError(error);
+            });
+    }
+
+    const listContacts = () => {
+        axios.get( `${BASE_URL}contacts/`, getConfig({
+            limit: 0
+        }))
+            .then((response) => {
+                console.log("Contacts: ", response.data);
+
+                const preparedContactProvidersData = {};
+                response.data.results.forEach((contact) => {
+                    const contactPhoneNumbers = contact.phone_numbers;
+                    contactPhoneNumbers.forEach((contactPhoneNumber) => {
+                        const curPhoneNumber = preparePhoneNumber(contactPhoneNumber.phone_number);
+                        if (!(curPhoneNumber in preparedContactProvidersData)) {
+                            preparedContactProvidersData[curPhoneNumber] = [];
+                        }
+
+                        preparedContactProvidersData[curPhoneNumber].push(contact);
+                    });
+                });
+
+                console.log(preparedContactProvidersData);
+
+                setContactProvidersData(preparedContactProvidersData);
             })
             .catch((error) => {
                 displayError(error);

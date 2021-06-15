@@ -31,10 +31,6 @@ function SidebarChat(props) {
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
-        props.retrieveContactData(props.chatData.waId);
-    }, []);
-
-    useEffect(() => {
         // Set chat unselected, if selection mode is off
         if (!props.isSelectionModeEnabled) {
             setSelected(false);
