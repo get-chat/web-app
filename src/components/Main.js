@@ -263,8 +263,6 @@ function Main() {
     };
 
     useEffect(() => {
-        listContacts();
-
         // Display custom errors in any component
         window.displayCustomError = displayCustomError;
 
@@ -523,10 +521,10 @@ function Main() {
 
                 setUsers(preparedUsers);
 
-                setProgress(30);
+                setProgress(20);
 
                 // Trigger next request
-                listSavedResponses();
+                listContacts();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -551,7 +549,7 @@ function Main() {
                 const tempIsAdmin = role === "admin";
                 setAdmin(tempIsAdmin);
 
-                setProgress(20);
+                setProgress(10);
 
                 // Trigger next request
                 listUsers();
@@ -591,8 +589,6 @@ function Main() {
                 setProgress(50);
             })
             .catch((error) => {
-                // TODO: Handle errors
-
                 displayError(error);
             });
     }
@@ -600,7 +596,7 @@ function Main() {
     const listSavedResponses = () => {
         axios.get( `${BASE_URL}saved_responses/`, getConfig())
             .then((response) => {
-                console.log("Saved responses: ", response.data);
+                //console.log("Saved responses: ", response.data);
 
                 const preparedSavedResponses = {};
                 response.data.results.forEach((savedResponse) => {
@@ -705,6 +701,11 @@ function Main() {
                 });
 
                 setContactProvidersData(preparedContactProvidersData);
+
+                setProgress(30);
+
+                // Trigger next request
+                listSavedResponses();
             })
             .catch((error) => {
                 displayError(error);
