@@ -524,7 +524,7 @@ function Main() {
                 setProgress(30);
 
                 // Trigger next request
-                getSavedResponses();
+                listSavedResponses();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -568,7 +568,7 @@ function Main() {
             });
     }
 
-    const getTemplates = () => {
+    const listTemplates = () => {
         axios.get( `${BASE_URL}templates/`, getConfig())
             .then((response) => {
                 //console.log("Templates: ", response.data);
@@ -595,7 +595,7 @@ function Main() {
             });
     }
 
-    const getSavedResponses = () => {
+    const listSavedResponses = () => {
         axios.get( `${BASE_URL}saved_responses/`, getConfig())
             .then((response) => {
                 console.log("Saved responses: ", response.data);
@@ -611,7 +611,7 @@ function Main() {
                 setProgress(40);
 
                 // Trigger next request
-                getTemplates();
+                listTemplates();
             })
             .catch((error) => {
                 displayError(error);
@@ -629,7 +629,7 @@ function Main() {
                 displaySuccess("Saved as response successfully!");
 
                 // Reload saved responses
-                getSavedResponses();
+                listSavedResponses();
             })
             .catch((error) => {
                 displayError(error);
@@ -645,7 +645,7 @@ function Main() {
                 displaySuccess("Deleted response successfully!");
 
                 // Reload saved responses
-                getSavedResponses();
+                listSavedResponses();
             })
             .catch((error) => {
                 displayError(error);
