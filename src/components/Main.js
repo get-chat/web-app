@@ -263,12 +263,6 @@ function Main() {
     };
 
     useEffect(() => {
-        if (progress === 100) {
-            getSavedResponses();
-        }
-    }, [progress]);
-
-    useEffect(() => {
         // Display custom errors in any component
         window.displayCustomError = displayCustomError;
 
@@ -530,7 +524,7 @@ function Main() {
                 setProgress(30);
 
                 // Trigger next request
-                getTemplates();
+                getSavedResponses();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -593,7 +587,6 @@ function Main() {
                 setTemplatesReady(true);
 
                 setProgress(50);
-
             })
             .catch((error) => {
                 // TODO: Handle errors
@@ -615,8 +608,10 @@ function Main() {
 
                 setSavedResponses(preparedSavedResponses);
 
-                //setProgress(50);
+                setProgress(40);
 
+                // Trigger next request
+                getTemplates();
             })
             .catch((error) => {
                 displayError(error);
