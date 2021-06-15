@@ -50,7 +50,7 @@ function Main() {
 
     const {waId} = useParams();
 
-    const [progress, _setProgress] = useState(20);
+    const [progress, _setProgress] = useState(0);
     const [checked, setChecked] = useState(false);
 
     const [currentUser, setCurrentUser] = useState();
@@ -671,6 +671,19 @@ function Main() {
     }
 
     const listContacts = () => {
+        const callback = () => {
+            setProgress(30);
+
+            // Trigger next request
+            listSavedResponses();
+        }
+
+        // Check if needs to be loaded
+        if (Object.keys(contactProvidersData).length !== 0) {
+            callback();
+            return;
+        }
+
         axios.get( `${BASE_URL}contacts/`, getConfig({
             limit: 0
         }))
@@ -702,10 +715,8 @@ function Main() {
 
                 setContactProvidersData(preparedContactProvidersData);
 
-                setProgress(30);
-
-                // Trigger next request
-                listSavedResponses();
+                // Chain
+                callback();
             })
             .catch((error) => {
                 displayError(error);
