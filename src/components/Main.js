@@ -684,17 +684,25 @@ function Main() {
                 const preparedContactProvidersData = {};
                 response.data.results.forEach((contact) => {
                     const contactPhoneNumbers = contact.phone_numbers;
+
+                    const processedPhoneNumbers = [];
                     contactPhoneNumbers.forEach((contactPhoneNumber) => {
                         const curPhoneNumber = preparePhoneNumber(contactPhoneNumber.phone_number);
+
+                        // Prevent duplicates from same provider with same phone numbers formatted differently
+                        if (processedPhoneNumbers.includes(curPhoneNumber)) {
+                            return;
+                        }
+
                         if (!(curPhoneNumber in preparedContactProvidersData)) {
                             preparedContactProvidersData[curPhoneNumber] = [];
                         }
 
                         preparedContactProvidersData[curPhoneNumber].push(contact);
+
+                        processedPhoneNumbers.push(curPhoneNumber);
                     });
                 });
-
-                console.log(preparedContactProvidersData);
 
                 setContactProvidersData(preparedContactProvidersData);
             })
