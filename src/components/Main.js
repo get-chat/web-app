@@ -764,7 +764,8 @@ function Main() {
                     isSelectionModeEnabled={isSelectionModeEnabled}
                     setSelectionModeEnabled={setSelectionModeEnabled}
                     setSelectedChats={setSelectedChats}
-                    finishBulkSendMessage={finishBulkSendMessage} />
+                    finishBulkSendMessage={finishBulkSendMessage}
+                    tags={tags} />
                 }
 
                 {templatesReady &&
