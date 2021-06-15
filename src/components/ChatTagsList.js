@@ -17,29 +17,10 @@ import LabelIcon from "@material-ui/icons/Label";
 
 function ChatTagsList(props) {
 
-    const [isLoading, setLoading] = useState(true);
-    const [tags, setTags] = useState([]);
-
-    useEffect(() => {
-        listTags();
-    }, []);
+    const [isLoading, setLoading] = useState(false);
 
     const close = () => {
         props.setOpen(false);
-    }
-
-    const listTags = () => {
-        axios.get( `${BASE_URL}tags/`, getConfig())
-            .then((response) => {
-                console.log("Tags: ", response.data);
-
-                setTags(response.data.results);
-
-                setLoading(false);
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
     }
 
     const handleClick = (tag) => {
@@ -53,12 +34,12 @@ function ChatTagsList(props) {
             <DialogContent className="chatTagsListWrapper">
                 <div className="mb-3">You can filter chats by tags.</div>
 
-                {tags &&
+                {props.tags &&
                 <div className="chatTagsList">
-                    {tags.length > 0
+                    {props.tags.length > 0
                         ?
                         <div>
-                            {tags.map((tag) =>
+                            {props.tags.map((tag) =>
                                 <ListItem key={tag.id} button onClick={() => handleClick(tag)}>
                                     <div className="chatTagsListWrapper__tag">
                                         <LabelIcon style={{fill: tag.web_inbox_color}} />

@@ -66,6 +66,8 @@ function Main() {
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
     const [templatesReady, setTemplatesReady] = useState(false);
 
+    const [tags, setTags] = useState([]);
+
     const [isSuccessVisible, setSuccessVisible] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [isErrorVisible, setErrorVisible] = useState(false);
@@ -586,7 +588,10 @@ function Main() {
                 setLoadingTemplates(false);
                 setTemplatesReady(true);
 
-                setProgress(50);
+                setProgress(45);
+
+                // Trigger next request
+                listTags();
             })
             .catch((error) => {
                 displayError(error);
@@ -723,6 +728,18 @@ function Main() {
             });
     }
 
+    const listTags = () => {
+        axios.get( `${BASE_URL}tags/`, getConfig())
+            .then((response) => {
+                console.log("Tags: ", response.data);
+
+                setTags(response.data.results);
+            })
+            .catch((error) => {
+                displayError(error);
+            });
+    }
+
     return (
         <Fade in={checked}>
             <div className="app__body">
@@ -810,6 +827,7 @@ function Main() {
                     waId={waId}
                     open={isChatTagsListVisible}
                     setOpen={setChatTagsListVisible}
+                    tags={tags}
                     filterTag={filterTag}
                     setFilterTag={setFilterTag}
                 />
