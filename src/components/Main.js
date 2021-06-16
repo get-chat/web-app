@@ -173,6 +173,13 @@ function Main() {
         axios.post( `${BASE_URL}messages/`, payload, getConfig())
             .then((response) => {
                 console.log(response.data);
+
+                // Disable selection mode
+                setSelectionModeEnabled(false);
+
+                // Clear selections
+                setSelectedChats([]);
+                setSelectedTags([]);
             })
             .catch((error) => {
                 window.displayError(error);
