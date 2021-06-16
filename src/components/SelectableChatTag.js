@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Checkbox, ListItem} from "@material-ui/core";
 import LabelIcon from "@material-ui/icons/Label";
 import '../styles/SelectableChatTag.css';
@@ -6,20 +6,16 @@ import '../styles/SelectableChatTag.css';
 function SelectableChatTag(props) {
     const [isSelected, setSelected] = useState(false);
 
-    const handleClick = () => {
-        let newSelectedState;
-        setSelected(prevState => {
-            newSelectedState = !prevState;
-            return newSelectedState;
-        });
+    useEffect(() => {
+        setSelected(props.selectedTags.includes(props.data.id));
+    }, [props.selectedTags]);
 
+    const handleClick = () => {
         props.setSelectedTags(prevState => {
-            if (newSelectedState) {
-                if (!prevState.includes(props.data.id)) {
-                    prevState.push(props.data.id);
-                }
-            } else {
+            if (prevState.includes(props.data.id)) {
                 prevState = prevState.filter(arrayItem => arrayItem !== props.data.id);
+            } else {
+                prevState.push(props.data.id);
             }
 
             return [...prevState];

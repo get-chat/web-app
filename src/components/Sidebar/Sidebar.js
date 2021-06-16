@@ -505,6 +505,7 @@ function Sidebar(props) {
                         <SelectableChatTag
                             key={tag[0]}
                             data={tag[1]}
+                            selectedTags={props.selectedTags}
                             setSelectedTags={props.setSelectedTags} />
                     )}
                 </div>
