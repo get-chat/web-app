@@ -147,7 +147,7 @@ a {
     margin-right: 5px;
 }
 
-.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root) {
+.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root):not(.MuiCheckbox-root .MuiSvgIcon-root) {
     color: #919191;
 }
 

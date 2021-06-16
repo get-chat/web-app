@@ -163,11 +163,12 @@ function Main() {
 
     const finishBulkSendMessage = () => {
         const recipients = selectedChats;
+        const tags = selectedTags;
         const payload = bulkSendPayload;
 
-        console.log(recipients, payload);
+        console.log(recipients, tags, payload);
 
-        // TODO: Inject recipients
+        // TODO: Inject recipients and tags
         // TODO: Complete sending
         axios.post( `${BASE_URL}messages/`, payload, getConfig())
             .then((response) => {

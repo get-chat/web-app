@@ -28,7 +28,10 @@ function SelectableChatTag(props) {
 
     return (
         <ListItem className="sidebarTagListItem" button onClick={handleClick}>
-            <div className="sidebarTag">
+            <div className={
+                'sidebarTag '
+                + (isSelected ? 'isSelected ' : '')
+            }>
                 <Checkbox className="sidebarTag__selection" checked={isSelected} color="primary"/>
                 <div className="sidebarTag__selection__tag">
                     <LabelIcon style={{fill: props.data.web_inbox_color}} />

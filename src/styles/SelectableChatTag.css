@@ -4,9 +4,14 @@
 
 .sidebarTag {
     display: flex;
+    flex: 1;
     flex-direction: row;
     align-items: center;
     padding: 5px 15px;
+}
+
+.sidebarTag.isSelected {
+    background-color: rgb(217, 239, 236) !important;
 }
 
 .sidebarTag__selection__tag {
