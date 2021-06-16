@@ -50,16 +50,12 @@ function ChatHeader(props) {
         hideMenu();
     }
 
-    const closeChat = () => {
-        history.push("/main");
-    }
-
     return (
         <div className="chat__header" onDrop={(event) => event.preventDefault()}>
 
             {!props.isChatOnly &&
             <div className="mobileOnly">
-                <IconButton className="chat__header__backButton" onClick={closeChat}>
+                <IconButton className="chat__header__backButton" onClick={props.closeChat}>
                     <ArrowBack/>
                 </IconButton>
             </div>

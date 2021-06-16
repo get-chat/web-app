@@ -45,6 +45,7 @@ import PreviewSendMedia from "../PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../Helpers/FileHelper";
 import SavedResponses from "../SavedResponses";
 import {generateTemplateMessagePayload} from "../../Helpers/ChatHelper";
+import {isMobileOnly} from "react-device-detect";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -601,7 +602,7 @@ export default function Chat(props) {
                         setAtBottom(true);
                     } else {
                         // To prevent missing data on refresh
-                        history.push("/main")
+                        closeChat();
                     }
                 } else {
                     window.displayError(error);
@@ -815,6 +816,11 @@ export default function Chat(props) {
         }
 
         props.setBulkSendPayload(payload);
+
+        // Close chat on mobile
+        if (isMobileOnly) {
+            closeChat();
+        }
     }
 
     const sendMessage = (e, customPayload, callback) => {
@@ -1141,6 +1147,10 @@ export default function Chat(props) {
         }
     }
 
+    const closeChat = () => {
+        history.push("/main");
+    }
+
     let lastPrintedDate;
     let lastSenderWaId;
 
@@ -1156,7 +1166,8 @@ export default function Chat(props) {
                 retrieveContactData={props.retrieveContactData}
                 isChatOnly={props.isChatOnly}
                 setChatAssignmentVisible={props.setChatAssignmentVisible}
-                setChatTagsVisible={props.setChatTagsVisible} />
+                setChatTagsVisible={props.setChatTagsVisible}
+                closeChat={closeChat} />
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">
@@ -1248,7 +1259,8 @@ export default function Chat(props) {
                 accept={accept}
                 setAccept={setAccept}
                 isScrollButtonVisible={isScrollButtonVisible}
-                handleScrollButtonClick={handleScrollButtonClick}/>
+                handleScrollButtonClick={handleScrollButtonClick}
+                closeChat={closeChat} />
 
             {isTemplateMessagesVisible &&
             <TemplateMessages
