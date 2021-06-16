@@ -502,7 +502,10 @@ function Sidebar(props) {
                 {(props.isSelectionModeEnabled && props.tags) &&
                 <div>
                     { Object.entries(props.tags).map((tag) =>
-                        <SelectableChatTag key={tag[0]} data={tag[1]} />
+                        <SelectableChatTag
+                            key={tag[0]}
+                            data={tag[1]}
+                            setSelectedTags={props.setSelectedTags} />
                     )}
                 </div>
                 }

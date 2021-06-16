@@ -7,7 +7,23 @@ function SelectableChatTag(props) {
     const [isSelected, setSelected] = useState(false);
 
     const handleClick = () => {
+        let newSelectedState;
+        setSelected(prevState => {
+            newSelectedState = !prevState;
+            return newSelectedState;
+        });
 
+        props.setSelectedTags(prevState => {
+            if (newSelectedState) {
+                if (!prevState.includes(props.data.id)) {
+                    prevState.push(props.data.id);
+                }
+            } else {
+                prevState = prevState.filter(arrayItem => arrayItem !== props.data.id);
+            }
+
+            return [...prevState];
+        });
     }
 
     return (
