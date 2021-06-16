@@ -1,0 +1,14 @@
+.sidebarTag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.sidebarTag__selection__tag {
+    flex: 1 1;
+    display: flex;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

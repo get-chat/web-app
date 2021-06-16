@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Checkbox} from "@material-ui/core";
 import LabelIcon from "@material-ui/icons/Label";
+import '../styles/SelectableChatTag.css';
 
 function SelectableChatTag(props) {
     const [isSelected, setSelected] = useState(false);
