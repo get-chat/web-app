@@ -36,7 +36,8 @@ import {clearContactProvidersData} from "../../Helpers/StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
 import {filterChat} from "../../Helpers/SidebarHelper";
 import BulkSendIndicator from "./BulkSendIndicator";
-import SelectableChatTag from "../SelectableChatTag";
+import SelectableChatTag from "./SelectableChatTag";
+import BulkSendActions from "./BulkSendActions";
 
 function Sidebar(props) {
 
@@ -458,6 +459,14 @@ function Sidebar(props) {
                 </div>
             </div>
 
+            {props.isSelectionModeEnabled &&
+            <BulkSendActions
+                selectedChats={props.selectedChats}
+                selectedTags={props.selectedTags}
+                cancelSelection={cancelSelection}
+                finishBulkSendMessage={finishBulkSendMessage} />
+            }
+
             <SearchBar onChange={(_keyword) => search(_keyword)} />
 
             {props.filterTag &&
@@ -487,13 +496,6 @@ function Sidebar(props) {
             <div
                 className="sidebar__results"
                 ref={chatsContainer}>
-
-                {props.isSelectionModeEnabled &&
-                <div className="sidebar__results__selectionActions">
-                    <Button color="secondary" onClick={cancelSelection}>Cancel</Button>
-                    <Button color="primary" onClick={finishBulkSendMessage}>Send</Button>
-                </div>
-                }
 
                 {(props.isSelectionModeEnabled && props.tags) &&
                 <h3>Tags</h3>

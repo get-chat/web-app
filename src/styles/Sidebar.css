@@ -85,13 +85,6 @@
     display: none !important;
 }
 
-.sidebar__results__selectionActions {
-    display: flex;
-    flex-direction:row;
-    justify-content: space-around;
-    padding: 10px 15px;
-}
-
 @media only screen and (max-width: 750px) {
     .sidebar {
         position: absolute;
