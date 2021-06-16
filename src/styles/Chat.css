@@ -439,6 +439,7 @@ a.chat__document:hover {
     padding: 30px;
     background-color: var(--gray-light);
     border-left: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 100;
 }
 
 .chat__default > h2 {

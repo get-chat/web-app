@@ -507,7 +507,7 @@ function Sidebar(props) {
                 </div>
                 }
 
-                {keyword.trim().length > 0 &&
+                {(keyword.trim().length > 0 || props.isSelectionModeEnabled) &&
                 <h3>Chats</h3>
                 }
 

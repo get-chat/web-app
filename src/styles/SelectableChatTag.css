@@ -1,8 +1,12 @@
+.sidebarTagListItem {
+    padding: 0 !important;
+}
+
 .sidebarTag {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 15px;
+    padding: 5px 15px;
 }
 
 .sidebarTag__selection__tag {
@@ -11,4 +15,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    margin-left: 10px;
+    font-weight: 600;
+}
+
+.sidebarTag__selection__tag .MuiSvgIcon-root {
+    margin-right: 5px;
 }
