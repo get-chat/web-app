@@ -125,6 +125,7 @@ export default function Chat(props) {
         setTemplateMessagesVisible(false);
         setSavedResponsesVisible(false);
         setAtBottom(false);
+        setInput('');
 
         setPreviewSendMediaVisible(false);
         setPreviewSendMediaData(undefined);
