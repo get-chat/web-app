@@ -90,6 +90,7 @@ function Main() {
 
     const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
     const [selectedChats, setSelectedChats] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
     const [bulkSendPayload, setBulkSendPayload] = useState();
 
     const history = useHistory();
@@ -764,6 +765,7 @@ function Main() {
                     isSelectionModeEnabled={isSelectionModeEnabled}
                     setSelectionModeEnabled={setSelectionModeEnabled}
                     setSelectedChats={setSelectedChats}
+                    setSelectedTags={setSelectedTags}
                     finishBulkSendMessage={finishBulkSendMessage}
                     tags={tags} />
                 }

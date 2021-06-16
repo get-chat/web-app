@@ -432,6 +432,7 @@ function Sidebar(props) {
     const cancelSelection = () => {
         props.setSelectionModeEnabled(false);
         props.setSelectedChats([]);
+        props.setSelectedTags([]);
     }
 
     const finishBulkSendMessage = () => {
