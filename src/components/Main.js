@@ -772,6 +772,7 @@ function Main() {
                     setChatTagsListVisible={setChatTagsListVisible}
                     isSelectionModeEnabled={isSelectionModeEnabled}
                     setSelectionModeEnabled={setSelectionModeEnabled}
+                    selectedChats={selectedChats}
                     setSelectedChats={setSelectedChats}
                     setSelectedTags={setSelectedTags}
                     finishBulkSendMessage={finishBulkSendMessage}

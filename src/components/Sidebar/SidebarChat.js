@@ -31,11 +31,8 @@ function SidebarChat(props) {
     const avatarClasses = avatarStyles();
 
     useEffect(() => {
-        // Set chat unselected, if selection mode is off
-        if (!props.isSelectionModeEnabled) {
-            setSelected(false);
-        }
-    }, [props.isSelectionModeEnabled]);
+        setSelected(props.selectedChats.includes(props.chatData.waId));
+    }, [props.selectedChats]);
 
     const generateTagNames = () => {
         const generatedTagNames = [];
@@ -112,11 +109,7 @@ function SidebarChat(props) {
 
     const handleClick = () => {
         if (props.isSelectionModeEnabled) {
-            let newSelectedState;
-            setSelected(prevState => {
-                newSelectedState = !prevState;
-                return newSelectedState;
-            });
+            let newSelectedState = !isSelected;
 
             props.setSelectedChats(prevState => {
                 if (newSelectedState) {

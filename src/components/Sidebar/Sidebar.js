@@ -530,6 +530,7 @@ function Sidebar(props) {
                                 retrieveContactData={props.retrieveContactData}
                                 tabCase={tabCase}
                                 isSelectionModeEnabled={props.isSelectionModeEnabled}
+                                selectedChats={props.selectedChats}
                                 setSelectedChats={props.setSelectedChats} />
                         )}
 
