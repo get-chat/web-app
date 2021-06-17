@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import LinearProgress from '@material-ui/core/LinearProgress';
-import '../styles/LoadingScreen.css';
-import {VERSION} from "../Constants";
-import logoBlack from '../assets/images/logo-black.svg';
+import '../../styles/LoadingScreen.css';
+import {VERSION} from "../../Constants";
+import logoBlack from '../../assets/images/logo-black.svg';
 
 function LoadingScreen(props) {
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {BASE_URL} from "../Constants";
-import {getConfig, getHubURL} from "../Helpers/Helpers";
+import {BASE_URL} from "../../Constants";
+import {getConfig, getHubURL} from "../../Helpers/Helpers";
 import {
     Button,
     CircularProgress,
@@ -12,7 +12,7 @@ import {
     Link,
     ListItem
 } from "@material-ui/core";
-import '../styles/ChatTagsList.css';
+import '../../styles/ChatTagsList.css';
 import LabelIcon from "@material-ui/icons/Label";
 
 function ChatTagsList(props) {

@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
-import '../styles/SendTemplateMessage.css';
-import {getConfig, getTemplateParams, templateParamToInteger} from "../Helpers/Helpers";
-import FileInput from "./FileInput";
+import '../../styles/SendTemplateMessage.css';
+import {getConfig, getTemplateParams, templateParamToInteger} from "../../Helpers/Helpers";
+import FileInput from "../FileInput";
 import axios from "axios";
-import {BASE_URL} from "../Constants";
+import {BASE_URL} from "../../Constants";
 import {Alert, AlertTitle} from "@material-ui/lab";
 
 function SendTemplateMessage(props) {

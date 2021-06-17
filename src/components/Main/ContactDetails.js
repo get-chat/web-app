@@ -4,13 +4,13 @@ import CloseIcon from "@material-ui/icons/Close";
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import PubSub from "pubsub-js";
-import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../Constants";
-import '../styles/ContactDetails.css';
+import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../../Constants";
+import '../../styles/ContactDetails.css';
 import Moment from "react-moment";
-import {avatarStyles} from "../AvatarStyles";
-import googleLogo from '../assets/images/ic-google.png';
-import hubspotLogo from '../assets/images/ic-hubspot.png';
-import {addPlus, replaceEmojis} from "../Helpers/Helpers";
+import {avatarStyles} from "../../AvatarStyles";
+import googleLogo from '../../assets/images/ic-google.png';
+import hubspotLogo from '../../assets/images/ic-hubspot.png';
+import {addPlus, replaceEmojis} from "../../Helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {

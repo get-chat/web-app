@@ -23,7 +23,7 @@ import {
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PersonClass from "../../PersonClass";
-import TemplateMessages from "../TemplateMessages";
+import TemplateMessages from "./TemplateMessages";
 import ChatFooter from "./ChatFooter";
 import ChatHeader from "./ChatHeader";
 import ChatMessageOptionsMenu from "./ChatMessage/ChatMessageOptionsMenu";
@@ -41,9 +41,9 @@ import {
     sortMessagesAsc,
     translateHTMLInputToText
 } from "../../Helpers/Helpers";
-import PreviewSendMedia from "../PreviewSendMedia";
+import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../Helpers/FileHelper";
-import SavedResponses from "../SavedResponses";
+import SavedResponses from "./SavedResponses";
 import {generateTemplateMessagePayload} from "../../Helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 

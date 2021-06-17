@@ -13,9 +13,9 @@ import {
     Select
 } from "@material-ui/core";
 import axios from "axios";
-import {BASE_URL} from "../Constants";
-import {getConfig} from "../Helpers/Helpers";
-import '../styles/ChatAssignment.css';
+import {BASE_URL} from "../../Constants";
+import {getConfig} from "../../Helpers/Helpers";
+import '../../styles/ChatAssignment.css';
 
 function ChatAssignment(props) {
 

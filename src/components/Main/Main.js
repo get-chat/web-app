@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import Sidebar from "./Sidebar/Sidebar";
-import Chat from "./Chat/Chat";
+import Sidebar from "../Sidebar/Sidebar";
+import Chat from "../Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getWebSocketURL, preparePhoneNumber} from "../Helpers/Helpers";
+import {getConfig, getWebSocketURL, preparePhoneNumber} from "../../Helpers/Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
-import SearchMessage from "./SearchMessage";
+import SearchMessage from "../SearchMessage";
 import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
-import TemplateMessageClass from "../TemplateMessageClass";
+import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
     BASE_URL,
@@ -23,24 +23,24 @@ import {
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
     EVENT_TOPIC_UNSUPPORTED_FILE
-} from "../Constants";
-import ChatMessageClass from "../ChatMessageClass";
+} from "../../Constants";
+import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
-import logo from '../assets/images/logo.png';
+import logo from '../../assets/images/logo.png';
 import {
     clearContactProvidersData,
     clearToken,
     getContactProvidersData,
     getToken,
     storeContactProvidersData
-} from "../Helpers/StorageHelper";
+} from "../../Helpers/StorageHelper";
 import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";
-import DownloadUnsupportedFile from "./DownloadUnsupportedFile";
-import SavedResponseClass from "../SavedResponseClass";
+import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
+import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
-import UserClass from "../UserClass";
+import UserClass from "../../UserClass";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);

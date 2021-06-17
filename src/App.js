@@ -2,7 +2,7 @@ import React from "react";
 import Login from "./components/Login";
 import {ThemeProvider} from '@material-ui/styles';
 import {BrowserRouter as Router, Route, Switch as RouteSwitch} from "react-router-dom";
-import Main from "./components/Main";
+import Main from "./components/Main/Main";
 import AppTheme from "./AppTheme";
 
 function App() {
