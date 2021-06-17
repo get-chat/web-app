@@ -49,7 +49,12 @@ import SavedResponses from "./SavedResponses";
 import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 import {clearUserSession} from "../../helpers/ApiHelper";
-import {listMessagesCall, retrievePersonCall} from "../../api/ApiCalls";
+import {
+    listChatAssignmentEventsCall,
+    listChatTaggingEventsCall,
+    listMessagesCall,
+    retrievePersonCall
+} from "../../api/ApiCalls";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -713,14 +718,8 @@ export default function Chat(props) {
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
-            wa_id: waId,
-            before_time: beforeTimeForEvents,
-            since_time: sinceTimeForEvents,
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Assignment history", response.data);
-
+        listChatAssignmentEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+            (response) => {
                 response.data.results.reverse().forEach((assignmentEvent) => {
                     const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
                     preparedMessages[prepared.id] = prepared;
@@ -728,22 +727,12 @@ export default function Chat(props) {
 
                 // List chat tagging events
                 listChatTaggingEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
-
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 
     const listChatTaggingEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
-            wa_id: waId,
-            before_time: beforeTimeForEvents,
-            since_time: sinceTimeForEvents,
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Tagging history", response.data);
-
+        listChatTaggingEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+            (response) => {
                 response.data.results.reverse().forEach((taggingEvent) => {
                     const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
                     preparedMessages[prepared.id] = prepared;
@@ -751,16 +740,10 @@ export default function Chat(props) {
 
                 // Finish loading
                 finishLoadingMessages(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime);
-
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 
     const resendMessage = (message) => {
-        console.log(message);
-
         const successCallback = () => {
             // Delete message if resent successfully
             setMessages(prevState => {

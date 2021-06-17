@@ -138,3 +138,31 @@ export const listMessagesCall = (waId, offset, beforeTime, sinceTime, limit, can
             errorCallback?.(error);
         });
 }
+
+export const listChatAssignmentEventsCall = (waId, beforeTime, sinceTime, cancelToken, callback) => {
+    axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
+        wa_id: waId,
+        before_time: beforeTime,
+        since_time: sinceTime,
+    }, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
+export const listChatTaggingEventsCall = (waId, beforeTime, sinceTime, cancelToken, callback) => {
+    axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
+        wa_id: waId,
+        before_time: beforeTime,
+        since_time: sinceTime,
+    }, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
