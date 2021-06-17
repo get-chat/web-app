@@ -2,13 +2,10 @@ import axios from "axios";
 import {BASE_URL} from "../Constants";
 import {getConfig} from "../helpers/Helpers";
 import {handleIfUnauthorized} from "../helpers/ApiHelper";
-import TemplateMessageClass from "../TemplateMessageClass";
-import SavedResponseClass from "../SavedResponseClass";
 
 export const bulkSendCall = (body, callback) => {
     axios.post( `${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
-
             callback?.(response);
         })
         .catch((error) => {
@@ -51,6 +48,28 @@ export const listTemplatesCall = (callback) => {
 
 export const listSavedResponsesCall = (callback) => {
     axios.get( `${BASE_URL}saved_responses/`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
+export const createSavedResponseCall = (text, callback) => {
+    axios.post( `${BASE_URL}saved_responses/`, {
+        text: text
+    }, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
+export const deleteSavedResponseCall = (id, callback) => {
+    axios.delete( `${BASE_URL}saved_responses/${id}/`, getConfig())
         .then((response) => {
             callback?.(response);
         })

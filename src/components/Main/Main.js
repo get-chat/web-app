@@ -42,7 +42,7 @@ import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
 import {
-    bulkSendCall,
+    bulkSendCall, createSavedResponseCall, deleteSavedResponseCall,
     listSavedResponsesCall,
     listTemplatesCall,
     listUsersCall,
@@ -598,37 +598,23 @@ function Main() {
     }
 
     const createSavedResponse = (text) => {
-        axios.post( `${BASE_URL}saved_responses/`, {
-            text: text
-        }, getConfig())
-            .then((response) => {
-                console.log("Created saved response: ", response.data);
+        createSavedResponseCall(text, (response) => {
+            // Display a success message
+            displaySuccess("Saved as response successfully!");
 
-                // Display a success message
-                displaySuccess("Saved as response successfully!");
-
-                // Reload saved responses
-                listSavedResponses();
-            })
-            .catch((error) => {
-                displayError(error);
-            });
+            // Reload saved responses
+            listSavedResponses();
+        });
     }
 
     const deleteSavedResponse = (id) => {
-        axios.delete( `${BASE_URL}saved_responses/${id}/`, getConfig())
-            .then((response) => {
-                console.log("Deleted saved response: ", response.data);
+        deleteSavedResponseCall(id, (response) => {
+            // Display a success message
+            displaySuccess("Deleted response successfully!");
 
-                // Display a success message
-                displaySuccess("Deleted response successfully!");
-
-                // Reload saved responses
-                listSavedResponses();
-            })
-            .catch((error) => {
-                displayError(error);
-            });
+            // Reload saved responses
+            listSavedResponses();
+        });
     }
 
     const retrieveContactData = (personWaId) => {
