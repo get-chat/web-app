@@ -52,7 +52,7 @@ import {clearUserSession} from "../../helpers/ApiHelper";
 import {
     listChatAssignmentEventsCall,
     listChatTaggingEventsCall,
-    listMessagesCall,
+    listMessagesCall, markAsReceivedCall,
     retrievePersonCall, sendMessageCall, uploadMediaCall
 } from "../../api/ApiCalls";
 
@@ -1069,25 +1069,10 @@ export default function Chat(props) {
     }
 
     const markAsReceived = (timestamp) => {
-        console.log('Marking as received', timestamp);
-
-        axios.post( `${BASE_URL}mark_as_received/`, {
-            timestamp: timestamp,
-            customer_wa_id: waId
-        }, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                //console.log(response.data);
-
+        markAsReceivedCall(waId, timestamp, cancelTokenSourceRef.current.token,
+            (response) => {
                 PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
-
                 setCurrentNewMessages(0);
-            })
-            .catch((error) => {
-                window.displayError(error);
-
-                if (error.response) {
-                    handleIfUnauthorized(error);
-                }
             });
     }
 

@@ -188,3 +188,17 @@ export const uploadMediaCall = (formData, callback, errorCallback) => {
             errorCallback?.(error);
         });
 }
+
+export const markAsReceivedCall = (waId, timestamp, cancelToken, callback, history) => {
+    axios.post( `${BASE_URL}mark_as_received/`, {
+        customer_wa_id: waId,
+        timestamp: timestamp
+    }, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            handleIfUnauthorized(error, history);
+        });
+}
