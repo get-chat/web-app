@@ -41,7 +41,13 @@ import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
 import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
-import {bulkSendCall, listUsersCall} from "../../api/ApiCalls";
+import {
+    bulkSendCall,
+    listSavedResponsesCall,
+    listTemplatesCall,
+    listUsersCall,
+    retrieveCurrentUserCall
+} from "../../api/ApiCalls";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -531,91 +537,64 @@ function Main() {
     }
 
     const retrieveCurrentUser = () => {
-        axios.get( `${BASE_URL}users/current/`, getConfig())
-            .then((response) => {
-                console.log("User: ", response.data);
+        retrieveCurrentUserCall((response) => {
+            setCurrentUser(response.data);
 
-                setCurrentUser(response.data);
+            const role = response.data?.profile?.role;
 
-                const role = response.data?.profile?.role;
+            // Only admins and users can access
+            if (role !== "admin" && role !== "user") {
+                clearUserSession("incorrectRole", location);
+            }
 
-                // Only admins and users can access
-                if (role !== "admin" && role !== "user") {
-                    clearUserSession("incorrectRole", location);
-                }
+            // Check if role is admin
+            const tempIsAdmin = role === "admin";
+            setAdmin(tempIsAdmin);
 
-                // Check if role is admin
-                const tempIsAdmin = role === "admin";
-                setAdmin(tempIsAdmin);
+            setProgress(10);
 
-                setProgress(10);
-
-                // Trigger next request
-                listUsers();
-            })
-            .catch((error) => {
-                // TODO: Move this to a common interceptor
-                if (error.response) {
-                    if (error.response.status === 401) {
-                        // Invalid token
-                        console.log(location)
-                        clearUserSession("invalidToken", location);
-                    }
-                }
-
-                displayError(error);
-            });
+            // Trigger next request
+            listUsers();
+        }, history);
     }
 
     const listTemplates = () => {
-        axios.get( `${BASE_URL}templates/`, getConfig())
-            .then((response) => {
-                //console.log("Templates: ", response.data);
+        listTemplatesCall((response) => {
+            const preparedTemplates = {};
+            response.data.results.forEach((template) => {
+                const prepared = new TemplateMessageClass(template);
 
-                const preparedTemplates = {};
-                response.data.results.forEach((template) => {
-                    const prepared = new TemplateMessageClass(template);
-
-                    if (prepared.status === "approved") {
-                        preparedTemplates[prepared.name] = prepared;
-                    }
-                });
-
-                setTemplates(preparedTemplates);
-                setLoadingTemplates(false);
-                setTemplatesReady(true);
-
-                setProgress(45);
-
-                // Trigger next request
-                listTags();
-            })
-            .catch((error) => {
-                displayError(error);
+                if (prepared.status === "approved") {
+                    preparedTemplates[prepared.name] = prepared;
+                }
             });
+
+            setTemplates(preparedTemplates);
+            setLoadingTemplates(false);
+            setTemplatesReady(true);
+
+            setProgress(45);
+
+            // Trigger next request
+            listTags();
+        });
     }
 
     const listSavedResponses = () => {
-        axios.get( `${BASE_URL}saved_responses/`, getConfig())
-            .then((response) => {
-                //console.log("Saved responses: ", response.data);
-
-                const preparedSavedResponses = {};
-                response.data.results.forEach((savedResponse) => {
-                    const prepared = new SavedResponseClass(savedResponse);
-                    preparedSavedResponses[prepared.id] = prepared;
-                });
-
-                setSavedResponses(preparedSavedResponses);
-
-                setProgress(40);
-
-                // Trigger next request
-                listTemplates();
-            })
-            .catch((error) => {
-                displayError(error);
+        listSavedResponsesCall((response) => {
+            const preparedSavedResponses = {};
+            response.data.results.forEach((savedResponse) => {
+                const prepared = new SavedResponseClass(savedResponse);
+                preparedSavedResponses[prepared.id] = prepared;
             });
+
+            setSavedResponses(preparedSavedResponses);
+
+            setProgress(40);
+
+            // Trigger next request
+            listTemplates();
+        });
     }
 
     const createSavedResponse = (text) => {
@@ -735,6 +714,12 @@ function Main() {
             .catch((error) => {
                 displayError(error);
             });
+    }
+
+    const handleIfUnauthorized = (error) => {
+        if (error.response.status === 401) {
+            clearUserSession("invalidToken");
+        }
     }
 
     return (
