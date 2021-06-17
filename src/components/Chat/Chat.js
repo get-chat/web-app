@@ -53,7 +53,7 @@ import {
     listChatAssignmentEventsCall,
     listChatTaggingEventsCall,
     listMessagesCall,
-    retrievePersonCall
+    retrievePersonCall, sendMessageCall
 } from "../../api/ApiCalls";
 
 const SCROLL_OFFSET = 15;
@@ -826,10 +826,8 @@ export default function Chat(props) {
         }
 
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
-                .then((response) => {
-                    console.log(response.data);
-
+            sendMessageCall(requestBody,
+                (response) => {
                     // TODO: Display message immediately
                     /*const messageId = response.data?.waba_response?.messages?.[0]?.id;
                     setMessages(prevState => {
@@ -841,10 +839,7 @@ export default function Chat(props) {
                     if (callback) {
                         callback();
                     }
-                })
-                .catch((error) => {
-                    window.displayError(error);
-
+                }, (error) => {
                     if (error.response) {
                         const status = error.response.status;
                         // Switch to expired mode if status code is 453
@@ -877,20 +872,15 @@ export default function Chat(props) {
         }
 
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
-                .then((response) => {
-                    console.log(response.data);
-
+            sendMessageCall(requestBody,
+                (response) => {
                     // Hide dialog by this event
                     PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
 
                     if (callback) {
                         callback();
                     }
-                })
-                .catch((error) => {
-                    window.displayError(error);
-
+                }, (error) => {
                     if (error.response) {
                         const errors = error.response.data?.waba_response?.errors;
                         PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
@@ -983,16 +973,11 @@ export default function Chat(props) {
         }
 
         if (isLoaded) {
-            axios.post( `${BASE_URL}messages/`, requestBody, getConfig())
-                .then((response) => {
-                    console.log(response.data);
-
+            sendMessageCall(requestBody,
+                (response) => {
                     // Send next request (or resend callback)
                     callback();
-                })
-                .catch((error) => {
-                    window.displayError(error);
-
+                }, (error) => {
                     if (error.response) {
                         const status = error.response.status;
 

@@ -166,3 +166,14 @@ export const listChatTaggingEventsCall = (waId, beforeTime, sinceTime, cancelTok
             window.displayError(error);
         });
 }
+
+export const sendMessageCall = (body, callback, errorCallback) => {
+    axios.post( `${BASE_URL}messages/`, body, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            errorCallback?.(error);
+        });
+}
