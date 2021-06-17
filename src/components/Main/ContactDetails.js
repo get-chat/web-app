@@ -10,7 +10,7 @@ import Moment from "react-moment";
 import {avatarStyles} from "../../AvatarStyles";
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
-import {addPlus, replaceEmojis} from "../../Helpers/Helpers";
+import {addPlus, replaceEmojis} from "../../helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {

@@ -4,7 +4,7 @@ import Chat from "../Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getWebSocketURL, preparePhoneNumber} from "../../Helpers/Helpers";
+import {getConfig, getWebSocketURL, preparePhoneNumber} from "../../helpers/Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "../SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -33,7 +33,7 @@ import {
     getContactProvidersData,
     getToken,
     storeContactProvidersData
-} from "../../Helpers/StorageHelper";
+} from "../../helpers/StorageHelper";
 import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";
@@ -41,6 +41,7 @@ import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
 import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
+import {bulkSend} from "../../api/ApiCalls";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -170,20 +171,15 @@ function Main() {
 
         // TODO: Inject recipients and tags
         // TODO: Complete sending
-        axios.post( `${BASE_URL}messages/`, payload, getConfig())
-            .then((response) => {
-                console.log(response.data);
 
-                // Disable selection mode
-                setSelectionModeEnabled(false);
+        bulkSend(payload, () => {
+            // Disable selection mode
+            setSelectionModeEnabled(false);
 
-                // Clear selections
-                setSelectedChats([]);
-                setSelectedTags([]);
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
+            // Clear selections
+            setSelectedChats([]);
+            setSelectedTags([]);
+        });
     }
 
     const hideImageOrVideoPreview = () => {

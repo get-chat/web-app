@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 import '../../styles/SendTemplateMessage.css';
-import {getConfig, getTemplateParams, templateParamToInteger} from "../../Helpers/Helpers";
+import {getConfig, getTemplateParams, templateParamToInteger} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import axios from "axios";
 import {BASE_URL} from "../../Constants";

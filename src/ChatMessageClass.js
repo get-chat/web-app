@@ -1,5 +1,5 @@
 import {BASE_URL} from "./Constants";
-import {generateInitialsHelper} from "./Helpers/Helpers";
+import {generateInitialsHelper} from "./helpers/Helpers";
 
 export class ChatMessageClass {
 
@@ -180,7 +180,7 @@ export class ChatMessageClass {
             return ChatMessageClass.STATUS_DELIVERED;
         }
 
-        // We don't check if sent timestamp exists, this might be null right after sending message to bridge API
+        // We don't check if sent timestamp exists, this might be null right after sending message to bridge api
         return ChatMessageClass.STATUS_SENT;
     }
 

@@ -6,7 +6,7 @@ import HeadsetIcon from "@material-ui/icons/Headset";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_UNSUPPORTED_FILE} from "../../../Constants";
 import {avatarStyles} from "../../../AvatarStyles";
-import {isAudioMimeTypeSupported} from "../../../Helpers/FileHelper";
+import {isAudioMimeTypeSupported} from "../../../helpers/FileHelper";
 import UnsupportedFileClass from "../../../UnsupportedFileClass";
 
 function ChatMessageVoice(props) {

@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import '../../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
 import {ButtonBase, IconButton, TextField} from "@material-ui/core";
-import {getFirstObject, getLastObject, getObjLength} from "../../Helpers/Helpers";
+import {getFirstObject, getLastObject, getObjLength} from "../../helpers/Helpers";
 import Send from "@material-ui/icons/Send";
 import AddIcon from '@material-ui/icons/Add';
 import {
@@ -13,7 +13,7 @@ import {
     EMPTY_IMAGE_BASE64, EVENT_TOPIC_RELOAD_PREVIEW
 } from "../../Constants";
 import FileInput from "../FileInput";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../Helpers/FileHelper";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../helpers/FileHelper";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 

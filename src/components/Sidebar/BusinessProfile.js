@@ -4,7 +4,7 @@ import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, T
 import {ArrowBack} from "@material-ui/icons";
 import axios from "axios";
 import {BASE_URL} from "../../Constants";
-import {generateInitialsHelper, getConfig} from "../../Helpers/Helpers";
+import {generateInitialsHelper, getConfig} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import {avatarStyles} from "../../AvatarStyles";
 

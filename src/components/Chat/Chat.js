@@ -40,11 +40,11 @@ import {
     hasInternetConnection, isScrollable,
     sortMessagesAsc,
     translateHTMLInputToText
-} from "../../Helpers/Helpers";
+} from "../../helpers/Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../Helpers/FileHelper";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../helpers/FileHelper";
 import SavedResponses from "./SavedResponses";
-import {generateTemplateMessagePayload} from "../../Helpers/ChatHelper";
+import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 
 const SCROLL_OFFSET = 15;

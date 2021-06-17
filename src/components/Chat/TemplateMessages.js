@@ -8,9 +8,9 @@ import Dialog from "@material-ui/core/Dialog";
 import SendTemplateMessage from "./SendTemplateMessage";
 import {EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, EVENT_TOPIC_SENT_TEMPLATE_MESSAGE} from "../../Constants";
 import PubSub from "pubsub-js";
-import {getObjLength} from "../../Helpers/Helpers";
+import {getObjLength} from "../../helpers/Helpers";
 import ChatMessageClass from "../../ChatMessageClass";
-import {generateTemplateMessagePayload} from "../../Helpers/ChatHelper";
+import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 
 function TemplateMessages(props) {
 

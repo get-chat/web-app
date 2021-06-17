@@ -1,5 +1,5 @@
-import {getPastHoursByTimestamp} from "./Helpers/DateHelper";
-import {generateInitialsHelper} from "./Helpers/Helpers";
+import {getPastHoursByTimestamp} from "./helpers/DateHelper";
+import {generateInitialsHelper} from "./helpers/Helpers";
 
 class ChatClass {
 

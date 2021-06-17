@@ -14,7 +14,7 @@ import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import FileInput from "../FileInput";
-import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../../Helpers/Helpers";
+import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../../helpers/Helpers";
 import VoiceRecord from "../VoiceRecord";
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import {

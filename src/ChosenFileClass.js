@@ -1,4 +1,4 @@
-import {getAttachmentTypeByFile} from "./Helpers/FileHelper";
+import {getAttachmentTypeByFile} from "./helpers/FileHelper";
 import {EVENT_TOPIC_RELOAD_PREVIEW} from "./Constants";
 import PubSub from "pubsub-js";
 

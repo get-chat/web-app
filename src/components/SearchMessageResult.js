@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/SearchMessageResult.css';
 import Moment from "react-moment";
-import {markOccurrences, replaceEmojis} from "../Helpers/Helpers";
+import {markOccurrences, replaceEmojis} from "../helpers/Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from "@material-ui/icons/Done";

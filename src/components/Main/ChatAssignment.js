@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import {BASE_URL} from "../../Constants";
-import {getConfig} from "../../Helpers/Helpers";
+import {getConfig} from "../../helpers/Helpers";
 import '../../styles/ChatAssignment.css';
 import UserClass from "../../UserClass";
 

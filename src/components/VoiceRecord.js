@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import {displaySeconds} from "../Helpers/Helpers";
+import {displaySeconds} from "../helpers/Helpers";
 import DoneIcon from "@material-ui/icons/Done";
 import '../styles/VoiceRecord.css';
 import VoiceRecorder from "../VoiceRecorder";

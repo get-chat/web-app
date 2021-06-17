@@ -11,7 +11,7 @@ import {
     getHubURL,
     getObjLength,
     isScrollable
-} from "../../Helpers/Helpers";
+} from "../../helpers/Helpers";
 import {
     BASE_URL,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -32,9 +32,9 @@ import SearchMessageResult from "../SearchMessageResult";
 import {isMobile} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "../Contacts";
-import {clearContactProvidersData} from "../../Helpers/StorageHelper";
+import {clearContactProvidersData} from "../../helpers/StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
-import {filterChat} from "../../Helpers/SidebarHelper";
+import {filterChat} from "../../helpers/SidebarHelper";
 import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
