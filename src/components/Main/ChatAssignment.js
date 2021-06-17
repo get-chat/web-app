@@ -16,6 +16,7 @@ import axios from "axios";
 import {BASE_URL} from "../../Constants";
 import {getConfig} from "../../Helpers/Helpers";
 import '../../styles/ChatAssignment.css';
+import UserClass from "../../UserClass";
 
 function ChatAssignment(props) {
 
@@ -31,30 +32,6 @@ function ChatAssignment(props) {
 
     const close = () => {
         props.setOpen(false);
-    }
-
-    const retrieveChat = () => {
-        axios.get( `${BASE_URL}chats/${props.waId}/`, getConfig())
-            .then((response) => {
-                console.log("Chat: ", response.data);
-
-                // Update chats data
-                // Now updated automatically via socket event
-                /*const chat = response.data;
-                if (chat) {
-                    props.setChats(prevState => {
-                        prevState[props.waId].assignedToUser = chat.assigned_to_user;
-                        prevState[props.waId].assignedGroup = chat.assigned_group;
-
-                        return {...prevState};
-                    })
-                }*/
-
-                close();
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
     }
 
     const retrieveChatAssignment = () => {
@@ -81,8 +58,7 @@ function ChatAssignment(props) {
             .then((response) => {
                 console.log("Assignment: ", response.data);
 
-                // Retrieve chat and update chats data
-                retrieveChat();
+                close();
             })
             .catch((error) => {
                 window.displayError(error);
@@ -94,7 +70,13 @@ function ChatAssignment(props) {
             .then((response) => {
                 console.log("Users: ", response.data);
 
-                setUsers(response.data.results);
+                const preparedUsers = [];
+                response.data.results.forEach((user) => {
+                    const prepared = new UserClass(user);
+                    preparedUsers.push(prepared);
+                });
+
+                setUsers(preparedUsers);
 
                 // Next
                 listGroups();
@@ -127,29 +109,6 @@ function ChatAssignment(props) {
         setAssignedGroup(event.target.value);
     }
 
-    const prepareUserLabel = (user) => {
-        let label = '';
-        if (user.first_name) {
-            label = user.first_name;
-        }
-
-        if (user.last_name) {
-            if (label) {
-                label += ' ';
-            }
-
-            label += user.last_name;
-        }
-
-        if (label) {
-            label += ` (${user.username})`;
-        } else {
-            label = user.username;
-        }
-
-        return label;
-    }
-
     return (
         <Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
             <DialogTitle>Assign chat</DialogTitle>
@@ -166,7 +125,7 @@ function ChatAssignment(props) {
                         onChange={handleUserChange}>
                         <MenuItem value="null">Unassigned</MenuItem>
                         {users?.map((user) =>
-                            <MenuItem key={user.id} value={user.id}>{prepareUserLabel(user)}</MenuItem>
+                            <MenuItem key={user.id} value={user.id}>{user.prepareUserLabel()}</MenuItem>
                         )}
                     </Select>
                 </FormControl>
