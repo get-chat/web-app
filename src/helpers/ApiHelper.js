@@ -6,7 +6,7 @@ export const handleIfUnauthorized = (error, history) => {
     }
 }
 
-const clearUserSession = (errorCase, nextLocation, history) => {
+export const clearUserSession = (errorCase, nextLocation, history) => {
     clearToken();
     clearContactProvidersData();
 

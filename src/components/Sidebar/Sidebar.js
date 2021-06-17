@@ -38,6 +38,7 @@ import {filterChat} from "../../helpers/SidebarHelper";
 import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
+import {clearUserSession} from "../../helpers/ApiHelper";
 
 function Sidebar(props) {
 
@@ -59,7 +60,7 @@ function Sidebar(props) {
     const avatarClasses = avatarStyles();
 
     const logOut = () => {
-        props.clearUserSession();
+        clearUserSession(undefined, undefined, history);
         hideMenu();
     }
 
@@ -392,13 +393,13 @@ function Sidebar(props) {
 
     const handleIfUnauthorized = (error) => {
         if (error.response.status === 401) {
-            props.clearUserSession("invalidToken");
+            clearUserSession("invalidToken", undefined, history);
         }
     }
 
     const displayEditBusinessProfile = () => {
         setAnchorEl(null);
-        props.setBusinessProfileVisible(true);
+        setProfileVisible(true);
     }
 
     const goToSettings = () => {

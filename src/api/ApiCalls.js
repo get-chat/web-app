@@ -77,3 +77,35 @@ export const deleteSavedResponseCall = (id, callback) => {
             window.displayError(error);
         });
 }
+
+export const resolveContactCall = (personWaId, callback) => {
+    axios.get( `${BASE_URL}contacts/${personWaId}`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
+export const listContactsCall = (limit, callback) => {
+    axios.get( `${BASE_URL}contacts/`, getConfig({
+        limit: limit
+    }))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
+export const listTagsCall = (callback) => {
+    axios.get( `${BASE_URL}tags/`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}

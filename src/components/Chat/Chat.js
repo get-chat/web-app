@@ -46,6 +46,7 @@ import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../helpe
 import SavedResponses from "./SavedResponses";
 import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
+import {clearUserSession} from "../../helpers/ApiHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1144,7 +1145,7 @@ export default function Chat(props) {
 
     const handleIfUnauthorized = (error) => {
         if (error.response.status === 401) {
-            props.clearUserSession("invalidToken");
+            clearUserSession("invalidToken", undefined, history);
         }
     }
 

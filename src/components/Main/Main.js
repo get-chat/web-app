@@ -42,12 +42,13 @@ import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
 import {
-    bulkSendCall, createSavedResponseCall, deleteSavedResponseCall,
-    listSavedResponsesCall,
+    bulkSendCall, createSavedResponseCall, deleteSavedResponseCall, listContactsCall,
+    listSavedResponsesCall, listTagsCall,
     listTemplatesCall,
-    listUsersCall,
+    listUsersCall, resolveContactCall,
     retrieveCurrentUserCall
 } from "../../api/ApiCalls";
+import {clearUserSession} from "../../helpers/ApiHelper";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -131,25 +132,6 @@ function Main() {
     const displayCustomError = (errorMessage) => {
         setErrorMessage(errorMessage);
         setErrorVisible(true);
-    }
-
-    const clearUserSession = (errorCase, nextLocation) => {
-        clearToken();
-        clearContactProvidersData();
-
-        let path;
-
-        if (errorCase) {
-            path = `/login/error/${errorCase}`;
-        } else {
-            path = "/";
-        }
-
-        history.push({
-            'pathname': path,
-            'nextPath': nextLocation?.pathname,
-            'search': nextLocation?.search
-        });
     }
 
     const handleSuccessClose = (event, reason) => {
@@ -289,7 +271,7 @@ function Main() {
         window.goToChatByWaId = goToChatByWaId;
 
         if (!getToken()) {
-            clearUserSession("notLoggedIn", location);
+            clearUserSession("notLoggedIn", location, history);
         }
 
         // Retrieve current user, this will trigger other requests
@@ -544,7 +526,7 @@ function Main() {
 
             // Only admins and users can access
             if (role !== "admin" && role !== "user") {
-                clearUserSession("incorrectRole", location);
+                clearUserSession("incorrectRole", location, history);
             }
 
             // Check if role is admin
@@ -623,18 +605,12 @@ function Main() {
             return;
         }
 
-        axios.get( `${BASE_URL}contacts/${personWaId}`, getConfig())
-            .then((response) => {
-                console.log("Contact: ", response.data);
-
-                setContactProvidersData(prevState => {
-                    prevState[personWaId] = response.data.contact_provider_results;
-                    return {...prevState};
-                })
-            })
-            .catch((error) => {
-                displayError(error);
+        resolveContactCall(personWaId, (response) => {
+            setContactProvidersData(prevState => {
+                prevState[personWaId] = response.data.contact_provider_results;
+                return {...prevState};
             });
+        });
     }
 
     const listContacts = () => {
@@ -651,61 +627,41 @@ function Main() {
             return;
         }
 
-        axios.get( `${BASE_URL}contacts/`, getConfig({
-            limit: 0
-        }))
-            .then((response) => {
-                console.log("Contacts: ", response.data);
+        listContactsCall(0, (response) => {
+            const preparedContactProvidersData = {};
+            response.data.results.forEach((contact) => {
+                const contactPhoneNumbers = contact.phone_numbers;
 
-                const preparedContactProvidersData = {};
-                response.data.results.forEach((contact) => {
-                    const contactPhoneNumbers = contact.phone_numbers;
+                const processedPhoneNumbers = [];
+                contactPhoneNumbers.forEach((contactPhoneNumber) => {
+                    const curPhoneNumber = preparePhoneNumber(contactPhoneNumber.phone_number);
 
-                    const processedPhoneNumbers = [];
-                    contactPhoneNumbers.forEach((contactPhoneNumber) => {
-                        const curPhoneNumber = preparePhoneNumber(contactPhoneNumber.phone_number);
+                    // Prevent duplicates from same provider with same phone numbers formatted differently
+                    if (processedPhoneNumbers.includes(curPhoneNumber)) {
+                        return;
+                    }
 
-                        // Prevent duplicates from same provider with same phone numbers formatted differently
-                        if (processedPhoneNumbers.includes(curPhoneNumber)) {
-                            return;
-                        }
+                    if (!(curPhoneNumber in preparedContactProvidersData)) {
+                        preparedContactProvidersData[curPhoneNumber] = [];
+                    }
 
-                        if (!(curPhoneNumber in preparedContactProvidersData)) {
-                            preparedContactProvidersData[curPhoneNumber] = [];
-                        }
+                    preparedContactProvidersData[curPhoneNumber].push(contact);
 
-                        preparedContactProvidersData[curPhoneNumber].push(contact);
-
-                        processedPhoneNumbers.push(curPhoneNumber);
-                    });
+                    processedPhoneNumbers.push(curPhoneNumber);
                 });
-
-                setContactProvidersData(preparedContactProvidersData);
-
-                // Chain
-                callback();
-            })
-            .catch((error) => {
-                displayError(error);
             });
+
+            setContactProvidersData(preparedContactProvidersData);
+
+            // Chain
+            callback();
+        });
     }
 
     const listTags = () => {
-        axios.get( `${BASE_URL}tags/`, getConfig())
-            .then((response) => {
-                console.log("Tags: ", response.data);
-
-                setTags(response.data.results);
-            })
-            .catch((error) => {
-                displayError(error);
-            });
-    }
-
-    const handleIfUnauthorized = (error) => {
-        if (error.response.status === 401) {
-            clearUserSession("invalidToken");
-        }
+        listTagsCall((response) => {
+            setTags(response.data.results);
+        });
     }
 
     return (
@@ -724,7 +680,6 @@ function Main() {
                     currentUser={currentUser}
                     setProgress={setProgress}
                     displayNotification={displayNotification}
-                    clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
                     isChatOnly={isChatOnly}
@@ -750,7 +705,6 @@ function Main() {
                     savedResponses={savedResponses}
                     createSavedResponse={createSavedResponse}
                     deleteSavedResponse={deleteSavedResponse}
-                    clearUserSession={clearUserSession}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={retrieveContactData}
                     isChatOnly={isChatOnly}
