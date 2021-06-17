@@ -41,7 +41,7 @@ import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
 import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
-import {bulkSend} from "../../api/ApiCalls";
+import {bulkSendCall, listUsersCall} from "../../api/ApiCalls";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -172,7 +172,7 @@ function Main() {
         // TODO: Inject recipients and tags
         // TODO: Complete sending
 
-        bulkSend(payload, () => {
+        bulkSendCall(payload, () => {
             // Disable selection mode
             setSelectionModeEnabled(false);
 
@@ -514,28 +514,20 @@ function Main() {
     }, [contactProvidersData]);
 
     const listUsers = () => {
-        axios.get( `${BASE_URL}users/`, getConfig({
-            limit: 5000
-        }))
-            .then((response) => {
-                console.log("Users:", response.data);
-
-                const preparedUsers = {};
-                response.data.results.forEach((user) => {
-                    const prepared = new UserClass(user);
-                    preparedUsers[prepared.id] = prepared;
-                });
-
-                setUsers(preparedUsers);
-
-                setProgress(20);
-
-                // Trigger next request
-                listContacts();
-            })
-            .catch((error) => {
-                window.displayError(error);
+        listUsersCall(5000, (response) => {
+            const preparedUsers = {};
+            response.data.results.forEach((user) => {
+                const prepared = new UserClass(user);
+                preparedUsers[prepared.id] = prepared;
             });
+
+            setUsers(preparedUsers);
+
+            setProgress(20);
+
+            // Trigger next request
+            listContacts();
+        });
     }
 
     const retrieveCurrentUser = () => {
