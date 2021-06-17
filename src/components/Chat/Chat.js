@@ -53,7 +53,7 @@ import {
     listChatAssignmentEventsCall,
     listChatTaggingEventsCall,
     listMessagesCall,
-    retrievePersonCall, sendMessageCall
+    retrievePersonCall, sendMessageCall, uploadMediaCall
 } from "../../api/ApiCalls";
 
 const SCROLL_OFFSET = 15;
@@ -1038,19 +1038,13 @@ export default function Chat(props) {
                     }
                 }
 
-                axios.post(`${BASE_URL}media/`, request.formData, getConfig())
-                    .then((response) => {
-                        console.log(response.data);
-
+                uploadMediaCall(request.formData,
+                    (response) => {
                         // Convert parameters to a ChosenFile object
                         sendFile(response.data.file, request.chosenFile, undefined, function () {
                             sendNextRequest();
                         });
-
-                    })
-                    .catch((error) => {
-                        window.displayError(error);
-
+                    }, (error) => {
                         if (error.response) {
                             if (error.response) {
                                 handleIfUnauthorized(error);

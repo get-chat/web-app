@@ -177,3 +177,14 @@ export const sendMessageCall = (body, callback, errorCallback) => {
             errorCallback?.(error);
         });
 }
+
+export const uploadMediaCall = (formData, callback, errorCallback) => {
+    axios.post(`${BASE_URL}media/`, formData, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            errorCallback?.(error);
+        });
+}
