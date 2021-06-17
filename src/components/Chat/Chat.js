@@ -8,7 +8,6 @@ import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
-    BASE_URL,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
     EVENT_TOPIC_CHAT_TAGGING,
@@ -33,7 +32,6 @@ import MessageDateIndicator from "../MessageDateIndicator";
 import {
     extractTimestampFromMessage,
     generateUnixTimestamp,
-    getConfig,
     getFirstObject,
     getLastMessageAndExtractTimestamp,
     getLastObject,
@@ -52,8 +50,11 @@ import {clearUserSession} from "../../helpers/ApiHelper";
 import {
     listChatAssignmentEventsCall,
     listChatTaggingEventsCall,
-    listMessagesCall, markAsReceivedCall,
-    retrievePersonCall, sendMessageCall, uploadMediaCall
+    listMessagesCall,
+    markAsReceivedCall,
+    retrievePersonCall,
+    sendMessageCall,
+    uploadMediaCall
 } from "../../api/ApiCalls";
 
 const SCROLL_OFFSET = 15;
