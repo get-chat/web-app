@@ -109,3 +109,32 @@ export const listTagsCall = (callback) => {
             window.displayError(error);
         });
 }
+
+export const retrievePersonCall = (waId, cancelToken, callback, errorCallback) => {
+    axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            errorCallback?.(error);
+        });
+}
+
+export const listMessagesCall = (waId, offset, beforeTime, sinceTime, limit, cancelToken, callback, errorCallback) => {
+    axios.get( `${BASE_URL}messages/`,
+        getConfig({
+            wa_id: waId,
+            offset: offset ?? 0,
+            before_time: beforeTime,
+            since_time: sinceTime,
+            limit: limit,
+        }, cancelToken)
+    )
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            errorCallback?.(error);
+        });
+}

@@ -31,13 +31,15 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "../MessageDateIndicator";
 import {
-    extractTimestampFromMessage, generateUnixTimestamp,
+    extractTimestampFromMessage,
+    generateUnixTimestamp,
     getConfig,
     getFirstObject,
     getLastMessageAndExtractTimestamp,
     getLastObject,
     getObjLength,
-    hasInternetConnection, isScrollable,
+    hasInternetConnection,
+    isScrollable,
     sortMessagesAsc,
     translateHTMLInputToText
 } from "../../helpers/Helpers";
@@ -47,6 +49,7 @@ import SavedResponses from "./SavedResponses";
 import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 import {clearUserSession} from "../../helpers/ApiHelper";
+import {listMessagesCall, retrievePersonCall} from "../../api/ApiCalls";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -142,7 +145,7 @@ export default function Chat(props) {
         }
 
         // Load contact and messages
-        getPerson(true);
+        retrievePerson(true);
 
         return () => {
             // Cancelling ongoing requests
@@ -204,7 +207,7 @@ export default function Chat(props) {
                         //console.log("Scrolled to top");
                         if (isLoaded && !isLoadingMoreMessages) {
                             setLoadingMoreMessages(true);
-                            getMessages(false, undefined, getFirstObject(messages)?.timestamp);
+                            listMessages(false, undefined, getFirstObject(messages)?.timestamp);
                         }
                     } else {
                         // TODO: Make sure user scrolls
@@ -212,7 +215,7 @@ export default function Chat(props) {
                             //console.log('Scrolled to bottom');
                             if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
                                 setLoadingMoreMessages(true);
-                                getMessages(false, undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
+                                listMessages(false, undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
                             }
                         }
                     }
@@ -481,7 +484,7 @@ export default function Chat(props) {
             const el = messagesContainer.current;
             el.scroll({top: el.scrollHeight - el.offsetHeight - SCROLL_OFFSET, behavior: "smooth"});
         } else {
-            getMessages(false, undefined, undefined, undefined, undefined, false, true);
+            listMessages(false, undefined, undefined, undefined, undefined, false, true);
         }
 
         //setScrollButtonVisible(false);
@@ -528,7 +531,7 @@ export default function Chat(props) {
                     const callback = () => {
                         scrollToChild(msgId);
                     };
-                    getMessages(false, callback, undefined, undefined, timestamp, true, true);
+                    listMessages(false, callback, undefined, undefined, timestamp, true, true);
                 }
             }
         }
@@ -566,67 +569,53 @@ export default function Chat(props) {
         setOptionsChatMessage(chatMessage);
     }
 
-    const getPerson = (loadMessages) => {
-        axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                //console.log("Person", response.data);
+    const retrievePerson = (loadMessages) => {
+        retrievePersonCall(waId, cancelTokenSourceRef.current.token, (response) => {
+            const preparedPerson = new PersonClass(response.data);
+            setPerson(preparedPerson);
+            setExpired(preparedPerson.isExpired);
 
-                const preparedPerson = new PersonClass(response.data);
-                setPerson(preparedPerson);
-                setExpired(preparedPerson.isExpired);
+            // Person information is loaded, now load messages
+            if (loadMessages !== undefined && loadMessages === true) {
+                listMessages(true, function (preparedMessages) {
+                    setLastMessageId(getLastObject(preparedMessages)?.id);
 
-                // Person information is loaded, now load messages
-                if (loadMessages !== undefined && loadMessages === true) {
-                    getMessages(true, function (preparedMessages) {
-                        setLastMessageId(getLastObject(preparedMessages)?.id);
-
-                        // Scroll to message if goToMessageId is defined
-                        const goToMessage = location.goToMessage;
-                        if (goToMessage !== undefined) {
-                            goToMessageId(goToMessage.id, goToMessage.timestamp);
-                        }
-                    });
-                }
-            })
-            .catch((error) => {
-                if (error.response?.status === 404) {
-                    if (location.person) {
-                        const preparedPerson = new PersonClass({});
-                        preparedPerson.name = location.person.name;
-                        preparedPerson.initials = location.person.initials;
-                        preparedPerson.waId = waId;
-
-                        setPerson(preparedPerson);
-
-                        setExpired(true);
-                        setLoaded(true);
-                        setLoadingMoreMessages(false);
-                        setAtBottom(true);
-                    } else {
-                        // To prevent missing data on refresh
-                        closeChat();
+                    // Scroll to message if goToMessageId is defined
+                    const goToMessage = location.goToMessage;
+                    if (goToMessage !== undefined) {
+                        goToMessageId(goToMessage.id, goToMessage.timestamp);
                     }
+                });
+            }
+        }, (error) => {
+            if (error.response?.status === 404) {
+                if (location.person) {
+                    const preparedPerson = new PersonClass({});
+                    preparedPerson.name = location.person.name;
+                    preparedPerson.initials = location.person.initials;
+                    preparedPerson.waId = waId;
+
+                    setPerson(preparedPerson);
+
+                    setExpired(true);
+                    setLoaded(true);
+                    setLoadingMoreMessages(false);
+                    setAtBottom(true);
                 } else {
-                    window.displayError(error);
+                    // To prevent missing data on refresh
+                    closeChat();
                 }
-            });
+            } else {
+                window.displayError(error);
+            }
+        });
     }
 
-    const getMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
+    const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
-        axios.get( `${BASE_URL}messages/`,
-            getConfig({
-                wa_id: waId,
-                offset: offset ?? 0,
-                before_time: beforeTime,
-                since_time: sinceTime,
-                limit: limit,
-            }, cancelTokenSourceRef.current.token)
-        )
-            .then((response) => {
-                //console.log("Messages", response.data);
-
+        listMessagesCall(waId, offset ?? 0, beforeTime, sinceTime, limit, cancelTokenSourceRef.current.token,
+            (response) => {
                 const count = response.data.count;
                 //const previous = response.data.previous;
                 const next = response.data.next;
@@ -634,7 +623,7 @@ export default function Chat(props) {
                 if (sinceTime && isInitialWithSinceTime === true) {
                     if (next) { /*count > limit*/
                         setAtBottom(false);
-                        getMessages(false, callback, beforeTime, count - limit, sinceTime, false, replaceAll);
+                        listMessages(false, callback, beforeTime, count - limit, sinceTime, false, replaceAll);
                         return false;
                     }
                 }
@@ -665,15 +654,12 @@ export default function Chat(props) {
 
                 // List assignment events
                 listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
-
-            })
-            .catch((error) => {
+            }, (error) => {
                 setLoadingMoreMessages(false);
-                window.displayError(error);
             });
     }
 
-    // Chain: getMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
+    // Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
     const finishLoadingMessages = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime) => {
 
         // Sort prepared messages

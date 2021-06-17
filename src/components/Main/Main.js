@@ -599,7 +599,7 @@ function Main() {
         });
     }
 
-    const retrieveContactData = (personWaId) => {
+    const resolveContact = (personWaId) => {
         if (contactProvidersData?.[personWaId] !== undefined) {
             // Already retrieved
             return;
@@ -681,7 +681,7 @@ function Main() {
                     setProgress={setProgress}
                     displayNotification={displayNotification}
                     contactProvidersData={contactProvidersData}
-                    retrieveContactData={retrieveContactData}
+                    retrieveContactData={resolveContact}
                     isChatOnly={isChatOnly}
                     setChatTagsListVisible={setChatTagsListVisible}
                     isSelectionModeEnabled={isSelectionModeEnabled}
@@ -706,7 +706,7 @@ function Main() {
                     createSavedResponse={createSavedResponse}
                     deleteSavedResponse={deleteSavedResponse}
                     contactProvidersData={contactProvidersData}
-                    retrieveContactData={retrieveContactData}
+                    retrieveContactData={resolveContact}
                     isChatOnly={isChatOnly}
                     setChatAssignmentVisible={setChatAssignmentVisible}
                     setChatTagsVisible={setChatTagsVisible}
@@ -722,7 +722,7 @@ function Main() {
                 <ContactDetails
                     contactData={chosenContact}
                     contactProvidersData={contactProvidersData}
-                    retrieveContactData={retrieveContactData}
+                    retrieveContactData={resolveContact}
                     chats={chats}
                     filterTag={filterTag}
                     setFilterTag={setFilterTag}
