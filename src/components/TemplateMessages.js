@@ -63,7 +63,6 @@ function TemplateMessages(props) {
     }
 
     const bulkSendByRef = () => {
-        setSending(true);
         bulkSendButtonRef.current?.click();
     }
 
