@@ -23,12 +23,12 @@ import {
 import ChatMessageClass from "../../ChatMessageClass";
 import PersonClass from "../../PersonClass";
 import TemplateMessages from "./TemplateMessages";
-import ChatFooter from "./ChatFooter";
+import ChatFooter from "./ChatFooter/ChatFooter";
 import ChatHeader from "./ChatHeader";
 import ChatMessageOptionsMenu from "./ChatMessage/ChatMessageOptionsMenu";
 import moment from "moment";
 import PubSub from "pubsub-js";
-import MessageDateIndicator from "../MessageDateIndicator";
+import MessageDateIndicator from "./MessageDateIndicator";
 import {
     extractTimestampFromMessage,
     generateUnixTimestamp,

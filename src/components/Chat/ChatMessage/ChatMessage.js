@@ -8,7 +8,7 @@ import {formatMessage, replaceEmojis} from "../../../helpers/Helpers";
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../../../ChatMessageClass";
-import MessageDateIndicator from "../../MessageDateIndicator";
+import MessageDateIndicator from "../MessageDateIndicator";
 import ContextChatMessage from "../../ContextChatMessage";
 import ReplyIcon from '@material-ui/icons/Reply';
 import ChatMessageVideo from "./ChatMessageVideo";
