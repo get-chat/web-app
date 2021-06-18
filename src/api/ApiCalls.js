@@ -38,6 +38,17 @@ export const logoutCall = (callback) => {
         });
 }
 
+export const changePasswordCall = (currentPassword, newPassword, callback, errorCallback) => {
+    axios.put(`${BASE_URL}users/password/change/`, {
+        current_password: currentPassword,
+        new_password: newPassword
+    }, getConfig()).then((response) => {
+        callback?.(response);
+    }).catch((error) => {
+        errorCallback?.(error);
+    });
+}
+
 export const listChatsCall = (keyword, limit, offset, cancelToken, callback, history) => {
     axios.get(`${BASE_URL}chats/`,
         getConfig({

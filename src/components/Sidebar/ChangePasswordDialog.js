@@ -4,10 +4,8 @@ import {Button, Dialog, TextField} from "@material-ui/core";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-import axios from "axios";
-import {BASE_URL} from "../../Constants";
-import {getConfig} from "../../helpers/Helpers";
 import {Alert, AlertTitle} from "@material-ui/lab";
+import {changePasswordCall} from "../../api/ApiCalls";
 
 function ChangePasswordDialog(props) {
 
@@ -58,21 +56,14 @@ function ChangePasswordDialog(props) {
         setError(undefined);
         setRequesting(true);
 
-        axios.put(`${BASE_URL}users/password/change/`, {
-            current_password: currentPassword,
-            new_password: newPassword
-        }, getConfig()).then((response) => {
-            setRequesting(false);
-
-            // Hide the dialog
-            //close();
-
-            setSuccess(true);
-
-        }).catch((error) => {
-            setRequesting(false);
-            setError(error.response?.data?.reason ?? "An error has occurred.");
-        });
+        changePasswordCall(currentPassword, newPassword,
+            (response) => {
+                setRequesting(false);
+                setSuccess(true);
+            }, (error) => {
+                setRequesting(false);
+                setError(error.response?.data?.reason ?? "An error has occurred.");
+            });
     }
 
     return (
