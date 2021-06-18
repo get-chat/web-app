@@ -273,3 +273,13 @@ export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, ca
             window.displayError(error);
         });
 }
+
+export const listGroupsCall = (callback) => {
+    axios.get( `${BASE_URL}groups/`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}

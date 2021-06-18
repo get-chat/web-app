@@ -12,11 +12,8 @@ import {
     MenuItem,
     Select
 } from "@material-ui/core";
-import axios from "axios";
-import {BASE_URL} from "../../Constants";
-import {getConfig} from "../../helpers/Helpers";
 import '../../styles/ChatAssignment.css';
-import {retrieveChatAssignmentCall, updateChatAssignmentCall} from "../../api/ApiCalls";
+import {listGroupsCall, retrieveChatAssignmentCall, updateChatAssignmentCall} from "../../api/ApiCalls";
 
 function ChatAssignment(props) {
 
@@ -54,18 +51,12 @@ function ChatAssignment(props) {
     }
 
     const listGroups = () => {
-        axios.get( `${BASE_URL}groups/`, getConfig())
-            .then((response) => {
-                console.log("Groups: ", response.data);
+        listGroupsCall((response) => {
+            setGroups(response.data.results);
 
-                setGroups(response.data.results);
-
-                // Next
-                retrieveChatAssignment();
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
+            // Next
+            retrieveChatAssignment();
+        });
     }
 
     const handleUserChange = (event) => {
