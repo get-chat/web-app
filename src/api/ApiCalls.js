@@ -172,7 +172,7 @@ export const retrievePersonCall = (waId, cancelToken, callback, errorCallback) =
         });
 }
 
-export const listMessagesCall = (waId, offset, beforeTime, sinceTime, limit, cancelToken, callback, errorCallback) => {
+export const listMessagesCall = (waId, limit, offset, beforeTime, sinceTime, cancelToken, callback, errorCallback) => {
     axios.get( `${BASE_URL}messages/`,
         getConfig({
             wa_id: waId,

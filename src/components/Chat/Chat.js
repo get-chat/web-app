@@ -620,7 +620,7 @@ export default function Chat(props) {
     const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
-        listMessagesCall(waId, offset ?? 0, beforeTime, sinceTime, limit, cancelTokenSourceRef.current.token,
+        listMessagesCall(waId, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
             (response) => {
                 const count = response.data.count;
                 //const previous = response.data.previous;
