@@ -620,7 +620,7 @@ export default function Chat(props) {
     const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
-        listMessagesCall(waId, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
+        listMessagesCall(waId, undefined, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
             (response) => {
                 const count = response.data.count;
                 //const previous = response.data.previous;
@@ -662,7 +662,7 @@ export default function Chat(props) {
                 listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
             }, (error) => {
                 setLoadingMoreMessages(false);
-            });
+            }, history);
     }
 
     // Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages

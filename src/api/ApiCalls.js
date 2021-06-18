@@ -172,10 +172,11 @@ export const retrievePersonCall = (waId, cancelToken, callback, errorCallback) =
         });
 }
 
-export const listMessagesCall = (waId, limit, offset, beforeTime, sinceTime, cancelToken, callback, errorCallback) => {
+export const listMessagesCall = (waId, search, limit, offset, beforeTime, sinceTime, cancelToken, callback, errorCallback, history) => {
     axios.get( `${BASE_URL}messages/`,
         getConfig({
             wa_id: waId,
+            search: search,
             offset: offset ?? 0,
             before_time: beforeTime,
             since_time: sinceTime,
@@ -188,6 +189,7 @@ export const listMessagesCall = (waId, limit, offset, beforeTime, sinceTime, can
         .catch((error) => {
             window.displayError(error);
             errorCallback?.(error);
+            handleIfUnauthorized(error, history);
         });
 }
 

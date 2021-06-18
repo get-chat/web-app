@@ -3,21 +3,8 @@ import '../../styles/Sidebar.css';
 import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
-import axios from "axios";
-import {
-    containsLetters,
-    generateInitialsHelper,
-    getConfig,
-    getHubURL,
-    getObjLength,
-    isScrollable
-} from "../../helpers/Helpers";
-import {
-    BASE_URL,
-    EVENT_TOPIC_GO_TO_MSG_ID,
-    EVENT_TOPIC_NEW_CHAT_MESSAGES,
-    EVENT_TOPIC_UPDATE_PERSON_NAME
-} from "../../Constants";
+import {containsLetters, generateInitialsHelper, getHubURL, getObjLength, isScrollable} from "../../helpers/Helpers";
+import {EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_UPDATE_PERSON_NAME} from "../../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "../SearchBar";
 import SidebarContactResult from "./SidebarContactResult";
@@ -39,7 +26,7 @@ import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
-import {generateCancelToken, listChatsCall, retrieveChatCall} from "../../api/ApiCalls";
+import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../api/ApiCalls";
 
 function Sidebar(props) {
 
@@ -329,16 +316,10 @@ function Sidebar(props) {
     }
 
     const searchMessages = (cancelTokenSource) => {
-        axios.get( `${BASE_URL}messages/`,
-            getConfig({
-                //offset: offset ?? 0,
-                limit: 30,
-                search: keyword
-            }, cancelTokenSource.token)
-        )
-            .then((response) => {
-                console.log("Messages", response.data);
-
+        listMessagesCall(
+            undefined,
+            keyword, 30, undefined, undefined, undefined, cancelTokenSource.source,
+            (response) => {
                 const preparedMessages = {};
                 response.data.results.forEach((message) => {
                     const prepared = new ChatMessageClass(message);
@@ -346,14 +327,7 @@ function Sidebar(props) {
                 });
 
                 setChatMessages(preparedMessages);
-            })
-            .catch((error) => {
-                console.log(error);
-
-                if (error.response) {
-                    handleIfUnauthorized(error);
-                }
-            });
+            }, undefined, history);
     }
 
     const goToMessage = (chatMessage) => {
@@ -364,12 +338,6 @@ function Sidebar(props) {
             });
         } else {
             PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, chatMessage);
-        }
-    }
-
-    const handleIfUnauthorized = (error) => {
-        if (error.response.status === 401) {
-            clearUserSession("invalidToken", undefined, history);
         }
     }
 
