@@ -212,3 +212,16 @@ export const retrieveChatCall = (waId, callback) => {
             window.displayError(error);
         });
 }
+
+export const createTagCall = (waId, tagId, callback) => {
+    axios.post( `${BASE_URL}chat_tagging/`, {
+        chat: waId,
+        tag: tagId
+    }, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}

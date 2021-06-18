@@ -14,7 +14,7 @@ import axios from "axios";
 import {BASE_URL} from "../../Constants";
 import {getConfig, getHubURL} from "../../helpers/Helpers";
 import '../../styles/ChatTags.css';
-import {retrievePersonCall} from "../../api/ApiCalls";
+import {createTagCall, listTagsCall, retrieveChatCall, retrievePersonCall} from "../../api/ApiCalls";
 
 function ChatTags(props) {
 
@@ -75,7 +75,7 @@ function ChatTags(props) {
     }
 
     const retrieveChat = () => {
-        retrievePersonCall(props.waId,
+        retrieveChatCall(props.waId,
             (response) => {
                 setChat(response.data);
                 setChatTags(response.data.tags);
@@ -86,27 +86,15 @@ function ChatTags(props) {
     }
 
     const listTags = () => {
-        axios.get( `${BASE_URL}tags/`, getConfig())
-            .then((response) => {
-                console.log("Tags: ", response.data);
-
-                setAllTags(response.data.results);
-
-                setLoading(false);
-            })
-            .catch((error) => {
-                window.displayError(error);
-            });
+        listTagsCall((response) => {
+            setAllTags(response.data.results);
+            setLoading(false);
+        });
     }
 
     const createTag = (tag) => {
-        axios.post( `${BASE_URL}chat_tagging/`, {
-            tag: tag.id,
-            chat: props.waId
-        }, getConfig())
-            .then((response) => {
-                console.log("Created tag: ", response.data);
-
+        createTagCall(props.waId, tag.id,
+            (response) => {
                 setChatTags(prevState => {
                     let nextState = prevState.filter((curTag) => {
                         return curTag.id !== tag.id;
@@ -119,9 +107,6 @@ function ChatTags(props) {
 
                     return nextState;
                 });
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 
