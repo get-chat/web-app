@@ -10,7 +10,7 @@ import {Alert} from "@material-ui/lab";
 import {BASE_URL, VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
 import logo from '../assets/images/logo.png';
-import {baseCall} from "../api/ApiCalls";
+import {baseCall, loginCall} from "../api/ApiCalls";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -78,46 +78,43 @@ export default function Login(props) {
         // Display the loading animation
         setLoggingIn(true);
 
-        axios.post(`${BASE_URL}auth/token/`, {
-            username : username,
-            password : password
-        }).then((response) => {
-            // Store token in local storage
-            storeToken(response.data.token);
+        loginCall(username, password,
+            (response) => {
+                // Store token in local storage
+                storeToken(response.data.token);
 
-            // Android web interface
-            if (window.AndroidWebInterface) {
-                window.AndroidWebInterface.registerUserToken(response.data.token ?? "");
-            }
+                // Android web interface
+                if (window.AndroidWebInterface) {
+                    window.AndroidWebInterface.registerUserToken(response.data.token ?? "");
+                }
 
-            // Redirect to main route
-            history.push((location.nextPath ?? "/main") + (location.search ?? ""));
-        }).catch((error) => {
+                // Redirect to main route
+                history.push((location.nextPath ?? "/main") + (location.search ?? ""));
+            }, (error) => {
+                // Hide the loading animation
+                setLoggingIn(false);
+                setLoginError(undefined);
 
-            // Hide the loading animation
-            setLoggingIn(false);
-            setLoginError(undefined);
+                // Handle the error
+                if (error.response) {
+                    // Request made and server responded
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
 
-            // Handle the error
-            if (error.response) {
-                // Request made and server responded
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
+                    setLoginError("Incorrect username or password.");
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log(error.request);
 
-                setLoginError("Incorrect username or password.");
-            } else if (error.request) {
-                // The request was made but no response was received
-                console.log(error.request);
+                    setLoginError("An error has occurred.");
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
 
-                setLoginError("An error has occurred.");
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', error.message);
-
-                setLoginError("An error has occurred.");
-            }
-        })
+                    setLoginError("An error has occurred.");
+                }
+            });
     }
 
     const logoutToClearSession = () => {

@@ -13,6 +13,17 @@ export const baseCall = (callback, errorCallback) => {
         });
 }
 
+export const loginCall = (username, password, callback, errorCallback) => {
+    axios.post(`${BASE_URL}auth/token/`, {
+        username : username,
+        password : password
+    }).then((response) => {
+        callback?.(response);
+    }).catch((error) => {
+        errorCallback?.(error);
+    })
+}
+
 export const bulkSendCall = (body, callback) => {
     axios.post( `${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
