@@ -3,6 +3,16 @@ import {BASE_URL} from "../Constants";
 import {getConfig} from "../helpers/Helpers";
 import {handleIfUnauthorized} from "../helpers/ApiHelper";
 
+export const baseCall = (callback, errorCallback) => {
+    axios.get(BASE_URL, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            errorCallback?.(error);
+        });
+}
+
 export const bulkSendCall = (body, callback) => {
     axios.post( `${BASE_URL}messages/`, body, getConfig())
         .then((response) => {

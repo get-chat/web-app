@@ -10,6 +10,7 @@ import {Alert} from "@material-ui/lab";
 import {BASE_URL, VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
 import logo from '../assets/images/logo.png';
+import {baseCall} from "../api/ApiCalls";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -51,17 +52,16 @@ export default function Login(props) {
         const token = getToken();
         if (token) {
             setValidatingToken(true);
-            axios.get(BASE_URL, getConfig())
-                .then((response) => {
-                    // Redirect to main route
-                    history.push("/main");
-                })
-                .catch((error) => {
-                    setValidatingToken(false);
 
-                    // TODO: Make sure the response is Unauthorized
-                    clearToken();
-                });
+            baseCall((response) => {
+                // Redirect to main route
+                history.push("/main");
+            }, (error) => {
+                setValidatingToken(false);
+
+                // TODO: Make sure the response is Unauthorized
+                clearToken();
+            });
         }
     }, []);
 
