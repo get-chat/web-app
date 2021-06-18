@@ -283,3 +283,18 @@ export const listGroupsCall = (callback) => {
             window.displayError(error);
         });
 }
+
+export const verifyContactsCall = (contacts, cancelToken, callback, cancelCallback) => {
+    axios.post( `${BASE_URL}contacts/verify/`, {
+        blocking: "wait",
+        contacts: contacts,
+        force_check: true
+    }, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            cancelCallback?.(error);
+        });
+}

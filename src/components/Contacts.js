@@ -1,8 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
 import axios from "axios";
-import {BASE_URL} from "../Constants";
-import {addPlus, getConfig, getObjLength, preparePhoneNumber} from "../helpers/Helpers";
+import {addPlus, getObjLength, preparePhoneNumber} from "../helpers/Helpers";
 import SearchBar from "./SearchBar";
 import {Button, CircularProgress, Collapse, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
 import {ArrowBack, ExpandLess, ExpandMore} from "@material-ui/icons";
@@ -13,7 +12,7 @@ import {isMobileOnly} from "react-device-detect";
 import {useHistory} from "react-router-dom";
 import PersonClass from "../PersonClass";
 import Person from "./Person";
-import {listContactsCall, listPersonsCall} from "../api/ApiCalls";
+import {listContactsCall, listPersonsCall, verifyContactsCall} from "../api/ApiCalls";
 
 function Contacts(props) {
 
@@ -98,19 +97,13 @@ function Contacts(props) {
             });
     }
 
-    const verifyPhoneNumber = (data, waId) => {
+    const verifyContact = (data, waId) => {
         waId = preparePhoneNumber(waId);
 
         setVerifying(true);
 
-        axios.post( `${BASE_URL}contacts/verify/`, {
-            blocking: "wait",
-            contacts: [addPlus(waId)],
-            force_check: true
-        }, getConfig(undefined, verifyPhoneNumberCancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Verify", response.data);
-
+        verifyContactsCall([addPlus(waId)], verifyPhoneNumberCancelTokenSourceRef.current.token,
+            (response) => {
                 if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
                     history.push({
                         pathname: `/main/chat/${waId}`,
@@ -132,12 +125,7 @@ function Contacts(props) {
                 }
 
                 setVerifying(false);
-
-            })
-            .catch((error) => {
-                console.log(error);
-                window.displayError(error);
-
+            }, (error) => {
                 setVerifying(false);
             });
     }
@@ -170,7 +158,7 @@ function Contacts(props) {
                             startAdornment: <InputAdornment position="start">+</InputAdornment>,
                         }}
                         onChange={event => setPhoneNumber(event.target.value)} />
-                    <Button color="primary" onClick={() => verifyPhoneNumber(undefined, phoneNumber)}>Start</Button>
+                    <Button color="primary" onClick={() => verifyContact(undefined, phoneNumber)}>Start</Button>
                 </div>
                 }
             </div>
@@ -200,7 +188,7 @@ function Contacts(props) {
                         <Person
                             key={index}
                             data={person[1]}
-                            verifyPhoneNumber={verifyPhoneNumber}
+                            verifyPhoneNumber={verifyContact}
                             onHide={props.onHide}
                             contactProvidersData={props.contactProvidersData} />
                     )}
@@ -225,7 +213,7 @@ function Contacts(props) {
                         <Contact
                             key={index}
                             data={contact[1]}
-                            verifyPhoneNumber={verifyPhoneNumber}
+                            verifyPhoneNumber={verifyContact}
                             onHide={props.onHide} />
                     )}
                 </Collapse>
