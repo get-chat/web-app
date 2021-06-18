@@ -38,7 +38,7 @@ export const logoutCall = (callback) => {
         });
 }
 
-export const listChatsCall = (keyword, limit, offset, cancelToken, callback, errorCallback) => {
+export const listChatsCall = (keyword, limit, offset, cancelToken, callback, history) => {
     axios.get(`${BASE_URL}chats/`,
         getConfig({
             search: keyword,
@@ -49,7 +49,8 @@ export const listChatsCall = (keyword, limit, offset, cancelToken, callback, err
             callback?.(response);
         })
         .catch((error) => {
-            errorCallback?.(error);
+            window.displayError(error);
+            handleIfUnauthorized(error, history);
         });
 }
 

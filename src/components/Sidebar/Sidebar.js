@@ -39,7 +39,7 @@ import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
-import {generateCancelToken, listChatsCall} from "../../api/ApiCalls";
+import {generateCancelToken, listChatsCall, retrieveChatCall} from "../../api/ApiCalls";
 
 function Sidebar(props) {
 
@@ -312,18 +312,12 @@ function Sidebar(props) {
                         return {...prevState, ...preparedNewMessages}
                     });
                 }
-            }, (error) => {
-                if (error.response) {
-                    handleIfUnauthorized(error);
-                }
-            });
+            }, history);
     }
 
     const retrieveChat = (chatWaId) => {
-        axios.get( `${BASE_URL}chats/${chatWaId}/`, getConfig())
-            .then((response) => {
-                console.log("Chat: ", response.data);
-
+        retrieveChatCall(chatWaId,
+            (response) => {
                 const preparedChat = new ChatClass(response.data);
 
                 props.setChats(prevState => {
@@ -331,13 +325,6 @@ function Sidebar(props) {
                     const sortedNextState = sortChats(prevState);
                     return {...sortedNextState};
                 });
-            })
-            .catch((error) => {
-                window.displayError(error);
-
-                if (error.response) {
-                    handleIfUnauthorized(error);
-                }
             });
     }
 
