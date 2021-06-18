@@ -39,6 +39,7 @@ import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
+import {generateCancelToken} from "../../api/ApiCalls";
 
 function Sidebar(props) {
 
@@ -81,7 +82,7 @@ function Sidebar(props) {
 
     useEffect(() => {
         // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
+        cancelTokenSourceRef.current = generateCancelToken();
 
         getChats(cancelTokenSourceRef.current, true, undefined, true);
 

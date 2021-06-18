@@ -7,6 +7,7 @@ import {BASE_URL} from "../../Constants";
 import {generateInitialsHelper, getConfig} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import {avatarStyles} from "../../AvatarStyles";
+import {generateCancelToken} from "../../api/ApiCalls";
 
 function BusinessProfile(props) {
 
@@ -36,7 +37,7 @@ function BusinessProfile(props) {
         document.addEventListener('keydown', handleKey);
 
         // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
+        cancelTokenSourceRef.current = generateCancelToken();
 
         getBusinessProfile();
 

@@ -11,6 +11,7 @@ import {getConfig} from "../helpers/Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobileOnly} from 'react-device-detect';
+import {generateCancelToken} from "../api/ApiCalls";
 
 function SearchMessage(props) {
 
@@ -39,7 +40,7 @@ function SearchMessage(props) {
         }
 
         // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
+        cancelTokenSourceRef.current = generateCancelToken();
 
         if (_keyword.trim().length === 0) {
             setResults({});

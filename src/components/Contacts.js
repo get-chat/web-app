@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
-import axios from "axios";
 import {addPlus, getObjLength, preparePhoneNumber} from "../helpers/Helpers";
 import SearchBar from "./SearchBar";
 import {Button, CircularProgress, Collapse, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
@@ -12,7 +11,7 @@ import {isMobileOnly} from "react-device-detect";
 import {useHistory} from "react-router-dom";
 import PersonClass from "../PersonClass";
 import Person from "./Person";
-import {listContactsCall, listPersonsCall, verifyContactsCall} from "../api/ApiCalls";
+import {generateCancelToken, listContactsCall, listPersonsCall, verifyContactsCall} from "../api/ApiCalls";
 
 function Contacts(props) {
 
@@ -40,7 +39,7 @@ function Contacts(props) {
 
         document.addEventListener('keydown', handleKey);
 
-        verifyPhoneNumberCancelTokenSourceRef.current = axios.CancelToken.source();
+        verifyPhoneNumberCancelTokenSourceRef.current = generateCancelToken();
 
         return () => {
             document.removeEventListener('keydown', handleKey);
@@ -53,7 +52,7 @@ function Contacts(props) {
 
     useEffect(() => {
         // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
+        cancelTokenSourceRef.current = generateCancelToken();
 
         setLoading(true);
 

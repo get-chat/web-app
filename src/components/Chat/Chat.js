@@ -3,7 +3,6 @@ import '../../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage/ChatMessage";
 import {useHistory, useLocation, useParams} from "react-router-dom";
-import axios from "axios";
 import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
@@ -48,6 +47,7 @@ import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import {
+    generateCancelToken,
     listChatAssignmentEventsCall,
     listChatTaggingEventsCall,
     listMessagesCall,
@@ -98,7 +98,7 @@ export default function Chat(props) {
         props.retrieveContactData(waId);
 
         // Generate a token
-        cancelTokenSourceRef.current = axios.CancelToken.source();
+        cancelTokenSourceRef.current = generateCancelToken();
 
         if (messagesContainer) {
             messagesContainer.current.addEventListener('DOMNodeInserted', event => {
@@ -158,7 +158,7 @@ export default function Chat(props) {
             cancelTokenSourceRef.current.cancel();
 
             // Generate a new token, because component is not destroyed
-            cancelTokenSourceRef.current = axios.CancelToken.source();
+            cancelTokenSourceRef.current = generateCancelToken();
         }
     }, [waId]);
 

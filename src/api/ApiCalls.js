@@ -3,6 +3,10 @@ import {BASE_URL} from "../Constants";
 import {getConfig} from "../helpers/Helpers";
 import {handleIfUnauthorized} from "../helpers/ApiHelper";
 
+export const generateCancelToken = () => {
+    return axios.CancelToken.source();
+}
+
 export const baseCall = (callback, errorCallback) => {
     axios.get(BASE_URL, getConfig())
         .then((response) => {
