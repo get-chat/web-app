@@ -24,6 +24,16 @@ export const loginCall = (username, password, callback, errorCallback) => {
     })
 }
 
+export const logoutCall = (callback) => {
+    axios.get( `${BASE_URL}auth/logout/`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
 export const bulkSendCall = (body, callback) => {
     axios.post( `${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
