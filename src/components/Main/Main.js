@@ -733,7 +733,8 @@ function Main() {
                     open={isChatAssignmentVisible}
                     setOpen={setChatAssignmentVisible}
                     chats={chats}
-                    setChats={setChats} />
+                    setChats={setChats}
+                    users={users} />
                 }
 
                 {isChatTagsVisible &&

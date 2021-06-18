@@ -16,19 +16,17 @@ import axios from "axios";
 import {BASE_URL} from "../../Constants";
 import {getConfig} from "../../helpers/Helpers";
 import '../../styles/ChatAssignment.css';
-import UserClass from "../../UserClass";
 import {retrieveChatAssignmentCall, updateChatAssignmentCall} from "../../api/ApiCalls";
 
 function ChatAssignment(props) {
 
     const [isLoading, setLoading] = useState(true);
-    const [users, setUsers] = useState([]);
     const [groups, setGroups] = useState([]);
     const [assignedToUser, setAssignedToUser] = useState('null');
     const [assignedGroup, setAssignedGroup] = useState('null');
 
     useEffect(() => {
-        listUsers();
+        listGroups();
     }, []);
 
     const close = () => {
@@ -52,27 +50,6 @@ function ChatAssignment(props) {
             assignedGroup === 'null' ? null : assignedGroup,
             (response) => {
                 close();
-            });
-    }
-
-    const listUsers = () => {
-        axios.get( `${BASE_URL}users/`, getConfig())
-            .then((response) => {
-                console.log("Users: ", response.data);
-
-                const preparedUsers = [];
-                response.data.results.forEach((user) => {
-                    const prepared = new UserClass(user);
-                    preparedUsers.push(prepared);
-                });
-
-                setUsers(preparedUsers);
-
-                // Next
-                listGroups();
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 
@@ -114,7 +91,7 @@ function ChatAssignment(props) {
                         value={assignedToUser}
                         onChange={handleUserChange}>
                         <MenuItem value="null">Unassigned</MenuItem>
-                        {users?.map((user) =>
+                        {Object.values(props.users)?.map((user) =>
                             <MenuItem key={user.id} value={user.id}>{user.prepareUserLabel()}</MenuItem>
                         )}
                     </Select>
