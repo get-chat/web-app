@@ -10,11 +10,9 @@ import {
     DialogTitle,
     Link
 } from "@material-ui/core";
-import axios from "axios";
-import {BASE_URL} from "../../Constants";
-import {getConfig, getHubURL} from "../../helpers/Helpers";
+import {getHubURL} from "../../helpers/Helpers";
 import '../../styles/ChatTags.css';
-import {createTagCall, listTagsCall, retrieveChatCall, retrievePersonCall} from "../../api/ApiCalls";
+import {createChatTaggingCall, deleteChatTaggingCall, listTagsCall, retrieveChatCall} from "../../api/ApiCalls";
 
 function ChatTags(props) {
 
@@ -56,11 +54,11 @@ function ChatTags(props) {
     }
 
     const onDeleteTag = (tag) => {
-        deleteTag(tag);
+        deleteChatTagging(tag);
     }
 
     const onClickTag = (tag) => {
-        createTag(tag);
+        createChatTagging(tag);
     }
 
     const makeUniqueTagsArray = (tagsArray) => {
@@ -92,8 +90,8 @@ function ChatTags(props) {
         });
     }
 
-    const createTag = (tag) => {
-        createTagCall(props.waId, tag.id,
+    const createChatTagging = (tag) => {
+        createChatTaggingCall(props.waId, tag.id,
             (response) => {
                 setChatTags(prevState => {
                     let nextState = prevState.filter((curTag) => {
@@ -110,11 +108,9 @@ function ChatTags(props) {
             });
     }
 
-    const deleteTag = (tag) => {
-        axios.delete( `${BASE_URL}chat_tagging/${tag.tagging_id}`, getConfig())
-            .then((response) => {
-                console.log("Deleted tag: ", response.data);
-
+    const deleteChatTagging = (tag) => {
+        deleteChatTaggingCall(tag.tagging_id,
+            (response) => {
                 setChatTags(prevState => {
                     let nextState = prevState.filter((curTag) => {
                         return curTag.id !== tag.id;
@@ -122,9 +118,6 @@ function ChatTags(props) {
                     nextState = makeUniqueTagsArray(nextState);
                     return nextState;
                 });
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 

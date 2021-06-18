@@ -213,11 +213,21 @@ export const retrieveChatCall = (waId, callback) => {
         });
 }
 
-export const createTagCall = (waId, tagId, callback) => {
+export const createChatTaggingCall = (waId, chatTaggingId, callback) => {
     axios.post( `${BASE_URL}chat_tagging/`, {
         chat: waId,
-        tag: tagId
+        tag: chatTaggingId
     }, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
+
+export const deleteChatTaggingCall = (chatTaggingId, callback) => {
+    axios.delete( `${BASE_URL}chat_tagging/${chatTaggingId}`, getConfig())
         .then((response) => {
             callback?.(response);
         })
