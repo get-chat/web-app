@@ -13,6 +13,7 @@ import {isMobileOnly} from "react-device-detect";
 import {useHistory} from "react-router-dom";
 import PersonClass from "../PersonClass";
 import Person from "./Person";
+import {listContactsCall, listPersonsCall} from "../api/ApiCalls";
 
 function Contacts(props) {
 
@@ -58,7 +59,7 @@ function Contacts(props) {
         setLoading(true);
 
         timeout.current = setTimeout(function () {
-            findPersons();
+            listPersons();
         }, 500);
 
         return () => {
@@ -68,50 +69,31 @@ function Contacts(props) {
         }
     }, [keyword]);
 
-    const findPersons = () => {
-        axios.get(`${BASE_URL}persons/`, getConfig({
-            search: keyword?.trim()
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Persons list", response.data);
-
+    const listPersons = () => {
+        listPersonsCall(keyword?.trim(), cancelTokenSourceRef.current.token,
+            (response) => {
                 const preparedPersons = {};
                 response.data.results.forEach((person, personIndex) => {
                     preparedPersons[personIndex] = new PersonClass(person);
                 });
-
                 setPersons(preparedPersons);
-
-                findContacts();
-
-            })
-            .catch((error) => {
-                console.log(error);
-                window.displayError(error);
+                listContacts();
+            },
+            (error) => {
                 setLoading(false);
             });
     }
 
-    const findContacts = () => {
-        axios.get(`${BASE_URL}contacts/`, getConfig({
-            search: keyword?.trim()
-        }, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log("Contacts list", response.data);
-
+    const listContacts = () => {
+        listContactsCall(keyword?.trim(), 0, cancelTokenSourceRef.current.token,
+            (response) => {
                 const preparedContacts = {};
                 response.data.results.forEach((contact, contactIndex) => {
                     preparedContacts[contactIndex] = new ContactClass(contact);
                 });
-
                 setContacts(preparedContacts);
-
                 setLoading(false);
-
-            })
-            .catch((error) => {
-                console.log(error);
-                window.displayError(error);
+            }, (error) => {
                 setLoading(false);
             });
     }

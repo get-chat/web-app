@@ -625,7 +625,7 @@ function Main() {
             return;
         }
 
-        listContactsCall(0, (response) => {
+        listContactsCall(undefined, 0, undefined, (response) => {
             const preparedContactProvidersData = {};
             response.data.results.forEach((contact) => {
                 const contactPhoneNumbers = contact.phone_numbers;

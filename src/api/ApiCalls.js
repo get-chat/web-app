@@ -88,10 +88,11 @@ export const resolveContactCall = (personWaId, callback) => {
         });
 }
 
-export const listContactsCall = (limit, callback) => {
+export const listContactsCall = (search, limit, cancelToken, callback) => {
     axios.get( `${BASE_URL}contacts/`, getConfig({
+        search: search,
         limit: limit
-    }))
+    }, cancelToken))
         .then((response) => {
             callback?.(response);
         })
@@ -233,5 +234,18 @@ export const deleteChatTaggingCall = (chatTaggingId, callback) => {
         })
         .catch((error) => {
             window.displayError(error);
+        });
+}
+
+export const listPersonsCall = (search, cancelToken, callback, errorCallback) => {
+    axios.get(`${BASE_URL}persons/`, getConfig({
+        search: search
+    }, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            errorCallback?.(error);
         });
 }
