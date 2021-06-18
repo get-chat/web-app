@@ -259,3 +259,17 @@ export const retrieveChatAssignmentCall = (waId, callback) => {
             window.displayError(error);
         });
 }
+
+export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, callback) => {
+    axios.put( `${BASE_URL}chat_assignment/${waId}/`, {
+        'wa_id': waId,
+        'assigned_to_user': assignedToUser,
+        'assigned_group': assignedGroup,
+    }, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
