@@ -20,7 +20,7 @@ import {
 } from "../../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "../SearchBar";
-import SidebarContactResult from "../SidebarContactResult";
+import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../../ChatClass";
 import NewMessageClass from "../../NewMessageClass";
 import PubSub from "pubsub-js";
@@ -39,7 +39,7 @@ import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
-import {generateCancelToken} from "../../api/ApiCalls";
+import {generateCancelToken, listChatsCall} from "../../api/ApiCalls";
 
 function Sidebar(props) {
 
@@ -84,7 +84,7 @@ function Sidebar(props) {
         // Generate a token
         cancelTokenSourceRef.current = generateCancelToken();
 
-        getChats(cancelTokenSourceRef.current, true, undefined, true);
+        listChats(cancelTokenSourceRef.current, true, undefined, true);
 
         if (keyword.trim().length > 0) {
             searchMessages(cancelTokenSourceRef.current);
@@ -183,7 +183,7 @@ function Sidebar(props) {
                         retrieveChat(chatMessageWaId);
                     })
 
-                    //getChats(cancelTokenSourceRef.current, false, undefined, false);
+                    //listChats(cancelTokenSourceRef.current, false, undefined, false);
                 }
             }
         }
@@ -217,7 +217,7 @@ function Sidebar(props) {
 
                 if (isScrollable(el)) {
                     if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
-                        getChats(cancelTokenSourceRef.current, false, getObjLength(props.chats), false);
+                        listChats(cancelTokenSourceRef.current, false, getObjLength(props.chats), false);
                     }
                 }
             }, 100);
@@ -240,17 +240,9 @@ function Sidebar(props) {
         return Object.fromEntries(sortedState);
     }
 
-    const getChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
-        axios.get(`${BASE_URL}chats/`,
-            getConfig({
-                search: keyword,
-                limit: 18,
-                offset: offset
-            }, cancelTokenSource.token)
-        )
-            .then((response) => {
-                console.log("Chats", response.data)
-
+    const listChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
+        listChatsCall(keyword, 18, offset, cancelTokenSource.token,
+            (response) => {
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
                     const prepared = new ChatClass(contact);
@@ -320,11 +312,7 @@ function Sidebar(props) {
                         return {...prevState, ...preparedNewMessages}
                     });
                 }
-
-            })
-            .catch((error) => {
-                console.log(error);
-
+            }, (error) => {
                 if (error.response) {
                     handleIfUnauthorized(error);
                 }

@@ -38,6 +38,21 @@ export const logoutCall = (callback) => {
         });
 }
 
+export const listChatsCall = (keyword, limit, offset, cancelToken, callback, errorCallback) => {
+    axios.get(`${BASE_URL}chats/`,
+        getConfig({
+            search: keyword,
+            limit: 18,
+            offset: offset
+        }, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            errorCallback?.(error);
+        });
+}
+
 export const bulkSendCall = (body, callback) => {
     axios.post( `${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
