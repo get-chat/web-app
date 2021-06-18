@@ -14,6 +14,7 @@ import axios from "axios";
 import {BASE_URL} from "../../Constants";
 import {getConfig, getHubURL} from "../../helpers/Helpers";
 import '../../styles/ChatTags.css';
+import {retrievePersonCall} from "../../api/ApiCalls";
 
 function ChatTags(props) {
 
@@ -74,18 +75,13 @@ function ChatTags(props) {
     }
 
     const retrieveChat = () => {
-        axios.get( `${BASE_URL}chats/${props.waId}/`, getConfig())
-            .then((response) => {
-                console.log("Chat: ", response.data);
-
+        retrievePersonCall(props.waId,
+            (response) => {
                 setChat(response.data);
                 setChatTags(response.data.tags);
 
                 // Next
                 listTags();
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 

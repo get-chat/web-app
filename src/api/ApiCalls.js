@@ -202,3 +202,13 @@ export const markAsReceivedCall = (waId, timestamp, cancelToken, callback, histo
             handleIfUnauthorized(error, history);
         });
 }
+
+export const retrieveChatCall = (waId, callback) => {
+    axios.get( `${BASE_URL}chats/${waId}/`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
