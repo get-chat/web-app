@@ -17,6 +17,7 @@ import {BASE_URL} from "../../Constants";
 import {getConfig} from "../../helpers/Helpers";
 import '../../styles/ChatAssignment.css';
 import UserClass from "../../UserClass";
+import {retrieveChatAssignmentCall} from "../../api/ApiCalls";
 
 function ChatAssignment(props) {
 
@@ -35,17 +36,12 @@ function ChatAssignment(props) {
     }
 
     const retrieveChatAssignment = () => {
-        axios.get( `${BASE_URL}chat_assignment/${props.waId}/`, getConfig())
-            .then((response) => {
-                console.log("Assignment: ", response.data);
-
+        retrieveChatAssignmentCall(props.waId,
+            (response) => {
                 setAssignedToUser(response.data.assigned_to_user ?? 'null');
                 setAssignedGroup(response.data.assigned_group ?? 'null');
 
                 setLoading(false);
-            })
-            .catch((error) => {
-                window.displayError(error);
             });
     }
 

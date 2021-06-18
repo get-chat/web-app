@@ -249,3 +249,13 @@ export const listPersonsCall = (search, cancelToken, callback, errorCallback) =>
             errorCallback?.(error);
         });
 }
+
+export const retrieveChatAssignmentCall = (waId, callback) => {
+    axios.get( `${BASE_URL}chat_assignment/${waId}/`, getConfig())
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
