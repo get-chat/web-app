@@ -25,7 +25,7 @@ function LoadingScreen(props) {
     return (
         <div className="loadingScreen">
             <div className="loadingScreen__logoContainer">
-                <img src={logoBlack} />
+                <img src={logoBlack} alt="Logo" />
             </div>
             <div className="loadingScreen__progressContainer">
                 <LinearProgress variant="determinate" value={props.progress} />

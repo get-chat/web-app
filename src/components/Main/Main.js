@@ -4,7 +4,7 @@ import Chat from "../Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getConfig, getWebSocketURL, preparePhoneNumber} from "../../helpers/Helpers";
+import {getWebSocketURL, preparePhoneNumber} from "../../helpers/Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "../SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -12,7 +12,6 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
-    BASE_URL,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
@@ -27,13 +26,7 @@ import {
 import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
 import logo from '../../assets/images/logo.png';
-import {
-    clearContactProvidersData,
-    clearToken,
-    getContactProvidersData,
-    getToken,
-    storeContactProvidersData
-} from "../../helpers/StorageHelper";
+import {getContactProvidersData, getToken, storeContactProvidersData} from "../../helpers/StorageHelper";
 import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
 import ChatTagsList from "./ChatTagsList";
@@ -42,10 +35,15 @@ import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
 import {
-    bulkSendCall, createSavedResponseCall, deleteSavedResponseCall, listContactsCall,
-    listSavedResponsesCall, listTagsCall,
+    bulkSendCall,
+    createSavedResponseCall,
+    deleteSavedResponseCall,
+    listContactsCall,
+    listSavedResponsesCall,
+    listTagsCall,
     listTemplatesCall,
-    listUsersCall, resolveContactCall,
+    listUsersCall,
+    resolveContactCall,
     retrieveCurrentUserCall
 } from "../../api/ApiCalls";
 import {clearUserSession} from "../../helpers/ApiHelper";

@@ -1,7 +1,5 @@
-import React, {useEffect, useState} from "react";
-import axios from "axios";
-import {BASE_URL} from "../../Constants";
-import {getConfig, getHubURL} from "../../helpers/Helpers";
+import React, {useState} from "react";
+import {getHubURL} from "../../helpers/Helpers";
 import {
     Button,
     CircularProgress,

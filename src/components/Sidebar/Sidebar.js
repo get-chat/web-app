@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../../styles/Sidebar.css';
-import {Avatar, Button, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import axios from "axios";
