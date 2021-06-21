@@ -414,3 +414,14 @@ export const updateProfileAboutCall = (about, cancelToken, callback, errorCallba
             errorCallback?.(error);
         });
 }
+
+export const retrieveProfilePhotoCall = (cancelToken, callback, errorCallback) => {
+    axios.get(`${BASE_URL}settings/profile/photo/`,
+        getConfig(undefined, cancelToken, 'arraybuffer'))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            errorCallback?.(error);
+        });
+}

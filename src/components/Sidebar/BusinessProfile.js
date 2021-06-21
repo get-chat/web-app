@@ -11,6 +11,7 @@ import {
     generateCancelToken,
     retrieveBusinessProfileCall,
     retrieveProfileAboutCall,
+    retrieveProfilePhotoCall,
     updateBusinessProfileCall,
     updateProfileAboutCall
 } from "../../api/ApiCalls";
@@ -94,7 +95,7 @@ function BusinessProfile(props) {
             (response) => {
                 const profile = response.data.settings?.profile;
                 setAbout(profile?.about?.text);
-                getProfilePhoto();
+                retrieveProfilePhoto();
             });
     }
 
@@ -109,18 +110,15 @@ function BusinessProfile(props) {
             });
     }
 
-    const getProfilePhoto = () => {
-        axios.get(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelTokenSourceRef.current.token, 'arraybuffer'))
-            .then((response) => {
+    const retrieveProfilePhoto = () => {
+        retrieveProfilePhotoCall(cancelTokenSourceRef.current.token,
+            (response) => {
                 const base64 = Buffer.from(response.data, 'binary').toString('base64');
                 setProfilePhoto(base64);
 
                 // Finish
                 setLoaded(true);
-            })
-            .catch((error) => {
-                console.log(error);
-
+            }, (error) => {
                 // No photo
                 if (error?.response?.status === 404) {
                     // Finish
@@ -142,7 +140,7 @@ function BusinessProfile(props) {
                 setUpdating(false);
 
                 // Display new photo
-                getProfilePhoto();
+                retrieveProfilePhoto();
 
             })
             .catch((error) => {
