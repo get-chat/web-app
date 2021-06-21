@@ -362,3 +362,13 @@ export const verifyContactsCall = (contacts, cancelToken, callback, cancelCallba
             cancelCallback?.(error);
         });
 }
+
+export const retrieveBusinessProfileCall = (cancelToken, callback) => {
+    axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}

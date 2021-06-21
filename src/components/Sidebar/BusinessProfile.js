@@ -7,7 +7,7 @@ import {BASE_URL} from "../../Constants";
 import {generateInitialsHelper, getConfig} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import {avatarStyles} from "../../AvatarStyles";
-import {generateCancelToken} from "../../api/ApiCalls";
+import {generateCancelToken, retrieveBusinessProfileCall} from "../../api/ApiCalls";
 
 function BusinessProfile(props) {
 
@@ -39,7 +39,7 @@ function BusinessProfile(props) {
         // Generate a token
         cancelTokenSourceRef.current = generateCancelToken();
 
-        getBusinessProfile();
+        retrieveBusinessProfile();
 
         return () => {
             document.removeEventListener('keydown', handleKey);
@@ -47,11 +47,9 @@ function BusinessProfile(props) {
         }
     }, []);
 
-    const getBusinessProfile = () => {
-        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log(response.data);
-
+    const retrieveBusinessProfile = () => {
+        retrieveBusinessProfileCall(cancelTokenSourceRef.current.token,
+            (response) => {
                 const data = response.data;
 
                 setAddress(data.address);
@@ -68,12 +66,6 @@ function BusinessProfile(props) {
 
                 // Load about
                 getAbout();
-
-            })
-            .catch((error) => {
-                console.log(error);
-
-                window.displayError(error);
             });
     }
 
