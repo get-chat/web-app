@@ -3,15 +3,13 @@ import '../styles/SearchMessage.css';
 import {IconButton} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import {BASE_URL, EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
+import {EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
 import SearchBar from "./SearchBar";
 import {useParams} from "react-router-dom";
-import axios from "axios";
-import {getConfig} from "../helpers/Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobileOnly} from 'react-device-detect';
-import {generateCancelToken} from "../api/ApiCalls";
+import {generateCancelToken, searchMessagesCall} from "../api/ApiCalls";
 
 function SearchMessage(props) {
 
@@ -49,30 +47,16 @@ function SearchMessage(props) {
 
         setLoading(true);
 
-        axios.get( `${BASE_URL}messages/`,
-            getConfig({
-                wa_id: waId,
-                //offset: offset ?? 0,
-                limit: 30,
-                search: _keyword
-            }, cancelTokenSourceRef.current.token)
-        )
-            .then((response) => {
-                console.log("Messages", response.data);
-
+        searchMessagesCall(waId, _keyword, 30, cancelTokenSourceRef.current.token,
+            (response) => {
                 const preparedMessages = {};
                 response.data.results.forEach((message) => {
                     const prepared = new ChatMessageClass(message);
                     preparedMessages[prepared.id] = prepared;
                 });
-
                 setResults(preparedMessages);
-
                 setLoading(false);
-
-            })
-            .catch((error) => {
-                window.displayError(error);
+            }, (error) => {
                 setLoading(false);
             });
     }

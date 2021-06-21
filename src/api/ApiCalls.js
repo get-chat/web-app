@@ -233,6 +233,24 @@ export const listChatTaggingEventsCall = (waId, beforeTime, sinceTime, cancelTok
         });
 }
 
+export const searchMessagesCall = (waId, search, limit, cancelToken, callback, errorCallback) => {
+    axios.get( `${BASE_URL}messages/`,
+        getConfig({
+            wa_id: waId,
+            search: search,
+            //offset: offset ?? 0,
+            limit: limit,
+        }, cancelToken)
+    )
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            errorCallback?.(error);
+        });
+}
+
 export const sendMessageCall = (body, callback, errorCallback) => {
     axios.post(`${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
