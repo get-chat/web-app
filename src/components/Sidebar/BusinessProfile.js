@@ -7,7 +7,12 @@ import {BASE_URL} from "../../Constants";
 import {generateInitialsHelper, getConfig} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import {avatarStyles} from "../../AvatarStyles";
-import {generateCancelToken, retrieveBusinessProfileCall, updateBusinessProfileCall} from "../../api/ApiCalls";
+import {
+    generateCancelToken,
+    retrieveBusinessProfileCall,
+    retrieveProfileAboutCall,
+    updateBusinessProfileCall
+} from "../../api/ApiCalls";
 
 function BusinessProfile(props) {
 
@@ -65,7 +70,7 @@ function BusinessProfile(props) {
                 setWebsites({...websitesArray});
 
                 // Load about
-                getAbout();
+                retrieveProfileAbout();
             });
     }
 
@@ -77,32 +82,22 @@ function BusinessProfile(props) {
         updateBusinessProfileCall(address, description, email, vertical, Object.values(websites),
             cancelTokenSourceRef.current.token,
             (response) => {
-                updateAbout(event);
+                updateProfileAbout(event);
             }, (error) => {
                 setUpdating(false);
             });
     }
 
-    const getAbout = () => {
-        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log(response.data);
-
+    const retrieveProfileAbout = () => {
+        retrieveProfileAboutCall(cancelTokenSourceRef.current.token,
+            (response) => {
                 const profile = response.data.settings?.profile;
-
                 setAbout(profile?.about?.text);
-
                 getProfilePhoto();
-
-            })
-            .catch((error) => {
-                console.log(error);
-
-                window.displayError(error);
             });
     }
 
-    const updateAbout = async event => {
+    const updateProfileAbout = async event => {
         event.preventDefault();
 
         axios.patch( `${BASE_URL}settings/profile/about/`, {

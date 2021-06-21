@@ -391,3 +391,13 @@ export const updateBusinessProfileCall = (address, description, email, vertical,
             cancelCallback?.(error);
         });
 }
+
+export const retrieveProfileAboutCall = (cancelToken, callback) => {
+    axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}
