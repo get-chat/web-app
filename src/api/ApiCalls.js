@@ -19,8 +19,8 @@ export const baseCall = (callback, errorCallback) => {
 
 export const loginCall = (username, password, callback, errorCallback) => {
     axios.post(`${BASE_URL}auth/token/`, {
-        username : username,
-        password : password
+        username: username,
+        password: password
     }).then((response) => {
         callback?.(response);
     }).catch((error) => {
@@ -29,7 +29,7 @@ export const loginCall = (username, password, callback, errorCallback) => {
 }
 
 export const logoutCall = (callback) => {
-    axios.get( `${BASE_URL}auth/logout/`, getConfig())
+    axios.get(`${BASE_URL}auth/logout/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -66,7 +66,7 @@ export const listChatsCall = (keyword, limit, offset, cancelToken, callback, his
 }
 
 export const bulkSendCall = (body, callback) => {
-    axios.post( `${BASE_URL}messages/`, body, getConfig())
+    axios.post(`${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -76,7 +76,7 @@ export const bulkSendCall = (body, callback) => {
 }
 
 export const listUsersCall = (limit, callback) => {
-    axios.get( `${BASE_URL}users/`, getConfig({
+    axios.get(`${BASE_URL}users/`, getConfig({
         limit: limit
     }))
         .then((response) => {
@@ -88,7 +88,7 @@ export const listUsersCall = (limit, callback) => {
 }
 
 export const retrieveCurrentUserCall = (callback, history) => {
-    axios.get( `${BASE_URL}users/current/`, getConfig())
+    axios.get(`${BASE_URL}users/current/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -99,7 +99,7 @@ export const retrieveCurrentUserCall = (callback, history) => {
 }
 
 export const listTemplatesCall = (callback) => {
-    axios.get( `${BASE_URL}templates/`, getConfig())
+    axios.get(`${BASE_URL}templates/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -109,7 +109,7 @@ export const listTemplatesCall = (callback) => {
 }
 
 export const listSavedResponsesCall = (callback) => {
-    axios.get( `${BASE_URL}saved_responses/`, getConfig())
+    axios.get(`${BASE_URL}saved_responses/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -119,7 +119,7 @@ export const listSavedResponsesCall = (callback) => {
 }
 
 export const createSavedResponseCall = (text, callback) => {
-    axios.post( `${BASE_URL}saved_responses/`, {
+    axios.post(`${BASE_URL}saved_responses/`, {
         text: text
     }, getConfig())
         .then((response) => {
@@ -131,7 +131,7 @@ export const createSavedResponseCall = (text, callback) => {
 }
 
 export const deleteSavedResponseCall = (id, callback) => {
-    axios.delete( `${BASE_URL}saved_responses/${id}/`, getConfig())
+    axios.delete(`${BASE_URL}saved_responses/${id}/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -141,7 +141,7 @@ export const deleteSavedResponseCall = (id, callback) => {
 }
 
 export const resolveContactCall = (personWaId, callback) => {
-    axios.get( `${BASE_URL}contacts/${personWaId}`, getConfig())
+    axios.get(`${BASE_URL}contacts/${personWaId}`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -151,7 +151,7 @@ export const resolveContactCall = (personWaId, callback) => {
 }
 
 export const listContactsCall = (search, limit, cancelToken, callback) => {
-    axios.get( `${BASE_URL}contacts/`, getConfig({
+    axios.get(`${BASE_URL}contacts/`, getConfig({
         search: search,
         limit: limit
     }, cancelToken))
@@ -164,7 +164,7 @@ export const listContactsCall = (search, limit, cancelToken, callback) => {
 }
 
 export const listTagsCall = (callback) => {
-    axios.get( `${BASE_URL}tags/`, getConfig())
+    axios.get(`${BASE_URL}tags/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -183,8 +183,9 @@ export const retrievePersonCall = (waId, cancelToken, callback, errorCallback) =
         });
 }
 
-export const listMessagesCall = (waId, search, limit, offset, beforeTime, sinceTime, cancelToken, callback, errorCallback, history) => {
-    axios.get( `${BASE_URL}messages/`,
+export const listMessagesCall = (waId, search, limit, offset, beforeTime, sinceTime, cancelToken, callback,
+                                 errorCallback, history) => {
+    axios.get(`${BASE_URL}messages/`,
         getConfig({
             wa_id: waId,
             search: search,
@@ -233,7 +234,7 @@ export const listChatTaggingEventsCall = (waId, beforeTime, sinceTime, cancelTok
 }
 
 export const sendMessageCall = (body, callback, errorCallback) => {
-    axios.post( `${BASE_URL}messages/`, body, getConfig())
+    axios.post(`${BASE_URL}messages/`, body, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -255,7 +256,7 @@ export const uploadMediaCall = (formData, callback, errorCallback) => {
 }
 
 export const markAsReceivedCall = (waId, timestamp, cancelToken, callback, history) => {
-    axios.post( `${BASE_URL}mark_as_received/`, {
+    axios.post(`${BASE_URL}mark_as_received/`, {
         customer_wa_id: waId,
         timestamp: timestamp
     }, getConfig(undefined, cancelToken))
@@ -269,7 +270,7 @@ export const markAsReceivedCall = (waId, timestamp, cancelToken, callback, histo
 }
 
 export const retrieveChatCall = (waId, callback) => {
-    axios.get( `${BASE_URL}chats/${waId}/`, getConfig())
+    axios.get(`${BASE_URL}chats/${waId}/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -279,7 +280,7 @@ export const retrieveChatCall = (waId, callback) => {
 }
 
 export const createChatTaggingCall = (waId, chatTaggingId, callback) => {
-    axios.post( `${BASE_URL}chat_tagging/`, {
+    axios.post(`${BASE_URL}chat_tagging/`, {
         chat: waId,
         tag: chatTaggingId
     }, getConfig())
@@ -292,7 +293,7 @@ export const createChatTaggingCall = (waId, chatTaggingId, callback) => {
 }
 
 export const deleteChatTaggingCall = (chatTaggingId, callback) => {
-    axios.delete( `${BASE_URL}chat_tagging/${chatTaggingId}`, getConfig())
+    axios.delete(`${BASE_URL}chat_tagging/${chatTaggingId}`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -315,7 +316,7 @@ export const listPersonsCall = (search, cancelToken, callback, errorCallback) =>
 }
 
 export const retrieveChatAssignmentCall = (waId, callback) => {
-    axios.get( `${BASE_URL}chat_assignment/${waId}/`, getConfig())
+    axios.get(`${BASE_URL}chat_assignment/${waId}/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -325,7 +326,7 @@ export const retrieveChatAssignmentCall = (waId, callback) => {
 }
 
 export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, callback) => {
-    axios.put( `${BASE_URL}chat_assignment/${waId}/`, {
+    axios.put(`${BASE_URL}chat_assignment/${waId}/`, {
         'wa_id': waId,
         'assigned_to_user': assignedToUser,
         'assigned_group': assignedGroup,
@@ -339,7 +340,7 @@ export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, ca
 }
 
 export const listGroupsCall = (callback) => {
-    axios.get( `${BASE_URL}groups/`, getConfig())
+    axios.get(`${BASE_URL}groups/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
@@ -349,7 +350,7 @@ export const listGroupsCall = (callback) => {
 }
 
 export const verifyContactsCall = (contacts, cancelToken, callback, cancelCallback) => {
-    axios.post( `${BASE_URL}contacts/verify/`, {
+    axios.post(`${BASE_URL}contacts/verify/`, {
         blocking: "wait",
         contacts: contacts,
         force_check: true
@@ -370,5 +371,23 @@ export const retrieveBusinessProfileCall = (cancelToken, callback) => {
         })
         .catch((error) => {
             window.displayError(error);
+        });
+}
+
+export const updateBusinessProfileCall = (address, description, email, vertical, websites, cancelToken, callback,
+                                          cancelCallback) => {
+    axios.patch(`${BASE_URL}settings/business/profile/`, {
+        address: address,
+        description: description,
+        email: email,
+        vertical: vertical,
+        websites: Object.values(websites)
+    }, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            cancelCallback?.(error);
         });
 }

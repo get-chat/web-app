@@ -7,7 +7,7 @@ import {BASE_URL} from "../../Constants";
 import {generateInitialsHelper, getConfig} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import {avatarStyles} from "../../AvatarStyles";
-import {generateCancelToken, retrieveBusinessProfileCall} from "../../api/ApiCalls";
+import {generateCancelToken, retrieveBusinessProfileCall, updateBusinessProfileCall} from "../../api/ApiCalls";
 
 function BusinessProfile(props) {
 
@@ -74,26 +74,12 @@ function BusinessProfile(props) {
 
         setUpdating(true);
 
-        axios.patch( `${BASE_URL}settings/business/profile/`, {
-            address: address,
-            description: description,
-            email: email,
-            vertical: vertical,
-            websites: Object.values(websites)
-        }, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log(response.data);
-
-                // Update about
+        updateBusinessProfileCall(address, description, email, vertical, Object.values(websites),
+            cancelTokenSourceRef.current.token,
+            (response) => {
                 updateAbout(event);
-
-            })
-            .catch((error) => {
-                console.log(error);
-
+            }, (error) => {
                 setUpdating(false);
-
-                window.displayError(error);
             });
     }
 
