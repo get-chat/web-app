@@ -349,7 +349,7 @@ export const listGroupsCall = (callback) => {
         });
 }
 
-export const verifyContactsCall = (contacts, cancelToken, callback, cancelCallback) => {
+export const verifyContactsCall = (contacts, cancelToken, callback, errorCallback) => {
     axios.post(`${BASE_URL}contacts/verify/`, {
         blocking: "wait",
         contacts: contacts,
@@ -360,7 +360,7 @@ export const verifyContactsCall = (contacts, cancelToken, callback, cancelCallba
         })
         .catch((error) => {
             window.displayError(error);
-            cancelCallback?.(error);
+            errorCallback?.(error);
         });
 }
 
@@ -375,7 +375,7 @@ export const retrieveBusinessProfileCall = (cancelToken, callback) => {
 }
 
 export const updateBusinessProfileCall = (address, description, email, vertical, websites, cancelToken, callback,
-                                          cancelCallback) => {
+                                          errorCallback) => {
     axios.patch(`${BASE_URL}settings/business/profile/`, {
         address: address,
         description: description,
@@ -388,7 +388,7 @@ export const updateBusinessProfileCall = (address, description, email, vertical,
         })
         .catch((error) => {
             window.displayError(error);
-            cancelCallback?.(error);
+            errorCallback?.(error);
         });
 }
 
@@ -399,5 +399,18 @@ export const retrieveProfileAboutCall = (cancelToken, callback) => {
         })
         .catch((error) => {
             window.displayError(error);
+        });
+}
+
+export const updateProfileAboutCall = (about, cancelToken, callback, errorCallback) => {
+    axios.patch( `${BASE_URL}settings/profile/about/`, {
+        text: about
+    }, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+            errorCallback?.(error);
         });
 }

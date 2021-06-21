@@ -11,7 +11,8 @@ import {
     generateCancelToken,
     retrieveBusinessProfileCall,
     retrieveProfileAboutCall,
-    updateBusinessProfileCall
+    updateBusinessProfileCall,
+    updateProfileAboutCall
 } from "../../api/ApiCalls";
 
 function BusinessProfile(props) {
@@ -100,21 +101,11 @@ function BusinessProfile(props) {
     const updateProfileAbout = async event => {
         event.preventDefault();
 
-        axios.patch( `${BASE_URL}settings/profile/about/`, {
-            text: about
-        }, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log(response.data);
-
+        updateProfileAboutCall(about, cancelTokenSourceRef.current.token,
+            (response) => {
                 setUpdating(false);
-
-            })
-            .catch((error) => {
-                console.log(error);
-
+            }, (error) => {
                 setUpdating(false);
-
-                window.displayError(error);
             });
     }
 
