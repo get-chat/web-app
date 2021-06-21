@@ -1,11 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 import '../../styles/SendTemplateMessage.css';
-import {getConfig, getTemplateParams, templateParamToInteger} from "../../helpers/Helpers";
+import {getTemplateParams, templateParamToInteger} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
-import axios from "axios";
-import {BASE_URL} from "../../Constants";
 import {Alert, AlertTitle} from "@material-ui/lab";
+import {uploadMediaCall} from "../../api/ApiCalls";
 
 function SendTemplateMessage(props) {
 
@@ -128,19 +127,13 @@ function SendTemplateMessage(props) {
 
         setUploading(true);
 
-        axios.post(`${BASE_URL}media/`, formData, getConfig())
-            .then((response) => {
-                console.log(response.data);
-
+        uploadMediaCall(formData,
+            (response) => {
                 const fileURL = response.data.file;
                 setHeaderFileURL(fileURL);
 
                 setUploading(false);
-
-            })
-            .catch((error) => {
-                // TODO: Handle errors
-
+            }, (error) => {
                 setUploading(false);
             });
     }
