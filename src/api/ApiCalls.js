@@ -436,3 +436,13 @@ export const updateProfilePhotoCall = (formData, cancelToken, callback, errorCal
             errorCallback?.(error);
         });
 }
+
+export const deleteProfilePhotoCall = (cancelToken, callback) => {
+    axios.delete(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelToken))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            window.displayError(error);
+        });
+}

@@ -2,12 +2,11 @@ import React, {useEffect, useRef, useState} from "react";
 import '../../styles/BusinessProfile.css';
 import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
-import axios from "axios";
-import {BASE_URL} from "../../Constants";
-import {generateInitialsHelper, getConfig} from "../../helpers/Helpers";
+import {generateInitialsHelper} from "../../helpers/Helpers";
 import FileInput from "../FileInput";
 import {avatarStyles} from "../../AvatarStyles";
 import {
+    deleteProfilePhotoCall,
     generateCancelToken,
     retrieveBusinessProfileCall,
     retrieveProfileAboutCall,
@@ -146,14 +145,9 @@ function BusinessProfile(props) {
     }
 
     const deleteProfilePhoto = () => {
-        axios.delete(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
+        deleteProfilePhotoCall(cancelTokenSourceRef.current.token,
+            (response) => {
                 setProfilePhoto(undefined);
-            })
-            .catch((error) => {
-                console.log(error);
-
-                window.displayError(error);
             });
     }
 
