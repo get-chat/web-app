@@ -903,7 +903,7 @@ export default function Chat(props) {
 
     const displayFailedMessage = (requestBody, isStored, willClearInput) => {
         setMessages(prevState => {
-            let text = '';
+            let text;
 
             if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
                 text = requestBody.text.body;
