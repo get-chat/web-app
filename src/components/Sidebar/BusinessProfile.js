@@ -13,7 +13,8 @@ import {
     retrieveProfileAboutCall,
     retrieveProfilePhotoCall,
     updateBusinessProfileCall,
-    updateProfileAboutCall
+    updateProfileAboutCall,
+    updateProfilePhotoCall
 } from "../../api/ApiCalls";
 
 function BusinessProfile(props) {
@@ -133,22 +134,14 @@ function BusinessProfile(props) {
         const formData = new FormData();
         formData.append("file_encoded", file[0]);
 
-        axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelTokenSourceRef.current.token))
-            .then((response) => {
-                console.log(response.data);
-
+        updateProfilePhotoCall(formData, cancelTokenSourceRef.current.token,
+            (response) => {
                 setUpdating(false);
 
                 // Display new photo
                 retrieveProfilePhoto();
-
-            })
-            .catch((error) => {
-                console.log(error);
-
+            }, (error) => {
                 setUpdating(false);
-
-                window.displayError(error);
             });
     }
 
