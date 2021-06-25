@@ -149,14 +149,14 @@ function Main() {
     };
 
     const finishBulkSendMessage = () => {
+        const payload = {...bulkSendPayload};
         const recipients = selectedChats;
         const tags = selectedTags;
-        const payload = bulkSendPayload;
 
-        console.log(recipients, tags, payload);
+        payload.recipients = recipients;
+        payload.tags = tags;
 
-        // TODO: Inject recipients and tags
-        // TODO: Complete sending
+        console.log(payload);
 
         bulkSendCall(payload, () => {
             // Disable selection mode

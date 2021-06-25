@@ -66,7 +66,7 @@ export const listChatsCall = (keyword, limit, offset, cancelToken, callback, his
 }
 
 export const bulkSendCall = (body, callback) => {
-    axios.post(`${BASE_URL}messages/`, body, getConfig())
+    axios.post(`${BASE_URL}bulk_messages/`, body, getConfig())
         .then((response) => {
             callback?.(response);
         })
