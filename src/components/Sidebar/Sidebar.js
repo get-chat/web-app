@@ -40,6 +40,7 @@ function Sidebar(props) {
     const [isProfileVisible, setProfileVisible] = useState(false);
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
+    const [isNotificationsVisible, setNotificationsVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
     const [isBulkSendIndicatorVisible, setBulkSendIndicatorVisible] = useState(false);
@@ -578,7 +579,9 @@ function Sidebar(props) {
                 open={isChangePasswordDialogVisible}
                 setOpen={setChangePasswordDialogVisible} />
 
-            <Notifications />
+            {isNotificationsVisible &&
+            <Notifications/>
+            }
 
         </div>
     )
