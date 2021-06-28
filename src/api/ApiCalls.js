@@ -464,3 +464,14 @@ export const deleteProfilePhotoCall = (cancelToken, callback) => {
             window.displayError(error);
         });
 }
+
+export const retrieveBulkMessageElementsCall = (cancelToken, callback, errorCallback) => {
+    axios.get(`${BASE_URL}bulk_message_elements/profile/photo/`,
+        getConfig(undefined, cancelToken, 'arraybuffer'))
+        .then((response) => {
+            callback?.(response);
+        })
+        .catch((error) => {
+            errorCallback?.(error);
+        });
+}
