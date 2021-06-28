@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {retrieveBulkMessageElementsCall} from "../api/ApiCalls";
+import {generateCancelToken, retrieveBulkMessageElementsCall} from "../api/ApiCalls";
 import '../styles/Notifications.css';
 
 function Notifications(props) {
@@ -8,6 +8,7 @@ function Notifications(props) {
     let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
+        cancelTokenSourceRef.current = generateCancelToken();
         retrieveBulkMessageElements();
 
         return () => {
@@ -25,10 +26,21 @@ function Notifications(props) {
     }
 
     return (
-        <div>
-            {bulkMessageElements.map((notification) =>
-                <div>{JSON.stringify(notification)}</div>
-            )}
+        <div className="notificationsWrapper">
+            <div className="notifications">
+
+                <div className="notifications__header">
+                    <h3>Notifications</h3>
+                </div>
+
+                <div className="notifications__body">
+                    {bulkMessageElements.map((notification) =>
+                        <div>{JSON.stringify(notification)}</div>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }
+
+export default Notifications;

@@ -27,6 +27,7 @@ import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../api/ApiCalls";
+import Notifications from "../Notifications";
 
 function Sidebar(props) {
 
@@ -576,6 +577,8 @@ function Sidebar(props) {
             <ChangePasswordDialog
                 open={isChangePasswordDialogVisible}
                 setOpen={setChangePasswordDialogVisible} />
+
+            <Notifications />
 
         </div>
     )
