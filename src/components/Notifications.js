@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {retrieveBulkMessageElementsCall} from "../api/ApiCalls";
+import '../styles/Notifications.css';
 
 function Notifications(props) {
 
