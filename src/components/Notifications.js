@@ -25,7 +25,9 @@ function Notifications(props) {
 
     return (
         <div>
-            {JSON.stringify(bulkMessageElements)}
+            {bulkMessageElements.map((notification) =>
+                <div>{JSON.stringify(notification)}</div>
+            )}
         </div>
     )
 }
