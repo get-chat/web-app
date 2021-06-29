@@ -449,7 +449,7 @@ function Main() {
                             console.log(bulkMessageTaskElement);
 
                             const preparedBulkMessageTaskElements = {};
-                            const prepared = BulkMessageTaskElementClass(bulkMessageTaskElement);
+                            const prepared = new BulkMessageTaskElementClass(bulkMessageTaskElement);
                             preparedBulkMessageTaskElements[prepared.id] = prepared;
                         }
                     }
