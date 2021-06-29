@@ -441,6 +441,12 @@ function Main() {
                                 }
                             });
                         }
+
+                        const bulkMessageTaskElements = wabaPayload?.bulk_message_task_elements;
+
+                        if (bulkMessageTaskElements) {
+                            console.log(bulkMessageTaskElements);
+                        }
                     }
 
                 } catch (error) {
