@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import {generateCancelToken, retrieveBulkMessageElementsCall} from "../api/ApiCalls";
 import '../styles/Notifications.css';
+import PubSub from "pubsub-js";
+import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../Constants";
 
 function Notifications(props) {
 
@@ -11,8 +13,18 @@ function Notifications(props) {
         cancelTokenSourceRef.current = generateCancelToken();
         retrieveBulkMessageElements();
 
+        const onBulkMessageTaskElement = function (msg, data) {
+            if (data.status) {
+                // Means a bulk message task element has failed, so we refresh the data
+                retrieveBulkMessageElements();
+            }
+        }
+
+        const bulkMessageTaskElementEventToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, onBulkMessageTaskElement);
+
         return () => {
             cancelTokenSourceRef.current.cancel();
+            PubSub.unsubscribe(bulkMessageTaskElementEventToken);
         }
     }, []);
 

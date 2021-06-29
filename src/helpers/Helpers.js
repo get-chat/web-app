@@ -193,7 +193,8 @@ export const getBaseURL = () => {
 export const getWebSocketURL = () => {
     const baseURL = getBaseURL();
     if (baseURL.includes('localhost') || baseURL.includes('10.0.2.2')) {
-        return 'wss://websockets.whatsapp.kondz.io/';
+        return 'ws://localhost:6789/';
+        //return 'wss://websockets.whatsapp.kondz.io/';
     } else {
         return baseURL.replace('https://', 'wss://websockets-').replace('http://', 'wss://websockets-');
     }
