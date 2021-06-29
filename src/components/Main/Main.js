@@ -47,6 +47,7 @@ import {
     retrieveCurrentUserCall
 } from "../../api/ApiCalls";
 import {clearUserSession} from "../../helpers/ApiHelper";
+import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -442,10 +443,14 @@ function Main() {
                             });
                         }
 
-                        const bulkMessageTaskElements = wabaPayload?.bulk_message_task_elements;
+                        const bulkMessageTaskElement = wabaPayload?.bulk_message_task_element;
 
-                        if (bulkMessageTaskElements) {
-                            console.log(bulkMessageTaskElements);
+                        if (bulkMessageTaskElement) {
+                            console.log(bulkMessageTaskElement);
+
+                            const preparedBulkMessageTaskElements = {};
+                            const prepared = BulkMessageTaskElementClass(bulkMessageTaskElement);
+                            preparedBulkMessageTaskElements[prepared.id] = prepared;
                         }
                     }
 
