@@ -444,14 +444,17 @@ function Main() {
                             });
                         }
 
-                        const bulkMessageTaskElement = wabaPayload?.bulk_message_task_element;
+                        const bulkMessageTaskElements = wabaPayload?.bulk_message_task_elements;
 
-                        if (bulkMessageTaskElement) {
-                            console.log(bulkMessageTaskElement);
+                        if (bulkMessageTaskElements) {
+                            console.log(bulkMessageTaskElements);
 
                             const preparedBulkMessageTaskElements = {};
-                            const prepared = new BulkMessageTaskElementClass(bulkMessageTaskElement);
-                            preparedBulkMessageTaskElements[prepared.id] = prepared;
+
+                            bulkMessageTaskElements.forEach((element) => {
+                                const prepared = new BulkMessageTaskElementClass(element);
+                                preparedBulkMessageTaskElements[prepared.id] = prepared;
+                            });
 
                             PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, preparedBulkMessageTaskElements);
                         }
