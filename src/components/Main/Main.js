@@ -12,6 +12,7 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
+    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
@@ -451,6 +452,8 @@ function Main() {
                             const preparedBulkMessageTaskElements = {};
                             const prepared = new BulkMessageTaskElementClass(bulkMessageTaskElement);
                             preparedBulkMessageTaskElements[prepared.id] = prepared;
+
+                            PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, preparedBulkMessageTaskElements);
                         }
                     }
 

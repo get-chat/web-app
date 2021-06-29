@@ -20,6 +20,7 @@ export const EVENT_TOPIC_UPDATE_PERSON_NAME = "update_person_name";
 export const EVENT_TOPIC_CHAT_ASSIGNMENT = "chat_assignment";
 export const EVENT_TOPIC_CHAT_TAGGING = "chat_tagging";
 export const EVENT_TOPIC_UNSUPPORTED_FILE = "unsupported_file";
+export const EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT = "bulk_message_task_element";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
