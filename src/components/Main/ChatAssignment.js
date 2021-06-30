@@ -37,6 +37,11 @@ function ChatAssignment(props) {
                 setAssignedGroup(response.data.assigned_group ?? 'null');
 
                 setLoading(false);
+            }, (error) => {
+                if (error?.response?.status === 403) {
+                    window.displayCustomError('This chat is already assigned to another user.');
+                }
+                close();
             });
     }
 

@@ -333,13 +333,16 @@ export const listPersonsCall = (search, cancelToken, callback, errorCallback) =>
         });
 }
 
-export const retrieveChatAssignmentCall = (waId, callback) => {
+export const retrieveChatAssignmentCall = (waId, callback, errorCallback) => {
     axios.get(`${BASE_URL}chat_assignment/${waId}/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
         .catch((error) => {
-            window.displayError(error);
+            if (error?.response?.status !== 403) {
+                window.displayError(error);
+            }
+            errorCallback?.(error);
         });
 }
 
