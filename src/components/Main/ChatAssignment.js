@@ -20,8 +20,10 @@ function ChatAssignment(props) {
     const [isLoading, setLoading] = useState(true);
     const [isUnableToChange, setUnableToChange] = useState(false);
     const [groups, setGroups] = useState([]);
-    const [assignedToUser, setAssignedToUser] = useState('null');
-    const [assignedGroup, setAssignedGroup] = useState('null');
+    const [assignedToUser, setAssignedToUser] = useState();
+    const [assignedGroup, setAssignedGroup] = useState();
+    const [tempAssignedToUser, setTempAssignedToUser] = useState('null');
+    const [tempAssignedGroup, setTempAssignedGroup] = useState('null');
 
     useEffect(() => {
         listGroups();
@@ -29,7 +31,7 @@ function ChatAssignment(props) {
 
     useEffect(() => {
         checkIfUnableToChange();
-    }, [assignedToUser, assignedGroup]);
+    }, [assignedGroup, assignedGroup]);
 
     const close = () => {
         props.setOpen(false);
@@ -38,8 +40,13 @@ function ChatAssignment(props) {
     const retrieveChatAssignment = () => {
         retrieveChatAssignmentCall(props.waId,
             (response) => {
-                setAssignedToUser(response.data.assigned_to_user ?? 'null');
-                setAssignedGroup(response.data.assigned_group ?? 'null');
+                // Data on server
+                setAssignedToUser(response.data.assigned_to_user);
+                setAssignedGroup(response.data.assigned_group);
+
+                // UI data
+                setTempAssignedToUser(response.data.assigned_to_user ?? 'null');
+                setTempAssignedGroup(response.data.assigned_group ?? 'null');
 
                 setLoading(false);
             }, (error) => {
@@ -54,8 +61,8 @@ function ChatAssignment(props) {
     const updateChatAssignment = () => {
         updateChatAssignmentCall(
             props.waId,
-            assignedToUser === 'null' ? null : assignedToUser,
-            assignedGroup === 'null' ? null : assignedGroup,
+            tempAssignedToUser === 'null' ? null : tempAssignedToUser,
+            tempAssignedGroup === 'null' ? null : tempAssignedGroup,
             (response) => {
                 close();
             });
@@ -71,18 +78,19 @@ function ChatAssignment(props) {
     }
 
     const handleUserChange = (event) => {
-        setAssignedToUser(event.target.value);
+        setTempAssignedToUser(event.target.value);
     }
 
     const handleGroupChange = (event) => {
-        setAssignedGroup(event.target.value);
+        setTempAssignedGroup(event.target.value);
     }
 
     const checkIfUnableToChange = () => {
-        console.log(assignedToUser)
-        console.log(props.currentUser.id.toString())
+        console.log(assignedGroup);
         const isUnable = !props.isAdmin
-            && (assignedToUser !== 'null' && assignedToUser !== props.currentUser.id.toString());
+            && (assignedToUser !== undefined
+                && assignedToUser !== null
+                && assignedToUser !== props.currentUser.id.toString());
         setUnableToChange(isUnable);
     }
 
@@ -106,7 +114,7 @@ function ChatAssignment(props) {
                     <Select
                         labelId="assign-user-select-label"
                         id="assign-user-select"
-                        value={assignedToUser}
+                        value={tempAssignedToUser}
                         onChange={handleUserChange}>
                         <MenuItem value="null">Unassigned</MenuItem>
                         {Object.values(props.users)?.map((user) =>
@@ -120,7 +128,7 @@ function ChatAssignment(props) {
                     <Select
                         labelId="assign-group-select-label"
                         id="assign-group-select"
-                        value={assignedGroup}
+                        value={tempAssignedGroup}
                         onChange={handleGroupChange}>
                         <MenuItem value="null">Unassigned</MenuItem>
                         {groups?.map((group) =>
