@@ -78,7 +78,14 @@ function ChatAssignment(props) {
     }
 
     const handleUserChange = (event) => {
-        setTempAssignedToUser(event.target.value);
+        const userId = event.target.value;
+        setTempAssignedToUser(userId);
+
+        // Set group automatically, if not admin
+        if (!props.isAdmin) {
+            const firstGroupOfUser = props.users[userId]?.groups?.[0]?.id;
+            setTempAssignedGroup(firstGroupOfUser);
+        }
     }
 
     const handleGroupChange = (event) => {
@@ -86,7 +93,6 @@ function ChatAssignment(props) {
     }
 
     const checkIfUnableToChange = () => {
-        console.log(assignedGroup);
         const isUnable = !props.isAdmin
             && (assignedToUser !== undefined
                 && assignedToUser !== null
