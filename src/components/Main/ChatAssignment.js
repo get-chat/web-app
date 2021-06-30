@@ -18,7 +18,7 @@ import {listGroupsCall, retrieveChatAssignmentCall, updateChatAssignmentCall} fr
 function ChatAssignment(props) {
 
     const [isLoading, setLoading] = useState(true);
-    const [isFailed, setFailed] = useState(false);
+    const [isUnableToChange, setUnableToChange] = useState(false);
     const [groups, setGroups] = useState([]);
     const [assignedToUser, setAssignedToUser] = useState('null');
     const [assignedGroup, setAssignedGroup] = useState('null');
@@ -37,10 +37,11 @@ function ChatAssignment(props) {
                 setAssignedToUser(response.data.assigned_to_user ?? 'null');
                 setAssignedGroup(response.data.assigned_group ?? 'null');
 
+                checkIfUnableToChange();
+
                 setLoading(false);
             }, (error) => {
                 if (error?.response?.status === 403) {
-                    setFailed(true);
                     setLoading(false);
                 } else {
                     close();
@@ -75,12 +76,18 @@ function ChatAssignment(props) {
         setAssignedGroup(event.target.value);
     }
 
+    const checkIfUnableToChange = () => {
+        const isUnable = !props.isAdmin && assignedToUser && assignedToUser !== 'null'
+            && assignedToUser !== props.currentUser.id.toString();
+        setUnableToChange(isUnable);
+    }
+
     return (
         <Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
             <DialogTitle>Assign chat</DialogTitle>
             <DialogContent className="chatAssignment">
 
-                {isFailed &&
+                {isUnableToChange &&
                 <DialogContentText>
                     This chat is already assigned to another user.
                     You can change the assignment of this chat only if the current person will unassign themselves or
@@ -88,44 +95,40 @@ function ChatAssignment(props) {
                 </DialogContentText>
                 }
 
-                {!isFailed &&
-                <div>
-                    <DialogContentText>You can assign this chat to a user or a group.</DialogContentText>
+                <DialogContentText>You can assign this chat to a user or a group.</DialogContentText>
 
-                    <FormControl fullWidth={true}>
-                        <InputLabel id="assign-user-select-label">User</InputLabel>
-                        <Select
-                            labelId="assign-user-select-label"
-                            id="assign-user-select"
-                            value={assignedToUser}
-                            onChange={handleUserChange}>
-                            <MenuItem value="null">Unassigned</MenuItem>
-                            {Object.values(props.users)?.map((user) =>
-                                <MenuItem key={user.id} value={user.id}>{user.prepareUserLabel()}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
+                <FormControl fullWidth={true} disabled={isUnableToChange}>
+                    <InputLabel id="assign-user-select-label">User</InputLabel>
+                    <Select
+                        labelId="assign-user-select-label"
+                        id="assign-user-select"
+                        value={assignedToUser}
+                        onChange={handleUserChange}>
+                        <MenuItem value="null">Unassigned</MenuItem>
+                        {Object.values(props.users)?.map((user) =>
+                            <MenuItem key={user.id} value={user.id}>{user.prepareUserLabel()}</MenuItem>
+                        )}
+                    </Select>
+                </FormControl>
 
-                    <FormControl fullWidth={true}>
-                        <InputLabel id="assign-group-select-label">Group</InputLabel>
-                        <Select
-                            labelId="assign-group-select-label"
-                            id="assign-group-select"
-                            value={assignedGroup}
-                            onChange={handleGroupChange}>
-                            <MenuItem value="null">Unassigned</MenuItem>
-                            {groups?.map((group) =>
-                                <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-                </div>
-                }
+                <FormControl fullWidth={true}>
+                    <InputLabel id="assign-group-select-label">Group</InputLabel>
+                    <Select
+                        labelId="assign-group-select-label"
+                        id="assign-group-select"
+                        value={assignedGroup}
+                        onChange={handleGroupChange}>
+                        <MenuItem value="null">Unassigned</MenuItem>
+                        {groups?.map((group) =>
+                            <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
+                        )}
+                    </Select>
+                </FormControl>
 
             </DialogContent>
             <DialogActions>
                 <Button onClick={close} color="secondary">Close</Button>
-                {!isFailed &&
+                {!isUnableToChange &&
                 <Button color="primary" onClick={updateChatAssignment}>Update</Button>
                 }
             </DialogActions>
