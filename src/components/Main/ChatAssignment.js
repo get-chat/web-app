@@ -77,7 +77,7 @@ function ChatAssignment(props) {
     }
 
     const checkIfUnableToChange = () => {
-        const isUnable = !props.isAdmin && assignedToUser && assignedToUser !== 'null'
+        const isUnable = !props.isAdmin && assignedToUser !== 'null'
             && assignedToUser !== props.currentUser.id.toString();
         setUnableToChange(isUnable);
     }
