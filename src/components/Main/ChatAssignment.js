@@ -27,6 +27,10 @@ function ChatAssignment(props) {
         listGroups();
     }, []);
 
+    useEffect(() => {
+        checkIfUnableToChange();
+    }, [assignedToUser, assignedGroup]);
+
     const close = () => {
         props.setOpen(false);
     }
@@ -36,8 +40,6 @@ function ChatAssignment(props) {
             (response) => {
                 setAssignedToUser(response.data.assigned_to_user ?? 'null');
                 setAssignedGroup(response.data.assigned_group ?? 'null');
-
-                checkIfUnableToChange();
 
                 setLoading(false);
             }, (error) => {
@@ -77,8 +79,10 @@ function ChatAssignment(props) {
     }
 
     const checkIfUnableToChange = () => {
-        const isUnable = !props.isAdmin && assignedToUser !== 'null'
-            && assignedToUser !== props.currentUser.id.toString();
+        console.log(assignedToUser)
+        console.log(props.currentUser.id.toString())
+        const isUnable = !props.isAdmin
+            && (assignedToUser !== 'null' && assignedToUser !== props.currentUser.id.toString());
         setUnableToChange(isUnable);
     }
 
@@ -111,7 +115,7 @@ function ChatAssignment(props) {
                     </Select>
                 </FormControl>
 
-                <FormControl fullWidth={true}>
+                <FormControl fullWidth={true} disabled={isUnableToChange}>
                     <InputLabel id="assign-group-select-label">Group</InputLabel>
                     <Select
                         labelId="assign-group-select-label"
