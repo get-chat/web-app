@@ -751,7 +751,9 @@ function Main() {
                     setOpen={setChatAssignmentVisible}
                     chats={chats}
                     setChats={setChats}
-                    users={users} />
+                    users={users}
+                    currentUser={currentUser}
+                    isAdmin={isAdmin} />
                 }
 
                 {isChatTagsVisible &&
