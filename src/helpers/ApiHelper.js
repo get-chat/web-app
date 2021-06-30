@@ -1,7 +1,7 @@
 import {clearContactProvidersData, clearToken} from "./StorageHelper";
 
 export const handleIfUnauthorized = (error, history) => {
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
         clearUserSession("invalidToken", history);
     }
 }
