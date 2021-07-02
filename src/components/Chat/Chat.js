@@ -42,7 +42,7 @@ import {
 } from "../../helpers/Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../helpers/FileHelper";
-import SavedResponses from "./SavedResponses";
+import SavedResponses from "../SavedResponses";
 import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 import {clearUserSession} from "../../helpers/ApiHelper";
