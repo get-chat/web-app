@@ -7,6 +7,8 @@ function ChatMessageOptionsMenu(props) {
         if (props.optionsChatMessage) {
             props.createSavedResponse(props.optionsChatMessage.text);
         }
+
+        hideMenu();
     }
 
     const hideMenu = () => {
