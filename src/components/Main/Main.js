@@ -151,7 +151,8 @@ function Main() {
     };
 
     const finishBulkSendMessage = () => {
-        const payload = {...bulkSendPayload};
+        const requestPayload = {};
+        const messagePayload = {...bulkSendPayload};
         const recipients = selectedChats;
         const tags = selectedTags;
 
@@ -165,12 +166,13 @@ function Main() {
             preparedTags.push({"tag_id": tag});
         });
 
-        payload.recipients = preparedRecipients;
-        payload.tags = preparedTags;
+        requestPayload.recipients = preparedRecipients;
+        requestPayload.tags = preparedTags;
+        requestPayload.payload = messagePayload;
 
-        console.log(payload);
+        console.log(requestPayload);
 
-        bulkSendCall(payload, () => {
+        bulkSendCall(requestPayload, () => {
             // Disable selection mode
             setSelectionModeEnabled(false);
 
