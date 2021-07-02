@@ -781,6 +781,7 @@ export default function Chat(props) {
         if (type === ChatMessageClass.TYPE_TEXT) {
             const preparedInput = translateHTMLInputToText(input).trim();
             payload = {
+                type: "text",
                 text: {
                     body: preparedInput
                 }
