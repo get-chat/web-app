@@ -155,8 +155,18 @@ function Main() {
         const recipients = selectedChats;
         const tags = selectedTags;
 
-        payload.recipients = recipients;
-        payload.tags = tags;
+        const preparedRecipients = [];
+        recipients.forEach((recipient) => {
+            preparedRecipients.push({"recipient": recipient});
+        });
+
+        const preparedTags = [];
+        tags.forEach((tag) => {
+            preparedTags.push({"tag_id": tag});
+        });
+
+        payload.recipients = preparedRecipients;
+        payload.tags = preparedTags;
 
         console.log(payload);
 
