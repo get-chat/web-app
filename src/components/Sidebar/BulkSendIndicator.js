@@ -2,21 +2,22 @@ import React, {useEffect, useState} from "react";
 import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
+import {EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
 
 function BulkSendIndicator(props) {
 
+    const [tasks, setTasks] = useState({});
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const onBulkMessageTaskElement = function (msg, data) {
+        const onBulkMessageTask = function (msg, data) {
             console.log(data);
         }
 
-        const bulkMessageTaskElementEventToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, onBulkMessageTaskElement);
+        const bulkMessageTaskElementToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK, onBulkMessageTask);
 
         return () => {
-            PubSub.unsubscribe(bulkMessageTaskElementEventToken);
+            PubSub.unsubscribe(bulkMessageTaskElementToken);
         }
     }, []);
 

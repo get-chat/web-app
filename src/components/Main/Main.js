@@ -12,6 +12,7 @@ import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
+    EVENT_TOPIC_BULK_MESSAGE_TASK,
     EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
@@ -49,6 +50,7 @@ import {
 } from "../../api/ApiCalls";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
+import BulkMessageTaskClass from "../../BulkMessageTaskClass";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -454,6 +456,21 @@ function Main() {
                                     return {...prevState};
                                 }
                             });
+                        }
+
+                        const bulkMessageTasks = wabaPayload?.bulk_message_tasks;
+
+                        if (bulkMessageTasks) {
+                            console.log(bulkMessageTasks);
+
+                            const preparedBulkMessageTasks = {};
+
+                            bulkMessageTasks.forEach((task) => {
+                                const prepared = new BulkMessageTaskClass(task);
+                                preparedBulkMessageTasks[prepared.id] = prepared;
+                            });
+
+                            PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK, preparedBulkMessageTasks);
                         }
 
                         const bulkMessageTaskElements = wabaPayload?.bulk_message_task_elements;
