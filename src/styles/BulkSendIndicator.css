@@ -1,8 +1,12 @@
+.bulkSendIndicatorWrapper {
+    display: flex;
+}
+
 .bulkSendIndicator {
-    height: 63px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    height: 63px;
     padding: 0 15px;
     border-top: 1px solid lightgray;
     font-size: 15px;

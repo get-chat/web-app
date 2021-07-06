@@ -43,7 +43,7 @@ function Sidebar(props) {
     const [isNotificationsVisible, setNotificationsVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
-    const [isBulkSendIndicatorVisible, setBulkSendIndicatorVisible] = useState(false);
+    const [isBulkSendIndicatorVisible, setBulkSendIndicatorVisible] = useState(true);
 
     const history = useHistory();
 

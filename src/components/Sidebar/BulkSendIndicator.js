@@ -3,6 +3,7 @@ import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
+import {getObjLength} from "../../helpers/Helpers";
 
 function BulkSendIndicator(props) {
 
@@ -32,10 +33,14 @@ function BulkSendIndicator(props) {
     }, []);
 
     return (
-        <div className="bulkSendIndicator">
-            <div className="mb-2">Sending</div>
+        <div className="bulkSendIndicatorWrapper">
+            {getObjLength(tasks) > 0 &&
+            <div className="bulkSendIndicator">
+                <div className="mb-2">Sending</div>
 
-            <LinearProgress variant="determinate" value={progress} />
+                <LinearProgress variant="determinate" value={progress} />
+            </div>
+            }
         </div>
     )
 }
