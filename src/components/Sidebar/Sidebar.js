@@ -224,6 +224,12 @@ function Sidebar(props) {
         setKeyword(_keyword);
     }
 
+    useEffect(() => {
+        if (props.isSelectionModeEnabled) {
+            setContactsVisible(false);
+        }
+    }, [props.isSelectionModeEnabled]);
+
     const sortChats = (state) => {
         let sortedState = Object.entries(state).sort((a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp);
         return Object.fromEntries(sortedState);
