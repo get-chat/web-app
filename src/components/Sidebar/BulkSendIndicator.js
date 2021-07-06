@@ -3,17 +3,18 @@ import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
+import {getObjLength} from "../../helpers/Helpers";
 
 function BulkSendIndicator(props) {
 
-    const [tasks, setTasks] = useState({/*15: {id: 15, total: 2, done: 1, timestamp: 1625495133}*/});
+    const [tasks, setTasks] = useState({});
 
     useEffect(() => {
         const onBulkMessageTask = function (msg, data) {
-            console.log(data);
-
             setTasks((prevState) => {
-                Object.entries(data).forEach((task) => {
+                Object.entries(data).forEach((curTask) => {
+                    const task = curTask[1];
+                    console.log(task);
                     if (!(task.id in task) || task.done > tasks[task.id].done) {
                         prevState[task.id] = task;
                     }
@@ -29,6 +30,33 @@ function BulkSendIndicator(props) {
             PubSub.unsubscribe(bulkMessageTaskElementToken);
         }
     }, []);
+
+    useEffect(() => {
+        let timeout;
+
+        if (getObjLength(tasks) > 0) {
+            timeout = setTimeout(function () {
+                const nextState = tasks;
+                let changedAny = false;
+
+                Object.entries(tasks).forEach((curTask) => {
+                    const task = curTask[1];
+                    if (task.done >= task.total) {
+                        delete nextState[task.id];
+                        changedAny = true;
+                    }
+                });
+
+                if (changedAny) {
+                    setTasks({...nextState});
+                }
+            }, 3000);
+        }
+
+        return () => {
+            clearTimeout(timeout);
+        }
+    }, [tasks]);
 
     return (
         <div className="bulkSendIndicatorWrapper">
