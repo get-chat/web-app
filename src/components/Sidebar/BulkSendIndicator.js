@@ -14,7 +14,6 @@ function BulkSendIndicator(props) {
             setTasks((prevState) => {
                 Object.entries(data).forEach((curTask) => {
                     const task = curTask[1];
-                    console.log(task);
                     if (!(task.id in task) || task.done > tasks[task.id].done) {
                         prevState[task.id] = task;
                     }
@@ -32,29 +31,39 @@ function BulkSendIndicator(props) {
     }, []);
 
     useEffect(() => {
-        let timeout;
+        let intervalId;
 
         if (getObjLength(tasks) > 0) {
-            timeout = setTimeout(function () {
+            intervalId = setInterval(function () {
                 const nextState = tasks;
                 let changedAny = false;
+                const now = (new Date()).getTime();
 
+                // Delete tasks after 5 seconds after their completion
                 Object.entries(tasks).forEach((curTask) => {
                     const task = curTask[1];
                     if (task.done >= task.total) {
-                        delete nextState[task.id];
-                        changedAny = true;
+                        if (task.doneAt) {
+                            const secondsPast = Math.floor((now - task.doneAt) / 1000);
+                            if (secondsPast >= 5) {
+                                delete nextState[task.id];
+                                changedAny = true;
+                            }
+                        } else {
+                            task.doneAt = now;
+                            changedAny = true;
+                        }
                     }
                 });
 
                 if (changedAny) {
                     setTasks({...nextState});
                 }
-            }, 3000);
+            }, 1000);
         }
 
         return () => {
-            clearTimeout(timeout);
+            clearInterval(intervalId);
         }
     }, [tasks]);
 
@@ -62,7 +71,7 @@ function BulkSendIndicator(props) {
         <div className="bulkSendIndicatorWrapper">
             {Object.entries(tasks).map((task) =>
             <div className="bulkSendIndicator">
-                <div className="mb-2">Sending (Task {task[1].id})</div>
+                <div className="mb-2">Sending ({task[1].done} / {task[1].total}) (Task {task[1].id})</div>
                 <LinearProgress variant="determinate" value={(task[1].done * 100) / task[1].total} />
             </div>
             )}
