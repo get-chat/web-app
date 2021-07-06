@@ -1,5 +1,6 @@
 .bulkSendIndicatorWrapper {
     display: flex;
+    flex-direction: column;
 }
 
 .bulkSendIndicator {

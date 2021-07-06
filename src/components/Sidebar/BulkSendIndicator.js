@@ -3,12 +3,10 @@ import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
-import {getObjLength} from "../../helpers/Helpers";
 
 function BulkSendIndicator(props) {
 
-    const [tasks, setTasks] = useState({});
-    const [progress, setProgress] = useState(0);
+    const [tasks, setTasks] = useState({/*15: {id: 15, total: 2, done: 1, timestamp: 1625495133}*/});
 
     useEffect(() => {
         const onBulkMessageTask = function (msg, data) {
@@ -34,13 +32,12 @@ function BulkSendIndicator(props) {
 
     return (
         <div className="bulkSendIndicatorWrapper">
-            {getObjLength(tasks) > 0 &&
+            {Object.entries(tasks).map((task) =>
             <div className="bulkSendIndicator">
-                <div className="mb-2">Sending</div>
-
-                <LinearProgress variant="determinate" value={progress} />
+                <div className="mb-2">Sending (Task {task[1].id})</div>
+                <LinearProgress variant="determinate" value={(task[1].done * 100) / task[1].total} />
             </div>
-            }
+            )}
         </div>
     )
 }
