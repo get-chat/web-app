@@ -9,7 +9,7 @@ import {
     ATTACHMENT_TYPE_VIDEO,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CHAT_TAGGING, EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -115,14 +115,23 @@ export default function Chat(props) {
         }
 
         // Listen for file drop events
-        const token = PubSub.subscribe(EVENT_TOPIC_DROPPED_FILES, handleFilesDropped);
+        const handleFilesDroppedEventToken = PubSub.subscribe(EVENT_TOPIC_DROPPED_FILES, handleFilesDropped);
+
+        // Clear input on event
+        const clearInputOnEvent = function (msg, data) {
+            clearInput();
+        }
+
+        // Listen for clear input events
+        const clearInputEventToken = PubSub.subscribe(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT, clearInputOnEvent);
 
         return () => {
             // Cancelling ongoing requests
             cancelTokenSourceRef.current.cancel();
 
             // Unsubscribe
-            PubSub.unsubscribe(token);
+            PubSub.unsubscribe(handleFilesDroppedEventToken);
+            PubSub.unsubscribe(clearInputEventToken);
         }
     }, []);
 
