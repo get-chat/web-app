@@ -17,7 +17,7 @@ import {
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CHAT_TAGGING, EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
@@ -172,8 +172,6 @@ function Main() {
         requestPayload.tags = preparedTags;
         requestPayload.payload = messagePayload;
 
-        console.log(requestPayload);
-
         bulkSendCall(requestPayload, () => {
             // Disable selection mode
             setSelectionModeEnabled(false);
@@ -181,6 +179,11 @@ function Main() {
             // Clear selections
             setSelectedChats([]);
             setSelectedTags([]);
+
+            // Clear input if text message
+            if (messagePayload.type === 'text') {
+                PubSub.publish(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT);
+            }
         });
     }
 
