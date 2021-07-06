@@ -12,6 +12,16 @@ function BulkSendIndicator(props) {
     useEffect(() => {
         const onBulkMessageTask = function (msg, data) {
             console.log(data);
+
+            setTasks((prevState) => {
+                Object.entries(data).forEach((task) => {
+                    if (!(task.id in task) || task.done > tasks[task.id].done) {
+                        prevState[task.id] = task;
+                    }
+                });
+
+                return {...prevState};
+            });
         }
 
         const bulkMessageTaskElementToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK, onBulkMessageTask);
