@@ -2,8 +2,9 @@ import React, {useEffect, useState} from "react";
 import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
+import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
 import {getObjLength} from "../../helpers/Helpers";
+import Moment from "react-moment";
 
 function BulkSendIndicator(props) {
 
@@ -71,7 +72,8 @@ function BulkSendIndicator(props) {
         <div className="bulkSendIndicatorWrapper">
             {Object.entries(tasks).map((task) =>
             <div className="bulkSendIndicator">
-                <div className="mb-2">Sending ({task[1].done} / {task[1].total}) (Task {task[1].id})</div>
+                <div className="mb-1">Sending ({task[1].done} / {task[1].total})</div>
+                <div className="bulkSendIndicator__timestamp mb-2">Type: <span className="bold">{task[1].payload?.type}</span>, started at <Moment className="bold" date={task[1].timestamp} calendar={CALENDAR_SHORT} unix /></div>
                 <LinearProgress variant="determinate" value={(task[1].done * 100) / task[1].total} />
             </div>
             )}
