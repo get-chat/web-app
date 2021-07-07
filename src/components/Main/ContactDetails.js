@@ -10,7 +10,7 @@ import Moment from "react-moment";
 import {avatarStyles} from "../../AvatarStyles";
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
-import {addPlus, replaceEmojis} from "../../helpers/Helpers";
+import {addPlus, extractAvatarFromContactProviderData, replaceEmojis} from "../../helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {
@@ -49,7 +49,7 @@ function ContactDetails(props)  {
                 <div className="contactDetails__body__section">
                     <div className="contactDetails__body__avatarContainer">
                         <Avatar
-                            src={props.contactProvidersData[props.contactData.waId]?.[0]?.large_avatar}
+                            src={extractAvatarFromContactProviderData(props.contactProvidersData[props.contactData.waId], true)}
                             className={avatarClasses[props.contactData.getAvatarClassName()] + " contactDetails__body__avatar"}>{props.contactData.initials}</Avatar>
                     </div>
 

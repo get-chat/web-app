@@ -6,7 +6,7 @@ import {avatarStyles} from "../../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../Constants";
 import PubSub from "pubsub-js";
 import {useHistory} from "react-router-dom";
-import {addPlus, replaceEmojis} from "../../helpers/Helpers";
+import {addPlus, extractAvatarFromContactProviderData, replaceEmojis} from "../../helpers/Helpers";
 
 function ChatHeader(props) {
 
@@ -63,7 +63,7 @@ function ChatHeader(props) {
 
             <div className="chat__header__clickable" onClick={showContactDetails}>
                 <Avatar
-                    src={props.contactProvidersData[props.person?.waId]?.[0]?.avatar}
+                    src={extractAvatarFromContactProviderData(props.contactProvidersData[props.person?.waId])}
                     className={(props.person?.isExpired ? '' : avatarClasses[props.person?.getAvatarClassName()]) + (" chat__header__avatar")}>{props.person?.initials}</Avatar>
 
                 <div className="chat__headerInfo">

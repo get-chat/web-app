@@ -273,12 +273,12 @@ export const containsLetters = (text) => {
     return regExp.test(text);
 }
 
-export const extractAvatarFromContactProviderData = (contactProviderData) => {
+export const extractAvatarFromContactProviderData = (contactProviderData, isLarge) => {
     if (contactProviderData) {
         for (let i = 0; i < getObjLength(contactProviderData); i++) {
             const data = contactProviderData[i];
             if (data?.avatar) {
-                return data.avatar;
+                return isLarge === true ? data.large_avatar : data.avatar;
             }
         }
     }
