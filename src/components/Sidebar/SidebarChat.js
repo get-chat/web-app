@@ -109,6 +109,8 @@ function SidebarChat(props) {
 
     const handleClick = () => {
         if (props.isSelectionModeEnabled) {
+            if (isDisabled()) return;
+
             let newSelectedState = !isSelected;
 
             props.setSelectedChats(prevState => {
@@ -128,6 +130,10 @@ function SidebarChat(props) {
         }
     }
 
+    const isDisabled = () => {
+        return isExpired && props.bulkSendPayload?.type !== 'template';
+    }
+
     return (
         <ListItem button onClick={handleClick}>
             <div
@@ -143,7 +149,7 @@ function SidebarChat(props) {
                 <div className="sidebarChat">
 
                     {props.isSelectionModeEnabled &&
-                    <Checkbox className="sidebarChat__selection" checked={isSelected} color="primary"/>
+                    <Checkbox className="sidebarChat__selection" checked={isSelected} color="primary" disabled={isDisabled()} />
                     }
 
                     <div className="sidebarChat__avatarWrapper">

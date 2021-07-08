@@ -548,6 +548,14 @@ function Main() {
         storeContactProvidersData(contactProvidersData);
     }, [contactProvidersData]);
 
+    // Clear selected chats and tags when bulk send payload changes
+    useEffect(() => {
+        if (bulkSendPayload) {
+            setSelectedChats([]);
+            setSelectedTags([]);
+        }
+    }, [bulkSendPayload])
+
     const listUsers = () => {
         listUsersCall(5000, (response) => {
             const preparedUsers = {};
