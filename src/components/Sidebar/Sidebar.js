@@ -485,6 +485,7 @@ function Sidebar(props) {
                                 contactProvidersData={props.contactProvidersData}
                                 retrieveContactData={props.retrieveContactData}
                                 tabCase={tabCase}
+                                bulkSendPayload={props.bulkSendPayload}
                                 isSelectionModeEnabled={props.isSelectionModeEnabled}
                                 selectedChats={props.selectedChats}
                                 setSelectedChats={props.setSelectedChats} />
