@@ -13,7 +13,7 @@ import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
     EVENT_TOPIC_BULK_MESSAGE_TASK,
-    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
+    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
@@ -172,7 +172,7 @@ function Main() {
         requestPayload.tags = preparedTags;
         requestPayload.payload = messagePayload;
 
-        bulkSendCall(requestPayload, () => {
+        bulkSendCall(requestPayload, (response) => {
             // Disable selection mode
             setSelectionModeEnabled(false);
 
@@ -184,6 +184,9 @@ function Main() {
             if (messagePayload.type === 'text') {
                 PubSub.publish(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT);
             }
+
+            const preparedBulkMessageTask = new BulkMessageTaskClass(response);
+            PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED, preparedBulkMessageTask);
         });
     }
 
