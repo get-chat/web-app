@@ -274,13 +274,11 @@ export const containsLetters = (text) => {
 }
 
 export const extractAvatarFromContactProviderData = (contactProviderData, isLarge) => {
-    console.log(contactProviderData);
     if (contactProviderData) {
         for (let i = 0; i < getObjLength(contactProviderData); i++) {
             const data = contactProviderData[i];
-            console.log(data);
             if (data?.avatar) {
-                return isLarge === true ? data.large_avatar : data.avatar;
+                return isLarge === true && data?.large_avatar ? data.large_avatar : data.avatar;
             }
         }
     }
