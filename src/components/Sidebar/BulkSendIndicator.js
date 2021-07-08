@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
-import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK} from "../../Constants";
+import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED} from "../../Constants";
 import {getObjLength} from "../../helpers/Helpers";
 import Moment from "react-moment";
 
@@ -10,24 +10,39 @@ function BulkSendIndicator(props) {
 
     const [tasks, setTasks] = useState({});
 
+    const addTask = (prevState, task) => {
+        if (!(task.id in task) || task.done > tasks[task.id].done) {
+            prevState[task.id] = task;
+        }
+
+        return prevState;
+    }
+
     useEffect(() => {
         const onBulkMessageTask = function (msg, data) {
             setTasks((prevState) => {
                 Object.entries(data).forEach((curTask) => {
                     const task = curTask[1];
-                    if (!(task.id in task) || task.done > tasks[task.id].done) {
-                        prevState[task.id] = task;
-                    }
+                    prevState = addTask(prevState, task);
                 });
 
                 return {...prevState};
             });
         }
 
-        const bulkMessageTaskElementToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK, onBulkMessageTask);
+        const bulkMessageTaskToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK, onBulkMessageTask);
+
+        const onBulkMessageTaskStarted = function (msg, data) {
+            setTasks(prevState => {
+                return {...addTask(prevState, data)}
+            });
+        }
+
+        const bulkMessageTaskStartedToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED, onBulkMessageTaskStarted);
 
         return () => {
-            PubSub.unsubscribe(bulkMessageTaskElementToken);
+            PubSub.unsubscribe(bulkMessageTaskToken);
+            PubSub.unsubscribe(bulkMessageTaskStartedToken);
         }
     }, []);
 
@@ -82,7 +97,7 @@ function BulkSendIndicator(props) {
     return (
         <div className="bulkSendIndicatorWrapper">
             {Object.entries(tasks).map((task) =>
-            <div className="bulkSendIndicator">
+            <div className="bulkSendIndicator" key={task.id}>
                 <div className="mb-1">Sending ({task[1].done} / {task[1].total})</div>
                 <div className="bulkSendIndicator__messagePreviewWrapper mb-1">
                     <span className="bulkSendIndicator__messagePreview">

@@ -5,7 +5,6 @@ class BulkMessageTaskClass {
         this.recipients = data.recipients;
         this.tags = data.tags;
         this.payload = data.payload;
-        console.log(this.payload?.type);
         this.sender = data.sender;
         this.total = data.total;
         this.done = data.done;

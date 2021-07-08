@@ -185,7 +185,7 @@ function Main() {
                 PubSub.publish(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT);
             }
 
-            const preparedBulkMessageTask = new BulkMessageTaskClass(response);
+            const preparedBulkMessageTask = new BulkMessageTaskClass(response.data);
             PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED, preparedBulkMessageTask);
         });
     }

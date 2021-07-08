@@ -21,8 +21,8 @@ export const EVENT_TOPIC_CHAT_ASSIGNMENT = "chat_assignment";
 export const EVENT_TOPIC_CHAT_TAGGING = "chat_tagging";
 export const EVENT_TOPIC_UNSUPPORTED_FILE = "unsupported_file";
 export const EVENT_TOPIC_BULK_MESSAGE_TASK = "bulk_message_task";
-export const EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT = "bulk_message_task_element";
 export const EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED = "bulk_message_task_started";
+export const EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT = "bulk_message_task_element";
 export const EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT = "clear_text_message_input";
 
 export const EMOJI_SET = 'facebook';
