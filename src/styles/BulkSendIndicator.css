@@ -13,6 +13,13 @@
     font-size: 15px;
 }
 
+.bulkSendIndicator__messagePreview {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
 .bulkSendIndicator__timestamp {
     font-size: 10px;
     color: rgba(0, 0, 0, 0.6);
