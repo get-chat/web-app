@@ -13,8 +13,12 @@
     font-size: 15px;
 }
 
-.bulkSendIndicator__messagePreview {
+.bulkSendIndicator__messagePreviewWrapper {
     font-size: 12px;
+    display: grid;
+}
+
+.bulkSendIndicator__messagePreview {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

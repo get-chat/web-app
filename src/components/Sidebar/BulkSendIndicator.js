@@ -71,11 +71,9 @@ function BulkSendIndicator(props) {
     const generateMessagePreview = (payload) => {
         const messageType = payload?.type;
         if (messageType === 'text') {
-            const textBody = payload?.text?.body ?? '';
-            return textBody;
+            return payload?.text?.body ?? '';
         } else if (messageType === 'template') {
-            const templateName = payload?.template?.name;
-            return 'Template: ' + templateName;
+            return 'Template: ' + (payload?.template?.name ?? '');
         } else {
             return messageType;
         }
@@ -86,8 +84,10 @@ function BulkSendIndicator(props) {
             {Object.entries(tasks).map((task) =>
             <div className="bulkSendIndicator">
                 <div className="mb-1">Sending ({task[1].done} / {task[1].total})</div>
-                <div className="bulkSendIndicator__messagePreview mb-1">
-                    {generateMessagePreview(task[1].payload)}
+                <div className="bulkSendIndicator__messagePreviewWrapper mb-1">
+                    <span className="bulkSendIndicator__messagePreview">
+                        {generateMessagePreview(task[1].payload)}
+                    </span>
                 </div>
                 <div className="bulkSendIndicator__timestamp mb-2">
                     Started at <Moment className="bold" date={task[1].timestamp} calendar={CALENDAR_SHORT} unix />
