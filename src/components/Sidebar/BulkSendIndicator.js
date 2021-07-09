@@ -3,7 +3,7 @@ import '../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED} from "../../Constants";
-import {getObjLength} from "../../helpers/Helpers";
+import {generateMessagePreview, getObjLength} from "../../helpers/Helpers";
 import Moment from "react-moment";
 
 function BulkSendIndicator(props) {
@@ -82,17 +82,6 @@ function BulkSendIndicator(props) {
             clearInterval(intervalId);
         }
     }, [tasks]);
-
-    const generateMessagePreview = (payload) => {
-        const messageType = payload?.type;
-        if (messageType === 'text') {
-            return payload?.text?.body ?? '';
-        } else if (messageType === 'template') {
-            return 'Template: ' + (payload?.template?.name ?? '');
-        } else {
-            return messageType;
-        }
-    }
 
     return (
         <div className="bulkSendIndicatorWrapper">

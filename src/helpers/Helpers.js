@@ -302,3 +302,14 @@ export const isScrollable = (el) => {
 
     return hasScrollableContent && !isOverflowHidden;
 }
+
+export const generateMessagePreview = (payload) => {
+    const messageType = payload?.type;
+    if (messageType === 'text') {
+        return payload?.text?.body ?? '';
+    } else if (messageType === 'template') {
+        return 'Template: ' + (payload?.template?.name ?? '');
+    } else {
+        return messageType;
+    }
+}

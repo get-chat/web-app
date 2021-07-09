@@ -177,7 +177,6 @@ function SidebarChat(props) {
                     </div>
 
                     <div className="sidebarChat__info">
-
                         <div className="sidebarChat__info__nameWrapper">
                             <h2>
                                 {(props.keyword !== undefined && props.keyword.trim().length > 0)
