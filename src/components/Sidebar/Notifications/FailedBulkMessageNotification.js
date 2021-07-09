@@ -4,7 +4,7 @@ import {CALENDAR_SHORT} from "../../../Constants";
 
 function FailedBulkMessageNotification(props) {
     return (
-        <div className="notification">
+        <div className="notification error">
             <h3>Bulk message (ID: {props.data.id}) failed.</h3>
             <div className="mb-1">Recipient: {props.data.waId}</div>
             <div className="mb-1">Status code: <span className="bold">{props.data.statusCode}</span></div>
