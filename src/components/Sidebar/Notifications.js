@@ -51,6 +51,7 @@ function Notifications(props) {
                 response.data.results.forEach((taskElement) => {
                     const prepared = new BulkMessageTaskElementClass(taskElement);
 
+                    // TODO: Results should be ordered DESC in the backend
                     // Check if failed
                     if (prepared.statusCode >= 400) {
                         preparedBulkMessageTaskElements[prepared.id] = prepared;
@@ -86,7 +87,7 @@ function Notifications(props) {
                 </div>
                 }
 
-                {Object.entries(bulkMessageTaskElements).map((notification) =>
+                {Object.entries(bulkMessageTaskElements).reverse().map((notification) =>
                     <FailedBulkMessageNotification key={notification[1].id} data={notification[1]} />
                 )}
             </div>
