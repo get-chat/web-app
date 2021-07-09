@@ -28,7 +28,7 @@ import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../api/ApiCalls";
 import Notifications from "./Notifications";
-import {NotificationImportant} from "@material-ui/icons";
+import {Notifications as NotificationsIcon} from "@material-ui/icons";
 
 function Sidebar(props) {
 
@@ -410,7 +410,7 @@ function Sidebar(props) {
                         <ChatIcon />
                     </IconButton>
                     <IconButton onClick={displayNotifications}>
-                        <NotificationImportant />
+                        <NotificationsIcon />
                     </IconButton>
                     <IconButton onClick={displayMenu}>
                         <MoreVertIcon />
