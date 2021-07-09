@@ -27,7 +27,7 @@ import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../api/ApiCalls";
-import Notifications from "./Notifications";
+import Notifications from "./NotificationsContainer/Notifications";
 import {Notifications as NotificationsIcon} from "@material-ui/icons";
 
 function Sidebar(props) {
