@@ -28,6 +28,7 @@ import BulkSendActions from "./BulkSendActions";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../api/ApiCalls";
 import Notifications from "./Notifications";
+import {NotificationImportant} from "@material-ui/icons";
 
 function Sidebar(props) {
 
@@ -392,6 +393,10 @@ function Sidebar(props) {
         props.finishBulkSendMessage();
     }
 
+    const displayNotifications = () => {
+        setNotificationsVisible(true);
+    }
+
     return (
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
@@ -403,6 +408,9 @@ function Sidebar(props) {
                 <div className="sidebar__headerRight">
                     <IconButton onClick={displayContacts}>
                         <ChatIcon />
+                    </IconButton>
+                    <IconButton onClick={displayNotifications}>
+                        <NotificationImportant />
                     </IconButton>
                     <IconButton onClick={displayMenu}>
                         <MoreVertIcon />
@@ -583,7 +591,8 @@ function Sidebar(props) {
                 setOpen={setChangePasswordDialogVisible} />
 
             {isNotificationsVisible &&
-            <Notifications/>
+            <Notifications
+                onHide={() => setNotificationsVisible(false)} />
             }
 
         </div>

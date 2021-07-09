@@ -5,10 +5,14 @@ import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
 import FailedBulkMessageNotification from "./Notifications/FailedBulkMessageNotification";
 import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
+import CloseIcon from "@material-ui/icons/Close";
+import {IconButton} from "@material-ui/core";
+import {getObjLength} from "../../helpers/Helpers";
 
 function Notifications(props) {
 
     const [bulkMessageElements, setBulkMessageElements] = useState({});
+    const [isLoaded, setLoaded] = useState(false);
     let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
@@ -44,24 +48,37 @@ function Notifications(props) {
                 });
 
                 setBulkMessageElements(preparedBulkMessageTaskElements);
+                setLoaded(true);
             }, (error) => {
 
             });
     }
 
+    const hideNotifications = () => {
+        props.onHide();
+    }
+
     return (
-        <div className="notificationsWrapper">
-            <div className="notifications">
+        <div className="notifications">
 
-                {/*<div className="notifications__header">
-                    <h3>Notifications</h3>
-                </div>*/}
+            <div className="notifications__header">
+                <IconButton onClick={hideNotifications}>
+                    <CloseIcon />
+                </IconButton>
 
-                <div className="notifications__body">
-                    {Object.entries(bulkMessageElements).map((notification) =>
-                        <FailedBulkMessageNotification key={notification[1].id} data={notification[1]} />
-                    )}
+                <h3>Notifications</h3>
+            </div>
+
+            <div className="notifications__body">
+                {(isLoaded && getObjLength(bulkMessageElements) === 0) &&
+                <div className="notifications__body__empty">
+                    You have no notifications
                 </div>
+                }
+
+                {Object.entries(bulkMessageElements).map((notification) =>
+                    <FailedBulkMessageNotification key={notification[1].id} data={notification[1]} />
+                )}
             </div>
         </div>
     )
