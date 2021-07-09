@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
-import {generateCancelToken, retrieveBulkMessageElementsCall} from "../api/ApiCalls";
-import '../styles/Notifications.css';
+import {generateCancelToken, retrieveBulkMessageElementsCall} from "../../api/ApiCalls";
+import '../../styles/Notifications.css';
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../Constants";
+import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
 
 function Notifications(props) {
 
