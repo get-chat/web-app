@@ -60,7 +60,7 @@
 }
 
 .notifications .notification.error > h3 {
-    color: red;
+    color: rgba(255, 0, 0, 0.8);
 }
 
 .notifications .notification__timestamp {
