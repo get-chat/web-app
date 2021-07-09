@@ -1,13 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
-import {generateCancelToken, retrieveBulkMessageTaskElementsCall} from "../../api/ApiCalls";
-import '../../styles/Notifications.css';
+import {generateCancelToken, retrieveBulkMessageTaskElementsCall} from "../../../api/ApiCalls";
+import '../../../styles/Notifications.css';
 import PubSub from "pubsub-js";
-import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
-import FailedBulkMessageNotification from "./Notifications/FailedBulkMessageNotification";
-import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
+import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../../Constants";
+import FailedBulkMessageNotification from "./FailedBulkMessageNotification";
+import BulkMessageTaskElementClass from "../../../BulkMessageTaskElementClass";
 import CloseIcon from "@material-ui/icons/Close";
 import {IconButton} from "@material-ui/core";
-import {getObjLength} from "../../helpers/Helpers";
+import {getObjLength} from "../../../helpers/Helpers";
 
 function Notifications(props) {
 
