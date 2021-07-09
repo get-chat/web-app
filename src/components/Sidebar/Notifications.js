@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
-import {generateCancelToken, retrieveBulkMessageElementsCall} from "../../api/ApiCalls";
+import {generateCancelToken, retrieveBulkMessageTaskElementsCall} from "../../api/ApiCalls";
 import '../../styles/Notifications.css';
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
@@ -11,31 +11,41 @@ import {getObjLength} from "../../helpers/Helpers";
 
 function Notifications(props) {
 
-    const [bulkMessageElements, setBulkMessageElements] = useState({});
+    const [bulkMessageTaskElements, setBulkMessageTaskElements] = useState({});
     const [isLoaded, setLoaded] = useState(false);
     let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
+        const handleKey = (event) => {
+            if (event.keyCode === 27) { // Escape
+                props.onHide();
+            }
+        }
+
+        document.addEventListener('keydown', handleKey);
+
+        // Retrieve bulk message task elements
         cancelTokenSourceRef.current = generateCancelToken();
-        retrieveBulkMessageElements();
+        retrieveBulkMessageTaskElements();
 
         const onBulkMessageTaskElement = function (msg, data) {
             if (data.status) {
                 // Means a bulk message task element has failed, so we refresh the data
-                retrieveBulkMessageElements();
+                retrieveBulkMessageTaskElements();
             }
         }
 
         const bulkMessageTaskElementEventToken = PubSub.subscribe(EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, onBulkMessageTaskElement);
 
         return () => {
+            document.removeEventListener('keydown', handleKey);
             cancelTokenSourceRef.current.cancel();
             PubSub.unsubscribe(bulkMessageTaskElementEventToken);
         }
     }, []);
 
-    const retrieveBulkMessageElements = () => {
-        retrieveBulkMessageElementsCall(cancelTokenSourceRef.current.token,
+    const retrieveBulkMessageTaskElements = () => {
+        retrieveBulkMessageTaskElementsCall(cancelTokenSourceRef.current.token,
             (response) => {
                 const preparedBulkMessageTaskElements = {};
                 response.data.results.forEach((taskElement) => {
@@ -47,7 +57,7 @@ function Notifications(props) {
                     }
                 });
 
-                setBulkMessageElements(preparedBulkMessageTaskElements);
+                setBulkMessageTaskElements(preparedBulkMessageTaskElements);
                 setLoaded(true);
             }, (error) => {
 
@@ -70,13 +80,13 @@ function Notifications(props) {
             </div>
 
             <div className="notifications__body">
-                {(isLoaded && getObjLength(bulkMessageElements) === 0) &&
+                {(isLoaded && getObjLength(bulkMessageTaskElements) === 0) &&
                 <div className="notifications__body__empty">
                     You have no notifications
                 </div>
                 }
 
-                {Object.entries(bulkMessageElements).map((notification) =>
+                {Object.entries(bulkMessageTaskElements).map((notification) =>
                     <FailedBulkMessageNotification key={notification[1].id} data={notification[1]} />
                 )}
             </div>

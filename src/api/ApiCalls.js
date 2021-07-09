@@ -468,7 +468,7 @@ export const deleteProfilePhotoCall = (cancelToken, callback) => {
         });
 }
 
-export const retrieveBulkMessageElementsCall = (cancelToken, callback, errorCallback) => {
+export const retrieveBulkMessageTaskElementsCall = (cancelToken, callback, errorCallback) => {
     axios.get(`${BASE_URL}bulk_message_elements/`,
         getConfig(undefined, cancelToken))
         .then((response) => {
