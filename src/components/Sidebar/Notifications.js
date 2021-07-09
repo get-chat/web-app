@@ -36,12 +36,14 @@ function Notifications(props) {
                 const preparedBulkMessageTaskElements = {};
                 response.data.results.forEach((taskElement) => {
                     const prepared = new BulkMessageTaskElementClass(taskElement);
-                    preparedBulkMessageTaskElements[prepared.id] = prepared;
+
+                    // Check if failed
+                    if (prepared.statusCode >= 400) {
+                        preparedBulkMessageTaskElements[prepared.id] = prepared;
+                    }
                 });
 
                 setBulkMessageElements(preparedBulkMessageTaskElements);
-
-                setBulkMessageElements(response.data.results);
             }, (error) => {
 
             });
@@ -51,9 +53,9 @@ function Notifications(props) {
         <div className="notificationsWrapper">
             <div className="notifications">
 
-                <div className="notifications__header">
+                {/*<div className="notifications__header">
                     <h3>Notifications</h3>
-                </div>
+                </div>*/}
 
                 <div className="notifications__body">
                     {Object.entries(bulkMessageElements).map((notification) =>

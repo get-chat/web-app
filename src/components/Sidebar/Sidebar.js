@@ -40,7 +40,7 @@ function Sidebar(props) {
     const [isProfileVisible, setProfileVisible] = useState(false);
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
-    const [isNotificationsVisible, setNotificationsVisible] = useState(true);
+    const [isNotificationsVisible, setNotificationsVisible] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
     const history = useHistory();

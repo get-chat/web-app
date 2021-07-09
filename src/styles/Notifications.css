@@ -5,30 +5,36 @@
     right: 0;
     bottom: 0;
     background-color: white;
-    padding: 15px 10px;
 }
 
 .notifications__header h3 {
-    margin-left: 15px;
     font-weight: 400;
     font-size: 18px;
+    margin: 10px 15px;
 }
 
 .notificationsWrapper .notification {
     display: flex;
     flex-direction: column;
     padding: 10px 15px;
-    border-bottom: 1px solid #f5f5f5;
     font-size: 14px;
+    border-bottom: 1px solid #f5f5f5;
+    background-color: white;
 }
 
 .notificationsWrapper .notification > h3 {
     font-weight: 400;
     font-size: 16px;
+    margin-bottom: 10px;
 }
 
 .notificationsWrapper .notification__timestamp {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.6);
-    margin-top: 10px;
+}
+
+.notificationsWrapper .notification__code {
+    border-radius: 5px;
+    background-color: var(--gray-light);
+    padding: 5px 10px;
 }
