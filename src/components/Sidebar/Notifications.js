@@ -3,6 +3,7 @@ import {generateCancelToken, retrieveBulkMessageElementsCall} from "../../api/Ap
 import '../../styles/Notifications.css';
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
+import FailedBulkMessageNotification from "./Notifications/FailedBulkMessageNotification";
 
 function Notifications(props) {
 
@@ -47,7 +48,7 @@ function Notifications(props) {
 
                 <div className="notifications__body">
                     {bulkMessageElements.map((notification) =>
-                        <div>{JSON.stringify(notification)}</div>
+                        <FailedBulkMessageNotification key={notification.id} data={notification} />
                     )}
                 </div>
             </div>

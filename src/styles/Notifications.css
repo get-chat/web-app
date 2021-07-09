@@ -13,3 +13,9 @@
     font-weight: 400;
     font-size: 18px;
 }
+
+.notificationsWrapper .notification {
+    display: flex;
+    padding: 10px 15px;
+    border-bottom: 1px solid #f5f5f5;
+}
