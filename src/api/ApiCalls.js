@@ -469,8 +469,8 @@ export const deleteProfilePhotoCall = (cancelToken, callback) => {
 }
 
 export const retrieveBulkMessageElementsCall = (cancelToken, callback, errorCallback) => {
-    axios.get(`${BASE_URL}bulk_message_elements/profile/photo/`,
-        getConfig(undefined, cancelToken, 'arraybuffer'))
+    axios.get(`${BASE_URL}bulk_message_elements/`,
+        getConfig(undefined, cancelToken))
         .then((response) => {
             callback?.(response);
         })

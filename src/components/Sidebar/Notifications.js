@@ -31,7 +31,7 @@ function Notifications(props) {
     const retrieveBulkMessageElements = () => {
         retrieveBulkMessageElementsCall(cancelTokenSourceRef.current.token,
             (response) => {
-                setBulkMessageElements(response.results);
+                setBulkMessageElements(response.data.results);
             }, (error) => {
 
             });
