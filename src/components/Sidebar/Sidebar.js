@@ -43,8 +43,6 @@ function Sidebar(props) {
     const [isNotificationsVisible, setNotificationsVisible] = useState(true);
     const [tabCase, setTabCase] = useState("all")
 
-    const [isBulkSendIndicatorVisible, setBulkSendIndicatorVisible] = useState(true);
-
     const history = useHistory();
 
     const avatarClasses = avatarStyles();
@@ -551,9 +549,7 @@ function Sidebar(props) {
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
             }
 
-            {isBulkSendIndicatorVisible &&
             <BulkSendIndicator/>
-            }
 
             <Menu
                 anchorEl={anchorEl}

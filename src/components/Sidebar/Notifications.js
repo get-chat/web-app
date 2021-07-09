@@ -4,10 +4,11 @@ import '../../styles/Notifications.css';
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../Constants";
 import FailedBulkMessageNotification from "./Notifications/FailedBulkMessageNotification";
+import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 
 function Notifications(props) {
 
-    const [bulkMessageElements, setBulkMessageElements] = useState([]);
+    const [bulkMessageElements, setBulkMessageElements] = useState({});
     let cancelTokenSourceRef = useRef();
 
     useEffect(() => {
@@ -32,6 +33,14 @@ function Notifications(props) {
     const retrieveBulkMessageElements = () => {
         retrieveBulkMessageElementsCall(cancelTokenSourceRef.current.token,
             (response) => {
+                const preparedBulkMessageTaskElements = {};
+                response.data.results.forEach((taskElement) => {
+                    const prepared = new BulkMessageTaskElementClass(taskElement);
+                    preparedBulkMessageTaskElements[prepared.id] = prepared;
+                });
+
+                setBulkMessageElements(preparedBulkMessageTaskElements);
+
                 setBulkMessageElements(response.data.results);
             }, (error) => {
 
@@ -47,8 +56,8 @@ function Notifications(props) {
                 </div>
 
                 <div className="notifications__body">
-                    {bulkMessageElements.map((notification) =>
-                        <FailedBulkMessageNotification key={notification.id} data={notification} />
+                    {Object.entries(bulkMessageElements).map((notification) =>
+                        <FailedBulkMessageNotification key={notification[1].id} data={notification[1]} />
                     )}
                 </div>
             </div>
