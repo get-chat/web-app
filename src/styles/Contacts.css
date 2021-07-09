@@ -14,10 +14,10 @@
     height: var(--header-height);
     display: flex;
     align-items: center;
-    background-color: var(--color-primary-light);
-    padding: 4px 15px;
-    color: white;
     font-size: 18px;
+    padding: 4px 15px;
+    background-color: var(--color-primary-light);
+    color: white;
 }
 
 .contacts__header h3 {

@@ -14,13 +14,18 @@
     display: flex;
     align-items: center;
     padding: 4px 15px;
-    background-color: var(--gray-light);
+    background-color: var(--color-primary-light);
+    color: white;
 }
 
 .notifications__header h3 {
     font-weight: 400;
     font-size: 18px;
     margin: 10px 15px;
+}
+
+.notifications__header .MuiSvgIcon-root {
+    color: white !important;
 }
 
 .notifications__body {
