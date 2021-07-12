@@ -97,6 +97,8 @@ export default function Chat(props) {
 
     const cancelTokenSourceRef = useRef();
 
+    const confirmationMessage = "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?";
+
     useEffect(() => {
         props.retrieveContactData(waId);
 
@@ -174,6 +176,23 @@ export default function Chat(props) {
             cancelTokenSourceRef.current = generateCancelToken();
         }
     }, [waId]);
+
+    useEffect(() => {
+        // Window close event
+        window.addEventListener('beforeunload', alertUser);
+        return () => {
+            window.removeEventListener('beforeunload', alertUser);
+        }
+    }, [hasFailedMessages]);
+
+    const alertUser = e => {
+        if (hasFailedMessages) {
+            if (!window.confirm(confirmationMessage)) {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+    }
 
     useEffect(() => {
         props.setChosenContact(person);
@@ -1129,8 +1148,7 @@ export default function Chat(props) {
             onDragOver={(event) => handleDragOver(event)}>
 
             <Prompt when={hasFailedMessages}
-                    message="There are unsent messages in the chat.
-                    If you continue, they will be deleted. Are you sure you want to continue?" />
+                    message={confirmationMessage} />
 
             <ChatHeader
                 person={person}
