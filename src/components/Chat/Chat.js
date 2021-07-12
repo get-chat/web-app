@@ -21,7 +21,7 @@ import {
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PersonClass from "../../PersonClass";
-import TemplateMessages from "./TemplateMessages";
+import TemplateMessages from "./TemplateMessages/TemplateMessages";
 import ChatFooter from "./ChatFooter/ChatFooter";
 import ChatHeader from "./ChatHeader";
 import ChatMessageOptionsMenu from "./ChatMessage/ChatMessageOptionsMenu";
