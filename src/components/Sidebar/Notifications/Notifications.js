@@ -3,7 +3,7 @@ import {generateCancelToken, retrieveBulkMessageTaskElementsCall} from "../../..
 import '../../../styles/Notifications.css';
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../../Constants";
-import FailedBulkMessageNotification from "../Notifications/FailedBulkMessageNotification";
+import FailedBulkMessageNotification from "./FailedBulkMessageNotification";
 import BulkMessageTaskElementClass from "../../../BulkMessageTaskElementClass";
 import CloseIcon from "@material-ui/icons/Close";
 import {IconButton} from "@material-ui/core";
