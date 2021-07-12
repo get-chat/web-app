@@ -148,6 +148,7 @@ export default function Chat(props) {
         setSavedResponsesVisible(false);
         setAtBottom(false);
         setInput('');
+        setHasFailedMessages(false);
 
         setPreviewSendMediaVisible(false);
         setPreviewSendMediaData(undefined);
@@ -761,6 +762,19 @@ export default function Chat(props) {
             // Delete message if resent successfully
             setMessages(prevState => {
                 delete prevState[message.id];
+
+                // Check if there is another failed message
+                let hasAnotherFailedMessage = false;
+
+                for (let i = 0; i < getObjLength(messages); i++) {
+                    const curMessage = messages[i];
+                    if (curMessage.isFailed && !curMessage.isStored) {
+                        hasAnotherFailedMessage = true;
+                        break;
+                    }
+                }
+
+                setHasFailedMessages(hasAnotherFailedMessage);
 
                 return {...prevState};
             });
