@@ -772,7 +772,8 @@ function Main() {
                     setChatAssignmentVisible={setChatAssignmentVisible}
                     setChatTagsVisible={setChatTagsVisible}
                     setSelectionModeEnabled={setSelectionModeEnabled}
-                    setBulkSendPayload={setBulkSendPayload} />
+                    setBulkSendPayload={setBulkSendPayload}
+                    setFailedChat={setFailedMessages} />
                 }
 
                 {isSearchMessagesVisible &&

@@ -859,6 +859,13 @@ export default function Chat(props) {
                         } else if (status === 500 || status === 502) {
                             const isStored = status === 502;
                             displayFailedMessage(requestBody, isStored, true);
+
+                            // This will be used to display a warning before refreshing
+                            if (!isStored) {
+                                props.setFailedChat(prevState => {
+                                    prevState[waId] = true;
+                                });
+                            }
                         }
 
                         handleIfUnauthorized();
