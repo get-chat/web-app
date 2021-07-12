@@ -78,6 +78,8 @@ function Main() {
 
     const [tags, setTags] = useState([]);
 
+    const [failedMessages, setFailedMessages] = useState({});
+
     const [isSuccessVisible, setSuccessVisible] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [isErrorVisible, setErrorVisible] = useState(false);
