@@ -56,6 +56,7 @@ import {
     sendMessageCall,
     uploadMediaCall
 } from "../../api/ApiCalls";
+import {Prompt} from 'react-router-dom';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -74,6 +75,8 @@ export default function Chat(props) {
     const [messages, setMessages] = useState({});
     const [input, setInput] = useState('');
     const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
+
+    const [hasFailedMessages, setHasFailedMessages] = useState(false);
 
     const [selectedFiles, setSelectedFiles] = useState();
     const [accept, setAccept] = useState('');
@@ -862,9 +865,7 @@ export default function Chat(props) {
 
                             // This will be used to display a warning before refreshing
                             if (!isStored) {
-                                props.setFailedChat(prevState => {
-                                    prevState[waId] = true;
-                                });
+                                setHasFailedMessages(true);
                             }
                         }
 
@@ -1112,6 +1113,10 @@ export default function Chat(props) {
             className={"chat" + (waId ? " chatOpen" : "") + (props.isChatOnly ? " chatFullWidth" : "")}
             onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
+
+            <Prompt when={hasFailedMessages}
+                    message="There are unsent messages in the chat.
+                    If you continue, they will be deleted. Are you sure you want to continue?" />
 
             <ChatHeader
                 person={person}
