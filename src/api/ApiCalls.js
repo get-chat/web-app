@@ -98,13 +98,13 @@ export const retrieveCurrentUserCall = (callback, history) => {
         });
 }
 
-export const listTemplatesCall = (callback) => {
+export const listTemplatesCall = (callback, errorCallback) => {
     axios.get(`${BASE_URL}templates/`, getConfig())
         .then((response) => {
             callback?.(response);
         })
         .catch((error) => {
-            window.displayError(error);
+            errorCallback?.(error);
         });
 }
 

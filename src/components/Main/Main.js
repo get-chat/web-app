@@ -617,6 +617,17 @@ function Main() {
 
             // Trigger next request
             listTags();
+        }, (error) => {
+            if (error.response) {
+                const status = error.response.status;
+                // Status code 400 means template management is not available
+                // See: https://gitlab.com/wabbitproject/web-app/-/issues/73
+                if (status !== 400) {
+                    window.displayError(error);
+                }
+            } else {
+                window.displayError(error);
+            }
         });
     }
 
