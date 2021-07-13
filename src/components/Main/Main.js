@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import Sidebar from "../Sidebar/Sidebar";
-import Chat from "../Chat/Chat";
+import Sidebar from "./Sidebar/Sidebar";
+import Chat from "./Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
@@ -617,6 +617,17 @@ function Main() {
 
             // Trigger next request
             listTags();
+        }, (error) => {
+            if (error.response) {
+                const status = error.response.status;
+                // Status code 400 means template management is not available
+                // See: https://gitlab.com/wabbitproject/web-app/-/issues/73
+                if (status !== 400) {
+                    window.displayError(error);
+                }
+            } else {
+                window.displayError(error);
+            }
         });
     }
 
