@@ -775,6 +775,7 @@ function Main() {
                     currentUser={currentUser}
                     setProgress={setProgress}
                     displayNotification={displayNotification}
+                    isBlurred={isBlurred}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={resolveContact}
                     isChatOnly={isChatOnly}

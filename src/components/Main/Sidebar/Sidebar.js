@@ -140,7 +140,7 @@ function Sidebar(props) {
                     }
 
                     // New chatMessages
-                    if (!chatMessage.isFromUs && (waId !== chatMessageWaId || document.visibilityState === 'hidden')) {
+                    if (!chatMessage.isFromUs && (waId !== chatMessageWaId || document.visibilityState === 'hidden' || props.isBlurred)) {
                         const preparedNewMessages = props.newMessages;
                         if (props.newMessages[chatMessageWaId] === undefined) {
                             preparedNewMessages[chatMessageWaId] = new NewMessageClass(chatMessageWaId, 0);
@@ -181,7 +181,7 @@ function Sidebar(props) {
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
         }
-    }, [waId, props.chats, props.newMessages, keyword]);
+    }, [waId, props.isBlurred, props.chats, props.newMessages, keyword]);
 
     useEffect(() => {
         const chatsContainerCopy = chatsContainer.current;
