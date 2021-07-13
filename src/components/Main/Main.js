@@ -62,6 +62,7 @@ function Main() {
 
     const [progress, _setProgress] = useState(0);
     const [checked, setChecked] = useState(false);
+    const [isBlurred, setBlurred] = useState(false);
 
     const [currentUser, setCurrentUser] = useState();
     const [users, setUsers] = useState({});
@@ -512,6 +513,24 @@ function Main() {
             ws.close(CODE_NORMAL);
         }
     }, []);
+
+    useEffect(() => {
+        function onBlur(event) {
+            setBlurred(true);
+        }
+
+        function onFocus(event) {
+            setBlurred(false);
+        }
+
+        window.addEventListener('blur', onBlur);
+        window.addEventListener('focus', onFocus);
+
+        return () => {
+            window.removeEventListener('blur', onBlur);
+            window.removeEventListener('focus', onFocus);
+        }
+    }, [isBlurred]);
 
     useEffect(() => {
         setChecked(true);
