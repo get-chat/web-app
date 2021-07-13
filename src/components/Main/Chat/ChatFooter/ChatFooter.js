@@ -8,13 +8,13 @@ import NotesIcon from '@material-ui/icons/Notes';
 import MicIcon from '@material-ui/icons/Mic';
 import {Emoji, NimblePicker} from "emoji-mart";
 import 'emoji-mart/css/emoji-mart.css';
-import '../../../styles/ChatFooter.css';
-import '../../../styles/EmojiPicker.css';
+import '../../../../styles/ChatFooter.css';
+import '../../../../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
-import FileInput from "../../FileInput";
-import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../../../helpers/Helpers";
+import FileInput from "../../../FileInput";
+import {getSelectionHtml, replaceEmojis, translateHTMLInputToText} from "../../../../helpers/Helpers";
 import VoiceRecord from "./VoiceRecord";
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import {
@@ -23,8 +23,8 @@ import {
     EMPTY_IMAGE_BASE64,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_REQUEST_MIC_PERMISSION
-} from "../../../Constants";
-import ChatMessageClass from "../../../ChatMessageClass";
+} from "../../../../Constants";
+import ChatMessageClass from "../../../../ChatMessageClass";
 
 function ChatFooter(props) {
 

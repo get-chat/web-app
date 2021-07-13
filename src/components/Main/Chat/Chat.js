@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react'
-import '../../styles/Chat.css'
+import '../../../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage/ChatMessage";
 import {useHistory, useLocation, useParams} from "react-router-dom";
@@ -18,9 +18,9 @@ import {
     EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
     EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
     EVENT_TOPIC_UPDATE_PERSON_NAME
-} from "../../Constants";
-import ChatMessageClass from "../../ChatMessageClass";
-import PersonClass from "../../PersonClass";
+} from "../../../Constants";
+import ChatMessageClass from "../../../ChatMessageClass";
+import PersonClass from "../../../PersonClass";
 import TemplateMessages from "./TemplateMessages/TemplateMessages";
 import ChatFooter from "./ChatFooter/ChatFooter";
 import ChatHeader from "./ChatHeader";
@@ -39,13 +39,13 @@ import {
     isScrollable,
     sortMessagesAsc,
     translateHTMLInputToText
-} from "../../helpers/Helpers";
+} from "../../../helpers/Helpers";
 import PreviewSendMedia from "./PreviewSendMedia";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../helpers/FileHelper";
+import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../../helpers/FileHelper";
 import SavedResponses from "./SavedResponses";
-import {generateTemplateMessagePayload} from "../../helpers/ChatHelper";
+import {generateTemplateMessagePayload} from "../../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
-import {clearUserSession} from "../../helpers/ApiHelper";
+import {clearUserSession} from "../../../helpers/ApiHelper";
 import {
     generateCancelToken,
     listChatAssignmentEventsCall,
@@ -55,7 +55,7 @@ import {
     retrievePersonCall,
     sendMessageCall,
     uploadMediaCall
-} from "../../api/ApiCalls";
+} from "../../../api/ApiCalls";
 import {Prompt} from 'react-router-dom';
 
 const SCROLL_OFFSET = 15;

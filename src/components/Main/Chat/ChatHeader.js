@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import '../../styles/ChatHeader.css';
+import '../../../styles/ChatHeader.css';
 import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
-import {avatarStyles} from "../../AvatarStyles";
-import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../Constants";
+import {avatarStyles} from "../../../AvatarStyles";
+import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
 import PubSub from "pubsub-js";
 import {useHistory} from "react-router-dom";
-import {addPlus, extractAvatarFromContactProviderData, replaceEmojis} from "../../helpers/Helpers";
+import {addPlus, extractAvatarFromContactProviderData, replaceEmojis} from "../../../helpers/Helpers";
 
 function ChatHeader(props) {
 

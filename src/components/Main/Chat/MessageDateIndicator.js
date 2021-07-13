@@ -1,6 +1,6 @@
 import React from "react";
 import Moment from "react-moment";
-import {CALENDAR_SHORT_DAYS} from "../../Constants";
+import {CALENDAR_SHORT_DAYS} from "../../../Constants";
 
 function MessageDateIndicator(props) {
 

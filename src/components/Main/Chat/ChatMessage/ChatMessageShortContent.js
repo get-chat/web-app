@@ -1,9 +1,9 @@
 import React from "react";
 import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 import ChatMessageTypeLabel from "./ChatMessageTypeLabel";
-import {replaceEmojis} from "../../../helpers/Helpers";
+import {replaceEmojis} from "../../../../helpers/Helpers";
 import ReplyIcon from '@material-ui/icons/Reply';
-import ChatMessageClass from "../../../ChatMessageClass";
+import ChatMessageClass from "../../../../ChatMessageClass";
 
 function ChatMessageShortContent(props) {
     return (

@@ -17,7 +17,7 @@ import {
 import {getDroppedFiles, handleDragOver} from "../../../helpers/FileHelper";
 import PubSub from "pubsub-js";
 import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../../../Constants";
-import ChatMessageShortContent from "../../Chat/ChatMessage/ChatMessageShortContent";
+import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
 
 function SidebarChat(props) {
 

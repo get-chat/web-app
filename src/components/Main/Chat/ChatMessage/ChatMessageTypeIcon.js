@@ -1,5 +1,5 @@
 import React from "react";
-import ChatMessageClass from "../../../ChatMessageClass";
+import ChatMessageClass from "../../../../ChatMessageClass";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import MicIcon from "@material-ui/icons/Mic";
 import AudiotrackIcon from "@material-ui/icons/Audiotrack";
