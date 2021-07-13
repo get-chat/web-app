@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import Sidebar from "../Sidebar/Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import Chat from "../Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";

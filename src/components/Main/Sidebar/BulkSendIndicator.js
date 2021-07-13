@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import '../../styles/BulkSendIndicator.css';
+import '../../../styles/BulkSendIndicator.css';
 import {LinearProgress} from "@material-ui/core";
 import PubSub from "pubsub-js";
-import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED} from "../../Constants";
-import {generateMessagePreview, getObjLength} from "../../helpers/Helpers";
+import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED} from "../../../Constants";
+import {generateMessagePreview, getObjLength} from "../../../helpers/Helpers";
 import Moment from "react-moment";
 
 function BulkSendIndicator(props) {

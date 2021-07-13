@@ -1,8 +1,8 @@
 import React from 'react';
-import '../../styles/SidebarContactResult.css';
+import '../../../styles/SidebarContactResult.css';
 import {Link} from "react-router-dom";
 import {Avatar} from "@material-ui/core";
-import {avatarStyles} from "../../AvatarStyles";
+import {avatarStyles} from "../../../AvatarStyles";
 
 function SidebarContactResult(props) {
 

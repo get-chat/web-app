@@ -1,6 +1,6 @@
 import React from "react";
 import {Button} from "@material-ui/core";
-import '../../styles/BulkSendActions.css';
+import '../../../styles/BulkSendActions.css';
 
 function BulkSendActions(props) {
     return (

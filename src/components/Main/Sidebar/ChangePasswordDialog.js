@@ -1,11 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
-import '../../styles/ChangePasswordDialog.css';
+import '../../../styles/ChangePasswordDialog.css';
 import {Button, Dialog, TextField} from "@material-ui/core";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {Alert, AlertTitle} from "@material-ui/lab";
-import {changePasswordCall} from "../../api/ApiCalls";
+import {changePasswordCall} from "../../../api/ApiCalls";
 
 function ChangePasswordDialog(props) {
 

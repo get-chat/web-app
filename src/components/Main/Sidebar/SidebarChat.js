@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import '../../styles/SidebarChat.css';
+import '../../../styles/SidebarChat.css';
 import {Avatar, Checkbox, ListItem, Tooltip} from "@material-ui/core";
 import {useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import GroupIcon from '@material-ui/icons/Group';
 import Moment from "react-moment";
-import {avatarStyles} from "../../AvatarStyles";
+import {avatarStyles} from "../../../AvatarStyles";
 import moment from "moment";
 import {
     addPlus,
@@ -13,11 +13,11 @@ import {
     generateInitialsHelper,
     markOccurrences,
     replaceEmojis
-} from "../../helpers/Helpers";
-import {getDroppedFiles, handleDragOver} from "../../helpers/FileHelper";
+} from "../../../helpers/Helpers";
+import {getDroppedFiles, handleDragOver} from "../../../helpers/FileHelper";
 import PubSub from "pubsub-js";
-import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../../Constants";
-import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
+import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../../../Constants";
+import ChatMessageShortContent from "../../Chat/ChatMessage/ChatMessageShortContent";
 
 function SidebarChat(props) {
 

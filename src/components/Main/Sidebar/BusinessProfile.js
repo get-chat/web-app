@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
-import '../../styles/BusinessProfile.css';
+import '../../../styles/BusinessProfile.css';
 import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
-import {generateInitialsHelper} from "../../helpers/Helpers";
-import FileInput from "../FileInput";
-import {avatarStyles} from "../../AvatarStyles";
+import {generateInitialsHelper} from "../../../helpers/Helpers";
+import FileInput from "../../FileInput";
+import {avatarStyles} from "../../../AvatarStyles";
 import {
     deleteProfilePhotoCall,
     generateCancelToken,
@@ -14,7 +14,7 @@ import {
     updateBusinessProfileCall,
     updateProfileAboutCall,
     updateProfilePhotoCall
-} from "../../api/ApiCalls";
+} from "../../../api/ApiCalls";
 
 function BusinessProfile(props) {
 
