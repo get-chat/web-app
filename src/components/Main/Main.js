@@ -599,6 +599,13 @@ function Main() {
     }
 
     const listTemplates = () => {
+        const completeCallback = () => {
+            setLoadingTemplates(false);
+            setTemplatesReady(true);
+
+            setProgress(45);
+        };
+
         listTemplatesCall((response) => {
             const preparedTemplates = {};
             response.data.results.forEach((template) => {
@@ -610,10 +617,8 @@ function Main() {
             });
 
             setTemplates(preparedTemplates);
-            setLoadingTemplates(false);
-            setTemplatesReady(true);
 
-            setProgress(45);
+            completeCallback();
 
             // Trigger next request
             listTags();
@@ -622,7 +627,9 @@ function Main() {
                 const status = error.response.status;
                 // Status code 400 means template management is not available
                 // See: https://gitlab.com/wabbitproject/web-app/-/issues/73
-                if (status !== 400) {
+                if (status === 400) {
+                    completeCallback();
+                } else {
                     window.displayError(error);
                 }
             } else {
