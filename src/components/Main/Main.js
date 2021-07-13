@@ -62,6 +62,7 @@ function Main() {
 
     const [progress, _setProgress] = useState(0);
     const [checked, setChecked] = useState(false);
+    const [isBlurred, setBlurred] = useState(false);
 
     const [currentUser, setCurrentUser] = useState();
     const [users, setUsers] = useState({});
@@ -514,6 +515,24 @@ function Main() {
     }, []);
 
     useEffect(() => {
+        function onBlur(event) {
+            setBlurred(true);
+        }
+
+        function onFocus(event) {
+            setBlurred(false);
+        }
+
+        window.addEventListener('blur', onBlur);
+        window.addEventListener('focus', onFocus);
+
+        return () => {
+            window.removeEventListener('blur', onBlur);
+            window.removeEventListener('focus', onFocus);
+        }
+    }, [isBlurred]);
+
+    useEffect(() => {
         setChecked(true);
 
         return () => {
@@ -756,6 +775,7 @@ function Main() {
                     currentUser={currentUser}
                     setProgress={setProgress}
                     displayNotification={displayNotification}
+                    isBlurred={isBlurred}
                     contactProvidersData={contactProvidersData}
                     retrieveContactData={resolveContact}
                     isChatOnly={isChatOnly}
