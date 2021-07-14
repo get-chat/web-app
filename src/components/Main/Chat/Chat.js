@@ -456,7 +456,7 @@ export default function Chat(props) {
 
     useEffect(() => {
         const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
-        console.log("Has newer to load:", hasNewerToLoad);
+        //console.log("Has newer to load:", hasNewerToLoad);
         setAtBottom(!hasNewerToLoad);
 
     }, [messages, lastMessageId]);
