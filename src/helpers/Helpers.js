@@ -192,13 +192,10 @@ export const getBaseURL = () => {
 
 export const getWebSocketURL = () => {
     let baseUrlEnv = BASE_URL;
-    console.log(baseUrlEnv);
     if (!baseUrlEnv || baseUrlEnv === "/" || baseUrlEnv === "/api/v1/" || baseUrlEnv === "/api/v2/") {
         const baseURL = getBaseURL();
-        console.log(prepareWebsocketUrl(baseURL));
         return prepareWebsocketUrl(baseURL);
     } else {
-        console.log(prepareWebsocketUrl(baseUrlEnv));
         return prepareWebsocketUrl(baseUrlEnv);
     }
 }
