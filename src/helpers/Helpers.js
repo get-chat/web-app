@@ -191,13 +191,13 @@ export const getBaseURL = () => {
 }
 
 export const getWebSocketURL = () => {
-    const baseURL = getBaseURL();
-    if (baseURL.includes('localhost') || baseURL.includes('10.0.2.2')) {
-        //return 'ws://localhost:6789/';
-        return 'wss://websockets-staging.stagingwainbox.360dialog.com/';
-    } else {
-        return baseURL.replace('https://', 'wss://websockets-').replace('http://', 'wss://websockets-');
-    }
+    return BASE_URL
+        .replace('https://', 'wss://websockets-')
+        .replace('http://', 'wss://websockets-')
+        .replace('api/v1/', '')
+        .replace('api/v2/', '');
+
+    //return 'ws://localhost:6789/';
 }
 
 export const displaySeconds = (seconds) => {
