@@ -329,8 +329,6 @@ function Main() {
                     const now = new Date();
                     const differenceInMinutes = Math.abs(now.getTime() - socketClosedAt.getTime()) / 1000 / 60;
 
-                    console.log(differenceInMinutes);
-
                     // If window was blurred for more than 3 hours
                     if (differenceInMinutes >= 5) {
                         window.location.reload();
