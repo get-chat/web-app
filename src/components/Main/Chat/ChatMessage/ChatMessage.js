@@ -17,7 +17,7 @@ import ChatMessageDocument from "./ChatMessageDocument";
 import ChatMessageVoice from "./ChatMessageVoice";
 import ChatMessageTemplate from "./ChatMessageTemplate";
 import ChatAssignmentEvent from "../../../ChatAssignmentEvent";
-import ChatTaggingEvent from "../../../ChatTaggingEvent";
+import ChatTaggingEvent from "./ChatTaggingEvent";
 
 const iconStyles = {
     fontSize: '15px'

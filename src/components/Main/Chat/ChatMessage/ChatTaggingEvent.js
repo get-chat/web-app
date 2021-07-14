@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/ChatTaggingEvent.css';
+import '../../../../styles/ChatTaggingEvent.css';
 import Moment from "react-moment";
 
 function ChatTaggingEvent(props) {
