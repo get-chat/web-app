@@ -61,7 +61,7 @@ function ContactDetails(props)  {
                     </div>
                     }
 
-                    <span>Last message: <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment></span>
+                    <span>Last message: {props.contactData.lastMessageTimestamp ? <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment> : 'Never'}</span>
 
                     {chat?.tags?.length > 0 &&
                     <div className="contactDetails__body__tags mt-3">
