@@ -191,13 +191,21 @@ export const getBaseURL = () => {
 }
 
 export const getWebSocketURL = () => {
-    return BASE_URL
+    let baseUrlEnv = BASE_URL;
+    if (!baseUrlEnv || baseUrlEnv === "/") {
+        const baseURL = getBaseURL();
+        return prepareWebsocketUrl(baseURL);
+    } else {
+        return prepareWebsocketUrl(baseUrlEnv);
+    }
+}
+
+const prepareWebsocketUrl = (url) => {
+    return url
         .replace('https://', 'wss://websockets-')
         .replace('http://', 'wss://websockets-')
         .replace('api/v1/', '')
         .replace('api/v2/', '');
-
-    //return 'ws://localhost:6789/';
 }
 
 export const displaySeconds = (seconds) => {
