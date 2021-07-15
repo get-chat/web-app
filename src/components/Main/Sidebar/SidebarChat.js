@@ -16,7 +16,12 @@ import {
 } from "../../../helpers/Helpers";
 import {getDroppedFiles, handleDragOver} from "../../../helpers/FileHelper";
 import PubSub from "pubsub-js";
-import {CALENDAR_SHORT, EVENT_TOPIC_DROPPED_FILES} from "../../../Constants";
+import {
+    CALENDAR_SHORT,
+    EVENT_TOPIC_DROPPED_FILES,
+    SIDEBAR_TAB_CASE_ALL,
+    SIDEBAR_TAB_CASE_GROUP, SIDEBAR_TAB_CASE_ME
+} from "../../../Constants";
 import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
 
 function SidebarChat(props) {
@@ -158,7 +163,7 @@ function SidebarChat(props) {
                             {props.chatData.initials}
                         </Avatar>
 
-                        {(props.chatData.assignedToUser && ((props.tabCase === 'all') || (props.tabCase === 'group'))) &&
+                        {(props.chatData.assignedToUser && ((props.tabCase === SIDEBAR_TAB_CASE_ALL) || (props.tabCase === SIDEBAR_TAB_CASE_GROUP))) &&
                         <Tooltip title={props.chatData.generateAssignmentInformation()}>
                             <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
                                 {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
@@ -167,7 +172,10 @@ function SidebarChat(props) {
                         }
 
                         {(props.chatData.assignedGroup
-                            && ((props.tabCase === 'all' && !props.chatData.assignedToUser) || (props.tabCase === 'me') || (props.tabCase === 'group' && !props.chatData.assignedToUser))) &&
+                            && ((props.tabCase === SIDEBAR_TAB_CASE_ALL && !props.chatData.assignedToUser)
+                                || (props.tabCase === SIDEBAR_TAB_CASE_ME)
+                                || (props.tabCase === SIDEBAR_TAB_CASE_GROUP && !props.chatData.assignedToUser)))
+                        &&
                         <Tooltip title={props.chatData.generateAssignmentInformation()}>
                             <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedGroupInitials()]}>
                                 <GroupIcon />
