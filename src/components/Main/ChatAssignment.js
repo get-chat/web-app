@@ -111,15 +111,16 @@ function ChatAssignment(props) {
             <DialogTitle>Assign chat</DialogTitle>
             <DialogContent className="chatAssignment">
 
-                {isUnableToChange &&
-                <DialogContentText>
-                    This chat is already assigned to another user.
-                    You can change the assignment of this chat only if the current person will unassign themselves or
-                    someone with admin access will clear the assignment.
-                </DialogContentText>
+                {isUnableToChange
+                    ?
+                    <DialogContentText>
+                        This chat is already assigned to another user.
+                        You can change the assignment of this chat only if the current person will unassign themselves or
+                        someone with admin access will clear the assignment.
+                    </DialogContentText>
+                    :
+                    <DialogContentText>You can assign this chat to a user or a group.</DialogContentText>
                 }
-
-                <DialogContentText>You can assign this chat to a user or a group.</DialogContentText>
 
                 <FormControl fullWidth={true} disabled={isUnableToChange}>
                     <InputLabel id="assign-user-select-label">User</InputLabel>
