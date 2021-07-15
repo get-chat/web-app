@@ -65,6 +65,8 @@ function ChatAssignment(props) {
             tempAssignedGroup === 'null' ? null : tempAssignedGroup,
             (response) => {
                 close();
+            }, (error) => {
+
             });
     }
 

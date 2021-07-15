@@ -347,7 +347,7 @@ export const retrieveChatAssignmentCall = (waId, callback, errorCallback) => {
         });
 }
 
-export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, callback) => {
+export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, callback, errorCallback) => {
     axios.put(`${BASE_URL}chat_assignment/${waId}/`, {
         'wa_id': waId,
         'assigned_to_user': assignedToUser,
@@ -357,7 +357,10 @@ export const updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, ca
             callback?.(response);
         })
         .catch((error) => {
-            window.displayError(error);
+            if (error?.response?.status !== 403) {
+                window.displayError(error);
+            }
+            errorCallback?.(error);
         });
 }
 
