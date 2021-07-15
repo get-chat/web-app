@@ -67,7 +67,7 @@ function ChatAssignment(props) {
                 close();
             }, (error) => {
                 if (error?.response?.status === 403) {
-                    window.displayCustomError('Assignments of this chat have changed recently.');
+                    window.displayCustomError('This chat could not be assigned as its assignments have been changed by another user recently.');
                 }
 
                 close();
