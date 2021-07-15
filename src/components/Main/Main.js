@@ -434,6 +434,8 @@ function Main() {
                                     prevState[prepared.waId].assignedGroup = prepared.assignmentEvent.assigned_group_set;
                                     return {...prevState};
                                 }
+
+                                return prevState;
                             });
                         }
 
@@ -460,6 +462,8 @@ function Main() {
 
                                     return {...prevState};
                                 }
+
+                                return prevState;
                             });
                         }
 
