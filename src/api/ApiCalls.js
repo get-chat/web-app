@@ -49,7 +49,7 @@ export const changePasswordCall = (currentPassword, newPassword, callback, error
     });
 }
 
-export const listChatsCall = (keyword, limit, offset, cancelToken, callback, history) => {
+export const listChatsCall = (keyword, limit, offset, cancelToken, callback, errorCallback, history) => {
     axios.get(`${BASE_URL}chats/`,
         getConfig({
             search: keyword,
@@ -62,6 +62,7 @@ export const listChatsCall = (keyword, limit, offset, cancelToken, callback, his
         .catch((error) => {
             window.displayError(error);
             handleIfUnauthorized(error, history);
+            errorCallback?.(error);
         });
 }
 

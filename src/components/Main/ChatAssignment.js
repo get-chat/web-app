@@ -81,8 +81,8 @@ function ChatAssignment(props) {
         const userId = event.target.value;
         setTempAssignedToUser(userId);
 
-        // Set group automatically, if not admin
-        if (!props.isAdmin) {
+        // Set group automatically, if assigned group was blank
+        if (!assignedGroup) {
             const firstGroupOfUser = props.users[userId]?.groups?.[0]?.id;
             setTempAssignedGroup(firstGroupOfUser);
         }

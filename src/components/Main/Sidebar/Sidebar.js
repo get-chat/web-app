@@ -1,6 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../../../styles/Sidebar.css';
-import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import {
+    Avatar,
+    CircularProgress,
+    Divider,
+    Fade,
+    IconButton,
+    Link,
+    Menu,
+    MenuItem,
+    Tab,
+    Tabs,
+    Zoom
+} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import {containsLetters, generateInitialsHelper, getHubURL, getObjLength, isScrollable} from "../../../helpers/Helpers";
@@ -42,6 +54,7 @@ function Sidebar(props) {
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [isNotificationsVisible, setNotificationsVisible] = useState(false);
+    const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
     const history = useHistory();
@@ -235,6 +248,10 @@ function Sidebar(props) {
     }
 
     const listChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
+        if (!isInitial) {
+            setLoadingMoreChats(true);
+        }
+
         listChatsCall(keyword, 18, offset, cancelTokenSource.token,
             (response) => {
                 const preparedChats = {};
@@ -306,6 +323,11 @@ function Sidebar(props) {
                         return {...prevState, ...preparedNewMessages}
                     });
                 }
+
+                setLoadingMoreChats(false);
+
+            }, (error) => {
+                setLoadingMoreChats(false);
             }, history);
     }
 
@@ -541,6 +563,16 @@ function Sidebar(props) {
                 </div>
                 }
             </div>
+
+            <Fade in={isLoadingMoreChats}>
+                <div className="sidebar__loadingMore">
+                    <Zoom in={isLoadingMoreChats}>
+                        <div className="sidebar__loadingMore__wrapper">
+                            <CircularProgress size={28}/>
+                        </div>
+                    </Zoom>
+                </div>
+            </Fade>
 
             {isContactsVisible &&
             <Contacts

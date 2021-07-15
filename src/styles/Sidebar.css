@@ -52,6 +52,27 @@
     min-width: 0;
 }
 
+.sidebar__loadingMore {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    background: rgb(255,255,255);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+}
+
+.sidebar__loadingMore__wrapper {
+    width: auto;
+    padding: 10px 10px 4px 10px;
+    border-radius: 40px;
+    background-color: white;
+    box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
+}
+
 .sidebar__results {
     flex: 1;
     background-color: white;
