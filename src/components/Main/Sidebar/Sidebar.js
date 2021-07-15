@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../../../styles/Sidebar.css';
-import {Avatar, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
+import {Avatar, CircularProgress, Divider, IconButton, Link, Menu, MenuItem, Tab, Tabs} from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import {containsLetters, generateInitialsHelper, getHubURL, getObjLength, isScrollable} from "../../../helpers/Helpers";
@@ -42,6 +42,7 @@ function Sidebar(props) {
     const [isContactsVisible, setContactsVisible] = useState(false);
     const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] = useState(false);
     const [isNotificationsVisible, setNotificationsVisible] = useState(false);
+    const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
     const [tabCase, setTabCase] = useState("all")
 
     const history = useHistory();
@@ -541,6 +542,14 @@ function Sidebar(props) {
                 </div>
                 }
             </div>
+
+            {isLoadingMoreChats &&
+            <div className="sidebar__loadingMore">
+                <div className="sidebar__loadingMore__wrapper">
+                    <CircularProgress size={28}/>
+                </div>
+            </div>
+            }
 
             {isContactsVisible &&
             <Contacts
