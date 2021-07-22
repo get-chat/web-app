@@ -1,6 +1,6 @@
 export const BASE_URL = process.env.REACT_APP_BASE_URL.trim();
 
-export const VERSION = 1.21
+export const VERSION = 1.22
 
 export const EVENT_TOPIC_CHAT_MESSAGE = "chat_message";
 export const EVENT_TOPIC_GO_TO_MSG_ID = "go_to_msg_id";
@@ -34,6 +34,10 @@ export const ATTACHMENT_TYPE_AUDIO = 'audio';
 export const ATTACHMENT_TYPE_DOCUMENT = 'document';
 
 export const EMPTY_IMAGE_BASE64 = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+export const SIDEBAR_TAB_CASE_ALL = 'all';
+export const SIDEBAR_TAB_CASE_ME = 'me';
+export const SIDEBAR_TAB_CASE_GROUP = 'group';
 
 export const CALENDAR_NORMAL = {
     lastDay: '[Yesterday at] H:mm', // LT

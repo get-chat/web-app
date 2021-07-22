@@ -1,12 +1,12 @@
-# Wabbit Web App
+# get.chat Web App
 
-Wabbit Web App
+get.chat Web App
 
 ## Before Start
 
 You must configure `REACT_APP_BASE_URL` (Base URL) variable.
 This variable is defined in `package.json` (scripts -> start) and `.env` files.
-`REACT_APP_BASE_URL` should be set to `/api/v1/` to use same address as Wabbit Web App runs on.
+`REACT_APP_BASE_URL` should be set to `/api/v1/` to use same address as get.chat Web App runs on.
 You can define a custom backend URL for development (not for build) by defining it in `package.json` (scripts -> start).
 
 ## Available Scripts
