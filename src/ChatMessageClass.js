@@ -1,5 +1,7 @@
 import {BASE_URL} from "./Constants";
 import {generateInitialsHelper} from "./helpers/Helpers";
+import dompurify from 'dompurify';
+import purify from "dompurify";
 
 export class ChatMessageClass {
 
@@ -88,7 +90,17 @@ export class ChatMessageClass {
         this.isStored = false;
         this.isFailed = false;
         this.resendPayload = undefined;
+
+        this.purify();
     };
+
+    purify() {
+        const sanitizer = dompurify.sanitize;
+
+        if (this.text) {
+            this.text = sanitizer(this.text);
+        }
+    }
 
     static fromAssignmentEvent(assignmentEvent) {
         const message = new ChatMessageClass();
