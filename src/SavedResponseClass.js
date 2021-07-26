@@ -1,4 +1,4 @@
-import dompurify from "dompurify";
+import {sanitize} from "./helpers/Helpers";
 
 class SavedResponseClass {
 
@@ -9,10 +9,8 @@ class SavedResponseClass {
     }
 
     purify() {
-        const sanitizer = dompurify.sanitize;
-
         if (this.text) {
-            this.text = sanitizer(this.text);
+            this.text = sanitize(this.text);
         }
     }
 }

@@ -1,7 +1,5 @@
 import {BASE_URL} from "./Constants";
-import {generateInitialsHelper} from "./helpers/Helpers";
-import dompurify from 'dompurify';
-import purify from "dompurify";
+import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
 
 export class ChatMessageClass {
 
@@ -95,10 +93,8 @@ export class ChatMessageClass {
     };
 
     purify() {
-        const sanitizer = dompurify.sanitize;
-
         if (this.text) {
-            this.text = sanitizer(this.text);
+            this.text = sanitize(this.text);
         }
     }
 
