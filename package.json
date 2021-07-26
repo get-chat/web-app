@@ -10,6 +10,7 @@
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
     "axios": "^0.21.1",
+    "dompurify": "^2.3.0",
     "emoji-mart": "^3.0.0",
     "emoji-regex": "^9.2.1",
     "html-to-text": "^7.0.0",

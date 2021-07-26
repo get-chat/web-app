@@ -1,5 +1,5 @@
 import {BASE_URL} from "./Constants";
-import {generateInitialsHelper} from "./helpers/Helpers";
+import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
 
 export class ChatMessageClass {
 
@@ -88,7 +88,15 @@ export class ChatMessageClass {
         this.isStored = false;
         this.isFailed = false;
         this.resendPayload = undefined;
+
+        this.purify();
     };
+
+    purify() {
+        if (this.text) {
+            this.text = sanitize(this.text);
+        }
+    }
 
     static fromAssignmentEvent(assignmentEvent) {
         const message = new ChatMessageClass();
