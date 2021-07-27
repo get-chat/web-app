@@ -1,5 +1,5 @@
 import {getPastHoursByTimestamp} from "./helpers/DateHelper";
-import {generateInitialsHelper} from "./helpers/Helpers";
+import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
 
 class ChatClass {
 
@@ -25,6 +25,16 @@ class ChatClass {
         this.assignedGroup = data.assigned_group;
         this.assignedToUser = data.assigned_to_user;
         this.tags = data.tags;
+    }
+
+    sanitize() {
+        if (this.lastMessageBody) {
+            this.lastMessageBody = sanitize(this.lastMessageBody);
+        }
+
+        if (this.lastMessageButtonText) {
+            this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
+        }
     }
 
     setName(name) {
