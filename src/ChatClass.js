@@ -25,6 +25,8 @@ class ChatClass {
         this.assignedGroup = data.assigned_group;
         this.assignedToUser = data.assigned_to_user;
         this.tags = data.tags;
+
+        this.sanitize();
     }
 
     sanitize() {
