@@ -30,13 +30,10 @@ class ChatClass {
     }
 
     sanitize() {
-        if (this.lastMessageBody) {
-            this.lastMessageBody = sanitize(this.lastMessageBody);
-        }
-
-        if (this.lastMessageButtonText) {
-            this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
-        }
+        this.name = sanitize(this.name);
+        this.lastMessageBody = sanitize(this.lastMessageBody);
+        this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
+        this.lastMessageCaption = sanitize(this.lastMessageCaption);
     }
 
     setName(name) {
@@ -46,10 +43,6 @@ class ChatClass {
 
     generateInitials = () => {
         return generateInitialsHelper(this.name);
-    }
-
-    getAvatarClassName() {
-        return this.initials ? this.initials[0] : '';
     }
 
     setLastMessage(lastMessagePayload) {
@@ -76,12 +69,12 @@ class ChatClass {
         return this.getPastHoursAfterLastMessage() >= 24;
     }
 
-    generateAssignedToInitials() {
-        return this.assignedToUser?.username?.[0]?.toUpperCase();
+    getAssignedUserUsername() {
+        return this.assignedToUser?.username;
     }
 
-    generateAssignedGroupInitials() {
-        return this.assignedGroup?.name?.[0]?.toUpperCase();
+    generateAssignedToInitials() {
+        return this.assignedToUser?.username?.[0]?.toUpperCase();
     }
 
     generateAssignmentInformation() {

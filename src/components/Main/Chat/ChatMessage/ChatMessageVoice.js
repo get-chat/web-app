@@ -5,9 +5,9 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_UNSUPPORTED_FILE} from "../../../../Constants";
-import {avatarStyles} from "../../../../AvatarStyles";
 import {isAudioMimeTypeSupported} from "../../../../helpers/FileHelper";
 import UnsupportedFileClass from "../../../../UnsupportedFileClass";
+import {generateAvatarColor} from "../../../../helpers/Helpers";
 
 function ChatMessageVoice(props) {
 
@@ -25,8 +25,6 @@ function ChatMessageVoice(props) {
             pauseVoice();
         }
     };
-
-    const avatarClasses = avatarStyles();
 
     const playIconStyles = {
         fontSize: '38px'
@@ -128,7 +126,9 @@ function ChatMessageVoice(props) {
             <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
             <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
 
-            <Avatar className={(data.voiceId !== undefined ?? data.voiceLink !== undefined) ? avatarClasses[data.initials] : avatarClasses.orange + " audioMessageAvatar"}>
+            <Avatar
+                style={{backgroundColor: (data.voiceId !== undefined ?? data.voiceLink !== undefined) ? generateAvatarColor(data.senderName) : '#ff9a10'}}
+                className="audioMessageAvatar">
                 {data.voiceId !== undefined ? <span>{data.initials}</span> : <HeadsetIcon/>}
             </Avatar>
         </div>

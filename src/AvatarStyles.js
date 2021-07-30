@@ -30,37 +30,34 @@ const prepareStylesObject = () => {
     return obj;
 }
 
-// In case generating colors is needed again, this can be enabled
-//const avatarStyles = makeStyles((theme) => (prepareStylesObject()));
-
-const avatarStyles = makeStyles((theme) => ({
-    "A": {"color": "#fff", "backgroundColor": "#9D8060"},
-    "B": {"color": "#fff", "backgroundColor": "#60E8C0"},
+const colorsObject = {
+    "A": {"color": "#fff", "backgroundColor": "#ff4b29"},
+    "B": {"color": "#fff", "backgroundColor": "#ff00f2"},
     "C": {"color": "#fff", "backgroundColor": "#245120"},
-    "D": {"color": "#fff", "backgroundColor": "#E7B980"},
-    "E": {"color": "#fff", "backgroundColor": "#AB21E0"},
+    "D": {"color": "#fff", "backgroundColor": "#ff8c12"},
+    "E": {"color": "#fff", "backgroundColor": "#b900ff"},
     "F": {"color": "#fff", "backgroundColor": "#6E8A40"},
     "G": {"color": "#fff", "backgroundColor": "#31d5f2"},
     "H": {"color": "#fff", "backgroundColor": "#f55600"},
-    "I": {"color": "#fff", "backgroundColor": "#B8C360"},
+    "I": {"color": "#fff", "backgroundColor": "#e7ff2d"},
     "J": {"color": "#fff", "backgroundColor": "#7C2BC0"},
-    "K": {"color": "#fff", "backgroundColor": "#bc942e"},
-    "L": {"color": "#fff", "backgroundColor": "#02FC80"},
-    "M": {"color": "#fff", "backgroundColor": "#C664E0"},
-    "N": {"color": "#fff", "backgroundColor": "#89CD40"},
-    "O": {"color": "#fff", "backgroundColor": "#4e2a88"},
-    "P": {"color": "#fff", "backgroundColor": "#109E00"},
+    "K": {"color": "#fff", "backgroundColor": "#ff8000"},
+    "L": {"color": "#fff", "backgroundColor": "#02fc23"},
+    "M": {"color": "#fff", "backgroundColor": "#22ffdc"},
+    "N": {"color": "#fff", "backgroundColor": "#8eff11"},
+    "O": {"color": "#fff", "backgroundColor": "#13f7ff"},
+    "P": {"color": "#fff", "backgroundColor": "#29ff0f"},
     "Q": {"color": "#fff", "backgroundColor": "#ee2a81"},
-    "R": {"color": "#fff", "backgroundColor": "#976EC0"},
+    "R": {"color": "#fff", "backgroundColor": "#00b9ff"},
     "S": {"color": "#fff", "backgroundColor": "#5AD720"},
-    "T": {"color": "#fff", "backgroundColor": "#1E3F80"},
+    "T": {"color": "#fff", "backgroundColor": "#0d60ff"},
     "U": {"color": "#fff", "backgroundColor": "#E1A7E0"},
     "V": {"color": "#fff", "backgroundColor": "#A51040"},
-    "W": {"color": "#fff", "backgroundColor": "#6878A0"},
+    "W": {"color": "#fff", "backgroundColor": "#2d67ff"},
     "X": {"color": "#fff", "backgroundColor": "#2BE100"},
-    "Y": {"color": "#fff", "backgroundColor": "#EF4960"},
-    "Z": {"color": "#fff", "backgroundColor": "#B2B1C0"},
-    "0": {"color": "#fff", "backgroundColor": "#635ae9"},
+    "Y": {"color": "#fff", "backgroundColor": "#ce6bff"},
+    "Z": {"color": "#fff", "backgroundColor": "#4be4ff"},
+    "0": {"color": "#fff", "backgroundColor": "#6359ff"},
     "1": {"color": "#fff", "backgroundColor": "#0d6d6a"},
     "2": {"color": "#fff", "backgroundColor": "#8c409b"},
     "3": {"color": "#fff", "backgroundColor": "#b6c136"},
@@ -71,6 +68,11 @@ const avatarStyles = makeStyles((theme) => ({
     "8": {"color": "#fff", "backgroundColor": "#ff5c5c"},
     "9": {"color": "#fff", "backgroundColor": "#857708"},
     "orange": {"color": "#fff", "backgroundColor": "#ff9a10"}
-}));
+};
 
-export {avatarStyles}
+// In case generating colors is needed again, this can be enabled
+//const avatarStyles = makeStyles((theme) => (prepareStylesObject()));
+
+const avatarStyles = makeStyles((theme) => (colorsObject));
+
+export {avatarStyles, colorsObject}

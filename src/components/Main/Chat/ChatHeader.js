@@ -2,16 +2,18 @@ import React, {useEffect, useState} from 'react';
 import '../../../styles/ChatHeader.css';
 import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
-import {avatarStyles} from "../../../AvatarStyles";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
 import PubSub from "pubsub-js";
-import {useHistory} from "react-router-dom";
-import {addPlus, extractAvatarFromContactProviderData, replaceEmojis} from "../../../helpers/Helpers";
+import {
+    addPlus,
+    extractAvatarFromContactProviderData,
+    generateAvatarColor,
+    replaceEmojis
+} from "../../../helpers/Helpers";
 
 function ChatHeader(props) {
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const history = useHistory();
 
     useEffect(() => {
 
@@ -24,8 +26,6 @@ function ChatHeader(props) {
     const hideMenu = () => {
         setAnchorEl(null);
     }
-
-    const avatarClasses = avatarStyles();
 
     const showSearchMessages = () => {
         PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, true);
@@ -64,7 +64,10 @@ function ChatHeader(props) {
             <div className="chat__header__clickable" onClick={showContactDetails}>
                 <Avatar
                     src={extractAvatarFromContactProviderData(props.contactProvidersData[props.person?.waId])}
-                    className={(props.person?.isExpired ? '' : avatarClasses[props.person?.getAvatarClassName()]) + (" chat__header__avatar")}>{props.person?.initials}</Avatar>
+                    className="chat__header__avatar"
+                    style={props.person?.isExpired ? {} : {backgroundColor: generateAvatarColor(props.person?.name)}}>
+                    {props.person?.initials}
+                </Avatar>
 
                 <div className="chat__headerInfo">
                     <h3 dangerouslySetInnerHTML={{__html: replaceEmojis((props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : ''))}} />

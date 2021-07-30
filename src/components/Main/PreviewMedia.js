@@ -3,13 +3,11 @@ import {Avatar, IconButton, Zoom} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Moment from "react-moment";
 import {CALENDAR_NORMAL} from "../../Constants";
-import {avatarStyles} from "../../AvatarStyles";
+import {generateAvatarColor} from "../../helpers/Helpers";
 
 function PreviewMedia(props) {
 
     const chatMessageToPreview = props.data;
-
-    const avatarClasses = avatarStyles();
 
     return (
         <div className="app__mediaPreview">
@@ -19,7 +17,9 @@ function PreviewMedia(props) {
                     <CloseIcon />
                 </IconButton>
 
-                <Avatar className={avatarClasses[chatMessageToPreview.preparedAvatarClassName]}>{chatMessageToPreview.preparedInitials}</Avatar>
+                <Avatar style={{backgroundColor: generateAvatarColor(chatMessageToPreview.senderName)}}>
+                    {chatMessageToPreview.initials}
+                </Avatar>
 
                 <div className="app_imagePreview__header__senderInfo">
                     <h3>{chatMessageToPreview.senderName}</h3>

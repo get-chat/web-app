@@ -89,13 +89,12 @@ export class ChatMessageClass {
         this.isFailed = false;
         this.resendPayload = undefined;
 
-        this.purify();
+        this.sanitize();
     };
 
-    purify() {
-        if (this.text) {
-            this.text = sanitize(this.text);
-        }
+    sanitize() {
+        this.text = sanitize(this.text);
+        this.caption = sanitize(this.caption);
     }
 
     static fromAssignmentEvent(assignmentEvent) {
@@ -137,10 +136,6 @@ export class ChatMessageClass {
 
     generateInitials = () => {
         return generateInitialsHelper(this.senderName);
-    }
-
-    getAvatarClassName() {
-        return this.initials ? this.initials[0] : '';
     }
 
     hasMediaToPreview() {

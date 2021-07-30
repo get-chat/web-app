@@ -5,11 +5,11 @@ import {useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import GroupIcon from '@material-ui/icons/Group';
 import Moment from "react-moment";
-import {avatarStyles} from "../../../AvatarStyles";
 import moment from "moment";
 import {
     addPlus,
     extractAvatarFromContactProviderData,
+    generateAvatarColor,
     generateInitialsHelper,
     markOccurrences,
     replaceEmojis
@@ -20,7 +20,8 @@ import {
     CALENDAR_SHORT,
     EVENT_TOPIC_DROPPED_FILES,
     SIDEBAR_TAB_CASE_ALL,
-    SIDEBAR_TAB_CASE_GROUP, SIDEBAR_TAB_CASE_ME
+    SIDEBAR_TAB_CASE_GROUP,
+    SIDEBAR_TAB_CASE_ME
 } from "../../../Constants";
 import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
 
@@ -33,7 +34,6 @@ function SidebarChat(props) {
     const [timeLeft, setTimeLeft] = useState();
     const [remainingSeconds, setRemainingSeconds] = useState();
     const {waId} = useParams();
-    const avatarClasses = avatarStyles();
 
     useEffect(() => {
         setSelected(props.selectedChats.includes(props.chatData.waId));
@@ -159,13 +159,15 @@ function SidebarChat(props) {
 
                     <div className="sidebarChat__avatarWrapper">
                         <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])}
-                                className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>
+                                style={isExpired ? {} : {backgroundColor: generateAvatarColor(props.chatData.name)}}>
                             {props.chatData.initials}
                         </Avatar>
 
                         {(props.chatData.assignedToUser && ((props.tabCase === SIDEBAR_TAB_CASE_ALL) || (props.tabCase === SIDEBAR_TAB_CASE_GROUP))) &&
                         <Tooltip title={props.chatData.generateAssignmentInformation()}>
-                            <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
+                            <Avatar className="sidebarChat__avatarWrapper__assignee" style={{
+                                backgroundColor: generateAvatarColor(props.chatData.getAssignedUserUsername())
+                            }}>
                                 {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
                             </Avatar>
                         </Tooltip>
@@ -177,7 +179,8 @@ function SidebarChat(props) {
                                 || (props.tabCase === SIDEBAR_TAB_CASE_GROUP && !props.chatData.assignedToUser)))
                         &&
                         <Tooltip title={props.chatData.generateAssignmentInformation()}>
-                            <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedGroupInitials()]}>
+                            <Avatar className="sidebarChat__avatarWrapper__assignee"
+                                style={{backgroundColor: generateAvatarColor(props.chatData.assignedGroup?.name)}}>
                                 <GroupIcon />
                             </Avatar>
                         </Tooltip>
