@@ -30,10 +30,7 @@ const prepareStylesObject = () => {
     return obj;
 }
 
-// In case generating colors is needed again, this can be enabled
-//const avatarStyles = makeStyles((theme) => (prepareStylesObject()));
-
-const avatarStyles = makeStyles((theme) => ({
+const colorsObject = {
     "A": {"color": "#fff", "backgroundColor": "#9D8060"},
     "B": {"color": "#fff", "backgroundColor": "#60E8C0"},
     "C": {"color": "#fff", "backgroundColor": "#245120"},
@@ -71,6 +68,11 @@ const avatarStyles = makeStyles((theme) => ({
     "8": {"color": "#fff", "backgroundColor": "#ff5c5c"},
     "9": {"color": "#fff", "backgroundColor": "#857708"},
     "orange": {"color": "#fff", "backgroundColor": "#ff9a10"}
-}));
+};
 
-export {avatarStyles}
+// In case generating colors is needed again, this can be enabled
+//const avatarStyles = makeStyles((theme) => (prepareStylesObject()));
+
+const avatarStyles = makeStyles((theme) => (colorsObject));
+
+export {avatarStyles, colorsObject}

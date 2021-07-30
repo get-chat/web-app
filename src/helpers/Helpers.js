@@ -3,6 +3,7 @@ import data from '../EmojiData.json'; //from 'emoji-mart/data/all.json'
 import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
 import {getToken} from "./StorageHelper";
 import dompurify from "dompurify";
+import {colorsObject} from "../AvatarStyles";
 
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
@@ -293,6 +294,34 @@ export const extractAvatarFromContactProviderData = (contactProviderData, isLarg
     }
 
     return undefined;
+}
+
+function hexToRgb(h){return['0x'+h[1]+h[2]|0,'0x'+h[3]+h[4]|0,'0x'+h[5]+h[6]|0]}
+function rgbToHex(r,g,b){return"#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slice(1);}
+function avgHex(h1,h2){let a=hexToRgb(h1);let b=hexToRgb(h2);return rgbToHex(~~((a[0]+b[0])/2),~~((a[1]+b[1])/2),~~((a[2]+b[2])/2));}
+
+let cachedColors = {};
+
+export const generateAvatarColor = (name) => {
+    if (cachedColors[name]) return cachedColors[name];
+
+    let curAvgColor;
+
+    for (let letter in name) {
+        const letterColorObject = colorsObject[letter];
+        if (letterColorObject) {
+            if (curAvgColor) {
+                curAvgColor = avgHex(curAvgColor, letterColorObject.backgroundColor);
+            } else {
+                curAvgColor = letterColorObject.backgroundColor;
+            }
+        }
+    }
+
+    // Cache
+    cachedColors[name] = curAvgColor;
+
+    return curAvgColor;
 }
 
 export const hasInternetConnection = () => {
