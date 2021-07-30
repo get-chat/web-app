@@ -30,7 +30,6 @@ import SidebarContactResult from "./SidebarContactResult";
 import ChatClass from "../../../ChatClass";
 import NewMessageClass from "../../../NewMessageClass";
 import PubSub from "pubsub-js";
-import {avatarStyles} from "../../../AvatarStyles";
 import BusinessProfile from "./BusinessProfile";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import ChatMessageClass from "../../../ChatMessageClass";

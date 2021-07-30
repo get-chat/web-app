@@ -77,10 +77,6 @@ class ChatClass {
         return this.assignedToUser?.username?.[0]?.toUpperCase();
     }
 
-    generateAssignedGroupInitials() {
-        return this.assignedGroup?.name?.[0]?.toUpperCase();
-    }
-
     generateAssignmentInformation() {
         let info = '';
         if (this.assignedToUser) {
