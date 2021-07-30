@@ -9,9 +9,7 @@ class SavedResponseClass {
     }
 
     purify() {
-        if (this.text) {
-            this.text = sanitize(this.text);
-        }
+        this.text = sanitize(this.text);
     }
 }
 
