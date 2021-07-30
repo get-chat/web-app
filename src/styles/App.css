@@ -167,6 +167,10 @@ a {
     opacity: 0.3 !important;
 }
 
+.MuiAvatar-root {
+    text-shadow: 0 1px 3px #00000040;
+}
+
 .MuiAvatar-root .MuiSvgIcon-root {
     color: inherit;
 }
