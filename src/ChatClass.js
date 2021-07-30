@@ -30,13 +30,9 @@ class ChatClass {
     }
 
     sanitize() {
-        if (this.lastMessageBody) {
-            this.lastMessageBody = sanitize(this.lastMessageBody);
-        }
-
-        if (this.lastMessageButtonText) {
-            this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
-        }
+        this.lastMessageBody = sanitize(this.lastMessageBody);
+        this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
+        this.lastMessageCaption = sanitize(this.lastMessageCaption);
     }
 
     setName(name) {

@@ -324,6 +324,7 @@ export const generateMessagePreview = (payload) => {
 }
 
 export const sanitize = (dirty) => {
+    if (!dirty) return;
     const sanitizer = dompurify.sanitize;
     return sanitizer(dirty);
 }
