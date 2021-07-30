@@ -159,7 +159,7 @@ function SidebarChat(props) {
 
                     <div className="sidebarChat__avatarWrapper">
                         <Avatar src={extractAvatarFromContactProviderData(props.contactProvidersData[props.chatData.waId])}
-                                className={isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>
+                                style={isExpired ? {} : {backgroundColor: generateAvatarColor(props.chatData.name)}}>
                             {props.chatData.initials}
                         </Avatar>
 

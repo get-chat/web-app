@@ -303,14 +303,11 @@ function rgbToHex(r,g,b){return"#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slic
 let cachedColors = {};
 
 export const generateAvatarColor = (name) => {
+    if (!name) return;
     name = name?.toUpperCase();
     if (cachedColors[name]) return cachedColors[name];
 
-    const colorsArray = {
-        "R": 0,
-        "G": 0,
-        "B": 0
-    };
+    const colorsArray = {"R": 0, "G": 0, "B": 0};
 
     [...name].forEach((letter) => {
         const letterColorObject = colorsObject[letter];
@@ -340,7 +337,8 @@ export const hasInternetConnection = () => {
 }
 
 export const sortMessagesAsc = (messages) => {
-    let sortedNextState = Object.entries(messages).sort((a, b) => a[1].timestamp - b[1].timestamp);
+    let sortedNextState = Object.entries(messages)
+        .sort((a, b) => a[1].timestamp - b[1].timestamp);
     return Object.fromEntries(sortedNextState);
 }
 

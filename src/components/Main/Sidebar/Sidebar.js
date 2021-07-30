@@ -15,7 +15,14 @@ import {
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
-import {containsLetters, generateInitialsHelper, getHubURL, getObjLength, isScrollable} from "../../../helpers/Helpers";
+import {
+    containsLetters,
+    generateAvatarColor,
+    generateInitialsHelper,
+    getHubURL,
+    getObjLength,
+    isScrollable
+} from "../../../helpers/Helpers";
 import {EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_UPDATE_PERSON_NAME} from "../../../Constants";
 import {useHistory, useParams} from "react-router-dom";
 import SearchBar from "../../SearchBar";
@@ -58,8 +65,6 @@ function Sidebar(props) {
     const [tabCase, setTabCase] = useState("all")
 
     const history = useHistory();
-
-    const avatarClasses = avatarStyles();
 
     const logOut = () => {
         clearUserSession(undefined, undefined, history);
@@ -424,7 +429,7 @@ function Sidebar(props) {
             <div className="sidebar__header">
                 <Avatar
                     onClick={() => setProfileVisible(true)}
-                    className={"cursorPointer " + (props.currentUser ? avatarClasses[generateInitialsHelper(props.currentUser.username)?.[0]] : '')}>
+                    className="cursorPointer" style={{backgroundColor: generateAvatarColor(props.currentUser?.username)}}>
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">

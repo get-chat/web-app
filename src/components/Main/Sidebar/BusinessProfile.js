@@ -2,9 +2,8 @@ import React, {useEffect, useRef, useState} from "react";
 import '../../../styles/BusinessProfile.css';
 import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
-import {generateInitialsHelper} from "../../../helpers/Helpers";
+import {generateAvatarColor, generateInitialsHelper} from "../../../helpers/Helpers";
 import FileInput from "../../FileInput";
-import {avatarStyles} from "../../../AvatarStyles";
 import {
     deleteProfilePhotoCall,
     generateCancelToken,
@@ -31,8 +30,6 @@ function BusinessProfile(props) {
     const fileInput = useRef();
 
     const cancelTokenSourceRef = useRef();
-
-    const avatarClasses = avatarStyles();
 
     useEffect(() => {
         const handleKey = (event) => {
@@ -193,7 +190,9 @@ function BusinessProfile(props) {
                         </div>
 
                         <div className="sidebarBusinessProfile__body__avatarContainer">
-                            <Avatar className={avatarClasses[generateInitialsHelper(props.currentUser.username)?.[0]]}>{generateInitialsHelper(props.currentUser.username)}</Avatar>
+                            <Avatar style={{backgroundColor: generateAvatarColor(props.currentUser.username)}}>
+                                {generateInitialsHelper(props.currentUser.username)}
+                            </Avatar>
                         </div>
 
                         <h3>{props.currentUser.username}</h3>

@@ -138,10 +138,6 @@ export class ChatMessageClass {
         return generateInitialsHelper(this.senderName);
     }
 
-    getAvatarClassName() {
-        return this.initials ? this.initials[0] : '';
-    }
-
     hasMediaToPreview() {
         return this.imageLink !== undefined || this.videoId !== undefined || this.getHeaderFileLink('image') || this.getHeaderFileLink('video');
     }

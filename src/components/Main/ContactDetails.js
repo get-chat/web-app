@@ -7,10 +7,15 @@ import PubSub from "pubsub-js";
 import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../../Constants";
 import '../../styles/ContactDetails.css';
 import Moment from "react-moment";
-import {avatarStyles} from "../../AvatarStyles";
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
-import {addPlus, extractAvatarFromContactProviderData, replaceEmojis, sanitize} from "../../helpers/Helpers";
+import {
+    addPlus,
+    extractAvatarFromContactProviderData,
+    generateAvatarColor,
+    replaceEmojis,
+    sanitize
+} from "../../helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 
 function ContactDetails(props)  {
@@ -20,8 +25,6 @@ function ContactDetails(props)  {
     const hideContactDetails = () => {
         PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
     }
-
-    const avatarClasses = avatarStyles();
 
     useEffect(() => {
         props.retrieveContactData(props.contactData.waId);
@@ -50,7 +53,10 @@ function ContactDetails(props)  {
                     <div className="contactDetails__body__avatarContainer">
                         <Avatar
                             src={extractAvatarFromContactProviderData(props.contactProvidersData[props.contactData.waId], true)}
-                            className={avatarClasses[props.contactData.getAvatarClassName()] + " contactDetails__body__avatar"}>{props.contactData.initials}</Avatar>
+                            className="contactDetails__body__avatar"
+                            style={{backgroundColor: generateAvatarColor(props.contactData.name)}}>
+                            {props.contactData.initials}
+                        </Avatar>
                     </div>
 
                     <h3 dangerouslySetInnerHTML={{__html: replaceEmojis(sanitize(props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name ))}} />

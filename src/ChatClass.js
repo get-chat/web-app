@@ -45,10 +45,6 @@ class ChatClass {
         return generateInitialsHelper(this.name);
     }
 
-    getAvatarClassName() {
-        return this.initials ? this.initials[0] : '';
-    }
-
     setLastMessage(lastMessagePayload) {
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = this.lastMessage?.text?.body;

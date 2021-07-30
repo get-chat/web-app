@@ -31,10 +31,6 @@ class PersonClass {
         return generateInitialsHelper(this.name);
     }
 
-    getAvatarClassName() {
-        return this.initials ? this.initials[0] : '';
-    }
-
     static newInstance() {
         return new PersonClass({});
     }

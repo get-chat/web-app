@@ -2,17 +2,18 @@ import React from 'react';
 import '../../../styles/SidebarContactResult.css';
 import {Link} from "react-router-dom";
 import {Avatar} from "@material-ui/core";
-import {avatarStyles} from "../../../AvatarStyles";
+import {generateAvatarColor} from "../../../helpers/Helpers";
 
 function SidebarContactResult(props) {
 
     const data = props.contactData;
-    const avatarClasses = avatarStyles();
 
     return (
         <Link>
             <div id={data.waId}>
-                <Avatar className={props.chatData.isExpired ? '' : avatarClasses[props.chatData.getAvatarClassName()]}>{props.chatData.initials}</Avatar>
+                <Avatar style={{backgroundColor: generateAvatarColor(props.chatData.name)}}>
+                    {props.chatData.initials}
+                </Avatar>
                 <div className="sidebarContactResult__info">
                     <h2>{props.chatData.name}</h2>
                     <p className="sidebarContactResult__info__status">

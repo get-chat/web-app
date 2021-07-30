@@ -1,12 +1,10 @@
 import React from "react";
 import '../styles/Contact.css';
 import {Avatar, ListItem} from "@material-ui/core";
-import {avatarStyles} from "../AvatarStyles";
 import ContactProviderHeader from "./ContactProviderHeader";
+import {generateAvatarColor} from "../helpers/Helpers";
 
 function Person(props) {
-
-    const avatarClasses = avatarStyles();
 
     const handleClick = () => {
         goToChat(props.data.waId);
@@ -23,7 +21,7 @@ function Person(props) {
                     <div className="contact__avatarWrapper">
                         <Avatar
                             src={props.contactProvidersData[props.data.waId]?.[0]?.avatar}
-                            className={avatarClasses[props.data.getAvatarClassName()]}>
+                            style={{backgroundColor: generateAvatarColor(props.data.name)}}>
                             {props.data.initials}
                         </Avatar>
                         <ContactProviderHeader type="whatsapp"/>
