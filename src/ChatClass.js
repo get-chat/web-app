@@ -1,5 +1,5 @@
 import {getPastHoursByTimestamp} from "./helpers/DateHelper";
-import {generateAvatarColor, generateInitialsHelper, sanitize} from "./helpers/Helpers";
+import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
 
 class ChatClass {
 
@@ -73,8 +73,11 @@ class ChatClass {
         return this.getPastHoursAfterLastMessage() >= 24;
     }
 
+    getAssignedUserUsername() {
+        return this.assignedToUser?.username;
+    }
+
     generateAssignedToInitials() {
-        console.log(generateAvatarColor(this.assignedToUser?.username?.toUpperCase()));
         return this.assignedToUser?.username?.[0]?.toUpperCase();
     }
 

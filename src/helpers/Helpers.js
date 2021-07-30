@@ -298,30 +298,41 @@ export const extractAvatarFromContactProviderData = (contactProviderData, isLarg
 
 function hexToRgb(h){return['0x'+h[1]+h[2]|0,'0x'+h[3]+h[4]|0,'0x'+h[5]+h[6]|0]}
 function rgbToHex(r,g,b){return"#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slice(1);}
-function avgHex(h1,h2){let a=hexToRgb(h1);let b=hexToRgb(h2);return rgbToHex(~~((a[0]+b[0])/2),~~((a[1]+b[1])/2),~~((a[2]+b[2])/2));}
+// function avgHex(h1,h2){let a=hexToRgb(h1);let b=hexToRgb(h2);return rgbToHex(~~((a[0]+b[0])/2),~~((a[1]+b[1])/2),~~((a[2]+b[2])/2));}
 
 let cachedColors = {};
 
 export const generateAvatarColor = (name) => {
+    name = name?.toUpperCase();
     if (cachedColors[name]) return cachedColors[name];
 
-    let curAvgColor;
+    const colorsArray = {
+        "R": 0,
+        "G": 0,
+        "B": 0
+    };
 
-    for (let letter in name) {
+    [...name].forEach((letter) => {
         const letterColorObject = colorsObject[letter];
         if (letterColorObject) {
-            if (curAvgColor) {
-                curAvgColor = avgHex(curAvgColor, letterColorObject.backgroundColor);
-            } else {
-                curAvgColor = letterColorObject.backgroundColor;
-            }
+            const rgbColor = hexToRgb(letterColorObject.backgroundColor);
+            colorsArray["R"] += rgbColor[0];
+            colorsArray["G"] += rgbColor[1];
+            colorsArray["B"] += rgbColor[2];
         }
-    }
+    });
+
+    const nameLength = name.length;
+    const result = rgbToHex(
+        Math.round(colorsArray["R"] / nameLength),
+        Math.round(colorsArray["G"] / nameLength),
+        Math.round(colorsArray["B"] / nameLength)
+    );
 
     // Cache
-    cachedColors[name] = curAvgColor;
+    cachedColors[name] = result;
 
-    return curAvgColor;
+    return result;
 }
 
 export const hasInternetConnection = () => {

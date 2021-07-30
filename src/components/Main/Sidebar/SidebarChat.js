@@ -9,7 +9,7 @@ import {avatarStyles} from "../../../AvatarStyles";
 import moment from "moment";
 import {
     addPlus,
-    extractAvatarFromContactProviderData,
+    extractAvatarFromContactProviderData, generateAvatarColor,
     generateInitialsHelper,
     markOccurrences,
     replaceEmojis
@@ -165,7 +165,9 @@ function SidebarChat(props) {
 
                         {(props.chatData.assignedToUser && ((props.tabCase === SIDEBAR_TAB_CASE_ALL) || (props.tabCase === SIDEBAR_TAB_CASE_GROUP))) &&
                         <Tooltip title={props.chatData.generateAssignmentInformation()}>
-                            <Avatar className={"sidebarChat__avatarWrapper__assignee " + avatarClasses[props.chatData.generateAssignedToInitials()]}>
+                            <Avatar className="sidebarChat__avatarWrapper__assignee" style={{
+                                backgroundColor: generateAvatarColor(props.chatData.getAssignedUserUsername())
+                            }}>
                                 {generateInitialsHelper(props.chatData.generateAssignedToInitials())}
                             </Avatar>
                         </Tooltip>
