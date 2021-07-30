@@ -30,6 +30,7 @@ class ChatClass {
     }
 
     sanitize() {
+        this.name = sanitize(this.name);
         this.lastMessageBody = sanitize(this.lastMessageBody);
         this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
         this.lastMessageCaption = sanitize(this.lastMessageCaption);
