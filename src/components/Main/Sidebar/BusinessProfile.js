@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import '../../../styles/BusinessProfile.css';
 import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
 import {ArrowBack} from "@material-ui/icons";
-import {generateAvatarColor, generateInitialsHelper} from "../../../helpers/Helpers";
+import {generateInitialsHelper} from "../../../helpers/Helpers";
 import FileInput from "../../FileInput";
 import {
     deleteProfilePhotoCall,
@@ -14,6 +14,7 @@ import {
     updateProfileAboutCall,
     updateProfilePhotoCall
 } from "../../../api/ApiCalls";
+import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 
 function BusinessProfile(props) {
 

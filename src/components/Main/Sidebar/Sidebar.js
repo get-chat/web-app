@@ -17,7 +17,6 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import {
     containsLetters,
-    generateAvatarColor,
     generateInitialsHelper,
     getHubURL,
     getObjLength,
@@ -47,6 +46,7 @@ import {clearUserSession} from "../../../helpers/ApiHelper";
 import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../../api/ApiCalls";
 import Notifications from "./Notifications/Notifications";
 import {Notifications as NotificationsIcon} from "@material-ui/icons";
+import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 
 function Sidebar(props) {
 

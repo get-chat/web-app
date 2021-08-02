@@ -9,7 +9,6 @@ import moment from "moment";
 import {
     addPlus,
     extractAvatarFromContactProviderData,
-    generateAvatarColor,
     generateInitialsHelper,
     markOccurrences,
     replaceEmojis
@@ -24,6 +23,7 @@ import {
     SIDEBAR_TAB_CASE_ME
 } from "../../../Constants";
 import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
+import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 
 function SidebarChat(props) {
 

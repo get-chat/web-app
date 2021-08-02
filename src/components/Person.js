@@ -2,7 +2,7 @@ import React from "react";
 import '../styles/Contact.css';
 import {Avatar, ListItem} from "@material-ui/core";
 import ContactProviderHeader from "./ContactProviderHeader";
-import {generateAvatarColor} from "../helpers/Helpers";
+import {generateAvatarColor} from "../helpers/AvatarHelper";
 
 function Person(props) {
 
