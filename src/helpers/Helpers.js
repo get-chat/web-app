@@ -1,12 +1,10 @@
-import {Emoji, getEmojiDataFromNative} from "emoji-mart";
-import data from '../EmojiData.json'; //from 'emoji-mart/data/all.json'
-import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
+import {BASE_URL} from "../Constants";
 import {getToken} from "./StorageHelper";
 import dompurify from "dompurify";
 import {getLastObject, getObjLength} from "./ObjectHelper";
+import {replaceEmojis} from "./EmojiHelper";
 
 const { htmlToText } = require('html-to-text');
-const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
 export const getConfig = (params, cancelToken, responseType) => {
     const config = {
@@ -51,39 +49,6 @@ export const formatMessage = (message) => {
     let formatted = message.replaceAll('\n', '<br/>');
     formatted = linkify(formatted);
     return replaceEmojis(formatted);
-}
-
-function containsOnlyEmojis(text) {
-    const onlyEmojis = text.replace(new RegExp('[\u0000-\u1eeff]', 'g'), '')
-    const visibleChars = text.replace(new RegExp('[\n\r\s]+|( )+', 'g'), '')
-    return onlyEmojis.length === visibleChars.length
-}
-
-export const replaceEmojis = (message, ignoreOnlyEmojis) => {
-    if (!message) return;
-
-    const onlyEmojis = !ignoreOnlyEmojis ? containsOnlyEmojis(message) : false;
-    const regex = emojiRegex();
-
-    return message.replace(regex, function (occurrence) {
-        // TODO: Finding emoji data is too slow, find an alternative or improve it
-        const emojiData = getEmojiDataFromNative(occurrence, EMOJI_SET, data);
-        if (emojiData) {
-            const emoji = Emoji({
-                html: true,
-                emoji: emojiData,
-                size: onlyEmojis ? 44 : 22,
-                set: EMOJI_SET,
-                sheetSize: EMOJI_SHEET_SIZE
-            });
-
-            // Emoji might be null
-            return emoji ?? occurrence;
-
-        } else {
-            return occurrence;
-        }
-    });
 }
 
 export const translateHTMLInputToText = (html) => {

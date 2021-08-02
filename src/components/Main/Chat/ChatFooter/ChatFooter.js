@@ -14,7 +14,7 @@ import data from 'emoji-mart/data/facebook.json';
 import CloseIcon from "@material-ui/icons/Close";
 import PubSub from "pubsub-js";
 import FileInput from "../../../FileInput";
-import {getSelectionHtml, replaceEmojis, sanitize, translateHTMLInputToText} from "../../../../helpers/Helpers";
+import {getSelectionHtml, sanitize, translateHTMLInputToText} from "../../../../helpers/Helpers";
 import VoiceRecord from "./VoiceRecord";
 import AllInboxIcon from '@material-ui/icons/AllInbox';
 import {
@@ -25,6 +25,7 @@ import {
     EVENT_TOPIC_REQUEST_MIC_PERMISSION
 } from "../../../../Constants";
 import ChatMessageClass from "../../../../ChatMessageClass";
+import {replaceEmojis} from "../../../../helpers/EmojiHelper";
 
 function ChatFooter(props) {
 

@@ -1,13 +1,14 @@
 import React from 'react';
 import '../styles/SearchMessageResult.css';
 import Moment from "react-moment";
-import {markOccurrences, replaceEmojis} from "../helpers/Helpers";
+import {markOccurrences} from "../helpers/Helpers";
 import ChatMessageClass from "../ChatMessageClass";
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from "@material-ui/icons/Done";
 import {CALENDAR_NORMAL} from "../Constants";
 import ChatMessageTypeIcon from "./Main/Chat/ChatMessage/ChatMessageTypeIcon";
 import {ListItem} from "@material-ui/core";
+import {replaceEmojis} from "../helpers/EmojiHelper";
 
 function SearchMessageResult(props) {
 

@@ -10,8 +10,7 @@ import {
     addPlus,
     extractAvatarFromContactProviderData,
     generateInitialsHelper,
-    markOccurrences,
-    replaceEmojis
+    markOccurrences
 } from "../../../helpers/Helpers";
 import {getDroppedFiles, handleDragOver} from "../../../helpers/FileHelper";
 import PubSub from "pubsub-js";
@@ -24,6 +23,7 @@ import {
 } from "../../../Constants";
 import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
+import {replaceEmojis} from "../../../helpers/EmojiHelper";
 
 function SidebarChat(props) {
 
