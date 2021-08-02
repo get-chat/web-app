@@ -3,6 +3,7 @@ import data from '../EmojiData.json'; //from 'emoji-mart/data/all.json'
 import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
 import {getToken} from "./StorageHelper";
 import dompurify from "dompurify";
+import {getLastObject, getObjLength} from "./ObjectHelper";
 
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
@@ -24,10 +25,6 @@ export const getConfig = (params, cancelToken, responseType) => {
     }
 
     return config;
-}
-
-export const getObjLength = (obj) => {
-    return obj ? Object.keys(obj).length : 0;
 }
 
 function linkify(inputText) {
@@ -117,23 +114,6 @@ export const markOccurrences = (message, sub) => {
 
 export const generateInitialsHelper = (name) => {
     return (name ? name.replace(/[^a-z\d\s]+/gi, '').trim()[0] : '')?.toUpperCase();
-}
-
-export const getFirstObject = (jsonObject) => {
-    return jsonObject[Object.keys(jsonObject)[0]];
-}
-
-export const getLastObject = (jsonObject) => {
-    return jsonObject[Object.keys(jsonObject)[Object.keys(jsonObject).length - 1]];
-}
-
-export const getObjectByIndex = (jsonObject, index) => {
-    return jsonObject[Object.keys(jsonObject)[index]];
-}
-
-export const getLastKey = (jsonObject) => {
-    const keys = Object.keys(jsonObject);
-    return keys[keys.length - 1];
 }
 
 export const getLastMessageAndExtractTimestamp = (messagesObject) => {

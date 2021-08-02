@@ -31,10 +31,7 @@ import MessageDateIndicator from "./MessageDateIndicator";
 import {
     extractTimestampFromMessage,
     generateUnixTimestamp,
-    getFirstObject,
     getLastMessageAndExtractTimestamp,
-    getLastObject,
-    getObjLength,
     hasInternetConnection,
     isScrollable,
     sortMessagesAsc,
@@ -57,6 +54,7 @@ import {
     uploadMediaCall
 } from "../../../api/ApiCalls";
 import {Prompt} from 'react-router-dom';
+import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
