@@ -3,7 +3,7 @@ import data from '../EmojiData.json'; //from 'emoji-mart/data/all.json'
 import {BASE_URL, EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
 import {getToken} from "./StorageHelper";
 import dompurify from "dompurify";
-import {colorsObject} from "../AvatarStyles";
+import {getLastObject, getObjLength} from "./ObjectHelper";
 
 const { htmlToText } = require('html-to-text');
 const emojiRegex = require('emoji-regex/RGI_Emoji.js');
@@ -25,10 +25,6 @@ export const getConfig = (params, cancelToken, responseType) => {
     }
 
     return config;
-}
-
-export const getObjLength = (obj) => {
-    return obj ? Object.keys(obj).length : 0;
 }
 
 function linkify(inputText) {
@@ -120,23 +116,6 @@ export const generateInitialsHelper = (name) => {
     return (name ? name.replace(/[^a-z\d\s]+/gi, '').trim()[0] : '')?.toUpperCase();
 }
 
-export const getFirstObject = (jsonObject) => {
-    return jsonObject[Object.keys(jsonObject)[0]];
-}
-
-export const getLastObject = (jsonObject) => {
-    return jsonObject[Object.keys(jsonObject)[Object.keys(jsonObject).length - 1]];
-}
-
-export const getObjectByIndex = (jsonObject, index) => {
-    return jsonObject[Object.keys(jsonObject)[index]];
-}
-
-export const getLastKey = (jsonObject) => {
-    const keys = Object.keys(jsonObject);
-    return keys[keys.length - 1];
-}
-
 export const getLastMessageAndExtractTimestamp = (messagesObject) => {
     const last = getLastObject(messagesObject);
     return extractTimestampFromMessage(last);
@@ -218,42 +197,6 @@ export const displaySeconds = (seconds) => {
     return [minutes, seconds % 60].map(format).join(':');
 }
 
-export const getTemplateParams = (text) => {
-    const matches = text?.match(/\{{(.*?)\}}/g);
-    return matches ? matches : [];
-}
-
-export const templateParamToInteger = (templateParam) => {
-    return templateParam.match(/\d+/);
-}
-
-export const insertTemplateComponentParameters = (component, params) => {
-    if (!component) return;
-
-    const type = component.type.toLowerCase();
-    const format = component.format ? component.format.toLowerCase() : "text";
-    let text = component[format];
-
-    if (!params) return text;
-
-    for (let i = 0; i < params.length; i++) {
-        const component = params[i];
-
-        if (component.type === type) {
-            component.parameters.forEach((param, index) => {
-                const paramType = param.type;
-
-                const paramValue = param[paramType].fallback_value ?? param[paramType];
-                text = text.replace(`{{${index+1}}}`, paramValue);
-            });
-
-            break;
-        }
-    }
-
-    return text;
-}
-
 const removeWhitespaces = (text) => {
     return text.replace(/ /g,'');
 }
@@ -294,42 +237,6 @@ export const extractAvatarFromContactProviderData = (contactProviderData, isLarg
     }
 
     return undefined;
-}
-
-function hexToRgb(h){return['0x'+h[1]+h[2]|0,'0x'+h[3]+h[4]|0,'0x'+h[5]+h[6]|0]}
-function rgbToHex(r,g,b){return"#"+((1<<24)+(r<<16)+(g<<8)+ b).toString(16).slice(1);}
-// function avgHex(h1,h2){let a=hexToRgb(h1);let b=hexToRgb(h2);return rgbToHex(~~((a[0]+b[0])/2),~~((a[1]+b[1])/2),~~((a[2]+b[2])/2));}
-
-let cachedColors = {};
-
-export const generateAvatarColor = (name) => {
-    if (!name) return;
-    name = name?.toUpperCase();
-    if (cachedColors[name]) return cachedColors[name];
-
-    const colorsArray = {"R": 0, "G": 0, "B": 0};
-
-    [...name].forEach((letter) => {
-        const letterColorObject = colorsObject[letter];
-        if (letterColorObject) {
-            const rgbColor = hexToRgb(letterColorObject.backgroundColor);
-            colorsArray["R"] += rgbColor[0];
-            colorsArray["G"] += rgbColor[1];
-            colorsArray["B"] += rgbColor[2];
-        }
-    });
-
-    const nameLength = name.length;
-    const result = rgbToHex(
-        Math.round(colorsArray["R"] / nameLength),
-        Math.round(colorsArray["G"] / nameLength),
-        Math.round(colorsArray["B"] / nameLength)
-    );
-
-    // Cache
-    cachedColors[name] = result;
-
-    return result;
 }
 
 export const hasInternetConnection = () => {

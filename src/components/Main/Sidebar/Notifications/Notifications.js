@@ -7,7 +7,7 @@ import FailedBulkMessageNotification from "./FailedBulkMessageNotification";
 import BulkMessageTaskElementClass from "../../../../BulkMessageTaskElementClass";
 import CloseIcon from "@material-ui/icons/Close";
 import {IconButton} from "@material-ui/core";
-import {getObjLength} from "../../../../helpers/Helpers";
+import {getObjLength} from "../../../../helpers/ObjectHelper";
 
 function Notifications(props) {
 

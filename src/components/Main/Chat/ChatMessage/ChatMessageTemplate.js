@@ -2,9 +2,9 @@ import React from "react";
 import ChatMessageImage from "./ChatMessageImage";
 import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageDocument from "./ChatMessageDocument";
-import {insertTemplateComponentParameters} from "../../../../helpers/Helpers";
 import {Button} from "@material-ui/core";
 import SmsIcon from "@material-ui/icons/Sms";
+import {insertTemplateComponentParameters} from "../../../../helpers/TemplateMessageHelper";
 
 function ChatMessageTemplate(props) {
 

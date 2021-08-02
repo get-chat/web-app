@@ -3,7 +3,7 @@ import {Avatar, IconButton, Zoom} from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import Moment from "react-moment";
 import {CALENDAR_NORMAL} from "../../Constants";
-import {generateAvatarColor} from "../../helpers/Helpers";
+import {generateAvatarColor} from "../../helpers/AvatarHelper";
 
 function PreviewMedia(props) {
 

@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Button, TextField} from "@material-ui/core";
 import '../../../../styles/SendTemplateMessage.css';
-import {getTemplateParams, templateParamToInteger} from "../../../../helpers/Helpers";
 import FileInput from "../../../FileInput";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {uploadMediaCall} from "../../../../api/ApiCalls";
+import {getTemplateParams, templateParamToInteger} from "../../../../helpers/TemplateMessageHelper";
 
 function SendTemplateMessage(props) {
 

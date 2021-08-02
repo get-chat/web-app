@@ -7,7 +7,7 @@ import PubSub from "pubsub-js";
 import {EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_UNSUPPORTED_FILE} from "../../../../Constants";
 import {isAudioMimeTypeSupported} from "../../../../helpers/FileHelper";
 import UnsupportedFileClass from "../../../../UnsupportedFileClass";
-import {generateAvatarColor} from "../../../../helpers/Helpers";
+import {generateAvatarColor} from "../../../../helpers/AvatarHelper";
 
 function ChatMessageVoice(props) {
 

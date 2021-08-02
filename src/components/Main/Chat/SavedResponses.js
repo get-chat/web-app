@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import {getObjLength} from "../../../helpers/Helpers";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
+import {getObjLength} from "../../../helpers/ObjectHelper";
 
 function SavedResponses(props) {
 

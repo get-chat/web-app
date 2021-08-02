@@ -12,11 +12,11 @@ import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import {
     addPlus,
     extractAvatarFromContactProviderData,
-    generateAvatarColor,
     replaceEmojis,
     sanitize
 } from "../../helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
+import {generateAvatarColor} from "../../helpers/AvatarHelper";
 
 function ContactDetails(props)  {
 

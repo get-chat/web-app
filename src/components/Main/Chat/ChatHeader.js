@@ -7,9 +7,9 @@ import PubSub from "pubsub-js";
 import {
     addPlus,
     extractAvatarFromContactProviderData,
-    generateAvatarColor,
     replaceEmojis
 } from "../../../helpers/Helpers";
+import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 
 function ChatHeader(props) {
 

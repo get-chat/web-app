@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import '../../../styles/PreviewSendMedia.css';
 import CloseIcon from "@material-ui/icons/Close";
 import {ButtonBase, IconButton, TextField} from "@material-ui/core";
-import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/Helpers";
 import Send from "@material-ui/icons/Send";
 import AddIcon from '@material-ui/icons/Add';
 import {
@@ -20,6 +19,7 @@ import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 import {Document, Page, pdfjs} from "react-pdf";
 import PubSub from "pubsub-js";
 import {useForceUpdate} from "../../../hooks/useForceUpdate";
+import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
 
 function PreviewSendMedia(props) {
 

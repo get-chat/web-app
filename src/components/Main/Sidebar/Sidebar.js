@@ -17,10 +17,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import {
     containsLetters,
-    generateAvatarColor,
     generateInitialsHelper,
     getHubURL,
-    getObjLength,
     isScrollable
 } from "../../../helpers/Helpers";
 import {EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_NEW_CHAT_MESSAGES, EVENT_TOPIC_UPDATE_PERSON_NAME} from "../../../Constants";
@@ -47,6 +45,8 @@ import {clearUserSession} from "../../../helpers/ApiHelper";
 import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../../api/ApiCalls";
 import Notifications from "./Notifications/Notifications";
 import {Notifications as NotificationsIcon} from "@material-ui/icons";
+import {generateAvatarColor} from "../../../helpers/AvatarHelper";
+import {getObjLength} from "../../../helpers/ObjectHelper";
 
 function Sidebar(props) {
 
