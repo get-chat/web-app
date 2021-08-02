@@ -4,7 +4,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import Moment from "react-moment";
 import '../../../../styles/InputRange.css';
 import '../../../../AvatarStyles';
-import {formatMessage, replaceEmojis} from "../../../../helpers/Helpers";
+import {formatMessage} from "../../../../helpers/Helpers";
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatMessageClass from "../../../../ChatMessageClass";
@@ -18,6 +18,7 @@ import ChatMessageVoice from "./ChatMessageVoice";
 import ChatMessageTemplate from "./ChatMessageTemplate";
 import ChatAssignmentEvent from "../../../ChatAssignmentEvent";
 import ChatTaggingEvent from "./ChatTaggingEvent";
+import {replaceEmojis} from "../../../../helpers/EmojiHelper";
 
 const iconStyles = {
     fontSize: '15px'

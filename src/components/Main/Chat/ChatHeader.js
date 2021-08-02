@@ -6,10 +6,10 @@ import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISI
 import PubSub from "pubsub-js";
 import {
     addPlus,
-    extractAvatarFromContactProviderData,
-    replaceEmojis
+    extractAvatarFromContactProviderData
 } from "../../../helpers/Helpers";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
+import {replaceEmojis} from "../../../helpers/EmojiHelper";
 
 function ChatHeader(props) {
 
