@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {getHubURL} from "../../helpers/Helpers";
 import {
     Button,
     CircularProgress,
@@ -12,6 +11,7 @@ import {
 } from "@material-ui/core";
 import '../../styles/ChatTagsList.css';
 import LabelIcon from "@material-ui/icons/Label";
+import {getHubURL} from "../../helpers/URLHelper";
 
 function ChatTagsList(props) {
 

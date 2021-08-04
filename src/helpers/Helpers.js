@@ -1,4 +1,3 @@
-import {BASE_URL} from "../Constants";
 import {getToken} from "./StorageHelper";
 import dompurify from "dompurify";
 import {getObjLength} from "./ObjectHelper";
@@ -85,37 +84,6 @@ export const getSelectionHtml = () => {
         }
     }
     return html;
-}
-
-export const getAdminPanelURL = () => {
-    return BASE_URL.replace('/api/v1', '/admin');
-}
-
-export const getHubURL = () => {
-    return BASE_URL.replace('/api/v1', '/hub');
-}
-
-export const getBaseURL = () => {
-    const windowLocation = window.location;
-    return windowLocation.protocol + "//" + windowLocation.host + "/";
-}
-
-export const getWebSocketURL = () => {
-    let baseUrlEnv = BASE_URL;
-    if (!baseUrlEnv || baseUrlEnv === "/" || baseUrlEnv === "/api/v1/" || baseUrlEnv === "/api/v2/") {
-        const baseURL = getBaseURL();
-        return prepareWebsocketUrl(baseURL);
-    } else {
-        return prepareWebsocketUrl(baseUrlEnv);
-    }
-}
-
-const prepareWebsocketUrl = (url) => {
-    return url
-        .replace('https://', 'wss://websockets-')
-        .replace('http://', 'wss://websockets-')
-        .replace('api/v1/', '')
-        .replace('api/v2/', '');
 }
 
 export const displaySeconds = (seconds) => {
