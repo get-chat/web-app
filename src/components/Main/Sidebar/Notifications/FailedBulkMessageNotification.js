@@ -1,9 +1,9 @@
 import React from "react";
 import Moment from "react-moment";
 import {CALENDAR_SHORT} from "../../../../Constants";
-import {generateMessagePreview} from "../../../../helpers/Helpers";
 import {useHistory} from "react-router-dom";
 import {Link} from "@material-ui/core";
+import {generateMessagePreview} from "../../../../helpers/MessageHelper";
 
 function FailedBulkMessageNotification(props) {
 
