@@ -29,9 +29,7 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
-    extractTimestampFromMessage,
     generateUnixTimestamp,
-    getLastMessageAndExtractTimestamp,
     hasInternetConnection,
     isScrollable,
     sortMessagesAsc,
@@ -55,6 +53,10 @@ import {
 } from "../../../api/ApiCalls";
 import {Prompt} from 'react-router-dom';
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
+import {
+    extractTimestampFromMessage,
+    messageHelper
+} from "../../../helpers/MessageHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -736,7 +738,7 @@ export default function Chat(props) {
         if (isInitial) {
             // beforeTime is not passed only for initial request
             // Mark messages as received
-            const lastMessageTimestamp = getLastMessageAndExtractTimestamp(preparedMessages);
+            const lastMessageTimestamp = messageHelper(preparedMessages);
             markAsReceived(lastMessageTimestamp);
         }
 
