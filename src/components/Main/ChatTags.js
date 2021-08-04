@@ -10,9 +10,9 @@ import {
     DialogTitle,
     Link
 } from "@material-ui/core";
-import {getHubURL} from "../../helpers/Helpers";
 import '../../styles/ChatTags.css';
 import {createChatTaggingCall, deleteChatTaggingCall, listTagsCall, retrieveChatCall} from "../../api/ApiCalls";
+import {getHubURL} from "../../helpers/URLHelper";
 
 function ChatTags(props) {
 

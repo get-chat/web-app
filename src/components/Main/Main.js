@@ -4,7 +4,7 @@ import Chat from "./Chat/Chat";
 import {Fade, Snackbar} from "@material-ui/core";
 import PubSub from "pubsub-js";
 import axios from "axios";
-import {getWebSocketURL, preparePhoneNumber} from "../../helpers/Helpers";
+import {preparePhoneNumber} from "../../helpers/Helpers";
 import {useHistory, useLocation, useParams} from "react-router-dom";
 import SearchMessage from "../SearchMessage";
 import ContactDetails from "./ContactDetails";
@@ -51,6 +51,7 @@ import {
 import {clearUserSession} from "../../helpers/ApiHelper";
 import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 import BulkMessageTaskClass from "../../BulkMessageTaskClass";
+import {getWebSocketURL} from "../../helpers/URLHelper";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
