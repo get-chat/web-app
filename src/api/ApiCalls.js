@@ -151,7 +151,7 @@ export const resolveContactCall = (personWaId, callback) => {
         });
 }
 
-export const listContactsCall = (search, limit, cancelToken, callback) => {
+export const listContactsCall = (search, limit, cancelToken, callback, errorCallback) => {
     axios.get(`${BASE_URL}contacts/`, getConfig({
         search: search,
         limit: limit
@@ -161,6 +161,7 @@ export const listContactsCall = (search, limit, cancelToken, callback) => {
         })
         .catch((error) => {
             window.displayError(error);
+            errorCallback?.(error);
         });
 }
 

@@ -753,6 +753,11 @@ function Main() {
 
             // Chain
             callback();
+        }, (error) => {
+            if (error?.response?.status === 500) {
+                // Continue with chain, in case contact provider data can not be loaded
+                callback();
+            }
         });
     }
 
