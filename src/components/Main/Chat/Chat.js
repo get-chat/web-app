@@ -151,6 +151,7 @@ export default function Chat(props) {
         setAtBottom(false);
         setInput('');
         setHasFailedMessages(false);
+        setScrollButtonVisible(false);
 
         setPreviewSendMediaVisible(false);
         setPreviewSendMediaData(undefined);
