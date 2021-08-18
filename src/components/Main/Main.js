@@ -13,11 +13,13 @@ import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
     EVENT_TOPIC_BULK_MESSAGE_TASK,
-    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
+    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
+    EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CHAT_TAGGING, EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
+    EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
@@ -633,7 +635,7 @@ function Main() {
             setLoadingTemplates(false);
             setTemplatesReady(true);
 
-            setProgress(45);
+            setProgress(70);
         };
 
         listTemplatesCall((response) => {
@@ -669,8 +671,6 @@ function Main() {
     }
 
     const listSavedResponses = () => {
-
-
         listSavedResponsesCall((response) => {
             const preparedSavedResponses = {};
             response.data.results.forEach((savedResponse) => {
@@ -680,7 +680,7 @@ function Main() {
 
             setSavedResponses(preparedSavedResponses);
 
-            setProgress(40);
+            setProgress(50);
 
             // Trigger next request
             listTemplates();
@@ -725,7 +725,7 @@ function Main() {
         setLoadingNow('contacts');
 
         const callback = () => {
-            setProgress(30);
+            setProgress(35);
 
             setLoadingNow('saved responses');
 
@@ -776,8 +776,6 @@ function Main() {
     }
 
     const listTags = () => {
-        setLoadingNow('tags');
-
         listTagsCall((response) => {
             setTags(response.data.results);
         });
@@ -812,7 +810,8 @@ function Main() {
                     selectedTags={selectedTags}
                     setSelectedTags={setSelectedTags}
                     finishBulkSendMessage={finishBulkSendMessage}
-                    tags={tags} />
+                    tags={tags}
+                    setLoadingNow={setLoadingNow} />
                 }
 
                 {templatesReady &&

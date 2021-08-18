@@ -254,6 +254,8 @@ function Sidebar(props) {
     const listChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
         if (!isInitial) {
             setLoadingMoreChats(true);
+        } else {
+            props.setLoadingNow('chats');
         }
 
         listChatsCall(keyword, 18, offset, cancelTokenSource.token,
