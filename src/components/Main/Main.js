@@ -62,6 +62,8 @@ function Main() {
     const {waId} = useParams();
 
     const [progress, _setProgress] = useState(0);
+    const [loadingNow, setLoadingNow] = useState('');
+
     const [checked, setChecked] = useState(false);
     const [isBlurred, setBlurred] = useState(false);
 
@@ -884,7 +886,8 @@ function Main() {
                     <div className="loadingScreenOuter">
                         <LoadingScreen
                             progress={progress}
-                            setProgress={setProgress} />
+                            setProgress={setProgress}
+                            loadingNow={loadingNow} />
                     </div>
                 </Fade>
 

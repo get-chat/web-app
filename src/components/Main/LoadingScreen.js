@@ -31,9 +31,12 @@ function LoadingScreen(props) {
                 <LinearProgress variant="determinate" value={props.progress} />
             </div>
 
+            <div className="loadingScreen__details">
+                Loading {props.loadingNow}
+            </div>
+
             {isSkipVisible &&
             <div>
-                {/*<span className="loadingScreen__skip" onClick={window.location.reload}>Reload</span>*/}
                 <span className="loadingScreen__skip" onClick={skip}>Skip</span>
             </div>
             }
