@@ -5,11 +5,11 @@ import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
 import PubSub from "pubsub-js";
 import {
-    addPlus,
     extractAvatarFromContactProviderData
 } from "../../../helpers/Helpers";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../../helpers/EmojiHelper";
+import {addPlus} from "../../../helpers/PhoneNumberHelper";
 
 function ChatHeader(props) {
 

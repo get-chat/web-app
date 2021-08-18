@@ -94,30 +94,6 @@ export const displaySeconds = (seconds) => {
     return [minutes, seconds % 60].map(format).join(':');
 }
 
-const removeWhitespaces = (text) => {
-    return text.replace(/ /g,'');
-}
-
-const removeHyphens = (text) => {
-    return text.replace(/-/g, '');
-}
-
-const removePluses = (text) => {
-    return text.replace(/\+/g,'');
-}
-
-export const preparePhoneNumber = (phoneNumber) => {
-    phoneNumber = removeHyphens(phoneNumber);
-    phoneNumber = removeWhitespaces(phoneNumber);
-    phoneNumber = removePluses(phoneNumber);
-
-    return phoneNumber;
-}
-
-export const addPlus = (phoneNumber) => {
-    return phoneNumber?.includes('+') ? phoneNumber : `+${phoneNumber}`;
-}
-
 export const containsLetters = (text) => {
     const regExp = /[a-zA-Z]/g;
     return regExp.test(text);
