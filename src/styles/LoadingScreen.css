@@ -37,6 +37,12 @@
     height: 3px;
 }
 
+.loadingScreen__details {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    margin-top: 15px;
+}
+
 .loadingScreen__skip {
     display: inline-block;
     cursor: pointer;

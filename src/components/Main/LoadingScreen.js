@@ -32,7 +32,7 @@ function LoadingScreen(props) {
             </div>
 
             <div className="loadingScreen__details">
-                Loading {props.loadingNow}
+                Loading: {props.loadingNow}
             </div>
 
             {isSkipVisible &&

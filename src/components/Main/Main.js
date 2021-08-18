@@ -584,6 +584,8 @@ function Main() {
     }, [bulkSendPayload])
 
     const listUsers = () => {
+        setLoadingNow('users');
+
         listUsersCall(5000, (response) => {
             const preparedUsers = {};
             response.data.results.forEach((user) => {
@@ -601,6 +603,8 @@ function Main() {
     }
 
     const retrieveCurrentUser = () => {
+        setLoadingNow('current user');
+
         retrieveCurrentUserCall((response) => {
             setCurrentUser(response.data);
 
@@ -623,6 +627,8 @@ function Main() {
     }
 
     const listTemplates = () => {
+        setLoadingNow('templates');
+
         const completeCallback = () => {
             setLoadingTemplates(false);
             setTemplatesReady(true);
@@ -663,6 +669,8 @@ function Main() {
     }
 
     const listSavedResponses = () => {
+
+
         listSavedResponsesCall((response) => {
             const preparedSavedResponses = {};
             response.data.results.forEach((savedResponse) => {
@@ -714,8 +722,12 @@ function Main() {
     }
 
     const listContacts = () => {
+        setLoadingNow('contacts');
+
         const callback = () => {
             setProgress(30);
+
+            setLoadingNow('saved responses');
 
             // Trigger next request
             listSavedResponses();
@@ -764,6 +776,8 @@ function Main() {
     }
 
     const listTags = () => {
+        setLoadingNow('tags');
+
         listTagsCall((response) => {
             setTags(response.data.results);
         });
