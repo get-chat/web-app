@@ -10,13 +10,13 @@ import Moment from "react-moment";
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import {
-    addPlus,
     extractAvatarFromContactProviderData,
     sanitize
 } from "../../helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 import {generateAvatarColor} from "../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../helpers/EmojiHelper";
+import {addPlus} from "../../helpers/PhoneNumberHelper";
 
 function ContactDetails(props)  {
 

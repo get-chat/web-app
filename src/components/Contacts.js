@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import '../styles/Contacts.css';
-import {addPlus, preparePhoneNumber} from "../helpers/Helpers";
 import SearchBar from "./SearchBar";
 import {Button, CircularProgress, Collapse, IconButton, InputAdornment, ListItem, TextField} from "@material-ui/core";
 import {ArrowBack, ExpandLess, ExpandMore} from "@material-ui/icons";
@@ -13,6 +12,7 @@ import PersonClass from "../PersonClass";
 import Person from "./Person";
 import {generateCancelToken, listContactsCall, listPersonsCall, verifyContactsCall} from "../api/ApiCalls";
 import {getObjLength} from "../helpers/ObjectHelper";
+import {addPlus, preparePhoneNumber} from "../helpers/PhoneNumberHelper";
 
 function Contacts(props) {
 

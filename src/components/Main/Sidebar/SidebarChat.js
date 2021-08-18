@@ -7,7 +7,6 @@ import GroupIcon from '@material-ui/icons/Group';
 import Moment from "react-moment";
 import moment from "moment";
 import {
-    addPlus,
     extractAvatarFromContactProviderData,
     generateInitialsHelper,
     markOccurrences
@@ -24,6 +23,7 @@ import {
 import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../../helpers/EmojiHelper";
+import {addPlus} from "../../../helpers/PhoneNumberHelper";
 
 function SidebarChat(props) {
 
