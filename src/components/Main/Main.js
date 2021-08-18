@@ -13,11 +13,13 @@ import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import {
     EVENT_TOPIC_BULK_MESSAGE_TASK,
-    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
+    EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
+    EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CHAT_TAGGING, EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
+    EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
@@ -62,6 +64,8 @@ function Main() {
     const {waId} = useParams();
 
     const [progress, _setProgress] = useState(0);
+    const [loadingNow, setLoadingNow] = useState('');
+
     const [checked, setChecked] = useState(false);
     const [isBlurred, setBlurred] = useState(false);
 
@@ -582,6 +586,8 @@ function Main() {
     }, [bulkSendPayload])
 
     const listUsers = () => {
+        setLoadingNow('users');
+
         listUsersCall(5000, (response) => {
             const preparedUsers = {};
             response.data.results.forEach((user) => {
@@ -599,6 +605,8 @@ function Main() {
     }
 
     const retrieveCurrentUser = () => {
+        setLoadingNow('current user');
+
         retrieveCurrentUserCall((response) => {
             setCurrentUser(response.data);
 
@@ -621,11 +629,13 @@ function Main() {
     }
 
     const listTemplates = () => {
+        setLoadingNow('templates');
+
         const completeCallback = () => {
             setLoadingTemplates(false);
             setTemplatesReady(true);
 
-            setProgress(45);
+            setProgress(70);
         };
 
         listTemplatesCall((response) => {
@@ -670,7 +680,7 @@ function Main() {
 
             setSavedResponses(preparedSavedResponses);
 
-            setProgress(40);
+            setProgress(50);
 
             // Trigger next request
             listTemplates();
@@ -712,8 +722,12 @@ function Main() {
     }
 
     const listContacts = () => {
+        setLoadingNow('contacts');
+
         const callback = () => {
-            setProgress(30);
+            setProgress(35);
+
+            setLoadingNow('saved responses');
 
             // Trigger next request
             listSavedResponses();
@@ -796,7 +810,8 @@ function Main() {
                     selectedTags={selectedTags}
                     setSelectedTags={setSelectedTags}
                     finishBulkSendMessage={finishBulkSendMessage}
-                    tags={tags} />
+                    tags={tags}
+                    setLoadingNow={setLoadingNow} />
                 }
 
                 {templatesReady &&
@@ -884,7 +899,8 @@ function Main() {
                     <div className="loadingScreenOuter">
                         <LoadingScreen
                             progress={progress}
-                            setProgress={setProgress} />
+                            setProgress={setProgress}
+                            loadingNow={loadingNow} />
                     </div>
                 </Fade>
 
