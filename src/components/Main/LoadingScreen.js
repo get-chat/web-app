@@ -11,7 +11,7 @@ function LoadingScreen(props) {
     useEffect(() => {
         let intervalId = setInterval(function () {
             setSkipVisible(true);
-        }, 8000);
+        }, 20000);
 
         return () => {
             clearInterval(intervalId);
