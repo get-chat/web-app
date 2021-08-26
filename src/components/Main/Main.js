@@ -659,7 +659,8 @@ function Main() {
                 const status = error.response.status;
                 // Status code >= 500 means template management is not available
                 if (status >= 500) {
-                    displayCustomError('Message templates are not available from WABA Stack provider. Please try again later.');
+                    const reason = error.response.data?.reason;
+                    displayCustomError(reason);
                     completeCallback();
                 } else {
                     window.displayError(error);
