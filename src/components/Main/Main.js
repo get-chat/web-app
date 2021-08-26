@@ -657,9 +657,9 @@ function Main() {
         }, (error) => {
             if (error.response) {
                 const status = error.response.status;
-                // Status code 400 means template management is not available
-                // See: https://gitlab.com/wabbitproject/web-app/-/issues/73
-                if (status === 400) {
+                // Status code >= 500 means template management is not available
+                if (status >= 500) {
+                    displayCustomError('Message templates are not available from WABA Stack provider. Please try again later.');
                     completeCallback();
                 } else {
                     window.displayError(error);
