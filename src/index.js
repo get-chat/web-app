@@ -6,12 +6,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import {isLocalHost} from "./helpers/URLHelper";
 
-Sentry.init({
-    dsn: process.env.REACT_APP_SENTRY_DSN,
-    integrations: [new Integrations.BrowserTracing()],
-    tracesSampleRate: 0.01,
-});
+if (!isLocalHost()) {
+    Sentry.init({
+        dsn: process.env.REACT_APP_SENTRY_DSN,
+        integrations: [new Integrations.BrowserTracing()],
+        tracesSampleRate: 0.01,
+    });
+}
 
 ReactDOM.render(
     <App />,
