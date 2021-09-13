@@ -1,5 +1,9 @@
 import {BASE_URL} from "../Constants";
 
+export const isLocalHost = () => {
+    return (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1");
+}
+
 export const getAdminPanelURL = () => {
     return BASE_URL.replace('/api/v1', '/admin');
 }
