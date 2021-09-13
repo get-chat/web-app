@@ -1,6 +1,6 @@
 export const BASE_URL = process.env.REACT_APP_BASE_URL.trim();
 
-export const VERSION = 1.24
+export const VERSION = 1.25
 
 export const EVENT_TOPIC_CHAT_MESSAGE = "chat_message";
 export const EVENT_TOPIC_GO_TO_MSG_ID = "go_to_msg_id";

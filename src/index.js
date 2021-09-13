@@ -13,6 +13,13 @@ if (!isLocalHost()) {
         dsn: process.env.REACT_APP_SENTRY_DSN,
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 0.01,
+        beforeSend(event, hint) {
+            // Check if it is an exception, and if so, show the report dialog
+            if (event.exception) {
+                Sentry.showReportDialog({ eventId: event.event_id });
+            }
+            return event;
+        },
     });
 }
 
