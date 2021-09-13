@@ -9,6 +9,7 @@ import SearchMessage from "../SearchMessage";
 import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../../TemplateMessageClass";
+import * as Sentry from "@sentry/react";
 import {Alert} from "@material-ui/lab";
 import {
     EVENT_TOPIC_BULK_MESSAGE_TASK,
@@ -505,6 +506,7 @@ function Main() {
 
                 } catch (error) {
                     console.error(error);
+                    Sentry.captureException(error);
                 }
             }
         }
