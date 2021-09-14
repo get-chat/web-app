@@ -77,7 +77,7 @@ function Main() {
     const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
 
-    const [isTemplatesFailed, setIsTemplatesFailed] = useState(false);
+    const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
     const [templates, setTemplates] = useState({});
     const [savedResponses, setSavedResponses] = useState({});
@@ -674,6 +674,8 @@ function Main() {
                 completeCallback();
             }
 
+            setTemplatesFailed(false);
+
         }, (error) => {
             if (!isRetry) {
                 if (error.response) {
@@ -685,7 +687,7 @@ function Main() {
                         completeCallback();
 
                         // To trigger retrying periodically
-                        setIsTemplatesFailed(true);
+                        setTemplatesFailed(true);
                     } else {
                         window.displayError(error);
                     }
