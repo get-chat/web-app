@@ -528,9 +528,14 @@ function Main() {
     useEffect(() => {
         let tryLoadingTemplateMessagesIntervalId;
         if (isTemplatesFailed) {
+            let timeout = 5000;
+            const delay = () => {
+                timeout += 1000;
+                return timeout;
+            }
             tryLoadingTemplateMessagesIntervalId = setInterval(() => {
                 listTemplates(true);
-            }, 15000);
+            }, delay());
         }
 
         return () => {
