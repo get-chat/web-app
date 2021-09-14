@@ -58,7 +58,14 @@ function ChatMessageTemplate(props) {
                         )}
                     </div>
                     :
-                    <div>Missing template</div>
+                    <div>
+                        {props.isTemplatesFailed
+                            ?
+                            <span>[Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!]</span>
+                            :
+                            <span>[Missing template]</span>
+                        }
+                    </div>
                 }
             </div>
         </div>

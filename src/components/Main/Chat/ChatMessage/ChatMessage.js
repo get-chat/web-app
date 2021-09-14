@@ -103,13 +103,15 @@ function ChatMessage(props) {
 
                     {data.type === ChatMessageClass.TYPE_STICKER &&
                     <span>
-                    <NoteIcon fontSize="small"/>
-                </span>
+                        <NoteIcon fontSize="small"/>
+                    </span>
                     }
 
                     {data.type === ChatMessageClass.TYPE_TEMPLATE &&
-                    <ChatMessageTemplate data={data} templateData={templateData}
-                                         onPreview={() => props.onPreview(data)}/>
+                    <ChatMessageTemplate data={data}
+                                         templateData={templateData}
+                                         isTemplatesFailed={props.isTemplatesFailed}
+                                         onPreview={() => props.onPreview(data)} />
                     }
 
                     {data.errors &&

@@ -107,7 +107,14 @@ function TemplateMessages(props) {
                     </div>
 
                     {getObjLength(templates) === 0 &&
-                    <div className="templateMessages__emptyInfo mt-3">No templates have been registered yet.</div>
+                    <div className="templateMessages__emptyInfo mt-3">
+                        {props.isTemplatesFailed
+                            ?
+                            <span>Template messages couldn't be loaded.</span>
+                            :
+                            <span>No templates have been registered yet.</span>
+                        }
+                    </div>
                     }
 
                     {Object.entries(templates).map((template, index) =>

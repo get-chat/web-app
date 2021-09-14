@@ -9,7 +9,6 @@ import SearchMessage from "../SearchMessage";
 import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../../TemplateMessageClass";
-import * as Sentry from "@sentry/react";
 import {Alert} from "@material-ui/lab";
 import {
     EVENT_TOPIC_BULK_MESSAGE_TASK,
@@ -77,6 +76,8 @@ function Main() {
     const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
+
+    const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
     const [templates, setTemplates] = useState({});
     const [savedResponses, setSavedResponses] = useState({});
@@ -506,7 +507,8 @@ function Main() {
 
                 } catch (error) {
                     console.error(error);
-                    Sentry.captureException(error);
+                    // Do not force Sentry if exceptions can't be handled without a user feedback dialog
+                    //Sentry.captureException(error);
                 }
             }
         }
@@ -522,6 +524,19 @@ function Main() {
             ws.close(CODE_NORMAL);
         }
     }, []);
+
+    useEffect(() => {
+        let tryLoadingTemplateMessagesIntervalId;
+        if (isTemplatesFailed) {
+            tryLoadingTemplateMessagesIntervalId = setInterval(() => {
+                listTemplates(true);
+            }, 15000);
+        }
+
+        return () => {
+            clearInterval(tryLoadingTemplateMessagesIntervalId);
+        }
+    }, [isTemplatesFailed]);
 
     useEffect(() => {
         function onBlur(event) {
@@ -630,7 +645,7 @@ function Main() {
         }, history);
     }
 
-    const listTemplates = () => {
+    const listTemplates = (isRetry) => {
         setLoadingNow('templates');
 
         const completeCallback = () => {
@@ -638,6 +653,9 @@ function Main() {
             setTemplatesReady(true);
 
             setProgress(70);
+
+            // Trigger next request
+            listTags();
         };
 
         listTemplatesCall((response) => {
@@ -652,23 +670,32 @@ function Main() {
 
             setTemplates(preparedTemplates);
 
-            completeCallback();
+            if (!isRetry) {
+                completeCallback();
+            }
 
-            // Trigger next request
-            listTags();
+            setTemplatesFailed(false);
+
         }, (error) => {
-            if (error.response) {
-                const status = error.response.status;
-                // Status code >= 500 means template management is not available
-                if (status >= 500) {
-                    const reason = error.response.data?.reason;
-                    displayCustomError(reason);
-                    completeCallback();
+            if (!isRetry) {
+                if (error.response) {
+                    const status = error.response.status;
+                    // Status code >= 500 means template management is not available
+                    if (status >= 500) {
+                        const reason = error.response.data?.reason;
+                        displayCustomError(reason);
+                        completeCallback();
+
+                        // To trigger retrying periodically
+                        setTemplatesFailed(true);
+                    } else {
+                        window.displayError(error);
+                    }
                 } else {
                     window.displayError(error);
                 }
             } else {
-                window.displayError(error);
+                console.error(error);
             }
         });
     }
@@ -686,7 +713,7 @@ function Main() {
             setProgress(50);
 
             // Trigger next request
-            listTemplates();
+            listTemplates(false);
         });
     }
 
@@ -824,6 +851,7 @@ function Main() {
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
+                    isTemplatesFailed={isTemplatesFailed}
                     isLoadingTemplates={isLoadingTemplates}
                     savedResponses={savedResponses}
                     createSavedResponse={createSavedResponse}
