@@ -1221,6 +1221,7 @@ export default function Chat(props) {
                             date={curMsgDate}
                             onPreview={(chatMessage) => props.previewMedia(chatMessage)}
                             templates={props.templates}
+                            isTemplatesFailed={props.isTemplatesFailed}
                             goToMessageId={goToMessageId}
                             onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)}
                             contactProvidersData={props.contactProvidersData}
@@ -1259,6 +1260,7 @@ export default function Chat(props) {
                 templatesData={props.templates}
                 onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
                 onBulkSend={bulkSendMessage}
+                isTemplatesFailed={props.isTemplatesFailed}
                 isLoadingTemplates={props.isLoadingTemplates} />
             }
 

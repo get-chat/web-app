@@ -527,10 +527,10 @@ function Main() {
 
     useEffect(() => {
         let tryLoadingTemplateMessagesIntervalId;
-        if (!isTemplatesFailed) {
+        if (isTemplatesFailed) {
             tryLoadingTemplateMessagesIntervalId = setInterval(() => {
                 listTemplates(true);
-            }, 5000);
+            }, 15000);
         }
 
         return () => {
@@ -653,6 +653,9 @@ function Main() {
             setTemplatesReady(true);
 
             setProgress(70);
+
+            // Trigger next request
+            listTags();
         };
 
         listTemplatesCall((response) => {
@@ -671,8 +674,6 @@ function Main() {
                 completeCallback();
             }
 
-            // Trigger next request
-            listTags();
         }, (error) => {
             if (!isRetry) {
                 if (error.response) {
@@ -685,7 +686,6 @@ function Main() {
 
                         // To trigger retrying periodically
                         setIsTemplatesFailed(true);
-
                     } else {
                         window.displayError(error);
                     }
@@ -849,6 +849,7 @@ function Main() {
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
                     templates={templates}
+                    isTemplatesFailed={isTemplatesFailed}
                     isLoadingTemplates={isLoadingTemplates}
                     savedResponses={savedResponses}
                     createSavedResponse={createSavedResponse}
