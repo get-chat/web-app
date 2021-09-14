@@ -622,6 +622,9 @@ function Sidebar(props) {
                 }
                 <Divider />
                 <MenuItem onClick={logOut}>Logout</MenuItem>
+                {props.isAdmin &&
+                <MenuItem onClick={() => {throw new Error('Test')}}>Test failure</MenuItem>
+                }
             </Menu>
 
             <ChangePasswordDialog
