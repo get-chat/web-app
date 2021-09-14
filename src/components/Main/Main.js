@@ -506,7 +506,8 @@ function Main() {
 
                 } catch (error) {
                     console.error(error);
-                    Sentry.captureException(error);
+                    // Do not force Sentry if exceptions can't be handled without a user feedback dialog
+                    //Sentry.captureException(error);
                 }
             }
         }
