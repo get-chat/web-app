@@ -77,6 +77,8 @@ function Main() {
     const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
 
+    const [isTemplatesFailed, setIsTemplatesFailed] = useState(false);
+
     const [templates, setTemplates] = useState({});
     const [savedResponses, setSavedResponses] = useState({});
     const [isLoadingTemplates, setLoadingTemplates] = useState(true);
@@ -524,6 +526,19 @@ function Main() {
     }, []);
 
     useEffect(() => {
+        let tryLoadingTemplateMessagesIntervalId;
+        if (!isTemplatesFailed) {
+            tryLoadingTemplateMessagesIntervalId = setInterval(() => {
+                listTemplates(true);
+            }, 5000);
+        }
+
+        return () => {
+            clearInterval(tryLoadingTemplateMessagesIntervalId);
+        }
+    }, [isTemplatesFailed]);
+
+    useEffect(() => {
         function onBlur(event) {
             setBlurred(true);
         }
@@ -630,7 +645,7 @@ function Main() {
         }, history);
     }
 
-    const listTemplates = () => {
+    const listTemplates = (isRetry) => {
         setLoadingNow('templates');
 
         const completeCallback = () => {
@@ -652,23 +667,33 @@ function Main() {
 
             setTemplates(preparedTemplates);
 
-            completeCallback();
+            if (!isRetry) {
+                completeCallback();
+            }
 
             // Trigger next request
             listTags();
         }, (error) => {
-            if (error.response) {
-                const status = error.response.status;
-                // Status code >= 500 means template management is not available
-                if (status >= 500) {
-                    const reason = error.response.data?.reason;
-                    displayCustomError(reason);
-                    completeCallback();
+            if (!isRetry) {
+                if (error.response) {
+                    const status = error.response.status;
+                    // Status code >= 500 means template management is not available
+                    if (status >= 500) {
+                        const reason = error.response.data?.reason;
+                        displayCustomError(reason);
+                        completeCallback();
+
+                        // To trigger retrying periodically
+                        setIsTemplatesFailed(true);
+
+                    } else {
+                        window.displayError(error);
+                    }
                 } else {
                     window.displayError(error);
                 }
             } else {
-                window.displayError(error);
+                console.error(error);
             }
         });
     }
@@ -686,7 +711,7 @@ function Main() {
             setProgress(50);
 
             // Trigger next request
-            listTemplates();
+            listTemplates(false);
         });
     }
 
