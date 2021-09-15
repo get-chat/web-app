@@ -526,20 +526,20 @@ function Main() {
     }, []);
 
     useEffect(() => {
-        let tryLoadingTemplateMessagesIntervalId;
+        let tryLoadingTemplatesTimeoutId;
         if (isTemplatesFailed) {
             let timeout = 5000;
             const delay = () => {
                 timeout += 1000;
                 return timeout;
             }
-            tryLoadingTemplateMessagesIntervalId = setInterval(() => {
+            tryLoadingTemplatesTimeoutId = setTimeout(() => {
                 listTemplates(true);
             }, delay());
         }
 
         return () => {
-            clearInterval(tryLoadingTemplateMessagesIntervalId);
+            clearTimeout(tryLoadingTemplatesTimeoutId);
         }
     }, [isTemplatesFailed]);
 
