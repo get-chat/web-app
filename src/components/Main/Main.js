@@ -526,15 +526,26 @@ function Main() {
     }, []);
 
     useEffect(() => {
-        let tryLoadingTemplateMessagesIntervalId;
+        let tryLoadingTemplatesTimeoutId;
         if (isTemplatesFailed) {
-            tryLoadingTemplateMessagesIntervalId = setInterval(() => {
-                listTemplates(true);
-            }, 15000);
+            let timeout = 10000;
+            const delay = () => {
+                timeout += 1000;
+                return timeout;
+            }
+
+            let retryTask = () => {
+                tryLoadingTemplatesTimeoutId = setTimeout(() => {
+                    listTemplates(true);
+                    retryTask();
+                }, delay());
+            }
+
+            retryTask();
         }
 
         return () => {
-            clearInterval(tryLoadingTemplateMessagesIntervalId);
+            clearTimeout(tryLoadingTemplatesTimeoutId);
         }
     }, [isTemplatesFailed]);
 
