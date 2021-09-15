@@ -528,14 +528,20 @@ function Main() {
     useEffect(() => {
         let tryLoadingTemplatesTimeoutId;
         if (isTemplatesFailed) {
-            let timeout = 5000;
+            let timeout = 10000;
             const delay = () => {
                 timeout += 1000;
                 return timeout;
             }
-            tryLoadingTemplatesTimeoutId = setTimeout(() => {
-                listTemplates(true);
-            }, delay());
+
+            let retryTask = () => {
+                tryLoadingTemplatesTimeoutId = setTimeout(() => {
+                    listTemplates(true);
+                    retryTask();
+                }, delay());
+            }
+
+            retryTask();
         }
 
         return () => {
@@ -662,6 +668,13 @@ function Main() {
             // Trigger next request
             listTags();
         };
+
+        // TODO: TESTING _ DELETE IT
+        if (!isRetry) {
+            setTemplatesFailed(true);
+            completeCallback();
+            return;
+        }
 
         listTemplatesCall((response) => {
             const preparedTemplates = {};
