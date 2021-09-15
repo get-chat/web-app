@@ -669,13 +669,6 @@ function Main() {
             listTags();
         };
 
-        // TODO: TESTING _ DELETE IT
-        if (!isRetry) {
-            setTemplatesFailed(true);
-            completeCallback();
-            return;
-        }
-
         listTemplatesCall((response) => {
             const preparedTemplates = {};
             response.data.results.forEach((template) => {
