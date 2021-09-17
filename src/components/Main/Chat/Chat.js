@@ -903,7 +903,7 @@ export default function Chat(props) {
                             }
                         }
 
-                        handleIfUnauthorized();
+                        handleIfUnauthorized(error);
                     }
                 });
 
