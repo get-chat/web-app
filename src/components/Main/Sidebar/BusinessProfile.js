@@ -191,7 +191,9 @@ function BusinessProfile(props) {
                         </div>
 
                         <div className="sidebarBusinessProfile__body__avatarContainer">
-                            <Avatar style={{backgroundColor: generateAvatarColor(props.currentUser.username)}}>
+                            <Avatar
+                                src={props.currentUser?.large_avatar ?? props.currentUser?.avatar}
+                                style={{backgroundColor: generateAvatarColor(props.currentUser.username)}}>
                                 {generateInitialsHelper(props.currentUser.username)}
                             </Avatar>
                         </div>
