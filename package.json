@@ -34,6 +34,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "set \"REACT_APP_BASE_URL=https://staging.stagingwainbox.360dialog.com/api/v1/\" && react-scripts start",
+    "local": "set \"REACT_APP_BASE_URL=http://127.0.0.1:8000/api/v1/\" && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
