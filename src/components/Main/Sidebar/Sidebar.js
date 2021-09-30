@@ -429,6 +429,7 @@ function Sidebar(props) {
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
                 <Avatar
+                    src={props.currentUser?.avatar}
                     onClick={() => setProfileVisible(true)}
                     className="cursorPointer" style={{backgroundColor: generateAvatarColor(props.currentUser?.username)}}>
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
@@ -588,8 +589,8 @@ function Sidebar(props) {
 
             {isProfileVisible &&
             <BusinessProfile
-                isAdmin={props.isAdmin}
                 currentUser={props.currentUser}
+                isAdmin={props.isAdmin}
                 onHide={() => setProfileVisible(false)}
                 displayEditBusinessProfile={displayEditBusinessProfile}
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />

@@ -828,6 +828,7 @@ function Main() {
 
                 {templatesReady &&
                 <Sidebar
+                    currentUser={currentUser}
                     isAdmin={isAdmin}
                     chats={chats}
                     setChats={setChats}
@@ -835,7 +836,6 @@ function Main() {
                     setNewMessages={setNewMessages}
                     filterTag={filterTag}
                     setFilterTag={setFilterTag}
-                    currentUser={currentUser}
                     setProgress={setProgress}
                     displayNotification={displayNotification}
                     isBlurred={isBlurred}
@@ -893,14 +893,14 @@ function Main() {
 
                 {isChatAssignmentVisible &&
                 <ChatAssignment
+                    currentUser={currentUser}
+                    isAdmin={isAdmin}
                     waId={waId}
                     open={isChatAssignmentVisible}
                     setOpen={setChatAssignmentVisible}
                     chats={chats}
                     setChats={setChats}
-                    users={users}
-                    currentUser={currentUser}
-                    isAdmin={isAdmin} />
+                    users={users} />
                 }
 
                 {isChatTagsVisible &&
