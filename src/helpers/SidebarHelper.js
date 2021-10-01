@@ -2,7 +2,7 @@ import {SIDEBAR_TAB_CASE_ALL, SIDEBAR_TAB_CASE_GROUP, SIDEBAR_TAB_CASE_ME} from 
 
 export const filterChat = (props, tabCase, curChat) => {
     // Filter by tag
-    if (props.filterTag) {
+    /*if (props.filterTag) {
         if (!curChat.tags) {
             return false;
         }
@@ -15,7 +15,7 @@ export const filterChat = (props, tabCase, curChat) => {
             }
         }
         if (!hasTag) return false;
-    }
+    }*/
 
     // Filter by case
     switch (tabCase) {

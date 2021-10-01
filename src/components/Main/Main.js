@@ -10,6 +10,7 @@ import ContactDetails from "./ContactDetails";
 import LoadingScreen from "./LoadingScreen";
 import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
+import 'url-search-params-polyfill';
 import {
     EVENT_TOPIC_BULK_MESSAGE_TASK,
     EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
