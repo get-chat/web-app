@@ -431,7 +431,7 @@ function Sidebar(props) {
         <div className={"sidebar" + (props.isChatOnly ? " hidden" : "")}>
             <div className="sidebar__header">
                 <Avatar
-                    src={props.currentUser?.avatar}
+                    src={props.currentUser?.profile?.avatar}
                     onClick={() => setProfileVisible(true)}
                     className="cursorPointer" style={{backgroundColor: generateAvatarColor(props.currentUser?.username)}}>
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
