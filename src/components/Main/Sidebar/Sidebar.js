@@ -91,6 +91,7 @@ function Sidebar(props) {
 
         listChats(cancelTokenSourceRef.current, true, undefined, true);
 
+        // TODO: Make sure this works well with filterTag
         if (keyword.trim().length > 0) {
             searchMessages(cancelTokenSourceRef.current);
         }
@@ -100,7 +101,7 @@ function Sidebar(props) {
                 cancelTokenSourceRef.current.cancel("Operation canceled due to new request.");
             }
         }
-    }, [keyword]);
+    }, [keyword, props.filterTag]);
 
     useEffect(() => {
         // New chatMessages
@@ -234,7 +235,7 @@ function Sidebar(props) {
             clearTimeout(debounceTimer);
             chatsContainerCopy.removeEventListener("scroll", handleScroll);
         }
-    }, [props.chats, keyword]);
+    }, [props.chats, keyword, props.filterTag]);
 
     const search = async (_keyword) => {
         setKeyword(_keyword);
@@ -258,7 +259,7 @@ function Sidebar(props) {
             props.setLoadingNow('chats');
         }
 
-        listChatsCall(keyword, 18, offset, cancelTokenSource.token,
+        listChatsCall(keyword, props.filterTag?.id, 18, offset, cancelTokenSource.token,
             (response) => {
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
@@ -353,7 +354,9 @@ function Sidebar(props) {
     const searchMessages = (cancelTokenSource) => {
         listMessagesCall(
             undefined,
-            keyword, 30, undefined, undefined, undefined, cancelTokenSource.source,
+            keyword,
+            props.filterTag?.id,
+            30, undefined, undefined, undefined, cancelTokenSource.source,
             (response) => {
                 const preparedMessages = {};
                 response.data.results.forEach((message) => {

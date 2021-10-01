@@ -49,10 +49,11 @@ export const changePasswordCall = (currentPassword, newPassword, callback, error
     });
 }
 
-export const listChatsCall = (keyword, limit, offset, cancelToken, callback, errorCallback, history) => {
+export const listChatsCall = (keyword, chatTagId, limit, offset, cancelToken, callback, errorCallback, history) => {
     axios.get(`${BASE_URL}chats/`,
         getConfig({
             search: keyword,
+            chat_tag_id: chatTagId,
             limit: 18,
             offset: offset
         }, cancelToken))
@@ -185,12 +186,13 @@ export const retrievePersonCall = (waId, cancelToken, callback, errorCallback) =
         });
 }
 
-export const listMessagesCall = (waId, search, limit, offset, beforeTime, sinceTime, cancelToken, callback,
+export const listMessagesCall = (waId, search, chatTagId, limit, offset, beforeTime, sinceTime, cancelToken, callback,
                                  errorCallback, history) => {
     axios.get(`${BASE_URL}messages/`,
         getConfig({
             wa_id: waId,
             search: search,
+            chat_tag_id: chatTagId,
             offset: offset ?? 0,
             before_time: beforeTime,
             since_time: sinceTime,
