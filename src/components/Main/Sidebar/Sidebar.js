@@ -91,7 +91,6 @@ function Sidebar(props) {
 
         listChats(cancelTokenSourceRef.current, true, undefined, true);
 
-        // TODO: Make sure this works well with filterTag
         if (keyword.trim().length > 0) {
             searchMessages(cancelTokenSourceRef.current);
         }
