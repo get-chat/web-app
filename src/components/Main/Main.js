@@ -55,6 +55,7 @@ import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 import BulkMessageTaskClass from "../../BulkMessageTaskClass";
 import {getWebSocketURL} from "../../helpers/URLHelper";
 import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
+import {isIPad13} from "react-device-detect";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -825,7 +826,7 @@ function Main() {
 
     return (
         <Fade in={checked}>
-            <div className="app__body">
+            <div className={"app__body" + (isIPad13 ? " absoluteFullscreen" : "")}>
 
                 {templatesReady &&
                 <Sidebar
