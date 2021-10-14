@@ -78,7 +78,13 @@ export default function Chat(props) {
                 // TODO: This is just a success callback now, add it as a general callback
                 firstPendingMessage.callback?.();
 
-                // TODO: Delete sent one from the list and continue
+                // TODO: Not safe, delete by id instead
+                // TODO: Consider state changes
+                // TODO: State should be updated after deleting items
+                pendingMessages.shift();
+                if (pendingMessages.length > 0) {
+                    sendNextPending();
+                }
             }
 
             if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
