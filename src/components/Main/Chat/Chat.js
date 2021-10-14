@@ -68,22 +68,29 @@ export default function Chat(props) {
     const [pendingMessages, setPendingMessages] = useState([]);
 
     useEffect(() => {
-        console.log(pendingMessages);
+        console.log(isSendingPendingMessages, pendingMessages);
 
-        if (!isSendingPendingMessages && pendingMessages.length > 0) {
-            setSendingPendingMessages(true);
-
+        const sendNextPending = () => {
             const firstPendingMessage = pendingMessages[0];
             const requestBody = firstPendingMessage.requestBody;
             const callback = () => {
                 console.log('Ready for next.');
                 // TODO: This is just a success callback now, add it as a general callback
-                firstPendingMessage?.callback();
+                firstPendingMessage.callback?.();
+
+                // TODO: Delete sent one from the list and continue
             }
 
             if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
                 sendMessage(false, undefined, requestBody, callback);
+            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
+                sendTemplateMessage(false, undefined, requestBody, callback);
             }
+        }
+
+        if (!isSendingPendingMessages && pendingMessages.length > 0) {
+            setSendingPendingMessages(true);
+            sendNextPending();
         }
 
     }, [isSendingPendingMessages, pendingMessages]);
@@ -1287,7 +1294,7 @@ export default function Chat(props) {
                 isExpired={isExpired}
                 input={input}
                 setInput={setInput}
-                sendMessage={sendMessage}
+                sendMessage={(e) => sendMessage(true, e)}
                 bulkSendMessage={bulkSendMessage}
                 setSelectedFiles={setSelectedFiles}
                 isTemplateMessagesVisible={isTemplateMessagesVisible}
@@ -1305,7 +1312,7 @@ export default function Chat(props) {
             <TemplateMessages
                 waId={waId}
                 templatesData={props.templates}
-                onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
+                onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
                 onBulkSend={bulkSendMessage}
                 isTemplatesFailed={props.isTemplatesFailed}
                 isLoadingTemplates={props.isLoadingTemplates} />
