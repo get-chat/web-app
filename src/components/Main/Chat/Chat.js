@@ -963,7 +963,7 @@ export default function Chat(props) {
         }
     }
 
-    const sendTemplateMessage = (willQueue, templateMessage, customPayload, callback) => {
+    const sendTemplateMessage = (willQueue, templateMessage, customPayload, successCallback) => {
         let requestBody;
 
         if (customPayload) {
@@ -974,7 +974,7 @@ export default function Chat(props) {
         }
 
         if (willQueue) {
-            queueMessage(requestBody, callback);
+            queueMessage(requestBody, successCallback);
             return;
         }
 
@@ -984,9 +984,8 @@ export default function Chat(props) {
                     // Hide dialog by this event
                     PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
 
-                    if (callback) {
-                        callback();
-                    }
+                    successCallback?.();
+
                 }, (error) => {
                     if (error.response) {
                         const errors = error.response.data?.waba_response?.errors;
