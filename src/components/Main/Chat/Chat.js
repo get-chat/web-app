@@ -29,6 +29,7 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
+    generateUniqueID,
     generateUnixTimestamp,
     hasInternetConnection,
     isScrollable,
@@ -62,6 +63,12 @@ const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
+
+    const [pendingMessages, setPendingMessages] = useState([]);
+
+    useEffect(() => {
+        console.log(pendingMessages);
+    }, [pendingMessages]);
 
     const messagesContainer = useRef(null);
 
@@ -872,6 +879,18 @@ export default function Chat(props) {
             // Resend payload is being sent
             requestBody = customPayload;
         }
+
+        // Queue message
+        setPendingMessages((prevState) => {
+            prevState.push({
+                id: generateUniqueID(),
+                request: requestBody,
+                callback: callback
+            })
+            return [...prevState];
+        });
+
+        return;
 
         if (isLoaded) {
             sendMessageCall(requestBody,
