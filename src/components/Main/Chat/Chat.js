@@ -64,11 +64,29 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
 
+    const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
     const [pendingMessages, setPendingMessages] = useState([]);
 
     useEffect(() => {
         console.log(pendingMessages);
-    }, [pendingMessages]);
+
+        if (!isSendingPendingMessages && pendingMessages.length > 0) {
+            setSendingPendingMessages(true);
+
+            const firstPendingMessage = pendingMessages[0];
+            const requestBody = firstPendingMessage.requestBody;
+            const callback = () => {
+                console.log('Ready for next.');
+                // TODO: This is just a success callback now, add it as a general callback
+                firstPendingMessage?.callback();
+            }
+
+            if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
+                sendMessage(false, undefined, requestBody, callback);
+            }
+        }
+
+    }, [isSendingPendingMessages, pendingMessages]);
 
     const messagesContainer = useRef(null);
 
@@ -788,7 +806,7 @@ export default function Chat(props) {
         setPendingMessages((prevState) => {
             prevState.push({
                 id: generateUniqueID(),
-                request: requestBody,
+                requestBody: requestBody,
                 callback: callback
             })
             return [...prevState];
@@ -860,7 +878,7 @@ export default function Chat(props) {
         }
     }
 
-    const sendMessage = (willQueue, e, customPayload, callback) => {
+    const sendMessage = (willQueue, e, customPayload, successCallback) => {
         e?.preventDefault();
 
         // Check if has internet connection
@@ -893,7 +911,7 @@ export default function Chat(props) {
 
         // Queue message
         if (willQueue) {
-            queueMessage(requestBody, callback);
+            queueMessage(requestBody, successCallback);
             clearInput();
             return;
         }
@@ -909,9 +927,8 @@ export default function Chat(props) {
                         return {...prevState};
                     });*/
 
-                    if (callback) {
-                        callback();
-                    }
+                    successCallback?.();
+
                 }, (error) => {
                     if (error.response) {
                         const status = error.response.status;
