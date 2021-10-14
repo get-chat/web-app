@@ -78,6 +78,10 @@ function ChatFooter(props) {
         }
     }, [editable, props.input]);
 
+    const queueTextMessage = (e) => {
+        props.sendMessage(true, e);
+    }
+
     const toggleTemplateMessages = () => {
         // If messages container is already scrolled to bottom
         /*const elem = messagesContainer.current;
@@ -288,11 +292,11 @@ function ChatFooter(props) {
                             onDrop={(event) => event.preventDefault()}
                             spellCheck="true"
                             onInput={event => handleEditableChange(event)}
-                            onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
+                            onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) queueTextMessage(e)}}
                         />
 
                     </div>
-                    <button onClick={props.sendMessage} type="submit">Send a message</button>
+                    <button onClick={queueTextMessage} type="submit">Send a message</button>
                 </form>
 
                 {(!hasInput() && !props.isExpired) &&
@@ -307,7 +311,7 @@ function ChatFooter(props) {
 
                 {hasInput() &&
                 <Tooltip title="Send" placement="top">
-                    <IconButton onClick={props.sendMessage}>
+                    <IconButton onClick={queueTextMessage}>
                         <Send/>
                     </IconButton>
                 </Tooltip>

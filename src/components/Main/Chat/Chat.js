@@ -784,6 +784,17 @@ export default function Chat(props) {
             });
     }
 
+    const queueMessage = (requestBody, callback) => {
+        setPendingMessages((prevState) => {
+            prevState.push({
+                id: generateUniqueID(),
+                request: requestBody,
+                callback: callback
+            })
+            return [...prevState];
+        });
+    }
+
     const resendMessage = (message) => {
         const successCallback = () => {
             // Delete message if resent successfully
@@ -810,9 +821,9 @@ export default function Chat(props) {
         const resendPayload = message.resendPayload;
 
         if (resendPayload.type === ChatMessageClass.TYPE_TEXT || resendPayload.text) {
-            sendMessage(undefined, resendPayload, successCallback);
+            sendMessage(true, undefined, resendPayload, successCallback);
         } else if (resendPayload.type === ChatMessageClass.TYPE_TEMPLATE) {
-            sendTemplateMessage(undefined, resendPayload, successCallback);
+            sendTemplateMessage(true, undefined, resendPayload, successCallback);
         } else {
             // File
             sendFile(undefined, undefined, resendPayload, successCallback);
@@ -820,7 +831,7 @@ export default function Chat(props) {
     }
 
     const sendCustomTextMessage = (text) => {
-        sendMessage(undefined, {
+        sendMessage(true, undefined, {
             wa_id: waId,
             text: {
                 body: text.trim()
@@ -849,7 +860,7 @@ export default function Chat(props) {
         }
     }
 
-    const sendMessage = (e, customPayload, callback) => {
+    const sendMessage = (willQueue, e, customPayload, callback) => {
         e?.preventDefault();
 
         // Check if has internet connection
@@ -881,16 +892,11 @@ export default function Chat(props) {
         }
 
         // Queue message
-        setPendingMessages((prevState) => {
-            prevState.push({
-                id: generateUniqueID(),
-                request: requestBody,
-                callback: callback
-            })
-            return [...prevState];
-        });
-
-        return;
+        if (willQueue) {
+            queueMessage(requestBody, callback);
+            clearInput();
+            return;
+        }
 
         if (isLoaded) {
             sendMessageCall(requestBody,
@@ -926,14 +932,14 @@ export default function Chat(props) {
                     }
                 });
 
-            clearInput();
+            //clearInput();
 
             // Close emoji picker
             PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
         }
     }
 
-    const sendTemplateMessage = (templateMessage, customPayload, callback) => {
+    const sendTemplateMessage = (willQueue, templateMessage, customPayload, callback) => {
         let requestBody;
 
         if (customPayload) {
@@ -941,6 +947,11 @@ export default function Chat(props) {
         } else {
             requestBody = generateTemplateMessagePayload(templateMessage);
             requestBody.wa_id = waId;
+        }
+
+        if (willQueue) {
+            queueMessage(requestBody, callback);
+            return;
         }
 
         if (isLoaded) {
