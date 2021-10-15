@@ -71,6 +71,7 @@ export default function Chat(props) {
         // Keep state in window as a variable to have actual state in callbacks
         window.pendingMessages = pendingMessages;
 
+        // Log state changes
         console.log(isSendingPendingMessages, pendingMessages);
 
         const sendNextPending = () => {
