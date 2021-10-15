@@ -1,6 +1,8 @@
+import ChatMessageClass from "../ChatMessageClass";
+
 export const generateTemplateMessagePayload = (templateMessage) => {
     return {
-        type: 'template',
+        type: ChatMessageClass.TYPE_TEMPLATE,
         template: {
             namespace: templateMessage.namespace,
             name: templateMessage.name,

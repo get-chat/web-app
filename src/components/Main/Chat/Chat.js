@@ -185,10 +185,12 @@ export default function Chat(props) {
             }
 
             // Use proper method to send message depends on its type
-            if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
+            if (requestBody.type === ChatMessageClass.TYPE_TEXT) {
                 sendMessage(false, undefined, requestBody, successCallback, completeCallback);
             } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
                 sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
+            } else if (firstPendingMessage.chosenFile) {
+                uploadMedia(firstPendingMessage.chosenFile, requestBody, firstPendingMessage.formData, completeCallback);
             }
         }
 
@@ -839,14 +841,16 @@ export default function Chat(props) {
             });
     }
 
-    const queueMessage = (requestBody, successCallback, errorCallback, completeCallback) => {
+    const queueMessage = (requestBody, successCallback, errorCallback, completeCallback, formData, chosenFile) => {
         setPendingMessages((prevState) => {
             prevState.push({
                 id: generateUniqueID(),
                 requestBody: requestBody,
                 successCallback: successCallback,
                 errorCallback: errorCallback,
-                completeCallback: completeCallback
+                completeCallback: completeCallback,
+                formData: formData,
+                chosenFile: chosenFile
             })
             return [...prevState];
         });
@@ -877,13 +881,14 @@ export default function Chat(props) {
 
         const resendPayload = message.resendPayload;
 
+        // TODO: Make it work with queue
         if (resendPayload.type === ChatMessageClass.TYPE_TEXT || resendPayload.text) {
             sendMessage(true, undefined, resendPayload, successCallback);
         } else if (resendPayload.type === ChatMessageClass.TYPE_TEMPLATE) {
             sendTemplateMessage(true, undefined, resendPayload, successCallback);
         } else {
             // File
-            sendFile(undefined, undefined, resendPayload, successCallback);
+            sendFile(undefined, undefined, undefined, resendPayload, successCallback);
         }
     }
 
@@ -902,7 +907,7 @@ export default function Chat(props) {
         if (type === ChatMessageClass.TYPE_TEXT) {
             const preparedInput = translateHTMLInputToText(input).trim();
             payload = {
-                type: "text",
+                type: ChatMessageClass.TYPE_TEXT,
                 text: {
                     body: preparedInput
                 }
@@ -939,6 +944,7 @@ export default function Chat(props) {
 
             requestBody = {
                 wa_id: waId,
+                type: ChatMessageClass.TYPE_TEXT,
                 text: {
                     body: preparedInput
                 }
@@ -1081,11 +1087,11 @@ export default function Chat(props) {
         setInput('')
     }
 
-    const uploadMedia = (file, payload, completeCallback) => {
-        uploadMediaCall(payload,
+    const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
+        uploadMediaCall(formData,
             (response) => {
                 // Convert parameters to a ChosenFile object
-                sendFile(response.data.file, file, undefined, function () {
+                sendFile(payload?.wa_id, response.data.file, chosenFile, undefined, function () {
                     completeCallback();
                 });
             }, (error) => {
@@ -1100,7 +1106,7 @@ export default function Chat(props) {
             });
     }
 
-    const sendFile = (fileURL, chosenFile, customPayload, callback) => {
+    const sendFile = (receiverWaId, fileURL, chosenFile, customPayload, completeCallback) => {
         let requestBody;
 
         if (customPayload) {
@@ -1113,9 +1119,9 @@ export default function Chat(props) {
             const mimeType = file.type;
 
             requestBody = {
-                wa_id: waId,
+                wa_id: receiverWaId,
                 recipient_type: 'individual',
-                to: waId,
+                to: receiverWaId,
                 type: type
             };
 
@@ -1139,7 +1145,7 @@ export default function Chat(props) {
             sendMessageCall(requestBody,
                 (response) => {
                     // Send next request (or resend callback)
-                    callback();
+                    completeCallback();
                 }, (error) => {
                     if (error.response) {
                         const status = error.response.status;
@@ -1157,7 +1163,7 @@ export default function Chat(props) {
                     // Send next when it fails, a retry can be considered
                     // If custom payload is empty, it means it is resending, so it is just a success callback
                     if (!customPayload) {
-                        callback();
+                        completeCallback();
                     }
                 });
         }
@@ -1174,9 +1180,7 @@ export default function Chat(props) {
 
     const sendHandledChosenFiles = (preparedFiles) => {
         if (isLoaded && preparedFiles) {
-            const requests = [];
-
-            // Sending all files in a loop
+            // Prepare and queue uploading and sending processes
             Object.entries(preparedFiles).forEach((curFile) => {
                 const curChosenFile = curFile[1];
                 const file = curChosenFile.file;
@@ -1184,42 +1188,12 @@ export default function Chat(props) {
                 const formData = new FormData();
                 formData.append("file_encoded", file);
 
-                requests.push({
-                    formData: formData,
-                    chosenFile: curChosenFile
-                });
-            });
-
-            let requestIndex = 0;
-
-            const sendRequest = (request) => {
-                const sendNextRequest = () => {
-                    requestIndex++;
-                    const nextRequest = requests[requestIndex];
-                    if (nextRequest) {
-                        sendRequest(nextRequest);
-                    }
+                const requestBody = {
+                    wa_id: waId
                 }
 
-                uploadMediaCall(request.formData,
-                    (response) => {
-                        // Convert parameters to a ChosenFile object
-                        sendFile(response.data.file, request.chosenFile, undefined, function () {
-                            sendNextRequest();
-                        });
-                    }, (error) => {
-                        if (error.response) {
-                            if (error.response) {
-                                handleIfUnauthorized(error);
-                            }
-                        }
-
-                        // Send next when it fails, a retry can be considered
-                        sendNextRequest();
-                    });
-            }
-
-            sendRequest(requests[requestIndex]);
+                queueMessage(requestBody, undefined, undefined, undefined, formData, curChosenFile);
+            });
         }
     }
 
