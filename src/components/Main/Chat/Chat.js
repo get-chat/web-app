@@ -75,15 +75,12 @@ export default function Chat(props) {
 
         const sendNextPending = () => {
             const firstPendingMessage = pendingMessages[0];
-
             const requestBody = firstPendingMessage.requestBody;
             const successCallback = firstPendingMessage.successCallback;
             // const errorCallback = firstPendingMessage.errorCallback;
-            const completeCallback = () => {
-                console.log('Ready for next.');
-                console.log('Length when ready: ' + pendingMessages.length);
-                console.log('Length when ready window: ' + window.pendingMessages.length);
 
+            // Prepare a custom callback to continue with queue after first one is sent
+            const completeCallback = () => {
                 // Run original callback of sent message
                 firstPendingMessage.completeCallback?.();
 
@@ -97,6 +94,7 @@ export default function Chat(props) {
                 setSendingPendingMessages(false);
             }
 
+            // Use proper method to send message depends on its type
             if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
                 sendMessage(false, undefined, requestBody, successCallback, completeCallback);
             } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
@@ -104,6 +102,7 @@ export default function Chat(props) {
             }
         }
 
+        // If it is not sending currently and there are pending messages
         if (!isSendingPendingMessages && pendingMessages.length > 0) {
             setSendingPendingMessages(true);
             sendNextPending();
