@@ -67,52 +67,6 @@ export default function Chat(props) {
     const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
     const [pendingMessages, setPendingMessages] = useState([]);
 
-    useEffect(() => {
-        // Keep state in window as a variable to have actual state in callbacks
-        window.pendingMessages = pendingMessages;
-
-        // Log state changes
-        console.log(isSendingPendingMessages, pendingMessages);
-
-        const sendNextPending = () => {
-            const firstPendingMessage = pendingMessages[0];
-            const requestBody = firstPendingMessage.requestBody;
-            const successCallback = firstPendingMessage.successCallback;
-            // const errorCallback = firstPendingMessage.errorCallback;
-
-            // Prepare a custom callback to continue with queue after first one is sent
-            const completeCallback = () => {
-                // Run original callback of sent message
-                firstPendingMessage.completeCallback?.();
-
-                // Delete sent message from state
-                const updatedState = window.pendingMessages.filter(function(pendingMessage) {
-                    return pendingMessage.id !== firstPendingMessage.id;
-                });
-
-                // Update state after deleting sent one
-                setPendingMessages(updatedState);
-                setSendingPendingMessages(false);
-            }
-
-            // Use proper method to send message depends on its type
-            if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
-                sendMessage(false, undefined, requestBody, successCallback, completeCallback);
-            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
-                sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
-            }
-        }
-
-        // If it is not sending currently and there are pending messages
-        if (!isSendingPendingMessages && pendingMessages.length > 0) {
-            setSendingPendingMessages(true);
-            sendNextPending();
-        } else if (pendingMessages.length === 0) {
-            setSendingPendingMessages(false);
-        }
-
-    }, [isSendingPendingMessages, pendingMessages]);
-
     const messagesContainer = useRef(null);
 
     const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
@@ -189,6 +143,52 @@ export default function Chat(props) {
             PubSub.unsubscribe(clearInputEventToken);
         }
     }, []);
+
+    useEffect(() => {
+        // Keep state in window as a variable to have actual state in callbacks
+        window.pendingMessages = pendingMessages;
+
+        // Log state changes
+        console.log(isSendingPendingMessages, pendingMessages);
+
+        const sendNextPending = () => {
+            const firstPendingMessage = pendingMessages[0];
+            const requestBody = firstPendingMessage.requestBody;
+            const successCallback = firstPendingMessage.successCallback;
+            // const errorCallback = firstPendingMessage.errorCallback;
+
+            // Prepare a custom callback to continue with queue after first one is sent
+            const completeCallback = () => {
+                // Run original callback of sent message
+                firstPendingMessage.completeCallback?.();
+
+                // Delete sent message from state
+                const updatedState = window.pendingMessages.filter(function(pendingMessage) {
+                    return pendingMessage.id !== firstPendingMessage.id;
+                });
+
+                // Update state after deleting sent one
+                setPendingMessages(updatedState);
+                setSendingPendingMessages(false);
+            }
+
+            // Use proper method to send message depends on its type
+            if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
+                sendMessage(false, undefined, requestBody, successCallback, completeCallback);
+            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
+                sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
+            }
+        }
+
+        // If it is not sending currently and there are pending messages
+        if (!isSendingPendingMessages && pendingMessages.length > 0) {
+            setSendingPendingMessages(true);
+            sendNextPending();
+        } else if (pendingMessages.length === 0) {
+            setSendingPendingMessages(false);
+        }
+
+    }, [isSendingPendingMessages, pendingMessages]);
 
     useEffect(() => {
         setLoaded(false);
