@@ -1080,6 +1080,25 @@ export default function Chat(props) {
         setInput('')
     }
 
+    const uploadMedia = (file, payload, completeCallback) => {
+        uploadMediaCall(payload,
+            (response) => {
+                // Convert parameters to a ChosenFile object
+                sendFile(response.data.file, file, undefined, function () {
+                    completeCallback();
+                });
+            }, (error) => {
+                if (error.response) {
+                    if (error.response) {
+                        handleIfUnauthorized(error);
+                    }
+                }
+
+                // A retry can be considered
+                completeCallback();
+            });
+    }
+
     const sendFile = (fileURL, chosenFile, customPayload, callback) => {
         let requestBody;
 
