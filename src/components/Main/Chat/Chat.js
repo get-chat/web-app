@@ -943,6 +943,7 @@ export default function Chat(props) {
             return;
         }
 
+        // TODO: FIX: This condition breaks sending messages from queue
         if (isLoaded) {
             sendMessageCall(requestBody,
                 (response) => {
