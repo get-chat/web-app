@@ -68,24 +68,33 @@ export default function Chat(props) {
     const [pendingMessages, setPendingMessages] = useState([]);
 
     useEffect(() => {
+        // Keep state in window as a variable to have actual state in callbacks
+        window.pendingMessages = pendingMessages;
+
         console.log(isSendingPendingMessages, pendingMessages);
 
         const sendNextPending = () => {
             const firstPendingMessage = pendingMessages[0];
+
             const requestBody = firstPendingMessage.requestBody;
             const successCallback = firstPendingMessage.successCallback;
             // const errorCallback = firstPendingMessage.errorCallback;
             const completeCallback = () => {
                 console.log('Ready for next.');
+                console.log('Length when ready: ' + pendingMessages.length);
+                console.log('Length when ready window: ' + window.pendingMessages.length);
+
+                // Run original callback of sent message
                 firstPendingMessage.completeCallback?.();
 
-                // TODO: Not safe, delete by id instead
-                // TODO: Consider state changes
-                // TODO: State should be updated after deleting items
-                pendingMessages.shift();
-                if (pendingMessages.length > 0) {
-                    sendNextPending();
-                }
+                // Delete sent message from state
+                const updatedState = window.pendingMessages.filter(function(pendingMessage) {
+                    return pendingMessage.id !== firstPendingMessage.id;
+                });
+
+                // Update state after deleting sent one
+                setPendingMessages(updatedState);
+                setSendingPendingMessages(false);
             }
 
             if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
@@ -98,6 +107,8 @@ export default function Chat(props) {
         if (!isSendingPendingMessages && pendingMessages.length > 0) {
             setSendingPendingMessages(true);
             sendNextPending();
+        } else if (pendingMessages.length === 0) {
+            setSendingPendingMessages(false);
         }
 
     }, [isSendingPendingMessages, pendingMessages]);
