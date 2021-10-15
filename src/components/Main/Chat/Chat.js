@@ -73,10 +73,11 @@ export default function Chat(props) {
         const sendNextPending = () => {
             const firstPendingMessage = pendingMessages[0];
             const requestBody = firstPendingMessage.requestBody;
-            const callback = () => {
+            const successCallback = firstPendingMessage.successCallback;
+            // const errorCallback = firstPendingMessage.errorCallback;
+            const completeCallback = () => {
                 console.log('Ready for next.');
-                // TODO: This is just a success callback now, add it as a general callback
-                firstPendingMessage.callback?.();
+                firstPendingMessage.completeCallback?.();
 
                 // TODO: Not safe, delete by id instead
                 // TODO: Consider state changes
@@ -88,9 +89,9 @@ export default function Chat(props) {
             }
 
             if (!requestBody.type || requestBody.type === ChatMessageClass.TYPE_TEXT) {
-                sendMessage(false, undefined, requestBody, callback);
+                sendMessage(false, undefined, requestBody, successCallback, completeCallback);
             } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
-                sendTemplateMessage(false, undefined, requestBody, callback);
+                sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
             }
         }
 
@@ -815,12 +816,14 @@ export default function Chat(props) {
             });
     }
 
-    const queueMessage = (requestBody, callback) => {
+    const queueMessage = (requestBody, successCallback, errorCallback, completeCallback) => {
         setPendingMessages((prevState) => {
             prevState.push({
                 id: generateUniqueID(),
                 requestBody: requestBody,
-                callback: callback
+                successCallback: successCallback,
+                errorCallback: errorCallback,
+                completeCallback: completeCallback
             })
             return [...prevState];
         });
@@ -891,7 +894,7 @@ export default function Chat(props) {
         }
     }
 
-    const sendMessage = (willQueue, e, customPayload, successCallback) => {
+    const sendMessage = (willQueue, e, customPayload, successCallback, completeCallback) => {
         e?.preventDefault();
 
         // Check if has internet connection
@@ -924,7 +927,7 @@ export default function Chat(props) {
 
         // Queue message
         if (willQueue) {
-            queueMessage(requestBody, successCallback);
+            queueMessage(requestBody, successCallback, undefined, completeCallback);
             clearInput();
             return;
         }
@@ -941,6 +944,7 @@ export default function Chat(props) {
                     });*/
 
                     successCallback?.();
+                    completeCallback?.();
 
                 }, (error) => {
                     if (error.response) {
@@ -960,6 +964,8 @@ export default function Chat(props) {
 
                         handleIfUnauthorized(error);
                     }
+
+                    completeCallback?.();
                 });
 
             //clearInput();
@@ -969,7 +975,7 @@ export default function Chat(props) {
         }
     }
 
-    const sendTemplateMessage = (willQueue, templateMessage, customPayload, successCallback) => {
+    const sendTemplateMessage = (willQueue, templateMessage, customPayload, successCallback, completeCallback) => {
         let requestBody;
 
         if (customPayload) {
@@ -980,7 +986,7 @@ export default function Chat(props) {
         }
 
         if (willQueue) {
-            queueMessage(requestBody, successCallback);
+            queueMessage(requestBody, successCallback, undefined, completeCallback);
             return;
         }
 
@@ -991,6 +997,7 @@ export default function Chat(props) {
                     PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
 
                     successCallback?.();
+                    completeCallback?.();
 
                 }, (error) => {
                     if (error.response) {
@@ -1008,6 +1015,8 @@ export default function Chat(props) {
 
                         handleIfUnauthorized(error);
                     }
+
+                    completeCallback?.();
                 });
         }
     }
