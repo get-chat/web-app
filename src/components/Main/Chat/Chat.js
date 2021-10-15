@@ -145,6 +145,17 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
+        // Switching between chats (state changes of isLoaded) breaks ongoing message queues
+        // Because send message methods check if isLoaded is true before sending a message
+        // isLoaded state is set to false when loading another chat so queue stops
+        // When next chat is loaded we set (isLoaded is true again) we set setSendingPendingMessages to false to trigger queue again
+        if (isLoaded) {
+            setSendingPendingMessages(false);
+        }
+
+    }, [isLoaded])
+
+    useEffect(() => {
         // Keep state in window as a variable to have actual state in callbacks
         window.pendingMessages = pendingMessages;
 
@@ -943,7 +954,6 @@ export default function Chat(props) {
             return;
         }
 
-        // TODO: FIX: This condition breaks sending messages from queue
         if (isLoaded) {
             sendMessageCall(requestBody,
                 (response) => {
