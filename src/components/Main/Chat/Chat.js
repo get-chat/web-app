@@ -145,6 +145,7 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
+        // TODO: Make sure it doesn't duplicate ongoing requests
         // Switching between chats (state changes of isLoaded) breaks ongoing message queues
         // Because send message methods check if isLoaded is true before sending a message
         // isLoaded state is set to false when loading another chat so queue stops
