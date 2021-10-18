@@ -7,7 +7,6 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Alert} from "@material-ui/lab";
 import {VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
-import logo from '../assets/images/logo.png';
 import {baseCall, loginCall, logoutCall} from "../api/ApiCalls";
 
 const useStyles = makeStyles((theme) => ({
@@ -125,7 +124,7 @@ export default function Login(props) {
             <Fade in={true}>
                 <div className="login__body">
                     <div className="login__body__logoWrapper">
-                        <img className="login__body__logo" src={logo} alt="Logo" />
+                        <img className="login__body__logo" src={process.env.REACT_APP_LOGO_URL} alt="Logo" />
                     </div>
 
                     <h2>Welcome</h2>
