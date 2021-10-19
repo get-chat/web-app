@@ -58,6 +58,7 @@ import {
     extractTimestampFromMessage,
     messageHelper
 } from "../../../helpers/MessageHelper";
+import {isLocalHost} from "../../../helpers/URLHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1244,10 +1245,12 @@ export default function Chat(props) {
                 closeChat={closeChat} />
 
             {/* FOR TESTING QUEUE */}
-            {/*<div>
+            {isLocalHost() && pendingMessages.length > 0 &&
+            <div className="pendingMessagesIndicator">
                 <div>{isSendingPendingMessages.toString()}</div>
                 <div>{pendingMessages.length}</div>
-            </div>*/}
+            </div>
+            }
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">
