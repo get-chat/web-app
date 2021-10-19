@@ -145,18 +145,6 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
-        // TODO: Make sure it doesn't duplicate ongoing requests
-        // Switching between chats (state changes of isLoaded) breaks ongoing message queues
-        // Because send message methods check if isLoaded is true before sending a message
-        // isLoaded state is set to false when loading another chat so queue stops
-        // When next chat is loaded we set (isLoaded is true again) we set setSendingPendingMessages to false to trigger queue again
-        if (isLoaded) {
-            setSendingPendingMessages(false);
-        }
-
-    }, [isLoaded])
-
-    useEffect(() => {
         // Keep state in window as a variable to have actual state in callbacks
         window.pendingMessages = pendingMessages;
 
@@ -165,6 +153,12 @@ export default function Chat(props) {
 
         const sendNextPending = () => {
             const firstPendingMessage = pendingMessages[0];
+
+            if (!firstPendingMessage) {
+                console.warn('First pending message is empty!');
+                return;
+            }
+
             const requestBody = firstPendingMessage.requestBody;
             const successCallback = firstPendingMessage.successCallback;
             // const errorCallback = firstPendingMessage.errorCallback;
@@ -956,52 +950,56 @@ export default function Chat(props) {
 
         // Queue message
         if (willQueue) {
+            if (!isLoaded) {
+                console.warn('Cancelled sending.');
+                return;
+            }
+
             queueMessage(requestBody, successCallback, undefined, completeCallback);
             clearInput();
             return;
         }
 
-        if (isLoaded) {
-            sendMessageCall(requestBody,
-                (response) => {
-                    // TODO: Display message immediately
-                    /*const messageId = response.data?.waba_response?.messages?.[0]?.id;
-                    setMessages(prevState => {
-                        const sentMessage = new ChatMessageClass();
-                        prevState[messageId] = sentMessage;
-                        return {...prevState};
-                    });*/
+        sendMessageCall(requestBody,
+            (response) => {
+                // TODO: Display message immediately
+                /*const messageId = response.data?.waba_response?.messages?.[0]?.id;
+                setMessages(prevState => {
+                    const sentMessage = new ChatMessageClass();
+                    prevState[messageId] = sentMessage;
+                    return {...prevState};
+                });*/
 
-                    successCallback?.();
-                    completeCallback?.();
+                successCallback?.();
+                completeCallback?.();
 
-                }, (error) => {
-                    if (error.response) {
-                        const status = error.response.status;
-                        // Switch to expired mode if status code is 453
-                        if (status === 453) {
-                            setExpired(true);
-                        } else if (status === 500 || status === 502) {
-                            const isStored = status === 502;
-                            displayFailedMessage(requestBody, isStored, true);
+            }, (error) => {
+                if (error.response) {
+                    const status = error.response.status;
+                    // Switch to expired mode if status code is 453
+                    if (status === 453) {
+                        setExpired(true);
+                    } else if (status === 500 || status === 502) {
+                        const isStored = status === 502;
+                        displayFailedMessage(requestBody, isStored, true);
 
-                            // This will be used to display a warning before refreshing
-                            if (!isStored) {
-                                setHasFailedMessages(true);
-                            }
+                        // This will be used to display a warning before refreshing
+                        if (!isStored) {
+                            setHasFailedMessages(true);
                         }
-
-                        handleIfUnauthorized(error);
                     }
 
-                    completeCallback?.();
-                });
+                    handleIfUnauthorized(error);
+                }
 
-            //clearInput();
+                completeCallback?.();
+            });
 
-            // Close emoji picker
-            PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
-        }
+        //clearInput();
+
+        // Close emoji picker
+        PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
+
     }
 
     const sendTemplateMessage = (willQueue, templateMessage, customPayload, successCallback, completeCallback) => {
@@ -1015,39 +1013,42 @@ export default function Chat(props) {
         }
 
         if (willQueue) {
+            if (!isLoaded) {
+                console.warn('Cancelled sending.');
+                return;
+            }
+
             queueMessage(requestBody, successCallback, undefined, completeCallback);
             return;
         }
 
-        if (isLoaded) {
-            sendMessageCall(requestBody,
-                (response) => {
-                    // Hide dialog by this event
-                    PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
+        sendMessageCall(requestBody,
+            (response) => {
+                // Hide dialog by this event
+                PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
 
-                    successCallback?.();
-                    completeCallback?.();
+                successCallback?.();
+                completeCallback?.();
 
-                }, (error) => {
-                    if (error.response) {
-                        const errors = error.response.data?.waba_response?.errors;
-                        PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+            }, (error) => {
+                if (error.response) {
+                    const errors = error.response.data?.waba_response?.errors;
+                    PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
 
-                        const status = error.response.status;
+                    const status = error.response.status;
 
-                        if (status === 453) {
-                            setExpired(true);
-                        } else if (status === 500 || status === 502) {
-                            const isStored = status === 502;
-                            displayFailedMessage(requestBody, isStored);
-                        }
-
-                        handleIfUnauthorized(error);
+                    if (status === 453) {
+                        setExpired(true);
+                    } else if (status === 500 || status === 502) {
+                        const isStored = status === 502;
+                        displayFailedMessage(requestBody, isStored);
                     }
 
-                    completeCallback?.();
-                });
-        }
+                    handleIfUnauthorized(error);
+                }
+
+                completeCallback?.();
+            });
     }
 
     const displayFailedMessage = (requestBody, isStored, willClearInput) => {
@@ -1141,32 +1142,30 @@ export default function Chat(props) {
             }
         }
 
-        if (isLoaded) {
-            sendMessageCall(requestBody,
-                (response) => {
-                    // Send next request (or resend callback)
+        sendMessageCall(requestBody,
+            (response) => {
+                // Send next request (or resend callback)
+                completeCallback();
+            }, (error) => {
+                if (error.response) {
+                    const status = error.response.status;
+
+                    if (status === 453) {
+                        setExpired(true);
+                    } else if (status === 500 || status === 502) {
+                        const isStored = status === 502;
+                        displayFailedMessage(requestBody, isStored);
+                    }
+
+                    handleIfUnauthorized(error);
+                }
+
+                // Send next when it fails, a retry can be considered
+                // If custom payload is empty, it means it is resending, so it is just a success callback
+                if (!customPayload) {
                     completeCallback();
-                }, (error) => {
-                    if (error.response) {
-                        const status = error.response.status;
-
-                        if (status === 453) {
-                            setExpired(true);
-                        } else if (status === 500 || status === 502) {
-                            const isStored = status === 502;
-                            displayFailedMessage(requestBody, isStored);
-                        }
-
-                        handleIfUnauthorized(error);
-                    }
-
-                    // Send next when it fails, a retry can be considered
-                    // If custom payload is empty, it means it is resending, so it is just a success callback
-                    if (!customPayload) {
-                        completeCallback();
-                    }
-                });
-        }
+                }
+            });
     }
 
     const handleChosenFiles = () => {
@@ -1243,6 +1242,12 @@ export default function Chat(props) {
                 setChatAssignmentVisible={props.setChatAssignmentVisible}
                 setChatTagsVisible={props.setChatTagsVisible}
                 closeChat={closeChat} />
+
+            {/* FOR TESTING QUEUE */}
+            {/*<div>
+                <div>{isSendingPendingMessages.toString()}</div>
+                <div>{pendingMessages.length}</div>
+            </div>*/}
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">
