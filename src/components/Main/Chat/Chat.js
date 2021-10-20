@@ -2,14 +2,15 @@ import React, {useEffect, useRef, useState} from 'react'
 import '../../../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage/ChatMessage";
-import {useHistory, useLocation, useParams} from "react-router-dom";
+import {Prompt, useHistory, useLocation, useParams} from "react-router-dom";
 import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
     ATTACHMENT_TYPE_VIDEO,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CHAT_TAGGING, EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
+    EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -52,14 +53,10 @@ import {
     sendMessageCall,
     uploadMediaCall
 } from "../../../api/ApiCalls";
-import {Prompt} from 'react-router-dom';
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
-import {
-    extractTimestampFromMessage,
-    messageHelper
-} from "../../../helpers/MessageHelper";
+import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
-import {setFirstPendingMessageWillRetry, setPendingMessageFailed} from "../../../helpers/PendingMessagesHelper";
+import {setAllFailedPendingMessagesWillRetry, setPendingMessageFailed} from "../../../helpers/PendingMessagesHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -868,7 +865,7 @@ export default function Chat(props) {
 
     const resendMessage = (message) => {
         // Set all failed pending message as willRetry so queue will retry automatically
-        props.setPendingMessages([...setFirstPendingMessageWillRetry()]);
+        props.setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
 
         /*const successCallback = () => {
             // Delete message if resent successfully

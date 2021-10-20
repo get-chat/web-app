@@ -23,6 +23,7 @@ export const setPendingMessageFailed = (id) => {
     return pendingMessages;
 }
 
+// Delete if not used
 export const setPendingMessageWillRetry = (id) => {
     const pendingMessages = getPendingMessages();
     const pendingMessageIndex = findPendingMessageIndex(id);
@@ -31,6 +32,7 @@ export const setPendingMessageWillRetry = (id) => {
     return pendingMessages;
 }
 
+// Delete if not used
 export const setFirstPendingMessageWillRetry = () => {
     const pendingMessages = getPendingMessages();
     pendingMessages[0].willRetry = true;
@@ -39,7 +41,7 @@ export const setFirstPendingMessageWillRetry = () => {
     return pendingMessages;
 }
 
-export const setAllPendingMessagesWillRetry = () => {
+export const setAllFailedPendingMessagesWillRetry = () => {
     const pendingMessages = getPendingMessages();
     for (let i = 0; i < pendingMessages.length; i++) {
         if (pendingMessages[i].isFailed) {
