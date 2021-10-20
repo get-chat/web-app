@@ -155,33 +155,36 @@ export default function Chat(props) {
         console.log(isSendingPendingMessages.toString(), JSON.parse(JSON.stringify(pendingMessages)));
 
         const sendNextPending = () => {
-            const firstPendingMessage = pendingMessages[0];
+            let pendingMessageToSend;
 
-            if (!firstPendingMessage) {
-                console.warn('First pending message is empty!');
-                return;
+            for (let i = 0; i < pendingMessages.length; i++) {
+                const curPendingMessage = pendingMessages[i];
+                if (!curPendingMessage.isFailed || curPendingMessage.willRetry) {
+                    pendingMessageToSend = curPendingMessage;
+                    break;
+                }
             }
 
-            if (firstPendingMessage.isFailed && !firstPendingMessage.willRetry) {
-                console.warn('First message has failed, stopped!');
+            if (!pendingMessageToSend) {
+                console.warn('No pending messages!');
                 return;
             }
 
             // If first message exists and not failed, start sending
             props.setSendingPendingMessages(true);
 
-            const requestBody = firstPendingMessage.requestBody;
-            const successCallback = firstPendingMessage.successCallback;
-            // const errorCallback = firstPendingMessage.errorCallback;
+            const requestBody = pendingMessageToSend.requestBody;
+            const successCallback = pendingMessageToSend.successCallback;
+            // const errorCallback = pendingMessageToSend.errorCallback;
 
             // Prepare a custom callback to continue with queue after first one is sent
             const completeCallback = () => {
                 // Run original callback of sent message
-                firstPendingMessage.completeCallback?.();
+                pendingMessageToSend.completeCallback?.();
 
                 // Delete sent message from state
                 const updatedState = window.pendingMessages.filter(function(pendingMessage) {
-                    return pendingMessage.id !== firstPendingMessage.id;
+                    return pendingMessage.id !== pendingMessageToSend.id;
                 });
 
                 // Update state after deleting sent one
@@ -194,8 +197,8 @@ export default function Chat(props) {
                 sendMessage(false, undefined, requestBody, successCallback, completeCallback);
             } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
                 sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
-            } else if (firstPendingMessage.chosenFile) {
-                uploadMedia(firstPendingMessage.chosenFile, requestBody, firstPendingMessage.formData, completeCallback);
+            } else if (pendingMessageToSend.chosenFile) {
+                uploadMedia(pendingMessageToSend.chosenFile, requestBody, pendingMessageToSend.formData, completeCallback);
             }
         }
 
