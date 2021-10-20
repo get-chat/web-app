@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import '../../../styles/Chat.css'
 import {CircularProgress, Zoom} from "@material-ui/core";
 import ChatMessage from "./ChatMessage/ChatMessage";
-import {Prompt, useHistory, useLocation, useParams} from "react-router-dom";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
@@ -56,7 +56,11 @@ import {
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
 import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
-import {setAllFailedPendingMessagesWillRetry, setPendingMessageFailed} from "../../../helpers/PendingMessagesHelper";
+import {
+    hasFailedPendingMessages,
+    setAllFailedPendingMessagesWillRetry,
+    setPendingMessageFailed
+} from "../../../helpers/PendingMessagesHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -198,7 +202,7 @@ export default function Chat(props) {
         // Make sure this is the best place for it
         // If there is no failed message, update state
         // This state is used for prompting user before leaving page
-        if (!hasFailedPendingMessages()) {
+        if (!hasFailedPendingMessages(props.pendingMessages)) {
             setHasFailedMessages(false);
         }
 
@@ -1218,16 +1222,6 @@ export default function Chat(props) {
         if (error.response.status === 401) {
             clearUserSession("invalidToken", undefined, history);
         }
-    }
-
-    const hasFailedPendingMessages = () => {
-        const pendingMessages = props.pendingMessages;
-        for (let i = 0; i < pendingMessages.length; i++) {
-            // Consider willRetry additionally
-            if (pendingMessages[i].isFailed) return true;
-        }
-
-        return false;
     }
 
     const closeChat = () => {
