@@ -1339,7 +1339,7 @@ export default function Chat(props) {
 
                 {isLoaded && hasFailedPendingMessages() &&
                 <div className="chat__body__retryContainer">
-                    There are failed messages. <a onClick={resendMessage}>Click</a> to retry.
+                    Failed to send some messages. <a onClick={resendMessage}>Click</a> to retry.
                 </div>
                 }
 
