@@ -59,6 +59,7 @@ import {
     messageHelper
 } from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
+import {setPendingMessageFailed} from "../../../helpers/PendingMessagesHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -837,18 +838,24 @@ export default function Chat(props) {
     }
 
     const queueMessage = (requestBody, successCallback, errorCallback, completeCallback, formData, chosenFile) => {
-        props.setPendingMessages((prevState) => {
-            prevState.push({
-                id: generateUniqueID(),
-                requestBody: requestBody,
-                successCallback: successCallback,
-                errorCallback: errorCallback,
-                completeCallback: completeCallback,
-                formData: formData,
-                chosenFile: chosenFile
-            })
-            return [...prevState];
+        const uniqueID = generateUniqueID();
+
+        // Inject id into requestBody
+        requestBody.pendingMessageUniqueId = uniqueID;
+
+        const updatedState = window.pendingMessages;
+        updatedState.push({
+            id: uniqueID,
+            requestBody: requestBody,
+            successCallback: successCallback,
+            errorCallback: errorCallback,
+            completeCallback: completeCallback,
+            formData: formData,
+            chosenFile: chosenFile,
+            isFailed: false
         });
+
+        props.setPendingMessages([...updatedState]);
     }
 
     const resendMessage = (message) => {
@@ -961,6 +968,14 @@ export default function Chat(props) {
             return;
         }
 
+        // TODO: Remove pendingMessageUniqueId from requestBody if needed
+
+        // Testing
+        /*displayFailedMessage(requestBody, false);
+        props.setPendingMessages(setPendingMessageFailed(requestBody.pendingMessageUniqueId));
+        props.setSendingPendingMessages(false);
+        return;*/
+
         sendMessageCall(requestBody,
             (response) => {
                 // Message is stored and will be sent later
@@ -979,6 +994,10 @@ export default function Chat(props) {
                         setExpired(true);
                     } else if (status === 500) {
                         displayFailedMessage(requestBody, false);
+
+                        // Mark message in queue as failed
+                        props.setPendingMessages(setPendingMessageFailed(requestBody.pendingMessageUniqueId));
+                        props.setSendingPendingMessages(false);
 
                         // This will be used to display a warning before refreshing
                         setHasFailedMessages(true);
