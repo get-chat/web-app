@@ -156,7 +156,7 @@ export default function Chat(props) {
         console.log(isSendingPendingMessages.toString(), JSON.parse(JSON.stringify(pendingMessages)));
 
         const sendNextPending = () => {
-            let pendingMessageToSend = pickFirstPendingMessageToSend(pendingMessages);
+            const pendingMessageToSend = pickFirstPendingMessageToSend(pendingMessages);
 
             if (!pendingMessageToSend) {
                 console.warn('No pending messages!');
