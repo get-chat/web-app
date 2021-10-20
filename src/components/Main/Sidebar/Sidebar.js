@@ -517,6 +517,7 @@ function Sidebar(props) {
                             <SidebarChat
                                 key={chat[0]}
                                 chatData={chat[1]}
+                                pendingMessages={props.pendingMessages}
                                 newMessages={props.newMessages}
                                 keyword={keyword}
                                 contactProvidersData={props.contactProvidersData}
