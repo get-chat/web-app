@@ -963,13 +963,10 @@ export default function Chat(props) {
 
         sendMessageCall(requestBody,
             (response) => {
-                // TODO: Display message immediately
-                /*const messageId = response.data?.waba_response?.messages?.[0]?.id;
-                setMessages(prevState => {
-                    const sentMessage = new ChatMessageClass();
-                    prevState[messageId] = sentMessage;
-                    return {...prevState};
-                });*/
+                // Message is stored and will be sent later
+                if (response.status === 202) {
+                    displayFailedMessage(requestBody, true);
+                }
 
                 successCallback?.();
                 completeCallback?.();
@@ -980,14 +977,11 @@ export default function Chat(props) {
                     // Switch to expired mode if status code is 453
                     if (status === 453) {
                         setExpired(true);
-                    } else if (status === 500 || status === 502) {
-                        const isStored = status === 502;
-                        displayFailedMessage(requestBody, isStored, true);
+                    } else if (status === 500) {
+                        displayFailedMessage(requestBody, false);
 
                         // This will be used to display a warning before refreshing
-                        if (!isStored) {
-                            setHasFailedMessages(true);
-                        }
+                        setHasFailedMessages(true);
                     }
 
                     handleIfUnauthorized(error);
@@ -1020,13 +1014,20 @@ export default function Chat(props) {
             }
 
             queueMessage(requestBody, successCallback, undefined, completeCallback);
+
+            // Hide dialog by this event
+            // With queue feature it may take some time to be sent, so hide the dialog immediately when it's queued
+            PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
+
             return;
         }
 
         sendMessageCall(requestBody,
             (response) => {
-                // Hide dialog by this event
-                PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
+                // Message is stored and will be sent later
+                if (response.status === 202) {
+                    displayFailedMessage(requestBody, true);
+                }
 
                 successCallback?.();
                 completeCallback?.();
@@ -1040,9 +1041,9 @@ export default function Chat(props) {
 
                     if (status === 453) {
                         setExpired(true);
-                    } else if (status === 500 || status === 502) {
-                        const isStored = status === 502;
-                        displayFailedMessage(requestBody, isStored);
+                    } else if (status === 500) {
+                        displayFailedMessage(requestBody, false);
+                        setHasFailedMessages(true);
                     }
 
                     handleIfUnauthorized(error);
@@ -1050,43 +1051,6 @@ export default function Chat(props) {
 
                 completeCallback?.();
             });
-    }
-
-    const displayFailedMessage = (requestBody, isStored, willClearInput) => {
-        setMessages(prevState => {
-            let text;
-
-            if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
-                text = requestBody.text.body;
-            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
-                text = requestBody.template.name;
-            } else {
-                // File
-                text = requestBody.link;
-            }
-
-            const timestamp = generateUnixTimestamp();
-            const messageId = 'failed_' + timestamp;
-            const failedMessage = new ChatMessageClass();
-            failedMessage.id = messageId;
-            failedMessage.text = text;
-            failedMessage.isFromUs = true;
-            failedMessage.isFailed = true;
-            failedMessage.isStored = isStored;
-            failedMessage.timestamp = timestamp;
-            failedMessage.resendPayload = requestBody;
-
-            prevState[messageId] = failedMessage;
-            return {...prevState};
-        });
-
-        if (willClearInput === true) {
-            clearInput();
-        }
-    }
-
-    const clearInput = () => {
-        setInput('')
     }
 
     const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
@@ -1145,6 +1109,11 @@ export default function Chat(props) {
 
         sendMessageCall(requestBody,
             (response) => {
+                // Message is stored and will be sent later
+                if (response.status === 202) {
+                    displayFailedMessage(requestBody, true);
+                }
+
                 // Send next request (or resend callback)
                 completeCallback();
             }, (error) => {
@@ -1153,9 +1122,9 @@ export default function Chat(props) {
 
                     if (status === 453) {
                         setExpired(true);
-                    } else if (status === 500 || status === 502) {
-                        const isStored = status === 502;
-                        displayFailedMessage(requestBody, isStored);
+                    } else if (status === 500) {
+                        displayFailedMessage(requestBody, false);
+                        setHasFailedMessages(true);
                     }
 
                     handleIfUnauthorized(error);
@@ -1167,6 +1136,40 @@ export default function Chat(props) {
                     completeCallback();
                 }
             });
+    }
+
+    const displayFailedMessage = (requestBody, isStored) => {
+        setMessages(prevState => {
+            let text;
+
+            if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
+                text = requestBody.text.body;
+            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
+                text = requestBody.template.name;
+            } else {
+                // File
+                text = requestBody.link;
+            }
+
+            // TODO: Check if timestamp and id are provided when stored with response 202
+            const timestamp = generateUnixTimestamp();
+            const messageId = 'failed_' + timestamp;
+            const failedMessage = new ChatMessageClass();
+            failedMessage.id = messageId;
+            failedMessage.text = text;
+            failedMessage.isFromUs = true;
+            failedMessage.isFailed = true;
+            failedMessage.isStored = isStored;
+            failedMessage.timestamp = timestamp;
+            failedMessage.resendPayload = requestBody;
+
+            prevState[messageId] = failedMessage;
+            return {...prevState};
+        });
+    }
+
+    const clearInput = () => {
+        setInput('');
     }
 
     const handleChosenFiles = () => {
