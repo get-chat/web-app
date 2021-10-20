@@ -981,8 +981,6 @@ export default function Chat(props) {
                 completeCallback?.();
             });
 
-        //clearInput();
-
         // Close emoji picker
         PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
 
@@ -1335,7 +1333,7 @@ export default function Chat(props) {
                     )
                 }) }
 
-                {isLoaded && hasFailedPendingMessages() &&
+                {(isLoaded && hasFailedMessages) &&
                 <div className={"chat__body__retryContainer" + (props.isSendingPendingMessages ? " sending" : "")}>
                     Failed to send some messages. <a onClick={resendMessage}>Click</a> to retry.
                 </div>
