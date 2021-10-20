@@ -58,6 +58,7 @@ import {extractTimestampFromMessage, messageHelper} from "../../../helpers/Messa
 import {isLocalHost} from "../../../helpers/URLHelper";
 import {
     hasFailedPendingMessages,
+    pickFirstPendingMessageToSend,
     setAllFailedPendingMessagesWillRetry,
     setPendingMessageFailed
 } from "../../../helpers/PendingMessagesHelper";
@@ -155,15 +156,7 @@ export default function Chat(props) {
         console.log(isSendingPendingMessages.toString(), JSON.parse(JSON.stringify(pendingMessages)));
 
         const sendNextPending = () => {
-            let pendingMessageToSend;
-
-            for (let i = 0; i < pendingMessages.length; i++) {
-                const curPendingMessage = pendingMessages[i];
-                if (!curPendingMessage.isFailed || curPendingMessage.willRetry) {
-                    pendingMessageToSend = curPendingMessage;
-                    break;
-                }
-            }
+            let pendingMessageToSend = pickFirstPendingMessageToSend(pendingMessages);
 
             if (!pendingMessageToSend) {
                 console.warn('No pending messages!');
