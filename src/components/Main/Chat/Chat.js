@@ -949,13 +949,11 @@ export default function Chat(props) {
             return;
         }
 
-        // TODO: Remove pendingMessageUniqueId from requestBody if needed
-
         // Testing
-        if (Math.random() >= 0.5) {
+        /*if (Math.random() >= 0.5) {
             handleFailedMessage(requestBody);
             return;
-        }
+        }*/
 
         sendMessageCall(requestBody,
             (response) => {
