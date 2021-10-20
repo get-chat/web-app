@@ -59,7 +59,7 @@ import {
     messageHelper
 } from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
-import {setPendingMessageFailed} from "../../../helpers/PendingMessagesHelper";
+import {setFirstPendingMessageWillRetry, setPendingMessageFailed} from "../../../helpers/PendingMessagesHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -161,7 +161,7 @@ export default function Chat(props) {
                 return;
             }
 
-            if (firstPendingMessage.isFailed) {
+            if (firstPendingMessage.isFailed && !firstPendingMessage.willRetry) {
                 console.warn('First message has failed, stopped!');
                 return;
             }
@@ -859,14 +859,18 @@ export default function Chat(props) {
             completeCallback: completeCallback,
             formData: formData,
             chosenFile: chosenFile,
-            isFailed: false
+            isFailed: false,
+            willRetry: false
         });
 
         props.setPendingMessages([...updatedState]);
     }
 
     const resendMessage = (message) => {
-        const successCallback = () => {
+        // Set all failed pending message as willRetry so queue will retry automatically
+        props.setPendingMessages([...setFirstPendingMessageWillRetry()]);
+
+        /*const successCallback = () => {
             // Delete message if resent successfully
             setMessages(prevState => {
                 delete prevState[message.id];
@@ -888,9 +892,10 @@ export default function Chat(props) {
             });
         }
 
+
+
         const resendPayload = message.resendPayload;
 
-        // TODO: Make it work with queue
         if (resendPayload.type === ChatMessageClass.TYPE_TEXT || resendPayload.text) {
             sendMessage(true, undefined, resendPayload, successCallback);
         } else if (resendPayload.type === ChatMessageClass.TYPE_TEMPLATE) {
@@ -898,7 +903,7 @@ export default function Chat(props) {
         } else {
             // File
             sendFile(undefined, undefined, undefined, resendPayload, successCallback);
-        }
+        }*/
     }
 
     const sendCustomTextMessage = (text) => {
@@ -978,10 +983,12 @@ export default function Chat(props) {
         // TODO: Remove pendingMessageUniqueId from requestBody if needed
 
         // Testing
-        /*displayFailedMessage(requestBody, false);
-        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
-        props.setSendingPendingMessages(false);
-        return;*/
+        /*if (Math.random() >= 0.5) {
+            displayFailedMessage(requestBody, false);
+            props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
+            props.setSendingPendingMessages(false);
+            return;
+        }*/
 
         sendMessageCall(requestBody,
             (response) => {
