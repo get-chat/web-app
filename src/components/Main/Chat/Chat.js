@@ -981,9 +981,7 @@ export default function Chat(props) {
 
         // Testing
         /*if (Math.random() >= 0.5) {
-            displayFailedMessage(requestBody, false);
-            props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
-            props.setSendingPendingMessages(false);
+            handleSendingMessageFailed(requestBody);
             return;
         }*/
 
@@ -1004,14 +1002,7 @@ export default function Chat(props) {
                     if (status === 453) {
                         setExpired(true);
                     } else if (status === 500) {
-                        displayFailedMessage(requestBody, false);
-
-                        // Mark message in queue as failed
-                        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
-                        props.setSendingPendingMessages(false);
-
-                        // This will be used to display a warning before refreshing
-                        setHasFailedMessages(true);
+                        handleSendingMessageFailed(requestBody);
                     }
 
                     handleIfUnauthorized(error);
@@ -1072,8 +1063,7 @@ export default function Chat(props) {
                     if (status === 453) {
                         setExpired(true);
                     } else if (status === 500) {
-                        displayFailedMessage(requestBody, false);
-                        setHasFailedMessages(true);
+                        handleSendingMessageFailed(requestBody);
                     }
 
                     handleIfUnauthorized(error);
@@ -1153,8 +1143,7 @@ export default function Chat(props) {
                     if (status === 453) {
                         setExpired(true);
                     } else if (status === 500) {
-                        displayFailedMessage(requestBody, false);
-                        setHasFailedMessages(true);
+                        handleSendingMessageFailed(requestBody);
                     }
 
                     handleIfUnauthorized(error);
@@ -1196,6 +1185,17 @@ export default function Chat(props) {
             prevState[messageId] = failedMessage;
             return {...prevState};
         });
+    }
+
+    const handleSendingMessageFailed = (requestBody) => {
+        displayFailedMessage(requestBody, false);
+
+        // Mark message in queue as failed
+        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
+        props.setSendingPendingMessages(false);
+
+        // This will be used to display a warning before refreshing
+        setHasFailedMessages(true);
     }
 
     const clearInput = () => {
