@@ -151,7 +151,7 @@ export default function Chat(props) {
         window.pendingMessages = pendingMessages;
 
         // Log state changes
-        console.log(isSendingPendingMessages, pendingMessages);
+        console.log(isSendingPendingMessages.toString(), JSON.parse(JSON.stringify(pendingMessages)));
 
         const sendNextPending = () => {
             const firstPendingMessage = pendingMessages[0];
@@ -160,6 +160,14 @@ export default function Chat(props) {
                 console.warn('First pending message is empty!');
                 return;
             }
+
+            if (firstPendingMessage.isFailed) {
+                console.warn('First message has failed, stopped!');
+                return;
+            }
+
+            // If first message exists and not failed, start sending
+            props.setSendingPendingMessages(true);
 
             const requestBody = firstPendingMessage.requestBody;
             const successCallback = firstPendingMessage.successCallback;
@@ -192,7 +200,6 @@ export default function Chat(props) {
 
         // If it is not sending currently and there are pending messages
         if (!isSendingPendingMessages && pendingMessages.length > 0) {
-            props.setSendingPendingMessages(true);
             sendNextPending();
         } else if (pendingMessages.length === 0) {
             props.setSendingPendingMessages(false);
@@ -972,7 +979,7 @@ export default function Chat(props) {
 
         // Testing
         /*displayFailedMessage(requestBody, false);
-        props.setPendingMessages(setPendingMessageFailed(requestBody.pendingMessageUniqueId));
+        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
         props.setSendingPendingMessages(false);
         return;*/
 
@@ -996,7 +1003,7 @@ export default function Chat(props) {
                         displayFailedMessage(requestBody, false);
 
                         // Mark message in queue as failed
-                        props.setPendingMessages(setPendingMessageFailed(requestBody.pendingMessageUniqueId));
+                        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
                         props.setSendingPendingMessages(false);
 
                         // This will be used to display a warning before refreshing
