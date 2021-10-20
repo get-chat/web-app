@@ -195,6 +195,13 @@ export default function Chat(props) {
             }
         }
 
+        // Make sure this is the best place for it
+        // If there is no failed message, update state
+        // This state is used for prompting user before leaving page
+        if (!hasFailedPendingMessages()) {
+            setHasFailedMessages(false);
+        }
+
         // If it is not sending currently and there are pending messages
         if (!isSendingPendingMessages && pendingMessages.length > 0) {
             sendNextPending();
@@ -214,7 +221,7 @@ export default function Chat(props) {
         setSavedResponsesVisible(false);
         setAtBottom(false);
         setInput('');
-        setHasFailedMessages(false);
+        //setHasFailedMessages(false);
         setScrollButtonVisible(false);
 
         setPreviewSendMediaVisible(false);
@@ -863,44 +870,9 @@ export default function Chat(props) {
         props.setPendingMessages([...updatedState]);
     }
 
-    const resendMessage = (message) => {
+    const resendMessage = () => {
         // Set all failed pending message as willRetry so queue will retry automatically
         props.setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
-
-        /*const successCallback = () => {
-            // Delete message if resent successfully
-            setMessages(prevState => {
-                delete prevState[message.id];
-
-                // Check if there is another failed message
-                let hasAnotherFailedMessage = false;
-
-                for (let i = 0; i < getObjLength(messages); i++) {
-                    const curMessage = messages[i];
-                    if (curMessage.isFailed && !curMessage.isStored) {
-                        hasAnotherFailedMessage = true;
-                        break;
-                    }
-                }
-
-                setHasFailedMessages(hasAnotherFailedMessage);
-
-                return {...prevState};
-            });
-        }
-
-
-
-        const resendPayload = message.resendPayload;
-
-        if (resendPayload.type === ChatMessageClass.TYPE_TEXT || resendPayload.text) {
-            sendMessage(true, undefined, resendPayload, successCallback);
-        } else if (resendPayload.type === ChatMessageClass.TYPE_TEMPLATE) {
-            sendTemplateMessage(true, undefined, resendPayload, successCallback);
-        } else {
-            // File
-            sendFile(undefined, undefined, undefined, resendPayload, successCallback);
-        }*/
     }
 
     const sendCustomTextMessage = (text) => {
@@ -980,10 +952,10 @@ export default function Chat(props) {
         // TODO: Remove pendingMessageUniqueId from requestBody if needed
 
         // Testing
-        /*if (Math.random() >= 0.5) {
-            handleSendingMessageFailed(requestBody);
+        if (Math.random() >= 0.5) {
+            handleFailedMessage(requestBody);
             return;
-        }*/
+        }
 
         sendMessageCall(requestBody,
             (response) => {
@@ -1002,7 +974,7 @@ export default function Chat(props) {
                     if (status === 453) {
                         setExpired(true);
                     } else if (status === 500) {
-                        handleSendingMessageFailed(requestBody);
+                        handleFailedMessage(requestBody);
                     }
 
                     handleIfUnauthorized(error);
@@ -1063,7 +1035,7 @@ export default function Chat(props) {
                     if (status === 453) {
                         setExpired(true);
                     } else if (status === 500) {
-                        handleSendingMessageFailed(requestBody);
+                        handleFailedMessage(requestBody);
                     }
 
                     handleIfUnauthorized(error);
@@ -1143,7 +1115,7 @@ export default function Chat(props) {
                     if (status === 453) {
                         setExpired(true);
                     } else if (status === 500) {
-                        handleSendingMessageFailed(requestBody);
+                        handleFailedMessage(requestBody);
                     }
 
                     handleIfUnauthorized(error);
@@ -1187,8 +1159,8 @@ export default function Chat(props) {
         });
     }
 
-    const handleSendingMessageFailed = (requestBody) => {
-        displayFailedMessage(requestBody, false);
+    const handleFailedMessage = (requestBody) => {
+        //displayFailedMessage(requestBody, false);
 
         // Mark message in queue as failed
         props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
@@ -1252,6 +1224,16 @@ export default function Chat(props) {
         }
     }
 
+    const hasFailedPendingMessages = () => {
+        const pendingMessages = props.pendingMessages;
+        for (let i = 0; i < pendingMessages.length; i++) {
+            // Consider willRetry additionally
+            if (pendingMessages[i].isFailed) return true;
+        }
+
+        return false;
+    }
+
     const closeChat = () => {
         history.push("/main");
     }
@@ -1265,8 +1247,8 @@ export default function Chat(props) {
             onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
 
-            <Prompt when={hasFailedMessages}
-                    message={confirmationMessage} />
+            {/*<Prompt when={hasFailedMessages}
+                    message={confirmationMessage} />*/}
 
             <ChatHeader
                 person={person}
@@ -1351,9 +1333,15 @@ export default function Chat(props) {
                             onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)}
                             contactProvidersData={props.contactProvidersData}
                             retrieveContactData={props.retrieveContactData}
-                            resendMessage={(message) => resendMessage(message)} />
+                            resendMessage={resendMessage} />
                     )
                 }) }
+
+                {isLoaded && hasFailedPendingMessages() &&
+                <div className="chat__body__retryContainer">
+                    There are failed messages. <a onClick={resendMessage}>Click</a> to retry.
+                </div>
+                }
 
                 <div className="chat__body__empty" />
 
