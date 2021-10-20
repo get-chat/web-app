@@ -139,6 +139,10 @@ function SidebarChat(props) {
         return isExpired && props.bulkSendPayload?.type !== 'template';
     }
 
+    const hasFailedMessages = () => {
+
+    }
+
     return (
         <ListItem button onClick={handleClick}>
             <div

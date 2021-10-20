@@ -75,6 +75,9 @@ function Main() {
     const [users, setUsers] = useState({});
     const [isAdmin, setAdmin] = useState(false);
 
+    const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
+    const [pendingMessages, setPendingMessages] = useState([]);
+
     const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
@@ -832,6 +835,7 @@ function Main() {
                 <Sidebar
                     currentUser={currentUser}
                     isAdmin={isAdmin}
+                    pendingMessages={pendingMessages}
                     chats={chats}
                     setChats={setChats}
                     newMessages={newMessages}
@@ -860,6 +864,10 @@ function Main() {
                 {templatesReady &&
                 <Chat
                     isAdmin={isAdmin}
+                    pendingMessages={pendingMessages}
+                    setPendingMessages={setPendingMessages}
+                    isSendingPendingMessages={isSendingPendingMessages}
+                    setSendingPendingMessages={setSendingPendingMessages}
                     newMessages={newMessages}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}

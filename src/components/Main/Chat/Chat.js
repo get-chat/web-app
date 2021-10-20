@@ -65,9 +65,6 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
 
-    const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
-    const [pendingMessages, setPendingMessages] = useState([]);
-
     const messagesContainer = useRef(null);
 
     const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
@@ -146,6 +143,9 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
+        const pendingMessages = props.pendingMessages;
+        const isSendingPendingMessages = props.isSendingPendingMessages;
+
         // Keep state in window as a variable to have actual state in callbacks
         window.pendingMessages = pendingMessages;
 
@@ -175,8 +175,8 @@ export default function Chat(props) {
                 });
 
                 // Update state after deleting sent one
-                setPendingMessages(updatedState);
-                setSendingPendingMessages(false);
+                props.setPendingMessages(updatedState);
+                props.setSendingPendingMessages(false);
             }
 
             // Use proper method to send message depends on its type
@@ -191,13 +191,13 @@ export default function Chat(props) {
 
         // If it is not sending currently and there are pending messages
         if (!isSendingPendingMessages && pendingMessages.length > 0) {
-            setSendingPendingMessages(true);
+            props.setSendingPendingMessages(true);
             sendNextPending();
         } else if (pendingMessages.length === 0) {
-            setSendingPendingMessages(false);
+            props.setSendingPendingMessages(false);
         }
 
-    }, [isSendingPendingMessages, pendingMessages]);
+    }, [props.isSendingPendingMessages, props.pendingMessages]);
 
     useEffect(() => {
         setLoaded(false);
@@ -837,7 +837,7 @@ export default function Chat(props) {
     }
 
     const queueMessage = (requestBody, successCallback, errorCallback, completeCallback, formData, chosenFile) => {
-        setPendingMessages((prevState) => {
+        props.setPendingMessages((prevState) => {
             prevState.push({
                 id: generateUniqueID(),
                 requestBody: requestBody,
@@ -1248,10 +1248,10 @@ export default function Chat(props) {
                 closeChat={closeChat} />
 
             {/* FOR TESTING QUEUE */}
-            {isLocalHost() && pendingMessages.length > 0 &&
+            {isLocalHost() && props.pendingMessages.length > 0 &&
             <div className="pendingMessagesIndicator">
-                <div>{isSendingPendingMessages.toString()}</div>
-                <div>{pendingMessages.length}</div>
+                <div>{props.isSendingPendingMessages.toString()}</div>
+                <div>{props.pendingMessages.length}</div>
             </div>
             }
 
