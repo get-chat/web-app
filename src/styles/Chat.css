@@ -305,6 +305,10 @@ a.chat__document:hover {
     color: red;
 }
 
+.chat__body__retryContainer.sending {
+    opacity: 0.5;
+}
+
 .chat__body__retryContainer a {
     cursor: pointer;
     font-weight: 600 !important;
