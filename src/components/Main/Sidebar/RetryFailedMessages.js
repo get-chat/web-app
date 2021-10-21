@@ -28,7 +28,8 @@ function RetryFailedMessages(props) {
         const failedWaIds = extractFailedWaIds(props.pendingMessages);
         let namesArray = [];
         failedWaIds.forEach((waId) => {
-            namesArray.push(props.contactProvidersData[waId]?.[0]?.name ?? props.chats[waId]?.name);
+            const name = props.contactProvidersData[waId]?.[0]?.name ?? props.chats[waId]?.name;
+            namesArray.push(name ?? waId);
         });
 
         return namesArray.join(', ');
