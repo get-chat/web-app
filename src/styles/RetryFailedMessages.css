@@ -4,9 +4,10 @@
 }
 
 .retryFailedMessages {
+    background-color: red;
     font-size: 16px;
     padding: 10px 15px;
-    color: red;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .retryFailedMessages.sending {
@@ -16,5 +17,5 @@
 .retryFailedMessages a {
     cursor: pointer;
     font-weight: 600 !important;
-    color: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
 }
