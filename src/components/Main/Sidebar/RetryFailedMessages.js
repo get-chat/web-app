@@ -1,13 +1,27 @@
 import React from "react";
-import {extractFailedWaIds, setAllFailedPendingMessagesWillRetry} from "../../../helpers/PendingMessagesHelper";
+import {
+    extractFailedWaIds,
+    getFirstFailedPendingMessage,
+    setAllFailedPendingMessagesWillRetry
+} from "../../../helpers/PendingMessagesHelper";
 import '../../../styles/RetryFailedMessages.css';
 import {Alert} from "@material-ui/lab";
+import {useHistory} from "react-router-dom";
 
 function RetryFailedMessages(props) {
+
+    const history = useHistory();
 
     const resendMessage = () => {
         // Set all failed pending message as willRetry so queue will retry automatically
         props.setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
+
+        // Switch to chat of first failed message
+        const firstFailedMessage = getFirstFailedPendingMessage(props.pendingMessages);
+        const waId = firstFailedMessage.requestBody?.wa_id;
+        if (waId) {
+            history.push(`/main/chat/${waId}`);
+        }
     }
 
     const generateFailedReceiversString = () => {

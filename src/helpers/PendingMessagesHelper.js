@@ -43,10 +43,19 @@ export const hasFailedPendingMessages = (pendingMessages) => {
     return false;
 }
 
-export const pickFirstPendingMessageToSend = (pendingMessages) => {
+export const getFirstPendingMessageToSend = (pendingMessages) => {
     for (let i = 0; i < pendingMessages.length; i++) {
         const curPendingMessage = pendingMessages[i];
         if (!curPendingMessage.isFailed || curPendingMessage.willRetry) {
+            return curPendingMessage;
+        }
+    }
+}
+
+export const getFirstFailedPendingMessage = (pendingMessages) => {
+    for (let i = 0; i < pendingMessages.length; i++) {
+        const curPendingMessage = pendingMessages[i];
+        if (curPendingMessage.isFailed) {
             return curPendingMessage;
         }
     }
