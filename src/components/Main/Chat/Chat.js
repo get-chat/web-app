@@ -877,6 +877,12 @@ export default function Chat(props) {
         }
     }
 
+    const sanitizeRequestBody = (requestBody) => {
+        const sanitizedRequestBody = {...requestBody};
+        delete sanitizedRequestBody['pendingMessageUniqueId'];
+        return sanitizedRequestBody;
+    }
+
     const sendMessage = (willQueue, e, customPayload, successCallback, completeCallback) => {
         e?.preventDefault();
 
@@ -927,7 +933,7 @@ export default function Chat(props) {
             return;
         }*/
 
-        sendMessageCall(requestBody,
+        sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -983,7 +989,7 @@ export default function Chat(props) {
             return;
         }
 
-        sendMessageCall(requestBody,
+        sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1067,7 +1073,7 @@ export default function Chat(props) {
             }
         }
 
-        sendMessageCall(requestBody,
+        sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
