@@ -10,3 +10,9 @@
 .retryFailedMessages.sending {
     opacity: 0.5;
 }
+
+.retryFailedMessages__lastSendAttemptAt {
+    font-size: 12px !important;
+    margin-top: 10px;
+    opacity: 0.8;
+}

@@ -7,10 +7,13 @@ import {
 import '../../../styles/RetryFailedMessages.css';
 import {Alert} from "@material-ui/lab";
 import {useHistory} from "react-router-dom";
+import Moment from "react-moment";
 
 function RetryFailedMessages(props) {
 
     const history = useHistory();
+
+    const dateFormat = 'H:mm';
 
     const resendMessage = () => {
         // Set all failed pending message as willRetry so queue will retry automatically
@@ -42,6 +45,12 @@ function RetryFailedMessages(props) {
                 severity="error"
                 elevation={0}>
                 Failed to send messages to {generateFailedReceiversString()}. <a href="#" className="bold" onClick={resendMessage}>Click</a> to retry.<br />
+
+                {props.lastSendAttemptAt &&
+                <div className="retryFailedMessages__lastSendAttemptAt">
+                    Last attempt at: <Moment date={props.lastSendAttemptAt} format={dateFormat} />
+                </div>
+                }
             </Alert>
         </div>
     )

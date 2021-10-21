@@ -605,6 +605,7 @@ function Sidebar(props) {
                 pendingMessages={props.pendingMessages}
                 setPendingMessages={props.setPendingMessages}
                 isSendingPendingMessages={props.isSendingPendingMessages}
+                lastSendAttemptAt={props.lastSendAttemptAt}
                 contactProvidersData={props.contactProvidersData}
                 chats={props.chats} />
             }

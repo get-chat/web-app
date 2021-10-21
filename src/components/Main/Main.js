@@ -78,6 +78,7 @@ function Main() {
     const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
     const [pendingMessages, setPendingMessages] = useState([]);
     const [hasFailedMessages, setHasFailedMessages] = useState(false);
+    const [lastSendAttemptAt, setLastSendAttemptAt] = useState();
 
     const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
@@ -859,6 +860,7 @@ function Main() {
                     setPendingMessages={setPendingMessages}
                     isSendingPendingMessages={isSendingPendingMessages}
                     hasFailedMessages={hasFailedMessages}
+                    lastSendAttemptAt={lastSendAttemptAt}
                     chats={chats}
                     setChats={setChats}
                     newMessages={newMessages}
@@ -894,6 +896,8 @@ function Main() {
                     setSendingPendingMessages={setSendingPendingMessages}
                     hasFailedMessages={hasFailedMessages}
                     setHasFailedMessages={setHasFailedMessages}
+                    lastSendAttemptAt={lastSendAttemptAt}
+                    setLastSendAttemptAt={setLastSendAttemptAt}
                     newMessages={newMessages}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}

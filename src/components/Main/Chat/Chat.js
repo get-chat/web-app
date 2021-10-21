@@ -1138,6 +1138,9 @@ export default function Chat(props) {
 
         // This will be used to display a warning before refreshing
         props.setHasFailedMessages(true);
+
+        // Last attempt at
+        props.setLastSendAttemptAt(new Date());
     }
 
     const clearInput = () => {
