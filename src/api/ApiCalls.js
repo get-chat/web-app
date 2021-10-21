@@ -272,7 +272,11 @@ export const uploadMediaCall = (formData, successCallback, errorCallback) => {
             successCallback?.(response);
         })
         .catch((error) => {
-            window.displayError(error);
+            if (error?.response?.status === 413) {
+                window.displayCustomError('The media file is too big to upload!');
+            } else {
+                window.displayError(error);
+            }
             errorCallback?.(error);
         });
 }
