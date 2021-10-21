@@ -51,3 +51,16 @@ export const pickFirstPendingMessageToSend = (pendingMessages) => {
         }
     }
 }
+
+export const extractFailedWaIds = (pendingMessages) => {
+    const result = [];
+    for (let i = 0; i < pendingMessages.length; i++) {
+        const currentPendingMessage = pendingMessages[i];
+        const waId = currentPendingMessage.requestBody?.wa_id;
+        if (currentPendingMessage.isFailed && !result.includes(waId)) {
+            result.push(waId);
+        }
+    }
+
+    return result;
+}

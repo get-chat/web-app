@@ -57,6 +57,7 @@ import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/Obje
 import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
 import {
+    extractFailedWaIds,
     hasFailedPendingMessages,
     pickFirstPendingMessageToSend,
     setAllFailedPendingMessagesWillRetry,
@@ -1326,7 +1327,7 @@ export default function Chat(props) {
 
                 {(isLoaded && hasFailedMessages) &&
                 <div className={"chat__body__retryContainer" + (props.isSendingPendingMessages ? " sending" : "")}>
-                    Failed to send some messages. <a onClick={resendMessage}>Click</a> to retry.
+                    Failed to send messages to {JSON.stringify(extractFailedWaIds(props.pendingMessages))}. <a onClick={resendMessage}>Click</a> to retry.<br />
                 </div>
                 }
 
