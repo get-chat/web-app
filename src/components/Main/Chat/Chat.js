@@ -958,7 +958,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayFailedMessage(requestBody, true);
+                    displayMessageInChatByRequestBody(requestBody);
                 }
 
                 successCallback?.();
@@ -1014,7 +1014,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayFailedMessage(requestBody, true);
+                    displayMessageInChatByRequestBody(requestBody);
                 }
 
                 successCallback?.();
@@ -1098,7 +1098,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayFailedMessage(requestBody, true);
+                    displayMessageInChatByRequestBody(requestBody);
                 }
 
                 // Send next request (or resend callback)
@@ -1124,7 +1124,7 @@ export default function Chat(props) {
             });
     }
 
-    const displayFailedMessage = (requestBody, isStored) => {
+    const displayMessageInChatByRequestBody = (requestBody) => {
         setMessages(prevState => {
             let text;
 
@@ -1142,10 +1142,12 @@ export default function Chat(props) {
             const messageId = 'failed_' + timestamp;
             const failedMessage = new ChatMessageClass();
             failedMessage.id = messageId;
+            failedMessage.type = requestBody.type;
             failedMessage.text = text;
             failedMessage.isFromUs = true;
-            failedMessage.isFailed = true;
-            failedMessage.isStored = isStored;
+            failedMessage.username = props.currentUser?.username;
+            failedMessage.isFailed = false;
+            failedMessage.isStored = true;
             failedMessage.timestamp = timestamp;
             failedMessage.resendPayload = requestBody;
 
@@ -1155,7 +1157,7 @@ export default function Chat(props) {
     }
 
     const handleFailedMessage = (requestBody) => {
-        //displayFailedMessage(requestBody, false);
+        //displayMessageInChatByRequestBody(requestBody, false);
 
         // Mark message in queue as failed
         props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);

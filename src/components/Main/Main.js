@@ -864,6 +864,7 @@ function Main() {
                 {templatesReady &&
                 <Chat
                     isAdmin={isAdmin}
+                    currentUser={currentUser}
                     pendingMessages={pendingMessages}
                     setPendingMessages={setPendingMessages}
                     isSendingPendingMessages={isSendingPendingMessages}
