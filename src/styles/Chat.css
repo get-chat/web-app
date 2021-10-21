@@ -297,24 +297,6 @@ a.chat__document:hover {
     min-height: 0;
 }
 
-.chat__body__retryContainer {
-    font-size: 16px;
-    padding: 10px 15px;
-    text-align: center;
-    margin: 15px 0;
-    color: red;
-}
-
-.chat__body__retryContainer.sending {
-    opacity: 0.5;
-}
-
-.chat__body__retryContainer a {
-    cursor: pointer;
-    font-weight: 600 !important;
-    color: rgba(0, 0, 0, 0.8) !important;
-}
-
 .chat__body__empty {
     content: '';
     flex: 0 0 5px;

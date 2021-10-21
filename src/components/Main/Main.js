@@ -77,6 +77,7 @@ function Main() {
 
     const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
     const [pendingMessages, setPendingMessages] = useState([]);
+    const [hasFailedMessages, setHasFailedMessages] = useState(false);
 
     const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
@@ -119,6 +120,8 @@ function Main() {
     const history = useHistory();
     const location = useLocation();
     const query = useQuery();
+
+    const confirmationMessage = "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?";
 
     const checkIsChatOnly = () => {
         return query.get('chatonly') === '1';
@@ -531,6 +534,23 @@ function Main() {
     }, []);
 
     useEffect(() => {
+        // Window close event
+        window.addEventListener('beforeunload', alertUser);
+        return () => {
+            window.removeEventListener('beforeunload', alertUser);
+        }
+    }, [hasFailedMessages]);
+
+    const alertUser = e => {
+        if (hasFailedMessages) {
+            if (!window.confirm(confirmationMessage)) {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+    }
+
+    useEffect(() => {
         let tryLoadingTemplatesTimeoutId;
         if (isTemplatesFailed) {
             let timeout = 10000;
@@ -836,6 +856,9 @@ function Main() {
                     currentUser={currentUser}
                     isAdmin={isAdmin}
                     pendingMessages={pendingMessages}
+                    setPendingMessages={setPendingMessages}
+                    isSendingPendingMessages={isSendingPendingMessages}
+                    hasFailedMessages={hasFailedMessages}
                     chats={chats}
                     setChats={setChats}
                     newMessages={newMessages}
@@ -869,6 +892,8 @@ function Main() {
                     setPendingMessages={setPendingMessages}
                     isSendingPendingMessages={isSendingPendingMessages}
                     setSendingPendingMessages={setSendingPendingMessages}
+                    hasFailedMessages={hasFailedMessages}
+                    setHasFailedMessages={setHasFailedMessages}
                     newMessages={newMessages}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}

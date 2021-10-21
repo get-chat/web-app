@@ -47,6 +47,7 @@ import {Notifications as NotificationsIcon} from "@material-ui/icons";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {getObjLength} from "../../../helpers/ObjectHelper";
 import {getHubURL} from "../../../helpers/URLHelper";
+import RetryFailedMessages from "./RetryFailedMessages";
 
 function Sidebar(props) {
 
@@ -597,6 +598,13 @@ function Sidebar(props) {
                 onHide={() => setProfileVisible(false)}
                 displayEditBusinessProfile={displayEditBusinessProfile}
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
+            }
+
+            {props.hasFailedMessages &&
+            <RetryFailedMessages
+                pendingMessages={props.pendingMessages}
+                setPendingMessages={props.setPendingMessages}
+                isSendingPendingMessages={props.isSendingPendingMessages}/>
             }
 
             <BulkSendIndicator/>

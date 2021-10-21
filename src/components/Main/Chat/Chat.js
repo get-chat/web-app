@@ -57,10 +57,8 @@ import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/Obje
 import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
 import {
-    extractFailedWaIds,
     hasFailedPendingMessages,
     pickFirstPendingMessageToSend,
-    setAllFailedPendingMessagesWillRetry,
     setPendingMessageFailed
 } from "../../../helpers/PendingMessagesHelper";
 
@@ -82,8 +80,6 @@ export default function Chat(props) {
     const [input, setInput] = useState('');
     const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 
-    const [hasFailedMessages, setHasFailedMessages] = useState(false);
-
     const [selectedFiles, setSelectedFiles] = useState();
     const [accept, setAccept] = useState('');
 
@@ -102,8 +98,6 @@ export default function Chat(props) {
     const location = useLocation();
 
     const cancelTokenSourceRef = useRef();
-
-    const confirmationMessage = "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?";
 
     useEffect(() => {
         props.retrieveContactData(waId);
@@ -200,7 +194,7 @@ export default function Chat(props) {
         // If there is no failed message, update state
         // This state is used for prompting user before leaving page
         if (!hasFailedPendingMessages(props.pendingMessages)) {
-            setHasFailedMessages(false);
+            props.setHasFailedMessages(false);
         }
 
         // If it is not sending currently and there are pending messages
@@ -248,23 +242,6 @@ export default function Chat(props) {
             cancelTokenSourceRef.current = generateCancelToken();
         }
     }, [waId]);
-
-    useEffect(() => {
-        // Window close event
-        window.addEventListener('beforeunload', alertUser);
-        return () => {
-            window.removeEventListener('beforeunload', alertUser);
-        }
-    }, [hasFailedMessages]);
-
-    const alertUser = e => {
-        if (hasFailedMessages) {
-            if (!window.confirm(confirmationMessage)) {
-                e.preventDefault()
-                e.returnValue = ''
-            }
-        }
-    }
 
     useEffect(() => {
         props.setChosenContact(person);
@@ -870,11 +847,6 @@ export default function Chat(props) {
         props.setPendingMessages([...updatedState]);
     }
 
-    const resendMessage = () => {
-        // Set all failed pending message as willRetry so queue will retry automatically
-        props.setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
-    }
-
     const sendCustomTextMessage = (text) => {
         sendMessage(true, undefined, {
             wa_id: waId,
@@ -950,10 +922,10 @@ export default function Chat(props) {
         }
 
         // Testing
-        /*if (Math.random() >= 0.5) {
+        if (Math.random() >= 0.5) {
             handleFailedMessage(requestBody);
             return;
-        }*/
+        }
 
         sendMessageCall(requestBody,
             (response) => {
@@ -1165,7 +1137,7 @@ export default function Chat(props) {
         props.setSendingPendingMessages(false);
 
         // This will be used to display a warning before refreshing
-        setHasFailedMessages(true);
+        props.setHasFailedMessages(true);
     }
 
     const clearInput = () => {
@@ -1320,16 +1292,9 @@ export default function Chat(props) {
                             goToMessageId={goToMessageId}
                             onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)}
                             contactProvidersData={props.contactProvidersData}
-                            retrieveContactData={props.retrieveContactData}
-                            resendMessage={resendMessage} />
+                            retrieveContactData={props.retrieveContactData} />
                     )
                 }) }
-
-                {(isLoaded && hasFailedMessages) &&
-                <div className={"chat__body__retryContainer" + (props.isSendingPendingMessages ? " sending" : "")}>
-                    Failed to send messages to {JSON.stringify(extractFailedWaIds(props.pendingMessages))}. <a onClick={resendMessage}>Click</a> to retry.<br />
-                </div>
-                }
 
                 <div className="chat__body__empty" />
             </div>

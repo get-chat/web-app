@@ -1,0 +1,20 @@
+.retryFailedMessagesWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.retryFailedMessages {
+    font-size: 16px;
+    padding: 10px 15px;
+    color: red;
+}
+
+.retryFailedMessages.sending {
+    opacity: 0.5;
+}
+
+.retryFailedMessages a {
+    cursor: pointer;
+    font-weight: 600 !important;
+    color: rgba(0, 0, 0, 0.8) !important;
+}
