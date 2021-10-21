@@ -1,6 +1,7 @@
 import React from "react";
 import {extractFailedWaIds, setAllFailedPendingMessagesWillRetry} from "../../../helpers/PendingMessagesHelper";
 import '../../../styles/RetryFailedMessages.css';
+import {Alert} from "@material-ui/lab";
 
 function RetryFailedMessages(props) {
 
@@ -9,11 +10,24 @@ function RetryFailedMessages(props) {
         props.setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
     }
 
+    const generateFailedReceiversString = () => {
+        const failedWaIds = extractFailedWaIds(props.pendingMessages);
+        let namesArray = [];
+        failedWaIds.forEach((waId) => {
+            namesArray.push(props.contactProvidersData[waId]?.[0]?.name ?? props.chats[waId]?.name);
+        });
+
+        return namesArray.join(', ');
+    }
+
     return (
         <div className="retryFailedMessagesWrapper">
-            <div className={"retryFailedMessages" + (props.isSendingPendingMessages ? " sending" : "")}>
-                Failed to send messages to {JSON.stringify(extractFailedWaIds(props.pendingMessages))}. <a onClick={resendMessage}>Click</a> to retry.<br />
-            </div>
+            <Alert
+                className={"retryFailedMessages" + (props.isSendingPendingMessages ? " sending" : "")}
+                severity="error"
+                elevation={0}>
+                Failed to send messages to {generateFailedReceiversString()}. <a href="#" className="bold" onClick={resendMessage}>Click</a> to retry.<br />
+            </Alert>
         </div>
     )
 }

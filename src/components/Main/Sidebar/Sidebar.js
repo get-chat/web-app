@@ -604,7 +604,9 @@ function Sidebar(props) {
             <RetryFailedMessages
                 pendingMessages={props.pendingMessages}
                 setPendingMessages={props.setPendingMessages}
-                isSendingPendingMessages={props.isSendingPendingMessages}/>
+                isSendingPendingMessages={props.isSendingPendingMessages}
+                contactProvidersData={props.contactProvidersData}
+                chats={props.chats} />
             }
 
             <BulkSendIndicator/>
