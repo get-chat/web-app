@@ -1116,17 +1116,17 @@ export default function Chat(props) {
                 text = requestBody.link;
             }
 
-            let getChatId;
+            let getchatId;
             if (response) {
-                getChatId = response.data.id;
+                getchatId = response.data.id;
             }
 
             // TODO: Check if timestamp is provided when stored with response 202
             const timestamp = generateUnixTimestamp();
-            const messageId = 'getChatId_' + getChatId;
+            const messageId = 'getchatId_' + getchatId;
             const storedMessage = new ChatMessageClass();
             storedMessage.id = messageId;
-            storedMessage.getChatId = getChatId;
+            storedMessage.getchatId = getchatId;
             storedMessage.type = requestBody.type;
             storedMessage.text = text;
             storedMessage.isFromUs = true;
