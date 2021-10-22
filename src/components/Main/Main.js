@@ -376,6 +376,18 @@ function Main() {
                 try {
                     const data = JSON.parse(event.data);
 
+                    const extractGetchatId = (wabaId) => {
+                        const getchatPayload = data.getchat_payload;
+                        if (getchatPayload) {
+                            for (let i = 0; i < getchatPayload.length; i++) {
+                                const currentObj = getchatPayload[i];
+                                if (currentObj.waba_id === wabaId) {
+                                    return currentObj.getchat_id;
+                                }
+                            }
+                        }
+                    }
+
                     if (data.type === 'waba_webhook') {
                         const wabaPayload = data.waba_payload;
 
