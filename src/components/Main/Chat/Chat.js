@@ -340,7 +340,12 @@ export default function Chat(props) {
                     const chatMessage = message[1];
 
                     if (waId === chatMessage.waId) {
-                        preparedMessages[msgId] = chatMessage;
+                        // Check if any message is displayed with internal id
+                        // Fix duplicated messages in this way
+                        const internalIdString = chatMessage.generateInternalIdString();
+                        if (!(internalIdString in messages)) {
+                            preparedMessages[msgId] = chatMessage;
+                        }
 
                         if (!chatMessage.isFromUs) {
                             hasAnyIncomingMsg = true;
@@ -410,22 +415,32 @@ export default function Chat(props) {
 
                     Object.entries(data).forEach((status) => {
                         const statusMsgId = status[0];
+                        let wabaIdOrGetchatId = statusMsgId;
+
                         const statusObj = status[1];
 
-                        if (newState[statusMsgId]) {
+                        // Check if any message is displayed with internal id
+                        // Fix duplicated messages in this way
+                        const internalIdString = ChatMessageClass.generateInternalIdStringStatic(statusObj.getchatId);
+
+                        if (internalIdString in newState) {
+                            wabaIdOrGetchatId = internalIdString;
+                        }
+
+                        if (wabaIdOrGetchatId in newState) {
                             if (statusObj.sentTimestamp) {
                                 changedAny = true;
-                                newState[statusMsgId].sentTimestamp = statusObj.sentTimestamp;
+                                newState[wabaIdOrGetchatId].sentTimestamp = statusObj.sentTimestamp;
                             }
 
                             if (statusObj.deliveredTimestamp) {
                                 changedAny = true;
-                                newState[statusMsgId].deliveredTimestamp = statusObj.deliveredTimestamp;
+                                newState[wabaIdOrGetchatId].deliveredTimestamp = statusObj.deliveredTimestamp;
                             }
 
                             if (statusObj.readTimestamp) {
                                 changedAny = true;
-                                newState[statusMsgId].readTimestamp = statusObj.readTimestamp;
+                                newState[wabaIdOrGetchatId].readTimestamp = statusObj.readTimestamp;
                             }
                         }
                     });
@@ -718,7 +733,10 @@ export default function Chat(props) {
                 const preparedMessages = {};
                 response.data.results.reverse().forEach((message) => {
                     const prepared = new ChatMessageClass(message);
-                    preparedMessages[prepared.id] = prepared;
+                    // WABA ID is null if not sent yet
+                    // Consider switching to getchat id only
+                    const messageKey = prepared.id ?? prepared.generateInternalIdString();
+                    preparedMessages[messageKey] = prepared;
                 });
 
                 const lastMessage = getLastObject(preparedMessages);
@@ -1124,8 +1142,8 @@ export default function Chat(props) {
             // TODO: Check if timestamp is provided when stored with response 202
             const timestamp = generateUnixTimestamp();
             const storedMessage = new ChatMessageClass();
-            storedMessage.id = ChatMessageClass.generateInternalIdString(getchatId);
             storedMessage.getchatId = getchatId;
+            storedMessage.id = storedMessage.generateInternalIdString();
             storedMessage.type = requestBody.type;
             storedMessage.text = text;
             storedMessage.isFromUs = true;
