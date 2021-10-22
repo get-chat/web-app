@@ -27,6 +27,7 @@ export class ChatMessageClass {
         this.payload = payload;
 
         this.id = payload.id;
+        this.getchatId = data.id;
         this.to = payload.to;
         this.waId = data.customer_wa_id;
         this.isFromUs = data.from_us;
@@ -113,6 +114,14 @@ export class ChatMessageClass {
         message.taggingEvent = taggingEvent;
         message.timestamp = taggingEvent.timestamp;
         return message;
+    }
+
+    static generateInternalIdStringStatic(getchatId) {
+        return 'getchatId_' + getchatId;
+    }
+
+    generateInternalIdString() {
+        return ChatMessageClass.generateInternalIdStringStatic(this.getchatId);
     }
 
     getUniqueSender() {

@@ -1,5 +1,21 @@
-import {colorsObject} from "../AvatarStyles";
+let cachedColors = {};
+export const generateAvatarColor = function(name) {
+    if (!name) return;
+    if (cachedColors[name]) return cachedColors[name];
 
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let colour = '#';
+    for (let i = 0; i < 3; i++) {
+        const value = (hash >> (i * 8)) & 0xFF;
+        colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+}
+
+/*
 function hexToRgb(h) {
     return ['0x' + h[1] + h[2] | 0, '0x' + h[3] + h[4] | 0, '0x' + h[5] + h[6] | 0]
 }
@@ -8,7 +24,6 @@ function rgbToHex(r, g, b) {
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
-let cachedColors = {};
 export const generateAvatarColor = (name) => {
     if (!name) return;
     name = name?.toUpperCase();
@@ -37,4 +52,4 @@ export const generateAvatarColor = (name) => {
     cachedColors[name] = result;
 
     return result;
-}
+}*/

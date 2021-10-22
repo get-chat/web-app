@@ -9,7 +9,8 @@ import {
     ATTACHMENT_TYPE_VIDEO,
     EVENT_TOPIC_CHAT_ASSIGNMENT,
     EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-    EVENT_TOPIC_CHAT_TAGGING, EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
+    EVENT_TOPIC_CHAT_TAGGING,
+    EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_DROPPED_FILES,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
     EVENT_TOPIC_GO_TO_MSG_ID,
@@ -29,6 +30,7 @@ import moment from "moment";
 import PubSub from "pubsub-js";
 import MessageDateIndicator from "./MessageDateIndicator";
 import {
+    generateUniqueID,
     generateUnixTimestamp,
     hasInternetConnection,
     isScrollable,
@@ -51,12 +53,14 @@ import {
     sendMessageCall,
     uploadMediaCall
 } from "../../../api/ApiCalls";
-import {Prompt} from 'react-router-dom';
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
+import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
+import {isLocalHost} from "../../../helpers/URLHelper";
 import {
-    extractTimestampFromMessage,
-    messageHelper
-} from "../../../helpers/MessageHelper";
+    getFirstPendingMessageToSend,
+    hasFailedPendingMessages,
+    setPendingMessageFailed
+} from "../../../helpers/PendingMessagesHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -76,8 +80,6 @@ export default function Chat(props) {
     const [input, setInput] = useState('');
     const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 
-    const [hasFailedMessages, setHasFailedMessages] = useState(false);
-
     const [selectedFiles, setSelectedFiles] = useState();
     const [accept, setAccept] = useState('');
 
@@ -96,8 +98,6 @@ export default function Chat(props) {
     const location = useLocation();
 
     const cancelTokenSourceRef = useRef();
-
-    const confirmationMessage = "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?";
 
     useEffect(() => {
         props.retrieveContactData(waId);
@@ -141,6 +141,72 @@ export default function Chat(props) {
     }, []);
 
     useEffect(() => {
+        const pendingMessages = props.pendingMessages;
+        const isSendingPendingMessages = props.isSendingPendingMessages;
+
+        // Keep state in window as a variable to have actual state in callbacks
+        window.pendingMessages = pendingMessages;
+
+        // Log state changes
+        console.log(isSendingPendingMessages.toString(), JSON.parse(JSON.stringify(pendingMessages)));
+
+        const sendNextPending = () => {
+            const pendingMessageToSend = getFirstPendingMessageToSend(pendingMessages);
+
+            if (!pendingMessageToSend) {
+                console.warn('No pending messages!');
+                return;
+            }
+
+            // If first message exists and not failed, start sending
+            props.setSendingPendingMessages(true);
+
+            const requestBody = pendingMessageToSend.requestBody;
+            const successCallback = pendingMessageToSend.successCallback;
+            // const errorCallback = pendingMessageToSend.errorCallback;
+
+            // Prepare a custom callback to continue with queue after first one is sent
+            const completeCallback = () => {
+                // Run original callback of sent message
+                pendingMessageToSend.completeCallback?.();
+
+                // Delete sent message from state
+                const updatedState = window.pendingMessages.filter(function(pendingMessage) {
+                    return pendingMessage.id !== pendingMessageToSend.id;
+                });
+
+                // Update state after deleting sent one
+                props.setPendingMessages(updatedState);
+                props.setSendingPendingMessages(false);
+            }
+
+            // Use proper method to send message depends on its type
+            if (requestBody.type === ChatMessageClass.TYPE_TEXT) {
+                sendMessage(false, undefined, requestBody, successCallback, completeCallback);
+            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
+                sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
+            } else if (pendingMessageToSend.chosenFile) {
+                uploadMedia(pendingMessageToSend.chosenFile, requestBody, pendingMessageToSend.formData, completeCallback);
+            }
+        }
+
+        // Make sure this is the best place for it
+        // If there is no failed message, update state
+        // This state is used for prompting user before leaving page
+        if (!hasFailedPendingMessages(props.pendingMessages)) {
+            props.setHasFailedMessages(false);
+        }
+
+        // If it is not sending currently and there are pending messages
+        if (!isSendingPendingMessages && pendingMessages.length > 0) {
+            sendNextPending();
+        } else if (pendingMessages.length === 0) {
+            props.setSendingPendingMessages(false);
+        }
+
+    }, [props.isSendingPendingMessages, props.pendingMessages]);
+
+    useEffect(() => {
         setLoaded(false);
 
         // Clear values for next route
@@ -150,7 +216,6 @@ export default function Chat(props) {
         setSavedResponsesVisible(false);
         setAtBottom(false);
         setInput('');
-        setHasFailedMessages(false);
         setScrollButtonVisible(false);
 
         setPreviewSendMediaVisible(false);
@@ -177,23 +242,6 @@ export default function Chat(props) {
             cancelTokenSourceRef.current = generateCancelToken();
         }
     }, [waId]);
-
-    useEffect(() => {
-        // Window close event
-        window.addEventListener('beforeunload', alertUser);
-        return () => {
-            window.removeEventListener('beforeunload', alertUser);
-        }
-    }, [hasFailedMessages]);
-
-    const alertUser = e => {
-        if (hasFailedMessages) {
-            if (!window.confirm(confirmationMessage)) {
-                e.preventDefault()
-                e.returnValue = ''
-            }
-        }
-    }
 
     useEffect(() => {
         props.setChosenContact(person);
@@ -292,7 +340,12 @@ export default function Chat(props) {
                     const chatMessage = message[1];
 
                     if (waId === chatMessage.waId) {
-                        preparedMessages[msgId] = chatMessage;
+                        // Check if any message is displayed with internal id
+                        // Fix duplicated messages in this way
+                        const internalIdString = chatMessage.generateInternalIdString();
+                        if (!(internalIdString in messages)) {
+                            preparedMessages[msgId] = chatMessage;
+                        }
 
                         if (!chatMessage.isFromUs) {
                             hasAnyIncomingMsg = true;
@@ -362,22 +415,32 @@ export default function Chat(props) {
 
                     Object.entries(data).forEach((status) => {
                         const statusMsgId = status[0];
+                        let wabaIdOrGetchatId = statusMsgId;
+
                         const statusObj = status[1];
 
-                        if (newState[statusMsgId]) {
+                        // Check if any message is displayed with internal id
+                        // Fix duplicated messages in this way
+                        const internalIdString = ChatMessageClass.generateInternalIdStringStatic(statusObj.getchatId);
+
+                        if (internalIdString in newState) {
+                            wabaIdOrGetchatId = internalIdString;
+                        }
+
+                        if (wabaIdOrGetchatId in newState) {
                             if (statusObj.sentTimestamp) {
                                 changedAny = true;
-                                newState[statusMsgId].sentTimestamp = statusObj.sentTimestamp;
+                                newState[wabaIdOrGetchatId].sentTimestamp = statusObj.sentTimestamp;
                             }
 
                             if (statusObj.deliveredTimestamp) {
                                 changedAny = true;
-                                newState[statusMsgId].deliveredTimestamp = statusObj.deliveredTimestamp;
+                                newState[wabaIdOrGetchatId].deliveredTimestamp = statusObj.deliveredTimestamp;
                             }
 
                             if (statusObj.readTimestamp) {
                                 changedAny = true;
-                                newState[statusMsgId].readTimestamp = statusObj.readTimestamp;
+                                newState[wabaIdOrGetchatId].readTimestamp = statusObj.readTimestamp;
                             }
                         }
                     });
@@ -617,7 +680,8 @@ export default function Chat(props) {
             // Person information is loaded, now load messages
             if (loadMessages !== undefined && loadMessages === true) {
                 listMessages(true, function (preparedMessages) {
-                    setLastMessageId(getLastObject(preparedMessages)?.id);
+                    const lastPreparedMessage = getLastObject(preparedMessages);
+                    setLastMessageId(lastPreparedMessage?.id ?? lastPreparedMessage?.generateInternalIdString());
 
                     // Scroll to message if goToMessageId is defined
                     const goToMessage = location.goToMessage;
@@ -670,7 +734,10 @@ export default function Chat(props) {
                 const preparedMessages = {};
                 response.data.results.reverse().forEach((message) => {
                     const prepared = new ChatMessageClass(message);
-                    preparedMessages[prepared.id] = prepared;
+                    // WABA ID is null if not sent yet
+                    // Consider switching to getchat id only
+                    const messageKey = prepared.id ?? prepared.generateInternalIdString();
+                    preparedMessages[messageKey] = prepared;
                 });
 
                 const lastMessage = getLastObject(preparedMessages);
@@ -777,43 +844,30 @@ export default function Chat(props) {
             });
     }
 
-    const resendMessage = (message) => {
-        const successCallback = () => {
-            // Delete message if resent successfully
-            setMessages(prevState => {
-                delete prevState[message.id];
+    const queueMessage = (requestBody, successCallback, errorCallback, completeCallback, formData, chosenFile) => {
+        const uniqueID = generateUniqueID();
 
-                // Check if there is another failed message
-                let hasAnotherFailedMessage = false;
+        // Inject id into requestBody
+        requestBody.pendingMessageUniqueId = uniqueID;
 
-                for (let i = 0; i < getObjLength(messages); i++) {
-                    const curMessage = messages[i];
-                    if (curMessage.isFailed && !curMessage.isStored) {
-                        hasAnotherFailedMessage = true;
-                        break;
-                    }
-                }
+        const updatedState = window.pendingMessages;
+        updatedState.push({
+            id: uniqueID,
+            requestBody: requestBody,
+            successCallback: successCallback,
+            errorCallback: errorCallback,
+            completeCallback: completeCallback,
+            formData: formData,
+            chosenFile: chosenFile,
+            isFailed: false,
+            willRetry: false
+        });
 
-                setHasFailedMessages(hasAnotherFailedMessage);
-
-                return {...prevState};
-            });
-        }
-
-        const resendPayload = message.resendPayload;
-
-        if (resendPayload.type === ChatMessageClass.TYPE_TEXT || resendPayload.text) {
-            sendMessage(undefined, resendPayload, successCallback);
-        } else if (resendPayload.type === ChatMessageClass.TYPE_TEMPLATE) {
-            sendTemplateMessage(undefined, resendPayload, successCallback);
-        } else {
-            // File
-            sendFile(undefined, undefined, resendPayload, successCallback);
-        }
+        props.setPendingMessages([...updatedState]);
     }
 
     const sendCustomTextMessage = (text) => {
-        sendMessage(undefined, {
+        sendMessage(true, undefined, {
             wa_id: waId,
             text: {
                 body: text.trim()
@@ -827,7 +881,7 @@ export default function Chat(props) {
         if (type === ChatMessageClass.TYPE_TEXT) {
             const preparedInput = translateHTMLInputToText(input).trim();
             payload = {
-                type: "text",
+                type: ChatMessageClass.TYPE_TEXT,
                 text: {
                     body: preparedInput
                 }
@@ -842,7 +896,13 @@ export default function Chat(props) {
         }
     }
 
-    const sendMessage = (e, customPayload, callback) => {
+    const sanitizeRequestBody = (requestBody) => {
+        const sanitizedRequestBody = {...requestBody};
+        delete sanitizedRequestBody['pendingMessageUniqueId'];
+        return sanitizedRequestBody;
+    }
+
+    const sendMessage = (willQueue, e, customPayload, successCallback, completeCallback) => {
         e?.preventDefault();
 
         // Check if has internet connection
@@ -864,6 +924,7 @@ export default function Chat(props) {
 
             requestBody = {
                 wa_id: waId,
+                type: ChatMessageClass.TYPE_TEXT,
                 text: {
                     body: preparedInput
                 }
@@ -873,48 +934,56 @@ export default function Chat(props) {
             requestBody = customPayload;
         }
 
-        if (isLoaded) {
-            sendMessageCall(requestBody,
-                (response) => {
-                    // TODO: Display message immediately
-                    /*const messageId = response.data?.waba_response?.messages?.[0]?.id;
-                    setMessages(prevState => {
-                        const sentMessage = new ChatMessageClass();
-                        prevState[messageId] = sentMessage;
-                        return {...prevState};
-                    });*/
+        // Queue message
+        if (willQueue) {
+            if (!isLoaded) {
+                console.warn('Cancelled sending.');
+                return;
+            }
 
-                    if (callback) {
-                        callback();
-                    }
-                }, (error) => {
-                    if (error.response) {
-                        const status = error.response.status;
-                        // Switch to expired mode if status code is 453
-                        if (status === 453) {
-                            setExpired(true);
-                        } else if (status === 500 || status === 502) {
-                            const isStored = status === 502;
-                            displayFailedMessage(requestBody, isStored, true);
-
-                            // This will be used to display a warning before refreshing
-                            if (!isStored) {
-                                setHasFailedMessages(true);
-                            }
-                        }
-
-                        handleIfUnauthorized(error);
-                    }
-                });
-
+            queueMessage(requestBody, successCallback, undefined, completeCallback);
             clearInput();
-
-            // Close emoji picker
-            PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
+            return;
         }
+
+        // Testing
+        /*if (Math.random() >= 0.5) {
+            handleFailedMessage(requestBody);
+            return;
+        }*/
+
+        sendMessageCall(sanitizeRequestBody(requestBody),
+            (response) => {
+                // Message is stored and will be sent later
+                if (response.status === 202) {
+                    displayMessageInChatManually(requestBody, response);
+                }
+
+                successCallback?.();
+                completeCallback?.();
+
+            }, (error) => {
+                if (error.response) {
+                    const status = error.response.status;
+                    // Switch to expired mode if status code is 453
+                    if (status === 453) {
+                        setExpired(true);
+                    } else if (status >= 500) {
+                        handleFailedMessage(requestBody);
+                    }
+
+                    handleIfUnauthorized(error);
+                }
+
+                completeCallback?.();
+            });
+
+        // Close emoji picker
+        PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
+
     }
 
-    const sendTemplateMessage = (templateMessage, customPayload, callback) => {
+    const sendTemplateMessage = (willQueue, templateMessage, customPayload, successCallback, completeCallback) => {
         let requestBody;
 
         if (customPayload) {
@@ -924,73 +993,76 @@ export default function Chat(props) {
             requestBody.wa_id = waId;
         }
 
-        if (isLoaded) {
-            sendMessageCall(requestBody,
-                (response) => {
-                    // Hide dialog by this event
-                    PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
-
-                    if (callback) {
-                        callback();
-                    }
-                }, (error) => {
-                    if (error.response) {
-                        const errors = error.response.data?.waba_response?.errors;
-                        PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
-
-                        const status = error.response.status;
-
-                        if (status === 453) {
-                            setExpired(true);
-                        } else if (status === 500 || status === 502) {
-                            const isStored = status === 502;
-                            displayFailedMessage(requestBody, isStored);
-                        }
-
-                        handleIfUnauthorized(error);
-                    }
-                });
-        }
-    }
-
-    const displayFailedMessage = (requestBody, isStored, willClearInput) => {
-        setMessages(prevState => {
-            let text;
-
-            if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
-                text = requestBody.text.body;
-            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
-                text = requestBody.template.name;
-            } else {
-                // File
-                text = requestBody.link;
+        if (willQueue) {
+            if (!isLoaded) {
+                console.warn('Cancelled sending.');
+                return;
             }
 
-            const timestamp = generateUnixTimestamp();
-            const messageId = 'failed_' + timestamp;
-            const failedMessage = new ChatMessageClass();
-            failedMessage.id = messageId;
-            failedMessage.text = text;
-            failedMessage.isFromUs = true;
-            failedMessage.isFailed = true;
-            failedMessage.isStored = isStored;
-            failedMessage.timestamp = timestamp;
-            failedMessage.resendPayload = requestBody;
+            queueMessage(requestBody, successCallback, undefined, completeCallback);
 
-            prevState[messageId] = failedMessage;
-            return {...prevState};
-        });
+            // Hide dialog by this event
+            // With queue feature it may take some time to be sent, so hide the dialog immediately when it's queued
+            PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
 
-        if (willClearInput === true) {
-            clearInput();
+            return;
         }
+
+        sendMessageCall(sanitizeRequestBody(requestBody),
+            (response) => {
+                // Message is stored and will be sent later
+                if (response.status === 202) {
+                    displayMessageInChatManually(requestBody, response);
+                }
+
+                successCallback?.();
+                completeCallback?.();
+
+            }, (error) => {
+                if (error.response) {
+                    const errors = error.response.data?.waba_response?.errors;
+                    PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+
+                    const status = error.response.status;
+
+                    if (status === 453) {
+                        setExpired(true);
+                    } else if (status >= 500) {
+                        handleFailedMessage(requestBody);
+                    }
+
+                    handleIfUnauthorized(error);
+                }
+
+                completeCallback?.();
+            });
     }
 
-    const clearInput = () => {
-        setInput('')
+    const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
+        // To display a progress
+        props.setUploadingMedia(true);
+
+        uploadMediaCall(formData,
+            (response) => {
+                // Convert parameters to a ChosenFile object
+                sendFile(payload?.wa_id, response.data.file, chosenFile, undefined, function () {
+                    completeCallback();
+                    props.setUploadingMedia(false);
+                });
+            }, (error) => {
+                if (error.response) {
+                    if (error.response) {
+                        handleIfUnauthorized(error);
+                    }
+                }
+
+                // A retry can be considered
+                completeCallback();
+                props.setUploadingMedia(false);
+            });
     }
 
-    const sendFile = (fileURL, chosenFile, customPayload, callback) => {
+    const sendFile = (receiverWaId, fileURL, chosenFile, customPayload, completeCallback) => {
         let requestBody;
 
         if (customPayload) {
@@ -1003,9 +1075,9 @@ export default function Chat(props) {
             const mimeType = file.type;
 
             requestBody = {
-                wa_id: waId,
+                wa_id: receiverWaId,
                 recipient_type: 'individual',
-                to: waId,
+                to: receiverWaId,
                 type: type
             };
 
@@ -1025,32 +1097,89 @@ export default function Chat(props) {
             }
         }
 
-        if (isLoaded) {
-            sendMessageCall(requestBody,
-                (response) => {
-                    // Send next request (or resend callback)
-                    callback();
-                }, (error) => {
-                    if (error.response) {
-                        const status = error.response.status;
+        sendMessageCall(sanitizeRequestBody(requestBody),
+            (response) => {
+                // Message is stored and will be sent later
+                if (response.status === 202) {
+                    displayMessageInChatManually(requestBody, response);
+                }
 
-                        if (status === 453) {
-                            setExpired(true);
-                        } else if (status === 500 || status === 502) {
-                            const isStored = status === 502;
-                            displayFailedMessage(requestBody, isStored);
-                        }
+                // Send next request (or resend callback)
+                completeCallback();
+            }, (error) => {
+                if (error.response) {
+                    const status = error.response.status;
 
-                        handleIfUnauthorized(error);
+                    if (status === 453) {
+                        setExpired(true);
+                    } else if (status >= 500) {
+                        handleFailedMessage(requestBody);
                     }
 
-                    // Send next when it fails, a retry can be considered
-                    // If custom payload is empty, it means it is resending, so it is just a success callback
-                    if (!customPayload) {
-                        callback();
-                    }
-                });
-        }
+                    handleIfUnauthorized(error);
+                }
+
+                // Send next when it fails, a retry can be considered
+                // If custom payload is empty, it means it is resending, so it is just a success callback
+                if (!customPayload) {
+                    completeCallback();
+                }
+            });
+    }
+
+    const displayMessageInChatManually = (requestBody, response) => {
+        setMessages(prevState => {
+            let text;
+
+            if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
+                text = requestBody.text.body;
+            } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
+                text = requestBody.template.name;
+            } else {
+                // File
+                text = requestBody.link;
+            }
+
+            let getchatId;
+            if (response) {
+                getchatId = response.data.id;
+            }
+
+            // TODO: Check if timestamp is provided when stored with response 202
+            const timestamp = generateUnixTimestamp();
+            const storedMessage = new ChatMessageClass();
+            storedMessage.getchatId = getchatId;
+            storedMessage.id = storedMessage.generateInternalIdString();
+            storedMessage.type = requestBody.type;
+            storedMessage.text = text;
+            storedMessage.isFromUs = true;
+            storedMessage.username = props.currentUser?.username;
+            storedMessage.isFailed = false;
+            storedMessage.isStored = true;
+            storedMessage.timestamp = timestamp;
+            storedMessage.resendPayload = requestBody;
+
+            prevState[storedMessage.id] = storedMessage;
+            return {...prevState};
+        });
+    }
+
+    const handleFailedMessage = (requestBody) => {
+        //displayMessageInChatManually(requestBody, false);
+
+        // Mark message in queue as failed
+        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
+        props.setSendingPendingMessages(false);
+
+        // This will be used to display a warning before refreshing
+        props.setHasFailedMessages(true);
+
+        // Last attempt at
+        props.setLastSendAttemptAt(new Date());
+    }
+
+    const clearInput = () => {
+        setInput('');
     }
 
     const handleChosenFiles = () => {
@@ -1064,9 +1193,7 @@ export default function Chat(props) {
 
     const sendHandledChosenFiles = (preparedFiles) => {
         if (isLoaded && preparedFiles) {
-            const requests = [];
-
-            // Sending all files in a loop
+            // Prepare and queue uploading and sending processes
             Object.entries(preparedFiles).forEach((curFile) => {
                 const curChosenFile = curFile[1];
                 const file = curChosenFile.file;
@@ -1074,42 +1201,12 @@ export default function Chat(props) {
                 const formData = new FormData();
                 formData.append("file_encoded", file);
 
-                requests.push({
-                    formData: formData,
-                    chosenFile: curChosenFile
-                });
-            });
-
-            let requestIndex = 0;
-
-            const sendRequest = (request) => {
-                const sendNextRequest = () => {
-                    requestIndex++;
-                    const nextRequest = requests[requestIndex];
-                    if (nextRequest) {
-                        sendRequest(nextRequest);
-                    }
+                const requestBody = {
+                    wa_id: waId
                 }
 
-                uploadMediaCall(request.formData,
-                    (response) => {
-                        // Convert parameters to a ChosenFile object
-                        sendFile(response.data.file, request.chosenFile, undefined, function () {
-                            sendNextRequest();
-                        });
-                    }, (error) => {
-                        if (error.response) {
-                            if (error.response) {
-                                handleIfUnauthorized(error);
-                            }
-                        }
-
-                        // Send next when it fails, a retry can be considered
-                        sendNextRequest();
-                    });
-            }
-
-            sendRequest(requests[requestIndex]);
+                queueMessage(requestBody, undefined, undefined, undefined, formData, curChosenFile);
+            });
         }
     }
 
@@ -1148,8 +1245,8 @@ export default function Chat(props) {
             onDrop={(event) => handleDrop(event)}
             onDragOver={(event) => handleDragOver(event)}>
 
-            <Prompt when={hasFailedMessages}
-                    message={confirmationMessage} />
+            {/*<Prompt when={hasFailedMessages}
+                    message={confirmationMessage} />*/}
 
             <ChatHeader
                 person={person}
@@ -1159,6 +1256,14 @@ export default function Chat(props) {
                 setChatAssignmentVisible={props.setChatAssignmentVisible}
                 setChatTagsVisible={props.setChatTagsVisible}
                 closeChat={closeChat} />
+
+            {/* FOR TESTING QUEUE */}
+            {isLocalHost() && props.pendingMessages.length > 0 &&
+            <div className="pendingMessagesIndicator">
+                <div>{props.isSendingPendingMessages.toString()}</div>
+                <div>{props.pendingMessages.length}</div>
+            </div>
+            }
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
                 <div className="chat__body__dateIndicator">
@@ -1225,13 +1330,11 @@ export default function Chat(props) {
                             goToMessageId={goToMessageId}
                             onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)}
                             contactProvidersData={props.contactProvidersData}
-                            retrieveContactData={props.retrieveContactData}
-                            resendMessage={(message) => resendMessage(message)} />
+                            retrieveContactData={props.retrieveContactData} />
                     )
                 }) }
 
                 <div className="chat__body__empty" />
-
             </div>
 
             <ChatFooter
@@ -1240,7 +1343,7 @@ export default function Chat(props) {
                 isExpired={isExpired}
                 input={input}
                 setInput={setInput}
-                sendMessage={sendMessage}
+                sendMessage={(e) => sendMessage(true, e)}
                 bulkSendMessage={bulkSendMessage}
                 setSelectedFiles={setSelectedFiles}
                 isTemplateMessagesVisible={isTemplateMessagesVisible}
@@ -1258,7 +1361,7 @@ export default function Chat(props) {
             <TemplateMessages
                 waId={waId}
                 templatesData={props.templates}
-                onSend={(templateMessage) => sendTemplateMessage(templateMessage)}
+                onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
                 onBulkSend={bulkSendMessage}
                 isTemplatesFailed={props.isTemplatesFailed}
                 isLoadingTemplates={props.isLoadingTemplates} />

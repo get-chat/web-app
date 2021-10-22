@@ -488,6 +488,18 @@ a.chat__document:hover {
     color: rgba(0, 0, 0, 0.6);
 }
 
+.pendingMessagesIndicator {
+    position: absolute;
+    top: 75px;
+    left: 20px;
+    z-index: 5;
+    font-size: 12px;
+    border-radius: 10px;
+    background-color: white;
+    padding: 6px 10px;
+    box-shadow: -1px 4px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
 @media only screen and (max-width: 750px) {
     .chat {
         position: absolute;

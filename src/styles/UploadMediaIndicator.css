@@ -1,0 +1,9 @@
+.uploadingMediaIndicatorWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.uploadingMediaIndicator .MuiLinearProgress-root {
+    height: 3px;
+    margin-top: 10px;
+}

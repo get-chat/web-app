@@ -135,3 +135,7 @@ export const sanitize = (dirty) => {
     const sanitizer = dompurify.sanitize;
     return sanitizer(dirty);
 }
+
+export const generateUniqueID = () => {
+    return `${Date.now()}-${Math.floor(Math.random() * (9e12 - 1)) + 1e12}`;
+}

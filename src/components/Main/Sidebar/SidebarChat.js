@@ -4,6 +4,7 @@ import {Avatar, Checkbox, ListItem, Tooltip} from "@material-ui/core";
 import {useHistory, useParams} from "react-router-dom";
 import LabelIcon from '@material-ui/icons/Label';
 import GroupIcon from '@material-ui/icons/Group';
+import WarningIcon from '@material-ui/icons/Warning';
 import Moment from "react-moment";
 import moment from "moment";
 import {
@@ -139,6 +140,15 @@ function SidebarChat(props) {
         return isExpired && props.bulkSendPayload?.type !== 'template';
     }
 
+    const hasFailedMessages = () => {
+        let result = false;
+        props.pendingMessages.forEach((pendingMessage) => {
+            if (pendingMessage.requestBody?.wa_id === props.chatData.waId && pendingMessage.isFailed === true) result = true;
+        });
+
+        return result;
+    }
+
     return (
         <ListItem button onClick={handleClick}>
             <div
@@ -180,7 +190,7 @@ function SidebarChat(props) {
                         &&
                         <Tooltip title={props.chatData.generateAssignmentInformation()}>
                             <Avatar className="sidebarChat__avatarWrapper__assignee"
-                                style={{backgroundColor: generateAvatarColor(props.chatData.assignedGroup?.name)}}>
+                                    style={{backgroundColor: generateAvatarColor(props.chatData.assignedGroup?.name)}}>
                                 <GroupIcon />
                             </Avatar>
                         </Tooltip>
@@ -242,6 +252,14 @@ function SidebarChat(props) {
                 </div>
 
                 <span className="sidebarChatWrapper__waId">{addPlus(props.chatData.waId)}</span>
+
+                {hasFailedMessages() &&
+                <div className="sidebarChat__failedMessagesIndicator">
+                    <Tooltip title="This chat has failed messages!">
+                        <WarningIcon />
+                    </Tooltip>
+                </div>
+                }
 
             </div>
         </ListItem>

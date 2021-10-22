@@ -75,6 +75,13 @@ function Main() {
     const [users, setUsers] = useState({});
     const [isAdmin, setAdmin] = useState(false);
 
+    const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
+    const [pendingMessages, setPendingMessages] = useState([]);
+    const [hasFailedMessages, setHasFailedMessages] = useState(false);
+    const [lastSendAttemptAt, setLastSendAttemptAt] = useState();
+
+    const [isUploadingMedia, setUploadingMedia] = useState(false);
+
     const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
@@ -116,6 +123,8 @@ function Main() {
     const history = useHistory();
     const location = useLocation();
     const query = useQuery();
+
+    const confirmationMessage = "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?";
 
     const checkIsChatOnly = () => {
         return query.get('chatonly') === '1';
@@ -410,6 +419,9 @@ function Main() {
                                     preparedStatuses[statusObj.id] = {};
                                 }
 
+                                // Inject getchat id to avoid duplicated messages
+                                preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
+
                                 if (statusObj.status === 'sent') {
                                     preparedStatuses[statusObj.id].sentTimestamp = statusObj.timestamp;
                                 }
@@ -526,6 +538,23 @@ function Main() {
             ws.close(CODE_NORMAL);
         }
     }, []);
+
+    useEffect(() => {
+        // Window close event
+        window.addEventListener('beforeunload', alertUser);
+        return () => {
+            window.removeEventListener('beforeunload', alertUser);
+        }
+    }, [hasFailedMessages]);
+
+    const alertUser = e => {
+        if (hasFailedMessages) {
+            if (!window.confirm(confirmationMessage)) {
+                e.preventDefault()
+                e.returnValue = ''
+            }
+        }
+    }
 
     useEffect(() => {
         let tryLoadingTemplatesTimeoutId;
@@ -811,7 +840,7 @@ function Main() {
             // Chain
             callback();
         }, (error) => {
-            if (error?.response?.status === 500) {
+            if (error?.response?.status >= 500) {
                 // Continue with chain, in case contact provider data can not be loaded
                 callback();
             }
@@ -832,6 +861,12 @@ function Main() {
                 <Sidebar
                     currentUser={currentUser}
                     isAdmin={isAdmin}
+                    pendingMessages={pendingMessages}
+                    setPendingMessages={setPendingMessages}
+                    isSendingPendingMessages={isSendingPendingMessages}
+                    hasFailedMessages={hasFailedMessages}
+                    lastSendAttemptAt={lastSendAttemptAt}
+                    isUploadingMedia={isUploadingMedia}
                     chats={chats}
                     setChats={setChats}
                     newMessages={newMessages}
@@ -860,6 +895,17 @@ function Main() {
                 {templatesReady &&
                 <Chat
                     isAdmin={isAdmin}
+                    currentUser={currentUser}
+                    pendingMessages={pendingMessages}
+                    setPendingMessages={setPendingMessages}
+                    isSendingPendingMessages={isSendingPendingMessages}
+                    setSendingPendingMessages={setSendingPendingMessages}
+                    hasFailedMessages={hasFailedMessages}
+                    setHasFailedMessages={setHasFailedMessages}
+                    lastSendAttemptAt={lastSendAttemptAt}
+                    setLastSendAttemptAt={setLastSendAttemptAt}
+                    isUploadingMedia={isUploadingMedia}
+                    setUploadingMedia={setUploadingMedia}
                     newMessages={newMessages}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
