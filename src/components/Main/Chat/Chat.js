@@ -937,7 +937,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayMessageInChatByRequestBody(requestBody);
+                    displayMessageInChatByRequestBody(requestBody, response);
                 }
 
                 successCallback?.();
@@ -993,7 +993,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayMessageInChatByRequestBody(requestBody);
+                    displayMessageInChatByRequestBody(requestBody, response);
                 }
 
                 successCallback?.();
@@ -1077,7 +1077,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayMessageInChatByRequestBody(requestBody);
+                    displayMessageInChatByRequestBody(requestBody, response);
                 }
 
                 // Send next request (or resend callback)
@@ -1103,7 +1103,7 @@ export default function Chat(props) {
             });
     }
 
-    const displayMessageInChatByRequestBody = (requestBody) => {
+    const displayMessageInChatByRequestBody = (requestBody, response) => {
         setMessages(prevState => {
             let text;
 
@@ -1116,21 +1116,27 @@ export default function Chat(props) {
                 text = requestBody.link;
             }
 
-            // TODO: Check if timestamp and id are provided when stored with response 202
-            const timestamp = generateUnixTimestamp();
-            const messageId = 'failed_' + timestamp;
-            const failedMessage = new ChatMessageClass();
-            failedMessage.id = messageId;
-            failedMessage.type = requestBody.type;
-            failedMessage.text = text;
-            failedMessage.isFromUs = true;
-            failedMessage.username = props.currentUser?.username;
-            failedMessage.isFailed = false;
-            failedMessage.isStored = true;
-            failedMessage.timestamp = timestamp;
-            failedMessage.resendPayload = requestBody;
+            let getChatId;
+            if (response) {
+                getChatId = response.data.id;
+            }
 
-            prevState[messageId] = failedMessage;
+            // TODO: Check if timestamp is provided when stored with response 202
+            const timestamp = generateUnixTimestamp();
+            const messageId = 'getChatId_' + getChatId;
+            const storedMessage = new ChatMessageClass();
+            storedMessage.id = messageId;
+            storedMessage.getChatId = getChatId;
+            storedMessage.type = requestBody.type;
+            storedMessage.text = text;
+            storedMessage.isFromUs = true;
+            storedMessage.username = props.currentUser?.username;
+            storedMessage.isFailed = false;
+            storedMessage.isStored = true;
+            storedMessage.timestamp = timestamp;
+            storedMessage.resendPayload = requestBody;
+
+            prevState[messageId] = storedMessage;
             return {...prevState};
         });
     }
