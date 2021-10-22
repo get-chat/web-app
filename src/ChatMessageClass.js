@@ -98,6 +98,10 @@ export class ChatMessageClass {
         this.caption = sanitize(this.caption);
     }
 
+    static generateInternalIdString(getchatId) {
+        return 'getchatId_' + getchatId;
+    }
+
     static fromAssignmentEvent(assignmentEvent) {
         const message = new ChatMessageClass();
         message.id = 'assignmentEvent_' + assignmentEvent.timestamp;

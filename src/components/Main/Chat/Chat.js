@@ -937,7 +937,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayMessageInChatByRequestBody(requestBody, response);
+                    displayMessageInChatManually(requestBody, response);
                 }
 
                 successCallback?.();
@@ -993,7 +993,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayMessageInChatByRequestBody(requestBody, response);
+                    displayMessageInChatManually(requestBody, response);
                 }
 
                 successCallback?.();
@@ -1077,7 +1077,7 @@ export default function Chat(props) {
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
-                    displayMessageInChatByRequestBody(requestBody, response);
+                    displayMessageInChatManually(requestBody, response);
                 }
 
                 // Send next request (or resend callback)
@@ -1103,7 +1103,7 @@ export default function Chat(props) {
             });
     }
 
-    const displayMessageInChatByRequestBody = (requestBody, response) => {
+    const displayMessageInChatManually = (requestBody, response) => {
         setMessages(prevState => {
             let text;
 
@@ -1123,9 +1123,8 @@ export default function Chat(props) {
 
             // TODO: Check if timestamp is provided when stored with response 202
             const timestamp = generateUnixTimestamp();
-            const messageId = 'getchatId_' + getchatId;
             const storedMessage = new ChatMessageClass();
-            storedMessage.id = messageId;
+            storedMessage.id = ChatMessageClass.generateInternalIdString(getchatId);
             storedMessage.getchatId = getchatId;
             storedMessage.type = requestBody.type;
             storedMessage.text = text;
@@ -1136,13 +1135,13 @@ export default function Chat(props) {
             storedMessage.timestamp = timestamp;
             storedMessage.resendPayload = requestBody;
 
-            prevState[messageId] = storedMessage;
+            prevState[storedMessage.id] = storedMessage;
             return {...prevState};
         });
     }
 
     const handleFailedMessage = (requestBody) => {
-        //displayMessageInChatByRequestBody(requestBody, false);
+        //displayMessageInChatManually(requestBody, false);
 
         // Mark message in queue as failed
         props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
