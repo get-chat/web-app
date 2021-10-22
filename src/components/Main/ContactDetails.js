@@ -28,10 +28,10 @@ function ContactDetails(props)  {
 
     useEffect(() => {
         props.retrieveContactData(props.contactData.waId);
-        setChat(getChatByWaId());
+        setChat(findChatByWaId());
     }, []);
 
-    const getChatByWaId = () => {
+    const findChatByWaId = () => {
         const waId = props.contactData.waId;
         return props.chats[waId];
     }
