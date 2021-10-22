@@ -866,6 +866,7 @@ function Main() {
                     isSendingPendingMessages={isSendingPendingMessages}
                     hasFailedMessages={hasFailedMessages}
                     lastSendAttemptAt={lastSendAttemptAt}
+                    isUploadingMedia={isUploadingMedia}
                     chats={chats}
                     setChats={setChats}
                     newMessages={newMessages}

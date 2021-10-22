@@ -48,6 +48,7 @@ import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {getObjLength} from "../../../helpers/ObjectHelper";
 import {getHubURL} from "../../../helpers/URLHelper";
 import RetryFailedMessages from "./RetryFailedMessages";
+import UploadMediaIndicator from "./UploadMediaIndicator";
 
 function Sidebar(props) {
 
@@ -598,6 +599,10 @@ function Sidebar(props) {
                 onHide={() => setProfileVisible(false)}
                 displayEditBusinessProfile={displayEditBusinessProfile}
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
+            }
+
+            {props.isUploadingMedia &&
+            <UploadMediaIndicator />
             }
 
             {props.hasFailedMessages &&

@@ -1039,11 +1039,15 @@ export default function Chat(props) {
     }
 
     const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
+        // To display a progress
+        props.setUploadingMedia(true);
+
         uploadMediaCall(formData,
             (response) => {
                 // Convert parameters to a ChosenFile object
                 sendFile(payload?.wa_id, response.data.file, chosenFile, undefined, function () {
                     completeCallback();
+                    props.setUploadingMedia(false);
                 });
             }, (error) => {
                 if (error.response) {
@@ -1054,6 +1058,7 @@ export default function Chat(props) {
 
                 // A retry can be considered
                 completeCallback();
+                props.setUploadingMedia(false);
             });
     }
 
