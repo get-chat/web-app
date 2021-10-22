@@ -968,7 +968,7 @@ export default function Chat(props) {
                     // Switch to expired mode if status code is 453
                     if (status === 453) {
                         setExpired(true);
-                    } else if (status === 500) {
+                    } else if (status >= 500) {
                         handleFailedMessage(requestBody);
                     }
 
@@ -1027,7 +1027,7 @@ export default function Chat(props) {
 
                     if (status === 453) {
                         setExpired(true);
-                    } else if (status === 500) {
+                    } else if (status >= 500) {
                         handleFailedMessage(requestBody);
                     }
 
@@ -1107,7 +1107,7 @@ export default function Chat(props) {
 
                     if (status === 453) {
                         setExpired(true);
-                    } else if (status === 500) {
+                    } else if (status >= 500) {
                         handleFailedMessage(requestBody);
                     }
 

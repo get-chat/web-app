@@ -80,6 +80,8 @@ function Main() {
     const [hasFailedMessages, setHasFailedMessages] = useState(false);
     const [lastSendAttemptAt, setLastSendAttemptAt] = useState();
 
+    const [isUploadingMedia, setUploadingMedia] = useState(false);
+
     const [chats, setChats] = useState({});
     const [newMessages, setNewMessages] = useState({});
     const [filterTag, setFilterTag] = useState();
@@ -838,7 +840,7 @@ function Main() {
             // Chain
             callback();
         }, (error) => {
-            if (error?.response?.status === 500) {
+            if (error?.response?.status >= 500) {
                 // Continue with chain, in case contact provider data can not be loaded
                 callback();
             }
@@ -901,6 +903,8 @@ function Main() {
                     setHasFailedMessages={setHasFailedMessages}
                     lastSendAttemptAt={lastSendAttemptAt}
                     setLastSendAttemptAt={setLastSendAttemptAt}
+                    isUploadingMedia={isUploadingMedia}
+                    setUploadingMedia={setUploadingMedia}
                     newMessages={newMessages}
                     setChosenContact={setChosenContact}
                     previewMedia={(chatMessage) => previewMedia(chatMessage)}
