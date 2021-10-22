@@ -57,8 +57,8 @@ import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/Obje
 import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
 import {
-    hasFailedPendingMessages,
     getFirstPendingMessageToSend,
+    hasFailedPendingMessages,
     setPendingMessageFailed
 } from "../../../helpers/PendingMessagesHelper";
 
@@ -680,7 +680,8 @@ export default function Chat(props) {
             // Person information is loaded, now load messages
             if (loadMessages !== undefined && loadMessages === true) {
                 listMessages(true, function (preparedMessages) {
-                    setLastMessageId(getLastObject(preparedMessages)?.id);
+                    const lastPreparedMessage = getLastObject(preparedMessages);
+                    setLastMessageId(lastPreparedMessage?.id ?? lastPreparedMessage?.generateInternalIdString());
 
                     // Scroll to message if goToMessageId is defined
                     const goToMessage = location.goToMessage;
