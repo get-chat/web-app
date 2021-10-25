@@ -124,7 +124,7 @@ export default function Login(props) {
             <Fade in={true}>
                 <div className="login__body">
                     <div className="login__body__logoWrapper">
-                        <img className="login__body__logo" src={process.env.REACT_APP_LOGO_URL} alt="Logo" />
+                        <img className="login__body__logo" src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'} alt="Logo" />
                     </div>
 
                     <h2>Welcome</h2>

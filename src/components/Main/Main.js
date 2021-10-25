@@ -231,7 +231,7 @@ function Main() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
                 body: body,
-                icon: process.env.REACT_APP_LOGO_URL,
+                icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
                 tag: chatWaId + moment().seconds(0).milliseconds(0).toISOString()
             });
 
