@@ -41,7 +41,7 @@
     top: 0;
     content: '';
     height: 127px;
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-light);
 }
 
 /*.app:after {

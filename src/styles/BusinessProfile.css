@@ -14,7 +14,7 @@
     height: var(--header-height);
     display: flex;
     align-items: center;
-    background-color: var(--color-primary-light);
+    background-color: var(--color-primary);
     padding: 4px 15px;
     color: white;
     font-size: 18px;

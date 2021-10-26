@@ -1,8 +1,8 @@
 :root {
-    --color-primary: #009688;
+    --color-primary: #65cbac;
     --color-primary-transparent: rgba(0, 150, 136, 0.05);
     --color-primary-transparent-darker: rgba(0, 150, 136, 0.08);
-    --color-primary-light: #00bfa5;
+    --color-primary-light: #86e7c9;
     --color-light-blue: #4fc3f7;
     --gray-light: #ededed;
     --default-text-color: #212529;
