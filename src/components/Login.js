@@ -92,24 +92,13 @@ export default function Login(props) {
                 setLoggingIn(false);
                 setLoginError(undefined);
 
-                // Handle the error
                 if (error.response) {
-                    // Request made and server responded
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-
-                    setLoginError("Incorrect username or password.");
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    console.log(error.request);
-
-                    setLoginError("An error has occurred.");
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-
-                    setLoginError("An error has occurred.");
+                    // Current status code for incorrect credentials must be changed to 401 or 403
+                    if ([400, 401, 403].includes(error.response.status)) {
+                        setLoginError("Incorrect username or password.");
+                    } else {
+                        setLoginError("An error has occurred. Please try again later.");
+                    }
                 }
             });
     }
