@@ -9,6 +9,28 @@ This variable is defined in `package.json` (scripts -> start) and `.env` files.
 `REACT_APP_BASE_URL` should be set to `/api/v1/` to use same address as get.chat Web App runs on.
 You can define a custom backend URL for development (not for build) by defining it in `package.json` (scripts -> start).
 
+## Environment Variables
+
+Please see .env.example file for example values.
+
+`REACT_APP_TITLE`: Application (page) title.
+
+`REACT_APP_BASE_URL`: API base URL.
+
+`REACT_APP_SENTRY_DSN`: Sentry data source name (DSN).
+
+`REACT_APP_MANIFEST_URL`: manifest.json URL. This file provides information about the application.
+
+`REACT_APP_FAVICON_URL`: Page favicon URL.
+
+`REACT_APP_LOGO_512_URL`: 512x512 PNG icon used for mobile devices.
+
+`REACT_APP_LOGO_192_URL`: 192x192 PNG icon used for mobile devices.
+
+`REACT_APP_LOGO_URL`: Application logo URL.
+
+`REACT_APP_LOGO_BLACK_URL`: Black and white version of application logo (used inside the loading screen).
+
 ## Available Scripts
 
 In the project directory, you can run:

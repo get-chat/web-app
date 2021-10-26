@@ -29,7 +29,6 @@ import {
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
-import logo from '../../assets/images/logo.png';
 import {getContactProvidersData, getToken, storeContactProvidersData} from "../../helpers/StorageHelper";
 import ChatAssignment from "./ChatAssignment";
 import ChatTags from "./ChatTags";
@@ -241,7 +240,7 @@ function Main() {
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
                 body: body,
-                icon: logo,
+                icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
                 tag: chatWaId + moment().seconds(0).milliseconds(0).toISOString()
             });
 
@@ -260,7 +259,7 @@ function Main() {
             if (Notification.permission === 'granted') {
                 displayNtf();
             } else {
-                // request permission from user
+                // Request permission from user
                 Notification.requestPermission().then(function (p) {
                     if (p === 'granted') {
                         displayNtf();
