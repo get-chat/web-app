@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     padding: 15px 15px;
-    background-color: var(--color-primary-light);
+    background-color: var(--color-primary);
     color: white;
     cursor: pointer;
     font-size: 16px;
