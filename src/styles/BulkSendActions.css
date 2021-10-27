@@ -1,5 +1,5 @@
 .bulkSendActions {
-    background-color: var(--color-primary-light);
+    background-color: var(--color-primary);
     padding: 10px 15px;
     display: flex;
     flex-direction: column;

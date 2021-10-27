@@ -41,7 +41,7 @@
     top: 0;
     content: '';
     height: 127px;
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-light);
 }
 
 /*.app:after {
@@ -307,7 +307,7 @@ a {
 }
 
 .activeIconButton .MuiSvgIcon-root {
-    color: var(--color-primary-light) !important;
+    color: var(--color-primary) !important;
 }
 
 h1 .emoji-mart-emoji, h2 .emoji-mart-emoji, h3 .emoji-mart-emoji {
