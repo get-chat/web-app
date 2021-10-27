@@ -784,6 +784,11 @@ function Main() {
             return;
         }
 
+        if (!personWaId) {
+            console.warn('Resolve contact: wa_id is undefined!');
+            return;
+        }
+
         resolveContactCall(personWaId, (response) => {
             setContactProvidersData(prevState => {
                 prevState[personWaId] = response.data.contact_provider_results;
