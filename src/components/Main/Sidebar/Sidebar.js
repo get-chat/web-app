@@ -31,7 +31,7 @@ import BusinessProfile from "./BusinessProfile";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import ChatMessageClass from "../../../ChatMessageClass";
 import SearchMessageResult from "../../SearchMessageResult";
-import {isMobile} from 'react-device-detect';
+import {isMobile, isMobileOnly} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "../../Contacts";
 import {clearContactProvidersData} from "../../../helpers/StorageHelper";
@@ -601,7 +601,7 @@ function Sidebar(props) {
                 setChangePasswordDialogVisible={setChangePasswordDialogVisible} />
             }
 
-            {props.isUploadingMedia &&
+            {(props.isUploadingMedia && !isMobileOnly) &&
             <UploadMediaIndicator />
             }
 

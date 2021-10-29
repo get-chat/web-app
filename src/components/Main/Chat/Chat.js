@@ -1255,7 +1255,8 @@ export default function Chat(props) {
                 isChatOnly={props.isChatOnly}
                 setChatAssignmentVisible={props.setChatAssignmentVisible}
                 setChatTagsVisible={props.setChatTagsVisible}
-                closeChat={closeChat} />
+                closeChat={closeChat}
+                hasFailedMessages={props.hasFailedMessages} />
 
             {/* FOR TESTING QUEUE */}
             {isLocalHost() && props.pendingMessages.length > 0 &&

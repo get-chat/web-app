@@ -256,7 +256,7 @@ function SidebarChat(props) {
                 {hasFailedMessages() &&
                 <div className="sidebarChat__failedMessagesIndicator">
                     <Tooltip title="This chat has failed messages!">
-                        <WarningIcon />
+                        <WarningIcon className="error" />
                     </Tooltip>
                 </div>
                 }

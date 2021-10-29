@@ -161,6 +161,10 @@ a {
     color: #919191;
 }
 
+.MuiSvgIcon-root.error:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root .MuiSvgIcon-root):not(.MuiCheckbox-root .MuiSvgIcon-root) {
+    color: red;
+}
+
 .MuiButton-label {
     text-transform: none;
 }

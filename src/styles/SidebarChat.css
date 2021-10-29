@@ -199,7 +199,6 @@
 .sidebarChat__failedMessagesIndicator .MuiSvgIcon-root {
     height: 22px;
     width: 22px;
-    color: red !important;
 }
 
 .sidebar__results__chats .MuiListItem-root {
