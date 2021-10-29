@@ -54,7 +54,8 @@ import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 import BulkMessageTaskClass from "../../BulkMessageTaskClass";
 import {getWebSocketURL} from "../../helpers/URLHelper";
 import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
-import {isIPad13} from "react-device-detect";
+import {isIPad13, isMobileOnly} from "react-device-detect";
+import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -1009,6 +1010,10 @@ function Main() {
                         {errorMessage}
                     </Alert>
                 </Snackbar>
+
+                {(isUploadingMedia && isMobileOnly) &&
+                <UploadMediaIndicator/>
+                }
 
             </div>
         </Fade>

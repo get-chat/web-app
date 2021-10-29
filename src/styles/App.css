@@ -221,6 +221,19 @@ a {
     font-weight: 600 !important;
 }
 
+.app__body > .uploadingMediaIndicatorWrapper {
+    pointer-events: none;
+    position: absolute;
+    z-index: 10;
+    margin-left: 30%;
+    margin-right: 15px;
+    margin-top: 70px;
+}
+
+.app__body > .uploadingMediaIndicatorWrapper .uploadingMediaIndicator {
+    box-shadow: -1px 6px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
 .app__mediaPreview {
     position: absolute;
     display: flex;
