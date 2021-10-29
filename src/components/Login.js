@@ -3,11 +3,11 @@ import '../styles/Login.css';
 import {Backdrop, CircularProgress, Fade, TextField} from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import {useHistory, useLocation, useParams} from 'react-router-dom';
-import {makeStyles} from '@material-ui/core/styles';
 import {Alert} from "@material-ui/lab";
 import {VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
 import {baseCall, loginCall, logoutCall} from "../api/ApiCalls";
+import {makeStyles} from "@material-ui/styles";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {

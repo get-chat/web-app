@@ -1,4 +1,4 @@
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/styles";
 
 function hashCode(str) {
     let hash = 0;
