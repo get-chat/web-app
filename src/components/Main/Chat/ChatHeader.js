@@ -4,13 +4,12 @@ import {Avatar, IconButton, Menu, MenuItem, Tooltip} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
 import PubSub from "pubsub-js";
-import {
-    extractAvatarFromContactProviderData
-} from "../../../helpers/Helpers";
+import {extractAvatarFromContactProviderData} from "../../../helpers/Helpers";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../../helpers/EmojiHelper";
 import {addPlus} from "../../../helpers/PhoneNumberHelper";
 import WarningIcon from "@material-ui/icons/Warning";
+import {isMobileOnly} from "react-device-detect";
 
 function ChatHeader(props) {
 
@@ -72,23 +71,21 @@ function ChatHeader(props) {
 
                 <div className="chat__headerInfo">
                     <h3 dangerouslySetInnerHTML={{__html: replaceEmojis((props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : ''))}} />
-
                     {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
-
                     {props.person?.isExpired &&
                     <p className="chat__header__expired">Inactive</p>
                     }
                 </div>
 
                 <div className="chat__headerInfo_2">
-                <span className="chat__headerInfo_2__waId desktopOnly">
-                    {props.person?.waId ? addPlus(props.person?.waId) : ''}
-                </span>
+                    <span className="chat__headerInfo_2__waId desktopOnly">
+                        {props.person?.waId ? addPlus(props.person?.waId) : ''}
+                    </span>
                 </div>
             </div>
 
             <div className="chat__headerRight">
-                {props.hasFailedMessages &&
+                {(isMobileOnly && props.hasFailedMessages) &&
                 <Tooltip title="Failed to send some messages!">
                     <IconButton onClick={props.closeChat}>
                         <WarningIcon className="error" />
