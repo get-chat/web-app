@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../../styles/ChatHeader.css';
-import {Avatar, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {Avatar, IconButton, Menu, MenuItem, Tooltip} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
 import PubSub from "pubsub-js";
@@ -10,6 +10,7 @@ import {
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../../helpers/EmojiHelper";
 import {addPlus} from "../../../helpers/PhoneNumberHelper";
+import WarningIcon from "@material-ui/icons/Warning";
 
 function ChatHeader(props) {
 
@@ -87,6 +88,13 @@ function ChatHeader(props) {
             </div>
 
             <div className="chat__headerRight">
+                {props.hasFailedMessages &&
+                <Tooltip title="Failed to send some messages!">
+                    <IconButton onClick={props.closeChat}>
+                        <WarningIcon className="error" />
+                    </IconButton>
+                </Tooltip>
+                }
                 <IconButton onClick={showSearchMessages}>
                     <Search />
                 </IconButton>
