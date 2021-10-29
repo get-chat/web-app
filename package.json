@@ -12,7 +12,7 @@
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.0",
     "axios": "^0.21.1",
-    "dompurify": "^2.3.0",
+    "dompurify": "^2.3.3",
     "emoji-mart": "^3.0.0",
     "emoji-regex": "^9.2.1",
     "html-to-text": "^7.0.0",
@@ -20,14 +20,14 @@
     "moment-timezone": "^0.5.32",
     "mp3-mediarecorder": "^4.0.3",
     "music-metadata-browser": "^2.2.5",
-    "pubsub-js": "^1.9.2",
-    "react": "^17.0.1",
-    "react-device-detect": "^2.0.1",
-    "react-dom": "^17.0.1",
+    "pubsub-js": "^1.9.3",
+    "react": "^17.0.2",
+    "react-device-detect": "^2.0.2",
+    "react-dom": "^17.0.2",
     "react-moment": "^1.1.1",
     "react-pdf": "^5.2.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "^4.0.3",
     "source-map-explorer": "^2.5.2",
     "url-search-params-polyfill": "^8.1.1",
     "web-vitals": "^0.2.4"
@@ -60,6 +60,6 @@
     ]
   },
   "devDependencies": {
-    "@material-ui/styles": "^4.11.2"
+    "@material-ui/styles": "^4.11.4"
   }
 }
