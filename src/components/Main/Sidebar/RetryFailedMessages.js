@@ -44,7 +44,8 @@ function RetryFailedMessages(props) {
                 className={"retryFailedMessages" + (props.isSendingPendingMessages ? " sending" : "")}
                 severity="error"
                 elevation={0}>
-                Failed to send messages to {generateFailedReceiversString()}. <a href="#" className="bold" onClick={resendMessage}>Click</a> to retry.<br />
+                Failed to send messages to {generateFailedReceiversString()}.<br />
+                <a href="#" className="bold" onClick={resendMessage}>Click to retry.</a><br />
 
                 {props.lastSendAttemptAt &&
                 <div className="retryFailedMessages__lastSendAttemptAt">
