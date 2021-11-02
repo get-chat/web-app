@@ -81,6 +81,12 @@ function Sidebar(props) {
         window.location.reload();
     }
 
+    const toggleAssignmentAndTaggingHistory = () => {
+        setDisplayAssignmentAndTaggingHistory(!getDisplayAssignmentAndTaggingHistory());
+        hideMenu();
+        window.location.reload();
+    }
+
     const displayMenu = (event) => {
         setAnchorEl(event.currentTarget);
     }
@@ -636,8 +642,7 @@ function Sidebar(props) {
                 <MenuItem onClick={showChangePassword}>Change password</MenuItem>
                 <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
                 <Divider />
-                <MenuItem
-                    onClick={() => setDisplayAssignmentAndTaggingHistory(!getDisplayAssignmentAndTaggingHistory())}>Toggle display assignment and tagging</MenuItem>
+                <MenuItem onClick={toggleAssignmentAndTaggingHistory}>Toggle assignment and tagging history</MenuItem>
                 {props.isAdmin &&
                 <Divider />
                 }
