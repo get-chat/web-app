@@ -16,7 +16,7 @@ export const clearToken = () => {
 }
 
 export const getDisplayAssignmentAndTaggingHistory = () => {
-    return localStorage.getItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY);
+    return localStorage.getItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY) ?? true;
 }
 
 export const setDisplayAssignmentAndTaggingHistory = (willDisplay) => {
