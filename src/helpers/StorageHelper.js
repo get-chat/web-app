@@ -16,10 +16,12 @@ export const clearToken = () => {
 }
 
 export const getDisplayAssignmentAndTaggingHistory = () => {
-    return localStorage.getItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY) ?? true;
+    const result = localStorage.getItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY);
+    return result ? result === 'true' : true;
 }
 
 export const setDisplayAssignmentAndTaggingHistory = (willDisplay) => {
+    console.log(willDisplay);
     return localStorage.setItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY, willDisplay);
 }
 
