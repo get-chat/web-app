@@ -12,7 +12,7 @@ import {
     EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_DROPPED_FILES,
-    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_FORCE_REFRESH_CHAT,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -61,6 +61,7 @@ import {
     hasFailedPendingMessages,
     setPendingMessageFailed
 } from "../../../helpers/PendingMessagesHelper";
+import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -510,11 +511,26 @@ export default function Chat(props) {
 
         const chatTaggingEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_TAGGING, onChatAssignmentOrChatTagging);
 
+        // Refresh chat/messages when displaying assignment and tagging history is toggled
+        const onForceRefreshChat = function (msg, data) {
+            if (waId) {
+                // Clear existing messages
+                setMessages({});
+                setLoaded(false);
+
+                // This method triggers loading messages with proper callback
+                retrievePerson(true);
+            }
+        }
+
+        const forceRefreshChatEventToken = PubSub.subscribe(EVENT_TOPIC_FORCE_REFRESH_CHAT, onForceRefreshChat);
+
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
             PubSub.unsubscribe(chatMessageStatusChangeEventToken);
             PubSub.unsubscribe(chatAssignmentEventToken);
             PubSub.unsubscribe(chatTaggingEventToken);
+            PubSub.unsubscribe(forceRefreshChatEventToken);
         }
     }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
 
@@ -758,8 +774,14 @@ export default function Chat(props) {
                     sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
                 }
 
-                // List assignment events
-                listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
+                // List assignment and tagging history depends on user choice
+                if (getDisplayAssignmentAndTaggingHistory()) {
+                    // List assignment events
+                    listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
+                } else {
+                    finishLoadingMessages(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime);
+                }
+
             }, (error) => {
                 setLoadingMoreMessages(false);
             }, history);

@@ -1,6 +1,6 @@
 export const BASE_URL = process.env.REACT_APP_BASE_URL.trim();
 
-export const VERSION = 1.34
+export const VERSION = 1.35
 
 export const EVENT_TOPIC_CHAT_MESSAGE = "chat_message";
 export const EVENT_TOPIC_GO_TO_MSG_ID = "go_to_msg_id";
@@ -24,6 +24,7 @@ export const EVENT_TOPIC_BULK_MESSAGE_TASK = "bulk_message_task";
 export const EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED = "bulk_message_task_started";
 export const EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT = "bulk_message_task_element";
 export const EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT = "clear_text_message_input";
+export const EVENT_TOPIC_FORCE_REFRESH_CHAT = "force_refresh_chat";
 
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
