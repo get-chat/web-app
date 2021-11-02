@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import '../../../styles/ChatHeader.css';
-import {Avatar, IconButton, Menu, MenuItem, Tooltip} from "@material-ui/core";
+import {Avatar, Divider, IconButton, Menu, MenuItem, Tooltip} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
 import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
 import PubSub from "pubsub-js";
@@ -10,6 +10,10 @@ import {replaceEmojis} from "../../../helpers/EmojiHelper";
 import {addPlus} from "../../../helpers/PhoneNumberHelper";
 import WarningIcon from "@material-ui/icons/Warning";
 import {isMobileOnly} from "react-device-detect";
+import {
+    getDisplayAssignmentAndTaggingHistory,
+    setDisplayAssignmentAndTaggingHistory
+} from "../../../helpers/StorageHelper";
 
 function ChatHeader(props) {
 
@@ -48,6 +52,12 @@ function ChatHeader(props) {
     const showChatTagsAndHideMenu = () => {
         props.setChatTagsVisible(true);
         hideMenu();
+    }
+
+    const toggleAssignmentAndTaggingHistory = () => {
+        setDisplayAssignmentAndTaggingHistory(!getDisplayAssignmentAndTaggingHistory());
+        hideMenu();
+        window.location.reload();
     }
 
     return (
@@ -112,6 +122,8 @@ function ChatHeader(props) {
                 <MenuItem onClick={showContactDetailsAndHideMenu}>Contact details</MenuItem>
                 <MenuItem onClick={showChatAssignmentAndHideMenu}>Assign chat</MenuItem>
                 <MenuItem onClick={showChatTagsAndHideMenu}>Change tags</MenuItem>
+                <Divider />
+                <MenuItem onClick={toggleAssignmentAndTaggingHistory}>Toggle assignment and tagging history</MenuItem>
             </Menu>
 
         </div>

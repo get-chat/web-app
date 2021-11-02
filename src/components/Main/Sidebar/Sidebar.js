@@ -34,11 +34,7 @@ import SearchMessageResult from "../../SearchMessageResult";
 import {isMobile, isMobileOnly} from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from "../../Contacts";
-import {
-    clearContactProvidersData,
-    getDisplayAssignmentAndTaggingHistory,
-    setDisplayAssignmentAndTaggingHistory
-} from "../../../helpers/StorageHelper";
+import {clearContactProvidersData} from "../../../helpers/StorageHelper";
 import CloseIcon from "@material-ui/icons/Close";
 import {filterChat} from "../../../helpers/SidebarHelper";
 import BulkSendIndicator from "./BulkSendIndicator";
@@ -78,12 +74,6 @@ function Sidebar(props) {
 
     const forceClearContactProvidersData = () => {
         clearContactProvidersData();
-        window.location.reload();
-    }
-
-    const toggleAssignmentAndTaggingHistory = () => {
-        setDisplayAssignmentAndTaggingHistory(!getDisplayAssignmentAndTaggingHistory());
-        hideMenu();
         window.location.reload();
     }
 
@@ -641,8 +631,6 @@ function Sidebar(props) {
                 <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
                 <MenuItem onClick={showChangePassword}>Change password</MenuItem>
                 <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
-                <Divider />
-                <MenuItem onClick={toggleAssignmentAndTaggingHistory}>Toggle assignment and tagging history</MenuItem>
                 {props.isAdmin &&
                 <Divider />
                 }
