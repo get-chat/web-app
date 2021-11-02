@@ -2,7 +2,11 @@ import React, {useEffect, useState} from 'react';
 import '../../../styles/ChatHeader.css';
 import {Avatar, Divider, IconButton, Menu, MenuItem, Tooltip} from "@material-ui/core";
 import {ArrowBack, MoreVert, Search} from "@material-ui/icons";
-import {EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../../../Constants";
+import {
+    EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
+    EVENT_TOPIC_FORCE_REFRESH_CHAT,
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY
+} from "../../../Constants";
 import PubSub from "pubsub-js";
 import {extractAvatarFromContactProviderData} from "../../../helpers/Helpers";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
@@ -57,7 +61,9 @@ function ChatHeader(props) {
     const toggleAssignmentAndTaggingHistory = () => {
         setDisplayAssignmentAndTaggingHistory(!getDisplayAssignmentAndTaggingHistory());
         hideMenu();
-        window.location.reload();
+
+        // Force refresh chat
+        PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
     }
 
     return (
