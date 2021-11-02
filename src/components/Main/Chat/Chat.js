@@ -61,6 +61,7 @@ import {
     hasFailedPendingMessages,
     setPendingMessageFailed
 } from "../../../helpers/PendingMessagesHelper";
+import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -758,8 +759,14 @@ export default function Chat(props) {
                     sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
                 }
 
-                // List assignment events
-                listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
+                // List assignment and tagging history depends on user choice
+                if (getDisplayAssignmentAndTaggingHistory()) {
+                    // List assignment events
+                    listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
+                } else {
+                    finishLoadingMessages(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime);
+                }
+
             }, (error) => {
                 setLoadingMoreMessages(false);
             }, history);
