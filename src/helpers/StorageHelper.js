@@ -3,52 +3,61 @@ const STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY = "display_assignment_a
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA = "contact_providers_data";
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME = "contact_providers_data_time";
 
+const getLocalStorage = () => {
+    try {
+        return window.localStorage;
+    } catch (e) {
+        console.warn(e.toString());
+    }
+}
+
 export const getToken = () => {
-    return localStorage.getItem(STORAGE_TAG_TOKEN);
+    return getLocalStorage()?.getItem(STORAGE_TAG_TOKEN);
 }
 
 export const storeToken = (token) => {
-    localStorage.setItem(STORAGE_TAG_TOKEN, token);
+    getLocalStorage()?.setItem(STORAGE_TAG_TOKEN, token);
 }
 
 export const clearToken = () => {
-    localStorage.removeItem(STORAGE_TAG_TOKEN);
+    getLocalStorage()?.removeItem(STORAGE_TAG_TOKEN);
 }
 
 export const getDisplayAssignmentAndTaggingHistory = () => {
-    const result = localStorage.getItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY);
+    const result = getLocalStorage()?.getItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY);
     return result ? result === 'true' : true;
 }
 
 export const setDisplayAssignmentAndTaggingHistory = (willDisplay) => {
-    console.log(willDisplay);
-    return localStorage.setItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY, willDisplay);
+    return getLocalStorage()?.setItem(STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY, willDisplay);
 }
 
 export const getContactProvidersData = () => {
     clearContactProvidersDataIfExpired();
 
-    return JSON.parse(localStorage.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA)) ?? {};
+    const data = getLocalStorage()?.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
+    return data ? JSON.parse(data) ?? {} : {};
 }
 
 export const storeContactProvidersData = (data) => {
-    localStorage.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA, JSON.stringify(data));
+    getLocalStorage()?.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA, JSON.stringify(data));
 }
 
 export const clearContactProvidersData = () => {
-    localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
+    getLocalStorage()?.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA);
 }
 
 export const getContactProvidersDataTime = () => {
-    return JSON.parse(localStorage.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME));
+    const data = getLocalStorage()?.getItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME);
+    return data ? JSON.parse(data) : undefined;
 }
 
 export const storeContactProvidersDataTime = (time) => {
-    localStorage.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME, time);
+    getLocalStorage()?.setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME, time);
 }
 
 export const clearContactProvidersDataTime = () => {
-    localStorage.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME);
+    getLocalStorage()?.removeItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME);
 }
 
 const clearContactProvidersDataIfExpired = () => {
