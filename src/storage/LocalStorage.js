@@ -8,4 +8,8 @@ export class LocalStorage extends BaseStorage {
     setItem(itemKey, itemValue) {
         window.localStorage.setItem(itemKey, itemValue);
     }
+
+    removeItem(itemKey) {
+        window.localStorage.removeItem(itemKey);
+    }
 }

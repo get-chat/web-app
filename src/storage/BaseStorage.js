@@ -6,4 +6,8 @@ export class BaseStorage {
     setItem(itemKey, itemValue) {
         throw new Error('Not implemented.');
     }
+
+    removeItem(itemKey) {
+        throw new Error('Not implemented.');
+    }
 }

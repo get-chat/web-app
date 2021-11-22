@@ -12,4 +12,8 @@ export class MemoryStorage extends BaseStorage {
 
         window.customStorage[itemKey] = itemValue;
     }
+
+    removeItem(itemKey) {
+        delete window.customStorage?.[itemKey];
+    }
 }
