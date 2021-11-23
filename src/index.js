@@ -7,7 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import {isLocalHost} from "./helpers/URLHelper";
+import {initStorageType} from "./helpers/StorageHelper";
 
+// Init Sentry
 if (!isLocalHost()) {
     Sentry.init({
         dsn: process.env.REACT_APP_SENTRY_DSN,
@@ -22,6 +24,9 @@ if (!isLocalHost()) {
         },
     });
 }
+
+// Init storage type
+initStorageType();
 
 ReactDOM.render(
     <App />,
