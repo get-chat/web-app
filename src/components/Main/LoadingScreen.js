@@ -24,7 +24,7 @@ function LoadingScreen(props) {
     return (
         <div className="loadingScreen">
             <div className="loadingScreen__logoContainer">
-                <img src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logo-black.svg'} alt="Logo" />
+                <img src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'} alt="Logo" />
             </div>
             <div className="loadingScreen__progressContainer">
                 <LinearProgress variant="determinate" value={props.progress} />
