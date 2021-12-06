@@ -17,6 +17,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SidebarChat from "./SidebarChat";
 import {containsLetters, generateInitialsHelper, isScrollable} from "../../../helpers/Helpers";
 import {
+    CHAT_KEY_PREFIX,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_UPDATE_PERSON_NAME
@@ -265,7 +266,7 @@ function Sidebar(props) {
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
                     const prepared = new ChatClass(contact);
-                    preparedChats[prepared.waId] = prepared;
+                    preparedChats[CHAT_KEY_PREFIX + prepared.waId] = prepared;
                 });
 
                 props.setChats(prevState => {

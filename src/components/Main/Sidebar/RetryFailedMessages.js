@@ -8,6 +8,7 @@ import '../../../styles/RetryFailedMessages.css';
 import {Alert} from "@material-ui/lab";
 import {useHistory} from "react-router-dom";
 import Moment from "react-moment";
+import {CHAT_KEY_PREFIX} from "../../../Constants";
 
 function RetryFailedMessages(props) {
 
@@ -31,7 +32,7 @@ function RetryFailedMessages(props) {
         const failedWaIds = extractFailedWaIds(props.pendingMessages);
         let namesArray = [];
         failedWaIds.forEach((waId) => {
-            const name = props.contactProvidersData[waId]?.[0]?.name ?? props.chats[waId]?.name;
+            const name = props.contactProvidersData[waId]?.[0]?.name ?? props.chats[CHAT_KEY_PREFIX + waId]?.name;
             namesArray.push(name ?? waId);
         });
 
