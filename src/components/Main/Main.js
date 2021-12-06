@@ -951,7 +951,6 @@ function Main() {
                     waId={waId}
                     open={isChatAssignmentVisible}
                     setOpen={setChatAssignmentVisible}
-                    chats={chats}
                     setChats={setChats}
                     users={users} />
                 }
@@ -961,7 +960,6 @@ function Main() {
                     waId={waId}
                     open={isChatTagsVisible}
                     setOpen={setChatTagsVisible}
-                    chats={chats}
                     setChats={setChats}
                 />
                 }
