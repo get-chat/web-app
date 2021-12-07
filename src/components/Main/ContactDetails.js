@@ -4,7 +4,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import PersonIcon from '@material-ui/icons/Person';
 import GroupIcon from '@material-ui/icons/Group';
 import PubSub from "pubsub-js";
-import {CALENDAR_NORMAL, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../../Constants";
+import {CALENDAR_NORMAL, CHAT_KEY_PREFIX, EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY} from "../../Constants";
 import '../../styles/ContactDetails.css';
 import Moment from "react-moment";
 import googleLogo from '../../assets/images/ic-google.png';
@@ -33,7 +33,7 @@ function ContactDetails(props)  {
 
     const findChatByWaId = () => {
         const waId = props.contactData.waId;
-        return props.chats[waId];
+        return props.chats[CHAT_KEY_PREFIX + waId];
     }
 
     return (
