@@ -12,6 +12,7 @@ export class ChatMessageClass {
     static TYPE_STICKER = 'sticker';
     static TYPE_TEMPLATE = 'template';
     static TYPE_BUTTON = 'button';
+    static TYPE_INTERACTIVE = 'interactive';
 
     static STATUS_SENT = 'sent';
     static STATUS_DELIVERED = 'delivered';
@@ -39,7 +40,8 @@ export class ChatMessageClass {
         this.senderName = this.getSenderName();
         this.initials = this.generateInitials(); //this.senderName ? this.senderName[0] : "?";
         this.text = payload.text?.body;
-        this.buttonText = payload?.button?.text;
+        this.buttonText = payload.button?.text;
+        this.interactiveButtonText = payload.interactive?.button_reply?.title;
         this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
         //this.isReceived = data.received;
 

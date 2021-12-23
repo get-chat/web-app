@@ -124,8 +124,8 @@ function ChatMessage(props) {
                     </div>
                     }
 
-                    {(data.text ?? data.caption ?? data.buttonText) ? <span className="wordBreakWord"
-                                                                            dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText))}}/> : '\u00A0'}
+                    {(data.text ?? data.caption ?? data.buttonText ?? data.interactiveButtonText) ? <span className="wordBreakWord"
+                                                                            dangerouslySetInnerHTML={{__html: formatMessage((data.text ?? data.caption ?? data.buttonText ?? data.interactiveButtonText))}}/> : '\u00A0'}
 
                     <span className="chat__message__info">
                         <span className="chat__timestamp">
