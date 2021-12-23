@@ -242,6 +242,7 @@ function SidebarChat(props) {
                                     <ChatMessageShortContent
                                         type={props.chatData.lastMessageType}
                                         buttonText={props.chatData.lastMessageButtonText}
+                                        interactiveButtonText={props.chatData.interactiveButtonText}
                                         text={props.chatData.lastMessageBody}
                                         caption={props.chatData.lastMessageCaption}
                                         isLastMessageFromUs={props.chatData.isLastMessageFromUs } />

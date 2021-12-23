@@ -15,6 +15,7 @@ function ContextChatMessage(props) {
                     <ChatMessageShortContent
                         type={props.contextMessage.type}
                         buttonText={props.contextMessage.buttonText}
+                        interactiveButtonText={props.contextMessage.interactiveButtonText}
                         text={props.contextMessage.text}
                         caption={props.contextMessage.caption}
                         isLastMessageFromUs={props.contextMessage?.isFromUs} />

@@ -14,9 +14,9 @@ function ChatMessageShortContent(props) {
 
             <ChatMessageTypeIcon type={props.type}/>
 
-            {(props.type === ChatMessageClass.TYPE_TEXT || props.type === ChatMessageClass.TYPE_BUTTON)
+            {([ChatMessageClass.TYPE_TEXT, ChatMessageClass.TYPE_BUTTON, ChatMessageClass.TYPE_INTERACTIVE].includes(props.type))
                 ?
-                <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.text ?? props.buttonText, true)}} />
+                <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.text ?? props.buttonText ?? props.interactiveButtonText, true)}} />
                 :
                 <span>
                     {(props.caption && props.caption.length > 0)

@@ -122,9 +122,11 @@ function Sidebar(props) {
                     const chatMessage = message[1];
                     const chatMessageWaId = chatMessage.waId;
 
+                    const chatKey = CHAT_KEY_PREFIX + chatMessageWaId
+
                     // New chat, incoming or outgoing message
                     // Check if chat with waId already exists
-                    if (!nextState.hasOwnProperty(chatMessageWaId)) {
+                    if (!nextState.hasOwnProperty(chatKey)) {
                         willMakeRequest = true;
 
                         // Collect waid list to retrieve chats
@@ -134,21 +136,21 @@ function Sidebar(props) {
                     }
 
                     // Chats are ordered by incoming message date
-                    if (nextState.hasOwnProperty(chatMessageWaId)) {
+                    if (nextState.hasOwnProperty(chatKey)) {
                         changedAny = true;
 
                         // Update existing chat
-                        nextState[chatMessageWaId].setLastMessage(chatMessage.payload);
+                        nextState[chatKey].setLastMessage(chatMessage.payload);
 
                         // Incoming
                         if (!chatMessage.isFromUs) {
                             // Update name and initials on incoming message if name is missing
-                            const chat = nextState[chatMessageWaId];
+                            const chat = nextState[chatKey];
                             if (chat) {
                                 const chatName = chat.name;
                                 if (!containsLetters(chatName)) {
                                     // Update sidebar chat name
-                                    nextState[chatMessageWaId].setName(chatMessage.senderName);
+                                    nextState[chatKey].setName(chatMessage.senderName);
 
                                     // Check if current chat
                                     if (waId === chatMessageWaId) {
@@ -346,7 +348,7 @@ function Sidebar(props) {
                 const preparedChat = new ChatClass(response.data);
 
                 props.setChats(prevState => {
-                    prevState[chatWaId] = preparedChat;
+                    prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
                     const sortedNextState = sortChats(prevState);
                     return {...sortedNextState};
                 });

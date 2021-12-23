@@ -33,6 +33,7 @@ class ChatClass {
         this.name = sanitize(this.name);
         this.lastMessageBody = sanitize(this.lastMessageBody);
         this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
+        this.lastMessageInteractiveButtonText = sanitize(this.lastMessageInteractiveButtonText);
         this.lastMessageCaption = sanitize(this.lastMessageCaption);
     }
 
@@ -49,6 +50,7 @@ class ChatClass {
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = this.lastMessage?.text?.body;
         this.lastMessageButtonText = lastMessagePayload?.button?.text;
+        this.lastMessageInteractiveButtonText = lastMessagePayload?.interactive?.button_reply?.title;
         this.lastMessageCaption = lastMessagePayload?.image?.caption ?? lastMessagePayload?.video?.caption ?? lastMessagePayload?.audio?.caption ?? lastMessagePayload?.document?.caption;
         this.lastMessageType = lastMessagePayload?.type;
         this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
