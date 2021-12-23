@@ -12,6 +12,7 @@ import TemplateMessageClass from "../../TemplateMessageClass";
 import {Alert} from "@material-ui/lab";
 import 'url-search-params-polyfill';
 import {
+    CHAT_KEY_PREFIX,
     EVENT_TOPIC_BULK_MESSAGE_TASK,
     EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
     EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
@@ -448,11 +449,13 @@ function Main() {
 
                             PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
 
+                            const chatKey = CHAT_KEY_PREFIX + prepared.waId;
+
                             // Update chats
                             setChats(prevState => {
-                                if (prevState.hasOwnProperty(prepared.waId)) {
-                                    prevState[prepared.waId].assignedToUser = prepared.assignmentEvent.assigned_to_user_set;
-                                    prevState[prepared.waId].assignedGroup = prepared.assignmentEvent.assigned_group_set;
+                                if (prevState.hasOwnProperty(chatKey)) {
+                                    prevState[chatKey].assignedToUser = prepared.assignmentEvent.assigned_to_user_set;
+                                    prevState[chatKey].assignedGroup = prepared.assignmentEvent.assigned_group_set;
                                     return {...prevState};
                                 }
 
@@ -470,13 +473,15 @@ function Main() {
 
                             PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
 
+                            const chatKey = CHAT_KEY_PREFIX + prepared.waId;
+
                             // Update chats
                             setChats(prevState => {
-                                if (prevState.hasOwnProperty(prepared.waId)) {
+                                if (prevState.hasOwnProperty(chatKey)) {
                                     if (chatTagging.action === "added") {
-                                        prevState[prepared.waId].tags.push(prepared.taggingEvent.tag);
+                                        prevState[chatKey].tags.push(prepared.taggingEvent.tag);
                                     } else if (chatTagging.action === "removed") {
-                                        prevState[prepared.waId].tags = prevState[prepared.waId].tags.filter((tag) => {
+                                        prevState[chatKey].tags = prevState[chatKey].tags.filter((tag) => {
                                             return tag.id !== prepared.taggingEvent.tag.id;
                                         });
                                     }
