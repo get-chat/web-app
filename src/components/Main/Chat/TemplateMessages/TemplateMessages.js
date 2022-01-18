@@ -19,6 +19,8 @@ function TemplateMessages(props) {
     const [chosenTemplate, setChosenTemplate] = useState();
     const [isDialogVisible, setDialogVisible] = useState(false);
 
+    const [sentTemplateMessage, setSentTemplateMessage] = useState();
+
     const dialogContent = useRef();
 
     const [isSending, setSending] = useState(false);
@@ -47,7 +49,9 @@ function TemplateMessages(props) {
     }
 
     const send = (template) => {
-        props.onSend(template ?? chosenTemplate);
+        const messageToBeSent = template ?? chosenTemplate;
+        setSentTemplateMessage(messageToBeSent);
+        props.onSend(messageToBeSent);
         //hideDialog();
     }
 
@@ -80,9 +84,15 @@ function TemplateMessages(props) {
         const sendTemplateMessageErrorEventToken = PubSub.subscribe(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, onSendTemplateMessageError);
 
         const onSentTemplateMessage = function (msg, data) {
-            // TODO: Hide if sent successfully
-            //hideDialog();
-            setSending(false);
+            // Remove injected fields
+            delete data.wa_id;
+            delete data.pendingMessageUniqueId;
+
+            // Check if sent message is equal to current pending one
+            if (sentTemplateMessage !== undefined && JSON.stringify(data) === JSON.stringify(generateTemplateMessagePayload(sentTemplateMessage))) {
+                hideDialog();
+                setSending(false);
+            }
         }
 
         const sentTemplateMessageEventToken = PubSub.subscribe(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, onSentTemplateMessage);
@@ -91,7 +101,7 @@ function TemplateMessages(props) {
             PubSub.unsubscribe(sendTemplateMessageErrorEventToken);
             PubSub.unsubscribe(sentTemplateMessageEventToken);
         }
-    }, [dialogContent.current]);
+    }, [dialogContent.current, sentTemplateMessage]);
 
     return (
         <div className="templateMessagesOuter">

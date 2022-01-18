@@ -1023,10 +1023,6 @@ export default function Chat(props) {
 
             queueMessage(requestBody, successCallback, undefined, completeCallback);
 
-            // Hide dialog by this event
-            // With queue feature it may take some time to be sent, so hide the dialog immediately when it's queued
-            PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, true);
-
             return;
         }
 
@@ -1039,6 +1035,9 @@ export default function Chat(props) {
 
                 successCallback?.();
                 completeCallback?.();
+
+                // Hide dialog by this event
+                PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
 
             }, (error) => {
                 if (error.response) {
