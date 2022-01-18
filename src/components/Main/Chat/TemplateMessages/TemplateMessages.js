@@ -72,7 +72,7 @@ function TemplateMessages(props) {
             setSending(false);
 
             // Scroll to bottom
-            if (dialogContent) {
+            if (dialogContent.current) {
                 dialogContent.current.scrollTop = dialogContent.current.scrollHeight;
             }
         }
@@ -90,7 +90,7 @@ function TemplateMessages(props) {
             PubSub.unsubscribe(sendTemplateMessageErrorEventToken);
             PubSub.unsubscribe(sentTemplateMessageEventToken);
         }
-    }, [dialogContent]);
+    }, [dialogContent.current]);
 
     return (
         <div className="templateMessagesOuter">
