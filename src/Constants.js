@@ -1,6 +1,6 @@
 export const BASE_URL = process.env.REACT_APP_BASE_URL.trim();
 
-export const VERSION = "1.37.4"
+export const VERSION = "1.37.5"
 
 export const CHAT_KEY_PREFIX = "chat_";
 
