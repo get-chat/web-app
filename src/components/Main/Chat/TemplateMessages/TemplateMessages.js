@@ -80,7 +80,8 @@ function TemplateMessages(props) {
         const sendTemplateMessageErrorEventToken = PubSub.subscribe(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, onSendTemplateMessageError);
 
         const onSentTemplateMessage = function (msg, data) {
-            hideDialog();
+            // TODO: Hide if sent successfully
+            //hideDialog();
             setSending(false);
         }
 
