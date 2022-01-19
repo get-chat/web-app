@@ -87,7 +87,7 @@ function BulkSendIndicator(props) {
     return (
         <div className="bulkSendIndicatorWrapper">
             {Object.entries(tasks).map((task) =>
-            <div className="bulkSendIndicator" key={task.id}>
+            <div className="bulkSendIndicator" key={task[1].id}>
                 <div className="mb-1">Sending ({task[1].done} / {task[1].total})</div>
                 <div className="bulkSendIndicator__messagePreviewWrapper mb-1">
                     <span className="bulkSendIndicator__messagePreview">
