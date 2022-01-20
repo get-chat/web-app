@@ -121,6 +121,8 @@ function Main() {
     const [selectedTags, setSelectedTags] = useState([]);
     const [bulkSendPayload, setBulkSendPayload] = useState();
 
+    const [notificationHistory, setNotificationHistory] = useState({});
+
     const history = useHistory();
     const location = useLocation();
     const query = useQuery();
