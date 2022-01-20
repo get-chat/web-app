@@ -7,6 +7,7 @@ import {
 } from "../Constants";
 import {stringContainsAnyInArray} from "./Helpers";
 import * as musicMetadata from "music-metadata-browser";
+import {isSafari} from "react-device-detect";
 
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
@@ -88,6 +89,10 @@ export const getAttachmentTypeByFile = (file, callback) => {
 
 export const isAudioMimeTypeSupported = (mimeType) => {
     if (mimeType === 'audio/amr') {
+        return false;
+    }
+
+    if (isSafari && mimeType === 'audio/ogg') {
         return false;
     }
 
