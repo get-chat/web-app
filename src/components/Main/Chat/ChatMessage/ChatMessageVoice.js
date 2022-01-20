@@ -65,7 +65,8 @@ function ChatMessageVoice(props) {
                 } else {
                     const unsupportedFile = new UnsupportedFileClass({
                         name: props.data.filename,
-                        link: props.data.audioLink
+                        link: props.data.audioLink,
+                        mimeType: data.mimeType
                     });
                     PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
                 }
