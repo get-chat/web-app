@@ -248,27 +248,33 @@ function Main() {
         function displayNtf() {
             const timeString = moment().seconds(0).milliseconds(0).toISOString();
 
-            console.log(JSON.stringify(notificationHistory));
-
-            // eslint-disable-next-line no-unused-vars
-            const notification = new Notification(title, {
-                body: body,
-                icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
-                tag: chatWaId + timeString
-            });
-
-            notification.onclick = function (event) {
-                window.focus();
-
-                if (waId) {
-                    goToChatByWaId(chatWaId);
-                }
-            }
-
             setNotificationHistory((prevState) => {
+
+                // Notification limit per minute is 5
+                if ((prevState[timeString]?.length ?? 0) >= 5) {
+                    console.info('Cancelled a notification.');
+                    return prevState;
+                }
+
+                // eslint-disable-next-line no-unused-vars
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
+                    tag: chatWaId + timeString
+                });
+
+                notification.onclick = function (event) {
+                    window.focus();
+
+                    if (waId) {
+                        goToChatByWaId(chatWaId);
+                    }
+                }
+
                 if (!prevState.hasOwnProperty(timeString)) {
                     prevState[timeString] = [];
                 }
+
                 prevState[timeString].push(chatWaId);
                 return {...prevState};
             });
@@ -554,7 +560,7 @@ function Main() {
         connect();
 
         // Testing
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 20; i++) {
             displayNotification("test " + i, "new message", generateUniqueID());
         }
 
