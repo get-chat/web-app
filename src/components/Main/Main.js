@@ -26,7 +26,8 @@ import {
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-    EVENT_TOPIC_UNSUPPORTED_FILE, NOTIFICATIONS_LIMIT_PER_MINUTE
+    EVENT_TOPIC_UNSUPPORTED_FILE,
+    NOTIFICATIONS_LIMIT_PER_MINUTE
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
@@ -57,7 +58,6 @@ import {getWebSocketURL} from "../../helpers/URLHelper";
 import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
 import {isIPad13, isMobileOnly} from "react-device-detect";
 import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
-import {generateUniqueID} from "../../helpers/Helpers";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -559,11 +559,6 @@ function Main() {
         }
 
         connect();
-
-        // Testing
-        for (let i = 0; i < 20; i++) {
-            displayNotification("test " + i, "new message", generateUniqueID());
-        }
 
         return () => {
             PubSub.unsubscribe(searchMessagesVisibilityEventToken);
