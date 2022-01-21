@@ -233,10 +233,6 @@ function Main() {
         history.push(`/main/chat/${_waId}`);
     }
 
-    useEffect(() => {
-        console.log(JSON.stringify(notificationHistory))
-    }, [notificationHistory]);
-
     const displayNotification = (title, body, chatWaId) => {
         if (isChatOnly) return;
 
@@ -276,7 +272,12 @@ function Main() {
                 }
 
                 prevState[timeString].push(chatWaId);
-                return {...prevState};
+
+                // Clear older elements to prevent growing
+                const nextState = {};
+                nextState[timeString] = prevState[timeString];
+
+                return {...nextState};
             });
         }
         if (!window.Notification) {
