@@ -57,6 +57,7 @@ import {getWebSocketURL} from "../../helpers/URLHelper";
 import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
 import {isIPad13, isMobileOnly} from "react-device-detect";
 import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
+import {generateUniqueID} from "../../helpers/Helpers";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -232,6 +233,10 @@ function Main() {
         history.push(`/main/chat/${_waId}`);
     }
 
+    useEffect(() => {
+        console.log(JSON.stringify(notificationHistory))
+    }, [notificationHistory]);
+
     const displayNotification = (title, body, chatWaId) => {
         if (isChatOnly) return;
 
@@ -242,6 +247,8 @@ function Main() {
 
         function displayNtf() {
             const timeString = moment().seconds(0).milliseconds(0).toISOString();
+
+            console.log(JSON.stringify(notificationHistory));
 
             // eslint-disable-next-line no-unused-vars
             const notification = new Notification(title, {
@@ -259,7 +266,11 @@ function Main() {
             }
 
             setNotificationHistory((prevState) => {
+                if (!prevState.hasOwnProperty(timeString)) {
+                    prevState[timeString] = [];
+                }
                 prevState[timeString].push(chatWaId);
+                return {...prevState};
             });
         }
         if (!window.Notification) {
@@ -541,6 +552,11 @@ function Main() {
         }
 
         connect();
+
+        // Testing
+        for (let i = 0; i < 50; i++) {
+            displayNotification("test " + i, "new message", generateUniqueID());
+        }
 
         return () => {
             PubSub.unsubscribe(searchMessagesVisibilityEventToken);
