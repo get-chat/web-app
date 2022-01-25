@@ -26,7 +26,8 @@ import {
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-    EVENT_TOPIC_UNSUPPORTED_FILE
+    EVENT_TOPIC_UNSUPPORTED_FILE,
+    NOTIFICATIONS_LIMIT_PER_MINUTE
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
@@ -120,6 +121,8 @@ function Main() {
     const [selectedChats, setSelectedChats] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [bulkSendPayload, setBulkSendPayload] = useState();
+
+    const [notificationHistory, setNotificationHistory] = useState({});
 
     const history = useHistory();
     const location = useLocation();
@@ -239,20 +242,43 @@ function Main() {
         }
 
         function displayNtf() {
-            // eslint-disable-next-line no-unused-vars
-            const notification = new Notification(title, {
-                body: body,
-                icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
-                tag: chatWaId + moment().seconds(0).milliseconds(0).toISOString()
-            });
+            const timeString = moment().seconds(0).milliseconds(0).toISOString();
 
-            notification.onclick = function (event) {
-                window.focus();
+            setNotificationHistory((prevState) => {
 
-                if (waId) {
-                    goToChatByWaId(chatWaId);
+                // Notification limit per minute
+                if ((prevState[timeString]?.length ?? 0) >= NOTIFICATIONS_LIMIT_PER_MINUTE) {
+                    console.info('Cancelled a notification.');
+                    return prevState;
                 }
-            }
+
+                // eslint-disable-next-line no-unused-vars
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
+                    tag: chatWaId + timeString
+                });
+
+                notification.onclick = function (event) {
+                    window.focus();
+
+                    if (waId) {
+                        goToChatByWaId(chatWaId);
+                    }
+                }
+
+                if (!prevState.hasOwnProperty(timeString)) {
+                    prevState[timeString] = [];
+                }
+
+                prevState[timeString].push(chatWaId);
+
+                // Clear older elements to prevent growing
+                const nextState = {};
+                nextState[timeString] = prevState[timeString];
+
+                return {...nextState};
+            });
         }
         if (!window.Notification) {
             console.log('Browser does not support notifications.');
