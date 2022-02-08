@@ -8,11 +8,13 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import {isLocalHost} from "./helpers/URLHelper";
 import {initStorageType} from "./helpers/StorageHelper";
+import {VERSION} from "./Constants";
 
 // Init Sentry
 if (!isLocalHost()) {
     Sentry.init({
         dsn: process.env.REACT_APP_SENTRY_DSN,
+        release: VERSION,
         integrations: [new Integrations.BrowserTracing()],
         tracesSampleRate: 0.01,
         beforeSend(event, hint) {
