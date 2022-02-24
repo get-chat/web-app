@@ -1,7 +1,10 @@
 import React from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
+import {useTranslation} from "react-i18next";
 
 function DownloadUnsupportedFile(props) {
+
+    const { t, i18n } = useTranslation();
 
     const close = () => {
         props.setOpen(false);
@@ -15,18 +18,22 @@ function DownloadUnsupportedFile(props) {
     return (
         <Dialog open={props.open} onClose={close}>
             <DialogTitle>
-                Unsupported file type
+                {t('Unsupported file type')}
             </DialogTitle>
 
             <DialogContent>
                 <DialogContentText>
-                    This file type is not supported, however you can still download it.
+                    {t('This file type is not supported, however you can still download it.')}
                 </DialogContentText>
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={close} color="secondary">Close</Button>
-                <Button onClick={download} color="primary">Download</Button>
+                <Button onClick={close} color="secondary">
+                    {t('Close')}
+                </Button>
+                <Button onClick={download} color="primary">
+                    {t('Download')}
+                </Button>
             </DialogActions>
         </Dialog>
     )

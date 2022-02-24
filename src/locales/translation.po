@@ -54,13 +54,13 @@ msgstr ""
 msgid "No persons or contacts found for <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "Unsupported file type"
 msgstr ""
 
-msgid ""
+msgid "Close"
 msgstr ""
 
-msgid ""
+msgid "Download"
 msgstr ""
 
 msgid ""
