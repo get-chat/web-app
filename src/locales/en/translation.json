@@ -13,5 +13,19 @@
    "Start": "Start",
    "Persons": "Persons",
    "Contacts": "Contacts",
-   "No persons or contacts found for <1>%s</1>": "No persons or contacts found for <1>%s</1>"
+   "No persons or contacts found for <1>%s</1>": "No persons or contacts found for <1>%s</1>",
+   "Unsupported file type": "Unsupported file type",
+   "Close": "Close",
+   "Download": "Download",
+   "Only admins and users can access to our web app.": "Only admins and users can access to our web app.",
+   "You are not logged in.": "You are not logged in.",
+   "Invalid token.": "Invalid token.",
+   "Incorrect username or password.": "Incorrect username or password.",
+   "An error has occurred. Please try again later.": "An error has occurred. Please try again later.",
+   "Username": "Username",
+   "Password": "Password",
+   "Log in": "Log in",
+   "Welcome": "Welcome",
+   "We are validating your session, please wait.": "We are validating your session, please wait.",
+   "Please login to start": "Please login to start"
 }

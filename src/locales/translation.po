@@ -63,6 +63,48 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
+msgid "Only admins and users can access to our web app."
+msgstr ""
+
+msgid "You are not logged in."
+msgstr ""
+
+msgid "Invalid token."
+msgstr ""
+
+msgid "Incorrect username or password."
+msgstr ""
+
+msgid "An error has occurred. Please try again later."
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Welcome"
+msgstr ""
+
+msgid "We are validating your session, please wait."
+msgstr ""
+
+msgid "Please login to start"
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 
