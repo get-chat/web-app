@@ -27,5 +27,12 @@
    "Log in": "Log in",
    "Welcome": "Welcome",
    "We are validating your session, please wait.": "We are validating your session, please wait.",
-   "Please login to start": "Please login to start"
+   "Please login to start": "Please login to start",
+   "Search For Messages": "Search For Messages",
+   "This chat could not be assigned as its assignments have been changed by another user recently.": "This chat could not be assigned as its assignments have been changed by another user recently.",
+   "This contact has no phone number.": "This contact has no phone number.",
+   "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.": "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.",
+   "You can assign this chat to a user or a group.": "You can assign this chat to a user or a group.",
+   "Unassigned": "Unassigned",
+   "Update": "Update"
 }

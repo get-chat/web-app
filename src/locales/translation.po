@@ -96,10 +96,25 @@ msgstr ""
 msgid "Please login to start"
 msgstr ""
 
-msgid ""
+msgid "Search For Messages"
 msgstr ""
 
-msgid ""
+msgid "This chat could not be assigned as its assignments have been changed by another user recently."
+msgstr ""
+
+msgid "This contact has no phone number."
+msgstr ""
+
+msgid "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment."
+msgstr ""
+
+msgid "You can assign this chat to a user or a group."
+msgstr ""
+
+msgid "Unassigned"
+msgstr ""
+
+msgid "Update"
 msgstr ""
 
 msgid ""

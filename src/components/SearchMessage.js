@@ -10,8 +10,11 @@ import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobileOnly} from 'react-device-detect';
 import {generateCancelToken, searchMessagesCall} from "../api/ApiCalls";
+import {useTranslation} from "react-i18next";
 
 function SearchMessage(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [results, setResults] = useState({});
     const [keyword, setKeyword] = useState("");
@@ -76,7 +79,7 @@ function SearchMessage(props) {
                     <CloseIcon />
                 </IconButton>
 
-                <h3>Search For Messages</h3>
+                <h3>{t('Search For Messages')}</h3>
             </div>
 
             <SearchBar
