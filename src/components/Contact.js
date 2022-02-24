@@ -19,7 +19,7 @@ function Contact(props) {
                 setPhoneNumbersVisible(prevState => !prevState);
             }
         } else {
-            window.displayCustomError(t('This contact has no phone number.'));
+            window.displayCustomError('This contact has no phone number.');
         }
     }
 

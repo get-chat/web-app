@@ -48,5 +48,11 @@
    "Assigned to: <1>%s</1>": "Assigned to: <1>%s</1>",
    "Assigned group: <1>%s</1>": "Assigned group: <1>%s</1>",
    "Phone number": "Phone number",
-   "E-mail": "E-mail"
+   "E-mail": "E-mail",
+   "Loading: %s": "Loading: %s",
+   "Skip": "Skip",
+   "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?": "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?",
+   "An error has occurred.": "An error has occurred.",
+   "Saved as response successfully!": "Saved as response successfully!",
+   "Deleted response successfully!": "Deleted response successfully!"
 }

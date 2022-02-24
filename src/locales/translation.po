@@ -159,6 +159,24 @@ msgstr ""
 msgid "E-mail"
 msgstr ""
 
+msgid "Loading: %s"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
+msgstr ""
+
+msgid "An error has occurred."
+msgstr ""
+
+msgid "Saved as response successfully!"
+msgstr ""
+
+msgid "Deleted response successfully!"
+msgstr ""
+
 msgid ""
 msgstr ""
 
