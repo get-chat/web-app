@@ -11,3 +11,36 @@ msgstr ""
 
 msgid "<0>%s</0> has changed chat assignments."
 msgstr ""
+
+msgid "Chat assignments were changed."
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""

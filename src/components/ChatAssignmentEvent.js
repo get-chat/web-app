@@ -1,9 +1,11 @@
 import React from "react";
 import '../styles/ChatAssignmentEvent.css';
 import Moment from "react-moment";
-import {Trans} from "react-i18next";
+import {Trans, useTranslation} from "react-i18next";
 
 function ChatAssignmentEvent(props) {
+
+    const { t, i18n } = useTranslation();
 
     const dateFormat = 'H:mm';
 
@@ -19,7 +21,7 @@ function ChatAssignmentEvent(props) {
                             </Trans>
                         </div>
                     :
-                        <div>Chat assignments were changed.</div>
+                        <div>{t('Chat assignments were changed.')}</div>
                     }
                 </div>
 
