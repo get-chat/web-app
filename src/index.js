@@ -10,6 +10,8 @@ import {isLocalHost} from "./helpers/URLHelper";
 import {initStorageType} from "./helpers/StorageHelper";
 import {VERSION} from "./Constants";
 
+import './i18n';
+
 // Init Sentry
 if (!isLocalHost()) {
     Sentry.init({
