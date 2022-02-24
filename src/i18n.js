@@ -23,7 +23,7 @@ i18n
     .init({
         // lng: 'en',
         fallbackLng: 'en',
-        debug: false,
+        debug: true,
         overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
         keySeparator: false,
         nsSeparator: false,

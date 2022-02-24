@@ -1,6 +1,7 @@
 import React from "react";
 import '../styles/ChatAssignmentEvent.css';
 import Moment from "react-moment";
+import {Trans} from "react-i18next";
 
 function ChatAssignmentEvent(props) {
 
@@ -12,7 +13,11 @@ function ChatAssignmentEvent(props) {
                 <div className="chatAssignmentEvent__content__title">
                     {props.data.done_by
                     ?
-                        <div><span className="bold">{props.data.done_by?.username ?? 'a user'}</span> has changed chat assignments.</div>
+                        <div>
+                            <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.done_by?.username ?? 'a user' ]}}>
+                                <span className="bold">%s</span> has changed chat assignments.
+                            </Trans>
+                        </div>
                     :
                         <div>Chat assignments were changed.</div>
                     }
