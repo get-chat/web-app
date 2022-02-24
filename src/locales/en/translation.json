@@ -61,5 +61,15 @@
    "Failed to send some messages!": "Failed to send some messages!",
    "Assign chat": "Assign chat",
    "Change tags": "Change tags",
-   "Toggle assignment and tagging history": "Toggle assignment and tagging history"
+   "Toggle assignment and tagging history": "Toggle assignment and tagging history",
+   "Preview": "Preview",
+   "Add a caption...": "Add a caption...",
+   "Add more": "Add more",
+   "Drag and drop here": "Drag and drop here",
+   "No response message have been saved yet.": "No response message have been saved yet.",
+   "Send": "Send",
+   "Oops!": "Oops!",
+   "Are you sure you want to delete this saved response?": "Are you sure you want to delete this saved response?",
+   "Yes": "Yes",
+   "No": "No"
 }

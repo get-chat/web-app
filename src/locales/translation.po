@@ -198,6 +198,42 @@ msgstr ""
 msgid "Toggle assignment and tagging history"
 msgstr ""
 
+msgid "Preview"
+msgstr ""
+
+msgid "Add a caption..."
+msgstr ""
+
+msgid "Add more"
+msgstr ""
+
+msgid "Drag and drop here"
+msgstr ""
+
+msgid "No response message have been saved yet."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Oops!"
+msgstr ""
+
+msgid "Are you sure you want to delete this saved response?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 

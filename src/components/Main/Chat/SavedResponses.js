@@ -1,8 +1,11 @@
 import React, {useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import {getObjLength} from "../../../helpers/ObjectHelper";
+import {useTranslation} from "react-i18next";
 
 function SavedResponses(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [deleteId, setDeleteId] = useState();
     const [open, setOpen] = React.useState(false);
@@ -30,7 +33,9 @@ function SavedResponses(props) {
             <div className="savedResponses">
 
                 {getObjLength(props.savedResponses) === 0 &&
-                <div className="savedResponses__emptyInfo mt-3">No response message have been saved yet.</div>
+                <div className="savedResponses__emptyInfo mt-3">
+                    {t('No response message have been saved yet.')}
+                </div>
                 }
 
                 {Object.entries(props.savedResponses).map((savedResponse, index) =>
@@ -43,8 +48,12 @@ function SavedResponses(props) {
                             </div>
                         </div>
 
-                        <Button onClick={() => sendSavedResponse(savedResponse[0])}>Send</Button>
-                        <Button onClick={() => attemptToDelete(savedResponse[0])}>Delete</Button>
+                        <Button onClick={() => sendSavedResponse(savedResponse[0])}>
+                            {t('Send')}
+                        </Button>
+                        <Button onClick={() => attemptToDelete(savedResponse[0])}>
+                            {t('Delete')}
+                        </Button>
 
                     </div>
                 )}
@@ -54,18 +63,20 @@ function SavedResponses(props) {
             <Dialog
                 open={open}
                 onClose={handleClose}>
-                <DialogTitle>Oops!</DialogTitle>
+                <DialogTitle>
+                    {t('Oops!')}
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to delete this saved response?
+                        {t('Are you sure you want to delete this saved response?')}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="secondary">
-                        No
+                        {t('No')}
                     </Button>
                     <Button onClick={deleteSavedResponse} color="primary" autoFocus>
-                        Yes
+                        {t('Yes')}
                     </Button>
                 </DialogActions>
             </Dialog>
