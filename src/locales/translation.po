@@ -15,7 +15,7 @@ msgstr ""
 msgid "Chat assignments were changed."
 msgstr ""
 
-msgid ""
+msgid "assigned to user: <1>%s</1>"
 msgstr ""
 
 msgid ""

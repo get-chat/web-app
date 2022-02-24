@@ -27,7 +27,9 @@ function ChatAssignmentEvent(props) {
 
                 {props.data.assigned_to_user_set &&
                 <div>
-                    assigned to user: <span className="bold">{props.data.assigned_to_user_set.username}</span>
+                    <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.assigned_to_user_set.username ]}}>
+                        assigned to user: <span className="bold">%s</span>
+                    </Trans>
                 </div>
                 }
 
