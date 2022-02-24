@@ -39,5 +39,14 @@
    "You can add or remove tags for this chat.": "You can add or remove tags for this chat.",
    "Current tags": "Current tags",
    "Empty": "Empty",
-   "Manage tags": "Manage tags"
+   "Manage tags": "Manage tags",
+   "Tags": "Tags",
+   "You can filter chats by tags.": "You can filter chats by tags.",
+   "Contact Details": "Contact Details",
+   "Never": "Never",
+   "Whatsapp Phone Number": "Whatsapp Phone Number",
+   "Assigned to: <1>%s</1>": "Assigned to: <1>%s</1>",
+   "Assigned group: <1>%s</1>": "Assigned group: <1>%s</1>",
+   "Phone number": "Phone number",
+   "E-mail": "E-mail"
 }

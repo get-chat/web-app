@@ -138,25 +138,25 @@ msgstr ""
 msgid "You can filter chats by tags."
 msgstr ""
 
-msgid ""
+msgid "Contact Details"
 msgstr ""
 
-msgid ""
+msgid "Never"
 msgstr ""
 
-msgid ""
+msgid "Whatsapp Phone Number"
 msgstr ""
 
-msgid ""
+msgid "Assigned to: <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "Assigned group: <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "Phone number"
 msgstr ""
 
-msgid ""
+msgid "E-mail"
 msgstr ""
 
 msgid ""
