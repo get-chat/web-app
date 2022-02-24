@@ -177,6 +177,27 @@ msgstr ""
 msgid "Deleted response successfully!"
 msgstr ""
 
+msgid "Hey"
+msgstr ""
+
+msgid "Choose a contact to start a conversation"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Failed to send some messages!"
+msgstr ""
+
+msgid "Assign chat"
+msgstr ""
+
+msgid "Change tags"
+msgstr ""
+
+msgid "Toggle assignment and tagging history"
+msgstr ""
+
 msgid ""
 msgstr ""
 

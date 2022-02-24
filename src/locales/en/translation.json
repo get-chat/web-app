@@ -54,5 +54,12 @@
    "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?": "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?",
    "An error has occurred.": "An error has occurred.",
    "Saved as response successfully!": "Saved as response successfully!",
-   "Deleted response successfully!": "Deleted response successfully!"
+   "Deleted response successfully!": "Deleted response successfully!",
+   "Hey": "Hey",
+   "Choose a contact to start a conversation": "Choose a contact to start a conversation",
+   "Inactive": "Inactive",
+   "Failed to send some messages!": "Failed to send some messages!",
+   "Assign chat": "Assign chat",
+   "Change tags": "Change tags",
+   "Toggle assignment and tagging history": "Toggle assignment and tagging history"
 }
