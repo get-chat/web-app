@@ -117,7 +117,19 @@ msgstr ""
 msgid "Update"
 msgstr ""
 
-msgid ""
+msgid "Chat tags"
+msgstr ""
+
+msgid "You can add or remove tags for this chat."
+msgstr ""
+
+msgid "Current tags"
+msgstr ""
+
+msgid "Empty"
+msgstr ""
+
+msgid "Manage tags"
 msgstr ""
 
 msgid ""

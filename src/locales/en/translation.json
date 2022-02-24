@@ -34,5 +34,10 @@
    "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.": "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.",
    "You can assign this chat to a user or a group.": "You can assign this chat to a user or a group.",
    "Unassigned": "Unassigned",
-   "Update": "Update"
+   "Update": "Update",
+   "Chat tags": "Chat tags",
+   "You can add or remove tags for this chat.": "You can add or remove tags for this chat.",
+   "Current tags": "Current tags",
+   "Empty": "Empty",
+   "Manage tags": "Manage tags"
 }
