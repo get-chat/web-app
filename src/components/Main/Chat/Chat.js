@@ -62,11 +62,14 @@ import {
     setPendingMessageFailed
 } from "../../../helpers/PendingMessagesHelper";
 import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
+import {useTranslation} from "react-i18next";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
+
+    const { t, i18n } = useTranslation();
 
     const messagesContainer = useRef(null);
 
@@ -1398,8 +1401,8 @@ export default function Chat(props) {
 
             {!waId &&
             <div className="chat__default">
-                <h2>Hey</h2>
-                <p>Choose a contact to start a conversation</p>
+                <h2>{t('Hey')}</h2>
+                <p>{t('Choose a contact to start a conversation')}</p>
             </div>
             }
 
