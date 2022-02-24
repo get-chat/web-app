@@ -228,10 +228,25 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-msgid ""
+msgid "This chat has expired. You need to answer with template messages."
 msgstr ""
 
-msgid ""
+msgid "Type a message"
+msgstr ""
+
+msgid "Send a message"
+msgstr ""
+
+msgid "You must grant microphone permission."
+msgstr ""
+
+msgid "This feature is not supported on your browser."
+msgstr ""
+
+msgid "You must open the inbox in a new tab to access this feature."
+msgstr ""
+
+msgid "Go to inbox"
 msgstr ""
 
 msgid ""
