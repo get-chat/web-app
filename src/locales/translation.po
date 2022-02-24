@@ -132,6 +132,30 @@ msgstr ""
 msgid "Manage tags"
 msgstr ""
 
+msgid "Tags"
+msgstr ""
+
+msgid "You can filter chats by tags."
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 

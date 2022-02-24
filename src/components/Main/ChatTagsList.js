@@ -12,8 +12,11 @@ import {
 import '../../styles/ChatTagsList.css';
 import LabelIcon from "@material-ui/icons/Label";
 import {getHubURL} from "../../helpers/URLHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatTagsList(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [isLoading, setLoading] = useState(false);
 
@@ -28,9 +31,13 @@ function ChatTagsList(props) {
 
     return (
         <Dialog open={props.open} onClose={close} className="chatTagsListWrapper">
-            <DialogTitle>Tags</DialogTitle>
+            <DialogTitle>
+                {t('Tags')}
+            </DialogTitle>
             <DialogContent className="chatTagsListWrapper">
-                <div className="mb-3">You can filter chats by tags.</div>
+                <div className="mb-3">
+                    {t('You can filter chats by tags.')}
+                </div>
 
                 {props.tags &&
                 <div className="chatTagsList">
@@ -48,7 +55,7 @@ function ChatTagsList(props) {
                         </div>
                         :
                         <div className="chatTagsList__empty">
-                            Empty
+                            {t('Empty')}
                         </div>
                     }
 
@@ -56,12 +63,16 @@ function ChatTagsList(props) {
                 }
 
                 <div className="mt-3">
-                    <Link href={getHubURL() + 'main/tag/'} target="_blank">Manage tags</Link>
+                    <Link href={getHubURL() + 'main/tag/'} target="_blank">
+                        {t('Manage tags')}
+                    </Link>
                 </div>
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={close} color="secondary">Close</Button>
+                <Button onClick={close} color="secondary">
+                    {t('Close')}
+                </Button>
             </DialogActions>
 
             {isLoading &&
