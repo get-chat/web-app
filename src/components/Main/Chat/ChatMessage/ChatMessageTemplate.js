@@ -5,8 +5,11 @@ import ChatMessageDocument from "./ChatMessageDocument";
 import {Button} from "@material-ui/core";
 import SmsIcon from "@material-ui/icons/Sms";
 import {insertTemplateComponentParameters} from "../../../../helpers/TemplateMessageHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatMessageTemplate(props) {
+
+    const { t, i18n } = useTranslation();
 
     const data = props.data;
     const templateData = props.templateData;
@@ -14,7 +17,7 @@ function ChatMessageTemplate(props) {
     return (
         <div className="chat__template">
                     <span className="chat__templateHeader">
-                        <SmsIcon />Template message:<br/>
+                        <SmsIcon />{t('Template message:')}<br/>
                     </span>
 
             <div className="chat__templateContent">
@@ -61,9 +64,9 @@ function ChatMessageTemplate(props) {
                     <div>
                         {props.isTemplatesFailed
                             ?
-                            <span>[Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!]</span>
+                            <span>[{t('Your template was sent to the user successfully, however we couldn\'t load templates at this moment. Please check again in a while, sorry!')}]</span>
                             :
-                            <span>[Missing template]</span>
+                            <span>[{t('Missing template')}]</span>
                         }
                     </div>
                 }

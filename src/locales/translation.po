@@ -249,6 +249,27 @@ msgstr ""
 msgid "Go to inbox"
 msgstr ""
 
+msgid "Forwarded"
+msgstr ""
+
+msgid "Document"
+msgstr ""
+
+msgid "Save this response"
+msgstr ""
+
+msgid "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!"
+msgstr ""
+
+msgid "Missing template"
+msgstr ""
+
+msgid "Template message:"
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 
