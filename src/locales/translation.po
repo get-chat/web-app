@@ -36,6 +36,33 @@ msgstr ""
 msgid "Choose a phone number"
 msgstr ""
 
+msgid "New chat"
+msgstr ""
+
+msgid "Start a chat with a phone number"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Persons"
+msgstr ""
+
+msgid "Contacts"
+msgstr ""
+
+msgid "No persons or contacts found for <1>%s</1>"
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 

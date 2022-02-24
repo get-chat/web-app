@@ -7,5 +7,11 @@
    "cleared assigned group": "cleared assigned group",
    "There is no phone number": "There is no phone number",
    "%d more phone number(s)": "%d more phone number(s)",
-   "Choose a phone number": "Choose a phone number"
+   "Choose a phone number": "Choose a phone number",
+   "New chat": "New chat",
+   "Start a chat with a phone number": "Start a chat with a phone number",
+   "Start": "Start",
+   "Persons": "Persons",
+   "Contacts": "Contacts",
+   "No persons or contacts found for <1>%s</1>": "No persons or contacts found for <1>%s</1>"
 }

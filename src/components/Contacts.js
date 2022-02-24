@@ -13,8 +13,11 @@ import Person from "./Person";
 import {generateCancelToken, listContactsCall, listPersonsCall, verifyContactsCall} from "../api/ApiCalls";
 import {getObjLength} from "../helpers/ObjectHelper";
 import {addPlus, preparePhoneNumber} from "../helpers/PhoneNumberHelper";
+import {Trans, useTranslation} from "react-i18next";
 
 function Contacts(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [keyword, setKeyword] = useState("");
     const [contacts, setContacts] = useState({});
@@ -137,7 +140,7 @@ function Contacts(props) {
                     <ArrowBack />
                 </IconButton>
 
-                <h3>New chat</h3>
+                <h3>{t('New chat')}</h3>
             </div>
 
             <div className="contacts__startByPhoneNumberWrapper">
@@ -145,7 +148,7 @@ function Contacts(props) {
                     <ListItem button>
                         <div className="contacts__startByPhoneNumber__inner">
                             <DialpadIcon />
-                            <span>Start a chat with a phone number</span>
+                            <span>{t('Start a chat with a phone number')}</span>
                         </div>
                     </ListItem>
                 </div>
@@ -158,7 +161,9 @@ function Contacts(props) {
                             startAdornment: <InputAdornment position="start">+</InputAdornment>,
                         }}
                         onChange={event => setPhoneNumber(event.target.value)} />
-                    <Button color="primary" onClick={() => verifyContact(undefined, phoneNumber)}>Start</Button>
+                    <Button color="primary" onClick={() => verifyContact(undefined, phoneNumber)}>
+                        {t('Start')}
+                    </Button>
                 </div>
                 }
             </div>
@@ -171,7 +176,7 @@ function Contacts(props) {
             <div className="contacts__body">
                 {getObjLength(persons) > 0 &&
                 <div className="contacts__body__headerWrapper">
-                    <h3>Persons</h3>
+                    <h3>{'Persons'}</h3>
                     <IconButton onClick={() => setPersonsVisible(prevState => !prevState)}>
                         {isPersonsVisible
                             ?
@@ -196,7 +201,7 @@ function Contacts(props) {
 
                 {getObjLength(contacts) > 0 &&
                 <div className="contacts__body__headerWrapper">
-                    <h3>Contacts</h3>
+                    <h3>{'Contacts'}</h3>
                     <IconButton onClick={() => setContactsVisible(prevState => !prevState)}>
                         {isContactsVisible
                             ?
@@ -225,8 +230,11 @@ function Contacts(props) {
                 }
 
                 {(!isLoading && keyword?.length > 0 && getObjLength(persons) === 0 && getObjLength(contacts) === 0) &&
-                <span className="contacts__body__hint">No persons or contacts found for <span
-                    className="searchOccurrence">{keyword}</span></span>
+                <span className="contacts__body__hint">
+                    <Trans values={{ postProcess: 'sprintf', sprintf: [ keyword ]}}>
+                        No persons or contacts found for <span className="searchOccurrence">%s</span>
+                    </Trans>
+                </span>
                 }
             </div>
         </div>
