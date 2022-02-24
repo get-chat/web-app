@@ -267,10 +267,22 @@ msgstr ""
 msgid "Template message:"
 msgstr ""
 
-msgid ""
+msgid "Image"
 msgstr ""
 
-msgid ""
+msgid "Video"
+msgstr ""
+
+msgid "Voice"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Sticker"
+msgstr ""
+
+msgid "Template"
 msgstr ""
 
 msgid ""

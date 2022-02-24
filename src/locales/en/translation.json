@@ -84,5 +84,11 @@
    "Save this response": "Save this response",
    "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!": "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!",
    "Missing template": "Missing template",
-   "Template message:": "Template message:"
+   "Template message:": "Template message:",
+   "Image": "Image",
+   "Video": "Video",
+   "Voice": "Voice",
+   "Audio": "Audio",
+   "Sticker": "Sticker",
+   "Template": "Template"
 }
