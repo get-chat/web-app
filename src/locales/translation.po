@@ -18,13 +18,13 @@ msgstr ""
 msgid "assigned to user: <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "assigned to group: <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "cleared assigned user"
 msgstr ""
 
-msgid ""
+msgid "cleared assigned group"
 msgstr ""
 
 msgid ""

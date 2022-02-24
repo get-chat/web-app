@@ -35,19 +35,21 @@ function ChatAssignmentEvent(props) {
 
                 {props.data.assigned_group_set &&
                 <div>
-                    assigned to group: <span className="bold">{props.data.assigned_group_set.name}</span>
+                    <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.assigned_group_set.name ]}}>
+                        assigned to group: <span className="bold">%s</span>
+                    </Trans>
                 </div>
                 }
 
                 {props.data.assigned_to_user_was_cleared &&
                 <div>
-                    cleared assigned user
+                    {t('cleared assigned user')}
                 </div>
                 }
 
                 {props.data.assigned_group_was_cleared &&
                 <div>
-                    cleared assigned group
+                    {t('cleared assigned group')}
                 </div>
                 }
 

@@ -1,5 +1,8 @@
 {
    "<0>%s</0> has changed chat assignments.": "<0>%s</0> has changed chat assignments.",
    "Chat assignments were changed.": "Chat assignments were changed.",
-   "assigned to user: <1>%s</1>": "assigned to user: <1>%s</1>"
+   "assigned to user: <1>%s</1>": "assigned to user: <1>%s</1>",
+   "assigned to group: <1>%s</1>": "assigned to group: <1>%s</1>",
+   "cleared assigned user": "cleared assigned user",
+   "cleared assigned group": "cleared assigned group"
 }
