@@ -4,5 +4,8 @@
    "assigned to user: <1>%s</1>": "assigned to user: <1>%s</1>",
    "assigned to group: <1>%s</1>": "assigned to group: <1>%s</1>",
    "cleared assigned user": "cleared assigned user",
-   "cleared assigned group": "cleared assigned group"
+   "cleared assigned group": "cleared assigned group",
+   "There is no phone number": "There is no phone number",
+   "%d more phone number(s)": "%d more phone number(s)",
+   "Choose a phone number": "Choose a phone number"
 }

@@ -27,13 +27,13 @@ msgstr ""
 msgid "cleared assigned group"
 msgstr ""
 
-msgid ""
+msgid "There is no phone number"
 msgstr ""
 
-msgid ""
+msgid "%d more phone number(s)"
 msgstr ""
 
-msgid ""
+msgid "Choose a phone number"
 msgstr ""
 
 msgid ""
