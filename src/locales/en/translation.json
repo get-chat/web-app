@@ -43,6 +43,7 @@
    "Tags": "Tags",
    "You can filter chats by tags.": "You can filter chats by tags.",
    "Contact Details": "Contact Details",
+   "Contact details": "Contact details",
    "Never": "Never",
    "Whatsapp Phone Number": "Whatsapp Phone Number",
    "Assigned to: <1>%s</1>": "Assigned to: <1>%s</1>",
@@ -90,5 +91,7 @@
    "Voice": "Voice",
    "Audio": "Audio",
    "Sticker": "Sticker",
-   "Template": "Template"
+   "Template": "Template",
+   "<0>%(username)s</0> has added tag: <4>%(tag)s</4>.": "<0>%(username)s</0> has added tag: <4>%(tag)s</4>.",
+   "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>.": "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>."
 }

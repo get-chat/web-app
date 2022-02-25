@@ -141,6 +141,9 @@ msgstr ""
 msgid "Contact Details"
 msgstr ""
 
+msgid "Contact details"
+msgstr ""
+
 msgid "Never"
 msgstr ""
 
@@ -283,6 +286,21 @@ msgid "Sticker"
 msgstr ""
 
 msgid "Template"
+msgstr ""
+
+msgid "<0>%(username)s</0> has added tag: <4>%(tag)s</4>."
+msgstr ""
+
+msgid "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>."
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
 msgstr ""
 
 msgid ""
