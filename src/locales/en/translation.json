@@ -97,5 +97,7 @@
    "A tag was added: <3>%(tag)s</3>.": "A tag was added: <3>%(tag)s</3>.",
    "A tag was removed: <3>%(tag)s</3>.": "A tag was removed: <3>%(tag)s</3>.",
    "Delete": "Delete",
-   "Bulk Send": "Bulk Send"
+   "Bulk Send": "Bulk Send",
+   "Cancel": "Cancel",
+   "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).": "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
 }

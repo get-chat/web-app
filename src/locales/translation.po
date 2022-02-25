@@ -306,5 +306,11 @@ msgstr ""
 msgid "Bulk Send"
 msgstr ""
 
+msgid "Cancel"
+msgstr ""
+
+msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
+msgstr ""
+
 msgid ""
 msgstr ""
