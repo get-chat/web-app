@@ -14,16 +14,18 @@ function ChatTaggingEvent(props) {
                     {props.data.done_by
                         ?
                         <div>
-                            <Trans
-                                values={{postProcess: 'sprintf', sprintf: {'username': props.data.done_by.username, 'tag': props.data.tag?.name}}}>
+                            <Trans values={{postProcess: 'sprintf', sprintf: {'username': props.data.done_by.username, 'tag': props.data.tag?.name}}}>
                                 <span className="bold">%(username)s</span> has {props.data.action} tag: <span
                                 className="bold"
                                 style={{color: props.data.tag?.web_inbox_color}}>%(tag)s</span>.
                             </Trans>
                         </div>
                         :
-                        <div>A tag was {props.data.action}: <span className="bold"
-                                                                  style={{color: props.data.tag?.web_inbox_color}}>%(tag)s</span>.
+                        <div>
+                            <Trans values={{postProcess: 'sprintf', sprintf: {'tag': props.data.tag?.name}}}>
+                                A tag was {props.data.action}: <span className="bold"
+                                                                      style={{color: props.data.tag?.web_inbox_color}}>%(tag)s</span>.
+                            </Trans>
                         </div>
                     }
                 </div>

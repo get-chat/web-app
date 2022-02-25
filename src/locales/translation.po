@@ -294,10 +294,10 @@ msgstr ""
 msgid "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>."
 msgstr ""
 
-msgid ""
+msgid "A tag was added: <3>%(tag)s</3>."
 msgstr ""
 
-msgid ""
+msgid "A tag was removed: <3>%(tag)s</3>."
 msgstr ""
 
 msgid ""
