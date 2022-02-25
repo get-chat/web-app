@@ -300,7 +300,7 @@ msgstr ""
 msgid "A tag was removed: <3>%(tag)s</3>."
 msgstr ""
 
-msgid ""
+msgid "Delete"
 msgstr ""
 
 msgid ""
