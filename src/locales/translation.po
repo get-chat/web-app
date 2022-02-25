@@ -312,5 +312,98 @@ msgstr ""
 msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
 msgstr ""
 
+msgid "Started at <1></1>"
+msgstr ""
+
+msgid "Automotive"
+msgstr ""
+
+msgid "Beauty, Spa and Salon"
+msgstr ""
+
+msgid "Clothing and Apparel"
+msgstr ""
+
+msgid "Education"
+msgstr ""
+
+msgid "Entertainment"
+msgstr ""
+
+msgid "Event Planning and Service"
+msgstr ""
+
+msgid "Finance and Banking"
+msgstr ""
+
+msgid "Food and Grocery"
+msgstr ""
+
+msgid "Public Service"
+msgstr ""
+
+msgid "Hotel and Lodging"
+msgstr ""
+
+msgid "Medical and Health"
+msgstr ""
+
+msgid "Non-profit"
+msgstr ""
+
+msgid "Professional Services"
+msgstr ""
+
+msgid "Shopping and Retail"
+msgstr ""
+
+msgid "Travel and Transportation"
+msgstr ""
+
+msgid "Restaurant"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Personal Profile"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
+msgid "Business Profile"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Vertical"
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""

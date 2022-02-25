@@ -6,11 +6,9 @@ import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK, EVENT_TOPIC_BULK_MESSAGE_
 import Moment from "react-moment";
 import {getObjLength} from "../../../helpers/ObjectHelper";
 import {generateMessagePreview} from "../../../helpers/MessageHelper";
-import {Trans, useTranslation} from "react-i18next";
+import {Trans} from "react-i18next";
 
 function BulkSendIndicator(props) {
-
-    const { t, i18n } = useTranslation();
 
     const [tasks, setTasks] = useState({});
 
