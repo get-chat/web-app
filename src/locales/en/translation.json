@@ -136,5 +136,19 @@
     "New password (repeat)": "",
     "Error": "",
     "Success": "",
-    "Change": ""
+    "Change": "",
+    "Click to retry.": "",
+    "Last attempt at: <1></1>": "",
+    "New messages": "",
+    "You have new messages!": "",
+    "Clear filter: <1>%s</1>": "",
+    "All": "",
+    "Me": "",
+    "Group": "",
+    "Messages": "",
+    "Refresh": "",
+    "Refresh contacts": "",
+    "Admin panel": "",
+    "Settings (App Only)": "",
+    "Logout": ""
 }

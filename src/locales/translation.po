@@ -423,6 +423,57 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
+msgid "Click to retry."
+msgstr ""
+
+msgid "Last attempt at: <1></1>"
+msgstr ""
+
+msgid "New messages"
+msgstr ""
+
+msgid "You have new messages!"
+msgstr ""
+
+msgid "Clear filter: <1>%s</1>"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Me"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Refresh contacts"
+msgstr ""
+
+msgid "Admin panel"
+msgstr ""
+
+msgid "Settings (App Only)"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 
