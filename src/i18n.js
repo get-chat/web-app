@@ -31,6 +31,7 @@ i18n
             useSuspense: false
         },
         returnObjects: true,
+        returnEmptyString: false,
         // saveMissing: true,
 
         resources: {

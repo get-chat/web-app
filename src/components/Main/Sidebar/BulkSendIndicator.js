@@ -6,8 +6,11 @@ import {CALENDAR_SHORT, EVENT_TOPIC_BULK_MESSAGE_TASK, EVENT_TOPIC_BULK_MESSAGE_
 import Moment from "react-moment";
 import {getObjLength} from "../../../helpers/ObjectHelper";
 import {generateMessagePreview} from "../../../helpers/MessageHelper";
+import {Trans, useTranslation} from "react-i18next";
 
 function BulkSendIndicator(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [tasks, setTasks] = useState({});
 
@@ -95,7 +98,9 @@ function BulkSendIndicator(props) {
                     </span>
                 </div>
                 <div className="bulkSendIndicator__timestamp mb-2">
-                    Started at <Moment className="bold" date={task[1].timestamp} calendar={CALENDAR_SHORT} unix />
+                    <Trans>
+                        Started at <Moment className="bold" date={task[1].timestamp} calendar={CALENDAR_SHORT} unix />
+                    </Trans>
                 </div>
                 <LinearProgress variant="determinate" value={(task[1].done * 100) / task[1].total} />
             </div>
