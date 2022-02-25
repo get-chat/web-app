@@ -156,7 +156,7 @@ function Contacts(props) {
                 {isPhoneNumberFormVisible &&
                 <div className="contacts__startByPhoneNumberWrapper__formWrapper">
                     <TextField
-                        label="Phone number"
+                        label={t('Phone number')}
                         InputProps={{
                             startAdornment: <InputAdornment position="start">+</InputAdornment>,
                         }}

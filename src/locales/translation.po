@@ -465,26 +465,29 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-msgid ""
+msgid "%d new messages"
 msgstr ""
 
-msgid ""
+msgid "%s left"
 msgstr ""
 
-msgid ""
+msgid "Status"
 msgstr ""
 
-msgid ""
+msgid "Uploading a media file. Please wait..."
 msgstr ""
 
-msgid ""
+msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
 msgstr ""
 
-msgid ""
+msgid "Recipient: <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "Message: <1>%s</1>"
 msgstr ""
 
-msgid ""
+msgid "Notifications"
+msgstr ""
+
+msgid "You have no notifications"
 msgstr ""

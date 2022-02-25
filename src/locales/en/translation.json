@@ -150,5 +150,14 @@
     "Refresh contacts": "",
     "Admin panel": "",
     "Settings (App Only)": "",
-    "Logout": ""
+    "Logout": "",
+    "%d new messages": "",
+    "%s left": "",
+    "Status": "",
+    "Uploading a media file. Please wait...": "",
+    "Bulk message (ID: %s) couldn't be sent to a recipient.": "",
+    "Recipient: <1>%s</1>": "",
+    "Message: <1>%s</1>": "",
+    "Notifications": "",
+    "You have no notifications": ""
 }

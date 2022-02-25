@@ -2,8 +2,12 @@ import React from "react";
 import {LinearProgress} from "@material-ui/core";
 import {Alert} from "@material-ui/lab";
 import '../../../styles/UploadMediaIndicator.css';
+import {useTranslation} from "react-i18next";
 
 function UploadMediaIndicator() {
+
+    const { t, i18n } = useTranslation();
+
     return (
         <div className="uploadingMediaIndicatorWrapper">
             <Alert
@@ -11,7 +15,7 @@ function UploadMediaIndicator() {
                 severity="info"
                 elevation={0}>
                 <div>
-                    Uploading a media file. Please wait...
+                    {t('Uploading a media file. Please wait...')}
                 </div>
                 <LinearProgress variant="indeterminate" />
             </Alert>
