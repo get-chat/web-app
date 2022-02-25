@@ -96,5 +96,6 @@
    "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>.": "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>.",
    "A tag was added: <3>%(tag)s</3>.": "A tag was added: <3>%(tag)s</3>.",
    "A tag was removed: <3>%(tag)s</3>.": "A tag was removed: <3>%(tag)s</3>.",
-   "Delete": "Delete"
+   "Delete": "Delete",
+   "Bulk Send": "Bulk Send"
 }

@@ -213,8 +213,12 @@ function SendTemplateMessage(props) {
                 </div>
             )}
 
-            <Button innerRef={props.sendButtonInnerRef} onClick={send} className="hidden">Send</Button>
-            <Button innerRef={props.bulkSendButtonInnerRef} onClick={() => send(true)} className="hidden">Bulk Send</Button>
+            <Button innerRef={props.sendButtonInnerRef} onClick={send} className="hidden">
+                {t('Send')}
+            </Button>
+            <Button innerRef={props.bulkSendButtonInnerRef} onClick={() => send(true)} className="hidden">
+                {t('Bulk Send')}
+            </Button>
         </div>
     )
 }

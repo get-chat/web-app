@@ -303,5 +303,8 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+msgid "Bulk Send"
+msgstr ""
+
 msgid ""
 msgstr ""
