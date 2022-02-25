@@ -127,5 +127,14 @@
     "Address": "",
     "Description": "",
     "None": "",
-    "Vertical": ""
+    "Vertical": "",
+    "You must fill all fields!": "",
+    "Passwords must match!": "",
+    "Changed password successfully": "",
+    "Current password": "",
+    "New password": "",
+    "New password (repeat)": "",
+    "Error": "",
+    "Success": "",
+    "Change": ""
 }

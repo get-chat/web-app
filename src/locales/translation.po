@@ -396,6 +396,36 @@ msgstr ""
 msgid "Vertical"
 msgstr ""
 
+msgid "You must fill all fields!"
+msgstr ""
+
+msgid "Passwords must match!"
+msgstr ""
+
+msgid "Changed password successfully"
+msgstr ""
+
+msgid "Current password"
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "New password (repeat)"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid ""
+msgstr ""
+
 msgid ""
 msgstr ""
 
