@@ -13,8 +13,11 @@ import {
 import '../../styles/ChatTags.css';
 import {createChatTaggingCall, deleteChatTaggingCall, listTagsCall, retrieveChatCall} from "../../api/ApiCalls";
 import {getHubURL} from "../../helpers/URLHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatTags(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [isLoading, setLoading] = useState(true);
     const [chat, setChat] = useState();
@@ -123,13 +126,19 @@ function ChatTags(props) {
 
     return (
         <Dialog open={props.open} onClose={close} className="chatTagsWrapper">
-            <DialogTitle>Chat tags</DialogTitle>
+            <DialogTitle>
+                {t('Chat tags')}
+            </DialogTitle>
             <DialogContent>
-                <DialogContentText>You can add or remove tags for this chat.</DialogContentText>
+                <DialogContentText>
+                    {t('You can add or remove tags for this chat.')}
+                </DialogContentText>
 
                 {chatTags &&
                 <div className="chatTags__tags current">
-                    <h5>Current tags</h5>
+                    <h5>
+                        {t('Current tags')}
+                    </h5>
                     {chatTags?.length > 0
                         ?
                         <div>
@@ -142,7 +151,7 @@ function ChatTags(props) {
                         </div>
                         :
                         <div className="chatTags__tags__empty mt-1">
-                            Empty
+                            {t('Empty')}
                         </div>
                     }
                 </div>
@@ -164,19 +173,23 @@ function ChatTags(props) {
                         </div>
                         :
                         <div className="chatTags__tags__empty mt-1">
-                            Empty
+                            {t('Empty')}
                         </div>
                     }
                 </div>
                 }
 
                 <div className="mt-3">
-                    <Link href={getHubURL() + 'main/tag/'} target="_blank">Manage tags</Link>
+                    <Link href={getHubURL() + 'main/tag/'} target="_blank">
+                        {t('Manage tags')}
+                    </Link>
                 </div>
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={close} color="secondary">Close</Button>
+                <Button onClick={close} color="secondary">
+                    {t('Close')}
+                </Button>
                 {/*<Button color="primary">Update</Button>*/}
             </DialogActions>
 

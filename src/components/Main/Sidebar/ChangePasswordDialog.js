@@ -6,8 +6,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {changePasswordCall} from "../../../api/ApiCalls";
+import {useTranslation} from "react-i18next";
 
 function ChangePasswordDialog(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -75,7 +78,7 @@ function ChangePasswordDialog(props) {
                     <TextField
                         value={currentPassword}
                         onChange={(event) => setCurrentPassword(event.target.value)}
-                        label="Current password"
+                        label={t('Current password')}
                         type="password"
                         autoFocus
                         fullWidth />
@@ -83,33 +86,37 @@ function ChangePasswordDialog(props) {
                     <TextField
                         value={newPassword}
                         onChange={(event) => setNewPassword(event.target.value)}
-                        label="New password"
+                        label={t('New password')}
                         type="password"
                         fullWidth />
 
                     <TextField
                         value={newPasswordRepeat}
                         onChange={(event) => setNewPasswordRepeat(event.target.value)}
-                        label="New password (repeat)"
+                        label={t('New password (repeat)')}
                         type="password"
                         fullWidth />
                 </div>
                 {(error && !isSuccess) &&
                 <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
-                    {error}
+                    <AlertTitle>{t('Error')}</AlertTitle>
+                    {t(error)}
                 </Alert>
                 }
                 {isSuccess &&
                 <Alert severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    Changed password successfully
+                    <AlertTitle>{t('Success')}</AlertTitle>
+                    {t('Changed password successfully')}
                 </Alert>
                 }
             </DialogContent>
             <DialogActions>
-                <Button onClick={close} color="secondary">Close</Button>
-                <Button onClick={changePassword} color="primary" disabled={(isRequesting || isSuccess)}>Change</Button>
+                <Button onClick={close} color="secondary">
+                    {t('Close')}
+                </Button>
+                <Button onClick={changePassword} color="primary" disabled={(isRequesting || isSuccess)}>
+                    {t('Change')}
+                </Button>
             </DialogActions>
         </Dialog>
     )

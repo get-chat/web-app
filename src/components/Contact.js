@@ -2,8 +2,11 @@ import React, {useState} from "react";
 import '../styles/Contact.css';
 import {Avatar, ListItem} from "@material-ui/core";
 import ContactProviderHeader from "./ContactProviderHeader";
+import {useTranslation} from "react-i18next";
 
 function Contact(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [phoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
 
@@ -16,7 +19,7 @@ function Contact(props) {
                 setPhoneNumbersVisible(prevState => !prevState);
             }
         } else {
-            window.displayCustomError("This contact has no phone number.");
+            window.displayCustomError('This contact has no phone number.');
         }
     }
 
@@ -44,12 +47,12 @@ function Contact(props) {
                                 {props.data.phoneNumbers[0].phone_number}
                             </div>
                             :
-                            <div className="contact__info__missingPhoneNumber">There is no phone number</div>
+                            <div className="contact__info__missingPhoneNumber">{t('There is no phone number')}</div>
                         }
 
                         {(props.data.phoneNumbers && props.data.phoneNumbers.length > 1) &&
                         <div className="contact__info__otherPhoneNumbers">
-                            <span>{props.data.phoneNumbers?.length - 1} more phone number(s)</span>
+                            <span>{t('%d more phone number(s)', props.data.phoneNumbers?.length - 1)}</span>
                         </div>
                         }
                     </div>
@@ -58,7 +61,7 @@ function Contact(props) {
 
             {phoneNumbersVisible &&
             <div className="contactPhoneNumbersChoices">
-                <h3>Choose a phone number</h3>
+                <h3>{t('Choose a phone number')}</h3>
                 { Object.entries(props.data.phoneNumbers).map((phoneNumber) =>
                     <div
                         key={phoneNumber[0]}

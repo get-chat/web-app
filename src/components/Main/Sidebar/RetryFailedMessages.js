@@ -9,8 +9,11 @@ import {Alert} from "@material-ui/lab";
 import {useHistory} from "react-router-dom";
 import Moment from "react-moment";
 import {CHAT_KEY_PREFIX} from "../../../Constants";
+import {Trans, useTranslation} from "react-i18next";
 
 function RetryFailedMessages(props) {
+
+    const { t, i18n } = useTranslation();
 
     const history = useHistory();
 
@@ -46,11 +49,15 @@ function RetryFailedMessages(props) {
                 severity="error"
                 elevation={0}>
                 Failed to send messages to {generateFailedReceiversString()}.<br />
-                <a href="#" className="bold" onClick={resendMessage}>Click to retry.</a><br />
+                <a href="#" className="bold" onClick={resendMessage}>
+                    {t('Click to retry.')}
+                </a><br />
 
                 {props.lastSendAttemptAt &&
                 <div className="retryFailedMessages__lastSendAttemptAt">
-                    Last attempt at: <Moment date={props.lastSendAttemptAt} format={dateFormat} />
+                    <Trans>
+                        Last attempt at: <Moment date={props.lastSendAttemptAt} format={dateFormat} />
+                    </Trans>
                 </div>
                 }
             </Alert>

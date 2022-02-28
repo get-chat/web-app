@@ -10,10 +10,13 @@ import {EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../
 import PubSub from "pubsub-js";
 import {useParams} from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import {useTranslation} from "react-i18next";
 
 let timerIntervalId;
 
 function VoiceRecord(props) {
+
+    const { t, i18n } = useTranslation();
 
     const voiceRecorder = useRef(new VoiceRecorder());
     const [timer, setTimer] = useState(0);
@@ -163,15 +166,15 @@ function VoiceRecord(props) {
                 <DialogTitle>Oops!</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        You must open the inbox in a new tab to access this feature.
+                        {t('You must open the inbox in a new tab to access this feature.')}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="secondary">
-                        Close
+                        {t('Close')}
                     </Button>
                     <Button onClick={goToInbox} color="primary" autoFocus>
-                        Go to inbox
+                        {t('Go to inbox')}
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -25,8 +25,11 @@ import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../../helpers/EmojiHelper";
 import {addPlus} from "../../../helpers/PhoneNumberHelper";
+import {useTranslation} from "react-i18next";
 
 function SidebarChat(props) {
+
+    const { t, i18n } = useTranslation();
 
     const history = useHistory();
 
@@ -226,7 +229,7 @@ function SidebarChat(props) {
                                 }
 
                                 {!isExpired &&
-                                <span className="sidebarChat__info__date__timeLeft">{timeLeft} left</span>
+                                <span className="sidebarChat__info__date__timeLeft">{t('%s left', timeLeft)}</span>
                                 }
                             </div>
                         </div>
@@ -235,7 +238,7 @@ function SidebarChat(props) {
                             {((props.newMessages[props.chatData.waId]?.newMessages ?? 0) > 0 /*&& waId !== props.chatData.waId*/)
                                 ?
                                 <div className="sidebarChat__info__lastMessage__new">
-                                    {props.newMessages[props.chatData.waId]?.newMessages} new message(s)
+                                    {t('%d new message(s)', props.newMessages[props.chatData.waId]?.newMessages)}
                                 </div>
                                 :
                                 <div className="sidebarChat__info__lastMessage__body">

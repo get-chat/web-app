@@ -50,8 +50,11 @@ import {getObjLength} from "../../../helpers/ObjectHelper";
 import {getHubURL} from "../../../helpers/URLHelper";
 import RetryFailedMessages from "./RetryFailedMessages";
 import UploadMediaIndicator from "./UploadMediaIndicator";
+import {Trans, useTranslation} from "react-i18next";
 
 function Sidebar(props) {
+
+    const { t, i18n } = useTranslation();
 
     const {waId} = useParams();
     const chatsContainer = useRef(null);
@@ -175,7 +178,7 @@ function Sidebar(props) {
 
                         // Display a notification
                         if (!chatMessage.isFromUs) {
-                            props.displayNotification("New messages", "You have new messages!", chatMessageWaId);
+                            props.displayNotification(t('New messages'), t('You have new messages!'), chatMessageWaId);
                         }
                     }
                 });
@@ -327,7 +330,7 @@ function Sidebar(props) {
 
                     // Display a notification
                     if (hasAnyNewMessages) {
-                        props.displayNotification("New messages", "You have new messages!", chatMessageWaId);
+                        props.displayNotification(t('New messages'), t('You have new messages!'), chatMessageWaId);
                     }
                 } else {
                     props.setNewMessages(prevState => {
@@ -467,8 +470,9 @@ function Sidebar(props) {
             {props.filterTag &&
             <div className="sidebar__clearFilter" onClick={clearFilter}>
                 <CloseIcon />
-                Clear filter:&nbsp;
-                <span className="bold">{props.filterTag.name}</span>
+                <Trans values={{postProcess: 'sprintf', sprintf: [props.filterTag.name] }}>
+                    Clear filter: <span className="bold ml-1">%s</span>
+                </Trans>
             </div>
             }
 
@@ -481,9 +485,9 @@ function Sidebar(props) {
                     scrollButtons="auto"
                     onChange={handleTabChange}>
 
-                    <Tab label={"All"} value={"all"} />
-                    <Tab label={"Me"} value={"me"} />
-                    <Tab label={"Group"} value={"group"} />
+                    <Tab label={t('All')} value={"all"} />
+                    <Tab label={t('Me')} value={"me"} />
+                    <Tab label={t('Group')} value={"group"} />
 
                 </Tabs>
             </div>
@@ -546,7 +550,7 @@ function Sidebar(props) {
                 </div>
 
                 {(keyword.trim().length > 0 && getObjLength(contactResults) > 0) &&
-                <h3>Contacts</h3>
+                <h3>{t('Contacts')}</h3>
                 }
 
                 {(keyword.trim().length > 0 && getObjLength(contactResults) > 0) &&
@@ -561,7 +565,7 @@ function Sidebar(props) {
                 }
 
                 {(keyword.trim().length > 0 && getObjLength(chatMessages) > 0) &&
-                <h3>Messages</h3>
+                <h3>{t('Messages')}</h3>
                 }
 
                 {(keyword.trim().length > 0 && getObjLength(chatMessages) > 0) &&
@@ -629,22 +633,36 @@ function Sidebar(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
-                <MenuItem onClick={showChatTagsList}>Tags</MenuItem>
+                <MenuItem onClick={showChatTagsList}>
+                    {t('Tags')}
+                </MenuItem>
                 <Divider />
-                <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>Refresh</MenuItem>
-                <MenuItem onClick={showChangePassword}>Change password</MenuItem>
-                <MenuItem onClick={forceClearContactProvidersData}>Refresh contacts</MenuItem>
+                <MenuItem className="sidebar__menu__refresh" onClick={() => window.location.reload()}>
+                    {t('Refresh')}
+                </MenuItem>
+                <MenuItem onClick={showChangePassword}>
+                    {t('Change password')}
+                </MenuItem>
+                <MenuItem onClick={forceClearContactProvidersData}>
+                    {t('Refresh contacts')}
+                </MenuItem>
                 {props.isAdmin &&
                 <Divider />
                 }
                 {props.isAdmin &&
-                <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">Admin panel</MenuItem>
+                <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">
+                    {t('Admin panel')}
+                </MenuItem>
                 }
                 {isMobile &&
-                <MenuItem onClick={goToSettings}>Settings (App Only)</MenuItem>
+                <MenuItem onClick={goToSettings}>
+                    {t('Settings (App Only)')}
+                </MenuItem>
                 }
                 <Divider />
-                <MenuItem onClick={logOut}>Logout</MenuItem>
+                <MenuItem onClick={logOut}>
+                    {t('Logout')}
+                </MenuItem>
             </Menu>
 
             <ChangePasswordDialog

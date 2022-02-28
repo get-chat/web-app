@@ -26,8 +26,11 @@ import {
 } from "../../../../Constants";
 import ChatMessageClass from "../../../../ChatMessageClass";
 import {replaceEmojis} from "../../../../helpers/EmojiHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatFooter(props) {
+
+    const { t, i18n } = useTranslation();
 
     const fileInput = useRef(null);
     const editable = useRef(null);
@@ -271,9 +274,9 @@ function ChatFooter(props) {
                         <div className="typeBox__hint">
                             {props.isExpired
                                 ?
-                                <span>This chat has expired. You need to answer with template messages.</span>
+                                <span>{t('This chat has expired. You need to answer with template messages.')}</span>
                                 :
-                                <span>Type a message</span>
+                                <span>{t('Type a message')}</span>
                             }
                         </div>
                         }
@@ -292,7 +295,9 @@ function ChatFooter(props) {
                         />
 
                     </div>
-                    <button onClick={props.sendMessage} type="submit">Send a message</button>
+                    <button onClick={props.sendMessage} type="submit">
+                        {t('Send a message')}
+                    </button>
                 </form>
 
                 {(!hasInput() && !props.isExpired) &&

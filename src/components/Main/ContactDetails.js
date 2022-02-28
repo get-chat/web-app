@@ -17,8 +17,11 @@ import LabelIcon from "@material-ui/icons/Label";
 import {generateAvatarColor} from "../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../helpers/EmojiHelper";
 import {addPlus} from "../../helpers/PhoneNumberHelper";
+import {Trans, useTranslation} from "react-i18next";
 
 function ContactDetails(props)  {
+
+    const { t, i18n } = useTranslation();
 
     const [chat, setChat] = useState({});
 
@@ -43,7 +46,9 @@ function ContactDetails(props)  {
                     <CloseIcon />
                 </IconButton>
 
-                <h3>Contact Details</h3>
+                <h3>
+                    {t('Contact Details')}
+                </h3>
             </div>
 
             {props.contactData &&
@@ -68,7 +73,7 @@ function ContactDetails(props)  {
                     }
 
                     <span>Last message: {(props.contactData.lastMessageTimestamp && props.contactData.lastMessageTimestamp > 0)
-                        ? <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment> : 'Never'}</span>
+                        ? <Moment unix calendar={CALENDAR_NORMAL}>{props.contactData.lastMessageTimestamp}</Moment> : t('Never')}</span>
 
                     {chat?.tags?.length > 0 &&
                     <div className="contactDetails__body__tags mt-3">
@@ -89,14 +94,18 @@ function ContactDetails(props)  {
                         {chat?.assignedToUser &&
                         <div>
                             <PersonIcon />
-                            Assigned to: <span className="bold">{chat?.assignedToUser.username} {(props.users?.[chat?.assignedToUser.id]?.isBot()) ? ' (App)' : ''}</span>
+                            <Trans values={{ postProcess: 'sprintf', sprintf: [ chat?.assignedToUser.username + (props.users?.[chat?.assignedToUser.id]?.isBot()) ? ' (App)' : '' ]}}>
+                                Assigned to: <span className="bold">%s</span>
+                            </Trans>
                         </div>
                         }
 
                         {chat?.assignedGroup &&
                         <div>
                             <GroupIcon />
-                            Assigned group: <span className="bold">{chat?.assignedGroup.name}</span>
+                            <Trans values={{ postProcess: 'sprintf', sprintf: [ chat?.assignedGroup.name ]}}>
+                                Assigned group: <span className="bold">%s</span>
+                            </Trans>
                         </div>
                         }
                     </div>
@@ -104,7 +113,9 @@ function ContactDetails(props)  {
                 </div>
 
                 <div className="contactDetails__body__section">
-                    <div className="contactDetails__body__section__title">Whatsapp Phone Number</div>
+                    <div className="contactDetails__body__section__title">
+                        {t('Whatsapp Phone Number')}
+                    </div>
                     <a href={"tel:+" + props.contactData.waId}>{addPlus(props.contactData.waId)}</a>
                 </div>
 
@@ -126,7 +137,9 @@ function ContactDetails(props)  {
                         </div>
 
                         <div className="contactDetails__body__section__content mb-2">
-                            <div className="contactDetails__body__section__subtitle">Phone number</div>
+                            <div className="contactDetails__body__section__subtitle">
+                                {t('Phone number')}
+                            </div>
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.phone_numbers?.map((phoneNumber, phoneNumberIndex) =>
                                     <div key={phoneNumberIndex}>
@@ -141,7 +154,9 @@ function ContactDetails(props)  {
                         </div>
 
                         <div className="contactDetails__body__section__content">
-                            <div className="contactDetails__body__section__subtitle">E-mail</div>
+                            <div className="contactDetails__body__section__subtitle">
+                                {t('E-mail')}
+                            </div>
                             <div className="contactDetails__body__section__content__sub">
                                 {providerData.email_addresses?.map((emailAddress, emailAddressIndex) =>
                                     <div key={emailAddressIndex}>

@@ -1,35 +1,39 @@
 import React from "react";
 import ChatMessageClass from "../../../../ChatMessageClass";
+import {useTranslation} from "react-i18next";
 
 function ChatMessageTypeLabel(props) {
+
+    const { t, i18n } = useTranslation();
+
     return (
         <span className="chatMessageTypeLabel">
             {props.type === ChatMessageClass.TYPE_IMAGE &&
-            <span>Image</span>
+            <span>{t('Image')}</span>
             }
 
             {props.type === ChatMessageClass.TYPE_VIDEO &&
-            <span>Video</span>
+            <span>{t('Video')}</span>
             }
 
             {props.type === ChatMessageClass.TYPE_VOICE &&
-            <span>Voice</span>
+            <span>{t('Voice')}</span>
             }
 
             {props.type === ChatMessageClass.TYPE_AUDIO &&
-            <span>Audio</span>
+            <span>{t('Audio')}</span>
             }
 
             {props.type === ChatMessageClass.TYPE_DOCUMENT &&
-            <span>Document</span>
+            <span>{t('Document')}</span>
             }
 
             {props.type === ChatMessageClass.TYPE_STICKER &&
-            <span>Sticker</span>
+            <span>{t('Sticker')}</span>
             }
 
             {props.type === ChatMessageClass.TYPE_TEMPLATE &&
-            <span>Template</span>
+            <span>{t('Template')}</span>
             }
         </span>
     )

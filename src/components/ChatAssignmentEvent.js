@@ -1,8 +1,11 @@
 import React from "react";
 import '../styles/ChatAssignmentEvent.css';
 import Moment from "react-moment";
+import {Trans, useTranslation} from "react-i18next";
 
 function ChatAssignmentEvent(props) {
+
+    const { t, i18n } = useTranslation();
 
     const dateFormat = 'H:mm';
 
@@ -12,33 +15,41 @@ function ChatAssignmentEvent(props) {
                 <div className="chatAssignmentEvent__content__title">
                     {props.data.done_by
                     ?
-                        <div><span className="bold">{props.data.done_by?.username ?? 'a user'}</span> has changed chat assignments.</div>
+                        <div>
+                            <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.done_by?.username ?? 'a user' ]}}>
+                                <span className="bold">%s</span> has changed chat assignments.
+                            </Trans>
+                        </div>
                     :
-                        <div>Chat assignments were changed.</div>
+                        <div>{t('Chat assignments were changed.')}</div>
                     }
                 </div>
 
                 {props.data.assigned_to_user_set &&
                 <div>
-                    assigned to user: <span className="bold">{props.data.assigned_to_user_set.username}</span>
+                    <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.assigned_to_user_set.username ]}}>
+                        assigned to user: <span className="bold">%s</span>
+                    </Trans>
                 </div>
                 }
 
                 {props.data.assigned_group_set &&
                 <div>
-                    assigned to group: <span className="bold">{props.data.assigned_group_set.name}</span>
+                    <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.assigned_group_set.name ]}}>
+                        assigned to group: <span className="bold">%s</span>
+                    </Trans>
                 </div>
                 }
 
                 {props.data.assigned_to_user_was_cleared &&
                 <div>
-                    cleared assigned user
+                    {t('cleared assigned user')}
                 </div>
                 }
 
                 {props.data.assigned_group_was_cleared &&
                 <div>
-                    cleared assigned group
+                    {t('cleared assigned group')}
                 </div>
                 }
 

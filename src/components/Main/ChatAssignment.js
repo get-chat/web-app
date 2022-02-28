@@ -14,8 +14,11 @@ import {
 } from "@material-ui/core";
 import '../../styles/ChatAssignment.css';
 import {listGroupsCall, retrieveChatAssignmentCall, updateChatAssignmentCall} from "../../api/ApiCalls";
+import {useTranslation} from "react-i18next";
 
 function ChatAssignment(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [isLoading, setLoading] = useState(true);
     const [isUnableToChange, setUnableToChange] = useState(false);
@@ -114,12 +117,12 @@ function ChatAssignment(props) {
                 {isUnableToChange
                     ?
                     <DialogContentText>
-                        This chat is already assigned to another user.
-                        You can change the assignment of this chat only if the current person will unassign themselves or
-                        someone with admin access will clear the assignment.
+                        {t('This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.')}
                     </DialogContentText>
                     :
-                    <DialogContentText>You can assign this chat to a user or a group.</DialogContentText>
+                    <DialogContentText>
+                        {t('You can assign this chat to a user or a group.')}
+                    </DialogContentText>
                 }
 
                 <FormControl fullWidth={true} disabled={isUnableToChange}>
@@ -129,7 +132,9 @@ function ChatAssignment(props) {
                         id="assign-user-select"
                         value={tempAssignedToUser}
                         onChange={handleUserChange}>
-                        <MenuItem value="null">Unassigned</MenuItem>
+                        <MenuItem value="null">
+                            {t('Unassigned')}
+                        </MenuItem>
                         {Object.values(props.users)?.map((user) =>
                             <MenuItem key={user.id} value={user.id}>{user.prepareUserLabel()}</MenuItem>
                         )}
@@ -143,7 +148,9 @@ function ChatAssignment(props) {
                         id="assign-group-select"
                         value={tempAssignedGroup}
                         onChange={handleGroupChange}>
-                        <MenuItem value="null">Unassigned</MenuItem>
+                        <MenuItem value="null">
+                            {t('Unassigned')}
+                        </MenuItem>
                         {groups?.map((group) =>
                             <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
                         )}
@@ -154,7 +161,9 @@ function ChatAssignment(props) {
             <DialogActions>
                 <Button onClick={close} color="secondary">Close</Button>
                 {!isUnableToChange &&
-                <Button color="primary" onClick={updateChatAssignment}>Update</Button>
+                <Button color="primary" onClick={updateChatAssignment}>
+                    {t('Update')}
+                </Button>
                 }
             </DialogActions>
 

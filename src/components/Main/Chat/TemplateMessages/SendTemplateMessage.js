@@ -5,8 +5,11 @@ import FileInput from "../../../FileInput";
 import {Alert, AlertTitle} from "@material-ui/lab";
 import {uploadMediaCall} from "../../../../api/ApiCalls";
 import {getTemplateParams, templateParamToInteger} from "../../../../helpers/TemplateMessageHelper";
+import {Trans, useTranslation} from "react-i18next";
 
 function SendTemplateMessage(props) {
+
+    const { t, i18n } = useTranslation();
 
     const template = props.data;
 
@@ -168,9 +171,15 @@ function SendTemplateMessage(props) {
                                     }
                                 </div>
                                 <FileInput innerRef={headerFileInput} multiple={false} accept={getMimetypeByFormat(comp.format)} handleSelectedFiles={handleChosenImage} />
-                                <Button color="primary" onClick={() => headerFileInput.current.click()} disabled={isUploading}>Upload {headerFileURL ? "another " : ""}{comp.format.toLowerCase()}</Button>
+                                <Button color="primary" onClick={() => headerFileInput.current.click()} disabled={isUploading}>
+                                    <Trans>
+                                        Upload {headerFileURL ? "another " : ""}{comp.format.toLowerCase()}
+                                    </Trans>
+                                </Button>
                                 {headerFileURL &&
-                                <Button color="secondary" onClick={() => setHeaderFileURL('')}>Delete</Button>
+                                <Button color="secondary" onClick={() => setHeaderFileURL('')}>
+                                    {t('Delete')}
+                                </Button>
                                 }
                             </div>
                             }
@@ -204,8 +213,12 @@ function SendTemplateMessage(props) {
                 </div>
             )}
 
-            <Button innerRef={props.sendButtonInnerRef} onClick={send} className="hidden">Send</Button>
-            <Button innerRef={props.bulkSendButtonInnerRef} onClick={() => send(true)} className="hidden">Bulk Send</Button>
+            <Button innerRef={props.sendButtonInnerRef} onClick={send} className="hidden">
+                {t('Send')}
+            </Button>
+            <Button innerRef={props.bulkSendButtonInnerRef} onClick={() => send(true)} className="hidden">
+                {t('Bulk Send')}
+            </Button>
         </div>
     )
 }

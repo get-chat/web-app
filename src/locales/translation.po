@@ -1,0 +1,493 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: get.chat 1.0\n"
+"Report-Msgid-Bugs-To: support@get.chat \n"
+"Last-Translator: Berkay AKIN <berkay@get.chat>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "<0>%s</0> has changed chat assignments."
+msgstr ""
+
+msgid "Chat assignments were changed."
+msgstr ""
+
+msgid "assigned to user: <1>%s</1>"
+msgstr ""
+
+msgid "assigned to group: <1>%s</1>"
+msgstr ""
+
+msgid "cleared assigned user"
+msgstr ""
+
+msgid "cleared assigned group"
+msgstr ""
+
+msgid "There is no phone number"
+msgstr ""
+
+msgid "%d more phone number(s)"
+msgstr ""
+
+msgid "Choose a phone number"
+msgstr ""
+
+msgid "New chat"
+msgstr ""
+
+msgid "Start a chat with a phone number"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Persons"
+msgstr ""
+
+msgid "Contacts"
+msgstr ""
+
+msgid "No persons or contacts found for <1>%s</1>"
+msgstr ""
+
+msgid "Unsupported file type"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Only admins and users can access to our web app."
+msgstr ""
+
+msgid "You are not logged in."
+msgstr ""
+
+msgid "Invalid token."
+msgstr ""
+
+msgid "Incorrect username or password."
+msgstr ""
+
+msgid "An error has occurred. Please try again later."
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Log in"
+msgstr ""
+
+msgid "Welcome"
+msgstr ""
+
+msgid "We are validating your session, please wait."
+msgstr ""
+
+msgid "Please login to start"
+msgstr ""
+
+msgid "Search For Messages"
+msgstr ""
+
+msgid "This chat could not be assigned as its assignments have been changed by another user recently."
+msgstr ""
+
+msgid "This contact has no phone number."
+msgstr ""
+
+msgid "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment."
+msgstr ""
+
+msgid "You can assign this chat to a user or a group."
+msgstr ""
+
+msgid "Unassigned"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Chat tags"
+msgstr ""
+
+msgid "You can add or remove tags for this chat."
+msgstr ""
+
+msgid "Current tags"
+msgstr ""
+
+msgid "Empty"
+msgstr ""
+
+msgid "Manage tags"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "You can filter chats by tags."
+msgstr ""
+
+msgid "Contact Details"
+msgstr ""
+
+msgid "Contact details"
+msgstr ""
+
+msgid "Never"
+msgstr ""
+
+msgid "Whatsapp Phone Number"
+msgstr ""
+
+msgid "Assigned to: <1>%s</1>"
+msgstr ""
+
+msgid "Assigned group: <1>%s</1>"
+msgstr ""
+
+msgid "Phone number"
+msgstr ""
+
+msgid "E-mail"
+msgstr ""
+
+msgid "Loading: %s"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
+msgstr ""
+
+msgid "An error has occurred."
+msgstr ""
+
+msgid "Saved as response successfully!"
+msgstr ""
+
+msgid "Deleted response successfully!"
+msgstr ""
+
+msgid "Hey"
+msgstr ""
+
+msgid "Choose a contact to start a conversation"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Failed to send some messages!"
+msgstr ""
+
+msgid "Assign chat"
+msgstr ""
+
+msgid "Change tags"
+msgstr ""
+
+msgid "Toggle assignment and tagging history"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Add a caption..."
+msgstr ""
+
+msgid "Add more"
+msgstr ""
+
+msgid "Drag and drop here"
+msgstr ""
+
+msgid "No response message have been saved yet."
+msgstr ""
+
+msgid "Send"
+msgstr ""
+
+msgid "Oops!"
+msgstr ""
+
+msgid "Are you sure you want to delete this saved response?"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "This chat has expired. You need to answer with template messages."
+msgstr ""
+
+msgid "Type a message"
+msgstr ""
+
+msgid "Send a message"
+msgstr ""
+
+msgid "You must grant microphone permission."
+msgstr ""
+
+msgid "This feature is not supported on your browser."
+msgstr ""
+
+msgid "You must open the inbox in a new tab to access this feature."
+msgstr ""
+
+msgid "Go to inbox"
+msgstr ""
+
+msgid "Forwarded"
+msgstr ""
+
+msgid "Document"
+msgstr ""
+
+msgid "Save this response"
+msgstr ""
+
+msgid "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!"
+msgstr ""
+
+msgid "Missing template"
+msgstr ""
+
+msgid "Template message:"
+msgstr ""
+
+msgid "Image"
+msgstr ""
+
+msgid "Video"
+msgstr ""
+
+msgid "Voice"
+msgstr ""
+
+msgid "Audio"
+msgstr ""
+
+msgid "Sticker"
+msgstr ""
+
+msgid "Template"
+msgstr ""
+
+msgid "<0>%(username)s</0> has added tag: <4>%(tag)s</4>."
+msgstr ""
+
+msgid "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>."
+msgstr ""
+
+msgid "A tag was added: <3>%(tag)s</3>."
+msgstr ""
+
+msgid "A tag was removed: <3>%(tag)s</3>."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Bulk Send"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
+msgstr ""
+
+msgid "Started at <1></1>"
+msgstr ""
+
+msgid "Automotive"
+msgstr ""
+
+msgid "Beauty, Spa and Salon"
+msgstr ""
+
+msgid "Clothing and Apparel"
+msgstr ""
+
+msgid "Education"
+msgstr ""
+
+msgid "Entertainment"
+msgstr ""
+
+msgid "Event Planning and Service"
+msgstr ""
+
+msgid "Finance and Banking"
+msgstr ""
+
+msgid "Food and Grocery"
+msgstr ""
+
+msgid "Public Service"
+msgstr ""
+
+msgid "Hotel and Lodging"
+msgstr ""
+
+msgid "Medical and Health"
+msgstr ""
+
+msgid "Non-profit"
+msgstr ""
+
+msgid "Professional Services"
+msgstr ""
+
+msgid "Shopping and Retail"
+msgstr ""
+
+msgid "Travel and Transportation"
+msgstr ""
+
+msgid "Restaurant"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "Personal Profile"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Change password"
+msgstr ""
+
+msgid "Business Profile"
+msgstr ""
+
+msgid "Loading"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Vertical"
+msgstr ""
+
+msgid "You must fill all fields!"
+msgstr ""
+
+msgid "Passwords must match!"
+msgstr ""
+
+msgid "Changed password successfully"
+msgstr ""
+
+msgid "Current password"
+msgstr ""
+
+msgid "New password"
+msgstr ""
+
+msgid "New password (repeat)"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+msgid "Click to retry."
+msgstr ""
+
+msgid "Last attempt at: <1></1>"
+msgstr ""
+
+msgid "New messages"
+msgstr ""
+
+msgid "You have new messages!"
+msgstr ""
+
+msgid "Clear filter: <1>%s</1>"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Me"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Messages"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Refresh contacts"
+msgstr ""
+
+msgid "Admin panel"
+msgstr ""
+
+msgid "Settings (App Only)"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "%d new messages"
+msgstr ""
+
+msgid "%s left"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Uploading a media file. Please wait..."
+msgstr ""
+
+msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
+msgstr ""
+
+msgid "Recipient: <1>%s</1>"
+msgstr ""
+
+msgid "Message: <1>%s</1>"
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "You have no notifications"
+msgstr ""

@@ -20,8 +20,11 @@ import {Document, Page, pdfjs} from "react-pdf";
 import PubSub from "pubsub-js";
 import {useForceUpdate} from "../../../hooks/useForceUpdate";
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
+import {useTranslation} from "react-i18next";
 
 function PreviewSendMedia(props) {
+
+    const { t, i18n } = useTranslation();
 
     const fileInput = useRef(null);
 
@@ -190,7 +193,7 @@ function PreviewSendMedia(props) {
             <div className="previewSendMedia__header">
 
                 <CloseIcon onClick={hidePreview}/>
-                <span>Preview</span>
+                <span>{t('Preview')}</span>
             </div>
 
             <div className="previewSendMedia__preview">
@@ -221,7 +224,7 @@ function PreviewSendMedia(props) {
             <div className="previewSendMedia__caption">
                 <TextField value={currentCaption}
                            onChange={e => setCurrentCaption(e.target.value)}
-                           label="Add a caption..."
+                           label={t('Add a caption...')}
                            size="medium"
                            fullWidth={true}/>
             </div>
@@ -269,7 +272,7 @@ function PreviewSendMedia(props) {
                     <ButtonBase className="previewSendMedia__footer__addMoreWrapper" onClick={() => fileInput.current?.click()}>
                         <div className="previewSendMedia__footer__addMore">
                             <AddIcon/>
-                            <span>Add more</span>
+                            <span>{t('Add more')}</span>
                         </div>
                     </ButtonBase>
 
@@ -290,7 +293,7 @@ function PreviewSendMedia(props) {
             {isDragOverlayVisible &&
             <div className="previewSendMedia__dragOverlay" onDragLeave={() => setDragOverlayVisible(false)}>
                 <div className="previewSendMedia__dragOverlay__innerWrapper">
-                    Drag and drop here
+                    {t('Drag and drop here')}
                 </div>
             </div>
             }

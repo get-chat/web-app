@@ -2,8 +2,11 @@ import React, {useEffect, useState} from "react";
 import LinearProgress from '@material-ui/core/LinearProgress';
 import '../../styles/LoadingScreen.css';
 import {VERSION} from "../../Constants";
+import {useTranslation} from "react-i18next";
 
 function LoadingScreen(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [isSkipVisible, setSkipVisible] = useState(false);
 
@@ -31,12 +34,14 @@ function LoadingScreen(props) {
             </div>
 
             <div className="loadingScreen__details">
-                Loading: {props.loadingNow}
+                {t('Loading: %s', props.loadingNow)}
             </div>
 
             {isSkipVisible &&
             <div>
-                <span className="loadingScreen__skip" onClick={skip}>Skip</span>
+                <span className="loadingScreen__skip" onClick={skip}>
+                    {t('Skip')}
+                </span>
             </div>
             }
 

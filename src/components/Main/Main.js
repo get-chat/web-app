@@ -58,12 +58,15 @@ import {getWebSocketURL} from "../../helpers/URLHelper";
 import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
 import {isIPad13, isMobileOnly} from "react-device-detect";
 import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
+import {useTranslation} from "react-i18next";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
 function Main() {
+
+    const { t, i18n } = useTranslation();
 
     const {waId} = useParams();
 
@@ -128,7 +131,7 @@ function Main() {
     const location = useLocation();
     const query = useQuery();
 
-    const confirmationMessage = "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?";
+    const confirmationMessage = t('There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?');
 
     const checkIsChatOnly = () => {
         return query.get('chatonly') === '1';
@@ -1030,13 +1033,13 @@ function Main() {
 
                 <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={isSuccessVisible} autoHideDuration={6000} onClose={handleSuccessClose}>
                     <Alert onClose={handleSuccessClose} severity="success" elevation={4}>
-                        {successMessage}
+                        {t(successMessage)}
                     </Alert>
                 </Snackbar>
 
                 <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleErrorClose}>
                     <Alert onClose={handleErrorClose} severity="error" elevation={4}>
-                        {errorMessage}
+                        {t(errorMessage)}
                     </Alert>
                 </Snackbar>
 
