@@ -1,7 +1,10 @@
 import React from 'react';
 import {Menu, MenuItem} from "@material-ui/core";
+import {useTranslation} from "react-i18next";
 
 function ChatMessageOptionsMenu(props) {
+
+    const { t, i18n } = useTranslation();
 
     const createSavedResponse = () => {
         if (props.optionsChatMessage) {
@@ -30,7 +33,9 @@ function ChatMessageOptionsMenu(props) {
             {/*<MenuItem>Delete</MenuItem>*/}
 
             {(props.optionsChatMessage && props.optionsChatMessage.type === 'text' && props.optionsChatMessage.isFromUs) &&
-            <MenuItem onClick={createSavedResponse}>Save this response</MenuItem>
+            <MenuItem onClick={createSavedResponse}>
+                {t('Save this response')}
+            </MenuItem>
             }
 
         </Menu>

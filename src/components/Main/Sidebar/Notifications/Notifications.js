@@ -8,8 +8,11 @@ import BulkMessageTaskElementClass from "../../../../BulkMessageTaskElementClass
 import CloseIcon from "@material-ui/icons/Close";
 import {IconButton} from "@material-ui/core";
 import {getObjLength} from "../../../../helpers/ObjectHelper";
+import {useTranslation} from "react-i18next";
 
 function Notifications(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [bulkMessageTaskElements, setBulkMessageTaskElements] = useState({});
     const [isLoaded, setLoaded] = useState(false);
@@ -77,13 +80,13 @@ function Notifications(props) {
                     <CloseIcon />
                 </IconButton>
 
-                <h3>Notifications</h3>
+                <h3>{t('Notifications')}</h3>
             </div>
 
             <div className="notifications__body">
                 {(isLoaded && getObjLength(bulkMessageTaskElements) === 0) &&
                 <div className="notifications__body__empty">
-                    You have no notifications
+                    {t('You have no notifications')}
                 </div>
                 }
 

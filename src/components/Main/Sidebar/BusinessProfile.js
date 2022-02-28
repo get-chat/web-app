@@ -15,8 +15,11 @@ import {
     updateProfilePhotoCall
 } from "../../../api/ApiCalls";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
+import {useTranslation} from "react-i18next";
 
 function BusinessProfile(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [isLoaded, setLoaded] = useState(false);
     const [isUpdating, setUpdating] = useState(false);
@@ -150,7 +153,8 @@ function BusinessProfile(props) {
     }
 
     const verticalOptions = [
-        "Automotive", "Beauty, Spa and Salon",
+        "Automotive",
+        "Beauty, Spa and Salon",
         "Clothing and Apparel",
         "Education",
         "Entertainment",
@@ -179,7 +183,7 @@ function BusinessProfile(props) {
                     <ArrowBack />
                 </IconButton>
 
-                <h3>Profile</h3>
+                <h3>{t('Profile')}</h3>
             </div>
 
             <div className="sidebarBusinessProfile__body">
@@ -187,7 +191,7 @@ function BusinessProfile(props) {
                     {props.currentUser &&
                     <div>
                         <div className="sidebarBusinessProfile__body__section__header">
-                            <h5>Personal Profile</h5>
+                            <h5>{t('Personal Profile')}</h5>
                         </div>
 
                         <div className="sidebarBusinessProfile__body__avatarContainer">
@@ -202,7 +206,9 @@ function BusinessProfile(props) {
                         <span>{props.currentUser.first_name + ' ' + props.currentUser.last_name}</span>
 
                         <div className="sidebarBusinessProfile__body__changePasswordContainer">
-                            <Button onClick={() => props.setChangePasswordDialogVisible(true)} color="secondary">Change password</Button>
+                            <Button onClick={() => props.setChangePasswordDialogVisible(true)} color="secondary">
+                                {t('Change password')}
+                            </Button>
                         </div>
                     </div>
                     }
@@ -210,11 +216,11 @@ function BusinessProfile(props) {
 
                 <div className="sidebarBusinessProfile__body__section">
                     <div className="sidebarBusinessProfile__body__section__header">
-                        <h5>Business Profile</h5>
+                        <h5>{t('Business Profile')}</h5>
                     </div>
 
                     {!isLoaded &&
-                    <span>Loading</span>
+                    <span>{t('Loading')}</span>
                     }
 
                     {isLoaded &&
@@ -231,15 +237,19 @@ function BusinessProfile(props) {
 
                         <form onSubmit={updateBusinessProfile}>
                             <div>
-                                <TextField value={about} onChange={e => setAbout(e.target.value)} label="About" size="medium" multiline={true} fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
-                                <TextField value={address} onChange={e => setAddress(e.target.value)} label="Address" size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
-                                <TextField value={description} onChange={e => setDescription(e.target.value)} label="Description" size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
-                                <TextField value={email} onChange={e => setEmail(e.target.value)} label="E-mail" size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={about} onChange={e => setAbout(e.target.value)} label={t('About')} size="medium" multiline={true} fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={address} onChange={e => setAddress(e.target.value)} label={t('Address')} size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={description} onChange={e => setDescription(e.target.value)} label={t('Description')} size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
+                                <TextField value={email} onChange={e => setEmail(e.target.value)} label={t('E-mail')} size="medium" fullWidth={true} InputProps={{readOnly: !props.isAdmin}} />
 
                                 <FormControl fullWidth={true} disabled={!props.isAdmin}>
-                                    <InputLabel id="vertical-label">Vertical</InputLabel>
+                                    <InputLabel id="vertical-label">
+                                        {t('Vertical')}
+                                    </InputLabel>
                                     <Select value={vertical} onChange={(event) => setVertical(event.target.value)} labelId="vertical-label">
-                                        <MenuItem value="">None</MenuItem>
+                                        <MenuItem value="">
+                                            {t('None')}
+                                        </MenuItem>
 
                                         {verticalOptions.map((verticalOption, index) =>
                                             <MenuItem key={index} value={verticalOption}>{verticalOption}</MenuItem>
@@ -250,7 +260,9 @@ function BusinessProfile(props) {
 
                             {props.isAdmin &&
                             <div className="sidebarBusinessProfile__body__section__subSection__action">
-                                <Button type="submit" disabled={isUpdating} color="primary" size="large">Update</Button>
+                                <Button type="submit" disabled={isUpdating} color="primary" size="large">
+                                    {t('Update')}
+                                </Button>
                             </div>
                             }
                         </form>

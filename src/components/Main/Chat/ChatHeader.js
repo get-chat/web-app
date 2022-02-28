@@ -18,8 +18,11 @@ import {
     getDisplayAssignmentAndTaggingHistory,
     setDisplayAssignmentAndTaggingHistory
 } from "../../../helpers/StorageHelper";
+import {useTranslation} from "react-i18next";
 
 function ChatHeader(props) {
+
+    const { t, i18n } = useTranslation();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -89,7 +92,9 @@ function ChatHeader(props) {
                     <h3 dangerouslySetInnerHTML={{__html: replaceEmojis((props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : ''))}} />
                     {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
                     {props.person?.isExpired &&
-                    <p className="chat__header__expired">Inactive</p>
+                    <p className="chat__header__expired">
+                        {t('Inactive')}
+                    </p>
                     }
                 </div>
 
@@ -102,7 +107,7 @@ function ChatHeader(props) {
 
             <div className="chat__headerRight">
                 {(isMobileOnly && props.hasFailedMessages) &&
-                <Tooltip title="Failed to send some messages!">
+                <Tooltip title={t('Failed to send some messages!')}>
                     <IconButton onClick={props.closeChat}>
                         <WarningIcon className="error" />
                     </IconButton>
@@ -125,11 +130,19 @@ function ChatHeader(props) {
                 open={Boolean(anchorEl)}
                 onClose={hideMenu}
                 elevation={3}>
-                <MenuItem onClick={showContactDetailsAndHideMenu}>Contact details</MenuItem>
-                <MenuItem onClick={showChatAssignmentAndHideMenu}>Assign chat</MenuItem>
-                <MenuItem onClick={showChatTagsAndHideMenu}>Change tags</MenuItem>
+                <MenuItem onClick={showContactDetailsAndHideMenu}>
+                    {t('Contact details')}
+                </MenuItem>
+                <MenuItem onClick={showChatAssignmentAndHideMenu}>
+                    {t('Assign chat')}
+                </MenuItem>
+                <MenuItem onClick={showChatTagsAndHideMenu}>
+                    {t('Change tags')}
+                </MenuItem>
                 <Divider />
-                <MenuItem onClick={toggleAssignmentAndTaggingHistory}>Toggle assignment and tagging history</MenuItem>
+                <MenuItem onClick={toggleAssignmentAndTaggingHistory}>
+                    {t('Toggle assignment and tagging history')}
+                </MenuItem>
             </Menu>
 
         </div>

@@ -3,8 +3,11 @@ import '../../../styles/SidebarContactResult.css';
 import {Link} from "react-router-dom";
 import {Avatar} from "@material-ui/core";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
+import {useTranslation} from "react-i18next";
 
 function SidebarContactResult(props) {
+
+    const { t, i18n } = useTranslation();
 
     const data = props.contactData;
 
@@ -17,7 +20,7 @@ function SidebarContactResult(props) {
                 <div className="sidebarContactResult__info">
                     <h2>{props.chatData.name}</h2>
                     <p className="sidebarContactResult__info__status">
-                        Status
+                        {t('Status')}
                     </p>
                 </div>
             </div>

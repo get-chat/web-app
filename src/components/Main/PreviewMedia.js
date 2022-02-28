@@ -12,7 +12,6 @@ function PreviewMedia(props) {
     return (
         <div className="app__mediaPreview">
             <div className="app__mediaPreview__header">
-
                 <IconButton className="app__mediaPreview__close" onClick={props.hideImageOrVideoPreview}>
                     <CloseIcon />
                 </IconButton>
@@ -25,8 +24,8 @@ function PreviewMedia(props) {
                     <h3>{chatMessageToPreview.senderName}</h3>
                     <span><Moment calendar={CALENDAR_NORMAL} date={chatMessageToPreview.timestamp} unix /></span>
                 </div>
-
             </div>
+
             <Zoom in={true}>
                 <div className="app__mediaPreview__container" onClick={props.hideImageOrVideoPreview}>
                     {(chatMessageToPreview.imageId || chatMessageToPreview.imageLink || chatMessageToPreview.getHeaderFileLink('image')) &&

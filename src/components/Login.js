@@ -8,6 +8,7 @@ import {VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
 import {baseCall, loginCall, logoutCall} from "../api/ApiCalls";
 import {makeStyles} from "@material-ui/styles";
+import {useTranslation} from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -17,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
+
+    const { t, i18n } = useTranslation();
 
     const {errorCase} = useParams();
 
@@ -116,24 +119,26 @@ export default function Login(props) {
                         <img className="login__body__logo" src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'} alt="Logo" />
                     </div>
 
-                    <h2>Welcome</h2>
-                    <p>Please login to start</p>
+                    <h2>{t('Welcome')}</h2>
+                    <p>{t('Please login to start')}</p>
 
                     <form onSubmit={doLogin}>
-                        <TextField value={username} onChange={e => setUsername(e.target.value)} label="Username" size="medium" fullWidth={true} />
-                        <TextField value={password} onChange={e => setPassword(e.target.value)} type="password" label="Password" size="medium" fullWidth={true} />
-                        <Button type="submit" color="primary" fullWidth={true} disableElevation>Login</Button>
+                        <TextField value={username} onChange={e => setUsername(e.target.value)} label={t('Username')} size="medium" fullWidth={true} />
+                        <TextField value={password} onChange={e => setPassword(e.target.value)} type="password" label={t('Password')} size="medium" fullWidth={true} />
+                        <Button type="submit" color="primary" fullWidth={true} disableElevation>
+                            {t('Log in')}
+                        </Button>
                     </form>
 
                     {isValidatingToken &&
                     <div className="login__validatingToken">
-                        <h2>Welcome</h2>
-                        <p>We are validating your session, please wait.</p>
+                        <h2>{t('Welcome')}</h2>
+                        <p>{t('We are validating your session, please wait.')}</p>
                     </div>
                     }
 
                     {loginError &&
-                    <Alert severity="error">{loginError}</Alert>
+                    <Alert severity="error">{t(loginError)}</Alert>
                     }
 
                     <div className="login__body__versionWrapper">

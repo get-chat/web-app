@@ -19,12 +19,15 @@ import ChatAssignmentEvent from "../../../ChatAssignmentEvent";
 import ChatTaggingEvent from "./ChatTaggingEvent";
 import {replaceEmojis} from "../../../../helpers/EmojiHelper";
 import {formatMessage} from "../../../../helpers/MessageHelper";
+import {useTranslation} from "react-i18next";
 
 const iconStyles = {
     fontSize: '15px'
 };
 
 function ChatMessage(props) {
+
+    const { t, i18n } = useTranslation();
 
     const data = props.messageData;
     const templateData = data.type === ChatMessageClass.TYPE_TEMPLATE ? props.templates[data.templateName] : undefined;
@@ -73,7 +76,7 @@ function ChatMessage(props) {
                     {data.isForwarded &&
                     <div className="chat__forwarded">
                         <ReplyIcon/>
-                        <span>Forwarded</span>
+                        <span>{t('Forwarded')}</span>
                     </div>
                     }
 

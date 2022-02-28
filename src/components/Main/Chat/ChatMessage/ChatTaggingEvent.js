@@ -1,6 +1,7 @@
 import React from "react";
 import '../../../../styles/ChatTaggingEvent.css';
 import Moment from "react-moment";
+import {Trans} from "react-i18next";
 
 function ChatTaggingEvent(props) {
 
@@ -11,16 +12,22 @@ function ChatTaggingEvent(props) {
             <div className="chatTaggingEvent__content">
                 <div className="chatTaggingEvent__content__title">
                     {props.data.done_by
-                    ?
+                        ?
                         <div>
-                            <span className="bold">{props.data.done_by.username}</span> has {props.data.action} tag:
+                            <Trans values={{postProcess: 'sprintf', sprintf: {'username': props.data.done_by.username, 'tag': props.data.tag?.name}}}>
+                                <span className="bold">%(username)s</span> has {props.data.action} tag: <span
+                                className="bold"
+                                style={{color: props.data.tag?.web_inbox_color}}>%(tag)s</span>.
+                            </Trans>
                         </div>
-                    :
-                        <div>A tag was {props.data.action}:</div>
+                        :
+                        <div>
+                            <Trans values={{postProcess: 'sprintf', sprintf: {'tag': props.data.tag?.name}}}>
+                                A tag was {props.data.action}: <span className="bold"
+                                                                      style={{color: props.data.tag?.web_inbox_color}}>%(tag)s</span>.
+                            </Trans>
+                        </div>
                     }
-
-                    &nbsp;
-                    <span className="bold" style={{color: props.data.tag?.web_inbox_color}}>{props.data.tag?.name}</span>.
                 </div>
 
                 <div className="chatTaggingEvent__content__timestamp">

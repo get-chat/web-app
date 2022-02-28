@@ -4,8 +4,11 @@ import {CALENDAR_SHORT} from "../../../../Constants";
 import {useHistory} from "react-router-dom";
 import {Link} from "@material-ui/core";
 import {generateMessagePreview} from "../../../../helpers/MessageHelper";
+import {Trans, useTranslation} from "react-i18next";
 
 function FailedBulkMessageNotification(props) {
+
+    const { t, i18n } = useTranslation();
 
     const history = useHistory();
 
@@ -24,10 +27,16 @@ function FailedBulkMessageNotification(props) {
 
     return (
         <div className="notification error">
-            <h3>Bulk message (ID: {props.data.id}) couldn't be sent to a recipient.</h3>
-            <div className="mb-1">Recipient: <Link href="#" onClick={handleClick} className="bold">{props.data.waId}</Link></div>
+            <h3>{t('Bulk message (ID: %s) couldn\'t be sent to a recipient.', props.data.id)}</h3>
             <div className="mb-1">
-                Message: <span className="bold">{generateMessagePreview(props.data.task.payload)}</span>
+                <Trans values={{ postProcess: 'sprintf', sprintf: [ props.data.waId ]}}>
+                    Recipient: <Link href="#" onClick={handleClick} className="bold">%s</Link>
+                </Trans>
+            </div>
+            <div className="mb-1">
+                <Trans values={{ postProcess: 'sprintf', sprintf: [ generateMessagePreview(props.data.task.payload) ]}}>
+                    Message: <span className="bold">%s</span>
+                </Trans>
             </div>
             <div className="mb-2">Status code: <span className="bold">{props.data.statusCode}</span></div>
             <div className="mb-2">
