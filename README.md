@@ -31,6 +31,19 @@ Please see .env.example file for example values.
 
 `REACT_APP_LOGO_BLACK_URL`: Black and white version of application logo (used inside the loading screen).
 
+## Sentry
+
+This project uses Sentry for error tracking.
+
+### Change Sentry DSN Key
+
+If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key (https://docs.sentry.io/product/sentry-basics/dsn-explainer/).
+In order to do this, please go to `.env` file and replace the value of `REACT_APP_SENTRY_DSN` environment variable.
+
+### Disable Sentry
+
+In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `index.js`.
+
 ## Available Scripts
 
 In the project directory, you can run:
