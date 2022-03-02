@@ -33,7 +33,7 @@ Please see .env.example file for example values.
 
 ## Sentry
 
-This repository uses Sentry for error tracking.
+This project uses Sentry for error tracking.
 
 ### Change Sentry DSN Key
 
