@@ -37,7 +37,7 @@ This project uses Sentry for error tracking.
 
 ### Change Sentry DSN Key
 
-If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key.
+If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key (https://docs.sentry.io/product/sentry-basics/dsn-explainer/).
 In order to do this, please go to `.env` file and replace the value of `REACT_APP_SENTRY_DSN` environment variable.
 
 ### Disable Sentry
