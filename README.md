@@ -40,6 +40,10 @@ This repository uses Sentry for error tracking.
 If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key.
 In order to do this, please go to `.env` file and replace the value of `REACT_APP_SENTRY_DSN` environment variable.
 
+### Disable Sentry
+
+In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `index.js`.
+
 ## Available Scripts
 
 In the project directory, you can run:
