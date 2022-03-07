@@ -18,7 +18,7 @@ export const setPendingMessageFailed = (id) => {
     const pendingMessages = getPendingMessages();
     const pendingMessageIndex = findPendingMessageIndex(id);
     const failedMessage = pendingMessages[pendingMessageIndex] || {}
-    pendingMessages[pendingMessageIndex] = {...failedMessage, isFailed: true, willRetry = false};
+    pendingMessages[pendingMessageIndex] = {...failedMessage, isFailed: true, willRetry: false};
 
     return pendingMessages;
 }
