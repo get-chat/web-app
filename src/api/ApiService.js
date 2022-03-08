@@ -2,7 +2,7 @@ import axios from "axios";
 import PubSub from "pubsub-js";
 import {BASE_URL, EVENT_TOPIC_FORCE_LOGOUT} from "../Constants";
 import {getConfig, handleIfUnauthorized} from "../helpers/ApiHelper";
-import { getStorage, STORAGE_TAG_TOKEN } from "../helpers/StorageHelper";
+import {getStorage, STORAGE_TAG_TOKEN} from "../helpers/StorageHelper";
 
 export class ApiService {
 
@@ -92,25 +92,25 @@ export class ApiService {
     }
 
     bulkSendCall = (body, successCallback) => {
-        axios.post(`${BASE_URL}bulk_messages/`, body, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${BASE_URL}bulk_messages/`, body, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     listUsersCall = (limit, successCallback) => {
-        axios.get(`${BASE_URL}users/`, getConfig({
-            limit: limit
-        }))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}users/`, getConfig({
+                limit: limit
+            })),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     retrieveCurrentUserCall = (successCallback, history) => {
@@ -211,7 +211,7 @@ export class ApiService {
     }
 
     listMessagesCall = (waId, search, chatTagId, limit, offset, beforeTime, sinceTime, cancelToken, successCallback,
-                                     errorCallback, history) => {
+                        errorCallback, history) => {
         axios.get(`${BASE_URL}messages/`,
             getConfig({
                 wa_id: waId,
@@ -262,7 +262,7 @@ export class ApiService {
     }
 
     searchMessagesCall = (waId, search, limit, cancelToken, successCallback, errorCallback) => {
-        axios.get( `${BASE_URL}messages/`,
+        axios.get(`${BASE_URL}messages/`,
             getConfig({
                 wa_id: waId,
                 search: search,
@@ -431,7 +431,7 @@ export class ApiService {
     }
 
     updateBusinessProfileCall = (address, description, email, vertical, websites, cancelToken, successCallback,
-                                              errorCallback) => {
+                                 errorCallback) => {
         axios.patch(`${BASE_URL}settings/business/profile/`, {
             address: address,
             description: description,
@@ -459,7 +459,7 @@ export class ApiService {
     }
 
     updateProfileAboutCall = (about, cancelToken, successCallback, errorCallback) => {
-        axios.patch( `${BASE_URL}settings/profile/about/`, {
+        axios.patch(`${BASE_URL}settings/profile/about/`, {
             text: about
         }, getConfig(undefined, cancelToken))
             .then((response) => {
@@ -483,7 +483,7 @@ export class ApiService {
     }
 
     updateProfilePhotoCall = (formData, cancelToken, successCallback, errorCallback) => {
-        axios.post( `${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelToken))
+        axios.post(`${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelToken))
             .then((response) => {
                 successCallback?.(response);
             })
