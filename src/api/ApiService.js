@@ -39,24 +39,24 @@ export class ApiService {
     }
 
     loginCall = (username, password, successCallback, errorCallback) => {
-        axios.post(`${BASE_URL}auth/token/`, {
-            username: username,
-            password: password
-        }).then((response) => {
-            successCallback?.(response);
-        }).catch((error) => {
-            errorCallback?.(error);
-        })
+        this.handleRequest(
+            axios.post(`${BASE_URL}auth/token/`, {
+                username: username,
+                password: password
+            }),
+            successCallback,
+            errorCallback
+        );
     }
 
     logoutCall = (successCallback) => {
-        axios.get(`${BASE_URL}auth/logout/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}auth/logout/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     changePasswordCall = (currentPassword, newPassword, successCallback, errorCallback) => {
