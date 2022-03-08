@@ -1,6 +1,6 @@
 import axios from "axios";
 import PubSub from "pubsub-js";
-import {BASE_URL, EVENT_TOPIC_FORCE_LOGOUT} from "../Constants";
+import {EVENT_TOPIC_FORCE_LOGOUT} from "../Constants";
 import {getConfig, handleIfUnauthorized} from "../helpers/ApiHelper";
 import {getStorage, STORAGE_TAG_TOKEN} from "../helpers/StorageHelper";
 
@@ -40,7 +40,7 @@ export class ApiService {
 
     loginCall = (username, password, successCallback, errorCallback) => {
         this.handleRequest(
-            axios.post(`${BASE_URL}auth/token/`, {
+            axios.post(`${this.apiBaseURL}auth/token/`, {
                 username: username,
                 password: password
             }),
@@ -51,7 +51,7 @@ export class ApiService {
 
     logoutCall = (successCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}auth/logout/`, getConfig()),
+            axios.get(`${this.apiBaseURL}auth/logout/`, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -61,7 +61,7 @@ export class ApiService {
 
     changePasswordCall = (currentPassword, newPassword, successCallback, errorCallback) => {
         this.handleRequest(
-            axios.put(`${BASE_URL}users/password/change/`, {
+            axios.put(`${this.apiBaseURL}users/password/change/`, {
                 current_password: currentPassword,
                 new_password: newPassword
             }, getConfig()),
@@ -72,7 +72,7 @@ export class ApiService {
 
     listChatsCall = (keyword, chatTagId, limit, offset, cancelToken, successCallback, errorCallback, history) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}chats/`,
+            axios.get(`${this.apiBaseURL}chats/`,
                 getConfig(
                     {
                         search: keyword,
@@ -93,7 +93,7 @@ export class ApiService {
 
     bulkSendCall = (body, successCallback) => {
         this.handleRequest(
-            axios.post(`${BASE_URL}bulk_messages/`, body, getConfig()),
+            axios.post(`${this.apiBaseURL}bulk_messages/`, body, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -103,7 +103,7 @@ export class ApiService {
 
     listUsersCall = (limit, successCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}users/`, getConfig({
+            axios.get(`${this.apiBaseURL}users/`, getConfig({
                 limit: limit
             })),
             successCallback,
@@ -115,7 +115,7 @@ export class ApiService {
 
     retrieveCurrentUserCall = (successCallback, history) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}users/current/`, getConfig()),
+            axios.get(`${this.apiBaseURL}users/current/`, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -126,7 +126,7 @@ export class ApiService {
 
     listTemplatesCall = (successCallback, errorCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}templates/`, getConfig()),
+            axios.get(`${this.apiBaseURL}templates/`, getConfig()),
             successCallback,
             errorCallback
         );
@@ -134,7 +134,7 @@ export class ApiService {
 
     listSavedResponsesCall = (successCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}saved_responses/`, getConfig()),
+            axios.get(`${this.apiBaseURL}saved_responses/`, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -144,7 +144,7 @@ export class ApiService {
 
     createSavedResponseCall = (text, successCallback) => {
         this.handleRequest(
-            axios.post(`${BASE_URL}saved_responses/`, {
+            axios.post(`${this.apiBaseURL}saved_responses/`, {
                 text: text
             }, getConfig()),
             successCallback,
@@ -156,7 +156,7 @@ export class ApiService {
 
     deleteSavedResponseCall = (id, successCallback) => {
         this.handleRequest(
-            axios.delete(`${BASE_URL}saved_responses/${id}/`, getConfig()),
+            axios.delete(`${this.apiBaseURL}saved_responses/${id}/`, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -166,7 +166,7 @@ export class ApiService {
 
     resolveContactCall = (personWaId, successCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}contacts/${personWaId}`, getConfig()),
+            axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -176,7 +176,7 @@ export class ApiService {
 
     listContactsCall = (search, limit, cancelToken, successCallback, errorCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}contacts/`, getConfig({
+            axios.get(`${this.apiBaseURL}contacts/`, getConfig({
                 search: search,
                 limit: limit
             }, cancelToken)),
@@ -190,7 +190,7 @@ export class ApiService {
 
     listTagsCall = (successCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}tags/`, getConfig()),
+            axios.get(`${this.apiBaseURL}tags/`, getConfig()),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -200,7 +200,7 @@ export class ApiService {
 
     retrievePersonCall = (waId, cancelToken, successCallback, errorCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelToken)),
+            axios.get(`${this.apiBaseURL}persons/${waId}/`, getConfig(undefined, cancelToken)),
             successCallback,
             (error) => {
                 window.displayError(error);
@@ -211,7 +211,7 @@ export class ApiService {
     listMessagesCall = (waId, search, chatTagId, limit, offset, beforeTime, sinceTime, cancelToken, successCallback,
                         errorCallback, history) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}messages/`,
+            axios.get(`${this.apiBaseURL}messages/`,
                 getConfig({
                     wa_id: waId,
                     search: search,
@@ -233,7 +233,7 @@ export class ApiService {
 
     listChatAssignmentEventsCall = (waId, beforeTime, sinceTime, cancelToken, successCallback) => {
         this.handleRequest(
-            axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
+            axios.get(`${this.apiBaseURL}chat_assignment_events/`, getConfig({
                 wa_id: waId,
                 before_time: beforeTime,
                 since_time: sinceTime,
@@ -246,270 +246,266 @@ export class ApiService {
     }
 
     listChatTaggingEventsCall = (waId, beforeTime, sinceTime, cancelToken, successCallback) => {
-        axios.get(`${BASE_URL}chat_tagging_events/`, getConfig({
-            wa_id: waId,
-            before_time: beforeTime,
-            since_time: sinceTime,
-        }, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}chat_tagging_events/`, getConfig({
+                wa_id: waId,
+                before_time: beforeTime,
+                since_time: sinceTime,
+            }, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     searchMessagesCall = (waId, search, limit, cancelToken, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}messages/`,
-            getConfig({
-                wa_id: waId,
-                search: search,
-                //offset: offset ?? 0,
-                limit: limit,
-            }, cancelToken)
-        )
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}messages/`,
+                getConfig({
+                    wa_id: waId,
+                    search: search,
+                    //offset: offset ?? 0,
+                    limit: limit,
+                }, cancelToken)
+            ),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     sendMessageCall = (body, successCallback, errorCallback) => {
-        axios.post(`${BASE_URL}messages/`, body, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${this.apiBaseURL}messages/`, body, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     uploadMediaCall = (formData, successCallback, errorCallback) => {
-        axios.post(`${BASE_URL}media/`, formData, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${this.apiBaseURL}media/`, formData, getConfig()),
+            successCallback,
+            (error) => {
                 if (error?.response?.status === 413) {
                     window.displayCustomError('The media file is too big to upload!');
                 } else {
                     window.displayError(error);
                 }
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     markAsReceivedCall = (waId, timestamp, cancelToken, successCallback, history) => {
-        axios.post(`${BASE_URL}mark_as_received/`, {
-            customer_wa_id: waId,
-            timestamp: timestamp
-        }, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${this.apiBaseURL}mark_as_received/`, {
+                customer_wa_id: waId,
+                timestamp: timestamp
+            }, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 handleIfUnauthorized(error, history);
-            });
+            }
+        );
     }
 
     retrieveChatCall = (waId, successCallback) => {
-        axios.get(`${BASE_URL}chats/${waId}/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}chats/${waId}/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     createChatTaggingCall = (waId, chatTaggingId, successCallback) => {
-        axios.post(`${BASE_URL}chat_tagging/`, {
-            chat: waId,
-            tag: chatTaggingId
-        }, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${this.apiBaseURL}chat_tagging/`, {
+                chat: waId,
+                tag: chatTaggingId
+            }, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     deleteChatTaggingCall = (chatTaggingId, successCallback) => {
-        axios.delete(`${BASE_URL}chat_tagging/${chatTaggingId}`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.delete(`${this.apiBaseURL}chat_tagging/${chatTaggingId}`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     listPersonsCall = (search, cancelToken, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}persons/`, getConfig({
-            search: search
-        }, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}persons/`, getConfig({
+                search: search
+            }, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     retrieveChatAssignmentCall = (waId, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}chat_assignment/${waId}/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}chat_assignment/${waId}/`, getConfig()),
+            successCallback,
+            (error) => {
                 if (error?.response?.status !== 403) {
                     window.displayError(error);
                 }
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     updateChatAssignmentCall = (waId, assignedToUser, assignedGroup, successCallback, errorCallback) => {
-        axios.put(`${BASE_URL}chat_assignment/${waId}/`, {
-            'wa_id': waId,
-            'assigned_to_user': assignedToUser,
-            'assigned_group': assignedGroup,
-        }, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.put(`${this.apiBaseURL}chat_assignment/${waId}/`, {
+                'wa_id': waId,
+                'assigned_to_user': assignedToUser,
+                'assigned_group': assignedGroup,
+            }, getConfig()),
+            successCallback,
+            (error) => {
                 if (error?.response?.status !== 403) {
                     window.displayError(error);
                 }
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     listGroupsCall = (successCallback) => {
-        axios.get(`${BASE_URL}groups/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}groups/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     verifyContactsCall = (contacts, cancelToken, successCallback, errorCallback) => {
-        axios.post(`${BASE_URL}contacts/verify/`, {
-            blocking: "wait",
-            contacts: contacts,
-            force_check: true
-        }, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${this.apiBaseURL}contacts/verify/`, {
+                blocking: "wait",
+                contacts: contacts,
+                force_check: true
+            }, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     retrieveBusinessProfileCall = (cancelToken, successCallback) => {
-        axios.get(`${BASE_URL}settings/business/profile/`, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}settings/business/profile/`, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     updateBusinessProfileCall = (address, description, email, vertical, websites, cancelToken, successCallback,
                                  errorCallback) => {
-        axios.patch(`${BASE_URL}settings/business/profile/`, {
-            address: address,
-            description: description,
-            email: email,
-            vertical: vertical,
-            websites: Object.values(websites)
-        }, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.patch(`${this.apiBaseURL}settings/business/profile/`, {
+                address: address,
+                description: description,
+                email: email,
+                vertical: vertical,
+                websites: Object.values(websites)
+            }, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     retrieveProfileAboutCall = (cancelToken, successCallback) => {
-        axios.get(`${BASE_URL}settings/profile/about/`, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}settings/profile/about/`, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     updateProfileAboutCall = (about, cancelToken, successCallback, errorCallback) => {
-        axios.patch(`${BASE_URL}settings/profile/about/`, {
-            text: about
-        }, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.patch(`${this.apiBaseURL}settings/profile/about/`, {
+                text: about
+            }, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     retrieveProfilePhotoCall = (cancelToken, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}settings/profile/photo/`,
-            getConfig(undefined, cancelToken, 'arraybuffer'))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
-                errorCallback?.(error);
-            });
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}settings/profile/photo/`,
+                getConfig(undefined, cancelToken, 'arraybuffer')),
+            successCallback,
+            errorCallback
+        );
     }
 
     updateProfilePhotoCall = (formData, cancelToken, successCallback, errorCallback) => {
-        axios.post(`${BASE_URL}settings/profile/photo/`, formData, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${this.apiBaseURL}settings/profile/photo/`, formData, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     deleteProfilePhotoCall = (cancelToken, successCallback) => {
-        axios.delete(`${BASE_URL}settings/profile/photo/`, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.delete(`${this.apiBaseURL}settings/profile/photo/`, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     retrieveBulkMessageTaskElementsCall = (cancelToken, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}bulk_message_elements/`,
-            getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
-                errorCallback?.(error);
-            });
+        this.handleRequest(
+            axios.get(`${this.apiBaseURL}bulk_message_elements/`,
+                getConfig(undefined, cancelToken)),
+            successCallback,
+            errorCallback
+        );
     }
 
 }
