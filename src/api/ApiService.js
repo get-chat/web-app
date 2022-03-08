@@ -175,74 +175,74 @@ export class ApiService {
     }
 
     listContactsCall = (search, limit, cancelToken, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}contacts/`, getConfig({
-            search: search,
-            limit: limit
-        }, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}contacts/`, getConfig({
+                search: search,
+                limit: limit
+            }, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     listTagsCall = (successCallback) => {
-        axios.get(`${BASE_URL}tags/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}tags/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     retrievePersonCall = (waId, cancelToken, successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
-                errorCallback?.(error);
-            });
+        this.handleRequest(
+            axios.get(`${BASE_URL}persons/${waId}/`, getConfig(undefined, cancelToken)),
+            successCallback,
+            (error) => {
+                window.displayError(error);
+            }
+        );
     }
 
     listMessagesCall = (waId, search, chatTagId, limit, offset, beforeTime, sinceTime, cancelToken, successCallback,
                         errorCallback, history) => {
-        axios.get(`${BASE_URL}messages/`,
-            getConfig({
-                wa_id: waId,
-                search: search,
-                chat_tag_id: chatTagId,
-                offset: offset ?? 0,
-                before_time: beforeTime,
-                since_time: sinceTime,
-                limit: limit,
-            }, cancelToken)
-        )
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}messages/`,
+                getConfig({
+                    wa_id: waId,
+                    search: search,
+                    chat_tag_id: chatTagId,
+                    offset: offset ?? 0,
+                    before_time: beforeTime,
+                    since_time: sinceTime,
+                    limit: limit,
+                }, cancelToken)
+            ),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 errorCallback?.(error);
                 handleIfUnauthorized(error, history);
-            });
+            }
+        );
     }
 
     listChatAssignmentEventsCall = (waId, beforeTime, sinceTime, cancelToken, successCallback) => {
-        axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
-            wa_id: waId,
-            before_time: beforeTime,
-            since_time: sinceTime,
-        }, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}chat_assignment_events/`, getConfig({
+                wa_id: waId,
+                before_time: beforeTime,
+                since_time: sinceTime,
+            }, cancelToken)),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     listChatTaggingEventsCall = (waId, beforeTime, sinceTime, cancelToken, successCallback) => {
