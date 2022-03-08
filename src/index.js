@@ -11,6 +11,8 @@ import {initStorageType} from "./helpers/StorageHelper";
 import {VERSION} from "./Constants";
 
 import './i18n';
+import axios from "axios";
+import {ApiService} from "./api/ApiService";
 
 // Init Sentry
 if (!isLocalHost()) {
@@ -32,10 +34,22 @@ if (!isLocalHost()) {
 // Init storage type
 initStorageType();
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('root')
-);
+// Load external config and render App
+axios.get(`/config.json`)
+    .then((response) => {
+        const config = response.data;
+
+        const apiService = new ApiService(config.API_BASE_URL);
+
+        ReactDOM.render(
+            <React.StrictMode>
+                <App config={config} apiService={apiService} />
+            </React.StrictMode>,
+            document.getElementById('root')
+        );
+    }).catch((error) => {
+    console.error(error);
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
