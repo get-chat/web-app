@@ -114,66 +114,64 @@ export class ApiService {
     }
 
     retrieveCurrentUserCall = (successCallback, history) => {
-        axios.get(`${BASE_URL}users/current/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}users/current/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 handleIfUnauthorized(error, history);
-            });
+            }
+        );
     }
 
     listTemplatesCall = (successCallback, errorCallback) => {
-        axios.get(`${BASE_URL}templates/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
-                errorCallback?.(error);
-            });
+        this.handleRequest(
+            axios.get(`${BASE_URL}templates/`, getConfig()),
+            successCallback,
+            errorCallback
+        );
     }
 
     listSavedResponsesCall = (successCallback) => {
-        axios.get(`${BASE_URL}saved_responses/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}saved_responses/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     createSavedResponseCall = (text, successCallback) => {
-        axios.post(`${BASE_URL}saved_responses/`, {
-            text: text
-        }, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.post(`${BASE_URL}saved_responses/`, {
+                text: text
+            }, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     deleteSavedResponseCall = (id, successCallback) => {
-        axios.delete(`${BASE_URL}saved_responses/${id}/`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.delete(`${BASE_URL}saved_responses/${id}/`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     resolveContactCall = (personWaId, successCallback) => {
-        axios.get(`${BASE_URL}contacts/${personWaId}`, getConfig())
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}contacts/${personWaId}`, getConfig()),
+            successCallback,
+            (error) => {
                 window.displayError(error);
-            });
+            }
+        );
     }
 
     listContactsCall = (search, limit, cancelToken, successCallback, errorCallback) => {
