@@ -1,7 +1,7 @@
 import {LocalStorage} from "../storage/LocalStorage";
 import {MemoryStorage} from "../storage/MemoryStorage";
 
-const STORAGE_TAG_TOKEN = "token";
+export const STORAGE_TAG_TOKEN = "token";
 const STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY = "display_assignment_and_tagging_history";
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA = "contact_providers_data";
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME = "contact_providers_data_time";
@@ -20,6 +20,10 @@ export const initStorageType = () => {
 
 const getActiveStorage = () => {
     return window.activeStorage;
+}
+
+export const getStorage = () => {
+    return getActiveStorage();
 }
 
 export const getToken = () => {

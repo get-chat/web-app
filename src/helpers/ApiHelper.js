@@ -1,4 +1,23 @@
-import {clearContactProvidersData, clearToken} from "./StorageHelper";
+import {clearContactProvidersData, clearToken, getStorage, STORAGE_TAG_TOKEN} from "./StorageHelper";
+
+export const getConfig = (params, cancelToken, responseType) => {
+    const config = {
+        withCredentials: false,
+        params,
+        headers: {
+            'Authorization': 'JWT ' + getStorage().getItem(STORAGE_TAG_TOKEN),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        cancelToken: cancelToken
+    }
+
+    if (responseType !== undefined) {
+        config.responseType = responseType;
+    }
+
+    return config;
+}
 
 export const handleIfUnauthorized = (error, history) => {
     if (error?.response?.status === 401) {
