@@ -60,32 +60,35 @@ export class ApiService {
     }
 
     changePasswordCall = (currentPassword, newPassword, successCallback, errorCallback) => {
-        axios.put(`${BASE_URL}users/password/change/`, {
-            current_password: currentPassword,
-            new_password: newPassword
-        }, getConfig()).then((response) => {
-            successCallback?.(response);
-        }).catch((error) => {
-            errorCallback?.(error);
-        });
+        this.handleRequest(
+            axios.put(`${BASE_URL}users/password/change/`, {
+                current_password: currentPassword,
+                new_password: newPassword
+            }, getConfig()),
+            successCallback,
+            errorCallback
+        );
     }
 
     listChatsCall = (keyword, chatTagId, limit, offset, cancelToken, successCallback, errorCallback, history) => {
-        axios.get(`${BASE_URL}chats/`,
-            getConfig({
-                search: keyword,
-                chat_tag_id: chatTagId,
-                limit: 18,
-                offset: offset
-            }, cancelToken))
-            .then((response) => {
-                successCallback?.(response);
-            })
-            .catch((error) => {
+        this.handleRequest(
+            axios.get(`${BASE_URL}chats/`,
+                getConfig(
+                    {
+                        search: keyword,
+                        chat_tag_id: chatTagId,
+                        limit: 18,
+                        offset: offset
+                    },
+                    cancelToken)
+            ),
+            successCallback,
+            (error) => {
                 window.displayError(error);
                 handleIfUnauthorized(error, history);
                 errorCallback?.(error);
-            });
+            }
+        );
     }
 
     bulkSendCall = (body, successCallback) => {
