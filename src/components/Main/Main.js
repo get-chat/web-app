@@ -67,7 +67,7 @@ function useQuery() {
 
 function Main() {
 
-    const {config} = React.useContext(AppConfig);
+    const config = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 

@@ -17,7 +17,7 @@ import {AppConfig} from "../../contexts/AppConfig";
 
 function ChatTagsList(props) {
 
-    const {config} = React.useContext(AppConfig);
+    const config = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
