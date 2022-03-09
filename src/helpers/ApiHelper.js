@@ -5,7 +5,7 @@ export const getConfig = (params, cancelToken, responseType) => {
         withCredentials: false,
         params,
         headers: {
-            'Authorization': 'JWT ' + getStorage().getItem(STORAGE_TAG_TOKEN),
+            'Authorization': 'Token ' + getStorage().getItem(STORAGE_TAG_TOKEN),
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
