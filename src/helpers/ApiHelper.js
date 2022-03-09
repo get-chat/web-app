@@ -26,7 +26,7 @@ export const getConfig = (params, cancelToken, responseType) => {
 
 export const handleIfUnauthorized = (error, history) => {
     if (error?.response?.status === 401) {
-        clearUserSession("invalidToken", history);
+        clearUserSession("invalidToken", undefined, history);
     }
 }
 
@@ -42,9 +42,11 @@ export const clearUserSession = (errorCase, nextLocation, history) => {
         path = "/";
     }
 
-    history.push({
-        'pathname': path,
-        'nextPath': nextLocation?.pathname,
-        'search': nextLocation?.search
-    });
+    if (history !== undefined) {
+        history.push({
+            'pathname': path,
+            'nextPath': nextLocation?.pathname,
+            'search': nextLocation?.search
+        });
+    }
 }
