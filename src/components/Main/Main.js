@@ -26,8 +26,7 @@ import {
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-    EVENT_TOPIC_UNSUPPORTED_FILE,
-    NOTIFICATIONS_LIMIT_PER_MINUTE
+    EVENT_TOPIC_UNSUPPORTED_FILE
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
@@ -243,7 +242,7 @@ function Main() {
             setNotificationHistory((prevState) => {
 
                 // Notification limit per minute
-                if ((prevState[timeString]?.length ?? 0) >= NOTIFICATIONS_LIMIT_PER_MINUTE) {
+                if ((prevState[timeString]?.length ?? 0) >= config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE) {
                     console.info('Cancelled a notification.');
                     return prevState;
                 }

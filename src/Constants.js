@@ -4,8 +4,6 @@ export const VERSION = "1.38.1"
 
 export const CHAT_KEY_PREFIX = "chat_";
 
-export const NOTIFICATIONS_LIMIT_PER_MINUTE = parseInt(process.env.REACT_APP_NOTIFICATIONS_LIMIT_PER_MINUTE ?? 10)
-
 export const EVENT_TOPIC_FORCE_LOGOUT = "force_logout";
 export const EVENT_TOPIC_CHAT_MESSAGE = "chat_message";
 export const EVENT_TOPIC_GO_TO_MSG_ID = "go_to_msg_id";
