@@ -39,18 +39,6 @@ import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
 import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
-import {
-    bulkSendCall,
-    createSavedResponseCall,
-    deleteSavedResponseCall,
-    listContactsCall,
-    listSavedResponsesCall,
-    listTagsCall,
-    listTemplatesCall,
-    listUsersCall,
-    resolveContactCall,
-    retrieveCurrentUserCall
-} from "../../api/ApiCalls";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 import BulkMessageTaskClass from "../../BulkMessageTaskClass";
@@ -60,6 +48,7 @@ import {isIPad13, isMobileOnly} from "react-device-detect";
 import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
 import {useTranslation} from "react-i18next";
 import {AppConfig} from "../../contexts/AppConfig";
+import {ApplicationContext} from "../../contexts/ApplicationContext";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -67,6 +56,7 @@ function useQuery() {
 
 function Main() {
 
+    const {apiService} = React.useContext(ApplicationContext);
     const config = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
@@ -201,7 +191,7 @@ function Main() {
         requestPayload.tags = preparedTags;
         requestPayload.payload = messagePayload;
 
-        bulkSendCall(requestPayload, (response) => {
+        apiService.bulkSendCall(requestPayload, (response) => {
             // Disable selection mode
             setSelectionModeEnabled(false);
 
@@ -684,7 +674,7 @@ function Main() {
     const listUsers = () => {
         setLoadingNow('users');
 
-        listUsersCall(5000, (response) => {
+        apiService.listUsersCall(5000, (response) => {
             const preparedUsers = {};
             response.data.results.forEach((user) => {
                 const prepared = new UserClass(user);
@@ -703,7 +693,7 @@ function Main() {
     const retrieveCurrentUser = () => {
         setLoadingNow('current user');
 
-        retrieveCurrentUserCall((response) => {
+        apiService.retrieveCurrentUserCall((response) => {
             setCurrentUser(response.data);
 
             const role = response.data?.profile?.role;
@@ -737,7 +727,7 @@ function Main() {
             listTags();
         };
 
-        listTemplatesCall((response) => {
+        apiService.listTemplatesCall((response) => {
             const preparedTemplates = {};
             response.data.results.forEach((template) => {
                 const prepared = new TemplateMessageClass(template);
@@ -780,7 +770,7 @@ function Main() {
     }
 
     const listSavedResponses = () => {
-        listSavedResponsesCall((response) => {
+        apiService.listSavedResponsesCall((response) => {
             const preparedSavedResponses = {};
             response.data.results.forEach((savedResponse) => {
                 const prepared = new SavedResponseClass(savedResponse);
@@ -797,7 +787,7 @@ function Main() {
     }
 
     const createSavedResponse = (text) => {
-        createSavedResponseCall(text, (response) => {
+        apiService.createSavedResponseCall(text, (response) => {
             // Display a success message
             displaySuccess("Saved as response successfully!");
 
@@ -807,7 +797,7 @@ function Main() {
     }
 
     const deleteSavedResponse = (id) => {
-        deleteSavedResponseCall(id, (response) => {
+        apiService.deleteSavedResponseCall(id, (response) => {
             // Display a success message
             displaySuccess("Deleted response successfully!");
 
@@ -827,7 +817,7 @@ function Main() {
             return;
         }
 
-        resolveContactCall(personWaId, (response) => {
+        apiService.resolveContactCall(personWaId, (response) => {
             setContactProvidersData(prevState => {
                 prevState[personWaId] = response.data.contact_provider_results;
                 return {...prevState};
@@ -853,7 +843,7 @@ function Main() {
             return;
         }
 
-        listContactsCall(undefined, 0, undefined, (response) => {
+        apiService.listContactsCall(undefined, 0, undefined, (response) => {
             const preparedContactProvidersData = {};
             response.data.results.forEach((contact) => {
                 const contactPhoneNumbers = contact.phone_numbers;
@@ -890,7 +880,7 @@ function Main() {
     }
 
     const listTags = () => {
-        listTagsCall((response) => {
+        apiService.listTagsCall((response) => {
             setTags(response.data.results);
         });
     }

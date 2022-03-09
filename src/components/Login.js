@@ -6,7 +6,7 @@ import {useHistory, useLocation, useParams} from 'react-router-dom';
 import {Alert} from "@material-ui/lab";
 import {VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
-import {baseCall, loginCall, logoutCall} from "../api/ApiCalls";
+import {logoutCall} from "../api/ApiCalls";
 import {makeStyles} from "@material-ui/styles";
 import {useTranslation} from "react-i18next";
 import {ApplicationContext} from "../contexts/ApplicationContext";
