@@ -5,7 +5,7 @@ import './styles/App.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as Sentry from "@sentry/react";
-import { Integrations } from "@sentry/tracing";
+import {Integrations} from "@sentry/tracing";
 import {isLocalHost} from "./helpers/URLHelper";
 import {initStorageType} from "./helpers/StorageHelper";
 import {VERSION} from "./Constants";
@@ -42,9 +42,7 @@ axios.get(`/config.json`)
         const apiService = new ApiService(config.API_BASE_URL);
 
         ReactDOM.render(
-            <React.StrictMode>
-                <App config={config} apiService={apiService} />
-            </React.StrictMode>,
+            <App config={config} apiService={apiService} />,
             document.getElementById('root')
         );
     }).catch((error) => {
