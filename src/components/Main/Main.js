@@ -59,12 +59,15 @@ import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
 import {isIPad13, isMobileOnly} from "react-device-detect";
 import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
 import {useTranslation} from "react-i18next";
+import {AppConfig} from "../../contexts/AppConfig";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
 function Main() {
+
+    const {config} = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -366,7 +369,7 @@ function Main() {
             console.log('Connecting to websocket server');
 
             // WebSocket, consider a separate env variable for ws address
-            ws = new WebSocket(getWebSocketURL());
+            ws = new WebSocket(getWebSocketURL(config.API_BASE_URL));
 
             ws.onopen = function (event) {
                 console.log('Connected to websocket server.');

@@ -51,8 +51,11 @@ import {getHubURL} from "../../../helpers/URLHelper";
 import RetryFailedMessages from "./RetryFailedMessages";
 import UploadMediaIndicator from "./UploadMediaIndicator";
 import {Trans, useTranslation} from "react-i18next";
+import {AppConfig} from "../../../contexts/AppConfig";
 
 function Sidebar(props) {
+
+    const {config} = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -650,7 +653,7 @@ function Sidebar(props) {
                 <Divider />
                 }
                 {props.isAdmin &&
-                <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">
+                <MenuItem component={Link} href={getHubURL(config.API_BASE_URL)} target="_blank" color="initial">
                     {t('Admin panel')}
                 </MenuItem>
                 }

@@ -14,8 +14,11 @@ import '../../styles/ChatTags.css';
 import {createChatTaggingCall, deleteChatTaggingCall, listTagsCall, retrieveChatCall} from "../../api/ApiCalls";
 import {getHubURL} from "../../helpers/URLHelper";
 import {useTranslation} from "react-i18next";
+import {AppConfig} from "../../contexts/AppConfig";
 
 function ChatTags(props) {
+
+    const {config} = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -180,7 +183,7 @@ function ChatTags(props) {
                 }
 
                 <div className="mt-3">
-                    <Link href={getHubURL() + 'main/tag/'} target="_blank">
+                    <Link href={getHubURL(config.API_BASE_URL) + 'main/tag/'} target="_blank">
                         {t('Manage tags')}
                     </Link>
                 </div>

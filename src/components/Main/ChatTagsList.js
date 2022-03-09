@@ -13,8 +13,11 @@ import '../../styles/ChatTagsList.css';
 import LabelIcon from "@material-ui/icons/Label";
 import {getHubURL} from "../../helpers/URLHelper";
 import {useTranslation} from "react-i18next";
+import {AppConfig} from "../../contexts/AppConfig";
 
 function ChatTagsList(props) {
+
+    const {config} = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -63,7 +66,7 @@ function ChatTagsList(props) {
                 }
 
                 <div className="mt-3">
-                    <Link href={getHubURL() + 'main/tag/'} target="_blank">
+                    <Link href={getHubURL(config.API_BASE_URL) + 'main/tag/'} target="_blank">
                         {t('Manage tags')}
                     </Link>
                 </div>
