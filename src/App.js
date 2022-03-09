@@ -5,8 +5,8 @@ import {BrowserRouter as Router, Route, Switch as RouteSwitch} from "react-route
 import Main from "./components/Main/Main";
 import AppTheme from "./AppTheme";
 import {isIPad13} from "react-device-detect";
-import {AppConfig} from "contexts/AppConfig";
-import {ApplicationContext} from "contexts/ApplicationContext";
+import {ApplicationContext} from "./contexts/ApplicationContext";
+import {AppConfig} from "./contexts/AppConfig";
 
 
 function App({config, apiService}) {
