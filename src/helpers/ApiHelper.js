@@ -1,4 +1,9 @@
 import {clearContactProvidersData, clearToken, getStorage, STORAGE_TAG_TOKEN} from "./StorageHelper";
+import axios from "axios";
+
+export const generateCancelToken = () => {
+    return axios.CancelToken.source();
+}
 
 export const getConfig = (params, cancelToken, responseType) => {
     const config = {

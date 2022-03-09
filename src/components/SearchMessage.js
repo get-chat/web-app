@@ -9,10 +9,13 @@ import {useParams} from "react-router-dom";
 import ChatMessageClass from "../ChatMessageClass";
 import SearchMessageResult from "./SearchMessageResult";
 import {isMobileOnly} from 'react-device-detect';
-import {generateCancelToken, searchMessagesCall} from "../api/ApiCalls";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../contexts/ApplicationContext";
+import {generateCancelToken} from "../helpers/ApiHelper";
 
 function SearchMessage(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -50,7 +53,7 @@ function SearchMessage(props) {
 
         setLoading(true);
 
-        searchMessagesCall(waId, _keyword, 30, cancelTokenSourceRef.current.token,
+        apiService.searchMessagesCall(waId, _keyword, 30, cancelTokenSourceRef.current.token,
             (response) => {
                 const preparedMessages = {};
                 response.data.results.forEach((message) => {

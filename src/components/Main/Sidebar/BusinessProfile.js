@@ -4,20 +4,14 @@ import {Avatar, Button, FormControl, IconButton, InputLabel, MenuItem, Select, T
 import {ArrowBack} from "@material-ui/icons";
 import {generateInitialsHelper} from "../../../helpers/Helpers";
 import FileInput from "../../FileInput";
-import {
-    deleteProfilePhotoCall,
-    generateCancelToken,
-    retrieveBusinessProfileCall,
-    retrieveProfileAboutCall,
-    retrieveProfilePhotoCall,
-    updateBusinessProfileCall,
-    updateProfileAboutCall,
-    updateProfilePhotoCall
-} from "../../../api/ApiCalls";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../../contexts/ApplicationContext";
+import {generateCancelToken} from "../../../helpers/ApiHelper";
 
 function BusinessProfile(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -56,7 +50,7 @@ function BusinessProfile(props) {
     }, []);
 
     const retrieveBusinessProfile = () => {
-        retrieveBusinessProfileCall(cancelTokenSourceRef.current.token,
+        apiService.retrieveBusinessProfileCall(cancelTokenSourceRef.current.token,
             (response) => {
                 const data = response.data;
 
@@ -82,7 +76,7 @@ function BusinessProfile(props) {
 
         setUpdating(true);
 
-        updateBusinessProfileCall(address, description, email, vertical, Object.values(websites),
+        apiService.updateBusinessProfileCall(address, description, email, vertical, Object.values(websites),
             cancelTokenSourceRef.current.token,
             (response) => {
                 updateProfileAbout(event);
@@ -92,7 +86,7 @@ function BusinessProfile(props) {
     }
 
     const retrieveProfileAbout = () => {
-        retrieveProfileAboutCall(cancelTokenSourceRef.current.token,
+        apiService.retrieveProfileAboutCall(cancelTokenSourceRef.current.token,
             (response) => {
                 const profile = response.data.settings?.profile;
                 setAbout(profile?.about?.text);
@@ -103,7 +97,7 @@ function BusinessProfile(props) {
     const updateProfileAbout = async event => {
         event.preventDefault();
 
-        updateProfileAboutCall(about, cancelTokenSourceRef.current.token,
+        apiService.updateProfileAboutCall(about, cancelTokenSourceRef.current.token,
             (response) => {
                 setUpdating(false);
             }, (error) => {
@@ -112,7 +106,7 @@ function BusinessProfile(props) {
     }
 
     const retrieveProfilePhoto = () => {
-        retrieveProfilePhotoCall(cancelTokenSourceRef.current.token,
+        apiService.retrieveProfilePhotoCall(cancelTokenSourceRef.current.token,
             (response) => {
                 const base64 = Buffer.from(response.data, 'binary').toString('base64');
                 setProfilePhoto(base64);
@@ -134,7 +128,7 @@ function BusinessProfile(props) {
         const formData = new FormData();
         formData.append("file_encoded", file[0]);
 
-        updateProfilePhotoCall(formData, cancelTokenSourceRef.current.token,
+        apiService.updateProfilePhotoCall(formData, cancelTokenSourceRef.current.token,
             (response) => {
                 setUpdating(false);
 
@@ -146,7 +140,7 @@ function BusinessProfile(props) {
     }
 
     const deleteProfilePhoto = () => {
-        deleteProfilePhotoCall(cancelTokenSourceRef.current.token,
+        apiService.deleteProfilePhotoCall(cancelTokenSourceRef.current.token,
             (response) => {
                 setProfilePhoto(undefined);
             });
