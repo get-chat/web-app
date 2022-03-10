@@ -273,7 +273,6 @@ export class ApiService {
                 getConfig({
                     wa_id: waId,
                     search: search,
-                    //offset: offset ?? 0,
                     limit: limit,
                 }, cancelToken)
             ),
