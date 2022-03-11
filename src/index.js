@@ -39,6 +39,9 @@ axios.get(`/config.json`)
     .then((response) => {
         const config = response.data;
 
+        // It is needed for ChatMessageClass
+        window.config = config;
+
         const apiService = new ApiService(config.API_BASE_URL);
 
         ReactDOM.render(
