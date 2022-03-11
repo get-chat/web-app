@@ -6,9 +6,9 @@ import {useHistory, useLocation, useParams} from 'react-router-dom';
 import {Alert} from "@material-ui/lab";
 import {VERSION} from "../Constants";
 import {clearToken, getToken, storeToken} from "../helpers/StorageHelper";
-import {baseCall, loginCall, logoutCall} from "../api/ApiCalls";
 import {makeStyles} from "@material-ui/styles";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../contexts/ApplicationContext";
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -18,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Login(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -53,7 +55,7 @@ export default function Login(props) {
         if (token) {
             setValidatingToken(true);
 
-            baseCall((response) => {
+            apiService.baseCall((response) => {
                 // Redirect to main route
                 history.push("/main");
             }, (error) => {
@@ -78,7 +80,7 @@ export default function Login(props) {
         // Display the loading animation
         setLoggingIn(true);
 
-        loginCall(username, password,
+        apiService.loginCall(username, password,
             (response) => {
                 // Store token in local storage
                 storeToken(response.data.token);
@@ -107,7 +109,7 @@ export default function Login(props) {
     }
 
     const logoutToClearSession = () => {
-        logoutCall();
+        apiService.logoutCall();
     }
 
     return (

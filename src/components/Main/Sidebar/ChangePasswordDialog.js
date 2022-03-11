@@ -5,10 +5,12 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import {Alert, AlertTitle} from "@material-ui/lab";
-import {changePasswordCall} from "../../../api/ApiCalls";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../../contexts/ApplicationContext";
 
 function ChangePasswordDialog(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -59,7 +61,7 @@ function ChangePasswordDialog(props) {
         setError(undefined);
         setRequesting(true);
 
-        changePasswordCall(currentPassword, newPassword,
+        apiService.changePasswordCall(currentPassword, newPassword,
             (response) => {
                 setRequesting(false);
                 setSuccess(true);

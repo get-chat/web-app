@@ -26,8 +26,7 @@ import {
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-    EVENT_TOPIC_UNSUPPORTED_FILE,
-    NOTIFICATIONS_LIMIT_PER_MINUTE
+    EVENT_TOPIC_UNSUPPORTED_FILE
 } from "../../Constants";
 import ChatMessageClass from "../../ChatMessageClass";
 import PreviewMedia from "./PreviewMedia";
@@ -39,18 +38,6 @@ import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
 import SavedResponseClass from "../../SavedResponseClass";
 import moment from "moment";
 import UserClass from "../../UserClass";
-import {
-    bulkSendCall,
-    createSavedResponseCall,
-    deleteSavedResponseCall,
-    listContactsCall,
-    listSavedResponsesCall,
-    listTagsCall,
-    listTemplatesCall,
-    listUsersCall,
-    resolveContactCall,
-    retrieveCurrentUserCall
-} from "../../api/ApiCalls";
 import {clearUserSession} from "../../helpers/ApiHelper";
 import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
 import BulkMessageTaskClass from "../../BulkMessageTaskClass";
@@ -59,12 +46,17 @@ import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
 import {isIPad13, isMobileOnly} from "react-device-detect";
 import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
 import {useTranslation} from "react-i18next";
+import {AppConfig} from "../../contexts/AppConfig";
+import {ApplicationContext} from "../../contexts/ApplicationContext";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
 function Main() {
+
+    const {apiService} = React.useContext(ApplicationContext);
+    const config = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -198,7 +190,7 @@ function Main() {
         requestPayload.tags = preparedTags;
         requestPayload.payload = messagePayload;
 
-        bulkSendCall(requestPayload, (response) => {
+        apiService.bulkSendCall(requestPayload, (response) => {
             // Disable selection mode
             setSelectionModeEnabled(false);
 
@@ -250,7 +242,7 @@ function Main() {
             setNotificationHistory((prevState) => {
 
                 // Notification limit per minute
-                if ((prevState[timeString]?.length ?? 0) >= NOTIFICATIONS_LIMIT_PER_MINUTE) {
+                if ((prevState[timeString]?.length ?? 0) >= config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE) {
                     console.info('Cancelled a notification.');
                     return prevState;
                 }
@@ -366,7 +358,7 @@ function Main() {
             console.log('Connecting to websocket server');
 
             // WebSocket, consider a separate env variable for ws address
-            ws = new WebSocket(getWebSocketURL());
+            ws = new WebSocket(getWebSocketURL(config.API_BASE_URL));
 
             ws.onopen = function (event) {
                 console.log('Connected to websocket server.');
@@ -681,7 +673,7 @@ function Main() {
     const listUsers = () => {
         setLoadingNow('users');
 
-        listUsersCall(5000, (response) => {
+        apiService.listUsersCall(5000, (response) => {
             const preparedUsers = {};
             response.data.results.forEach((user) => {
                 const prepared = new UserClass(user);
@@ -700,7 +692,7 @@ function Main() {
     const retrieveCurrentUser = () => {
         setLoadingNow('current user');
 
-        retrieveCurrentUserCall((response) => {
+        apiService.retrieveCurrentUserCall((response) => {
             setCurrentUser(response.data);
 
             const role = response.data?.profile?.role;
@@ -734,7 +726,7 @@ function Main() {
             listTags();
         };
 
-        listTemplatesCall((response) => {
+        apiService.listTemplatesCall((response) => {
             const preparedTemplates = {};
             response.data.results.forEach((template) => {
                 const prepared = new TemplateMessageClass(template);
@@ -777,7 +769,7 @@ function Main() {
     }
 
     const listSavedResponses = () => {
-        listSavedResponsesCall((response) => {
+        apiService.listSavedResponsesCall((response) => {
             const preparedSavedResponses = {};
             response.data.results.forEach((savedResponse) => {
                 const prepared = new SavedResponseClass(savedResponse);
@@ -794,7 +786,7 @@ function Main() {
     }
 
     const createSavedResponse = (text) => {
-        createSavedResponseCall(text, (response) => {
+        apiService.createSavedResponseCall(text, (response) => {
             // Display a success message
             displaySuccess("Saved as response successfully!");
 
@@ -804,7 +796,7 @@ function Main() {
     }
 
     const deleteSavedResponse = (id) => {
-        deleteSavedResponseCall(id, (response) => {
+        apiService.deleteSavedResponseCall(id, (response) => {
             // Display a success message
             displaySuccess("Deleted response successfully!");
 
@@ -824,7 +816,7 @@ function Main() {
             return;
         }
 
-        resolveContactCall(personWaId, (response) => {
+        apiService.resolveContactCall(personWaId, (response) => {
             setContactProvidersData(prevState => {
                 prevState[personWaId] = response.data.contact_provider_results;
                 return {...prevState};
@@ -850,7 +842,7 @@ function Main() {
             return;
         }
 
-        listContactsCall(undefined, 0, undefined, (response) => {
+        apiService.listContactsCall(undefined, 0, undefined, (response) => {
             const preparedContactProvidersData = {};
             response.data.results.forEach((contact) => {
                 const contactPhoneNumbers = contact.phone_numbers;
@@ -887,7 +879,7 @@ function Main() {
     }
 
     const listTags = () => {
-        listTagsCall((response) => {
+        apiService.listTagsCall((response) => {
             setTags(response.data.results);
         });
     }

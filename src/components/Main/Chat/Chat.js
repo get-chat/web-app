@@ -12,7 +12,8 @@ import {
     EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_DROPPED_FILES,
-    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_FORCE_REFRESH_CHAT,
+    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+    EVENT_TOPIC_FORCE_REFRESH_CHAT,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -42,17 +43,7 @@ import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../../he
 import SavedResponses from "./SavedResponses";
 import {generateTemplateMessagePayload} from "../../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
-import {clearUserSession} from "../../../helpers/ApiHelper";
-import {
-    generateCancelToken,
-    listChatAssignmentEventsCall,
-    listChatTaggingEventsCall,
-    listMessagesCall,
-    markAsReceivedCall,
-    retrievePersonCall,
-    sendMessageCall,
-    uploadMediaCall
-} from "../../../api/ApiCalls";
+import {clearUserSession, generateCancelToken} from "../../../helpers/ApiHelper";
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
 import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
@@ -63,11 +54,14 @@ import {
 } from "../../../helpers/PendingMessagesHelper";
 import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../../contexts/ApplicationContext";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -691,7 +685,7 @@ export default function Chat(props) {
     }
 
     const retrievePerson = (loadMessages) => {
-        retrievePersonCall(waId, cancelTokenSourceRef.current.token, (response) => {
+        apiService.retrievePersonCall(waId, cancelTokenSourceRef.current.token, (response) => {
             const preparedPerson = new PersonClass(response.data);
             setPerson(preparedPerson);
             setExpired(preparedPerson.isExpired);
@@ -736,7 +730,7 @@ export default function Chat(props) {
     const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
-        listMessagesCall(waId, undefined, undefined, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
+        apiService.listMessagesCall(waId, undefined, undefined, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
             (response) => {
                 const count = response.data.count;
                 //const previous = response.data.previous;
@@ -844,7 +838,7 @@ export default function Chat(props) {
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        listChatAssignmentEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+        apiService.listChatAssignmentEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
             (response) => {
                 response.data.results.reverse().forEach((assignmentEvent) => {
                     const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
@@ -857,7 +851,7 @@ export default function Chat(props) {
     }
 
     const listChatTaggingEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        listChatTaggingEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+        apiService.listChatTaggingEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
             (response) => {
                 response.data.results.reverse().forEach((taggingEvent) => {
                     const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
@@ -977,7 +971,7 @@ export default function Chat(props) {
             return;
         }*/
 
-        sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1029,7 +1023,7 @@ export default function Chat(props) {
             return;
         }
 
-        sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1066,7 +1060,7 @@ export default function Chat(props) {
         // To display a progress
         props.setUploadingMedia(true);
 
-        uploadMediaCall(formData,
+        apiService.uploadMediaCall(formData,
             (response) => {
                 // Convert parameters to a ChosenFile object
                 sendFile(payload?.wa_id, response.data.file, chosenFile, undefined, function () {
@@ -1121,7 +1115,7 @@ export default function Chat(props) {
             }
         }
 
-        sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1243,7 +1237,7 @@ export default function Chat(props) {
     }
 
     const markAsReceived = (timestamp) => {
-        markAsReceivedCall(waId, timestamp, cancelTokenSourceRef.current.token,
+        apiService.markAsReceivedCall(waId, timestamp, cancelTokenSourceRef.current.token,
             (response) => {
                 PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
                 setCurrentNewMessages(0);

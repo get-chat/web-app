@@ -3,11 +3,13 @@ import {Button, TextField} from "@material-ui/core";
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from "../../../FileInput";
 import {Alert, AlertTitle} from "@material-ui/lab";
-import {uploadMediaCall} from "../../../../api/ApiCalls";
 import {getTemplateParams, templateParamToInteger} from "../../../../helpers/TemplateMessageHelper";
 import {Trans, useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../../../contexts/ApplicationContext";
 
 function SendTemplateMessage(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -130,7 +132,7 @@ function SendTemplateMessage(props) {
 
         setUploading(true);
 
-        uploadMediaCall(formData,
+        apiService.uploadMediaCall(formData,
             (response) => {
                 const fileURL = response.data.file;
                 setHeaderFileURL(fileURL);

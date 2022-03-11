@@ -1,6 +1,6 @@
 {
   "name": "getchat-frontend",
-  "version": "1.37.12",
+  "version": "1.38.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -40,9 +40,9 @@
   },
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
-    "start": "set \"REACT_APP_BASE_URL=https://staging.stagingwainbox.360dialog.com/api/v1/\" && react-scripts start",
-    "testFeature": "set \"REACT_APP_BASE_URL=https://review-105-delive-huo8pi.stagingwainbox.360dialog.com/api/v1/\" && react-scripts start",
-    "local": "set \"REACT_APP_BASE_URL=http://127.0.0.1:8000/api/v1/\" && react-scripts start",
+    "start": "react-scripts start",
+    "testFeature": "react-scripts start",
+    "local": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
