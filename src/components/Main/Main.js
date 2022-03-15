@@ -242,7 +242,7 @@ function Main() {
             setNotificationHistory((prevState) => {
 
                 // Notification limit per minute
-                if ((prevState[timeString]?.length ?? 0) >= config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE) {
+                if ((prevState[timeString]?.length ?? 0) >= (config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE ?? 8)) {
                     console.info('Cancelled a notification.');
                     return prevState;
                 }
