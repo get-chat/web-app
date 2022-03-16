@@ -14,23 +14,6 @@ import './i18n';
 import axios from "axios";
 import {ApiService} from "./api/ApiService";
 
-// Init Sentry
-if (!isLocalHost()) {
-    Sentry.init({
-        dsn: process.env.REACT_APP_SENTRY_DSN,
-        release: VERSION,
-        integrations: [new Integrations.BrowserTracing()],
-        tracesSampleRate: 0.01,
-        beforeSend(event, hint) {
-            // Check if it is an exception, and if so, show the report dialog
-            if (event.exception) {
-                Sentry.showReportDialog({ eventId: event.event_id });
-            }
-            return event;
-        },
-    });
-}
-
 // Init storage type
 initStorageType();
 
@@ -41,6 +24,24 @@ axios.get(`/config.json`)
 
         // It is needed for ChatMessageClass
         window.config = config;
+
+        // Init Sentry
+        if (!isLocalHost()) {
+            Sentry.init({
+                debug: true,
+                dsn: config.APP_SENTRY_DSN,
+                release: VERSION,
+                integrations: [new Integrations.BrowserTracing()],
+                tracesSampleRate: 0.01,
+                beforeSend(event, hint) {
+                    // Check if it is an exception, and if so, show the report dialog
+                    if (event.exception) {
+                        Sentry.showReportDialog({ eventId: event.event_id });
+                    }
+                    return event;
+                },
+            });
+        }
 
         const apiService = new ApiService(config.API_BASE_URL);
 
