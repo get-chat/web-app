@@ -30,7 +30,7 @@ export class ApiService {
 
     handleAuthError = (error) => {
         if (error.response) {
-            if (error.response.status === 401 || error.response.status === 400) {
+            if (error.response.status === 401) {
                 console.warn('Unauthorized: ' + error.response.status);
                 getStorage().removeItem(STORAGE_TAG_TOKEN);
                 PubSub.publish(EVENT_TOPIC_FORCE_LOGOUT);
