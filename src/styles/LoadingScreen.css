@@ -28,7 +28,8 @@
     opacity: 0.15;
 }
 
-.loadingScreen__progressContainer, .loadingScreen__logoContainer {
+.loadingScreen__progressContainer,
+.loadingScreen__logoContainer {
     width: 100%;
     max-width: 400px;
 }
@@ -40,13 +41,19 @@
 .loadingScreen__details {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.4);
-    margin-top: 15px;
+    margin: 15px 0;
 }
 
-.loadingScreen__skip {
+.loadingScreen__actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.loadingScreen__link {
     display: inline-block;
     cursor: pointer;
-    margin-top: 20px;
     font-size: 18px;
     color: var(--color-primary);
     padding: 10px;
