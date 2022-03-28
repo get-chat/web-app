@@ -816,12 +816,22 @@ function Main() {
             return;
         }
 
-        apiService.resolveContactCall(personWaId, (response) => {
-            setContactProvidersData(prevState => {
-                prevState[personWaId] = response.data.contact_provider_results;
-                return {...prevState};
-            });
-        });
+        apiService.resolveContactCall(
+            personWaId,
+            (response) => {
+                setContactProvidersData(prevState => {
+                    prevState[personWaId] = response.data.contact_provider_results;
+                    return {...prevState};
+                });
+            },
+            (error) => {
+                if (error.response?.status === 404) {
+                    console.log('Contact is not found.');
+                } else {
+                    window.displayError(error);
+                }
+            }
+        );
     }
 
     const listContacts = () => {

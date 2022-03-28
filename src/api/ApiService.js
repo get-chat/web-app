@@ -172,13 +172,11 @@ export class ApiService {
         );
     }
 
-    resolveContactCall = (personWaId, successCallback) => {
+    resolveContactCall = (personWaId, successCallback, errorCallback) => {
         this.handleRequest(
             axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getConfig()),
             successCallback,
-            (error) => {
-                window.displayError(error);
-            }
+            errorCallback
         );
     }
 
@@ -210,9 +208,7 @@ export class ApiService {
         this.handleRequest(
             axios.get(`${this.apiBaseURL}persons/${waId}/`, getConfig(undefined, cancelToken)),
             successCallback,
-            (error) => {
-                window.displayError(error);
-            }
+            errorCallback
         );
     }
 
