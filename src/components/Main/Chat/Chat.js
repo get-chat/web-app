@@ -379,11 +379,13 @@ export default function Chat(props) {
                             }
 
                             // Update contact
-                            setPerson(prevState => ({
-                                ...prevState,
-                                lastMessageTimestamp: lastMessageTimestamp,
-                                isExpired: false
-                            }));
+                            setPerson(prevState => {
+                                const nextState = prevState;
+                                nextState.lastMessageTimestamp = lastMessageTimestamp;
+                                nextState.isExpired = false;
+
+                                return nextState;
+                            });
 
                             // Chat is not expired anymore
                             setExpired(false);
