@@ -332,71 +332,73 @@ export default function Chat(props) {
             if (data && isLoaded) {
                 let hasAnyIncomingMsg = false;
 
-                const preparedMessages = {};
-                Object.entries(data).forEach((message) => {
-                    const msgId = message[0];
-                    const chatMessage = message[1];
+                setMessages(prevState => {
 
-                    if (waId === chatMessage.waId) {
-                        // Check if any message is displayed with internal id
-                        // Fix duplicated messages in this way
-                        const internalIdString = chatMessage.generateInternalIdString();
-                        if (!(internalIdString in messages)) {
-                            preparedMessages[msgId] = chatMessage;
-                        }
+                    let newState;
+                    const preparedMessages = {};
+                    Object.entries(data).forEach((message) => {
+                        const msgId = message[0];
+                        const chatMessage = message[1];
 
-                        if (!chatMessage.isFromUs) {
-                            hasAnyIncomingMsg = true;
-                        }
-                    }
-                });
-
-                if (getObjLength(preparedMessages) > 0) {
-                    const lastMessage = getLastObject(preparedMessages);
-
-                    if (isAtBottom) {
-                        const prevScrollTop = messagesContainer.current.scrollTop;
-                        const prevScrollHeight = messagesContainer.current.scrollHeight;
-                        const isCurrentlyLastMessageVisible = isLastMessageVisible();
-
-                        setMessages(prevState => {
-                            return {...prevState, ...preparedMessages};
-                        });
-
-                        if (!isCurrentlyLastMessageVisible) {
-                            persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
-                            displayScrollButton();
-                        }
-
-                        if (hasAnyIncomingMsg) {
-                            const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
-
-                            // Mark new message as received if visible
-                            if (canSeeLastMessage(messagesContainer.current)) {
-                                markAsReceived(lastMessageTimestamp);
-                            } else {
-                                setCurrentNewMessages(prevState => prevState+1);
+                        if (waId === chatMessage.waId) {
+                            // Check if any message is displayed with internal id
+                            // Fix duplicated messages in this way
+                            const internalIdString = chatMessage.generateInternalIdString();
+                            if (!(internalIdString in prevState)) {
+                                preparedMessages[msgId] = chatMessage;
                             }
 
-                            // Update contact
-                            setPerson(prevState => {
-                                const nextState = prevState;
-                                nextState.lastMessageTimestamp = lastMessageTimestamp;
-                                nextState.isExpired = false;
-
-                                return nextState;
-                            });
-
-                            // Chat is not expired anymore
-                            setExpired(false);
+                            if (!chatMessage.isFromUs) {
+                                hasAnyIncomingMsg = true;
+                            }
                         }
-                    } else {
-                        setCurrentNewMessages(prevState => prevState+1);
+                    });
+
+                    if (getObjLength(preparedMessages) > 0) {
+                        const lastMessage = getLastObject(preparedMessages);
+
+                        if (isAtBottom) {
+                            const prevScrollTop = messagesContainer.current.scrollTop;
+                            const prevScrollHeight = messagesContainer.current.scrollHeight;
+                            const isCurrentlyLastMessageVisible = isLastMessageVisible();
+
+                            newState = {...prevState, ...preparedMessages};
+
+                            if (!isCurrentlyLastMessageVisible) {
+                                persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                                displayScrollButton();
+                            }
+
+                            if (hasAnyIncomingMsg) {
+                                const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
+
+                                // Mark new message as received if visible
+                                if (canSeeLastMessage(messagesContainer.current)) {
+                                    markAsReceived(lastMessageTimestamp);
+                                } else {
+                                    setCurrentNewMessages(prevState => prevState+1);
+                                }
+
+                                // Update contact
+                                setPerson(prevState => ({
+                                    ...prevState,
+                                    lastMessageTimestamp: lastMessageTimestamp,
+                                    isExpired: false
+                                }));
+
+                                // Chat is not expired anymore
+                                setExpired(false);
+                            }
+                        } else {
+                            setCurrentNewMessages(prevState => prevState+1);
+                        }
+
+                        // Update last message id
+                        setLastMessageId(lastMessage.id);
                     }
 
-                    // Update last message id
-                    setLastMessageId(lastMessage.id);
-                }
+                    return newState ?? prevState;
+                });
             }
         }
 
@@ -529,7 +531,7 @@ export default function Chat(props) {
             PubSub.unsubscribe(chatTaggingEventToken);
             PubSub.unsubscribe(forceRefreshChatEventToken);
         }
-    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
+    }, [waId, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
 
     useEffect(() => {
         const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
@@ -1278,10 +1280,10 @@ export default function Chat(props) {
 
             {/* FOR TESTING QUEUE */}
             {isLocalHost() && props.pendingMessages.length > 0 &&
-            <div className="pendingMessagesIndicator">
-                <div>{props.isSendingPendingMessages.toString()}</div>
-                <div>{props.pendingMessages.length}</div>
-            </div>
+                <div className="pendingMessagesIndicator">
+                    <div>{props.isSendingPendingMessages.toString()}</div>
+                    <div>{props.pendingMessages.length}</div>
+                </div>
             }
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
@@ -1377,27 +1379,27 @@ export default function Chat(props) {
                 closeChat={closeChat} />
 
             {isTemplateMessagesVisible &&
-            <TemplateMessages
-                waId={waId}
-                templatesData={props.templates}
-                onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
-                onBulkSend={bulkSendMessage}
-                isTemplatesFailed={props.isTemplatesFailed}
-                isLoadingTemplates={props.isLoadingTemplates} />
+                <TemplateMessages
+                    waId={waId}
+                    templatesData={props.templates}
+                    onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
+                    onBulkSend={bulkSendMessage}
+                    isTemplatesFailed={props.isTemplatesFailed}
+                    isLoadingTemplates={props.isLoadingTemplates} />
             }
 
             {isSavedResponsesVisible &&
-            <SavedResponses
-                savedResponses={props.savedResponses}
-                deleteSavedResponse={props.deleteSavedResponse}
-                sendCustomTextMessage={sendCustomTextMessage} />
+                <SavedResponses
+                    savedResponses={props.savedResponses}
+                    deleteSavedResponse={props.deleteSavedResponse}
+                    sendCustomTextMessage={sendCustomTextMessage} />
             }
 
             {!waId &&
-            <div className="chat__default">
-                <h2>{t('Hey')}</h2>
-                <p>{t('Choose a contact to start a conversation')}</p>
-            </div>
+                <div className="chat__default">
+                    <h2>{t('Hey')}</h2>
+                    <p>{t('Choose a contact to start a conversation')}</p>
+                </div>
             }
 
             <ChatMessageOptionsMenu
@@ -1407,12 +1409,12 @@ export default function Chat(props) {
                 createSavedResponse={props.createSavedResponse} />
 
             {isPreviewSendMediaVisible &&
-            <PreviewSendMedia
-                data={previewSendMediaData}
-                setData={setPreviewSendMediaData}
-                setPreviewSendMediaVisible={setPreviewSendMediaVisible}
-                sendHandledChosenFiles={sendHandledChosenFiles}
-                accept={accept} />
+                <PreviewSendMedia
+                    data={previewSendMediaData}
+                    setData={setPreviewSendMediaData}
+                    setPreviewSendMediaVisible={setPreviewSendMediaVisible}
+                    sendHandledChosenFiles={sendHandledChosenFiles}
+                    accept={accept} />
             }
 
         </div>

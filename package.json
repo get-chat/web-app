@@ -1,6 +1,6 @@
 {
   "name": "getchat-frontend",
-  "version": "1.38.6",
+  "version": "1.38.7",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.2",
