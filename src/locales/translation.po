@@ -165,7 +165,13 @@ msgstr ""
 msgid "Loading: %s"
 msgstr ""
 
+msgid "Contact us"
+msgstr ""
+
 msgid "Skip"
+msgstr ""
+
+msgid "Something went wrong, this will be fixed automatically"
 msgstr ""
 
 msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
