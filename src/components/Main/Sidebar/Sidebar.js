@@ -41,8 +41,7 @@ import {filterChat} from "../../../helpers/SidebarHelper";
 import BulkSendIndicator from "./BulkSendIndicator";
 import SelectableChatTag from "./SelectableChatTag";
 import BulkSendActions from "./BulkSendActions";
-import {clearUserSession} from "../../../helpers/ApiHelper";
-import {generateCancelToken, listChatsCall, listMessagesCall, retrieveChatCall} from "../../../api/ApiCalls";
+import {clearUserSession, generateCancelToken} from "../../../helpers/ApiHelper";
 import Notifications from "./Notifications/Notifications";
 import {Notifications as NotificationsIcon} from "@material-ui/icons";
 import {generateAvatarColor} from "../../../helpers/AvatarHelper";
@@ -51,8 +50,13 @@ import {getHubURL} from "../../../helpers/URLHelper";
 import RetryFailedMessages from "./RetryFailedMessages";
 import UploadMediaIndicator from "./UploadMediaIndicator";
 import {Trans, useTranslation} from "react-i18next";
+import {AppConfig} from "../../../contexts/AppConfig";
+import {ApplicationContext} from "../../../contexts/ApplicationContext";
 
 function Sidebar(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
+    const config = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -266,7 +270,7 @@ function Sidebar(props) {
             props.setLoadingNow('chats');
         }
 
-        listChatsCall(keyword, props.filterTag?.id, 18, offset, cancelTokenSource.token,
+        apiService.listChatsCall(keyword, props.filterTag?.id, 18, offset, cancelTokenSource.token,
             (response) => {
                 const preparedChats = {};
                 response.data.results.forEach((contact) => {
@@ -346,7 +350,7 @@ function Sidebar(props) {
     }
 
     const retrieveChat = (chatWaId) => {
-        retrieveChatCall(chatWaId,
+        apiService.retrieveChatCall(chatWaId,
             (response) => {
                 const preparedChat = new ChatClass(response.data);
 
@@ -359,7 +363,7 @@ function Sidebar(props) {
     }
 
     const searchMessages = (cancelTokenSource) => {
-        listMessagesCall(
+        apiService.listMessagesCall(
             undefined,
             keyword,
             props.filterTag?.id,
@@ -650,7 +654,7 @@ function Sidebar(props) {
                 <Divider />
                 }
                 {props.isAdmin &&
-                <MenuItem component={Link} href={getHubURL()} target="_blank" color="initial">
+                <MenuItem component={Link} href={getHubURL(config.API_BASE_URL)} target="_blank" color="initial">
                     {t('Admin panel')}
                 </MenuItem>
                 }

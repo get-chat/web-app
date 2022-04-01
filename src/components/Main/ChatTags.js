@@ -11,11 +11,15 @@ import {
     Link
 } from "@material-ui/core";
 import '../../styles/ChatTags.css';
-import {createChatTaggingCall, deleteChatTaggingCall, listTagsCall, retrieveChatCall} from "../../api/ApiCalls";
 import {getHubURL} from "../../helpers/URLHelper";
 import {useTranslation} from "react-i18next";
+import {AppConfig} from "../../contexts/AppConfig";
+import {ApplicationContext} from "../../contexts/ApplicationContext";
 
 function ChatTags(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
+    const config = React.useContext(AppConfig);
 
     const { t, i18n } = useTranslation();
 
@@ -76,7 +80,7 @@ function ChatTags(props) {
     }
 
     const retrieveChat = () => {
-        retrieveChatCall(props.waId,
+        apiService.retrieveChatCall(props.waId,
             (response) => {
                 setChat(response.data);
                 setChatTags(response.data.tags);
@@ -87,14 +91,14 @@ function ChatTags(props) {
     }
 
     const listTags = () => {
-        listTagsCall((response) => {
+        apiService.listTagsCall((response) => {
             setAllTags(response.data.results);
             setLoading(false);
         });
     }
 
     const createChatTagging = (tag) => {
-        createChatTaggingCall(props.waId, tag.id,
+        apiService.createChatTaggingCall(props.waId, tag.id,
             (response) => {
                 setChatTags(prevState => {
                     let nextState = prevState.filter((curTag) => {
@@ -112,7 +116,7 @@ function ChatTags(props) {
     }
 
     const deleteChatTagging = (tag) => {
-        deleteChatTaggingCall(tag.tagging_id,
+        apiService.deleteChatTaggingCall(tag.tagging_id,
             (response) => {
                 setChatTags(prevState => {
                     let nextState = prevState.filter((curTag) => {
@@ -180,7 +184,7 @@ function ChatTags(props) {
                 }
 
                 <div className="mt-3">
-                    <Link href={getHubURL() + 'main/tag/'} target="_blank">
+                    <Link href={getHubURL(config.API_BASE_URL) + 'main/tag/'} target="_blank">
                         {t('Manage tags')}
                     </Link>
                 </div>

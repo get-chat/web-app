@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from "react";
-import {generateCancelToken, retrieveBulkMessageTaskElementsCall} from "../../../../api/ApiCalls";
 import '../../../../styles/Notifications.css';
 import PubSub from "pubsub-js";
 import {EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT} from "../../../../Constants";
@@ -9,8 +8,12 @@ import CloseIcon from "@material-ui/icons/Close";
 import {IconButton} from "@material-ui/core";
 import {getObjLength} from "../../../../helpers/ObjectHelper";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../../../contexts/ApplicationContext";
+import {generateCancelToken} from "../../../../helpers/ApiHelper";
 
 function Notifications(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -48,7 +51,7 @@ function Notifications(props) {
     }, []);
 
     const retrieveBulkMessageTaskElements = () => {
-        retrieveBulkMessageTaskElementsCall(cancelTokenSourceRef.current.token,
+        apiService.retrieveBulkMessageTaskElementsCall(cancelTokenSourceRef.current.token,
             (response) => {
                 const preparedBulkMessageTaskElements = {};
                 response.data.results.forEach((taskElement) => {

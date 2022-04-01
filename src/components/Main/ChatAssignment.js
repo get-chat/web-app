@@ -13,10 +13,12 @@ import {
     Select
 } from "@material-ui/core";
 import '../../styles/ChatAssignment.css';
-import {listGroupsCall, retrieveChatAssignmentCall, updateChatAssignmentCall} from "../../api/ApiCalls";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../contexts/ApplicationContext";
 
 function ChatAssignment(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -41,7 +43,7 @@ function ChatAssignment(props) {
     }
 
     const retrieveChatAssignment = () => {
-        retrieveChatAssignmentCall(props.waId,
+        apiService.retrieveChatAssignmentCall(props.waId,
             (response) => {
                 // Data on server
                 setAssignedToUser(response.data.assigned_to_user);
@@ -62,7 +64,7 @@ function ChatAssignment(props) {
     }
 
     const updateChatAssignment = () => {
-        updateChatAssignmentCall(
+        apiService.updateChatAssignmentCall(
             props.waId,
             tempAssignedToUser === 'null' ? null : tempAssignedToUser,
             tempAssignedGroup === 'null' ? null : tempAssignedGroup,
@@ -78,7 +80,7 @@ function ChatAssignment(props) {
     }
 
     const listGroups = () => {
-        listGroupsCall((response) => {
+        apiService.listGroupsCall((response) => {
             setGroups(response.data.results);
 
             // Next

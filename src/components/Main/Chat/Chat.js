@@ -12,7 +12,8 @@ import {
     EVENT_TOPIC_CHAT_TAGGING,
     EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
     EVENT_TOPIC_DROPPED_FILES,
-    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, EVENT_TOPIC_FORCE_REFRESH_CHAT,
+    EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+    EVENT_TOPIC_FORCE_REFRESH_CHAT,
     EVENT_TOPIC_GO_TO_MSG_ID,
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -42,17 +43,7 @@ import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../../he
 import SavedResponses from "./SavedResponses";
 import {generateTemplateMessagePayload} from "../../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
-import {clearUserSession} from "../../../helpers/ApiHelper";
-import {
-    generateCancelToken,
-    listChatAssignmentEventsCall,
-    listChatTaggingEventsCall,
-    listMessagesCall,
-    markAsReceivedCall,
-    retrievePersonCall,
-    sendMessageCall,
-    uploadMediaCall
-} from "../../../api/ApiCalls";
+import {clearUserSession, generateCancelToken} from "../../../helpers/ApiHelper";
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
 import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
 import {isLocalHost} from "../../../helpers/URLHelper";
@@ -63,11 +54,14 @@ import {
 } from "../../../helpers/PendingMessagesHelper";
 import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
 import {useTranslation} from "react-i18next";
+import {ApplicationContext} from "../../../contexts/ApplicationContext";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -338,71 +332,73 @@ export default function Chat(props) {
             if (data && isLoaded) {
                 let hasAnyIncomingMsg = false;
 
-                const preparedMessages = {};
-                Object.entries(data).forEach((message) => {
-                    const msgId = message[0];
-                    const chatMessage = message[1];
+                setMessages(prevState => {
 
-                    if (waId === chatMessage.waId) {
-                        // Check if any message is displayed with internal id
-                        // Fix duplicated messages in this way
-                        const internalIdString = chatMessage.generateInternalIdString();
-                        if (!(internalIdString in messages)) {
-                            preparedMessages[msgId] = chatMessage;
-                        }
+                    let newState;
+                    const preparedMessages = {};
+                    Object.entries(data).forEach((message) => {
+                        const msgId = message[0];
+                        const chatMessage = message[1];
 
-                        if (!chatMessage.isFromUs) {
-                            hasAnyIncomingMsg = true;
-                        }
-                    }
-                });
-
-                if (getObjLength(preparedMessages) > 0) {
-                    const lastMessage = getLastObject(preparedMessages);
-
-                    if (isAtBottom) {
-                        const prevScrollTop = messagesContainer.current.scrollTop;
-                        const prevScrollHeight = messagesContainer.current.scrollHeight;
-                        const isCurrentlyLastMessageVisible = isLastMessageVisible();
-
-                        setMessages(prevState => {
-                            return {...prevState, ...preparedMessages};
-                        });
-
-                        if (!isCurrentlyLastMessageVisible) {
-                            persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
-                            displayScrollButton();
-                        }
-
-                        if (hasAnyIncomingMsg) {
-                            const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
-
-                            // Mark new message as received if visible
-                            if (canSeeLastMessage(messagesContainer.current)) {
-                                markAsReceived(lastMessageTimestamp);
-                            } else {
-                                setCurrentNewMessages(prevState => prevState+1);
+                        if (waId === chatMessage.waId) {
+                            // Check if any message is displayed with internal id
+                            // Fix duplicated messages in this way
+                            const internalIdString = chatMessage.generateInternalIdString();
+                            if (!(internalIdString in prevState)) {
+                                preparedMessages[msgId] = chatMessage;
                             }
 
-                            // Update contact
-                            setPerson(prevState => {
-                                const nextState = prevState;
-                                nextState.lastMessageTimestamp = lastMessageTimestamp;
-                                nextState.isExpired = false;
-
-                                return nextState;
-                            });
-
-                            // Chat is not expired anymore
-                            setExpired(false);
+                            if (!chatMessage.isFromUs) {
+                                hasAnyIncomingMsg = true;
+                            }
                         }
-                    } else {
-                        setCurrentNewMessages(prevState => prevState+1);
+                    });
+
+                    if (getObjLength(preparedMessages) > 0) {
+                        const lastMessage = getLastObject(preparedMessages);
+
+                        if (isAtBottom) {
+                            const prevScrollTop = messagesContainer.current.scrollTop;
+                            const prevScrollHeight = messagesContainer.current.scrollHeight;
+                            const isCurrentlyLastMessageVisible = isLastMessageVisible();
+
+                            newState = {...prevState, ...preparedMessages};
+
+                            if (!isCurrentlyLastMessageVisible) {
+                                persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                                displayScrollButton();
+                            }
+
+                            if (hasAnyIncomingMsg) {
+                                const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
+
+                                // Mark new message as received if visible
+                                if (canSeeLastMessage(messagesContainer.current)) {
+                                    markAsReceived(lastMessageTimestamp);
+                                } else {
+                                    setCurrentNewMessages(prevState => prevState+1);
+                                }
+
+                                // Update contact
+                                setPerson(prevState => ({
+                                    ...prevState,
+                                    lastMessageTimestamp: lastMessageTimestamp,
+                                    isExpired: false
+                                }));
+
+                                // Chat is not expired anymore
+                                setExpired(false);
+                            }
+                        } else {
+                            setCurrentNewMessages(prevState => prevState+1);
+                        }
+
+                        // Update last message id
+                        setLastMessageId(lastMessage.id);
                     }
 
-                    // Update last message id
-                    setLastMessageId(lastMessage.id);
-                }
+                    return newState ?? prevState;
+                });
             }
         }
 
@@ -535,7 +531,7 @@ export default function Chat(props) {
             PubSub.unsubscribe(chatTaggingEventToken);
             PubSub.unsubscribe(forceRefreshChatEventToken);
         }
-    }, [waId, messages, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
+    }, [waId, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
 
     useEffect(() => {
         const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
@@ -691,7 +687,7 @@ export default function Chat(props) {
     }
 
     const retrievePerson = (loadMessages) => {
-        retrievePersonCall(waId, cancelTokenSourceRef.current.token, (response) => {
+        apiService.retrievePersonCall(waId, cancelTokenSourceRef.current.token, (response) => {
             const preparedPerson = new PersonClass(response.data);
             setPerson(preparedPerson);
             setExpired(preparedPerson.isExpired);
@@ -736,7 +732,7 @@ export default function Chat(props) {
     const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
         const limit = 30;
 
-        listMessagesCall(waId, undefined, undefined, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
+        apiService.listMessagesCall(waId, undefined, undefined, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
             (response) => {
                 const count = response.data.count;
                 //const previous = response.data.previous;
@@ -844,7 +840,7 @@ export default function Chat(props) {
     }
 
     const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        listChatAssignmentEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+        apiService.listChatAssignmentEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
             (response) => {
                 response.data.results.reverse().forEach((assignmentEvent) => {
                     const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
@@ -857,7 +853,7 @@ export default function Chat(props) {
     }
 
     const listChatTaggingEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        listChatTaggingEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+        apiService.listChatTaggingEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
             (response) => {
                 response.data.results.reverse().forEach((taggingEvent) => {
                     const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
@@ -977,7 +973,7 @@ export default function Chat(props) {
             return;
         }*/
 
-        sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1029,7 +1025,7 @@ export default function Chat(props) {
             return;
         }
 
-        sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1066,7 +1062,7 @@ export default function Chat(props) {
         // To display a progress
         props.setUploadingMedia(true);
 
-        uploadMediaCall(formData,
+        apiService.uploadMediaCall(formData,
             (response) => {
                 // Convert parameters to a ChosenFile object
                 sendFile(payload?.wa_id, response.data.file, chosenFile, undefined, function () {
@@ -1121,7 +1117,7 @@ export default function Chat(props) {
             }
         }
 
-        sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1243,7 +1239,7 @@ export default function Chat(props) {
     }
 
     const markAsReceived = (timestamp) => {
-        markAsReceivedCall(waId, timestamp, cancelTokenSourceRef.current.token,
+        apiService.markAsReceivedCall(waId, timestamp, cancelTokenSourceRef.current.token,
             (response) => {
                 PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
                 setCurrentNewMessages(0);
@@ -1284,10 +1280,10 @@ export default function Chat(props) {
 
             {/* FOR TESTING QUEUE */}
             {isLocalHost() && props.pendingMessages.length > 0 &&
-            <div className="pendingMessagesIndicator">
-                <div>{props.isSendingPendingMessages.toString()}</div>
-                <div>{props.pendingMessages.length}</div>
-            </div>
+                <div className="pendingMessagesIndicator">
+                    <div>{props.isSendingPendingMessages.toString()}</div>
+                    <div>{props.pendingMessages.length}</div>
+                </div>
             }
 
             <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
@@ -1383,27 +1379,27 @@ export default function Chat(props) {
                 closeChat={closeChat} />
 
             {isTemplateMessagesVisible &&
-            <TemplateMessages
-                waId={waId}
-                templatesData={props.templates}
-                onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
-                onBulkSend={bulkSendMessage}
-                isTemplatesFailed={props.isTemplatesFailed}
-                isLoadingTemplates={props.isLoadingTemplates} />
+                <TemplateMessages
+                    waId={waId}
+                    templatesData={props.templates}
+                    onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
+                    onBulkSend={bulkSendMessage}
+                    isTemplatesFailed={props.isTemplatesFailed}
+                    isLoadingTemplates={props.isLoadingTemplates} />
             }
 
             {isSavedResponsesVisible &&
-            <SavedResponses
-                savedResponses={props.savedResponses}
-                deleteSavedResponse={props.deleteSavedResponse}
-                sendCustomTextMessage={sendCustomTextMessage} />
+                <SavedResponses
+                    savedResponses={props.savedResponses}
+                    deleteSavedResponse={props.deleteSavedResponse}
+                    sendCustomTextMessage={sendCustomTextMessage} />
             }
 
             {!waId &&
-            <div className="chat__default">
-                <h2>{t('Hey')}</h2>
-                <p>{t('Choose a contact to start a conversation')}</p>
-            </div>
+                <div className="chat__default">
+                    <h2>{t('Hey')}</h2>
+                    <p>{t('Choose a contact to start a conversation')}</p>
+                </div>
             }
 
             <ChatMessageOptionsMenu
@@ -1413,12 +1409,12 @@ export default function Chat(props) {
                 createSavedResponse={props.createSavedResponse} />
 
             {isPreviewSendMediaVisible &&
-            <PreviewSendMedia
-                data={previewSendMediaData}
-                setData={setPreviewSendMediaData}
-                setPreviewSendMediaVisible={setPreviewSendMediaVisible}
-                sendHandledChosenFiles={sendHandledChosenFiles}
-                accept={accept} />
+                <PreviewSendMedia
+                    data={previewSendMediaData}
+                    setData={setPreviewSendMediaData}
+                    setPreviewSendMediaVisible={setPreviewSendMediaVisible}
+                    sendHandledChosenFiles={sendHandledChosenFiles}
+                    accept={accept} />
             }
 
         </div>

@@ -1,4 +1,3 @@
-import {BASE_URL} from "./Constants";
 import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
 
 export class ChatMessageClass {
@@ -158,7 +157,7 @@ export class ChatMessageClass {
     }
 
     generateMediaLink(id) {
-        return id ? `${BASE_URL}media/${id}` : undefined;
+        return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
     }
 
     generateImageLink(includeTemplateHeader) {

@@ -4,10 +4,10 @@ get.chat Web App
 
 ## Before Start
 
-You must configure `REACT_APP_BASE_URL` (Base URL) variable.
-This variable is defined in `package.json` (scripts -> start) and `.env` files.
-`REACT_APP_BASE_URL` should be set to `/api/v1/` to use same address as get.chat Web App runs on.
-You can define a custom backend URL for development (not for build) by defining it in `package.json` (scripts -> start).
+You must create the `config.json` file in `public` folder if it doesn't exist. Please see the `config.json.tmpl` template file.
+
+Specify the Rest API URL as the value of `API_BASE_URL` inside the config.
+`API_BASE_URL` should be set to `/api/v1/` to use same address as get.chat Web App runs on.
 
 ## Environment Variables
 
@@ -38,7 +38,7 @@ This project uses Sentry for error tracking.
 ### Change Sentry DSN Key
 
 If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key (https://docs.sentry.io/product/sentry-basics/dsn-explainer/).
-In order to do this, please go to `.env` file and replace the value of `REACT_APP_SENTRY_DSN` environment variable.
+In order to do this, please go to `config.json` file and replace the value of `APP_SENTRY_DSN` variable.
 
 ### Disable Sentry
 

@@ -10,12 +10,15 @@ import {isMobileOnly} from "react-device-detect";
 import {useHistory} from "react-router-dom";
 import PersonClass from "../PersonClass";
 import Person from "./Person";
-import {generateCancelToken, listContactsCall, listPersonsCall, verifyContactsCall} from "../api/ApiCalls";
 import {getObjLength} from "../helpers/ObjectHelper";
 import {addPlus, preparePhoneNumber} from "../helpers/PhoneNumberHelper";
 import {Trans, useTranslation} from "react-i18next";
+import {ApplicationContext} from "../contexts/ApplicationContext";
+import {generateCancelToken} from "../helpers/ApiHelper";
 
 function Contacts(props) {
+
+    const {apiService} = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -72,7 +75,7 @@ function Contacts(props) {
     }, [keyword]);
 
     const listPersons = () => {
-        listPersonsCall(keyword?.trim(), cancelTokenSourceRef.current.token,
+        apiService.listPersonsCall(keyword?.trim(), cancelTokenSourceRef.current.token,
             (response) => {
                 const preparedPersons = {};
                 response.data.results.forEach((person, personIndex) => {
@@ -87,7 +90,7 @@ function Contacts(props) {
     }
 
     const listContacts = () => {
-        listContactsCall(keyword?.trim(), 0, cancelTokenSourceRef.current.token,
+        apiService.listContactsCall(keyword?.trim(), 0, cancelTokenSourceRef.current.token,
             (response) => {
                 const preparedContacts = {};
                 response.data.results.forEach((contact, contactIndex) => {
@@ -105,7 +108,7 @@ function Contacts(props) {
 
         setVerifying(true);
 
-        verifyContactsCall([addPlus(waId)], verifyPhoneNumberCancelTokenSourceRef.current.token,
+        apiService.verifyContactsCall([addPlus(waId)], verifyPhoneNumberCancelTokenSourceRef.current.token,
             (response) => {
                 if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
                     history.push({
