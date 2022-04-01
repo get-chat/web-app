@@ -45,8 +45,13 @@ export const translateHTMLInputToText = (html) => {
 export const markOccurrences = (message, sub) => {
     if (!message) return;
 
-    const reg = new RegExp('(' + sub + ')', 'gi');
-    return message.replace(reg, '<span class="searchOccurrence">$1</span>');
+    try {
+        const reg = new RegExp('(' + sub + ')', 'gi');
+        return message.replace(reg, '<span class="searchOccurrence">$1</span>');
+    } catch (error) {
+        console.error(error);
+        return message;
+    }
 }
 
 export const generateInitialsHelper = (name) => {
