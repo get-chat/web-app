@@ -1,4 +1,4 @@
-export const VERSION = "1.38.9"
+export const VERSION = "1.38.10"
 
 export const CHAT_KEY_PREFIX = "chat_";
 
