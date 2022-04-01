@@ -544,9 +544,14 @@ export default function Chat(props) {
         const onUpdatePersonName = function (msg, data) {
             const name = data;
             setPerson(prevState => {
-                prevState?.setName(name);
-                // Assign object to a new instance to trigger change
-                return Object.assign(PersonClass.newInstance(), prevState);
+                if (prevState && prevState instanceof PersonClass) {
+                    return {
+                        ...prevState,
+                        name: name
+                    }
+                } else {
+                    return prevState;
+                }
             });
         }
 
