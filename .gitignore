@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# MacOS
+.DS_Store
+
 # dependencies
 /node_modules
 /.pnp
@@ -24,3 +27,6 @@ yarn-error.log*
 
 .eslintcache
 debug.log
+
+# Editors
+.idea
