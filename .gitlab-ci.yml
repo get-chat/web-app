@@ -22,5 +22,5 @@ Test:
     - tags
 
   script:
-    - npm ci
+    - npm install --prefer-offline
     - npm test -- --passWithNoTests
