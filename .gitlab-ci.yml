@@ -7,6 +7,10 @@ variables:
 
 
 cache:
+  key:
+    files:
+      # compute our cache key from the lock file (`package-lock.json`)
+      - package-lock.json
   paths:
     # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
     - node_modules/
