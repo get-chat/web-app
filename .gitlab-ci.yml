@@ -6,6 +6,12 @@ variables:
   NODE_IMAGE: node:16-alpine
 
 
+cache:
+  paths:
+    # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
+    - node_modules/
+
+
 Test:
   stage: test
   image: $NODE_IMAGE
