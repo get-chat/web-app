@@ -64,6 +64,7 @@ function Sidebar(props) {
     const {waId} = useParams();
     const chatsContainer = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [chatMessages, setChatMessages] = useState({});
     const [contactResults, setContactResults] = useState({});
@@ -92,6 +93,19 @@ function Sidebar(props) {
 
     const hideMenu = () => {
         setAnchorEl(null);
+    }
+
+    const displayBulkMessageMenu = (event) => {
+        setBulkMessageMenuAnchorEl(event.currentTarget);
+    }
+
+    const hideBulkMessageMenu = () => {
+        setBulkMessageMenuAnchorEl(null);
+    }
+
+    const showSendBulkVoiceMessageDialog = () => {
+        setBulkMessageMenuAnchorEl(null);
+        props.setSendBulkVoiceMessageDialogVisible(true);
     }
 
     let cancelTokenSourceRef = useRef();
@@ -453,7 +467,7 @@ function Sidebar(props) {
                     <IconButton onClick={displayContacts}>
                         <ChatIcon />
                     </IconButton>
-                    <IconButton onClick={() => props.setSendBulkMessageDialogVisible(true)}>
+                    <IconButton onClick={displayBulkMessageMenu}>
                         <DynamicFeedIcon />
                     </IconButton>
                     <IconButton onClick={displayNotifications}>
@@ -670,6 +684,20 @@ function Sidebar(props) {
                 <Divider />
                 <MenuItem onClick={logOut}>
                     {t('Logout')}
+                </MenuItem>
+            </Menu>
+
+            <Menu
+                anchorEl={bulkMessageMenuAnchorEl}
+                getContentAnchorEl={null}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                keepMounted
+                open={Boolean(bulkMessageMenuAnchorEl)}
+                onClose={hideBulkMessageMenu}
+                elevation={3}>
+                <MenuItem onClick={showSendBulkVoiceMessageDialog}>
+                    {t('Send bulk voice message')}
                 </MenuItem>
             </Menu>
 

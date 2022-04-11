@@ -48,7 +48,7 @@ import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
 import {useTranslation} from "react-i18next";
 import {AppConfig} from "../../contexts/AppConfig";
 import {ApplicationContext} from "../../contexts/ApplicationContext";
-import SendBulkMessageDialog from "../SendBulkMessageDialog";
+import SendBulkVoiceMessageDialog from "../SendBulkVoiceMessageDialog";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -118,7 +118,7 @@ function Main() {
     const [selectedTags, setSelectedTags] = useState([]);
     const [bulkSendPayload, setBulkSendPayload] = useState();
 
-    const [isSendBulkMessageDialogVisible, setSendBulkMessageDialogVisible] = useState(false);
+    const [isSendBulkVoiceMessageDialogVisible, setSendBulkVoiceMessageDialogVisible] = useState(false);
 
     const [notificationHistory, setNotificationHistory] = useState({});
 
@@ -935,7 +935,7 @@ function Main() {
                         finishBulkSendMessage={finishBulkSendMessage}
                         tags={tags}
                         setLoadingNow={setLoadingNow}
-                        setSendBulkMessageDialogVisible={setSendBulkMessageDialogVisible}/>
+                        setSendBulkVoiceMessageDialogVisible={setSendBulkVoiceMessageDialogVisible}/>
                 }
 
                 {templatesReady &&
@@ -1056,9 +1056,9 @@ function Main() {
                     <UploadMediaIndicator/>
                 }
 
-                <SendBulkMessageDialog
-                    open={isSendBulkMessageDialogVisible}
-                    setOpen={setSendBulkMessageDialogVisible}
+                <SendBulkVoiceMessageDialog
+                    open={isSendBulkVoiceMessageDialogVisible}
+                    setOpen={setSendBulkVoiceMessageDialogVisible}
                 />
 
             </div>
