@@ -52,6 +52,7 @@ import UploadMediaIndicator from "./UploadMediaIndicator";
 import {Trans, useTranslation} from "react-i18next";
 import {AppConfig} from "../../../contexts/AppConfig";
 import {ApplicationContext} from "../../../contexts/ApplicationContext";
+import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 
 function Sidebar(props) {
 
@@ -451,6 +452,9 @@ function Sidebar(props) {
                 <div className="sidebar__headerRight">
                     <IconButton onClick={displayContacts}>
                         <ChatIcon />
+                    </IconButton>
+                    <IconButton onClick={() => props.setSendBulkMessageDialogVisible(true)}>
+                        <DynamicFeedIcon />
                     </IconButton>
                     <IconButton onClick={displayNotifications}>
                         <NotificationsIcon />
