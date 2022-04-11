@@ -6,7 +6,11 @@ import {displaySeconds} from "../../../../helpers/Helpers";
 import DoneIcon from "@material-ui/icons/Done";
 import '../../../../styles/VoiceRecord.css';
 import VoiceRecorder from "../../../../VoiceRecorder";
-import {EVENT_TOPIC_DISPLAY_ERROR, EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../../../../Constants";
+import {
+    EVENT_TOPIC_DISPLAY_ERROR,
+    EVENT_TOPIC_REQUEST_MIC_PERMISSION,
+    EVENT_TOPIC_VOICE_RECORD_STARTING
+} from "../../../../Constants";
 import PubSub from "pubsub-js";
 import {useParams} from "react-router-dom";
 import Button from "@material-ui/core/Button";
@@ -38,14 +42,24 @@ function VoiceRecord(
     useEffect(() => {
         const onRequestMicPermission = function (msg, data) {
             if (data === voiceRecordCase) {
+                PubSub.publish(EVENT_TOPIC_VOICE_RECORD_STARTING, voiceRecordCase);
                 requestMicrophonePermission();
             }
         }
 
-        const token = PubSub.subscribe(EVENT_TOPIC_REQUEST_MIC_PERMISSION, onRequestMicPermission);
+        const onRequestMicPermissionToken = PubSub.subscribe(EVENT_TOPIC_REQUEST_MIC_PERMISSION, onRequestMicPermission);
+
+        const onVoiceRecordStarting = function (msg, data) {
+            if (data !== voiceRecordCase) {
+                cancelVoiceRecord();
+            }
+        }
+
+        const onVoiceRecordStartingToken = PubSub.subscribe(EVENT_TOPIC_VOICE_RECORD_STARTING, onVoiceRecordStarting);
 
         return () => {
-            PubSub.unsubscribe(token);
+            PubSub.unsubscribe(onRequestMicPermissionToken);
+            PubSub.unsubscribe(onVoiceRecordStartingToken);
 
             cancelVoiceRecord();
         }
