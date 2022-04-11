@@ -14,9 +14,15 @@ import {useTranslation} from "react-i18next";
 
 let timerIntervalId;
 
-function VoiceRecord(props) {
+function VoiceRecord(
+    {
+        voiceRecordCase,
+        setRecording,
+        sendHandledChosenFiles
+    }
+) {
 
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
 
     const voiceRecorder = useRef(new VoiceRecorder());
     const [timer, setTimer] = useState(0);
@@ -31,7 +37,9 @@ function VoiceRecord(props) {
 
     useEffect(() => {
         const onRequestMicPermission = function (msg, data) {
-            requestMicrophonePermission();
+            if (data === voiceRecordCase) {
+                requestMicrophonePermission();
+            }
         }
 
         const token = PubSub.subscribe(EVENT_TOPIC_REQUEST_MIC_PERMISSION, onRequestMicPermission);
@@ -54,7 +62,7 @@ function VoiceRecord(props) {
     }
 
     const onVoiceRecordStop = () => {
-        props.setRecording(false);
+        setRecording(false);
 
         // Stop timer
         clearInterval(timerIntervalId);
@@ -107,7 +115,7 @@ function VoiceRecord(props) {
         voiceRecorder.current?.start(
             stream,
             function () {
-                props.setRecording(true);
+                setRecording(true);
 
                 // Update timer every second
                 timerIntervalId = setInterval(function () {
@@ -135,7 +143,7 @@ function VoiceRecord(props) {
 
             // Send
             if (chosenFile) {
-                props.sendHandledChosenFiles({0: voiceRecorder.current.lastAudioChosenFile});
+                sendHandledChosenFiles({0: voiceRecorder.current.lastAudioChosenFile});
             } else {
                 console.log('Audio file is missing');
             }
@@ -150,14 +158,14 @@ function VoiceRecord(props) {
     return (
         <div className="voiceRecord">
             <IconButton onClick={stopVoiceRecord} className="voiceRecord__cancelButton">
-                <CloseIcon />
+                <CloseIcon/>
             </IconButton>
 
-            <FiberManualRecordIcon className="voiceRecord__recordIcon" />
-            <span className="voiceRecord__timer">{ displaySeconds(timer) }</span>
+            <FiberManualRecordIcon className="voiceRecord__recordIcon"/>
+            <span className="voiceRecord__timer">{displaySeconds(timer)}</span>
 
             <IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
-                <DoneIcon />
+                <DoneIcon/>
             </IconButton>
 
             <Dialog

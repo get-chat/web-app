@@ -11,6 +11,7 @@ import MicIcon from "@material-ui/icons/Mic";
 import '../styles/SendBulkVoiceMessageDialog.css';
 
 const SendBulkVoiceMessageDialog = ({open, setOpen}) => {
+    // TODO: Handle isRecording globally to avoid conflicts
     const [isRecording, setRecording] = useState(false);
 
     const {t, i18n} = useTranslation();
@@ -29,13 +30,14 @@ const SendBulkVoiceMessageDialog = ({open, setOpen}) => {
             <DialogContent className="sendBulkVoiceMessageDialogContent">
                 {!isRecording &&
                     <Tooltip title="Voice" placement="top">
-                        <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, true)}>
+                        <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, "bulk")}>
                             <MicIcon/>
                         </IconButton>
                     </Tooltip>
                 }
                 <div className={!isRecording ? 'hidden' : ''}>
                     <VoiceRecord
+                        voiceRecordCase="bulk"
                         setRecording={setRecording}
                         sendHandledChosenFiles={sendHandledChosenFiles}/>
                 </div>

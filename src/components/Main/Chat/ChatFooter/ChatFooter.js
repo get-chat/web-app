@@ -328,7 +328,7 @@ function ChatFooter(props) {
 
                 {(!props.isExpired && !hasInput() && !isRecording) &&
                 <Tooltip title="Voice" placement="top">
-                    <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, true)}>
+                    <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, "chat")}>
                         <MicIcon/>
                     </IconButton>
                 </Tooltip>
@@ -336,6 +336,7 @@ function ChatFooter(props) {
 
                 <div className={!isRecording ? 'hidden' : ''}>
                     <VoiceRecord
+                        voiceRecordCase="chat"
                         setRecording={setRecording}
                         sendHandledChosenFiles={props.sendHandledChosenFiles} />
                 </div>
