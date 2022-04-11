@@ -1057,8 +1057,10 @@ function Main() {
                 }
 
                 <SendBulkVoiceMessageDialog
+                    apiService={apiService}
                     open={isSendBulkVoiceMessageDialogVisible}
                     setOpen={setSendBulkVoiceMessageDialogVisible}
+                    setUploadingMedia={setUploadingMedia}
                 />
 
             </div>
