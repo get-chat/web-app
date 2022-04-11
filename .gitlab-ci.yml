@@ -27,4 +27,9 @@ Test:
 
   script:
     - npm install --prefer-offline --no-audit --no-fund
-    - npm test -- --passWithNoTests
+    - npm test --
+      --passWithNoTests
+      --coverage
+
+  # track our test coverage in GitLab's MR widget/ui
+  coverage: '/All files.*\|\s+(\d+(?:\.\d+)?)/'
