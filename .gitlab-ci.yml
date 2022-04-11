@@ -29,7 +29,15 @@ Test:
     - npm install --prefer-offline --no-audit --no-fund
     - npm test --
       --passWithNoTests
-      --coverage
+      --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
 
   # track our test coverage in GitLab's MR widget/ui
   coverage: '/All files.*\|\s+(\d+(?:\.\d+)?)/'
+
+  # track our test coverage in GitLab's CI pipeline test reports
+  artifacts:
+    expose_as: Coverage HTML report
+    paths:
+      - coverage/
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
