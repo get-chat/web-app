@@ -1061,6 +1061,8 @@ function Main() {
                     open={isSendBulkVoiceMessageDialogVisible}
                     setOpen={setSendBulkVoiceMessageDialogVisible}
                     setUploadingMedia={setUploadingMedia}
+                    setBulkSendPayload={setBulkSendPayload}
+                    setSelectionModeEnabled={setSelectionModeEnabled}
                 />
 
             </div>

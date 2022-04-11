@@ -9,8 +9,9 @@ import PubSub from "pubsub-js";
 import {EVENT_TOPIC_REQUEST_MIC_PERMISSION} from "../Constants";
 import MicIcon from "@material-ui/icons/Mic";
 import '../styles/SendBulkVoiceMessageDialog.css';
+import {prepareSendFilePayload} from "../helpers/ChatHelper";
 
-const SendBulkVoiceMessageDialog = ({apiService, open, setOpen, setUploadingMedia}) => {
+const SendBulkVoiceMessageDialog = ({apiService, open, setOpen, setUploadingMedia, setBulkSendPayload, setSelectionModeEnabled}) => {
     // TODO: Handle isRecording globally to avoid conflicts
     const [isRecording, setRecording] = useState(false);
 
@@ -56,9 +57,15 @@ const SendBulkVoiceMessageDialog = ({apiService, open, setOpen, setUploadingMedi
     }
 
     const sendFile = (receiverWaId, fileURL, chosenFile, customPayload, completeCallback) => {
-        console.log(fileURL);
-
         completeCallback?.();
+
+        const requestBody = prepareSendFilePayload(chosenFile, fileURL);
+        setBulkSendPayload(requestBody);
+
+        setSelectionModeEnabled(true);
+
+        // Hide the dialog
+        setOpen(false);
     }
 
     return (
@@ -80,7 +87,7 @@ const SendBulkVoiceMessageDialog = ({apiService, open, setOpen, setUploadingMedi
                 </div>
             </DialogContent>
             <DialogActions>
-                <Button onClick={close} color="secondary">
+                <Button onClick={close} color="secondary" disabled={isRecording}>
                     {t('Close')}
                 </Button>
             </DialogActions>
