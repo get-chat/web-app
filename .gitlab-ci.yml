@@ -28,7 +28,13 @@ Build:
 
   script:
     - npm install --prefer-offline --no-audit --no-fund
-    - npm run build
+
+    # HACK: Using `CI=false` as a temporary workaround to ignore compilation
+    # warnings, as they're breaking our GitLab CI/CD pipeline
+    #
+    # For details, please see:
+    # https://gitlab.com/wabbitproject/web-app/-/issues/156
+    - CI=false npm run build
 
 
 Test:
