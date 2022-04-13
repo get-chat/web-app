@@ -10,7 +10,7 @@ import {
     Menu,
     MenuItem,
     Tab,
-    Tabs,
+    Tabs, Tooltip,
     Zoom
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -464,18 +464,26 @@ function Sidebar(props) {
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
-                    <IconButton onClick={displayContacts}>
-                        <ChatIcon />
-                    </IconButton>
-                    <IconButton onClick={displayBulkMessageMenu}>
-                        <DynamicFeedIcon />
-                    </IconButton>
-                    <IconButton onClick={displayNotifications}>
-                        <NotificationsIcon />
-                    </IconButton>
-                    <IconButton onClick={displayMenu}>
-                        <MoreVertIcon />
-                    </IconButton>
+                    <Tooltip title={t('New chat')}>
+                        <IconButton onClick={displayContacts}>
+                            <ChatIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('Bulk send')}>
+                        <IconButton onClick={displayBulkMessageMenu}>
+                            <DynamicFeedIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('Notifications')}>
+                        <IconButton onClick={displayNotifications}>
+                            <NotificationsIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('Options')}>
+                        <IconButton onClick={displayMenu}>
+                            <MoreVertIcon/>
+                        </IconButton>
+                    </Tooltip>
                 </div>
             </div>
 

@@ -309,7 +309,7 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-msgid "Bulk Send"
+msgid "Bulk send"
 msgstr ""
 
 msgid "Cancel"
@@ -496,4 +496,7 @@ msgid "Notifications"
 msgstr ""
 
 msgid "You have no notifications"
+msgstr ""
+
+msgid "Options"
 msgstr ""
