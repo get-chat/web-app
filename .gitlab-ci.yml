@@ -20,6 +20,7 @@ cache:
 
 Update project version on git tag:
   stage: update_version
+  image: $NODE_IMAGE
 
   only:
     - tags
