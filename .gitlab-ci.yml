@@ -1,4 +1,5 @@
 stages:
+  - update_version
   - build
   - test
 
@@ -15,6 +16,21 @@ cache:
   paths:
     # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
     - node_modules/
+
+
+Update project version on git tag:
+  stage: update_version
+
+  only:
+    - tags
+
+  script:
+    - npm version --no-git-tag-version ${CI_COMMIT_TAG}
+
+  artifacts:
+    name: version
+    paths:
+      - package*.json
 
 
 Build:
