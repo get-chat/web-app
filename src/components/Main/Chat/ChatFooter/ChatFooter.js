@@ -16,7 +16,6 @@ import PubSub from "pubsub-js";
 import FileInput from "../../../FileInput";
 import {getSelectionHtml, sanitize, translateHTMLInputToText} from "../../../../helpers/Helpers";
 import VoiceRecord from "./VoiceRecord";
-import AllInboxIcon from '@material-ui/icons/AllInbox';
 import {
     EMOJI_SET,
     EMOJI_SHEET_SIZE,
@@ -27,6 +26,7 @@ import {
 import ChatMessageClass from "../../../../ChatMessageClass";
 import {replaceEmojis} from "../../../../helpers/EmojiHelper";
 import {useTranslation} from "react-i18next";
+import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
 
 function ChatFooter(props) {
 
@@ -321,7 +321,7 @@ function ChatFooter(props) {
                 {hasInput() &&
                 <Tooltip title="Bulk Send" placement="top">
                     <IconButton onClick={() => props.bulkSendMessage(ChatMessageClass.TYPE_TEXT)}>
-                        <AllInboxIcon/>
+                        <DynamicFeedIcon/>
                     </IconButton>
                 </Tooltip>
                 }
