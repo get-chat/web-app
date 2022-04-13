@@ -26,7 +26,7 @@ function VoiceRecord(
     }
 ) {
 
-    const {t, i18n} = useTranslation();
+    const {t} = useTranslation();
 
     const voiceRecorder = useRef(new VoiceRecorder());
     const [timer, setTimer] = useState(0);
