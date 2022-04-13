@@ -41,7 +41,7 @@ import {
 import PreviewSendMedia from "./PreviewSendMedia";
 import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../../helpers/FileHelper";
 import SavedResponses from "./SavedResponses";
-import {generateTemplateMessagePayload} from "../../../helpers/ChatHelper";
+import {generateTemplateMessagePayload, prepareSendFilePayload} from "../../../helpers/ChatHelper";
 import {isMobileOnly} from "react-device-detect";
 import {clearUserSession, generateCancelToken} from "../../../helpers/ApiHelper";
 import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
@@ -1093,32 +1093,12 @@ export default function Chat(props) {
         if (customPayload) {
             requestBody = customPayload;
         } else {
-            const caption = chosenFile.caption;
-            const type = chosenFile.attachmentType;
-            const file = chosenFile.file;
-            const filename = file.name;
-            const mimeType = file.type;
-
+            requestBody = prepareSendFilePayload(chosenFile, fileURL);
             requestBody = {
+                ...requestBody,
                 wa_id: receiverWaId,
                 recipient_type: 'individual',
                 to: receiverWaId,
-                type: type
-            };
-
-            requestBody[type] = {
-                link: fileURL,
-                mime_type: mimeType,
-            }
-
-            // caption param is accepted for only images and videos
-            if (type === ATTACHMENT_TYPE_IMAGE || type === ATTACHMENT_TYPE_VIDEO) {
-                requestBody[type]['caption'] = caption;
-            }
-
-            // filename param is accepted for documents
-            if (type === ATTACHMENT_TYPE_DOCUMENT) {
-                requestBody[type]['filename'] = filename;
             }
         }
 

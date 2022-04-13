@@ -60,7 +60,9 @@ function ChatMessageVoice(props) {
                 console.log(data.mimeType);
 
                 if (isAudioMimeTypeSupported(data.mimeType)) {
-                    audio.current.play();
+                    audio.current.play().catch(error => {
+                        console.error(error);
+                    });
                     setPlaying(true);
                 } else {
                     const unsupportedFile = new UnsupportedFileClass({

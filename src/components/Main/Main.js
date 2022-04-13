@@ -48,6 +48,7 @@ import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
 import {useTranslation} from "react-i18next";
 import {AppConfig} from "../../contexts/AppConfig";
 import {ApplicationContext} from "../../contexts/ApplicationContext";
+import SendBulkVoiceMessageDialog from "../SendBulkVoiceMessageDialog";
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -58,7 +59,7 @@ function Main() {
     const {apiService} = React.useContext(ApplicationContext);
     const config = React.useContext(AppConfig);
 
-    const { t, i18n } = useTranslation();
+    const {t, i18n} = useTranslation();
 
     const {waId} = useParams();
 
@@ -116,6 +117,8 @@ function Main() {
     const [selectedChats, setSelectedChats] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [bulkSendPayload, setBulkSendPayload] = useState();
+
+    const [isSendBulkVoiceMessageDialogVisible, setSendBulkVoiceMessageDialogVisible] = useState(false);
 
     const [notificationHistory, setNotificationHistory] = useState({});
 
@@ -275,6 +278,7 @@ function Main() {
                 return {...nextState};
             });
         }
+
         if (!window.Notification) {
             console.log('Browser does not support notifications.');
         } else {
@@ -899,129 +903,130 @@ function Main() {
             <div className={"app__body" + (isIPad13 ? " absoluteFullscreen" : "")}>
 
                 {templatesReady &&
-                <Sidebar
-                    currentUser={currentUser}
-                    isAdmin={isAdmin}
-                    pendingMessages={pendingMessages}
-                    setPendingMessages={setPendingMessages}
-                    isSendingPendingMessages={isSendingPendingMessages}
-                    hasFailedMessages={hasFailedMessages}
-                    lastSendAttemptAt={lastSendAttemptAt}
-                    isUploadingMedia={isUploadingMedia}
-                    chats={chats}
-                    setChats={setChats}
-                    newMessages={newMessages}
-                    setNewMessages={setNewMessages}
-                    filterTag={filterTag}
-                    setFilterTag={setFilterTag}
-                    setProgress={setProgress}
-                    displayNotification={displayNotification}
-                    isBlurred={isBlurred}
-                    contactProvidersData={contactProvidersData}
-                    retrieveContactData={resolveContact}
-                    isChatOnly={isChatOnly}
-                    setChatTagsListVisible={setChatTagsListVisible}
-                    isSelectionModeEnabled={isSelectionModeEnabled}
-                    setSelectionModeEnabled={setSelectionModeEnabled}
-                    bulkSendPayload={bulkSendPayload}
-                    selectedChats={selectedChats}
-                    setSelectedChats={setSelectedChats}
-                    selectedTags={selectedTags}
-                    setSelectedTags={setSelectedTags}
-                    finishBulkSendMessage={finishBulkSendMessage}
-                    tags={tags}
-                    setLoadingNow={setLoadingNow} />
+                    <Sidebar
+                        currentUser={currentUser}
+                        isAdmin={isAdmin}
+                        pendingMessages={pendingMessages}
+                        setPendingMessages={setPendingMessages}
+                        isSendingPendingMessages={isSendingPendingMessages}
+                        hasFailedMessages={hasFailedMessages}
+                        lastSendAttemptAt={lastSendAttemptAt}
+                        isUploadingMedia={isUploadingMedia}
+                        chats={chats}
+                        setChats={setChats}
+                        newMessages={newMessages}
+                        setNewMessages={setNewMessages}
+                        filterTag={filterTag}
+                        setFilterTag={setFilterTag}
+                        setProgress={setProgress}
+                        displayNotification={displayNotification}
+                        isBlurred={isBlurred}
+                        contactProvidersData={contactProvidersData}
+                        retrieveContactData={resolveContact}
+                        isChatOnly={isChatOnly}
+                        setChatTagsListVisible={setChatTagsListVisible}
+                        isSelectionModeEnabled={isSelectionModeEnabled}
+                        setSelectionModeEnabled={setSelectionModeEnabled}
+                        bulkSendPayload={bulkSendPayload}
+                        selectedChats={selectedChats}
+                        setSelectedChats={setSelectedChats}
+                        selectedTags={selectedTags}
+                        setSelectedTags={setSelectedTags}
+                        finishBulkSendMessage={finishBulkSendMessage}
+                        tags={tags}
+                        setLoadingNow={setLoadingNow}
+                        setSendBulkVoiceMessageDialogVisible={setSendBulkVoiceMessageDialogVisible}/>
                 }
 
                 {templatesReady &&
-                <Chat
-                    isAdmin={isAdmin}
-                    currentUser={currentUser}
-                    pendingMessages={pendingMessages}
-                    setPendingMessages={setPendingMessages}
-                    isSendingPendingMessages={isSendingPendingMessages}
-                    setSendingPendingMessages={setSendingPendingMessages}
-                    hasFailedMessages={hasFailedMessages}
-                    setHasFailedMessages={setHasFailedMessages}
-                    lastSendAttemptAt={lastSendAttemptAt}
-                    setLastSendAttemptAt={setLastSendAttemptAt}
-                    isUploadingMedia={isUploadingMedia}
-                    setUploadingMedia={setUploadingMedia}
-                    newMessages={newMessages}
-                    setChosenContact={setChosenContact}
-                    previewMedia={(chatMessage) => previewMedia(chatMessage)}
-                    templates={templates}
-                    isTemplatesFailed={isTemplatesFailed}
-                    isLoadingTemplates={isLoadingTemplates}
-                    savedResponses={savedResponses}
-                    createSavedResponse={createSavedResponse}
-                    deleteSavedResponse={deleteSavedResponse}
-                    contactProvidersData={contactProvidersData}
-                    retrieveContactData={resolveContact}
-                    isChatOnly={isChatOnly}
-                    setChatAssignmentVisible={setChatAssignmentVisible}
-                    setChatTagsVisible={setChatTagsVisible}
-                    setSelectionModeEnabled={setSelectionModeEnabled}
-                    setBulkSendPayload={setBulkSendPayload} />
+                    <Chat
+                        isAdmin={isAdmin}
+                        currentUser={currentUser}
+                        pendingMessages={pendingMessages}
+                        setPendingMessages={setPendingMessages}
+                        isSendingPendingMessages={isSendingPendingMessages}
+                        setSendingPendingMessages={setSendingPendingMessages}
+                        hasFailedMessages={hasFailedMessages}
+                        setHasFailedMessages={setHasFailedMessages}
+                        lastSendAttemptAt={lastSendAttemptAt}
+                        setLastSendAttemptAt={setLastSendAttemptAt}
+                        isUploadingMedia={isUploadingMedia}
+                        setUploadingMedia={setUploadingMedia}
+                        newMessages={newMessages}
+                        setChosenContact={setChosenContact}
+                        previewMedia={(chatMessage) => previewMedia(chatMessage)}
+                        templates={templates}
+                        isTemplatesFailed={isTemplatesFailed}
+                        isLoadingTemplates={isLoadingTemplates}
+                        savedResponses={savedResponses}
+                        createSavedResponse={createSavedResponse}
+                        deleteSavedResponse={deleteSavedResponse}
+                        contactProvidersData={contactProvidersData}
+                        retrieveContactData={resolveContact}
+                        isChatOnly={isChatOnly}
+                        setChatAssignmentVisible={setChatAssignmentVisible}
+                        setChatTagsVisible={setChatTagsVisible}
+                        setSelectionModeEnabled={setSelectionModeEnabled}
+                        setBulkSendPayload={setBulkSendPayload}/>
                 }
 
                 {isSearchMessagesVisible &&
-                <SearchMessage />
+                    <SearchMessage/>
                 }
 
                 {isContactDetailsVisible &&
-                <ContactDetails
-                    contactData={chosenContact}
-                    contactProvidersData={contactProvidersData}
-                    retrieveContactData={resolveContact}
-                    chats={chats}
-                    filterTag={filterTag}
-                    setFilterTag={setFilterTag}
-                    users={users} />
+                    <ContactDetails
+                        contactData={chosenContact}
+                        contactProvidersData={contactProvidersData}
+                        retrieveContactData={resolveContact}
+                        chats={chats}
+                        filterTag={filterTag}
+                        setFilterTag={setFilterTag}
+                        users={users}/>
                 }
 
                 {isChatAssignmentVisible &&
-                <ChatAssignment
-                    currentUser={currentUser}
-                    isAdmin={isAdmin}
-                    waId={waId}
-                    open={isChatAssignmentVisible}
-                    setOpen={setChatAssignmentVisible}
-                    setChats={setChats}
-                    users={users} />
+                    <ChatAssignment
+                        currentUser={currentUser}
+                        isAdmin={isAdmin}
+                        waId={waId}
+                        open={isChatAssignmentVisible}
+                        setOpen={setChatAssignmentVisible}
+                        setChats={setChats}
+                        users={users}/>
                 }
 
                 {isChatTagsVisible &&
-                <ChatTags
-                    waId={waId}
-                    open={isChatTagsVisible}
-                    setOpen={setChatTagsVisible}
-                    setChats={setChats}
-                />
+                    <ChatTags
+                        waId={waId}
+                        open={isChatTagsVisible}
+                        setOpen={setChatTagsVisible}
+                        setChats={setChats}
+                    />
                 }
 
                 {isChatTagsListVisible &&
-                <ChatTagsList
-                    waId={waId}
-                    open={isChatTagsListVisible}
-                    setOpen={setChatTagsListVisible}
-                    tags={tags}
-                    filterTag={filterTag}
-                    setFilterTag={setFilterTag}
-                />
+                    <ChatTagsList
+                        waId={waId}
+                        open={isChatTagsListVisible}
+                        setOpen={setChatTagsListVisible}
+                        tags={tags}
+                        filterTag={filterTag}
+                        setFilterTag={setFilterTag}
+                    />
                 }
 
                 {chatMessageToPreview &&
-                <PreviewMedia
-                    data={chatMessageToPreview}
-                    hideImageOrVideoPreview={hideImageOrVideoPreview} />
+                    <PreviewMedia
+                        data={chatMessageToPreview}
+                        hideImageOrVideoPreview={hideImageOrVideoPreview}/>
                 }
 
                 {isDownloadUnsupportedFileVisible &&
-                <DownloadUnsupportedFile
-                    open={isDownloadUnsupportedFileVisible}
-                    setOpen={setDownloadUnsupportedFileVisible}
-                    data={unsupportedFile} />
+                    <DownloadUnsupportedFile
+                        open={isDownloadUnsupportedFileVisible}
+                        setOpen={setDownloadUnsupportedFileVisible}
+                        data={unsupportedFile}/>
                 }
 
                 <Fade in={progress < 100} timeout={{exit: 1000}}>
@@ -1029,25 +1034,36 @@ function Main() {
                         <LoadingScreen
                             progress={progress}
                             setProgress={setProgress}
-                            loadingNow={loadingNow} />
+                            loadingNow={loadingNow}/>
                     </div>
                 </Fade>
 
-                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "right" }} open={isSuccessVisible} autoHideDuration={6000} onClose={handleSuccessClose}>
+                <Snackbar anchorOrigin={{vertical: "bottom", horizontal: "right"}} open={isSuccessVisible}
+                          autoHideDuration={6000} onClose={handleSuccessClose}>
                     <Alert onClose={handleSuccessClose} severity="success" elevation={4}>
                         {t(successMessage)}
                     </Alert>
                 </Snackbar>
 
-                <Snackbar anchorOrigin={{ vertical: "bottom", horizontal: "left" }} open={isErrorVisible} autoHideDuration={6000} onClose={handleErrorClose}>
+                <Snackbar anchorOrigin={{vertical: "bottom", horizontal: "left"}} open={isErrorVisible}
+                          autoHideDuration={6000} onClose={handleErrorClose}>
                     <Alert onClose={handleErrorClose} severity="error" elevation={4}>
                         {t(errorMessage)}
                     </Alert>
                 </Snackbar>
 
                 {(isUploadingMedia && isMobileOnly) &&
-                <UploadMediaIndicator/>
+                    <UploadMediaIndicator/>
                 }
+
+                <SendBulkVoiceMessageDialog
+                    apiService={apiService}
+                    open={isSendBulkVoiceMessageDialogVisible}
+                    setOpen={setSendBulkVoiceMessageDialogVisible}
+                    setUploadingMedia={setUploadingMedia}
+                    setBulkSendPayload={setBulkSendPayload}
+                    setSelectionModeEnabled={setSelectionModeEnabled}
+                />
 
             </div>
         </Fade>

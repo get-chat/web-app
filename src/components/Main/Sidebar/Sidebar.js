@@ -10,7 +10,7 @@ import {
     Menu,
     MenuItem,
     Tab,
-    Tabs,
+    Tabs, Tooltip,
     Zoom
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -52,6 +52,7 @@ import UploadMediaIndicator from "./UploadMediaIndicator";
 import {Trans, useTranslation} from "react-i18next";
 import {AppConfig} from "../../../contexts/AppConfig";
 import {ApplicationContext} from "../../../contexts/ApplicationContext";
+import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 
 function Sidebar(props) {
 
@@ -63,6 +64,7 @@ function Sidebar(props) {
     const {waId} = useParams();
     const chatsContainer = useRef(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState(null);
     const [keyword, setKeyword] = useState("");
     const [chatMessages, setChatMessages] = useState({});
     const [contactResults, setContactResults] = useState({});
@@ -91,6 +93,19 @@ function Sidebar(props) {
 
     const hideMenu = () => {
         setAnchorEl(null);
+    }
+
+    const displayBulkMessageMenu = (event) => {
+        setBulkMessageMenuAnchorEl(event.currentTarget);
+    }
+
+    const hideBulkMessageMenu = () => {
+        setBulkMessageMenuAnchorEl(null);
+    }
+
+    const showSendBulkVoiceMessageDialog = () => {
+        setBulkMessageMenuAnchorEl(null);
+        props.setSendBulkVoiceMessageDialogVisible(true);
     }
 
     let cancelTokenSourceRef = useRef();
@@ -449,15 +464,26 @@ function Sidebar(props) {
                     {props.currentUser ? generateInitialsHelper(props.currentUser.username) : ''}
                 </Avatar>
                 <div className="sidebar__headerRight">
-                    <IconButton onClick={displayContacts}>
-                        <ChatIcon />
-                    </IconButton>
-                    <IconButton onClick={displayNotifications}>
-                        <NotificationsIcon />
-                    </IconButton>
-                    <IconButton onClick={displayMenu}>
-                        <MoreVertIcon />
-                    </IconButton>
+                    <Tooltip title={t('New chat')}>
+                        <IconButton onClick={displayContacts}>
+                            <ChatIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('Bulk send')}>
+                        <IconButton onClick={displayBulkMessageMenu}>
+                            <DynamicFeedIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('Notifications')}>
+                        <IconButton onClick={displayNotifications}>
+                            <NotificationsIcon/>
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('Options')}>
+                        <IconButton onClick={displayMenu}>
+                            <MoreVertIcon/>
+                        </IconButton>
+                    </Tooltip>
                 </div>
             </div>
 
@@ -666,6 +692,20 @@ function Sidebar(props) {
                 <Divider />
                 <MenuItem onClick={logOut}>
                     {t('Logout')}
+                </MenuItem>
+            </Menu>
+
+            <Menu
+                anchorEl={bulkMessageMenuAnchorEl}
+                getContentAnchorEl={null}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+                keepMounted
+                open={Boolean(bulkMessageMenuAnchorEl)}
+                onClose={hideBulkMessageMenu}
+                elevation={3}>
+                <MenuItem onClick={showSendBulkVoiceMessageDialog}>
+                    {t('Send bulk voice message')}
                 </MenuItem>
             </Menu>
 
