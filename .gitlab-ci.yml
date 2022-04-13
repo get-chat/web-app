@@ -1,4 +1,5 @@
 stages:
+  - build
   - test
 
 
@@ -14,6 +15,20 @@ cache:
   paths:
     # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
     - node_modules/
+
+
+Build:
+  stage: build
+  image: $NODE_IMAGE
+
+  only:
+    - master
+    - merge_requests
+    - tags
+
+  script:
+    - npm install --prefer-offline --no-audit --no-fund
+    - npm run build
 
 
 Test:
