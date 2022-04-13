@@ -36,6 +36,13 @@ Build:
     # https://gitlab.com/wabbitproject/web-app/-/issues/156
     - CI=false npm run build
 
+  # track our built frontend files in GitLab's MR widget/ui
+  artifacts:
+    name: frontend
+    expose_as: Built frontend files
+    paths:
+      - build/
+
 
 Test:
   stage: test
