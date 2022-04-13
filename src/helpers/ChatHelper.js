@@ -17,29 +17,27 @@ export const generateTemplateMessagePayload = (templateMessage) => {
 }
 
 export const prepareSendFilePayload = (chosenFile, fileURL) => {
-    const caption = chosenFile.caption;
-    const type = chosenFile.attachmentType;
-    const file = chosenFile.file;
+    const { caption, attachmentType, file } = chosenFile;
     const filename = file.name;
     const mimeType = file.type;
 
     let requestBody = {
-        type: type
+        type: attachmentType
     };
 
-    requestBody[type] = {
+    requestBody[attachmentType] = {
         link: fileURL,
         mime_type: mimeType,
     }
 
     // caption param is accepted for only images and videos
-    if (type === ATTACHMENT_TYPE_IMAGE || type === ATTACHMENT_TYPE_VIDEO) {
-        requestBody[type]['caption'] = caption;
+    if (attachmentType === ATTACHMENT_TYPE_IMAGE || attachmentType === ATTACHMENT_TYPE_VIDEO) {
+        requestBody[attachmentType]['caption'] = caption;
     }
 
     // filename param is accepted for documents
-    if (type === ATTACHMENT_TYPE_DOCUMENT) {
-        requestBody[type]['filename'] = filename;
+    if (attachmentType === ATTACHMENT_TYPE_DOCUMENT) {
+        requestBody[attachmentType]['filename'] = filename;
     }
 
     return requestBody;
