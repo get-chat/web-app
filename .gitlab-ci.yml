@@ -3,6 +3,7 @@ stages:
   - build
   - test
   - package
+  - release
 
 
 variables:
@@ -32,7 +33,7 @@ Update project version on git tag:
     - tags
 
   script:
-    - npm version --no-git-tag-version ${CI_COMMIT_TAG}
+    - npm version --no-git-tag-version ${PACKAGE_VERSION}
 
   artifacts:
     name: version
@@ -108,3 +109,27 @@ Publish package on git tag:
       --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
       --upload-file ${PACKAGE_FILE}
       ${PACKAGE_REGISTRY_URL}
+
+
+Create release on git tag:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli
+
+  only:
+    - tags
+
+  # HACK: All release jobs, except trigger jobs, must include the `script` keyword.
+  #
+  # For details, please see:
+  # https://docs.gitlab.com/ee/ci/yaml/#release
+  script:
+    - echo "Running the release job..."
+
+  release:
+    tag_name: $PACKAGE_VERSION
+    description: Release automatically created by ${CI_PIPELINE_URL}
+    assets:
+      links:
+        - name: $PACKAGE_FILE
+          url: $PACKAGE_REGISTRY_URL
+          link_type: package
