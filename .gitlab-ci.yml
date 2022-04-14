@@ -102,4 +102,9 @@ Publish package on git tag:
 
   script:
     - tar -czvf ${PACKAGE_FILE} -C build .
-    - curl --fail --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${PACKAGE_FILE} ${PACKAGE_REGISTRY_URL}
+    - >
+      curl
+      --fail
+      --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
+      --upload-file ${PACKAGE_FILE}
+      ${PACKAGE_REGISTRY_URL}
