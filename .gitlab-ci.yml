@@ -2,10 +2,16 @@ stages:
   - update_version
   - build
   - test
+  - package
 
 
 variables:
   NODE_IMAGE: node:16-alpine
+
+  PACKAGE_NAME: frontend
+  PACKAGE_VERSION: $CI_COMMIT_REF_NAME
+  PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
+  PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
 cache:
@@ -86,3 +92,14 @@ Test:
       - coverage/
     reports:
       cobertura: coverage/cobertura-coverage.xml
+
+
+Publish package on git tag:
+  stage: package
+
+  only:
+    - tags
+
+  script:
+    - tar -czvf ${PACKAGE_FILE} -C build .
+    - curl --fail --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${PACKAGE_FILE} ${PACKAGE_REGISTRY_URL}
