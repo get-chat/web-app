@@ -15,7 +15,7 @@ variables:
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
-cache:
+.cache_config: &cache_config
   key:
     files:
       # compute our cache key from the lock file (`package-lock.json`)
@@ -50,6 +50,9 @@ Build:
     - merge_requests
     - tags
 
+  cache:
+    <<: *cache_config
+
   script:
     - npm install --prefer-offline --no-audit --no-fund
 
@@ -71,6 +74,14 @@ Build:
 Test:
   stage: test
   image: $NODE_IMAGE
+
+  cache:
+    <<: *cache_config
+
+    # download the cache when this job starts, but don't upload it when this job
+    # finishes - as the 'Build' job has already (re)generated the cache for us,
+    # as needed
+    policy: pull
 
   only:
     - master
