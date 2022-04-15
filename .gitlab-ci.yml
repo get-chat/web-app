@@ -88,6 +88,9 @@ Test:
     - merge_requests
     - tags
 
+  dependencies:
+    - Update project version on git tag
+
   script:
     - npm install --prefer-offline --no-audit --no-fund
     - npm test --
@@ -112,6 +115,9 @@ Publish package on git tag:
   only:
     - tags
 
+  dependencies:
+    - Build
+
   script:
     - tar -czvf ${PACKAGE_FILE} -C build .
     - >
@@ -128,6 +134,8 @@ Create release on git tag:
 
   only:
     - tags
+
+  dependencies: []
 
   # HACK: All release jobs, except trigger jobs, must include the `script` keyword.
   #
