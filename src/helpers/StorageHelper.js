@@ -27,7 +27,7 @@ export const getStorage = () => {
 }
 
 export const getToken = () => {
-    return getStorage().getItem(STORAGE_TAG_TOKEN);
+    return getStorage()?.getItem(STORAGE_TAG_TOKEN);
 }
 
 export const storeToken = (token) => {
