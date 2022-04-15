@@ -48,6 +48,10 @@ In order to disable Sentry integration, you can either remove or comment out `Se
 
 In the project directory, you can run:
 
+### `i18next-conv -l en -s ./src/locales/translation.po ./src/locales/en/translation.json`
+
+Converts the PO file to a JSON file. Do not forget to specify the correct language and the input and output paths.
+
 ### `npm start`
 
 Runs the app in the development mode.\

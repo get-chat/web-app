@@ -99,7 +99,7 @@
     "A tag was added: <3>%(tag)s</3>.": "",
     "A tag was removed: <3>%(tag)s</3>.": "",
     "Delete": "",
-    "Bulk Send": "",
+    "Bulk send": "",
     "Cancel": "",
     "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).": "",
     "Started at <1></1>": "",
@@ -161,5 +161,6 @@
     "Recipient: <1>%s</1>": "",
     "Message: <1>%s</1>": "",
     "Notifications": "",
-    "You have no notifications": ""
+    "You have no notifications": "",
+    "Options": ""
 }
