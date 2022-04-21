@@ -22,7 +22,7 @@ export const insertTemplateComponentParameters = (component, params) => {
                 component.parameters.forEach((param, index) => {
                     const paramType = param.type;
 
-                    const paramValue = param[paramType].fallback_value ?? param[paramType];
+                    const paramValue = param[paramType]?.fallback_value ?? param[paramType];
                     text = text.replace(`{{${index + 1}}}`, paramValue);
                 });
             }
