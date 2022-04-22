@@ -1,0 +1,154 @@
+stages:
+  - update_version
+  - build
+  - test
+  - package
+  - release
+
+
+variables:
+  NODE_IMAGE: node:16-alpine
+
+  PACKAGE_NAME: frontend
+  PACKAGE_VERSION: $CI_COMMIT_REF_NAME
+  PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
+  PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
+
+
+.cache_config: &cache_config
+  key:
+    files:
+      # compute our cache key from the lock file (`package-lock.json`)
+      - package-lock.json
+  paths:
+    # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
+    - node_modules/
+
+
+Update project version on git tag:
+  stage: update_version
+  image: $NODE_IMAGE
+
+  only:
+    - tags
+
+  script:
+    - npm version --no-git-tag-version ${PACKAGE_VERSION}
+
+  artifacts:
+    name: version
+    paths:
+      - package*.json
+
+
+Build:
+  stage: build
+  image: $NODE_IMAGE
+
+  only:
+    - master
+    - merge_requests
+    - tags
+
+  cache:
+    <<: *cache_config
+
+  script:
+    - npm install --prefer-offline --no-audit --no-fund
+
+    # HACK: Using `CI=false` as a temporary workaround to ignore compilation
+    # warnings, as they're breaking our GitLab CI/CD pipeline
+    #
+    # For details, please see:
+    # https://gitlab.com/wabbitproject/web-app/-/issues/156
+    - CI=false npm run build
+
+  # track our built frontend files in GitLab's MR widget/ui
+  artifacts:
+    name: frontend
+    expose_as: Built frontend files
+    paths:
+      - build/
+
+
+Test:
+  stage: test
+  image: $NODE_IMAGE
+
+  cache:
+    <<: *cache_config
+
+    # download the cache when this job starts, but don't upload it when this job
+    # finishes - as the 'Build' job has already (re)generated the cache for us,
+    # as needed
+    policy: pull
+
+  only:
+    - master
+    - merge_requests
+    - tags
+
+  dependencies:
+    - Update project version on git tag
+
+  script:
+    - npm install --prefer-offline --no-audit --no-fund
+    - npm test --
+      --passWithNoTests
+      --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
+
+  # track our test coverage in GitLab's MR widget/ui
+  coverage: '/All files.*\|\s+(\d+(?:\.\d+)?)/'
+
+  # track our test coverage in GitLab's CI pipeline test reports
+  artifacts:
+    expose_as: Coverage HTML report
+    paths:
+      - coverage/
+    reports:
+      cobertura: coverage/cobertura-coverage.xml
+
+
+Publish package on git tag:
+  stage: package
+
+  only:
+    - tags
+
+  dependencies:
+    - Build
+
+  script:
+    - tar -czvf ${PACKAGE_FILE} -C build .
+    - >
+      curl
+      --fail
+      --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
+      --upload-file ${PACKAGE_FILE}
+      ${PACKAGE_REGISTRY_URL}
+
+
+Create release on git tag:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli
+
+  only:
+    - tags
+
+  dependencies: []
+
+  # HACK: All release jobs, except trigger jobs, must include the `script` keyword.
+  #
+  # For details, please see:
+  # https://docs.gitlab.com/ee/ci/yaml/#release
+  script:
+    - echo "Running the release job..."
+
+  release:
+    tag_name: $PACKAGE_VERSION
+    description: Release automatically created by ${CI_PIPELINE_URL}
+    assets:
+      links:
+        - name: $PACKAGE_FILE
+          url: $PACKAGE_REGISTRY_URL
+          link_type: package
