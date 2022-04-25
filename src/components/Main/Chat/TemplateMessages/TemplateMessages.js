@@ -111,7 +111,7 @@ function TemplateMessages(props) {
                 ?
                 <Alert severity="info">Loading template messages...</Alert>
                 :
-                <div className="templateMessages">
+                <div className="templateMessages" data-test-id="template-messages">
 
                     <div className="templateMessages__create">
                         <Button color="primary" href="https://hub.360dialog.com/dashboard/home" target="_blank" size="medium">Register templates</Button>
@@ -177,7 +177,7 @@ function TemplateMessages(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={hideDialog} color="secondary">Close</Button>
-                    <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus>Send</Button>
+                    <Button onClick={sendByRef} color="primary" disabled={isSending} autoFocus data-test-id="send-template-message-button">Send</Button>
                     <Button onClick={bulkSendByRef} color="primary" disabled={isSending} autoFocus>Bulk send</Button>
                 </DialogActions>
             </Dialog>

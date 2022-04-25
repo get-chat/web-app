@@ -191,7 +191,7 @@ function Contacts(props) {
                 </div>
                 }
 
-                <Collapse in={isPersonsVisible}>
+                <Collapse in={isPersonsVisible} data-test-id="contacts-list">
                     { Object.entries(persons).map((person, index) =>
                         <Person
                             key={index}
