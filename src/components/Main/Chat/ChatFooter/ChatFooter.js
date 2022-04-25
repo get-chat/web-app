@@ -247,7 +247,7 @@ function ChatFooter(props) {
                 }
 
                 <Tooltip title="Templates" placement="top" className={!props.isExpired ? "desktopOnly" : ""}>
-                    <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
+                    <IconButton data-test-id="templates-button" onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
                         <SmsIcon />
                     </IconButton>
                 </Tooltip>
@@ -312,7 +312,7 @@ function ChatFooter(props) {
 
                 {hasInput() &&
                 <Tooltip title="Send" placement="top">
-                    <IconButton onClick={props.sendMessage}>
+                    <IconButton onClick={props.sendMessage} data-test-id="send-message-button">
                         <Send/>
                     </IconButton>
                 </Tooltip>

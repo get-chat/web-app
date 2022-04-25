@@ -465,7 +465,7 @@ function Sidebar(props) {
                 </Avatar>
                 <div className="sidebar__headerRight">
                     <Tooltip title={t('New chat')}>
-                        <IconButton onClick={displayContacts}>
+                        <IconButton onClick={displayContacts} data-test-id="new-chat">
                             <ChatIcon/>
                         </IconButton>
                     </Tooltip>
@@ -480,7 +480,7 @@ function Sidebar(props) {
                         </IconButton>
                     </Tooltip>
                     <Tooltip title={t('Options')}>
-                        <IconButton onClick={displayMenu}>
+                        <IconButton onClick={displayMenu} data-test-id="options">
                             <MoreVertIcon/>
                         </IconButton>
                     </Tooltip>
@@ -690,7 +690,7 @@ function Sidebar(props) {
                 </MenuItem>
                 }
                 <Divider />
-                <MenuItem onClick={logOut}>
+                <MenuItem onClick={logOut} data-test-id="logout-button">
                     {t('Logout')}
                 </MenuItem>
             </Menu>

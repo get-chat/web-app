@@ -118,5 +118,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ## Testing
 
-To run all tests run the command `npm run test`
+To run tests run the command `npm run test`
+
+To run e2e tests run the command `npm run test:e2e`
 
