@@ -109,6 +109,22 @@ Test:
       cobertura: coverage/cobertura-coverage.xml
 
 
+Security audit:
+  stage: test
+  image: $NODE_IMAGE
+
+  only:
+    - master
+    - merge_requests
+    - tags
+
+  dependencies:
+    - Update project version on git tag
+
+  script:
+    - npm audit --audit-level=moderate
+
+
 Publish package on git tag:
   stage: package
 
