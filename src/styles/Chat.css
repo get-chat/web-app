@@ -191,7 +191,8 @@ a.chat__document:hover {
     margin-right: 5px;
 }
 
-.chat__message.messageType__template {
+.chat__message.messageType__template,
+.chat__message.messageType__interactive {
     background-color: #f4f0d7 !important;
 }
 

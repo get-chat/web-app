@@ -1,34 +1,44 @@
 import React from "react";
 import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 import ChatMessageTypeLabel from "./ChatMessageTypeLabel";
-import ReplyIcon from '@material-ui/icons/Reply';
+import ReplyIcon from "@material-ui/icons/Reply";
 import ChatMessageClass from "../../../../ChatMessageClass";
-import {replaceEmojis} from "../../../../helpers/EmojiHelper";
+import { replaceEmojis } from "../../../../helpers/EmojiHelper";
 
 function ChatMessageShortContent(props) {
     return (
         <div>
-            {props.isLastMessageFromUs &&
-                <ReplyIcon className="replyIcon" />
-            }
+            {props.isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
 
-            <ChatMessageTypeIcon type={props.type}/>
+            <ChatMessageTypeIcon type={props.type} />
 
-            {([ChatMessageClass.TYPE_TEXT, ChatMessageClass.TYPE_BUTTON, ChatMessageClass.TYPE_INTERACTIVE].includes(props.type))
-                ?
-                <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.text ?? props.buttonText ?? props.interactiveButtonText, true)}} />
-                :
+            {[
+                ChatMessageClass.TYPE_TEXT,
+                ChatMessageClass.TYPE_BUTTON,
+            ].includes(props.type) ? (
+                <span
+                    dangerouslySetInnerHTML={{
+                        __html: replaceEmojis(
+                            props.text ??
+                                props.buttonText ??
+                                props.interactiveButtonText,
+                            true
+                        ),
+                    }}
+                />
+            ) : (
                 <span>
-                    {(props.caption && props.caption.length > 0)
-                        ?
-                        <span dangerouslySetInnerHTML={{__html: props.caption}} />
-                        :
-                        <ChatMessageTypeLabel type={props.type}/>
-                    }
+                    {props.caption && props.caption.length > 0 ? (
+                        <span
+                            dangerouslySetInnerHTML={{ __html: props.caption }}
+                        />
+                    ) : (
+                        <ChatMessageTypeLabel type={props.type} />
+                    )}
                 </span>
-            }
+            )}
         </div>
-    )
+    );
 }
 
 export default ChatMessageShortContent;
