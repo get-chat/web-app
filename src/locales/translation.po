@@ -276,6 +276,9 @@ msgstr ""
 msgid "Template message:"
 msgstr ""
 
+msgid "Interactive message:"
+msgstr ""
+
 msgid "Image"
 msgstr ""
 
@@ -292,6 +295,9 @@ msgid "Sticker"
 msgstr ""
 
 msgid "Template"
+msgstr ""
+
+msgid "Interactive"
 msgstr ""
 
 msgid "<0>%(username)s</0> has added tag: <4>%(tag)s</4>."
