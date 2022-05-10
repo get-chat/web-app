@@ -8,8 +8,7 @@ import * as Sentry from "@sentry/react";
 import {Integrations} from "@sentry/tracing";
 import {isLocalHost} from "./helpers/URLHelper";
 import {initStorageType} from "./helpers/StorageHelper";
-import {VERSION} from "./Constants";
-
+import packageJson from '../package.json';
 import './i18n';
 import axios from "axios";
 import {ApiService} from "./api/ApiService";
@@ -30,7 +29,7 @@ axios.get(`/config.json`)
             Sentry.init({
                 debug: true,
                 dsn: config.APP_SENTRY_DSN,
-                release: VERSION,
+                release: packageJson.version,
                 integrations: [new Integrations.BrowserTracing()],
                 tracesSampleRate: 0.01,
                 beforeSend(event, hint) {
