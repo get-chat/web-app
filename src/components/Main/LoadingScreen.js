@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import "../../styles/LoadingScreen.css";
-import { VERSION } from "../../Constants";
-import { useTranslation } from "react-i18next";
-import { Alert } from "@material-ui/lab";
+import {useTranslation} from "react-i18next";
+import {Alert} from "@material-ui/lab";
+import packageJson from '../../../package.json';
 
 function LoadingScreen(props) {
     const { t } = useTranslation();
@@ -69,7 +69,7 @@ function LoadingScreen(props) {
                 </>
             )}
 
-            <span className="loadingScreen__version">Version: {VERSION}</span>
+            <span className="loadingScreen__version">Version: {packageJson.version}</span>
         </div>
     );
 }

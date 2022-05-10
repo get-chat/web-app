@@ -4,11 +4,11 @@ import { Backdrop, CircularProgress, Fade, TextField } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { Alert } from "@material-ui/lab";
-import { VERSION } from "../Constants";
 import { clearToken, getToken, storeToken } from "../helpers/StorageHelper";
 import { makeStyles } from "@material-ui/styles";
 import { useTranslation } from "react-i18next";
 import { ApplicationContext } from "../contexts/ApplicationContext";
+import packageJson from '../../package.json';
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -185,7 +185,7 @@ export default function Login(props) {
 
                     <div className="login__body__versionWrapper">
                         <span className="login__body__version">
-                            Version: {VERSION}
+                            Version: {packageJson.version}
                         </span>
                     </div>
                 </div>

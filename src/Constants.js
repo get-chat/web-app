@@ -1,5 +1,3 @@
-export const VERSION = "1.38.16"
-
 export const CHAT_KEY_PREFIX = "chat_";
 
 export const EVENT_TOPIC_FORCE_LOGOUT = "force_logout";
