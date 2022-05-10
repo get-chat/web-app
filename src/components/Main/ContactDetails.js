@@ -94,7 +94,7 @@ function ContactDetails(props)  {
                         {chat?.assignedToUser &&
                         <div>
                             <PersonIcon />
-                            <Trans values={{ postProcess: 'sprintf', sprintf: [ chat?.assignedToUser.username + (props.users?.[chat?.assignedToUser.id]?.isBot()) ? ' (App)' : '' ]}}>
+                            <Trans values={{ postProcess: 'sprintf', sprintf: [ chat?.assignedToUser.username ]}}>
                                 Assigned to: <span className="bold">%s</span>
                             </Trans>
                         </div>
