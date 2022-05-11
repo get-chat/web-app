@@ -903,6 +903,10 @@ function Main() {
         });
     }
 
+    useEffect(() => {
+        listTags()
+    }, [bulkSendPayload])
+
     return (
         <Fade in={checked}>
             <div className={"app__body" + (isIPad13 ? " absoluteFullscreen" : "")}>
