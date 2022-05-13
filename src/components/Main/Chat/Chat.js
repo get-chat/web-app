@@ -55,6 +55,7 @@ import {
 import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
 import {useTranslation} from "react-i18next";
 import {ApplicationContext} from "../../../contexts/ApplicationContext";
+import {addPlus, preparePhoneNumber} from "../../../helpers/PhoneNumberHelper";
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -128,9 +129,16 @@ export default function Chat(props) {
         // Listen for clear input events
         const clearInputEventToken = PubSub.subscribe(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT, clearInputOnEvent);
 
+        // Generate cancel token for verifying phone number
+        // It is used when a new chat is started by URL and person does not exist
+        verifyPhoneNumberCancelTokenSourceRef.current = generateCancelToken();
+
         return () => {
             // Cancelling ongoing requests
             cancelTokenSourceRef.current.cancel();
+
+            // Cancel verifying phone number
+            verifyPhoneNumberCancelTokenSourceRef.current.cancel();
 
             // Unsubscribe
             PubSub.unsubscribe(handleFilesDroppedEventToken);
@@ -713,25 +721,55 @@ export default function Chat(props) {
         }, (error) => {
             if (error.response?.status === 404) {
                 if (location.person) {
-                    const preparedPerson = new PersonClass({});
-                    preparedPerson.name = location.person.name;
-                    preparedPerson.initials = location.person.initials;
-                    preparedPerson.waId = waId;
-
-                    setPerson(preparedPerson);
-
-                    setExpired(true);
-                    setLoaded(true);
-                    setLoadingMoreMessages(false);
-                    setAtBottom(true);
+                    createPersonAndStartChat(location.person.name, location.person.initials);
                 } else {
                     // To prevent missing data on refresh
-                    closeChat();
+                    //closeChat();
+
+                    verifyContact()
                 }
             } else {
                 window.displayError(error);
             }
         });
+    }
+
+    let verifyPhoneNumberCancelTokenSourceRef = useRef();
+
+    const verifyContact = () => {
+        const onError = () => {
+            closeChat();
+            window.displayCustomError("There is no WhatsApp account connected to this phone number.");
+        }
+
+        let phoneNumber = preparePhoneNumber(waId);
+        phoneNumber = addPlus(phoneNumber);
+
+        apiService.verifyContactsCall([phoneNumber], verifyPhoneNumberCancelTokenSourceRef.current.token,
+            (response) => {
+                if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
+                    createPersonAndStartChat(addPlus(waId), waId?.[0]);
+                } else {
+                    onError();
+                }
+            }, (error) => {
+                console.error(error);
+                onError();
+            });
+    }
+
+    const createPersonAndStartChat = (name, initials) => {
+        const preparedPerson = new PersonClass({});
+        preparedPerson.name = name;
+        preparedPerson.initials = initials;
+        preparedPerson.waId = waId;
+
+        setPerson(preparedPerson);
+
+        setExpired(true);
+        setLoaded(true);
+        setLoadingMoreMessages(false);
+        setAtBottom(true);
     }
 
     const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
