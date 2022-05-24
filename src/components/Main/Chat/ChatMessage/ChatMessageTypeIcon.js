@@ -8,6 +8,7 @@ import NoteIcon from "@material-ui/icons/Note";
 import SmsIcon from "@material-ui/icons/Sms";
 import TouchAppIcon from "@material-ui/icons/TouchApp";
 import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
+import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 function ChatMessageTypeIcon(props) {
     return (
@@ -25,6 +26,8 @@ function ChatMessageTypeIcon(props) {
             )}
 
             {props.type === ChatMessageClass.TYPE_STICKER && <NoteIcon />}
+
+            {props.type === ChatMessageClass.TYPE_LOCATION && <LocationOnIcon />}
 
             {props.type === ChatMessageClass.TYPE_TEMPLATE && <SmsIcon />}
 

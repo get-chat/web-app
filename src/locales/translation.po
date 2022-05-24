@@ -506,3 +506,9 @@ msgstr ""
 
 msgid "Options"
 msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Location: <1>%s</1>"
+msgstr ""
