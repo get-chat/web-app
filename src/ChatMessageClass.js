@@ -192,7 +192,6 @@ export class ChatMessageClass {
         return `https://www.google.com/maps/search/?api=1&query=${this.location?.latitude},${this.location?.longitude}`;
     }
 
-
     getStatus() {
         if (this.readTimestamp) {
             return ChatMessageClass.STATUS_READ;
