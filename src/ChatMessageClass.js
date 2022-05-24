@@ -9,6 +9,7 @@ export class ChatMessageClass {
     static TYPE_AUDIO = 'audio';
     static TYPE_DOCUMENT = 'document';
     static TYPE_STICKER = 'sticker';
+    static TYPE_LOCATION = 'location';
     static TYPE_TEMPLATE = 'template';
     static TYPE_BUTTON = 'button';
     static TYPE_INTERACTIVE = 'interactive';
@@ -68,6 +69,8 @@ export class ChatMessageClass {
         this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption ?? payload.document?.caption;
 
         this.mimeType = payload.image?.mime_type ?? payload.video?.mime_type ?? payload.audio?.mime_type ?? payload.document?.mime_type;
+
+        this.location = payload.location;
 
         this.templateName = payload.template?.name;
         this.templateNamespace = payload.template?.namespace;
@@ -184,6 +187,11 @@ export class ChatMessageClass {
     generateStickerLink() {
         return this.stickerLink ?? this.generateMediaLink(this.stickerId);
     }
+
+    generateLocationURL() {
+        return `https://www.google.com/maps/search/?api=1&query=${this.location?.latitude},${this.location?.longitude}`;
+    }
+
 
     getStatus() {
         if (this.readTimestamp) {
