@@ -21,6 +21,7 @@ import { replaceEmojis } from "../../../../helpers/EmojiHelper";
 import { formatMessage } from "../../../../helpers/MessageHelper";
 import { useTranslation } from "react-i18next";
 import InteractiveMessage from "./InteractiveMessage";
+import OrderMessage from "./OrderMessage";
 
 const iconStyles = {
     fontSize: "15px",
@@ -161,6 +162,10 @@ function ChatMessage(props) {
 
                         {data.type === ChatMessageClass.TYPE_INTERACTIVE && (
                             <InteractiveMessage data={data} />
+                        )}
+
+                        {data.type === ChatMessageClass.TYPE_ORDER && (
+                            <OrderMessage data={data} />
                         )}
 
                         {data.errors && (

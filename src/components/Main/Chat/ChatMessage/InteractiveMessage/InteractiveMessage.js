@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import ButtonsMessage from "./components/ButtonsMessage";
 import ListMessage from "./components/ListMessage";
+import ProductMessage from "./components/ProductMessage";
 
 import styles from "./InteractiveMessage.module.css";
 
@@ -39,6 +40,15 @@ const InteractiveMessage = ({ data }) => {
 
             {type === "list" && (
                 <ListMessage
+                    header={header}
+                    body={body}
+                    footer={footer}
+                    action={action}
+                />
+            )}
+
+            {(type === "product" || type === "product_list") && (
+                <ProductMessage
                     header={header}
                     body={body}
                     footer={footer}

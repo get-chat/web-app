@@ -12,6 +12,7 @@ export class ChatMessageClass {
     static TYPE_TEMPLATE = 'template';
     static TYPE_BUTTON = 'button';
     static TYPE_INTERACTIVE = 'interactive';
+    static TYPE_ORDER = 'order';
 
     static STATUS_SENT = 'sent';
     static STATUS_DELIVERED = 'delivered';
