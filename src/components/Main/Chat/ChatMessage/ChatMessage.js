@@ -17,6 +17,7 @@ import ChatMessageVoice from "./ChatMessageVoice";
 import ChatMessageTemplate from "./ChatMessageTemplate";
 import ChatAssignmentEvent from "../../../ChatAssignmentEvent";
 import ChatTaggingEvent from "./ChatTaggingEvent";
+import ChatMessageLocation from "./ChatMessageLocation";
 import { replaceEmojis } from "../../../../helpers/EmojiHelper";
 import { formatMessage } from "../../../../helpers/MessageHelper";
 import { useTranslation } from "react-i18next";
@@ -150,6 +151,10 @@ function ChatMessage(props) {
                                 <NoteIcon fontSize="small" />
                             </span>
                         )}
+
+                        {data.type === ChatMessageClass.TYPE_LOCATION &&
+                        <ChatMessageLocation data={data}/>
+                        }
 
                         {data.type === ChatMessageClass.TYPE_TEMPLATE && (
                             <ChatMessageTemplate

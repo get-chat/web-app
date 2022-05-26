@@ -164,5 +164,7 @@
     "Message: <1>%s</1>": "",
     "Notifications": "",
     "You have no notifications": "",
-    "Options": ""
+    "Options": "",
+    "Location": "",
+    "Location: <1>%s</1>": ""
 }

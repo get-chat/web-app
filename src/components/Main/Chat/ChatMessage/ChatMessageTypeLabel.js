@@ -23,6 +23,10 @@ function ChatMessageTypeLabel({ type }) {
                 <span>{t("Sticker")}</span>
             )}
 
+            {type === ChatMessageClass.TYPE_LOCATION && (
+                <span>{t("Location")}</span>
+            )}
+
             {type === ChatMessageClass.TYPE_TEMPLATE && (
                 <span>{t("Template")}</span>
             )}
