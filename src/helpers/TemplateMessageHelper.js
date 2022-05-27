@@ -37,14 +37,18 @@ export const insertTemplateComponentParameters = (component, params) => {
 export const sortTemplateComponents = (components) => {
     if (!components) return [];
 
-    components.sort(function(a, b) {
-        if (a.type === "HEADER") {
-            return -1;
-        } else if (b.type === "HEADER") {
-            return 1;
+    const getComponentOrderByType = (componentType) => {
+        switch (componentType) {
+            case "HEADER": return 4;
+            case "BODY": return 3;
+            case "FOOTER": return 2;
+            case "BUTTONS": return 1;
+            default: return 0;
         }
+    }
 
-        return 0;
+    components.sort(function(a, b) {
+        return getComponentOrderByType(b.type) - getComponentOrderByType(a.type);
     });
 
     return components;
