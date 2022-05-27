@@ -11,6 +11,7 @@ import PubSub from "pubsub-js";
 import ChatMessageClass from "../../../../ChatMessageClass";
 import {generateTemplateMessagePayload} from "../../../../helpers/ChatHelper";
 import {getObjLength} from "../../../../helpers/ObjectHelper";
+import {sortTemplateComponents} from "../../../../helpers/TemplateMessageHelper";
 
 function TemplateMessages(props) {
 
@@ -134,7 +135,7 @@ function TemplateMessages(props) {
                             <div className="chat__message chat__outgoing messageType__template">
                                 {/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
                                 <div className="templateMessage__message">
-                                    {template[1].components.map((comp, index) =>
+                                    {sortTemplateComponents(template[1].components).map((comp, index) =>
                                         <div key={index}>
                                             <span className="templateType bold lowercase">{comp.type}:</span> {comp.text ?? comp.format ?? JSON.stringify(comp.buttons)}
                                         </div>

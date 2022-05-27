@@ -4,27 +4,27 @@ import ChatMessageVideo from "./ChatMessageVideo";
 import ChatMessageDocument from "./ChatMessageDocument";
 import {Button} from "@material-ui/core";
 import SmsIcon from "@material-ui/icons/Sms";
-import {insertTemplateComponentParameters} from "../../../../helpers/TemplateMessageHelper";
+import {insertTemplateComponentParameters, sortTemplateComponents} from "../../../../helpers/TemplateMessageHelper";
 import {useTranslation} from "react-i18next";
 
 function ChatMessageTemplate(props) {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     const data = props.data;
     const templateData = props.templateData;
 
     return (
         <div className="chat__template">
-                    <span className="chat__templateHeader">
-                        <SmsIcon />{t('Template message:')}<br/>
-                    </span>
+            <span className="chat__templateHeader">
+                <SmsIcon />{t('Template message:')}<br/>
+            </span>
 
             <div className="chat__templateContent">
                 {templateData !== undefined
                     ?
                     <div>
-                        {Object.values(templateData.components).map((component, index) =>
+                        {sortTemplateComponents(templateData.components).map((component, index) =>
                             <div key={index}>
                                 {component.type === "HEADER" &&
                                 <div className="chat__templateContent__header">

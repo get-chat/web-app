@@ -19,7 +19,7 @@ const InteractiveMessage = ({ data }) => {
                 <TouchAppIcon /> {t("Interactive message:")}
             </div>
 
-            {/* TODO: FIXME: i don't knon where right place in current architecture, but it's works */}
+            {/* TODO: FIXME: i don't know where right place in current architecture, but it works */}
             {data.payload.interactive.type === "list_reply" && (
                 <div>
                     <div>{data.payload.interactive.list_reply.title}</div>
