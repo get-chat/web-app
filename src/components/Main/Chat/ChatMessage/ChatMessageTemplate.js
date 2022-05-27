@@ -16,9 +16,9 @@ function ChatMessageTemplate(props) {
 
     return (
         <div className="chat__template">
-                    <span className="chat__templateHeader">
-                        <SmsIcon />{t('Template message:')}<br/>
-                    </span>
+            <span className="chat__templateHeader">
+                <SmsIcon />{t('Template message:')}<br/>
+            </span>
 
             <div className="chat__templateContent">
                 {templateData !== undefined
