@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 
 function ChatMessageTemplate(props) {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     const data = props.data;
     const templateData = props.templateData;
