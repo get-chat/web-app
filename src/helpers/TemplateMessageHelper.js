@@ -33,3 +33,19 @@ export const insertTemplateComponentParameters = (component, params) => {
 
     return text;
 }
+
+export const sortTemplateComponents = (components) => {
+    if (!components) return [];
+
+    components.sort(function(a, b) {
+        if (a.type === "HEADER") {
+            return -1;
+        } else if (b.type === "HEADER") {
+            return 1;
+        }
+
+        return 0;
+    });
+
+    return components;
+}
