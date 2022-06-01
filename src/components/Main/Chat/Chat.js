@@ -933,6 +933,7 @@ export default function Chat(props) {
     const sendCustomTextMessage = (text) => {
         sendMessage(true, undefined, {
             wa_id: waId,
+            type: ChatMessageClass.TYPE_TEXT,
             text: {
                 body: text.trim()
             }
