@@ -53,7 +53,15 @@ function ChatMessageTemplate(props) {
                                 {component.type === "BUTTONS" &&
                                 <div className="chat__templateContent__buttons">
                                     {component.buttons.map((button, buttonIndex) =>
-                                        <Button key={buttonIndex} color="primary" fullWidth={true} disabled={true}>{button.text}</Button>
+                                        <Button
+                                            href={button.type === "URL" ? button.url : ""}
+                                            target={"_blank"}
+                                            key={buttonIndex}
+                                            color="primary" fullWidth={true}
+                                            disabled={button.type !== "URL"}
+                                        >
+                                            {button.text}
+                                        </Button>
                                     )}
                                 </div>
                                 }
