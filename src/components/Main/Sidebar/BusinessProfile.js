@@ -8,6 +8,7 @@ import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {useTranslation} from "react-i18next";
 import {ApplicationContext} from "../../../contexts/ApplicationContext";
 import {generateCancelToken} from "../../../helpers/ApiHelper";
+import {binaryToBase64} from "../../../helpers/ImageHelper";
 
 function BusinessProfile(props) {
 
@@ -108,7 +109,7 @@ function BusinessProfile(props) {
     const retrieveProfilePhoto = () => {
         apiService.retrieveProfilePhotoCall(cancelTokenSourceRef.current.token,
             (response) => {
-                const base64 = Buffer.from(response.data, 'binary').toString('base64');
+                const base64 = binaryToBase64(response.data);
                 setProfilePhoto(base64);
 
                 // Finish
