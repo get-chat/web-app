@@ -3,9 +3,11 @@ import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
 import ChatMessageTypeLabel from "./ChatMessageTypeLabel";
 import ReplyIcon from "@material-ui/icons/Reply";
 import ChatMessageClass from "../../../../ChatMessageClass";
-import { replaceEmojis } from "../../../../helpers/EmojiHelper";
+import PrintMessage from "../../../PrintMessage";
 
 function ChatMessageShortContent(props) {
+    const text = props.text ?? props.buttonText ?? props.interactiveButtonText;
+
     return (
         <div>
             {props.isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
@@ -16,22 +18,11 @@ function ChatMessageShortContent(props) {
                 ChatMessageClass.TYPE_TEXT,
                 ChatMessageClass.TYPE_BUTTON,
             ].includes(props.type) ? (
-                <span
-                    dangerouslySetInnerHTML={{
-                        __html: replaceEmojis(
-                            props.text ??
-                                props.buttonText ??
-                                props.interactiveButtonText,
-                            true
-                        ),
-                    }}
-                />
+                <PrintMessage message={text} />
             ) : (
                 <span>
                     {props.caption && props.caption.length > 0 ? (
-                        <span
-                            dangerouslySetInnerHTML={{ __html: props.caption }}
-                        />
+                        <PrintMessage message={props.caption} />
                     ) : (
                         <ChatMessageTypeLabel type={props.type} />
                     )}

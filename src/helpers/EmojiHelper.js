@@ -1,13 +1,13 @@
-import {Emoji, getEmojiDataFromNative} from "emoji-mart";
-import {EMOJI_SET, EMOJI_SHEET_SIZE} from "../Constants";
+import { Emoji, getEmojiDataFromNative } from "emoji-mart";
+import { EMOJI_SET, EMOJI_SHEET_SIZE } from "../Constants";
 import data from "../EmojiData.json";
 
-const emojiRegex = require('emoji-regex/RGI_Emoji.js');
+const emojiRegex = require("emoji-regex/RGI_Emoji.js");
 
 function containsOnlyEmojis(text) {
-    const onlyEmojis = text.replace(new RegExp('[\u0000-\u1eeff]', 'g'), '')
-    const visibleChars = text.replace(new RegExp('[\n\r\s]+|( )+', 'g'), '')
-    return onlyEmojis.length === visibleChars.length
+    const onlyEmojis = text.replace(new RegExp("[\u0000-\u1eeff]", "g"), "");
+    const visibleChars = text.replace(new RegExp("[\n\rs]+|( )+", "g"), "");
+    return onlyEmojis.length === visibleChars.length;
 }
 
 export const replaceEmojis = (message, ignoreOnlyEmojis) => {
@@ -25,14 +25,13 @@ export const replaceEmojis = (message, ignoreOnlyEmojis) => {
                 emoji: emojiData,
                 size: onlyEmojis ? 44 : 22,
                 set: EMOJI_SET,
-                sheetSize: EMOJI_SHEET_SIZE
+                sheetSize: EMOJI_SHEET_SIZE,
             });
 
             // Emoji might be null
             return emoji ?? occurrence;
-
         } else {
             return occurrence;
         }
     });
-}
+};

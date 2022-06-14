@@ -10,7 +10,6 @@ import moment from "moment";
 import {
     extractAvatarFromContactProviderData,
     generateInitialsHelper,
-    markOccurrences
 } from "../../../helpers/Helpers";
 import {getDroppedFiles, handleDragOver} from "../../../helpers/FileHelper";
 import PubSub from "pubsub-js";
@@ -26,6 +25,7 @@ import {generateAvatarColor} from "../../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../../helpers/EmojiHelper";
 import {addPlus} from "../../../helpers/PhoneNumberHelper";
 import {useTranslation} from "react-i18next";
+import PrintMessage from '../../PrintMessage';
 
 function SidebarChat(props) {
 
@@ -205,9 +205,10 @@ function SidebarChat(props) {
                             <h2>
                                 {(props.keyword !== undefined && props.keyword.trim().length > 0)
                                     ?
-                                    <span dangerouslySetInnerHTML={{__html: markOccurrences(replaceEmojis(props.chatData.name), props.keyword)}}/>
+                                    // TODO: Hightlite props.keyword
+                                    <PrintMessage message={props.chatData.name} />
                                     :
-                                    <span dangerouslySetInnerHTML={{__html: replaceEmojis(props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name)}} />
+                                    <PrintMessage message={props.contactProvidersData[props.chatData.waId]?.[0]?.name ?? props.chatData.name}  />
                                 }
 
                                 {props.chatData.tags?.length > 0 &&

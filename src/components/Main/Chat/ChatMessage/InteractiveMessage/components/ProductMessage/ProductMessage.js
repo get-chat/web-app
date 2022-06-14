@@ -3,6 +3,10 @@ import React from "react";
 import styles from "./ProductMessage.module.css";
 
 const ProductMessage = ({ header, body, footer, action }) => {
+    if (!action) {
+        return null;
+    }
+
     return (
         <>
             <div className={styles.actions}>
