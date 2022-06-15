@@ -1,5 +1,5 @@
 {
-    "API_BASE_URL": "/api/v1/",
+    "API_BASE_URL": "https://staging.stagingwainbox.360dialog.com/api/v1/",
     "APP_SENTRY_DSN": "",
     "APP_ENV_NAME": "development",
     "APP_NOTIFICATIONS_LIMIT_PER_MINUTE": 8

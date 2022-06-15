@@ -189,15 +189,17 @@ function ChatMessage(props) {
                         {data.text ??
                         data.caption ??
                         data.buttonText ??
-                        data.interactiveButtonText ? (
+                        data.interactiveButtonText ??
+                        data.location ? (
                             <span
                                 className="wordBreakWord"
                                 dangerouslySetInnerHTML={{
                                     __html: formatMessage(
                                         data.text ??
-                                            data.caption ??
-                                            data.buttonText ??
-                                            data.interactiveButtonText
+                                        data.caption ??
+                                        data.buttonText ??
+                                        data.interactiveButtonText ??
+                                        data.location.name
                                     ),
                                 }}
                             />

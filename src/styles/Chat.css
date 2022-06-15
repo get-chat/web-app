@@ -44,7 +44,7 @@
     margin-top: -20px;
 }
 
-.chat__message.hasMedia {
+.chat__message.hasMedia, .chat__message.messageType__location {
     width: min-content;
 }
 
@@ -52,7 +52,7 @@
     color: var(--color-light-blue);
 }
 
-.chat__media, .chat__location iframe {
+.chat__media, .chat__location {
     border-radius: 6px;
     display: block;
     margin: 0 -4px 4px -4px;
