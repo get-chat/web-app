@@ -55,7 +55,7 @@
 .chat__media, .chat__location {
     border-radius: 6px;
     display: block;
-    margin: 0 -4px 4px -4px;
+    margin: -2px -6px 4px -6px;
     height: 150px;
     width: 250px;
     /*max-width: 250px;*/
@@ -214,6 +214,11 @@ a.chat__document:hover {
 .chat__errors__error {
     font-size: 12px;
     color: rgba(255, 0, 0, 0.8);
+}
+
+.chat__message__location__address {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .chat__message__info {

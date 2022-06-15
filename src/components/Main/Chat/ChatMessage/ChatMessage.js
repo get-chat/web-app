@@ -207,6 +207,12 @@ function ChatMessage(props) {
                             "\u00A0"
                         )}
 
+                        {data.location?.address &&
+                        <div className="chat__message__location__address wordBreakWord">
+                            {data.location.address}
+                        </div>
+                        }
+
                         <span className="chat__message__info">
                             <span className="chat__timestamp">
                                 <Moment
