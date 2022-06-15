@@ -52,7 +52,7 @@
     color: var(--color-light-blue);
 }
 
-.chat__media {
+.chat__media, .chat__location iframe {
     border-radius: 6px;
     display: block;
     margin: 0 -4px 4px -4px;
@@ -61,6 +61,8 @@
     /*max-width: 250px;*/
     object-fit: cover;
     cursor: pointer;
+    border: none !important;
+    transform: translateY(0px);
 }
 
 video.chat__media {
