@@ -24,6 +24,7 @@ const getTextNodeType = (node) => {
     if (isEmoji(node)) {
         return {
             type: "emoji",
+            single: false,
             component: Emoji,
         };
     }
@@ -55,23 +56,36 @@ const decomposeMessage = (message) => {
     result.push(section.split(linkRegExp));
     section = "";
 
-    return [].concat(...result).map((item, index) => ({
-        index,
-        data: item,
-        ...getTextNodeType(item),
-    }));
+    return []
+        .concat(...result)
+        .filter((item) => item !== "")
+        .map((item, index) => ({
+            index,
+            text: item,
+            ...getTextNodeType(item),
+        }));
 };
 
-const PrintMessage = ({ message, as: Tag = "span", className }) => {
+const PrintMessage = ({
+    message,
+    as: Tag = "span",
+    smallEmoji = false,
+    className,
+}) => {
     const splittedMessage = useMemo(() => decomposeMessage(message), [message]);
     const classNames = cn("printMessage", className);
+
+    // single emoji
+    if (splittedMessage.length === 1 && splittedMessage[0].type === "emoji") {
+        splittedMessage[0].single = !smallEmoji;
+    }
 
     return (
         <Tag className={classNames}>
             {splittedMessage.map((item) => {
                 const Component = item.component;
 
-                return <Component data={item.data} key={item.index} />;
+                return <Component data={item} key={item.index} />;
             })}
         </Tag>
     );

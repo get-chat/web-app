@@ -18,11 +18,14 @@ function ChatMessageShortContent(props) {
                 ChatMessageClass.TYPE_TEXT,
                 ChatMessageClass.TYPE_BUTTON,
             ].includes(props.type) ? (
-                <PrintMessage message={text} />
+                <PrintMessage message={text} smallEmoji={true} />
             ) : (
                 <span>
                     {props.caption && props.caption.length > 0 ? (
-                        <PrintMessage message={props.caption} />
+                        <PrintMessage
+                            message={props.caption}
+                            smallEmoji={true}
+                        />
                     ) : (
                         <ChatMessageTypeLabel type={props.type} />
                     )}
