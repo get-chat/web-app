@@ -11,13 +11,13 @@ import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import {
     extractAvatarFromContactProviderData,
-    sanitize
 } from "../../helpers/Helpers";
 import LabelIcon from "@material-ui/icons/Label";
 import {generateAvatarColor} from "../../helpers/AvatarHelper";
 import {replaceEmojis} from "../../helpers/EmojiHelper";
 import {addPlus} from "../../helpers/PhoneNumberHelper";
 import {Trans, useTranslation} from "react-i18next";
+import PrintMessage from '../PrintMessage';
 
 function ContactDetails(props)  {
 
@@ -64,7 +64,7 @@ function ContactDetails(props)  {
                         </Avatar>
                     </div>
 
-                    <h3 dangerouslySetInnerHTML={{__html: replaceEmojis(sanitize(props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name ))}} />
+                    <PrintMessage as="h3" message={props.contactProvidersData[props.contactData.waId]?.[0]?.name ?? props.contactData.name} />
 
                     {props.contactProvidersData[props.contactData.waId]?.[0]?.companies?.[0] !== undefined &&
                     <div className="contactDetails__body__job">

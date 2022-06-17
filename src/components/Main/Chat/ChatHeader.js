@@ -19,6 +19,7 @@ import {
     setDisplayAssignmentAndTaggingHistory
 } from "../../../helpers/StorageHelper";
 import {useTranslation} from "react-i18next";
+import PrintMessage from '../../PrintMessage';
 
 function ChatHeader(props) {
 
@@ -89,7 +90,8 @@ function ChatHeader(props) {
                 </Avatar>
 
                 <div className="chat__headerInfo">
-                    <h3 dangerouslySetInnerHTML={{__html: replaceEmojis((props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : ''))}} />
+                    <PrintMessage as="h3" message={(props.contactProvidersData[props.person?.waId]?.[0]?.name ?? props.person?.name) ?? (props.person?.waId ? addPlus(props.person?.waId) : '')} />
+
                     {/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
                     {props.person?.isExpired &&
                     <p className="chat__header__expired">
