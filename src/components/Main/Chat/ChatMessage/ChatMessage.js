@@ -23,6 +23,7 @@ import { formatMessage } from "../../../../helpers/MessageHelper";
 import { useTranslation } from "react-i18next";
 import InteractiveMessage from "./InteractiveMessage";
 import OrderMessage from "./OrderMessage";
+import PrintMessage from "../../../PrintMessage";
 
 const iconStyles = {
     fontSize: "15px",
@@ -60,18 +61,17 @@ function ChatMessage(props) {
             {!data.assignmentEvent && !data.taggingEvent && (
                 <div>
                     {(props.displaySender || props.displayDate) && (
-                        <span
+                        <PrintMessage
                             className="chat__name"
-                            dangerouslySetInnerHTML={{
-                                __html:
-                                    data.isFromUs === true
-                                        ? data.senderName
-                                        : replaceEmojis(
-                                              props.contactProvidersData[
-                                                  data.waId
-                                              ]?.[0]?.name ?? data.senderName
-                                          ),
-                            }}
+                            message={
+                                data.isFromUs === true
+                                    ? data.senderName
+                                    : replaceEmojis(
+                                          props.contactProvidersData[
+                                              data.waId
+                                          ]?.[0]?.name ?? data.senderName
+                                      )
+                            }
                         />
                     )}
 
@@ -152,9 +152,9 @@ function ChatMessage(props) {
                             </span>
                         )}
 
-                        {data.type === ChatMessageClass.TYPE_LOCATION &&
-                        <ChatMessageLocation data={data}/>
-                        }
+                        {data.type === ChatMessageClass.TYPE_LOCATION && (
+                            <ChatMessageLocation data={data} />
+                        )}
 
                         {data.type === ChatMessageClass.TYPE_TEMPLATE && (
                             <ChatMessageTemplate
@@ -190,16 +190,14 @@ function ChatMessage(props) {
                         data.caption ??
                         data.buttonText ??
                         data.interactiveButtonText ? (
-                            <span
+                            <PrintMessage
                                 className="wordBreakWord"
-                                dangerouslySetInnerHTML={{
-                                    __html: formatMessage(
-                                        data.text ??
-                                            data.caption ??
-                                            data.buttonText ??
-                                            data.interactiveButtonText
-                                    ),
-                                }}
+                                message={
+                                    data.text ??
+                                    data.caption ??
+                                    data.buttonText ??
+                                    data.interactiveButtonText
+                                }
                             />
                         ) : (
                             "\u00A0"
