@@ -62,7 +62,6 @@
     object-fit: cover;
     cursor: pointer;
     border: none !important;
-    transform: translateY(0px);
 }
 
 video.chat__media {
