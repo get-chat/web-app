@@ -1,13 +1,16 @@
 import React from "react";
-import {Trans} from "react-i18next";
 
 function ChatMessageLocation(props) {
     return (
-        <div>
-            <Trans>
-                Location: <a href={props.data.generateLocationURL()} target="_blank">{props.data.location?.name}</a>
-            </Trans>
-        </div>
+        <iframe
+            className="chat__location"
+            width="250"
+            height="150"
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://www.google.com/maps/embed/v1/place?key=${window.config.APP_GOOGLE_MAPS_API_KEY}&&q=${props.data.location?.latitude},${props.data.location?.longitude}&q=`}>
+        </iframe>
     )
 }
 

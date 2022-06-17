@@ -46,6 +46,10 @@ In order to do this, please go to `config.json` file and replace the value of `A
 
 In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `index.js`.
 
+## Google Maps
+
+In order to display Google Maps Embed API in location messages, you need to provide a `Google Maps API key` in `config.json` for `APP_GOOGLE_MAPS_API_KEY`.
+
 ## Available Scripts
 
 In the project directory, you can run:

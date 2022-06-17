@@ -14,6 +14,10 @@
 # production
 /build
 
+# development
+/public/config.dev.json
+/public/config.development.json
+
 # misc
 .DS_Store
 .env.local
