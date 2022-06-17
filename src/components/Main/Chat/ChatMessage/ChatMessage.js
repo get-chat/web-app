@@ -189,14 +189,16 @@ function ChatMessage(props) {
                         {data.text ??
                         data.caption ??
                         data.buttonText ??
-                        data.interactiveButtonText ? (
+                        data.interactiveButtonText ??
+                        data.location ? (
                             <PrintMessage
                                 className="wordBreakWord"
                                 message={
                                     data.text ??
                                     data.caption ??
                                     data.buttonText ??
-                                    data.interactiveButtonText
+                                    data.interactiveButtonText ??
+                                    data.location.name
                                 }
                             />
                         ) : (
