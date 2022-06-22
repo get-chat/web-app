@@ -55,7 +55,8 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "test:e2e": "cypress run",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "i18next-conv": "i18next-conv -l en -s src/locales/translation.po src/locales/en/translation.json"
     },
     "eslintConfig": {
         "extends": [

@@ -1,4 +1,5 @@
 import React from "react";
+import { Trans } from "react-i18next";
 
 import styles from "./ProductMessage.module.css";
 
@@ -19,8 +20,17 @@ const ProductMessage = ({ header, body, footer, action }) => {
                                     {section.product_items.map(
                                         ({ product_retailer_id }) => (
                                             <li key={product_retailer_id}>
-                                                <b>Product retailer ID:</b>
-                                                {product_retailer_id}
+                                                <Trans
+                                                    values={{
+                                                        postProcess: "sprintf",
+                                                        sprintf: [
+                                                            product_retailer_id,
+                                                        ],
+                                                    }}
+                                                >
+                                                    <b>Product retailer ID</b>:
+                                                    %s
+                                                </Trans>
                                             </li>
                                         )
                                     )}
@@ -31,11 +41,24 @@ const ProductMessage = ({ header, body, footer, action }) => {
                 ) : (
                     <>
                         <div>
-                            <b>Catalog ID</b>: {action.catalog_id}
+                            <Trans
+                                values={{
+                                    postProcess: "sprintf",
+                                    sprintf: [action.catalog_id],
+                                }}
+                            >
+                                <b>Catalog ID</b>: %s
+                            </Trans>
                         </div>
                         <div>
-                            <b>Product retailer ID</b>:{" "}
-                            {action.product_retailer_id}
+                            <Trans
+                                values={{
+                                    postProcess: "sprintf",
+                                    sprintf: [action.product_retailer_id],
+                                }}
+                            >
+                                <b>Product retailer ID</b>: %s
+                            </Trans>
                         </div>
                     </>
                 )}
