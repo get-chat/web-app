@@ -15,6 +15,7 @@
 /build
 
 # development
+/public/config.json
 /public/config.dev.json
 /public/config.development.json
 
