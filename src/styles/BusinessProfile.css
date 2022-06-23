@@ -88,7 +88,7 @@
 .sidebarBusinessProfile__body__avatarContainer__info {
     margin-bottom: 15px;
     text-align: center;
-    font-size: 0.8rem !important;
+    font-size: 0.8rem;
 }
 
 .sidebarBusinessProfile__body__avatarContainer.editable .MuiAvatar-root:hover {
