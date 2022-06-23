@@ -524,3 +524,6 @@ msgstr ""
 
 msgid "<0>Price</0>: %d %s"
 msgstr ""
+
+msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
+msgstr ""
