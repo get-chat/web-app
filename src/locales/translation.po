@@ -512,3 +512,15 @@ msgstr ""
 
 msgid "Location: <1>%s</1>"
 msgstr ""
+
+msgid "<0>Product retailer ID<0>: %s"
+msgstr ""
+
+msgid "<0>Catalog ID</0>: %s"
+msgstr ""
+
+msgid "<0>Quantity</0>: %d"
+msgstr ""
+
+msgid "<0>Price</0>: %d %s"
+msgstr ""

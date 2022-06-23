@@ -1,4 +1,5 @@
 import React from "react";
+import { Trans } from "react-i18next";
 
 import styles from "./OrderMessage.module.css";
 
@@ -8,7 +9,14 @@ const OrderMessage = ({ data }) => {
     return (
         <>
             <div className={styles.title}>
-                <b>Catalog ID:</b> {catalog_id}
+                <Trans
+                    values={{
+                        postProcess: "sprintf",
+                        sprintf: [catalog_id],
+                    }}
+                >
+                    <b>Catalog ID</b>: %s
+                </Trans>
             </div>
 
             <ul className={styles.list}>
@@ -21,14 +29,34 @@ const OrderMessage = ({ data }) => {
                     }) => (
                         <li key={product_retailer_id} className={styles.item}>
                             <div>
-                                <b>Product retailer ID:</b>{" "}
-                                {product_retailer_id}
+                                <Trans
+                                    values={{
+                                        postProcess: "sprintf",
+                                        sprintf: [product_retailer_id],
+                                    }}
+                                >
+                                    <b>Product retailer ID</b>: %s
+                                </Trans>
                             </div>
                             <div>
-                                <b>Quantity:</b> {quantity}
+                                <Trans
+                                    values={{
+                                        postProcess: "sprintf",
+                                        sprintf: [quantity],
+                                    }}
+                                >
+                                    <b>Quantity</b>: %d
+                                </Trans>
                             </div>
                             <div>
-                                <b>Price:</b> {item_price} {currency}
+                                <Trans
+                                    values={{
+                                        postProcess: "sprintf",
+                                        sprintf: [item_price, currency],
+                                    }}
+                                >
+                                    <b>Price</b>: %d %s
+                                </Trans>
                             </div>
                         </li>
                     )
