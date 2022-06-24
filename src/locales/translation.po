@@ -527,3 +527,6 @@ msgstr ""
 
 msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
 msgstr ""
+
+msgid "Copied!"
+msgstr ""

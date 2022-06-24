@@ -189,27 +189,19 @@ function ChatMessage(props) {
                         {data.text ??
                         data.caption ??
                         data.buttonText ??
-                        data.interactiveButtonText ??
-                        data.location ? (
+                        data.interactiveButtonText ? (
                             <PrintMessage
                                 className="wordBreakWord"
                                 message={
                                     data.text ??
                                     data.caption ??
                                     data.buttonText ??
-                                    data.interactiveButtonText ??
-                                    data.location.name
+                                    data.interactiveButtonText
                                 }
                             />
                         ) : (
                             "\u00A0"
                         )}
-
-                        {data.location?.address &&
-                        <div className="chat__message__location__address wordBreakWord">
-                            {data.location.address}
-                        </div>
-                        }
 
                         <span className="chat__message__info">
                             <span className="chat__timestamp">
