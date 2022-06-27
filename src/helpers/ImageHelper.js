@@ -1,4 +1,4 @@
-import * as Sentry from "@sentry/browser";
+import * as Sentry from '@sentry/browser';
 
 export const binaryToBase64 = (data) => {
     try {
@@ -11,4 +11,4 @@ export const binaryToBase64 = (data) => {
     } catch (error) {
         Sentry.captureException(error);
     }
-}
+};

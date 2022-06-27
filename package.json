@@ -49,6 +49,7 @@
         "nth-check": "^2.0.1"
     },
     "scripts": {
+        "prettier": "prettier --write src",
         "analyze": "source-map-explorer 'build/static/js/*.js'",
         "start": "react-scripts start",
         "local": "react-scripts start",
@@ -82,7 +83,8 @@
         "@material-ui/styles": "^4.11.4",
         "@testing-library/cypress": "^8.0.2",
         "cypress": "^9.5.4",
-        "html-webpack-plugin": "^4.5.2"
+        "html-webpack-plugin": "^4.5.2",
+        "prettier": "2.7.1"
     },
     "engines": {
         "node": "^16.13.0",

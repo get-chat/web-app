@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import TouchAppIcon from "@material-ui/icons/TouchApp";
-import { useTranslation } from "react-i18next";
+import TouchAppIcon from '@material-ui/icons/TouchApp';
+import { useTranslation } from 'react-i18next';
 
-import ButtonsMessage from "./components/ButtonsMessage";
-import ListMessage from "./components/ListMessage";
-import ProductMessage from "./components/ProductMessage";
+import ButtonsMessage from './components/ButtonsMessage';
+import ListMessage from './components/ListMessage';
+import ProductMessage from './components/ProductMessage';
 
-import styles from "./InteractiveMessage.module.css";
+import styles from './InteractiveMessage.module.css';
 
 const InteractiveMessage = ({ data }) => {
     const { t } = useTranslation();
@@ -16,20 +16,20 @@ const InteractiveMessage = ({ data }) => {
     return (
         <>
             <div className={styles.caption}>
-                <TouchAppIcon /> {t("Interactive message:")}
+                <TouchAppIcon /> {t('Interactive message:')}
             </div>
 
             {/* TODO: FIXME: i don't know where right place in current architecture, but it works */}
-            {data.payload.interactive.type === "list_reply" && (
+            {data.payload.interactive.type === 'list_reply' && (
                 <div>
                     <div>{data.payload.interactive.list_reply.title}</div>
-                    <div style={{ opacity: 0.5, fontSize: "0.8em" }}>
+                    <div style={{ opacity: 0.5, fontSize: '0.8em' }}>
                         {data.payload.interactive.list_reply.description}
                     </div>
                 </div>
             )}
 
-            {type === "button" && (
+            {type === 'button' && (
                 <ButtonsMessage
                     header={header}
                     body={body}
@@ -38,7 +38,7 @@ const InteractiveMessage = ({ data }) => {
                 />
             )}
 
-            {type === "list" && (
+            {type === 'list' && (
                 <ListMessage
                     header={header}
                     body={body}
@@ -47,7 +47,7 @@ const InteractiveMessage = ({ data }) => {
                 />
             )}
 
-            {(type === "product" || type === "product_list") && (
+            {(type === 'product' || type === 'product_list') && (
                 <ProductMessage
                     header={header}
                     body={body}

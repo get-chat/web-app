@@ -33,7 +33,8 @@
     display: flex;
 }
 
-.chat__footer > form > textarea, .typeBox {
+.chat__footer > form > textarea,
+.typeBox {
     position: relative;
     background-color: white;
     height: auto;
@@ -52,7 +53,8 @@
     background-color: rgba(255, 255, 255, 0.5);
 }
 
-.chat__footer > form > textarea:focus, .typeBox {
+.chat__footer > form > textarea:focus,
+.typeBox {
     outline: none;
     border: none;
 }
@@ -102,7 +104,9 @@
     position: relative;
 }
 
-.chat__footer__attachmentContainer:hover .chat__footer__attachmentContainer__options, .chat__footer__attachmentContainer__options:hover {
+.chat__footer__attachmentContainer:hover
+    .chat__footer__attachmentContainer__options,
+.chat__footer__attachmentContainer__options:hover {
     display: block;
 }
 

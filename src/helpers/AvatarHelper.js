@@ -1,5 +1,5 @@
 let cachedColors = {};
-export const generateAvatarColor = function(name) {
+export const generateAvatarColor = function (name) {
     if (!name) return;
     if (cachedColors[name]) return cachedColors[name];
 
@@ -9,11 +9,11 @@ export const generateAvatarColor = function(name) {
     }
     let colour = '#';
     for (let i = 0; i < 3; i++) {
-        const value = (hash >> (i * 8)) & 0xFF;
+        const value = (hash >> (i * 8)) & 0xff;
         colour += ('00' + value.toString(16)).substr(-2);
     }
     return colour;
-}
+};
 
 /*
 function hexToRgb(h) {

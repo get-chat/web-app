@@ -1,9 +1,9 @@
-import React from "react";
-import ChatMessageTypeIcon from "./ChatMessageTypeIcon";
-import ChatMessageTypeLabel from "./ChatMessageTypeLabel";
-import ReplyIcon from "@material-ui/icons/Reply";
-import ChatMessageClass from "../../../../ChatMessageClass";
-import PrintMessage from "../../../PrintMessage";
+import React from 'react';
+import ChatMessageTypeIcon from './ChatMessageTypeIcon';
+import ChatMessageTypeLabel from './ChatMessageTypeLabel';
+import ReplyIcon from '@material-ui/icons/Reply';
+import ChatMessageClass from '../../../../ChatMessageClass';
+import PrintMessage from '../../../PrintMessage';
 
 function ChatMessageShortContent(props) {
     const text = props.text ?? props.buttonText ?? props.interactiveButtonText;

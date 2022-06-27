@@ -1,22 +1,22 @@
-import { createTheme } from "@material-ui/core/styles";
+import { createTheme } from '@material-ui/core/styles';
 
 const AppTheme = createTheme({
     palette: {
         primary: {
-            main: "#65cbac",
+            main: '#65cbac',
         },
         secondary: {
-            main: "#E33E7F",
+            main: '#E33E7F',
         },
     },
     typography: {
         fontFamily: [
-            "Inter",
-            "Roboto",
+            'Inter',
+            'Roboto',
             '"Helvetica Neue"',
-            "Arial",
-            "sans-serif",
-        ].join(","),
+            'Arial',
+            'sans-serif',
+        ].join(','),
     },
 });
 

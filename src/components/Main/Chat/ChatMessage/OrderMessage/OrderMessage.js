@@ -1,7 +1,7 @@
-import React from "react";
-import { Trans } from "react-i18next";
+import React from 'react';
+import { Trans } from 'react-i18next';
 
-import styles from "./OrderMessage.module.css";
+import styles from './OrderMessage.module.css';
 
 const OrderMessage = ({ data }) => {
     const { catalog_id, text, product_items } = data.payload.order;
@@ -11,7 +11,7 @@ const OrderMessage = ({ data }) => {
             <div className={styles.title}>
                 <Trans
                     values={{
-                        postProcess: "sprintf",
+                        postProcess: 'sprintf',
                         sprintf: [catalog_id],
                     }}
                 >
@@ -31,7 +31,7 @@ const OrderMessage = ({ data }) => {
                             <div>
                                 <Trans
                                     values={{
-                                        postProcess: "sprintf",
+                                        postProcess: 'sprintf',
                                         sprintf: [product_retailer_id],
                                     }}
                                 >
@@ -41,7 +41,7 @@ const OrderMessage = ({ data }) => {
                             <div>
                                 <Trans
                                     values={{
-                                        postProcess: "sprintf",
+                                        postProcess: 'sprintf',
                                         sprintf: [quantity],
                                     }}
                                 >
@@ -51,7 +51,7 @@ const OrderMessage = ({ data }) => {
                             <div>
                                 <Trans
                                     values={{
-                                        postProcess: "sprintf",
+                                        postProcess: 'sprintf',
                                         sprintf: [item_price, currency],
                                     }}
                                 >

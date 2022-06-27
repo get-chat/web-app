@@ -1,5 +1,9 @@
-import ChatMessageClass from "../ChatMessageClass";
-import {ATTACHMENT_TYPE_DOCUMENT, ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO} from "../Constants";
+import ChatMessageClass from '../ChatMessageClass';
+import {
+    ATTACHMENT_TYPE_DOCUMENT,
+    ATTACHMENT_TYPE_IMAGE,
+    ATTACHMENT_TYPE_VIDEO,
+} from '../Constants';
 
 export const generateTemplateMessagePayload = (templateMessage) => {
     return {
@@ -9,12 +13,12 @@ export const generateTemplateMessagePayload = (templateMessage) => {
             name: templateMessage.name,
             language: {
                 code: templateMessage.language,
-                policy: 'deterministic'
+                policy: 'deterministic',
             },
-            components: templateMessage.params
-        }
-    }
-}
+            components: templateMessage.params,
+        },
+    };
+};
 
 export const prepareSendFilePayload = (chosenFile, fileURL) => {
     const { caption, attachmentType, file } = chosenFile;
@@ -22,16 +26,19 @@ export const prepareSendFilePayload = (chosenFile, fileURL) => {
     const mimeType = file.type;
 
     let requestBody = {
-        type: attachmentType
+        type: attachmentType,
     };
 
     requestBody[attachmentType] = {
         link: fileURL,
         mime_type: mimeType,
-    }
+    };
 
     // caption param is accepted for only images and videos
-    if (attachmentType === ATTACHMENT_TYPE_IMAGE || attachmentType === ATTACHMENT_TYPE_VIDEO) {
+    if (
+        attachmentType === ATTACHMENT_TYPE_IMAGE ||
+        attachmentType === ATTACHMENT_TYPE_VIDEO
+    ) {
         requestBody[attachmentType]['caption'] = caption;
     }
 
@@ -41,4 +48,4 @@ export const prepareSendFilePayload = (chosenFile, fileURL) => {
     }
 
     return requestBody;
-}
+};

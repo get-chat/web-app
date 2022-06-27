@@ -1,5 +1,4 @@
 class TemplateMessageClass {
-
     constructor(data) {
         this.namespace = data.namespace;
         this.name = data.name;

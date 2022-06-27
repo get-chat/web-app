@@ -1,5 +1,5 @@
-import React from "react";
-import {Button} from "@material-ui/core";
+import React from 'react';
+import { Button } from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
 
 function ChatMessageLocation(props) {
@@ -9,7 +9,7 @@ function ChatMessageLocation(props) {
     const share = async () => {
         if (navigator.share) {
             try {
-                await navigator.share({url: mapURL});
+                await navigator.share({ url: mapURL });
             } catch (e) {
                 if (e.toString().includes('AbortError')) {
                     console.log('Ignored AbortError.');
@@ -23,7 +23,7 @@ function ChatMessageLocation(props) {
         } else {
             console.log('HTTPS is required for this feature!');
         }
-    }
+    };
 
     return (
         <div className="chat__location">
@@ -34,22 +34,23 @@ function ChatMessageLocation(props) {
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
-                src={mapEmbedURL} />
+                src={mapEmbedURL}
+            />
 
-            {props.data.location &&
-            <>
-                {props.data.location.name &&
-                <div className="chat__message__location__name">
-                    {props.data.location.name}
-                </div>
-                }
-                {props.data.location.address &&
-                <div className="chat__message__location__address">
-                    {props.data.location.address}
-                </div>
-                }
-            </>
-            }
+            {props.data.location && (
+                <>
+                    {props.data.location.name && (
+                        <div className="chat__message__location__name">
+                            {props.data.location.name}
+                        </div>
+                    )}
+                    {props.data.location.address && (
+                        <div className="chat__message__location__address">
+                            {props.data.location.address}
+                        </div>
+                    )}
+                </>
+            )}
 
             <Button
                 className="chat__message__location__share"
@@ -57,12 +58,13 @@ function ChatMessageLocation(props) {
                 variant="outlined"
                 size="small"
                 disableElevation
-                startIcon={<ShareIcon/>}
-                onClick={share}>
+                startIcon={<ShareIcon />}
+                onClick={share}
+            >
                 Share
             </Button>
         </div>
-    )
+    );
 }
 
 export default ChatMessageLocation;

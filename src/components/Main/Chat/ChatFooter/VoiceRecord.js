@@ -1,37 +1,41 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
-import {displaySeconds} from "../../../../helpers/Helpers";
-import DoneIcon from "@material-ui/icons/Done";
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { displaySeconds } from '../../../../helpers/Helpers';
+import DoneIcon from '@material-ui/icons/Done';
 import '../../../../styles/VoiceRecord.css';
-import VoiceRecorder from "../../../../VoiceRecorder";
+import VoiceRecorder from '../../../../VoiceRecorder';
 import {
     EVENT_TOPIC_DISPLAY_ERROR,
     EVENT_TOPIC_REQUEST_MIC_PERMISSION,
-    EVENT_TOPIC_VOICE_RECORD_STARTING
-} from "../../../../Constants";
-import PubSub from "pubsub-js";
-import {useParams} from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import {useTranslation} from "react-i18next";
+    EVENT_TOPIC_VOICE_RECORD_STARTING,
+} from '../../../../Constants';
+import PubSub from 'pubsub-js';
+import { useParams } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import { useTranslation } from 'react-i18next';
 
 let timerIntervalId;
 
-function VoiceRecord(
-    {
-        voiceRecordCase,
-        setRecording,
-        sendHandledChosenFiles
-    }
-) {
-
-    const {t} = useTranslation();
+function VoiceRecord({
+    voiceRecordCase,
+    setRecording,
+    sendHandledChosenFiles,
+}) {
+    const { t } = useTranslation();
 
     const voiceRecorder = useRef(new VoiceRecorder());
     const [timer, setTimer] = useState(0);
 
-    const {waId} = useParams();
+    const { waId } = useParams();
 
     const [open, setOpen] = React.useState(false);
 
@@ -42,27 +46,36 @@ function VoiceRecord(
     useEffect(() => {
         const onRequestMicPermission = function (msg, data) {
             if (data === voiceRecordCase) {
-                PubSub.publish(EVENT_TOPIC_VOICE_RECORD_STARTING, voiceRecordCase);
+                PubSub.publish(
+                    EVENT_TOPIC_VOICE_RECORD_STARTING,
+                    voiceRecordCase
+                );
                 requestMicrophonePermission();
             }
-        }
+        };
 
-        const onRequestMicPermissionToken = PubSub.subscribe(EVENT_TOPIC_REQUEST_MIC_PERMISSION, onRequestMicPermission);
+        const onRequestMicPermissionToken = PubSub.subscribe(
+            EVENT_TOPIC_REQUEST_MIC_PERMISSION,
+            onRequestMicPermission
+        );
 
         const onVoiceRecordStarting = function (msg, data) {
             if (data !== voiceRecordCase) {
                 cancelVoiceRecord();
             }
-        }
+        };
 
-        const onVoiceRecordStartingToken = PubSub.subscribe(EVENT_TOPIC_VOICE_RECORD_STARTING, onVoiceRecordStarting);
+        const onVoiceRecordStartingToken = PubSub.subscribe(
+            EVENT_TOPIC_VOICE_RECORD_STARTING,
+            onVoiceRecordStarting
+        );
 
         return () => {
             PubSub.unsubscribe(onRequestMicPermissionToken);
             PubSub.unsubscribe(onVoiceRecordStartingToken);
 
             cancelVoiceRecord();
-        }
+        };
     }, []);
 
     useEffect(() => {
@@ -73,7 +86,7 @@ function VoiceRecord(
         voiceRecorder.current?.cancel();
 
         onVoiceRecordStop();
-    }
+    };
 
     const onVoiceRecordStop = () => {
         setRecording(false);
@@ -81,29 +94,32 @@ function VoiceRecord(
         // Stop timer
         clearInterval(timerIntervalId);
         setTimer(0);
-    }
+    };
 
     const requestMicrophonePermission = () => {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-
             const constraints = {
                 audio: {
                     sampleRate: 48000,
                     channelCount: 1,
                     volume: 1.0,
-                    noiseSuppression: true
+                    noiseSuppression: true,
                 },
-                video: false
+                video: false,
             };
 
-            navigator.mediaDevices.getUserMedia(constraints)
+            navigator.mediaDevices
+                .getUserMedia(constraints)
                 .then(function (stream) {
                     startVoiceRecord(stream);
                 })
                 .catch(function (err) {
                     console.log('Permission denied');
 
-                    PubSub.publish(EVENT_TOPIC_DISPLAY_ERROR, 'You must grant microphone permission.');
+                    PubSub.publish(
+                        EVENT_TOPIC_DISPLAY_ERROR,
+                        'You must grant microphone permission.'
+                    );
 
                     if (window.AndroidWebInterface) {
                         window.AndroidWebInterface.requestPermissions();
@@ -117,9 +133,12 @@ function VoiceRecord(
         } else {
             console.log('Not supported on your browser.');
 
-            PubSub.publish(EVENT_TOPIC_DISPLAY_ERROR, 'This feature is not supported on your browser.');
+            PubSub.publish(
+                EVENT_TOPIC_DISPLAY_ERROR,
+                'This feature is not supported on your browser.'
+            );
         }
-    }
+    };
 
     const startVoiceRecord = (stream) => {
         // If it is already recording, return
@@ -133,7 +152,7 @@ function VoiceRecord(
 
                 // Update timer every second
                 timerIntervalId = setInterval(function () {
-                    setTimer(prevState => prevState + 1);
+                    setTimer((prevState) => prevState + 1);
                 }, 1000);
             },
             function () {
@@ -143,11 +162,11 @@ function VoiceRecord(
                 //console.log(audioFile);
             }
         );
-    }
+    };
 
     const stopVoiceRecord = () => {
         voiceRecorder.current?.stop();
-    }
+    };
 
     const sendVoiceRecord = () => {
         stopVoiceRecord();
@@ -157,38 +176,46 @@ function VoiceRecord(
 
             // Send
             if (chosenFile) {
-                sendHandledChosenFiles({0: voiceRecorder.current.lastAudioChosenFile});
+                sendHandledChosenFiles({
+                    0: voiceRecorder.current.lastAudioChosenFile,
+                });
             } else {
                 console.log('Audio file is missing');
             }
         }, 1000);
-    }
+    };
 
     const goToInbox = () => {
         window.open(window.location.href, '_blank');
         handleClose();
-    }
+    };
 
     return (
         <div className="voiceRecord">
-            <IconButton onClick={stopVoiceRecord} className="voiceRecord__cancelButton">
-                <CloseIcon/>
+            <IconButton
+                onClick={stopVoiceRecord}
+                className="voiceRecord__cancelButton"
+            >
+                <CloseIcon />
             </IconButton>
 
-            <FiberManualRecordIcon className="voiceRecord__recordIcon"/>
+            <FiberManualRecordIcon className="voiceRecord__recordIcon" />
             <span className="voiceRecord__timer">{displaySeconds(timer)}</span>
 
-            <IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
-                <DoneIcon/>
+            <IconButton
+                onClick={sendVoiceRecord}
+                className="voiceRecord__sendButton"
+            >
+                <DoneIcon />
             </IconButton>
 
-            <Dialog
-                open={open}
-                onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Oops!</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        {t('You must open the inbox in a new tab to access this feature.')}
+                        {t(
+                            'You must open the inbox in a new tab to access this feature.'
+                        )}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -200,9 +227,8 @@ function VoiceRecord(
                     </Button>
                 </DialogActions>
             </Dialog>
-
         </div>
-    )
+    );
 }
 
 export default VoiceRecord;

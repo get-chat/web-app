@@ -1,29 +1,31 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/SearchMessage.css';
-import {IconButton} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import PubSub from "pubsub-js";
-import {EVENT_TOPIC_GO_TO_MSG_ID, EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY} from "../Constants";
-import SearchBar from "./SearchBar";
-import {useParams} from "react-router-dom";
-import ChatMessageClass from "../ChatMessageClass";
-import SearchMessageResult from "./SearchMessageResult";
-import {isMobileOnly} from 'react-device-detect';
-import {useTranslation} from "react-i18next";
-import {ApplicationContext} from "../contexts/ApplicationContext";
-import {generateCancelToken} from "../helpers/ApiHelper";
+import { IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import PubSub from 'pubsub-js';
+import {
+    EVENT_TOPIC_GO_TO_MSG_ID,
+    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
+} from '../Constants';
+import SearchBar from './SearchBar';
+import { useParams } from 'react-router-dom';
+import ChatMessageClass from '../ChatMessageClass';
+import SearchMessageResult from './SearchMessageResult';
+import { isMobileOnly } from 'react-device-detect';
+import { useTranslation } from 'react-i18next';
+import { ApplicationContext } from '../contexts/ApplicationContext';
+import { generateCancelToken } from '../helpers/ApiHelper';
 
 function SearchMessage(props) {
-
-    const {apiService} = React.useContext(ApplicationContext);
+    const { apiService } = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
     const [results, setResults] = useState({});
-    const [keyword, setKeyword] = useState("");
+    const [keyword, setKeyword] = useState('');
     const [isLoading, setLoading] = useState(false);
 
-    const {waId} = useParams();
+    const { waId } = useParams();
 
     useEffect(() => {
         setResults({});
@@ -31,7 +33,7 @@ function SearchMessage(props) {
 
     const hideSearchMessages = () => {
         PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
-    }
+    };
 
     let cancelTokenSourceRef = useRef();
 
@@ -40,7 +42,9 @@ function SearchMessage(props) {
 
         // Check if there are any previous pending requests
         if (cancelTokenSourceRef.current) {
-            cancelTokenSourceRef.current.cancel("Operation canceled due to new request.");
+            cancelTokenSourceRef.current.cancel(
+                'Operation canceled due to new request.'
+            );
         }
 
         // Generate a token
@@ -53,7 +57,11 @@ function SearchMessage(props) {
 
         setLoading(true);
 
-        apiService.searchMessagesCall(waId, _keyword, 30, cancelTokenSourceRef.current.token,
+        apiService.searchMessagesCall(
+            waId,
+            _keyword,
+            30,
+            cancelTokenSourceRef.current.token,
             (response) => {
                 const preparedMessages = {};
                 response.data.results.forEach((message) => {
@@ -62,10 +70,12 @@ function SearchMessage(props) {
                 });
                 setResults(preparedMessages);
                 setLoading(false);
-            }, (error) => {
+            },
+            (error) => {
                 setLoading(false);
-            });
-    }
+            }
+        );
+    };
 
     const goToMessage = (data) => {
         PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
@@ -73,7 +83,7 @@ function SearchMessage(props) {
         if (isMobileOnly) {
             hideSearchMessages();
         }
-    }
+    };
 
     return (
         <div className="searchMessage">
@@ -85,22 +95,21 @@ function SearchMessage(props) {
                 <h3>{t('Search For Messages')}</h3>
             </div>
 
-            <SearchBar
-                onChange={search}
-                isLoading={isLoading} />
+            <SearchBar onChange={search} isLoading={isLoading} />
 
             <div className="searchMessage__body">
-                { Object.entries(results).map((message) =>
+                {Object.entries(results).map((message) => (
                     <SearchMessageResult
                         key={message[0]}
                         waId={waId}
                         messageData={message[1]}
                         keyword={keyword}
-                        onClick={(chatMessage) => goToMessage(chatMessage)}/>
-                )}
+                        onClick={(chatMessage) => goToMessage(chatMessage)}
+                    />
+                ))}
             </div>
         </div>
-    )
+    );
 }
 
 export default SearchMessage;

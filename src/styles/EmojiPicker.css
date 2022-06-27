@@ -54,13 +54,14 @@ button.emoji-mart-emoji {
     cursor: pointer;
 }
 
-.emoji-mart-anchors svg, .emoji-mart-anchors img {
+.emoji-mart-anchors svg,
+.emoji-mart-anchors img {
     width: 20px;
     height: 20px;
 }
 
 .emoji-mart-anchor:focus {
-    outline: 0
+    outline: 0;
 }
 
 .emoji-mart-anchor:hover,

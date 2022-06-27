@@ -2,7 +2,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    flex: 0.30;
+    flex: 0.3;
 }
 
 .sidebar__header {
@@ -61,8 +61,12 @@
     display: flex;
     justify-content: center;
     padding-bottom: 20px;
-    background: rgb(255,255,255);
-    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    background: rgb(255, 255, 255);
+    background: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0) 100%
+    );
 }
 
 .sidebar__loadingMore__wrapper {

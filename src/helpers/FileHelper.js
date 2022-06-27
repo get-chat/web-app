@@ -1,13 +1,13 @@
-import ChosenFileClass from "../ChosenFileClass";
+import ChosenFileClass from '../ChosenFileClass';
 import {
     ATTACHMENT_TYPE_AUDIO,
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
-    ATTACHMENT_TYPE_VIDEO
-} from "../Constants";
-import {stringContainsAnyInArray} from "./Helpers";
-import * as musicMetadata from "music-metadata-browser";
-import {isSafari} from "react-device-detect";
+    ATTACHMENT_TYPE_VIDEO,
+} from '../Constants';
+import { stringContainsAnyInArray } from './Helpers';
+import * as musicMetadata from 'music-metadata-browser';
+import { isSafari } from 'react-device-detect';
 
 export const prepareSelectedFiles = (selectedFiles) => {
     const preparedFiles = {};
@@ -16,7 +16,7 @@ export const prepareSelectedFiles = (selectedFiles) => {
     });
 
     return preparedFiles;
-}
+};
 
 export const getDroppedFiles = (event) => {
     event.preventDefault();
@@ -38,8 +38,8 @@ export const getDroppedFiles = (event) => {
         }
     }*/
 
-    return {...event.dataTransfer.files};
-}
+    return { ...event.dataTransfer.files };
+};
 
 export const getAttachmentTypeByFile = (file, callback) => {
     const mimeType = file.type;
@@ -56,12 +56,10 @@ export const getAttachmentTypeByFile = (file, callback) => {
     } else if (mimeType.includes('audio')) {
         // OGG is an exception
         if (mimeType.includes('audio/ogg')) {
-
             // This will be skipped for voice recording, we know what is type
             if (callback !== undefined) {
-
                 // Get codec information async
-                musicMetadata.parseBlob(file).then(metadata => {
+                musicMetadata.parseBlob(file).then((metadata) => {
                     const codec = metadata?.format?.codec;
                     // OGG files with Opus codec are supported
                     if (codec && codec.toLowerCase().includes('opus')) {
@@ -70,14 +68,18 @@ export const getAttachmentTypeByFile = (file, callback) => {
                         // Base OGG files are not supported
                         callback(ATTACHMENT_TYPE_DOCUMENT);
                     }
-                })
+                });
             }
 
             return ATTACHMENT_TYPE_DOCUMENT;
-
         } else {
             // If not OGG
-            const supportedAudioTypes = ['audio/aac', 'audio/mp4', 'audio/amr', 'audio/mpeg'];
+            const supportedAudioTypes = [
+                'audio/aac',
+                'audio/mp4',
+                'audio/amr',
+                'audio/mpeg',
+            ];
             if (stringContainsAnyInArray(mimeType, supportedAudioTypes)) {
                 return ATTACHMENT_TYPE_AUDIO;
             }
@@ -85,7 +87,7 @@ export const getAttachmentTypeByFile = (file, callback) => {
     }
 
     return ATTACHMENT_TYPE_DOCUMENT;
-}
+};
 
 export const isAudioMimeTypeSupported = (mimeType) => {
     if (mimeType === 'audio/amr') {
@@ -97,7 +99,7 @@ export const isAudioMimeTypeSupported = (mimeType) => {
     }
 
     return true;
-}
+};
 
 /*export const convertToBase64 = (file, callback) => {
     const fileReader = new FileReader();
@@ -133,7 +135,7 @@ export const isAudioMimeTypeSupported = (mimeType) => {
 
 export const handleDragOver = (event) => {
     event.preventDefault();
-}
+};
 
 /*const getVideoCover = (file, seekTo = 0.0) => {
     console.log("getting video cover for file: ", file);

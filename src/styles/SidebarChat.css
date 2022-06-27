@@ -48,7 +48,8 @@
     position: relative;
 }
 
-.sidebarChat__avatarWrapper .MuiAvatar-root.sidebarChat__avatarWrapper__assignee {
+.sidebarChat__avatarWrapper
+    .MuiAvatar-root.sidebarChat__avatarWrapper__assignee {
     position: absolute;
     bottom: -3px;
     right: -3px;
@@ -58,7 +59,9 @@
     box-shadow: 0 1px 3px var(--shadow-light);
 }
 
-.sidebarChat__avatarWrapper .MuiAvatar-root.sidebarChat__avatarWrapper__assignee .MuiSvgIcon-root {
+.sidebarChat__avatarWrapper
+    .MuiAvatar-root.sidebarChat__avatarWrapper__assignee
+    .MuiSvgIcon-root {
     color: white !important;
     height: 0.5em;
     width: 0.5em;
@@ -141,7 +144,8 @@
     color: var(--color-primary);
 }
 
-.sidebarChat__info__lastMessage__body, .sidebarChat__info__lastMessage__body > div {
+.sidebarChat__info__lastMessage__body,
+.sidebarChat__info__lastMessage__body > div {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -180,7 +184,8 @@
     margin-left: 5px;
 }
 
-.sidebarChat__info__expired, .sidebarChat__info__date {
+.sidebarChat__info__expired,
+.sidebarChat__info__date {
     display: block;
     margin-top: 5px;
 }

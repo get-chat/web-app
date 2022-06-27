@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
-import "../../../styles/SidebarChat.css";
-import { Avatar, Checkbox, ListItem, Tooltip } from "@material-ui/core";
-import { useHistory, useParams } from "react-router-dom";
-import LabelIcon from "@material-ui/icons/Label";
-import GroupIcon from "@material-ui/icons/Group";
-import WarningIcon from "@material-ui/icons/Warning";
-import Moment from "react-moment";
-import moment from "moment";
+import React, { useEffect, useState } from 'react';
+import '../../../styles/SidebarChat.css';
+import { Avatar, Checkbox, ListItem, Tooltip } from '@material-ui/core';
+import { useHistory, useParams } from 'react-router-dom';
+import LabelIcon from '@material-ui/icons/Label';
+import GroupIcon from '@material-ui/icons/Group';
+import WarningIcon from '@material-ui/icons/Warning';
+import Moment from 'react-moment';
+import moment from 'moment';
 import {
     extractAvatarFromContactProviderData,
     generateInitialsHelper,
-} from "../../../helpers/Helpers";
-import { getDroppedFiles, handleDragOver } from "../../../helpers/FileHelper";
-import PubSub from "pubsub-js";
+} from '../../../helpers/Helpers';
+import { getDroppedFiles, handleDragOver } from '../../../helpers/FileHelper';
+import PubSub from 'pubsub-js';
 import {
     CALENDAR_SHORT,
     EVENT_TOPIC_DROPPED_FILES,
     SIDEBAR_TAB_CASE_ALL,
     SIDEBAR_TAB_CASE_GROUP,
     SIDEBAR_TAB_CASE_ME,
-} from "../../../Constants";
-import ChatMessageShortContent from "../Chat/ChatMessage/ChatMessageShortContent";
-import { generateAvatarColor } from "../../../helpers/AvatarHelper";
-import { replaceEmojis } from "../../../helpers/EmojiHelper";
-import { addPlus } from "../../../helpers/PhoneNumberHelper";
-import { useTranslation } from "react-i18next";
-import PrintMessage from "../../PrintMessage";
+} from '../../../Constants';
+import ChatMessageShortContent from '../Chat/ChatMessage/ChatMessageShortContent';
+import { generateAvatarColor } from '../../../helpers/AvatarHelper';
+import { replaceEmojis } from '../../../helpers/EmojiHelper';
+import { addPlus } from '../../../helpers/PhoneNumberHelper';
+import { useTranslation } from 'react-i18next';
+import PrintMessage from '../../PrintMessage';
 
 function SidebarChat(props) {
     const { t, i18n } = useTranslation();
@@ -47,7 +47,7 @@ function SidebarChat(props) {
         props.chatData.tags?.forEach((tag) => {
             generatedTagNames.push(tag.name);
         });
-        return generatedTagNames.join(", ");
+        return generatedTagNames.join(', ');
     };
 
     useEffect(() => {
@@ -55,26 +55,26 @@ function SidebarChat(props) {
             const momentDate = moment.unix(
                 props.chatData.lastReceivedMessageTimestamp
             );
-            momentDate.add(1, "day");
+            momentDate.add(1, 'day');
             const curDate = moment(new Date());
-            const hours = momentDate.diff(curDate, "hours");
-            const seconds = momentDate.diff(curDate, "seconds");
+            const hours = momentDate.diff(curDate, 'hours');
+            const seconds = momentDate.diff(curDate, 'seconds');
 
             setRemainingSeconds(seconds);
 
             let suffix;
 
             if (hours > 0) {
-                suffix = "h";
+                suffix = 'h';
                 setTimeLeft(hours + suffix);
             } else {
-                const minutes = momentDate.diff(curDate, "minutes");
+                const minutes = momentDate.diff(curDate, 'minutes');
                 if (minutes > 1) {
-                    suffix = "m";
+                    suffix = 'm';
                     setTimeLeft(minutes + suffix);
                 } else {
                     if (seconds > 1) {
-                        suffix = "m";
+                        suffix = 'm';
                         setTimeLeft(minutes + suffix);
                     } else {
                         // Expired
@@ -146,7 +146,7 @@ function SidebarChat(props) {
     };
 
     const isDisabled = () => {
-        return isExpired && props.bulkSendPayload?.type !== "template";
+        return isExpired && props.bulkSendPayload?.type !== 'template';
     };
 
     const hasFailedMessages = () => {
@@ -167,16 +167,16 @@ function SidebarChat(props) {
             <div
                 id={props.chatData.waId}
                 className={
-                    "sidebarChatWrapper " +
-                    (waId === props.chatData.waId ? "activeChat " : "") +
+                    'sidebarChatWrapper ' +
+                    (waId === props.chatData.waId ? 'activeChat ' : '') +
                     (isExpired
-                        ? "expired "
+                        ? 'expired '
                         : remainingSeconds < 8 * 60 * 60
-                        ? "almostExpired "
-                        : "") +
+                        ? 'almostExpired '
+                        : '') +
                     (props.isSelectionModeEnabled && isSelected
-                        ? "isSelected "
-                        : "")
+                        ? 'isSelected '
+                        : '')
                 }
                 onDrop={(event) => handleDroppedFiles(event)}
                 onDragOver={(event) => handleDragOver(event)}
@@ -282,8 +282,8 @@ function SidebarChat(props) {
                                                 className={
                                                     props.chatData.tags.length >
                                                     1
-                                                        ? "multiple"
-                                                        : ""
+                                                        ? 'multiple'
+                                                        : ''
                                                 }
                                                 style={{
                                                     fill: props.chatData.tags[0]
@@ -309,7 +309,7 @@ function SidebarChat(props) {
 
                                 {!isExpired && (
                                     <span className="sidebarChat__info__date__timeLeft">
-                                        {t("%s left", timeLeft)}
+                                        {t('%s left', timeLeft)}
                                     </span>
                                 )}
                             </div>
@@ -321,7 +321,7 @@ function SidebarChat(props) {
                             0 /*&& waId !== props.chatData.waId*/ ? (
                                 <div className="sidebarChat__info__lastMessage__new">
                                     {t(
-                                        "%d new message(s)",
+                                        '%d new message(s)',
                                         props.newMessages[props.chatData.waId]
                                             ?.newMessages
                                     )}

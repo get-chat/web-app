@@ -1,7 +1,7 @@
-import React from "react";
-import { Trans } from "react-i18next";
+import React from 'react';
+import { Trans } from 'react-i18next';
 
-import styles from "./ProductMessage.module.css";
+import styles from './ProductMessage.module.css';
 
 const ProductMessage = ({ header, body, footer, action }) => {
     if (!action) {
@@ -22,7 +22,7 @@ const ProductMessage = ({ header, body, footer, action }) => {
                                             <li key={product_retailer_id}>
                                                 <Trans
                                                     values={{
-                                                        postProcess: "sprintf",
+                                                        postProcess: 'sprintf',
                                                         sprintf: [
                                                             product_retailer_id,
                                                         ],
@@ -43,7 +43,7 @@ const ProductMessage = ({ header, body, footer, action }) => {
                         <div>
                             <Trans
                                 values={{
-                                    postProcess: "sprintf",
+                                    postProcess: 'sprintf',
                                     sprintf: [action.catalog_id],
                                 }}
                             >
@@ -53,7 +53,7 @@ const ProductMessage = ({ header, body, footer, action }) => {
                         <div>
                             <Trans
                                 values={{
-                                    postProcess: "sprintf",
+                                    postProcess: 'sprintf',
                                     sprintf: [action.product_retailer_id],
                                 }}
                             >

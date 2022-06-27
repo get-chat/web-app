@@ -1,48 +1,48 @@
-import React, { useMemo } from "react";
-import cn from "classnames";
+import React, { useMemo } from 'react';
+import cn from 'classnames';
 
-import emojiTree from "emoji-tree";
-import isEmoji from "emoji-tree/lib/isEmoji";
+import emojiTree from 'emoji-tree';
+import isEmoji from 'emoji-tree/lib/isEmoji';
 
-import Text from "./components/Text";
-import Link from "./components/Link";
-import Emoji from "./components/Emoji";
+import Text from './components/Text';
+import Link from './components/Link';
+import Emoji from './components/Emoji';
 
 const linkRegExp = new RegExp(
     /((?<!\+)https?:\/\/(?:www\.)?(?:[-\w.]+?[.@][a-zA-Z\d]{2,}|localhost)(?:[-\w.:%+~#*$!?&/=@]*?(?:,(?!\s))*?)*)/,
-    "gmi"
+    'gmi'
 );
 
 const getTextNodeType = (node) => {
     if (linkRegExp.test(node)) {
         return {
-            type: "link",
+            type: 'link',
             component: Link,
         };
     }
 
     if (isEmoji(node)) {
         return {
-            type: "emoji",
+            type: 'emoji',
             single: false,
             component: Emoji,
         };
     }
 
     return {
-        type: "text",
+        type: 'text',
         component: Text,
     };
 };
 
 const decomposeMessage = (message) => {
-    let section = "";
+    let section = '';
 
     const result = emojiTree(message).reduce((acc, item) => {
-        if (item.type === "emoji") {
+        if (item.type === 'emoji') {
             if (section) {
                 acc.push(section.split(linkRegExp));
-                section = "";
+                section = '';
             }
 
             acc.push(item.text);
@@ -54,11 +54,11 @@ const decomposeMessage = (message) => {
     }, []);
 
     result.push(section.split(linkRegExp));
-    section = "";
+    section = '';
 
     return []
         .concat(...result)
-        .filter((item) => item !== "")
+        .filter((item) => item !== '')
         .map((item, index) => ({
             index,
             text: item,
@@ -68,15 +68,15 @@ const decomposeMessage = (message) => {
 
 const PrintMessage = ({
     message,
-    as: Tag = "span",
+    as: Tag = 'span',
     smallEmoji = false,
     className,
 }) => {
     const splittedMessage = useMemo(() => decomposeMessage(message), [message]);
-    const classNames = cn("printMessage", className);
+    const classNames = cn('printMessage', className);
 
     // single emoji
-    if (splittedMessage.length === 1 && splittedMessage[0].type === "emoji") {
+    if (splittedMessage.length === 1 && splittedMessage[0].type === 'emoji') {
         splittedMessage[0].single = !smallEmoji;
     }
 

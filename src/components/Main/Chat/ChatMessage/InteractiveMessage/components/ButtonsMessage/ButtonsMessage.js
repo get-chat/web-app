@@ -1,7 +1,7 @@
-import React from "react";
-import { Button } from "@material-ui/core";
+import React from 'react';
+import { Button } from '@material-ui/core';
 
-import styles from "./ButtonsMessage.module.css";
+import styles from './ButtonsMessage.module.css';
 
 const ButtonsMessage = ({ header, body, footer, action }) => {
     return (

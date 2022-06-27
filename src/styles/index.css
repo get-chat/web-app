@@ -8,17 +8,21 @@
     --default-text-color: #212529;
     --shadow-light: rgba(0, 0, 0, 0.08);
     --header-height: 56px;
-    --font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Arial', sans-serif;
+    --font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system,
+        BlinkMacSystemFont, 'Arial', sans-serif;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -ms-box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     overflow: hidden;
     margin: 0;
     height: 100%;
@@ -36,14 +40,19 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-button, input, optgroup, select, textarea {
+button,
+input,
+optgroup,
+select,
+textarea {
     margin: 0;
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
 }
 
-input[type="text"], textarea {
+input[type='text'],
+textarea {
     line-height: 1.5rem;
 }
 
@@ -54,5 +63,5 @@ svg {
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace !important;
+        monospace !important;
 }

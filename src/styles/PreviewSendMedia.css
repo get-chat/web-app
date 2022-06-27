@@ -153,7 +153,8 @@
     padding: 2px !important;
 }
 
-.previewSendMedia__footer__thumbnailOuter:hover .previewSendMedia__footer__thumbnail__delete {
+.previewSendMedia__footer__thumbnailOuter:hover
+    .previewSendMedia__footer__thumbnail__delete {
     display: initial !important;
 }
 

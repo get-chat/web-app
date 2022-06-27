@@ -1,5 +1,4 @@
 class BulkMessageTaskClass {
-
     constructor(data) {
         this.id = data.id;
         this.recipients = data.recipients;

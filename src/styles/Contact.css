@@ -80,7 +80,7 @@
     margin-top: 5px;
     margin-right: 10px;
     box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
-    transition: box-shadow ease .3s;
+    transition: box-shadow ease 0.3s;
 }
 
 .contactPhoneNumbersChoices__choice:hover {

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import styles from "./ListMessage.module.css";
+import styles from './ListMessage.module.css';
 
 const ListMessage = ({ header, body, footer, action }) => {
     const { sections } = action;

@@ -1,13 +1,13 @@
-import React from "react";
-import "../styles/SearchMessageResult.css";
-import Moment from "react-moment";
-import ChatMessageClass from "../ChatMessageClass";
-import DoneAll from "@material-ui/icons/DoneAll";
-import DoneIcon from "@material-ui/icons/Done";
-import { CALENDAR_NORMAL } from "../Constants";
-import ChatMessageTypeIcon from "./Main/Chat/ChatMessage/ChatMessageTypeIcon";
-import { ListItem } from "@material-ui/core";
-import PrintMessage from "./PrintMessage";
+import React from 'react';
+import '../styles/SearchMessageResult.css';
+import Moment from 'react-moment';
+import ChatMessageClass from '../ChatMessageClass';
+import DoneAll from '@material-ui/icons/DoneAll';
+import DoneIcon from '@material-ui/icons/Done';
+import { CALENDAR_NORMAL } from '../Constants';
+import ChatMessageTypeIcon from './Main/Chat/ChatMessage/ChatMessageTypeIcon';
+import { ListItem } from '@material-ui/core';
+import PrintMessage from './PrintMessage';
 
 function SearchMessageResult(props) {
     const data = props.messageData;
@@ -30,7 +30,7 @@ function SearchMessageResult(props) {
                             data.type === ChatMessageClass.TYPE_TEXT && (
                                 <span
                                     className={
-                                        data.isRead() ? "chat__received" : ""
+                                        data.isRead() ? 'chat__received' : ''
                                     }
                                 >
                                     {data.isDeliveredOrRead() ? (

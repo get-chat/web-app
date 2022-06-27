@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import "../../styles/LoadingScreen.css";
-import {useTranslation} from "react-i18next";
-import {Alert} from "@material-ui/lab";
+import React, { useEffect, useState } from 'react';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import '../../styles/LoadingScreen.css';
+import { useTranslation } from 'react-i18next';
+import { Alert } from '@material-ui/lab';
 import packageJson from '../../../package.json';
 
 function LoadingScreen(props) {
@@ -28,7 +28,7 @@ function LoadingScreen(props) {
             <div className="loadingScreen__logoContainer">
                 <img
                     src={
-                        process.env.REACT_APP_LOGO_BLACK_URL ?? "/logoblack.svg"
+                        process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'
                     }
                     alt="Logo"
                 />
@@ -44,14 +44,14 @@ function LoadingScreen(props) {
             </div>
 
             <div className="loadingScreen__details">
-                {t("Loading: %s", props.loadingNow)}
+                {t('Loading: %s', props.loadingNow)}
             </div>
 
             {isSkipVisible && (
                 <>
                     <Alert severity="error" variant="filled">
                         {t(
-                            "Something went wrong, this will be fixed automatically"
+                            'Something went wrong, this will be fixed automatically'
                         )}
                     </Alert>
 
@@ -60,16 +60,18 @@ function LoadingScreen(props) {
                             className="loadingScreen__link"
                             href="mailto:support@get.chat"
                         >
-                            {t("Contact us")}
+                            {t('Contact us')}
                         </a>
                         <span className="loadingScreen__link" onClick={skip}>
-                            {t("Skip")}
+                            {t('Skip')}
                         </span>
                     </div>
                 </>
             )}
 
-            <span className="loadingScreen__version">Version: {packageJson.version}</span>
+            <span className="loadingScreen__version">
+                Version: {packageJson.version}
+            </span>
         </div>
     );
 }

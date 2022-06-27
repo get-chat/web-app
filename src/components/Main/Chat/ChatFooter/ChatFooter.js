@@ -1,35 +1,44 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Badge, Fab, IconButton, Tooltip, Zoom} from "@material-ui/core";
-import {Add, ArrowDownward, AttachFile, InsertEmoticon, Send} from "@material-ui/icons";
+import React, { useEffect, useRef, useState } from 'react';
+import { Badge, Fab, IconButton, Tooltip, Zoom } from '@material-ui/core';
+import {
+    Add,
+    ArrowDownward,
+    AttachFile,
+    InsertEmoticon,
+    Send,
+} from '@material-ui/icons';
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import NotesIcon from '@material-ui/icons/Notes';
 import MicIcon from '@material-ui/icons/Mic';
-import {Emoji, NimblePicker} from "emoji-mart";
+import { Emoji, NimblePicker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/ChatFooter.css';
 import '../../../../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
-import CloseIcon from "@material-ui/icons/Close";
-import PubSub from "pubsub-js";
-import FileInput from "../../../FileInput";
-import {getSelectionHtml, sanitize, translateHTMLInputToText} from "../../../../helpers/Helpers";
-import VoiceRecord from "./VoiceRecord";
+import CloseIcon from '@material-ui/icons/Close';
+import PubSub from 'pubsub-js';
+import FileInput from '../../../FileInput';
+import {
+    getSelectionHtml,
+    sanitize,
+    translateHTMLInputToText,
+} from '../../../../helpers/Helpers';
+import VoiceRecord from './VoiceRecord';
 import {
     EMOJI_SET,
     EMOJI_SHEET_SIZE,
     EMPTY_IMAGE_BASE64,
     EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
-    EVENT_TOPIC_REQUEST_MIC_PERMISSION
-} from "../../../../Constants";
-import ChatMessageClass from "../../../../ChatMessageClass";
-import {replaceEmojis} from "../../../../helpers/EmojiHelper";
-import {useTranslation} from "react-i18next";
-import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
+    EVENT_TOPIC_REQUEST_MIC_PERMISSION,
+} from '../../../../Constants';
+import ChatMessageClass from '../../../../ChatMessageClass';
+import { replaceEmojis } from '../../../../helpers/EmojiHelper';
+import { useTranslation } from 'react-i18next';
+import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 
 function ChatFooter(props) {
-
     const { t, i18n } = useTranslation();
 
     const fileInput = useRef(null);
@@ -49,11 +58,11 @@ function ChatFooter(props) {
         if (window.AndroidWebInterface) {
             window.AndroidWebInterface.requestPermissions();
         }
-    }
+    };
 
     const handleEmojiPickerVisibility = function (msg, data) {
         setEmojiPickerVisible(data);
-    }
+    };
 
     let timeout = useRef();
     const handleEditableChange = (event) => {
@@ -62,16 +71,19 @@ function ChatFooter(props) {
         }
 
         timeout.current = setTimeout(function () {
-            props.setInput(event.target.innerHTML)
+            props.setInput(event.target.innerHTML);
         }, 5);
-    }
+    };
 
     useEffect(() => {
-        const token = PubSub.subscribe(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, handleEmojiPickerVisibility);
+        const token = PubSub.subscribe(
+            EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+            handleEmojiPickerVisibility
+        );
 
         return () => {
             PubSub.unsubscribe(token);
-        }
+        };
     }, []);
 
     useEffect(() => {
@@ -94,15 +106,15 @@ function ChatFooter(props) {
         // Hide saved responses first
         props.setSavedResponsesVisible(false);
 
-        props.setTemplateMessagesVisible((prevState => !prevState));
-    }
+        props.setTemplateMessagesVisible((prevState) => !prevState);
+    };
 
     const toggleSavedResponses = () => {
         // Hide template messages first
         props.setTemplateMessagesVisible(false);
 
-        props.setSavedResponsesVisible((prevState => !prevState));
-    }
+        props.setSavedResponsesVisible((prevState) => !prevState);
+    };
 
     function insertAtCursor(el, html) {
         if (!html) return;
@@ -111,7 +123,9 @@ function ChatFooter(props) {
         html = sanitize(html);
 
         //html = html.replace('<span', '<span contentEditable="false"');
-        html = html.replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"').replace('</span>', '');
+        html = html
+            .replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"')
+            .replace('</span>', '');
         el.focus();
 
         let selection = window.getSelection();
@@ -139,21 +153,23 @@ function ChatFooter(props) {
                 emoji: emoji.colons,
                 size: 22,
                 set: EMOJI_SET,
-                sheetSize: EMOJI_SHEET_SIZE
+                sheetSize: EMOJI_SHEET_SIZE,
             });
 
             insertAtCursor(editable.current, emojiOutput);
         }
-    }
+    };
 
     const handlePaste = (event) => {
-        let text = (event.originalEvent || event).clipboardData.getData('text/plain');
+        let text = (event.originalEvent || event).clipboardData.getData(
+            'text/plain'
+        );
         text = replaceEmojis(text, true);
 
         insertAtCursor(editable.current, text);
 
         event.preventDefault();
-    }
+    };
 
     const handleCopy = (event) => {
         let data = getSelectionHtml();
@@ -161,7 +177,7 @@ function ChatFooter(props) {
         event.clipboardData.setData('text', data);
 
         event.preventDefault();
-    }
+    };
 
     const handleFocus = (event) => {
         if (props.isExpired) {
@@ -173,113 +189,161 @@ function ChatFooter(props) {
         if (isRecording) {
             event.target.blur();
         }
-    }
+    };
 
     const hasInput = () => {
         return props.input && props.input.length > 0;
-    }
+    };
 
     const showMore = () => {
         setEmojiPickerVisible(false);
         setMoreVisible(true);
-    }
+    };
 
-    const hideMore = () =>{
+    const hideMore = () => {
         props.setTemplateMessagesVisible(false);
-        setMoreVisible(false)
-    }
+        setMoreVisible(false);
+    };
 
-    const ACCEPT_IMAGE_AND_VIDEO = 'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
+    const ACCEPT_IMAGE_AND_VIDEO =
+        'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
     const ACCEPT_DOCUMENT = '*.*';
 
     return (
-        <div className="chat__footerOuter" onDrop={(event) => event.preventDefault()}>
-
-            {isEmojiPickerVisible &&
-            <div className="chat__footer__emojiPicker">
-                <NimblePicker
-                    set={EMOJI_SET}
-                    sheetSize={EMOJI_SHEET_SIZE}
-                    data={data}
-                    showPreview={false}
-                    emojiSize={32}
-                    onSelect={handleEmojiSelect}/>
-            </div>
-            }
+        <div
+            className="chat__footerOuter"
+            onDrop={(event) => event.preventDefault()}
+        >
+            {isEmojiPickerVisible && (
+                <div className="chat__footer__emojiPicker">
+                    <NimblePicker
+                        set={EMOJI_SET}
+                        sheetSize={EMOJI_SHEET_SIZE}
+                        data={data}
+                        showPreview={false}
+                        emojiSize={32}
+                        onSelect={handleEmojiSelect}
+                    />
+                </div>
+            )}
 
             <div className="chat__footer">
-
-                {!props.isExpired &&
-                <Tooltip title="Emoji" placement="top">
-                    <IconButton className={isEmojiPickerVisible ? "activeIconButton" : ""}
-                                onClick={() => setEmojiPickerVisible(prevState => !prevState)}>
-                        <InsertEmoticon/>
-                    </IconButton>
-                </Tooltip>
-                }
-
-                {!props.isExpired &&
-                <div className="chat__footer__attachmentContainer desktopOnly">
-                    <Tooltip title="Attachment" placement="right">
-                        <IconButton>
-                            <AttachFile/>
+                {!props.isExpired && (
+                    <Tooltip title="Emoji" placement="top">
+                        <IconButton
+                            className={
+                                isEmojiPickerVisible ? 'activeIconButton' : ''
+                            }
+                            onClick={() =>
+                                setEmojiPickerVisible((prevState) => !prevState)
+                            }
+                        >
+                            <InsertEmoticon />
                         </IconButton>
                     </Tooltip>
+                )}
 
-                    <div className="chat__footer__attachmentContainer__options">
-                        <Tooltip title="Documents" placement="right">
-                            <IconButton
-                                className="chat__footer__attachmentContainer__options__document"
-                                onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}>
-                                <InsertDriveFileIcon/>
+                {!props.isExpired && (
+                    <div className="chat__footer__attachmentContainer desktopOnly">
+                        <Tooltip title="Attachment" placement="right">
+                            <IconButton>
+                                <AttachFile />
                             </IconButton>
                         </Tooltip>
 
-                        <Tooltip title="Images & Videos" placement="right">
-                            <IconButton
-                                className="chat__footer__attachmentContainer__options__imageAndVideo"
-                                onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}>
-                                <ImageIcon/>
-                            </IconButton>
-                        </Tooltip>
+                        <div className="chat__footer__attachmentContainer__options">
+                            <Tooltip title="Documents" placement="right">
+                                <IconButton
+                                    className="chat__footer__attachmentContainer__options__document"
+                                    onClick={() =>
+                                        handleAttachmentClick(ACCEPT_DOCUMENT)
+                                    }
+                                >
+                                    <InsertDriveFileIcon />
+                                </IconButton>
+                            </Tooltip>
+
+                            <Tooltip title="Images & Videos" placement="right">
+                                <IconButton
+                                    className="chat__footer__attachmentContainer__options__imageAndVideo"
+                                    onClick={() =>
+                                        handleAttachmentClick(
+                                            ACCEPT_IMAGE_AND_VIDEO
+                                        )
+                                    }
+                                >
+                                    <ImageIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
                     </div>
-                </div>
-                }
+                )}
 
-                <Tooltip title="Templates" placement="top" className={!props.isExpired ? "desktopOnly" : ""}>
-                    <IconButton data-test-id="templates-button" onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
+                <Tooltip
+                    title="Templates"
+                    placement="top"
+                    className={!props.isExpired ? 'desktopOnly' : ''}
+                >
+                    <IconButton
+                        data-test-id="templates-button"
+                        onClick={toggleTemplateMessages}
+                        className={
+                            props.isTemplateMessagesVisible
+                                ? 'activeIconButton'
+                                : ''
+                        }
+                    >
                         <SmsIcon />
                     </IconButton>
                 </Tooltip>
 
-                {!props.isExpired &&
-                <Tooltip title="Saved Responses" placement="top" className="desktopOnly">
-                    <IconButton onClick={toggleSavedResponses}
-                                className={props.isSavedResponsesVisible ? "activeIconButton" : ""}>
-                        <NotesIcon/>
-                    </IconButton>
-                </Tooltip>
-                }
+                {!props.isExpired && (
+                    <Tooltip
+                        title="Saved Responses"
+                        placement="top"
+                        className="desktopOnly"
+                    >
+                        <IconButton
+                            onClick={toggleSavedResponses}
+                            className={
+                                props.isSavedResponsesVisible
+                                    ? 'activeIconButton'
+                                    : ''
+                            }
+                        >
+                            <NotesIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
 
                 <div className="hidden">
                     <FileInput
                         innerRef={fileInput}
-                        handleSelectedFiles={ (files) => props.setSelectedFiles({...files}) } />
+                        handleSelectedFiles={(files) =>
+                            props.setSelectedFiles({ ...files })
+                        }
+                    />
                 </div>
 
                 <form>
-                    <div className={"typeBox " + (props.isExpired ? "expired" : "")}>
-
-                        {!props.input &&
-                        <div className="typeBox__hint">
-                            {props.isExpired
-                                ?
-                                <span>{t('This chat has expired. You need to answer with template messages.')}</span>
-                                :
-                                <span>{t('Type a message')}</span>
-                            }
-                        </div>
+                    <div
+                        className={
+                            'typeBox ' + (props.isExpired ? 'expired' : '')
                         }
+                    >
+                        {!props.input && (
+                            <div className="typeBox__hint">
+                                {props.isExpired ? (
+                                    <span>
+                                        {t(
+                                            'This chat has expired. You need to answer with template messages.'
+                                        )}
+                                    </span>
+                                ) : (
+                                    <span>{t('Type a message')}</span>
+                                )}
+                            </div>
+                        )}
                         <div
                             id="typeBox__editable"
                             ref={editable}
@@ -290,85 +354,123 @@ function ChatFooter(props) {
                             onCopy={(event) => handleCopy(event)}
                             onDrop={(event) => event.preventDefault()}
                             spellCheck="true"
-                            onInput={event => handleEditableChange(event)}
-                            onKeyDown={(e) => {if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e)}}
+                            onInput={(event) => handleEditableChange(event)}
+                            onKeyDown={(e) => {
+                                if (e.keyCode === 13 && !e.shiftKey)
+                                    props.sendMessage(e);
+                            }}
                         />
-
                     </div>
                     <button onClick={props.sendMessage} type="submit">
                         {t('Send a message')}
                     </button>
                 </form>
 
-                {(!hasInput() && !props.isExpired) &&
-                <div className="mobileOnly">
-                    <Tooltip title="More">
-                        <IconButton className="chat_footer__moreButton" onClick={showMore}>
-                            <Add/>
+                {!hasInput() && !props.isExpired && (
+                    <div className="mobileOnly">
+                        <Tooltip title="More">
+                            <IconButton
+                                className="chat_footer__moreButton"
+                                onClick={showMore}
+                            >
+                                <Add />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
+                )}
+
+                {hasInput() && (
+                    <Tooltip title="Send" placement="top">
+                        <IconButton
+                            onClick={props.sendMessage}
+                            data-test-id="send-message-button"
+                        >
+                            <Send />
                         </IconButton>
                     </Tooltip>
-                </div>
-                }
+                )}
 
-                {hasInput() &&
-                <Tooltip title="Send" placement="top">
-                    <IconButton onClick={props.sendMessage} data-test-id="send-message-button">
-                        <Send/>
-                    </IconButton>
-                </Tooltip>
-                }
+                {hasInput() && (
+                    <Tooltip title="Bulk Send" placement="top">
+                        <IconButton
+                            onClick={() =>
+                                props.bulkSendMessage(
+                                    ChatMessageClass.TYPE_TEXT
+                                )
+                            }
+                        >
+                            <DynamicFeedIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
 
-                {hasInput() &&
-                <Tooltip title="Bulk Send" placement="top">
-                    <IconButton onClick={() => props.bulkSendMessage(ChatMessageClass.TYPE_TEXT)}>
-                        <DynamicFeedIcon/>
-                    </IconButton>
-                </Tooltip>
-                }
-
-                {(!props.isExpired && !hasInput() && !isRecording) &&
-                <Tooltip title="Voice" placement="top">
-                    <IconButton onClick={() => PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, "chat")}>
-                        <MicIcon/>
-                    </IconButton>
-                </Tooltip>
-                }
+                {!props.isExpired && !hasInput() && !isRecording && (
+                    <Tooltip title="Voice" placement="top">
+                        <IconButton
+                            onClick={() =>
+                                PubSub.publish(
+                                    EVENT_TOPIC_REQUEST_MIC_PERMISSION,
+                                    'chat'
+                                )
+                            }
+                        >
+                            <MicIcon />
+                        </IconButton>
+                    </Tooltip>
+                )}
 
                 <div className={!isRecording ? 'hidden' : ''}>
                     <VoiceRecord
                         voiceRecordCase="chat"
                         setRecording={setRecording}
-                        sendHandledChosenFiles={props.sendHandledChosenFiles} />
+                        sendHandledChosenFiles={props.sendHandledChosenFiles}
+                    />
                 </div>
             </div>
 
-            {isMoreVisible &&
-            <div className="chat__footerMore">
+            {isMoreVisible && (
+                <div className="chat__footerMore">
+                    <IconButton onClick={hideMore}>
+                        <CloseIcon />
+                    </IconButton>
 
-                <IconButton onClick={hideMore}>
-                    <CloseIcon/>
-                </IconButton>
+                    <IconButton
+                        onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
+                    >
+                        <InsertDriveFileIcon />
+                    </IconButton>
 
-                <IconButton
-                    onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}>
-                    <InsertDriveFileIcon/>
-                </IconButton>
+                    <IconButton
+                        onClick={() =>
+                            handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
+                        }
+                    >
+                        <ImageIcon />
+                    </IconButton>
 
-                <IconButton
-                    onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}>
-                    <ImageIcon/>
-                </IconButton>
+                    <IconButton
+                        onClick={toggleTemplateMessages}
+                        className={
+                            props.isTemplateMessagesVisible
+                                ? 'activeIconButton'
+                                : ''
+                        }
+                    >
+                        <SmsIcon />
+                    </IconButton>
 
-                <IconButton onClick={toggleTemplateMessages} className={props.isTemplateMessagesVisible ? "activeIconButton" : ""}>
-                    <SmsIcon/>
-                </IconButton>
-
-                <IconButton onClick={toggleSavedResponses} className={props.isSavedResponsesVisible ? "activeIconButton" : ""}>
-                    <NotesIcon/>
-                </IconButton>
-
-            </div>
-            }
+                    <IconButton
+                        onClick={toggleSavedResponses}
+                        className={
+                            props.isSavedResponsesVisible
+                                ? 'activeIconButton'
+                                : ''
+                        }
+                    >
+                        <NotesIcon />
+                    </IconButton>
+                </div>
+            )}
 
             <Zoom in={props.isScrollButtonVisible}>
                 <Badge
@@ -379,18 +481,19 @@ function ChatFooter(props) {
                     anchorOrigin={{
                         vertical: 'top',
                         horizontal: 'left',
-                    }}>
+                    }}
+                >
                     <Fab
                         onClick={props.handleScrollButtonClick}
                         className="chat__scrollButton"
-                        size="small">
+                        size="small"
+                    >
                         <ArrowDownward />
                     </Fab>
                 </Badge>
             </Zoom>
-
         </div>
-    )
+    );
 }
 
 export default ChatFooter;

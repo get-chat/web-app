@@ -1,7 +1,7 @@
 .searchMessage {
     display: flex;
     flex-direction: column;
-    flex: 0.40 1;
+    flex: 0.4 1;
     border-left: 1px solid lightgray;
 }
 

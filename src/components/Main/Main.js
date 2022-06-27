@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import Sidebar from "./Sidebar/Sidebar";
-import Chat from "./Chat/Chat";
-import {Fade, Snackbar} from "@material-ui/core";
-import PubSub from "pubsub-js";
-import axios from "axios";
-import {useHistory, useLocation, useParams} from "react-router-dom";
-import SearchMessage from "../SearchMessage";
-import ContactDetails from "./ContactDetails";
-import LoadingScreen from "./LoadingScreen";
-import TemplateMessageClass from "../../TemplateMessageClass";
-import {Alert} from "@material-ui/lab";
+import React, { useEffect, useState } from 'react';
+import Sidebar from './Sidebar/Sidebar';
+import Chat from './Chat/Chat';
+import { Fade, Snackbar } from '@material-ui/core';
+import PubSub from 'pubsub-js';
+import axios from 'axios';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import SearchMessage from '../SearchMessage';
+import ContactDetails from './ContactDetails';
+import LoadingScreen from './LoadingScreen';
+import TemplateMessageClass from '../../TemplateMessageClass';
+import { Alert } from '@material-ui/lab';
 import 'url-search-params-polyfill';
 import {
     CHAT_KEY_PREFIX,
@@ -26,42 +26,45 @@ import {
     EVENT_TOPIC_MARKED_AS_RECEIVED,
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-    EVENT_TOPIC_UNSUPPORTED_FILE
-} from "../../Constants";
-import ChatMessageClass from "../../ChatMessageClass";
-import PreviewMedia from "./PreviewMedia";
-import {getContactProvidersData, getToken, storeContactProvidersData} from "../../helpers/StorageHelper";
-import ChatAssignment from "./ChatAssignment";
-import ChatTags from "./ChatTags";
-import ChatTagsList from "./ChatTagsList";
-import DownloadUnsupportedFile from "../DownloadUnsupportedFile";
-import SavedResponseClass from "../../SavedResponseClass";
-import moment from "moment";
-import UserClass from "../../UserClass";
-import {clearUserSession} from "../../helpers/ApiHelper";
-import BulkMessageTaskElementClass from "../../BulkMessageTaskElementClass";
-import BulkMessageTaskClass from "../../BulkMessageTaskClass";
-import {getWebSocketURL} from "../../helpers/URLHelper";
-import {preparePhoneNumber} from "../../helpers/PhoneNumberHelper";
-import {isIPad13, isMobileOnly} from "react-device-detect";
-import UploadMediaIndicator from "./Sidebar/UploadMediaIndicator";
-import {useTranslation} from "react-i18next";
-import {AppConfig} from "../../contexts/AppConfig";
-import {ApplicationContext} from "../../contexts/ApplicationContext";
-import SendBulkVoiceMessageDialog from "../SendBulkVoiceMessageDialog";
+    EVENT_TOPIC_UNSUPPORTED_FILE,
+} from '../../Constants';
+import ChatMessageClass from '../../ChatMessageClass';
+import PreviewMedia from './PreviewMedia';
+import {
+    getContactProvidersData,
+    getToken,
+    storeContactProvidersData,
+} from '../../helpers/StorageHelper';
+import ChatAssignment from './ChatAssignment';
+import ChatTags from './ChatTags';
+import ChatTagsList from './ChatTagsList';
+import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
+import SavedResponseClass from '../../SavedResponseClass';
+import moment from 'moment';
+import UserClass from '../../UserClass';
+import { clearUserSession } from '../../helpers/ApiHelper';
+import BulkMessageTaskElementClass from '../../BulkMessageTaskElementClass';
+import BulkMessageTaskClass from '../../BulkMessageTaskClass';
+import { getWebSocketURL } from '../../helpers/URLHelper';
+import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
+import { isIPad13, isMobileOnly } from 'react-device-detect';
+import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
+import { useTranslation } from 'react-i18next';
+import { AppConfig } from '../../contexts/AppConfig';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
+import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
 function Main() {
-
-    const {apiService} = React.useContext(ApplicationContext);
+    const { apiService } = React.useContext(ApplicationContext);
     const config = React.useContext(AppConfig);
 
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
 
-    const {waId} = useParams();
+    const { waId } = useParams();
 
     const [progress, _setProgress] = useState(0);
     const [loadingNow, setLoadingNow] = useState('');
@@ -73,7 +76,8 @@ function Main() {
     const [users, setUsers] = useState({});
     const [isAdmin, setAdmin] = useState(false);
 
-    const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
+    const [isSendingPendingMessages, setSendingPendingMessages] =
+        useState(false);
     const [pendingMessages, setPendingMessages] = useState([]);
     const [hasFailedMessages, setHasFailedMessages] = useState(false);
     const [lastSendAttemptAt, setLastSendAttemptAt] = useState();
@@ -105,20 +109,28 @@ function Main() {
     const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
     const [isChatTagsVisible, setChatTagsVisible] = useState(false);
     const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
-    const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] = useState(false);
+    const [
+        isDownloadUnsupportedFileVisible,
+        setDownloadUnsupportedFileVisible,
+    ] = useState(false);
 
     const [unsupportedFile, setUnsupportedFile] = useState();
 
     const [chosenContact, setChosenContact] = useState();
 
-    const [contactProvidersData, setContactProvidersData] = useState(getContactProvidersData());
+    const [contactProvidersData, setContactProvidersData] = useState(
+        getContactProvidersData()
+    );
 
     const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
     const [selectedChats, setSelectedChats] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [bulkSendPayload, setBulkSendPayload] = useState();
 
-    const [isSendBulkVoiceMessageDialogVisible, setSendBulkVoiceMessageDialogVisible] = useState(false);
+    const [
+        isSendBulkVoiceMessageDialogVisible,
+        setSendBulkVoiceMessageDialogVisible,
+    ] = useState(false);
 
     const [notificationHistory, setNotificationHistory] = useState({});
 
@@ -126,36 +138,40 @@ function Main() {
     const location = useLocation();
     const query = useQuery();
 
-    const confirmationMessage = t('There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?');
+    const confirmationMessage = t(
+        'There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?'
+    );
 
     const checkIsChatOnly = () => {
         return query.get('chatonly') === '1';
-    }
+    };
 
-    const [isChatOnly,] = useState(checkIsChatOnly());
+    const [isChatOnly] = useState(checkIsChatOnly());
 
     const setProgress = (value) => {
-        _setProgress(prevState => {
+        _setProgress((prevState) => {
             return value > prevState ? value : prevState;
-        })
-    }
+        });
+    };
 
     const displaySuccess = (message) => {
         setSuccessMessage(message);
         setSuccessVisible(true);
-    }
+    };
 
     const displayError = (error) => {
         if (!axios.isCancel(error)) {
-            setErrorMessage(error.response?.data?.reason ?? 'An error has occurred.');
+            setErrorMessage(
+                error.response?.data?.reason ?? 'An error has occurred.'
+            );
             setErrorVisible(true);
         }
-    }
+    };
 
     const displayCustomError = (errorMessage) => {
         setErrorMessage(errorMessage);
         setErrorVisible(true);
-    }
+    };
 
     const handleSuccessClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -175,18 +191,18 @@ function Main() {
 
     const finishBulkSendMessage = () => {
         const requestPayload = {};
-        const messagePayload = {...bulkSendPayload};
+        const messagePayload = { ...bulkSendPayload };
         const recipients = selectedChats;
         const tags = selectedTags;
 
         const preparedRecipients = [];
         recipients.forEach((recipient) => {
-            preparedRecipients.push({"recipient": recipient});
+            preparedRecipients.push({ recipient: recipient });
         });
 
         const preparedTags = [];
         tags.forEach((tag) => {
-            preparedTags.push({"tag_id": tag});
+            preparedTags.push({ tag_id: tag });
         });
 
         requestPayload.recipients = preparedRecipients;
@@ -206,14 +222,19 @@ function Main() {
                 PubSub.publish(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT);
             }
 
-            const preparedBulkMessageTask = new BulkMessageTaskClass(response.data);
-            PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED, preparedBulkMessageTask);
+            const preparedBulkMessageTask = new BulkMessageTaskClass(
+                response.data
+            );
+            PubSub.publish(
+                EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
+                preparedBulkMessageTask
+            );
         });
-    }
+    };
 
     const hideImageOrVideoPreview = () => {
         setChatMessageToPreview(null);
-    }
+    };
 
     const previewMedia = (chatMessage) => {
         if (!chatMessage) {
@@ -225,27 +246,36 @@ function Main() {
         PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
         setChatMessageToPreview(chatMessage);
-    }
+    };
 
     const goToChatByWaId = (_waId) => {
         history.push(`/main/chat/${_waId}`);
-    }
+    };
 
     const displayNotification = (title, body, chatWaId) => {
         if (isChatOnly) return;
 
         // Android web app interface
         if (window.AndroidWebInterface) {
-            window.AndroidWebInterface.displayNotification(title, body, chatWaId);
+            window.AndroidWebInterface.displayNotification(
+                title,
+                body,
+                chatWaId
+            );
         }
 
         function displayNtf() {
-            const timeString = moment().seconds(0).milliseconds(0).toISOString();
+            const timeString = moment()
+                .seconds(0)
+                .milliseconds(0)
+                .toISOString();
 
             setNotificationHistory((prevState) => {
-
                 // Notification limit per minute
-                if ((prevState[timeString]?.length ?? 0) >= (config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE ?? 8)) {
+                if (
+                    (prevState[timeString]?.length ?? 0) >=
+                    (config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE ?? 8)
+                ) {
                     console.info('Cancelled a notification.');
                     return prevState;
                 }
@@ -256,7 +286,7 @@ function Main() {
                     const notification = new Notification(title, {
                         body: body,
                         icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
-                        tag: chatWaId + timeString
+                        tag: chatWaId + timeString,
                     });
 
                     notification.onclick = function (event) {
@@ -265,7 +295,7 @@ function Main() {
                         if (waId) {
                             goToChatByWaId(chatWaId);
                         }
-                    }
+                    };
                 } catch (e) {
                     console.log(e);
                 }
@@ -280,7 +310,7 @@ function Main() {
                 const nextState = {};
                 nextState[timeString] = prevState[timeString];
 
-                return {...nextState};
+                return { ...nextState };
             });
         }
 
@@ -292,18 +322,20 @@ function Main() {
                 displayNtf();
             } else {
                 // Request permission from user
-                Notification.requestPermission().then(function (p) {
-                    if (p === 'granted') {
-                        displayNtf();
-                    } else {
-                        console.log('User blocked notifications.');
-                    }
-                }).catch(function (err) {
-                    console.error(err);
-                });
+                Notification.requestPermission()
+                    .then(function (p) {
+                        if (p === 'granted') {
+                            displayNtf();
+                        } else {
+                            console.log('User blocked notifications.');
+                        }
+                    })
+                    .catch(function (err) {
+                        console.error(err);
+                    });
             }
         }
-    }
+    };
 
     const onSearchMessagesVisibilityEvent = function (msg, data) {
         setSearchMessagesVisible(data);
@@ -341,7 +373,7 @@ function Main() {
         window.goToChatByWaId = goToChatByWaId;
 
         if (!getToken()) {
-            clearUserSession("notLoggedIn", location, history);
+            clearUserSession('notLoggedIn', location, history);
         }
 
         // Retrieve current user, this will trigger other requests
@@ -353,10 +385,22 @@ function Main() {
         };
 
         // EventBus
-        const searchMessagesVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, onSearchMessagesVisibilityEvent);
-        const contactDetailsVisibilityEventToken = PubSub.subscribe(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, onContactDetailsVisibilityEvent);
-        const displayErrorEventToken = PubSub.subscribe(EVENT_TOPIC_DISPLAY_ERROR, onDisplayError);
-        const unsupportedFileEventToken = PubSub.subscribe(EVENT_TOPIC_UNSUPPORTED_FILE, onUnsupportedFileEvent);
+        const searchMessagesVisibilityEventToken = PubSub.subscribe(
+            EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
+            onSearchMessagesVisibilityEvent
+        );
+        const contactDetailsVisibilityEventToken = PubSub.subscribe(
+            EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
+            onContactDetailsVisibilityEvent
+        );
+        const displayErrorEventToken = PubSub.subscribe(
+            EVENT_TOPIC_DISPLAY_ERROR,
+            onDisplayError
+        );
+        const unsupportedFileEventToken = PubSub.subscribe(
+            EVENT_TOPIC_UNSUPPORTED_FILE,
+            onUnsupportedFileEvent
+        );
 
         const CODE_NORMAL = 1000;
         let ws;
@@ -372,11 +416,14 @@ function Main() {
             ws.onopen = function (event) {
                 console.log('Connected to websocket server.');
 
-                ws.send(JSON.stringify({token: getToken()}));
+                ws.send(JSON.stringify({ token: getToken() }));
 
                 if (socketClosedAt) {
                     const now = new Date();
-                    const differenceInMinutes = Math.abs(now.getTime() - socketClosedAt.getTime()) / 1000 / 60;
+                    const differenceInMinutes =
+                        Math.abs(now.getTime() - socketClosedAt.getTime()) /
+                        1000 /
+                        60;
 
                     // If window was blurred for more than 3 hours
                     if (differenceInMinutes >= 5) {
@@ -385,11 +432,13 @@ function Main() {
                         socketClosedAt = undefined;
                     }
                 }
-            }
+            };
 
             ws.onclose = function (event) {
                 if (event.code !== CODE_NORMAL) {
-                    console.log('Retrying connection to websocket server in 1 second.');
+                    console.log(
+                        'Retrying connection to websocket server in 1 second.'
+                    );
 
                     socketClosedAt = new Date();
 
@@ -397,11 +446,11 @@ function Main() {
                         connect();
                     }, 1000);
                 }
-            }
+            };
 
             ws.onerror = function (event) {
                 ws.close();
-            }
+            };
 
             ws.onmessage = function (event) {
                 console.log('New message:', event.data);
@@ -419,11 +468,16 @@ function Main() {
                             const preparedMessages = {};
 
                             incomingMessages.forEach((message) => {
-                                const messageObj = new ChatMessageClass(message);
+                                const messageObj = new ChatMessageClass(
+                                    message
+                                );
                                 preparedMessages[messageObj.id] = messageObj;
                             });
 
-                            PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                            PubSub.publish(
+                                EVENT_TOPIC_NEW_CHAT_MESSAGES,
+                                preparedMessages
+                            );
                         }
 
                         // Outgoing messages
@@ -433,11 +487,16 @@ function Main() {
                             const preparedMessages = {};
 
                             outgoingMessages.forEach((message) => {
-                                const messageObj = new ChatMessageClass(message);
+                                const messageObj = new ChatMessageClass(
+                                    message
+                                );
                                 preparedMessages[messageObj.id] = messageObj;
                             });
 
-                            PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+                            PubSub.publish(
+                                EVENT_TOPIC_NEW_CHAT_MESSAGES,
+                                preparedMessages
+                            );
                         }
 
                         // Statuses
@@ -446,27 +505,41 @@ function Main() {
                         if (statuses) {
                             const preparedStatuses = {};
                             statuses.forEach((statusObj) => {
-                                if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
+                                if (
+                                    !preparedStatuses.hasOwnProperty(
+                                        statusObj.id
+                                    )
+                                ) {
                                     preparedStatuses[statusObj.id] = {};
                                 }
 
                                 // Inject getchat id to avoid duplicated messages
-                                preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
+                                preparedStatuses[statusObj.id].getchatId =
+                                    statusObj.getchat_id;
 
                                 if (statusObj.status === 'sent') {
-                                    preparedStatuses[statusObj.id].sentTimestamp = statusObj.timestamp;
+                                    preparedStatuses[
+                                        statusObj.id
+                                    ].sentTimestamp = statusObj.timestamp;
                                 }
 
                                 if (statusObj.status === 'delivered') {
-                                    preparedStatuses[statusObj.id].deliveredTimestamp = statusObj.timestamp;
+                                    preparedStatuses[
+                                        statusObj.id
+                                    ].deliveredTimestamp = statusObj.timestamp;
                                 }
 
                                 if (statusObj.status === 'read') {
-                                    preparedStatuses[statusObj.id].readTimestamp = statusObj.timestamp;
+                                    preparedStatuses[
+                                        statusObj.id
+                                    ].readTimestamp = statusObj.timestamp;
                                 }
                             });
 
-                            PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, preparedStatuses);
+                            PubSub.publish(
+                                EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+                                preparedStatuses
+                            );
                         }
 
                         // Chat assignment
@@ -474,19 +547,27 @@ function Main() {
 
                         if (chatAssignment) {
                             const preparedMessages = {};
-                            const prepared = ChatMessageClass.fromAssignmentEvent(chatAssignment);
+                            const prepared =
+                                ChatMessageClass.fromAssignmentEvent(
+                                    chatAssignment
+                                );
                             preparedMessages[prepared.id] = prepared;
 
-                            PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
+                            PubSub.publish(
+                                EVENT_TOPIC_CHAT_ASSIGNMENT,
+                                preparedMessages
+                            );
 
                             const chatKey = CHAT_KEY_PREFIX + prepared.waId;
 
                             // Update chats
-                            setChats(prevState => {
+                            setChats((prevState) => {
                                 if (prevState.hasOwnProperty(chatKey)) {
-                                    prevState[chatKey].assignedToUser = prepared.assignmentEvent.assigned_to_user_set;
-                                    prevState[chatKey].assignedGroup = prepared.assignmentEvent.assigned_group_set;
-                                    return {...prevState};
+                                    prevState[chatKey].assignedToUser =
+                                        prepared.assignmentEvent.assigned_to_user_set;
+                                    prevState[chatKey].assignedGroup =
+                                        prepared.assignmentEvent.assigned_group_set;
+                                    return { ...prevState };
                                 }
 
                                 return prevState;
@@ -498,32 +579,46 @@ function Main() {
 
                         if (chatTagging) {
                             const preparedMessages = {};
-                            const prepared = ChatMessageClass.fromTaggingEvent(chatTagging);
+                            const prepared =
+                                ChatMessageClass.fromTaggingEvent(chatTagging);
                             preparedMessages[prepared.id] = prepared;
 
-                            PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
+                            PubSub.publish(
+                                EVENT_TOPIC_CHAT_TAGGING,
+                                preparedMessages
+                            );
 
                             const chatKey = CHAT_KEY_PREFIX + prepared.waId;
 
                             // Update chats
-                            setChats(prevState => {
+                            setChats((prevState) => {
                                 if (prevState.hasOwnProperty(chatKey)) {
-                                    if (chatTagging.action === "added") {
-                                        prevState[chatKey].tags.push(prepared.taggingEvent.tag);
-                                    } else if (chatTagging.action === "removed") {
-                                        prevState[chatKey].tags = prevState[chatKey].tags.filter((tag) => {
-                                            return tag.id !== prepared.taggingEvent.tag.id;
+                                    if (chatTagging.action === 'added') {
+                                        prevState[chatKey].tags.push(
+                                            prepared.taggingEvent.tag
+                                        );
+                                    } else if (
+                                        chatTagging.action === 'removed'
+                                    ) {
+                                        prevState[chatKey].tags = prevState[
+                                            chatKey
+                                        ].tags.filter((tag) => {
+                                            return (
+                                                tag.id !==
+                                                prepared.taggingEvent.tag.id
+                                            );
                                         });
                                     }
 
-                                    return {...prevState};
+                                    return { ...prevState };
                                 }
 
                                 return prevState;
                             });
                         }
 
-                        const bulkMessageTasks = wabaPayload?.bulk_message_tasks;
+                        const bulkMessageTasks =
+                            wabaPayload?.bulk_message_tasks;
 
                         if (bulkMessageTasks) {
                             console.log(bulkMessageTasks);
@@ -532,13 +627,18 @@ function Main() {
 
                             bulkMessageTasks.forEach((task) => {
                                 const prepared = new BulkMessageTaskClass(task);
-                                preparedBulkMessageTasks[prepared.id] = prepared;
+                                preparedBulkMessageTasks[prepared.id] =
+                                    prepared;
                             });
 
-                            PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK, preparedBulkMessageTasks);
+                            PubSub.publish(
+                                EVENT_TOPIC_BULK_MESSAGE_TASK,
+                                preparedBulkMessageTasks
+                            );
                         }
 
-                        const bulkMessageTaskElements = wabaPayload?.bulk_message_task_elements;
+                        const bulkMessageTaskElements =
+                            wabaPayload?.bulk_message_task_elements;
 
                         if (bulkMessageTaskElements) {
                             console.log(bulkMessageTaskElements);
@@ -546,21 +646,25 @@ function Main() {
                             const preparedBulkMessageTaskElements = {};
 
                             bulkMessageTaskElements.forEach((element) => {
-                                const prepared = new BulkMessageTaskElementClass(element);
-                                preparedBulkMessageTaskElements[prepared.id] = prepared;
+                                const prepared =
+                                    new BulkMessageTaskElementClass(element);
+                                preparedBulkMessageTaskElements[prepared.id] =
+                                    prepared;
                             });
 
-                            PubSub.publish(EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT, preparedBulkMessageTaskElements);
+                            PubSub.publish(
+                                EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
+                                preparedBulkMessageTaskElements
+                            );
                         }
                     }
-
                 } catch (error) {
                     console.error(error);
                     // Do not force Sentry if exceptions can't be handled without a user feedback dialog
                     //Sentry.captureException(error);
                 }
-            }
-        }
+            };
+        };
 
         connect();
 
@@ -571,7 +675,7 @@ function Main() {
             PubSub.unsubscribe(unsupportedFileEventToken);
 
             ws.close(CODE_NORMAL);
-        }
+        };
     }, []);
 
     useEffect(() => {
@@ -579,17 +683,17 @@ function Main() {
         window.addEventListener('beforeunload', alertUser);
         return () => {
             window.removeEventListener('beforeunload', alertUser);
-        }
+        };
     }, [hasFailedMessages]);
 
-    const alertUser = e => {
+    const alertUser = (e) => {
         if (hasFailedMessages) {
             if (!window.confirm(confirmationMessage)) {
-                e.preventDefault()
-                e.returnValue = ''
+                e.preventDefault();
+                e.returnValue = '';
             }
         }
-    }
+    };
 
     useEffect(() => {
         let tryLoadingTemplatesTimeoutId;
@@ -598,21 +702,21 @@ function Main() {
             const delay = () => {
                 timeout += 1000;
                 return timeout;
-            }
+            };
 
             let retryTask = () => {
                 tryLoadingTemplatesTimeoutId = setTimeout(() => {
                     listTemplates(true);
                     retryTask();
                 }, delay());
-            }
+            };
 
             retryTask();
         }
 
         return () => {
             clearTimeout(tryLoadingTemplatesTimeoutId);
-        }
+        };
     }, [isTemplatesFailed]);
 
     useEffect(() => {
@@ -630,7 +734,7 @@ function Main() {
         return () => {
             window.removeEventListener('blur', onBlur);
             window.removeEventListener('focus', onFocus);
-        }
+        };
     }, [isBlurred]);
 
     useEffect(() => {
@@ -645,26 +749,29 @@ function Main() {
 
             // Hide chat assignment
             setChatAssignmentVisible(false);
-        }
+        };
     }, [waId]);
 
     useEffect(() => {
         const onMarkedAsReceived = function (msg, data) {
             const relatedWaId = data;
 
-            setNewMessages(prevState => {
+            setNewMessages((prevState) => {
                 const nextState = prevState;
                 delete nextState[relatedWaId];
 
-                return {...nextState};
+                return { ...nextState };
             });
-        }
+        };
 
-        const markedAsReceivedEventToken = PubSub.subscribe(EVENT_TOPIC_MARKED_AS_RECEIVED, onMarkedAsReceived);
+        const markedAsReceivedEventToken = PubSub.subscribe(
+            EVENT_TOPIC_MARKED_AS_RECEIVED,
+            onMarkedAsReceived
+        );
 
         return () => {
             PubSub.unsubscribe(markedAsReceivedEventToken);
-        }
+        };
     }, [newMessages]);
 
     useEffect(() => {
@@ -677,7 +784,7 @@ function Main() {
             setSelectedChats([]);
             setSelectedTags([]);
         }
-    }, [bulkSendPayload])
+    }, [bulkSendPayload]);
 
     const listUsers = () => {
         setLoadingNow('users');
@@ -696,7 +803,7 @@ function Main() {
             // Trigger next request
             listContacts();
         });
-    }
+    };
 
     const retrieveCurrentUser = () => {
         setLoadingNow('current user');
@@ -707,12 +814,12 @@ function Main() {
             const role = response.data?.profile?.role;
 
             // Only admins and users can access
-            if (role !== "admin" && role !== "user") {
-                clearUserSession("incorrectRole", location, history);
+            if (role !== 'admin' && role !== 'user') {
+                clearUserSession('incorrectRole', location, history);
             }
 
             // Check if role is admin
-            const tempIsAdmin = role === "admin";
+            const tempIsAdmin = role === 'admin';
             setAdmin(tempIsAdmin);
 
             setProgress(10);
@@ -720,7 +827,7 @@ function Main() {
             // Trigger next request
             listUsers();
         }, history);
-    }
+    };
 
     const listTemplates = (isRetry) => {
         setLoadingNow('templates');
@@ -735,47 +842,49 @@ function Main() {
             listTags();
         };
 
-        apiService.listTemplatesCall((response) => {
-            const preparedTemplates = {};
-            response.data.results.forEach((template) => {
-                const prepared = new TemplateMessageClass(template);
+        apiService.listTemplatesCall(
+            (response) => {
+                const preparedTemplates = {};
+                response.data.results.forEach((template) => {
+                    const prepared = new TemplateMessageClass(template);
 
-                if (prepared.status === "approved") {
-                    preparedTemplates[prepared.name] = prepared;
+                    if (prepared.status === 'approved') {
+                        preparedTemplates[prepared.name] = prepared;
+                    }
+                });
+
+                setTemplates(preparedTemplates);
+
+                if (!isRetry) {
+                    completeCallback();
                 }
-            });
 
-            setTemplates(preparedTemplates);
+                setTemplatesFailed(false);
+            },
+            (error) => {
+                if (!isRetry) {
+                    if (error.response) {
+                        const status = error.response.status;
+                        // Status code >= 500 means template management is not available
+                        if (status >= 500) {
+                            const reason = error.response.data?.reason;
+                            displayCustomError(reason);
+                            completeCallback();
 
-            if (!isRetry) {
-                completeCallback();
-            }
-
-            setTemplatesFailed(false);
-
-        }, (error) => {
-            if (!isRetry) {
-                if (error.response) {
-                    const status = error.response.status;
-                    // Status code >= 500 means template management is not available
-                    if (status >= 500) {
-                        const reason = error.response.data?.reason;
-                        displayCustomError(reason);
-                        completeCallback();
-
-                        // To trigger retrying periodically
-                        setTemplatesFailed(true);
+                            // To trigger retrying periodically
+                            setTemplatesFailed(true);
+                        } else {
+                            window.displayError(error);
+                        }
                     } else {
                         window.displayError(error);
                     }
                 } else {
-                    window.displayError(error);
+                    console.error(error);
                 }
-            } else {
-                console.error(error);
             }
-        });
-    }
+        );
+    };
 
     const listSavedResponses = () => {
         apiService.listSavedResponsesCall((response) => {
@@ -792,27 +901,27 @@ function Main() {
             // Trigger next request
             listTemplates(false);
         });
-    }
+    };
 
     const createSavedResponse = (text) => {
         apiService.createSavedResponseCall(text, (response) => {
             // Display a success message
-            displaySuccess("Saved as response successfully!");
+            displaySuccess('Saved as response successfully!');
 
             // Reload saved responses
             listSavedResponses();
         });
-    }
+    };
 
     const deleteSavedResponse = (id) => {
         apiService.deleteSavedResponseCall(id, (response) => {
             // Display a success message
-            displaySuccess("Deleted response successfully!");
+            displaySuccess('Deleted response successfully!');
 
             // Reload saved responses
             listSavedResponses();
         });
-    }
+    };
 
     const resolveContact = (personWaId) => {
         if (contactProvidersData?.[personWaId] !== undefined) {
@@ -828,9 +937,10 @@ function Main() {
         apiService.resolveContactCall(
             personWaId,
             (response) => {
-                setContactProvidersData(prevState => {
-                    prevState[personWaId] = response.data.contact_provider_results;
-                    return {...prevState};
+                setContactProvidersData((prevState) => {
+                    prevState[personWaId] =
+                        response.data.contact_provider_results;
+                    return { ...prevState };
                 });
             },
             (error) => {
@@ -841,7 +951,7 @@ function Main() {
                 }
             }
         );
-    }
+    };
 
     const listContacts = () => {
         setLoadingNow('contacts');
@@ -853,7 +963,7 @@ function Main() {
 
             // Trigger next request
             listSavedResponses();
-        }
+        };
 
         // Check if needs to be loaded
         if (Object.keys(contactProvidersData).length !== 0) {
@@ -861,57 +971,70 @@ function Main() {
             return;
         }
 
-        apiService.listContactsCall(undefined, 0, undefined, (response) => {
-            const preparedContactProvidersData = {};
-            response.data.results.forEach((contact) => {
-                const contactPhoneNumbers = contact.phone_numbers;
+        apiService.listContactsCall(
+            undefined,
+            0,
+            undefined,
+            (response) => {
+                const preparedContactProvidersData = {};
+                response.data.results.forEach((contact) => {
+                    const contactPhoneNumbers = contact.phone_numbers;
 
-                const processedPhoneNumbers = [];
-                contactPhoneNumbers.forEach((contactPhoneNumber) => {
-                    const curPhoneNumber = preparePhoneNumber(contactPhoneNumber.phone_number);
+                    const processedPhoneNumbers = [];
+                    contactPhoneNumbers.forEach((contactPhoneNumber) => {
+                        const curPhoneNumber = preparePhoneNumber(
+                            contactPhoneNumber.phone_number
+                        );
 
-                    // Prevent duplicates from same provider with same phone numbers formatted differently
-                    if (processedPhoneNumbers.includes(curPhoneNumber)) {
-                        return;
-                    }
+                        // Prevent duplicates from same provider with same phone numbers formatted differently
+                        if (processedPhoneNumbers.includes(curPhoneNumber)) {
+                            return;
+                        }
 
-                    if (!(curPhoneNumber in preparedContactProvidersData)) {
-                        preparedContactProvidersData[curPhoneNumber] = [];
-                    }
+                        if (!(curPhoneNumber in preparedContactProvidersData)) {
+                            preparedContactProvidersData[curPhoneNumber] = [];
+                        }
 
-                    preparedContactProvidersData[curPhoneNumber].push(contact);
+                        preparedContactProvidersData[curPhoneNumber].push(
+                            contact
+                        );
 
-                    processedPhoneNumbers.push(curPhoneNumber);
+                        processedPhoneNumbers.push(curPhoneNumber);
+                    });
                 });
-            });
 
-            setContactProvidersData(preparedContactProvidersData);
+                setContactProvidersData(preparedContactProvidersData);
 
-            // Chain
-            callback();
-        }, (error) => {
-            if (error?.response?.status >= 500) {
-                // Continue with chain, in case contact provider data can not be loaded
+                // Chain
                 callback();
+            },
+            (error) => {
+                if (error?.response?.status >= 500) {
+                    // Continue with chain, in case contact provider data can not be loaded
+                    callback();
+                }
             }
-        });
-    }
+        );
+    };
 
     const listTags = () => {
         apiService.listTagsCall((response) => {
             setTags(response.data.results);
         });
-    }
+    };
 
     useEffect(() => {
-        listTags()
-    }, [bulkSendPayload])
+        listTags();
+    }, [bulkSendPayload]);
 
     return (
         <Fade in={checked}>
-            <div className={"app__body" + (isIPad13 ? " absoluteFullscreen" : "")}>
-
-                {templatesReady &&
+            <div
+                className={
+                    'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')
+                }
+            >
+                {templatesReady && (
                     <Sidebar
                         currentUser={currentUser}
                         isAdmin={isAdmin}
@@ -944,10 +1067,13 @@ function Main() {
                         finishBulkSendMessage={finishBulkSendMessage}
                         tags={tags}
                         setLoadingNow={setLoadingNow}
-                        setSendBulkVoiceMessageDialogVisible={setSendBulkVoiceMessageDialogVisible}/>
-                }
+                        setSendBulkVoiceMessageDialogVisible={
+                            setSendBulkVoiceMessageDialogVisible
+                        }
+                    />
+                )}
 
-                {templatesReady &&
+                {templatesReady && (
                     <Chat
                         isAdmin={isAdmin}
                         currentUser={currentUser}
@@ -963,7 +1089,9 @@ function Main() {
                         setUploadingMedia={setUploadingMedia}
                         newMessages={newMessages}
                         setChosenContact={setChosenContact}
-                        previewMedia={(chatMessage) => previewMedia(chatMessage)}
+                        previewMedia={(chatMessage) =>
+                            previewMedia(chatMessage)
+                        }
                         templates={templates}
                         isTemplatesFailed={isTemplatesFailed}
                         isLoadingTemplates={isLoadingTemplates}
@@ -976,14 +1104,13 @@ function Main() {
                         setChatAssignmentVisible={setChatAssignmentVisible}
                         setChatTagsVisible={setChatTagsVisible}
                         setSelectionModeEnabled={setSelectionModeEnabled}
-                        setBulkSendPayload={setBulkSendPayload}/>
-                }
+                        setBulkSendPayload={setBulkSendPayload}
+                    />
+                )}
 
-                {isSearchMessagesVisible &&
-                    <SearchMessage/>
-                }
+                {isSearchMessagesVisible && <SearchMessage />}
 
-                {isContactDetailsVisible &&
+                {isContactDetailsVisible && (
                     <ContactDetails
                         contactData={chosenContact}
                         contactProvidersData={contactProvidersData}
@@ -991,10 +1118,11 @@ function Main() {
                         chats={chats}
                         filterTag={filterTag}
                         setFilterTag={setFilterTag}
-                        users={users}/>
-                }
+                        users={users}
+                    />
+                )}
 
-                {isChatAssignmentVisible &&
+                {isChatAssignmentVisible && (
                     <ChatAssignment
                         currentUser={currentUser}
                         isAdmin={isAdmin}
@@ -1002,19 +1130,20 @@ function Main() {
                         open={isChatAssignmentVisible}
                         setOpen={setChatAssignmentVisible}
                         setChats={setChats}
-                        users={users}/>
-                }
+                        users={users}
+                    />
+                )}
 
-                {isChatTagsVisible &&
+                {isChatTagsVisible && (
                     <ChatTags
                         waId={waId}
                         open={isChatTagsVisible}
                         setOpen={setChatTagsVisible}
                         setChats={setChats}
                     />
-                }
+                )}
 
-                {isChatTagsListVisible &&
+                {isChatTagsListVisible && (
                     <ChatTagsList
                         waId={waId}
                         open={isChatTagsListVisible}
@@ -1023,47 +1152,64 @@ function Main() {
                         filterTag={filterTag}
                         setFilterTag={setFilterTag}
                     />
-                }
+                )}
 
-                {chatMessageToPreview &&
+                {chatMessageToPreview && (
                     <PreviewMedia
                         data={chatMessageToPreview}
-                        hideImageOrVideoPreview={hideImageOrVideoPreview}/>
-                }
+                        hideImageOrVideoPreview={hideImageOrVideoPreview}
+                    />
+                )}
 
-                {isDownloadUnsupportedFileVisible &&
+                {isDownloadUnsupportedFileVisible && (
                     <DownloadUnsupportedFile
                         open={isDownloadUnsupportedFileVisible}
                         setOpen={setDownloadUnsupportedFileVisible}
-                        data={unsupportedFile}/>
-                }
+                        data={unsupportedFile}
+                    />
+                )}
 
-                <Fade in={progress < 100} timeout={{exit: 1000}}>
+                <Fade in={progress < 100} timeout={{ exit: 1000 }}>
                     <div className="loadingScreenOuter">
                         <LoadingScreen
                             progress={progress}
                             setProgress={setProgress}
-                            loadingNow={loadingNow}/>
+                            loadingNow={loadingNow}
+                        />
                     </div>
                 </Fade>
 
-                <Snackbar anchorOrigin={{vertical: "bottom", horizontal: "right"}} open={isSuccessVisible}
-                          autoHideDuration={6000} onClose={handleSuccessClose}>
-                    <Alert onClose={handleSuccessClose} severity="success" elevation={4}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    open={isSuccessVisible}
+                    autoHideDuration={6000}
+                    onClose={handleSuccessClose}
+                >
+                    <Alert
+                        onClose={handleSuccessClose}
+                        severity="success"
+                        elevation={4}
+                    >
                         {t(successMessage)}
                     </Alert>
                 </Snackbar>
 
-                <Snackbar anchorOrigin={{vertical: "bottom", horizontal: "left"}} open={isErrorVisible}
-                          autoHideDuration={6000} onClose={handleErrorClose}>
-                    <Alert onClose={handleErrorClose} severity="error" elevation={4}>
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                    open={isErrorVisible}
+                    autoHideDuration={6000}
+                    onClose={handleErrorClose}
+                >
+                    <Alert
+                        onClose={handleErrorClose}
+                        severity="error"
+                        elevation={4}
+                    >
                         {t(errorMessage)}
                     </Alert>
                 </Snackbar>
 
-                {(isUploadingMedia && isMobileOnly) &&
-                    <UploadMediaIndicator/>
-                }
+                {isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
 
                 <SendBulkVoiceMessageDialog
                     apiService={apiService}
@@ -1073,10 +1219,9 @@ function Main() {
                     setBulkSendPayload={setBulkSendPayload}
                     setSelectionModeEnabled={setSelectionModeEnabled}
                 />
-
             </div>
         </Fade>
-    )
+    );
 }
 
 export default Main;

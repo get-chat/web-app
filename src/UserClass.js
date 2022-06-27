@@ -1,5 +1,4 @@
 class UserClass {
-
     constructor(data) {
         this.id = data.id;
         this.username = data.username;
@@ -31,7 +30,7 @@ class UserClass {
         }
 
         return label;
-    }
+    };
 
     isBot() {
         if (this.groups) {

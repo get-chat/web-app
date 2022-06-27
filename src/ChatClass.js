@@ -1,8 +1,7 @@
-import {getPastHoursByTimestamp} from "./helpers/DateHelper";
-import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
+import { getPastHoursByTimestamp } from './helpers/DateHelper';
+import { generateInitialsHelper, sanitize } from './helpers/Helpers';
 
 class ChatClass {
-
     constructor(data) {
         const contact = data.contact;
         const lastMessage = data.last_message;
@@ -15,12 +14,16 @@ class ChatClass {
 
         this.newMessages = data.new_messages;
 
-        this.lastReceivedMessageTimestamp = parseInt(contact.last_message_timestamp);
+        this.lastReceivedMessageTimestamp = parseInt(
+            contact.last_message_timestamp
+        );
 
         this.setLastMessage(lastMessagePayload);
 
         // Use last message timestamp from contact object, if last message does not exist
-        this.lastMessageTimestamp = this.lastMessageTimestamp ? this.lastMessageTimestamp : parseInt(contact.last_message_timestamp);
+        this.lastMessageTimestamp = this.lastMessageTimestamp
+            ? this.lastMessageTimestamp
+            : parseInt(contact.last_message_timestamp);
 
         this.assignedGroup = data.assigned_group;
         this.assignedToUser = data.assigned_to_user;
@@ -33,7 +36,9 @@ class ChatClass {
         this.name = sanitize(this.name);
         this.lastMessageBody = sanitize(this.lastMessageBody);
         this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
-        this.lastMessageInteractiveButtonText = sanitize(this.lastMessageInteractiveButtonText);
+        this.lastMessageInteractiveButtonText = sanitize(
+            this.lastMessageInteractiveButtonText
+        );
         this.lastMessageCaption = sanitize(this.lastMessageCaption);
     }
 
@@ -44,19 +49,24 @@ class ChatClass {
 
     generateInitials = () => {
         return generateInitialsHelper(this.name);
-    }
+    };
 
     setLastMessage(lastMessagePayload) {
         this.lastMessage = lastMessagePayload;
         this.lastMessageBody = this.lastMessage?.text?.body;
         this.lastMessageButtonText = lastMessagePayload?.button?.text;
-        this.lastMessageInteractiveButtonText = lastMessagePayload?.interactive?.button_reply?.title;
-        this.lastMessageCaption = lastMessagePayload?.image?.caption ?? lastMessagePayload?.video?.caption ?? lastMessagePayload?.audio?.caption ?? lastMessagePayload?.document?.caption;
+        this.lastMessageInteractiveButtonText =
+            lastMessagePayload?.interactive?.button_reply?.title;
+        this.lastMessageCaption =
+            lastMessagePayload?.image?.caption ??
+            lastMessagePayload?.video?.caption ??
+            lastMessagePayload?.audio?.caption ??
+            lastMessagePayload?.document?.caption;
         this.lastMessageType = lastMessagePayload?.type;
         this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
         this.isLastMessageFromUs = lastMessagePayload?.hasOwnProperty('to');
 
-        if (this.lastMessage?.hasOwnProperty("from")) {
+        if (this.lastMessage?.hasOwnProperty('from')) {
             this.lastReceivedMessageTimestamp = this.lastMessageTimestamp;
         }
 

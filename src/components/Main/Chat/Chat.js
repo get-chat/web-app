@@ -1,8 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react'
-import '../../../styles/Chat.css'
-import {CircularProgress, Zoom} from "@material-ui/core";
-import ChatMessage from "./ChatMessage/ChatMessage";
-import {useHistory, useLocation, useParams} from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import '../../../styles/Chat.css';
+import { CircularProgress, Zoom } from '@material-ui/core';
+import ChatMessage from './ChatMessage/ChatMessage';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import {
     ATTACHMENT_TYPE_DOCUMENT,
     ATTACHMENT_TYPE_IMAGE,
@@ -19,50 +19,69 @@ import {
     EVENT_TOPIC_NEW_CHAT_MESSAGES,
     EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
     EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
-    EVENT_TOPIC_UPDATE_PERSON_NAME
-} from "../../../Constants";
-import ChatMessageClass from "../../../ChatMessageClass";
-import PersonClass from "../../../PersonClass";
-import TemplateMessages from "./TemplateMessages/TemplateMessages";
-import ChatFooter from "./ChatFooter/ChatFooter";
-import ChatHeader from "./ChatHeader";
-import ChatMessageOptionsMenu from "./ChatMessage/ChatMessageOptionsMenu";
-import moment from "moment";
-import PubSub from "pubsub-js";
-import MessageDateIndicator from "./MessageDateIndicator";
+    EVENT_TOPIC_UPDATE_PERSON_NAME,
+} from '../../../Constants';
+import ChatMessageClass from '../../../ChatMessageClass';
+import PersonClass from '../../../PersonClass';
+import TemplateMessages from './TemplateMessages/TemplateMessages';
+import ChatFooter from './ChatFooter/ChatFooter';
+import ChatHeader from './ChatHeader';
+import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
+import moment from 'moment';
+import PubSub from 'pubsub-js';
+import MessageDateIndicator from './MessageDateIndicator';
 import {
     generateUniqueID,
     generateUnixTimestamp,
     hasInternetConnection,
     isScrollable,
     sortMessagesAsc,
-    translateHTMLInputToText
-} from "../../../helpers/Helpers";
-import PreviewSendMedia from "./PreviewSendMedia";
-import {getDroppedFiles, handleDragOver, prepareSelectedFiles} from "../../../helpers/FileHelper";
-import SavedResponses from "./SavedResponses";
-import {generateTemplateMessagePayload, prepareSendFilePayload} from "../../../helpers/ChatHelper";
-import {isMobileOnly} from "react-device-detect";
-import {clearUserSession, generateCancelToken} from "../../../helpers/ApiHelper";
-import {getFirstObject, getLastObject, getObjLength} from "../../../helpers/ObjectHelper";
-import {extractTimestampFromMessage, messageHelper} from "../../../helpers/MessageHelper";
-import {isLocalHost} from "../../../helpers/URLHelper";
+    translateHTMLInputToText,
+} from '../../../helpers/Helpers';
+import PreviewSendMedia from './PreviewSendMedia';
+import {
+    getDroppedFiles,
+    handleDragOver,
+    prepareSelectedFiles,
+} from '../../../helpers/FileHelper';
+import SavedResponses from './SavedResponses';
+import {
+    generateTemplateMessagePayload,
+    prepareSendFilePayload,
+} from '../../../helpers/ChatHelper';
+import { isMobileOnly } from 'react-device-detect';
+import {
+    clearUserSession,
+    generateCancelToken,
+} from '../../../helpers/ApiHelper';
+import {
+    getFirstObject,
+    getLastObject,
+    getObjLength,
+} from '../../../helpers/ObjectHelper';
+import {
+    extractTimestampFromMessage,
+    messageHelper,
+} from '../../../helpers/MessageHelper';
+import { isLocalHost } from '../../../helpers/URLHelper';
 import {
     getFirstPendingMessageToSend,
     hasFailedPendingMessages,
-    setPendingMessageFailed
-} from "../../../helpers/PendingMessagesHelper";
-import {getDisplayAssignmentAndTaggingHistory} from "../../../helpers/StorageHelper";
-import {useTranslation} from "react-i18next";
-import {ApplicationContext} from "../../../contexts/ApplicationContext";
-import {addPlus, preparePhoneNumber} from "../../../helpers/PhoneNumberHelper";
+    setPendingMessageFailed,
+} from '../../../helpers/PendingMessagesHelper';
+import { getDisplayAssignmentAndTaggingHistory } from '../../../helpers/StorageHelper';
+import { useTranslation } from 'react-i18next';
+import { ApplicationContext } from '../../../contexts/ApplicationContext';
+import {
+    addPlus,
+    preparePhoneNumber,
+} from '../../../helpers/PhoneNumberHelper';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 
 export default function Chat(props) {
-
-    const {apiService} = React.useContext(ApplicationContext);
+    const { apiService } = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -72,7 +91,8 @@ export default function Chat(props) {
     const [isLoaded, setLoaded] = useState(false);
     const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
     const [isExpired, setExpired] = useState(false);
-    const [isTemplateMessagesVisible, setTemplateMessagesVisible] = useState(false);
+    const [isTemplateMessagesVisible, setTemplateMessagesVisible] =
+        useState(false);
     const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
     const [person, setPerson] = useState();
     const [messages, setMessages] = useState({});
@@ -82,7 +102,8 @@ export default function Chat(props) {
     const [selectedFiles, setSelectedFiles] = useState();
     const [accept, setAccept] = useState('');
 
-    const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] = useState(false);
+    const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] =
+        useState(false);
     const [previewSendMediaData, setPreviewSendMediaData] = useState();
 
     const [currentNewMessages, setCurrentNewMessages] = useState(0);
@@ -91,7 +112,7 @@ export default function Chat(props) {
 
     const [lastMessageId, setLastMessageId] = useState();
 
-    const {waId} = useParams();
+    const { waId } = useParams();
 
     const history = useHistory();
     const location = useLocation();
@@ -105,29 +126,43 @@ export default function Chat(props) {
         cancelTokenSourceRef.current = generateCancelToken();
 
         if (messagesContainer) {
-            messagesContainer.current.addEventListener('DOMNodeInserted', event => {
-                if (event.target.parentNode.id === "chat__body") {
-                    const {currentTarget: target} = event;
-                    target.scroll({top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET});
+            messagesContainer.current.addEventListener(
+                'DOMNodeInserted',
+                (event) => {
+                    if (event.target.parentNode.id === 'chat__body') {
+                        const { currentTarget: target } = event;
+                        target.scroll({
+                            top:
+                                target.scrollHeight -
+                                target.offsetHeight -
+                                SCROLL_OFFSET,
+                        });
+                    }
                 }
-            });
+            );
         }
 
         // Handle files dragged and dropped to sidebar chat
         const handleFilesDropped = function (msg, data) {
             setSelectedFiles(data);
-        }
+        };
 
         // Listen for file drop events
-        const handleFilesDroppedEventToken = PubSub.subscribe(EVENT_TOPIC_DROPPED_FILES, handleFilesDropped);
+        const handleFilesDroppedEventToken = PubSub.subscribe(
+            EVENT_TOPIC_DROPPED_FILES,
+            handleFilesDropped
+        );
 
         // Clear input on event
         const clearInputOnEvent = function (msg, data) {
             clearInput();
-        }
+        };
 
         // Listen for clear input events
-        const clearInputEventToken = PubSub.subscribe(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT, clearInputOnEvent);
+        const clearInputEventToken = PubSub.subscribe(
+            EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
+            clearInputOnEvent
+        );
 
         // Generate cancel token for verifying phone number
         // It is used when a new chat is started by URL and person does not exist
@@ -143,7 +178,7 @@ export default function Chat(props) {
             // Unsubscribe
             PubSub.unsubscribe(handleFilesDroppedEventToken);
             PubSub.unsubscribe(clearInputEventToken);
-        }
+        };
     }, []);
 
     useEffect(() => {
@@ -154,10 +189,14 @@ export default function Chat(props) {
         window.pendingMessages = pendingMessages;
 
         // Log state changes
-        console.log(isSendingPendingMessages.toString(), JSON.parse(JSON.stringify(pendingMessages)));
+        console.log(
+            isSendingPendingMessages.toString(),
+            JSON.parse(JSON.stringify(pendingMessages))
+        );
 
         const sendNextPending = () => {
-            const pendingMessageToSend = getFirstPendingMessageToSend(pendingMessages);
+            const pendingMessageToSend =
+                getFirstPendingMessageToSend(pendingMessages);
 
             if (!pendingMessageToSend) {
                 console.warn('No pending messages!');
@@ -177,24 +216,43 @@ export default function Chat(props) {
                 pendingMessageToSend.completeCallback?.();
 
                 // Delete sent message from state
-                const updatedState = window.pendingMessages.filter(function(pendingMessage) {
+                const updatedState = window.pendingMessages.filter(function (
+                    pendingMessage
+                ) {
                     return pendingMessage.id !== pendingMessageToSend.id;
                 });
 
                 // Update state after deleting sent one
                 props.setPendingMessages(updatedState);
                 props.setSendingPendingMessages(false);
-            }
+            };
 
             // Use proper method to send message depends on its type
             if (requestBody.type === ChatMessageClass.TYPE_TEXT) {
-                sendMessage(false, undefined, requestBody, successCallback, completeCallback);
+                sendMessage(
+                    false,
+                    undefined,
+                    requestBody,
+                    successCallback,
+                    completeCallback
+                );
             } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
-                sendTemplateMessage(false, undefined, requestBody, successCallback, completeCallback);
+                sendTemplateMessage(
+                    false,
+                    undefined,
+                    requestBody,
+                    successCallback,
+                    completeCallback
+                );
             } else if (pendingMessageToSend.chosenFile) {
-                uploadMedia(pendingMessageToSend.chosenFile, requestBody, pendingMessageToSend.formData, completeCallback);
+                uploadMedia(
+                    pendingMessageToSend.chosenFile,
+                    requestBody,
+                    pendingMessageToSend.formData,
+                    completeCallback
+                );
             }
-        }
+        };
 
         // Make sure this is the best place for it
         // If there is no failed message, update state
@@ -209,7 +267,6 @@ export default function Chat(props) {
         } else if (pendingMessages.length === 0) {
             props.setSendingPendingMessages(false);
         }
-
     }, [props.isSendingPendingMessages, props.pendingMessages]);
 
     useEffect(() => {
@@ -246,7 +303,7 @@ export default function Chat(props) {
 
             // Generate a new token, because component is not destroyed
             cancelTokenSourceRef.current = generateCancelToken();
-        }
+        };
     }, [waId]);
 
     useEffect(() => {
@@ -255,7 +312,7 @@ export default function Chat(props) {
 
     const getNewMessagesCount = () => {
         return props.newMessages[waId]?.newMessages ?? 0;
-    }
+    };
 
     useEffect(() => {
         const newMessagesCount = getNewMessagesCount();
@@ -266,7 +323,9 @@ export default function Chat(props) {
 
     useEffect(() => {
         const messagesContainerCopy = messagesContainer.current;
-        const dateIndicators = messagesContainerCopy.querySelectorAll('.chat__message__outer > .chat__message__dateContainer > .chat__message__dateContainer__indicator');
+        const dateIndicators = messagesContainerCopy.querySelectorAll(
+            '.chat__message__outer > .chat__message__dateContainer > .chat__message__dateContainer__indicator'
+        );
 
         // To optimize scroll event
         let debounceTimer;
@@ -291,7 +350,9 @@ export default function Chat(props) {
                         if (currentNewMessages > 0) {
                             const lastMessage = getLastObject(messages);
                             if (lastMessage) {
-                                markAsReceived(extractTimestampFromMessage(lastMessage));
+                                markAsReceived(
+                                    extractTimestampFromMessage(lastMessage)
+                                );
                             }
                         }
                     }
@@ -300,15 +361,34 @@ export default function Chat(props) {
                         //console.log("Scrolled to top");
                         if (isLoaded && !isLoadingMoreMessages) {
                             setLoadingMoreMessages(true);
-                            listMessages(false, undefined, getFirstObject(messages)?.timestamp);
+                            listMessages(
+                                false,
+                                undefined,
+                                getFirstObject(messages)?.timestamp
+                            );
                         }
                     } else {
                         // TODO: Make sure user scrolls
-                        if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+                        if (
+                            el.scrollHeight - el.scrollTop - el.clientHeight <
+                            1
+                        ) {
                             //console.log('Scrolled to bottom');
-                            if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
+                            if (
+                                isLoaded &&
+                                !isLoadingMoreMessages &&
+                                !isAtBottom
+                            ) {
                                 setLoadingMoreMessages(true);
-                                listMessages(false, undefined, undefined, undefined, getLastObject(messages)?.timestamp, true, false);
+                                listMessages(
+                                    false,
+                                    undefined,
+                                    undefined,
+                                    undefined,
+                                    getLastObject(messages)?.timestamp,
+                                    true,
+                                    false
+                                );
                             }
                         }
                     }
@@ -322,7 +402,7 @@ export default function Chat(props) {
         }
 
         if (messagesContainer && isLoaded) {
-            messagesContainerCopy.addEventListener("scroll", handleScroll);
+            messagesContainerCopy.addEventListener('scroll', handleScroll);
 
             // Display fixed date indicator
             prepareFixedDateIndicator(dateIndicators, messagesContainerCopy);
@@ -330,9 +410,15 @@ export default function Chat(props) {
 
         return () => {
             clearTimeout(debounceTimer);
-            messagesContainerCopy.removeEventListener("scroll", handleScroll);
-        }
-    }, [messages, isLoaded, isLoadingMoreMessages, isAtBottom, currentNewMessages]);
+            messagesContainerCopy.removeEventListener('scroll', handleScroll);
+        };
+    }, [
+        messages,
+        isLoaded,
+        isLoadingMoreMessages,
+        isAtBottom,
+        currentNewMessages,
+    ]);
 
     useEffect(() => {
         // New messages
@@ -340,8 +426,7 @@ export default function Chat(props) {
             if (data && isLoaded) {
                 let hasAnyIncomingMsg = false;
 
-                setMessages(prevState => {
-
+                setMessages((prevState) => {
                     let newState;
                     const preparedMessages = {};
                     Object.entries(data).forEach((message) => {
@@ -351,7 +436,8 @@ export default function Chat(props) {
                         if (waId === chatMessage.waId) {
                             // Check if any message is displayed with internal id
                             // Fix duplicated messages in this way
-                            const internalIdString = chatMessage.generateInternalIdString();
+                            const internalIdString =
+                                chatMessage.generateInternalIdString();
                             if (!(internalIdString in prevState)) {
                                 preparedMessages[msgId] = chatMessage;
                             }
@@ -366,39 +452,51 @@ export default function Chat(props) {
                         const lastMessage = getLastObject(preparedMessages);
 
                         if (isAtBottom) {
-                            const prevScrollTop = messagesContainer.current.scrollTop;
-                            const prevScrollHeight = messagesContainer.current.scrollHeight;
-                            const isCurrentlyLastMessageVisible = isLastMessageVisible();
+                            const prevScrollTop =
+                                messagesContainer.current.scrollTop;
+                            const prevScrollHeight =
+                                messagesContainer.current.scrollHeight;
+                            const isCurrentlyLastMessageVisible =
+                                isLastMessageVisible();
 
-                            newState = {...prevState, ...preparedMessages};
+                            newState = { ...prevState, ...preparedMessages };
 
                             if (!isCurrentlyLastMessageVisible) {
-                                persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                                persistScrollStateFromBottom(
+                                    prevScrollHeight,
+                                    prevScrollTop,
+                                    0
+                                );
                                 displayScrollButton();
                             }
 
                             if (hasAnyIncomingMsg) {
-                                const lastMessageTimestamp = extractTimestampFromMessage(lastMessage);
+                                const lastMessageTimestamp =
+                                    extractTimestampFromMessage(lastMessage);
 
                                 // Mark new message as received if visible
-                                if (canSeeLastMessage(messagesContainer.current)) {
+                                if (
+                                    canSeeLastMessage(messagesContainer.current)
+                                ) {
                                     markAsReceived(lastMessageTimestamp);
                                 } else {
-                                    setCurrentNewMessages(prevState => prevState+1);
+                                    setCurrentNewMessages(
+                                        (prevState) => prevState + 1
+                                    );
                                 }
 
                                 // Update contact
-                                setPerson(prevState => ({
+                                setPerson((prevState) => ({
                                     ...prevState,
                                     lastMessageTimestamp: lastMessageTimestamp,
-                                    isExpired: false
+                                    isExpired: false,
                                 }));
 
                                 // Chat is not expired anymore
                                 setExpired(false);
                             }
                         } else {
-                            setCurrentNewMessages(prevState => prevState+1);
+                            setCurrentNewMessages((prevState) => prevState + 1);
                         }
 
                         // Update last message id
@@ -408,16 +506,18 @@ export default function Chat(props) {
                     return newState ?? prevState;
                 });
             }
-        }
+        };
 
-        const newChatMessagesEventToken = PubSub.subscribe(EVENT_TOPIC_NEW_CHAT_MESSAGES, onNewMessages);
+        const newChatMessagesEventToken = PubSub.subscribe(
+            EVENT_TOPIC_NEW_CHAT_MESSAGES,
+            onNewMessages
+        );
 
         // Status changes
         const onMessageStatusChange = function (msg, data) {
             if (data && isLoaded) {
-
                 // TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
-                setMessages(prevState => {
+                setMessages((prevState) => {
                     const newState = prevState;
                     let changedAny = false;
 
@@ -429,7 +529,10 @@ export default function Chat(props) {
 
                         // Check if any message is displayed with internal id
                         // Fix duplicated messages in this way
-                        const internalIdString = ChatMessageClass.generateInternalIdStringStatic(statusObj.getchatId);
+                        const internalIdString =
+                            ChatMessageClass.generateInternalIdStringStatic(
+                                statusObj.getchatId
+                            );
 
                         if (internalIdString in newState) {
                             wabaIdOrGetchatId = internalIdString;
@@ -438,31 +541,37 @@ export default function Chat(props) {
                         if (wabaIdOrGetchatId in newState) {
                             if (statusObj.sentTimestamp) {
                                 changedAny = true;
-                                newState[wabaIdOrGetchatId].sentTimestamp = statusObj.sentTimestamp;
+                                newState[wabaIdOrGetchatId].sentTimestamp =
+                                    statusObj.sentTimestamp;
                             }
 
                             if (statusObj.deliveredTimestamp) {
                                 changedAny = true;
-                                newState[wabaIdOrGetchatId].deliveredTimestamp = statusObj.deliveredTimestamp;
+                                newState[wabaIdOrGetchatId].deliveredTimestamp =
+                                    statusObj.deliveredTimestamp;
                             }
 
                             if (statusObj.readTimestamp) {
                                 changedAny = true;
-                                newState[wabaIdOrGetchatId].readTimestamp = statusObj.readTimestamp;
+                                newState[wabaIdOrGetchatId].readTimestamp =
+                                    statusObj.readTimestamp;
                             }
                         }
                     });
 
                     if (changedAny) {
-                        return {...newState};
+                        return { ...newState };
                     } else {
                         return prevState;
                     }
                 });
             }
-        }
+        };
 
-        const chatMessageStatusChangeEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, onMessageStatusChange);
+        const chatMessageStatusChangeEventToken = PubSub.subscribe(
+            EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+            onMessageStatusChange
+        );
 
         // Chat assignment
         const onChatAssignment = function (msg, data) {
@@ -471,25 +580,34 @@ export default function Chat(props) {
             if (waId === prepared.waId) {
                 if (isAtBottom) {
                     const prevScrollTop = messagesContainer.current.scrollTop;
-                    const prevScrollHeight = messagesContainer.current.scrollHeight;
-                    const isCurrentlyLastMessageVisible = isLastMessageVisible();
+                    const prevScrollHeight =
+                        messagesContainer.current.scrollHeight;
+                    const isCurrentlyLastMessageVisible =
+                        isLastMessageVisible();
 
                     // Display as a new message
-                    setMessages(prevState => {
-                        return {...prevState, ...data};
+                    setMessages((prevState) => {
+                        return { ...prevState, ...data };
                     });
 
                     if (!isCurrentlyLastMessageVisible) {
-                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                        persistScrollStateFromBottom(
+                            prevScrollHeight,
+                            prevScrollTop,
+                            0
+                        );
                         displayScrollButton();
                     }
                 } else {
                     displayScrollButton();
                 }
             }
-        }
+        };
 
-        const chatAssignmentEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_ASSIGNMENT, onChatAssignment);
+        const chatAssignmentEventToken = PubSub.subscribe(
+            EVENT_TOPIC_CHAT_ASSIGNMENT,
+            onChatAssignment
+        );
 
         // Chat tagging
         const onChatAssignmentOrChatTagging = function (msg, data) {
@@ -498,25 +616,34 @@ export default function Chat(props) {
             if (waId === prepared.waId) {
                 if (isAtBottom) {
                     const prevScrollTop = messagesContainer.current.scrollTop;
-                    const prevScrollHeight = messagesContainer.current.scrollHeight;
-                    const isCurrentlyLastMessageVisible = isLastMessageVisible();
+                    const prevScrollHeight =
+                        messagesContainer.current.scrollHeight;
+                    const isCurrentlyLastMessageVisible =
+                        isLastMessageVisible();
 
                     // Display as a new message
-                    setMessages(prevState => {
-                        return {...prevState, ...data};
+                    setMessages((prevState) => {
+                        return { ...prevState, ...data };
                     });
 
                     if (!isCurrentlyLastMessageVisible) {
-                        persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+                        persistScrollStateFromBottom(
+                            prevScrollHeight,
+                            prevScrollTop,
+                            0
+                        );
                         displayScrollButton();
                     }
                 } else {
                     displayScrollButton();
                 }
             }
-        }
+        };
 
-        const chatTaggingEventToken = PubSub.subscribe(EVENT_TOPIC_CHAT_TAGGING, onChatAssignmentOrChatTagging);
+        const chatTaggingEventToken = PubSub.subscribe(
+            EVENT_TOPIC_CHAT_TAGGING,
+            onChatAssignmentOrChatTagging
+        );
 
         // Refresh chat/messages when displaying assignment and tagging history is toggled
         const onForceRefreshChat = function (msg, data) {
@@ -528,9 +655,12 @@ export default function Chat(props) {
                 // This method triggers loading messages with proper callback
                 retrievePerson(true);
             }
-        }
+        };
 
-        const forceRefreshChatEventToken = PubSub.subscribe(EVENT_TOPIC_FORCE_REFRESH_CHAT, onForceRefreshChat);
+        const forceRefreshChatEventToken = PubSub.subscribe(
+            EVENT_TOPIC_FORCE_REFRESH_CHAT,
+            onForceRefreshChat
+        );
 
         return () => {
             PubSub.unsubscribe(newChatMessagesEventToken);
@@ -538,36 +668,46 @@ export default function Chat(props) {
             PubSub.unsubscribe(chatAssignmentEventToken);
             PubSub.unsubscribe(chatTaggingEventToken);
             PubSub.unsubscribe(forceRefreshChatEventToken);
-        }
-    }, [waId, isLoaded, /*isLoadingMoreMessages,*/ isExpired, isAtBottom, currentNewMessages]);
+        };
+    }, [
+        waId,
+        isLoaded,
+        /*isLoadingMoreMessages,*/ isExpired,
+        isAtBottom,
+        currentNewMessages,
+    ]);
 
     useEffect(() => {
-        const hasNewerToLoad = lastMessageId === undefined || !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
+        const hasNewerToLoad =
+            lastMessageId === undefined ||
+            !messages.hasOwnProperty(lastMessageId); //(previous != null && typeof previous !== typeof undefined);
         //console.log("Has newer to load:", hasNewerToLoad);
         setAtBottom(!hasNewerToLoad);
-
     }, [messages, lastMessageId]);
 
     useEffect(() => {
         const onUpdatePersonName = function (msg, data) {
             const name = data;
-            setPerson(prevState => {
+            setPerson((prevState) => {
                 if (prevState && prevState instanceof PersonClass) {
                     return {
                         ...prevState,
-                        name: name
-                    }
+                        name: name,
+                    };
                 } else {
                     return prevState;
                 }
             });
-        }
+        };
 
-        const updatePersonNameTokenEventToken = PubSub.subscribe(EVENT_TOPIC_UPDATE_PERSON_NAME, onUpdatePersonName);
+        const updatePersonNameTokenEventToken = PubSub.subscribe(
+            EVENT_TOPIC_UPDATE_PERSON_NAME,
+            onUpdatePersonName
+        );
 
         return () => {
             PubSub.unsubscribe(updatePersonNameTokenEventToken);
-        }
+        };
     }, [person]);
 
     /*useEffect(() => {
@@ -584,7 +724,10 @@ export default function Chat(props) {
 
         for (let i = 0; i < dateIndicators.length; i++) {
             const indicator = dateIndicators[i];
-            if (indicatorToShow === undefined || indicator.offsetTop <= curScrollTop) {
+            if (
+                indicatorToShow === undefined ||
+                indicator.offsetTop <= curScrollTop
+            ) {
                 indicatorToShow = indicator;
             } else {
                 break;
@@ -594,45 +737,73 @@ export default function Chat(props) {
         if (indicatorToShow) {
             setFixedDateIndicatorText(indicatorToShow.innerHTML);
         }
-    }
+    };
 
     const isLastMessageVisible = () => {
         const el = messagesContainer.current;
-        return el.scrollHeight - el.scrollTop - el.clientHeight < SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET;
-    }
+        return (
+            el.scrollHeight - el.scrollTop - el.clientHeight <
+            SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET
+        );
+    };
 
     const displayScrollButton = () => {
         setScrollButtonVisible(true);
-    }
+    };
 
     const canSeeLastMessage = (element) => {
-        return !(element.scrollHeight - element.scrollTop - element.clientHeight > SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET);
-    }
+        return !(
+            element.scrollHeight - element.scrollTop - element.clientHeight >
+            SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET
+        );
+    };
 
     const handleScrollButtonClick = () => {
         if (isAtBottom) {
             const el = messagesContainer.current;
-            el.scroll({top: el.scrollHeight - el.offsetHeight - SCROLL_OFFSET, behavior: "smooth"});
+            el.scroll({
+                top: el.scrollHeight - el.offsetHeight - SCROLL_OFFSET,
+                behavior: 'smooth',
+            });
         } else {
-            listMessages(false, undefined, undefined, undefined, undefined, false, true);
+            listMessages(
+                false,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                false,
+                true
+            );
         }
 
         //setScrollButtonVisible(false);
-    }
+    };
 
-    const persistScrollStateFromBottom = (prevScrollHeight, prevScrollTop, offset) => {
+    const persistScrollStateFromBottom = (
+        prevScrollHeight,
+        prevScrollTop,
+        offset
+    ) => {
         const nextScrollHeight = messagesContainer.current.scrollHeight;
-        messagesContainer.current.scrollTop = (nextScrollHeight - prevScrollHeight) + prevScrollTop - offset;
-    }
+        messagesContainer.current.scrollTop =
+            nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
+    };
 
     const scrollToChild = (msgId) => {
         setTimeout(function () {
-            const child = messagesContainer.current.querySelector('#message_' + msgId);
+            const child = messagesContainer.current.querySelector(
+                '#message_' + msgId
+            );
             let _offset = 25;
             if (child) {
                 let targetOffsetTop = child.offsetTop - _offset;
-                if (targetOffsetTop < SCROLL_OFFSET) targetOffsetTop = SCROLL_OFFSET;
-                messagesContainer.current.scroll({top: targetOffsetTop, behavior: "smooth"});
+                if (targetOffsetTop < SCROLL_OFFSET)
+                    targetOffsetTop = SCROLL_OFFSET;
+                messagesContainer.current.scroll({
+                    top: targetOffsetTop,
+                    behavior: 'smooth',
+                });
 
                 child.classList.add('blink');
 
@@ -643,16 +814,16 @@ export default function Chat(props) {
                 }, 1000);
             }
         }, 100);
-    }
+    };
 
     const goToMessageId = (msgId, timestamp) => {
         if (messagesContainer.current) {
             if (msgId) {
                 if (messages[msgId]) {
-                    console.log("This message is already loaded.");
+                    console.log('This message is already loaded.');
                     scrollToChild(msgId);
                 } else {
-                    console.log("This message will be loaded.");
+                    console.log('This message will be loaded.');
 
                     // TODO: Cancel other messages requests first
 
@@ -661,11 +832,19 @@ export default function Chat(props) {
                     const callback = () => {
                         scrollToChild(msgId);
                     };
-                    listMessages(false, callback, undefined, undefined, timestamp, true, true);
+                    listMessages(
+                        false,
+                        callback,
+                        undefined,
+                        undefined,
+                        timestamp,
+                        true,
+                        true
+                    );
                 }
             }
         }
-    }
+    };
 
     useEffect(() => {
         const onGoToMessageId = function (msg, data) {
@@ -673,15 +852,18 @@ export default function Chat(props) {
             const timestamp = data.timestamp;
 
             goToMessageId(msgId, timestamp);
-        }
+        };
 
         // Subscribe for scrolling to message event
-        const token = PubSub.subscribe(EVENT_TOPIC_GO_TO_MSG_ID, onGoToMessageId);
+        const token = PubSub.subscribe(
+            EVENT_TOPIC_GO_TO_MSG_ID,
+            onGoToMessageId
+        );
 
         return () => {
             // Unsubscribe
             PubSub.unsubscribe(token);
-        }
+        };
     }, [messages, isAtBottom]);
 
     useEffect(() => {
@@ -697,66 +879,91 @@ export default function Chat(props) {
         // We need to use parent because menu view gets hidden
         setMenuAnchorEl(event.currentTarget.parentElement);
         setOptionsChatMessage(chatMessage);
-    }
+    };
 
     const retrievePerson = (loadMessages) => {
-        apiService.retrievePersonCall(waId, cancelTokenSourceRef.current.token, (response) => {
-            const preparedPerson = new PersonClass(response.data);
-            setPerson(preparedPerson);
-            setExpired(preparedPerson.isExpired);
+        apiService.retrievePersonCall(
+            waId,
+            cancelTokenSourceRef.current.token,
+            (response) => {
+                const preparedPerson = new PersonClass(response.data);
+                setPerson(preparedPerson);
+                setExpired(preparedPerson.isExpired);
 
-            // Person information is loaded, now load messages
-            if (loadMessages !== undefined && loadMessages === true) {
-                listMessages(true, function (preparedMessages) {
-                    const lastPreparedMessage = getLastObject(preparedMessages);
-                    setLastMessageId(lastPreparedMessage?.id ?? lastPreparedMessage?.generateInternalIdString());
+                // Person information is loaded, now load messages
+                if (loadMessages !== undefined && loadMessages === true) {
+                    listMessages(true, function (preparedMessages) {
+                        const lastPreparedMessage =
+                            getLastObject(preparedMessages);
+                        setLastMessageId(
+                            lastPreparedMessage?.id ??
+                                lastPreparedMessage?.generateInternalIdString()
+                        );
 
-                    // Scroll to message if goToMessageId is defined
-                    const goToMessage = location.goToMessage;
-                    if (goToMessage !== undefined) {
-                        goToMessageId(goToMessage.id, goToMessage.timestamp);
-                    }
-                });
-            }
-        }, (error) => {
-            if (error.response?.status === 404) {
-                if (location.person) {
-                    createPersonAndStartChat(location.person.name, location.person.initials);
-                } else {
-                    // To prevent missing data on refresh
-                    //closeChat();
-
-                    verifyContact()
+                        // Scroll to message if goToMessageId is defined
+                        const goToMessage = location.goToMessage;
+                        if (goToMessage !== undefined) {
+                            goToMessageId(
+                                goToMessage.id,
+                                goToMessage.timestamp
+                            );
+                        }
+                    });
                 }
-            } else {
-                window.displayError(error);
+            },
+            (error) => {
+                if (error.response?.status === 404) {
+                    if (location.person) {
+                        createPersonAndStartChat(
+                            location.person.name,
+                            location.person.initials
+                        );
+                    } else {
+                        // To prevent missing data on refresh
+                        //closeChat();
+
+                        verifyContact();
+                    }
+                } else {
+                    window.displayError(error);
+                }
             }
-        });
-    }
+        );
+    };
 
     let verifyPhoneNumberCancelTokenSourceRef = useRef();
 
     const verifyContact = () => {
         const onError = () => {
             closeChat();
-            window.displayCustomError("There is no WhatsApp account connected to this phone number.");
-        }
+            window.displayCustomError(
+                'There is no WhatsApp account connected to this phone number.'
+            );
+        };
 
         let phoneNumber = preparePhoneNumber(waId);
         phoneNumber = addPlus(phoneNumber);
 
-        apiService.verifyContactsCall([phoneNumber], verifyPhoneNumberCancelTokenSourceRef.current.token,
+        apiService.verifyContactsCall(
+            [phoneNumber],
+            verifyPhoneNumberCancelTokenSourceRef.current.token,
             (response) => {
-                if (response.data.contacts && response.data.contacts.length > 0 && response.data.contacts[0].status === "valid") {
+                if (
+                    response.data.contacts &&
+                    response.data.contacts.length > 0 &&
+                    response.data.contacts[0].status === 'valid'
+                ) {
                     createPersonAndStartChat(addPlus(waId), waId?.[0]);
                 } else {
                     onError();
                 }
-            }, (error) => {
+            },
+            (error) => {
                 console.error(error);
                 onError();
-            });
-    }
+            }
+        );
+    };
 
     const createPersonAndStartChat = (name, initials) => {
         const preparedPerson = new PersonClass({});
@@ -770,21 +977,46 @@ export default function Chat(props) {
         setLoaded(true);
         setLoadingMoreMessages(false);
         setAtBottom(true);
-    }
+    };
 
-    const listMessages = (isInitial, callback, beforeTime, offset, sinceTime, isInitialWithSinceTime, replaceAll) => {
+    const listMessages = (
+        isInitial,
+        callback,
+        beforeTime,
+        offset,
+        sinceTime,
+        isInitialWithSinceTime,
+        replaceAll
+    ) => {
         const limit = 30;
 
-        apiService.listMessagesCall(waId, undefined, undefined, limit, offset ?? 0, beforeTime, sinceTime, cancelTokenSourceRef.current.token,
+        apiService.listMessagesCall(
+            waId,
+            undefined,
+            undefined,
+            limit,
+            offset ?? 0,
+            beforeTime,
+            sinceTime,
+            cancelTokenSourceRef.current.token,
             (response) => {
                 const count = response.data.count;
                 //const previous = response.data.previous;
                 const next = response.data.next;
 
                 if (sinceTime && isInitialWithSinceTime === true) {
-                    if (next) { /*count > limit*/
+                    if (next) {
+                        /*count > limit*/
                         setAtBottom(false);
-                        listMessages(false, callback, beforeTime, count - limit, sinceTime, false, replaceAll);
+                        listMessages(
+                            false,
+                            callback,
+                            beforeTime,
+                            count - limit,
+                            sinceTime,
+                            false,
+                            replaceAll
+                        );
                         return false;
                     }
                 }
@@ -794,7 +1026,8 @@ export default function Chat(props) {
                     const prepared = new ChatMessageClass(message);
                     // WABA ID is null if not sent yet
                     // Consider switching to getchat id only
-                    const messageKey = prepared.id ?? prepared.generateInternalIdString();
+                    const messageKey =
+                        prepared.id ?? prepared.generateInternalIdString();
                     preparedMessages[messageKey] = prepared;
                 });
 
@@ -813,25 +1046,50 @@ export default function Chat(props) {
                 }
 
                 if (!sinceTime) {
-                    sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
+                    sinceTimeForEvents =
+                        getFirstObject(preparedMessages)?.timestamp;
                 }
 
                 // List assignment and tagging history depends on user choice
                 if (getDisplayAssignmentAndTaggingHistory()) {
                     // List assignment events
-                    listChatAssignmentEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
+                    listChatAssignmentEvents(
+                        preparedMessages,
+                        isInitial,
+                        callback,
+                        replaceAll,
+                        beforeTime,
+                        sinceTime,
+                        beforeTimeForEvents,
+                        sinceTimeForEvents
+                    );
                 } else {
-                    finishLoadingMessages(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime);
+                    finishLoadingMessages(
+                        preparedMessages,
+                        isInitial,
+                        callback,
+                        replaceAll,
+                        beforeTime,
+                        sinceTime
+                    );
                 }
-
-            }, (error) => {
+            },
+            (error) => {
                 setLoadingMoreMessages(false);
-            }, history);
-    }
+            },
+            history
+        );
+    };
 
     // Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
-    const finishLoadingMessages = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime) => {
-
+    const finishLoadingMessages = (
+        preparedMessages,
+        isInitial,
+        callback,
+        replaceAll,
+        beforeTime,
+        sinceTime
+    ) => {
         // Sort prepared messages
         preparedMessages = sortMessagesAsc(preparedMessages);
 
@@ -840,24 +1098,28 @@ export default function Chat(props) {
             const prevScrollTop = messagesContainer.current.scrollTop;
             const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-            setMessages((prevState => {
+            setMessages((prevState) => {
                 let nextState;
                 if (replaceAll) {
                     nextState = preparedMessages;
                 } else {
                     if (sinceTime) {
-                        nextState = {...prevState, ...preparedMessages}
+                        nextState = { ...prevState, ...preparedMessages };
                     } else {
-                        nextState = {...preparedMessages, ...prevState}
+                        nextState = { ...preparedMessages, ...prevState };
                     }
                 }
 
                 // Sort final object
                 return sortMessagesAsc(nextState);
-            }));
+            });
 
             if (!sinceTime || replaceAll) {
-                persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, SCROLL_OFFSET);
+                persistScrollStateFromBottom(
+                    prevScrollHeight,
+                    prevScrollTop,
+                    SCROLL_OFFSET
+                );
             } else if (sinceTime) {
                 messagesContainer.current.scrollTop = prevScrollTop;
             }
@@ -880,35 +1142,88 @@ export default function Chat(props) {
                 callback(preparedMessages);
             }, 50);
         }
-    }
+    };
 
-    const listChatAssignmentEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        apiService.listChatAssignmentEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+    const listChatAssignmentEvents = (
+        preparedMessages,
+        isInitial,
+        callback,
+        replaceAll,
+        beforeTime,
+        sinceTime,
+        beforeTimeForEvents,
+        sinceTimeForEvents
+    ) => {
+        apiService.listChatAssignmentEventsCall(
+            waId,
+            beforeTimeForEvents,
+            sinceTimeForEvents,
+            cancelTokenSourceRef.current.token,
             (response) => {
                 response.data.results.reverse().forEach((assignmentEvent) => {
-                    const prepared = ChatMessageClass.fromAssignmentEvent(assignmentEvent);
+                    const prepared =
+                        ChatMessageClass.fromAssignmentEvent(assignmentEvent);
                     preparedMessages[prepared.id] = prepared;
                 });
 
                 // List chat tagging events
-                listChatTaggingEvents(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents);
-            });
-    }
+                listChatTaggingEvents(
+                    preparedMessages,
+                    isInitial,
+                    callback,
+                    replaceAll,
+                    beforeTime,
+                    sinceTime,
+                    beforeTimeForEvents,
+                    sinceTimeForEvents
+                );
+            }
+        );
+    };
 
-    const listChatTaggingEvents = (preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime, beforeTimeForEvents, sinceTimeForEvents) => {
-        apiService.listChatTaggingEventsCall(waId, beforeTimeForEvents, sinceTimeForEvents, cancelTokenSourceRef.current.token,
+    const listChatTaggingEvents = (
+        preparedMessages,
+        isInitial,
+        callback,
+        replaceAll,
+        beforeTime,
+        sinceTime,
+        beforeTimeForEvents,
+        sinceTimeForEvents
+    ) => {
+        apiService.listChatTaggingEventsCall(
+            waId,
+            beforeTimeForEvents,
+            sinceTimeForEvents,
+            cancelTokenSourceRef.current.token,
             (response) => {
                 response.data.results.reverse().forEach((taggingEvent) => {
-                    const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
+                    const prepared =
+                        ChatMessageClass.fromTaggingEvent(taggingEvent);
                     preparedMessages[prepared.id] = prepared;
                 });
 
                 // Finish loading
-                finishLoadingMessages(preparedMessages, isInitial, callback, replaceAll, beforeTime, sinceTime);
-            });
-    }
+                finishLoadingMessages(
+                    preparedMessages,
+                    isInitial,
+                    callback,
+                    replaceAll,
+                    beforeTime,
+                    sinceTime
+                );
+            }
+        );
+    };
 
-    const queueMessage = (requestBody, successCallback, errorCallback, completeCallback, formData, chosenFile) => {
+    const queueMessage = (
+        requestBody,
+        successCallback,
+        errorCallback,
+        completeCallback,
+        formData,
+        chosenFile
+    ) => {
         const uniqueID = generateUniqueID();
 
         // Inject id into requestBody
@@ -924,21 +1239,21 @@ export default function Chat(props) {
             formData: formData,
             chosenFile: chosenFile,
             isFailed: false,
-            willRetry: false
+            willRetry: false,
         });
 
         props.setPendingMessages([...updatedState]);
-    }
+    };
 
     const sendCustomTextMessage = (text) => {
         sendMessage(true, undefined, {
             wa_id: waId,
             type: ChatMessageClass.TYPE_TEXT,
             text: {
-                body: text.trim()
-            }
+                body: text.trim(),
+            },
         });
-    }
+    };
 
     const bulkSendMessage = (type, payload) => {
         props.setSelectionModeEnabled(true);
@@ -948,8 +1263,8 @@ export default function Chat(props) {
             payload = {
                 type: ChatMessageClass.TYPE_TEXT,
                 text: {
-                    body: preparedInput
-                }
+                    body: preparedInput,
+                },
             };
         }
 
@@ -959,15 +1274,21 @@ export default function Chat(props) {
         if (isMobileOnly) {
             closeChat();
         }
-    }
+    };
 
     const sanitizeRequestBody = (requestBody) => {
-        const sanitizedRequestBody = {...requestBody};
+        const sanitizedRequestBody = { ...requestBody };
         delete sanitizedRequestBody['pendingMessageUniqueId'];
         return sanitizedRequestBody;
-    }
+    };
 
-    const sendMessage = (willQueue, e, customPayload, successCallback, completeCallback) => {
+    const sendMessage = (
+        willQueue,
+        e,
+        customPayload,
+        successCallback,
+        completeCallback
+    ) => {
         e?.preventDefault();
 
         // Check if has internet connection
@@ -991,8 +1312,8 @@ export default function Chat(props) {
                 wa_id: waId,
                 type: ChatMessageClass.TYPE_TEXT,
                 text: {
-                    body: preparedInput
-                }
+                    body: preparedInput,
+                },
             };
         } else if (customPayload) {
             // Resend payload is being sent
@@ -1006,7 +1327,12 @@ export default function Chat(props) {
                 return;
             }
 
-            queueMessage(requestBody, successCallback, undefined, completeCallback);
+            queueMessage(
+                requestBody,
+                successCallback,
+                undefined,
+                completeCallback
+            );
             clearInput();
             return;
         }
@@ -1017,7 +1343,8 @@ export default function Chat(props) {
             return;
         }*/
 
-        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(
+            sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1026,8 +1353,8 @@ export default function Chat(props) {
 
                 successCallback?.();
                 completeCallback?.();
-
-            }, (error) => {
+            },
+            (error) => {
                 if (error.response) {
                     const status = error.response.status;
                     // Switch to expired mode if status code is 453
@@ -1041,14 +1368,20 @@ export default function Chat(props) {
                 }
 
                 completeCallback?.();
-            });
+            }
+        );
 
         // Close emoji picker
         PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
+    };
 
-    }
-
-    const sendTemplateMessage = (willQueue, templateMessage, customPayload, successCallback, completeCallback) => {
+    const sendTemplateMessage = (
+        willQueue,
+        templateMessage,
+        customPayload,
+        successCallback,
+        completeCallback
+    ) => {
         let requestBody;
 
         if (customPayload) {
@@ -1064,12 +1397,18 @@ export default function Chat(props) {
                 return;
             }
 
-            queueMessage(requestBody, successCallback, undefined, completeCallback);
+            queueMessage(
+                requestBody,
+                successCallback,
+                undefined,
+                completeCallback
+            );
 
             return;
         }
 
-        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(
+            sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1081,11 +1420,14 @@ export default function Chat(props) {
 
                 // Hide dialog by this event
                 PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
-
-            }, (error) => {
+            },
+            (error) => {
                 if (error.response) {
                     const errors = error.response.data?.waba_response?.errors;
-                    PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+                    PubSub.publish(
+                        EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
+                        errors
+                    );
 
                     const status = error.response.status;
 
@@ -1099,21 +1441,30 @@ export default function Chat(props) {
                 }
 
                 completeCallback?.();
-            });
-    }
+            }
+        );
+    };
 
     const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
         // To display a progress
         props.setUploadingMedia(true);
 
-        apiService.uploadMediaCall(formData,
+        apiService.uploadMediaCall(
+            formData,
             (response) => {
                 // Convert parameters to a ChosenFile object
-                sendFile(payload?.wa_id, response.data.file, chosenFile, undefined, function () {
-                    completeCallback();
-                    props.setUploadingMedia(false);
-                });
-            }, (error) => {
+                sendFile(
+                    payload?.wa_id,
+                    response.data.file,
+                    chosenFile,
+                    undefined,
+                    function () {
+                        completeCallback();
+                        props.setUploadingMedia(false);
+                    }
+                );
+            },
+            (error) => {
                 if (error.response) {
                     if (error.response) {
                         handleIfUnauthorized(error);
@@ -1123,10 +1474,17 @@ export default function Chat(props) {
                 // A retry can be considered
                 completeCallback();
                 props.setUploadingMedia(false);
-            });
-    }
+            }
+        );
+    };
 
-    const sendFile = (receiverWaId, fileURL, chosenFile, customPayload, completeCallback) => {
+    const sendFile = (
+        receiverWaId,
+        fileURL,
+        chosenFile,
+        customPayload,
+        completeCallback
+    ) => {
         let requestBody;
 
         if (customPayload) {
@@ -1138,10 +1496,11 @@ export default function Chat(props) {
                 wa_id: receiverWaId,
                 recipient_type: 'individual',
                 to: receiverWaId,
-            }
+            };
         }
 
-        apiService.sendMessageCall(sanitizeRequestBody(requestBody),
+        apiService.sendMessageCall(
+            sanitizeRequestBody(requestBody),
             (response) => {
                 // Message is stored and will be sent later
                 if (response.status === 202) {
@@ -1150,7 +1509,8 @@ export default function Chat(props) {
 
                 // Send next request (or resend callback)
                 completeCallback();
-            }, (error) => {
+            },
+            (error) => {
                 if (error.response) {
                     const status = error.response.status;
 
@@ -1168,14 +1528,18 @@ export default function Chat(props) {
                 if (!customPayload) {
                     completeCallback();
                 }
-            });
-    }
+            }
+        );
+    };
 
     const displayMessageInChatManually = (requestBody, response) => {
-        setMessages(prevState => {
+        setMessages((prevState) => {
             let text;
 
-            if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
+            if (
+                requestBody.type === ChatMessageClass.TYPE_TEXT ||
+                requestBody.text
+            ) {
                 text = requestBody.text.body;
             } else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
                 text = requestBody.template.name;
@@ -1204,15 +1568,17 @@ export default function Chat(props) {
             storedMessage.resendPayload = requestBody;
 
             prevState[storedMessage.id] = storedMessage;
-            return {...prevState};
+            return { ...prevState };
         });
-    }
+    };
 
     const handleFailedMessage = (requestBody) => {
         //displayMessageInChatManually(requestBody, false);
 
         // Mark message in queue as failed
-        props.setPendingMessages([...setPendingMessageFailed(requestBody.pendingMessageUniqueId)]);
+        props.setPendingMessages([
+            ...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
+        ]);
         props.setSendingPendingMessages(false);
 
         // This will be used to display a warning before refreshing
@@ -1220,11 +1586,11 @@ export default function Chat(props) {
 
         // Last attempt at
         props.setLastSendAttemptAt(new Date());
-    }
+    };
 
     const clearInput = () => {
         setInput('');
-    }
+    };
 
     const handleChosenFiles = () => {
         if (getObjLength(selectedFiles) > 0) {
@@ -1233,7 +1599,7 @@ export default function Chat(props) {
             setPreviewSendMediaData(preparedFiles);
             setPreviewSendMediaVisible(true);
         }
-    }
+    };
 
     const sendHandledChosenFiles = (preparedFiles) => {
         if (isLoaded && preparedFiles) {
@@ -1243,16 +1609,23 @@ export default function Chat(props) {
                 const file = curChosenFile.file;
 
                 const formData = new FormData();
-                formData.append("file_encoded", file);
+                formData.append('file_encoded', file);
 
                 const requestBody = {
-                    wa_id: waId
-                }
+                    wa_id: waId,
+                };
 
-                queueMessage(requestBody, undefined, undefined, undefined, formData, curChosenFile);
+                queueMessage(
+                    requestBody,
+                    undefined,
+                    undefined,
+                    undefined,
+                    formData,
+                    curChosenFile
+                );
             });
         }
-    }
+    };
 
     const handleDrop = (event) => {
         if (waId) {
@@ -1260,35 +1633,43 @@ export default function Chat(props) {
         } else {
             event.preventDefault();
         }
-    }
+    };
 
     const markAsReceived = (timestamp) => {
-        apiService.markAsReceivedCall(waId, timestamp, cancelTokenSourceRef.current.token,
+        apiService.markAsReceivedCall(
+            waId,
+            timestamp,
+            cancelTokenSourceRef.current.token,
             (response) => {
                 PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
                 setCurrentNewMessages(0);
-            });
-    }
+            }
+        );
+    };
 
     const handleIfUnauthorized = (error) => {
         if (error.response.status === 401) {
-            clearUserSession("invalidToken", undefined, history);
+            clearUserSession('invalidToken', undefined, history);
         }
-    }
+    };
 
     const closeChat = () => {
-        history.push("/main");
-    }
+        history.push('/main');
+    };
 
     let lastPrintedDate;
     let lastSenderWaId;
 
     return (
         <div
-            className={"chat" + (waId ? " chatOpen" : "") + (props.isChatOnly ? " chatFullWidth" : "")}
+            className={
+                'chat' +
+                (waId ? ' chatOpen' : '') +
+                (props.isChatOnly ? ' chatFullWidth' : '')
+            }
             onDrop={(event) => handleDrop(event)}
-            onDragOver={(event) => handleDragOver(event)}>
-
+            onDragOver={(event) => handleDragOver(event)}
+        >
             {/*<Prompt when={hasFailedMessages}
                     message={confirmationMessage} />*/}
 
@@ -1300,17 +1681,25 @@ export default function Chat(props) {
                 setChatAssignmentVisible={props.setChatAssignmentVisible}
                 setChatTagsVisible={props.setChatTagsVisible}
                 closeChat={closeChat}
-                hasFailedMessages={props.hasFailedMessages} />
+                hasFailedMessages={props.hasFailedMessages}
+            />
 
             {/* FOR TESTING QUEUE */}
-            {isLocalHost() && props.pendingMessages.length > 0 &&
+            {isLocalHost() && props.pendingMessages.length > 0 && (
                 <div className="pendingMessagesIndicator">
                     <div>{props.isSendingPendingMessages.toString()}</div>
                     <div>{props.pendingMessages.length}</div>
                 </div>
-            }
+            )}
 
-            <Zoom in={(isLoaded && !isLoadingMoreMessages && (fixedDateIndicatorText !== undefined && fixedDateIndicatorText.trim().length > 0))}>
+            <Zoom
+                in={
+                    isLoaded &&
+                    !isLoadingMoreMessages &&
+                    fixedDateIndicatorText !== undefined &&
+                    fixedDateIndicatorText.trim().length > 0
+                }
+            >
                 <div className="chat__body__dateIndicator">
                     <MessageDateIndicator text={fixedDateIndicatorText} />
                 </div>
@@ -1324,11 +1713,15 @@ export default function Chat(props) {
                 </div>
             </Zoom>
 
-            <div id="chat__body" className="chat__body" ref={messagesContainer} onDrop={(event) => event.preventDefault()}>
-                <div className="chat__empty"/>
+            <div
+                id="chat__body"
+                className="chat__body"
+                ref={messagesContainer}
+                onDrop={(event) => event.preventDefault()}
+            >
+                <div className="chat__empty" />
 
-                { Object.entries(messages).map((message, index) => {
-
+                {Object.entries(messages).map((message, index) => {
                     // Message date is created here and passed to ChatMessage for a better performance
                     const curMsgDate = moment.unix(message[1].timestamp);
 
@@ -1369,15 +1762,20 @@ export default function Chat(props) {
                             displayDate={willDisplayDate}
                             displaySender={willDisplaySender}
                             date={curMsgDate}
-                            onPreview={(chatMessage) => props.previewMedia(chatMessage)}
+                            onPreview={(chatMessage) =>
+                                props.previewMedia(chatMessage)
+                            }
                             templates={props.templates}
                             isTemplatesFailed={props.isTemplatesFailed}
                             goToMessageId={goToMessageId}
-                            onOptionsClick={(event, chatMessage) => displayOptionsMenu(event, chatMessage)}
+                            onOptionsClick={(event, chatMessage) =>
+                                displayOptionsMenu(event, chatMessage)
+                            }
                             contactProvidersData={props.contactProvidersData}
-                            retrieveContactData={props.retrieveContactData} />
-                    )
-                }) }
+                            retrieveContactData={props.retrieveContactData}
+                        />
+                    );
+                })}
 
                 <div className="chat__body__empty" />
             </div>
@@ -1400,47 +1798,53 @@ export default function Chat(props) {
                 setAccept={setAccept}
                 isScrollButtonVisible={isScrollButtonVisible}
                 handleScrollButtonClick={handleScrollButtonClick}
-                closeChat={closeChat} />
+                closeChat={closeChat}
+            />
 
-            {isTemplateMessagesVisible &&
+            {isTemplateMessagesVisible && (
                 <TemplateMessages
                     waId={waId}
                     templatesData={props.templates}
-                    onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
+                    onSend={(templateMessage) =>
+                        sendTemplateMessage(true, templateMessage)
+                    }
                     onBulkSend={bulkSendMessage}
                     isTemplatesFailed={props.isTemplatesFailed}
-                    isLoadingTemplates={props.isLoadingTemplates} />
-            }
+                    isLoadingTemplates={props.isLoadingTemplates}
+                />
+            )}
 
-            {isSavedResponsesVisible &&
+            {isSavedResponsesVisible && (
                 <SavedResponses
                     savedResponses={props.savedResponses}
                     deleteSavedResponse={props.deleteSavedResponse}
-                    sendCustomTextMessage={sendCustomTextMessage} />
-            }
+                    sendCustomTextMessage={sendCustomTextMessage}
+                />
+            )}
 
-            {!waId &&
+            {!waId && (
                 <div className="chat__default">
                     <h2>{t('Hey')}</h2>
                     <p>{t('Choose a contact to start a conversation')}</p>
                 </div>
-            }
+            )}
 
             <ChatMessageOptionsMenu
                 menuAnchorEl={menuAnchorEl}
                 setMenuAnchorEl={setMenuAnchorEl}
                 optionsChatMessage={optionsChatMessage}
-                createSavedResponse={props.createSavedResponse} />
+                createSavedResponse={props.createSavedResponse}
+            />
 
-            {isPreviewSendMediaVisible &&
+            {isPreviewSendMediaVisible && (
                 <PreviewSendMedia
                     data={previewSendMediaData}
                     setData={setPreviewSendMediaData}
                     setPreviewSendMediaVisible={setPreviewSendMediaVisible}
                     sendHandledChosenFiles={sendHandledChosenFiles}
-                    accept={accept} />
-            }
-
+                    accept={accept}
+                />
+            )}
         </div>
-    )
+    );
 }

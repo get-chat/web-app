@@ -1,8 +1,7 @@
-import {getPastHoursByTimestamp} from "./helpers/DateHelper";
-import {generateInitialsHelper} from "./helpers/Helpers";
+import { getPastHoursByTimestamp } from './helpers/DateHelper';
+import { generateInitialsHelper } from './helpers/Helpers';
 
 class PersonClass {
-
     constructor(data) {
         const payload = data.waba_payload;
 
@@ -10,7 +9,9 @@ class PersonClass {
 
         this.setName(payload?.profile?.name);
 
-        this.lastMessageTimestamp = data.last_message_timestamp ? parseInt(data.last_message_timestamp) : -1;
+        this.lastMessageTimestamp = data.last_message_timestamp
+            ? parseInt(data.last_message_timestamp)
+            : -1;
         this.isExpired = this.checkIfExpired();
     }
 
@@ -29,7 +30,7 @@ class PersonClass {
 
     generateInitials = () => {
         return generateInitialsHelper(this.name);
-    }
+    };
 
     static newInstance() {
         return new PersonClass({});

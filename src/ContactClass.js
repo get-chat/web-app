@@ -1,5 +1,4 @@
 class ContactClass {
-
     constructor(data) {
         this.name = data.name;
         this.initials = data.initials;

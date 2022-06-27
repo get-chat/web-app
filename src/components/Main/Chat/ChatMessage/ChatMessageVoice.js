@@ -1,22 +1,24 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Avatar, IconButton} from "@material-ui/core";
-import PauseIcon from "@material-ui/icons/Pause";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import HeadsetIcon from "@material-ui/icons/Headset";
-import PubSub from "pubsub-js";
-import {EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_UNSUPPORTED_FILE} from "../../../../Constants";
-import {isAudioMimeTypeSupported} from "../../../../helpers/FileHelper";
-import UnsupportedFileClass from "../../../../UnsupportedFileClass";
-import {generateAvatarColor} from "../../../../helpers/AvatarHelper";
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, IconButton } from '@material-ui/core';
+import PauseIcon from '@material-ui/icons/Pause';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import HeadsetIcon from '@material-ui/icons/Headset';
+import PubSub from 'pubsub-js';
+import {
+    EVENT_TOPIC_CHAT_MESSAGE,
+    EVENT_TOPIC_UNSUPPORTED_FILE,
+} from '../../../../Constants';
+import { isAudioMimeTypeSupported } from '../../../../helpers/FileHelper';
+import UnsupportedFileClass from '../../../../UnsupportedFileClass';
+import { generateAvatarColor } from '../../../../helpers/AvatarHelper';
 
 function ChatMessageVoice(props) {
-
     const data = props.data;
 
     const [isPlaying, setPlaying] = useState(false);
     const duration = useRef(null);
     const [progress, setProgress] = useState(0);
-    const [currentDuration, setCurrentDuration] = useState("0:00");
+    const [currentDuration, setCurrentDuration] = useState('0:00');
     const audio = useRef(null);
     const range = useRef(null);
 
@@ -27,16 +29,19 @@ function ChatMessageVoice(props) {
     };
 
     const playIconStyles = {
-        fontSize: '38px'
+        fontSize: '38px',
     };
 
     useEffect(() => {
         // Subscribing only if there is voice or audio
         if (data.hasAnyAudio()) {
-            const token = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE, onChatMessageEvent);
+            const token = PubSub.subscribe(
+                EVENT_TOPIC_CHAT_MESSAGE,
+                onChatMessageEvent
+            );
             return () => {
                 PubSub.unsubscribe(token);
-            }
+            };
         }
     }, []);
 
@@ -53,14 +58,13 @@ function ChatMessageVoice(props) {
                 audio.current.pause();
                 setPlaying(false);
             } else {
-
                 // Pause others
                 PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
                 console.log(data.mimeType);
 
                 if (isAudioMimeTypeSupported(data.mimeType)) {
-                    audio.current.play().catch(error => {
+                    audio.current.play().catch((error) => {
                         console.error(error);
                     });
                     setPlaying(true);
@@ -68,9 +72,12 @@ function ChatMessageVoice(props) {
                     const unsupportedFile = new UnsupportedFileClass({
                         name: props.data.filename,
                         link: props.data.audioLink,
-                        mimeType: data.mimeType
+                        mimeType: data.mimeType,
                     });
-                    PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
+                    PubSub.publish(
+                        EVENT_TOPIC_UNSUPPORTED_FILE,
+                        unsupportedFile
+                    );
                 }
             }
 
@@ -82,7 +89,7 @@ function ChatMessageVoice(props) {
                     setCurrentDuration(formatDuration(currentTime));
 
                     if (duration) {
-                        const percentage = (currentTime * 100) / duration
+                        const percentage = (currentTime * 100) / duration;
 
                         if (percentage >= 100) {
                             setProgress(0);
@@ -103,39 +110,78 @@ function ChatMessageVoice(props) {
                 }
             }, 300);
         }
-    }
+    };
 
     const formatDuration = (s) => {
         s = Math.floor(s);
-        return (s-(s%=60))/60+(9<s?':':':0')+s;
-    }
+        return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
+    };
 
     const changeDuration = (value) => {
-        if (audio.current && range.current && audio.current.duration !== Infinity) {
+        if (
+            audio.current &&
+            range.current &&
+            audio.current.duration !== Infinity
+        ) {
             setProgress(value);
             const nextCurrentTime = audio.current.duration / value;
             if (nextCurrentTime !== Infinity && !isNaN(nextCurrentTime)) {
                 audio.current.currentTime = parseFloat(nextCurrentTime);
             }
         }
-    }
+    };
 
     return (
         <div className="chat__voice">
-            <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
+            <span ref={duration} className="chat__voice__duration">
+                {currentDuration}
+            </span>
             <IconButton onClick={() => playVoice()}>
-                {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
+                {isPlaying ? (
+                    <PauseIcon style={playIconStyles} />
+                ) : (
+                    <PlayArrowIcon style={playIconStyles} />
+                )}
             </IconButton>
-            <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-            <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
+            <input
+                ref={range}
+                dir="ltr"
+                type="range"
+                className="chat__voice__range"
+                min="0"
+                max="100"
+                value={progress}
+                onChange={(e) => changeDuration(e.target.value)}
+            />
+            <audio
+                ref={audio}
+                src={
+                    data.voiceId
+                        ? data.generateVoiceLink()
+                        : data.generateAudioLink()
+                }
+                preload="none"
+                onLoadedMetadata={(event) => console.log(event.target.duration)}
+            />
 
             <Avatar
-                style={{backgroundColor: (data.voiceId !== undefined ?? data.voiceLink !== undefined) ? generateAvatarColor(data.senderName) : '#ff9a10'}}
-                className="audioMessageAvatar">
-                {data.voiceId !== undefined ? <span>{data.initials}</span> : <HeadsetIcon/>}
+                style={{
+                    backgroundColor:
+                        data.voiceId !== undefined ??
+                        data.voiceLink !== undefined
+                            ? generateAvatarColor(data.senderName)
+                            : '#ff9a10',
+                }}
+                className="audioMessageAvatar"
+            >
+                {data.voiceId !== undefined ? (
+                    <span>{data.initials}</span>
+                ) : (
+                    <HeadsetIcon />
+                )}
             </Avatar>
         </div>
-    )
+    );
 }
 
 export default ChatMessageVoice;

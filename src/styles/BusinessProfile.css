@@ -47,7 +47,8 @@
     font-weight: 400;
 }
 
-.sidebarBusinessProfile__body__section span:not(.MuiButton-label), .sidebarBusinessProfile__body__section__subSection > div {
+.sidebarBusinessProfile__body__section span:not(.MuiButton-label),
+.sidebarBusinessProfile__body__section__subSection > div {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
 }
@@ -82,7 +83,7 @@
     width: 200px;
     margin-bottom: 15px;
     font-size: 5rem !important;
-    transition: opacity linear .1s;
+    transition: opacity linear 0.1s;
 }
 
 .sidebarBusinessProfile__body__avatarContainer__info {
@@ -100,7 +101,8 @@
     margin-top: 10px;
 }
 
-.sidebarBusinessProfile__body__section__header, .sidebarBusinessProfile__body__section__header {
+.sidebarBusinessProfile__body__section__header,
+.sidebarBusinessProfile__body__section__header {
     display: flex;
     margin-bottom: 15px;
 }

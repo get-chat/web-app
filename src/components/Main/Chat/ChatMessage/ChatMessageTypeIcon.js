@@ -1,13 +1,13 @@
-import React from "react";
-import ChatMessageClass from "../../../../ChatMessageClass";
-import VideocamIcon from "@material-ui/icons/Videocam";
-import MicIcon from "@material-ui/icons/Mic";
-import AudiotrackIcon from "@material-ui/icons/Audiotrack";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import NoteIcon from "@material-ui/icons/Note";
-import SmsIcon from "@material-ui/icons/Sms";
-import TouchAppIcon from "@material-ui/icons/TouchApp";
-import PhotoCameraIcon from "@material-ui/icons/PhotoCamera";
+import React from 'react';
+import ChatMessageClass from '../../../../ChatMessageClass';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import MicIcon from '@material-ui/icons/Mic';
+import AudiotrackIcon from '@material-ui/icons/Audiotrack';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import NoteIcon from '@material-ui/icons/Note';
+import SmsIcon from '@material-ui/icons/Sms';
+import TouchAppIcon from '@material-ui/icons/TouchApp';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 
 function ChatMessageTypeIcon(props) {
@@ -27,7 +27,9 @@ function ChatMessageTypeIcon(props) {
 
             {props.type === ChatMessageClass.TYPE_STICKER && <NoteIcon />}
 
-            {props.type === ChatMessageClass.TYPE_LOCATION && <LocationOnIcon />}
+            {props.type === ChatMessageClass.TYPE_LOCATION && (
+                <LocationOnIcon />
+            )}
 
             {props.type === ChatMessageClass.TYPE_TEMPLATE && <SmsIcon />}
 

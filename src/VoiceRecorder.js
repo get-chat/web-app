@@ -1,12 +1,11 @@
-import ChosenFileClass from "./ChosenFileClass";
-import {ATTACHMENT_TYPE_AUDIO} from "./Constants";
+import ChosenFileClass from './ChosenFileClass';
+import { ATTACHMENT_TYPE_AUDIO } from './Constants';
 
 import { Mp3MediaRecorder } from 'mp3-mediarecorder';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Mp3RecorderWorker from 'worker-loader!./recorder/worker';
 
 class VoiceRecorder {
-
     constructor() {
         this.mediaRecorder = undefined;
         this.lastAudioChosenFile = undefined;
@@ -26,7 +25,7 @@ class VoiceRecorder {
             if (startCallback) {
                 startCallback();
             }
-        }
+        };
 
         const _this = this;
         this.mediaRecorder.ondataavailable = (event) => {
@@ -46,7 +45,7 @@ class VoiceRecorder {
         };
 
         this.mediaRecorder.onstop = () => {
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach((track) => track.stop());
 
             if (stopCallback) {
                 stopCallback();
@@ -71,7 +70,7 @@ class VoiceRecorder {
                 const stream = this.mediaRecorder.stream;
                 this.mediaRecorder.stop();
 
-                stream.getTracks().forEach(track => track.stop());
+                stream.getTracks().forEach((track) => track.stop());
             }
         }
     }

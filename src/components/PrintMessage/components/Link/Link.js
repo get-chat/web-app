@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { linkify } from "../../../../helpers/MessageHelper";
+import { linkify } from '../../../../helpers/MessageHelper';
 
 const Link = ({ data: { text } }) => {
     return <span dangerouslySetInnerHTML={{ __html: linkify(text) }} />;

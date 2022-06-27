@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import "../styles/Login.css";
-import { Backdrop, CircularProgress, Fade, TextField } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import { Alert } from "@material-ui/lab";
-import { clearToken, getToken, storeToken } from "../helpers/StorageHelper";
-import { makeStyles } from "@material-ui/styles";
-import { useTranslation } from "react-i18next";
-import { ApplicationContext } from "../contexts/ApplicationContext";
+import React, { useEffect, useState } from 'react';
+import '../styles/Login.css';
+import { Backdrop, CircularProgress, Fade, TextField } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { Alert } from '@material-ui/lab';
+import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
+import { makeStyles } from '@material-ui/styles';
+import { useTranslation } from 'react-i18next';
+import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
         zIndex: theme.zIndex.drawer + 1,
-        color: "#fff",
+        color: '#fff',
     },
 }));
 
@@ -25,15 +25,15 @@ export default function Login(props) {
     const { errorCase } = useParams();
 
     const errorMessages = {
-        incorrectRole: "Only admins and users can access to our web app.",
-        notLoggedIn: "You are not logged in.",
-        invalidToken: "Invalid token.",
+        incorrectRole: 'Only admins and users can access to our web app.',
+        notLoggedIn: 'You are not logged in.',
+        invalidToken: 'Invalid token.',
     };
 
     const classes = useStyles();
 
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const [isLoggingIn, setLoggingIn] = useState(false);
     const [isValidatingToken, setValidatingToken] = useState(false);
     const [loginError, setLoginError] = useState();
@@ -45,7 +45,7 @@ export default function Login(props) {
         if (errorCase) {
             setLoginError(errorMessages[errorCase]);
 
-            if (errorCase === "invalidToken") {
+            if (errorCase === 'invalidToken') {
                 logoutToClearSession();
             }
         }
@@ -57,7 +57,7 @@ export default function Login(props) {
             apiService.baseCall(
                 (response) => {
                     // Redirect to main route
-                    history.push("/main");
+                    history.push('/main');
                 },
                 (error) => {
                     setValidatingToken(false);
@@ -73,9 +73,9 @@ export default function Login(props) {
         e.preventDefault();
 
         // Check if username or password is empty
-        if (username.trim() === "" || password.trim() === "") {
+        if (username.trim() === '' || password.trim() === '') {
             // TODO: Display error on UI
-            console.log("Empty credentials");
+            console.log('Empty credentials');
             return false;
         }
 
@@ -92,13 +92,13 @@ export default function Login(props) {
                 // Android web interface
                 if (window.AndroidWebInterface) {
                     window.AndroidWebInterface.registerUserToken(
-                        response.data.token ?? ""
+                        response.data.token ?? ''
                     );
                 }
 
                 // Redirect to main route
                 history.push(
-                    (location.nextPath ?? "/main") + (location.search ?? "")
+                    (location.nextPath ?? '/main') + (location.search ?? '')
                 );
             },
             (error) => {
@@ -109,10 +109,10 @@ export default function Login(props) {
                 if (error.response) {
                     // Current status code for incorrect credentials must be changed to 401 or 403
                     if ([400, 401, 403].includes(error.response.status)) {
-                        setLoginError("Incorrect username or password.");
+                        setLoginError('Incorrect username or password.');
                     } else {
                         setLoginError(
-                            "An error has occurred. Please try again later."
+                            'An error has occurred. Please try again later.'
                         );
                     }
                 }
@@ -131,20 +131,20 @@ export default function Login(props) {
                     <div className="login__body__logoWrapper">
                         <img
                             className="login__body__logo"
-                            src={process.env.REACT_APP_LOGO_URL ?? "/logo.png"}
+                            src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
                             alt="Logo"
                         />
                     </div>
 
-                    <h2>{t("Welcome")}</h2>
-                    <p>{t("Please login to start")}</p>
+                    <h2>{t('Welcome')}</h2>
+                    <p>{t('Please login to start')}</p>
 
                     <form onSubmit={doLogin}>
                         <TextField
                             data-test-id="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            label={t("Username")}
+                            label={t('Username')}
                             size="medium"
                             fullWidth={true}
                         />
@@ -153,7 +153,7 @@ export default function Login(props) {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             type="password"
-                            label={t("Password")}
+                            label={t('Password')}
                             size="medium"
                             fullWidth={true}
                         />
@@ -164,16 +164,16 @@ export default function Login(props) {
                             fullWidth={true}
                             disableElevation
                         >
-                            {t("Log in")}
+                            {t('Log in')}
                         </Button>
                     </form>
 
                     {isValidatingToken && (
                         <div className="login__validatingToken">
-                            <h2>{t("Welcome")}</h2>
+                            <h2>{t('Welcome')}</h2>
                             <p>
                                 {t(
-                                    "We are validating your session, please wait."
+                                    'We are validating your session, please wait.'
                                 )}
                             </p>
                         </div>

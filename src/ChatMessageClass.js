@@ -1,7 +1,6 @@
-import {generateInitialsHelper, sanitize} from "./helpers/Helpers";
+import { generateInitialsHelper, sanitize } from './helpers/Helpers';
 
 export class ChatMessageClass {
-
     static TYPE_TEXT = 'text';
     static TYPE_IMAGE = 'image';
     static TYPE_VIDEO = 'video';
@@ -47,28 +46,48 @@ export class ChatMessageClass {
         //this.isReceived = data.received;
 
         this.imageId = payload.image?.id;
-        this.imageLink = payload.image?.link ?? (this.imageId ? this.generateImageLink() : undefined);
+        this.imageLink =
+            payload.image?.link ??
+            (this.imageId ? this.generateImageLink() : undefined);
 
         this.videoId = payload.video?.id;
-        this.videoLink = payload.video?.link ?? (this.videoId ? this.generateVideoLink() : undefined);
+        this.videoLink =
+            payload.video?.link ??
+            (this.videoId ? this.generateVideoLink() : undefined);
 
         this.documentId = payload.document?.id;
-        this.documentLink = payload.document?.link ?? (this.documentId ? this.generateDocumentLink() : undefined);
+        this.documentLink =
+            payload.document?.link ??
+            (this.documentId ? this.generateDocumentLink() : undefined);
         this.documentFileName = payload.document?.filename;
         //this.documentCaption = payload.document?.caption;
 
         this.voiceId = payload.voice?.id;
-        this.voiceLink = payload.voice?.link ?? (this.voiceId ? this.generateVoiceLink() : undefined);
+        this.voiceLink =
+            payload.voice?.link ??
+            (this.voiceId ? this.generateVoiceLink() : undefined);
 
         this.audioId = payload.audio?.id;
-        this.audioLink = payload.audio?.link ?? (this.audioId ? this.generateAudioLink() : undefined);
+        this.audioLink =
+            payload.audio?.link ??
+            (this.audioId ? this.generateAudioLink() : undefined);
 
         this.stickerId = payload.sticker?.id;
-        this.stickerLink = payload.sticker?.stickerLink ?? (this.stickerId ? this.generateStickerLink() : undefined);
+        this.stickerLink =
+            payload.sticker?.stickerLink ??
+            (this.stickerId ? this.generateStickerLink() : undefined);
 
-        this.caption = payload.image?.caption ?? payload.video?.caption ?? payload.audio?.caption ?? payload.document?.caption;
+        this.caption =
+            payload.image?.caption ??
+            payload.video?.caption ??
+            payload.audio?.caption ??
+            payload.document?.caption;
 
-        this.mimeType = payload.image?.mime_type ?? payload.video?.mime_type ?? payload.audio?.mime_type ?? payload.document?.mime_type;
+        this.mimeType =
+            payload.image?.mime_type ??
+            payload.video?.mime_type ??
+            payload.audio?.mime_type ??
+            payload.document?.mime_type;
 
         this.location = payload.location;
 
@@ -96,7 +115,7 @@ export class ChatMessageClass {
         this.resendPayload = undefined;
 
         this.sanitize();
-    };
+    }
 
     sanitize() {
         this.text = sanitize(this.text);
@@ -145,19 +164,32 @@ export class ChatMessageClass {
             }
         }
 
-        return this.senderObject?.username ?? (!this.isFromUs ? this.contact?.waba_payload?.profile?.name : "Us");
+        return (
+            this.senderObject?.username ??
+            (!this.isFromUs ? this.contact?.waba_payload?.profile?.name : 'Us')
+        );
     }
 
     generateInitials = () => {
         return generateInitialsHelper(this.senderName);
-    }
+    };
 
     hasMediaToPreview() {
-        return this.imageLink !== undefined || this.videoId !== undefined || this.getHeaderFileLink('image') || this.getHeaderFileLink('video');
+        return (
+            this.imageLink !== undefined ||
+            this.videoId !== undefined ||
+            this.getHeaderFileLink('image') ||
+            this.getHeaderFileLink('video')
+        );
     }
 
     hasAnyAudio() {
-        return this.voiceId !== undefined || this.voiceLink !== undefined || this.audioId !== undefined || this.audioLink !== undefined;
+        return (
+            this.voiceId !== undefined ||
+            this.voiceLink !== undefined ||
+            this.audioId !== undefined ||
+            this.audioLink !== undefined
+        );
     }
 
     generateMediaLink(id) {
@@ -165,11 +197,23 @@ export class ChatMessageClass {
     }
 
     generateImageLink(includeTemplateHeader) {
-        return this.imageLink ?? this.generateMediaLink(this.imageId) ?? (includeTemplateHeader === true ? this.getHeaderFileLink('image') : undefined);
+        return (
+            this.imageLink ??
+            this.generateMediaLink(this.imageId) ??
+            (includeTemplateHeader === true
+                ? this.getHeaderFileLink('image')
+                : undefined)
+        );
     }
 
     generateVideoLink(includeTemplateHeader) {
-        return this.videoLink ?? this.generateMediaLink(this.videoId) ?? (includeTemplateHeader === true ? this.getHeaderFileLink('video') : undefined);
+        return (
+            this.videoLink ??
+            this.generateMediaLink(this.videoId) ??
+            (includeTemplateHeader === true
+                ? this.getHeaderFileLink('video')
+                : undefined)
+        );
     }
 
     generateDocumentLink() {
@@ -215,7 +259,10 @@ export class ChatMessageClass {
 
     isDeliveredOrRead() {
         const status = this.getStatus();
-        return status === ChatMessageClass.STATUS_DELIVERED || status === ChatMessageClass.STATUS_READ;
+        return (
+            status === ChatMessageClass.STATUS_DELIVERED ||
+            status === ChatMessageClass.STATUS_READ
+        );
     }
 
     getHeaderFileLink(type) {
@@ -224,7 +271,7 @@ export class ChatMessageClass {
                 for (let i = 0; i < this.templateParameters.length; i++) {
                     const component = this.templateParameters[i];
 
-                    if (component.type === "header") {
+                    if (component.type === 'header') {
                         for (let j = 0; j < component.parameters.length; j++) {
                             const param = component.parameters[j];
 

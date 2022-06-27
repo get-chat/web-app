@@ -1,20 +1,27 @@
-import React from "react";
-import {Button} from "@material-ui/core";
+import React from 'react';
+import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
-import {Trans, useTranslation} from "react-i18next";
+import { Trans, useTranslation } from 'react-i18next';
 
 function BulkSendActions(props) {
-
     const { t, i18n } = useTranslation();
 
     return (
         <div className="bulkSendActions">
-
             <h3>{t('Bulk Send')}</h3>
 
             <div className="bulkSendActions__recipients">
-                <Trans values={{postProcess: 'sprintf', sprintf: {'contacts_count': props.selectedChats.length, 'tags_count': props.selectedTags.length} }}>
-                    Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
+                <Trans
+                    values={{
+                        postProcess: 'sprintf',
+                        sprintf: {
+                            contacts_count: props.selectedChats.length,
+                            tags_count: props.selectedTags.length,
+                        },
+                    }}
+                >
+                    Selected %(contacts_count)d contact(s) and %(tags_count)d
+                    tag(s).
                 </Trans>
             </div>
 
@@ -26,9 +33,8 @@ function BulkSendActions(props) {
                     {t('Send')}
                 </Button>
             </div>
-
         </div>
-    )
+    );
 }
 
 export default BulkSendActions;

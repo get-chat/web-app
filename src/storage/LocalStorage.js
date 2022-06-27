@@ -1,4 +1,4 @@
-import {BaseStorage} from "./BaseStorage";
+import { BaseStorage } from './BaseStorage';
 
 export class LocalStorage extends BaseStorage {
     getItem(itemKey) {

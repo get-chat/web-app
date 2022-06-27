@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
-import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import React, { useState } from 'react';
+import {
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField,
+} from '@material-ui/core';
 import '../styles/CreateTemplate.css';
 
 function CreateTemplate() {
+    const [language, setLanguage] = useState('en_US');
+    const [category, setCategory] = useState('AUTO_REPLY');
 
-    const [language, setLanguage] = useState("en_US");
-    const [category, setCategory] = useState("AUTO_REPLY");
-
-    const createTemplate = () => {
-
-    }
+    const createTemplate = () => {};
 
     const handleLanguageChange = (event) => {
         setLanguage(event.target.value);
@@ -19,9 +23,8 @@ function CreateTemplate() {
         setCategory(event.target.value);
     };
 
-    return(
+    return (
         <div className="createTemplate">
-
             <h3>Create a template</h3>
 
             <TextField
@@ -37,8 +40,9 @@ function CreateTemplate() {
                     labelId="demo-simple-select-outlined-label"
                     onChange={handleLanguageChange}
                     label="Language"
-                    value={language}>
-                    <MenuItem value={"en_US"}>en_US</MenuItem>
+                    value={language}
+                >
+                    <MenuItem value={'en_US'}>en_US</MenuItem>
                 </Select>
             </FormControl>
 
@@ -48,8 +52,9 @@ function CreateTemplate() {
                     labelId="demo-simple-select-outlined-label"
                     onChange={handleCategoryChange}
                     label="Category"
-                    value={category}>
-                    <MenuItem value={"AUTO_REPLY"}>AUTO_REPLY</MenuItem>
+                    value={category}
+                >
+                    <MenuItem value={'AUTO_REPLY'}>AUTO_REPLY</MenuItem>
                 </Select>
             </FormControl>
 
@@ -61,12 +66,11 @@ function CreateTemplate() {
                 fullWidth={true}
             />
 
-            <Button
-                fullWidth={true}
-                onClick={createTemplate}>Create</Button>
-
+            <Button fullWidth={true} onClick={createTemplate}>
+                Create
+            </Button>
         </div>
-    )
+    );
 }
 
 export default CreateTemplate;

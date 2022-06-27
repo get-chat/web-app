@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     CircularProgress,
@@ -10,15 +10,14 @@ import {
     FormControl,
     InputLabel,
     MenuItem,
-    Select
-} from "@material-ui/core";
+    Select,
+} from '@material-ui/core';
 import '../../styles/ChatAssignment.css';
-import {useTranslation} from "react-i18next";
-import {ApplicationContext} from "../../contexts/ApplicationContext";
+import { useTranslation } from 'react-i18next';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
 
 function ChatAssignment(props) {
-
-    const {apiService} = React.useContext(ApplicationContext);
+    const { apiService } = React.useContext(ApplicationContext);
 
     const { t, i18n } = useTranslation();
 
@@ -40,10 +39,11 @@ function ChatAssignment(props) {
 
     const close = () => {
         props.setOpen(false);
-    }
+    };
 
     const retrieveChatAssignment = () => {
-        apiService.retrieveChatAssignmentCall(props.waId,
+        apiService.retrieveChatAssignmentCall(
+            props.waId,
             (response) => {
                 // Data on server
                 setAssignedToUser(response.data.assigned_to_user);
@@ -54,14 +54,16 @@ function ChatAssignment(props) {
                 setTempAssignedGroup(response.data.assigned_group ?? 'null');
 
                 setLoading(false);
-            }, (error) => {
+            },
+            (error) => {
                 if (error?.response?.status === 403) {
                     setLoading(false);
                 } else {
                     close();
                 }
-            });
-    }
+            }
+        );
+    };
 
     const updateChatAssignment = () => {
         apiService.updateChatAssignmentCall(
@@ -70,14 +72,18 @@ function ChatAssignment(props) {
             tempAssignedGroup === 'null' ? null : tempAssignedGroup,
             (response) => {
                 close();
-            }, (error) => {
+            },
+            (error) => {
                 if (error?.response?.status === 403) {
-                    window.displayCustomError('This chat could not be assigned as its assignments have been changed by another user recently.');
+                    window.displayCustomError(
+                        'This chat could not be assigned as its assignments have been changed by another user recently.'
+                    );
                 }
 
                 close();
-            });
-    }
+            }
+        );
+    };
 
     const listGroups = () => {
         apiService.listGroupsCall((response) => {
@@ -86,7 +92,7 @@ function ChatAssignment(props) {
             // Next
             retrieveChatAssignment();
         });
-    }
+    };
 
     const handleUserChange = (event) => {
         const userId = event.target.value;
@@ -97,35 +103,40 @@ function ChatAssignment(props) {
             const firstGroupOfUser = props.users[userId]?.groups?.[0]?.id;
             setTempAssignedGroup(firstGroupOfUser);
         }
-    }
+    };
 
     const handleGroupChange = (event) => {
         setTempAssignedGroup(event.target.value);
-    }
+    };
 
     const checkIfUnableToChange = () => {
-        const isUnable = !props.isAdmin
-            && (assignedToUser !== undefined
-                && assignedToUser !== null
-                && assignedToUser !== props.currentUser.id.toString());
+        const isUnable =
+            !props.isAdmin &&
+            assignedToUser !== undefined &&
+            assignedToUser !== null &&
+            assignedToUser !== props.currentUser.id.toString();
         setUnableToChange(isUnable);
-    }
+    };
 
     return (
-        <Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
+        <Dialog
+            open={props.open}
+            onClose={close}
+            className="chatAssignmentWrapper"
+        >
             <DialogTitle>Assign chat</DialogTitle>
             <DialogContent className="chatAssignment">
-
-                {isUnableToChange
-                    ?
+                {isUnableToChange ? (
                     <DialogContentText>
-                        {t('This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.')}
+                        {t(
+                            'This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.'
+                        )}
                     </DialogContentText>
-                    :
+                ) : (
                     <DialogContentText>
                         {t('You can assign this chat to a user or a group.')}
                     </DialogContentText>
-                }
+                )}
 
                 <FormControl fullWidth={true} disabled={isUnableToChange}>
                     <InputLabel id="assign-user-select-label">User</InputLabel>
@@ -133,50 +144,54 @@ function ChatAssignment(props) {
                         labelId="assign-user-select-label"
                         id="assign-user-select"
                         value={tempAssignedToUser}
-                        onChange={handleUserChange}>
-                        <MenuItem value="null">
-                            {t('Unassigned')}
-                        </MenuItem>
-                        {Object.values(props.users)?.map((user) =>
-                            <MenuItem key={user.id} value={user.id}>{user.prepareUserLabel()}</MenuItem>
-                        )}
+                        onChange={handleUserChange}
+                    >
+                        <MenuItem value="null">{t('Unassigned')}</MenuItem>
+                        {Object.values(props.users)?.map((user) => (
+                            <MenuItem key={user.id} value={user.id}>
+                                {user.prepareUserLabel()}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
 
                 <FormControl fullWidth={true} disabled={isUnableToChange}>
-                    <InputLabel id="assign-group-select-label">Group</InputLabel>
+                    <InputLabel id="assign-group-select-label">
+                        Group
+                    </InputLabel>
                     <Select
                         labelId="assign-group-select-label"
                         id="assign-group-select"
                         value={tempAssignedGroup}
-                        onChange={handleGroupChange}>
-                        <MenuItem value="null">
-                            {t('Unassigned')}
-                        </MenuItem>
-                        {groups?.map((group) =>
-                            <MenuItem key={group.id} value={group.id}>{group.name}</MenuItem>
-                        )}
+                        onChange={handleGroupChange}
+                    >
+                        <MenuItem value="null">{t('Unassigned')}</MenuItem>
+                        {groups?.map((group) => (
+                            <MenuItem key={group.id} value={group.id}>
+                                {group.name}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
-
             </DialogContent>
             <DialogActions>
-                <Button onClick={close} color="secondary">Close</Button>
-                {!isUnableToChange &&
-                <Button color="primary" onClick={updateChatAssignment}>
-                    {t('Update')}
+                <Button onClick={close} color="secondary">
+                    Close
                 </Button>
-                }
+                {!isUnableToChange && (
+                    <Button color="primary" onClick={updateChatAssignment}>
+                        {t('Update')}
+                    </Button>
+                )}
             </DialogActions>
 
-            {isLoading &&
-            <div className="chatAssignmentWrapper__loading">
-                <CircularProgress size={28} />
-            </div>
-            }
-
+            {isLoading && (
+                <div className="chatAssignmentWrapper__loading">
+                    <CircularProgress size={28} />
+                </div>
+            )}
         </Dialog>
-    )
+    );
 }
 
 export default ChatAssignment;

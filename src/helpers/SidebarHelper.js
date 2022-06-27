@@ -1,4 +1,8 @@
-import {SIDEBAR_TAB_CASE_ALL, SIDEBAR_TAB_CASE_GROUP, SIDEBAR_TAB_CASE_ME} from "../Constants";
+import {
+    SIDEBAR_TAB_CASE_ALL,
+    SIDEBAR_TAB_CASE_GROUP,
+    SIDEBAR_TAB_CASE_ME,
+} from '../Constants';
 
 export const filterChat = (props, tabCase, curChat) => {
     // Filter by tag
@@ -47,4 +51,4 @@ export const filterChat = (props, tabCase, curChat) => {
     }
 
     return false;
-}
+};

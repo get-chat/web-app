@@ -28,5 +28,5 @@
 }
 
 .bulkSendActions__actions .MuiButton-root:first-of-type .MuiButton-label {
-    opacity: .75;
+    opacity: 0.75;
 }

@@ -29,7 +29,8 @@
     padding: 10px;
 }
 
-.searchBar__searchContainer > .MuiSvgIcon-root, .searchBar__searchContainer > .MuiCircularProgress-root {
+.searchBar__searchContainer > .MuiSvgIcon-root,
+.searchBar__searchContainer > .MuiCircularProgress-root {
     position: absolute;
     left: 0;
     margin-top: auto;

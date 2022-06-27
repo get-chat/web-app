@@ -1,7 +1,7 @@
-import { replaceEmojis } from "./EmojiHelper";
-import { getLastObject } from "./ObjectHelper";
+import { replaceEmojis } from './EmojiHelper';
+import { getLastObject } from './ObjectHelper';
 
-import { sanitize } from "dompurify";
+import { sanitize } from 'dompurify';
 
 export function linkify(inputText) {
     let replacedText, replacePattern1, replacePattern2, replacePattern3;
@@ -34,7 +34,7 @@ export function linkify(inputText) {
 export const formatMessage = (message) => {
     if (!message) return;
 
-    let formatted = message.replaceAll("\n", "<br/>");
+    let formatted = message.replaceAll('\n', '<br/>');
     formatted = linkify(formatted);
     formatted = sanitize(formatted);
     formatted = replaceEmojis(formatted);
@@ -50,10 +50,10 @@ export const extractTimestampFromMessage = (message) => {
 };
 export const generateMessagePreview = (payload) => {
     const messageType = payload?.type;
-    if (messageType === "text") {
-        return payload?.text?.body ?? "";
-    } else if (messageType === "template") {
-        return "Template: " + (payload?.template?.name ?? "");
+    if (messageType === 'text') {
+        return payload?.text?.body ?? '';
+    } else if (messageType === 'template') {
+        return 'Template: ' + (payload?.template?.name ?? '');
     } else {
         return messageType;
     }

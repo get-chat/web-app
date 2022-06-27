@@ -1,7 +1,7 @@
 .contactDetails {
     display: flex;
     flex-direction: column;
-    flex: 0.40 1;
+    flex: 0.4 1;
     border-left: 1px solid lightgray;
     z-index: 10;
 }
@@ -50,7 +50,8 @@
     width: 20px !important;
 }
 
-.contactDetails__body__section > span, .contactDetails__body__section__content__sub {
+.contactDetails__body__section > span,
+.contactDetails__body__section__content__sub {
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
 }
@@ -83,10 +84,10 @@
 }
 
 .contactDetails__body__avatar {
-    height: 200px!important;
-    width: 200px!important;
+    height: 200px !important;
+    width: 200px !important;
     margin-bottom: 15px;
-    font-size: 5rem!important;
+    font-size: 5rem !important;
 }
 
 .contactDetails__body__job {

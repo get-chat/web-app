@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import DoneAll from "@material-ui/icons/DoneAll";
 import DoneIcon from "@material-ui/icons/Done";
@@ -22,9 +23,37 @@ import { useTranslation } from "react-i18next";
 import InteractiveMessage from "./InteractiveMessage";
 import OrderMessage from "./OrderMessage";
 import PrintMessage from "../../../PrintMessage";
+=======
+import React from 'react';
+import DoneAll from '@material-ui/icons/DoneAll';
+import DoneIcon from '@material-ui/icons/Done';
+import Moment from 'react-moment';
+import '../../../../styles/InputRange.css';
+import '../../../../AvatarStyles';
+import NoteIcon from '@material-ui/icons/Note';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ChatMessageClass from '../../../../ChatMessageClass';
+import MessageDateIndicator from '../MessageDateIndicator';
+import ContextChatMessage from './ContextChatMessage';
+import ReplyIcon from '@material-ui/icons/Reply';
+import ChatMessageVideo from './ChatMessageVideo';
+import ChatMessageImage from './ChatMessageImage';
+import ChatMessageDocument from './ChatMessageDocument';
+import ChatMessageVoice from './ChatMessageVoice';
+import ChatMessageTemplate from './ChatMessageTemplate';
+import ChatAssignmentEvent from '../../../ChatAssignmentEvent';
+import ChatTaggingEvent from './ChatTaggingEvent';
+import ChatMessageLocation from './ChatMessageLocation';
+import { replaceEmojis } from '../../../../helpers/EmojiHelper';
+import { formatMessage } from '../../../../helpers/MessageHelper';
+import { useTranslation } from 'react-i18next';
+import InteractiveMessage from './InteractiveMessage';
+import OrderMessage from './OrderMessage';
+import PrintMessage from '../../../PrintMessage';
+>>>>>>> 9d9d5eb (Add prettier and pretty all files in src)
 
 const iconStyles = {
-    fontSize: "15px",
+    fontSize: '15px',
 };
 
 function ChatMessage(props) {
@@ -36,14 +65,14 @@ function ChatMessage(props) {
             ? props.templates[data.templateName]
             : undefined;
 
-    const dateFormat = "H:mm";
+    const dateFormat = 'H:mm';
 
     return (
         <div
-            id={"message_" + data.id}
+            id={'message_' + data.id}
             className={
-                "chat__message__outer" +
-                (data.isFromUs === true ? " outgoing" : "")
+                'chat__message__outer' +
+                (data.isFromUs === true ? ' outgoing' : '')
             }
         >
             {props.displayDate && (
@@ -80,17 +109,17 @@ function ChatMessage(props) {
 
                     <div
                         className={
-                            "chat__message" +
-                            (data.hasMediaToPreview() ? " hasMedia" : "") +
+                            'chat__message' +
+                            (data.hasMediaToPreview() ? ' hasMedia' : '') +
                             (data.isFromUs === true
-                                ? (data.isRead() ? " chat__received" : "") +
-                                  " chat__outgoing"
-                                : "") +
+                                ? (data.isRead() ? ' chat__received' : '') +
+                                  ' chat__outgoing'
+                                : '') +
                             (!props.displaySender && !props.displayDate
-                                ? " hiddenSender"
-                                : "") +
-                            (" messageType__" + data.type) +
-                            (data.isFailed ? " chat__failed" : "")
+                                ? ' hiddenSender'
+                                : '') +
+                            (' messageType__' + data.type) +
+                            (data.isFailed ? ' chat__failed' : '')
                         }
                     >
                         <div
@@ -105,7 +134,7 @@ function ChatMessage(props) {
                         {data.isForwarded && (
                             <div className="chat__forwarded">
                                 <ReplyIcon />
-                                <span>{t("Forwarded")}</span>
+                                <span>{t('Forwarded')}</span>
                             </div>
                         )}
 
@@ -195,7 +224,7 @@ function ChatMessage(props) {
                                 }
                             />
                         ) : (
-                            "\u00A0"
+                            '\u00A0'
                         )}
 
                         <span className="chat__message__info">
@@ -228,7 +257,7 @@ function ChatMessage(props) {
                                 )}
                         </span>
 
-                        <div style={{ clear: "both" }} />
+                        <div style={{ clear: 'both' }} />
                     </div>
                 </div>
             )}

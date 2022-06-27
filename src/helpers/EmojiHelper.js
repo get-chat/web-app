@@ -1,12 +1,12 @@
-import { Emoji, getEmojiDataFromNative } from "emoji-mart";
-import { EMOJI_SET, EMOJI_SHEET_SIZE } from "../Constants";
-import data from "../EmojiData.json";
+import { Emoji, getEmojiDataFromNative } from 'emoji-mart';
+import { EMOJI_SET, EMOJI_SHEET_SIZE } from '../Constants';
+import data from '../EmojiData.json';
 
-const emojiRegex = require("emoji-regex/RGI_Emoji.js");
+const emojiRegex = require('emoji-regex/RGI_Emoji.js');
 
 function containsOnlyEmojis(text) {
-    const onlyEmojis = text.replace(new RegExp("[\u0000-\u1eeff]", "g"), "");
-    const visibleChars = text.replace(new RegExp("[\n\rs]+|( )+", "g"), "");
+    const onlyEmojis = text.replace(new RegExp('[\u0000-\u1eeff]', 'g'), '');
+    const visibleChars = text.replace(new RegExp('[\n\rs]+|( )+', 'g'), '');
     return onlyEmojis.length === visibleChars.length;
 }
 

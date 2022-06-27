@@ -1,6 +1,6 @@
-import {getAttachmentTypeByFile} from "./helpers/FileHelper";
-import {EVENT_TOPIC_RELOAD_PREVIEW} from "./Constants";
-import PubSub from "pubsub-js";
+import { getAttachmentTypeByFile } from './helpers/FileHelper';
+import { EVENT_TOPIC_RELOAD_PREVIEW } from './Constants';
+import PubSub from 'pubsub-js';
 
 class ChosenFileClass {
     constructor(key, data, checkAudioCodec) {
@@ -18,7 +18,7 @@ class ChosenFileClass {
 
                 // An event is published to force preview to render again
                 PubSub.publishSync(EVENT_TOPIC_RELOAD_PREVIEW, type);
-            }
+            };
         }
 
         this.attachmentType = getAttachmentTypeByFile(data, callback);

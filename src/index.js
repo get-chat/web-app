@@ -4,20 +4,21 @@ import './styles/index.css';
 import './styles/App.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import * as Sentry from "@sentry/react";
-import {Integrations} from "@sentry/tracing";
-import {isLocalHost} from "./helpers/URLHelper";
-import {initStorageType} from "./helpers/StorageHelper";
+import * as Sentry from '@sentry/react';
+import { Integrations } from '@sentry/tracing';
+import { isLocalHost } from './helpers/URLHelper';
+import { initStorageType } from './helpers/StorageHelper';
 import packageJson from '../package.json';
 import './i18n';
-import axios from "axios";
-import {ApiService} from "./api/ApiService";
+import axios from 'axios';
+import { ApiService } from './api/ApiService';
 
 // Init storage type
 initStorageType();
 
 // Load external config and render App
-axios.get(`/config.json`)
+axios
+    .get(`/config.json`)
     .then((response) => {
         const config = response.data;
 
@@ -48,9 +49,10 @@ axios.get(`/config.json`)
             <App config={config} apiService={apiService} />,
             document.getElementById('root')
         );
-    }).catch((error) => {
-    console.error(error);
-});
+    })
+    .catch((error) => {
+        console.error(error);
+    });
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
