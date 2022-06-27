@@ -8,7 +8,15 @@ function ChatMessageLocation(props) {
 
     const share = async () => {
         if (navigator.share) {
-            await navigator.share({url: mapURL});
+            try {
+                await navigator.share({url: mapURL});
+            } catch (e) {
+                if (e.toString().includes('AbortError')) {
+                    console.log('Ignored AbortError.');
+                } else {
+                    window.displayCustomError(e.toString());
+                }
+            }
         } else if (navigator.clipboard) {
             await navigator.clipboard.writeText(mapURL);
             window.displaySuccess('Copied!');
