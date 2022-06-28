@@ -10,46 +10,38 @@ import { ListItem } from '@material-ui/core';
 import PrintMessage from './PrintMessage';
 
 function SearchMessageResult(props) {
-    const data = props.messageData;
+	const data = props.messageData;
 
-    return (
-        <ListItem button onClick={() => props.onClick(data)}>
-            <div className="searchResult__message">
-                <div className="searchResult__message__header">
-                    <Moment
-                        unix
-                        calendar={CALENDAR_NORMAL}
-                        date={data.timestamp}
-                    />
+	return (
+		<ListItem button onClick={() => props.onClick(data)}>
+			<div className="searchResult__message">
+				<div className="searchResult__message__header">
+					<Moment unix calendar={CALENDAR_NORMAL} date={data.timestamp} />
 
-                    {props.displaySender === true && <h3>{data.senderName}</h3>}
-                </div>
-                <div className="searchResult__message__body">
-                    <span className="searchResult__message__body__type">
-                        {data.isFromUs === true &&
-                            data.type === ChatMessageClass.TYPE_TEXT && (
-                                <span
-                                    className={
-                                        data.isRead() ? 'chat__received' : ''
-                                    }
-                                >
-                                    {data.isDeliveredOrRead() ? (
-                                        <DoneAll className="chat__iconDoneAll" />
-                                    ) : (
-                                        <DoneIcon />
-                                    )}
-                                </span>
-                            )}
+					{props.displaySender === true && <h3>{data.senderName}</h3>}
+				</div>
+				<div className="searchResult__message__body">
+					<span className="searchResult__message__body__type">
+						{data.isFromUs === true &&
+							data.type === ChatMessageClass.TYPE_TEXT && (
+								<span className={data.isRead() ? 'chat__received' : ''}>
+									{data.isDeliveredOrRead() ? (
+										<DoneAll className="chat__iconDoneAll" />
+									) : (
+										<DoneIcon />
+									)}
+								</span>
+							)}
 
-                        <ChatMessageTypeIcon type={data.type} />
-                    </span>
+						<ChatMessageTypeIcon type={data.type} />
+					</span>
 
-                    {/* TODO: hightlite htext with props.keyword */}
-                    <PrintMessage message={data.text ?? data.caption} />
-                </div>
-            </div>
-        </ListItem>
-    );
+					{/* TODO: hightlite htext with props.keyword */}
+					<PrintMessage message={data.text ?? data.caption} />
+				</div>
+			</div>
+		</ListItem>
+	);
 }
 
 export default SearchMessageResult;

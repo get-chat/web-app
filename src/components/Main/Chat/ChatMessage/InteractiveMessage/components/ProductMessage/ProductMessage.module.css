@@ -1,28 +1,28 @@
 .actions {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid #ccc;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #ccc;
 }
 
 .header,
 .body {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 .footer {
-    opacity: 0.5;
+	opacity: 0.5;
 }
 
 .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 .item + .item {
-    margin-top: 5px;
+	margin-top: 5px;
 }

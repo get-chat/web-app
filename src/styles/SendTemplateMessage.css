@@ -1,46 +1,46 @@
 .sendTemplateMessage__title {
-    margin-bottom: 20px;
-    word-break: break-all;
+	margin-bottom: 20px;
+	word-break: break-all;
 }
 
 .sendTemplateMessage h6 {
-    color: rgba(0, 0, 0, 0.5);
-    margin-bottom: 5px;
+	color: rgba(0, 0, 0, 0.5);
+	margin-bottom: 5px;
 }
 
 .sendTemplateMessage__section {
-    padding: 15px 20px;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.03);
-    margin-bottom: 20px;
+	padding: 15px 20px;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 0, 0.03);
+	margin-bottom: 20px;
 }
 
 .sendTemplateMessage__section .MuiAlert-root {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .sendTemplateMessage__section .MuiButtonBase-root {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 .templateMessage__param {
-    margin-top: 10px !important;
+	margin-top: 10px !important;
 }
 
 .templateMessagesDialogErrors .MuiAlert-root {
-    margin-bottom: 5px !important;
+	margin-bottom: 5px !important;
 }
 
 .sendTemplateMessage__component__header__preview {
-    max-height: 100px;
-    max-width: 250px;
-    object-fit: contain;
-    margin-bottom: 5px;
-    border-radius: 3px;
+	max-height: 100px;
+	max-width: 250px;
+	object-fit: contain;
+	margin-bottom: 5px;
+	border-radius: 3px;
 }
 
 @media only screen and (max-width: 750px) {
-    .sendTemplateMessage__section {
-        padding: 15px 15px;
-    }
+	.sendTemplateMessage__section {
+		padding: 15px 15px;
+	}
 }

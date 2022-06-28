@@ -4,8 +4,8 @@ import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import PubSub from 'pubsub-js';
 import {
-    EVENT_TOPIC_GO_TO_MSG_ID,
-    EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
+	EVENT_TOPIC_GO_TO_MSG_ID,
+	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
 } from '../Constants';
 import SearchBar from './SearchBar';
 import { useParams } from 'react-router-dom';
@@ -17,99 +17,99 @@ import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
 
 function SearchMessage(props) {
-    const { apiService } = React.useContext(ApplicationContext);
+	const { apiService } = React.useContext(ApplicationContext);
 
-    const { t, i18n } = useTranslation();
+	const { t, i18n } = useTranslation();
 
-    const [results, setResults] = useState({});
-    const [keyword, setKeyword] = useState('');
-    const [isLoading, setLoading] = useState(false);
+	const [results, setResults] = useState({});
+	const [keyword, setKeyword] = useState('');
+	const [isLoading, setLoading] = useState(false);
 
-    const { waId } = useParams();
+	const { waId } = useParams();
 
-    useEffect(() => {
-        setResults({});
-    }, [waId]);
+	useEffect(() => {
+		setResults({});
+	}, [waId]);
 
-    const hideSearchMessages = () => {
-        PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
-    };
+	const hideSearchMessages = () => {
+		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
+	};
 
-    let cancelTokenSourceRef = useRef();
+	let cancelTokenSourceRef = useRef();
 
-    const search = async (_keyword) => {
-        setKeyword(_keyword);
+	const search = async (_keyword) => {
+		setKeyword(_keyword);
 
-        // Check if there are any previous pending requests
-        if (cancelTokenSourceRef.current) {
-            cancelTokenSourceRef.current.cancel(
-                'Operation canceled due to new request.'
-            );
-        }
+		// Check if there are any previous pending requests
+		if (cancelTokenSourceRef.current) {
+			cancelTokenSourceRef.current.cancel(
+				'Operation canceled due to new request.'
+			);
+		}
 
-        // Generate a token
-        cancelTokenSourceRef.current = generateCancelToken();
+		// Generate a token
+		cancelTokenSourceRef.current = generateCancelToken();
 
-        if (_keyword.trim().length === 0) {
-            setResults({});
-            return false;
-        }
+		if (_keyword.trim().length === 0) {
+			setResults({});
+			return false;
+		}
 
-        setLoading(true);
+		setLoading(true);
 
-        apiService.searchMessagesCall(
-            waId,
-            _keyword,
-            30,
-            cancelTokenSourceRef.current.token,
-            (response) => {
-                const preparedMessages = {};
-                response.data.results.forEach((message) => {
-                    const prepared = new ChatMessageClass(message);
-                    preparedMessages[prepared.id] = prepared;
-                });
-                setResults(preparedMessages);
-                setLoading(false);
-            },
-            (error) => {
-                setLoading(false);
-            }
-        );
-    };
+		apiService.searchMessagesCall(
+			waId,
+			_keyword,
+			30,
+			cancelTokenSourceRef.current.token,
+			(response) => {
+				const preparedMessages = {};
+				response.data.results.forEach((message) => {
+					const prepared = new ChatMessageClass(message);
+					preparedMessages[prepared.id] = prepared;
+				});
+				setResults(preparedMessages);
+				setLoading(false);
+			},
+			(error) => {
+				setLoading(false);
+			}
+		);
+	};
 
-    const goToMessage = (data) => {
-        PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
+	const goToMessage = (data) => {
+		PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
 
-        if (isMobileOnly) {
-            hideSearchMessages();
-        }
-    };
+		if (isMobileOnly) {
+			hideSearchMessages();
+		}
+	};
 
-    return (
-        <div className="searchMessage">
-            <div className="searchMessage__header">
-                <IconButton onClick={hideSearchMessages}>
-                    <CloseIcon />
-                </IconButton>
+	return (
+		<div className="searchMessage">
+			<div className="searchMessage__header">
+				<IconButton onClick={hideSearchMessages}>
+					<CloseIcon />
+				</IconButton>
 
-                <h3>{t('Search For Messages')}</h3>
-            </div>
+				<h3>{t('Search For Messages')}</h3>
+			</div>
 
-            <SearchBar onChange={search} isLoading={isLoading} />
+			<SearchBar onChange={search} isLoading={isLoading} />
 
-            <div className="searchMessage__body">
-                {Object.entries(results).map((message) => (
-                    <SearchMessageResult
-                        key={message[0]}
-                        waId={waId}
-                        messageData={message[1]}
-                        keyword={keyword}
-                        onClick={(chatMessage) => goToMessage(chatMessage)}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+			<div className="searchMessage__body">
+				{Object.entries(results).map((message) => (
+					<SearchMessageResult
+						key={message[0]}
+						waId={waId}
+						messageData={message[1]}
+						keyword={keyword}
+						onClick={(chatMessage) => goToMessage(chatMessage)}
+					/>
+				))}
+			</div>
+		</div>
+	);
 }
 
 export default SearchMessage;

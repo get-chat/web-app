@@ -1,19 +1,19 @@
 .actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
 }
 
 .header {
-    font-weight: 600;
+	font-weight: 600;
 }
 
 .body {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 .footer {
-    opacity: 0.5;
+	opacity: 0.5;
 }

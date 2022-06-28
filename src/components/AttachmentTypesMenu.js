@@ -5,32 +5,32 @@ import SpeedDial from '@material-ui/lab/SpeedDial';
 import { SpeedDialAction } from '@material-ui/lab';
 
 export function AttachmentTypesMenu() {
-    const [open, setOpen] = useState(false);
-    const [hidden, setHidden] = useState(false);
+	const [open, setOpen] = useState(false);
+	const [hidden, setHidden] = useState(false);
 
-    const handleVisibility = () => {
-        setHidden((prevHidden) => !prevHidden);
-    };
+	const handleVisibility = () => {
+		setHidden((prevHidden) => !prevHidden);
+	};
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
+	const handleOpen = () => {
+		setOpen(true);
+	};
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+	const handleClose = () => {
+		setOpen(false);
+	};
 
-    return (
-        <SpeedDial
-            icon={<SpeedDialIcon openIcon={<CloseIcon />} />}
-            ariaLabel="Send a file"
-            onClose={handleClose}
-            onOpen={handleOpen}
-            open={open}
-        >
-            <SpeedDialAction key="document" title="Document" icon="Like" />
+	return (
+		<SpeedDial
+			icon={<SpeedDialIcon openIcon={<CloseIcon />} />}
+			ariaLabel="Send a file"
+			onClose={handleClose}
+			onOpen={handleOpen}
+			open={open}
+		>
+			<SpeedDialAction key="document" title="Document" icon="Like" />
 
-            <SpeedDialAction key="image" title="Image" icon="Camera" />
-        </SpeedDial>
-    );
+			<SpeedDialAction key="image" title="Image" icon="Camera" />
+		</SpeedDial>
+	);
 }

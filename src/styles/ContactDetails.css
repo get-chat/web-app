@@ -1,150 +1,150 @@
 .contactDetails {
-    display: flex;
-    flex-direction: column;
-    flex: 0.4 1;
-    border-left: 1px solid lightgray;
-    z-index: 10;
+	display: flex;
+	flex-direction: column;
+	flex: 0.4 1;
+	border-left: 1px solid lightgray;
+	z-index: 10;
 }
 
 .contactDetails__header {
-    height: var(--header-height);
-    display: flex;
-    align-items: center;
-    padding: 4px 15px;
-    background-color: var(--gray-light);
+	height: var(--header-height);
+	display: flex;
+	align-items: center;
+	padding: 4px 15px;
+	background-color: var(--gray-light);
 }
 
 .contactDetails__header > h3 {
-    margin-left: 15px;
-    font-weight: 400;
-    font-size: 18px;
+	margin-left: 15px;
+	font-weight: 400;
+	font-size: 18px;
 }
 
 .contactDetails__body {
-    background-color: var(--gray-light);
-    flex: 1 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+	background-color: var(--gray-light);
+	flex: 1 1;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
 }
 
 .contactDetails__body a {
-    color: var(--color-light-blue);
+	color: var(--color-light-blue);
 }
 
 .contactDetails__body__section {
-    padding: 20px;
-    margin-bottom: 10px;
-    background-color: white;
-    box-shadow: 0 1px 3px var(--shadow-light);
+	padding: 20px;
+	margin-bottom: 10px;
+	background-color: white;
+	box-shadow: 0 1px 3px var(--shadow-light);
 }
 
 .contactDetails__body__section > h3 {
-    font-size: 20px;
-    font-weight: 600;
+	font-size: 20px;
+	font-weight: 600;
 }
 
 .contactDetails__body__section > h3 .emoji-mart-emoji {
-    height: 20px !important;
-    width: 20px !important;
+	height: 20px !important;
+	width: 20px !important;
 }
 
 .contactDetails__body__section > span,
 .contactDetails__body__section__content__sub {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.6);
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.6);
 }
 
 .contactDetails__body__section__providerTitle {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 16px;
-    background-color: rgba(0, 0, 0, 0.05);
-    color: rgba(0, 0, 0, 0.8);
+	display: inline-block;
+	padding: 5px 10px;
+	border-radius: 16px;
+	background-color: rgba(0, 0, 0, 0.05);
+	color: rgba(0, 0, 0, 0.8);
 }
 
 .contactDetails__body__section__title {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 .contactDetails__body__section__title img {
-    height: 16px;
-    width: 16px;
-    vertical-align: middle;
+	height: 16px;
+	width: 16px;
+	vertical-align: middle;
 }
 
 .contactDetails__body__section__subtitle {
-    font-size: 14px;
+	font-size: 14px;
 }
 
 .contactDetails__body__avatarContainer {
-    display: flex;
-    justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 
 .contactDetails__body__avatar {
-    height: 200px !important;
-    width: 200px !important;
-    margin-bottom: 15px;
-    font-size: 5rem !important;
+	height: 200px !important;
+	width: 200px !important;
+	margin-bottom: 15px;
+	font-size: 5rem !important;
 }
 
 .contactDetails__body__job {
-    font-size: 14px;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.4);
-    margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	color: rgba(0, 0, 0, 0.4);
+	margin-bottom: 10px;
 }
 
 .contactDetails__body__tags__tag {
-    cursor: pointer;
-    display: inline-block;
-    margin-right: 10px;
+	cursor: pointer;
+	display: inline-block;
+	margin-right: 10px;
 }
 
 .contactDetails__body__tags__tag .MuiSvgIcon-root {
-    margin-right: 5px;
-    vertical-align: baseline;
+	margin-right: 5px;
+	vertical-align: baseline;
 }
 
 .contactDetails__body__tags__tag > span {
-    display: inline-block;
-    max-width: 150px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+	display: inline-block;
+	max-width: 150px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .contactDetails__body__assignees {
-    padding: 5px 10px;
-    border: 2px solid var(--gray-light);
-    border-radius: 10px;
-    font-size: 14px;
+	padding: 5px 10px;
+	border: 2px solid var(--gray-light);
+	border-radius: 10px;
+	font-size: 14px;
 }
 
 .contactDetails__body__assignees > div {
-    padding: 5px 0;
+	padding: 5px 0;
 }
 
 .contactDetails__body__assignees .MuiSvgIcon-root {
-    vertical-align: middle;
-    margin-right: 10px;
-    height: 0.8em;
-    width: 0.8em;
+	vertical-align: middle;
+	margin-right: 10px;
+	height: 0.8em;
+	width: 0.8em;
 }
 
 @media only screen and (max-width: 750px) {
-    .contactDetails {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border-left: none;
-    }
+	.contactDetails {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border-left: none;
+	}
 
-    .contactDetails__header {
-        padding: 4px 10px;
-    }
+	.contactDetails__header {
+		padding: 4px 10px;
+	}
 }
