@@ -18,8 +18,6 @@ import ChatMessageTemplate from "./ChatMessageTemplate";
 import ChatAssignmentEvent from "../../../ChatAssignmentEvent";
 import ChatTaggingEvent from "./ChatTaggingEvent";
 import ChatMessageLocation from "./ChatMessageLocation";
-import { replaceEmojis } from "../../../../helpers/EmojiHelper";
-import { formatMessage } from "../../../../helpers/MessageHelper";
 import { useTranslation } from "react-i18next";
 import InteractiveMessage from "./InteractiveMessage";
 import OrderMessage from "./OrderMessage";
@@ -66,11 +64,8 @@ function ChatMessage(props) {
                             message={
                                 data.isFromUs === true
                                     ? data.senderName
-                                    : replaceEmojis(
-                                          props.contactProvidersData[
-                                              data.waId
-                                          ]?.[0]?.name ?? data.senderName
-                                      )
+                                    : props.contactProvidersData[data.waId]?.[0]
+                                          ?.name ?? data.senderName
                             }
                         />
                     )}
