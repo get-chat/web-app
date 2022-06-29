@@ -9,6 +9,7 @@ specifiers:
   '@material-ui/icons': ^4.11.2
   '@material-ui/lab': ^4.0.0-alpha.57
   '@material-ui/styles': ^4.11.4
+  '@sentry/browser': ^6.19.3
   '@sentry/react': ^6.19.3
   '@sentry/tracing': ^6.19.3
   '@testing-library/cypress': ^8.0.2
@@ -51,6 +52,7 @@ dependencies:
   '@material-ui/core': 4.12.4_sfoxds7t5ydpegc3knd667wn6m
   '@material-ui/icons': 4.11.3_phlbjj2qqbzyjdfzujtmlw3coi
   '@material-ui/lab': 4.0.0-alpha.61_phlbjj2qqbzyjdfzujtmlw3coi
+  '@sentry/browser': 6.19.7
   '@sentry/react': 6.19.7_react@17.0.2
   '@sentry/tracing': 6.19.7
   '@testing-library/jest-dom': 5.16.4
