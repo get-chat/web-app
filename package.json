@@ -42,12 +42,14 @@
         "web-vitals": "^0.2.4",
         "worker-loader": "^3.0.8"
     },
-    "//HACK: override `nth-check`": [
-        "Override the `nth-check` indirect project dependency, to use its non-vulnerable version",
-        "For details, please see: https://gitlab.com/wabbitproject/web-app/-/merge_requests/84#note_933930067"
-    ],
-    "overrides": {
-        "nth-check": "^2.0.1"
+    "pnpm": {
+        "//HACK: override `nth-check`": [
+            "Override the `nth-check` indirect project dependency, to use its non-vulnerable version",
+            "For details, please see: https://gitlab.com/wabbitproject/web-app/-/merge_requests/84#note_933930067"
+        ],
+        "overrides": {
+            "nth-check": "^2.0.1"
+        }
     },
     "scripts": {
         "analyze": "source-map-explorer 'build/static/js/*.js'",
