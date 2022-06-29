@@ -1,29 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-import DoneAll from "@material-ui/icons/DoneAll";
-import DoneIcon from "@material-ui/icons/Done";
-import Moment from "react-moment";
-import "../../../../styles/InputRange.css";
-import "../../../../AvatarStyles";
-import NoteIcon from "@material-ui/icons/Note";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ChatMessageClass from "../../../../ChatMessageClass";
-import MessageDateIndicator from "../MessageDateIndicator";
-import ContextChatMessage from "./ContextChatMessage";
-import ReplyIcon from "@material-ui/icons/Reply";
-import ChatMessageVideo from "./ChatMessageVideo";
-import ChatMessageImage from "./ChatMessageImage";
-import ChatMessageDocument from "./ChatMessageDocument";
-import ChatMessageVoice from "./ChatMessageVoice";
-import ChatMessageTemplate from "./ChatMessageTemplate";
-import ChatAssignmentEvent from "../../../ChatAssignmentEvent";
-import ChatTaggingEvent from "./ChatTaggingEvent";
-import ChatMessageLocation from "./ChatMessageLocation";
-import { useTranslation } from "react-i18next";
-import InteractiveMessage from "./InteractiveMessage";
-import OrderMessage from "./OrderMessage";
-import PrintMessage from "../../../PrintMessage";
-=======
 import React from 'react';
 import DoneAll from '@material-ui/icons/DoneAll';
 import DoneIcon from '@material-ui/icons/Done';
@@ -44,13 +18,10 @@ import ChatMessageTemplate from './ChatMessageTemplate';
 import ChatAssignmentEvent from '../../../ChatAssignmentEvent';
 import ChatTaggingEvent from './ChatTaggingEvent';
 import ChatMessageLocation from './ChatMessageLocation';
-import { replaceEmojis } from '../../../../helpers/EmojiHelper';
-import { formatMessage } from '../../../../helpers/MessageHelper';
 import { useTranslation } from 'react-i18next';
 import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import PrintMessage from '../../../PrintMessage';
->>>>>>> 9d9d5eb (Add prettier and pretty all files in src)
 
 const iconStyles = {
 	fontSize: '15px',
@@ -82,21 +53,6 @@ function ChatMessage(props) {
 
 			{data.taggingEvent && <ChatTaggingEvent data={data.taggingEvent} />}
 
-<<<<<<< HEAD
-            {!data.assignmentEvent && !data.taggingEvent && (
-                <div>
-                    {(props.displaySender || props.displayDate) && (
-                        <PrintMessage
-                            className="chat__name"
-                            message={
-                                data.isFromUs === true
-                                    ? data.senderName
-                                    : props.contactProvidersData[data.waId]?.[0]
-                                          ?.name ?? data.senderName
-                            }
-                        />
-                    )}
-=======
 			{!data.assignmentEvent && !data.taggingEvent && (
 				<div>
 					{(props.displaySender || props.displayDate) && (
@@ -105,14 +61,11 @@ function ChatMessage(props) {
 							message={
 								data.isFromUs === true
 									? data.senderName
-									: replaceEmojis(
-											props.contactProvidersData[data.waId]?.[0]?.name ??
-												data.senderName
-									  )
+									: props.contactProvidersData[data.waId]?.[0]?.name ??
+									  data.senderName
 							}
 						/>
 					)}
->>>>>>> 5c9e8c2 (Update README)
 
 					{data.type === ChatMessageClass.TYPE_STICKER && (
 						<img

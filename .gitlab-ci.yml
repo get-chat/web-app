@@ -1,5 +1,4 @@
 stages:
-  - lint
   - update_version
   - build
   - test
@@ -25,20 +24,6 @@ variables:
     # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
     - node_modules/
 
-Lint:
-  stage: lint
-  image: $NODE_IMAGE
-
-  cache:
-    <<: *cache_config
-    policy: pull
-
-  only:
-    - merge_requests
-
-  script:
-    - npm install --prefer-offline --no-audit --no-fund
-    - npm run lint:prettier
 
 Update project version on git tag:
   stage: update_version
@@ -84,6 +69,22 @@ Build:
     expose_as: Built frontend files
     paths:
       - build/
+
+
+Lint:
+  stage: test
+  image: $NODE_IMAGE
+
+  cache:
+    <<: *cache_config
+    policy: pull
+
+  only:
+    - merge_requests
+
+  script:
+    - npm install --prefer-offline --no-audit --no-fund
+    - npm run lint:prettier
 
 
 Test:
