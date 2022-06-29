@@ -1,71 +1,71 @@
 .loadingScreenOuter {
-    z-index: 500;
+	z-index: 500;
 }
 
 .loadingScreen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 30px 60px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #f0f0f0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 30px 60px;
 }
 
 .loadingScreen__logoContainer {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 50px;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 50px;
 }
 
 .loadingScreen__logoContainer img {
-    height: 80px;
-    width: 80px;
-    opacity: 0.15;
+	height: 80px;
+	width: 80px;
+	opacity: 0.15;
 }
 
 .loadingScreen__progressContainer,
 .loadingScreen__logoContainer {
-    width: 100%;
-    max-width: 400px;
+	width: 100%;
+	max-width: 400px;
 }
 
 .loadingScreen__progressContainer .MuiLinearProgress-root {
-    height: 3px;
+	height: 3px;
 }
 
 .loadingScreen__details {
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.4);
-    margin: 15px 0;
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.4);
+	margin: 15px 0;
 }
 
 .loadingScreen__actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
 }
 
 .loadingScreen__link {
-    display: inline-block;
-    cursor: pointer;
-    font-size: 18px;
-    color: var(--color-primary);
-    padding: 10px;
+	display: inline-block;
+	cursor: pointer;
+	font-size: 18px;
+	color: var(--color-primary);
+	padding: 10px;
 }
 
 .loadingScreen__version {
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    margin-bottom: 15px;
-    font-size: 12px;
-    color: gray;
+	display: block;
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
+	margin-bottom: 15px;
+	font-size: 12px;
+	color: gray;
 }

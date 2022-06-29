@@ -71,6 +71,22 @@ Build:
       - build/
 
 
+Lint:
+  stage: test
+  image: $NODE_IMAGE
+
+  cache:
+    <<: *cache_config
+    policy: pull
+
+  only:
+    - merge_requests
+
+  script:
+    - npm install --prefer-offline --no-audit --no-fund
+    - npm run lint:prettier
+
+
 Test:
   stage: test
   image: $NODE_IMAGE

@@ -1,5 +1,5 @@
-import React from "react";
+import React from 'react';
 
 const AppConfig = React.createContext(undefined);
 
-export{AppConfig};
+export { AppConfig };

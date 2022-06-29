@@ -1,34 +1,34 @@
 .chatTagsListWrapper {
-    position: relative;
+	position: relative;
 }
 
 .chatTagsListWrapper__loading {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: white;
 }
 
 .chatTagsListWrapper .MuiListItem-root {
-    border-radius: 10px;
-    margin-top: 5px;
+	border-radius: 10px;
+	margin-top: 5px;
 }
 
 .chatTagsListWrapper__tag {
-    margin: 0 -10px;
-    font-size: 16px;
+	margin: 0 -10px;
+	font-size: 16px;
 }
 
 .chatTagsListWrapper__tag .MuiSvgIcon-root {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 .chatTagsList__empty {
-    font-size: 15px;
-    color: rgba(0, 0, 0, 0.6);
+	font-size: 15px;
+	color: rgba(0, 0, 0, 0.6);
 }

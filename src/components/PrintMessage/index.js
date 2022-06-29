@@ -1,1 +1,1 @@
-export { default } from "./PrintMessage";
+export { default } from './PrintMessage';

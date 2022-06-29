@@ -1,32 +1,32 @@
 .bulkSendActions {
-    background-color: var(--color-primary);
-    padding: 10px 15px;
-    display: flex;
-    flex-direction: column;
+	background-color: var(--color-primary);
+	padding: 10px 15px;
+	display: flex;
+	flex-direction: column;
 }
 
 .bulkSendActions > h3 {
-    font-weight: 400;
-    font-size: 18px;
-    color: white;
+	font-weight: 400;
+	font-size: 18px;
+	color: white;
 }
 
 .bulkSendActions__recipients {
-    font-size: 14px;
-    color: white;
+	font-size: 14px;
+	color: white;
 }
 
 .bulkSendActions__actions {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
+	margin-top: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
 }
 
 .bulkSendActions__actions .MuiButton-text {
-    color: white;
+	color: white;
 }
 
 .bulkSendActions__actions .MuiButton-root:first-of-type .MuiButton-label {
-    opacity: .75;
+	opacity: 0.75;
 }

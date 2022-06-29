@@ -1,1 +1,1 @@
-export { default } from "./InteractiveMessage";
+export { default } from './InteractiveMessage';

@@ -1,72 +1,76 @@
-import React, {useState} from 'react';
-import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from "@material-ui/core";
+import React, { useState } from 'react';
+import {
+	Button,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	TextField,
+} from '@material-ui/core';
 import '../styles/CreateTemplate.css';
 
 function CreateTemplate() {
+	const [language, setLanguage] = useState('en_US');
+	const [category, setCategory] = useState('AUTO_REPLY');
 
-    const [language, setLanguage] = useState("en_US");
-    const [category, setCategory] = useState("AUTO_REPLY");
+	const createTemplate = () => {};
 
-    const createTemplate = () => {
+	const handleLanguageChange = (event) => {
+		setLanguage(event.target.value);
+	};
 
-    }
+	const handleCategoryChange = (event) => {
+		setCategory(event.target.value);
+	};
 
-    const handleLanguageChange = (event) => {
-        setLanguage(event.target.value);
-    };
+	return (
+		<div className="createTemplate">
+			<h3>Create a template</h3>
 
-    const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
-    };
+			<TextField
+				label="Name"
+				variant="outlined"
+				size="medium"
+				fullWidth={true}
+			/>
 
-    return(
-        <div className="createTemplate">
+			<FormControl variant="outlined" fullWidth={true}>
+				<InputLabel>Language</InputLabel>
+				<Select
+					labelId="demo-simple-select-outlined-label"
+					onChange={handleLanguageChange}
+					label="Language"
+					value={language}
+				>
+					<MenuItem value={'en_US'}>en_US</MenuItem>
+				</Select>
+			</FormControl>
 
-            <h3>Create a template</h3>
+			<FormControl variant="outlined" fullWidth={true}>
+				<InputLabel>Category</InputLabel>
+				<Select
+					labelId="demo-simple-select-outlined-label"
+					onChange={handleCategoryChange}
+					label="Category"
+					value={category}
+				>
+					<MenuItem value={'AUTO_REPLY'}>AUTO_REPLY</MenuItem>
+				</Select>
+			</FormControl>
 
-            <TextField
-                label="Name"
-                variant="outlined"
-                size="medium"
-                fullWidth={true}
-            />
+			<TextField
+				label="Body"
+				multiline
+				variant="outlined"
+				size="medium"
+				fullWidth={true}
+			/>
 
-            <FormControl variant="outlined" fullWidth={true}>
-                <InputLabel>Language</InputLabel>
-                <Select
-                    labelId="demo-simple-select-outlined-label"
-                    onChange={handleLanguageChange}
-                    label="Language"
-                    value={language}>
-                    <MenuItem value={"en_US"}>en_US</MenuItem>
-                </Select>
-            </FormControl>
-
-            <FormControl variant="outlined" fullWidth={true}>
-                <InputLabel>Category</InputLabel>
-                <Select
-                    labelId="demo-simple-select-outlined-label"
-                    onChange={handleCategoryChange}
-                    label="Category"
-                    value={category}>
-                    <MenuItem value={"AUTO_REPLY"}>AUTO_REPLY</MenuItem>
-                </Select>
-            </FormControl>
-
-            <TextField
-                label="Body"
-                multiline
-                variant="outlined"
-                size="medium"
-                fullWidth={true}
-            />
-
-            <Button
-                fullWidth={true}
-                onClick={createTemplate}>Create</Button>
-
-        </div>
-    )
+			<Button fullWidth={true} onClick={createTemplate}>
+				Create
+			</Button>
+		</div>
+	);
 }
 
 export default CreateTemplate;

@@ -1,122 +1,124 @@
 .sidebarBusinessProfile {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: var(--gray-light);
-    z-index: 10;
+	display: flex;
+	flex-direction: column;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--gray-light);
+	z-index: 10;
 }
 
 .sidebarBusinessProfile__header {
-    height: var(--header-height);
-    display: flex;
-    align-items: center;
-    background-color: var(--color-primary);
-    padding: 4px 15px;
-    color: white;
-    font-size: 18px;
+	height: var(--header-height);
+	display: flex;
+	align-items: center;
+	background-color: var(--color-primary);
+	padding: 4px 15px;
+	color: white;
+	font-size: 18px;
 }
 
 .sidebarBusinessProfile__header h3 {
-    margin-left: 15px;
-    font-weight: 400;
-    font-size: 18px;
+	margin-left: 15px;
+	font-weight: 400;
+	font-size: 18px;
 }
 
 .sidebarBusinessProfile__header .MuiSvgIcon-root {
-    color: white !important;
+	color: white !important;
 }
 
 .sidebarBusinessProfile__body {
-    flex: 1 1;
-    overflow-x: hidden;
-    overflow-y: auto;
+	flex: 1 1;
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .sidebarBusinessProfile__body__section {
-    padding: 20px;
-    margin-bottom: 10px;
-    background-color: white;
-    box-shadow: 0 1px 3px var(--shadow-light);
+	padding: 20px;
+	margin-bottom: 10px;
+	background-color: white;
+	box-shadow: 0 1px 3px var(--shadow-light);
 }
 
 .sidebarBusinessProfile__body__section h3 {
-    font-weight: 400;
+	font-weight: 400;
 }
 
-.sidebarBusinessProfile__body__section span:not(.MuiButton-label), .sidebarBusinessProfile__body__section__subSection > div {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.6);
+.sidebarBusinessProfile__body__section span:not(.MuiButton-label),
+.sidebarBusinessProfile__body__section__subSection > div {
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.6);
 }
 
 .sidebarBusinessProfile__body__section__subSection > div {
-    margin-top: 15px;
+	margin-top: 15px;
 }
 
 .sidebarBusinessProfile__body__section__subSection h5 {
-    color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.5);
 }
 
 .sidebarBusinessProfile__body__avatarContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
 }
 
 .sidebarBusinessProfile__body__avatarContainer .MuiButton-root {
-    margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 .sidebarBusinessProfile__body__avatarDeleteContainer {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
+	display: flex;
+	justify-content: center;
+	margin-bottom: 10px;
 }
 
 .sidebarBusinessProfile__body__avatarContainer .MuiAvatar-root {
-    height: 200px;
-    width: 200px;
-    margin-bottom: 15px;
-    font-size: 5rem !important;
-    transition: opacity linear .1s;
+	height: 200px;
+	width: 200px;
+	margin-bottom: 15px;
+	font-size: 5rem !important;
+	transition: opacity linear 0.1s;
 }
 
 .sidebarBusinessProfile__body__avatarContainer__info {
-    margin-bottom: 15px;
-    text-align: center;
-    font-size: 0.8rem;
+	margin-bottom: 15px;
+	text-align: center;
+	font-size: 0.8rem;
 }
 
 .sidebarBusinessProfile__body__avatarContainer.editable .MuiAvatar-root:hover {
-    cursor: pointer;
-    opacity: 0.75;
+	cursor: pointer;
+	opacity: 0.75;
 }
 
 .sidebarBusinessProfile__body__changePasswordContainer {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
-.sidebarBusinessProfile__body__section__header, .sidebarBusinessProfile__body__section__header {
-    display: flex;
-    margin-bottom: 15px;
+.sidebarBusinessProfile__body__section__header,
+.sidebarBusinessProfile__body__section__header {
+	display: flex;
+	margin-bottom: 15px;
 }
 
 .sidebarBusinessProfile__body__section__header h5 {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--color-primary);
-    flex: 1 1;
+	font-size: 14px;
+	font-weight: 400;
+	color: var(--color-primary);
+	flex: 1 1;
 }
 
 .sidebarBusinessProfile__body__section .MuiFormControl-root {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .sidebarBusinessProfile__body__section__subSection__action {
-    display: flex;
-    justify-content: flex-end;
+	display: flex;
+	justify-content: flex-end;
 }

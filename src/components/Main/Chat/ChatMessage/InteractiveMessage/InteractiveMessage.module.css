@@ -1,12 +1,12 @@
 .caption {
-    display: flex;
-    align-items: center;
-    font-size: x-small;
-    margin-bottom: 5px;
+	display: flex;
+	align-items: center;
+	font-size: x-small;
+	margin-bottom: 5px;
 }
 
 .caption :global(.MuiSvgIcon-root) {
-    color: rgba(0, 0, 0, 0.4) !important;
-    width: 0.6em;
-    height: 0.6em;
+	color: rgba(0, 0, 0, 0.4) !important;
+	width: 0.6em;
+	height: 0.6em;
 }
