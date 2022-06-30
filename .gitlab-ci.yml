@@ -30,7 +30,7 @@ variables:
 
 .install_pnpm: &install_pnpm
   before_script:
-    - npm install --global --no-fund pnpm
+    - npm install --location=global --no-fund pnpm
     - pnpm config set store-dir $PNPM_STORE_DIR
 
 
