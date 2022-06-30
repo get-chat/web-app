@@ -25,7 +25,6 @@ variables:
   paths:
     # cache the `pnpm`'s content-addressable store between our CI/CD pipeline
     # runs, to optimize execution time
-    - node_modules/
     - $PNPM_STORE_DIR
 
 
