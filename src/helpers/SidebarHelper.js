@@ -1,8 +1,12 @@
-import {SIDEBAR_TAB_CASE_ALL, SIDEBAR_TAB_CASE_GROUP, SIDEBAR_TAB_CASE_ME} from "../Constants";
+import {
+	SIDEBAR_TAB_CASE_ALL,
+	SIDEBAR_TAB_CASE_GROUP,
+	SIDEBAR_TAB_CASE_ME,
+} from '../Constants';
 
 export const filterChat = (props, tabCase, curChat) => {
-    // Filter by tag
-    /*if (props.filterTag) {
+	// Filter by tag
+	/*if (props.filterTag) {
         if (!curChat.tags) {
             return false;
         }
@@ -17,34 +21,34 @@ export const filterChat = (props, tabCase, curChat) => {
         if (!hasTag) return false;
     }*/
 
-    // Filter by case
-    switch (tabCase) {
-        case SIDEBAR_TAB_CASE_ALL: {
-            return true;
-        }
-        case SIDEBAR_TAB_CASE_ME: {
-            if (curChat.assignedToUser?.id === props.currentUser.id) {
-                return true;
-            }
-            break;
-        }
-        case SIDEBAR_TAB_CASE_GROUP: {
-            if (curChat.assignedGroup && props.currentUser.groups) {
-                const assignedGroupId = curChat.assignedGroup.id;
-                for (let i = 0; i < props.currentUser.groups.length; i++) {
-                    const group = props.currentUser.groups[i];
+	// Filter by case
+	switch (tabCase) {
+		case SIDEBAR_TAB_CASE_ALL: {
+			return true;
+		}
+		case SIDEBAR_TAB_CASE_ME: {
+			if (curChat.assignedToUser?.id === props.currentUser.id) {
+				return true;
+			}
+			break;
+		}
+		case SIDEBAR_TAB_CASE_GROUP: {
+			if (curChat.assignedGroup && props.currentUser.groups) {
+				const assignedGroupId = curChat.assignedGroup.id;
+				for (let i = 0; i < props.currentUser.groups.length; i++) {
+					const group = props.currentUser.groups[i];
 
-                    if (group?.id === assignedGroupId) {
-                        return true;
-                    }
-                }
-            }
-            break;
-        }
-        default: {
-            break;
-        }
-    }
+					if (group?.id === assignedGroupId) {
+						return true;
+					}
+				}
+			}
+			break;
+		}
+		default: {
+			break;
+		}
+	}
 
-    return false;
-}
+	return false;
+};

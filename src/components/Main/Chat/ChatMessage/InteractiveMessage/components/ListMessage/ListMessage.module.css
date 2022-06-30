@@ -1,43 +1,43 @@
 .message {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
 }
 
 .actions {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .header {
-    font-weight: 600;
+	font-weight: 600;
 }
 
 .body {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 .footer {
-    opacity: 0.5;
-    margin-bottom: 5px;
+	opacity: 0.5;
+	margin-bottom: 5px;
 }
 
 .list {
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    gap: 5px;
+	display: flex;
+	flex-direction: column;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	gap: 5px;
 }
 
 .title {
-    font-size: 1em;
-    border-bottom: 1px solid #ccc;
+	font-size: 1em;
+	border-bottom: 1px solid #ccc;
 }
 
 .description {
-    opacity: 0.5;
-    font-size: 0.8em;
+	opacity: 0.5;
+	font-size: 0.8em;
 }

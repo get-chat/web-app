@@ -82,6 +82,32 @@ Build:
       - build/
 
 
+Lint:
+  stage: test
+  image: $NODE_IMAGE
+
+  cache:
+    <<: *cache_config
+
+    # download the cache when this job starts, but don't upload it when this job
+    # finishes - as the 'Build' job has already (re)generated the cache for us,
+    # as needed
+    policy: pull
+
+  only:
+    - master
+    - merge_requests
+    - tags
+
+  dependencies:
+    - Update project version on git tag
+
+  <<: *install_pnpm
+  script:
+    - pnpm install --prefer-offline
+    - pnpm lint:prettier
+
+
 Test:
   stage: test
   image: $NODE_IMAGE

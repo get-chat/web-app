@@ -1,141 +1,175 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Avatar, IconButton} from "@material-ui/core";
-import PauseIcon from "@material-ui/icons/Pause";
-import PlayArrowIcon from "@material-ui/icons/PlayArrow";
-import HeadsetIcon from "@material-ui/icons/Headset";
-import PubSub from "pubsub-js";
-import {EVENT_TOPIC_CHAT_MESSAGE, EVENT_TOPIC_UNSUPPORTED_FILE} from "../../../../Constants";
-import {isAudioMimeTypeSupported} from "../../../../helpers/FileHelper";
-import UnsupportedFileClass from "../../../../UnsupportedFileClass";
-import {generateAvatarColor} from "../../../../helpers/AvatarHelper";
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, IconButton } from '@material-ui/core';
+import PauseIcon from '@material-ui/icons/Pause';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import HeadsetIcon from '@material-ui/icons/Headset';
+import PubSub from 'pubsub-js';
+import {
+	EVENT_TOPIC_CHAT_MESSAGE,
+	EVENT_TOPIC_UNSUPPORTED_FILE,
+} from '../../../../Constants';
+import { isAudioMimeTypeSupported } from '../../../../helpers/FileHelper';
+import UnsupportedFileClass from '../../../../UnsupportedFileClass';
+import { generateAvatarColor } from '../../../../helpers/AvatarHelper';
 
 function ChatMessageVoice(props) {
+	const data = props.data;
 
-    const data = props.data;
+	const [isPlaying, setPlaying] = useState(false);
+	const duration = useRef(null);
+	const [progress, setProgress] = useState(0);
+	const [currentDuration, setCurrentDuration] = useState('0:00');
+	const audio = useRef(null);
+	const range = useRef(null);
 
-    const [isPlaying, setPlaying] = useState(false);
-    const duration = useRef(null);
-    const [progress, setProgress] = useState(0);
-    const [currentDuration, setCurrentDuration] = useState("0:00");
-    const audio = useRef(null);
-    const range = useRef(null);
+	const onChatMessageEvent = function (msg, data) {
+		if (data === 'pause') {
+			pauseVoice();
+		}
+	};
 
-    const onChatMessageEvent = function (msg, data) {
-        if (data === 'pause') {
-            pauseVoice();
-        }
-    };
+	const playIconStyles = {
+		fontSize: '38px',
+	};
 
-    const playIconStyles = {
-        fontSize: '38px'
-    };
+	useEffect(() => {
+		// Subscribing only if there is voice or audio
+		if (data.hasAnyAudio()) {
+			const token = PubSub.subscribe(
+				EVENT_TOPIC_CHAT_MESSAGE,
+				onChatMessageEvent
+			);
+			return () => {
+				PubSub.unsubscribe(token);
+			};
+		}
+	}, []);
 
-    useEffect(() => {
-        // Subscribing only if there is voice or audio
-        if (data.hasAnyAudio()) {
-            const token = PubSub.subscribe(EVENT_TOPIC_CHAT_MESSAGE, onChatMessageEvent);
-            return () => {
-                PubSub.unsubscribe(token);
-            }
-        }
-    }, []);
+	const pauseVoice = () => {
+		if (audio.current && range.current && !audio.current.paused) {
+			audio.current.pause();
+			setPlaying(false);
+		}
+	};
 
-    const pauseVoice = () => {
-        if (audio.current && range.current && !audio.current.paused) {
-            audio.current.pause();
-            setPlaying(false);
-        }
-    };
+	const playVoice = () => {
+		if (audio.current && range.current) {
+			if (!audio.current.paused) {
+				audio.current.pause();
+				setPlaying(false);
+			} else {
+				// Pause others
+				PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
-    const playVoice = () => {
-        if (audio.current && range.current) {
-            if (!audio.current.paused) {
-                audio.current.pause();
-                setPlaying(false);
-            } else {
+				console.log(data.mimeType);
 
-                // Pause others
-                PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
+				if (isAudioMimeTypeSupported(data.mimeType)) {
+					audio.current.play().catch((error) => {
+						console.error(error);
+					});
+					setPlaying(true);
+				} else {
+					const unsupportedFile = new UnsupportedFileClass({
+						name: props.data.filename,
+						link: props.data.audioLink,
+						mimeType: data.mimeType,
+					});
+					PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
+				}
+			}
 
-                console.log(data.mimeType);
+			const interval = setInterval(function () {
+				if (audio.current && range.current) {
+					const duration = audio.current.duration;
+					const currentTime = audio.current.currentTime;
 
-                if (isAudioMimeTypeSupported(data.mimeType)) {
-                    audio.current.play().catch(error => {
-                        console.error(error);
-                    });
-                    setPlaying(true);
-                } else {
-                    const unsupportedFile = new UnsupportedFileClass({
-                        name: props.data.filename,
-                        link: props.data.audioLink,
-                        mimeType: data.mimeType
-                    });
-                    PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
-                }
-            }
+					setCurrentDuration(formatDuration(currentTime));
 
-            const interval = setInterval(function () {
-                if (audio.current && range.current) {
-                    const duration = audio.current.duration;
-                    const currentTime = audio.current.currentTime;
+					if (duration) {
+						const percentage = (currentTime * 100) / duration;
 
-                    setCurrentDuration(formatDuration(currentTime));
+						if (percentage >= 100) {
+							setProgress(0);
+							setCurrentDuration(formatDuration(0));
+							setPlaying(false);
+							clearInterval(interval);
+						} else {
+							setProgress(percentage);
+						}
+					}
 
-                    if (duration) {
-                        const percentage = (currentTime * 100) / duration
+					if (audio.current.paused) {
+						clearInterval(interval);
+					}
+				} else {
+					// In case component is reloaded
+					clearInterval(interval);
+				}
+			}, 300);
+		}
+	};
 
-                        if (percentage >= 100) {
-                            setProgress(0);
-                            setCurrentDuration(formatDuration(0));
-                            setPlaying(false);
-                            clearInterval(interval);
-                        } else {
-                            setProgress(percentage);
-                        }
-                    }
+	const formatDuration = (s) => {
+		s = Math.floor(s);
+		return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
+	};
 
-                    if (audio.current.paused) {
-                        clearInterval(interval);
-                    }
-                } else {
-                    // In case component is reloaded
-                    clearInterval(interval);
-                }
-            }, 300);
-        }
-    }
+	const changeDuration = (value) => {
+		if (audio.current && range.current && audio.current.duration !== Infinity) {
+			setProgress(value);
+			const nextCurrentTime = audio.current.duration / value;
+			if (nextCurrentTime !== Infinity && !isNaN(nextCurrentTime)) {
+				audio.current.currentTime = parseFloat(nextCurrentTime);
+			}
+		}
+	};
 
-    const formatDuration = (s) => {
-        s = Math.floor(s);
-        return (s-(s%=60))/60+(9<s?':':':0')+s;
-    }
+	return (
+		<div className="chat__voice">
+			<span ref={duration} className="chat__voice__duration">
+				{currentDuration}
+			</span>
+			<IconButton onClick={() => playVoice()}>
+				{isPlaying ? (
+					<PauseIcon style={playIconStyles} />
+				) : (
+					<PlayArrowIcon style={playIconStyles} />
+				)}
+			</IconButton>
+			<input
+				ref={range}
+				dir="ltr"
+				type="range"
+				className="chat__voice__range"
+				min="0"
+				max="100"
+				value={progress}
+				onChange={(e) => changeDuration(e.target.value)}
+			/>
+			<audio
+				ref={audio}
+				src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()}
+				preload="none"
+				onLoadedMetadata={(event) => console.log(event.target.duration)}
+			/>
 
-    const changeDuration = (value) => {
-        if (audio.current && range.current && audio.current.duration !== Infinity) {
-            setProgress(value);
-            const nextCurrentTime = audio.current.duration / value;
-            if (nextCurrentTime !== Infinity && !isNaN(nextCurrentTime)) {
-                audio.current.currentTime = parseFloat(nextCurrentTime);
-            }
-        }
-    }
-
-    return (
-        <div className="chat__voice">
-            <span ref={duration} className="chat__voice__duration">{currentDuration}</span>
-            <IconButton onClick={() => playVoice()}>
-                {isPlaying ? <PauseIcon style={playIconStyles}/> : <PlayArrowIcon style={playIconStyles}/>}
-            </IconButton>
-            <input ref={range} dir="ltr" type="range" className="chat__voice__range" min="0" max="100" value={progress} onChange={(e) => changeDuration(e.target.value)} />
-            <audio ref={audio} src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()} preload="none" onLoadedMetadata={event => console.log(event.target.duration)} />
-
-            <Avatar
-                style={{backgroundColor: (data.voiceId !== undefined ?? data.voiceLink !== undefined) ? generateAvatarColor(data.senderName) : '#ff9a10'}}
-                className="audioMessageAvatar">
-                {data.voiceId !== undefined ? <span>{data.initials}</span> : <HeadsetIcon/>}
-            </Avatar>
-        </div>
-    )
+			<Avatar
+				style={{
+					backgroundColor:
+						data.voiceId !== undefined ?? data.voiceLink !== undefined
+							? generateAvatarColor(data.senderName)
+							: '#ff9a10',
+				}}
+				className="audioMessageAvatar"
+			>
+				{data.voiceId !== undefined ? (
+					<span>{data.initials}</span>
+				) : (
+					<HeadsetIcon />
+				)}
+			</Avatar>
+		</div>
+	);
 }
 
 export default ChatMessageVoice;

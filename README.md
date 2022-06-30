@@ -83,6 +83,18 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ### `pnpm eject`
 
+### `pnpm lint:staged`
+
+It is used for a pre-commit hook, most likely you will not need it
+
+### `pnpm lint:prettier`
+
+Check all files and output the result of the check to the console
+
+### `pnpm lint:prettier:fix`
+
+Check all files and auto fix all of them
+
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
 If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.

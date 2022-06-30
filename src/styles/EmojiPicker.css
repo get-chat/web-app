@@ -1,92 +1,93 @@
 .emoji-mart {
-    width: 100% !important;
-    border: none;
-    border-radius: 0;
-    background: none;
+	width: 100% !important;
+	border: none;
+	border-radius: 0;
+	background: none;
 }
 
 .emoji-mart-scroll {
-    padding: 0 10px 10px 10px;
+	padding: 0 10px 10px 10px;
 }
 
 .emoji-mart-no-results-label {
-    font-family: var(--font-family);
+	font-family: var(--font-family);
 }
 
 .emoji-mart-category-label span {
-    background: var(--gray-light) none;
-    font-size: 13px;
-    padding: 15px 6px 5px 6px;
-    color: rgba(0, 0, 0, 0.46);
-    font-family: var(--font-family);
+	background: var(--gray-light) none;
+	font-size: 13px;
+	padding: 15px 6px 5px 6px;
+	color: rgba(0, 0, 0, 0.46);
+	font-family: var(--font-family);
 }
 
 .emoji-mart-search {
-    padding: 5px 10px 0;
+	padding: 5px 10px 0;
 }
 
 .emoji-mart-search-icon {
-    display: none;
+	display: none;
 }
 
 .emoji-mart-search input {
-    border-radius: 20px;
-    border: none;
-    background-color: #e6e6e6;
-    padding: 10px 20px;
-    font-family: var(--font-family);
+	border-radius: 20px;
+	border: none;
+	background-color: #e6e6e6;
+	padding: 10px 20px;
+	font-family: var(--font-family);
 }
 
 .emoji-mart-anchor {
-    cursor: pointer;
-    color: rgba(0, 0, 0, 0.35);
+	cursor: pointer;
+	color: rgba(0, 0, 0, 0.35);
 }
 
 .emoji-mart-emoji {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 button.emoji-mart-emoji {
-    outline: none;
+	outline: none;
 }
 
 .emoji-mart-category .emoji-mart-emoji span:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
-.emoji-mart-anchors svg, .emoji-mart-anchors img {
-    width: 20px;
-    height: 20px;
+.emoji-mart-anchors svg,
+.emoji-mart-anchors img {
+	width: 20px;
+	height: 20px;
 }
 
 .emoji-mart-anchor:focus {
-    outline: 0
+	outline: 0;
 }
 
 .emoji-mart-anchor:hover,
 .emoji-mart-anchor:focus,
 .emoji-mart-anchor-selected {
-    color: rgba(0, 0, 0, 0.45);
+	color: rgba(0, 0, 0, 0.45);
 }
 
 .emoji-mart-preview {
-    display: none;
+	display: none;
 }
 
 .emoji-mart-category .emoji-mart-emoji:hover:before {
-    background-color: inherit;
+	background-color: inherit;
 }
 
 .emoji-mart-anchor-bar {
-    background-color: var(--color-primary) !important;
+	background-color: var(--color-primary) !important;
 }
 
 .emoji-mart-anchor.emoji-mart-anchor-selected {
-    color: var(--color-primary) !important;
+	color: var(--color-primary) !important;
 }
 
 @media only screen and (max-width: 750px) {
-    .emoji-mart-scroll {
-        height: 190px;
-    }
+	.emoji-mart-scroll {
+		height: 190px;
+	}
 }

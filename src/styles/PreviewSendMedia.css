@@ -1,229 +1,230 @@
 .previewSendMedia {
-    position: absolute;
-    top: 56px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #e6e6e6;
-    z-index: 150;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+	position: absolute;
+	top: 56px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #e6e6e6;
+	z-index: 150;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 .previewSendMedia__header {
-    background-color: #00bfa5;
-    color: white;
-    box-sizing: border-box;
-    display: flex;
-    flex: none;
-    align-items: center;
-    height: 49px;
-    padding: 0 25px;
-    font-size: 18px;
-    font-weight: 600;
+	background-color: #00bfa5;
+	color: white;
+	box-sizing: border-box;
+	display: flex;
+	flex: none;
+	align-items: center;
+	height: 49px;
+	padding: 0 25px;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .previewSendMedia__header .MuiSvgIcon-root {
-    color: rgba(255, 255, 255, 0.7) !important;
-    margin-right: 20px;
-    cursor: pointer;
+	color: rgba(255, 255, 255, 0.7) !important;
+	margin-right: 20px;
+	cursor: pointer;
 }
 
 .previewSendMedia__preview {
-    position: relative;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 25px;
+	position: relative;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 25px;
 }
 
 .previewSendMedia__preview__wrapper {
-    position: absolute;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
+	position: absolute;
+	top: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
 }
 
 .previewSendMedia__preview__image {
-    max-width: 100%;
-    max-height: 100%;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .previewSendMedia__preview__video {
-    max-width: 100%;
-    max-height: 100%;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .previewSendMedia__preview__pdf {
-    max-width: 100%;
-    max-height: 100%;
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .previewSendMedia__caption {
-    padding: 40px 140px;
+	padding: 40px 140px;
 }
 
 .previewSendMedia__footer {
-    background-color: #d9d9d9;
-    position: relative;
+	background-color: #d9d9d9;
+	position: relative;
 }
 
 .previewSendMedia__footer__inner {
-    padding: 25px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    overflow-x: auto;
+	padding: 25px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	overflow-x: auto;
 }
 
 .previewSendMedia__footer__sendWrapper {
-    position: absolute;
-    right: 50px;
-    top: 0;
-    margin-top: -33px;
+	position: absolute;
+	right: 50px;
+	top: 0;
+	margin-top: -33px;
 }
 
 .previewSendMedia__footer__send {
-    padding: 20px !important;
-    background-color: #09e85e !important;
-    box-shadow: -1px 4px 10px -6px rgba(0, 0, 0, 0.4);
+	padding: 20px !important;
+	background-color: #09e85e !important;
+	box-shadow: -1px 4px 10px -6px rgba(0, 0, 0, 0.4);
 }
 
 .previewSendMedia__footer__send .MuiSvgIcon-root {
-    color: white !important;
+	color: white !important;
 }
 
 .previewSendMedia__footer__thumbnailOuter {
-    position: relative;
+	position: relative;
 }
 
 .previewSendMedia__footer__thumbnail {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid transparent;
-    margin: 0 1px;
-    height: 75px;
-    width: 75px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 3px solid transparent;
+	margin: 0 1px;
+	height: 75px;
+	width: 75px;
 }
 
 .previewSendMedia__footer__thumbnail.chosenFile {
-    border-color: white;
-    box-shadow: -1px 4px 6px -6px rgba(0, 0, 0, 0.4);
+	border-color: white;
+	box-shadow: -1px 4px 6px -6px rgba(0, 0, 0, 0.4);
 }
 
 .previewSendMedia__footer__thumbnail__image {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    background-color: white;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+	background-color: white;
 }
 
 .previewSendMedia__footer__thumbnail__iconWrapper {
-    height: 100%;
-    width: 100%;
-    background-color: var(--gray-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	height: 100%;
+	width: 100%;
+	background-color: var(--gray-light);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .previewSendMedia__footer__thumbnail__iconWrapper .MuiSvgIcon-root {
-    height: 1.5em;
-    width: 1.5em;
+	height: 1.5em;
+	width: 1.5em;
 }
 
 .previewSendMedia__footer__addMoreWrapper {
-    margin-left: 4px !important;
+	margin-left: 4px !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete {
-    display: none !important;
-    background-color: rgba(0, 0, 0, 0.2) !important;
-    position: absolute !important;
-    top: 8px;
-    right: 8px;
-    padding: 2px !important;
+	display: none !important;
+	background-color: rgba(0, 0, 0, 0.2) !important;
+	position: absolute !important;
+	top: 8px;
+	right: 8px;
+	padding: 2px !important;
 }
 
-.previewSendMedia__footer__thumbnailOuter:hover .previewSendMedia__footer__thumbnail__delete {
-    display: initial !important;
+.previewSendMedia__footer__thumbnailOuter:hover
+	.previewSendMedia__footer__thumbnail__delete {
+	display: initial !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete:hover {
-    background-color: rgba(0, 0, 0, 0.4) !important;
+	background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete .MuiSvgIcon-root {
-    height: 0.6em;
-    width: 0.6em;
-    color: white !important;
+	height: 0.6em;
+	width: 0.6em;
+	color: white !important;
 }
 
 .previewSendMedia__footer__addMore {
-    height: 75px;
-    width: 75px;
-    background-color: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: var(--color-primary);
-    cursor: pointer;
+	height: 75px;
+	width: 75px;
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+	color: var(--color-primary);
+	cursor: pointer;
 }
 
 .previewSendMedia__footer__addMore .MuiSvgIcon-root {
-    color: var(--color-primary) !important;
-    height: 1.25em;
-    width: 1.25em;
-    margin-bottom: 3px;
+	color: var(--color-primary) !important;
+	height: 1.25em;
+	width: 1.25em;
+	margin-bottom: 3px;
 }
 
 .previewSendMedia__dragOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.75);
-    z-index: 151;
-    padding: 100px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.75);
+	z-index: 151;
+	padding: 100px;
 }
 
 .previewSendMedia__dragOverlay__innerWrapper {
-    height: 100%;
-    width: 100%;
-    /*border: 3px dashed rgba(0, 0, 0, 0.15);*/
-    color: var(--color-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	height: 100%;
+	width: 100%;
+	/*border: 3px dashed rgba(0, 0, 0, 0.15);*/
+	color: var(--color-primary);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 @media only screen and (max-width: 1500px) {
-    .previewSendMedia__caption {
-        padding: 40px 30px;
-    }
+	.previewSendMedia__caption {
+		padding: 40px 30px;
+	}
 }
 
 @media only screen and (max-width: 750px) {
-    .previewSendMedia__caption {
-        padding: 40px 20px;
-    }
+	.previewSendMedia__caption {
+		padding: 40px 20px;
+	}
 
-    .previewSendMedia__header {
-        padding: 0 20px;
-    }
+	.previewSendMedia__header {
+		padding: 0 20px;
+	}
 
-    .previewSendMedia__footer__sendWrapper {
-        right: 20px;
-    }
+	.previewSendMedia__footer__sendWrapper {
+		right: 20px;
+	}
 }

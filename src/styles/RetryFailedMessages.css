@@ -1,18 +1,18 @@
 .retryFailedMessagesWrapper {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .retryFailedMessagesWrapper .MuiAlert-root {
-    border-radius: 0 !important;
+	border-radius: 0 !important;
 }
 
 .retryFailedMessages.sending {
-    opacity: 0.5;
+	opacity: 0.5;
 }
 
 .retryFailedMessages__lastSendAttemptAt {
-    font-size: 12px !important;
-    margin-top: 10px;
-    opacity: 0.8;
+	font-size: 12px !important;
+	margin-top: 10px;
+	opacity: 0.8;
 }

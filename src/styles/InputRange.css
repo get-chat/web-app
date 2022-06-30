@@ -1,99 +1,99 @@
-input[type=range] {
-    width: 100%;
-    margin: 5px 0;
-    background-color: transparent;
-    -webkit-appearance: none;
+input[type='range'] {
+	width: 100%;
+	margin: 5px 0;
+	background-color: transparent;
+	-webkit-appearance: none;
 }
 
-input[type=range]:focus {
-    outline: none;
+input[type='range']:focus {
+	outline: none;
 }
 
-input[type=range]::-webkit-slider-runnable-track {
-    background: rgba(0, 0, 0, 0.1);
-    border: 0.2px solid rgba(1, 1, 1, 0);
-    border-radius: 1.3px;
-    width: 100%;
-    height: 3px;
-    cursor: pointer;
+input[type='range']::-webkit-slider-runnable-track {
+	background: rgba(0, 0, 0, 0.1);
+	border: 0.2px solid rgba(1, 1, 1, 0);
+	border-radius: 1.3px;
+	width: 100%;
+	height: 3px;
+	cursor: pointer;
 }
 
-input[type=range]::-webkit-slider-thumb {
-    margin-top: -5.2px;
-    width: 13px;
-    height: 13px;
-    background: #30b6f6;
-    border: 1.8px solid rgba(0, 0, 30, 0);
-    border-radius: 7px;
-    cursor: pointer;
-    -webkit-appearance: none;
+input[type='range']::-webkit-slider-thumb {
+	margin-top: -5.2px;
+	width: 13px;
+	height: 13px;
+	background: #30b6f6;
+	border: 1.8px solid rgba(0, 0, 30, 0);
+	border-radius: 7px;
+	cursor: pointer;
+	-webkit-appearance: none;
 }
 
-input[type=range]:focus::-webkit-slider-runnable-track {
-    background: #e6e6e6;
+input[type='range']:focus::-webkit-slider-runnable-track {
+	background: #e6e6e6;
 }
 
-input[type=range]::-moz-range-track {
-    background: rgba(0, 0, 0, 0.1);
-    border: 0.2px solid rgba(1, 1, 1, 0);
-    border-radius: 1.3px;
-    width: 100%;
-    height: 3px;
-    cursor: pointer;
+input[type='range']::-moz-range-track {
+	background: rgba(0, 0, 0, 0.1);
+	border: 0.2px solid rgba(1, 1, 1, 0);
+	border-radius: 1.3px;
+	width: 100%;
+	height: 3px;
+	cursor: pointer;
 }
 
-input[type=range]::-moz-range-thumb {
-    width: 13px;
-    height: 13px;
-    background: #30b6f6;
-    border: 1.8px solid rgba(0, 0, 30, 0);
-    border-radius: 7px;
-    cursor: pointer;
+input[type='range']::-moz-range-thumb {
+	width: 13px;
+	height: 13px;
+	background: #30b6f6;
+	border: 1.8px solid rgba(0, 0, 30, 0);
+	border-radius: 7px;
+	cursor: pointer;
 }
 
-input[type=range]::-ms-track {
-    background: transparent;
-    border-color: transparent;
-    border-width: 5.9px 0;
-    color: transparent;
-    width: 100%;
-    height: 3px;
-    cursor: pointer;
+input[type='range']::-ms-track {
+	background: transparent;
+	border-color: transparent;
+	border-width: 5.9px 0;
+	color: transparent;
+	width: 100%;
+	height: 3px;
+	cursor: pointer;
 }
 
-input[type=range]::-ms-fill-lower {
-    background: #e6e6e6;
-    border: 0.2px solid rgba(1, 1, 1, 0);
-    border-radius: 2.6px;
+input[type='range']::-ms-fill-lower {
+	background: #e6e6e6;
+	border: 0.2px solid rgba(1, 1, 1, 0);
+	border-radius: 2.6px;
 }
 
-input[type=range]::-ms-fill-upper {
-    background: rgba(0, 0, 0, 0.1);
-    border: 0.2px solid rgba(1, 1, 1, 0);
-    border-radius: 2.6px;
+input[type='range']::-ms-fill-upper {
+	background: rgba(0, 0, 0, 0.1);
+	border: 0.2px solid rgba(1, 1, 1, 0);
+	border-radius: 2.6px;
 }
 
-input[type=range]::-ms-thumb {
-    width: 13px;
-    height: 13px;
-    background: #30b6f6;
-    border: 1.8px solid rgba(0, 0, 30, 0);
-    border-radius: 7px;
-    cursor: pointer;
-    margin-top: 0;
-    /*Needed to keep the Edge thumb centred*/
+input[type='range']::-ms-thumb {
+	width: 13px;
+	height: 13px;
+	background: #30b6f6;
+	border: 1.8px solid rgba(0, 0, 30, 0);
+	border-radius: 7px;
+	cursor: pointer;
+	margin-top: 0;
+	/*Needed to keep the Edge thumb centred*/
 }
 
-input[type=range]:focus::-ms-fill-lower {
-    background: rgba(0, 0, 0, 0.1);
+input[type='range']:focus::-ms-fill-lower {
+	background: rgba(0, 0, 0, 0.1);
 }
 
-input[type=range]:focus::-ms-fill-upper {
-    background: #e6e6e6;
+input[type='range']:focus::-ms-fill-upper {
+	background: #e6e6e6;
 }
 
-@supports (-ms-ime-align:auto) {
-    input[type=range] {
-        margin: 0;
-    }
+@supports (-ms-ime-align: auto) {
+	input[type='range'] {
+		margin: 0;
+	}
 }

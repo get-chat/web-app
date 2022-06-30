@@ -1,1 +1,1 @@
-export { default } from "./ProductMessage";
+export { default } from './ProductMessage';
