@@ -58,7 +58,7 @@ In the project directory, you can run:
 
 Converts the PO file to a JSON file. Do not forget to specify the correct language and the input and output paths.
 
-### `npm start`
+### `pnpm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -66,12 +66,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+### `pnpm test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### `pnpm build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
@@ -81,17 +81,17 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### `pnpm eject`
 
-### `npm run lint:staged`
+### `pnpm lint:staged`
 
 It is used for a pre-commit hook, most likely you will not need it
 
-### `npm run lint:prettier`
+### `pnpm lint:prettier`
 
 Check all files and output the result of the check to the console
 
-### `npm run lint:prettier:fix`
+### `pnpm lint:prettier:fix`
 
 Check all files and auto fix all of them
 
@@ -129,14 +129,14 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+### `pnpm build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 
 ## Testing
 
-To run tests run the command `npm run test`
+To run tests run the command `pnpm test`
 
-To run e2e tests run the command `npm run test:e2e`
+To run e2e tests run the command `pnpm test:e2e`
 

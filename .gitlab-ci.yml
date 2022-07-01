@@ -9,6 +9,8 @@ stages:
 variables:
   NODE_IMAGE: node:16-alpine
 
+  PNPM_STORE_DIR: .pnpm-store
+
   PACKAGE_NAME: frontend
   PACKAGE_VERSION: $CI_COMMIT_REF_NAME
   PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
@@ -18,11 +20,18 @@ variables:
 .cache_config: &cache_config
   key:
     files:
-      # compute our cache key from the lock file (`package-lock.json`)
-      - package-lock.json
+      # compute our cache key from the lock file (`pnpm-lock.yaml`)
+      - pnpm-lock.yaml
   paths:
-    # cache `node_modules/` between our CI/CD pipeline runs, to optimize execution time
-    - node_modules/
+    # cache the `pnpm`'s content-addressable store between our CI/CD pipeline
+    # runs, to optimize execution time
+    - $PNPM_STORE_DIR
+
+
+.install_pnpm: &install_pnpm
+  before_script:
+    - npm install --location=global --no-fund pnpm
+    - pnpm config set store-dir $PNPM_STORE_DIR
 
 
 Update project version on git tag:
@@ -32,13 +41,14 @@ Update project version on git tag:
   only:
     - tags
 
+  <<: *install_pnpm
   script:
-    - npm version --no-git-tag-version ${PACKAGE_VERSION}
+    - pnpm version --no-git-tag-version ${PACKAGE_VERSION}
 
   artifacts:
     name: version
     paths:
-      - package*.json
+      - package.json
 
 
 Build:
@@ -53,15 +63,16 @@ Build:
   cache:
     <<: *cache_config
 
+  <<: *install_pnpm
   script:
-    - npm install --prefer-offline --no-audit --no-fund
+    - pnpm install --prefer-offline
 
     # HACK: Using `CI=false` as a temporary workaround to ignore compilation
     # warnings, as they're breaking our GitLab CI/CD pipeline
     #
     # For details, please see:
     # https://gitlab.com/wabbitproject/web-app/-/issues/156
-    - CI=false npm run build
+    - CI=false pnpm build
 
   # track our built frontend files in GitLab's MR widget/ui
   artifacts:
@@ -77,14 +88,24 @@ Lint:
 
   cache:
     <<: *cache_config
+
+    # download the cache when this job starts, but don't upload it when this job
+    # finishes - as the 'Build' job has already (re)generated the cache for us,
+    # as needed
     policy: pull
 
   only:
+    - master
     - merge_requests
+    - tags
 
+  dependencies:
+    - Update project version on git tag
+
+  <<: *install_pnpm
   script:
-    - npm install --prefer-offline --no-audit --no-fund
-    - npm run lint:prettier
+    - pnpm install --prefer-offline
+    - pnpm lint:prettier
 
 
 Test:
@@ -107,9 +128,10 @@ Test:
   dependencies:
     - Update project version on git tag
 
+  <<: *install_pnpm
   script:
-    - npm install --prefer-offline --no-audit --no-fund
-    - npm test --
+    - pnpm install --prefer-offline
+    - pnpm test --
       --passWithNoTests
       --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
 
@@ -139,8 +161,9 @@ Security audit:
   dependencies:
     - Update project version on git tag
 
+  <<: *install_pnpm
   script:
-    - npm audit --audit-level=moderate
+    - pnpm audit --audit-level=moderate
 
 
 Publish package on git tag:

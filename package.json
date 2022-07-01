@@ -17,12 +17,13 @@
 		"lint:prettier:fix": "prettier --write --ignore-unknown src"
 	},
 	"lint-staged": {
-		"src/**/*": "npm run lint:prettier"
+		"src/**/*": "pnpm lint:prettier"
 	},
 	"dependencies": {
 		"@material-ui/core": "^4.11.2",
 		"@material-ui/icons": "^4.11.2",
 		"@material-ui/lab": "^4.0.0-alpha.57",
+		"@sentry/browser": "^6.19.3",
 		"@sentry/react": "^6.19.3",
 		"@sentry/tracing": "^6.19.3",
 		"@testing-library/jest-dom": "^5.11.9",
@@ -40,6 +41,7 @@
 		"i18next-conv": "^12.0.2",
 		"i18next-http-backend": "^1.3.2",
 		"i18next-sprintf-postprocessor": "^0.2.2",
+		"identity-obj-proxy": "^3.0.0",
 		"moment": "^2.29.1",
 		"moment-timezone": "^0.5.32",
 		"mp3-mediarecorder": "^4.0.3",
@@ -58,12 +60,14 @@
 		"web-vitals": "^0.2.4",
 		"worker-loader": "^3.0.8"
 	},
-	"//HACK: override `nth-check`": [
-		"Override the `nth-check` indirect project dependency, to use its non-vulnerable version",
-		"For details, please see: https://gitlab.com/wabbitproject/web-app/-/merge_requests/84#note_933930067"
-	],
-	"overrides": {
-		"nth-check": "^2.0.1"
+	"pnpm": {
+		"//HACK: override `nth-check`": [
+			"Override the `nth-check` indirect project dependency, to use its non-vulnerable version",
+			"For details, please see: https://gitlab.com/wabbitproject/web-app/-/merge_requests/84#note_933930067"
+		],
+		"overrides": {
+			"nth-check": "^2.0.1"
+		}
 	},
 	"eslintConfig": {
 		"extends": [
