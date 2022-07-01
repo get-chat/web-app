@@ -20,9 +20,10 @@ function LoadingScreen(props) {
 		};
 	}, []);
 
-	const skip = () => {
-		props.setProgress(100);
-	};
+	// const skip = () => {
+	//     props.setProgress(100);
+	// };
+
 	return (
 		<div className="loadingScreen">
 			<div className="loadingScreen__logoContainer">
@@ -44,7 +45,7 @@ function LoadingScreen(props) {
 
 			{isSkipVisible && (
 				<>
-					<Alert severity="error" variant="filled">
+					<Alert severity="warning" variant="filled">
 						{t('Something went wrong, this will be fixed automatically')}
 					</Alert>
 
@@ -52,9 +53,9 @@ function LoadingScreen(props) {
 						<a className="loadingScreen__link" href="mailto:support@get.chat">
 							{t('Contact us')}
 						</a>
-						<span className="loadingScreen__link" onClick={skip}>
-							{t('Skip')}
-						</span>
+						{/* <span className="loadingScreen__link" onClick={skip}>
+                            {t("Skip")}
+                        </span> */}
 					</div>
 				</>
 			)}

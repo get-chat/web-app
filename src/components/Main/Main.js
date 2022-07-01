@@ -730,50 +730,59 @@ function Main() {
 		}
 	}, [bulkSendPayload]);
 
-	const listUsers = () => {
+	// ** 2 **
+	const listUsers = async () => {
 		setLoadingNow('users');
 
-		apiService.listUsersCall(5000, (response) => {
-			const preparedUsers = {};
-			response.data.results.forEach((user) => {
-				const prepared = new UserClass(user);
-				preparedUsers[prepared.id] = prepared;
+		try {
+			await apiService.listUsersCall(5000, (response) => {
+				const preparedUsers = {};
+
+				response.data.results.forEach((user) => {
+					const prepared = new UserClass(user);
+
+					preparedUsers[prepared.id] = prepared;
+				});
+
+				setUsers(preparedUsers);
+				setProgress(20);
 			});
-
-			setUsers(preparedUsers);
-
-			setProgress(20);
-
+		} catch (error) {
+			console.error('Error in listUsers', error);
+		} finally {
 			// Trigger next request
 			listContacts();
-		});
+		}
 	};
 
-	const retrieveCurrentUser = () => {
+	// ** 1 **
+	const retrieveCurrentUser = async () => {
 		setLoadingNow('current user');
 
-		apiService.retrieveCurrentUserCall((response) => {
-			setCurrentUser(response.data);
+		try {
+			await apiService.retrieveCurrentUserCall(({ data }) => {
+				const role = data?.profile?.role;
 
-			const role = response.data?.profile?.role;
+				setCurrentUser(data);
 
-			// Only admins and users can access
-			if (role !== 'admin' && role !== 'user') {
-				clearUserSession('incorrectRole', location, history);
-			}
+				// Only admins and users can access
+				if (role !== 'admin' && role !== 'user') {
+					clearUserSession('incorrectRole', location, history);
+				}
 
-			// Check if role is admin
-			const tempIsAdmin = role === 'admin';
-			setAdmin(tempIsAdmin);
-
-			setProgress(10);
-
+				setAdmin(role === 'admin');
+				setProgress(10);
+			}, history);
+		} catch (error) {
+			console.error('Error retrieving current user', error);
+		} finally {
 			// Trigger next request
 			listUsers();
-		}, history);
+		}
 	};
 
-	const listTemplates = (isRetry) => {
+	// ** 5 **
+	const listTemplates = async (isRetry) => {
 		setLoadingNow('templates');
 
 		const completeCallback = () => {
@@ -786,7 +795,7 @@ function Main() {
 			listTags();
 		};
 
-		apiService.listTemplatesCall(
+		await apiService.listTemplatesCall(
 			(response) => {
 				const preparedTemplates = {};
 				response.data.results.forEach((template) => {
@@ -821,6 +830,8 @@ function Main() {
 							window.displayError(error);
 						}
 					} else {
+						// auto skip if no response
+						completeCallback();
 						window.displayError(error);
 					}
 				} else {
@@ -830,21 +841,27 @@ function Main() {
 		);
 	};
 
-	const listSavedResponses = () => {
-		apiService.listSavedResponsesCall((response) => {
-			const preparedSavedResponses = {};
-			response.data.results.forEach((savedResponse) => {
-				const prepared = new SavedResponseClass(savedResponse);
-				preparedSavedResponses[prepared.id] = prepared;
+	// ** 4 **
+	const listSavedResponses = async () => {
+		try {
+			await apiService.listSavedResponsesCall((response) => {
+				const preparedSavedResponses = {};
+
+				response.data.results.forEach((savedResponse) => {
+					const prepared = new SavedResponseClass(savedResponse);
+
+					preparedSavedResponses[prepared.id] = prepared;
+				});
+
+				setSavedResponses(preparedSavedResponses);
+				setProgress(50);
 			});
-
-			setSavedResponses(preparedSavedResponses);
-
-			setProgress(50);
-
+		} catch (error) {
+			console.error('Error in listSavedResponses', error);
+		} finally {
 			// Trigger next request
 			listTemplates(false);
-		});
+		}
 	};
 
 	const createSavedResponse = (text) => {
@@ -896,34 +913,26 @@ function Main() {
 		);
 	};
 
-	const listContacts = () => {
+	// ** 3 **
+	const listContacts = async () => {
 		setLoadingNow('contacts');
-
-		const callback = () => {
-			setProgress(35);
-
-			setLoadingNow('saved responses');
-
-			// Trigger next request
-			listSavedResponses();
-		};
 
 		// Check if needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
-			callback();
+			setProgress(35);
+			setLoadingNow('saved responses');
+			listSavedResponses();
 			return;
 		}
 
-		apiService.listContactsCall(
-			undefined,
-			0,
-			undefined,
-			(response) => {
+		try {
+			await apiService.listContactsCall(undefined, 0, undefined, (response) => {
 				const preparedContactProvidersData = {};
+
 				response.data.results.forEach((contact) => {
 					const contactPhoneNumbers = contact.phone_numbers;
-
 					const processedPhoneNumbers = [];
+
 					contactPhoneNumbers.forEach((contactPhoneNumber) => {
 						const curPhoneNumber = preparePhoneNumber(
 							contactPhoneNumber.phone_number
@@ -939,29 +948,32 @@ function Main() {
 						}
 
 						preparedContactProvidersData[curPhoneNumber].push(contact);
-
 						processedPhoneNumbers.push(curPhoneNumber);
 					});
 				});
 
 				setContactProvidersData(preparedContactProvidersData);
 
-				// Chain
-				callback();
-			},
-			(error) => {
-				if (error?.response?.status >= 500) {
-					// Continue with chain, in case contact provider data can not be loaded
-					callback();
-				}
-			}
-		);
+				setProgress(35);
+				setLoadingNow('saved responses');
+			});
+		} catch (error) {
+			console.error('Error in listContacts', error);
+		} finally {
+			// Trigger next request
+			listSavedResponses();
+		}
 	};
 
-	const listTags = () => {
-		apiService.listTagsCall((response) => {
-			setTags(response.data.results);
-		});
+	// ** 6 **
+	const listTags = async () => {
+		try {
+			await apiService.listTagsCall((response) => {
+				setTags(response.data.results);
+			});
+		} catch (error) {
+			console.error('Error in listTags', error);
+		}
 	};
 
 	useEffect(() => {
