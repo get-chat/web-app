@@ -51,6 +51,7 @@
 		"react-device-detect": "^2.0.2",
 		"react-dom": "^17.0.2",
 		"react-i18next": "^11.15.5",
+		"react-linkify": "1.0.0-alpha",
 		"react-moment": "^1.1.1",
 		"react-pdf": "^5.2.0",
 		"react-router-dom": "^5.3.0",
