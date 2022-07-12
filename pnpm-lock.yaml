@@ -34,7 +34,7 @@ specifiers:
   i18next-sprintf-postprocessor: ^0.2.2
   identity-obj-proxy: ^3.0.0
   lint-staged: ^13.0.3
-  moment: ^2.29.1
+  moment: ^2.29.4
   moment-timezone: ^0.5.32
   mp3-mediarecorder: ^4.0.3
   music-metadata-browser: ^2.2.5
@@ -77,7 +77,7 @@ dependencies:
   i18next-http-backend: 1.4.1
   i18next-sprintf-postprocessor: 0.2.2
   identity-obj-proxy: 3.0.0
-  moment: 2.29.3
+  moment: 2.29.4
   moment-timezone: 0.5.34
   mp3-mediarecorder: 4.0.5
   music-metadata-browser: 2.5.6
@@ -87,7 +87,7 @@ dependencies:
   react-dom: 17.0.2_react@17.0.2
   react-i18next: 11.17.3_iunkfnprfsbsde3j2gf563wwwi
   react-linkify: 1.0.0-alpha
-  react-moment: 1.1.2_u3iootd6vmgvk5brh3bdnw73oq
+  react-moment: 1.1.2_ba2jrvgygmh2fdmvstgt5hjk4e
   react-pdf: 5.7.2_f2dekmd3qtblyjyaj3cvf3x4di
   react-router-dom: 5.3.3_react@17.0.2
   react-scripts: 5.0.1_kkkse6ykemylkxedq55canwpsq
@@ -8266,11 +8266,11 @@ packages:
   /moment-timezone/0.5.34:
     resolution: {integrity: sha512-3zAEHh2hKUs3EXLESx/wsgw6IQdusOT8Bxm3D9UrHPQR7zlMmzwybC8zHEM1tQ4LJwP7fcxrWr8tuBg05fFCbg==}
     dependencies:
-      moment: 2.29.3
+      moment: 2.29.4
     dev: false
 
-  /moment/2.29.3:
-    resolution: {integrity: sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==}
+  /moment/2.29.4:
+    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
     dev: false
 
   /mp3-mediarecorder/4.0.5:
@@ -9873,14 +9873,14 @@ packages:
       tlds: 1.231.0
     dev: false
 
-  /react-moment/1.1.2_u3iootd6vmgvk5brh3bdnw73oq:
+  /react-moment/1.1.2_ba2jrvgygmh2fdmvstgt5hjk4e:
     resolution: {integrity: sha512-lfb+shYXI2tXlQrNUpNr05/1D/kzFj8Isbfp89DQrpZk0fs2JIAnLHWETR0hQS9zvtzwLWlVv0wKLffbue5HoA==}
     peerDependencies:
       moment: ^2.29.0
       prop-types: ^15.7.0
       react: ^16.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      moment: 2.29.3
+      moment: 2.29.4
       prop-types: 15.8.1
       react: 17.0.2
     dev: false
