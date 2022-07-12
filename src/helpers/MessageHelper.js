@@ -1,7 +1,7 @@
-import {replaceEmojis} from './EmojiHelper';
-import {getLastObject} from './ObjectHelper';
+import { replaceEmojis } from './EmojiHelper';
+import { getLastObject } from './ObjectHelper';
 
-import {sanitize} from 'dompurify';
+import { sanitize } from 'dompurify';
 
 export const formatMessage = (message) => {
 	if (!message) return;

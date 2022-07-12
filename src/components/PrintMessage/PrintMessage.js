@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import cn from 'classnames';
 
 import emojiTree from 'emoji-tree';
