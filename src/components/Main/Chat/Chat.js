@@ -4,9 +4,6 @@ import { CircularProgress, Zoom } from '@material-ui/core';
 import ChatMessage from './ChatMessage/ChatMessage';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import {
-	ATTACHMENT_TYPE_DOCUMENT,
-	ATTACHMENT_TYPE_IMAGE,
-	ATTACHMENT_TYPE_VIDEO,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
