@@ -191,6 +191,7 @@ function SidebarChat(props) {
 
 					<div className="sidebarChat__avatarWrapper">
 						<Avatar
+							className="sidebarChat__avatarWrapper__mainAvatar"
 							src={extractAvatarFromContactProviderData(
 								props.contactProvidersData[props.chatData.waId]
 							)}
@@ -250,7 +251,7 @@ function SidebarChat(props) {
 							<h2>
 								{props.keyword !== undefined &&
 								props.keyword.trim().length > 0 ? (
-									// TODO: Hightlite props.keyword
+									// TODO: Highlight props.keyword
 									<PrintMessage message={props.chatData.name} />
 								) : (
 									<PrintMessage

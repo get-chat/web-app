@@ -6,17 +6,9 @@
 	flex-direction: column;
 	cursor: pointer;
 	border-bottom: 1px solid #f2f3f6;
-	border-left: 4px solid var(--color-primary);
 }
 
-.sidebarChatWrapper.expired {
-	border-left: 4px solid #cfcfcf;
-}
-
-.sidebarChatWrapper.almostExpired {
-	border-left: 4px solid #fed167;
-}
-
+.sidebarChatWrapper:hover,
 .sidebarChatWrapper.activeChat {
 	background-color: #f2f3f6;
 }
@@ -65,6 +57,13 @@
 	color: white !important;
 	height: 0.5em;
 	width: 0.5em;
+}
+
+.sidebarChatWrapper.expired
+	.sidebarChat__avatarWrapper
+	.sidebarChat__avatarWrapper__mainAvatar
+	> img {
+	filter: grayscale(100%);
 }
 
 .sidebarChat__selection {
@@ -178,6 +177,15 @@
 	font-weight: 600;
 	background-color: white;
 	color: var(--color-primary);
+	outline: 1px solid var(--color-primary);
+}
+
+.sidebarChatWrapper.expired .sidebarChat__info__date {
+	outline-color: var(--gray-light);
+}
+
+.sidebarChatWrapper.almostExpired .sidebarChat__info__date {
+	outline-color: #fed167;
 }
 
 .sidebarChat__info__date__timeLeft {

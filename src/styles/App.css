@@ -147,7 +147,7 @@ a {
 
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
 		.MuiSvgIcon-root):not(.MuiCheckbox-root .MuiSvgIcon-root) {
-	color: #868a9f;
+	color: #6f7385;
 }
 
 .MuiSvgIcon-root.error:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
@@ -173,6 +173,7 @@ a {
 
 .MuiAvatar-root {
 	text-shadow: 0 1px 3px #00000040;
+	font-weight: 600;
 }
 
 .MuiAvatar-root .MuiSvgIcon-root {
