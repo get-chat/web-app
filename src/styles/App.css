@@ -147,7 +147,7 @@ a {
 
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
 		.MuiSvgIcon-root):not(.MuiCheckbox-root .MuiSvgIcon-root) {
-	color: #919191;
+	color: #868a9f;
 }
 
 .MuiSvgIcon-root.error:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
