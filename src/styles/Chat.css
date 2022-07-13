@@ -253,6 +253,7 @@ a.chat__document:hover {
 	font-size: x-small;
 }
 
+.chat__iconPending,
 .chat__iconDone,
 .chat__iconDoneAll {
 	height: 10px;

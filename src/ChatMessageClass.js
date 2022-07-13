@@ -14,6 +14,7 @@ export class ChatMessageClass {
 	static TYPE_INTERACTIVE = 'interactive';
 	static TYPE_ORDER = 'order';
 
+	static STATUS_PENDING = 'pending';
 	static STATUS_SENT = 'sent';
 	static STATUS_DELIVERED = 'delivered';
 	static STATUS_READ = 'read';
@@ -245,11 +246,22 @@ export class ChatMessageClass {
 			return ChatMessageClass.STATUS_DELIVERED;
 		}
 
-		// We don't check if sent timestamp exists, this might be null right after sending message to bridge api
-		return ChatMessageClass.STATUS_SENT;
+		if (this.sentTimestamp) {
+			return ChatMessageClass.STATUS_SENT;
+		}
+
+		return ChatMessageClass.STATUS_PENDING;
 	}
 
-	isDelivered() {
+	isPending() {
+		return this.getStatus() === ChatMessageClass.STATUS_PENDING;
+	}
+
+	isJustSent() {
+		return this.getStatus() === ChatMessageClass.STATUS_SENT;
+	}
+
+	isJustDelivered() {
 		return this.getStatus() === ChatMessageClass.STATUS_DELIVERED;
 	}
 
