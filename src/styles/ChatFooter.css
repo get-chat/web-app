@@ -42,11 +42,11 @@
 	/*max-height: 400px;*/
 	/*resize: none;*/
 	flex: 1;
-	border-radius: 30px;
+	border-radius: 9px;
 	padding: 8px 15px;
 	margin: 10px 10px;
 	border: none;
-	box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
+	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);*/
 }
 
 .typeBox.expired {
