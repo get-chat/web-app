@@ -484,17 +484,17 @@ function Main() {
 								// Inject getchat id to avoid duplicated messages
 								preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
 
-								if (statusObj.status === 'sent') {
+								if (statusObj.status === ChatMessageClass.STATUS_SENT) {
 									preparedStatuses[statusObj.id].sentTimestamp =
 										statusObj.timestamp;
 								}
 
-								if (statusObj.status === 'delivered') {
+								if (statusObj.status === ChatMessageClass.STATUS_DELIVERED) {
 									preparedStatuses[statusObj.id].deliveredTimestamp =
 										statusObj.timestamp;
 								}
 
-								if (statusObj.status === 'read') {
+								if (statusObj.status === ChatMessageClass.STATUS_READ) {
 									preparedStatuses[statusObj.id].readTimestamp =
 										statusObj.timestamp;
 								}
