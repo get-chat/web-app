@@ -169,7 +169,7 @@ video.chat__media {
 a.chat__document {
 	color: #4a4a4a;
 	border-radius: 6px;
-	margin: 0 -4px 4px -4px;
+	margin: -1px -6px 4px -6px;
 	background-color: rgba(0, 0, 45, 0.05);
 	padding: 10px 6px;
 	display: flex;
