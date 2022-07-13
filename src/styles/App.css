@@ -31,8 +31,8 @@
 	place-items: center;
 	background: linear-gradient(
 		0deg,
-		rgba(215, 219, 215, 1) 45%,
-		rgba(181, 218, 201, 1) 100%
+		rgb(240, 241, 246) 45%,
+		rgba(201, 205, 223, 1) 100%
 	);
 	height: 100vh;
 }
@@ -46,7 +46,7 @@
 	width: 90vw;
 	box-shadow: -1px 4px 10px -6px rgba(0, 0, 45, 0.7);
 	max-width: 1400px;
-	/*border-radius: 10px;*/
+	border-radius: var(--wrapper-border-radius);
 }
 
 h1,
@@ -327,6 +327,7 @@ h3 .emoji-mart-emoji {
 @media only screen and (max-width: 750px) {
 	.app__body {
 		display: inherit;
+		border-radius: 0;
 	}
 
 	.mobileOnly {

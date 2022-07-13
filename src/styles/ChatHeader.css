@@ -6,6 +6,7 @@
 	background-color: var(--gray-light);
 	/*border-bottom: 1px solid lightgray;*/
 	border-left: 1px solid lightgray;
+	border-top-right-radius: var(--wrapper-border-radius);
 }
 
 .chat__header__clickable {
@@ -38,7 +39,7 @@
 
 .chat__headerInfo p {
 	margin-bottom: 0;
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__header__avatar {

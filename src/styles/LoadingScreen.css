@@ -67,5 +67,5 @@
 	transform: translate(-50%, 0);
 	margin-bottom: 15px;
 	font-size: 12px;
-	color: gray;
+	color: var(--lighter-text-color);
 }

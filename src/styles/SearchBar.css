@@ -19,7 +19,7 @@
 }
 
 .searchBar__searchContainer > .MuiSvgIcon-root {
-	color: gray;
+	color: var(--lighter-text-color);
 	margin: 10px;
 	height: 0.8em;
 	width: 0.8em;

@@ -486,12 +486,12 @@ a.chat__document:hover {
 
 .chat__default > h2 {
 	font-size: 40px;
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__default > p {
 	font-size: 18px;
-	color: gray;
+	color: var(--lighter-text-color);
 	margin-bottom: 0;
 }
 

@@ -20,7 +20,7 @@
 }
 
 .sidebarContactResult__info__status {
-	color: gray;
+	color: var(--lighter-text-color);
 	margin-bottom: 0;
 	font-size: 14px;
 	text-overflow: ellipsis;

@@ -12,6 +12,7 @@
 	/*border-top: 1px solid lightgray;*/
 	padding: 0 10px;
 	background-color: var(--gray-light);
+	border-bottom-right-radius: var(--wrapper-border-radius);
 }
 
 .chat__footer__emojiPicker {
@@ -96,12 +97,12 @@
 
 .chat__footer > .MuiSvgIcon-root {
 	/*padding: 10px;*/
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__footer__expiredWarning {
 	font-size: 14px;
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__footer__attachmentContainer {
