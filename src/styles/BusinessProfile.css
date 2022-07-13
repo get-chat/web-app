@@ -50,7 +50,7 @@
 .sidebarBusinessProfile__body__section span:not(.MuiButton-label),
 .sidebarBusinessProfile__body__section__subSection > div {
 	font-size: 14px;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 }
 
 .sidebarBusinessProfile__body__section__subSection > div {
@@ -58,7 +58,7 @@
 }
 
 .sidebarBusinessProfile__body__section__subSection h5 {
-	color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 45, 0.5);
 }
 
 .sidebarBusinessProfile__body__avatarContainer {

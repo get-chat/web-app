@@ -53,15 +53,15 @@
 .contactDetails__body__section > span,
 .contactDetails__body__section__content__sub {
 	font-size: 14px;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 }
 
 .contactDetails__body__section__providerTitle {
 	display: inline-block;
 	padding: 5px 10px;
 	border-radius: 16px;
-	background-color: rgba(0, 0, 0, 0.05);
-	color: rgba(0, 0, 0, 0.8);
+	background-color: rgba(0, 0, 45, 0.05);
+	color: rgba(0, 0, 45, 0.8);
 }
 
 .contactDetails__body__section__title {
@@ -93,7 +93,7 @@
 .contactDetails__body__job {
 	font-size: 14px;
 	font-weight: 600;
-	color: rgba(0, 0, 0, 0.4);
+	color: rgba(0, 0, 45, 0.4);
 	margin-bottom: 10px;
 }
 

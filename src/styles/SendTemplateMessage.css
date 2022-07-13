@@ -4,14 +4,14 @@
 }
 
 .sendTemplateMessage h6 {
-	color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 45, 0.5);
 	margin-bottom: 5px;
 }
 
 .sendTemplateMessage__section {
 	padding: 15px 20px;
 	border-radius: 10px;
-	background-color: rgba(0, 0, 0, 0.03);
+	background-color: rgba(0, 0, 45, 0.03);
 	margin-bottom: 20px;
 }
 

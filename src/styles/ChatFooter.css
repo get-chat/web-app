@@ -46,7 +46,7 @@
 	padding: 8px 15px;
 	margin: 10px 10px;
 	border: none;
-	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);*/
+	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
 }
 
 .typeBox.expired {
@@ -121,7 +121,7 @@
 }
 
 .chat__footer__attachmentContainer__options .MuiButtonBase-root {
-	box-shadow: -1px 4px 12px -6px rgba(0, 0, 0, 0.85);
+	box-shadow: -1px 4px 12px -6px rgba(0, 0, 45, 0.85);
 	margin-bottom: 15px;
 }
 

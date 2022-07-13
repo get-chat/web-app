@@ -4,7 +4,7 @@
 
 .searchResult__message__header {
 	font-size: 12px;
-	color: rgba(0, 0, 0, 0.45);
+	color: rgba(0, 0, 45, 0.45);
 }
 
 .searchResult__message__header h3 {
@@ -16,7 +16,7 @@
 
 .searchResult__message__body {
 	font-size: 14px;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 	word-break: break-all;
 }
 

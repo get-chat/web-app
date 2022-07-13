@@ -74,7 +74,7 @@
 	padding: 10px 10px 4px 10px;
 	border-radius: 40px;
 	background-color: white;
-	box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
+	box-shadow: -1px 6px 15px -6px rgba(0, 0, 45, 0.4);
 }
 
 .sidebar__results {
@@ -96,7 +96,7 @@
 
 .sidebar__results__chats__noResult {
 	display: block;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 	font-size: 14px;
 	padding: 10px 15px;
 	word-break: break-all;
