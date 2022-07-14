@@ -94,7 +94,9 @@ function ChatHeader(props) {
 					src={extractAvatarFromContactProviderData(
 						props.contactProvidersData[props.person?.waId]
 					)}
-					className="chat__header__avatar"
+					className={
+						'chat__header__avatar ' + (props.person?.isExpired ? 'expired' : '')
+					}
 					style={
 						props.person?.isExpired
 							? {}

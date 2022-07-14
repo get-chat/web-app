@@ -6,6 +6,7 @@
 	background-color: var(--gray-light);
 	/*border-bottom: 1px solid lightgray;*/
 	border-left: 1px solid lightgray;
+	border-top-right-radius: var(--wrapper-border-radius);
 }
 
 .chat__header__clickable {
@@ -38,11 +39,15 @@
 
 .chat__headerInfo p {
 	margin-bottom: 0;
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__header__avatar {
 	cursor: pointer;
+}
+
+.chat__header__avatar.expired > img {
+	filter: grayscale(100%);
 }
 
 .chat__header__expired {
@@ -58,14 +63,14 @@
 
 .chat__headerInfo_2__waId {
 	font-size: 14px;
-	color: rgba(0, 0, 0, 0.45);
+	color: rgba(0, 0, 45, 0.45);
 }
 
 @media only screen and (max-width: 750px) {
 	.chat__header {
 		padding: 4px 10px;
 		border-left: none;
-		box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
+		box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
 		z-index: 1;
 	}
 }

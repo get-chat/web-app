@@ -13,16 +13,16 @@
 	border: 2px solid white;
 	font-size: 12px;
 	padding: 5px 10px;
-	box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.3);
+	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.3);
 }
 
 .chatAssignmentEvent__content__title {
-	color: rgba(0, 0, 0, 0.7);
+	color: rgba(0, 0, 45, 0.7);
 	font-size: 12px;
 }
 
 .chatAssignmentEvent__content__timestamp {
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 	margin-top: 5px;
 	font-size: x-small;
 }

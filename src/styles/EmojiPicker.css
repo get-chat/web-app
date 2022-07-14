@@ -17,7 +17,7 @@
 	background: var(--gray-light) none;
 	font-size: 13px;
 	padding: 15px 6px 5px 6px;
-	color: rgba(0, 0, 0, 0.46);
+	color: rgba(0, 0, 45, 0.46);
 	font-family: var(--font-family);
 }
 
@@ -39,7 +39,7 @@
 
 .emoji-mart-anchor {
 	cursor: pointer;
-	color: rgba(0, 0, 0, 0.35);
+	color: rgba(0, 0, 45, 0.35);
 }
 
 .emoji-mart-emoji {
@@ -67,7 +67,7 @@ button.emoji-mart-emoji {
 .emoji-mart-anchor:hover,
 .emoji-mart-anchor:focus,
 .emoji-mart-anchor-selected {
-	color: rgba(0, 0, 0, 0.45);
+	color: rgba(0, 0, 45, 0.45);
 }
 
 .emoji-mart-preview {

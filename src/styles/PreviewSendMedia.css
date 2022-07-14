@@ -92,7 +92,7 @@
 .previewSendMedia__footer__send {
 	padding: 20px !important;
 	background-color: #09e85e !important;
-	box-shadow: -1px 4px 10px -6px rgba(0, 0, 0, 0.4);
+	box-shadow: -1px 4px 10px -6px rgba(0, 0, 45, 0.4);
 }
 
 .previewSendMedia__footer__send .MuiSvgIcon-root {
@@ -116,7 +116,7 @@
 
 .previewSendMedia__footer__thumbnail.chosenFile {
 	border-color: white;
-	box-shadow: -1px 4px 6px -6px rgba(0, 0, 0, 0.4);
+	box-shadow: -1px 4px 6px -6px rgba(0, 0, 45, 0.4);
 }
 
 .previewSendMedia__footer__thumbnail__image {
@@ -146,7 +146,7 @@
 
 .previewSendMedia__footer__thumbnail__delete {
 	display: none !important;
-	background-color: rgba(0, 0, 0, 0.2) !important;
+	background-color: rgba(0, 0, 45, 0.2) !important;
 	position: absolute !important;
 	top: 8px;
 	right: 8px;
@@ -159,7 +159,7 @@
 }
 
 .previewSendMedia__footer__thumbnail__delete:hover {
-	background-color: rgba(0, 0, 0, 0.4) !important;
+	background-color: rgba(0, 0, 45, 0.4) !important;
 }
 
 .previewSendMedia__footer__thumbnail__delete .MuiSvgIcon-root {
@@ -202,7 +202,7 @@
 .previewSendMedia__dragOverlay__innerWrapper {
 	height: 100%;
 	width: 100%;
-	/*border: 3px dashed rgba(0, 0, 0, 0.15);*/
+	/*border: 3px dashed rgba(0, 0, 45, 0.15);*/
 	color: var(--color-primary);
 	display: flex;
 	align-items: center;

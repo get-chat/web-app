@@ -13,6 +13,7 @@
 	padding: 4px 15px;
 	background-color: var(--gray-light);
 	/*border-right: 1px solid lightgray;*/
+	border-top-left-radius: var(--wrapper-border-radius);
 }
 
 .sidebar__headerRight {
@@ -45,7 +46,7 @@
 
 .sidebar__tabs {
 	display: grid;
-	background-color: #f5f5f5;
+	background-color: #fff;
 }
 
 .sidebar__tabs .MuiTab-root {
@@ -56,7 +57,7 @@
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	right: 0;
+	right: 5px;
 	z-index: 1;
 	display: flex;
 	justify-content: center;
@@ -67,6 +68,7 @@
 		rgba(255, 255, 255, 1) 0%,
 		rgba(255, 255, 255, 0) 100%
 	);
+	border-bottom-left-radius: var(--wrapper-border-radius);
 }
 
 .sidebar__loadingMore__wrapper {
@@ -74,14 +76,14 @@
 	padding: 10px 10px 4px 10px;
 	border-radius: 40px;
 	background-color: white;
-	box-shadow: -1px 6px 15px -6px rgba(0, 0, 0, 0.4);
+	box-shadow: -1px 6px 15px -6px rgba(0, 0, 45, 0.4);
 }
 
 .sidebar__results {
 	flex: 1;
 	background-color: white;
 	overflow-y: auto;
-	/*border-bottom-left-radius: 10px;*/
+	border-bottom-left-radius: var(--wrapper-border-radius);
 }
 
 .sidebar__results > h3 {
@@ -96,7 +98,7 @@
 
 .sidebar__results__chats__noResult {
 	display: block;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 	font-size: 14px;
 	padding: 10px 15px;
 	word-break: break-all;
