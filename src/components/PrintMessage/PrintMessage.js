@@ -5,22 +5,9 @@ import emojiTree from 'emoji-tree';
 import isEmoji from 'emoji-tree/lib/isEmoji';
 
 import Text from './components/Text';
-import Link from './components/Link';
 import Emoji from './components/Emoji';
 
-const linkRegExp = new RegExp(
-	/((?<!\+)https?:\/\/(?:www\.)?(?:[-\w.]+?[.@][a-zA-Z\d]{2,}|localhost)(?:[-\w.:%+~#*$!?&/=@]*?(?:,(?!\s))*?)*)/,
-	'gmi'
-);
-
 const getTextNodeType = (node) => {
-	if (linkRegExp.test(node)) {
-		return {
-			type: 'link',
-			component: Link,
-		};
-	}
-
 	if (isEmoji(node)) {
 		return {
 			type: 'emoji',
@@ -41,7 +28,7 @@ const decomposeMessage = (message) => {
 	const result = emojiTree(message).reduce((acc, item) => {
 		if (item.type === 'emoji') {
 			if (section) {
-				acc.push(section.split(linkRegExp));
+				acc.push(section);
 				section = '';
 			}
 
@@ -53,7 +40,7 @@ const decomposeMessage = (message) => {
 		return acc;
 	}, []);
 
-	result.push(section.split(linkRegExp));
+	result.push(section);
 	section = '';
 
 	return []
