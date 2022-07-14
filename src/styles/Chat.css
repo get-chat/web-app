@@ -401,15 +401,20 @@ a.chat__document:hover {
 	margin-bottom: 15px;
 }
 
+.templateMessagesWrapper,
+.savedResponsesWrapper {
+	overflow: hidden;
+	background-color: rgba(0, 0, 45, 0.1);
+	border-radius: 10px; /*0 0 10px 10px;*/
+	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
+}
+
 .templateMessages,
 .savedResponses {
 	flex: 1 1;
 	max-height: 290px;
 	overflow-y: auto;
 	padding: 15px;
-	background-color: rgba(0, 0, 45, 0.1);
-	border-radius: 10px; /*0 0 10px 10px;*/
-	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
 }
 
 .templateMessages__emptyInfo,

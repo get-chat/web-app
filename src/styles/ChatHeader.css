@@ -6,7 +6,6 @@
 	background-color: var(--gray-light);
 	/*border-bottom: 1px solid lightgray;*/
 	border-left: 1px solid lightgray;
-	border-top-right-radius: var(--wrapper-border-radius);
 }
 
 .chat__header__clickable {
