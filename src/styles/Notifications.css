@@ -69,12 +69,12 @@
 	align-self: flex-end;
 }
 
-.notifications .notification__code {
+.notifications .notification__codeWrapper {
 	border-radius: 5px;
 	background-color: var(--gray-light);
 	padding: 5px 10px;
 }
 
-.notifications .notification.error .notification__code {
-	background-color: rgba(255, 0, 0, 0.08);
+.notifications .notification.error .notification__codeWrapper {
+	background-color: #ffe8e8;
 }

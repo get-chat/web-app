@@ -60,7 +60,7 @@ function FailedBulkMessageNotification(props) {
 			<div className="mb-2">
 				Status code: <span className="bold">{props.data.statusCode}</span>
 			</div>
-			<div className="mb-2">
+			<div className="mb-2 notification__codeWrapper">
 				<code className="notification__code">
 					{extractReasonFromResponsePayload(props.data.response)}
 				</code>
