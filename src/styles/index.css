@@ -4,12 +4,20 @@
 	--color-primary-transparent-darker: rgba(0, 150, 136, 0.08);
 	--color-primary-light: #86e7c9;
 	--color-light-blue: #4fc3f7;
-	--gray-light: #ededed;
-	--default-text-color: #212529;
-	--shadow-light: rgba(0, 0, 0, 0.08);
+	--gray-light: #eaecf2;
+	--default-text-color: #212329;
+	--lighter-text-color: rgb(90, 92, 105);
+	--shadow-light: rgba(0, 0, 45, 0.08);
 	--header-height: 56px;
 	--font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system,
 		BlinkMacSystemFont, 'Arial', sans-serif;
+	--wrapper-border-radius: 10px;
+}
+
+@media only screen and (max-width: 1500px) {
+	:root {
+		--wrapper-border-radius: 0;
+	}
 }
 
 *,

@@ -27,7 +27,7 @@
 
 .bulkSendIndicator__timestamp {
 	font-size: 10px;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 }
 
 .bulkSendIndicator .MuiLinearProgress-root {

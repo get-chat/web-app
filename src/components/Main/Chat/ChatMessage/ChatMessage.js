@@ -1,6 +1,7 @@
 import React from 'react';
 import DoneAll from '@material-ui/icons/DoneAll';
 import DoneIcon from '@material-ui/icons/Done';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Moment from 'react-moment';
 import '../../../../styles/InputRange.css';
 import '../../../../AvatarStyles';
@@ -194,25 +195,33 @@ function ChatMessage(props) {
 								<Moment date={data.timestamp} format={dateFormat} unix />
 							</span>
 
-							{!data.isFailed &&
-								data.isFromUs === true &&
-								!data.isDeliveredOrRead() && (
-									<DoneIcon
-										className="chat__iconDone"
-										color="inherit"
-										style={iconStyles}
-									/>
-								)}
+							{!data.isFailed && data.isFromUs === true && (
+								<>
+									{data.isPending() && (
+										<AccessTimeIcon
+											className="chat__iconPending"
+											color="inherit"
+											style={iconStyles}
+										/>
+									)}
 
-							{!data.isFailed &&
-								data.isFromUs === true &&
-								data.isDeliveredOrRead() && (
-									<DoneAll
-										className="chat__iconDoneAll"
-										color="inherit"
-										style={iconStyles}
-									/>
-								)}
+									{data.isJustSent() && (
+										<DoneIcon
+											className="chat__iconDone"
+											color="inherit"
+											style={iconStyles}
+										/>
+									)}
+
+									{data.isDeliveredOrRead() && (
+										<DoneAll
+											className="chat__iconDoneAll"
+											color="inherit"
+											style={iconStyles}
+										/>
+									)}
+								</>
+							)}
 						</span>
 
 						<div style={{ clear: 'both' }} />

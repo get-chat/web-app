@@ -12,6 +12,7 @@
 	/*border-top: 1px solid lightgray;*/
 	padding: 0 10px;
 	background-color: var(--gray-light);
+	border-bottom-right-radius: var(--wrapper-border-radius);
 }
 
 .chat__footer__emojiPicker {
@@ -42,15 +43,15 @@
 	/*max-height: 400px;*/
 	/*resize: none;*/
 	flex: 1;
-	border-radius: 30px;
+	border-radius: 9px;
 	padding: 8px 15px;
 	margin: 10px 10px;
 	border: none;
-	box-shadow: -1px 4px 5px -6px rgba(0, 0, 0, 0.4);
+	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
 }
 
 .typeBox.expired {
-	background-color: rgba(255, 255, 255, 0.5);
+	background-color: #dcdfea;
 }
 
 .chat__footer > form > textarea:focus,
@@ -64,12 +65,16 @@
 	/*top: 50%;
     transform: translateY(-50%);*/
 	z-index: 0;
-	color: #827f80;
+	color: #868a9b;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	width: 100%;
 	padding-right: 25px;
+}
+
+.typeBox.expired .typeBox__hint {
+	color: #626573;
 }
 
 [contenteditable] {
@@ -92,12 +97,12 @@
 
 .chat__footer > .MuiSvgIcon-root {
 	/*padding: 10px;*/
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__footer__expiredWarning {
 	font-size: 14px;
-	color: gray;
+	color: var(--lighter-text-color);
 }
 
 .chat__footer__attachmentContainer {
@@ -121,7 +126,7 @@
 }
 
 .chat__footer__attachmentContainer__options .MuiButtonBase-root {
-	box-shadow: -1px 4px 12px -6px rgba(0, 0, 0, 0.85);
+	box-shadow: -1px 4px 12px -6px rgba(0, 0, 45, 0.85);
 	margin-bottom: 15px;
 }
 
