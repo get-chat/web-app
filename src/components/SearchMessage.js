@@ -19,7 +19,7 @@ import { generateCancelToken } from '../helpers/ApiHelper';
 function SearchMessage(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [results, setResults] = useState({});
 	const [keyword, setKeyword] = useState('');

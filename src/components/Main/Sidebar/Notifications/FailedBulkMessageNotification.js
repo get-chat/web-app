@@ -7,7 +7,7 @@ import { generateMessagePreview } from '../../../../helpers/MessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
 
 function FailedBulkMessageNotification(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const history = useHistory();
 

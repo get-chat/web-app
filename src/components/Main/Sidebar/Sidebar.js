@@ -66,7 +66,7 @@ function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const { waId } = useParams();
 	const chatsContainer = useRef(null);

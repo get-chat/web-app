@@ -5,7 +5,7 @@ import ContactProviderHeader from './ContactProviderHeader';
 import { useTranslation } from 'react-i18next';
 
 function Contact(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [phoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
 

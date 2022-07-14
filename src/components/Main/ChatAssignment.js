@@ -19,7 +19,7 @@ import { ApplicationContext } from '../../contexts/ApplicationContext';
 function ChatAssignment(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
 	const [isUnableToChange, setUnableToChange] = useState(false);

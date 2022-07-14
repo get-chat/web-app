@@ -6,7 +6,7 @@ import { generateAvatarColor } from '../../../helpers/AvatarHelper';
 import { useTranslation } from 'react-i18next';
 
 function SidebarContactResult(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const data = props.contactData;
 

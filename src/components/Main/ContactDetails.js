@@ -22,7 +22,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 
 function ContactDetails(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [chat, setChat] = useState({});
 

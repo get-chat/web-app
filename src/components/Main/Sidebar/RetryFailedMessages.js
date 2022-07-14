@@ -12,7 +12,7 @@ import { CHAT_KEY_PREFIX } from '../../../Constants';
 import { Trans, useTranslation } from 'react-i18next';
 
 function RetryFailedMessages(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const history = useHistory();
 

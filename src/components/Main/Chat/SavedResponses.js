@@ -11,7 +11,7 @@ import { getObjLength } from '../../../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 
 function SavedResponses(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [deleteId, setDeleteId] = useState();
 	const [open, setOpen] = React.useState(false);

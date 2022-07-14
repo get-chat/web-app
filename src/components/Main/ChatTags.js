@@ -20,7 +20,7 @@ function ChatTags(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
 	const [chat, setChat] = useState();

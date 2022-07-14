@@ -14,7 +14,7 @@ import { generateCancelToken } from '../../../../helpers/ApiHelper';
 function Notifications(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [bulkMessageTaskElements, setBulkMessageTaskElements] = useState({});
 	const [isLoaded, setLoaded] = useState(false);

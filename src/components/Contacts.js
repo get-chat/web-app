@@ -27,7 +27,7 @@ import { generateCancelToken } from '../helpers/ApiHelper';
 function Contacts(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [keyword, setKeyword] = useState('');
 	const [contacts, setContacts] = useState({});

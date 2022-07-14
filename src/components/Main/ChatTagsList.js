@@ -18,7 +18,7 @@ import { AppConfig } from '../../contexts/AppConfig';
 function ChatTagsList(props) {
 	const config = React.useContext(AppConfig);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(false);
 
