@@ -409,7 +409,7 @@ a.chat__document:hover {
 	padding: 15px;
 	background-color: rgba(0, 0, 45, 0.1);
 	border-radius: 10px; /*0 0 10px 10px;*/
-	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
+	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
 }
 
 .templateMessages__emptyInfo,
@@ -419,7 +419,8 @@ a.chat__document:hover {
 }
 
 .templateMessages__create a {
-	color: var(--color-primary);
+	color: var(--default-text-color);
+	font-weight: 600;
 }
 
 .templateMessages .templateMessageWrapper,
