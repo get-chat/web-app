@@ -16,7 +16,6 @@ import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '../../helpers/Helpers';
 import LabelIcon from '@material-ui/icons/Label';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
-import { replaceEmojis } from '../../helpers/EmojiHelper';
 import { addPlus } from '../../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
