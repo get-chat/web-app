@@ -94,8 +94,14 @@
 .contactDetails__body__job {
 	font-size: 14px;
 	font-weight: 600;
+	text-align: center;
 	color: rgba(0, 0, 45, 0.4);
 	margin-bottom: 10px;
+}
+
+.contactDetails__body__lastMessageAt {
+	text-align: center;
+	font-size: 14px;
 }
 
 .contactDetails__body__tags__tag {

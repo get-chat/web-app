@@ -94,7 +94,7 @@ function ContactDetails(props) {
 							</div>
 						)}
 
-						<span>
+						<div className="contactDetails__body__lastMessageAt">
 							Last message:{' '}
 							{props.contactData.lastMessageTimestamp &&
 							props.contactData.lastMessageTimestamp > 0 ? (
@@ -104,7 +104,7 @@ function ContactDetails(props) {
 							) : (
 								t('Never')
 							)}
-						</span>
+						</div>
 
 						{chat?.tags?.length > 0 && (
 							<div className="contactDetails__body__tags mt-3">
