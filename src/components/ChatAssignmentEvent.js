@@ -4,7 +4,7 @@ import Moment from 'react-moment';
 import { Trans, useTranslation } from 'react-i18next';
 
 function ChatAssignmentEvent(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const dateFormat = 'H:mm';
 

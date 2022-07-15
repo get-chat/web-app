@@ -11,7 +11,7 @@ import { ApplicationContext } from '../../../contexts/ApplicationContext';
 function ChangePasswordDialog(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');

@@ -22,7 +22,7 @@ const SendBulkVoiceMessageDialog = ({
 	// TODO: Handle isRecording globally to avoid conflicts
 	const [isRecording, setRecording] = useState(false);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const close = () => {
 		setOpen(false);

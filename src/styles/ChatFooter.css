@@ -12,7 +12,6 @@
 	/*border-top: 1px solid lightgray;*/
 	padding: 0 10px;
 	background-color: var(--gray-light);
-	border-bottom-right-radius: var(--wrapper-border-radius);
 }
 
 .chat__footer__emojiPicker {

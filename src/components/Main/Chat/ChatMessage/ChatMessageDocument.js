@@ -3,7 +3,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { useTranslation } from 'react-i18next';
 
 function ChatMessageDocument(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<a

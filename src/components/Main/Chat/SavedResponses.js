@@ -11,7 +11,7 @@ import { getObjLength } from '../../../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 
 function SavedResponses(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [deleteId, setDeleteId] = useState();
 	const [open, setOpen] = React.useState(false);
@@ -36,30 +36,32 @@ function SavedResponses(props) {
 
 	return (
 		<div className="savedResponsesOuter">
-			<div className="savedResponses">
-				{getObjLength(props.savedResponses) === 0 && (
-					<div className="savedResponses__emptyInfo mt-3">
-						{t('No response message have been saved yet.')}
-					</div>
-				)}
-
-				{Object.entries(props.savedResponses).map((savedResponse, index) => (
-					<div key={savedResponse[0]} className="savedResponseWrapper">
-						<div className="chat__savedResponse chat__message chat__outgoing">
-							{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
-							<div className="savedResponse__message">
-								{savedResponse[1].text}
-							</div>
+			<div className="savedResponsesWrapper">
+				<div className="savedResponses">
+					{getObjLength(props.savedResponses) === 0 && (
+						<div className="savedResponses__emptyInfo mt-3">
+							{t('No response message have been saved yet.')}
 						</div>
+					)}
 
-						<Button onClick={() => sendSavedResponse(savedResponse[0])}>
-							{t('Send')}
-						</Button>
-						<Button onClick={() => attemptToDelete(savedResponse[0])}>
-							{t('Delete')}
-						</Button>
-					</div>
-				))}
+					{Object.entries(props.savedResponses).map((savedResponse, index) => (
+						<div key={savedResponse[0]} className="savedResponseWrapper">
+							<div className="chat__savedResponse chat__message chat__outgoing">
+								{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
+								<div className="savedResponse__message">
+									{savedResponse[1].text}
+								</div>
+							</div>
+
+							<Button onClick={() => sendSavedResponse(savedResponse[0])}>
+								{t('Send')}
+							</Button>
+							<Button onClick={() => attemptToDelete(savedResponse[0])}>
+								{t('Delete')}
+							</Button>
+						</div>
+					))}
+				</div>
 			</div>
 
 			<Dialog open={open} onClose={handleClose}>

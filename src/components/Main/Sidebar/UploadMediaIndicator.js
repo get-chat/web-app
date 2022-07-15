@@ -5,7 +5,7 @@ import '../../../styles/UploadMediaIndicator.css';
 import { useTranslation } from 'react-i18next';
 
 function UploadMediaIndicator() {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	return (
 		<div className="uploadingMediaIndicatorWrapper">

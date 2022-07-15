@@ -30,9 +30,9 @@
 }
 
 .emoji-mart-search input {
-	border-radius: 20px;
+	border-radius: 9px;
 	border: none;
-	background-color: #e6e6e6;
+	background-color: #fff;
 	padding: 10px 20px;
 	font-family: var(--font-family);
 }

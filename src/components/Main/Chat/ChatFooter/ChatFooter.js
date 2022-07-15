@@ -39,7 +39,7 @@ import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 
 function ChatFooter(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const fileInput = useRef(null);
 	const editable = useRef(null);

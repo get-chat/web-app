@@ -13,7 +13,7 @@ import { ApplicationContext } from '../../../../contexts/ApplicationContext';
 function SendTemplateMessage(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const template = props.data;
 

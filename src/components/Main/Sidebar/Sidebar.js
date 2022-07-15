@@ -23,6 +23,9 @@ import {
 } from '../../../helpers/Helpers';
 import {
 	CHAT_KEY_PREFIX,
+	CHAT_LIST_TAB_CASE_ALL,
+	CHAT_LIST_TAB_CASE_GROUP,
+	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
@@ -42,7 +45,6 @@ import ChatIcon from '@material-ui/icons/Chat';
 import Contacts from '../../Contacts';
 import { clearContactProvidersData } from '../../../helpers/StorageHelper';
 import CloseIcon from '@material-ui/icons/Close';
-import { filterChat } from '../../../helpers/SidebarHelper';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import BulkSendActions from './BulkSendActions';
@@ -66,7 +68,7 @@ function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const { waId } = useParams();
 	const chatsContainer = useRef(null);
@@ -80,8 +82,9 @@ function Sidebar(props) {
 	const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] =
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
+	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
-	const [tabCase, setTabCase] = useState('all');
+	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
 
 	const history = useHistory();
 
@@ -135,7 +138,7 @@ function Sidebar(props) {
 				);
 			}
 		};
-	}, [keyword, props.filterTag]);
+	}, [keyword, tabCase, props.filterTag]);
 
 	useEffect(() => {
 		// New chatMessages
@@ -320,11 +323,21 @@ function Sidebar(props) {
 			props.setLoadingNow('chats');
 		}
 
+		if (replaceAll) {
+			setLoadingChats(true);
+		}
+
+		const assignedToMe = tabCase === CHAT_LIST_TAB_CASE_ME ? true : undefined;
+		const assignedGroup =
+			tabCase === CHAT_LIST_TAB_CASE_GROUP ? true : undefined;
+
 		apiService.listChatsCall(
 			keyword,
 			props.filterTag?.id,
 			18,
 			offset,
+			assignedToMe,
+			assignedGroup,
 			cancelTokenSource.token,
 			(response) => {
 				const preparedChats = {};
@@ -409,9 +422,13 @@ function Sidebar(props) {
 				}
 
 				setLoadingMoreChats(false);
+				setLoadingChats(false);
 			},
 			(error) => {
+				console.log(error);
+
 				setLoadingMoreChats(false);
+				setLoadingChats(false);
 			},
 			history
 		);
@@ -586,9 +603,36 @@ function Sidebar(props) {
 					scrollButtons="auto"
 					onChange={handleTabChange}
 				>
-					<Tab label={t('All')} value={'all'} />
-					<Tab label={t('Me')} value={'me'} />
-					<Tab label={t('Group')} value={'group'} />
+					<Tab
+						label={
+							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_ALL ? (
+								<CircularProgress size={20} variant={'indeterminate'} />
+							) : (
+								t('All')
+							)
+						}
+						value={CHAT_LIST_TAB_CASE_ALL}
+					/>
+					<Tab
+						label={
+							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_ME ? (
+								<CircularProgress size={20} variant={'indeterminate'} />
+							) : (
+								t('Me')
+							)
+						}
+						value={CHAT_LIST_TAB_CASE_ME}
+					/>
+					<Tab
+						label={
+							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_GROUP ? (
+								<CircularProgress size={20} variant={'indeterminate'} />
+							) : (
+								t('Group')
+							)
+						}
+						value={CHAT_LIST_TAB_CASE_GROUP}
+					/>
 				</Tabs>
 			</div>
 
@@ -613,27 +657,22 @@ function Sidebar(props) {
 				)}
 
 				<div className="sidebar__results__chats">
-					{Object.entries(props.chats)
-						.filter((chat) => {
-							// Filter by helper method
-							return filterChat(props, tabCase, chat[1]);
-						})
-						.map((chat) => (
-							<SidebarChat
-								key={chat[0]}
-								chatData={chat[1]}
-								pendingMessages={props.pendingMessages}
-								newMessages={props.newMessages}
-								keyword={keyword}
-								contactProvidersData={props.contactProvidersData}
-								retrieveContactData={props.retrieveContactData}
-								tabCase={tabCase}
-								bulkSendPayload={props.bulkSendPayload}
-								isSelectionModeEnabled={props.isSelectionModeEnabled}
-								selectedChats={props.selectedChats}
-								setSelectedChats={props.setSelectedChats}
-							/>
-						))}
+					{Object.entries(props.chats).map((chat) => (
+						<SidebarChat
+							key={chat[0]}
+							chatData={chat[1]}
+							pendingMessages={props.pendingMessages}
+							newMessages={props.newMessages}
+							keyword={keyword}
+							contactProvidersData={props.contactProvidersData}
+							retrieveContactData={props.retrieveContactData}
+							tabCase={tabCase}
+							bulkSendPayload={props.bulkSendPayload}
+							isSelectionModeEnabled={props.isSelectionModeEnabled}
+							selectedChats={props.selectedChats}
+							setSelectedChats={props.setSelectedChats}
+						/>
+					))}
 
 					{Object.keys(props.chats).length === 0 && (
 						<span className="sidebar__results__chats__noResult">

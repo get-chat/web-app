@@ -22,7 +22,7 @@ import { binaryToBase64 } from '../../../helpers/ImageHelper';
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [isLoaded, setLoaded] = useState(false);
 	const [isUpdating, setUpdating] = useState(false);

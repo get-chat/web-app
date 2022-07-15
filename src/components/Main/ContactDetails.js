@@ -16,13 +16,12 @@ import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '../../helpers/Helpers';
 import LabelIcon from '@material-ui/icons/Label';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
-import { replaceEmojis } from '../../helpers/EmojiHelper';
 import { addPlus } from '../../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 
 function ContactDetails(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const [chat, setChat] = useState({});
 
@@ -95,7 +94,7 @@ function ContactDetails(props) {
 							</div>
 						)}
 
-						<span>
+						<div className="contactDetails__body__lastMessageAt">
 							Last message:{' '}
 							{props.contactData.lastMessageTimestamp &&
 							props.contactData.lastMessageTimestamp > 0 ? (
@@ -105,7 +104,7 @@ function ContactDetails(props) {
 							) : (
 								t('Never')
 							)}
-						</span>
+						</div>
 
 						{chat?.tags?.length > 0 && (
 							<div className="contactDetails__body__tags mt-3">

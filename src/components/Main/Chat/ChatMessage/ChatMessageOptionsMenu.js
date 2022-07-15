@@ -3,7 +3,7 @@ import { Menu, MenuItem } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 
 function ChatMessageOptionsMenu(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const createSavedResponse = () => {
 		if (props.optionsChatMessage) {

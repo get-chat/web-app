@@ -32,7 +32,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 function PreviewSendMedia(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const fileInput = useRef(null);
 

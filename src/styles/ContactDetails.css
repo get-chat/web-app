@@ -41,6 +41,7 @@
 }
 
 .contactDetails__body__section > h3 {
+	text-align: center;
 	font-size: 20px;
 	font-weight: 600;
 }
@@ -60,7 +61,7 @@
 	display: inline-block;
 	padding: 5px 10px;
 	border-radius: 16px;
-	background-color: rgba(0, 0, 45, 0.05);
+	background-color: var(--gray-light);
 	color: rgba(0, 0, 45, 0.8);
 }
 
@@ -93,8 +94,14 @@
 .contactDetails__body__job {
 	font-size: 14px;
 	font-weight: 600;
+	text-align: center;
 	color: rgba(0, 0, 45, 0.4);
 	margin-bottom: 10px;
+}
+
+.contactDetails__body__lastMessageAt {
+	text-align: center;
+	font-size: 14px;
 }
 
 .contactDetails__body__tags__tag {

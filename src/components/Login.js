@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Login(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const { errorCase } = useParams();
 

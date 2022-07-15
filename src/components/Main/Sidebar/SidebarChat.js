@@ -22,13 +22,12 @@ import {
 } from '../../../Constants';
 import ChatMessageShortContent from '../Chat/ChatMessage/ChatMessageShortContent';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
-import { replaceEmojis } from '../../../helpers/EmojiHelper';
 import { addPlus } from '../../../helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
 
 function SidebarChat(props) {
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const history = useHistory();
 

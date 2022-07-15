@@ -80,7 +80,7 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { t, i18n } = useTranslation();
+	const { t } = useTranslation();
 
 	const messagesContainer = useRef(null);
 
