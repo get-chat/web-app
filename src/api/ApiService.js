@@ -99,6 +99,8 @@ export class ApiService {
 		chatTagId,
 		limit,
 		offset,
+		assignedToMe,
+		assignedGroup,
 		cancelToken,
 		successCallback,
 		errorCallback,
@@ -113,6 +115,8 @@ export class ApiService {
 						chat_tag_id: chatTagId,
 						limit: 18,
 						offset: offset,
+						assigned_to_me: assignedToMe,
+						assigned_group: assignedGroup,
 					},
 					cancelToken
 				)

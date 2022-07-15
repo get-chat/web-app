@@ -23,6 +23,9 @@ import {
 } from '../../../helpers/Helpers';
 import {
 	CHAT_KEY_PREFIX,
+	CHAT_LIST_TAB_CASE_ALL,
+	CHAT_LIST_TAB_CASE_GROUP,
+	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
@@ -81,7 +84,7 @@ function Sidebar(props) {
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
-	const [tabCase, setTabCase] = useState('all');
+	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
 
 	const history = useHistory();
 
@@ -320,11 +323,17 @@ function Sidebar(props) {
 			props.setLoadingNow('chats');
 		}
 
+		const assignedToMe = tabCase === CHAT_LIST_TAB_CASE_ME ? true : undefined;
+		const assignedGroup =
+			tabCase === CHAT_LIST_TAB_CASE_GROUP ? true : undefined;
+
 		apiService.listChatsCall(
 			keyword,
 			props.filterTag?.id,
 			18,
 			offset,
+			assignedToMe,
+			assignedGroup,
 			cancelTokenSource.token,
 			(response) => {
 				const preparedChats = {};
@@ -586,9 +595,9 @@ function Sidebar(props) {
 					scrollButtons="auto"
 					onChange={handleTabChange}
 				>
-					<Tab label={t('All')} value={'all'} />
-					<Tab label={t('Me')} value={'me'} />
-					<Tab label={t('Group')} value={'group'} />
+					<Tab label={t('All')} value={CHAT_LIST_TAB_CASE_ALL} />
+					<Tab label={t('Me')} value={CHAT_LIST_TAB_CASE_ME} />
+					<Tab label={t('Group')} value={CHAT_LIST_TAB_CASE_GROUP} />
 				</Tabs>
 			</div>
 
