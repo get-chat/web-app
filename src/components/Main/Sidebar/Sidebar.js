@@ -138,7 +138,7 @@ function Sidebar(props) {
 				);
 			}
 		};
-	}, [keyword, props.filterTag]);
+	}, [keyword, tabCase, props.filterTag]);
 
 	useEffect(() => {
 		// New chatMessages
