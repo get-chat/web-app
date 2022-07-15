@@ -17,7 +17,6 @@ import {
 import PubSub from 'pubsub-js';
 import { extractAvatarFromContactProviderData } from '../../../helpers/Helpers';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
-import { replaceEmojis } from '../../../helpers/EmojiHelper';
 import { addPlus } from '../../../helpers/PhoneNumberHelper';
 import WarningIcon from '@material-ui/icons/Warning';
 import { isMobileOnly } from 'react-device-detect';

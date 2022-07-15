@@ -22,7 +22,6 @@ import {
 } from '../../../Constants';
 import ChatMessageShortContent from '../Chat/ChatMessage/ChatMessageShortContent';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
-import { replaceEmojis } from '../../../helpers/EmojiHelper';
 import { addPlus } from '../../../helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
