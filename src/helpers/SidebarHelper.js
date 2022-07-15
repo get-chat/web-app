@@ -21,6 +21,16 @@ export const filterChat = (props, tabCase, curChat) => {
         if (!hasTag) return false;
     }*/
 
+	// If any of these objects are undefined for any reason: https://sentry.io/organizations/getchat/issues/3426491838
+	if (!curChat || !props.currentUser) {
+		console.log(
+			'Current chat or current user is empty.',
+			curChat,
+			props.currentUser
+		);
+		return true;
+	}
+
 	// Filter by case
 	switch (tabCase) {
 		case SIDEBAR_TAB_CASE_ALL: {
