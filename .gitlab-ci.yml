@@ -163,7 +163,7 @@ Security audit:
 
   <<: *install_pnpm
   script:
-    - pnpm audit --audit-level=moderate
+    - pnpm audit --audit-level=high
 
 
 Publish package on git tag:

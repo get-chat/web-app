@@ -1487,13 +1487,29 @@ export default function Chat(props) {
 				getchatId = response.data.id;
 			}
 
-			// TODO: Check if timestamp is provided when stored with response 202
 			const timestamp = generateUnixTimestamp();
 			const storedMessage = new ChatMessageClass();
 			storedMessage.getchatId = getchatId;
 			storedMessage.id = storedMessage.generateInternalIdString();
 			storedMessage.type = requestBody.type;
 			storedMessage.text = text;
+
+			storedMessage.templateName = requestBody.template?.name;
+			storedMessage.templateNamespace = requestBody.template?.namespace;
+			storedMessage.templateLanguage = requestBody.template?.language?.code;
+			storedMessage.templateParameters = requestBody.template?.components;
+
+			storedMessage.imageLink = requestBody.image?.link;
+			storedMessage.videoLink = requestBody.video?.link;
+			storedMessage.audioLink = requestBody.audio?.link;
+			storedMessage.documentLink = requestBody.document?.link;
+
+			storedMessage.caption =
+				requestBody.image?.caption ??
+				requestBody.video?.caption ??
+				requestBody.audio?.caption ??
+				requestBody.document?.caption;
+
 			storedMessage.isFromUs = true;
 			storedMessage.username = props.currentUser?.username;
 			storedMessage.isFailed = false;
