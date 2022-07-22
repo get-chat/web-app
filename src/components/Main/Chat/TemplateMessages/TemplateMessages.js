@@ -190,6 +190,7 @@ function TemplateMessages(props) {
 					<SendTemplateMessage
 						data={chosenTemplate}
 						send={(template) => send(template)}
+						setSending={setSending}
 						bulkSend={(template) => bulkSend(template)}
 						sendButtonInnerRef={sendButtonRef}
 						bulkSendButtonInnerRef={bulkSendButtonRef}
