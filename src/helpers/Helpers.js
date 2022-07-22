@@ -23,6 +23,10 @@ export const getConfig = (params, cancelToken, responseType) => {
 	return config;
 };
 
+export const isEmptyString = (str) => {
+	return !str || str.length === 0;
+};
+
 export const translateHTMLInputToText = (html) => {
 	let result;
 	//const reg = new RegExp('((<span\\b[^>]*\\s\\bstyle=(["\'])([^"]*)\\3[^>]*>)(.*?)</span>)', 'g');

@@ -530,3 +530,9 @@ msgstr ""
 
 msgid "Copied!"
 msgstr ""
+
+msgid "Missing parameters"
+msgstr ""
+
+msgid "You need to fill the parameters!"
+msgstr ""

@@ -1475,11 +1475,6 @@ export default function Chat(props) {
 
 			if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
 				text = requestBody.text.body;
-			} else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
-				text = requestBody.template.name;
-			} else {
-				// File
-				text = requestBody.link;
 			}
 
 			let getchatId;

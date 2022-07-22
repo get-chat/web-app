@@ -172,5 +172,7 @@
 	"<0>Quantity</0>: %d": "",
 	"<0>Price</0>: %d %s": "",
 	"On WhatsApp, your business profile photo has bigger resolution than shown here.": "",
-	"Copied!": ""
+	"Copied!": "",
+	"Missing parameters": "",
+	"You need to fill the parameters!": ""
 }
