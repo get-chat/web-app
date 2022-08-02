@@ -250,8 +250,10 @@ function SidebarChat(props) {
 							<h2>
 								{props.keyword !== undefined &&
 								props.keyword.trim().length > 0 ? (
-									// TODO: Highlight props.keyword
-									<PrintMessage message={props.chatData.name} />
+									<PrintMessage
+										message={props.chatData.name}
+										highlightText={props.keyword}
+									/>
 								) : (
 									<PrintMessage
 										message={

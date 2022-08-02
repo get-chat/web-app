@@ -35,9 +35,10 @@ function SearchMessageResult(props) {
 
 						<ChatMessageTypeIcon type={data.type} />
 					</span>
-
-					{/* TODO: hightlite htext with props.keyword */}
-					<PrintMessage message={data.text ?? data.caption} />
+					<PrintMessage
+						message={data.text ?? data.caption}
+						highlightText={props.keyword}
+					/>
 				</div>
 			</div>
 		</ListItem>

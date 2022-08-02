@@ -22,10 +22,19 @@ const getTextNodeType = (node) => {
 	};
 };
 
-const decomposeMessage = (message) => {
+const decomposeMessage = (message, highlightText) => {
+	const regex = new RegExp(highlightText, 'gi');
 	let section = '';
 
-	const result = emojiTree(message).reduce((acc, item) => {
+	if (highlightText) {
+		message = message
+			.replace(regex, (match) => {
+				return `<mark class="highlight">${match}</mark>`;
+			})
+			.replace(/\n/g, '<br />');
+	}
+
+	let result = emojiTree(message).reduce((acc, item) => {
 		if (item.type === 'emoji') {
 			if (section) {
 				acc.push(section);
@@ -57,9 +66,13 @@ const PrintMessage = ({
 	message,
 	as: Tag = 'span',
 	smallEmoji = false,
+	highlightText,
 	className,
 }) => {
-	const splittedMessage = useMemo(() => decomposeMessage(message), [message]);
+	const splittedMessage = useMemo(
+		() => decomposeMessage(message, highlightText),
+		[message, highlightText]
+	);
 	const classNames = cn('printMessage', className);
 
 	// single emoji
