@@ -68,7 +68,10 @@
 			"For details, please see: https://gitlab.com/wabbitproject/web-app/-/merge_requests/84#note_933930067"
 		],
 		"overrides": {
-			"nth-check": "^2.0.1"
+			"nth-check": "^2.0.1",
+			"terser@>=5.0.0 <5.14.2": ">=5.14.2",
+			"terser@<4.8.1": ">=4.8.1",
+			"file-type@>=13.0.0 <16.5.4": ">=16.5.4"
 		}
 	},
 	"eslintConfig": {
