@@ -244,6 +244,14 @@ function SendTemplateMessage(props) {
 											{t('Delete')}
 										</Button>
 									)}
+									<TextField
+										value={headerFileURL}
+										onChange={(event) => setHeaderFileURL(event.target.value)}
+										label={t('File URL')}
+										type="text"
+										autoFocus
+										fullWidth
+									/>
 								</div>
 							)}
 
