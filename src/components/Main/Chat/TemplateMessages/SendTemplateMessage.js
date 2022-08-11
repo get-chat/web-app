@@ -23,6 +23,7 @@ function SendTemplateMessage(props) {
 	const [params, setParams] = useState({});
 	const [headerFileURL, setHeaderFileURL] = useState('');
 	const [isUploading, setUploading] = useState(false);
+	const [addFileByURL, setAddFileByURL] = useState(false);
 
 	const headerFileInput = useRef();
 
@@ -244,14 +245,16 @@ function SendTemplateMessage(props) {
 											{t('Delete')}
 										</Button>
 									)}
-									<TextField
-										value={headerFileURL}
-										onChange={(event) => setHeaderFileURL(event.target.value)}
-										label={t('File URL')}
-										type="text"
-										autoFocus
-										fullWidth
-									/>
+									{addFileByURL && (
+										<TextField
+											value={headerFileURL}
+											onChange={(event) => setHeaderFileURL(event.target.value)}
+											label={t('File URL')}
+											type="text"
+											autoFocus
+											fullWidth
+										/>
+									)}
 								</div>
 							)}
 
