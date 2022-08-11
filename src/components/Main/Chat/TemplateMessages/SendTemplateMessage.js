@@ -12,6 +12,8 @@ import { ApplicationContext } from '../../../../contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR } from '../../../../Constants';
 import { isEmptyString } from '../../../../helpers/Helpers';
+import PublishIcon from '@material-ui/icons/Publish';
+import HttpIcon from '@material-ui/icons/Http';
 
 function SendTemplateMessage(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -24,6 +26,10 @@ function SendTemplateMessage(props) {
 	const [headerFileURL, setHeaderFileURL] = useState('');
 	const [isUploading, setUploading] = useState(false);
 	const [addFileByURL, setAddFileByURL] = useState(false);
+	const [provideFileBy, setProvideFileBy] = useState();
+
+	const FILE_PROVIDE_TYPE_UPLOAD = 'upload';
+	const FILE_PROVIDE_TYPE_FILE_URL = 'file_url';
 
 	const headerFileInput = useRef();
 
@@ -209,51 +215,75 @@ function SendTemplateMessage(props) {
 								comp.format === 'VIDEO' ||
 								comp.format === 'DOCUMENT') && (
 								<div>
-									<div>
-										{headerFileURL && (
-											<div>
-												<Alert severity="success">
-													<AlertTitle>Uploaded successfully</AlertTitle>
-													<a href={headerFileURL} target="_blank">
-														{headerFileURL}
-													</a>
-												</Alert>
+									{!provideFileBy && (
+										<div className="sendTemplateMessage__section__provideFileChoices">
+											<div className="sendTemplateMessage__section__provideFileChoices__choice">
+												<PublishIcon />
+												<span>{t('Upload a file')}</span>
 											</div>
-										)}
-									</div>
-									<FileInput
-										innerRef={headerFileInput}
-										multiple={false}
-										accept={getMimetypeByFormat(comp.format)}
-										handleSelectedFiles={handleChosenImage}
-									/>
-									<Button
-										color="primary"
-										onClick={() => headerFileInput.current.click()}
-										disabled={isUploading}
-									>
-										<Trans>
-											Upload {headerFileURL ? 'another ' : ''}
-											{comp.format.toLowerCase()}
-										</Trans>
-									</Button>
-									{headerFileURL && (
-										<Button
-											color="secondary"
-											onClick={() => setHeaderFileURL('')}
-										>
-											{t('Delete')}
-										</Button>
+											<div className="sendTemplateMessage__section__provideFileChoices__choice">
+												<HttpIcon />
+												<span>{t('Enter a file URL')}</span>
+											</div>
+										</div>
 									)}
-									{addFileByURL && (
-										<TextField
-											value={headerFileURL}
-											onChange={(event) => setHeaderFileURL(event.target.value)}
-											label={t('File URL')}
-											type="text"
-											autoFocus
-											fullWidth
-										/>
+
+									{provideFileBy === FILE_PROVIDE_TYPE_UPLOAD && (
+										<div>
+											<div>
+												{headerFileURL && (
+													<div>
+														<Alert severity="success">
+															<AlertTitle>Uploaded successfully</AlertTitle>
+															<a href={headerFileURL} target="_blank">
+																{headerFileURL}
+															</a>
+														</Alert>
+													</div>
+												)}
+											</div>
+											<FileInput
+												innerRef={headerFileInput}
+												multiple={false}
+												accept={getMimetypeByFormat(comp.format)}
+												handleSelectedFiles={handleChosenImage}
+											/>
+											<Button
+												color="primary"
+												onClick={() => headerFileInput.current.click()}
+												disabled={isUploading}
+											>
+												<Trans>
+													Upload {headerFileURL ? 'another ' : ''}
+													{comp.format.toLowerCase()}
+												</Trans>
+											</Button>
+											{headerFileURL && (
+												<Button
+													color="secondary"
+													onClick={() => setHeaderFileURL('')}
+												>
+													{t('Delete')}
+												</Button>
+											)}
+										</div>
+									)}
+
+									{provideFileBy === FILE_PROVIDE_TYPE_FILE_URL && (
+										<div>
+											{addFileByURL && (
+												<TextField
+													value={headerFileURL}
+													onChange={(event) =>
+														setHeaderFileURL(event.target.value)
+													}
+													label={t('File URL')}
+													type="text"
+													autoFocus
+													fullWidth
+												/>
+											)}
+										</div>
 									)}
 								</div>
 							)}
