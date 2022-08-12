@@ -13,7 +13,7 @@ import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR } from '../../../../Constants';
 import { isEmptyString } from '../../../../helpers/Helpers';
 import PublishIcon from '@material-ui/icons/Publish';
-import HttpIcon from '@material-ui/icons/Http';
+import LinkIcon from '@material-ui/icons/Link';
 
 function SendTemplateMessage(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -214,9 +214,9 @@ function SendTemplateMessage(props) {
 								comp.format === 'VIDEO' ||
 								comp.format === 'DOCUMENT') && (
 								<div>
-									{/*<div className="sendTemplateMessage__section__fileType">
+									<div className="sendTemplateMessage__section__fileType">
 										{t('Type: %s', comp.format.toLowerCase())}
-									</div>*/}
+									</div>
 
 									{!provideFileBy && (
 										<div className="sendTemplateMessage__section__provideFileChoices">
@@ -237,7 +237,7 @@ function SendTemplateMessage(props) {
 												}
 												className="sendTemplateMessage__section__provideFileChoices__choice"
 											>
-												<HttpIcon />
+												<LinkIcon />
 												<span>{t('Enter a link to file')}</span>
 											</ButtonBase>
 										</div>

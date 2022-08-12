@@ -26,7 +26,12 @@
 }
 
 .sendTemplateMessage__section__fileType {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
+	font-size: 16px;
+	display: flex;
+	justify-content: center;
+	color: var(--color-primary);
+	font-weight: 600;
 }
 
 .sendTemplateMessage__section__provideFileChoices {
@@ -43,6 +48,7 @@
 	cursor: pointer;
 	padding: 5px 10px;
 	border-radius: 10px;
+	justify-content: flex-start;
 }
 
 .sendTemplateMessage__section__provideFileChoices__choice > .MuiSvgIcon-root {
@@ -54,6 +60,7 @@
 .sendTemplateMessage__section__provideFileChoices__choice > span {
 	font-weight: 600;
 	color: var(--lighter-text-color);
+	text-align: center;
 }
 
 .sendTemplateMessage__section__uploadWrapper {
