@@ -536,3 +536,18 @@ msgstr ""
 
 msgid "You need to fill the parameters!"
 msgstr ""
+
+msgid "Enter a link to file"
+msgstr ""
+
+msgid "Link to file"
+msgstr ""
+
+msgid "Upload a file"
+msgstr ""
+
+msgid "Enter a link to file instead"
+msgstr ""
+
+msgid "Upload a file instead"
+msgstr ""

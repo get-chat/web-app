@@ -147,7 +147,8 @@ a {
 }
 
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
-		.MuiSvgIcon-root):not(.MuiCheckbox-root .MuiSvgIcon-root) {
+		.MuiSvgIcon-root):not(.MuiCheckbox-root
+		.MuiSvgIcon-root):not(.MuiButton-root .MuiSvgIcon-root) {
 	color: #6f7385;
 }
 
@@ -162,6 +163,10 @@ a {
 
 .MuiListItem-root {
 	font-size: 14px !important;
+}
+
+.MuiButton-contained {
+	box-shadow: none !important;
 }
 
 .MuiTab-root {

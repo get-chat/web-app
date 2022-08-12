@@ -47,6 +47,10 @@
 	color: var(--lighter-text-color);
 }
 
+.sendTemplateMessage__section__provideFileOtherChoice {
+	margin-top: 15px;
+}
+
 .templateMessage__param {
 	margin-top: 10px !important;
 }

@@ -258,9 +258,11 @@ function SendTemplateMessage(props) {
 												handleSelectedFiles={handleChosenImage}
 											/>
 											<Button
+												variant="contained"
 												color="primary"
 												onClick={() => headerFileInput.current.click()}
 												disabled={isUploading}
+												startIcon={<PublishIcon />}
 											>
 												<Trans>
 													Upload {headerFileURL ? 'another ' : ''}
@@ -275,6 +277,17 @@ function SendTemplateMessage(props) {
 													{t('Delete')}
 												</Button>
 											)}
+
+											<div className="sendTemplateMessage__section__provideFileOtherChoice">
+												<Button
+													color="secondary"
+													onClick={() =>
+														setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
+													}
+												>
+													{t('Enter a link to file instead')}
+												</Button>
+											</div>
 										</div>
 									)}
 
@@ -285,11 +298,22 @@ function SendTemplateMessage(props) {
 												onChange={(event) =>
 													setHeaderFileURL(event.target.value)
 												}
-												label={t('File URL')}
+												label={t('Link to file')}
 												type="text"
 												autoFocus
 												fullWidth
 											/>
+
+											<div className="sendTemplateMessage__section__provideFileOtherChoice">
+												<Button
+													color="secondary"
+													onClick={() =>
+														setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
+													}
+												>
+													{t('Upload a file instead')}
+												</Button>
+											</div>
 										</div>
 									)}
 								</div>
