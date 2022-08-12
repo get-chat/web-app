@@ -25,7 +25,6 @@ function SendTemplateMessage(props) {
 	const [params, setParams] = useState({});
 	const [headerFileURL, setHeaderFileURL] = useState('');
 	const [isUploading, setUploading] = useState(false);
-	const [addFileByURL, setAddFileByURL] = useState(false);
 	const [provideFileBy, setProvideFileBy] = useState();
 
 	const FILE_PROVIDE_TYPE_UPLOAD = 'upload';
@@ -217,13 +216,23 @@ function SendTemplateMessage(props) {
 								<div>
 									{!provideFileBy && (
 										<div className="sendTemplateMessage__section__provideFileChoices">
-											<div className="sendTemplateMessage__section__provideFileChoices__choice">
+											<div
+												onClick={() =>
+													setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
+												}
+												className="sendTemplateMessage__section__provideFileChoices__choice"
+											>
 												<PublishIcon />
 												<span>{t('Upload a file')}</span>
 											</div>
-											<div className="sendTemplateMessage__section__provideFileChoices__choice">
+											<div
+												onClick={() =>
+													setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
+												}
+												className="sendTemplateMessage__section__provideFileChoices__choice"
+											>
 												<HttpIcon />
-												<span>{t('Enter a file URL')}</span>
+												<span>{t('Enter a link to file')}</span>
 											</div>
 										</div>
 									)}
@@ -271,18 +280,16 @@ function SendTemplateMessage(props) {
 
 									{provideFileBy === FILE_PROVIDE_TYPE_FILE_URL && (
 										<div>
-											{addFileByURL && (
-												<TextField
-													value={headerFileURL}
-													onChange={(event) =>
-														setHeaderFileURL(event.target.value)
-													}
-													label={t('File URL')}
-													type="text"
-													autoFocus
-													fullWidth
-												/>
-											)}
+											<TextField
+												value={headerFileURL}
+												onChange={(event) =>
+													setHeaderFileURL(event.target.value)
+												}
+												label={t('File URL')}
+												type="text"
+												autoFocus
+												fullWidth
+											/>
 										</div>
 									)}
 								</div>
