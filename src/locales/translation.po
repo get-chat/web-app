@@ -551,3 +551,6 @@ msgstr ""
 
 msgid "Upload a file instead"
 msgstr ""
+
+msgid "Type: %s"
+msgstr ""
