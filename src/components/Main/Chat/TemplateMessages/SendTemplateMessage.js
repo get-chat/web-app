@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { Button, ButtonBase, TextField } from '@material-ui/core';
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
@@ -214,9 +214,14 @@ function SendTemplateMessage(props) {
 								comp.format === 'VIDEO' ||
 								comp.format === 'DOCUMENT') && (
 								<div>
+									{/*<div className="sendTemplateMessage__section__fileType">
+										{t('Type: %s', comp.format.toLowerCase())}
+									</div>*/}
+
 									{!provideFileBy && (
 										<div className="sendTemplateMessage__section__provideFileChoices">
-											<div
+											<ButtonBase
+												component="div"
 												onClick={() =>
 													setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
 												}
@@ -224,8 +229,9 @@ function SendTemplateMessage(props) {
 											>
 												<PublishIcon />
 												<span>{t('Upload a file')}</span>
-											</div>
-											<div
+											</ButtonBase>
+											<ButtonBase
+												component="div"
 												onClick={() =>
 													setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
 												}
@@ -233,50 +239,54 @@ function SendTemplateMessage(props) {
 											>
 												<HttpIcon />
 												<span>{t('Enter a link to file')}</span>
-											</div>
+											</ButtonBase>
 										</div>
 									)}
 
 									{provideFileBy === FILE_PROVIDE_TYPE_UPLOAD && (
 										<div>
-											<div>
-												{headerFileURL && (
-													<div>
-														<Alert severity="success">
-															<AlertTitle>Uploaded successfully</AlertTitle>
-															<a href={headerFileURL} target="_blank">
-																{headerFileURL}
-															</a>
-														</Alert>
-													</div>
-												)}
-											</div>
+											{headerFileURL && (
+												<div>
+													<Alert severity="success">
+														<AlertTitle>Uploaded successfully</AlertTitle>
+														<a href={headerFileURL} target="_blank">
+															{headerFileURL}
+														</a>
+													</Alert>
+												</div>
+											)}
+
 											<FileInput
 												innerRef={headerFileInput}
 												multiple={false}
 												accept={getMimetypeByFormat(comp.format)}
 												handleSelectedFiles={handleChosenImage}
 											/>
-											<Button
-												variant="contained"
-												color="primary"
-												onClick={() => headerFileInput.current.click()}
-												disabled={isUploading}
-												startIcon={<PublishIcon />}
-											>
-												<Trans>
-													Upload {headerFileURL ? 'another ' : ''}
-													{comp.format.toLowerCase()}
-												</Trans>
-											</Button>
-											{headerFileURL && (
+
+											<div className="sendTemplateMessage__section__uploadWrapper">
 												<Button
-													color="secondary"
-													onClick={() => setHeaderFileURL('')}
+													variant="contained"
+													color="primary"
+													onClick={() => headerFileInput.current.click()}
+													disabled={isUploading}
+													startIcon={<PublishIcon />}
 												>
-													{t('Delete')}
+													<Trans>
+														Upload {headerFileURL ? 'another ' : ''}
+														{comp.format.toLowerCase()}
+													</Trans>
 												</Button>
-											)}
+
+												{headerFileURL && (
+													<Button
+														variant="contained"
+														color="secondary"
+														onClick={() => setHeaderFileURL('')}
+													>
+														{t('Delete')}
+													</Button>
+												)}
+											</div>
 
 											<div className="sendTemplateMessage__section__provideFileOtherChoice">
 												<Button
