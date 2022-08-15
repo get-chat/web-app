@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { Button, ButtonBase, TextField } from '@material-ui/core';
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
@@ -12,6 +12,8 @@ import { ApplicationContext } from '../../../../contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR } from '../../../../Constants';
 import { isEmptyString } from '../../../../helpers/Helpers';
+import PublishIcon from '@material-ui/icons/Publish';
+import LinkIcon from '@material-ui/icons/Link';
 
 function SendTemplateMessage(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -23,6 +25,10 @@ function SendTemplateMessage(props) {
 	const [params, setParams] = useState({});
 	const [headerFileURL, setHeaderFileURL] = useState('');
 	const [isUploading, setUploading] = useState(false);
+	const [provideFileBy, setProvideFileBy] = useState();
+
+	const FILE_PROVIDE_TYPE_UPLOAD = 'upload';
+	const FILE_PROVIDE_TYPE_FILE_URL = 'file_url';
 
 	const headerFileInput = useRef();
 
@@ -208,41 +214,117 @@ function SendTemplateMessage(props) {
 								comp.format === 'VIDEO' ||
 								comp.format === 'DOCUMENT') && (
 								<div>
-									<div>
-										{headerFileURL && (
-											<div>
-												<Alert severity="success">
-													<AlertTitle>Uploaded successfully</AlertTitle>
-													<a href={headerFileURL} target="_blank">
-														{headerFileURL}
-													</a>
-												</Alert>
-											</div>
-										)}
+									<div className="sendTemplateMessage__section__fileType">
+										{t('Type: %s', comp.format.toLowerCase())}
 									</div>
-									<FileInput
-										innerRef={headerFileInput}
-										multiple={false}
-										accept={getMimetypeByFormat(comp.format)}
-										handleSelectedFiles={handleChosenImage}
-									/>
-									<Button
-										color="primary"
-										onClick={() => headerFileInput.current.click()}
-										disabled={isUploading}
-									>
-										<Trans>
-											Upload {headerFileURL ? 'another ' : ''}
-											{comp.format.toLowerCase()}
-										</Trans>
-									</Button>
-									{headerFileURL && (
-										<Button
-											color="secondary"
-											onClick={() => setHeaderFileURL('')}
-										>
-											{t('Delete')}
-										</Button>
+
+									{!provideFileBy && (
+										<div className="sendTemplateMessage__section__provideFileChoices">
+											<ButtonBase
+												component="div"
+												onClick={() =>
+													setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
+												}
+												className="sendTemplateMessage__section__provideFileChoices__choice"
+											>
+												<PublishIcon />
+												<span>{t('Upload a file')}</span>
+											</ButtonBase>
+											<ButtonBase
+												component="div"
+												onClick={() =>
+													setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
+												}
+												className="sendTemplateMessage__section__provideFileChoices__choice"
+											>
+												<LinkIcon />
+												<span>{t('Enter a link to file')}</span>
+											</ButtonBase>
+										</div>
+									)}
+
+									{provideFileBy === FILE_PROVIDE_TYPE_UPLOAD && (
+										<div>
+											{headerFileURL && (
+												<div>
+													<Alert severity="success">
+														<AlertTitle>Uploaded successfully</AlertTitle>
+														<a href={headerFileURL} target="_blank">
+															{headerFileURL}
+														</a>
+													</Alert>
+												</div>
+											)}
+
+											<FileInput
+												innerRef={headerFileInput}
+												multiple={false}
+												accept={getMimetypeByFormat(comp.format)}
+												handleSelectedFiles={handleChosenImage}
+											/>
+
+											<div className="sendTemplateMessage__section__uploadWrapper">
+												<Button
+													variant="contained"
+													color="primary"
+													onClick={() => headerFileInput.current.click()}
+													disabled={isUploading}
+													startIcon={<PublishIcon />}
+												>
+													<Trans>
+														Upload {headerFileURL ? 'another ' : ''}
+														{comp.format.toLowerCase()}
+													</Trans>
+												</Button>
+
+												{headerFileURL && (
+													<Button
+														variant="contained"
+														color="secondary"
+														onClick={() => setHeaderFileURL('')}
+													>
+														{t('Delete')}
+													</Button>
+												)}
+											</div>
+
+											<div className="sendTemplateMessage__section__provideFileOtherChoice">
+												<Button
+													color="secondary"
+													onClick={() =>
+														setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
+													}
+												>
+													{t('Enter a link to file instead')}
+												</Button>
+											</div>
+										</div>
+									)}
+
+									{provideFileBy === FILE_PROVIDE_TYPE_FILE_URL && (
+										<div>
+											<TextField
+												value={headerFileURL}
+												onChange={(event) =>
+													setHeaderFileURL(event.target.value)
+												}
+												label={t('Link to file')}
+												type="text"
+												autoFocus
+												fullWidth
+											/>
+
+											<div className="sendTemplateMessage__section__provideFileOtherChoice">
+												<Button
+													color="secondary"
+													onClick={() =>
+														setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
+													}
+												>
+													{t('Upload a file instead')}
+												</Button>
+											</div>
+										</div>
 									)}
 								</div>
 							)}

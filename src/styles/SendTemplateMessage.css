@@ -19,8 +19,59 @@
 	margin-bottom: 10px;
 }
 
-.sendTemplateMessage__section .MuiButtonBase-root {
+.sendTemplateMessage__section
+	.MuiButtonBase-root:not(.sendTemplateMessage__section__provideFileChoices
+		.MuiButtonBase-root) {
 	margin-right: 10px;
+}
+
+.sendTemplateMessage__section__fileType {
+	margin-bottom: 15px;
+	font-size: 16px;
+	display: flex;
+	justify-content: center;
+	color: var(--color-primary);
+	font-weight: 600;
+}
+
+.sendTemplateMessage__section__provideFileChoices {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10px;
+}
+
+.sendTemplateMessage__section__provideFileChoices__choice {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	cursor: pointer;
+	padding: 5px 10px;
+	border-radius: 10px;
+	justify-content: flex-start;
+}
+
+.sendTemplateMessage__section__provideFileChoices__choice > .MuiSvgIcon-root {
+	height: 50px;
+	width: 50px;
+	margin-bottom: 10px;
+}
+
+.sendTemplateMessage__section__provideFileChoices__choice > span {
+	font-weight: 600;
+	color: var(--lighter-text-color);
+	text-align: center;
+}
+
+.sendTemplateMessage__section__uploadWrapper {
+	display: flex;
+	justify-content: center;
+}
+
+.sendTemplateMessage__section__provideFileOtherChoice {
+	margin-top: 30px;
+	display: flex;
+	justify-content: center;
 }
 
 .templateMessage__param {
