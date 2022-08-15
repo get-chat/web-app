@@ -177,7 +177,10 @@ function Contacts(props) {
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
 					<ListItem button>
-						<div className="contacts__startByPhoneNumber__inner">
+						<div
+							className="contacts__startByPhoneNumber__inner"
+							data-test-id="start-new-chat"
+						>
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
 						</div>
@@ -198,6 +201,7 @@ function Contacts(props) {
 						<Button
 							color="primary"
 							onClick={() => verifyContact(undefined, phoneNumber)}
+							data-test-id="start-chat-by-phone"
 						>
 							{t('Start')}
 						</Button>
