@@ -1,6 +1,7 @@
 import React from 'react';
 import DoneAll from '@material-ui/icons/DoneAll';
 import DoneIcon from '@material-ui/icons/Done';
+import ErrorIcon from '@material-ui/icons/Error';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Moment from 'react-moment';
 import '../../../../styles/InputRange.css';
@@ -221,6 +222,14 @@ function ChatMessage(props) {
 										/>
 									)}
 								</>
+							)}
+
+							{data.isFailed && (
+								<ErrorIcon
+									className="chat__iconError"
+									color="inherit"
+									style={iconStyles}
+								/>
 							)}
 						</span>
 
