@@ -496,8 +496,7 @@ export default function Chat(props) {
 					let changedAny = false;
 
 					Object.entries(data).forEach((status) => {
-						const statusMsgId = status[0];
-						let wabaIdOrGetchatId = statusMsgId;
+						let wabaIdOrGetchatId = status[0];
 
 						const statusObj = status[1];
 
@@ -529,6 +528,17 @@ export default function Chat(props) {
 								changedAny = true;
 								newState[wabaIdOrGetchatId].readTimestamp =
 									statusObj.readTimestamp;
+							}
+
+							if (statusObj.errors) {
+								changedAny = true;
+								newState[wabaIdOrGetchatId].isFailed = true;
+								// Merge with existing errors if exist
+								if (newState[wabaIdOrGetchatId].errors) {
+									newState[wabaIdOrGetchatId].errors.concat(statusObj.errors);
+								} else {
+									newState[wabaIdOrGetchatId].errors = statusObj.errors;
+								}
 							}
 						}
 					});

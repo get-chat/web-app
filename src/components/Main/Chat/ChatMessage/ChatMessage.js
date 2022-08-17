@@ -167,7 +167,7 @@ function ChatMessage(props) {
 							<div className="chat__errors">
 								{data.errors.map((error, index) => (
 									<div key={index} className="chat__errors__error">
-										{error.details}
+										{error.details ?? error.title}
 									</div>
 								))}
 							</div>
