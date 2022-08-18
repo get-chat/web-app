@@ -168,7 +168,7 @@ function ChatMessage(props) {
 						{data.errors && (
 							<Alert variant="filled" severity="error" className="chat__errors">
 								{data.errors.map((error, index) => (
-									<div key={index}>{error.details ?? error.title}</div>
+									<div key={index}>{t(error.details ?? error.title)}</div>
 								))}
 							</Alert>
 						)}
