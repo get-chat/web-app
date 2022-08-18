@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import PrintMessage from '../../../PrintMessage';
+import { Alert } from '@material-ui/lab';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -165,13 +166,11 @@ function ChatMessage(props) {
 						)}
 
 						{data.errors && (
-							<div className="chat__errors">
+							<Alert variant="filled" severity="error" className="chat__errors">
 								{data.errors.map((error, index) => (
-									<div key={index} className="chat__errors__error">
-										{error.details ?? error.title}
-									</div>
+									<div key={index}>{error.details ?? error.title}</div>
 								))}
-							</div>
+							</Alert>
 						)}
 
 						{data.text ??
