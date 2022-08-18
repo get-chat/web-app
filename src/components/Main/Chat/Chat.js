@@ -491,6 +491,11 @@ export default function Chat(props) {
 		const onMessageStatusChange = function (msg, data) {
 			if (data && isLoaded) {
 				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
+
+				let receivedNewErrors = false;
+				const prevScrollTop = messagesContainer.current.scrollTop;
+				const prevScrollHeight = messagesContainer.current.scrollHeight;
+
 				setMessages((prevState) => {
 					const newState = prevState;
 					let changedAny = false;
@@ -531,6 +536,7 @@ export default function Chat(props) {
 							}
 
 							if (statusObj.errors) {
+								receivedNewErrors = true;
 								changedAny = true;
 								newState[wabaIdOrGetchatId].isFailed = true;
 								// Merge with existing errors if exist
@@ -549,6 +555,10 @@ export default function Chat(props) {
 						return prevState;
 					}
 				});
+
+				if (receivedNewErrors) {
+					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+				}
 			}
 		};
 
