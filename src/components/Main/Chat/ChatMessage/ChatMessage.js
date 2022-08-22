@@ -232,6 +232,12 @@ function ChatMessage(props) {
 							)}
 						</span>
 
+						{data.isFailed && data.canRetry() && (
+							<div>
+								<span onClick={() => console.log('Retry')}>{t('Retry')}</span>
+							</div>
+						)}
+
 						<div style={{ clear: 'both' }} />
 					</div>
 				</div>
