@@ -303,6 +303,23 @@ export class ChatMessageClass {
 
 		return undefined;
 	}
+
+	canRetry() {
+		let result = false;
+
+		if (this.errors && Array.isArray(this.errors)) {
+			for (let i = 0; i < this.errors.length; i++) {
+				if (
+					ChatMessageClass.ERR_CODES_FOR_RETRY.includes(this.errors[i]['code'])
+				) {
+					result = true;
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
 }
 
 export default ChatMessageClass;
