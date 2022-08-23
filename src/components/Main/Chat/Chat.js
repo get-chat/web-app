@@ -1731,6 +1731,7 @@ export default function Chat(props) {
 							templates={props.templates}
 							isTemplatesFailed={props.isTemplatesFailed}
 							goToMessageId={goToMessageId}
+							sendMessage={sendMessage}
 							onOptionsClick={(event, chatMessage) =>
 								displayOptionsMenu(event, chatMessage)
 							}
