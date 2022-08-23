@@ -1553,6 +1553,12 @@ export default function Chat(props) {
 		props.setLastSendAttemptAt(new Date());
 	};
 
+	const retryMessage = (message) => {
+		if (message.type === ChatMessageClass.TYPE_TEXT) {
+			sendMessage(true, undefined, message.payload);
+		}
+	};
+
 	const clearInput = () => {
 		setInput('');
 	};
@@ -1731,7 +1737,7 @@ export default function Chat(props) {
 							templates={props.templates}
 							isTemplatesFailed={props.isTemplatesFailed}
 							goToMessageId={goToMessageId}
-							sendMessage={(payload) => sendMessage(true, undefined, payload)}
+							retryMessage={retryMessage}
 							onOptionsClick={(event, chatMessage) =>
 								displayOptionsMenu(event, chatMessage)
 							}

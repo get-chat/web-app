@@ -42,10 +42,6 @@ function ChatMessage(props) {
 
 	const dateFormat = 'H:mm';
 
-	const resend = () => {
-		// TODO: Implement
-	};
-
 	return (
 		<div
 			id={'message_' + data.id}
@@ -242,7 +238,7 @@ function ChatMessage(props) {
 
 					{data.isFailed && data.canRetry() && (
 						<div>
-							<Button variant="text" onClick={resend}>
+							<Button variant="text" onClick={props.retryMessage}>
 								{t('Retry')}
 							</Button>
 						</div>
