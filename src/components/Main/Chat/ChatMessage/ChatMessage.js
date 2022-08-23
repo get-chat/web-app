@@ -25,6 +25,7 @@ import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import PrintMessage from '../../../PrintMessage';
 import { Alert } from '@material-ui/lab';
+import { Button } from '@material-ui/core';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -236,14 +237,16 @@ function ChatMessage(props) {
 							)}
 						</span>
 
-						{data.isFailed && data.canRetry() && (
-							<div>
-								<span onClick={resend}>{t('Retry')}</span>
-							</div>
-						)}
-
 						<div style={{ clear: 'both' }} />
 					</div>
+
+					{data.isFailed && data.canRetry() && (
+						<div>
+							<Button variant="text" onClick={resend}>
+								{t('Retry')}
+							</Button>
+						</div>
+					)}
 				</div>
 			)}
 		</div>
