@@ -1565,6 +1565,16 @@ export default function Chat(props) {
 				sendTemplateMessage(true, undefined, message.resendPayload);
 				break;
 			default:
+				if (
+					[
+						ChatMessageClass.TYPE_AUDIO,
+						ChatMessageClass.TYPE_VIDEO,
+						ChatMessageClass.TYPE_IMAGE,
+						ChatMessageClass.TYPE_VOICE,
+					].includes(message.type)
+				) {
+					sendFile(undefined, undefined, undefined, message.resendPayload);
+				}
 				break;
 		}
 	};
