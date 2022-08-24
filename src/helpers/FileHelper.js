@@ -8,6 +8,8 @@ import {
 import { stringContainsAnyInArray } from './Helpers';
 import * as musicMetadata from 'music-metadata-browser';
 import { isSafari } from 'react-device-detect';
+import { Buffer } from 'buffer';
+import * as process from 'process';
 
 export const prepareSelectedFiles = (selectedFiles) => {
 	const preparedFiles = {};
@@ -58,9 +60,16 @@ export const getAttachmentTypeByFile = (file, callback) => {
 		if (mimeType.includes('audio/ogg')) {
 			// This will be skipped for voice recording, we know what is type
 			if (callback !== undefined) {
+				// Polyfill Buffer
+				window.Buffer = window.Buffer || Buffer;
+
+				// Polyfill process
+				window.process = window.process || process;
+
 				// Get codec information async
 				musicMetadata.parseBlob(file).then((metadata) => {
 					const codec = metadata?.format?.codec;
+					console.log(codec);
 					// OGG files with Opus codec are supported
 					if (codec && codec.toLowerCase().includes('opus')) {
 						callback(ATTACHMENT_TYPE_AUDIO);
