@@ -166,6 +166,23 @@ function ChatMessage(props) {
 							<OrderMessage data={data} />
 						)}
 
+						{data.text ??
+						data.caption ??
+						data.buttonText ??
+						data.interactiveButtonText ? (
+							<PrintMessage
+								className="wordBreakWord"
+								message={
+									data.text ??
+									data.caption ??
+									data.buttonText ??
+									data.interactiveButtonText
+								}
+							/>
+						) : (
+							'\u00A0'
+						)}
+
 						{data.errors && (
 							<Alert
 								variant="filled"
@@ -188,23 +205,6 @@ function ChatMessage(props) {
 									<div key={index}>{t(error.details ?? error.title)}</div>
 								))}
 							</Alert>
-						)}
-
-						{data.text ??
-						data.caption ??
-						data.buttonText ??
-						data.interactiveButtonText ? (
-							<PrintMessage
-								className="wordBreakWord"
-								message={
-									data.text ??
-									data.caption ??
-									data.buttonText ??
-									data.interactiveButtonText
-								}
-							/>
-						) : (
-							'\u00A0'
 						)}
 
 						<span className="chat__message__info">
