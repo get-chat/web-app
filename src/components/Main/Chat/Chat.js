@@ -1506,6 +1506,7 @@ export default function Chat(props) {
 			const storedMessage = new ChatMessageClass();
 			storedMessage.getchatId = getchatId;
 			storedMessage.id = storedMessage.generateInternalIdString();
+			storedMessage.waId = waId;
 			storedMessage.type = requestBody.type;
 			storedMessage.text = text;
 
@@ -1554,6 +1555,8 @@ export default function Chat(props) {
 	};
 
 	const retryMessage = (message) => {
+		message.resendPayload.wa_id = message.waId;
+
 		switch (message.type) {
 			case ChatMessageClass.TYPE_TEXT:
 				sendMessage(true, undefined, message.resendPayload);
