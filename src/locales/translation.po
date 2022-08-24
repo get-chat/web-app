@@ -554,3 +554,6 @@ msgstr ""
 
 msgid "Type: %s"
 msgstr ""
+
+msgid "Retry"
+msgstr ""
