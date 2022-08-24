@@ -157,6 +157,11 @@ a {
 	color: red;
 }
 
+.MuiAlert-root .MuiButton-root {
+	text-transform: uppercase !important;
+	font-weight: 600;
+}
+
 .MuiButton-label {
 	text-transform: none;
 }
