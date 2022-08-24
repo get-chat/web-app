@@ -177,7 +177,7 @@ function ChatMessage(props) {
 										<Button
 											color="inherit"
 											size="small"
-											onClick={props.retryMessage}
+											onClick={() => props.retryMessage(data)}
 										>
 											{t('Retry')}
 										</Button>

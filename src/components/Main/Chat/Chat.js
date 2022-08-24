@@ -1554,8 +1554,15 @@ export default function Chat(props) {
 	};
 
 	const retryMessage = (message) => {
-		if (message.type === ChatMessageClass.TYPE_TEXT) {
-			sendMessage(true, undefined, message.payload);
+		switch (message.type) {
+			case ChatMessageClass.TYPE_TEXT:
+				sendMessage(true, undefined, message.resendPayload);
+				break;
+			case ChatMessageClass.TYPE_TEMPLATE:
+				sendTemplateMessage(true, undefined, message.resendPayload);
+				break;
+			default:
+				break;
 		}
 	};
 
