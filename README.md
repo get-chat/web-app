@@ -17,10 +17,6 @@ Please see .env.example file for example values.
 
 `REACT_APP_TITLE`: Application (page) title.
 
-`REACT_APP_BASE_URL`: API base URL.
-
-`REACT_APP_SENTRY_DSN`: Sentry data source name (DSN).
-
 `REACT_APP_MANIFEST_URL`: manifest.json URL. This file provides information about the application.
 
 `REACT_APP_FAVICON_URL`: Page favicon URL.
