@@ -167,7 +167,23 @@ function ChatMessage(props) {
 						)}
 
 						{data.errors && (
-							<Alert variant="filled" severity="error" className="chat__errors">
+							<Alert
+								variant="filled"
+								severity="error"
+								className="chat__errors"
+								action={
+									data.isFailed &&
+									data.canRetry() && (
+										<Button
+											color="inherit"
+											size="small"
+											onClick={props.retryMessage}
+										>
+											{t('Retry')}
+										</Button>
+									)
+								}
+							>
 								{data.errors.map((error, index) => (
 									<div key={index}>{t(error.details ?? error.title)}</div>
 								))}
@@ -235,14 +251,6 @@ function ChatMessage(props) {
 
 						<div style={{ clear: 'both' }} />
 					</div>
-
-					{data.isFailed && data.canRetry() && (
-						<div>
-							<Button variant="text" onClick={props.retryMessage}>
-								{t('Retry')}
-							</Button>
-						</div>
-					)}
 				</div>
 			)}
 		</div>
