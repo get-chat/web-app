@@ -30,7 +30,6 @@ export class ChatMessageClass {
 		const payload = data.waba_payload;
 		const statuses = data.waba_statuses;
 
-		// Temp
 		this.payload = payload;
 
 		this.id = payload.id;
