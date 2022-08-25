@@ -23,6 +23,8 @@ const getTextNodeType = (node) => {
 };
 
 const decomposeMessage = (message, highlightText) => {
+	if (!message) return [];
+
 	const regex = new RegExp(highlightText, 'gi');
 	let section = '';
 
