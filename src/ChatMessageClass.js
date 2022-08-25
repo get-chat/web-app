@@ -19,13 +19,17 @@ export class ChatMessageClass {
 	static STATUS_DELIVERED = 'delivered';
 	static STATUS_READ = 'read';
 
+	static ERR_CODES_FOR_RETRY = [
+		400, 410, 429, 430, 432, 433, 470, 471, 500, 1000, 1005, 1011, 1015, 1016,
+		1018, 1023, 1024, 1026, 1031,
+	];
+
 	constructor(data) {
 		if (!data) return;
 
 		const payload = data.waba_payload;
 		const statuses = data.waba_statuses;
 
-		// Temp
 		this.payload = payload;
 
 		this.id = payload.id;
@@ -297,6 +301,23 @@ export class ChatMessageClass {
 		}
 
 		return undefined;
+	}
+
+	canRetry() {
+		let result = false;
+
+		if (this.errors && Array.isArray(this.errors)) {
+			for (let i = 0; i < this.errors.length; i++) {
+				if (
+					ChatMessageClass.ERR_CODES_FOR_RETRY.includes(this.errors[i]['code'])
+				) {
+					result = true;
+					break;
+				}
+			}
+		}
+
+		return result;
 	}
 }
 

@@ -180,5 +180,6 @@
 	"Upload a file": "",
 	"Enter a link to file instead": "",
 	"Upload a file instead": "",
-	"Type: %s": ""
+	"Type: %s": "",
+	"Retry": ""
 }

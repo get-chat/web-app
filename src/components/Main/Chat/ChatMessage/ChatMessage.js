@@ -1,6 +1,7 @@
 import React from 'react';
 import DoneAll from '@material-ui/icons/DoneAll';
 import DoneIcon from '@material-ui/icons/Done';
+import ErrorIcon from '@material-ui/icons/Error';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import Moment from 'react-moment';
 import '../../../../styles/InputRange.css';
@@ -23,6 +24,8 @@ import { useTranslation } from 'react-i18next';
 import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import PrintMessage from '../../../PrintMessage';
+import { Alert } from '@material-ui/lab';
+import { Button } from '@material-ui/core';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -163,16 +166,6 @@ function ChatMessage(props) {
 							<OrderMessage data={data} />
 						)}
 
-						{data.errors && (
-							<div className="chat__errors">
-								{data.errors.map((error, index) => (
-									<div key={index} className="chat__errors__error">
-										{error.details}
-									</div>
-								))}
-							</div>
-						)}
-
 						{data.text ??
 						data.caption ??
 						data.buttonText ??
@@ -188,6 +181,30 @@ function ChatMessage(props) {
 							/>
 						) : (
 							'\u00A0'
+						)}
+
+						{data.errors && (
+							<Alert
+								variant="filled"
+								severity="error"
+								className="chat__errors"
+								action={
+									data.isFailed &&
+									data.canRetry() && (
+										<Button
+											color="inherit"
+											size="small"
+											onClick={() => props.retryMessage(data)}
+										>
+											{t('Retry')}
+										</Button>
+									)
+								}
+							>
+								{data.errors.map((error, index) => (
+									<div key={index}>{t(error.details ?? error.title)}</div>
+								))}
+							</Alert>
 						)}
 
 						<span className="chat__message__info">
@@ -221,6 +238,14 @@ function ChatMessage(props) {
 										/>
 									)}
 								</>
+							)}
+
+							{data.isFailed && (
+								<ErrorIcon
+									className="chat__iconError"
+									color="inherit"
+									style={iconStyles}
+								/>
 							)}
 						</span>
 

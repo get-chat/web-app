@@ -498,6 +498,11 @@ function Main() {
 									preparedStatuses[statusObj.id].readTimestamp =
 										statusObj.timestamp;
 								}
+
+								// Handling errors
+								if (statusObj.errors) {
+									preparedStatuses[statusObj.id].errors = statusObj.errors;
+								}
 							});
 
 							PubSub.publish(

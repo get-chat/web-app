@@ -23,11 +23,6 @@
 	transition: opacity 1s ease;
 }
 
-/*.chat__message.chat__failed {
-    background-color: red !important;
-    color: white !important;
-}*/
-
 .chat__message__failed__info {
 	font-size: 12px;
 	color: red;
@@ -238,9 +233,10 @@ a.chat__document:hover {
 	align-self: center;
 }
 
-.chat__errors__error {
-	font-size: 12px;
-	color: rgba(255, 0, 0, 0.8);
+.chat__errors {
+	padding: 5px 15px !important;
+	margin-top: 10px;
+	border-radius: 5px !important;
 }
 
 .chat__message__info {
@@ -259,7 +255,8 @@ a.chat__document:hover {
 
 .chat__iconPending,
 .chat__iconDone,
-.chat__iconDoneAll {
+.chat__iconDoneAll,
+.chat__iconError {
 	height: 10px;
 	width: 10px;
 	margin-left: 5px;
@@ -267,6 +264,10 @@ a.chat__document:hover {
 
 .chat__received .chat__iconDoneAll * {
 	fill: var(--color-light-blue);
+}
+
+.chat__iconError * {
+	fill: red;
 }
 
 .chat__message__more {

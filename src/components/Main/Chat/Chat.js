@@ -491,13 +491,17 @@ export default function Chat(props) {
 		const onMessageStatusChange = function (msg, data) {
 			if (data && isLoaded) {
 				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
+
+				let receivedNewErrors = false;
+				const prevScrollTop = messagesContainer.current.scrollTop;
+				const prevScrollHeight = messagesContainer.current.scrollHeight;
+
 				setMessages((prevState) => {
 					const newState = prevState;
 					let changedAny = false;
 
 					Object.entries(data).forEach((status) => {
-						const statusMsgId = status[0];
-						let wabaIdOrGetchatId = statusMsgId;
+						let wabaIdOrGetchatId = status[0];
 
 						const statusObj = status[1];
 
@@ -530,6 +534,18 @@ export default function Chat(props) {
 								newState[wabaIdOrGetchatId].readTimestamp =
 									statusObj.readTimestamp;
 							}
+
+							if (statusObj.errors) {
+								receivedNewErrors = true;
+								changedAny = true;
+								newState[wabaIdOrGetchatId].isFailed = true;
+								// Merge with existing errors if exist
+								if (newState[wabaIdOrGetchatId].errors) {
+									newState[wabaIdOrGetchatId].errors.concat(statusObj.errors);
+								} else {
+									newState[wabaIdOrGetchatId].errors = statusObj.errors;
+								}
+							}
 						}
 					});
 
@@ -539,6 +555,10 @@ export default function Chat(props) {
 						return prevState;
 					}
 				});
+
+				if (receivedNewErrors) {
+					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+				}
 			}
 		};
 
@@ -1486,6 +1506,7 @@ export default function Chat(props) {
 			const storedMessage = new ChatMessageClass();
 			storedMessage.getchatId = getchatId;
 			storedMessage.id = storedMessage.generateInternalIdString();
+			storedMessage.waId = waId;
 			storedMessage.type = requestBody.type;
 			storedMessage.text = text;
 
@@ -1531,6 +1552,31 @@ export default function Chat(props) {
 
 		// Last attempt at
 		props.setLastSendAttemptAt(new Date());
+	};
+
+	const retryMessage = (message) => {
+		message.resendPayload.wa_id = message.waId;
+
+		switch (message.type) {
+			case ChatMessageClass.TYPE_TEXT:
+				sendMessage(true, undefined, message.resendPayload);
+				break;
+			case ChatMessageClass.TYPE_TEMPLATE:
+				sendTemplateMessage(true, undefined, message.resendPayload);
+				break;
+			default:
+				if (
+					[
+						ChatMessageClass.TYPE_AUDIO,
+						ChatMessageClass.TYPE_VIDEO,
+						ChatMessageClass.TYPE_IMAGE,
+						ChatMessageClass.TYPE_VOICE,
+					].includes(message.type)
+				) {
+					sendFile(undefined, undefined, undefined, message.resendPayload);
+				}
+				break;
+		}
 	};
 
 	const clearInput = () => {
@@ -1711,6 +1757,7 @@ export default function Chat(props) {
 							templates={props.templates}
 							isTemplatesFailed={props.isTemplatesFailed}
 							goToMessageId={goToMessageId}
+							retryMessage={retryMessage}
 							onOptionsClick={(event, chatMessage) =>
 								displayOptionsMenu(event, chatMessage)
 							}
