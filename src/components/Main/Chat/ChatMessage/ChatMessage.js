@@ -23,6 +23,7 @@ import ChatMessageLocation from './ChatMessageLocation';
 import { useTranslation } from 'react-i18next';
 import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
+import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
 import { Alert } from '@material-ui/lab';
 import { Button } from '@material-ui/core';
@@ -164,6 +165,10 @@ function ChatMessage(props) {
 
 						{data.type === ChatMessageClass.TYPE_ORDER && (
 							<OrderMessage data={data} />
+						)}
+
+						{data.type === ChatMessageClass.TYPE_CONTACTS && (
+							<ContactsMessage data={data} />
 						)}
 
 						{data.text ??

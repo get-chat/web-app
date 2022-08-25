@@ -1,0 +1,21 @@
+.root {
+	position: relative;
+	min-width: 180px;
+}
+
+.header,
+.footer {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.header {
+	margin: 5px 0 10px;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+}
+
+.footer {
+	justify-content: center;
+}
