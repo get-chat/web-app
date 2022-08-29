@@ -4,22 +4,96 @@
 
 get.chat Web App
 
-## Before Start
+## Configuration options
 
-You must create the `config.json` file in `public` folder if it doesn't exist. Please see the `config.json.tmpl` template file.
+Before you run it, you must create the `config.json` file in `public` folder if it doesn't exist. Please see the `public/config.json.tmpl` template file.
+
+```json
+{
+    "API_BASE_URL": "${APP_API_BASE_URL}",
+    "APP_SENTRY_DSN": "${APP_SENTRY_DSN}",
+    "APP_ENV_NAME": "${APP_ENV_NAME}",
+    "APP_NOTIFICATIONS_LIMIT_PER_MINUTE": "${APP_NOTIFICATIONS_LIMIT_PER_MINUTE}",
+    "APP_GOOGLE_MAPS_API_KEY": "${APP_GOOGLE_MAPS_API_KEY}"
+}
+
+```
+
+### API Base URL
 
 Specify the Rest API URL as the value of `API_BASE_URL` inside the config.
+
 `API_BASE_URL` should be set to `/api/v1/` to use same address as get.chat Web App runs on.
 
-## Environment Variables
 
-Please see .env.example file for example values.
+### Serntry
+Sentry is a developer-first error tracking and performance monitoring platform that helps developers see what actually matters, solve quicker, and learn continuously about their applications.
+#### Change Sentry DSN Key
+
+If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key (https://docs.sentry.io/product/sentry-basics/dsn-explainer/).
+In order to do this, please go to `public/config.json` file and replace the value of `APP_SENTRY_DSN` variable.
+
+#### Disable Sentry
+
+In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `src/index.js`.
+
+```diff
+// ***IMPORTS***
+// Init storage type
+initStorageType();
+
+// Load external config and render App
+axios
+	.get(`/config.json`)
+	.then((response) => {
+		const config = response.data;
+
+		// It is needed for ChatMessageClass
+		window.config = config;
+
+ 		// Init Sentry
++		// if (!isLocalHost()) {
++		// 	Sentry.init({
++		// 		debug: true,
++		// 		dsn: config.APP_SENTRY_DSN,
++		// 		release: packageJson.version,
++		// 		integrations: [new Integrations.BrowserTracing()],
++		// 		tracesSampleRate: 0.01,
++		// 		beforeSend(event, hint) {
++               // 			// Check if it is an exception, and if so, show the report dialog
++		// 			if (event.exception) {
++		// 				Sentry.showReportDialog({ eventId: event.event_id });
++		// 			}
++		// 			return event;
++		// 		},
++		// 	});
++		// }
+-		if (!isLocalHost()) {
+-			Sentry.init({
+-				debug: true,
+-				dsn: config.APP_SENTRY_DSN,
+-				release: packageJson.version,
+-				integrations: [new Integrations.BrowserTracing()],
+-				tracesSampleRate: 0.01,
+-				beforeSend(event, hint) {
+-					// Check if it is an exception, and if so, show the report dialog
+-					if (event.exception) {
+-						Sentry.showReportDialog({ eventId: event.event_id });
+-					}
+-					return event;
+-				},
+-			});
+-		}
+```
+
+### Google Maps
+
+In order to display Google Maps Embed API in location messages, you need to provide a `Google Maps API key` in `public/config.json` for `APP_GOOGLE_MAPS_API_KEY`.
+
+
+## Environment variables
 
 `REACT_APP_TITLE`: Application (page) title.
-
-`REACT_APP_BASE_URL`: API base URL.
-
-`REACT_APP_SENTRY_DSN`: Sentry data source name (DSN).
 
 `REACT_APP_MANIFEST_URL`: manifest.json URL. This file provides information about the application.
 
@@ -32,23 +106,6 @@ Please see .env.example file for example values.
 `REACT_APP_LOGO_URL`: Application logo URL.
 
 `REACT_APP_LOGO_BLACK_URL`: Black and white version of application logo (used inside the loading screen).
-
-## Sentry
-
-This project uses Sentry for error tracking.
-
-### Change Sentry DSN Key
-
-If you forked this project and want to keep Sentry integration enabled, please make sure to use your own Sentry DSN key (https://docs.sentry.io/product/sentry-basics/dsn-explainer/).
-In order to do this, please go to `config.json` file and replace the value of `APP_SENTRY_DSN` variable.
-
-### Disable Sentry
-
-In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `index.js`.
-
-## Google Maps
-
-In order to display Google Maps Embed API in location messages, you need to provide a `Google Maps API key` in `config.json` for `APP_GOOGLE_MAPS_API_KEY`.
 
 ## Available Scripts
 
