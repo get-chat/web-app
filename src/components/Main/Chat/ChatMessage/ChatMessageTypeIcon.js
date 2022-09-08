@@ -9,6 +9,7 @@ import SmsIcon from '@material-ui/icons/Sms';
 import TouchAppIcon from '@material-ui/icons/TouchApp';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import ContactsIcon from '@material-ui/icons/Contacts';
 
 function ChatMessageTypeIcon(props) {
 	return (
@@ -30,6 +31,8 @@ function ChatMessageTypeIcon(props) {
 			{props.type === ChatMessageClass.TYPE_TEMPLATE && <SmsIcon />}
 
 			{props.type === ChatMessageClass.TYPE_INTERACTIVE && <TouchAppIcon />}
+
+			{props.type === ChatMessageClass.TYPE_CONTACTS && <ContactsIcon />}
 		</span>
 	);
 }
