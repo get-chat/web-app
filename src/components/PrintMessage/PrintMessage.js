@@ -5,6 +5,7 @@ import emojiTree from 'emoji-tree';
 import isEmoji from 'emoji-tree/lib/isEmoji';
 
 import Text from './components/Text';
+import HighlightText from './components/HighlightText';
 import Emoji from './components/Emoji';
 
 const getTextNodeType = (node) => {
@@ -13,6 +14,13 @@ const getTextNodeType = (node) => {
 			type: 'emoji',
 			single: false,
 			component: Emoji,
+		};
+	}
+
+	if (node.match(/<mark class="highlight">.*.<\/mark>/gi)) {
+		return {
+			type: 'highlight',
+			component: HighlightText,
 		};
 	}
 
@@ -36,7 +44,7 @@ const decomposeMessage = (message, highlightText) => {
 			.replace(/\n/g, '<br />');
 	}
 
-	let result = emojiTree(message).reduce((acc, item) => {
+	let splitedWithEmoji = emojiTree(message).reduce((acc, item) => {
 		if (item.type === 'emoji') {
 			if (section) {
 				acc.push(section);
@@ -51,11 +59,19 @@ const decomposeMessage = (message, highlightText) => {
 		return acc;
 	}, []);
 
-	result.push(section);
+	splitedWithEmoji.push(section);
 	section = '';
 
+	const splittedWithHighlight = [];
+
+	splitedWithEmoji.forEach((item) => {
+		splittedWithHighlight.push(
+			item.split(/(<mark class="highlight">.*.<\/mark>)/gi)
+		);
+	});
+
 	return []
-		.concat(...result)
+		.concat(...splittedWithHighlight)
 		.filter((item) => item !== '')
 		.map((item, index) => ({
 			index,
