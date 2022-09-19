@@ -10,6 +10,7 @@ import {
 import SmsIcon from '@material-ui/icons/Sms';
 import ImageIcon from '@material-ui/icons/Image';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import ContactsIcon from '@material-ui/icons/Contacts';
 import NotesIcon from '@material-ui/icons/Notes';
 import MicIcon from '@material-ui/icons/Mic';
 import { Emoji, NimblePicker } from 'emoji-mart';
@@ -37,6 +38,7 @@ import ChatMessageClass from '../../../../ChatMessageClass';
 import { replaceEmojis } from '../../../../helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
+import ContactsModal from '../../../ContactsModal';
 
 function ChatFooter(props) {
 	const { t } = useTranslation();
@@ -46,6 +48,7 @@ function ChatFooter(props) {
 
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [isMoreVisible, setMoreVisible] = useState(false);
+	const [contactsModalVisible, setContactsModalVisible] = useState(false);
 
 	const [isRecording, setRecording] = useState(false);
 
@@ -205,6 +208,14 @@ function ChatFooter(props) {
 		setMoreVisible(false);
 	};
 
+	const openContactsModal = () => {
+		setContactsModalVisible(true);
+	};
+
+	const closeContactsModal = () => {
+		setContactsModalVisible(false);
+	};
+
 	const ACCEPT_IMAGE_AND_VIDEO =
 		'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
 	const ACCEPT_DOCUMENT = '*.*';
@@ -227,6 +238,13 @@ function ChatFooter(props) {
 				</div>
 			)}
 
+			<ContactsModal
+				open={contactsModalVisible}
+				onClose={closeContactsModal}
+				sendMessage={props.sendMessage}
+				recipientWaId={props.waId}
+			/>
+
 			<div className="chat__footer">
 				{!props.isExpired && (
 					<Tooltip title="Emoji" placement="top">
@@ -248,6 +266,15 @@ function ChatFooter(props) {
 						</Tooltip>
 
 						<div className="chat__footer__attachmentContainer__options">
+							<Tooltip title="Contacts" placement="right">
+								<IconButton
+									className="chat__footer__attachmentContainer__options__document"
+									onClick={openContactsModal}
+								>
+									<ContactsIcon />
+								</IconButton>
+							</Tooltip>
+
 							<Tooltip title="Documents" placement="right">
 								<IconButton
 									className="chat__footer__attachmentContainer__options__document"
@@ -338,11 +365,11 @@ function ChatFooter(props) {
 							spellCheck="true"
 							onInput={(event) => handleEditableChange(event)}
 							onKeyDown={(e) => {
-								if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(e);
+								if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(true, e);
 							}}
 						/>
 					</div>
-					<button onClick={props.sendMessage} type="submit">
+					<button onClick={(e) => props.sendMessage(true, e)} type="submit">
 						{t('Send a message')}
 					</button>
 				</form>
@@ -363,7 +390,7 @@ function ChatFooter(props) {
 				{hasInput() && (
 					<Tooltip title="Send" placement="top">
 						<IconButton
-							onClick={props.sendMessage}
+							onClick={(e) => props.sendMessage(true, e)}
 							data-test-id="send-message-button"
 						>
 							<Send />

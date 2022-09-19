@@ -1052,6 +1052,7 @@ function Main() {
 						deleteSavedResponse={deleteSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
+						chats={chats}
 						isChatOnly={isChatOnly}
 						setChatAssignmentVisible={setChatAssignmentVisible}
 						setChatTagsVisible={setChatTagsVisible}

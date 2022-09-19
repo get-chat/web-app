@@ -1776,7 +1776,7 @@ export default function Chat(props) {
 				isExpired={isExpired}
 				input={input}
 				setInput={setInput}
-				sendMessage={(e) => sendMessage(true, e)}
+				sendMessage={sendMessage}
 				bulkSendMessage={bulkSendMessage}
 				setSelectedFiles={setSelectedFiles}
 				isTemplateMessagesVisible={isTemplateMessagesVisible}

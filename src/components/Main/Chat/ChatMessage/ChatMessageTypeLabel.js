@@ -26,6 +26,8 @@ function ChatMessageTypeLabel({ type }) {
 			{type === ChatMessageClass.TYPE_INTERACTIVE && (
 				<span>{t('Interactive')}</span>
 			)}
+
+			{type === ChatMessageClass.TYPE_CONTACTS && <span>{t('Contacts')}</span>}
 		</span>
 	);
 }

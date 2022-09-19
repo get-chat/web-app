@@ -1,0 +1,25 @@
+.root {
+	width: 400px;
+	min-height: 200px;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.title {
+	font-weight: normal;
+}
+
+.emptyTitle {
+	font-weight: normal;
+	text-align: center;
+	padding: 20px;
+}
+
+.content {
+	/* override default material-ui padding */
+	padding: 0 !important;
+}

@@ -18,8 +18,8 @@ const ContactsMessage = ({ data }) => {
 			<div className={styles.footer}>
 				{data?.payload?.contacts?.map((contact) => (
 					<>
-						{contact.phones.length > 0 && (
-							<Link to={contact.phones[0]?.wa_id}>
+						{Boolean(contact.phones.length) && (
+							<Link to={contact.phones[0].wa_id}>
 								<Button color="primary" variant="outlined">
 									Message
 								</Button>
