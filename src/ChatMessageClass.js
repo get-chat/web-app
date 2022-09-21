@@ -119,7 +119,8 @@ export class ChatMessageClass {
 		this.isFailed = false;
 		this.resendPayload = undefined;
 
-		this.sanitize();
+		// Not need to sanitize this, because it is already sanitized
+		// this.sanitize();
 	}
 
 	sanitize() {

@@ -29,7 +29,8 @@ class ChatClass {
 		this.assignedToUser = data.assigned_to_user;
 		this.tags = data.tags;
 
-		this.sanitize();
+		// Not need to sanitize this, because it is already sanitized
+		// this.sanitize();
 	}
 
 	sanitize() {
