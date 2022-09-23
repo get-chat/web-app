@@ -118,7 +118,9 @@ export class ApiService {
 						assigned_to_me: assignedToMe,
 						assigned_group: assignedGroup,
 					},
-					cancelToken
+					cancelToken,
+					undefined,
+					0
 				)
 			),
 			successCallback,
