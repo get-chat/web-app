@@ -337,7 +337,7 @@ function Sidebar(props) {
 		apiService.listChatsCall(
 			keyword,
 			props.filterTag?.id,
-			25,
+			20,
 			offset,
 			assignedToMe,
 			assignedGroup,
