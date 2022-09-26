@@ -4,11 +4,14 @@ import '../../styles/LoadingScreen.css';
 import { useTranslation } from 'react-i18next';
 import { Alert } from '@material-ui/lab';
 import packageJson from '../../../package.json';
+import { CircularProgress } from '@material-ui/core';
 
 function LoadingScreen(props) {
 	const { t } = useTranslation();
 
 	const [isSkipVisible, setSkipVisible] = useState(false);
+	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
+		useState(false);
 
 	useEffect(() => {
 		let intervalId = setInterval(function () {
@@ -19,6 +22,17 @@ function LoadingScreen(props) {
 			clearInterval(intervalId);
 		};
 	}, []);
+
+	useEffect(() => {
+		let intervalId = setInterval(function () {
+			setLongTransactionInfoVisible(true);
+		}, 5000);
+
+		return () => {
+			clearInterval(intervalId);
+			setLongTransactionInfoVisible(false);
+		};
+	}, [props.loadingNow]);
 
 	// const skip = () => {
 	//     props.setProgress(100);
@@ -42,6 +56,13 @@ function LoadingScreen(props) {
 			<div className="loadingScreen__details">
 				{t('Loading: %s', props.loadingNow)}
 			</div>
+
+			{isLongTransactionInfoVisible && (
+				<div className="loadingScreen__longTransactionInfo">
+					<CircularProgress size={14} />
+					{t('Please wait, as %s are being loaded...', props.loadingNow)}
+				</div>
+			)}
 
 			{isSkipVisible && (
 				<>

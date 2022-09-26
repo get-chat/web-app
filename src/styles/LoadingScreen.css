@@ -43,6 +43,19 @@
 	margin: 15px 0;
 }
 
+.loadingScreen__longTransactionInfo {
+	margin-bottom: 10px;
+	font-size: 14px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.loadingScreen__longTransactionInfo .MuiCircularProgress-root {
+	margin-right: 10px;
+}
+
 .loadingScreen__actions {
 	display: flex;
 	justify-content: center;
