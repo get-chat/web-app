@@ -9,19 +9,8 @@ import { CircularProgress } from '@material-ui/core';
 function LoadingScreen(props) {
 	const { t } = useTranslation();
 
-	const [isSkipVisible, setSkipVisible] = useState(false);
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
 		useState(false);
-
-	useEffect(() => {
-		let intervalId = setInterval(function () {
-			setSkipVisible(true);
-		}, 20000);
-
-		return () => {
-			clearInterval(intervalId);
-		};
-	}, []);
 
 	useEffect(() => {
 		let intervalId = setInterval(function () {
@@ -48,7 +37,7 @@ function LoadingScreen(props) {
 			</div>
 
 			<div className="loadingScreen__progressContainer">
-				{!isSkipVisible && (
+				{!props.isInitialResourceFailed && (
 					<LinearProgress variant="determinate" value={props.progress} />
 				)}
 			</div>
@@ -64,7 +53,7 @@ function LoadingScreen(props) {
 				</div>
 			)}
 
-			{isSkipVisible && (
+			{props.isInitialResourceFailed && (
 				<>
 					<Alert severity="warning" variant="filled">
 						{t('Something went wrong, this will be fixed automatically')}

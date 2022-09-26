@@ -432,6 +432,10 @@ function Sidebar(props) {
 
 				setLoadingMoreChats(false);
 				setLoadingChats(false);
+
+				if (isInitial) {
+					props.setInitialResourceFailed(true);
+				}
 			},
 			history
 		);
