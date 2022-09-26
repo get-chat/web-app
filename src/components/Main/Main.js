@@ -388,12 +388,25 @@ function Main() {
 			onUnsupportedFileEvent
 		);
 
+		return () => {
+			PubSub.unsubscribe(searchMessagesVisibilityEventToken);
+			PubSub.unsubscribe(contactDetailsVisibilityEventToken);
+			PubSub.unsubscribe(displayErrorEventToken);
+			PubSub.unsubscribe(unsupportedFileEventToken);
+		};
+	}, []);
+
+	useEffect(() => {
 		const CODE_NORMAL = 1000;
 		let ws;
 
 		let socketClosedAt;
 
 		const connect = () => {
+			if (progress < 100) {
+				return;
+			}
+
 			console.log('Connecting to websocket server');
 
 			// WebSocket, consider a separate env variable for ws address
@@ -618,14 +631,9 @@ function Main() {
 		connect();
 
 		return () => {
-			PubSub.unsubscribe(searchMessagesVisibilityEventToken);
-			PubSub.unsubscribe(contactDetailsVisibilityEventToken);
-			PubSub.unsubscribe(displayErrorEventToken);
-			PubSub.unsubscribe(unsupportedFileEventToken);
-
-			ws.close(CODE_NORMAL);
+			ws?.close(CODE_NORMAL);
 		};
-	}, []);
+	}, [progress]);
 
 	useEffect(() => {
 		// Window close event
