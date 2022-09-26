@@ -557,3 +557,6 @@ msgstr ""
 
 msgid "Retry"
 msgstr ""
+
+msgid "Please wait, as %s are being loaded"
+msgstr ""

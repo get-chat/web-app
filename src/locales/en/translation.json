@@ -181,5 +181,6 @@
 	"Enter a link to file instead": "",
 	"Upload a file instead": "",
 	"Type: %s": "",
-	"Retry": ""
+	"Retry": "",
+	"Please wait, as %s are being loaded": ""
 }
