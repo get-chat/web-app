@@ -113,7 +113,7 @@ export class ApiService {
 					{
 						search: keyword,
 						chat_tag_id: chatTagId,
-						limit: 18,
+						limit: limit,
 						offset: offset,
 						assigned_to_me: assignedToMe,
 						assigned_group: assignedGroup,
