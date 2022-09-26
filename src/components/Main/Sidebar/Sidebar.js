@@ -240,6 +240,9 @@ function Sidebar(props) {
 				// We do this to generate new (missing) chat
 				if (willMakeRequest) {
 					retrieveChatWaIdList.forEach((chatMessageWaId) => {
+						console.log(
+							`A new message is received from ${chatMessageWaId} but this chat is not loaded yet. Retrieving chat via API.`
+						);
 						retrieveChat(chatMessageWaId);
 					});
 
