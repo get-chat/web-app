@@ -86,6 +86,8 @@ function Sidebar(props) {
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
 
+	const [missingChats, setMissingChats] = useState([]);
+
 	const history = useHistory();
 
 	const logOut = () => {
@@ -259,7 +261,14 @@ function Sidebar(props) {
 		return () => {
 			PubSub.unsubscribe(newChatMessagesEventToken);
 		};
-	}, [waId, props.isBlurred, props.chats, props.newMessages, keyword]);
+	}, [
+		waId,
+		props.isBlurred,
+		props.chats,
+		props.newMessages,
+		missingChats,
+		keyword,
+	]);
 
 	useEffect(() => {
 		const chatsContainerCopy = chatsContainer.current;
