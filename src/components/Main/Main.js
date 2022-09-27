@@ -68,6 +68,7 @@ function Main() {
 
 	const [progress, _setProgress] = useState(0);
 	const [loadingNow, setLoadingNow] = useState('');
+	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
 
 	const [checked, setChecked] = useState(false);
 	const [isBlurred, setBlurred] = useState(false);
@@ -388,12 +389,25 @@ function Main() {
 			onUnsupportedFileEvent
 		);
 
+		return () => {
+			PubSub.unsubscribe(searchMessagesVisibilityEventToken);
+			PubSub.unsubscribe(contactDetailsVisibilityEventToken);
+			PubSub.unsubscribe(displayErrorEventToken);
+			PubSub.unsubscribe(unsupportedFileEventToken);
+		};
+	}, []);
+
+	useEffect(() => {
 		const CODE_NORMAL = 1000;
 		let ws;
 
 		let socketClosedAt;
 
 		const connect = () => {
+			if (progress < 100) {
+				return;
+			}
+
 			console.log('Connecting to websocket server');
 
 			// WebSocket, consider a separate env variable for ws address
@@ -618,14 +632,9 @@ function Main() {
 		connect();
 
 		return () => {
-			PubSub.unsubscribe(searchMessagesVisibilityEventToken);
-			PubSub.unsubscribe(contactDetailsVisibilityEventToken);
-			PubSub.unsubscribe(displayErrorEventToken);
-			PubSub.unsubscribe(unsupportedFileEventToken);
-
-			ws.close(CODE_NORMAL);
+			ws?.close(CODE_NORMAL);
 		};
-	}, []);
+	}, [progress]);
 
 	useEffect(() => {
 		// Window close event
@@ -754,6 +763,7 @@ function Main() {
 			});
 		} catch (error) {
 			console.error('Error in listUsers', error);
+			setInitialResourceFailed(true);
 		} finally {
 			// Trigger next request
 			listContacts();
@@ -780,6 +790,7 @@ function Main() {
 			}, history);
 		} catch (error) {
 			console.error('Error retrieving current user', error);
+			setInitialResourceFailed(true);
 		} finally {
 			// Trigger next request
 			listUsers();
@@ -839,6 +850,8 @@ function Main() {
 						completeCallback();
 						window.displayError(error);
 					}
+
+					setInitialResourceFailed(true);
 				} else {
 					console.error(error);
 				}
@@ -863,6 +876,7 @@ function Main() {
 			});
 		} catch (error) {
 			console.error('Error in listSavedResponses', error);
+			setInitialResourceFailed(true);
 		} finally {
 			// Trigger next request
 			listTemplates(false);
@@ -964,6 +978,7 @@ function Main() {
 			});
 		} catch (error) {
 			console.error('Error in listContacts', error);
+			setInitialResourceFailed(true);
 		} finally {
 			// Trigger next request
 			listSavedResponses();
@@ -1024,6 +1039,7 @@ function Main() {
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
+						setInitialResourceFailed={setInitialResourceFailed}
 					/>
 				)}
 
@@ -1128,6 +1144,7 @@ function Main() {
 							progress={progress}
 							setProgress={setProgress}
 							loadingNow={loadingNow}
+							isInitialResourceFailed={isInitialResourceFailed}
 						/>
 					</div>
 				</Fade>

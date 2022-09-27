@@ -86,6 +86,8 @@ function Sidebar(props) {
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
 
+	const [missingChats, setMissingChats] = useState([]);
+
 	const history = useHistory();
 
 	const logOut = () => {
@@ -145,11 +147,9 @@ function Sidebar(props) {
 		const onNewMessages = function (msg, data) {
 			// We don't need to update if chats are filtered
 			if (keyword.trim().length === 0) {
-				let willMakeRequest = false;
+				let newMissingChats = [];
 
-				const retrieveChatWaIdList = [];
-
-				const nextState = props.chats;
+				const nextState = { ...props.chats };
 				let changedAny = false;
 
 				Object.entries(data).forEach((message) => {
@@ -162,11 +162,9 @@ function Sidebar(props) {
 					// New chat, incoming or outgoing message
 					// Check if chat with waId already exists
 					if (!nextState.hasOwnProperty(chatKey)) {
-						willMakeRequest = true;
-
 						// Collect waid list to retrieve chats
-						if (!retrieveChatWaIdList.includes(chatMessageWaId)) {
-							retrieveChatWaIdList.push(chatMessageWaId);
+						if (!newMissingChats.includes(chatMessageWaId)) {
+							newMissingChats.push(chatMessageWaId);
 						}
 					}
 
@@ -237,13 +235,14 @@ function Sidebar(props) {
 					props.setChats({ ...sortedNextState });
 				}
 
-				// We do this to generate new (missing) chat
-				if (willMakeRequest) {
-					retrieveChatWaIdList.forEach((chatMessageWaId) => {
-						retrieveChat(chatMessageWaId);
-					});
+				// Collect missing chats to load them periodically
+				if (newMissingChats.length > 0) {
+					setMissingChats((prevState) => {
+						let nextState = prevState.concat(newMissingChats);
 
-					//listChats(cancelTokenSourceRef.current, false, undefined, false);
+						// Unique wa ids
+						return [...new Set(nextState)];
+					});
 				}
 			}
 		};
@@ -256,7 +255,31 @@ function Sidebar(props) {
 		return () => {
 			PubSub.unsubscribe(newChatMessagesEventToken);
 		};
-	}, [waId, props.isBlurred, props.chats, props.newMessages, keyword]);
+	}, [
+		waId,
+		props.isBlurred,
+		props.chats,
+		props.newMessages,
+		missingChats,
+		keyword,
+	]);
+
+	useEffect(() => {
+		let intervalId = setInterval(function () {
+			if (missingChats?.length > 0) {
+				missingChats.forEach((chatMessageWaId) => {
+					console.log(
+						`A new message is received from ${chatMessageWaId} but this chat is not loaded yet. Retrieving chat via API.`
+					);
+					retrieveChat(chatMessageWaId);
+				});
+			}
+		}, 2000);
+
+		return () => {
+			clearInterval(intervalId);
+		};
+	}, [missingChats]);
 
 	useEffect(() => {
 		const chatsContainerCopy = chatsContainer.current;
@@ -334,7 +357,7 @@ function Sidebar(props) {
 		apiService.listChatsCall(
 			keyword,
 			props.filterTag?.id,
-			18,
+			20,
 			offset,
 			assignedToMe,
 			assignedGroup,
@@ -429,6 +452,10 @@ function Sidebar(props) {
 
 				setLoadingMoreChats(false);
 				setLoadingChats(false);
+
+				if (isInitial) {
+					props.setInitialResourceFailed(true);
+				}
 			},
 			history
 		);
@@ -443,6 +470,10 @@ function Sidebar(props) {
 				const sortedNextState = sortChats(prevState);
 				return { ...sortedNextState };
 			});
+
+			setMissingChats((prevState) =>
+				prevState.filter((item) => item !== chatWaId)
+			);
 		});
 	};
 

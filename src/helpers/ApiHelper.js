@@ -10,7 +10,7 @@ export const generateCancelToken = () => {
 	return axios.CancelToken.source();
 };
 
-export const getConfig = (params, cancelToken, responseType) => {
+export const getConfig = (params, cancelToken, responseType, timeout) => {
 	const config = {
 		withCredentials: false,
 		params,
@@ -24,6 +24,10 @@ export const getConfig = (params, cancelToken, responseType) => {
 
 	if (responseType !== undefined) {
 		config.responseType = responseType;
+	}
+
+	if (timeout !== undefined) {
+		config.timeout = timeout;
 	}
 
 	return config;
