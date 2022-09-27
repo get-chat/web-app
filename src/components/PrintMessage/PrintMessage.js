@@ -17,7 +17,7 @@ const getTextNodeType = (node) => {
 		};
 	}
 
-	if (node.match(/<mark class="highlight">.*.<\/mark>/gi)) {
+	if (node.match(/<mark class="highlight">(.*?)<\/mark>/gi)) {
 		return {
 			type: 'highlight',
 			component: HighlightText,
@@ -33,10 +33,14 @@ const getTextNodeType = (node) => {
 const decomposeMessage = (message, highlightText) => {
 	if (!message) return [];
 
-	const regex = new RegExp(highlightText, 'gi');
 	let section = '';
 
 	if (highlightText) {
+		const regex = new RegExp(
+			highlightText.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1'),
+			'gi'
+		);
+
 		message = message
 			.replace(regex, (match) => {
 				return `<mark class="highlight">${match}</mark>`;
