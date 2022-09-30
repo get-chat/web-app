@@ -1181,6 +1181,7 @@ function Main() {
 				<BulkSendTemplateViaCSV
 					open={isBulkSendTemplateViaCSVVisible}
 					setOpen={setBulkSendTemplateViaCSVVisible}
+					templates={templates}
 				/>
 
 				<SendBulkVoiceMessageDialog

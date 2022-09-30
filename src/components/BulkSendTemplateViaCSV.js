@@ -8,7 +8,7 @@ import { csvToArray } from '../helpers/CSVHelper';
 import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
 import FileInput from './FileInput';
 
-const BulkSendTemplateViaCSV = ({ open, setOpen }) => {
+const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
 
 	const csvFileInput = useRef();
