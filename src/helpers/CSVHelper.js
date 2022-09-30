@@ -4,18 +4,17 @@ export const csvToArray = (file, callback) => {
 	fileReader.onload = function (event) {
 		const string = event.target.result;
 
-		const csvHeader = string.slice(0, string.indexOf('\n')).split(',');
+		//const csvHeader = string.slice(0, string.indexOf('\n')).split(',');
 		const csvRows = string.slice(string.indexOf('\n') + 1).split('\n');
 
-		const array = csvRows.map((i) => {
+		const result = [];
+
+		csvRows.map((i) => {
 			const values = i.split(',');
-			return csvHeader.reduce((object, header, index) => {
-				object[header] = values[index];
-				return object;
-			}, {});
+			result.push(values);
 		});
 
-		callback?.(array);
+		callback?.(result);
 	};
 
 	fileReader.readAsText(file);
