@@ -3,11 +3,20 @@ import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
 import FileInput from '../../FileInput';
+import { csvToArray } from '../../../helpers/CSVHelper';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
 
 	const csvFileInput = useRef();
+
+	const handleCSV = (file) => {
+		if (!file) return;
+
+		csvToArray(file[0], (array) => {
+			console.log(array);
+		});
+	};
 
 	return (
 		<div className="bulkSendActions">
@@ -36,7 +45,7 @@ function BulkSendActions(props) {
 					innerRef={csvFileInput}
 					multiple={false}
 					accept=".csv"
-					handleSelectedFiles={() => console.log('selected')}
+					handleSelectedFiles={handleCSV}
 				/>
 				<Button color="secondary" onClick={() => csvFileInput.current.click()}>
 					{t('Import CSV')}
