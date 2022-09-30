@@ -67,7 +67,7 @@ function BulkSendActions(props) {
 					handleSelectedFiles={handleCSV}
 				/>
 				<Button color="secondary" onClick={() => csvFileInput.current.click()}>
-					{t('Import CSV')}
+					{t('Upload CSV')}
 				</Button>
 
 				<Button color="primary" onClick={props.finishBulkSendMessage}>
