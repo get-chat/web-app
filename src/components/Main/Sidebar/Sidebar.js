@@ -603,6 +603,7 @@ function Sidebar(props) {
 			{props.isSelectionModeEnabled && (
 				<BulkSendActions
 					selectedChats={props.selectedChats}
+					setSelectedChats={props.setSelectedChats}
 					selectedTags={props.selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={finishBulkSendMessage}

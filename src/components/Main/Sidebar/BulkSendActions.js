@@ -4,6 +4,7 @@ import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
 import FileInput from '../../FileInput';
 import { csvToArray } from '../../../helpers/CSVHelper';
+import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
@@ -14,7 +15,25 @@ function BulkSendActions(props) {
 		if (!file) return;
 
 		csvToArray(file[0], (array) => {
-			console.log(array);
+			const waIds = [];
+
+			// Extract and collect phone numbers
+			array.forEach((row) => {
+				if (row.length > 0) {
+					// Extract only digits
+					const waId = preparePhoneNumber(row[0]);
+					if (waId) {
+						waIds.push(waId);
+					}
+				}
+			});
+
+			// Combine with selected chats
+			if (waIds.length > 0) {
+				props.setSelectedChats([
+					...new Set([...waIds, ...props.selectedChats]),
+				]);
+			}
 		});
 	};
 
