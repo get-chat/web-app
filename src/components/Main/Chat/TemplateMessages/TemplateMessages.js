@@ -15,6 +15,7 @@ import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateTemplateMessagePayload } from '../../../../helpers/ChatHelper';
 import { getObjLength } from '../../../../helpers/ObjectHelper';
 import { sortTemplateComponents } from '../../../../helpers/TemplateMessageHelper';
+import TemplatesList from '../../../TemplatesList';
 
 function TemplateMessages(props) {
 	const templates = props.templatesData;
@@ -146,41 +147,10 @@ function TemplateMessages(props) {
 							</div>
 						)}
 
-						{Object.entries(templates).map((template, index) => (
-							<div key={template[0]} className="templateMessageWrapper">
-								<div className="chat__message chat__outgoing messageType__template">
-									{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
-									<div className="templateMessage__message">
-										<h4>{template[1].name}</h4>
-										{sortTemplateComponents(template[1].components).map(
-											(comp, index) => (
-												<div key={index}>
-													<span className="templateType bold lowercase">
-														{comp.type}:
-													</span>{' '}
-													{comp.text ??
-														comp.format ??
-														JSON.stringify(comp.buttons)}
-												</div>
-											)
-										)}
-									</div>
-								</div>
-
-								{template[1].status === 'approved' && (
-									<Button
-										onClick={
-											() =>
-												chooseTemplate(
-													template[1]
-												) /*props.onSend(template[1])*/
-										}
-									>
-										Send
-									</Button>
-								)}
-							</div>
-						))}
+						<TemplatesList
+							templates={templates}
+							onClick={(templateData) => chooseTemplate(templateData)}
+						/>
 					</div>
 				</div>
 			)}
