@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Button, Dialog } from '@material-ui/core';
@@ -52,6 +52,13 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 		console.log(finalData);
 	};
+
+	useEffect(() => {
+		// Resetting state on close
+		if (!open) {
+			setCsvData(undefined);
+		}
+	}, [open]);
 
 	const close = () => {
 		setOpen(false);
