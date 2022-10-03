@@ -8,6 +8,8 @@ import { csvToArray } from '../helpers/CSVHelper';
 import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
 import FileInput from './FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import TemplatesList from './TemplatesList';
+import '../styles/BulkSendTemplateViaCSV.css';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
@@ -47,24 +49,37 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={close} className="changePasswordDialog">
+		<Dialog open={open} onClose={close} className="bulkSendTemplateViaCSV">
 			<DialogTitle>{t('Bulk send template via CSV')}</DialogTitle>
 			<DialogContent className="sendBulkVoiceMessageDialogContent">
-				<div>
-					{t(
-						'You can upload a CSV file that contains a phone number and template parameters in every row.'
-					)}
-				</div>
+				{!data && (
+					<div>
+						{t(
+							'You can upload a CSV file that contains a phone number and template parameters in every row.'
+						)}
+					</div>
+				)}
 				{data?.length > 0 && (
-					<Alert
-						severity="success"
-						style={{
-							alignSelf: 'stretch',
-						}}
-					>
-						<AlertTitle>{t('Success')}</AlertTitle>
-						{t('%d receivers are ready', data?.length)}
-					</Alert>
+					<>
+						<Alert
+							severity="success"
+							style={{
+								alignSelf: 'stretch',
+							}}
+						>
+							<AlertTitle>{t('Success')}</AlertTitle>
+							{t('%d receivers are ready', data?.length)}
+						</Alert>
+
+						<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
+							<div className="bulkSendTemplateViaCSV__templatesWrapper">
+								<TemplatesList
+									templates={templates}
+									onClick={(templateData) => console.log(templateData)}
+								/>
+							</div>
+						</div>
+					</>
 				)}
 			</DialogContent>
 			<DialogActions>
