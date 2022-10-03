@@ -76,16 +76,11 @@ function SendTemplateMessage(props) {
 	useEffect(() => {
 		// Update params when header image changes
 		setParams((prevState) => {
-			// TODO: Do this in a better way depends on template headers complexity
-			if (prevState[0] && prevState[0][0] && prevState[0][0]['image']) {
+			if (prevState[0]?.[0]?.['image']) {
 				prevState[0][0]['image']['link'] = headerFileURL;
-			} else if (prevState[0] && prevState[0][0] && prevState[0][0]['video']) {
+			} else if (prevState[0]?.[0]?.['video']) {
 				prevState[0][0]['video']['link'] = headerFileURL;
-			} else if (
-				prevState[0] &&
-				prevState[0][0] &&
-				prevState[0][0]['document']
-			) {
+			} else if (prevState[0]?.[0]?.['document']) {
 				prevState[0][0]['document']['link'] = headerFileURL;
 			}
 
