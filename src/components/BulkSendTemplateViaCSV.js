@@ -10,6 +10,7 @@ import FileInput from './FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import TemplatesList from './TemplatesList';
 import '../styles/BulkSendTemplateViaCSV.css';
+import { generateTemplateParamsByValues } from '../helpers/TemplateMessageHelper';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
@@ -75,7 +76,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 							<div className="bulkSendTemplateViaCSV__templatesWrapper">
 								<TemplatesList
 									templates={templates}
-									onClick={(templateData) => console.log(templateData)}
+									onClick={(templateData) =>
+										generateTemplateParamsByValues(templateData, data[0])
+									}
 								/>
 							</div>
 						</div>

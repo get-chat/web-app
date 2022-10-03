@@ -4,6 +4,7 @@ import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import {
+	generateTemplateParamsByValues,
 	getTemplateParams,
 	templateParamToInteger,
 } from '../../../../helpers/TemplateMessageHelper';
@@ -33,44 +34,7 @@ function SendTemplateMessage(props) {
 	const headerFileInput = useRef();
 
 	useEffect(() => {
-		const preparedParams = {};
-		const components = { ...template.components };
-
-		Object.entries(components).forEach((paramEntry, paramIndex) => {
-			const key = paramEntry[0];
-			const component = paramEntry[1];
-			const componentType = component.type;
-
-			if (componentType === 'HEADER') {
-				if (
-					component.format === 'IMAGE' ||
-					component.format === 'VIDEO' ||
-					component.format === 'DOCUMENT'
-				) {
-					const format = component.format.toLowerCase();
-					preparedParams[key] = {
-						0: { type: format },
-					};
-
-					preparedParams[key][0][format] = { link: '' };
-				}
-			}
-
-			const paramText = component.text;
-			const templateParamsArray = getTemplateParams(paramText);
-
-			templateParamsArray.map((extractedParam, extractedParamIndex) => {
-				if (preparedParams[key] === undefined) {
-					preparedParams[key] = {};
-				}
-				preparedParams[key][templateParamToInteger(extractedParam)] = {
-					type: 'text',
-					text: '',
-				};
-			});
-		});
-
-		setParams(preparedParams);
+		setParams(generateTemplateParamsByValues(template, undefined));
 	}, []);
 
 	useEffect(() => {

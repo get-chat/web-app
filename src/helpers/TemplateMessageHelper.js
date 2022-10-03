@@ -59,3 +59,52 @@ export const sortTemplateComponents = (components) => {
 
 	return components;
 };
+
+export const generateTemplateParamsByValues = (template, paramValues) => {
+	const preparedParams = {};
+	const components = { ...template.components };
+
+	let hasHeader = false;
+
+	Object.entries(components).forEach((paramEntry, paramIndex) => {
+		const key = paramEntry[0];
+		const component = paramEntry[1];
+		const componentType = component.type;
+
+		if (componentType === 'HEADER') {
+			if (
+				component.format === 'IMAGE' ||
+				component.format === 'VIDEO' ||
+				component.format === 'DOCUMENT'
+			) {
+				hasHeader = true;
+
+				const format = component.format.toLowerCase();
+				preparedParams[key] = {
+					0: { type: format },
+				};
+
+				preparedParams[key][0][format] = {
+					link: paramValues ? paramValues[1] : '',
+				};
+			}
+		}
+
+		const paramText = component.text;
+		const templateParamsArray = getTemplateParams(paramText);
+
+		templateParamsArray.map((extractedParam, extractedParamIndex) => {
+			if (preparedParams[key] === undefined) {
+				preparedParams[key] = {};
+			}
+			preparedParams[key][templateParamToInteger(extractedParam)] = {
+				type: 'text',
+				text: paramValues
+					? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
+					: '',
+			};
+		});
+	});
+
+	return preparedParams;
+};
