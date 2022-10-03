@@ -68,7 +68,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 							}}
 						>
 							<AlertTitle>{t('Success')}</AlertTitle>
-							{t('%d receivers are ready', data?.length)}
+							{t('Imported data for %d receiver(s).', data?.length)}
 						</Alert>
 
 						<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
