@@ -15,7 +15,7 @@ import { generateTemplateParamsByValues } from '../helpers/TemplateMessageHelper
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
 
-	const [data, setData] = useState();
+	const [csvData, setCsvData] = useState();
 
 	const csvFileInput = useRef();
 
@@ -39,10 +39,18 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				}
 			});
 
-			setData(finalRows);
-
-			console.log(finalRows);
+			setCsvData(finalRows);
 		});
+	};
+
+	const prepareTemplateMessages = (template) => {
+		const finalData = [];
+		csvData?.forEach((curData) => {
+			// TODO: Inject parameters into template data
+			finalData.push(generateTemplateParamsByValues(template, curData));
+		});
+
+		console.log(finalData);
 	};
 
 	const close = () => {
@@ -53,14 +61,14 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		<Dialog open={open} onClose={close} className="bulkSendTemplateViaCSV">
 			<DialogTitle>{t('Bulk send template via CSV')}</DialogTitle>
 			<DialogContent className="sendBulkVoiceMessageDialogContent">
-				{!data && (
+				{!csvData && (
 					<div>
 						{t(
 							'You can upload a CSV file that contains a phone number and template parameters in every row.'
 						)}
 					</div>
 				)}
-				{data?.length > 0 && (
+				{csvData?.length > 0 && (
 					<>
 						<Alert
 							severity="success"
@@ -69,16 +77,14 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 							}}
 						>
 							<AlertTitle>{t('Success')}</AlertTitle>
-							{t('Imported data for %d receiver(s).', data?.length)}
+							{t('Imported data for %d receiver(s).', csvData?.length)}
 						</Alert>
 
 						<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
 							<div className="bulkSendTemplateViaCSV__templatesWrapper">
 								<TemplatesList
 									templates={templates}
-									onClick={(templateData) =>
-										generateTemplateParamsByValues(templateData, data[0])
-									}
+									onClick={(template) => prepareTemplateMessages(template)}
 								/>
 							</div>
 						</div>
