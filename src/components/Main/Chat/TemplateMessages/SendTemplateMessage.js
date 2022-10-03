@@ -248,7 +248,9 @@ function SendTemplateMessage(props) {
 											{headerFileURL && (
 												<div>
 													<Alert severity="success">
-														<AlertTitle>Uploaded successfully</AlertTitle>
+														<AlertTitle>
+															{t('Uploaded successfully')}
+														</AlertTitle>
 														<a href={headerFileURL} target="_blank">
 															{headerFileURL}
 														</a>

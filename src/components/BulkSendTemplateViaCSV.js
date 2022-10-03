@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import { Button, Dialog } from '@material-ui/core';
@@ -7,9 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { csvToArray } from '../helpers/CSVHelper';
 import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
 import FileInput from './FileInput';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
+
+	const [data, setData] = useState();
 
 	const csvFileInput = useRef();
 
@@ -33,6 +36,8 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				}
 			});
 
+			setData(finalRows);
+
 			console.log(finalRows);
 		});
 	};
@@ -50,6 +55,17 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						'You can upload a CSV file that contains a phone number and template parameters in every row.'
 					)}
 				</div>
+				{data?.length > 0 && (
+					<Alert
+						severity="success"
+						style={{
+							alignSelf: 'stretch',
+						}}
+					>
+						<AlertTitle>{t('Success')}</AlertTitle>
+						{t('%d receivers are ready', data?.length)}
+					</Alert>
+				)}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
