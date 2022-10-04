@@ -4,7 +4,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { Button, Dialog, Step, StepLabel, Stepper } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
-import { csvToArray } from '../helpers/CSVHelper';
+import { csvToObj } from '../helpers/CSVHelper';
 import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
 import FileInput from './FileInput';
 import TemplatesList from './TemplatesList';
@@ -15,6 +15,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
 
 	const [activeStep, setActiveStep] = React.useState(0);
+	const [csvHeader, setCsvHeader] = useState();
 	const [csvData, setCsvData] = useState();
 
 	const csvFileInput = useRef();
@@ -22,11 +23,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const handleCSV = (file) => {
 		if (!file) return;
 
-		csvToArray(file[0], (array) => {
-			const finalRows = [];
+		csvToObj(file[0], (result) => {
+			const finalData = [];
 
 			// Extract and collect phone numbers
-			array.forEach((row) => {
+			result.data.forEach((row) => {
 				if (row.length > 0) {
 					// Extract only digits
 					const waId = preparePhoneNumber(row[0]);
@@ -34,16 +35,15 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						// Replace original phone number with prepared wa id
 						row[0] = waId;
 						// Collect rows if they contain a proper phone number
-						finalRows.push(row);
+						finalData.push(row);
 					}
 				}
 			});
 
-			setCsvData(finalRows);
+			setCsvHeader(result.header);
+			setCsvData(finalData);
 
-			if (finalRows.length > 0) {
-				setActiveStep(1);
-			}
+			setActiveStep(finalData.length > 0 ? 1 : 0);
 		});
 	};
 
@@ -104,7 +104,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						</div>
 					</div>
 				)}
-				{activeStep === 2 && <div>{JSON.stringify(csvData?.[0])}</div>}
+				{activeStep === 2 && <div>{JSON.stringify(csvHeader)}</div>}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">

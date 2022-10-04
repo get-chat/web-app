@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
 import FileInput from '../../FileInput';
-import { csvToArray } from '../../../helpers/CSVHelper';
+import { csvToObj } from '../../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
 
 function BulkSendActions(props) {
@@ -14,11 +14,11 @@ function BulkSendActions(props) {
 	const handleCSV = (file) => {
 		if (!file) return;
 
-		csvToArray(file[0], (array) => {
+		csvToObj(file[0], (result) => {
 			const waIds = [];
 
 			// Extract and collect phone numbers
-			array.forEach((row) => {
+			result.data.forEach((row) => {
 				if (row.length > 0) {
 					// Extract only digits
 					const waId = preparePhoneNumber(row[0]);
