@@ -164,8 +164,8 @@ function SendTemplateMessage(props) {
 		<div className="sendTemplateMessage">
 			<h4 className="sendTemplateMessage__title">{template.name}</h4>
 
-			{template.components.map((comp, index) => (
-				<div key={index} className="sendTemplateMessage__component">
+			{template.components.map((comp, compIndex) => (
+				<div key={compIndex} className="sendTemplateMessage__component">
 					<div className="sendTemplateMessage__section">
 						<h6>{comp.type}</h6>
 						<div>
@@ -295,12 +295,16 @@ function SendTemplateMessage(props) {
 								{getTemplateParams(comp.text).map((param, paramIndex) => (
 									<TextField
 										value={
-											params[index]
-												? params[index][templateParamToInteger(param)].text
+											params[compIndex]
+												? params[compIndex][templateParamToInteger(param)].text
 												: ''
 										}
 										onChange={(event) =>
-											updateParam(event, index, templateParamToInteger(param))
+											updateParam(
+												event,
+												compIndex,
+												templateParamToInteger(param)
+											)
 										}
 										className="templateMessage__param"
 										key={paramIndex}

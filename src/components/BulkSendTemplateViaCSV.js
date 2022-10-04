@@ -137,8 +137,8 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				)}
 				{activeStep === 2 && (
 					<div>
-						{template?.components.map((comp, index) => (
-							<div key={index}>
+						{template?.components.map((comp, compIndex) => (
+							<div key={compIndex}>
 								{comp.text}
 								<div>
 									{getTemplateParams(comp.text).map((param, paramIndex) => (
@@ -146,14 +146,15 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 											<InputLabel>{param}</InputLabel>
 											<Select
 												value={
-													params[index]
-														? params[index][templateParamToInteger(param)].text
+													params[compIndex]
+														? params[compIndex][templateParamToInteger(param)]
+																.text
 														: ''
 												}
 												onChange={(event) =>
 													updateParam(
 														event,
-														index,
+														compIndex,
 														templateParamToInteger(param)
 													)
 												}
