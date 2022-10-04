@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Button, Dialog } from '@material-ui/core';
+import { Button, Dialog, Step, StepLabel, Stepper } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
 import { csvToArray } from '../helpers/CSVHelper';
 import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
 import FileInput from './FileInput';
-import { Alert, AlertTitle } from '@material-ui/lab';
 import TemplatesList from './TemplatesList';
 import '../styles/BulkSendTemplateViaCSV.css';
 import { generateTemplateParamsByValues } from '../helpers/TemplateMessageHelper';
@@ -15,6 +14,7 @@ import { generateTemplateParamsByValues } from '../helpers/TemplateMessageHelper
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
 
+	const [activeStep, setActiveStep] = React.useState(0);
 	const [csvData, setCsvData] = useState();
 
 	const csvFileInput = useRef();
@@ -40,6 +40,10 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			});
 
 			setCsvData(finalRows);
+
+			if (finalRows.length > 0) {
+				setActiveStep(1);
+			}
 		});
 	};
 
@@ -50,13 +54,20 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			finalData.push(generateTemplateParamsByValues(template, curData));
 		});
 
+		setActiveStep(2);
+
 		console.log(finalData);
 	};
+
+	function getSteps() {
+		return [t('Upload a CSV file'), t('Select a template'), t('Preview')];
+	}
 
 	useEffect(() => {
 		// Resetting state on close
 		if (!open) {
 			setCsvData(undefined);
+			setActiveStep(0);
 		}
 	}, [open]);
 
@@ -67,35 +78,31 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	return (
 		<Dialog open={open} onClose={close} className="bulkSendTemplateViaCSV">
 			<DialogTitle>{t('Bulk send template via CSV')}</DialogTitle>
-			<DialogContent className="sendBulkVoiceMessageDialogContent">
-				{!csvData && (
+			<DialogContent>
+				<Stepper activeStep={activeStep} alternativeLabel>
+					{getSteps().map((label) => (
+						<Step key={label}>
+							<StepLabel>{label}</StepLabel>
+						</Step>
+					))}
+				</Stepper>
+
+				{activeStep === 0 && (
 					<div>
 						{t(
 							'You can upload a CSV file that contains a phone number and template parameters in every row.'
 						)}
 					</div>
 				)}
-				{csvData?.length > 0 && (
-					<>
-						<Alert
-							severity="success"
-							style={{
-								alignSelf: 'stretch',
-							}}
-						>
-							<AlertTitle>{t('Success')}</AlertTitle>
-							{t('Imported data for %d receiver(s).', csvData?.length)}
-						</Alert>
-
-						<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
-							<div className="bulkSendTemplateViaCSV__templatesWrapper">
-								<TemplatesList
-									templates={templates}
-									onClick={(template) => prepareTemplateMessages(template)}
-								/>
-							</div>
+				{activeStep === 1 && (
+					<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
+						<div className="bulkSendTemplateViaCSV__templatesWrapper">
+							<TemplatesList
+								templates={templates}
+								onClick={(template) => prepareTemplateMessages(template)}
+							/>
 						</div>
-					</>
+					</div>
 				)}
 			</DialogContent>
 			<DialogActions>
