@@ -104,6 +104,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						</div>
 					</div>
 				)}
+				{activeStep === 2 && <div>{JSON.stringify(csvData?.[0])}</div>}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
