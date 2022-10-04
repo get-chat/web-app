@@ -7,11 +7,8 @@ export const csvToArray = (file, callback) => {
 		//const csvHeader = string.slice(0, string.indexOf('\n')).split(',');
 		const csvRows = string.slice(string.indexOf('\n') + 1).split('\n');
 
-		const result = [];
-
-		csvRows.map((i) => {
-			const values = i.split(',');
-			result.push(values);
+		const result = csvRows.map((i) => {
+			return i.split(',');
 		});
 
 		callback?.(result);
