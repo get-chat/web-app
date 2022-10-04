@@ -66,6 +66,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	useEffect(() => {
 		// Resetting state on close
 		if (!open) {
+			setCsvHeader(undefined);
 			setCsvData(undefined);
 			setActiveStep(0);
 		}
