@@ -65,6 +65,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 	const prepareTemplateMessages = (template) => {
 		setTemplate(template);
+		setParams(generateTemplateParamsByValues(template, undefined));
 
 		const finalData = [];
 		csvData?.forEach((curData) => {
@@ -80,6 +81,15 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	function getSteps() {
 		return [t('Upload a CSV file'), t('Select a template'), t('Preview')];
 	}
+
+	const updateParam = (event, index, paramKey) => {
+		setParams((prevState) => {
+			const nextState = prevState;
+			nextState[index][paramKey].text = event.target.value;
+
+			return { ...nextState };
+		});
+	};
 
 	useEffect(() => {
 		// Resetting state on close
@@ -128,7 +138,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				{activeStep === 2 && (
 					<div>
 						{template?.components.map((comp, index) => (
-							<>
+							<div key={index}>
 								{comp.text}
 								<div>
 									{getTemplateParams(comp.text).map((param, paramIndex) => (
@@ -140,7 +150,13 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 														? params[index][templateParamToInteger(param)].text
 														: ''
 												}
-												onChange={(event) => console.log(event)}
+												onChange={(event) =>
+													updateParam(
+														event,
+														index,
+														templateParamToInteger(param)
+													)
+												}
 											>
 												{csvHeader?.map((headerItem, headerIndex) => (
 													<MenuItem key={headerIndex} value={headerItem}>
@@ -151,7 +167,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 										</FormControl>
 									))}
 								</div>
-							</>
+							</div>
 						))}
 					</div>
 				)}
