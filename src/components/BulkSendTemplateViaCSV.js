@@ -9,7 +9,10 @@ import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
 import FileInput from './FileInput';
 import TemplatesList from './TemplatesList';
 import '../styles/BulkSendTemplateViaCSV.css';
-import { generateTemplateParamsByValues } from '../helpers/TemplateMessageHelper';
+import {
+	generateTemplateParamsByValues,
+	getTemplateParams,
+} from '../helpers/TemplateMessageHelper';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
@@ -17,6 +20,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [csvHeader, setCsvHeader] = useState();
 	const [csvData, setCsvData] = useState();
+	const [template, setTemplate] = useState();
 
 	const csvFileInput = useRef();
 
@@ -48,6 +52,8 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	};
 
 	const prepareTemplateMessages = (template) => {
+		setTemplate(template);
+
 		const finalData = [];
 		csvData?.forEach((curData) => {
 			// TODO: Inject parameters into template data
@@ -68,6 +74,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		if (!open) {
 			setCsvHeader(undefined);
 			setCsvData(undefined);
+			setTemplate(undefined);
 			setActiveStep(0);
 		}
 	}, [open]);
@@ -105,7 +112,20 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						</div>
 					</div>
 				)}
-				{activeStep === 2 && <div>{JSON.stringify(csvHeader)}</div>}
+				{activeStep === 2 && (
+					<div>
+						{template?.components.map((comp, index) => (
+							<>
+								{comp.text}
+								<div>
+									{getTemplateParams(comp.text).map((param, paramIndex) => (
+										<span key={paramIndex}>{JSON.stringify(param)}</span>
+									))}
+								</div>
+							</>
+						))}
+					</div>
+				)}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
