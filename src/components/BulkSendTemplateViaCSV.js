@@ -1,7 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Button, Dialog, Step, StepLabel, Stepper } from '@material-ui/core';
+import {
+	Button,
+	Dialog,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	Step,
+	StepLabel,
+	Stepper,
+} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
 import { csvToObj } from '../helpers/CSVHelper';
@@ -12,6 +22,7 @@ import '../styles/BulkSendTemplateViaCSV.css';
 import {
 	generateTemplateParamsByValues,
 	getTemplateParams,
+	templateParamToInteger,
 } from '../helpers/TemplateMessageHelper';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
@@ -21,6 +32,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [csvHeader, setCsvHeader] = useState();
 	const [csvData, setCsvData] = useState();
 	const [template, setTemplate] = useState();
+	const [params, setParams] = useState({});
 
 	const csvFileInput = useRef();
 
@@ -75,6 +87,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setCsvHeader(undefined);
 			setCsvData(undefined);
 			setTemplate(undefined);
+			setParams({});
 			setActiveStep(0);
 		}
 	}, [open]);
@@ -119,7 +132,23 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 								{comp.text}
 								<div>
 									{getTemplateParams(comp.text).map((param, paramIndex) => (
-										<span key={paramIndex}>{JSON.stringify(param)}</span>
+										<FormControl key={paramIndex}>
+											<InputLabel>{param}</InputLabel>
+											<Select
+												value={
+													params[index]
+														? params[index][templateParamToInteger(param)].text
+														: ''
+												}
+												onChange={(event) => console.log(event)}
+											>
+												{csvHeader?.map((headerItem, headerIndex) => (
+													<MenuItem key={headerIndex} value={headerItem}>
+														{headerItem}
+													</MenuItem>
+												))}
+											</Select>
+										</FormControl>
 									))}
 								</div>
 							</>
