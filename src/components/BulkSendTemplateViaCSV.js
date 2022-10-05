@@ -9,12 +9,19 @@ import {
 	FormLabel,
 	InputLabel,
 	MenuItem,
+	Paper,
 	Radio,
 	RadioGroup,
 	Select,
 	Step,
 	StepLabel,
 	Stepper,
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
 } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
@@ -181,7 +188,32 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						)}
 					</div>
 				)}
-				{activeStep === STEP_PREVIEW_CSV_DATA && <div></div>}
+				{activeStep === STEP_PREVIEW_CSV_DATA && (
+					<div>
+						<TableContainer component={Paper}>
+							<Table>
+								<TableHead>
+									<TableRow>
+										{csvHeader?.map((headerItem, headerIndex) => (
+											<TableCell key={headerIndex}>{headerItem}</TableCell>
+										))}
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{csvData?.map((row, rowIndex) => (
+										<TableRow key={rowIndex}>
+											{row?.map((column, columnIndex) => (
+												<TableCell key={columnIndex} component="th" scope="row">
+													{column}
+												</TableCell>
+											))}
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
+					</div>
+				)}
 				{activeStep === STEP_SELECT_PRIMARY_KEY && (
 					<div>
 						<FormControl>
