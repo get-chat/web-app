@@ -107,6 +107,10 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			case 0:
 				csvFileInput.current.click();
 				break;
+			case 3:
+				// TODO: Bulk send template
+				close();
+				break;
 			default:
 				setActiveStep((prevState) => prevState + 1);
 				return;
