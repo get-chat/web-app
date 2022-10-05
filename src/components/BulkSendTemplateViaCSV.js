@@ -33,6 +33,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [csvData, setCsvData] = useState();
 	const [template, setTemplate] = useState();
 	const [params, setParams] = useState({});
+	const [primaryKeyColumn, setPrimaryKeyColumn] = useState();
 
 	const csvFileInput = useRef();
 
@@ -98,6 +99,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setCsvData(undefined);
 			setTemplate(undefined);
 			setParams({});
+			setPrimaryKeyColumn(undefined);
 			setActiveStep(0);
 		}
 	}, [open]);
