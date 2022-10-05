@@ -72,7 +72,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setCsvData(finalData);
 
 			setActiveStep(
-				finalData.length > 0 ? STEP_SELECT_PRIMARY_KEY : STEP_UPLOAD_CSV
+				finalData.length > 0 ? STEP_PREVIEW_CSV_DATA : STEP_UPLOAD_CSV
 			);
 		});
 	};
