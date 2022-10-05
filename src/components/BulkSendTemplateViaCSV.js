@@ -43,7 +43,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [csvData, setCsvData] = useState();
 	const [template, setTemplate] = useState();
 	const [params, setParams] = useState({});
-	const [primaryKeyColumn, setPrimaryKeyColumn] = useState();
+	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
 
 	const csvFileInput = useRef();
 
@@ -151,7 +151,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setCsvData(undefined);
 			setTemplate(undefined);
 			setParams({});
-			setPrimaryKeyColumn(undefined);
+			setPrimaryKeyColumn('');
 			setActiveStep(STEP_UPLOAD_CSV);
 		}
 	}, [open]);
@@ -192,11 +192,12 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 							>
 								{csvHeader
 									?.filter((headerColumn) => !isEmptyString(headerColumn))
-									?.map((headerColumn) => (
+									?.map((headerColumn, headerColumnIndex) => (
 										<FormControlLabel
 											value={headerColumn}
 											control={<Radio />}
 											label={headerColumn}
+											key={headerColumnIndex}
 										/>
 									))}
 							</RadioGroup>
