@@ -36,6 +36,7 @@ import {
 	templateParamToInteger,
 } from '../helpers/TemplateMessageHelper';
 import { isEmptyString } from '../helpers/Helpers';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const STEP_UPLOAD_CSV = 0;
@@ -49,6 +50,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
 	const [csvHeader, setCsvHeader] = useState();
 	const [csvData, setCsvData] = useState();
+	const [csvError, setCsvError] = useState();
 	const [template, setTemplate] = useState();
 	const [params, setParams] = useState({});
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
@@ -57,6 +59,8 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 	const handleCSV = (file) => {
 		if (!file) return;
+
+		setCsvError(undefined);
 
 		csvToObj(file[0], (result) => {
 			const finalData = [];
@@ -74,6 +78,27 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 					}
 				}
 			});
+
+			let hasHeaderError = false;
+
+			if (result.header.length === 0) {
+				setCsvError(t('Empty file!'));
+				hasHeaderError = true;
+			}
+
+			for (let i = 0; i < result.header.length; i++) {
+				if (isEmptyString(result.header[i])) {
+					setCsvError(t('Empty header name!'));
+					hasHeaderError = true;
+					break;
+				}
+			}
+
+			// If CSV file has errors
+			if (hasHeaderError) {
+				setActiveStep(STEP_UPLOAD_CSV);
+				return;
+			}
 
 			setCsvHeader(result.header);
 			setCsvData(finalData);
@@ -158,6 +183,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		if (!open) {
 			setCsvHeader(undefined);
 			setCsvData(undefined);
+			setCsvError(undefined);
 			setTemplate(undefined);
 			setParams({});
 			setPrimaryKeyColumn('');
@@ -183,8 +209,19 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 				{activeStep === STEP_UPLOAD_CSV && (
 					<div>
-						{t(
-							'You can upload a CSV file that contains a phone number and template parameters in every row.'
+						<div>
+							{t(
+								'You can upload a CSV file that contains a phone number and template parameters in every row.'
+							)}
+						</div>
+						{csvError !== undefined && (
+							<Alert
+								severity="error"
+								className="bulkSendTemplateViaCSV__csvError"
+							>
+								<AlertTitle>{t('Error')}</AlertTitle>
+								{csvError}
+							</Alert>
 						)}
 					</div>
 				)}

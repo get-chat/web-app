@@ -25,6 +25,10 @@
 	width: 100%;
 }
 
+.bulkSendTemplateViaCSV__csvError {
+	margin-top: 15px;
+}
+
 .bulkSendTemplateViaCSV .MuiFormControl-root {
 	width: 100%;
 	margin-bottom: 10px;
