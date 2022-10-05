@@ -32,9 +32,10 @@ import { isEmptyString } from '../helpers/Helpers';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const STEP_UPLOAD_CSV = 0;
-	const STEP_SELECT_PRIMARY_KEY = 1;
-	const STEP_SELECT_TEMPLATE = 2;
-	const STEP_PREVIEW = 3;
+	const STEP_PREVIEW_CSV_DATA = 1;
+	const STEP_SELECT_PRIMARY_KEY = 2;
+	const STEP_SELECT_TEMPLATE = 3;
+	const STEP_PREVIEW_RESULT = 4;
 
 	const { t } = useTranslation();
 
@@ -86,7 +87,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			finalData.push(generateTemplateParamsByValues(template, curData));
 		});
 
-		setActiveStep(STEP_PREVIEW);
+		setActiveStep(STEP_PREVIEW_RESULT);
 
 		console.log(finalData);
 	};
@@ -94,6 +95,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	function getSteps() {
 		return [
 			t('Upload a CSV file'),
+			t('Preview CSV data'),
 			t('Select the primary key column'),
 			t('Select a template'),
 			t('Preview'),
@@ -114,7 +116,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			case STEP_UPLOAD_CSV:
 				csvFileInput.current.click();
 				break;
-			case STEP_PREVIEW:
+			case STEP_PREVIEW_RESULT:
 				// TODO: Bulk send template
 				close();
 				break;
@@ -128,7 +130,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		switch (activeStep) {
 			case STEP_UPLOAD_CSV:
 				return t('Upload CSV');
-			case STEP_PREVIEW:
+			case STEP_PREVIEW_RESULT:
 				return t('Send');
 			default:
 				return t('Next');
@@ -179,11 +181,12 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						)}
 					</div>
 				)}
+				{activeStep === STEP_PREVIEW_CSV_DATA && <div></div>}
 				{activeStep === STEP_SELECT_PRIMARY_KEY && (
 					<div>
 						<FormControl>
 							<FormLabel>
-								{t('Select the primary key column (phone numbers or tags)')}
+								{t('Select the column that contains phone numbers or tags')}
 							</FormLabel>
 							<RadioGroup
 								aria-label="primary-key"
@@ -214,7 +217,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						</div>
 					</div>
 				)}
-				{activeStep === STEP_PREVIEW && (
+				{activeStep === STEP_PREVIEW_RESULT && (
 					<div>
 						{template?.components.map((comp, compIndex) => (
 							<div key={compIndex}>
