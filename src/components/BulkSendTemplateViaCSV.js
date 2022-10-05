@@ -31,6 +31,11 @@ import {
 import { isEmptyString } from '../helpers/Helpers';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
+	const STEP_UPLOAD_CSV = 0;
+	const STEP_SELECT_PRIMARY_KEY = 1;
+	const STEP_SELECT_TEMPLATE = 2;
+	const STEP_PREVIEW = 3;
+
 	const { t } = useTranslation();
 
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
@@ -41,11 +46,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState();
 
 	const csvFileInput = useRef();
-
-	const STEP_UPLOAD_CSV = 0;
-	const STEP_SELECT_PRIMARY_KEY = 1;
-	const STEP_SELECT_TEMPLATE = 2;
-	const STEP_PREVIEW = 3;
 
 	const handleCSV = (file) => {
 		if (!file) return;
