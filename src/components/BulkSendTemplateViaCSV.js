@@ -33,7 +33,7 @@ import { isEmptyString } from '../helpers/Helpers';
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const { t } = useTranslation();
 
-	const [activeStep, setActiveStep] = React.useState(0);
+	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
 	const [csvHeader, setCsvHeader] = useState();
 	const [csvData, setCsvData] = useState();
 	const [template, setTemplate] = useState();
@@ -41,6 +41,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState();
 
 	const csvFileInput = useRef();
+
+	const STEP_UPLOAD_CSV = 0;
+	const STEP_SELECT_PRIMARY_KEY = 1;
+	const STEP_SELECT_TEMPLATE = 2;
+	const STEP_PREVIEW = 3;
 
 	const handleCSV = (file) => {
 		if (!file) return;
@@ -65,7 +70,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setCsvHeader(result.header);
 			setCsvData(finalData);
 
-			setActiveStep(finalData.length > 0 ? 1 : 0);
+			setActiveStep(
+				finalData.length > 0 ? STEP_SELECT_PRIMARY_KEY : STEP_UPLOAD_CSV
+			);
 		});
 	};
 
@@ -79,7 +86,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			finalData.push(generateTemplateParamsByValues(template, curData));
 		});
 
-		setActiveStep(3);
+		setActiveStep(STEP_PREVIEW);
 
 		console.log(finalData);
 	};
@@ -104,10 +111,10 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 	const handleNext = () => {
 		switch (activeStep) {
-			case 0:
+			case STEP_UPLOAD_CSV:
 				csvFileInput.current.click();
 				break;
-			case 3:
+			case STEP_PREVIEW:
 				// TODO: Bulk send template
 				close();
 				break;
@@ -119,9 +126,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 	const getNextButtonTitle = () => {
 		switch (activeStep) {
-			case 0:
+			case STEP_UPLOAD_CSV:
 				return t('Upload CSV');
-			case 3:
+			case STEP_PREVIEW:
 				return t('Send');
 			default:
 				return t('Next');
@@ -130,7 +137,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 	const getNextButtonEnabled = () => {
 		switch (activeStep) {
-			case 1:
+			case STEP_SELECT_PRIMARY_KEY:
 				return !isEmptyString(primaryKeyColumn);
 			default:
 				return true;
@@ -145,7 +152,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setTemplate(undefined);
 			setParams({});
 			setPrimaryKeyColumn(undefined);
-			setActiveStep(0);
+			setActiveStep(STEP_UPLOAD_CSV);
 		}
 	}, [open]);
 
@@ -165,14 +172,14 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 					))}
 				</Stepper>
 
-				{activeStep === 0 && (
+				{activeStep === STEP_UPLOAD_CSV && (
 					<div>
 						{t(
 							'You can upload a CSV file that contains a phone number and template parameters in every row.'
 						)}
 					</div>
 				)}
-				{activeStep === 1 && (
+				{activeStep === STEP_SELECT_PRIMARY_KEY && (
 					<div>
 						<FormControl>
 							<FormLabel>
@@ -196,7 +203,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						</FormControl>
 					</div>
 				)}
-				{activeStep === 2 && (
+				{activeStep === STEP_SELECT_TEMPLATE && (
 					<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
 						<div className="bulkSendTemplateViaCSV__templatesWrapper">
 							<TemplatesList
@@ -206,7 +213,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						</div>
 					</div>
 				)}
-				{activeStep === 3 && (
+				{activeStep === STEP_PREVIEW && (
 					<div>
 						{template?.components.map((comp, compIndex) => (
 							<div key={compIndex}>
