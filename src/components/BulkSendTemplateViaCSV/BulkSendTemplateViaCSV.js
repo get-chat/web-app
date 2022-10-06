@@ -133,10 +133,10 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	function getSteps() {
 		return [
 			t('Upload a CSV file'),
-			t('Preview CSV data'),
+			t('Preview the data'),
 			t('Select the primary key'),
 			t('Select a template'),
-			t('Select parameters'),
+			t('Select the parameters'),
 			t('Preview'),
 		];
 	}
