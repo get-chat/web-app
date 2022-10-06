@@ -229,6 +229,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				)}
 				{activeStep === STEP_SELECT_PARAMETERS && (
 					<StepSelectParameters
+						t={t}
 						csvHeader={csvHeader}
 						template={template}
 						params={params}
