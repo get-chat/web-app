@@ -37,6 +37,7 @@ import {
 } from '../helpers/TemplateMessageHelper';
 import { isEmptyString } from '../helpers/Helpers';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { hasDuplicates } from '../helpers/ArrayHelper';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const STEP_UPLOAD_CSV = 0;
@@ -83,6 +84,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 			if (result.header.length === 0) {
 				setCsvError(t('Empty file!'));
+				hasHeaderError = true;
+			}
+
+			if (hasDuplicates(result.header)) {
+				setCsvError(t('Headers must have a unique name!'));
 				hasHeaderError = true;
 			}
 
@@ -227,7 +233,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				)}
 				{activeStep === STEP_PREVIEW_CSV_DATA && (
 					<div>
-						<TableContainer component={Paper}>
+						<TableContainer>
 							<Table>
 								<TableHead>
 									<TableRow>
