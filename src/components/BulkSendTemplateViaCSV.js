@@ -45,6 +45,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const STEP_SELECT_TEMPLATE = 3;
 	const STEP_PREVIEW_RESULT = 4;
 
+	const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
+	const PRIMARY_KEY_TYPE_TAG = 'tag';
+
 	const { t } = useTranslation();
 
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
@@ -54,6 +57,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [template, setTemplate] = useState();
 	const [params, setParams] = useState({});
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
+	const [primaryKeyType, setPrimaryKeyType] = useState(PRIMARY_KEY_TYPE_WA_ID);
 
 	const csvFileInput = useRef();
 
@@ -192,6 +196,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setTemplate(undefined);
 			setParams({});
 			setPrimaryKeyColumn('');
+			setPrimaryKeyType(PRIMARY_KEY_TYPE_WA_ID);
 			setActiveStep(STEP_UPLOAD_CSV);
 		}
 	}, [open]);
@@ -278,6 +283,27 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 											key={headerColumnIndex}
 										/>
 									))}
+							</RadioGroup>
+						</FormControl>
+
+						<FormControl>
+							<FormLabel>{t('Select the type of receivers')}</FormLabel>
+							<RadioGroup
+								aria-label="primary-key"
+								value={primaryKeyType}
+								onChange={(event) => setPrimaryKeyType(event.target.value)}
+								row
+							>
+								<FormControlLabel
+									value={PRIMARY_KEY_TYPE_WA_ID}
+									control={<Radio />}
+									label={t('Phone numbers (canonical)')}
+								/>
+								<FormControlLabel
+									value={PRIMARY_KEY_TYPE_TAG}
+									control={<Radio />}
+									label={t('Tags')}
+								/>
 							</RadioGroup>
 						</FormControl>
 					</div>
