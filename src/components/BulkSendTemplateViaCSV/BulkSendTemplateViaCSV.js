@@ -125,7 +125,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			finalData.push(generateTemplateParamsByValues(template, curData));
 		});
 
-		setActiveStep(STEP_PREVIEW_RESULT);
+		setActiveStep(STEP_SELECT_PARAMETERS);
 
 		console.log(finalData);
 	};
