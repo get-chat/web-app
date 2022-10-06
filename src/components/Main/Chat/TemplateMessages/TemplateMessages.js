@@ -13,8 +13,6 @@ import {
 import PubSub from 'pubsub-js';
 import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateTemplateMessagePayload } from '../../../../helpers/ChatHelper';
-import { getObjLength } from '../../../../helpers/ObjectHelper';
-import { sortTemplateComponents } from '../../../../helpers/TemplateMessageHelper';
 import TemplatesList from '../../../TemplatesList';
 
 function TemplateMessages(props) {
@@ -124,35 +122,12 @@ function TemplateMessages(props) {
 			{props.isLoadingTemplates ? (
 				<Alert severity="info">Loading template messages...</Alert>
 			) : (
-				<div className="templateMessagesWrapper">
-					<div className="templateMessages" data-test-id="template-messages">
-						<div className="templateMessages__create">
-							<Button
-								color="primary"
-								href="https://hub.360dialog.com/dashboard/home"
-								target="_blank"
-								size="medium"
-							>
-								Register templates
-							</Button>
-						</div>
-
-						{getObjLength(templates) === 0 && (
-							<div className="templateMessages__emptyInfo mt-3">
-								{props.isTemplatesFailed ? (
-									<span>Template messages couldn't be loaded.</span>
-								) : (
-									<span>No templates have been registered yet.</span>
-								)}
-							</div>
-						)}
-
-						<TemplatesList
-							templates={templates}
-							onClick={(templateData) => chooseTemplate(templateData)}
-						/>
-					</div>
-				</div>
+				<TemplatesList
+					templates={templates}
+					onClick={(templateData) => chooseTemplate(templateData)}
+					displayRegisterTemplate={true}
+					isTemplatesFailed={props.isTemplatesFailed}
+				/>
 			)}
 
 			<Dialog open={isDialogVisible} onClose={hideDialog}>

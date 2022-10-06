@@ -1,26 +1,3 @@
-.bulkSendTemplateViaCSV__templatesOuterWrapper {
-	overflow: hidden;
-	background-color: rgba(0, 0, 45, 0.1);
-	border-radius: 10px;
-}
-
-.bulkSendTemplateViaCSV__templatesWrapper {
-	flex: 1 1;
-	max-height: 290px;
-	overflow-y: auto;
-	padding: 15px;
-}
-
-.bulkSendTemplateViaCSV__templatesWrapper .templateMessageWrapper {
-	margin-bottom: 15px !important;
-}
-
-.bulkSendTemplateViaCSV__templatesWrapper
-	.templateMessageWrapper
-	.chat__message {
-	margin-bottom: 0 !important;
-}
-
 .bulkSendTemplateViaCSV .MuiStepper-root {
 	width: 100%;
 }

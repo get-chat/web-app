@@ -1,29 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import {
-	Button,
-	Dialog,
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	Step,
-	StepLabel,
-	Stepper,
-} from '@material-ui/core';
+import { Button, Dialog, Step, StepLabel, Stepper } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
 import { csvToObj } from '../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import FileInput from '../FileInput';
-import TemplatesList from '../TemplatesList';
 import '../../styles/BulkSendTemplateViaCSV.css';
-import {
-	generateTemplateParamsByValues,
-	getTemplateParams,
-	templateParamToInteger,
-} from '../../helpers/TemplateMessageHelper';
+import { generateTemplateParamsByValues } from '../../helpers/TemplateMessageHelper';
 import { isEmptyString } from '../../helpers/Helpers';
 import { hasDuplicates } from '../../helpers/ArrayHelper';
 import StepUploadCSV from './components/StepUploadCSV';
@@ -233,6 +218,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				)}
 				{activeStep === STEP_SELECT_TEMPLATE && (
 					<StepSelectTemplate
+						t={t}
 						templates={templates}
 						prepareTemplateMessages={prepareTemplateMessages}
 					/>

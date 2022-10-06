@@ -1,15 +1,15 @@
 import React from 'react';
 import TemplatesList from '../../../TemplatesList';
 
-const StepSelectTemplate = ({ templates, prepareTemplateMessages }) => {
+const StepSelectTemplate = ({ t, templates, prepareTemplateMessages }) => {
 	return (
-		<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
-			<div className="bulkSendTemplateViaCSV__templatesWrapper">
-				<TemplatesList
-					templates={templates}
-					onClick={(template) => prepareTemplateMessages(template)}
-				/>
-			</div>
+		<div>
+			<TemplatesList
+				templates={templates}
+				onClick={(template) => prepareTemplateMessages(template)}
+				customSelectButtonTitle={t('Select')}
+				isTemplatesFailed={false}
+			/>
 		</div>
 	);
 };
