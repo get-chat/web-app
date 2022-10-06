@@ -111,6 +111,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 			setCsvHeader(result.header);
 			setCsvData(finalData);
+			setPrimaryKeyColumn(result.header[0]);
 
 			setActiveStep(
 				finalData.length > 0 ? STEP_PREVIEW_CSV_DATA : STEP_UPLOAD_CSV
