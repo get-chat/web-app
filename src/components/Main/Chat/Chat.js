@@ -73,6 +73,7 @@ import {
 	addPlus,
 	preparePhoneNumber,
 } from '../../../helpers/PhoneNumberHelper';
+import { ErrorBoundary } from '@sentry/react';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1747,23 +1748,25 @@ export default function Chat(props) {
 					}
 
 					return (
-						<ChatMessage
-							key={message[0]}
-							messageData={message[1]}
-							displayDate={willDisplayDate}
-							displaySender={willDisplaySender}
-							date={curMsgDate}
-							onPreview={(chatMessage) => props.previewMedia(chatMessage)}
-							templates={props.templates}
-							isTemplatesFailed={props.isTemplatesFailed}
-							goToMessageId={goToMessageId}
-							retryMessage={retryMessage}
-							onOptionsClick={(event, chatMessage) =>
-								displayOptionsMenu(event, chatMessage)
-							}
-							contactProvidersData={props.contactProvidersData}
-							retrieveContactData={props.retrieveContactData}
-						/>
+						<ErrorBoundary>
+							<ChatMessage
+								key={message[0]}
+								messageData={message[1]}
+								displayDate={willDisplayDate}
+								displaySender={willDisplaySender}
+								date={curMsgDate}
+								onPreview={(chatMessage) => props.previewMedia(chatMessage)}
+								templates={props.templates}
+								isTemplatesFailed={props.isTemplatesFailed}
+								goToMessageId={goToMessageId}
+								retryMessage={retryMessage}
+								onOptionsClick={(event, chatMessage) =>
+									displayOptionsMenu(event, chatMessage)
+								}
+								contactProvidersData={props.contactProvidersData}
+								retrieveContactData={props.retrieveContactData}
+							/>
+						</ErrorBoundary>
 					);
 				})}
 
