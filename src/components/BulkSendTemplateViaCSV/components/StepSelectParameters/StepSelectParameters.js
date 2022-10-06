@@ -62,8 +62,6 @@ const StepSelectParameters = ({
 
 	return (
 		<div className="template">
-			<div>{JSON.stringify(params)}</div>
-
 			{template?.components.map((comp, compIndex) => (
 				<div key={compIndex} className="template__component">
 					{comp.text}
