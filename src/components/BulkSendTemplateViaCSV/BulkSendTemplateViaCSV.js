@@ -126,10 +126,14 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		];
 	}
 
-	const updateParam = (event, index, paramKey) => {
+	const updateParam = (values, index, paramKey) => {
 		setParams((prevState) => {
 			const nextState = prevState;
-			nextState[index][paramKey].text = event.target.value;
+			// TODO: Combine values with the chosen separator
+			// TODO: Convert values to get.chat custom parameters
+			nextState[index][paramKey].text = Array.isArray(values)
+				? values.join(' ')
+				: values;
 
 			return { ...nextState };
 		});
