@@ -261,6 +261,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 								aria-label="primary-key"
 								value={primaryKeyColumn}
 								onChange={(event) => setPrimaryKeyColumn(event.target.value)}
+								row
 							>
 								{csvHeader
 									?.filter((headerColumn) => !isEmptyString(headerColumn))
