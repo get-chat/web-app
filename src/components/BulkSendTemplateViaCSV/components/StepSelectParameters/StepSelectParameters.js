@@ -5,6 +5,7 @@ import {
 } from '../../../../helpers/TemplateMessageHelper';
 import { TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
+import '../../../../styles/StepSelectParameters.css';
 
 const StepSelectParameters = ({
 	t,
@@ -36,13 +37,13 @@ const StepSelectParameters = ({
 	};
 
 	return (
-		<div>
+		<div className="template">
 			{template?.components.map((comp, compIndex) => (
-				<div key={compIndex}>
+				<div key={compIndex} className="template__component">
 					{comp.text}
 					<div>
 						{getTemplateParams(comp.text).map((param, paramIndex) => (
-							<div key={paramIndex}>
+							<div key={paramIndex} className="template__component__parameter">
 								<Autocomplete
 									multiple
 									options={csvHeader}
