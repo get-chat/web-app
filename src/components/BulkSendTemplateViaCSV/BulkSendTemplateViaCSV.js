@@ -5,48 +5,44 @@ import {
 	Button,
 	Dialog,
 	FormControl,
-	FormControlLabel,
-	FormLabel,
 	InputLabel,
 	MenuItem,
-	Radio,
-	RadioGroup,
 	Select,
 	Step,
 	StepLabel,
 	Stepper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
 } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
-import { csvToObj } from '../helpers/CSVHelper';
-import { preparePhoneNumber } from '../helpers/PhoneNumberHelper';
-import FileInput from './FileInput';
-import TemplatesList from './TemplatesList';
-import '../styles/BulkSendTemplateViaCSV.css';
+import { csvToObj } from '../../helpers/CSVHelper';
+import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
+import FileInput from '../FileInput';
+import TemplatesList from '../TemplatesList';
+import '../../styles/BulkSendTemplateViaCSV.css';
 import {
 	generateTemplateParamsByValues,
 	getTemplateParams,
 	templateParamToInteger,
-} from '../helpers/TemplateMessageHelper';
-import { isEmptyString } from '../helpers/Helpers';
-import { Alert, AlertTitle } from '@material-ui/lab';
-import { hasDuplicates } from '../helpers/ArrayHelper';
+} from '../../helpers/TemplateMessageHelper';
+import { isEmptyString } from '../../helpers/Helpers';
+import { hasDuplicates } from '../../helpers/ArrayHelper';
+import StepUploadCSV from './components/StepUploadCSV';
+import StepPreviewCSVData from './components/StepPreviewCSVData';
+import StepSelectPrimaryKey from './components/StepSelectPrimaryKey';
+import StepSelectTemplate from './components/StepSelectTemplate';
+import StepSelectParameters from './components/StepSelectParameters';
+import StepPreviewResult from './components/StepPreviewResult';
+
+export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
+export const PRIMARY_KEY_TYPE_TAG = 'tag';
 
 const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
 	const STEP_SELECT_TEMPLATE = 3;
-	const STEP_PREVIEW_RESULT = 4;
-
-	const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
-	const PRIMARY_KEY_TYPE_TAG = 'tag';
+	const STEP_SELECT_PARAMETERS = 4;
+	const STEP_PREVIEW_RESULT = 5;
 
 	const { t } = useTranslation();
 
@@ -138,8 +134,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		return [
 			t('Upload a CSV file'),
 			t('Preview CSV data'),
-			t('Select the primary key column'),
+			t('Select the primary key'),
 			t('Select a template'),
+			t('Select parameters'),
 			t('Preview'),
 		];
 	}
@@ -219,143 +216,36 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				</Stepper>
 
 				{activeStep === STEP_UPLOAD_CSV && (
-					<div>
-						<div>
-							{t(
-								'You can upload a CSV file that contains a phone number and template parameters in every row.'
-							)}
-						</div>
-						{csvError !== undefined && (
-							<Alert
-								severity="error"
-								className="bulkSendTemplateViaCSV__csvError"
-							>
-								<AlertTitle>{t('Error')}</AlertTitle>
-								{csvError}
-							</Alert>
-						)}
-					</div>
+					<StepUploadCSV t={t} csvError={csvError} />
 				)}
 				{activeStep === STEP_PREVIEW_CSV_DATA && (
-					<div>
-						<TableContainer>
-							<Table>
-								<TableHead>
-									<TableRow>
-										{csvHeader?.map((headerItem, headerIndex) => (
-											<TableCell key={headerIndex}>{headerItem}</TableCell>
-										))}
-									</TableRow>
-								</TableHead>
-								<TableBody>
-									{csvData?.map((row, rowIndex) => (
-										<TableRow key={rowIndex}>
-											{row?.map((column, columnIndex) => (
-												<TableCell key={columnIndex} component="th" scope="row">
-													{column}
-												</TableCell>
-											))}
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</TableContainer>
-					</div>
+					<StepPreviewCSVData csvHeader={csvHeader} csvData={csvData} />
 				)}
 				{activeStep === STEP_SELECT_PRIMARY_KEY && (
-					<div>
-						<FormControl>
-							<FormLabel>
-								{t('Select the column that contains phone numbers or tags')}
-							</FormLabel>
-							<RadioGroup
-								aria-label="primary-key"
-								value={primaryKeyColumn}
-								onChange={(event) => setPrimaryKeyColumn(event.target.value)}
-								row
-							>
-								{csvHeader
-									?.filter((headerColumn) => !isEmptyString(headerColumn))
-									?.map((headerColumn, headerColumnIndex) => (
-										<FormControlLabel
-											value={headerColumn}
-											control={<Radio />}
-											label={headerColumn}
-											key={headerColumnIndex}
-										/>
-									))}
-							</RadioGroup>
-						</FormControl>
-
-						<FormControl>
-							<FormLabel>{t('Select the type of receivers')}</FormLabel>
-							<RadioGroup
-								aria-label="primary-key"
-								value={primaryKeyType}
-								onChange={(event) => setPrimaryKeyType(event.target.value)}
-								row
-							>
-								<FormControlLabel
-									value={PRIMARY_KEY_TYPE_WA_ID}
-									control={<Radio />}
-									label={t('Phone numbers (canonical)')}
-								/>
-								<FormControlLabel
-									value={PRIMARY_KEY_TYPE_TAG}
-									control={<Radio />}
-									label={t('Tags')}
-								/>
-							</RadioGroup>
-						</FormControl>
-					</div>
+					<StepSelectPrimaryKey
+						t={t}
+						csvHeader={csvHeader}
+						primaryKeyColumn={primaryKeyColumn}
+						setPrimaryKeyColumn={setPrimaryKeyColumn}
+						primaryKeyType={primaryKeyType}
+						setPrimaryKeyType={setPrimaryKeyType}
+					/>
 				)}
 				{activeStep === STEP_SELECT_TEMPLATE && (
-					<div className="bulkSendTemplateViaCSV__templatesOuterWrapper">
-						<div className="bulkSendTemplateViaCSV__templatesWrapper">
-							<TemplatesList
-								templates={templates}
-								onClick={(template) => prepareTemplateMessages(template)}
-							/>
-						</div>
-					</div>
+					<StepSelectTemplate
+						templates={templates}
+						prepareTemplateMessages={prepareTemplateMessages}
+					/>
 				)}
-				{activeStep === STEP_PREVIEW_RESULT && (
-					<div>
-						{template?.components.map((comp, compIndex) => (
-							<div key={compIndex}>
-								{comp.text}
-								<div>
-									{getTemplateParams(comp.text).map((param, paramIndex) => (
-										<FormControl key={paramIndex}>
-											<InputLabel>{param}</InputLabel>
-											<Select
-												value={
-													params[compIndex]
-														? params[compIndex][templateParamToInteger(param)]
-																.text
-														: ''
-												}
-												onChange={(event) =>
-													updateParam(
-														event,
-														compIndex,
-														templateParamToInteger(param)
-													)
-												}
-											>
-												{csvHeader?.map((headerItem, headerIndex) => (
-													<MenuItem key={headerIndex} value={headerItem}>
-														{headerItem}
-													</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-									))}
-								</div>
-							</div>
-						))}
-					</div>
+				{activeStep === STEP_SELECT_PARAMETERS && (
+					<StepSelectParameters
+						csvHeader={csvHeader}
+						template={template}
+						params={params}
+						updateParam={updateParam}
+					/>
 				)}
+				{activeStep === STEP_SELECT_PARAMETERS && <StepPreviewResult />}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">

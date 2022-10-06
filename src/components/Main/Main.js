@@ -53,7 +53,7 @@ import { useTranslation } from 'react-i18next';
 import { AppConfig } from '../../contexts/AppConfig';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
-import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV';
+import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
