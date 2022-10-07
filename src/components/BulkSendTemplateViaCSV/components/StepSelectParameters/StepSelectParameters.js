@@ -56,7 +56,9 @@ const StepSelectParameters = ({
 
 		// Update final params
 		updateParam(
-			valuesArray.join(separators[compIndex]?.[paramInt] ?? ' '),
+			valuesArray
+				.map((value) => `{{ GET_CHAT_CUSTOM.${value} }}`)
+				.join(separators[compIndex]?.[paramInt] ?? ' '),
 			compIndex,
 			paramInt
 		);
