@@ -42,6 +42,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [csvError, setCsvError] = useState();
 	const [template, setTemplate] = useState();
 	const [params, setParams] = useState({});
+	const [paramsError, setParamsError] = useState();
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
 	const [primaryKeyType, setPrimaryKeyType] = useState(PRIMARY_KEY_TYPE_WA_ID);
 
@@ -121,7 +122,10 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			(error) => {
 				if (error === BreakException) {
 					hasError = true;
-					// TODO: Handle missing parameters
+					setParamsError({
+						title: t('Missing parameters'),
+						details: t('You need to fill the parameters!'),
+					});
 				} else {
 					throw error;
 				}
@@ -130,6 +134,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 		if (hasError) return;
 
+		setParamsError(undefined);
 		setActiveStep(STEP_PREVIEW_RESULT);
 
 		console.log(templateMessageData);
@@ -248,6 +253,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						csvHeader={csvHeader}
 						template={template}
 						params={params}
+						paramsError={paramsError}
 						updateHeaderMediaParam={updateHeaderMediaParam}
 						updateParam={updateParam}
 					/>

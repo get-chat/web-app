@@ -5,7 +5,7 @@ import {
 	templateParamToInteger,
 } from '../../../../helpers/TemplateMessageHelper';
 import { Button, TextField } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { Alert, AlertTitle, Autocomplete } from '@material-ui/lab';
 import '../../../../styles/StepSelectParameters.css';
 
 const StepSelectParameters = ({
@@ -13,6 +13,7 @@ const StepSelectParameters = ({
 	csvHeader,
 	template,
 	params,
+	paramsError,
 	updateHeaderMediaParam,
 	updateParam,
 }) => {
@@ -151,6 +152,15 @@ const StepSelectParameters = ({
 					)}
 				</div>
 			))}
+
+			{paramsError && (
+				<div className="mt-3">
+					<Alert severity="error">
+						<AlertTitle>{paramsError.title}</AlertTitle>
+						{paramsError.details}
+					</Alert>
+				</div>
+			)}
 		</div>
 	);
 };
