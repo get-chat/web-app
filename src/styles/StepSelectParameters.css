@@ -9,6 +9,11 @@
 	margin-bottom: 20px;
 }
 
+.template__component > h6 {
+	color: rgba(0, 0, 45, 0.5);
+	margin-bottom: 5px;
+}
+
 /*.template__component__parameter {
 	padding: 15px 20px;
 	border-radius: 10px;

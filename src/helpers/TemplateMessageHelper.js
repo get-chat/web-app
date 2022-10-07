@@ -1,9 +1,5 @@
 import { isEmptyString } from './Helpers';
-import {
-	BreakException,
-	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
-} from '../Constants';
-import PubSub from 'pubsub-js';
+import { BreakException } from '../Constants';
 
 export const getTemplateParams = (text) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
@@ -162,4 +158,12 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 	}
 
 	return preparedParams;
+};
+
+export const componentHasMediaFormat = (comp) => {
+	return (
+		comp.format === 'IMAGE' ||
+		comp.format === 'VIDEO' ||
+		comp.format === 'DOCUMENT'
+	);
 };

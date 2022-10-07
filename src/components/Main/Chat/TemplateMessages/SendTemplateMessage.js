@@ -4,6 +4,7 @@ import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import {
+	componentHasMediaFormat,
 	generateFinalTemplateParams,
 	generateTemplateParamsByValues,
 	getTemplateParams,
@@ -138,9 +139,7 @@ function SendTemplateMessage(props) {
 					<div className="sendTemplateMessage__section">
 						<h6>{comp.type}</h6>
 						<div>
-							{(comp.format === 'IMAGE' ||
-								comp.format === 'VIDEO' ||
-								comp.format === 'DOCUMENT') && (
+							{componentHasMediaFormat(comp) && (
 								<div>
 									<div className="sendTemplateMessage__section__fileType">
 										{t('Type: %s', comp.format.toLowerCase())}

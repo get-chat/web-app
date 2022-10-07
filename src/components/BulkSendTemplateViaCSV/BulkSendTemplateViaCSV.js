@@ -145,12 +145,21 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		];
 	}
 
-	const updateParam = (values, index, paramKey) => {
+	const updateHeaderMediaParam = (value, index, format) => {
 		setParams((prevState) => {
 			const nextState = prevState;
-			nextState[index][paramKey].text = Array.isArray(values)
-				? values.join(' ')
-				: values;
+			nextState[index][0][format.toLowerCase()].link = value;
+			return { ...nextState };
+		});
+	};
+
+	const updateParam = (value, index, paramKey) => {
+		setParams((prevState) => {
+			const nextState = prevState;
+			// Parameter value is an array for multiple choices
+			nextState[index][paramKey].text = Array.isArray(value)
+				? value.join(' ')
+				: value;
 
 			return { ...nextState };
 		});
@@ -253,6 +262,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						csvHeader={csvHeader}
 						template={template}
 						params={params}
+						updateHeaderMediaParam={updateHeaderMediaParam}
 						updateParam={updateParam}
 					/>
 				)}
