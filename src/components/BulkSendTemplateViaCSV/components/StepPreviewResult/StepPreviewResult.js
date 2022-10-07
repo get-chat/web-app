@@ -44,8 +44,6 @@ const StepPreviewResult = ({ t, templates, template, params, csvData }) => {
 	useEffect(() => {
 		if (!template) return;
 
-		console.log(csvData);
-
 		const replacedParams = replaceGetChatParams();
 
 		const preparedParams = generateFinalTemplateParams(
@@ -63,8 +61,7 @@ const StepPreviewResult = ({ t, templates, template, params, csvData }) => {
 
 	return (
 		<div className="stepPreviewResult">
-			<h4>{t('Preview')}</h4>
-			<div className="stepPreviewResult__wrapper mt-1">
+			<div className="stepPreviewResult__wrapper">
 				{messageData && (
 					<ErrorBoundary>
 						<ChatMessage messageData={messageData} templates={templates} />
