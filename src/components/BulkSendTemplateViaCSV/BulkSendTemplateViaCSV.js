@@ -208,6 +208,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setCsvError(undefined);
 			setTemplate(undefined);
 			setParams({});
+			setParamsError(undefined);
 			setPrimaryKeyColumn('');
 			setPrimaryKeyType(PRIMARY_KEY_TYPE_WA_ID);
 			setActiveStep(STEP_UPLOAD_CSV);
