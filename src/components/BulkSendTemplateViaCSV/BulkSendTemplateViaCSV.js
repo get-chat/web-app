@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Button, Dialog, Step, StepLabel, Stepper } from '@material-ui/core';
+import { Button, Dialog } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
 import { csvToObj } from '../../helpers/CSVHelper';
@@ -21,6 +21,7 @@ import StepSelectTemplate from './components/StepSelectTemplate';
 import StepSelectParameters from './components/StepSelectParameters';
 import StepPreviewResult from './components/StepPreviewResult';
 import { BreakException } from '../../Constants';
+import BulkSendStepper from './components/BulkSendStepper';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
@@ -134,17 +135,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		console.log(templateMessageData);
 	};
 
-	function getSteps() {
-		return [
-			t('Upload a CSV file'),
-			t('Preview the data'),
-			t('Select the primary key'),
-			t('Select a template'),
-			t('Select the parameters'),
-			t('Preview'),
-		];
-	}
-
 	const updateHeaderMediaParam = (value, index, format) => {
 		setParams((prevState) => {
 			const nextState = prevState;
@@ -225,13 +215,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		<Dialog open={open} onClose={close} className="bulkSendTemplateViaCSV">
 			<DialogTitle>{t('Bulk send template via CSV')}</DialogTitle>
 			<DialogContent>
-				<Stepper activeStep={activeStep} alternativeLabel>
-					{getSteps().map((label) => (
-						<Step key={label}>
-							<StepLabel>{label}</StepLabel>
-						</Step>
-					))}
-				</Stepper>
+				<BulkSendStepper t={t} activeStep={activeStep} />
 
 				{activeStep === STEP_UPLOAD_CSV && (
 					<StepUploadCSV t={t} csvError={csvError} />
