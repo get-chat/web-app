@@ -12,12 +12,14 @@ const StepPreviewResult = ({ templates, template, params }) => {
 	}, [template, params]);
 
 	return (
-		<div>
-			{messageData && (
-				<ErrorBoundary>
-					<ChatMessage messageData={messageData} templates={templates} />
-				</ErrorBoundary>
-			)}
+		<div className="stepPreviewResult">
+			<div className="stepPreviewResult__wrapper">
+				{messageData && (
+					<ErrorBoundary>
+						<ChatMessage messageData={messageData} templates={templates} />
+					</ErrorBoundary>
+				)}
+			</div>
 		</div>
 	);
 };

@@ -327,7 +327,7 @@ a.chat__document:hover {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-	background-color: #e8e0dc;
+	background-color: var(--chat-bg);
 	padding: 10px 30px 0 30px;
 	overflow-y: auto;
 	overflow-x: hidden;
