@@ -221,7 +221,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 					<StepUploadCSV t={t} csvError={csvError} />
 				)}
 				{activeStep === STEP_PREVIEW_CSV_DATA && (
-					<StepPreviewCSVData csvHeader={csvHeader} csvData={csvData} />
+					<StepPreviewCSVData t={t} csvHeader={csvHeader} csvData={csvData} />
 				)}
 				{activeStep === STEP_SELECT_PRIMARY_KEY && (
 					<StepSelectPrimaryKey

@@ -8,7 +8,9 @@ import {
 	TableRow,
 } from '@material-ui/core';
 
-const StepPreviewCSVData = ({ csvHeader, csvData }) => {
+const StepPreviewCSVData = ({ t, csvHeader, csvData }) => {
+	const previewLimit = 5;
+
 	return (
 		<div>
 			<TableContainer>
@@ -21,7 +23,7 @@ const StepPreviewCSVData = ({ csvHeader, csvData }) => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{csvData?.map((row, rowIndex) => (
+						{csvData?.slice(0, previewLimit)?.map((row, rowIndex) => (
 							<TableRow key={rowIndex}>
 								{row?.map((column, columnIndex) => (
 									<TableCell key={columnIndex} component="th" scope="row">
@@ -33,6 +35,12 @@ const StepPreviewCSVData = ({ csvHeader, csvData }) => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+
+			{(csvData?.length ?? 0) > previewLimit && (
+				<div className="mt-3">
+					{t('There are %d more row(s)...', csvData.length - previewLimit)}
+				</div>
+			)}
 		</div>
 	);
 };
