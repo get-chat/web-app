@@ -43,6 +43,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [template, setTemplate] = useState();
 	const [params, setParams] = useState({});
 	const [paramsError, setParamsError] = useState();
+	const [templateWithParams, setTemplateWithParams] = useState();
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
 	const [primaryKeyType, setPrimaryKeyType] = useState(PRIMARY_KEY_TYPE_WA_ID);
 
@@ -116,7 +117,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const prepareTemplateMessage = () => {
 		let hasError = false;
 
-		const templateMessageData = generateFinalTemplateParams(
+		const preparedParams = generateFinalTemplateParams(
 			template,
 			params,
 			(error) => {
@@ -134,10 +135,15 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 
 		if (hasError) return;
 
-		setParamsError(undefined);
-		setActiveStep(STEP_PREVIEW_RESULT);
+		const finalData = { ...template };
+		finalData.params = Object.values(preparedParams);
 
-		console.log(templateMessageData);
+		console.log(finalData);
+
+		setTemplateWithParams(finalData);
+		setParamsError(undefined);
+
+		setActiveStep(STEP_PREVIEW_RESULT);
 	};
 
 	const updateHeaderMediaParam = (value, index, format) => {
@@ -262,8 +268,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				{activeStep === STEP_PREVIEW_RESULT && (
 					<StepPreviewResult
 						templates={templates}
-						template={template}
-						params={params}
+						templateWithParams={templateWithParams}
 					/>
 				)}
 			</DialogContent>

@@ -3,13 +3,14 @@ import ChatMessage from '../../../Main/Chat/ChatMessage/ChatMessage';
 import { ErrorBoundary } from '@sentry/react';
 import ChatMessageClass from '../../../../ChatMessageClass';
 
-const StepPreviewResult = ({ templates, template, params }) => {
+const StepPreviewResult = ({ templates, templateWithParams }) => {
 	const [messageData, setMessageData] = useState();
 
 	useEffect(() => {
-		// TODO: Inject params
-		setMessageData(ChatMessageClass.fromTemplate(template));
-	}, [template, params]);
+		const data = { ...templateWithParams };
+		data.components = data.params;
+		setMessageData(ChatMessageClass.fromTemplate(data));
+	}, [templateWithParams]);
 
 	return (
 		<div className="stepPreviewResult">
