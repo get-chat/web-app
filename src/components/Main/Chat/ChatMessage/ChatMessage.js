@@ -128,7 +128,7 @@ function ChatMessage({
 							<ChatMessageImage
 								data={data}
 								source={data.generateImageLink()}
-								onPreview={() => onPreview(data)}
+								onPreview={() => onPreview?.(data)}
 							/>
 						)}
 
@@ -136,7 +136,7 @@ function ChatMessage({
 							<ChatMessageVideo
 								data={data}
 								source={data.generateVideoLink()}
-								onPreview={() => onPreview(data)}
+								onPreview={() => onPreview?.(data)}
 							/>
 						)}
 
@@ -164,7 +164,7 @@ function ChatMessage({
 								data={data}
 								templateData={templateData}
 								isTemplatesFailed={isTemplatesFailed}
-								onPreview={() => onPreview(data)}
+								onPreview={() => onPreview?.(data)}
 							/>
 						)}
 
