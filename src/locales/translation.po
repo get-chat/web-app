@@ -563,3 +563,6 @@ msgstr ""
 
 msgid "Upload CSV"
 msgstr ""
+
+msgid "Next"
+msgstr ""

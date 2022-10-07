@@ -183,5 +183,6 @@
 	"Type: %s": "",
 	"Retry": "",
 	"Please wait, as %s are being loaded...": "",
-	"Upload CSV": ""
+	"Upload CSV": "",
+	"Next": ""
 }

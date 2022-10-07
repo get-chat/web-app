@@ -4,7 +4,7 @@ import {
 	getTemplateParams,
 	templateParamToInteger,
 } from '../../../../helpers/TemplateMessageHelper';
-import { TextField } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import '../../../../styles/StepSelectParameters.css';
 
@@ -138,6 +138,16 @@ const StepSelectParameters = ({
 								</div>
 							))}
 						</>
+					)}
+
+					{comp.type === 'BUTTONS' && (
+						<div>
+							{comp.buttons.map((button, buttonIndex) => (
+								<Button key={buttonIndex} color="primary" disabled={true}>
+									{button.text}
+								</Button>
+							))}
+						</div>
 					)}
 				</div>
 			))}
