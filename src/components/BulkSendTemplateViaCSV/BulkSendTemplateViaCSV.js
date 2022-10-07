@@ -188,6 +188,8 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		switch (activeStep) {
 			case STEP_SELECT_PRIMARY_KEY:
 				return !isEmptyString(primaryKeyColumn);
+			case STEP_SELECT_TEMPLATE:
+				return false;
 			default:
 				return true;
 		}
