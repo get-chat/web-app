@@ -283,22 +283,30 @@ export class ChatMessageClass {
 	}
 
 	getHeaderFileLink(type) {
-		if (this.type === ChatMessageClass.TYPE_TEMPLATE) {
-			if (this.templateParameters) {
-				for (let i = 0; i < this.templateParameters.length; i++) {
-					const component = this.templateParameters[i];
+		try {
+			if (this.type === ChatMessageClass.TYPE_TEMPLATE) {
+				if (this.templateParameters) {
+					for (let i = 0; i < this.templateParameters.length; i++) {
+						const component = this.templateParameters[i];
 
-					if (component.type === 'header') {
-						for (let j = 0; j < component.parameters.length; j++) {
-							const param = component.parameters[j];
+						if (
+							component &&
+							component.type === 'header' &&
+							component.parameters.length
+						) {
+							for (let j = 0; j < component.parameters.length; j++) {
+								const param = component.parameters[j];
 
-							if (param.type === type) {
-								return param[type]?.link;
+								if (param.type === type) {
+									return param[type]?.link;
+								}
 							}
 						}
 					}
 				}
 			}
+		} catch (error) {
+			console.error(error);
 		}
 
 		return undefined;
