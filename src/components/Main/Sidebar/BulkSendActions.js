@@ -18,7 +18,9 @@ function BulkSendActions(props) {
 			const waIds = [];
 
 			// Extract and collect phone numbers
-			result.data.forEach((row) => {
+			result.data.forEach((curRow) => {
+				const row = Object.values(curRow);
+
 				if (row.length > 0) {
 					// Extract only digits
 					const waId = preparePhoneNumber(row[0]);

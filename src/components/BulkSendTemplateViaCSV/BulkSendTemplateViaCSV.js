@@ -5,7 +5,6 @@ import { Button, Dialog } from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import { useTranslation } from 'react-i18next';
 import { csvToObj } from '../../helpers/CSVHelper';
-import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import FileInput from '../FileInput';
 import '../../styles/BulkSendTemplateViaCSV.css';
 import {
@@ -55,22 +54,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		setCsvError(undefined);
 
 		csvToObj(file[0], (result) => {
-			const finalData = [];
-
-			// Extract and collect phone numbers
-			result.data.forEach((row) => {
-				if (row.length > 0) {
-					// Extract only digits
-					const waId = preparePhoneNumber(row[0]);
-					if (waId) {
-						// Replace original phone number with prepared wa id
-						row[0] = waId;
-						// Collect rows if they contain a proper phone number
-						finalData.push(row);
-					}
-				}
-			});
-
 			let hasHeaderError = false;
 
 			if (result.header.length === 0) {
@@ -98,11 +81,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			}
 
 			setCsvHeader(result.header);
-			setCsvData(finalData);
+			setCsvData(result.data);
 			setPrimaryKeyColumn(result.header[0]);
 
 			setActiveStep(
-				finalData.length > 0 ? STEP_PREVIEW_CSV_DATA : STEP_UPLOAD_CSV
+				result.data.length > 0 ? STEP_PREVIEW_CSV_DATA : STEP_UPLOAD_CSV
 			);
 		});
 	};
@@ -267,8 +250,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 				)}
 				{activeStep === STEP_PREVIEW_RESULT && (
 					<StepPreviewResult
+						t={t}
 						templates={templates}
-						templateWithParams={templateWithParams}
+						template={template}
+						params={params}
+						csvData={csvData}
 					/>
 				)}
 			</DialogContent>

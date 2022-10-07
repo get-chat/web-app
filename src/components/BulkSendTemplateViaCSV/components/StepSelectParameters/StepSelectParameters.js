@@ -54,13 +54,17 @@ const StepSelectParameters = ({
 		updateFinalParams(valuesArray, compIndex, param);
 	};
 
+	const convertToGetChatCustomParam = (str) => {
+		return `{{ GET_CHAT_CUSTOM.${str} }}`;
+	};
+
 	const updateFinalParams = (valuesArray, compIndex, param) => {
 		const paramInt = templateParamToInteger(param);
 
 		// Update final params
 		updateParam(
 			valuesArray
-				.map((value) => `{{ GET_CHAT_CUSTOM.${value} }}`)
+				.map((value) => convertToGetChatCustomParam(value))
 				.join(separators[compIndex]?.[paramInt] ?? ' '),
 			compIndex,
 			paramInt
@@ -77,8 +81,13 @@ const StepSelectParameters = ({
 							<Autocomplete
 								options={csvHeader}
 								getOptionLabel={(headerItem) => headerItem}
+								//value={}
 								onChange={(event, value) =>
-									updateHeaderMediaParam(value, compIndex, comp.format)
+									updateHeaderMediaParam(
+										convertToGetChatCustomParam(value),
+										compIndex,
+										comp.format
+									)
 								}
 								renderInput={(autoCompleteParams) => (
 									<TextField

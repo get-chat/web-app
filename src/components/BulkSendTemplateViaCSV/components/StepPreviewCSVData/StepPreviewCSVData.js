@@ -25,7 +25,7 @@ const StepPreviewCSVData = ({ t, csvHeader, csvData }) => {
 					<TableBody>
 						{csvData?.slice(0, previewLimit)?.map((row, rowIndex) => (
 							<TableRow key={rowIndex}>
-								{row?.map((column, columnIndex) => (
+								{Object.values(row)?.map((column, columnIndex) => (
 									<TableCell key={columnIndex} component="th" scope="row">
 										{column}
 									</TableCell>
