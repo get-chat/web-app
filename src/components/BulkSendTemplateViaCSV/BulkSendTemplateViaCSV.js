@@ -8,7 +8,10 @@ import { csvToObj } from '../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import FileInput from '../FileInput';
 import '../../styles/BulkSendTemplateViaCSV.css';
-import { generateTemplateParamsByValues } from '../../helpers/TemplateMessageHelper';
+import {
+	generateFinalTemplateParams,
+	generateTemplateParamsByValues,
+} from '../../helpers/TemplateMessageHelper';
 import { isEmptyString } from '../../helpers/Helpers';
 import { hasDuplicates } from '../../helpers/ArrayHelper';
 import StepUploadCSV from './components/StepUploadCSV';
@@ -17,6 +20,7 @@ import StepSelectPrimaryKey from './components/StepSelectPrimaryKey';
 import StepSelectTemplate from './components/StepSelectTemplate';
 import StepSelectParameters from './components/StepSelectParameters';
 import StepPreviewResult from './components/StepPreviewResult';
+import { BreakException } from '../../Constants';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
@@ -100,19 +104,34 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 		});
 	};
 
-	const prepareTemplateMessages = (template) => {
+	const selectTemplate = (template) => {
 		setTemplate(template);
 		setParams(generateTemplateParamsByValues(template, undefined));
 
-		const finalData = [];
-		csvData?.forEach((curData) => {
-			// TODO: Inject parameters into template data
-			finalData.push(generateTemplateParamsByValues(template, curData));
-		});
-
 		setActiveStep(STEP_SELECT_PARAMETERS);
+	};
 
-		console.log(finalData);
+	const prepareTemplateMessage = () => {
+		let hasError = false;
+
+		const templateMessageData = generateFinalTemplateParams(
+			template,
+			params,
+			(error) => {
+				if (error === BreakException) {
+					hasError = true;
+					// TODO: Handle missing parameters
+				} else {
+					throw error;
+				}
+			}
+		);
+
+		if (hasError) return;
+
+		setActiveStep(STEP_PREVIEW_RESULT);
+
+		console.log(templateMessageData);
 	};
 
 	function getSteps() {
@@ -145,6 +164,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			case STEP_PREVIEW_RESULT:
 				// TODO: Bulk send template
 				close();
+				break;
+			case STEP_SELECT_PARAMETERS:
+				prepareTemplateMessage();
 				break;
 			default:
 				setActiveStep((prevState) => prevState + 1);
@@ -222,7 +244,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 					<StepSelectTemplate
 						t={t}
 						templates={templates}
-						prepareTemplateMessages={prepareTemplateMessages}
+						selectTemplate={selectTemplate}
 					/>
 				)}
 				{activeStep === STEP_SELECT_PARAMETERS && (

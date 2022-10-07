@@ -4,6 +4,7 @@ import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import {
+	generateFinalTemplateParams,
 	generateTemplateParamsByValues,
 	getTemplateParams,
 	templateParamToInteger,
@@ -11,8 +12,10 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../../../contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR } from '../../../../Constants';
-import { isEmptyString } from '../../../../helpers/Helpers';
+import {
+	BreakException,
+	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
+} from '../../../../Constants';
 import PublishIcon from '@material-ui/icons/Publish';
 import LinkIcon from '@material-ui/icons/Link';
 
@@ -62,61 +65,27 @@ function SendTemplateMessage(props) {
 	};
 
 	const send = (isBulk) => {
-		const preparedParams = {};
-		const components = { ...template.components };
-
-		const BreakException = {};
-
-		try {
-			Object.entries(components).forEach((paramEntry, paramIndex) => {
-				const key = paramEntry[0];
-				const component = paramEntry[1];
-
-				if (params[key]) {
-					const paramsArray = Object.values(params[key]);
-
-					// Check if has empty params and throw BreakException if found
-					paramsArray.forEach((param) => {
-						if (
-							isEmptyString(
-								param.text ??
-									param.image?.link ??
-									param.video?.link ??
-									param.document?.link
-							)
-						) {
-							throw BreakException;
-						}
-					});
-
-					/*const localizableParams = [];
-					paramsArray.forEach((paramArrayItem) => {
-						localizableParams.push({
-							default: paramArrayItem.text,
-						});
-					});*/
-
-					preparedParams[component.type] = {
-						type: component.type.toLowerCase(),
-						parameters: paramsArray,
-						//localizable_params: localizableParams
-					};
+		let hasError = false;
+		const preparedParams = generateFinalTemplateParams(
+			template,
+			params,
+			(error) => {
+				if (error === BreakException) {
+					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+						{
+							title: t('Missing parameters'),
+							details: t('You need to fill the parameters!'),
+						},
+					]);
+					props.setSending(false);
+					hasError = true;
+				} else {
+					throw error;
 				}
-			});
-		} catch (error) {
-			if (error === BreakException) {
-				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
-					{
-						title: t('Missing parameters'),
-						details: t('You need to fill the parameters!'),
-					},
-				]);
-				props.setSending(false);
-				return;
-			} else {
-				throw error;
 			}
-		}
+		);
+
+		if (hasError) return;
 
 		const finalData = template;
 		finalData.params = Object.values(preparedParams);
