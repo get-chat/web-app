@@ -32,13 +32,24 @@ const iconStyles = {
 	fontSize: '15px',
 };
 
-function ChatMessage(props) {
+function ChatMessage({
+	messageData,
+	templates,
+	displaySender,
+	displayDate,
+	contactProvidersData,
+	onOptionsClick,
+	goToMessageId,
+	onPreview,
+	isTemplatesFailed,
+	retryMessage,
+}) {
 	const { t } = useTranslation();
 
-	const data = props.messageData;
+	const data = messageData;
 	const templateData =
 		data.type === ChatMessageClass.TYPE_TEMPLATE
-			? props.templates[data.templateName]
+			? templates[data.templateName]
 			: undefined;
 
 	const dateFormat = 'H:mm';
@@ -50,7 +61,7 @@ function ChatMessage(props) {
 				'chat__message__outer' + (data.isFromUs === true ? ' outgoing' : '')
 			}
 		>
-			{props.displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
+			{displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
 
 			{data.assignmentEvent && (
 				<ChatAssignmentEvent data={data.assignmentEvent} />
@@ -60,13 +71,13 @@ function ChatMessage(props) {
 
 			{!data.assignmentEvent && !data.taggingEvent && (
 				<div>
-					{(props.displaySender || props.displayDate) && (
+					{(displaySender || displayDate) && (
 						<PrintMessage
 							className="chat__name"
 							message={
 								data.isFromUs === true
 									? data.senderName
-									: props.contactProvidersData[data.waId]?.[0]?.name ??
+									: contactProvidersData[data.waId]?.[0]?.name ??
 									  data.senderName
 							}
 						/>
@@ -87,16 +98,14 @@ function ChatMessage(props) {
 							(data.isFromUs === true
 								? (data.isRead() ? ' chat__received' : '') + ' chat__outgoing'
 								: '') +
-							(!props.displaySender && !props.displayDate
-								? ' hiddenSender'
-								: '') +
+							(!displaySender && !displayDate ? ' hiddenSender' : '') +
 							(' messageType__' + data.type) +
 							(data.isFailed ? ' chat__failed' : '')
 						}
 					>
 						<div
 							className="chat__message__more"
-							onClick={(event) => props.onOptionsClick(event, data)}
+							onClick={(event) => onOptionsClick(event, data)}
 						>
 							<ExpandMoreIcon />
 						</div>
@@ -111,7 +120,7 @@ function ChatMessage(props) {
 						{data.contextMessage !== undefined && (
 							<ContextChatMessage
 								contextMessage={data.contextMessage}
-								goToMessageId={props.goToMessageId}
+								goToMessageId={goToMessageId}
 							/>
 						)}
 
@@ -119,7 +128,7 @@ function ChatMessage(props) {
 							<ChatMessageImage
 								data={data}
 								source={data.generateImageLink()}
-								onPreview={() => props.onPreview(data)}
+								onPreview={() => onPreview(data)}
 							/>
 						)}
 
@@ -127,7 +136,7 @@ function ChatMessage(props) {
 							<ChatMessageVideo
 								data={data}
 								source={data.generateVideoLink()}
-								onPreview={() => props.onPreview(data)}
+								onPreview={() => onPreview(data)}
 							/>
 						)}
 
@@ -154,8 +163,8 @@ function ChatMessage(props) {
 							<ChatMessageTemplate
 								data={data}
 								templateData={templateData}
-								isTemplatesFailed={props.isTemplatesFailed}
-								onPreview={() => props.onPreview(data)}
+								isTemplatesFailed={isTemplatesFailed}
+								onPreview={() => onPreview(data)}
 							/>
 						)}
 
@@ -199,7 +208,7 @@ function ChatMessage(props) {
 										<Button
 											color="inherit"
 											size="small"
-											onClick={() => props.retryMessage(data)}
+											onClick={() => retryMessage(data)}
 										>
 											{t('Retry')}
 										</Button>

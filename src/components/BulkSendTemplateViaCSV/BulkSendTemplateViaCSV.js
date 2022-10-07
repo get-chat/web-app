@@ -259,7 +259,13 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 						updateParam={updateParam}
 					/>
 				)}
-				{activeStep === STEP_SELECT_PARAMETERS && <StepPreviewResult />}
+				{activeStep === STEP_PREVIEW_RESULT && (
+					<StepPreviewResult
+						templates={templates}
+						template={template}
+						params={params}
+					/>
+				)}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">

@@ -1748,9 +1748,8 @@ export default function Chat(props) {
 					}
 
 					return (
-						<ErrorBoundary>
+						<ErrorBoundary key={message[0]}>
 							<ChatMessage
-								key={message[0]}
 								messageData={message[1]}
 								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}
