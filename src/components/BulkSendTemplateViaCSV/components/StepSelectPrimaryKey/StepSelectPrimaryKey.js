@@ -56,7 +56,7 @@ const StepSelectPrimaryKey = ({
 					<FormControlLabel
 						value={PRIMARY_KEY_TYPE_WA_ID}
 						control={<Radio />}
-						label={t('Phone numbers (canonical)')}
+						label={t('Phone numbers')}
 					/>
 					<FormControlLabel
 						value={PRIMARY_KEY_TYPE_TAG}
