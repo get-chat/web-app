@@ -14,6 +14,8 @@ const StepSelectParameters = ({
 	params,
 	updateParam,
 }) => {
+	const isSeparatorEnabled = false;
+
 	const [rawValues, setRawValues] = useState({});
 	const [separators, setSeparators] = useState({});
 
@@ -88,20 +90,22 @@ const StepSelectParameters = ({
 									)}
 								/>
 
-								{rawValues[compIndex]?.[templateParamToInteger(param)]?.length >
-									1 && (
-									<TextField
-										value={
-											separators[compIndex]?.[templateParamToInteger(param)] ??
-											''
-										}
-										onChange={(event) =>
-											updateSeparator(event, compIndex, param)
-										}
-										label={t('Separator (leave blank for space)')}
-										type="text"
-									/>
-								)}
+								{isSeparatorEnabled &&
+									rawValues[compIndex]?.[templateParamToInteger(param)]
+										?.length > 1 && (
+										<TextField
+											value={
+												separators[compIndex]?.[
+													templateParamToInteger(param)
+												] ?? ''
+											}
+											onChange={(event) =>
+												updateSeparator(event, compIndex, param)
+											}
+											label={t('Separator (leave blank for space)')}
+											type="text"
+										/>
+									)}
 							</div>
 						))}
 					</div>
