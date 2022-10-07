@@ -566,3 +566,6 @@ msgstr ""
 
 msgid "Next"
 msgstr ""
+
+msgid "Bulk send a template via CSV"
+msgstr ""

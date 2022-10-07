@@ -184,5 +184,6 @@
 	"Retry": "",
 	"Please wait, as %s are being loaded...": "",
 	"Upload CSV": "",
-	"Next": ""
+	"Next": "",
+	"Bulk send a template via CSV": ""
 }
