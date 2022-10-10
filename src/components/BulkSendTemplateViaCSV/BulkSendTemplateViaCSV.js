@@ -44,7 +44,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const [paramsError, setParamsError] = useState();
 	const [templateWithParams, setTemplateWithParams] = useState();
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
-	const [primaryKeyType, setPrimaryKeyType] = useState(PRIMARY_KEY_TYPE_WA_ID);
+	const [primaryKeyType, setPrimaryKeyType] = useState('');
 
 	const csvFileInput = useRef();
 
@@ -182,7 +182,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 	const getNextButtonEnabled = () => {
 		switch (activeStep) {
 			case STEP_SELECT_PRIMARY_KEY:
-				return !isEmptyString(primaryKeyColumn);
+				return (
+					!isEmptyString(primaryKeyColumn) && !isEmptyString(primaryKeyType)
+				);
 			case STEP_SELECT_TEMPLATE:
 				return false;
 			default:
@@ -200,7 +202,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			setParams({});
 			setParamsError(undefined);
 			setPrimaryKeyColumn('');
-			setPrimaryKeyType(PRIMARY_KEY_TYPE_WA_ID);
+			setPrimaryKeyType('');
 			setActiveStep(STEP_UPLOAD_CSV);
 		}
 	}, [open]);
