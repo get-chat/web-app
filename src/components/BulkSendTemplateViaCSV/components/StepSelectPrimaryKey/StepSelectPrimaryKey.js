@@ -106,7 +106,7 @@ const StepSelectPrimaryKey = ({
 							}}
 						>
 							You will send messages to phone numbers:{' '}
-							{prepareRecipientsPreview()}...
+							{prepareRecipientsPreview()}
 						</Trans>
 					)}
 
