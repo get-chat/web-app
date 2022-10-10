@@ -23,9 +23,7 @@ const StepSelectPrimaryKey = ({
 	return (
 		<div>
 			<FormControl>
-				<FormLabel>
-					{t('Select the column that contains phone numbers or tags')}
-				</FormLabel>
+				<FormLabel>{t('Select the column that contains recipients')}</FormLabel>
 				<RadioGroup
 					aria-label="primary-key"
 					value={primaryKeyColumn}
@@ -46,7 +44,7 @@ const StepSelectPrimaryKey = ({
 			</FormControl>
 
 			<FormControl>
-				<FormLabel>{t('Select the type of receivers')}</FormLabel>
+				<FormLabel>{t('Select the type of recipients')}</FormLabel>
 				<RadioGroup
 					aria-label="primary-key"
 					value={primaryKeyType}
