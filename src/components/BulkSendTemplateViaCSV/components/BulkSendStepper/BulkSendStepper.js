@@ -6,9 +6,9 @@ const BulkSendStepper = ({ t, activeStep }) => {
 		return [
 			t('Upload a CSV file'),
 			t('Preview the data'),
-			t('Select the primary key'),
+			t('Select recipients'),
 			t('Select a template'),
-			t('Select the parameters'),
+			t('Select parameters'),
 			t('Preview'),
 		];
 	};
