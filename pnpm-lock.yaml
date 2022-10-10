@@ -55,7 +55,6 @@ specifiers:
   react-scripts: ^5.0.0
   source-map-explorer: ^2.5.2
   url-search-params-polyfill: ^8.1.1
-  web-vitals: ^0.2.4
   worker-loader: ^3.0.8
 
 dependencies:
@@ -102,7 +101,6 @@ dependencies:
   react-scripts: 5.0.1_kkkse6ykemylkxedq55canwpsq
   source-map-explorer: 2.5.2
   url-search-params-polyfill: 8.1.1
-  web-vitals: 0.2.4
   worker-loader: 3.0.8_webpack@5.74.0
 
 devDependencies:
@@ -11907,10 +11905,6 @@ packages:
     resolution: {integrity: sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==}
     dependencies:
       minimalistic-assert: 1.0.1
-
-  /web-vitals/0.2.4:
-    resolution: {integrity: sha512-6BjspCO9VriYy12z356nL6JBS0GYeEcA457YyRzD+dD6XYCQ75NKhcOHUMHentOE7OcVCIXXDvOm0jKFfQG2Gg==}
-    dev: false
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
