@@ -1183,6 +1183,7 @@ function Main() {
 					open={isBulkSendTemplateViaCSVVisible}
 					setOpen={setBulkSendTemplateViaCSVVisible}
 					templates={templates}
+					tags={tags}
 				/>
 
 				<SendBulkVoiceMessageDialog

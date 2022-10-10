@@ -12,21 +12,44 @@ import {
 	PRIMARY_KEY_TYPE_WA_ID,
 } from '../../BulkSendTemplateViaCSV';
 import { Alert } from '@material-ui/lab';
+import { Trans } from 'react-i18next';
+import LabelIcon from '@material-ui/icons/Label';
 
 const StepSelectPrimaryKey = ({
 	t,
 	csvHeader,
 	csvData,
+	tags,
 	primaryKeyColumn,
 	setPrimaryKeyColumn,
 	primaryKeyType,
 	setPrimaryKeyType,
 }) => {
 	const prepareRecipientsPreview = () => {
-		return csvData
-			?.slice(0, 5)
-			?.map((item) => item[primaryKeyColumn])
-			?.join(', ');
+		return (
+			<div className="recipientsPreview">
+				{csvData?.slice(0, 5)?.map((item) => {
+					if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
+						const tagName = item[primaryKeyColumn];
+						const tag = tags?.filter(
+							(tagItem) => tagItem.name === tagName
+						)?.[0];
+						return (
+							<span>
+								<LabelIcon style={{ fill: tag?.web_inbox_color }} />{' '}
+								{tagName ? tagName : t('(empty)')}
+							</span>
+						);
+					}
+
+					return (
+						<span>
+							{item[primaryKeyColumn] ? item[primaryKeyColumn] : t('(empty)')}
+						</span>
+					);
+				})}
+			</div>
+		);
 	};
 
 	return (
@@ -75,17 +98,29 @@ const StepSelectPrimaryKey = ({
 
 			{primaryKeyType && (
 				<Alert severity="info">
-					{primaryKeyType === PRIMARY_KEY_TYPE_WA_ID &&
-						t(
-							'You will send messages to phone numbers: %s...',
-							prepareRecipientsPreview()
-						)}
+					{primaryKeyType === PRIMARY_KEY_TYPE_WA_ID && (
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [],
+							}}
+						>
+							You will send messages to phone numbers:{' '}
+							{prepareRecipientsPreview()}...
+						</Trans>
+					)}
 
-					{primaryKeyType === PRIMARY_KEY_TYPE_TAG &&
-						t(
-							'You will send messages to users tagged with: %s...',
-							prepareRecipientsPreview()
-						)}
+					{primaryKeyType === PRIMARY_KEY_TYPE_TAG && (
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [],
+							}}
+						>
+							You will send messages to users tagged with:{' '}
+							{prepareRecipientsPreview()}
+						</Trans>
+					)}
 				</Alert>
 			)}
 		</div>
