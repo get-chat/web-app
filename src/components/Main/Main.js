@@ -313,8 +313,9 @@ function Main() {
 				displayNtf();
 			} else {
 				// Request permission from user
+				// TODO: Safari doesn't return a promise, fix it
 				Notification.requestPermission()
-					.then(function (p) {
+					?.then(function (p) {
 						if (p === 'granted') {
 							displayNtf();
 						} else {
