@@ -11,15 +11,24 @@ import {
 	PRIMARY_KEY_TYPE_TAG,
 	PRIMARY_KEY_TYPE_WA_ID,
 } from '../../BulkSendTemplateViaCSV';
+import { Alert } from '@material-ui/lab';
 
 const StepSelectPrimaryKey = ({
 	t,
 	csvHeader,
+	csvData,
 	primaryKeyColumn,
 	setPrimaryKeyColumn,
 	primaryKeyType,
 	setPrimaryKeyType,
 }) => {
+	const prepareRecipientsPreview = () => {
+		return csvData
+			?.slice(0, 5)
+			?.map((item) => item[primaryKeyColumn])
+			?.join(', ');
+	};
+
 	return (
 		<div>
 			<FormControl>
@@ -63,6 +72,22 @@ const StepSelectPrimaryKey = ({
 					/>
 				</RadioGroup>
 			</FormControl>
+
+			{primaryKeyType && (
+				<Alert severity="info">
+					{primaryKeyType === PRIMARY_KEY_TYPE_WA_ID &&
+						t(
+							'You will send messages to phone numbers: %s...',
+							prepareRecipientsPreview()
+						)}
+
+					{primaryKeyType === PRIMARY_KEY_TYPE_TAG &&
+						t(
+							'You will send messages to users tagged with: %s...',
+							prepareRecipientsPreview()
+						)}
+				</Alert>
+			)}
 		</div>
 	);
 };

@@ -154,12 +154,13 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 			case STEP_UPLOAD_CSV:
 				csvFileInput.current.click();
 				break;
-			case STEP_PREVIEW_RESULT:
-				// TODO: Bulk send template
-				close();
-				break;
 			case STEP_SELECT_PARAMETERS:
 				prepareTemplateMessage();
+				break;
+			case STEP_PREVIEW_RESULT:
+				// TODO: Format phone numbers
+				// TODO: Bulk send template
+				close();
 				break;
 			default:
 				setActiveStep((prevState) => prevState + 1);
@@ -224,6 +225,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates }) => {
 					<StepSelectPrimaryKey
 						t={t}
 						csvHeader={csvHeader}
+						csvData={csvData}
 						primaryKeyColumn={primaryKeyColumn}
 						setPrimaryKeyColumn={setPrimaryKeyColumn}
 						primaryKeyType={primaryKeyType}
