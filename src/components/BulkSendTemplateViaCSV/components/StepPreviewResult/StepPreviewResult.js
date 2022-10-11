@@ -17,7 +17,8 @@ const StepPreviewResult = ({ t, templates, template, params, csvData }) => {
 	};
 
 	const replaceGetChatParams = () => {
-		let replacedParams = { ...params };
+		// Create a copy without reference
+		let replacedParams = { ...JSON.parse(JSON.stringify(params)) };
 
 		for (const compIndex in replacedParams) {
 			for (const paramIndex in params[compIndex]) {

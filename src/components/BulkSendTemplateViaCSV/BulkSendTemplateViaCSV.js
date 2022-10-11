@@ -173,6 +173,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 
 		console.log(recipients);
 		console.log(format);
+		console.log(templateWithParams);
 
 		//close();
 	};
