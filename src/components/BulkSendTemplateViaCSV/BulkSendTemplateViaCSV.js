@@ -21,6 +21,7 @@ import StepSelectParameters from './components/StepSelectParameters';
 import StepPreviewResult from './components/StepPreviewResult';
 import { BreakException } from '../../Constants';
 import BulkSendStepper from './components/BulkSendStepper';
+import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
@@ -121,8 +122,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 		const finalData = { ...template };
 		finalData.params = Object.values(preparedParams);
 
-		console.log(finalData);
-
 		setTemplateWithParams(finalData);
 		setParamsError(undefined);
 
@@ -149,6 +148,35 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 		});
 	};
 
+	const send = () => {
+		// Preparing recipients
+		const recipients = [];
+		const format = [];
+		csvData?.forEach((dataItem) => {
+			let recipient = dataItem[primaryKeyColumn];
+
+			// Formatting if recipients are phone numbers
+			if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
+				recipient = preparePhoneNumber(recipient);
+			}
+
+			if (recipient) {
+				recipients.push({ recipient: recipient });
+				const formatItem = {};
+				formatItem[primaryKeyType] = recipient;
+				format.push({
+					...formatItem,
+					params: dataItem,
+				});
+			}
+		});
+
+		console.log(recipients);
+		console.log(format);
+
+		//close();
+	};
+
 	const handleNext = () => {
 		switch (activeStep) {
 			case STEP_UPLOAD_CSV:
@@ -160,7 +188,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 			case STEP_PREVIEW_RESULT:
 				// TODO: Format phone numbers
 				// TODO: Bulk send template
-				close();
+				send();
 				break;
 			default:
 				setActiveStep((prevState) => prevState + 1);
