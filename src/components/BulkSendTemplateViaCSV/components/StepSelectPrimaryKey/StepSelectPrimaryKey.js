@@ -12,7 +12,6 @@ import {
 	PRIMARY_KEY_TYPE_WA_ID,
 } from '../../BulkSendTemplateViaCSV';
 import { Alert } from '@material-ui/lab';
-import { Trans } from 'react-i18next';
 import LabelIcon from '@material-ui/icons/Label';
 
 const StepSelectPrimaryKey = ({
@@ -26,9 +25,11 @@ const StepSelectPrimaryKey = ({
 	setPrimaryKeyType,
 }) => {
 	const prepareRecipientsPreview = () => {
+		const previewLimit = 5;
+
 		return (
 			<div className="recipientsPreview">
-				{csvData?.slice(0, 5)?.map((item) => {
+				{csvData?.slice(0, previewLimit)?.map((item) => {
 					if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
 						const tagName = item[primaryKeyColumn];
 						const tag = tags?.filter(
@@ -48,6 +49,11 @@ const StepSelectPrimaryKey = ({
 						</span>
 					);
 				})}
+				{csvData?.length > previewLimit && (
+					<span className="bold">
+						{t('+%d more', csvData.length - previewLimit)}
+					</span>
+				)}
 			</div>
 		);
 	};
@@ -99,28 +105,14 @@ const StepSelectPrimaryKey = ({
 			{primaryKeyType && (
 				<Alert severity="info">
 					{primaryKeyType === PRIMARY_KEY_TYPE_WA_ID && (
-						<Trans
-							values={{
-								postProcess: 'sprintf',
-								sprintf: [],
-							}}
-						>
-							You will send messages to phone numbers:{' '}
-							{prepareRecipientsPreview()}
-						</Trans>
+						<>{t('You will send messages to phone numbers:')}</>
 					)}
 
 					{primaryKeyType === PRIMARY_KEY_TYPE_TAG && (
-						<Trans
-							values={{
-								postProcess: 'sprintf',
-								sprintf: [],
-							}}
-						>
-							You will send messages to users tagged with:{' '}
-							{prepareRecipientsPreview()}
-						</Trans>
+						<>{t('You will send messages to users tagged with:')}</>
 					)}
+
+					{!isEmptyString(primaryKeyType) && <>{prepareRecipientsPreview()}</>}
 				</Alert>
 			)}
 		</div>
