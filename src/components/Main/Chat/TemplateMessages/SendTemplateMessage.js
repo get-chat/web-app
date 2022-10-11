@@ -262,6 +262,7 @@ function SendTemplateMessage(props) {
 							<div>
 								{getTemplateParams(comp.text).map((param, paramIndex) => (
 									<TextField
+										multiline
 										value={
 											params[compIndex]
 												? params[compIndex][templateParamToInteger(param)].text

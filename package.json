@@ -63,7 +63,6 @@
 		"react-scripts": "^5.0.0",
 		"source-map-explorer": "^2.5.2",
 		"url-search-params-polyfill": "^8.1.1",
-		"web-vitals": "^0.2.4",
 		"worker-loader": "^3.0.8"
 	},
 	"pnpm": {
