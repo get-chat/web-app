@@ -29,14 +29,14 @@ const StepSelectPrimaryKey = ({
 
 		return (
 			<div className="recipientsPreview">
-				{csvData?.slice(0, previewLimit)?.map((item) => {
+				{csvData?.slice(0, previewLimit)?.map((item, itemIndex) => {
 					if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
 						const tagName = item[primaryKeyColumn];
 						const tag = tags?.filter(
 							(tagItem) => tagItem.name === tagName
 						)?.[0];
 						return (
-							<span>
+							<span key={itemIndex}>
 								<LabelIcon style={{ fill: tag?.web_inbox_color }} />{' '}
 								{tagName ? tagName : t('(empty)')}
 							</span>
@@ -44,7 +44,7 @@ const StepSelectPrimaryKey = ({
 					}
 
 					return (
-						<span>
+						<span key={itemIndex}>
 							{item[primaryKeyColumn] ? item[primaryKeyColumn] : t('(empty)')}
 						</span>
 					);
