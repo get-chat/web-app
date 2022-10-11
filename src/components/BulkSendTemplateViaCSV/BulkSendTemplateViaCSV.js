@@ -175,6 +175,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 		console.log(format);
 		console.log(templateWithParams);
 
+		// TODO: Bulk send template messages and close the dialog
 		//close();
 	};
 
@@ -187,8 +188,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 				prepareTemplateMessage();
 				break;
 			case STEP_PREVIEW_RESULT:
-				// TODO: Format phone numbers
-				// TODO: Bulk send template
 				send();
 				break;
 			default:
