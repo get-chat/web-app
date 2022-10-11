@@ -68,9 +68,9 @@ function BulkSendActions(props) {
 					accept=".csv"
 					handleSelectedFiles={handleCSV}
 				/>
-				<Button color="secondary" onClick={() => csvFileInput.current.click()}>
+				{/*<Button color="secondary" onClick={() => csvFileInput.current.click()}>
 					{t('Upload CSV')}
-				</Button>
+				</Button>*/}
 
 				<Button color="primary" onClick={props.finishBulkSendMessage}>
 					{t('Send')}

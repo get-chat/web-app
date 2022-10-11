@@ -854,9 +854,9 @@ function Sidebar(props) {
 				onClose={hideBulkMessageMenu}
 				elevation={3}
 			>
-				<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
+				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
 					{t('Bulk send template using CSV')}
-				</MenuItem>
+				</MenuItem>*/}
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
 					{t(' Bulk send a voice message')}
 				</MenuItem>
