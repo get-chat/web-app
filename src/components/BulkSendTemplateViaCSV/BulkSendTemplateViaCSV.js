@@ -22,6 +22,7 @@ import StepPreviewResult from './components/StepPreviewResult';
 import { BreakException } from '../../Constants';
 import BulkSendStepper from './components/BulkSendStepper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
+import { generateTemplateMessagePayload } from '../../helpers/ChatHelper';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
@@ -171,9 +172,13 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 			}
 		});
 
-		console.log(recipients);
-		console.log(format);
-		console.log(templateWithParams);
+		const payload = {
+			...generateTemplateMessagePayload(templateWithParams),
+			recipients: recipients,
+			format: format,
+		};
+
+		console.log(payload);
 
 		// TODO: Bulk send template messages and close the dialog
 		//close();
