@@ -333,6 +333,7 @@ function SendTemplateMessage(props) {
 							<div>
 								{getTemplateParams(comp.text).map((param, paramIndex) => (
 									<TextField
+										multiline
 										value={
 											params[index]
 												? params[index][templateParamToInteger(param)].text
