@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@sentry/react';
 import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateFinalTemplateParams } from '../../../../helpers/TemplateMessageHelper';
 
-const StepPreviewResult = ({ t, templates, template, params, csvData }) => {
+const StepPreviewResult = ({ templates, template, params, csvData }) => {
 	const [messageData, setMessageData] = useState();
 
 	const replaceGetChatParamWithRealData = (string) => {

@@ -251,14 +251,13 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 				<BulkSendStepper t={t} activeStep={activeStep} />
 
 				{activeStep === STEP_UPLOAD_CSV && (
-					<StepUploadCSV t={t} csvError={csvError} />
+					<StepUploadCSV csvError={csvError} />
 				)}
 				{activeStep === STEP_PREVIEW_CSV_DATA && (
-					<StepPreviewCSVData t={t} csvHeader={csvHeader} csvData={csvData} />
+					<StepPreviewCSVData csvHeader={csvHeader} csvData={csvData} />
 				)}
 				{activeStep === STEP_SELECT_PRIMARY_KEY && (
 					<StepSelectPrimaryKey
-						t={t}
 						csvHeader={csvHeader}
 						csvData={csvData}
 						tags={tags}
@@ -270,14 +269,12 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 				)}
 				{activeStep === STEP_SELECT_TEMPLATE && (
 					<StepSelectTemplate
-						t={t}
 						templates={templates}
 						selectTemplate={selectTemplate}
 					/>
 				)}
 				{activeStep === STEP_SELECT_PARAMETERS && (
 					<StepSelectParameters
-						t={t}
 						csvHeader={csvHeader}
 						template={template}
 						params={params}
@@ -288,7 +285,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 				)}
 				{activeStep === STEP_PREVIEW_RESULT && (
 					<StepPreviewResult
-						t={t}
 						templates={templates}
 						template={template}
 						params={params}

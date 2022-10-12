@@ -13,9 +13,9 @@ import {
 } from '../../BulkSendTemplateViaCSV';
 import { Alert } from '@material-ui/lab';
 import LabelIcon from '@material-ui/icons/Label';
+import { useTranslation } from 'react-i18next';
 
 const StepSelectPrimaryKey = ({
-	t,
 	csvHeader,
 	csvData,
 	tags,
@@ -24,12 +24,14 @@ const StepSelectPrimaryKey = ({
 	primaryKeyType,
 	setPrimaryKeyType,
 }) => {
+	const { t } = useTranslation();
+
 	const prepareRecipientsPreview = () => {
-		const previewLimit = 5;
+		const PREVIEW_LIMIT = 5;
 
 		return (
 			<div className="recipientsPreview">
-				{csvData?.slice(0, previewLimit)?.map((item, itemIndex) => {
+				{csvData?.slice(0, PREVIEW_LIMIT)?.map((item, itemIndex) => {
 					if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
 						const tagName = item[primaryKeyColumn];
 						const tag = tags?.filter(
@@ -49,9 +51,9 @@ const StepSelectPrimaryKey = ({
 						</span>
 					);
 				})}
-				{csvData?.length > previewLimit && (
+				{csvData?.length > PREVIEW_LIMIT && (
 					<span className="bold">
-						{t('+%d more', csvData.length - previewLimit)}
+						{t('+%d more', csvData.length - PREVIEW_LIMIT)}
 					</span>
 				)}
 			</div>

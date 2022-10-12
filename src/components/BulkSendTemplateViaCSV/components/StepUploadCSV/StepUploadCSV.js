@@ -1,7 +1,10 @@
 import React from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { useTranslation } from 'react-i18next';
 
-const StepUploadCSV = ({ t, csvError }) => {
+const StepUploadCSV = ({ csvError }) => {
+	const { t } = useTranslation();
+
 	return (
 		<div>
 			<p>

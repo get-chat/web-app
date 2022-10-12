@@ -1,7 +1,10 @@
 import React from 'react';
 import TemplatesList from '../../../TemplatesList';
+import { useTranslation } from 'react-i18next';
 
-const StepSelectTemplate = ({ t, templates, selectTemplate }) => {
+const StepSelectTemplate = ({ templates, selectTemplate }) => {
+	const { t } = useTranslation();
+
 	return (
 		<div>
 			<TemplatesList

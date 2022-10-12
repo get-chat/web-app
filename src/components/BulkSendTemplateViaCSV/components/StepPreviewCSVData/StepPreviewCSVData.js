@@ -7,12 +7,15 @@ import {
 	TableHead,
 	TableRow,
 } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
 
-const StepPreviewCSVData = ({ t, csvHeader, csvData }) => {
-	const previewLimit = 5;
+const StepPreviewCSVData = ({ csvHeader, csvData }) => {
+	const { t } = useTranslation();
+
+	const PREVIEW_LIMIT = 5;
 
 	return (
-		<div>
+		<>
 			<TableContainer>
 				<Table>
 					<TableHead>
@@ -23,7 +26,7 @@ const StepPreviewCSVData = ({ t, csvHeader, csvData }) => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{csvData?.slice(0, previewLimit)?.map((row, rowIndex) => (
+						{csvData?.slice(0, PREVIEW_LIMIT)?.map((row, rowIndex) => (
 							<TableRow key={rowIndex}>
 								{Object.values(row)?.map((column, columnIndex) => (
 									<TableCell key={columnIndex} component="th" scope="row">
@@ -36,12 +39,12 @@ const StepPreviewCSVData = ({ t, csvHeader, csvData }) => {
 				</Table>
 			</TableContainer>
 
-			{(csvData?.length ?? 0) > previewLimit && (
+			{(csvData?.length ?? 0) > PREVIEW_LIMIT && (
 				<div className="mt-3">
-					{t('There are %d more row(s)...', csvData.length - previewLimit)}
+					{t('There are %d more row(s)...', csvData.length - PREVIEW_LIMIT)}
 				</div>
 			)}
-		</div>
+		</>
 	);
 };
 

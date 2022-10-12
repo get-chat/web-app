@@ -7,9 +7,9 @@ import {
 import { Button, TextField } from '@material-ui/core';
 import { Alert, AlertTitle, Autocomplete } from '@material-ui/lab';
 import '../../../../styles/StepSelectParameters.css';
+import { useTranslation } from 'react-i18next';
 
 const StepSelectParameters = ({
-	t,
 	csvHeader,
 	template,
 	params,
@@ -17,6 +17,8 @@ const StepSelectParameters = ({
 	updateHeaderMediaParam,
 	updateParam,
 }) => {
+	const { t } = useTranslation();
+
 	const isSeparatorEnabled = false;
 
 	const [rawValues, setRawValues] = useState({});
