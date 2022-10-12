@@ -178,8 +178,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 			format: format,
 		};
 
-		console.log(payload);
-
 		// TODO: Bulk send template messages and close the dialog
 		//close();
 	};

@@ -6,14 +6,12 @@ const StepSelectTemplate = ({ templates, selectTemplate }) => {
 	const { t } = useTranslation();
 
 	return (
-		<div>
-			<TemplatesList
-				templates={templates}
-				onClick={(template) => selectTemplate(template)}
-				customSelectButtonTitle={t('Select')}
-				isTemplatesFailed={false}
-			/>
-		</div>
+		<TemplatesList
+			templates={templates}
+			onClick={(template) => selectTemplate(template)}
+			customSelectButtonTitle={t('Select')}
+			isTemplatesFailed={false}
+		/>
 	);
 };
 

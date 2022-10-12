@@ -61,7 +61,7 @@ const StepSelectPrimaryKey = ({
 	};
 
 	return (
-		<div>
+		<>
 			<FormControl>
 				<FormLabel>{t('Select the column that contains recipients')}</FormLabel>
 				<RadioGroup
@@ -117,7 +117,7 @@ const StepSelectPrimaryKey = ({
 					{!isEmptyString(primaryKeyType) && <>{prepareRecipientsPreview()}</>}
 				</Alert>
 			)}
-		</div>
+		</>
 	);
 };
 

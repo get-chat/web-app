@@ -24,12 +24,6 @@
 	margin-bottom: 0 !important;
 }
 
-.bulkSendTemplateViaCSV .stepPreviewResult__wrapper {
-	border-radius: 10px;
-	background-color: var(--chat-bg);
-	padding: 10px;
-}
-
 .bulkSendTemplateViaCSV .recipientsPreview {
 	display: flex;
 	flex-wrap: wrap;

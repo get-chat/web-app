@@ -1,0 +1,5 @@
+.stepPreviewResult__wrapper {
+	border-radius: 10px;
+	background-color: var(--chat-bg);
+	padding: 10px;
+}

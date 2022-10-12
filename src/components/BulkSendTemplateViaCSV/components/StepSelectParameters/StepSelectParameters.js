@@ -19,7 +19,7 @@ const StepSelectParameters = ({
 }) => {
 	const { t } = useTranslation();
 
-	const isSeparatorEnabled = false;
+	const IS_SEPARATOR_ENABLED = false;
 
 	const [rawValues, setRawValues] = useState({});
 	const [separators, setSeparators] = useState({});
@@ -79,27 +79,25 @@ const StepSelectParameters = ({
 				<div key={compIndex} className="template__component">
 					<h6>{comp.type}</h6>
 					{componentHasMediaFormat(comp) && (
-						<>
-							<Autocomplete
-								options={csvHeader}
-								getOptionLabel={(headerItem) => headerItem}
-								//value={}
-								onChange={(event, value) =>
-									updateHeaderMediaParam(
-										convertToGetChatCustomParam(value),
-										compIndex,
-										comp.format
-									)
-								}
-								renderInput={(autoCompleteParams) => (
-									<TextField
-										{...autoCompleteParams}
-										variant="standard"
-										label={comp.format}
-									/>
-								)}
-							/>
-						</>
+						<Autocomplete
+							options={csvHeader}
+							getOptionLabel={(headerItem) => headerItem}
+							//value={}
+							onChange={(event, value) =>
+								updateHeaderMediaParam(
+									convertToGetChatCustomParam(value),
+									compIndex,
+									comp.format
+								)
+							}
+							renderInput={(autoCompleteParams) => (
+								<TextField
+									{...autoCompleteParams}
+									variant="standard"
+									label={comp.format}
+								/>
+							)}
+						/>
 					)}
 
 					{comp.text && (
@@ -131,7 +129,7 @@ const StepSelectParameters = ({
 										)}
 									/>
 
-									{isSeparatorEnabled &&
+									{IS_SEPARATOR_ENABLED &&
 										rawValues[compIndex]?.[templateParamToInteger(param)]
 											?.length > 1 && (
 											<TextField

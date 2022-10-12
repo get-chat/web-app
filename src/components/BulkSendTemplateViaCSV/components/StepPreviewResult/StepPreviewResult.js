@@ -3,6 +3,7 @@ import ChatMessage from '../../../Main/Chat/ChatMessage/ChatMessage';
 import { ErrorBoundary } from '@sentry/react';
 import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateFinalTemplateParams } from '../../../../helpers/TemplateMessageHelper';
+import style from './StepPreviewResult.module.css';
 
 const StepPreviewResult = ({ templates, template, params, csvData }) => {
 	const [messageData, setMessageData] = useState();
@@ -62,7 +63,7 @@ const StepPreviewResult = ({ templates, template, params, csvData }) => {
 
 	return (
 		<div className="stepPreviewResult">
-			<div className="stepPreviewResult__wrapper">
+			<div className={style.stepPreviewResult__wrapper}>
 				{messageData && (
 					<ErrorBoundary>
 						<ChatMessage messageData={messageData} templates={templates} />

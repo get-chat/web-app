@@ -160,10 +160,7 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 	return preparedParams;
 };
 
-export const componentHasMediaFormat = (comp) => {
-	return (
-		comp.format === 'IMAGE' ||
-		comp.format === 'VIDEO' ||
-		comp.format === 'DOCUMENT'
-	);
-};
+export const componentHasMediaFormat = (comp) =>
+	comp.format === 'IMAGE' ||
+	comp.format === 'VIDEO' ||
+	comp.format === 'DOCUMENT';

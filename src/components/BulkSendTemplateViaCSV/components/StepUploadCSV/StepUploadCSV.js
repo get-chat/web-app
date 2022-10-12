@@ -6,7 +6,7 @@ const StepUploadCSV = ({ csvError }) => {
 	const { t } = useTranslation();
 
 	return (
-		<div>
+		<>
 			<p>
 				{t(
 					'Please upload a CSV file containing the data for the message you want to send in bulk.'
@@ -23,7 +23,7 @@ const StepUploadCSV = ({ csvError }) => {
 					{csvError}
 				</Alert>
 			)}
-		</div>
+		</>
 	);
 };
 
