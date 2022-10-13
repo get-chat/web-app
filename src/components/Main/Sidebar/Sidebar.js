@@ -116,6 +116,11 @@ function Sidebar(props) {
 		setBulkMessageMenuAnchorEl(null);
 	};
 
+	const showBulkSendTemplateViaCSVDialog = () => {
+		setBulkMessageMenuAnchorEl(null);
+		props.setBulkSendTemplateViaCSVVisible(true);
+	};
+
 	const showSendBulkVoiceMessageDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
 		props.setSendBulkVoiceMessageDialogVisible(true);
@@ -603,6 +608,7 @@ function Sidebar(props) {
 			{props.isSelectionModeEnabled && (
 				<BulkSendActions
 					selectedChats={props.selectedChats}
+					setSelectedChats={props.setSelectedChats}
 					selectedTags={props.selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={finishBulkSendMessage}
@@ -848,8 +854,11 @@ function Sidebar(props) {
 				onClose={hideBulkMessageMenu}
 				elevation={3}
 			>
+				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
+					{t('Bulk send template using CSV')}
+				</MenuItem>*/}
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
-					{t('Send bulk voice message')}
+					{t(' Bulk send a voice message')}
 				</MenuItem>
 			</Menu>
 

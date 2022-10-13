@@ -65,7 +65,19 @@ function ChatMessageTemplate(props) {
 
 									{component.type === 'BODY' && (
 										<div
-											className="wordBreakAll"
+											className="chat__templateContent__body wordBreakAll"
+											dangerouslySetInnerHTML={{
+												__html: insertTemplateComponentParameters(
+													component,
+													data.templateParameters
+												),
+											}}
+										/>
+									)}
+
+									{component.type === 'FOOTER' && (
+										<div
+											className="chat__templateContent__footer wordBreakAll mt-1"
 											dangerouslySetInnerHTML={{
 												__html: insertTemplateComponentParameters(
 													component,

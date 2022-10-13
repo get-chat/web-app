@@ -30,7 +30,7 @@ function ContactDetails(props) {
 	};
 
 	useEffect(() => {
-		props.retrieveContactData(props.contactData.waId);
+		props.retrieveContactData(props.contactData?.waId);
 		setChat(findChatByWaId());
 	}, []);
 

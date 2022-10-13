@@ -1,3 +1,6 @@
+import { isEmptyString } from './Helpers';
+import { BreakException } from '../Constants';
+
 export const getTemplateParams = (text) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
 	return matches ? matches : [];
@@ -59,3 +62,105 @@ export const sortTemplateComponents = (components) => {
 
 	return components;
 };
+
+export const generateTemplateParamsByValues = (template, paramValues) => {
+	const preparedParams = {};
+	const components = { ...template.components };
+
+	let hasHeader = false;
+
+	Object.entries(components).forEach((paramEntry, paramIndex) => {
+		const key = paramEntry[0];
+		const component = paramEntry[1];
+		const componentType = component.type;
+
+		if (componentType === 'HEADER') {
+			if (
+				component.format === 'IMAGE' ||
+				component.format === 'VIDEO' ||
+				component.format === 'DOCUMENT'
+			) {
+				hasHeader = true;
+
+				const format = component.format.toLowerCase();
+				preparedParams[key] = {
+					0: { type: format },
+				};
+
+				preparedParams[key][0][format] = {
+					link: paramValues ? paramValues[1] : '',
+				};
+			}
+		}
+
+		const paramText = component.text;
+		const templateParamsArray = getTemplateParams(paramText);
+
+		templateParamsArray.map((extractedParam, extractedParamIndex) => {
+			if (preparedParams[key] === undefined) {
+				preparedParams[key] = {};
+			}
+			preparedParams[key][templateParamToInteger(extractedParam)] = {
+				type: 'text',
+				text: paramValues
+					? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
+					: '',
+			};
+		});
+	});
+
+	return preparedParams;
+};
+
+export const generateFinalTemplateParams = (template, params, onError) => {
+	const preparedParams = {};
+	const components = { ...template.components };
+
+	try {
+		// noinspection DuplicatedCode
+		Object.entries(components).forEach((paramEntry, paramIndex) => {
+			const key = paramEntry[0];
+			const component = paramEntry[1];
+
+			if (params[key]) {
+				const paramsArray = Object.values(params[key]);
+
+				// Check if has empty params and throw BreakException if found
+				paramsArray.forEach((param) => {
+					if (
+						isEmptyString(
+							param.text ??
+								param.image?.link ??
+								param.video?.link ??
+								param.document?.link
+						)
+					) {
+						throw BreakException;
+					}
+				});
+
+				/*const localizableParams = [];
+				paramsArray.forEach((paramArrayItem) => {
+					localizableParams.push({
+						default: paramArrayItem.text,
+					});
+				});*/
+
+				preparedParams[component.type] = {
+					type: component.type.toLowerCase(),
+					parameters: paramsArray,
+					//localizable_params: localizableParams
+				};
+			}
+		});
+	} catch (error) {
+		onError?.(error);
+	}
+
+	return preparedParams;
+};
+
+export const componentHasMediaFormat = (comp) =>
+	comp.format === 'IMAGE' ||
+	comp.format === 'VIDEO' ||
+	comp.format === 'DOCUMENT';

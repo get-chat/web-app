@@ -148,7 +148,8 @@ a {
 
 .MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
 		.MuiSvgIcon-root):not(.MuiCheckbox-root
-		.MuiSvgIcon-root):not(.MuiButton-root .MuiSvgIcon-root) {
+		.MuiSvgIcon-root):not(.MuiButton-root
+		.MuiSvgIcon-root):not(.MuiStepIcon-root) {
 	color: #6f7385;
 }
 

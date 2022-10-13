@@ -560,3 +560,12 @@ msgstr ""
 
 msgid "Please wait, as %s are being loaded..."
 msgstr ""
+
+msgid "Upload CSV"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "Bulk send template using CSV"
+msgstr ""

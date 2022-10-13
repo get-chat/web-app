@@ -1,3 +1,5 @@
+export const BreakException = {};
+
 export const CHAT_KEY_PREFIX = 'chat_';
 
 export const CHAT_LIST_TAB_CASE_ALL = 'all';

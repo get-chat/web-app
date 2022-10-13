@@ -32,6 +32,8 @@ export class ChatMessageClass {
 
 		this.payload = payload;
 
+		if (!payload) return;
+
 		this.id = payload.id;
 		this.getchatId = data.id;
 		this.to = payload.to;
@@ -110,9 +112,9 @@ export class ChatMessageClass {
 			this.contextMessage = new ChatMessageClass(data.context);
 		}
 
-		this.deliveredTimestamp = statuses.delivered;
-		this.readTimestamp = statuses.read;
-		this.sentTimestamp = statuses.sent;
+		this.deliveredTimestamp = statuses?.delivered;
+		this.readTimestamp = statuses?.read;
+		this.sentTimestamp = statuses?.sent;
 
 		this.errors = payload.errors;
 		this.isStored = false;
@@ -126,6 +128,17 @@ export class ChatMessageClass {
 	sanitize() {
 		this.text = sanitize(this.text);
 		this.caption = sanitize(this.caption);
+	}
+
+	static fromTemplate(template) {
+		return new ChatMessageClass({
+			from_us: true,
+			waba_payload: {
+				type: ChatMessageClass.TYPE_TEMPLATE,
+				template: template,
+				timestamp: new Date().getTime(),
+			},
+		});
 	}
 
 	static fromAssignmentEvent(assignmentEvent) {

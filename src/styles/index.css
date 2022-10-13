@@ -12,6 +12,7 @@
 	--font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system,
 		BlinkMacSystemFont, 'Arial', sans-serif;
 	--wrapper-border-radius: 10px;
+	--chat-bg: #e8e0dc;
 }
 
 @media only screen and (max-width: 1500px) {

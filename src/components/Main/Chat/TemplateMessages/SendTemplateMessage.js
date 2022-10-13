@@ -4,14 +4,19 @@ import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import {
+	componentHasMediaFormat,
+	generateFinalTemplateParams,
+	generateTemplateParamsByValues,
 	getTemplateParams,
 	templateParamToInteger,
 } from '../../../../helpers/TemplateMessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../../../contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR } from '../../../../Constants';
-import { isEmptyString } from '../../../../helpers/Helpers';
+import {
+	BreakException,
+	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
+} from '../../../../Constants';
 import PublishIcon from '@material-ui/icons/Publish';
 import LinkIcon from '@material-ui/icons/Link';
 
@@ -33,59 +38,17 @@ function SendTemplateMessage(props) {
 	const headerFileInput = useRef();
 
 	useEffect(() => {
-		const preparedParams = {};
-		const components = { ...template.components };
-
-		Object.entries(components).forEach((paramEntry, paramIndex) => {
-			const key = paramEntry[0];
-			const component = paramEntry[1];
-			const componentType = component.type;
-
-			if (componentType === 'HEADER') {
-				if (
-					component.format === 'IMAGE' ||
-					component.format === 'VIDEO' ||
-					component.format === 'DOCUMENT'
-				) {
-					const format = component.format.toLowerCase();
-					preparedParams[key] = {
-						0: { type: format },
-					};
-
-					preparedParams[key][0][format] = { link: '' };
-				}
-			}
-
-			const paramText = component.text;
-			const templateParamsArray = getTemplateParams(paramText);
-
-			templateParamsArray.map((extractedParam, extractedParamIndex) => {
-				if (preparedParams[key] === undefined) {
-					preparedParams[key] = {};
-				}
-				preparedParams[key][templateParamToInteger(extractedParam)] = {
-					type: 'text',
-					text: '',
-				};
-			});
-		});
-
-		setParams(preparedParams);
+		setParams(generateTemplateParamsByValues(template, undefined));
 	}, []);
 
 	useEffect(() => {
 		// Update params when header image changes
 		setParams((prevState) => {
-			// TODO: Do this in a better way depends on template headers complexity
-			if (prevState[0] && prevState[0][0] && prevState[0][0]['image']) {
+			if (prevState[0]?.[0]?.['image']) {
 				prevState[0][0]['image']['link'] = headerFileURL;
-			} else if (prevState[0] && prevState[0][0] && prevState[0][0]['video']) {
+			} else if (prevState[0]?.[0]?.['video']) {
 				prevState[0][0]['video']['link'] = headerFileURL;
-			} else if (
-				prevState[0] &&
-				prevState[0][0] &&
-				prevState[0][0]['document']
-			) {
+			} else if (prevState[0]?.[0]?.['document']) {
 				prevState[0][0]['document']['link'] = headerFileURL;
 			}
 
@@ -103,61 +66,27 @@ function SendTemplateMessage(props) {
 	};
 
 	const send = (isBulk) => {
-		const preparedParams = {};
-		const components = { ...template.components };
-
-		const BreakException = {};
-
-		try {
-			Object.entries(components).forEach((paramEntry, paramIndex) => {
-				const key = paramEntry[0];
-				const component = paramEntry[1];
-
-				if (params[key]) {
-					const paramsArray = Object.values(params[key]);
-
-					// Check if has empty params and throw BreakException if found
-					paramsArray.forEach((param) => {
-						if (
-							isEmptyString(
-								param.text ??
-									param.image?.link ??
-									param.video?.link ??
-									param.document?.link
-							)
-						) {
-							throw BreakException;
-						}
-					});
-
-					/*const localizableParams = [];
-					paramsArray.forEach((paramArrayItem) => {
-						localizableParams.push({
-							default: paramArrayItem.text,
-						});
-					});*/
-
-					preparedParams[component.type] = {
-						type: component.type.toLowerCase(),
-						parameters: paramsArray,
-						//localizable_params: localizableParams
-					};
+		let hasError = false;
+		const preparedParams = generateFinalTemplateParams(
+			template,
+			params,
+			(error) => {
+				if (error === BreakException) {
+					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+						{
+							title: t('Missing parameters'),
+							details: t('You need to fill the parameters!'),
+						},
+					]);
+					props.setSending(false);
+					hasError = true;
+				} else {
+					throw error;
 				}
-			});
-		} catch (error) {
-			if (error === BreakException) {
-				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
-					{
-						title: t('Missing parameters'),
-						details: t('You need to fill the parameters!'),
-					},
-				]);
-				props.setSending(false);
-				return;
-			} else {
-				throw error;
 			}
-		}
+		);
+
+		if (hasError) return;
 
 		const finalData = template;
 		finalData.params = Object.values(preparedParams);
@@ -205,14 +134,12 @@ function SendTemplateMessage(props) {
 		<div className="sendTemplateMessage">
 			<h4 className="sendTemplateMessage__title">{template.name}</h4>
 
-			{template.components.map((comp, index) => (
-				<div key={index} className="sendTemplateMessage__component">
+			{template.components.map((comp, compIndex) => (
+				<div key={compIndex} className="sendTemplateMessage__component">
 					<div className="sendTemplateMessage__section">
 						<h6>{comp.type}</h6>
 						<div>
-							{(comp.format === 'IMAGE' ||
-								comp.format === 'VIDEO' ||
-								comp.format === 'DOCUMENT') && (
+							{componentHasMediaFormat(comp) && (
 								<div>
 									<div className="sendTemplateMessage__section__fileType">
 										{t('Type: %s', comp.format.toLowerCase())}
@@ -248,7 +175,9 @@ function SendTemplateMessage(props) {
 											{headerFileURL && (
 												<div>
 													<Alert severity="success">
-														<AlertTitle>Uploaded successfully</AlertTitle>
+														<AlertTitle>
+															{t('Uploaded successfully')}
+														</AlertTitle>
 														<a href={headerFileURL} target="_blank">
 															{headerFileURL}
 														</a>
@@ -335,12 +264,16 @@ function SendTemplateMessage(props) {
 									<TextField
 										multiline
 										value={
-											params[index]
-												? params[index][templateParamToInteger(param)].text
+											params[compIndex]
+												? params[compIndex][templateParamToInteger(param)].text
 												: ''
 										}
 										onChange={(event) =>
-											updateParam(event, index, templateParamToInteger(param))
+											updateParam(
+												event,
+												compIndex,
+												templateParamToInteger(param)
+											)
 										}
 										className="templateMessage__param"
 										key={paramIndex}

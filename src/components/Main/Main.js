@@ -53,6 +53,7 @@ import { useTranslation } from 'react-i18next';
 import { AppConfig } from '../../contexts/AppConfig';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
+import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -124,6 +125,9 @@ function Main() {
 	const [selectedChats, setSelectedChats] = useState([]);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState();
+
+	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
+		useState(false);
 
 	const [
 		isSendBulkVoiceMessageDialogVisible,
@@ -309,8 +313,9 @@ function Main() {
 				displayNtf();
 			} else {
 				// Request permission from user
+				// TODO: Safari doesn't return a promise, fix it
 				Notification.requestPermission()
-					.then(function (p) {
+					?.then(function (p) {
 						if (p === 'granted') {
 							displayNtf();
 						} else {
@@ -1039,6 +1044,7 @@ function Main() {
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
+						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
 						setInitialResourceFailed={setInitialResourceFailed}
 					/>
 				)}
@@ -1172,6 +1178,13 @@ function Main() {
 				</Snackbar>
 
 				{isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
+
+				<BulkSendTemplateViaCSV
+					open={isBulkSendTemplateViaCSVVisible}
+					setOpen={setBulkSendTemplateViaCSVVisible}
+					templates={templates}
+					tags={tags}
+				/>
 
 				<SendBulkVoiceMessageDialog
 					apiService={apiService}
