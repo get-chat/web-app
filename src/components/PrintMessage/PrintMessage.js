@@ -7,7 +7,7 @@ import isEmoji from 'emoji-tree/lib/isEmoji';
 import Text from './components/Text';
 import HighlightText from './components/HighlightText';
 import Emoji from './components/Emoji';
-import TextRenderer from './components/TextRenderer';
+import Linkify from 'react-linkify';
 
 const getTextNodeType = (node) => {
 	if (isEmoji(node)) {
@@ -87,7 +87,7 @@ const decomposeMessage = (message, highlightText) => {
 
 const PrintMessage = ({
 	message,
-	as: Tag = TextRenderer,
+	as: Tag = 'span',
 	smallEmoji = false,
 	highlightText,
 	className,
@@ -104,13 +104,21 @@ const PrintMessage = ({
 	}
 
 	return (
-		<Tag className={classNames}>
-			{splitMessage.map((item) => {
-				const Component = item.component;
+		<Linkify
+			componentDecorator={(decoratedHref, decoratedText, key) => (
+				<a target="blank" href={decoratedHref} key={key}>
+					{decoratedText}
+				</a>
+			)}
+		>
+			<Tag className={classNames}>
+				{splitMessage.map((item) => {
+					const Component = item.component;
 
-				return <Component data={item} key={item.index} />;
-			})}
-		</Tag>
+					return <Component data={item} key={item.index} />;
+				})}
+			</Tag>
+		</Linkify>
 	);
 };
 
