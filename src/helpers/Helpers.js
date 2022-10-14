@@ -1,27 +1,6 @@
-import { getToken } from './StorageHelper';
 import dompurify from 'dompurify';
 import { getObjLength } from './ObjectHelper';
-
-const { htmlToText } = require('html-to-text');
-
-export const getConfig = (params, cancelToken, responseType) => {
-	const config = {
-		withCredentials: false,
-		params,
-		headers: {
-			Authorization: 'Token ' + getToken(),
-			'Content-Type': 'application/json',
-			Accept: 'application/json',
-		},
-		cancelToken: cancelToken,
-	};
-
-	if (responseType !== undefined) {
-		config.responseType = responseType;
-	}
-
-	return config;
-};
+import htmlToFormattedText from 'html-to-formatted-text';
 
 export const isEmptyString = (str) => {
 	return !str || str.length === 0;
@@ -46,8 +25,10 @@ export const translateHTMLInputToText = (html) => {
 		return '';
 	});
 
+	console.log(result);
+
 	// Convert it to plain text
-	result = htmlToText(result);
+	result = htmlToFormattedText(result);
 
 	return result;
 };
