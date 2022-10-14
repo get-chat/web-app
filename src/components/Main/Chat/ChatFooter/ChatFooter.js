@@ -166,7 +166,7 @@ function ChatFooter(props) {
 		}
 	};
 
-	const handlePaste = (event, el) => {
+	const handlePaste = (event) => {
 		let text = (event.originalEvent || event).clipboardData.getData(
 			'text/plain'
 		);
