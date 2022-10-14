@@ -48,6 +48,10 @@
 	color: var(--color-light-blue);
 }
 
+.chat__message .printMessage {
+	white-space: pre-line;
+}
+
 .chat__media,
 .chat__location__iframe {
 	border-radius: 6px;
