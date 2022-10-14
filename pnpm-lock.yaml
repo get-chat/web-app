@@ -53,6 +53,7 @@ specifiers:
   react-redux: ^8.0.4
   react-router-dom: ^5.3.0
   react-scripts: ^5.0.0
+  react-string-replace: ^1.1.0
   source-map-explorer: ^2.5.2
   url-search-params-polyfill: ^8.1.1
   worker-loader: ^3.0.8
@@ -99,6 +100,7 @@ dependencies:
   react-redux: 8.0.4_ykxqnxanlq42xavzz22bjdrwni
   react-router-dom: 5.3.3_react@17.0.2
   react-scripts: 5.0.1_kkkse6ykemylkxedq55canwpsq
+  react-string-replace: 1.1.0
   source-map-explorer: 2.5.2
   url-search-params-polyfill: 8.1.1
   worker-loader: 3.0.8_webpack@5.74.0
@@ -10236,6 +10238,11 @@ packages:
       - webpack-cli
       - webpack-hot-middleware
       - webpack-plugin-serve
+    dev: false
+
+  /react-string-replace/1.1.0:
+    resolution: {integrity: sha512-N6RalSDFGbOHs0IJi1H611WbZsvk3ZT47Jl2JEXFbiS3kTwsdCYij70Keo/tWtLy7sfhDsYm7CwNM/WmjXIaMw==}
+    engines: {node: '>=0.12.0'}
     dev: false
 
   /react-transition-group/4.4.2_sfoxds7t5ydpegc3knd667wn6m:
