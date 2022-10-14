@@ -48,7 +48,7 @@ const decomposeMessage = (message, highlightText) => {
 			.replace(/\n/g, '<br />');
 	}
 
-	let splitedWithEmoji = emojiTree(message).reduce((acc, item) => {
+	let splitWithEmoji = emojiTree(message).reduce((acc, item) => {
 		if (item.type === 'emoji') {
 			if (section) {
 				acc.push(section);
@@ -63,19 +63,19 @@ const decomposeMessage = (message, highlightText) => {
 		return acc;
 	}, []);
 
-	splitedWithEmoji.push(section);
+	splitWithEmoji.push(section);
 	section = '';
 
-	const splittedWithHighlight = [];
+	const splitWithHighlight = [];
 
-	splitedWithEmoji.forEach((item) => {
-		splittedWithHighlight.push(
+	splitWithEmoji.forEach((item) => {
+		splitWithHighlight.push(
 			item.split(/(<mark class="highlight">.*.<\/mark>)/gi)
 		);
 	});
 
 	return []
-		.concat(...splittedWithHighlight)
+		.concat(...splitWithHighlight)
 		.filter((item) => item !== '')
 		.map((item, index) => ({
 			index,
@@ -91,20 +91,20 @@ const PrintMessage = ({
 	highlightText,
 	className,
 }) => {
-	const splittedMessage = useMemo(
+	const splitMessage = useMemo(
 		() => decomposeMessage(message, highlightText),
 		[message, highlightText]
 	);
 	const classNames = cn('printMessage', className);
 
 	// single emoji
-	if (splittedMessage.length === 1 && splittedMessage[0].type === 'emoji') {
-		splittedMessage[0].single = !smallEmoji;
+	if (splitMessage.length === 1 && splitMessage[0].type === 'emoji') {
+		splitMessage[0].single = !smallEmoji;
 	}
 
 	return (
 		<Tag className={classNames}>
-			{splittedMessage.map((item) => {
+			{splitMessage.map((item) => {
 				const Component = item.component;
 
 				return <Component data={item} key={item.index} />;
