@@ -7,6 +7,7 @@ import isEmoji from 'emoji-tree/lib/isEmoji';
 import Text from './components/Text';
 import HighlightText from './components/HighlightText';
 import Emoji from './components/Emoji';
+import TextRenderer from './components/TextRenderer';
 
 const getTextNodeType = (node) => {
 	if (isEmoji(node)) {
@@ -86,7 +87,7 @@ const decomposeMessage = (message, highlightText) => {
 
 const PrintMessage = ({
 	message,
-	as: Tag = 'span',
+	as: Tag = TextRenderer,
 	smallEmoji = false,
 	highlightText,
 	className,
