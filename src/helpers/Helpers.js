@@ -25,8 +25,6 @@ export const translateHTMLInputToText = (html) => {
 		return '';
 	});
 
-	console.log(result);
-
 	// Convert it to plain text
 	result = htmlToFormattedText(result);
 
