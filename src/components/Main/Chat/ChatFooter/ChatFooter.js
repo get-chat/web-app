@@ -125,6 +125,9 @@ function ChatFooter(props) {
 		// Sanitize input
 		html = sanitize(html);
 
+		// Preserving new lines
+		html = html.replace(/(?:\r\n|\r|\n)/g, '<br>');
+
 		//html = html.replace('<span', '<span contentEditable="false"');
 		html = html
 			.replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"')

@@ -7,6 +7,7 @@ import isEmoji from 'emoji-tree/lib/isEmoji';
 import Text from './components/Text';
 import HighlightText from './components/HighlightText';
 import Emoji from './components/Emoji';
+import Linkify from 'react-linkify';
 
 const getTextNodeType = (node) => {
 	if (isEmoji(node)) {
@@ -48,7 +49,7 @@ const decomposeMessage = (message, highlightText) => {
 			.replace(/\n/g, '<br />');
 	}
 
-	let splitedWithEmoji = emojiTree(message).reduce((acc, item) => {
+	let splitWithEmoji = emojiTree(message).reduce((acc, item) => {
 		if (item.type === 'emoji') {
 			if (section) {
 				acc.push(section);
@@ -63,19 +64,19 @@ const decomposeMessage = (message, highlightText) => {
 		return acc;
 	}, []);
 
-	splitedWithEmoji.push(section);
+	splitWithEmoji.push(section);
 	section = '';
 
-	const splittedWithHighlight = [];
+	const splitWithHighlight = [];
 
-	splitedWithEmoji.forEach((item) => {
-		splittedWithHighlight.push(
+	splitWithEmoji.forEach((item) => {
+		splitWithHighlight.push(
 			item.split(/(<mark class="highlight">.*.<\/mark>)/gi)
 		);
 	});
 
 	return []
-		.concat(...splittedWithHighlight)
+		.concat(...splitWithHighlight)
 		.filter((item) => item !== '')
 		.map((item, index) => ({
 			index,
@@ -91,25 +92,33 @@ const PrintMessage = ({
 	highlightText,
 	className,
 }) => {
-	const splittedMessage = useMemo(
+	const splitMessage = useMemo(
 		() => decomposeMessage(message, highlightText),
 		[message, highlightText]
 	);
 	const classNames = cn('printMessage', className);
 
 	// single emoji
-	if (splittedMessage.length === 1 && splittedMessage[0].type === 'emoji') {
-		splittedMessage[0].single = !smallEmoji;
+	if (splitMessage.length === 1 && splitMessage[0].type === 'emoji') {
+		splitMessage[0].single = !smallEmoji;
 	}
 
 	return (
-		<Tag className={classNames}>
-			{splittedMessage.map((item) => {
-				const Component = item.component;
+		<Linkify
+			componentDecorator={(decoratedHref, decoratedText, key) => (
+				<a target="blank" href={decoratedHref} key={key}>
+					{decoratedText}
+				</a>
+			)}
+		>
+			<Tag className={classNames}>
+				{splitMessage.map((item) => {
+					const Component = item.component;
 
-				return <Component data={item} key={item.index} />;
-			})}
-		</Tag>
+					return <Component data={item} key={item.index} />;
+				})}
+			</Tag>
+		</Linkify>
 	);
 };
 

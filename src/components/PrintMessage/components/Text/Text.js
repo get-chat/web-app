@@ -1,18 +1,11 @@
 import React from 'react';
-import Linkify from 'react-linkify';
+import reactStringReplace from 'react-string-replace';
 
 const Text = ({ data: { text } }) => {
-	return (
-		<Linkify
-			componentDecorator={(decoratedHref, decoratedText, key) => (
-				<a target="blank" href={decoratedHref} key={key}>
-					{decoratedText}
-				</a>
-			)}
-		>
-			{text}
-		</Linkify>
-	);
+	const regex = /\*(.*?)\*/gi;
+	return reactStringReplace(text, regex, (match, index) => (
+		<strong key={index}>{match}</strong>
+	));
 };
 
 export default Text;
