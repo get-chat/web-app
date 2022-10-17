@@ -483,6 +483,13 @@ function Sidebar(props) {
 				) {
 					return;
 				}
+			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+				if (
+					!preparedChat.assignedGroup ||
+					props.currentUser?.isInGroup(preparedChat.assignedGroup.id)
+				) {
+					return;
+				}
 			}
 
 			props.setChats((prevState) => {
