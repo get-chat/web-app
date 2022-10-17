@@ -475,6 +475,16 @@ function Sidebar(props) {
 		apiService.retrieveChatCall(chatWaId, (response) => {
 			const preparedChat = new ChatClass(response.data);
 
+			// Don't display chat if tab case is "me" and chat is not assigned to user
+			if (tabCase === CHAT_LIST_TAB_CASE_ME) {
+				if (
+					!preparedChat.assignedToUser ||
+					preparedChat.assignedToUser.id !== props.currentUser?.id
+				) {
+					return;
+				}
+			}
+
 			props.setChats((prevState) => {
 				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
 				const sortedNextState = sortChats(prevState);

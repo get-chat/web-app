@@ -15,10 +15,10 @@ import { getDroppedFiles, handleDragOver } from '../../../helpers/FileHelper';
 import PubSub from 'pubsub-js';
 import {
 	CALENDAR_SHORT,
+	CHAT_LIST_TAB_CASE_ALL,
+	CHAT_LIST_TAB_CASE_GROUP,
+	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_DROPPED_FILES,
-	SIDEBAR_TAB_CASE_ALL,
-	SIDEBAR_TAB_CASE_GROUP,
-	SIDEBAR_TAB_CASE_ME,
 } from '../../../Constants';
 import ChatMessageShortContent from '../Chat/ChatMessage/ChatMessageShortContent';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
@@ -206,8 +206,8 @@ function SidebarChat(props) {
 						</Avatar>
 
 						{props.chatData.assignedToUser &&
-							(props.tabCase === SIDEBAR_TAB_CASE_ALL ||
-								props.tabCase === SIDEBAR_TAB_CASE_GROUP) && (
+							(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
+								props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
 								<Tooltip title={props.chatData.generateAssignmentInformation()}>
 									<Avatar
 										className="sidebarChat__avatarWrapper__assignee"
@@ -225,10 +225,10 @@ function SidebarChat(props) {
 							)}
 
 						{props.chatData.assignedGroup &&
-							((props.tabCase === SIDEBAR_TAB_CASE_ALL &&
+							((props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
 								!props.chatData.assignedToUser) ||
-								props.tabCase === SIDEBAR_TAB_CASE_ME ||
-								(props.tabCase === SIDEBAR_TAB_CASE_GROUP &&
+								props.tabCase === CHAT_LIST_TAB_CASE_ME ||
+								(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
 									!props.chatData.assignedToUser)) && (
 								<Tooltip title={props.chatData.generateAssignmentInformation()}>
 									<Avatar
