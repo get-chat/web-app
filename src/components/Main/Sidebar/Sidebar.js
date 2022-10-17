@@ -129,6 +129,11 @@ function Sidebar(props) {
 	let cancelTokenSourceRef = useRef();
 
 	useEffect(() => {
+		// Reset chats when tab case changes
+		props.setChats({});
+	}, [tabCase]);
+
+	useEffect(() => {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
@@ -715,11 +720,17 @@ function Sidebar(props) {
 						<span className="sidebar__results__chats__noResult">
 							{keyword.trim().length > 0 ? (
 								<span>
-									No chats found for:{' '}
-									<span className="searchOccurrence">{keyword}</span>
+									<Trans>
+										No chats found for:{' '}
+										<span className="searchOccurrence">{keyword}</span>
+									</Trans>
 								</span>
 							) : (
-								<span>You don't have any chats yet.</span>
+								<>
+									{!isLoadingChats && (
+										<span>{t("You don't have any chats yet.")}</span>
+									)}
+								</>
 							)}
 						</span>
 					)}
