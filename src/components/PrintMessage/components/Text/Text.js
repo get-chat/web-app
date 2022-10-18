@@ -2,10 +2,20 @@ import React from 'react';
 import reactStringReplace from 'react-string-replace';
 
 const Text = ({ data: { text } }) => {
-	const regex = /\*(.*?)\*/gi;
-	return reactStringReplace(text, regex, (match, index) => (
-		<strong key={index}>{match}</strong>
+	const italicRegex = /_(.*?)_/gi;
+	const boldRegex = /\*(.*?)\*/gi;
+
+	let formattedText = reactStringReplace(text, italicRegex, (match, index) => (
+		<i key={index}>{match}</i>
 	));
+
+	formattedText = reactStringReplace(
+		formattedText,
+		boldRegex,
+		(match, index) => <strong key={index}>{match}</strong>
+	);
+
+	return formattedText;
 };
 
 export default Text;
