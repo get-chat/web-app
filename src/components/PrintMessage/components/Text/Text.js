@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import reactStringReplace from 'react-string-replace';
 
 const Text = ({ data: { text } }) => {
-	const italicRegex = /_(.*?)_/gi;
-	const boldRegex = /\*(.*?)\*/gi;
+	return useMemo(() => {
+		const italicRegex = /_(.*?)_/gi;
+		const boldRegex = /\*(.*?)\*/gi;
 
-	let formattedText = reactStringReplace(text, italicRegex, (match, index) => (
-		<i key={index}>{match}</i>
-	));
+		let formattedText = text;
 
-	formattedText = reactStringReplace(
-		formattedText,
-		boldRegex,
-		(match, index) => <strong key={index}>{match}</strong>
-	);
+		formattedText = reactStringReplace(
+			formattedText,
+			italicRegex,
+			(match, index) => <i key={index}>{match}</i>
+		);
 
-	return formattedText;
+		formattedText = reactStringReplace(
+			formattedText,
+			boldRegex,
+			(match, index) => <strong key={index}>{match}</strong>
+		);
+
+		return formattedText;
+	}, [text]);
 };
 
 export default Text;
