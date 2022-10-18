@@ -11,13 +11,13 @@ const Text = ({ data: { text } }) => {
 		formattedText = reactStringReplace(
 			formattedText,
 			italicRegex,
-			(match, index) => <i key={index}>{match}</i>
+			(match, index) => <i key={'italic_' + index}>{match}</i>
 		);
 
 		formattedText = reactStringReplace(
 			formattedText,
 			boldRegex,
-			(match, index) => <strong key={index}>{match}</strong>
+			(match, index) => <strong key={'bold_' + index}>{match}</strong>
 		);
 
 		return formattedText;
