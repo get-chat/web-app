@@ -481,6 +481,9 @@ function Sidebar(props) {
 					!preparedChat.assignedToUser ||
 					preparedChat.assignedToUser.id !== props.currentUser?.id
 				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
 					return;
 				}
 			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
@@ -488,6 +491,9 @@ function Sidebar(props) {
 					!preparedChat.assignedGroup ||
 					props.currentUser?.isInGroup(preparedChat.assignedGroup.id)
 				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
 					return;
 				}
 			}
