@@ -3,10 +3,17 @@ import reactStringReplace from 'react-string-replace';
 
 const Text = ({ data: { text } }) => {
 	return useMemo(() => {
-		const italicRegex = /_(.*?)_/gi;
 		const boldRegex = /\*(.*?)\*/gi;
+		const italicRegex = /_(.*?)_/gi;
+		const strikeRegex = /~(.*?)~/gi;
 
 		let formattedText = text;
+
+		formattedText = reactStringReplace(
+			formattedText,
+			boldRegex,
+			(match, index) => <strong key={'bold_' + index}>{match}</strong>
+		);
 
 		formattedText = reactStringReplace(
 			formattedText,
@@ -16,8 +23,8 @@ const Text = ({ data: { text } }) => {
 
 		formattedText = reactStringReplace(
 			formattedText,
-			boldRegex,
-			(match, index) => <strong key={'bold_' + index}>{match}</strong>
+			strikeRegex,
+			(match, index) => <s key={'strike_' + index}>{match}</s>
 		);
 
 		return formattedText;
