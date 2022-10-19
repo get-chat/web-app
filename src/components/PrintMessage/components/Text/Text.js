@@ -35,32 +35,6 @@ const Text = ({ data: { text } }) => {
 			},
 		};
 
-		/*let formattedText = text;
-
-		formattedText = reactStringReplaceRecursive(
-			formattedText,
-			boldRegex,
-			(match, index) => <strong key={'bold_' + index}>{match}</strong>
-		);
-
-		formattedText = reactStringReplaceRecursive(
-			formattedText,
-			italicRegex,
-			(match, index) => <i key={'italic_' + index}>{match}</i>
-		);
-
-		formattedText = reactStringReplaceRecursive(
-			formattedText,
-			strikeRegex,
-			(match, index) => <s key={'strike_' + index}>{match}</s>
-		);
-
-		formattedText = reactStringReplaceRecursive(
-			formattedText,
-			codeRegex,
-			(match, index) => <code key={'code_' + index}>{match}</code>
-		);*/
-
 		return reactStringReplace(config)(text);
 	}, [text]);
 };
