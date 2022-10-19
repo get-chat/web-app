@@ -53,7 +53,7 @@ specifiers:
   react-redux: ^8.0.4
   react-router-dom: ^5.3.0
   react-scripts: ^5.0.0
-  react-string-replace: ^1.1.0
+  react-string-replace-recursively: ^0.2.0
   source-map-explorer: ^2.5.2
   url-search-params-polyfill: ^8.1.1
   worker-loader: ^3.0.8
@@ -100,7 +100,7 @@ dependencies:
   react-redux: 8.0.4_ykxqnxanlq42xavzz22bjdrwni
   react-router-dom: 5.3.3_react@17.0.2
   react-scripts: 5.0.1_kkkse6ykemylkxedq55canwpsq
-  react-string-replace: 1.1.0
+  react-string-replace-recursively: 0.2.0
   source-map-explorer: 2.5.2
   url-search-params-polyfill: 8.1.1
   worker-loader: 3.0.8_webpack@5.74.0
@@ -8123,6 +8123,14 @@ packages:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
     dev: false
 
+  /lodash.identity/3.0.0:
+    resolution: {integrity: sha512-AupTIzdLQxJS5wIYUQlgGyk2XRTfGXA+MCghDHqZk0pzUNYvd3EESS6dkChNauNYVIutcb0dfHw1ri9Q1yPV8Q==}
+    dev: false
+
+  /lodash.keys/4.2.0:
+    resolution: {integrity: sha512-J79MkJcp7Df5mizHiVNpjoHXLi4HLjh9VLS/M7lQSGoQ+0oQ+lWEigREkqKyizPB1IawvQLLKY8mzEcm1tkyxQ==}
+    dev: false
+
   /lodash.memoize/4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
     dev: false
@@ -8131,9 +8139,17 @@ packages:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: false
 
+  /lodash.omit/4.5.0:
+    resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
+    dev: false
+
   /lodash.once/4.1.1:
     resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==}
     dev: true
+
+  /lodash.reduce/4.6.0:
+    resolution: {integrity: sha512-6raRe2vxCYBhpBu+B+TtNGUzah+hQjVdu3E17wfusjyrXBka2nBS8OH/gjVZ5PvHOhWmIZTYri09Z6n/QfnNMw==}
+    dev: false
 
   /lodash.sortby/4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
@@ -10235,9 +10251,13 @@ packages:
       - webpack-plugin-serve
     dev: false
 
-  /react-string-replace/1.1.0:
-    resolution: {integrity: sha512-N6RalSDFGbOHs0IJi1H611WbZsvk3ZT47Jl2JEXFbiS3kTwsdCYij70Keo/tWtLy7sfhDsYm7CwNM/WmjXIaMw==}
-    engines: {node: '>=0.12.0'}
+  /react-string-replace-recursively/0.2.0:
+    resolution: {integrity: sha512-3ab5wUZ3HM1JFVKFFqmVV2NXoLZDdnkNx1HOVxvF2s/Ays/97h07erGJEIz6FGbxCZvHP/wN4n/9NobSXb23jg==}
+    dependencies:
+      lodash.identity: 3.0.0
+      lodash.keys: 4.2.0
+      lodash.omit: 4.5.0
+      lodash.reduce: 4.6.0
     dev: false
 
   /react-transition-group/4.4.2_sfoxds7t5ydpegc3knd667wn6m:
