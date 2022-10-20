@@ -32,6 +32,18 @@ class UserClass {
 		return label;
 	};
 
+	isInGroup(groupId) {
+		let inGroup = false;
+
+		this.groups?.forEach((groupItem) => {
+			if (groupItem?.id === groupId) {
+				inGroup = true;
+			}
+		});
+
+		return inGroup;
+	}
+
 	isBot() {
 		if (this.groups) {
 			for (let i = 0; i < this.groups.length; i++) {

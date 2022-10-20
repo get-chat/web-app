@@ -129,6 +129,11 @@ function Sidebar(props) {
 	let cancelTokenSourceRef = useRef();
 
 	useEffect(() => {
+		// Reset chats when tab case changes
+		props.setChats({});
+	}, [tabCase]);
+
+	useEffect(() => {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
@@ -470,6 +475,29 @@ function Sidebar(props) {
 		apiService.retrieveChatCall(chatWaId, (response) => {
 			const preparedChat = new ChatClass(response.data);
 
+			// Don't display chat if tab case is "me" and chat is not assigned to user
+			if (tabCase === CHAT_LIST_TAB_CASE_ME) {
+				if (
+					!preparedChat.assignedToUser ||
+					preparedChat.assignedToUser.id !== props.currentUser?.id
+				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
+					return;
+				}
+			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+				if (
+					!preparedChat.assignedGroup ||
+					props.currentUser?.isInGroup(preparedChat.assignedGroup.id)
+				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
+					return;
+				}
+			}
+
 			props.setChats((prevState) => {
 				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
 				const sortedNextState = sortChats(prevState);
@@ -715,11 +743,15 @@ function Sidebar(props) {
 						<span className="sidebar__results__chats__noResult">
 							{keyword.trim().length > 0 ? (
 								<span>
-									No chats found for:{' '}
-									<span className="searchOccurrence">{keyword}</span>
+									<Trans>
+										No chats found for:{' '}
+										<span className="searchOccurrence">{keyword}</span>
+									</Trans>
 								</span>
 							) : (
-								<span>You don't have any chats yet.</span>
+								!isLoadingChats && (
+									<span>{t("You don't have any chats yet.")}</span>
+								)
 							)}
 						</span>
 					)}

@@ -49,10 +49,6 @@ export const ATTACHMENT_TYPE_DOCUMENT = 'document';
 export const EMPTY_IMAGE_BASE64 =
 	'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-export const SIDEBAR_TAB_CASE_ALL = 'all';
-export const SIDEBAR_TAB_CASE_ME = 'me';
-export const SIDEBAR_TAB_CASE_GROUP = 'group';
-
 export const CALENDAR_NORMAL = {
 	lastDay: '[Yesterday at] H:mm', // LT
 	sameDay: '[Today at] H:mm',
