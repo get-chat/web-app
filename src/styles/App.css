@@ -249,6 +249,7 @@ a {
 	width: 100%;
 	padding: 4px 15px;
 	background-color: white;
+	box-shadow: 0 0 15px rgba(0, 0, 45, 0.2);
 }
 
 .app_imagePreview__header__senderInfo {
