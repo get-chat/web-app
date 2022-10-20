@@ -749,11 +749,9 @@ function Sidebar(props) {
 									</Trans>
 								</span>
 							) : (
-								<>
-									{!isLoadingChats && (
-										<span>{t("You don't have any chats yet.")}</span>
-									)}
-								</>
+								!isLoadingChats && (
+									<span>{t("You don't have any chats yet.")}</span>
+								)
 							)}
 						</span>
 					)}
