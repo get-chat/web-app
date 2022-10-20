@@ -1,11 +1,42 @@
-import React from 'react';
-import reactStringReplace from 'react-string-replace';
+import React, { useMemo } from 'react';
+import reactStringReplace from 'react-string-replace-recursively';
 
 const Text = ({ data: { text } }) => {
-	const regex = /\*(.*?)\*/gi;
-	return reactStringReplace(text, regex, (match, index) => (
-		<strong key={index}>{match}</strong>
-	));
+	return useMemo(() => {
+		const boldRegex = /\*(.*?)\*/gi;
+		const italicRegex = /_(.*?)_/gi;
+		const strikeRegex = /~(.*?)~/gi;
+		const codeRegex = /```(.*?)```/gi;
+
+		const config = {
+			bold: {
+				pattern: boldRegex,
+				matcherFn: function (rawText, processed, key) {
+					return <strong key={key}>{processed}</strong>;
+				},
+			},
+			italic: {
+				pattern: italicRegex,
+				matcherFn: function (rawText, processed, key) {
+					return <i key={key}>{processed}</i>;
+				},
+			},
+			strike: {
+				pattern: strikeRegex,
+				matcherFn: function (rawText, processed, key) {
+					return <s key={key}>{processed}</s>;
+				},
+			},
+			code: {
+				pattern: codeRegex,
+				matcherFn: function (rawText, processed, key) {
+					return <code key={key}>{processed}</code>;
+				},
+			},
+		};
+
+		return reactStringReplace(config)(text);
+	}, [text]);
 };
 
 export default Text;
