@@ -4,6 +4,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
+import { GetApp } from '@material-ui/icons';
 
 function PreviewMedia(props) {
 	const chatMessageToPreview = props.data;
@@ -38,6 +39,10 @@ function PreviewMedia(props) {
 						/>
 					</span>
 				</div>
+
+				<IconButton onClick={() => console.log('Download')}>
+					<GetApp />
+				</IconButton>
 			</div>
 
 			<Zoom in={true}>
