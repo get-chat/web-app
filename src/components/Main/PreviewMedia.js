@@ -9,6 +9,26 @@ import { GetApp } from '@material-ui/icons';
 function PreviewMedia(props) {
 	const chatMessageToPreview = props.data;
 
+	const download = () => {
+		let link;
+
+		if (
+			chatMessageToPreview.imageId ||
+			chatMessageToPreview.imageLink ||
+			chatMessageToPreview.getHeaderFileLink('image')
+		) {
+			link = chatMessageToPreview.generateImageLink(true);
+		} else if (
+			chatMessageToPreview.videoId ||
+			chatMessageToPreview.videoLink ||
+			chatMessageToPreview.getHeaderFileLink('video')
+		) {
+			link = chatMessageToPreview.generateVideoLink(true);
+		}
+
+		console.log(link);
+	};
+
 	return (
 		<div className="app__mediaPreview">
 			<div className="app__mediaPreview__header">
@@ -40,7 +60,7 @@ function PreviewMedia(props) {
 					</span>
 				</div>
 
-				<IconButton onClick={() => console.log('Download')}>
+				<IconButton onClick={download}>
 					<GetApp />
 				</IconButton>
 			</div>
