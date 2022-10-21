@@ -7,6 +7,7 @@ import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { GetApp } from '@material-ui/icons';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
+import mime2ext from 'mime2ext';
 
 function PreviewMedia(props) {
 	const chatMessageToPreview = props.data;
@@ -33,7 +34,9 @@ function PreviewMedia(props) {
 				responseType: 'blob',
 			})
 			.then((res) => {
-				fileDownload(res.data, 'testfile');
+				const extension = mime2ext(res.headers['content-type']);
+				const fileName = `${new Date().getTime()}.${extension}`;
+				fileDownload(res.data, fileName);
 			});
 
 		console.log(link);
