@@ -1,22 +1,56 @@
 import React from 'react';
-import { Avatar, IconButton, Zoom } from '@material-ui/core';
+import { Avatar, IconButton, Tooltip, Zoom } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
+import { GetApp } from '@material-ui/icons';
+import axios from 'axios';
+import fileDownload from 'js-file-download';
+import { mimeDB } from '../../helpers/MimeHelper';
+import { generateUniqueID } from '../../helpers/Helpers';
+import { useTranslation } from 'react-i18next';
 
 function PreviewMedia(props) {
+	const { t } = useTranslation();
+
 	const chatMessageToPreview = props.data;
+
+	const mimeToExtension = (mime) => {
+		mime = mime.trim().toLowerCase();
+		if (!mimeDB.hasOwnProperty(mime)) return '';
+		return mimeDB[mime][0];
+	};
+
+	const download = () => {
+		let fileURL =
+			chatMessageToPreview.generateImageLink(true) ??
+			chatMessageToPreview.generateVideoLink(true);
+
+		if (!fileURL) return;
+
+		axios
+			.get(fileURL, {
+				responseType: 'blob',
+			})
+			.then((res) => {
+				const extension = mimeToExtension(res.headers['content-type']);
+				const fileName = `getchat_${generateUniqueID()}.${extension}`;
+				fileDownload(res.data, fileName);
+			});
+	};
 
 	return (
 		<div className="app__mediaPreview">
 			<div className="app__mediaPreview__header">
-				<IconButton
-					className="app__mediaPreview__close"
-					onClick={props.hideImageOrVideoPreview}
-				>
-					<CloseIcon />
-				</IconButton>
+				<Tooltip title={t('Close')}>
+					<IconButton
+						className="app__mediaPreview__close"
+						onClick={props.hideImageOrVideoPreview}
+					>
+						<CloseIcon />
+					</IconButton>
+				</Tooltip>
 
 				<Avatar
 					style={{
@@ -38,6 +72,12 @@ function PreviewMedia(props) {
 						/>
 					</span>
 				</div>
+
+				<Tooltip title={t('Download')}>
+					<IconButton onClick={download}>
+						<GetApp />
+					</IconButton>
+				</Tooltip>
 			</div>
 
 			<Zoom in={true}>

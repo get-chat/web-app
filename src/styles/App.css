@@ -249,6 +249,7 @@ a {
 	width: 100%;
 	padding: 4px 15px;
 	background-color: white;
+	box-shadow: 0 0 15px rgba(0, 0, 45, 0.2);
 }
 
 .app_imagePreview__header__senderInfo {
@@ -291,6 +292,7 @@ a {
 	max-height: 100%;
 	max-width: 100%;
 	align-self: center;
+	border-radius: 10px;
 }
 
 .wordBreakAll {

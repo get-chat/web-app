@@ -120,7 +120,7 @@ video.chat__media {
 	top: 50%;
 	transform: translate(-50%, -50%);
 	padding: 10px;
-	background-color: rgba(0, 0, 45, 0.4);
+	background-color: rgba(0, 0, 0, 0.4);
 	border-radius: 50px;
 }
 

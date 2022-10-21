@@ -250,7 +250,7 @@ function ChatFooter(props) {
 
 			<div className="chat__footer">
 				{!props.isExpired && (
-					<Tooltip title="Emoji" placement="top">
+					<Tooltip title={t('Emoji')} placement="top">
 						<IconButton
 							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
 							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
@@ -262,14 +262,14 @@ function ChatFooter(props) {
 
 				{!props.isExpired && (
 					<div className="chat__footer__attachmentContainer desktopOnly">
-						<Tooltip title="Attachment" placement="right">
+						<Tooltip title={t('Attachment')} placement="right">
 							<IconButton>
 								<AttachFile />
 							</IconButton>
 						</Tooltip>
 
 						<div className="chat__footer__attachmentContainer__options">
-							<Tooltip title="Contacts" placement="right">
+							<Tooltip title={t('Contacts')} placement="right">
 								<IconButton
 									className="chat__footer__attachmentContainer__options__document"
 									onClick={openContactsModal}
@@ -278,7 +278,7 @@ function ChatFooter(props) {
 								</IconButton>
 							</Tooltip>
 
-							<Tooltip title="Documents" placement="right">
+							<Tooltip title={t('Documents')} placement="right">
 								<IconButton
 									className="chat__footer__attachmentContainer__options__document"
 									onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
@@ -287,7 +287,7 @@ function ChatFooter(props) {
 								</IconButton>
 							</Tooltip>
 
-							<Tooltip title="Images & Videos" placement="right">
+							<Tooltip title={t('Images & Videos')} placement="right">
 								<IconButton
 									className="chat__footer__attachmentContainer__options__imageAndVideo"
 									onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
@@ -379,7 +379,7 @@ function ChatFooter(props) {
 
 				{!hasInput() && !props.isExpired && (
 					<div className="mobileOnly">
-						<Tooltip title="More">
+						<Tooltip title={t('More')}>
 							<IconButton
 								className="chat_footer__moreButton"
 								onClick={showMore}
@@ -391,7 +391,7 @@ function ChatFooter(props) {
 				)}
 
 				{hasInput() && (
-					<Tooltip title="Send" placement="top">
+					<Tooltip title={t('Send')} placement="top">
 						<IconButton
 							onClick={(e) => props.sendMessage(true, e)}
 							data-test-id="send-message-button"
@@ -402,7 +402,7 @@ function ChatFooter(props) {
 				)}
 
 				{hasInput() && (
-					<Tooltip title="Bulk Send" placement="top">
+					<Tooltip title={t('Bulk Send')} placement="top">
 						<IconButton
 							onClick={() => props.bulkSendMessage(ChatMessageClass.TYPE_TEXT)}
 						>
@@ -412,7 +412,7 @@ function ChatFooter(props) {
 				)}
 
 				{!props.isExpired && !hasInput() && !isRecording && (
-					<Tooltip title="Voice" placement="top">
+					<Tooltip title={t('Voice')} placement="top">
 						<IconButton
 							onClick={() =>
 								PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')

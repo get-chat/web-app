@@ -95,7 +95,7 @@ const SendBulkVoiceMessageDialog = ({
 			<DialogTitle>{t('Send bulk voice message')}</DialogTitle>
 			<DialogContent className="sendBulkVoiceMessageDialogContent">
 				{!isRecording && (
-					<Tooltip title="Voice" placement="top">
+					<Tooltip title={t('Voice')} placement="top">
 						<IconButton
 							onClick={() =>
 								PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'bulk')

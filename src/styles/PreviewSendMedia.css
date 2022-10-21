@@ -52,16 +52,19 @@
 .previewSendMedia__preview__image {
 	max-width: 100%;
 	max-height: 100%;
+	border-radius: 10px;
 }
 
 .previewSendMedia__preview__video {
 	max-width: 100%;
 	max-height: 100%;
+	border-radius: 10px;
 }
 
 .previewSendMedia__preview__pdf {
 	max-width: 100%;
 	max-height: 100%;
+	border-radius: 10px;
 }
 
 .previewSendMedia__caption {
