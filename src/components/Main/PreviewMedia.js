@@ -8,6 +8,7 @@ import { GetApp } from '@material-ui/icons';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import { mimeDB } from '../../helpers/MimeHelper';
+import { generateUniqueID } from '../../helpers/Helpers';
 
 function PreviewMedia(props) {
 	const chatMessageToPreview = props.data;
@@ -19,33 +20,31 @@ function PreviewMedia(props) {
 	};
 
 	const download = () => {
-		let link;
+		let fileURL;
 
 		if (
 			chatMessageToPreview.imageId ||
 			chatMessageToPreview.imageLink ||
 			chatMessageToPreview.getHeaderFileLink('image')
 		) {
-			link = chatMessageToPreview.generateImageLink(true);
+			fileURL = chatMessageToPreview.generateImageLink(true);
 		} else if (
 			chatMessageToPreview.videoId ||
 			chatMessageToPreview.videoLink ||
 			chatMessageToPreview.getHeaderFileLink('video')
 		) {
-			link = chatMessageToPreview.generateVideoLink(true);
+			fileURL = chatMessageToPreview.generateVideoLink(true);
 		}
 
 		axios
-			.get(link, {
+			.get(fileURL, {
 				responseType: 'blob',
 			})
 			.then((res) => {
 				const extension = mimeToExtension(res.headers['content-type']);
-				const fileName = `${new Date().getTime()}.${extension}`;
+				const fileName = `getchat_${generateUniqueID()}.${extension}`;
 				fileDownload(res.data, fileName);
 			});
-
-		console.log(link);
 	};
 
 	return (
