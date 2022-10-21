@@ -107,11 +107,22 @@ In order to display Google Maps Embed API in location messages, you need to prov
 
 `REACT_APP_LOGO_BLACK_URL`: Black and white version of application logo (used inside the loading screen).
 
+## How to add translations of a new language
+
+- Find the ISO 639-1 code of the language you will be adding. For example `es` for Spanish.
+You can find the full list of languages codes in 639-1 at https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+
+- Create a new folder in `/src/locales/` with the language code as its name.
+
+- Copy the main PO file `/src/locales/translation.po` into the new language directory and add the translations.
+
+- Run the following command by changing `en` to the new language code: `lang="en";i18next-conv -l $lang -s ./src/locales/translation.po ./src/locales/${lang}/translation.json`
+
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `i18next-conv -l en -s ./src/locales/translation.po ./src/locales/en/translation.json`
+### `lang="en";i18next-conv -l $lang -s ./src/locales/translation.po ./src/locales/${lang}/translation.json`
 
 Converts the PO file to a JSON file. Do not forget to specify the correct language and the input and output paths.
 
