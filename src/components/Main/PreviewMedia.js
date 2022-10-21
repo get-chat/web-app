@@ -7,10 +7,16 @@ import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { GetApp } from '@material-ui/icons';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
-import mime2ext from 'mime2ext';
+import db from 'mime-standard';
 
 function PreviewMedia(props) {
 	const chatMessageToPreview = props.data;
+
+	const mimeToExtension = (mime) => {
+		mime = mime.trim().toLowerCase();
+		if (!db.hasOwnProperty(mime)) return '';
+		return db[mime][0];
+	};
 
 	const download = () => {
 		let link;
@@ -34,7 +40,7 @@ function PreviewMedia(props) {
 				responseType: 'blob',
 			})
 			.then((res) => {
-				const extension = mime2ext(res.headers['content-type']);
+				const extension = mimeToExtension(res.headers['content-type']);
 				const fileName = `${new Date().getTime()}.${extension}`;
 				fileDownload(res.data, fileName);
 			});

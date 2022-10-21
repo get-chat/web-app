@@ -37,7 +37,7 @@ specifiers:
   identity-obj-proxy: ^3.0.0
   js-file-download: ^0.4.12
   lint-staged: ^13.0.3
-  mime2ext: ^2.0.0
+  mime-standard: ^1.0.2
   moment: ^2.29.4
   moment-timezone: ^0.5.32
   mp3-mediarecorder: ^4.0.3
@@ -87,7 +87,7 @@ dependencies:
   i18next-sprintf-postprocessor: 0.2.2
   identity-obj-proxy: 3.0.0
   js-file-download: 0.4.12
-  mime2ext: 2.0.0
+  mime-standard: 1.0.2
   moment: 2.29.4
   moment-timezone: 0.5.34
   mp3-mediarecorder: 4.0.5
@@ -8340,12 +8340,6 @@ packages:
     resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
     engines: {node: '>=4'}
     hasBin: true
-
-  /mime2ext/2.0.0:
-    resolution: {integrity: sha512-v4f86Jsi/wtqbeXVJXcd7ZxMGAnTJ55LlMJS2tNYEQQoevDq6DdsxJxIAACjRUMPL43QJVzL6nF5x78BNf4R2Q==}
-    dependencies:
-      mime-standard: 1.0.2
-    dev: false
 
   /mimic-fn/2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
