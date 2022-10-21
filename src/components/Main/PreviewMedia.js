@@ -5,6 +5,8 @@ import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { GetApp } from '@material-ui/icons';
+import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 function PreviewMedia(props) {
 	const chatMessageToPreview = props.data;
@@ -25,6 +27,14 @@ function PreviewMedia(props) {
 		) {
 			link = chatMessageToPreview.generateVideoLink(true);
 		}
+
+		axios
+			.get(link, {
+				responseType: 'blob',
+			})
+			.then((res) => {
+				fileDownload(res.data, 'testfile');
+			});
 
 		console.log(link);
 	};
