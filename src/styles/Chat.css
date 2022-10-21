@@ -284,7 +284,8 @@ a.chat__document:hover {
 	position: absolute;
 	top: 0;
 	right: 0;
-	padding: 4px;
+	height: 31px;
+	width: 36px;
 	cursor: pointer;
 	z-index: 3;
 	background: rgb(215, 219, 215);
@@ -295,6 +296,8 @@ a.chat__document:hover {
 	);
 	border-radius: 0 10px 10px 0;
 	transition: all 1s;
+	justify-content: center;
+	align-items: center;
 }
 
 .chat__message.chat__outgoing .chat__message__more {
@@ -306,7 +309,7 @@ a.chat__document:hover {
 }
 
 .chat__message.chat__outgoing.messageType__text:hover .chat__message__more /*.chat__message:hover .chat__message__more*/ {
-	display: block;
+	display: flex;
 }
 
 .chat__forwarded {
