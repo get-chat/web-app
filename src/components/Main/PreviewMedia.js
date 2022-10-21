@@ -23,21 +23,11 @@ function PreviewMedia(props) {
 	};
 
 	const download = () => {
-		let fileURL;
+		let fileURL =
+			chatMessageToPreview.generateImageLink(true) ??
+			chatMessageToPreview.generateVideoLink(true);
 
-		if (
-			chatMessageToPreview.imageId ||
-			chatMessageToPreview.imageLink ||
-			chatMessageToPreview.getHeaderFileLink('image')
-		) {
-			fileURL = chatMessageToPreview.generateImageLink(true);
-		} else if (
-			chatMessageToPreview.videoId ||
-			chatMessageToPreview.videoLink ||
-			chatMessageToPreview.getHeaderFileLink('video')
-		) {
-			fileURL = chatMessageToPreview.generateVideoLink(true);
-		}
+		if (!fileURL) return;
 
 		axios
 			.get(fileURL, {
