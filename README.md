@@ -116,7 +116,7 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - Copy the main PO file `/src/locales/translation.po` into the new language directory and add the translations.
 
-- Run the following command by changing `en` to the new language code: `lang="en";i18next-conv -l $lang -s ./src/locales/translation.po ./src/locales/${lang}/translation.json`
+- Run the following command by changing `en` to the new language code: `lang="en";i18next-conv -l $lang -s ./src/locales/${lang}/translation.po ./src/locales/${lang}/translation.json`
 
 ## Available Scripts
 
