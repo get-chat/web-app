@@ -35,7 +35,7 @@ function ContactDetails(props) {
 	}, []);
 
 	const findChatByWaId = () => {
-		const waId = props.contactData.waId;
+		const waId = props.contactData?.waId;
 		return props.chats[CHAT_KEY_PREFIX + waId];
 	};
 
