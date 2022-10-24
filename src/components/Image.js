@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { binaryToBase64 } from '../helpers/ImageHelper';
 import { isEmptyString } from '../helpers/Helpers';
+import { EMPTY_IMAGE_BASE64 } from '../Constants';
 
 const Image = ({ src, alt, className, onClick }) => {
 	const [data, setData] = useState('');
@@ -24,7 +25,7 @@ const Image = ({ src, alt, className, onClick }) => {
 	const getSrc = () => {
 		return !isEmptyString(data) && !isEmptyString(mime) !== undefined
 			? `data:${mime};base64,${data}`
-			: '';
+			: EMPTY_IMAGE_BASE64;
 	};
 
 	return (
