@@ -10,6 +10,7 @@ import fileDownload from 'js-file-download';
 import { generateUniqueID } from '../../helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { mimeToExtension } from '../../helpers/ImageHelper';
+import Image from '../Image';
 
 function PreviewMedia(props) {
 	const { t } = useTranslation();
@@ -82,7 +83,7 @@ function PreviewMedia(props) {
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
 						chatMessageToPreview.getHeaderFileLink('image')) && (
-						<img
+						<Image
 							className="app__mediaPreview__image"
 							src={chatMessageToPreview.generateImageLink(true)}
 							alt="Preview"

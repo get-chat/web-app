@@ -20,7 +20,7 @@ const Image = ({ src, alt, className, onClick }) => {
 				setData(base64);
 				setMime(mimetype);
 			});
-	}, []);
+	}, [src]);
 
 	const getSrc = () => {
 		return !isEmptyString(data) && !isEmptyString(mime) !== undefined
