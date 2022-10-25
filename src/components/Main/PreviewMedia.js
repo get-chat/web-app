@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
 	Avatar,
 	IconButton,
@@ -20,6 +20,8 @@ import Image from '../Image';
 function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	const { t } = useTranslation();
 
+	const zoomView = useRef();
+
 	const chatMessageToPreview = data;
 
 	useEffect(() => {
@@ -31,6 +33,15 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 		};
 
 		document.addEventListener('keydown', handleKey);
+
+		zoomView.current.addEventListener('mousemove', (event) => {
+			zoomView.current.style.transform =
+				'translateX(' +
+				event.x * -1 +
+				'px) translateY(' +
+				event.y * -1 +
+				'px) scale(2)';
+		});
 
 		return () => {
 			document.removeEventListener('keydown', handleKey);
@@ -124,6 +135,17 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 					)}
 				</div>
 			</ZoomTransition>
+
+			{(chatMessageToPreview.imageId ||
+				chatMessageToPreview.imageLink ||
+				chatMessageToPreview.getHeaderFileLink('image')) && (
+				<div className="app__mediaPreview__zoom" ref={zoomView}>
+					<Image
+						src={chatMessageToPreview.generateImageLink(true)}
+						alt="Preview"
+					/>
+				</div>
+			)}
 		</div>
 	);
 }

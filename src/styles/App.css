@@ -295,6 +295,16 @@ a {
 	border-radius: 10px;
 }
 
+.app__mediaPreview__zoom {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.8);
+	transition: transform 300ms cubic-bezier(0.1, 0.82, 0.25, 1) 0s;
+}
+
 .wordBreakAll {
 	word-break: break-all;
 }
