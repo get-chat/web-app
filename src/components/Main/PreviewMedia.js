@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	Avatar,
 	IconButton,
@@ -19,10 +19,25 @@ import { mimeToExtension } from '../../helpers/ImageHelper';
 import Image from '../Image';
 import 'react-medium-image-zoom/dist/styles.css';
 
-function PreviewMedia(props) {
+function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	const { t } = useTranslation();
 
-	const chatMessageToPreview = props.data;
+	const chatMessageToPreview = data;
+
+	useEffect(() => {
+		const handleKey = (event) => {
+			if (event.keyCode === 27) {
+				// Escape
+				hideImageOrVideoPreview();
+			}
+		};
+
+		document.addEventListener('keydown', handleKey);
+
+		return () => {
+			document.removeEventListener('keydown', handleKey);
+		};
+	}, []);
 
 	const download = () => {
 		let fileURL =
@@ -48,7 +63,7 @@ function PreviewMedia(props) {
 				<Tooltip title={t('Close')}>
 					<IconButton
 						className="app__mediaPreview__close"
-						onClick={props.hideImageOrVideoPreview}
+						onClick={hideImageOrVideoPreview}
 					>
 						<CloseIcon />
 					</IconButton>
