@@ -37,6 +37,12 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 		};
 	}, []);
 
+	const handleClick = (event) => {
+		if (event.target.className?.includes('app__mediaPreview__container')) {
+			hideImageOrVideoPreview();
+		}
+	};
+
 	const download = () => {
 		let fileURL =
 			chatMessageToPreview.generateImageLink(true) ??
@@ -96,10 +102,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 			</div>
 
 			<ZoomTransition in={true}>
-				<div
-					className="app__mediaPreview__container"
-					//onClick={props.hideImageOrVideoPreview}
-				>
+				<div className="app__mediaPreview__container" onClick={handleClick}>
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
 						chatMessageToPreview.getHeaderFileLink('image')) && (
