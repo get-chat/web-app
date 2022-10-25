@@ -49,6 +49,7 @@ specifiers:
   react-dom: ^17.0.2
   react-i18next: ^11.15.5
   react-linkify: 1.0.0-alpha
+  react-medium-image-zoom: ^5.1.1
   react-moment: ^1.1.1
   react-pdf: ^5.2.0
   react-redux: ^8.0.4
@@ -97,6 +98,7 @@ dependencies:
   react-dom: 17.0.2_react@17.0.2
   react-i18next: 11.17.3_iunkfnprfsbsde3j2gf563wwwi
   react-linkify: 1.0.0-alpha
+  react-medium-image-zoom: 5.1.1_sfoxds7t5ydpegc3knd667wn6m
   react-moment: 1.1.2_ba2jrvgygmh2fdmvstgt5hjk4e
   react-pdf: 5.7.2_aghkqraqc2yugkbsxa3dbhkcrm
   react-redux: 8.0.4_ykxqnxanlq42xavzz22bjdrwni
@@ -10054,6 +10056,16 @@ packages:
     dependencies:
       linkify-it: 2.2.0
       tlds: 1.231.0
+    dev: false
+
+  /react-medium-image-zoom/5.1.1_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-6YVFpFy2zmFxSLHV5qOxmyH1QJIKCCbGU6STFr05iokvXhNO7yDS7rR3jlr9SV4QUgwrGLAWkmiqF2UPP2wmXA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /react-moment/1.1.2_ba2jrvgygmh2fdmvstgt5hjk4e:

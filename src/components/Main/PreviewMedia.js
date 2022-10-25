@@ -1,5 +1,11 @@
 import React from 'react';
-import { Avatar, IconButton, Tooltip, Zoom } from '@material-ui/core';
+import {
+	Avatar,
+	IconButton,
+	Tooltip,
+	Zoom as ZoomTransition,
+} from '@material-ui/core';
+import Zoom from 'react-medium-image-zoom';
 import CloseIcon from '@material-ui/icons/Close';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
@@ -11,6 +17,7 @@ import { generateUniqueID } from '../../helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { mimeToExtension } from '../../helpers/ImageHelper';
 import Image from '../Image';
+import 'react-medium-image-zoom/dist/styles.css';
 
 function PreviewMedia(props) {
 	const { t } = useTranslation();
@@ -75,10 +82,10 @@ function PreviewMedia(props) {
 				</Tooltip>
 			</div>
 
-			<Zoom in={true}>
+			<ZoomTransition in={true}>
 				<div
 					className="app__mediaPreview__container"
-					onClick={props.hideImageOrVideoPreview}
+					//onClick={props.hideImageOrVideoPreview}
 				>
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
@@ -100,7 +107,7 @@ function PreviewMedia(props) {
 						/>
 					)}
 				</div>
-			</Zoom>
+			</ZoomTransition>
 		</div>
 	);
 }
