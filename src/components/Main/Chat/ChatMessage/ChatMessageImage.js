@@ -1,8 +1,9 @@
 import React from 'react';
+import Image from '../../../Image';
 
 function ChatMessageImage(props) {
 	return (
-		<img
+		<Image
 			className="chat__media"
 			src={props.source}
 			alt={props.data.caption}

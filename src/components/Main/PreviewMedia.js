@@ -7,20 +7,15 @@ import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { GetApp } from '@material-ui/icons';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
-import { mimeDB } from '../../helpers/MimeHelper';
 import { generateUniqueID } from '../../helpers/Helpers';
 import { useTranslation } from 'react-i18next';
+import { mimeToExtension } from '../../helpers/ImageHelper';
+import Image from '../Image';
 
 function PreviewMedia(props) {
 	const { t } = useTranslation();
 
 	const chatMessageToPreview = props.data;
-
-	const mimeToExtension = (mime) => {
-		mime = mime.trim().toLowerCase();
-		if (!mimeDB.hasOwnProperty(mime)) return '';
-		return mimeDB[mime][0];
-	};
 
 	const download = () => {
 		let fileURL =
@@ -88,7 +83,7 @@ function PreviewMedia(props) {
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
 						chatMessageToPreview.getHeaderFileLink('image')) && (
-						<img
+						<Image
 							className="app__mediaPreview__image"
 							src={chatMessageToPreview.generateImageLink(true)}
 							alt="Preview"

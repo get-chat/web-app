@@ -269,8 +269,8 @@ a {
 	display: block;
 }
 
-.app__mediaPreview__header .MuiIconButton-root {
-	margin-right: 5px;
+.app__mediaPreview__header .MuiAvatar-root {
+	margin-left: 5px;
 }
 
 .app__mediaPreview__container {
