@@ -90,11 +90,13 @@ function PreviewMedia(props) {
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
 						chatMessageToPreview.getHeaderFileLink('image')) && (
-						<Image
-							className="app__mediaPreview__image"
-							src={chatMessageToPreview.generateImageLink(true)}
-							alt="Preview"
-						/>
+						<Zoom>
+							<Image
+								className="app__mediaPreview__image"
+								src={chatMessageToPreview.generateImageLink(true)}
+								alt="Preview"
+							/>
+						</Zoom>
 					)}
 					{(chatMessageToPreview.videoId ||
 						chatMessageToPreview.videoLink ||
