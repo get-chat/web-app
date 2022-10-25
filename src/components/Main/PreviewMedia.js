@@ -5,7 +5,6 @@ import {
 	Tooltip,
 	Zoom as ZoomTransition,
 } from '@material-ui/core';
-import Zoom from 'react-medium-image-zoom';
 import CloseIcon from '@material-ui/icons/Close';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
@@ -17,7 +16,6 @@ import { generateUniqueID } from '../../helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { mimeToExtension } from '../../helpers/ImageHelper';
 import Image from '../Image';
-import 'react-medium-image-zoom/dist/styles.css';
 
 function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	const { t } = useTranslation();
@@ -105,13 +103,11 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
 						chatMessageToPreview.getHeaderFileLink('image')) && (
-						<Zoom>
-							<Image
-								className="app__mediaPreview__image"
-								src={chatMessageToPreview.generateImageLink(true)}
-								alt="Preview"
-							/>
-						</Zoom>
+						<Image
+							className="app__mediaPreview__image"
+							src={chatMessageToPreview.generateImageLink(true)}
+							alt="Preview"
+						/>
 					)}
 					{(chatMessageToPreview.videoId ||
 						chatMessageToPreview.videoLink ||
