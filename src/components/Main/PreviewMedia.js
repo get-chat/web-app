@@ -34,19 +34,24 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 
 		document.addEventListener('keydown', handleKey);
 
-		zoomView.current.addEventListener('mousemove', (event) => {
+		const handleMouseMove = (event) => {
 			zoomView.current.style.transform =
 				'translateX(' +
 				event.x * -1 +
 				'px) translateY(' +
 				event.y * -1 +
 				'px) scale(2)';
-		});
+		};
+
+		zoomView.current.addEventListener('mousemove', handleMouseMove);
 
 		return () => {
 			document.removeEventListener('keydown', handleKey);
+			zoomView.current.removeEventListener('mousemove', handleMouseMove);
 		};
 	}, []);
+
+	useEffect(() => {}, [zoomView.current]);
 
 	const handleClick = (event) => {
 		if (event.target.className?.includes('app__mediaPreview__container')) {
