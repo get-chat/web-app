@@ -35,9 +35,16 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 		document.addEventListener('keydown', handleKey);
 
 		const handleMouseMove = (event) => {
+			console.log(event.x, event.y, event.target.width, event.target.height);
+
+			let targetX = event.target.width / 2 - event.x;
+			if (event.x > event.target.width) {
+				targetX = targetX * -1;
+			}
+
 			zoomView.current.style.transform =
 				'translateX(' +
-				event.x * -1 +
+				targetX +
 				'px) translateY(' +
 				event.y * -1 +
 				'px) scale(2)';
