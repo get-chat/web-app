@@ -266,7 +266,6 @@ function Sidebar(props) {
 		const onChatAssignment = function (msg, data) {
 			let newMissingChats = [];
 			const nextState = { ...props.chats };
-			let changedAny = false;
 
 			Object.entries(data).forEach((message) => {
 				//const msgId = message[0];
@@ -277,16 +276,12 @@ function Sidebar(props) {
 					const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
 
 					if (assignmentEvent.assigned_group_set) {
-						const groupId = assignmentEvent.assigned_group_set.id;
-
 						// Check if chat exists and is loaded
 						if (!nextState.hasOwnProperty(chatKey)) {
 							// Collect waId list to retrieve chats
 							if (!newMissingChats.includes(assignmentData.waId)) {
 								newMissingChats.push(assignmentData.waId);
 							}
-						} else {
-							// TODO: Handle changing group of existing chat
 						}
 					}
 				}
