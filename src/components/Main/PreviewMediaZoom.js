@@ -10,21 +10,11 @@ const PreviewMediaZoom = ({ src, onClick }) => {
 		let debounceTimer;
 
 		const move = (currentTarget, currentX, currentY) => {
-			if (currentX < 0) currentX = 0;
-			if (currentX > currentTarget.offsetWidth)
-				currentX = currentTarget.offsetWidth;
+			currentX = Math.max(0, Math.min(currentTarget.offsetWidth, currentX));
 			let targetX = currentTarget.offsetWidth / 2 - currentX;
-			if (currentX > currentTarget.offsetWidth) {
-				targetX = targetX * -1;
-			}
 
-			if (currentY < 0) currentY = 0;
-			if (currentY > currentTarget.offsetHeight)
-				currentY = currentTarget.offsetHeight;
+			currentY = Math.max(0, Math.min(currentTarget.offsetHeight, currentY));
 			let targetY = currentTarget.offsetHeight / 2 - currentY;
-			if (currentY > currentTarget.offsetHeight) {
-				targetY = targetY * -1;
-			}
 
 			currentZoomView.style.transform =
 				'translateX(' + targetX + 'px) translateY(' + targetY + 'px) scale(2)';
