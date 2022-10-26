@@ -5,6 +5,8 @@ const PreviewMediaZoom = ({ src, onClick }) => {
 	const zoomView = useRef();
 
 	useEffect(() => {
+		let currentZoomView = zoomView.current;
+
 		let debounceTimer;
 
 		const move = (currentTarget, currentX, currentY) => {
@@ -24,7 +26,7 @@ const PreviewMediaZoom = ({ src, onClick }) => {
 				targetY = targetY * -1;
 			}
 
-			zoomView.current.style.transform =
+			currentZoomView.style.transform =
 				'translateX(' + targetX + 'px) translateY(' + targetY + 'px) scale(2)';
 		};
 
@@ -56,12 +58,12 @@ const PreviewMediaZoom = ({ src, onClick }) => {
 			}, 5);
 		};
 
-		zoomView.current.addEventListener('mousemove', handleMouseMove);
-		zoomView.current.addEventListener('touchmove', handleTouchMove);
+		currentZoomView.addEventListener('mousemove', handleMouseMove);
+		currentZoomView.addEventListener('touchmove', handleTouchMove);
 
 		return () => {
-			zoomView.current.removeEventListener('mousemove', handleMouseMove);
-			zoomView.current.removeEventListener('touchmove', handleTouchMove);
+			currentZoomView.removeEventListener('mousemove', handleMouseMove);
+			currentZoomView.removeEventListener('touchmove', handleTouchMove);
 		};
 	}, [zoomView]);
 
