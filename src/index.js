@@ -32,6 +32,7 @@ axios
 				release: packageJson.version,
 				integrations: [new Integrations.BrowserTracing()],
 				tracesSampleRate: 0.01,
+				ignoreErrors: ['ResizeObserver loop limit exceeded'],
 				beforeSend(event, hint) {
 					// Check if it is an exception, and if so, show the report dialog
 					if (event.exception) {
