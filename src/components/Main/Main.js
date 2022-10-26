@@ -547,10 +547,26 @@ function Main() {
 							setTimeout(function () {
 								setChats((prevState) => {
 									if (prevState.hasOwnProperty(chatKey)) {
-										prevState[chatKey].assignedToUser =
+										const assignedToUserSet =
 											prepared.assignmentEvent.assigned_to_user_set;
-										prevState[chatKey].assignedGroup =
+										if (assignedToUserSet) {
+											prevState[chatKey].assignedToUser = assignedToUserSet;
+										} else if (
+											prepared.assignmentEvent.assigned_to_user_was_cleared
+										) {
+											prevState[chatKey].assignedToUser = undefined;
+										}
+
+										const assignedGroupSet =
 											prepared.assignmentEvent.assigned_group_set;
+										if (assignedGroupSet) {
+											prevState[chatKey].assignedGroup = assignedGroupSet;
+										} else if (
+											prepared.assignmentEvent.assigned_group_was_cleared
+										) {
+											prevState[chatKey].assignedGroup = undefined;
+										}
+
 										return { ...prevState };
 									}
 
