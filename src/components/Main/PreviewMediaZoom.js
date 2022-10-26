@@ -50,8 +50,8 @@ const PreviewMediaZoom = ({ src, onClick }) => {
 			}
 
 			let _currentTarget = e.currentTarget;
-			let _currentX = e.changedTouches[0].clientX;
-			let _currentY = e.changedTouches[0].clientY;
+			let _currentX = _currentTarget.offsetWidth - e.changedTouches[0].clientX;
+			let _currentY = _currentTarget.offsetHeight - e.changedTouches[0].clientY;
 
 			debounceTimer = setTimeout(function () {
 				move(_currentTarget, _currentX, _currentY);
