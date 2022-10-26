@@ -307,6 +307,7 @@ a {
 	align-items: center;
 	justify-content: center;
 	cursor: zoom-out;
+	padding: 20px;
 }
 
 .app__mediaPreview__zoom > img {

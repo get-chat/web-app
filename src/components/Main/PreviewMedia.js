@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import {
 	Avatar,
 	IconButton,
@@ -16,11 +16,10 @@ import { generateUniqueID } from '../../helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { mimeToExtension } from '../../helpers/ImageHelper';
 import Image from '../Image';
+import PreviewMediaZoom from './PreviewMediaZoom';
 
 function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	const { t } = useTranslation();
-
-	const zoomView = useRef();
 
 	const chatMessageToPreview = data;
 
@@ -34,46 +33,10 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 
 		document.addEventListener('keydown', handleKey);
 
-		let debounceTimer;
-
-		const handleMouseMove = (e) => {
-			if (debounceTimer) {
-				window.clearTimeout(debounceTimer);
-			}
-
-			let currentTarget = e.currentTarget;
-			let currentX = e.x;
-			let currentY = e.y;
-
-			debounceTimer = setTimeout(function () {
-				let targetX = currentTarget.offsetWidth / 2 - currentX;
-				if (currentX > currentTarget.offsetWidth) {
-					targetX = targetX * -1;
-				}
-
-				let targetY = currentTarget.offsetHeight / 2 - currentY;
-				if (currentY > currentTarget.offsetHeight) {
-					targetY = targetY * -1;
-				}
-
-				zoomView.current.style.transform =
-					'translateX(' +
-					targetX +
-					'px) translateY(' +
-					targetY +
-					'px) scale(2)';
-			}, 5);
-		};
-
-		zoomView.current.addEventListener('mousemove', handleMouseMove);
-
 		return () => {
 			document.removeEventListener('keydown', handleKey);
-			zoomView.current.removeEventListener('mousemove', handleMouseMove);
 		};
 	}, []);
-
-	useEffect(() => {}, [zoomView.current]);
 
 	const handleClick = (event) => {
 		if (event.target.className?.includes('app__mediaPreview__container')) {
@@ -166,12 +129,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 			{(chatMessageToPreview.imageId ||
 				chatMessageToPreview.imageLink ||
 				chatMessageToPreview.getHeaderFileLink('image')) && (
-				<div className="app__mediaPreview__zoom" ref={zoomView}>
-					<Image
-						src={chatMessageToPreview.generateImageLink(true)}
-						alt="Preview"
-					/>
-				</div>
+				<PreviewMediaZoom src={chatMessageToPreview.generateImageLink(true)} />
 			)}
 		</div>
 	);
