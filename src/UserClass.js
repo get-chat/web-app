@@ -1,5 +1,7 @@
 class UserClass {
 	constructor(data) {
+		if (!data) return;
+
 		this.id = data.id;
 		this.username = data.username;
 		this.firstName = data.first_name;
@@ -35,7 +37,7 @@ class UserClass {
 	isInGroup(groupId) {
 		let inGroup = false;
 
-		this.groups?.forEach((groupItem) => {
+		this.groups?.forEach((groupIndex, groupItem) => {
 			if (groupItem?.id === groupId) {
 				inGroup = true;
 			}
