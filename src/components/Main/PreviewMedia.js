@@ -34,20 +34,35 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 
 		document.addEventListener('keydown', handleKey);
 
-		const handleMouseMove = (event) => {
-			console.log(event.x, event.y, event.target.width, event.target.height);
+		let debounceTimer;
 
-			let targetX = event.target.width / 2 - event.x;
-			if (event.x > event.target.width) {
-				targetX = targetX * -1;
+		const handleMouseMove = (e) => {
+			if (debounceTimer) {
+				window.clearTimeout(debounceTimer);
 			}
 
-			zoomView.current.style.transform =
-				'translateX(' +
-				targetX +
-				'px) translateY(' +
-				event.y * -1 +
-				'px) scale(2)';
+			let currentTarget = e.currentTarget;
+			let currentX = e.x;
+			let currentY = e.y;
+
+			debounceTimer = setTimeout(function () {
+				let targetX = currentTarget.offsetWidth / 2 - currentX;
+				if (currentX > currentTarget.offsetWidth) {
+					targetX = targetX * -1;
+				}
+
+				let targetY = currentTarget.offsetHeight / 2 - currentY;
+				if (currentY > currentTarget.offsetHeight) {
+					targetY = targetY * -1;
+				}
+
+				zoomView.current.style.transform =
+					'translateX(' +
+					targetX +
+					'px) translateY(' +
+					targetY +
+					'px) scale(2)';
+			}, 5);
 		};
 
 		zoomView.current.addEventListener('mousemove', handleMouseMove);

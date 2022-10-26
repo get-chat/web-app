@@ -303,6 +303,15 @@ a {
 	bottom: 0;
 	background-color: rgba(255, 255, 255, 0.8);
 	transition: transform 300ms cubic-bezier(0.1, 0.82, 0.25, 1) 0s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: zoom-out;
+}
+
+.app__mediaPreview__zoom > img {
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .wordBreakAll {
