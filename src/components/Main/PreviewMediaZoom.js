@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Image from '../Image';
 
-const PreviewMediaZoom = ({ src }) => {
+const PreviewMediaZoom = ({ src, onClick }) => {
 	const zoomView = useRef();
 
 	useEffect(() => {
@@ -39,12 +39,13 @@ const PreviewMediaZoom = ({ src }) => {
 		zoomView.current.addEventListener('mousemove', handleMouseMove);
 
 		return () => {
+			console.log(zoomView.current);
 			zoomView.current.removeEventListener('mousemove', handleMouseMove);
 		};
-	}, []);
+	}, [zoomView]);
 
 	return (
-		<div className="app__mediaPreview__zoom" ref={zoomView}>
+		<div className="app__mediaPreview__zoom" ref={zoomView} onClick={onClick}>
 			<Image src={src} alt="Preview" />
 		</div>
 	);

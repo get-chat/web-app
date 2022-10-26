@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Avatar,
 	IconButton,
@@ -21,13 +21,19 @@ import PreviewMediaZoom from './PreviewMediaZoom';
 function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	const { t } = useTranslation();
 
+	const [isZoomEnabled, setZoomEnabled] = useState(false);
+
 	const chatMessageToPreview = data;
 
 	useEffect(() => {
 		const handleKey = (event) => {
+			// Escape
 			if (event.keyCode === 27) {
-				// Escape
-				hideImageOrVideoPreview();
+				if (isZoomEnabled) {
+					setZoomEnabled(false);
+				} else {
+					hideImageOrVideoPreview();
+				}
 			}
 		};
 
@@ -36,7 +42,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 		return () => {
 			document.removeEventListener('keydown', handleKey);
 		};
-	}, []);
+	}, [isZoomEnabled]);
 
 	const handleClick = (event) => {
 		if (event.target.className?.includes('app__mediaPreview__container')) {
@@ -111,6 +117,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 							className="app__mediaPreview__image"
 							src={chatMessageToPreview.generateImageLink(true)}
 							alt="Preview"
+							onClick={() => setZoomEnabled(true)}
 						/>
 					)}
 					{(chatMessageToPreview.videoId ||
@@ -126,11 +133,15 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 				</div>
 			</ZoomTransition>
 
-			{(chatMessageToPreview.imageId ||
-				chatMessageToPreview.imageLink ||
-				chatMessageToPreview.getHeaderFileLink('image')) && (
-				<PreviewMediaZoom src={chatMessageToPreview.generateImageLink(true)} />
-			)}
+			{isZoomEnabled &&
+				(chatMessageToPreview.imageId ||
+					chatMessageToPreview.imageLink ||
+					chatMessageToPreview.getHeaderFileLink('image')) && (
+					<PreviewMediaZoom
+						src={chatMessageToPreview.generateImageLink(true)}
+						onClick={() => setZoomEnabled(false)}
+					/>
+				)}
 		</div>
 	);
 }
