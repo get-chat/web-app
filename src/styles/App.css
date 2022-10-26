@@ -399,4 +399,8 @@ h3 .emoji-mart-emoji {
 	.MuiDialogContent-root {
 		padding: 5px 15px !important;
 	}
+
+	.app__mediaPreview__container {
+		padding: 10px;
+	}
 }
