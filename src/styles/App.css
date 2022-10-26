@@ -286,6 +286,10 @@ a {
 	padding: 30px;
 }
 
+.app__mediaPreview__image {
+	cursor: zoom-in;
+}
+
 .app__mediaPreview__image,
 .app__mediaPreview__video {
 	background-color: white;
