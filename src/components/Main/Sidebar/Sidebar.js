@@ -65,6 +65,7 @@ import { AppConfig } from '../../../contexts/AppConfig';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import UserClass from '../../../UserClass';
+import { filterChat } from '../../../helpers/SidebarHelper';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -263,6 +264,19 @@ function Sidebar(props) {
 			onNewMessages
 		);
 
+		return () => {
+			PubSub.unsubscribe(newChatMessagesEventToken);
+		};
+	}, [
+		waId,
+		props.isBlurred,
+		props.chats,
+		props.newMessages,
+		missingChats,
+		keyword,
+	]);
+
+	useEffect(() => {
 		const onChatAssignment = function (msg, data) {
 			let newMissingChats = [];
 			const nextState = { ...props.chats };
@@ -275,7 +289,10 @@ function Sidebar(props) {
 				if (assignmentEvent) {
 					const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
 
-					if (assignmentEvent.assigned_group_set) {
+					if (
+						assignmentEvent.assigned_group_set ||
+						assignmentEvent.assigned_to_user_set
+					) {
 						// Check if chat exists and is loaded
 						if (!nextState.hasOwnProperty(chatKey)) {
 							// Collect waId list to retrieve chats
@@ -303,17 +320,9 @@ function Sidebar(props) {
 		);
 
 		return () => {
-			PubSub.unsubscribe(newChatMessagesEventToken);
 			PubSub.unsubscribe(chatAssignmentEventToken);
 		};
-	}, [
-		waId,
-		props.isBlurred,
-		props.chats,
-		props.newMessages,
-		missingChats,
-		keyword,
-	]);
+	}, [props.chats, missingChats]);
 
 	useEffect(() => {
 		let intervalId = setInterval(function () {
@@ -766,22 +775,27 @@ function Sidebar(props) {
 				)}
 
 				<div className="sidebar__results__chats">
-					{Object.entries(props.chats).map((chat) => (
-						<SidebarChat
-							key={chat[0]}
-							chatData={chat[1]}
-							pendingMessages={props.pendingMessages}
-							newMessages={props.newMessages}
-							keyword={keyword}
-							contactProvidersData={props.contactProvidersData}
-							retrieveContactData={props.retrieveContactData}
-							tabCase={tabCase}
-							bulkSendPayload={props.bulkSendPayload}
-							isSelectionModeEnabled={props.isSelectionModeEnabled}
-							selectedChats={props.selectedChats}
-							setSelectedChats={props.setSelectedChats}
-						/>
-					))}
+					{Object.entries(props.chats)
+						.filter((chat) => {
+							// Filter by helper method
+							return filterChat(props, tabCase, chat[1]);
+						})
+						.map((chat) => (
+							<SidebarChat
+								key={chat[0]}
+								chatData={chat[1]}
+								pendingMessages={props.pendingMessages}
+								newMessages={props.newMessages}
+								keyword={keyword}
+								contactProvidersData={props.contactProvidersData}
+								retrieveContactData={props.retrieveContactData}
+								tabCase={tabCase}
+								bulkSendPayload={props.bulkSendPayload}
+								isSelectionModeEnabled={props.isSelectionModeEnabled}
+								selectedChats={props.selectedChats}
+								setSelectedChats={props.setSelectedChats}
+							/>
+						))}
 
 					{Object.keys(props.chats).length === 0 && (
 						<span className="sidebar__results__chats__noResult">
