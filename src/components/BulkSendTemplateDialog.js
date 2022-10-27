@@ -35,6 +35,7 @@ const BulkSendTemplateDialog = ({
 					isTemplatesFailed={isTemplatesFailed}
 					isLoadingTemplates={isLoadingTemplates}
 					sendCallback={close}
+					isBulkOnly={true}
 				/>
 			</DialogContent>
 			<DialogActions>
