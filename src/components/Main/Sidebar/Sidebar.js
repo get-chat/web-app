@@ -26,6 +26,7 @@ import {
 	CHAT_LIST_TAB_CASE_ALL,
 	CHAT_LIST_TAB_CASE_GROUP,
 	CHAT_LIST_TAB_CASE_ME,
+	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
@@ -63,6 +64,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AppConfig } from '../../../contexts/AppConfig';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
+import UserClass from '../../../UserClass';
+import { filterChat } from '../../../helpers/SidebarHelper';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -158,7 +161,6 @@ function Sidebar(props) {
 			// We don't need to update if chats are filtered
 			if (keyword.trim().length === 0) {
 				let newMissingChats = [];
-
 				const nextState = { ...props.chats };
 				let changedAny = false;
 
@@ -172,7 +174,7 @@ function Sidebar(props) {
 					// New chat, incoming or outgoing message
 					// Check if chat with waId already exists
 					if (!nextState.hasOwnProperty(chatKey)) {
-						// Collect waid list to retrieve chats
+						// Collect waId list to retrieve chats
 						if (!newMissingChats.includes(chatMessageWaId)) {
 							newMissingChats.push(chatMessageWaId);
 						}
@@ -273,6 +275,54 @@ function Sidebar(props) {
 		missingChats,
 		keyword,
 	]);
+
+	useEffect(() => {
+		const onChatAssignment = function (msg, data) {
+			let newMissingChats = [];
+			const nextState = { ...props.chats };
+
+			Object.entries(data).forEach((message) => {
+				//const msgId = message[0];
+				const assignmentData = message[1];
+				const assignmentEvent = assignmentData.assignmentEvent;
+
+				if (assignmentEvent) {
+					const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
+
+					if (
+						assignmentEvent.assigned_group_set ||
+						assignmentEvent.assigned_to_user_set
+					) {
+						// Check if chat exists and is loaded
+						if (!nextState.hasOwnProperty(chatKey)) {
+							// Collect waId list to retrieve chats
+							if (!newMissingChats.includes(assignmentData.waId)) {
+								newMissingChats.push(assignmentData.waId);
+							}
+						}
+					}
+				}
+			});
+
+			if (newMissingChats.length > 0) {
+				setMissingChats((prevState) => {
+					let nextState = prevState.concat(newMissingChats);
+
+					// Unique wa ids
+					return [...new Set(nextState)];
+				});
+			}
+		};
+
+		const chatAssignmentEventToken = PubSub.subscribe(
+			EVENT_TOPIC_CHAT_ASSIGNMENT,
+			onChatAssignment
+		);
+
+		return () => {
+			PubSub.unsubscribe(chatAssignmentEventToken);
+		};
+	}, [props.chats, missingChats]);
 
 	useEffect(() => {
 		let intervalId = setInterval(function () {
@@ -473,6 +523,11 @@ function Sidebar(props) {
 
 	const retrieveChat = (chatWaId) => {
 		apiService.retrieveChatCall(chatWaId, (response) => {
+			// Remove this chat from missing chats list
+			setMissingChats((prevState) =>
+				prevState.filter((item) => item !== chatWaId)
+			);
+
 			const preparedChat = new ChatClass(response.data);
 
 			// Don't display chat if tab case is "me" and chat is not assigned to user
@@ -487,9 +542,11 @@ function Sidebar(props) {
 					return;
 				}
 			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+				const userInstance = new UserClass(props.currentUser);
+
 				if (
 					!preparedChat.assignedGroup ||
-					props.currentUser?.isInGroup(preparedChat.assignedGroup.id)
+					userInstance?.isInGroup(preparedChat.assignedGroup.id)
 				) {
 					console.log(
 						'Chat will not be displayed as it does not belong to current tab.'
@@ -503,10 +560,6 @@ function Sidebar(props) {
 				const sortedNextState = sortChats(prevState);
 				return { ...sortedNextState };
 			});
-
-			setMissingChats((prevState) =>
-				prevState.filter((item) => item !== chatWaId)
-			);
 		});
 	};
 
@@ -722,22 +775,27 @@ function Sidebar(props) {
 				)}
 
 				<div className="sidebar__results__chats">
-					{Object.entries(props.chats).map((chat) => (
-						<SidebarChat
-							key={chat[0]}
-							chatData={chat[1]}
-							pendingMessages={props.pendingMessages}
-							newMessages={props.newMessages}
-							keyword={keyword}
-							contactProvidersData={props.contactProvidersData}
-							retrieveContactData={props.retrieveContactData}
-							tabCase={tabCase}
-							bulkSendPayload={props.bulkSendPayload}
-							isSelectionModeEnabled={props.isSelectionModeEnabled}
-							selectedChats={props.selectedChats}
-							setSelectedChats={props.setSelectedChats}
-						/>
-					))}
+					{Object.entries(props.chats)
+						.filter((chat) => {
+							// Filter by helper method
+							return filterChat(props, tabCase, chat[1]);
+						})
+						.map((chat) => (
+							<SidebarChat
+								key={chat[0]}
+								chatData={chat[1]}
+								pendingMessages={props.pendingMessages}
+								newMessages={props.newMessages}
+								keyword={keyword}
+								contactProvidersData={props.contactProvidersData}
+								retrieveContactData={props.retrieveContactData}
+								tabCase={tabCase}
+								bulkSendPayload={props.bulkSendPayload}
+								isSelectionModeEnabled={props.isSelectionModeEnabled}
+								selectedChats={props.selectedChats}
+								setSelectedChats={props.setSelectedChats}
+							/>
+						))}
 
 					{Object.keys(props.chats).length === 0 && (
 						<span className="sidebar__results__chats__noResult">

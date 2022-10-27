@@ -543,18 +543,36 @@ function Main() {
 
 							const chatKey = CHAT_KEY_PREFIX + prepared.waId;
 
-							// Update chats
-							setChats((prevState) => {
-								if (prevState.hasOwnProperty(chatKey)) {
-									prevState[chatKey].assignedToUser =
-										prepared.assignmentEvent.assigned_to_user_set;
-									prevState[chatKey].assignedGroup =
-										prepared.assignmentEvent.assigned_group_set;
-									return { ...prevState };
-								}
+							// Update chats with delay not to break EventBus
+							setTimeout(function () {
+								setChats((prevState) => {
+									if (prevState.hasOwnProperty(chatKey)) {
+										const assignedToUserSet =
+											prepared.assignmentEvent.assigned_to_user_set;
+										if (assignedToUserSet) {
+											prevState[chatKey].assignedToUser = assignedToUserSet;
+										} else if (
+											prepared.assignmentEvent.assigned_to_user_was_cleared
+										) {
+											prevState[chatKey].assignedToUser = undefined;
+										}
 
-								return prevState;
-							});
+										const assignedGroupSet =
+											prepared.assignmentEvent.assigned_group_set;
+										if (assignedGroupSet) {
+											prevState[chatKey].assignedGroup = assignedGroupSet;
+										} else if (
+											prepared.assignmentEvent.assigned_group_was_cleared
+										) {
+											prevState[chatKey].assignedGroup = undefined;
+										}
+
+										return { ...prevState };
+									}
+
+									return prevState;
+								});
+							}, 100);
 						}
 
 						// Chat tagging
@@ -569,24 +587,26 @@ function Main() {
 
 							const chatKey = CHAT_KEY_PREFIX + prepared.waId;
 
-							// Update chats
-							setChats((prevState) => {
-								if (prevState.hasOwnProperty(chatKey)) {
-									if (chatTagging.action === 'added') {
-										prevState[chatKey].tags.push(prepared.taggingEvent.tag);
-									} else if (chatTagging.action === 'removed') {
-										prevState[chatKey].tags = prevState[chatKey].tags.filter(
-											(tag) => {
-												return tag.id !== prepared.taggingEvent.tag.id;
-											}
-										);
+							// Update chats with delay not to break EventBus
+							setTimeout(function () {
+								setChats((prevState) => {
+									if (prevState.hasOwnProperty(chatKey)) {
+										if (chatTagging.action === 'added') {
+											prevState[chatKey].tags.push(prepared.taggingEvent.tag);
+										} else if (chatTagging.action === 'removed') {
+											prevState[chatKey].tags = prevState[chatKey].tags.filter(
+												(tag) => {
+													return tag.id !== prepared.taggingEvent.tag.id;
+												}
+											);
+										}
+
+										return { ...prevState };
 									}
 
-									return { ...prevState };
-								}
-
-								return prevState;
-							});
+									return prevState;
+								});
+							}, 100);
 						}
 
 						const bulkMessageTasks = wabaPayload?.bulk_message_tasks;
