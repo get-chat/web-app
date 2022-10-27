@@ -395,7 +395,7 @@ a.chat__document:hover {
 	flex: 1 1 auto;
 }
 
-.templateMessagesOuter,
+.chat .templateMessagesOuter,
 .savedResponsesOuter {
 	background-color: var(--gray-light);
 	padding: 0 15px 15px 15px;

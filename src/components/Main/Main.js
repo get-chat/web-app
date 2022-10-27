@@ -56,6 +56,7 @@ import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
 import { useDispatch } from 'react-redux';
 import { setTemplates } from '../../store/reducers/templatesReducer';
+import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -128,6 +129,9 @@ function Main() {
 	const [selectedChats, setSelectedChats] = useState([]);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState();
+
+	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
+		useState(false);
 
 	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
 		useState(false);
@@ -1064,11 +1068,12 @@ function Main() {
 						finishBulkSendMessage={finishBulkSendMessage}
 						tags={tags}
 						setLoadingNow={setLoadingNow}
+						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
+						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
+						setInitialResourceFailed={setInitialResourceFailed}
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
-						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
-						setInitialResourceFailed={setInitialResourceFailed}
 					/>
 				)}
 
@@ -1200,6 +1205,15 @@ function Main() {
 				</Snackbar>
 
 				{isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
+
+				<BulkSendTemplateDialog
+					apiService={apiService}
+					open={isBulkSendTemplateDialogVisible}
+					setOpen={setBulkSendTemplateDialogVisible}
+					setUploadingMedia={setUploadingMedia}
+					setBulkSendPayload={setBulkSendPayload}
+					setSelectionModeEnabled={setSelectionModeEnabled}
+				/>
 
 				<BulkSendTemplateViaCSV
 					open={isBulkSendTemplateViaCSVVisible}

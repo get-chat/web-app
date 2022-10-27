@@ -91,7 +91,7 @@ const SendBulkVoiceMessageDialog = ({
 	};
 
 	return (
-		<Dialog open={open} onClose={close} className="changePasswordDialog">
+		<Dialog open={open} onClose={close} className="sendBulkVoiceMessageDialog">
 			<DialogTitle>{t('Send bulk voice message')}</DialogTitle>
 			<DialogContent className="sendBulkVoiceMessageDialogContent">
 				{!isRecording && (
