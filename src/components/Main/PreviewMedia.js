@@ -1,5 +1,10 @@
-import React from 'react';
-import { Avatar, IconButton, Tooltip, Zoom } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import {
+	Avatar,
+	IconButton,
+	Tooltip,
+	Zoom as ZoomTransition,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
@@ -11,11 +16,39 @@ import { generateUniqueID } from '../../helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { mimeToExtension } from '../../helpers/ImageHelper';
 import Image from '../Image';
+import PreviewMediaZoom from './PreviewMediaZoom';
 
-function PreviewMedia(props) {
+function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	const { t } = useTranslation();
 
-	const chatMessageToPreview = props.data;
+	const [isZoomEnabled, setZoomEnabled] = useState(false);
+
+	const chatMessageToPreview = data;
+
+	useEffect(() => {
+		const handleKey = (event) => {
+			// Escape
+			if (event.keyCode === 27) {
+				if (isZoomEnabled) {
+					setZoomEnabled(false);
+				} else {
+					hideImageOrVideoPreview();
+				}
+			}
+		};
+
+		document.addEventListener('keydown', handleKey);
+
+		return () => {
+			document.removeEventListener('keydown', handleKey);
+		};
+	}, [isZoomEnabled]);
+
+	const handleClick = (event) => {
+		if (event.target.className?.includes('app__mediaPreview__container')) {
+			hideImageOrVideoPreview();
+		}
+	};
 
 	const download = () => {
 		let fileURL =
@@ -41,7 +74,7 @@ function PreviewMedia(props) {
 				<Tooltip title={t('Close')}>
 					<IconButton
 						className="app__mediaPreview__close"
-						onClick={props.hideImageOrVideoPreview}
+						onClick={hideImageOrVideoPreview}
 					>
 						<CloseIcon />
 					</IconButton>
@@ -75,11 +108,8 @@ function PreviewMedia(props) {
 				</Tooltip>
 			</div>
 
-			<Zoom in={true}>
-				<div
-					className="app__mediaPreview__container"
-					onClick={props.hideImageOrVideoPreview}
-				>
+			<ZoomTransition in={true}>
+				<div className="app__mediaPreview__container" onClick={handleClick}>
 					{(chatMessageToPreview.imageId ||
 						chatMessageToPreview.imageLink ||
 						chatMessageToPreview.getHeaderFileLink('image')) && (
@@ -87,6 +117,7 @@ function PreviewMedia(props) {
 							className="app__mediaPreview__image"
 							src={chatMessageToPreview.generateImageLink(true)}
 							alt="Preview"
+							onClick={() => setZoomEnabled(true)}
 						/>
 					)}
 					{(chatMessageToPreview.videoId ||
@@ -100,7 +131,17 @@ function PreviewMedia(props) {
 						/>
 					)}
 				</div>
-			</Zoom>
+			</ZoomTransition>
+
+			{isZoomEnabled &&
+				(chatMessageToPreview.imageId ||
+					chatMessageToPreview.imageLink ||
+					chatMessageToPreview.getHeaderFileLink('image')) && (
+					<PreviewMediaZoom
+						src={chatMessageToPreview.generateImageLink(true)}
+						onClick={() => setZoomEnabled(false)}
+					/>
+				)}
 		</div>
 	);
 }

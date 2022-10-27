@@ -4,7 +4,16 @@ import { binaryToBase64 } from '../helpers/ImageHelper';
 import { isEmptyString } from '../helpers/Helpers';
 import { EMPTY_IMAGE_BASE64 } from '../Constants';
 
-const Image = ({ src, alt, className, onClick }) => {
+const Image = ({
+	src,
+	alt,
+	className,
+	style,
+	height,
+	width,
+	onClick,
+	_ref,
+}) => {
 	const [data, setData] = useState('');
 	const [mime, setMime] = useState('');
 
@@ -29,7 +38,16 @@ const Image = ({ src, alt, className, onClick }) => {
 	};
 
 	return (
-		<img src={getSrc()} alt={alt} className={className} onClick={onClick} />
+		<img
+			ref={_ref}
+			src={getSrc()}
+			alt={alt}
+			className={className}
+			style={style}
+			height={height}
+			width={width}
+			onClick={onClick}
+		/>
 	);
 };
 

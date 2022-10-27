@@ -286,6 +286,10 @@ a {
 	padding: 30px;
 }
 
+.app__mediaPreview__image {
+	cursor: zoom-in;
+}
+
 .app__mediaPreview__image,
 .app__mediaPreview__video {
 	background-color: white;
@@ -293,6 +297,27 @@ a {
 	max-width: 100%;
 	align-self: center;
 	border-radius: 10px;
+}
+
+.app__mediaPreview__zoom {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.8);
+	transition: transform 300ms cubic-bezier(0.1, 0.82, 0.25, 1) 0s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: zoom-out;
+	padding: 20px;
+	transform: scale(2);
+}
+
+.app__mediaPreview__zoom > img {
+	max-width: 100%;
+	max-height: 100%;
 }
 
 .wordBreakAll {
@@ -377,5 +402,9 @@ h3 .emoji-mart-emoji {
 
 	.MuiDialogContent-root {
 		padding: 5px 15px !important;
+	}
+
+	.app__mediaPreview__container {
+		padding: 10px;
 	}
 }
