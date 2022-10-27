@@ -55,18 +55,22 @@ function TemplateMessages(props) {
 		const messageToBeSent = template ?? chosenTemplate;
 		setSentTemplateMessage(messageToBeSent);
 		props.onSend(messageToBeSent);
+		props.sendCallback?.();
 		//hideDialog();
 	};
 
 	const bulkSend = (template) => {
 		const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
 		props.onBulkSend(ChatMessageClass.TYPE_TEMPLATE, payload);
+		props.sendCallback?.();
 		hideDialog();
 	};
 
 	const sendByRef = () => {
 		setSending(true);
 		sendButtonRef.current?.click();
+
+		props.selectTemplateCallback?.();
 	};
 
 	const bulkSendByRef = () => {

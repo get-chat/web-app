@@ -1207,10 +1207,8 @@ function Main() {
 				{isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
 
 				<BulkSendTemplateDialog
-					apiService={apiService}
 					open={isBulkSendTemplateDialogVisible}
 					setOpen={setBulkSendTemplateDialogVisible}
-					setUploadingMedia={setUploadingMedia}
 					setBulkSendPayload={setBulkSendPayload}
 					setSelectionModeEnabled={setSelectionModeEnabled}
 				/>

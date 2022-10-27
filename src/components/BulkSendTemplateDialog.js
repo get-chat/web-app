@@ -8,13 +8,10 @@ import '../styles/SendBulkVoiceMessageDialog.css';
 import TemplateMessages from './Main/Chat/TemplateMessages/TemplateMessages';
 
 const BulkSendTemplateDialog = ({
-	apiService,
 	open,
 	setOpen,
-	setUploadingMedia,
 	setBulkSendPayload,
 	setSelectionModeEnabled,
-	bulkSendMessage,
 	isTemplatesFailed,
 	isLoadingTemplates,
 }) => {
@@ -22,6 +19,11 @@ const BulkSendTemplateDialog = ({
 
 	const close = () => {
 		setOpen(false);
+	};
+
+	const bulkSendMessage = (type, payload) => {
+		setSelectionModeEnabled(true);
+		setBulkSendPayload(payload);
 	};
 
 	return (
@@ -32,6 +34,7 @@ const BulkSendTemplateDialog = ({
 					onBulkSend={bulkSendMessage}
 					isTemplatesFailed={isTemplatesFailed}
 					isLoadingTemplates={isLoadingTemplates}
+					sendCallback={close}
 				/>
 			</DialogContent>
 			<DialogActions>
