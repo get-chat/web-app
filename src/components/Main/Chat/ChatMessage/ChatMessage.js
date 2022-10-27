@@ -27,14 +27,14 @@ import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
 import { Alert } from '@material-ui/lab';
 import { Button } from '@material-ui/core';
-import { useSelector } from 'react-redux';
 
 const iconStyles = {
 	fontSize: '15px',
 };
 
 function ChatMessage({
-	messageData,
+	data,
+	templateData,
 	displaySender,
 	displayDate,
 	contactProvidersData,
@@ -45,14 +45,6 @@ function ChatMessage({
 	retryMessage,
 }) {
 	const { t } = useTranslation();
-
-	const templates = useSelector((state) => state.templates.value);
-
-	const data = messageData;
-	const templateData =
-		data.type === ChatMessageClass.TYPE_TEMPLATE
-			? templates[data.templateName]
-			: undefined;
 
 	const dateFormat = 'H:mm';
 

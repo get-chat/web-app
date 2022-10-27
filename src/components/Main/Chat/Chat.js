@@ -74,6 +74,7 @@ import {
 	preparePhoneNumber,
 } from '../../../helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
+import { useSelector } from 'react-redux';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -84,6 +85,8 @@ export default function Chat(props) {
 	const { t } = useTranslation();
 
 	const messagesContainer = useRef(null);
+
+	const templates = useSelector((state) => state.templates.value);
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);
@@ -1750,7 +1753,8 @@ export default function Chat(props) {
 					return (
 						<ErrorBoundary key={message[0]}>
 							<ChatMessage
-								messageData={message[1]}
+								data={message[1]}
+								templateData={templates[message[1].templateName]}
 								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}
 								date={curMsgDate}

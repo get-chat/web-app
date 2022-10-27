@@ -69,7 +69,10 @@ const StepPreviewResult = ({ template, params, csvData }) => {
 			<div className={style.stepPreviewResult__wrapper}>
 				{messageData && (
 					<ErrorBoundary>
-						<ChatMessage messageData={messageData} templates={templates} />
+						<ChatMessage
+							data={messageData}
+							templateData={templates[messageData.templateName]}
+						/>
 					</ErrorBoundary>
 				)}
 			</div>
