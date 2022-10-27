@@ -23,11 +23,12 @@ import { BreakException } from '../../Constants';
 import BulkSendStepper from './components/BulkSendStepper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import { generateTemplateMessagePayload } from '../../helpers/ChatHelper';
+import { useSelector } from 'react-redux';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
 
-const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
+const BulkSendTemplateViaCSV = ({ open, setOpen, tags }) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
@@ -266,10 +267,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 					/>
 				)}
 				{activeStep === STEP_SELECT_TEMPLATE && (
-					<StepSelectTemplate
-						templates={templates}
-						selectTemplate={selectTemplate}
-					/>
+					<StepSelectTemplate selectTemplate={selectTemplate} />
 				)}
 				{activeStep === STEP_SELECT_PARAMETERS && (
 					<StepSelectParameters
@@ -283,7 +281,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, templates, tags }) => {
 				)}
 				{activeStep === STEP_PREVIEW_RESULT && (
 					<StepPreviewResult
-						templates={templates}
 						template={template}
 						params={params}
 						csvData={csvData}

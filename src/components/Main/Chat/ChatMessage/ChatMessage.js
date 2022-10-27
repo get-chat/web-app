@@ -27,6 +27,7 @@ import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
 import { Alert } from '@material-ui/lab';
 import { Button } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -34,7 +35,6 @@ const iconStyles = {
 
 function ChatMessage({
 	messageData,
-	templates,
 	displaySender,
 	displayDate,
 	contactProvidersData,
@@ -45,6 +45,8 @@ function ChatMessage({
 	retryMessage,
 }) {
 	const { t } = useTranslation();
+
+	const templates = useSelector((state) => state.templates.value);
 
 	const data = messageData;
 	const templateData =

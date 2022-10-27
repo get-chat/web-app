@@ -14,9 +14,10 @@ import PubSub from 'pubsub-js';
 import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateTemplateMessagePayload } from '../../../../helpers/ChatHelper';
 import TemplatesList from '../../../TemplatesList';
+import { useSelector } from 'react-redux';
 
 function TemplateMessages(props) {
-	const templates = props.templatesData;
+	const templates = useSelector((state) => state.templates.value);
 
 	const [chosenTemplate, setChosenTemplate] = useState();
 	const [isDialogVisible, setDialogVisible] = useState(false);

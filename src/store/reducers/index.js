@@ -3,7 +3,7 @@ import templatesReducer from './templatesReducer';
 
 const rootReducer = {
 	UI: UIReducer,
-	template: templatesReducer,
+	templates: templatesReducer,
 };
 
 export default rootReducer;

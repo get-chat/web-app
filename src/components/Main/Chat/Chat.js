@@ -1755,7 +1755,6 @@ export default function Chat(props) {
 								displaySender={willDisplaySender}
 								date={curMsgDate}
 								onPreview={(chatMessage) => props.previewMedia(chatMessage)}
-								templates={props.templates}
 								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}
@@ -1796,7 +1795,6 @@ export default function Chat(props) {
 			{isTemplateMessagesVisible && (
 				<TemplateMessages
 					waId={waId}
-					templatesData={props.templates}
 					onSend={(templateMessage) =>
 						sendTemplateMessage(true, templateMessage)
 					}
