@@ -33,8 +33,8 @@ const iconStyles = {
 };
 
 function ChatMessage({
-	messageData,
-	templates,
+	data,
+	templateData,
 	displaySender,
 	displayDate,
 	contactProvidersData,
@@ -45,12 +45,6 @@ function ChatMessage({
 	retryMessage,
 }) {
 	const { t } = useTranslation();
-
-	const data = messageData;
-	const templateData =
-		data.type === ChatMessageClass.TYPE_TEMPLATE
-			? templates[data.templateName]
-			: undefined;
 
 	const dateFormat = 'H:mm';
 

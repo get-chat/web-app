@@ -4,9 +4,12 @@ import { ErrorBoundary } from '@sentry/react';
 import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateFinalTemplateParams } from '../../../../helpers/TemplateMessageHelper';
 import style from './StepPreviewResult.module.css';
+import { useSelector } from 'react-redux';
 
-const StepPreviewResult = ({ templates, template, params, csvData }) => {
+const StepPreviewResult = ({ template, params, csvData }) => {
 	const [messageData, setMessageData] = useState();
+
+	const templates = useSelector((state) => state.templates.value);
 
 	const replaceGetChatParamWithRealData = (string) => {
 		return string.replace(/\{{(.*?)\}}/g, function (match) {
@@ -66,7 +69,10 @@ const StepPreviewResult = ({ templates, template, params, csvData }) => {
 			<div className={style.stepPreviewResult__wrapper}>
 				{messageData && (
 					<ErrorBoundary>
-						<ChatMessage messageData={messageData} templates={templates} />
+						<ChatMessage
+							data={messageData}
+							templateData={templates[messageData.templateName]}
+						/>
 					</ErrorBoundary>
 				)}
 			</div>

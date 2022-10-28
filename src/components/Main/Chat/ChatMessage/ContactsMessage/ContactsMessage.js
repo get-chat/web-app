@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button, Avatar } from '@material-ui/core';
@@ -10,14 +10,14 @@ const ContactsMessage = ({ data }) => {
 		<div className={styles.root}>
 			<div className={styles.header}>
 				<Avatar />
-				{data?.payload?.contacts?.map((contact) => (
-					<div key={contact.wa_id}>{contact.name.formatted_name}</div>
+				{data?.payload?.contacts?.map((contact, contactIndex) => (
+					<div key={contactIndex}>{contact.name.formatted_name}</div>
 				))}
 			</div>
 
 			<div className={styles.footer}>
-				{data?.payload?.contacts?.map((contact) => (
-					<>
+				{data?.payload?.contacts?.map((contact, contactIndex) => (
+					<Fragment key={contactIndex}>
 						{Boolean(contact.phones.length) && (
 							<Link to={contact.phones[0].wa_id}>
 								<Button color="primary" variant="outlined">
@@ -29,7 +29,7 @@ const ContactsMessage = ({ data }) => {
 						{/* <Button color="primary" variant="outlined">
 							View
 						</Button> */}
-					</>
+					</Fragment>
 				))}
 			</div>
 		</div>

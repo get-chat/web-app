@@ -54,6 +54,9 @@ import { AppConfig } from '../../contexts/AppConfig';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
+import { useDispatch } from 'react-redux';
+import { setTemplates } from '../../store/reducers/templatesReducer';
+import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -62,6 +65,8 @@ function useQuery() {
 function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
+
+	const dispatch = useDispatch();
 
 	const { t } = useTranslation();
 
@@ -91,7 +96,6 @@ function Main() {
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
-	const [templates, setTemplates] = useState({});
 	const [savedResponses, setSavedResponses] = useState({});
 	const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 	const [templatesReady, setTemplatesReady] = useState(false);
@@ -125,6 +129,9 @@ function Main() {
 	const [selectedChats, setSelectedChats] = useState([]);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState();
+
+	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
+		useState(false);
 
 	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
 		useState(false);
@@ -847,7 +854,7 @@ function Main() {
 					}
 				});
 
-				setTemplates(preparedTemplates);
+				dispatch(setTemplates(preparedTemplates));
 
 				if (!isRetry) {
 					completeCallback();
@@ -1061,11 +1068,12 @@ function Main() {
 						finishBulkSendMessage={finishBulkSendMessage}
 						tags={tags}
 						setLoadingNow={setLoadingNow}
+						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
+						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
+						setInitialResourceFailed={setInitialResourceFailed}
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
-						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
-						setInitialResourceFailed={setInitialResourceFailed}
 					/>
 				)}
 
@@ -1086,7 +1094,6 @@ function Main() {
 						newMessages={newMessages}
 						setChosenContact={setChosenContact}
 						previewMedia={(chatMessage) => previewMedia(chatMessage)}
-						templates={templates}
 						isTemplatesFailed={isTemplatesFailed}
 						isLoadingTemplates={isLoadingTemplates}
 						savedResponses={savedResponses}
@@ -1199,10 +1206,16 @@ function Main() {
 
 				{isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
 
+				<BulkSendTemplateDialog
+					open={isBulkSendTemplateDialogVisible}
+					setOpen={setBulkSendTemplateDialogVisible}
+					setBulkSendPayload={setBulkSendPayload}
+					setSelectionModeEnabled={setSelectionModeEnabled}
+				/>
+
 				<BulkSendTemplateViaCSV
 					open={isBulkSendTemplateViaCSVVisible}
 					setOpen={setBulkSendTemplateViaCSVVisible}
-					templates={templates}
 					tags={tags}
 				/>
 

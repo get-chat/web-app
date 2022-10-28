@@ -20,12 +20,19 @@ import {
 import PublishIcon from '@material-ui/icons/Publish';
 import LinkIcon from '@material-ui/icons/Link';
 
-function SendTemplateMessage(props) {
+function SendTemplateMessage({
+	data,
+	setSending,
+	bulkSend,
+	send,
+	sendButtonInnerRef,
+	bulkSendButtonInnerRef,
+}) {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
 
-	const template = props.data;
+	const template = data;
 
 	const [params, setParams] = useState({});
 	const [headerFileURL, setHeaderFileURL] = useState('');
@@ -65,7 +72,7 @@ function SendTemplateMessage(props) {
 		});
 	};
 
-	const send = (isBulk) => {
+	const sendAfterCheck = (isBulk) => {
 		let hasError = false;
 		const preparedParams = generateFinalTemplateParams(
 			template,
@@ -78,7 +85,7 @@ function SendTemplateMessage(props) {
 							details: t('You need to fill the parameters!'),
 						},
 					]);
-					props.setSending(false);
+					setSending(false);
 					hasError = true;
 				} else {
 					throw error;
@@ -92,9 +99,9 @@ function SendTemplateMessage(props) {
 		finalData.params = Object.values(preparedParams);
 
 		if (isBulk === true) {
-			props.bulkSend(finalData);
+			bulkSend(finalData);
 		} else {
-			props.send(finalData);
+			send(finalData);
 		}
 
 		/*Object.entries(params).forEach((paramEntry) => {
@@ -296,17 +303,16 @@ function SendTemplateMessage(props) {
 					</div>
 				</div>
 			))}
-
 			<Button
-				innerRef={props.sendButtonInnerRef}
-				onClick={send}
+				innerRef={sendButtonInnerRef}
+				onClick={sendAfterCheck}
 				className="hidden"
 			>
 				{t('Send')}
 			</Button>
 			<Button
-				innerRef={props.bulkSendButtonInnerRef}
-				onClick={() => send(true)}
+				innerRef={bulkSendButtonInnerRef}
+				onClick={() => sendAfterCheck(true)}
 				className="hidden"
 			>
 				{t('Bulk Send')}

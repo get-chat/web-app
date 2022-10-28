@@ -119,6 +119,11 @@ function Sidebar(props) {
 		setBulkMessageMenuAnchorEl(null);
 	};
 
+	const showBulkSendTemplateDialog = () => {
+		setBulkMessageMenuAnchorEl(null);
+		props.setBulkSendTemplateDialogVisible(true);
+	};
+
 	const showBulkSendTemplateViaCSVDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
 		props.setBulkSendTemplateViaCSVVisible(true);
@@ -944,6 +949,9 @@ function Sidebar(props) {
 				onClose={hideBulkMessageMenu}
 				elevation={3}
 			>
+				<MenuItem onClick={showBulkSendTemplateDialog}>
+					{t(' Bulk send a template')}
+				</MenuItem>
 				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
 					{t('Bulk send template using CSV')}
 				</MenuItem>*/}

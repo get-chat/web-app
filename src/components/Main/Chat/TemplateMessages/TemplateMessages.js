@@ -14,9 +14,19 @@ import PubSub from 'pubsub-js';
 import ChatMessageClass from '../../../../ChatMessageClass';
 import { generateTemplateMessagePayload } from '../../../../helpers/ChatHelper';
 import TemplatesList from '../../../TemplatesList';
+import { useSelector } from 'react-redux';
 
-function TemplateMessages(props) {
-	const templates = props.templatesData;
+function TemplateMessages({
+	waId,
+	onSend,
+	sendCallback,
+	onBulkSend,
+	selectTemplateCallback,
+	isLoadingTemplates,
+	isTemplatesFailed,
+	isBulkOnly,
+}) {
+	const templates = useSelector((state) => state.templates.value);
 
 	const [chosenTemplate, setChosenTemplate] = useState();
 	const [isDialogVisible, setDialogVisible] = useState(false);
@@ -33,7 +43,7 @@ function TemplateMessages(props) {
 
 	useEffect(() => {
 		setDialogVisible(false);
-	}, [props.waId]);
+	}, [waId]);
 
 	const showDialog = () => {
 		setErrors(undefined);
@@ -53,19 +63,23 @@ function TemplateMessages(props) {
 	const send = (template) => {
 		const messageToBeSent = template ?? chosenTemplate;
 		setSentTemplateMessage(messageToBeSent);
-		props.onSend(messageToBeSent);
+		onSend(messageToBeSent);
+		sendCallback?.();
 		//hideDialog();
 	};
 
 	const bulkSend = (template) => {
 		const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
-		props.onBulkSend(ChatMessageClass.TYPE_TEMPLATE, payload);
+		onBulkSend(ChatMessageClass.TYPE_TEMPLATE, payload);
+		sendCallback?.();
 		hideDialog();
 	};
 
 	const sendByRef = () => {
 		setSending(true);
 		sendButtonRef.current?.click();
+
+		selectTemplateCallback?.();
 	};
 
 	const bulkSendByRef = () => {
@@ -119,14 +133,14 @@ function TemplateMessages(props) {
 		<div className="templateMessagesOuter">
 			{/*<SearchBar />*/}
 
-			{props.isLoadingTemplates ? (
+			{isLoadingTemplates ? (
 				<Alert severity="info">Loading template messages...</Alert>
 			) : (
 				<TemplatesList
 					templates={templates}
 					onClick={(templateData) => chooseTemplate(templateData)}
 					displayRegisterTemplate={true}
-					isTemplatesFailed={props.isTemplatesFailed}
+					isTemplatesFailed={isTemplatesFailed}
 				/>
 			)}
 
@@ -157,15 +171,17 @@ function TemplateMessages(props) {
 					<Button onClick={hideDialog} color="secondary">
 						Close
 					</Button>
-					<Button
-						onClick={sendByRef}
-						color="primary"
-						disabled={isSending}
-						autoFocus
-						data-test-id="send-template-message-button"
-					>
-						Send
-					</Button>
+					{!isBulkOnly && (
+						<Button
+							onClick={sendByRef}
+							color="primary"
+							disabled={isSending}
+							autoFocus
+							data-test-id="send-template-message-button"
+						>
+							Send
+						</Button>
+					)}
 					<Button
 						onClick={bulkSendByRef}
 						color="primary"
