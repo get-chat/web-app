@@ -11,6 +11,7 @@ import packageJson from '../package.json';
 import './i18n';
 import axios from 'axios';
 import { ApiService } from './api/ApiService';
+import { isEmptyString } from './helpers/Helpers';
 
 // Init storage type
 initStorageType();
@@ -41,9 +42,13 @@ axios
 					return event;
 				},
 			});
+
+			if (!isEmptyString(config.APP_SENTRY_TAG_CLIENT)) {
+				Sentry.setTag('client', config.APP_SENTRY_TAG_CLIENT);
+			}
 		}
 
-		const apiService = new ApiService(config.API_BASE_URL);
+		const apiService = new ApiService(config);
 
 		ReactDOM.render(
 			<App config={config} apiService={apiService} />,

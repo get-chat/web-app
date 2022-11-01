@@ -1,12 +1,13 @@
 import axios from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_FORCE_LOGOUT } from '../Constants';
-import { getConfig, handleIfUnauthorized } from '../helpers/ApiHelper';
+import { getRequestConfig, handleIfUnauthorized } from '../helpers/ApiHelper';
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 
 export class ApiService {
-	constructor(apiBaseURL) {
-		this.apiBaseURL = apiBaseURL;
+	constructor(config) {
+		this.config = config;
+		this.apiBaseURL = config.API_BASE_URL;
 	}
 
 	handleRequest = (
@@ -47,7 +48,7 @@ export class ApiService {
 
 	baseCall = (successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(this.apiBaseURL, getConfig()),
+			axios.get(this.apiBaseURL, getRequestConfig()),
 			successCallback,
 			errorCallback
 		);
@@ -66,7 +67,7 @@ export class ApiService {
 
 	logoutCall = (successCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}auth/logout/`, getConfig()),
+			axios.get(`${this.apiBaseURL}auth/logout/`, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -87,7 +88,7 @@ export class ApiService {
 					current_password: currentPassword,
 					new_password: newPassword,
 				},
-				getConfig()
+				getRequestConfig()
 			),
 			successCallback,
 			errorCallback
@@ -109,7 +110,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}chats/`,
-				getConfig(
+				getRequestConfig(
 					{
 						search: keyword,
 						chat_tag_id: chatTagId,
@@ -134,7 +135,7 @@ export class ApiService {
 
 	bulkSendCall = (body, successCallback) => {
 		this.handleRequest(
-			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getConfig()),
+			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -146,7 +147,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}users/`,
-				getConfig({
+				getRequestConfig({
 					limit: limit,
 				})
 			),
@@ -159,7 +160,7 @@ export class ApiService {
 
 	retrieveCurrentUserCall = (successCallback, history) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}users/current/`, getConfig()),
+			axios.get(`${this.apiBaseURL}users/current/`, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -170,7 +171,7 @@ export class ApiService {
 
 	listTemplatesCall = (successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}templates/`, getConfig()),
+			axios.get(`${this.apiBaseURL}templates/`, getRequestConfig()),
 			successCallback,
 			errorCallback
 		);
@@ -178,7 +179,7 @@ export class ApiService {
 
 	listSavedResponsesCall = (successCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}saved_responses/`, getConfig()),
+			axios.get(`${this.apiBaseURL}saved_responses/`, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -193,7 +194,7 @@ export class ApiService {
 				{
 					text: text,
 				},
-				getConfig()
+				getRequestConfig()
 			),
 			successCallback,
 			(error) => {
@@ -204,7 +205,10 @@ export class ApiService {
 
 	deleteSavedResponseCall = (id, successCallback) => {
 		this.handleRequest(
-			axios.delete(`${this.apiBaseURL}saved_responses/${id}/`, getConfig()),
+			axios.delete(
+				`${this.apiBaseURL}saved_responses/${id}/`,
+				getRequestConfig()
+			),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -214,7 +218,7 @@ export class ApiService {
 
 	resolveContactCall = (personWaId, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getConfig()),
+			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getRequestConfig()),
 			successCallback,
 			errorCallback
 		);
@@ -230,7 +234,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}contacts/`,
-				getConfig(
+				getRequestConfig(
 					{
 						search: search,
 						limit: limit,
@@ -248,7 +252,7 @@ export class ApiService {
 
 	listTagsCall = (successCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}tags/`, getConfig()),
+			axios.get(`${this.apiBaseURL}tags/`, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -260,7 +264,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}persons/${waId}/`,
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			errorCallback
@@ -283,7 +287,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}messages/`,
-				getConfig(
+				getRequestConfig(
 					{
 						wa_id: waId,
 						search: search,
@@ -315,7 +319,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}chat_assignment_events/`,
-				getConfig(
+				getRequestConfig(
 					{
 						wa_id: waId,
 						before_time: beforeTime,
@@ -341,7 +345,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}chat_tagging_events/`,
-				getConfig(
+				getRequestConfig(
 					{
 						wa_id: waId,
 						before_time: beforeTime,
@@ -368,7 +372,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}messages/`,
-				getConfig(
+				getRequestConfig(
 					{
 						wa_id: waId,
 						search: search,
@@ -387,7 +391,7 @@ export class ApiService {
 
 	sendMessageCall = (body, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.post(`${this.apiBaseURL}messages/`, body, getConfig()),
+			axios.post(`${this.apiBaseURL}messages/`, body, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -398,7 +402,7 @@ export class ApiService {
 
 	uploadMediaCall = (formData, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.post(`${this.apiBaseURL}media/`, formData, getConfig()),
+			axios.post(`${this.apiBaseURL}media/`, formData, getRequestConfig()),
 			successCallback,
 			(error) => {
 				if (error?.response?.status === 413) {
@@ -425,7 +429,7 @@ export class ApiService {
 					customer_wa_id: waId,
 					timestamp: timestamp,
 				},
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -437,7 +441,7 @@ export class ApiService {
 
 	retrieveChatCall = (waId, successCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}chats/${waId}/`, getConfig()),
+			axios.get(`${this.apiBaseURL}chats/${waId}/`, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -453,7 +457,7 @@ export class ApiService {
 					chat: waId,
 					tag: chatTaggingId,
 				},
-				getConfig()
+				getRequestConfig()
 			),
 			successCallback,
 			(error) => {
@@ -466,7 +470,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.delete(
 				`${this.apiBaseURL}chat_tagging/${chatTaggingId}`,
-				getConfig()
+				getRequestConfig()
 			),
 			successCallback,
 			(error) => {
@@ -479,7 +483,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}persons/`,
-				getConfig(
+				getRequestConfig(
 					{
 						search: search,
 					},
@@ -496,7 +500,10 @@ export class ApiService {
 
 	retrieveChatAssignmentCall = (waId, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}chat_assignment/${waId}/`, getConfig()),
+			axios.get(
+				`${this.apiBaseURL}chat_assignment/${waId}/`,
+				getRequestConfig()
+			),
 			successCallback,
 			(error) => {
 				if (error?.response?.status !== 403) {
@@ -522,7 +529,7 @@ export class ApiService {
 					assigned_to_user: assignedToUser,
 					assigned_group: assignedGroup,
 				},
-				getConfig()
+				getRequestConfig()
 			),
 			successCallback,
 			(error) => {
@@ -536,7 +543,7 @@ export class ApiService {
 
 	listGroupsCall = (successCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}groups/`, getConfig()),
+			axios.get(`${this.apiBaseURL}groups/`, getRequestConfig()),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -558,7 +565,7 @@ export class ApiService {
 					contacts: contacts,
 					force_check: true,
 				},
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -572,7 +579,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}settings/business/profile/`,
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -601,7 +608,7 @@ export class ApiService {
 					vertical: vertical,
 					websites: Object.values(websites),
 				},
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -615,7 +622,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}settings/profile/about/`,
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -636,7 +643,7 @@ export class ApiService {
 				{
 					text: about,
 				},
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -650,7 +657,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}settings/profile/photo/`,
-				getConfig(undefined, cancelToken, 'arraybuffer')
+				getRequestConfig(undefined, cancelToken, 'arraybuffer')
 			),
 			successCallback,
 			errorCallback
@@ -667,7 +674,7 @@ export class ApiService {
 			axios.post(
 				`${this.apiBaseURL}settings/profile/photo/`,
 				formData,
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -681,7 +688,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.delete(
 				`${this.apiBaseURL}settings/profile/photo/`,
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			(error) => {
@@ -698,7 +705,7 @@ export class ApiService {
 		this.handleRequest(
 			axios.get(
 				`${this.apiBaseURL}bulk_message_elements/`,
-				getConfig(undefined, cancelToken)
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			errorCallback
