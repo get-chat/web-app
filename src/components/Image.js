@@ -28,6 +28,9 @@ const Image = ({
 
 				setData(base64);
 				setMime(mimetype);
+			})
+			.catch((error) => {
+				console.log(error);
 			});
 	}, [src]);
 

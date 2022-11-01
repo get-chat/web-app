@@ -65,6 +65,9 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 				const extension = mimeToExtension(res.headers['content-type']);
 				const fileName = `getchat_${generateUniqueID()}.${extension}`;
 				fileDownload(res.data, fileName);
+			})
+			.catch((error) => {
+				console.log(error);
 			});
 	};
 
