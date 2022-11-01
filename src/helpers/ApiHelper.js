@@ -10,8 +10,13 @@ export const generateCancelToken = () => {
 	return axios.CancelToken.source();
 };
 
-export const getConfig = (params, cancelToken, responseType, timeout) => {
-	const config = {
+export const getRequestConfig = (
+	params,
+	cancelToken,
+	responseType,
+	timeout
+) => {
+	const requestConfig = {
 		withCredentials: false,
 		params,
 		headers: {
@@ -23,14 +28,14 @@ export const getConfig = (params, cancelToken, responseType, timeout) => {
 	};
 
 	if (responseType !== undefined) {
-		config.responseType = responseType;
+		requestConfig.responseType = responseType;
 	}
 
 	if (timeout !== undefined) {
-		config.timeout = timeout;
+		requestConfig.timeout = timeout;
 	}
 
-	return config;
+	return requestConfig;
 };
 
 export const handleIfUnauthorized = (error, history) => {

@@ -470,6 +470,7 @@ function ChatFooter(props) {
 				<Badge
 					className="chat__scrollButtonWrapper"
 					color="primary"
+					overlap="rectangular"
 					badgeContent={props.currentNewMessages}
 					invisible={props.currentNewMessages === 0}
 					anchorOrigin={{
