@@ -102,15 +102,21 @@ const SendBulkVoiceMessageDialog = ({
 				</Alert>
 
 				{!isRecording && (
-					<Tooltip title={t('Voice')} placement="top">
-						<IconButton
-							onClick={() =>
-								PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'bulk')
-							}
+					<>
+						<h4>{t('Click to record your message')}</h4>
+						<Tooltip
+							title={t('Click to record your message')}
+							placement="bottom"
 						>
-							<MicIcon />
-						</IconButton>
-					</Tooltip>
+							<IconButton
+								onClick={() =>
+									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'bulk')
+								}
+							>
+								<MicIcon />
+							</IconButton>
+						</Tooltip>
+					</>
 				)}
 
 				<div className={!isRecording ? 'hidden' : ''}>
