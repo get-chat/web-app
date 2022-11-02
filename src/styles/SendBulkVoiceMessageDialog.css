@@ -4,3 +4,8 @@
 	align-items: center;
 	justify-content: center;
 }
+
+.sendBulkVoiceMessageDialogContent > .MuiAlert-root {
+	margin-bottom: 15px;
+	max-width: 400px;
+}

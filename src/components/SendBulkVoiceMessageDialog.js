@@ -10,6 +10,7 @@ import { EVENT_TOPIC_REQUEST_MIC_PERMISSION } from '../Constants';
 import MicIcon from '@material-ui/icons/Mic';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import { prepareSendFilePayload } from '../helpers/ChatHelper';
+import { Alert } from '@material-ui/lab';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
@@ -94,6 +95,12 @@ const SendBulkVoiceMessageDialog = ({
 		<Dialog open={open} onClose={close} className="sendBulkVoiceMessageDialog">
 			<DialogTitle>{t('Send bulk voice message')}</DialogTitle>
 			<DialogContent className="sendBulkVoiceMessageDialogContent">
+				<Alert severity="info">
+					{t(
+						'You can only send voice messages to users who wrote to you in last 24h.'
+					)}
+				</Alert>
+
 				{!isRecording && (
 					<Tooltip title={t('Voice')} placement="top">
 						<IconButton
@@ -105,6 +112,7 @@ const SendBulkVoiceMessageDialog = ({
 						</IconButton>
 					</Tooltip>
 				)}
+
 				<div className={!isRecording ? 'hidden' : ''}>
 					<VoiceRecord
 						voiceRecordCase="bulk"
