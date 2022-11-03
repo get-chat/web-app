@@ -1171,7 +1171,7 @@ function Main() {
 					/>
 				)}
 
-				<Fade in={progress < 100} timeout={{ exit: 1000 }}>
+				<Fade in={progress < 100} timeout={{ exit: 1000 }} unmountOnExit>
 					<div className="loadingScreenOuter">
 						<LoadingScreen
 							progress={progress}

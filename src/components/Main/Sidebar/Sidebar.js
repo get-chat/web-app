@@ -855,7 +855,7 @@ function Sidebar(props) {
 				)}
 			</div>
 
-			<Fade in={isLoadingMoreChats}>
+			<Fade in={isLoadingMoreChats} unmountOnExit>
 				<div className="sidebar__loadingMore">
 					<Zoom in={isLoadingMoreChats}>
 						<div className="sidebar__loadingMore__wrapper">
