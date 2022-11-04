@@ -32,7 +32,7 @@ axios
 				dsn: config.APP_SENTRY_DSN,
 				release: packageJson.version,
 				integrations: [new Integrations.BrowserTracing()],
-				tracesSampleRate: 0.01,
+				tracesSampleRate: 0.002,
 				ignoreErrors: ['ResizeObserver loop limit exceeded'],
 				beforeSend(event, hint) {
 					// Check if it is an exception, and if so, show the report dialog
