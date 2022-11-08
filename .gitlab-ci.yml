@@ -149,21 +149,21 @@ Test:
         path: coverage/cobertura-coverage.xml
 
 
-Security audit:
-  stage: test
-  image: $NODE_IMAGE
-
-  only:
-    - master
-    - merge_requests
-    - tags
-
-  dependencies:
-    - Update project version on git tag
-
-  <<: *install_pnpm
-  script:
-    - pnpm audit --audit-level=critical
+#Security audit:
+#  stage: test
+#  image: $NODE_IMAGE
+#
+#  only:
+#    - master
+#    - merge_requests
+#    - tags
+#
+#  dependencies:
+#    - Update project version on git tag
+#
+#  <<: *install_pnpm
+#  script:
+#    - pnpm audit --audit-level=critical
 
 
 Publish package on git tag:
