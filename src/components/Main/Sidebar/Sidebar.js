@@ -67,6 +67,7 @@ import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import { filterChat } from '../../../helpers/SidebarHelper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
+import { setTemplates } from '../../../store/reducers/templatesReducer';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -101,8 +102,9 @@ function Sidebar(props) {
 	const logOut = () => {
 		clearUserSession(undefined, undefined, history);
 
-		// Consider calling it in clearUserSession method
+		// TODO: Consider calling it in clearUserSession method
 		dispatch(setCurrentUser({}));
+		dispatch(setTemplates({}));
 
 		hideMenu();
 	};
