@@ -1,6 +1,4 @@
-import TextHelper from '../../helpers/TextHelper';
-import GenericHelper from '../../helpers/GenericHelper';
-import moment from 'moment';
+import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -14,21 +12,27 @@ export class ChatMessageModel {
 	static TYPE_TEMPLATE = 'template';
 	static TYPE_BUTTON = 'button';
 	static TYPE_INTERACTIVE = 'interactive';
-
+	static TYPE_ORDER = 'order';
+	static TYPE_CONTACTS = 'contacts';
+	static STATUS_PENDING = 'pending';
 	static STATUS_SENT = 'sent';
 	static STATUS_DELIVERED = 'delivered';
 	static STATUS_READ = 'read';
 
+	static ERR_CODES_FOR_RETRY = [
+		400, 410, 429, 430, 432, 433, 470, 471, 500, 1000, 1005, 1011, 1015, 1016,
+		1018, 1023, 1024, 1026, 1031,
+	];
+
 	constructor(data) {
-		if (!data) {
-			return;
-		}
+		if (!data) return;
 
 		const payload = data.waba_payload;
 		const statuses = data.waba_statuses;
 
-		// Temp
 		this.payload = payload;
+
+		if (!payload) return;
 
 		this.id = payload.id;
 		this.getchatId = data.id;
@@ -99,8 +103,6 @@ export class ChatMessageModel {
 		this.templateLanguage = payload.template?.language?.code;
 		this.templateParameters = payload.template?.components;
 
-		this.interactive = payload.interactive;
-
 		this.isForwarded = payload.context?.forwarded ?? false;
 
 		this.contextFrom = payload.context?.from;
@@ -110,26 +112,33 @@ export class ChatMessageModel {
 			this.contextMessage = new ChatMessageModel(data.context);
 		}
 
-		this.deliveredTimestamp = statuses.delivered;
-		this.readTimestamp = statuses.read;
-		this.sentTimestamp = statuses.sent;
+		this.deliveredTimestamp = statuses?.delivered;
+		this.readTimestamp = statuses?.read;
+		this.sentTimestamp = statuses?.sent;
 
 		this.errors = payload.errors;
 		this.isStored = false;
 		this.isFailed = false;
 		this.resendPayload = undefined;
 
-		this.sanitize();
+		// Not need to sanitize this, because it is already sanitized
+		// this.sanitize();
 	}
 
 	sanitize() {
-		this.text = TextHelper.sanitize(this.text);
-		this.caption = TextHelper.sanitize(this.caption);
+		this.text = sanitize(this.text);
+		this.caption = sanitize(this.caption);
 	}
 
-	textLength() {
-		return (this.text ?? this.buttonText ?? this.interactiveButtonText ?? '')
-			.length;
+	static fromTemplate(template) {
+		return new ChatMessageModel({
+			from_us: true,
+			waba_payload: {
+				type: ChatMessageModel.TYPE_TEMPLATE,
+				template: template,
+				timestamp: new Date().getTime(),
+			},
+		});
 	}
 
 	static fromAssignmentEvent(assignmentEvent) {
@@ -181,7 +190,7 @@ export class ChatMessageModel {
 	}
 
 	generateInitials = () => {
-		return GenericHelper.generateInitialsHelper(this.senderName);
+		return generateInitialsHelper(this.senderName);
 	};
 
 	hasMediaToPreview() {
@@ -203,7 +212,7 @@ export class ChatMessageModel {
 	}
 
 	generateMediaLink(id) {
-		return id ? `${window.apiService.apiBaseURL}media/${id}` : undefined;
+		return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
 	}
 
 	generateImageLink(includeTemplateHeader) {
@@ -255,11 +264,22 @@ export class ChatMessageModel {
 			return ChatMessageModel.STATUS_DELIVERED;
 		}
 
-		// We don't check if sent timestamp exists, this might be null right after sending message to bridge api
-		return ChatMessageModel.STATUS_SENT;
+		if (this.sentTimestamp) {
+			return ChatMessageModel.STATUS_SENT;
+		}
+
+		return ChatMessageModel.STATUS_PENDING;
 	}
 
-	isDelivered() {
+	isPending() {
+		return this.getStatus() === ChatMessageModel.STATUS_PENDING;
+	}
+
+	isJustSent() {
+		return this.getStatus() === ChatMessageModel.STATUS_SENT;
+	}
+
+	isJustDelivered() {
 		return this.getStatus() === ChatMessageModel.STATUS_DELIVERED;
 	}
 
@@ -276,46 +296,50 @@ export class ChatMessageModel {
 	}
 
 	getHeaderFileLink(type) {
-		if (this.type === ChatMessageModel.TYPE_TEMPLATE) {
-			if (this.templateParameters) {
-				for (let i = 0; i < this.templateParameters.length; i++) {
-					const component = this.templateParameters[i];
+		try {
+			if (this.type === ChatMessageModel.TYPE_TEMPLATE) {
+				if (this.templateParameters) {
+					for (let i = 0; i < this.templateParameters.length; i++) {
+						const component = this.templateParameters[i];
 
-					if (component.type === 'header') {
-						for (let j = 0; j < component.parameters.length; j++) {
-							const param = component.parameters[j];
+						if (
+							component &&
+							component.type === 'header' &&
+							component.parameters.length
+						) {
+							for (let j = 0; j < component.parameters.length; j++) {
+								const param = component.parameters[j];
 
-							if (param.type === type) {
-								return param[type]?.link;
+								if (param.type === type) {
+									return param[type]?.link;
+								}
 							}
 						}
 					}
 				}
 			}
+		} catch (error) {
+			console.error(error);
 		}
 
 		return undefined;
 	}
 
-	isDateIndicatorVisible(previousMessage) {
-		const curMsgDate = moment.unix(this.timestamp);
-		let previousMsgDate;
+	canRetry() {
+		let result = false;
 
-		if (previousMessage) {
-			previousMsgDate = moment.unix(previousMessage.timestamp);
-		}
-
-		return !previousMessage || !curMsgDate.isSame(previousMsgDate, 'day');
-	}
-
-	isSenderVisible(previousMessage) {
-		if (previousMessage) {
-			if (this.getUniqueSender() === previousMessage.getUniqueSender()) {
-				return false;
+		if (this.errors && Array.isArray(this.errors)) {
+			for (let i = 0; i < this.errors.length; i++) {
+				if (
+					ChatMessageModel.ERR_CODES_FOR_RETRY.includes(this.errors[i]['code'])
+				) {
+					result = true;
+					break;
+				}
 			}
 		}
 
-		return true;
+		return result;
 	}
 }
 

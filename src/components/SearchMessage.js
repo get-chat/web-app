@@ -9,7 +9,7 @@ import {
 } from '../Constants';
 import SearchBar from './SearchBar';
 import { useParams } from 'react-router-dom';
-import ChatMessageClass from '../ChatMessageClass';
+import ChatMessageModel from '../api/models/ChatMessageModel';
 import SearchMessageResult from './SearchMessageResult';
 import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
@@ -65,7 +65,7 @@ function SearchMessage(props) {
 			(response) => {
 				const preparedMessages = {};
 				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageClass(message);
+					const prepared = new ChatMessageModel(message);
 					preparedMessages[prepared.id] = prepared;
 				});
 				setResults(preparedMessages);

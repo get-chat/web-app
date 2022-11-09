@@ -1,5 +1,5 @@
-import DateHelper from '../../helpers/DateHelper';
-import GenericHelper from '../../helpers/GenericHelper';
+import { getPastHoursByTimestamp } from '../../helpers/DateHelper';
+import { generateInitialsHelper } from '../../helpers/Helpers';
 
 class PersonModel {
 	constructor(data) {
@@ -17,11 +17,11 @@ class PersonModel {
 
 	setName(name) {
 		this.name = name;
-		this.initials = this.generateInitials();
+		this.initials = this.generateInitials(); //data.initials;
 	}
 
 	getPastHoursAfterLastMessage() {
-		return DateHelper.getPastHoursByTimestamp(this.lastMessageTimestamp);
+		return getPastHoursByTimestamp(this.lastMessageTimestamp);
 	}
 
 	checkIfExpired() {
@@ -29,7 +29,7 @@ class PersonModel {
 	}
 
 	generateInitials = () => {
-		return GenericHelper.generateInitialsHelper(this.name);
+		return generateInitialsHelper(this.name);
 	};
 
 	static newInstance() {

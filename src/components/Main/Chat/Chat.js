@@ -18,8 +18,8 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '../../../Constants';
-import ChatMessageClass from '../../../ChatMessageClass';
-import PersonClass from '../../../PersonClass';
+import ChatMessageModel from '../../../api/models/ChatMessageModel';
+import PersonModel from '../../../api/models/PersonModel';
 import TemplateMessages from './TemplateMessages/TemplateMessages';
 import ChatFooter from './ChatFooter/ChatFooter';
 import ChatHeader from './ChatHeader';
@@ -75,6 +75,7 @@ import {
 } from '../../../helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
 import { useSelector } from 'react-redux';
+import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -225,7 +226,7 @@ export default function Chat(props) {
 			};
 
 			// Use proper method to send message depends on its type
-			if (requestBody.type === ChatMessageClass.TYPE_TEXT) {
+			if (requestBody.type === ChatMessageModel.TYPE_TEXT) {
 				sendMessage(
 					false,
 					undefined,
@@ -233,7 +234,7 @@ export default function Chat(props) {
 					successCallback,
 					completeCallback
 				);
-			} else if (requestBody.type === ChatMessageClass.TYPE_TEMPLATE) {
+			} else if (requestBody.type === ChatMessageModel.TYPE_TEMPLATE) {
 				sendTemplateMessage(
 					false,
 					undefined,
@@ -514,7 +515,7 @@ export default function Chat(props) {
 						// Check if any message is displayed with internal id
 						// Fix duplicated messages in this way
 						const internalIdString =
-							ChatMessageClass.generateInternalIdStringStatic(
+							ChatMessageModel.generateInternalIdStringStatic(
 								statusObj.getchatId
 							);
 
@@ -676,7 +677,7 @@ export default function Chat(props) {
 		const onUpdatePersonName = function (msg, data) {
 			const name = data;
 			setPerson((prevState) => {
-				if (prevState && prevState instanceof PersonClass) {
+				if (prevState && prevState instanceof PersonModel) {
 					return {
 						...prevState,
 						name: name,
@@ -869,7 +870,7 @@ export default function Chat(props) {
 			waId,
 			cancelTokenSourceRef.current.token,
 			(response) => {
-				const preparedPerson = new PersonClass(response.data);
+				const preparedPerson = new PersonModel(response.data);
 				setPerson(preparedPerson);
 				setExpired(preparedPerson.isExpired);
 
@@ -945,7 +946,7 @@ export default function Chat(props) {
 	};
 
 	const createPersonAndStartChat = (name, initials) => {
-		const preparedPerson = new PersonClass({});
+		const preparedPerson = new PersonModel({});
 		preparedPerson.name = name;
 		preparedPerson.initials = initials;
 		preparedPerson.waId = waId;
@@ -979,9 +980,11 @@ export default function Chat(props) {
 			sinceTime,
 			cancelTokenSourceRef.current.token,
 			(response) => {
-				const count = response.data.count;
+				const chatMessagesResponse = new ChatMessagesResponse(response.data);
+
+				const count = chatMessagesResponse.count;
 				//const previous = response.data.previous;
-				const next = response.data.next;
+				const next = chatMessagesResponse.next;
 
 				if (sinceTime && isInitialWithSinceTime === true) {
 					if (next) {
@@ -1000,16 +1003,10 @@ export default function Chat(props) {
 					}
 				}
 
-				const preparedMessages = {};
-				response.data.results.reverse().forEach((message) => {
-					const prepared = new ChatMessageClass(message);
-					// WABA ID is null if not sent yet
-					// Consider switching to getchat id only
-					const messageKey = prepared.id ?? prepared.generateInternalIdString();
-					preparedMessages[messageKey] = prepared;
-				});
+				const preparedMessages = chatMessagesResponse.messages;
 
 				const lastMessage = getLastObject(preparedMessages);
+				console.log(lastMessage);
 
 				// Pagination filters for events
 				let beforeTimeForEvents = beforeTime;
@@ -1143,7 +1140,7 @@ export default function Chat(props) {
 			(response) => {
 				response.data.results.reverse().forEach((assignmentEvent) => {
 					const prepared =
-						ChatMessageClass.fromAssignmentEvent(assignmentEvent);
+						ChatMessageModel.fromAssignmentEvent(assignmentEvent);
 					preparedMessages[prepared.id] = prepared;
 				});
 
@@ -1179,7 +1176,7 @@ export default function Chat(props) {
 			cancelTokenSourceRef.current.token,
 			(response) => {
 				response.data.results.reverse().forEach((taggingEvent) => {
-					const prepared = ChatMessageClass.fromTaggingEvent(taggingEvent);
+					const prepared = ChatMessageModel.fromTaggingEvent(taggingEvent);
 					preparedMessages[prepared.id] = prepared;
 				});
 
@@ -1228,7 +1225,7 @@ export default function Chat(props) {
 	const sendCustomTextMessage = (text) => {
 		sendMessage(true, undefined, {
 			wa_id: waId,
-			type: ChatMessageClass.TYPE_TEXT,
+			type: ChatMessageModel.TYPE_TEXT,
 			text: {
 				body: text.trim(),
 			},
@@ -1238,10 +1235,10 @@ export default function Chat(props) {
 	const bulkSendMessage = (type, payload) => {
 		props.setSelectionModeEnabled(true);
 
-		if (type === ChatMessageClass.TYPE_TEXT) {
+		if (type === ChatMessageModel.TYPE_TEXT) {
 			const preparedInput = translateHTMLInputToText(input).trim();
 			payload = {
-				type: ChatMessageClass.TYPE_TEXT,
+				type: ChatMessageModel.TYPE_TEXT,
 				text: {
 					body: preparedInput,
 				},
@@ -1290,7 +1287,7 @@ export default function Chat(props) {
 
 			requestBody = {
 				wa_id: waId,
-				type: ChatMessageClass.TYPE_TEXT,
+				type: ChatMessageModel.TYPE_TEXT,
 				text: {
 					body: preparedInput,
 				},
@@ -1503,7 +1500,7 @@ export default function Chat(props) {
 		setMessages((prevState) => {
 			let text;
 
-			if (requestBody.type === ChatMessageClass.TYPE_TEXT || requestBody.text) {
+			if (requestBody.type === ChatMessageModel.TYPE_TEXT || requestBody.text) {
 				text = requestBody.text.body;
 			}
 
@@ -1513,7 +1510,7 @@ export default function Chat(props) {
 			}
 
 			const timestamp = generateUnixTimestamp();
-			const storedMessage = new ChatMessageClass();
+			const storedMessage = new ChatMessageModel();
 			storedMessage.getchatId = getchatId;
 			storedMessage.id = storedMessage.generateInternalIdString();
 			storedMessage.waId = waId;
@@ -1568,19 +1565,19 @@ export default function Chat(props) {
 		message.resendPayload.wa_id = message.waId;
 
 		switch (message.type) {
-			case ChatMessageClass.TYPE_TEXT:
+			case ChatMessageModel.TYPE_TEXT:
 				sendMessage(true, undefined, message.resendPayload);
 				break;
-			case ChatMessageClass.TYPE_TEMPLATE:
+			case ChatMessageModel.TYPE_TEMPLATE:
 				sendTemplateMessage(true, undefined, message.resendPayload);
 				break;
 			default:
 				if (
 					[
-						ChatMessageClass.TYPE_AUDIO,
-						ChatMessageClass.TYPE_VIDEO,
-						ChatMessageClass.TYPE_IMAGE,
-						ChatMessageClass.TYPE_VOICE,
+						ChatMessageModel.TYPE_AUDIO,
+						ChatMessageModel.TYPE_VIDEO,
+						ChatMessageModel.TYPE_IMAGE,
+						ChatMessageModel.TYPE_VOICE,
 					].includes(message.type)
 				) {
 					sendFile(undefined, undefined, undefined, message.resendPayload);

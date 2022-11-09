@@ -1,5 +1,5 @@
 import React from 'react';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
 
 function ChatMessageTypeLabel({ type }) {
@@ -7,27 +7,27 @@ function ChatMessageTypeLabel({ type }) {
 
 	return (
 		<span className="chatMessageTypeLabel">
-			{type === ChatMessageClass.TYPE_IMAGE && <span>{t('Image')}</span>}
+			{type === ChatMessageModel.TYPE_IMAGE && <span>{t('Image')}</span>}
 
-			{type === ChatMessageClass.TYPE_VIDEO && <span>{t('Video')}</span>}
+			{type === ChatMessageModel.TYPE_VIDEO && <span>{t('Video')}</span>}
 
-			{type === ChatMessageClass.TYPE_VOICE && <span>{t('Voice')}</span>}
+			{type === ChatMessageModel.TYPE_VOICE && <span>{t('Voice')}</span>}
 
-			{type === ChatMessageClass.TYPE_AUDIO && <span>{t('Audio')}</span>}
+			{type === ChatMessageModel.TYPE_AUDIO && <span>{t('Audio')}</span>}
 
-			{type === ChatMessageClass.TYPE_DOCUMENT && <span>{t('Document')}</span>}
+			{type === ChatMessageModel.TYPE_DOCUMENT && <span>{t('Document')}</span>}
 
-			{type === ChatMessageClass.TYPE_STICKER && <span>{t('Sticker')}</span>}
+			{type === ChatMessageModel.TYPE_STICKER && <span>{t('Sticker')}</span>}
 
-			{type === ChatMessageClass.TYPE_LOCATION && <span>{t('Location')}</span>}
+			{type === ChatMessageModel.TYPE_LOCATION && <span>{t('Location')}</span>}
 
-			{type === ChatMessageClass.TYPE_TEMPLATE && <span>{t('Template')}</span>}
+			{type === ChatMessageModel.TYPE_TEMPLATE && <span>{t('Template')}</span>}
 
-			{type === ChatMessageClass.TYPE_INTERACTIVE && (
+			{type === ChatMessageModel.TYPE_INTERACTIVE && (
 				<span>{t('Interactive')}</span>
 			)}
 
-			{type === ChatMessageClass.TYPE_CONTACTS && <span>{t('Contacts')}</span>}
+			{type === ChatMessageModel.TYPE_CONTACTS && <span>{t('Contacts')}</span>}
 		</span>
 	);
 }

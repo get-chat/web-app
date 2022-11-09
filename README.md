@@ -48,7 +48,7 @@ axios
 	.then((response) => {
 		const config = response.data;
 
-		// It is needed for ChatMessageClass
+		// It is needed for ChatMessageModel
 		window.config = config;
 
  		// Init Sentry

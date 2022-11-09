@@ -1,6 +1,5 @@
-import DateHelper from '../../helpers/DateHelper';
-import GenericHelper from '../../helpers/GenericHelper';
-import TextHelper from '../../helpers/TextHelper';
+import { getPastHoursByTimestamp } from '../../helpers/DateHelper';
+import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
 
 class ChatModel {
 	constructor(data) {
@@ -30,19 +29,18 @@ class ChatModel {
 		this.assignedToUser = data.assigned_to_user;
 		this.tags = data.tags;
 
-		this.sanitize();
+		// Not need to sanitize this, because it is already sanitized
+		// this.sanitize();
 	}
 
 	sanitize() {
-		this.name = TextHelper.sanitize(this.name);
-		this.lastMessageBody = TextHelper.sanitize(this.lastMessageBody);
-		this.lastMessageButtonText = TextHelper.sanitize(
-			this.lastMessageButtonText
-		);
-		this.lastMessageInteractiveButtonText = TextHelper.sanitize(
+		this.name = sanitize(this.name);
+		this.lastMessageBody = sanitize(this.lastMessageBody);
+		this.lastMessageButtonText = sanitize(this.lastMessageButtonText);
+		this.lastMessageInteractiveButtonText = sanitize(
 			this.lastMessageInteractiveButtonText
 		);
-		this.lastMessageCaption = TextHelper.sanitize(this.lastMessageCaption);
+		this.lastMessageCaption = sanitize(this.lastMessageCaption);
 	}
 
 	setName(name) {
@@ -51,7 +49,7 @@ class ChatModel {
 	}
 
 	generateInitials = () => {
-		return GenericHelper.generateInitialsHelper(this.name);
+		return generateInitialsHelper(this.name);
 	};
 
 	setLastMessage(lastMessagePayload) {
@@ -76,18 +74,8 @@ class ChatModel {
 		this.isExpired = this.checkIfExpired();
 	}
 
-	getLastMessageContent() {
-		return (
-			this.lastMessageBody ??
-			this.lastMessageButtonText ??
-			this.lastMessageInteractiveButtonText
-		);
-	}
-
 	getPastHoursAfterLastMessage() {
-		return DateHelper.getPastHoursByTimestamp(
-			this.lastReceivedMessageTimestamp
-		);
+		return getPastHoursByTimestamp(this.lastReceivedMessageTimestamp);
 	}
 
 	checkIfExpired() {

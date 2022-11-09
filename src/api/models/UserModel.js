@@ -1,5 +1,7 @@
 class UserModel {
 	constructor(data) {
+		if (!data) return;
+
 		this.id = data.id;
 		this.username = data.username;
 		this.firstName = data.first_name;
@@ -33,6 +35,18 @@ class UserModel {
 
 		return label;
 	};
+
+	isInGroup(groupId) {
+		let inGroup = false;
+
+		this.groups?.forEach((groupIndex, groupItem) => {
+			if (groupItem?.id === groupId) {
+				inGroup = true;
+			}
+		});
+
+		return inGroup;
+	}
 
 	isBot() {
 		if (this.groups) {

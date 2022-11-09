@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ChatMessage from '../../../Main/Chat/ChatMessage/ChatMessage';
 import { ErrorBoundary } from '@sentry/react';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateFinalTemplateParams } from '../../../../helpers/TemplateMessageHelper';
 import style from './StepPreviewResult.module.css';
 import { useSelector } from 'react-redux';
@@ -61,7 +61,7 @@ const StepPreviewResult = ({ template, params, csvData }) => {
 		const data = { ...template };
 		data.components = Object.values(preparedParams);
 
-		setMessageData(ChatMessageClass.fromTemplate(data));
+		setMessageData(ChatMessageModel.fromTemplate(data));
 	}, [templates, template, params, csvData]);
 
 	return (

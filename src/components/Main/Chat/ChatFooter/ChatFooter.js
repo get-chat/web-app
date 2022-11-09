@@ -34,7 +34,7 @@ import {
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
 } from '../../../../Constants';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { replaceEmojis } from '../../../../helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
@@ -404,7 +404,7 @@ function ChatFooter(props) {
 				{hasInput() && (
 					<Tooltip title={t('Bulk Send')} placement="top">
 						<IconButton
-							onClick={() => props.bulkSendMessage(ChatMessageClass.TYPE_TEXT)}
+							onClick={() => props.bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
 						>
 							<DynamicFeedIcon />
 						</IconButton>

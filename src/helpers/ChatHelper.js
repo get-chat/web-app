@@ -1,4 +1,4 @@
-import ChatMessageClass from '../ChatMessageClass';
+import ChatMessageModel from '../api/models/ChatMessageModel';
 import {
 	ATTACHMENT_TYPE_DOCUMENT,
 	ATTACHMENT_TYPE_IMAGE,
@@ -7,7 +7,7 @@ import {
 
 export const generateTemplateMessagePayload = (templateMessage) => {
 	return {
-		type: ChatMessageClass.TYPE_TEMPLATE,
+		type: ChatMessageModel.TYPE_TEMPLATE,
 		template: {
 			namespace: templateMessage.namespace,
 			name: templateMessage.name,

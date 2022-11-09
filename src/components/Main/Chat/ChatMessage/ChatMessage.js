@@ -8,7 +8,7 @@ import '../../../../styles/InputRange.css';
 import '../../../../AvatarStyles';
 import NoteIcon from '@material-ui/icons/Note';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import MessageDateIndicator from '../MessageDateIndicator';
 import ContextChatMessage from './ContextChatMessage';
 import ReplyIcon from '@material-ui/icons/Reply';
@@ -77,7 +77,7 @@ function ChatMessage({
 						/>
 					)}
 
-					{data.type === ChatMessageClass.TYPE_STICKER && (
+					{data.type === ChatMessageModel.TYPE_STICKER && (
 						<img
 							className="chat__media chat__sticker"
 							src={data.generateStickerLink()}
@@ -118,7 +118,7 @@ function ChatMessage({
 							/>
 						)}
 
-						{data.type === ChatMessageClass.TYPE_IMAGE && (
+						{data.type === ChatMessageModel.TYPE_IMAGE && (
 							<ChatMessageImage
 								data={data}
 								source={data.generateImageLink()}
@@ -126,7 +126,7 @@ function ChatMessage({
 							/>
 						)}
 
-						{data.type === ChatMessageClass.TYPE_VIDEO && (
+						{data.type === ChatMessageModel.TYPE_VIDEO && (
 							<ChatMessageVideo
 								data={data}
 								source={data.generateVideoLink()}
@@ -134,26 +134,26 @@ function ChatMessage({
 							/>
 						)}
 
-						{(data.type === ChatMessageClass.TYPE_VOICE ||
-							data.type === ChatMessageClass.TYPE_AUDIO) && (
+						{(data.type === ChatMessageModel.TYPE_VOICE ||
+							data.type === ChatMessageModel.TYPE_AUDIO) && (
 							<ChatMessageVoice data={data} />
 						)}
 
-						{data.type === ChatMessageClass.TYPE_DOCUMENT && (
+						{data.type === ChatMessageModel.TYPE_DOCUMENT && (
 							<ChatMessageDocument data={data} />
 						)}
 
-						{data.type === ChatMessageClass.TYPE_STICKER && (
+						{data.type === ChatMessageModel.TYPE_STICKER && (
 							<span>
 								<NoteIcon fontSize="small" />
 							</span>
 						)}
 
-						{data.type === ChatMessageClass.TYPE_LOCATION && (
+						{data.type === ChatMessageModel.TYPE_LOCATION && (
 							<ChatMessageLocation data={data} />
 						)}
 
-						{data.type === ChatMessageClass.TYPE_TEMPLATE && (
+						{data.type === ChatMessageModel.TYPE_TEMPLATE && (
 							<ChatMessageTemplate
 								data={data}
 								templateData={templateData}
@@ -162,15 +162,15 @@ function ChatMessage({
 							/>
 						)}
 
-						{data.type === ChatMessageClass.TYPE_INTERACTIVE && (
+						{data.type === ChatMessageModel.TYPE_INTERACTIVE && (
 							<InteractiveMessage data={data} />
 						)}
 
-						{data.type === ChatMessageClass.TYPE_ORDER && (
+						{data.type === ChatMessageModel.TYPE_ORDER && (
 							<OrderMessage data={data} />
 						)}
 
-						{data.type === ChatMessageClass.TYPE_CONTACTS && (
+						{data.type === ChatMessageModel.TYPE_CONTACTS && (
 							<ContactsMessage data={data} />
 						)}
 

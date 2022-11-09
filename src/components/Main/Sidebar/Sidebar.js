@@ -34,12 +34,12 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import SearchBar from '../../SearchBar';
 import SidebarContactResult from './SidebarContactResult';
-import ChatClass from '../../../ChatClass';
-import NewMessageClass from '../../../NewMessageClass';
+import ChatModel from '../../../api/models/ChatModel';
+import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
 import ChangePasswordDialog from './ChangePasswordDialog';
-import ChatMessageClass from '../../../ChatMessageClass';
+import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -229,7 +229,7 @@ function Sidebar(props) {
 					) {
 						const preparedNewMessages = props.newMessages;
 						if (props.newMessages[chatMessageWaId] === undefined) {
-							preparedNewMessages[chatMessageWaId] = new NewMessageClass(
+							preparedNewMessages[chatMessageWaId] = new NewMessageModel(
 								chatMessageWaId,
 								0
 							);
@@ -436,7 +436,7 @@ function Sidebar(props) {
 			(response) => {
 				const preparedChats = {};
 				response.data.results.forEach((contact) => {
-					const prepared = new ChatClass(contact);
+					const prepared = new ChatModel(contact);
 					preparedChats[CHAT_KEY_PREFIX + prepared.waId] = prepared;
 				});
 
@@ -461,7 +461,7 @@ function Sidebar(props) {
 				response.data.results.forEach((newMessage) => {
 					const newWaId = newMessage.contact.waba_payload.wa_id;
 					const newAmount = newMessage.new_messages;
-					const prepared = new NewMessageClass(newWaId, newAmount);
+					const prepared = new NewMessageModel(newWaId, newAmount);
 					preparedNewMessages[prepared.waId] = prepared;
 				});
 
@@ -539,7 +539,7 @@ function Sidebar(props) {
 				prevState.filter((item) => item !== chatWaId)
 			);
 
-			const preparedChat = new ChatClass(response.data);
+			const preparedChat = new ChatModel(response.data);
 
 			// Don't display chat if tab case is "me" and chat is not assigned to user
 			if (tabCase === CHAT_LIST_TAB_CASE_ME) {
@@ -585,7 +585,7 @@ function Sidebar(props) {
 			(response) => {
 				const preparedMessages = {};
 				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageClass(message);
+					const prepared = new ChatMessageModel(message);
 					preparedMessages[prepared.id] = prepared;
 				});
 

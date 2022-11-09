@@ -13,10 +13,10 @@ import {
 import { ArrowBack, ExpandLess, ExpandMore } from '@material-ui/icons';
 import DialpadIcon from '@material-ui/icons/Dialpad';
 import Contact from './Contact';
-import ContactClass from '../ContactClass';
+import ContactModel from '../api/models/ContactModel';
 import { isMobileOnly } from 'react-device-detect';
 import { useHistory } from 'react-router-dom';
-import PersonClass from '../PersonClass';
+import PersonModel from '../api/models/PersonModel';
 import Person from './Person';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { addPlus, preparePhoneNumber } from '../helpers/PhoneNumberHelper';
@@ -89,7 +89,7 @@ function Contacts(props) {
 			(response) => {
 				const preparedPersons = {};
 				response.data.results.forEach((person, personIndex) => {
-					preparedPersons[personIndex] = new PersonClass(person);
+					preparedPersons[personIndex] = new PersonModel(person);
 				});
 				setPersons(preparedPersons);
 				listContacts();
@@ -108,7 +108,7 @@ function Contacts(props) {
 			(response) => {
 				const preparedContacts = {};
 				response.data.results.forEach((contact, contactIndex) => {
-					preparedContacts[contactIndex] = new ContactClass(contact);
+					preparedContacts[contactIndex] = new ContactModel(contact);
 				});
 				setContacts(preparedContacts);
 				setLoading(false);

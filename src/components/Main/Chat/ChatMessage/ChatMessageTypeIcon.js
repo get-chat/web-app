@@ -1,5 +1,5 @@
 import React from 'react';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import MicIcon from '@material-ui/icons/Mic';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
@@ -14,25 +14,25 @@ import ContactsIcon from '@material-ui/icons/Contacts';
 function ChatMessageTypeIcon(props) {
 	return (
 		<span>
-			{props.type === ChatMessageClass.TYPE_IMAGE && <PhotoCameraIcon />}
+			{props.type === ChatMessageModel.TYPE_IMAGE && <PhotoCameraIcon />}
 
-			{props.type === ChatMessageClass.TYPE_VIDEO && <VideocamIcon />}
+			{props.type === ChatMessageModel.TYPE_VIDEO && <VideocamIcon />}
 
-			{props.type === ChatMessageClass.TYPE_VOICE && <MicIcon />}
+			{props.type === ChatMessageModel.TYPE_VOICE && <MicIcon />}
 
-			{props.type === ChatMessageClass.TYPE_AUDIO && <AudiotrackIcon />}
+			{props.type === ChatMessageModel.TYPE_AUDIO && <AudiotrackIcon />}
 
-			{props.type === ChatMessageClass.TYPE_DOCUMENT && <InsertDriveFileIcon />}
+			{props.type === ChatMessageModel.TYPE_DOCUMENT && <InsertDriveFileIcon />}
 
-			{props.type === ChatMessageClass.TYPE_STICKER && <NoteIcon />}
+			{props.type === ChatMessageModel.TYPE_STICKER && <NoteIcon />}
 
-			{props.type === ChatMessageClass.TYPE_LOCATION && <LocationOnIcon />}
+			{props.type === ChatMessageModel.TYPE_LOCATION && <LocationOnIcon />}
 
-			{props.type === ChatMessageClass.TYPE_TEMPLATE && <SmsIcon />}
+			{props.type === ChatMessageModel.TYPE_TEMPLATE && <SmsIcon />}
 
-			{props.type === ChatMessageClass.TYPE_INTERACTIVE && <TouchAppIcon />}
+			{props.type === ChatMessageModel.TYPE_INTERACTIVE && <TouchAppIcon />}
 
-			{props.type === ChatMessageClass.TYPE_CONTACTS && <ContactsIcon />}
+			{props.type === ChatMessageModel.TYPE_CONTACTS && <ContactsIcon />}
 		</span>
 	);
 }
