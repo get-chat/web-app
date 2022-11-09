@@ -5,11 +5,13 @@ import {
 } from '../Constants';
 
 const isChatAssignedToUser = (currentUser, chat) => {
-	return chat.assignedToUser?.id === currentUser.id;
+	return (
+		currentUser?.id !== undefined && chat.assignedToUser?.id === currentUser.id
+	);
 };
 
 const isChatInUsersGroup = (currentUser, chat) => {
-	if (chat.assignedGroup && currentUser.groups) {
+	if (chat.assignedGroup && currentUser?.groups) {
 		const assignedGroupId = chat.assignedGroup.id;
 		for (let i = 0; i < currentUser.groups.length; i++) {
 			const group = currentUser.groups[i];
