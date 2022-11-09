@@ -922,18 +922,16 @@ function Sidebar(props) {
 				<MenuItem onClick={forceClearContactProvidersData}>
 					{t('Refresh contacts')}
 				</MenuItem>
+				{currentUser?.isAdmin && <Divider />}
 				{currentUser?.isAdmin && (
-					<>
-						<Divider />
-						<MenuItem
-							component={Link}
-							href={getHubURL(config.API_BASE_URL)}
-							target="_blank"
-							color="initial"
-						>
-							{t('Admin panel')}
-						</MenuItem>
-					</>
+					<MenuItem
+						component={Link}
+						href={getHubURL(config.API_BASE_URL)}
+						target="_blank"
+						color="initial"
+					>
+						{t('Admin panel')}
+					</MenuItem>
 				)}
 				{isMobile && (
 					<MenuItem onClick={goToSettings}>{t('Settings (App Only)')}</MenuItem>

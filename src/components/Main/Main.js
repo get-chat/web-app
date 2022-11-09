@@ -818,7 +818,6 @@ function Main() {
 					clearUserSession('incorrectRole', location, history);
 				}
 
-				setAdmin(role === 'admin');
 				setProgress(10);
 			}, history);
 		} catch (error) {
