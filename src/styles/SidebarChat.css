@@ -177,11 +177,11 @@
 	font-weight: 600;
 	background-color: white;
 	color: var(--color-primary);
-	outline: 1px solid var(--color-primary);
+	border: 1px solid var(--color-primary);
 }
 
 .sidebarChatWrapper.expired .sidebarChat__info__date {
-	outline-color: var(--gray-light);
+	border-color: var(--gray-light);
 }
 
 .sidebarChatWrapper.almostExpired .sidebarChat__info__date {
