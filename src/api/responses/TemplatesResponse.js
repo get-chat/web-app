@@ -4,7 +4,11 @@ class TemplatesResponse {
 	constructor(data) {
 		const templates = {};
 		data.results.forEach((templateData) => {
-			templates[templateData.name] = new TemplateModel(templateData);
+			const prepared = new TemplateModel(templateData);
+
+			if (prepared.status === 'approved') {
+				templates[prepared.name] = prepared;
+			}
 		});
 		this.templates = templates;
 	}

@@ -59,6 +59,7 @@ import { setTemplates } from '../../store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '../../store/reducers/currentUserReducer';
 import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
+import TemplatesResponse from '../../api/responses/TemplatesResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -845,16 +846,9 @@ function Main() {
 
 		await apiService.listTemplatesCall(
 			(response) => {
-				const preparedTemplates = {};
-				response.data.results.forEach((template) => {
-					const prepared = new TemplateModel(template);
+				const templatesResponse = new TemplatesResponse(response.data);
 
-					if (prepared.status === 'approved') {
-						preparedTemplates[prepared.name] = prepared;
-					}
-				});
-
-				dispatch(setTemplates(preparedTemplates));
+				dispatch(setTemplates(templatesResponse.templates));
 
 				if (!isRetry) {
 					completeCallback();

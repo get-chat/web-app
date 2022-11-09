@@ -68,6 +68,7 @@ import { filterChat } from '../../../helpers/SidebarHelper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
 import { setTemplates } from '../../../store/reducers/templatesReducer';
+import ChatsResponse from '../../../api/responses/ChatsResponse';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -434,11 +435,9 @@ function Sidebar(props) {
 			assignedGroup,
 			cancelTokenSource.token,
 			(response) => {
-				const preparedChats = {};
-				response.data.results.forEach((contact) => {
-					const prepared = new ChatModel(contact);
-					preparedChats[CHAT_KEY_PREFIX + prepared.waId] = prepared;
-				});
+				const chatsResponse = new ChatsResponse(response.data);
+
+				const preparedChats = chatsResponse.chats;
 
 				props.setChats((prevState) => {
 					if (replaceAll) {
