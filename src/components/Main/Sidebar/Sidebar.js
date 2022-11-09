@@ -146,11 +146,6 @@ function Sidebar(props) {
 	let cancelTokenSourceRef = useRef();
 
 	useEffect(() => {
-		// Reset chats when tab case changes
-		props.setChats({});
-	}, [tabCase]);
-
-	useEffect(() => {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
