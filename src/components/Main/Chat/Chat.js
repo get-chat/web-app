@@ -82,6 +82,8 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
+	const currentUser = useSelector((state) => state.currentUser.value);
+
 	const { t } = useTranslation();
 
 	const messagesContainer = useRef(null);
@@ -1531,7 +1533,7 @@ export default function Chat(props) {
 				requestBody.document?.caption;
 
 			storedMessage.isFromUs = true;
-			storedMessage.username = props.currentUser?.username;
+			storedMessage.username = currentUser?.username;
 			storedMessage.isFailed = false;
 			storedMessage.isStored = true;
 			storedMessage.timestamp = timestamp;

@@ -64,12 +64,15 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AppConfig } from '../../../contexts/AppConfig';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
-import UserClass from '../../../UserClass';
 import { filterChat } from '../../../helpers/SidebarHelper';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
+
+	const currentUser = useSelector((state) => state.currentUser.value);
 
 	const { t } = useTranslation();
 
@@ -93,8 +96,14 @@ function Sidebar(props) {
 
 	const history = useHistory();
 
+	const dispatch = useDispatch();
+
 	const logOut = () => {
 		clearUserSession(undefined, undefined, history);
+
+		// Consider calling it in clearUserSession method
+		dispatch(setCurrentUser({}));
+
 		hideMenu();
 	};
 
@@ -539,7 +548,7 @@ function Sidebar(props) {
 			if (tabCase === CHAT_LIST_TAB_CASE_ME) {
 				if (
 					!preparedChat.assignedToUser ||
-					preparedChat.assignedToUser.id !== props.currentUser?.id
+					preparedChat.assignedToUser.id !== currentUser?.id
 				) {
 					console.log(
 						'Chat will not be displayed as it does not belong to current tab.'
@@ -547,11 +556,9 @@ function Sidebar(props) {
 					return;
 				}
 			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
-				const userInstance = new UserClass(props.currentUser);
-
 				if (
 					!preparedChat.assignedGroup ||
-					userInstance?.isInGroup(preparedChat.assignedGroup.id)
+					currentUser?.isInGroup(preparedChat.assignedGroup.id)
 				) {
 					console.log(
 						'Chat will not be displayed as it does not belong to current tab.'
@@ -656,16 +663,14 @@ function Sidebar(props) {
 		<div className={'sidebar' + (props.isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
 				<Avatar
-					src={props.currentUser?.profile?.avatar}
+					src={currentUser?.profile?.avatar}
 					onClick={() => setProfileVisible(true)}
 					className="cursorPointer"
 					style={{
-						backgroundColor: generateAvatarColor(props.currentUser?.username),
+						backgroundColor: generateAvatarColor(currentUser?.username),
 					}}
 				>
-					{props.currentUser
-						? generateInitialsHelper(props.currentUser.username)
-						: ''}
+					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</Avatar>
 				<div className="sidebar__headerRight">
 					<Tooltip title={t('New chat')}>
@@ -783,7 +788,7 @@ function Sidebar(props) {
 					{Object.entries(props.chats)
 						.filter((chat) => {
 							// Filter by helper method
-							return filterChat(props, tabCase, chat[1]);
+							return filterChat(currentUser, props, tabCase, chat[1]);
 						})
 						.map((chat) => (
 							<SidebarChat
@@ -874,7 +879,6 @@ function Sidebar(props) {
 
 			{isProfileVisible && (
 				<BusinessProfile
-					currentUser={props.currentUser}
 					isAdmin={props.isAdmin}
 					onHide={() => setProfileVisible(false)}
 					displayEditBusinessProfile={displayEditBusinessProfile}

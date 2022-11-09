@@ -57,6 +57,8 @@ import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateVi
 import { useDispatch } from 'react-redux';
 import { setTemplates } from '../../store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
+import { setCurrentUser } from '../../store/reducers/currentUserReducer';
+import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -79,7 +81,6 @@ function Main() {
 	const [checked, setChecked] = useState(false);
 	const [isBlurred, setBlurred] = useState(false);
 
-	const [currentUser, setCurrentUser] = useState();
 	const [users, setUsers] = useState({});
 	const [isAdmin, setAdmin] = useState(false);
 
@@ -807,10 +808,11 @@ function Main() {
 		setLoadingNow('current user');
 
 		try {
-			await apiService.retrieveCurrentUserCall(({ data }) => {
-				const role = data?.profile?.role;
+			await apiService.retrieveCurrentUserCall((response) => {
+				const currentUserResponse = new CurrentUserResponse(response.data);
+				dispatch(setCurrentUser(currentUserResponse.currentUser));
 
-				setCurrentUser(data);
+				const role = response.data?.profile?.role;
 
 				// Only admins and users can access
 				if (role !== 'admin' && role !== 'user') {
@@ -1037,7 +1039,6 @@ function Main() {
 			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
 				{templatesReady && (
 					<Sidebar
-						currentUser={currentUser}
 						isAdmin={isAdmin}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
@@ -1080,7 +1081,6 @@ function Main() {
 				{templatesReady && (
 					<Chat
 						isAdmin={isAdmin}
-						currentUser={currentUser}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
@@ -1126,7 +1126,6 @@ function Main() {
 
 				{isChatAssignmentVisible && (
 					<ChatAssignment
-						currentUser={currentUser}
 						isAdmin={isAdmin}
 						waId={waId}
 						open={isChatAssignmentVisible}

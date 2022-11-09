@@ -1,0 +1,19 @@
+import ChatMessageModel from '../models/ChatMessageModel';
+
+class ChatMessagesResponse {
+	constructor(data) {
+		const messages = {};
+		data.results.forEach((message) => {
+			const prepared = new ChatMessageModel(message);
+			// Consider switching to getchat id only
+			const messageKey = prepared.id ?? prepared.generateInternalIdString();
+			messages[messageKey] = prepared;
+		});
+		this.messages = messages;
+
+		this.count = data.count;
+		this.next = data.next;
+	}
+}
+
+export default ChatMessagesResponse;
