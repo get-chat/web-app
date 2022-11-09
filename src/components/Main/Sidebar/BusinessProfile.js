@@ -24,6 +24,7 @@ function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const currentUser = useSelector((state) => state.currentUser.value);
+	const isAdmin = currentUser?.isAdmin ?? false;
 
 	const { t } = useTranslation();
 
@@ -204,7 +205,7 @@ function BusinessProfile(props) {
 	];
 
 	const handleBusinessProfileAvatarClick = () => {
-		if (props.isAdmin) fileInput.current.click();
+		if (isAdmin) fileInput.current.click();
 	};
 
 	return (
@@ -266,7 +267,7 @@ function BusinessProfile(props) {
 							<div
 								className={
 									'sidebarBusinessProfile__body__avatarContainer' +
-									(props.isAdmin ? ' editable' : '')
+									(isAdmin ? ' editable' : '')
 								}
 							>
 								<FileInput
@@ -296,7 +297,7 @@ function BusinessProfile(props) {
 									</div>
 								)}
 
-								{profilePhoto && props.isAdmin && (
+								{profilePhoto && isAdmin && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>
@@ -313,7 +314,7 @@ function BusinessProfile(props) {
 										multiline={true}
 										fullWidth={true}
 										InputProps={{
-											readOnly: !props.isAdmin,
+											readOnly: !isAdmin,
 										}}
 									/>
 									<TextField
@@ -323,7 +324,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !props.isAdmin,
+											readOnly: !isAdmin,
 										}}
 									/>
 									<TextField
@@ -333,7 +334,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !props.isAdmin,
+											readOnly: !isAdmin,
 										}}
 									/>
 									<TextField
@@ -343,11 +344,11 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !props.isAdmin,
+											readOnly: !isAdmin,
 										}}
 									/>
 
-									<FormControl fullWidth={true} disabled={!props.isAdmin}>
+									<FormControl fullWidth={true} disabled={!isAdmin}>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
 											value={vertical}
@@ -365,7 +366,7 @@ function BusinessProfile(props) {
 									</FormControl>
 								</div>
 
-								{props.isAdmin && (
+								{isAdmin && (
 									<div className="sidebarBusinessProfile__body__section__subSection__action">
 										<Button
 											type="submit"

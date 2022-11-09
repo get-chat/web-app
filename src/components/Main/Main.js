@@ -82,7 +82,6 @@ function Main() {
 	const [isBlurred, setBlurred] = useState(false);
 
 	const [users, setUsers] = useState({});
-	const [isAdmin, setAdmin] = useState(false);
 
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState([]);
@@ -1039,7 +1038,6 @@ function Main() {
 			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
 				{templatesReady && (
 					<Sidebar
-						isAdmin={isAdmin}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
@@ -1080,7 +1078,6 @@ function Main() {
 
 				{templatesReady && (
 					<Chat
-						isAdmin={isAdmin}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
@@ -1126,7 +1123,6 @@ function Main() {
 
 				{isChatAssignmentVisible && (
 					<ChatAssignment
-						isAdmin={isAdmin}
 						waId={waId}
 						open={isChatAssignmentVisible}
 						setOpen={setChatAssignmentVisible}

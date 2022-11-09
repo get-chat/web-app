@@ -879,7 +879,6 @@ function Sidebar(props) {
 
 			{isProfileVisible && (
 				<BusinessProfile
-					isAdmin={props.isAdmin}
 					onHide={() => setProfileVisible(false)}
 					displayEditBusinessProfile={displayEditBusinessProfile}
 					setChangePasswordDialogVisible={setChangePasswordDialogVisible}
@@ -923,16 +922,18 @@ function Sidebar(props) {
 				<MenuItem onClick={forceClearContactProvidersData}>
 					{t('Refresh contacts')}
 				</MenuItem>
-				{props.isAdmin && <Divider />}
-				{props.isAdmin && (
-					<MenuItem
-						component={Link}
-						href={getHubURL(config.API_BASE_URL)}
-						target="_blank"
-						color="initial"
-					>
-						{t('Admin panel')}
-					</MenuItem>
+				{currentUser?.isAdmin && (
+					<>
+						<Divider />
+						<MenuItem
+							component={Link}
+							href={getHubURL(config.API_BASE_URL)}
+							target="_blank"
+							color="initial"
+						>
+							{t('Admin panel')}
+						</MenuItem>
+					</>
 				)}
 				{isMobile && (
 					<MenuItem onClick={goToSettings}>{t('Settings (App Only)')}</MenuItem>
