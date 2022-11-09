@@ -8,7 +8,6 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
-import TemplateModel from '../../api/models/TemplateModel';
 import { Alert } from '@material-ui/lab';
 import 'url-search-params-polyfill';
 import {
