@@ -2,7 +2,7 @@ import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
 import ReplyIcon from '@material-ui/icons/Reply';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import PrintMessage from '../../../PrintMessage';
 
 function ChatMessageShortContent(props) {
@@ -14,7 +14,7 @@ function ChatMessageShortContent(props) {
 
 			<ChatMessageTypeIcon type={props.type} />
 
-			{[ChatMessageClass.TYPE_TEXT, ChatMessageClass.TYPE_BUTTON].includes(
+			{[ChatMessageModel.TYPE_TEXT, ChatMessageModel.TYPE_BUTTON].includes(
 				props.type
 			) ? (
 				<PrintMessage message={text} smallEmoji={true} />

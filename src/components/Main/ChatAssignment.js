@@ -15,9 +15,13 @@ import {
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { useSelector } from 'react-redux';
 
 function ChatAssignment(props) {
 	const { apiService } = React.useContext(ApplicationContext);
+
+	const currentUser = useSelector((state) => state.currentUser.value);
+	const isAdmin = currentUser?.isAdmin ?? false;
 
 	const { t } = useTranslation();
 
@@ -111,10 +115,10 @@ function ChatAssignment(props) {
 
 	const checkIfUnableToChange = () => {
 		const isUnable =
-			!props.isAdmin &&
+			!isAdmin &&
 			assignedToUser !== undefined &&
 			assignedToUser !== null &&
-			assignedToUser !== props.currentUser.id.toString();
+			assignedToUser !== currentUser.id.toString();
 		setUnableToChange(isUnable);
 	};
 

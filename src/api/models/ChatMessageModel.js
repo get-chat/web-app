@@ -1,6 +1,6 @@
-import { generateInitialsHelper, sanitize } from './helpers/Helpers';
+import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
 
-export class ChatMessageClass {
+export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
 	static TYPE_IMAGE = 'image';
 	static TYPE_VIDEO = 'video';
@@ -109,7 +109,7 @@ export class ChatMessageClass {
 		this.contextId = payload.context?.id;
 
 		if (data.context) {
-			this.contextMessage = new ChatMessageClass(data.context);
+			this.contextMessage = new ChatMessageModel(data.context);
 		}
 
 		this.deliveredTimestamp = statuses?.delivered;
@@ -131,10 +131,10 @@ export class ChatMessageClass {
 	}
 
 	static fromTemplate(template) {
-		return new ChatMessageClass({
+		return new ChatMessageModel({
 			from_us: true,
 			waba_payload: {
-				type: ChatMessageClass.TYPE_TEMPLATE,
+				type: ChatMessageModel.TYPE_TEMPLATE,
 				template: template,
 				timestamp: new Date().getTime(),
 			},
@@ -142,7 +142,7 @@ export class ChatMessageClass {
 	}
 
 	static fromAssignmentEvent(assignmentEvent) {
-		const message = new ChatMessageClass();
+		const message = new ChatMessageModel();
 		message.id = 'assignmentEvent_' + assignmentEvent.timestamp;
 		message.waId = assignmentEvent.wa_id;
 		message.assignmentEvent = assignmentEvent;
@@ -151,7 +151,7 @@ export class ChatMessageClass {
 	}
 
 	static fromTaggingEvent(taggingEvent) {
-		const message = new ChatMessageClass();
+		const message = new ChatMessageModel();
 		message.id = 'taggingEvent_' + taggingEvent.timestamp;
 		message.waId = taggingEvent.chat;
 		message.taggingEvent = taggingEvent;
@@ -164,7 +164,7 @@ export class ChatMessageClass {
 	}
 
 	generateInternalIdString() {
-		return ChatMessageClass.generateInternalIdStringStatic(this.getchatId);
+		return ChatMessageModel.generateInternalIdStringStatic(this.getchatId);
 	}
 
 	getUniqueSender() {
@@ -257,47 +257,47 @@ export class ChatMessageClass {
 
 	getStatus() {
 		if (this.readTimestamp) {
-			return ChatMessageClass.STATUS_READ;
+			return ChatMessageModel.STATUS_READ;
 		}
 
 		if (this.deliveredTimestamp) {
-			return ChatMessageClass.STATUS_DELIVERED;
+			return ChatMessageModel.STATUS_DELIVERED;
 		}
 
 		if (this.sentTimestamp) {
-			return ChatMessageClass.STATUS_SENT;
+			return ChatMessageModel.STATUS_SENT;
 		}
 
-		return ChatMessageClass.STATUS_PENDING;
+		return ChatMessageModel.STATUS_PENDING;
 	}
 
 	isPending() {
-		return this.getStatus() === ChatMessageClass.STATUS_PENDING;
+		return this.getStatus() === ChatMessageModel.STATUS_PENDING;
 	}
 
 	isJustSent() {
-		return this.getStatus() === ChatMessageClass.STATUS_SENT;
+		return this.getStatus() === ChatMessageModel.STATUS_SENT;
 	}
 
 	isJustDelivered() {
-		return this.getStatus() === ChatMessageClass.STATUS_DELIVERED;
+		return this.getStatus() === ChatMessageModel.STATUS_DELIVERED;
 	}
 
 	isRead() {
-		return this.getStatus() === ChatMessageClass.STATUS_READ;
+		return this.getStatus() === ChatMessageModel.STATUS_READ;
 	}
 
 	isDeliveredOrRead() {
 		const status = this.getStatus();
 		return (
-			status === ChatMessageClass.STATUS_DELIVERED ||
-			status === ChatMessageClass.STATUS_READ
+			status === ChatMessageModel.STATUS_DELIVERED ||
+			status === ChatMessageModel.STATUS_READ
 		);
 	}
 
 	getHeaderFileLink(type) {
 		try {
-			if (this.type === ChatMessageClass.TYPE_TEMPLATE) {
+			if (this.type === ChatMessageModel.TYPE_TEMPLATE) {
 				if (this.templateParameters) {
 					for (let i = 0; i < this.templateParameters.length; i++) {
 						const component = this.templateParameters[i];
@@ -331,7 +331,7 @@ export class ChatMessageClass {
 		if (this.errors && Array.isArray(this.errors)) {
 			for (let i = 0; i < this.errors.length; i++) {
 				if (
-					ChatMessageClass.ERR_CODES_FOR_RETRY.includes(this.errors[i]['code'])
+					ChatMessageModel.ERR_CODES_FOR_RETRY.includes(this.errors[i]['code'])
 				) {
 					result = true;
 					break;
@@ -343,4 +343,4 @@ export class ChatMessageClass {
 	}
 }
 
-export default ChatMessageClass;
+export default ChatMessageModel;

@@ -1,4 +1,4 @@
-class ContactClass {
+class ContactModel {
 	constructor(data) {
 		this.name = data.name;
 		this.initials = data.initials;
@@ -9,4 +9,4 @@ class ContactClass {
 	}
 }
 
-export default ContactClass;
+export default ContactModel;

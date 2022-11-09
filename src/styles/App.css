@@ -188,7 +188,8 @@ a {
 }
 
 .MuiAvatar-root .MuiSvgIcon-root {
-	color: inherit;
+	color: #fafafa !important;
+	filter: drop-shadow(0 1px 3px #00000020);
 }
 
 .MuiDivider-root {

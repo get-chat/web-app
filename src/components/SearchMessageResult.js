@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/SearchMessageResult.css';
 import Moment from 'react-moment';
-import ChatMessageClass from '../ChatMessageClass';
+import ChatMessageModel from '../api/models/ChatMessageModel';
 import DoneAll from '@material-ui/icons/DoneAll';
 import DoneIcon from '@material-ui/icons/Done';
 import { CALENDAR_NORMAL } from '../Constants';
@@ -23,7 +23,7 @@ function SearchMessageResult(props) {
 				<div className="searchResult__message__body">
 					<span className="searchResult__message__body__type">
 						{data.isFromUs === true &&
-							data.type === ChatMessageClass.TYPE_TEXT && (
+							data.type === ChatMessageModel.TYPE_TEXT && (
 								<span className={data.isRead() ? 'chat__received' : ''}>
 									{data.isDeliveredOrRead() ? (
 										<DoneAll className="chat__iconDoneAll" />

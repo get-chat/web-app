@@ -4,30 +4,42 @@ import {
 	CHAT_LIST_TAB_CASE_ME,
 } from '../Constants';
 
-export const filterChat = (props, tabCase, curChat) => {
+const isChatAssignedToUser = (currentUser, chat) => {
+	return (
+		currentUser?.id !== undefined && chat.assignedToUser?.id === currentUser.id
+	);
+};
+
+const isChatInUsersGroup = (currentUser, chat) => {
+	if (chat.assignedGroup && currentUser?.groups) {
+		const assignedGroupId = chat.assignedGroup.id;
+		for (let i = 0; i < currentUser.groups.length; i++) {
+			const group = currentUser.groups[i];
+
+			if (group?.id === assignedGroupId) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+};
+
+export const filterChat = (currentUser, tabCase, chat) => {
 	// Filter by case
 	switch (tabCase) {
 		case CHAT_LIST_TAB_CASE_ALL: {
-			return true;
+			return (
+				currentUser?.isAdmin ||
+				isChatAssignedToUser(currentUser, chat) ||
+				isChatInUsersGroup(currentUser, chat)
+			);
 		}
 		case CHAT_LIST_TAB_CASE_ME: {
-			if (curChat.assignedToUser?.id === props.currentUser.id) {
-				return true;
-			}
-			break;
+			return isChatAssignedToUser(currentUser, chat);
 		}
 		case CHAT_LIST_TAB_CASE_GROUP: {
-			if (curChat.assignedGroup && props.currentUser.groups) {
-				const assignedGroupId = curChat.assignedGroup.id;
-				for (let i = 0; i < props.currentUser.groups.length; i++) {
-					const group = props.currentUser.groups[i];
-
-					if (group?.id === assignedGroupId) {
-						return true;
-					}
-				}
-			}
-			break;
+			return isChatInUsersGroup(currentUser, chat);
 		}
 		default: {
 			break;

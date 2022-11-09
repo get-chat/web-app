@@ -1,7 +1,7 @@
-import { getPastHoursByTimestamp } from './helpers/DateHelper';
-import { generateInitialsHelper } from './helpers/Helpers';
+import { getPastHoursByTimestamp } from '../../helpers/DateHelper';
+import { generateInitialsHelper } from '../../helpers/Helpers';
 
-class PersonClass {
+class PersonModel {
 	constructor(data) {
 		const payload = data.waba_payload;
 
@@ -33,8 +33,8 @@ class PersonClass {
 	};
 
 	static newInstance() {
-		return new PersonClass({});
+		return new PersonModel({});
 	}
 }
 
-export default PersonClass;
+export default PersonModel;

@@ -3,7 +3,7 @@ import '../../../../styles/Notifications.css';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT } from '../../../../Constants';
 import FailedBulkMessageNotification from './FailedBulkMessageNotification';
-import BulkMessageTaskElementClass from '../../../../BulkMessageTaskElementClass';
+import BulkMessageTaskElementModel from '../../../../api/models/BulkMessageTaskElementModel';
 import CloseIcon from '@material-ui/icons/Close';
 import { IconButton } from '@material-ui/core';
 import { getObjLength } from '../../../../helpers/ObjectHelper';
@@ -59,7 +59,7 @@ function Notifications(props) {
 			(response) => {
 				const preparedBulkMessageTaskElements = {};
 				response.data.results.forEach((taskElement) => {
-					const prepared = new BulkMessageTaskElementClass(taskElement);
+					const prepared = new BulkMessageTaskElementModel(taskElement);
 
 					// TODO: Results should be ordered DESC in the backend
 					// Check if failed

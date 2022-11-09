@@ -8,7 +8,6 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
-import TemplateMessageClass from '../../TemplateMessageClass';
 import { Alert } from '@material-ui/lab';
 import 'url-search-params-polyfill';
 import {
@@ -28,7 +27,7 @@ import {
 	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 } from '../../Constants';
-import ChatMessageClass from '../../ChatMessageClass';
+import ChatMessageModel from '../../api/models/ChatMessageModel';
 import PreviewMedia from './PreviewMedia';
 import {
 	getContactProvidersData,
@@ -41,10 +40,10 @@ import ChatTagsList from './ChatTagsList';
 import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
 import SavedResponseClass from '../../SavedResponseClass';
 import moment from 'moment';
-import UserClass from '../../UserClass';
+import UserModel from '../../api/models/UserModel';
 import { clearUserSession } from '../../helpers/ApiHelper';
-import BulkMessageTaskElementClass from '../../BulkMessageTaskElementClass';
-import BulkMessageTaskClass from '../../BulkMessageTaskClass';
+import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
+import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '../../helpers/URLHelper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
@@ -57,6 +56,9 @@ import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateVi
 import { useDispatch } from 'react-redux';
 import { setTemplates } from '../../store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
+import { setCurrentUser } from '../../store/reducers/currentUserReducer';
+import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
+import TemplatesResponse from '../../api/responses/TemplatesResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -79,9 +81,7 @@ function Main() {
 	const [checked, setChecked] = useState(false);
 	const [isBlurred, setBlurred] = useState(false);
 
-	const [currentUser, setCurrentUser] = useState();
 	const [users, setUsers] = useState({});
-	const [isAdmin, setAdmin] = useState(false);
 
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState([]);
@@ -229,7 +229,7 @@ function Main() {
 				PubSub.publish(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT);
 			}
 
-			const preparedBulkMessageTask = new BulkMessageTaskClass(response.data);
+			const preparedBulkMessageTask = new BulkMessageTaskModel(response.data);
 			PubSub.publish(
 				EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
 				preparedBulkMessageTask
@@ -476,7 +476,7 @@ function Main() {
 							const preparedMessages = {};
 
 							incomingMessages.forEach((message) => {
-								const messageObj = new ChatMessageClass(message);
+								const messageObj = new ChatMessageModel(message);
 								preparedMessages[messageObj.id] = messageObj;
 							});
 
@@ -490,7 +490,7 @@ function Main() {
 							const preparedMessages = {};
 
 							outgoingMessages.forEach((message) => {
-								const messageObj = new ChatMessageClass(message);
+								const messageObj = new ChatMessageModel(message);
 								preparedMessages[messageObj.id] = messageObj;
 							});
 
@@ -510,17 +510,17 @@ function Main() {
 								// Inject getchat id to avoid duplicated messages
 								preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
 
-								if (statusObj.status === ChatMessageClass.STATUS_SENT) {
+								if (statusObj.status === ChatMessageModel.STATUS_SENT) {
 									preparedStatuses[statusObj.id].sentTimestamp =
 										statusObj.timestamp;
 								}
 
-								if (statusObj.status === ChatMessageClass.STATUS_DELIVERED) {
+								if (statusObj.status === ChatMessageModel.STATUS_DELIVERED) {
 									preparedStatuses[statusObj.id].deliveredTimestamp =
 										statusObj.timestamp;
 								}
 
-								if (statusObj.status === ChatMessageClass.STATUS_READ) {
+								if (statusObj.status === ChatMessageModel.STATUS_READ) {
 									preparedStatuses[statusObj.id].readTimestamp =
 										statusObj.timestamp;
 								}
@@ -543,7 +543,7 @@ function Main() {
 						if (chatAssignment) {
 							const preparedMessages = {};
 							const prepared =
-								ChatMessageClass.fromAssignmentEvent(chatAssignment);
+								ChatMessageModel.fromAssignmentEvent(chatAssignment);
 							preparedMessages[prepared.id] = prepared;
 
 							PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
@@ -587,7 +587,7 @@ function Main() {
 
 						if (chatTagging) {
 							const preparedMessages = {};
-							const prepared = ChatMessageClass.fromTaggingEvent(chatTagging);
+							const prepared = ChatMessageModel.fromTaggingEvent(chatTagging);
 							preparedMessages[prepared.id] = prepared;
 
 							PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
@@ -624,7 +624,7 @@ function Main() {
 							const preparedBulkMessageTasks = {};
 
 							bulkMessageTasks.forEach((task) => {
-								const prepared = new BulkMessageTaskClass(task);
+								const prepared = new BulkMessageTaskModel(task);
 								preparedBulkMessageTasks[prepared.id] = prepared;
 							});
 
@@ -643,7 +643,7 @@ function Main() {
 							const preparedBulkMessageTaskElements = {};
 
 							bulkMessageTaskElements.forEach((element) => {
-								const prepared = new BulkMessageTaskElementClass(element);
+								const prepared = new BulkMessageTaskElementModel(element);
 								preparedBulkMessageTaskElements[prepared.id] = prepared;
 							});
 
@@ -785,7 +785,7 @@ function Main() {
 				const preparedUsers = {};
 
 				response.data.results.forEach((user) => {
-					const prepared = new UserClass(user);
+					const prepared = new UserModel(user);
 
 					preparedUsers[prepared.id] = prepared;
 				});
@@ -807,17 +807,17 @@ function Main() {
 		setLoadingNow('current user');
 
 		try {
-			await apiService.retrieveCurrentUserCall(({ data }) => {
-				const role = data?.profile?.role;
+			await apiService.retrieveCurrentUserCall((response) => {
+				const currentUserResponse = new CurrentUserResponse(response.data);
+				dispatch(setCurrentUser(currentUserResponse.currentUser));
 
-				setCurrentUser(data);
+				const role = currentUserResponse.currentUser.role;
 
 				// Only admins and users can access
 				if (role !== 'admin' && role !== 'user') {
 					clearUserSession('incorrectRole', location, history);
 				}
 
-				setAdmin(role === 'admin');
 				setProgress(10);
 			}, history);
 		} catch (error) {
@@ -845,16 +845,9 @@ function Main() {
 
 		await apiService.listTemplatesCall(
 			(response) => {
-				const preparedTemplates = {};
-				response.data.results.forEach((template) => {
-					const prepared = new TemplateMessageClass(template);
+				const templatesResponse = new TemplatesResponse(response.data);
 
-					if (prepared.status === 'approved') {
-						preparedTemplates[prepared.name] = prepared;
-					}
-				});
-
-				dispatch(setTemplates(preparedTemplates));
+				dispatch(setTemplates(templatesResponse.templates));
 
 				if (!isRetry) {
 					completeCallback();
@@ -1037,8 +1030,6 @@ function Main() {
 			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
 				{templatesReady && (
 					<Sidebar
-						currentUser={currentUser}
-						isAdmin={isAdmin}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
@@ -1079,8 +1070,6 @@ function Main() {
 
 				{templatesReady && (
 					<Chat
-						isAdmin={isAdmin}
-						currentUser={currentUser}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
@@ -1126,8 +1115,6 @@ function Main() {
 
 				{isChatAssignmentVisible && (
 					<ChatAssignment
-						currentUser={currentUser}
-						isAdmin={isAdmin}
 						waId={waId}
 						open={isChatAssignmentVisible}
 						setOpen={setChatAssignmentVisible}

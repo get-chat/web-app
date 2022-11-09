@@ -1,4 +1,4 @@
-class TemplateMessageClass {
+class TemplateModel {
 	constructor(data) {
 		this.namespace = data.namespace;
 		this.name = data.name;
@@ -10,4 +10,4 @@ class TemplateMessageClass {
 	}
 }
 
-export default TemplateMessageClass;
+export default TemplateModel;

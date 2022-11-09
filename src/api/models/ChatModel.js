@@ -1,7 +1,7 @@
-import { getPastHoursByTimestamp } from './helpers/DateHelper';
-import { generateInitialsHelper, sanitize } from './helpers/Helpers';
+import { getPastHoursByTimestamp } from '../../helpers/DateHelper';
+import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
 
-class ChatClass {
+class ChatModel {
 	constructor(data) {
 		const contact = data.contact;
 		const lastMessage = data.last_message;
@@ -108,4 +108,4 @@ class ChatClass {
 	}
 }
 
-export default ChatClass;
+export default ChatModel;

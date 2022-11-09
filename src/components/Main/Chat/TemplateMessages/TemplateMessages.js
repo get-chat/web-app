@@ -11,7 +11,7 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 } from '../../../../Constants';
 import PubSub from 'pubsub-js';
-import ChatMessageClass from '../../../../ChatMessageClass';
+import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateTemplateMessagePayload } from '../../../../helpers/ChatHelper';
 import TemplatesList from '../../../TemplatesList';
 import { useSelector } from 'react-redux';
@@ -70,7 +70,7 @@ function TemplateMessages({
 
 	const bulkSend = (template) => {
 		const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
-		onBulkSend(ChatMessageClass.TYPE_TEMPLATE, payload);
+		onBulkSend(ChatMessageModel.TYPE_TEMPLATE, payload);
 		sendCallback?.();
 		hideDialog();
 	};

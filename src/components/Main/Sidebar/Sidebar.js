@@ -34,12 +34,12 @@ import {
 import { useHistory, useParams } from 'react-router-dom';
 import SearchBar from '../../SearchBar';
 import SidebarContactResult from './SidebarContactResult';
-import ChatClass from '../../../ChatClass';
-import NewMessageClass from '../../../NewMessageClass';
+import ChatModel from '../../../api/models/ChatModel';
+import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
 import ChangePasswordDialog from './ChangePasswordDialog';
-import ChatMessageClass from '../../../ChatMessageClass';
+import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -64,12 +64,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AppConfig } from '../../../contexts/AppConfig';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
-import UserClass from '../../../UserClass';
 import { filterChat } from '../../../helpers/SidebarHelper';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
+import { setTemplates } from '../../../store/reducers/templatesReducer';
+import ChatsResponse from '../../../api/responses/ChatsResponse';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
+
+	const currentUser = useSelector((state) => state.currentUser.value);
 
 	const { t } = useTranslation();
 
@@ -93,8 +98,15 @@ function Sidebar(props) {
 
 	const history = useHistory();
 
+	const dispatch = useDispatch();
+
 	const logOut = () => {
 		clearUserSession(undefined, undefined, history);
+
+		// TODO: Consider calling it in clearUserSession method
+		dispatch(setCurrentUser({}));
+		dispatch(setTemplates({}));
+
 		hideMenu();
 	};
 
@@ -135,11 +147,6 @@ function Sidebar(props) {
 	};
 
 	let cancelTokenSourceRef = useRef();
-
-	useEffect(() => {
-		// Reset chats when tab case changes
-		props.setChats({});
-	}, [tabCase]);
 
 	useEffect(() => {
 		// Generate a token
@@ -223,7 +230,7 @@ function Sidebar(props) {
 					) {
 						const preparedNewMessages = props.newMessages;
 						if (props.newMessages[chatMessageWaId] === undefined) {
-							preparedNewMessages[chatMessageWaId] = new NewMessageClass(
+							preparedNewMessages[chatMessageWaId] = new NewMessageModel(
 								chatMessageWaId,
 								0
 							);
@@ -428,11 +435,9 @@ function Sidebar(props) {
 			assignedGroup,
 			cancelTokenSource.token,
 			(response) => {
-				const preparedChats = {};
-				response.data.results.forEach((contact) => {
-					const prepared = new ChatClass(contact);
-					preparedChats[CHAT_KEY_PREFIX + prepared.waId] = prepared;
-				});
+				const chatsResponse = new ChatsResponse(response.data);
+
+				const preparedChats = chatsResponse.chats;
 
 				props.setChats((prevState) => {
 					if (replaceAll) {
@@ -455,7 +460,7 @@ function Sidebar(props) {
 				response.data.results.forEach((newMessage) => {
 					const newWaId = newMessage.contact.waba_payload.wa_id;
 					const newAmount = newMessage.new_messages;
-					const prepared = new NewMessageClass(newWaId, newAmount);
+					const prepared = new NewMessageModel(newWaId, newAmount);
 					preparedNewMessages[prepared.waId] = prepared;
 				});
 
@@ -533,13 +538,13 @@ function Sidebar(props) {
 				prevState.filter((item) => item !== chatWaId)
 			);
 
-			const preparedChat = new ChatClass(response.data);
+			const preparedChat = new ChatModel(response.data);
 
 			// Don't display chat if tab case is "me" and chat is not assigned to user
 			if (tabCase === CHAT_LIST_TAB_CASE_ME) {
 				if (
 					!preparedChat.assignedToUser ||
-					preparedChat.assignedToUser.id !== props.currentUser?.id
+					preparedChat.assignedToUser.id !== currentUser?.id
 				) {
 					console.log(
 						'Chat will not be displayed as it does not belong to current tab.'
@@ -547,11 +552,9 @@ function Sidebar(props) {
 					return;
 				}
 			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
-				const userInstance = new UserClass(props.currentUser);
-
 				if (
 					!preparedChat.assignedGroup ||
-					userInstance?.isInGroup(preparedChat.assignedGroup.id)
+					currentUser?.isInGroup(preparedChat.assignedGroup.id)
 				) {
 					console.log(
 						'Chat will not be displayed as it does not belong to current tab.'
@@ -581,7 +584,7 @@ function Sidebar(props) {
 			(response) => {
 				const preparedMessages = {};
 				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageClass(message);
+					const prepared = new ChatMessageModel(message);
 					preparedMessages[prepared.id] = prepared;
 				});
 
@@ -656,16 +659,14 @@ function Sidebar(props) {
 		<div className={'sidebar' + (props.isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
 				<Avatar
-					src={props.currentUser?.profile?.avatar}
+					src={currentUser?.profile?.avatar}
 					onClick={() => setProfileVisible(true)}
 					className="cursorPointer"
 					style={{
-						backgroundColor: generateAvatarColor(props.currentUser?.username),
+						backgroundColor: generateAvatarColor(currentUser?.username),
 					}}
 				>
-					{props.currentUser
-						? generateInitialsHelper(props.currentUser.username)
-						: ''}
+					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</Avatar>
 				<div className="sidebar__headerRight">
 					<Tooltip title={t('New chat')}>
@@ -783,7 +784,7 @@ function Sidebar(props) {
 					{Object.entries(props.chats)
 						.filter((chat) => {
 							// Filter by helper method
-							return filterChat(props, tabCase, chat[1]);
+							return filterChat(currentUser, tabCase, chat[1]);
 						})
 						.map((chat) => (
 							<SidebarChat
@@ -874,8 +875,6 @@ function Sidebar(props) {
 
 			{isProfileVisible && (
 				<BusinessProfile
-					currentUser={props.currentUser}
-					isAdmin={props.isAdmin}
 					onHide={() => setProfileVisible(false)}
 					displayEditBusinessProfile={displayEditBusinessProfile}
 					setChangePasswordDialogVisible={setChangePasswordDialogVisible}
@@ -919,8 +918,8 @@ function Sidebar(props) {
 				<MenuItem onClick={forceClearContactProvidersData}>
 					{t('Refresh contacts')}
 				</MenuItem>
-				{props.isAdmin && <Divider />}
-				{props.isAdmin && (
+				{currentUser?.isAdmin && <Divider />}
+				{currentUser?.isAdmin && (
 					<MenuItem
 						component={Link}
 						href={getHubURL(config.API_BASE_URL)}

@@ -1,4 +1,4 @@
-class UserClass {
+class UserModel {
 	constructor(data) {
 		if (!data) return;
 
@@ -9,6 +9,8 @@ class UserClass {
 		this.groups = data.groups;
 		this.permissions = data.permissions;
 		this.profile = data.profile;
+		this.role = data?.profile?.role;
+		this.isAdmin = this.role === 'admin';
 	}
 
 	prepareUserLabel = () => {
@@ -60,4 +62,4 @@ class UserClass {
 	}
 }
 
-export default UserClass;
+export default UserModel;

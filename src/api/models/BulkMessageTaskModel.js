@@ -1,4 +1,4 @@
-class BulkMessageTaskClass {
+class BulkMessageTaskModel {
 	constructor(data) {
 		this.id = data.id;
 		this.recipients = data.recipients;
@@ -11,4 +11,4 @@ class BulkMessageTaskClass {
 	}
 }
 
-export default BulkMessageTaskClass;
+export default BulkMessageTaskModel;

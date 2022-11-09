@@ -15,10 +15,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import ChatMessageClass from '../../ChatMessageClass';
+import ChatMessageModel from '../../api/models/ChatMessageModel';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import Contact from '../Contact';
-import ContactClass from '../../ContactClass';
+import ContactModel from '../../api/models/ContactModel';
 
 import styles from './ContactsModal.module.css';
 
@@ -50,7 +50,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 				const preparedContacts = {};
 
 				response.data.results.forEach((contact, contactIndex) => {
-					preparedContacts[contactIndex] = new ContactClass(contact);
+					preparedContacts[contactIndex] = new ContactModel(contact);
 				});
 
 				setContacts(preparedContacts);
@@ -71,7 +71,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 	const handleSendMessage = () => {
 		const payload = {
 			wa_id: recipientWaId,
-			type: ChatMessageClass.TYPE_CONTACTS,
+			type: ChatMessageModel.TYPE_CONTACTS,
 			contacts: [
 				{
 					name: {

@@ -302,7 +302,6 @@ export class ApiService {
 			),
 			successCallback,
 			(error) => {
-				window.displayError(error);
 				errorCallback?.(error);
 				handleIfUnauthorized(error, history);
 			}
@@ -420,6 +419,7 @@ export class ApiService {
 		timestamp,
 		cancelToken,
 		successCallback,
+		errorCallback,
 		history
 	) => {
 		this.handleRequest(
@@ -433,7 +433,6 @@ export class ApiService {
 			),
 			successCallback,
 			(error) => {
-				window.displayError(error);
 				handleIfUnauthorized(error, history);
 			}
 		);
