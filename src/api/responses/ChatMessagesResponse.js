@@ -1,7 +1,11 @@
 import ChatMessageModel from '../models/ChatMessageModel';
 
 class ChatMessagesResponse {
-	constructor(data) {
+	constructor(data, reverse) {
+		if (reverse) {
+			data.results.reverse();
+		}
+
 		const messages = {};
 		data.results.forEach((message) => {
 			const prepared = new ChatMessageModel(message);

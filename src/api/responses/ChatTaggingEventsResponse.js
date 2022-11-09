@@ -1,7 +1,11 @@
 import ChatMessageModel from '../models/ChatMessageModel';
 
 class ChatTaggingEventsResponse {
-	constructor(data) {
+	constructor(data, reverse) {
+		if (reverse) {
+			data.results.reverse();
+		}
+
 		const messages = {};
 		data.results.forEach((taggingEvent) => {
 			const prepared = ChatMessageModel.fromTaggingEvent(taggingEvent);

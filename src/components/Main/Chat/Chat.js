@@ -76,6 +76,8 @@ import {
 import { ErrorBoundary } from '@sentry/react';
 import { useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
+import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
+import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -980,7 +982,10 @@ export default function Chat(props) {
 			sinceTime,
 			cancelTokenSourceRef.current.token,
 			(response) => {
-				const chatMessagesResponse = new ChatMessagesResponse(response.data);
+				const chatMessagesResponse = new ChatMessagesResponse(
+					response.data,
+					true
+				);
 
 				const count = chatMessagesResponse.count;
 				//const previous = response.data.previous;
@@ -1006,7 +1011,6 @@ export default function Chat(props) {
 				const preparedMessages = chatMessagesResponse.messages;
 
 				const lastMessage = getLastObject(preparedMessages);
-				console.log(lastMessage);
 
 				// Pagination filters for events
 				let beforeTimeForEvents = beforeTime;
@@ -1138,11 +1142,15 @@ export default function Chat(props) {
 			sinceTimeForEvents,
 			cancelTokenSourceRef.current.token,
 			(response) => {
-				response.data.results.reverse().forEach((assignmentEvent) => {
-					const prepared =
-						ChatMessageModel.fromAssignmentEvent(assignmentEvent);
-					preparedMessages[prepared.id] = prepared;
-				});
+				const chatAssignmentEventsResponse = new ChatAssignmentEventsResponse(
+					response.data,
+					true
+				);
+
+				preparedMessages = {
+					...preparedMessages,
+					...chatAssignmentEventsResponse.messages,
+				};
 
 				// List chat tagging events
 				listChatTaggingEvents(
@@ -1175,10 +1183,15 @@ export default function Chat(props) {
 			sinceTimeForEvents,
 			cancelTokenSourceRef.current.token,
 			(response) => {
-				response.data.results.reverse().forEach((taggingEvent) => {
-					const prepared = ChatMessageModel.fromTaggingEvent(taggingEvent);
-					preparedMessages[prepared.id] = prepared;
-				});
+				const chatTaggingEventsResponse = new ChatTaggingEventsResponse(
+					response.data,
+					true
+				);
+
+				preparedMessages = {
+					...preparedMessages,
+					...chatTaggingEventsResponse.messages,
+				};
 
 				// Finish loading
 				finishLoadingMessages(
