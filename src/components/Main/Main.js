@@ -812,7 +812,7 @@ function Main() {
 				const currentUserResponse = new CurrentUserResponse(response.data);
 				dispatch(setCurrentUser(currentUserResponse.currentUser));
 
-				const role = response.data?.profile?.role;
+				const role = currentUserResponse.currentUser.role;
 
 				// Only admins and users can access
 				if (role !== 'admin' && role !== 'user') {

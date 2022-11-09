@@ -240,9 +240,7 @@ function BusinessProfile(props) {
 							</div>
 
 							<h3>{currentUser.username}</h3>
-							<span>
-								{currentUser.first_name + ' ' + currentUser.last_name}
-							</span>
+							<span>{currentUser.firstName + ' ' + currentUser.lastName}</span>
 
 							<div className="sidebarBusinessProfile__body__changePasswordContainer">
 								<Button

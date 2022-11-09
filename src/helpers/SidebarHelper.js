@@ -8,6 +8,7 @@ export const filterChat = (currentUser, tabCase, curChat) => {
 	// Filter by case
 	switch (tabCase) {
 		case CHAT_LIST_TAB_CASE_ALL: {
+			console.log('test');
 			return true;
 		}
 		case CHAT_LIST_TAB_CASE_ME: {

@@ -788,7 +788,7 @@ function Sidebar(props) {
 					{Object.entries(props.chats)
 						.filter((chat) => {
 							// Filter by helper method
-							return filterChat(currentUser, props, tabCase, chat[1]);
+							return filterChat(currentUser, tabCase, chat[1]);
 						})
 						.map((chat) => (
 							<SidebarChat
