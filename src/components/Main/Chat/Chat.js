@@ -1053,6 +1053,10 @@ export default function Chat(props) {
 			},
 			(error) => {
 				setLoadingMoreMessages(false);
+
+				if (isInitial) {
+					window.displayCustomError('Failed to load messages!');
+				}
 			},
 			history
 		);
@@ -1640,7 +1644,11 @@ export default function Chat(props) {
 			(response) => {
 				PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
 				setCurrentNewMessages(0);
-			}
+			},
+			(error) => {
+				console.log(error);
+			},
+			history
 		);
 	};
 
