@@ -124,7 +124,7 @@ In the project directory, you can run:
 
 ### `lang="en";i18next-conv -l $lang -s ./src/locales/${lang}/translation.po ./src/locales/${lang}/translation.json`
 
-Converts the PO file to a JSON file. Do not forget to specify the correct language and the input and output paths.
+Converts the PO file to a JSON file. **Do not forget to specify the target language.**
 
 ### `pnpm start`
 
