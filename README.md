@@ -114,7 +114,7 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - Create a new folder in `/src/locales/` with the language code as its name.
 
-- Copy the main PO file `/src/locales/translation.po` into the new language directory and add the translations.
+- Copy the main PO file `/src/locales/en/translation.po` into the new language directory and add the translations.
 
 - Run the following command by changing `en` to the new language code: `lang="en";i18next-conv -l $lang -s ./src/locales/${lang}/translation.po ./src/locales/${lang}/translation.json`
 
@@ -122,9 +122,9 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 In the project directory, you can run:
 
-### `lang="en";i18next-conv -l $lang -s ./src/locales/translation.po ./src/locales/${lang}/translation.json`
+### `lang="en";i18next-conv -l $lang -s ./src/locales/${lang}/translation.po ./src/locales/${lang}/translation.json`
 
-Converts the PO file to a JSON file. Do not forget to specify the correct language and the input and output paths.
+Converts the PO file to a JSON file. **Do not forget to specify the target language.**
 
 ### `pnpm start`
 
