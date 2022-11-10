@@ -10,7 +10,7 @@
 		"test": "react-scripts test",
 		"test:e2e": "cypress run",
 		"eject": "react-scripts eject",
-		"i18next-conv": "i18next-conv -l en -s src/locales/translation.po src/locales/en/translation.json",
+		"i18next-conv": "i18next-conv -l en -s src/locales/en/translation.po src/locales/en/translation.json",
 		"prepare": "husky install",
 		"lint:staged": "lint-staged --allow-empty",
 		"lint:prettier": "prettier --check --ignore-unknown  src",
