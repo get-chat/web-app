@@ -25,15 +25,26 @@ const isChatInUsersGroup = (currentUser, chat) => {
 	return false;
 };
 
+const hasPermission = (currentUser, chat) => {
+	const canReadChats = currentUser?.permissions?.canReadChats;
+
+	switch (canReadChats) {
+		case 'all':
+			return true;
+		case 'user':
+			return isChatAssignedToUser(currentUser, chat);
+		case 'group':
+			return isChatInUsersGroup(currentUser, chat);
+		default:
+			return false;
+	}
+};
+
 export const filterChat = (currentUser, tabCase, chat) => {
 	// Filter by case
 	switch (tabCase) {
 		case CHAT_LIST_TAB_CASE_ALL: {
-			return (
-				currentUser?.isAdmin ||
-				isChatAssignedToUser(currentUser, chat) ||
-				isChatInUsersGroup(currentUser, chat)
-			);
+			return currentUser?.isAdmin || hasPermission(currentUser, chat);
 		}
 		case CHAT_LIST_TAB_CASE_ME: {
 			return isChatAssignedToUser(currentUser, chat);
@@ -41,10 +52,7 @@ export const filterChat = (currentUser, tabCase, chat) => {
 		case CHAT_LIST_TAB_CASE_GROUP: {
 			return isChatInUsersGroup(currentUser, chat);
 		}
-		default: {
-			break;
-		}
+		default:
+			return false;
 	}
-
-	return false;
 };
