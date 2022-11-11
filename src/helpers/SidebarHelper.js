@@ -34,7 +34,10 @@ const hasPermission = (currentUser, chat) => {
 		case 'user':
 			return isChatAssignedToUser(currentUser, chat);
 		case 'group':
-			return isChatInUsersGroup(currentUser, chat);
+			return (
+				isChatAssignedToUser(currentUser, chat) ||
+				isChatInUsersGroup(currentUser, chat)
+			);
 		default:
 			return false;
 	}
