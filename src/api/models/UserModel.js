@@ -1,3 +1,5 @@
+import PermissionsModel from './PermissionsModel';
+
 class UserModel {
 	constructor(data) {
 		if (!data) return;
@@ -7,7 +9,7 @@ class UserModel {
 		this.firstName = data.first_name;
 		this.lastName = data.last_name;
 		this.groups = data.groups;
-		this.permissions = data.permissions;
+		this.permissions = new PermissionsModel(data.permissions);
 		this.profile = data.profile;
 		this.role = data?.profile?.role;
 		this.isAdmin = this.role === 'admin';
