@@ -1,50 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
+	<head>
+		<meta charset="utf-8" />
 
-    <% if (process.env.REACT_APP_FAVICON_URL) { %>
-    <link rel="icon" href="%REACT_APP_FAVICON_URL%" />
-    <% } else { %>
-    <link rel="icon" href="/favicon.png" />
-    <% } %>
+		<link rel="icon" href="/favicon.png" />
 
-		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-		<meta http-equiv="Pragma" content="no-cache">
-		<meta http-equiv="Expires" content="0">
+		<meta
+			http-equiv="Cache-Control"
+			content="no-cache, no-store, must-revalidate"
+		/>
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <meta name="theme-color" content="#65cbac" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, user-scalable=no"
+		/>
+		<meta name="theme-color" content="#65cbac" />
 
-    <% if (process.env.REACT_APP_TITLE) { %>
-    <meta name="description" content="%REACT_APP_TITLE%"/>
-    <% } else { %>
-    <meta name="description" content="get.chat Web App"/>
-    <% } %>
+		<meta name="description" content="%REACT_APP_TITLE%" />
 
-    <% if (process.env.REACT_APP_LOGO_192_URL) { %>
-    <link rel="apple-touch-icon" href="%REACT_APP_LOGO_192_URL%" />
-    <% } else { %>
-    <link rel="apple-touch-icon" href="/logo192.png" />
-    <% } %>
+		<meta name="description" content="get.chat Web App" />
 
-    <% if (process.env.REACT_APP_MANIFEST_URL) { %>
-    <link rel="manifest" href="%REACT_APP_MANIFEST_URL%" />
-    <% } else { %>
-    <link rel="manifest" href="/manifest.json" />
-    <% } %>
+		<link rel="apple-touch-icon" href="/logo192.png" />
 
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+		<link rel="manifest" href="/manifest.json" />
 
-    <% if (process.env.REACT_APP_TITLE) { %>
-    <title>%REACT_APP_TITLE%</title>
-    <% } else { %>
-    <title>get.chat Web App</title>
-    <% } %>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+		<link rel="preconnect" href="https://fonts.gstatic.com" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+			rel="stylesheet"
+		/>
+
+		<title>get.chat Web App</title>
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="root"></div>
+	</body>
 </html>
