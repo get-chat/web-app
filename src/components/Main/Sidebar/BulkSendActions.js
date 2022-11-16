@@ -1,8 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
-import FileInput from '../../FileInput';
 import { csvToObj } from '../../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
 import { Alert } from '@material-ui/lab';
@@ -10,8 +9,7 @@ import { Alert } from '@material-ui/lab';
 function BulkSendActions(props) {
 	const { t } = useTranslation();
 
-	const csvFileInput = useRef();
-
+	// TODO: Modify or delete after upload recipients csv feature
 	const handleCSV = (file) => {
 		if (!file) return;
 
@@ -77,13 +75,10 @@ function BulkSendActions(props) {
 					{t('Cancel')}
 				</Button>
 
-				<FileInput
-					innerRef={csvFileInput}
-					multiple={false}
-					accept=".csv"
-					handleSelectedFiles={handleCSV}
-				/>
-				<Button color="secondary" onClick={() => csvFileInput.current.click()}>
+				<Button
+					color="secondary"
+					onClick={() => props.setUploadRecipientsCSVVisible(true)}
+				>
 					{t('Upload CSV')}
 				</Button>
 

@@ -699,6 +699,7 @@ function Sidebar(props) {
 					selectedTags={props.selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={finishBulkSendMessage}
+					setUploadRecipientsCSVVisible={props.setUploadRecipientsCSVVisible}
 				/>
 			)}
 

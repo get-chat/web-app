@@ -23,7 +23,6 @@ import { BreakException } from '../../Constants';
 import BulkSendStepper from './components/BulkSendStepper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import { generateTemplateMessagePayload } from '../../helpers/ChatHelper';
-import { useSelector } from 'react-redux';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';

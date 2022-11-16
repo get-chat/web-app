@@ -59,6 +59,7 @@ import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '../../store/reducers/currentUserReducer';
 import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 import TemplatesResponse from '../../api/responses/TemplatesResponse';
+import UploadRecipientsCSV from '../UploadRecipientsCSV/UploadRecipientsCSV';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -131,6 +132,9 @@ function Main() {
 	const [bulkSendPayload, setBulkSendPayload] = useState();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
+		useState(false);
+
+	const [isUploadRecipientsCSVVisible, setUploadRecipientsCSVVisible] =
 		useState(false);
 
 	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
@@ -1059,6 +1063,7 @@ function Main() {
 						finishBulkSendMessage={finishBulkSendMessage}
 						tags={tags}
 						setLoadingNow={setLoadingNow}
+						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
 						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
 						setInitialResourceFailed={setInitialResourceFailed}
@@ -1198,6 +1203,12 @@ function Main() {
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
 					setSelectionModeEnabled={setSelectionModeEnabled}
+				/>
+
+				<UploadRecipientsCSV
+					open={isUploadRecipientsCSVVisible}
+					setOpen={setUploadRecipientsCSVVisible}
+					tags={tags}
 				/>
 
 				<BulkSendTemplateViaCSV
