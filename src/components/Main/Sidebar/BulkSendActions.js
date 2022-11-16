@@ -67,7 +67,7 @@ function BulkSendActions(props) {
 
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
 				{t(
-					'Please choose tags that do not target more than %s recipients.',
+					'Please select tags that target up to %s recipients in total.',
 					window.config.APP_MAX_BULK_TAG_RECIPIENTS ?? 2000
 				)}
 			</Alert>

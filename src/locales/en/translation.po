@@ -569,3 +569,9 @@ msgstr ""
 
 msgid "Bulk send template using CSV"
 msgstr ""
+
+msgid "Please select up to %s direct recipients."
+msgstr ""
+
+msgid "Please select tags that target up to %s recipients in total."
+msgstr ""
