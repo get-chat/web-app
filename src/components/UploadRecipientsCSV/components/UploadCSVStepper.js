@@ -2,15 +2,13 @@ import React from 'react';
 import { Step, StepLabel, Stepper } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 
-const BulkSendStepper = ({ activeStep }) => {
+const UploadCSVStepper = ({ activeStep }) => {
 	const { t } = useTranslation();
 
 	const steps = [
 		t('Upload a CSV file'),
 		t('Preview the data'),
 		t('Select recipients'),
-		t('Select a template'),
-		t('Select parameters'),
 		t('Preview'),
 	];
 
@@ -25,4 +23,4 @@ const BulkSendStepper = ({ activeStep }) => {
 	);
 };
 
-export default BulkSendStepper;
+export default UploadCSVStepper;

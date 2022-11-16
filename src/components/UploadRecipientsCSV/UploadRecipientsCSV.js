@@ -11,6 +11,8 @@ import { hasDuplicates } from '../../helpers/ArrayHelper';
 import { isEmptyString } from '../../helpers/Helpers';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import { PRIMARY_KEY_TYPE_WA_ID } from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
+import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
+import UploadCSVStepper from './components/UploadCSVStepper';
 
 const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 	const STEP_UPLOAD_CSV = 0;
@@ -153,7 +155,14 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 		<Dialog open={open} onClose={close} className="uploadRecipientsCSV">
 			<DialogTitle>{t('Upload CSV')}</DialogTitle>
 			<DialogContent>
-				<StepUploadCSV csvError={csvError} />
+				<UploadCSVStepper activeStep={activeStep} />
+
+				{activeStep === STEP_UPLOAD_CSV && (
+					<StepUploadCSV csvError={csvError} />
+				)}
+				{activeStep === STEP_PREVIEW_CSV_DATA && (
+					<StepPreviewCSVData csvHeader={csvHeader} csvData={csvData} />
+				)}
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
