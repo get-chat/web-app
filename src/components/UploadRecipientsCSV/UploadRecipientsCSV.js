@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button, Dialog } from '@material-ui/core';
 import DialogContent from '@material-ui/core/DialogContent';
-import StepUploadCSV from '../BulkSendTemplateViaCSV/components/StepUploadCSV';
 import FileInput from '../FileInput';
 import DialogActions from '@material-ui/core/DialogActions';
 import { csvToObj } from '../../helpers/CSVHelper';
@@ -11,8 +10,9 @@ import { hasDuplicates } from '../../helpers/ArrayHelper';
 import { isEmptyString } from '../../helpers/Helpers';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import { PRIMARY_KEY_TYPE_WA_ID } from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
-import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
 import UploadCSVStepper from './components/UploadCSVStepper';
+import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
+import StepUploadCSV from './components/StepUploadCSV';
 
 const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 	const STEP_UPLOAD_CSV = 0;

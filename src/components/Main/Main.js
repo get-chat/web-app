@@ -59,7 +59,7 @@ import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '../../store/reducers/currentUserReducer';
 import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 import TemplatesResponse from '../../api/responses/TemplatesResponse';
-import UploadRecipientsCSV from '../UploadRecipientsCSV/UploadRecipientsCSV';
+import UploadRecipientsCSV from '../UploadRecipientsCSV';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
