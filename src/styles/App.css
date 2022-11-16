@@ -158,6 +158,10 @@ a {
 	color: red;
 }
 
+.MuiAlert-root {
+	border-radius: 10px !important;
+}
+
 .MuiAlert-root .MuiButton-root {
 	font-weight: 600;
 }

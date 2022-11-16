@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import FileInput from '../../FileInput';
 import { csvToObj } from '../../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
+import { Alert } from '@material-ui/lab';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
@@ -56,6 +57,13 @@ function BulkSendActions(props) {
 					Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
 				</Trans>
 			</div>
+
+			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
+				{t(
+					'Please select up to %s recipients.',
+					window.config.APP_MAX_BULK_DIRECT_RECIPIENTS ?? 100
+				)}
+			</Alert>
 
 			<div className="bulkSendActions__actions">
 				<Button color="secondary" onClick={props.cancelSelection}>
