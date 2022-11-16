@@ -13,6 +13,7 @@ import { PRIMARY_KEY_TYPE_WA_ID } from '../BulkSendTemplateViaCSV/BulkSendTempla
 import UploadCSVStepper from './components/UploadCSVStepper';
 import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
 import StepUploadCSV from './components/StepUploadCSV';
+import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
 
 const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 	const STEP_UPLOAD_CSV = 0;
@@ -162,6 +163,17 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 				)}
 				{activeStep === STEP_PREVIEW_CSV_DATA && (
 					<StepPreviewCSVData csvHeader={csvHeader} csvData={csvData} />
+				)}
+				{activeStep === STEP_SELECT_PRIMARY_KEY && (
+					<StepSelectPrimaryKey
+						csvHeader={csvHeader}
+						csvData={csvData}
+						tags={tags}
+						primaryKeyColumn={primaryKeyColumn}
+						setPrimaryKeyColumn={setPrimaryKeyColumn}
+						primaryKeyType={primaryKeyType}
+						setPrimaryKeyType={setPrimaryKeyType}
+					/>
 				)}
 			</DialogContent>
 			<DialogActions>
