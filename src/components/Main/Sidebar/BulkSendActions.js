@@ -5,6 +5,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { csvToObj } from '../../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
 import { Alert } from '@material-ui/lab';
+import {
+	APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT,
+	MAX_BULK_DIRECT_RECIPIENTS_DEFAULT,
+} from '../../../Constants';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
@@ -59,14 +63,16 @@ function BulkSendActions(props) {
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
 				{t(
 					'Please select up to %s direct recipients.',
-					window.config.APP_MAX_BULK_DIRECT_RECIPIENTS ?? 1000
+					window.config.APP_MAX_BULK_DIRECT_RECIPIENTS ??
+						MAX_BULK_DIRECT_RECIPIENTS_DEFAULT
 				)}
 			</Alert>
 
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
 				{t(
 					'Please select tags that target up to %s recipients in total.',
-					window.config.APP_MAX_BULK_TAG_RECIPIENTS ?? 2000
+					window.config.APP_MAX_BULK_TAG_RECIPIENTS ??
+						APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT
 				)}
 			</Alert>
 
