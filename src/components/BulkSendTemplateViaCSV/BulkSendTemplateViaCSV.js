@@ -244,7 +244,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, tags }) => {
 
 	return (
 		<Dialog open={open} onClose={close} className="bulkSendTemplateViaCSV">
-			<DialogTitle>{t('Bulk send template using CSV')}</DialogTitle>
+			<DialogTitle>{t('Bulk send template with CSV')}</DialogTitle>
 			<DialogContent>
 				<BulkSendStepper activeStep={activeStep} />
 

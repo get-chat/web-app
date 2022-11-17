@@ -185,7 +185,7 @@
 	"Please wait, as %s are being loaded...": "",
 	"Upload CSV": "",
 	"Next": "",
-	"Bulk send template using CSV": "",
+	"Bulk send template with CSV": "",
 	"Please select up to %s direct recipients.": "",
 	"Please select tags that target up to %s recipients in total.": ""
 }
