@@ -15,6 +15,7 @@ import { Alert } from '@material-ui/lab';
 import LabelIcon from '@material-ui/icons/Label';
 import { useTranslation } from 'react-i18next';
 import style from './StepSelectPrimaryKey.module.css';
+import { findTagByName } from '../../../../helpers/TagHelper';
 
 const StepSelectPrimaryKey = ({
 	csvHeader,
@@ -35,9 +36,7 @@ const StepSelectPrimaryKey = ({
 				{csvData?.slice(0, PREVIEW_LIMIT)?.map((item, itemIndex) => {
 					if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
 						const tagName = item[primaryKeyColumn];
-						const tag = tags?.filter(
-							(tagItem) => tagItem.name === tagName
-						)?.[0];
+						const tag = findTagByName(tags, tagName);
 						return (
 							<span key={itemIndex}>
 								<LabelIcon style={{ fill: tag?.web_inbox_color }} />{' '}

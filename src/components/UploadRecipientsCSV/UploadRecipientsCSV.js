@@ -9,14 +9,22 @@ import { csvToObj } from '../../helpers/CSVHelper';
 import { hasDuplicates } from '../../helpers/ArrayHelper';
 import { isEmptyString } from '../../helpers/Helpers';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
-import { PRIMARY_KEY_TYPE_WA_ID } from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
+import {
+	PRIMARY_KEY_TYPE_TAG,
+	PRIMARY_KEY_TYPE_WA_ID,
+} from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
 import UploadCSVStepper from './components/UploadCSVStepper';
 import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
 import StepUploadCSV from './components/StepUploadCSV';
 import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
 import { getMaxDirectRecipients } from '../../helpers/BulkSendHelper';
 
-const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
+const UploadRecipientsCSV = ({
+	open,
+	setOpen,
+	tags,
+	addBulkSendRecipients,
+}) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
@@ -87,8 +95,8 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 
 	const complete = () => {
 		// Preparing recipients
-		const waIds = [];
-		const tags = [];
+		const newWaIds = [];
+		const newTags = [];
 		csvData?.forEach((dataItem) => {
 			let recipient = dataItem[primaryKeyColumn];
 
@@ -96,14 +104,15 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 			if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
 				const formattedWaId = preparePhoneNumber(recipient);
 				if (formattedWaId) {
-					waIds.push(formattedWaId);
+					newWaIds.push(formattedWaId);
 				}
-			} else if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
-				tags.push(recipient);
+			} else if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
+				newTags.push(recipient);
 			}
 		});
 
-		console.log(waIds, tags);
+		addBulkSendRecipients(newWaIds, newTags);
+		close();
 	};
 
 	const handleNext = () => {

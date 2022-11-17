@@ -2,8 +2,6 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
-import { csvToObj } from '../../../helpers/CSVHelper';
-import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
 import { Alert } from '@material-ui/lab';
 import {
 	getMaxDirectRecipients,
@@ -12,35 +10,6 @@ import {
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
-
-	// TODO: Modify or delete after upload recipients csv feature
-	const handleCSV = (file) => {
-		if (!file) return;
-
-		csvToObj(file[0], (result) => {
-			const waIds = [];
-
-			// Extract and collect phone numbers
-			result.data.forEach((curRow) => {
-				const row = Object.values(curRow);
-
-				if (row.length > 0) {
-					// Extract only digits
-					const waId = preparePhoneNumber(row[0]);
-					if (waId) {
-						waIds.push(waId);
-					}
-				}
-			});
-
-			// Combine with selected chats
-			if (waIds.length > 0) {
-				props.setSelectedChats([
-					...new Set([...waIds, ...props.selectedChats]),
-				]);
-			}
-		});
-	};
 
 	return (
 		<div className="bulkSendActions">
