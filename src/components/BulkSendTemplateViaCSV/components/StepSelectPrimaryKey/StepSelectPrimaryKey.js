@@ -14,6 +14,7 @@ import {
 import { Alert } from '@material-ui/lab';
 import LabelIcon from '@material-ui/icons/Label';
 import { useTranslation } from 'react-i18next';
+import style from './StepSelectPrimaryKey.module.css';
 
 const StepSelectPrimaryKey = ({
 	csvHeader,
@@ -30,7 +31,7 @@ const StepSelectPrimaryKey = ({
 		const PREVIEW_LIMIT = 5;
 
 		return (
-			<div className="recipientsPreview">
+			<div className={style.recipientsPreview}>
 				{csvData?.slice(0, PREVIEW_LIMIT)?.map((item, itemIndex) => {
 					if (primaryKeyType === PRIMARY_KEY_TYPE_TAG) {
 						const tagName = item[primaryKeyColumn];
