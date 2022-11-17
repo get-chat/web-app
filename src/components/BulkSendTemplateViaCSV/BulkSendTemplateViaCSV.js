@@ -23,7 +23,6 @@ import { BreakException } from '../../Constants';
 import BulkSendStepper from './components/BulkSendStepper';
 import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
 import { generateTemplateMessagePayload } from '../../helpers/ChatHelper';
-import { useSelector } from 'react-redux';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
@@ -245,9 +244,9 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, tags }) => {
 
 	return (
 		<Dialog open={open} onClose={close} className="bulkSendTemplateViaCSV">
-			<DialogTitle>{t('Bulk send template using CSV')}</DialogTitle>
+			<DialogTitle>{t('Bulk send template with CSV')}</DialogTitle>
 			<DialogContent>
-				<BulkSendStepper t={t} activeStep={activeStep} />
+				<BulkSendStepper activeStep={activeStep} />
 
 				{activeStep === STEP_UPLOAD_CSV && (
 					<StepUploadCSV csvError={csvError} />

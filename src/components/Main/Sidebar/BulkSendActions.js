@@ -1,43 +1,15 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
-import FileInput from '../../FileInput';
-import { csvToObj } from '../../../helpers/CSVHelper';
-import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
+import { Alert } from '@material-ui/lab';
+import {
+	getMaxDirectRecipients,
+	getMaxTagRecipients,
+} from '../../../helpers/BulkSendHelper';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
-
-	const csvFileInput = useRef();
-
-	const handleCSV = (file) => {
-		if (!file) return;
-
-		csvToObj(file[0], (result) => {
-			const waIds = [];
-
-			// Extract and collect phone numbers
-			result.data.forEach((curRow) => {
-				const row = Object.values(curRow);
-
-				if (row.length > 0) {
-					// Extract only digits
-					const waId = preparePhoneNumber(row[0]);
-					if (waId) {
-						waIds.push(waId);
-					}
-				}
-			});
-
-			// Combine with selected chats
-			if (waIds.length > 0) {
-				props.setSelectedChats([
-					...new Set([...waIds, ...props.selectedChats]),
-				]);
-			}
-		});
-	};
 
 	return (
 		<div className="bulkSendActions">
@@ -57,20 +29,31 @@ function BulkSendActions(props) {
 				</Trans>
 			</div>
 
+			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
+				{t(
+					'Please select up to %s direct recipients.',
+					getMaxDirectRecipients()
+				)}
+			</Alert>
+
+			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
+				{t(
+					'Please select tags that target up to %s recipients in total.',
+					getMaxTagRecipients()
+				)}
+			</Alert>
+
 			<div className="bulkSendActions__actions">
 				<Button color="secondary" onClick={props.cancelSelection}>
 					{t('Cancel')}
 				</Button>
 
-				<FileInput
-					innerRef={csvFileInput}
-					multiple={false}
-					accept=".csv"
-					handleSelectedFiles={handleCSV}
-				/>
-				{/*<Button color="secondary" onClick={() => csvFileInput.current.click()}>
+				<Button
+					color="secondary"
+					onClick={() => props.setUploadRecipientsCSVVisible(true)}
+				>
 					{t('Upload CSV')}
-				</Button>*/}
+				</Button>
 
 				<Button color="primary" onClick={props.finishBulkSendMessage}>
 					{t('Send')}

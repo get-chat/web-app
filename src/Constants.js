@@ -46,6 +46,9 @@ export const ATTACHMENT_TYPE_VIDEO = 'video';
 export const ATTACHMENT_TYPE_AUDIO = 'audio';
 export const ATTACHMENT_TYPE_DOCUMENT = 'document';
 
+export const MAX_BULK_DIRECT_RECIPIENTS_DEFAULT = 1000;
+export const APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT = 2000;
+
 export const EMPTY_IMAGE_BASE64 =
 	'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 

@@ -699,6 +699,7 @@ function Sidebar(props) {
 					selectedTags={props.selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={finishBulkSendMessage}
+					setUploadRecipientsCSVVisible={props.setUploadRecipientsCSVVisible}
 				/>
 			)}
 
@@ -952,7 +953,7 @@ function Sidebar(props) {
 					{t(' Bulk send a template')}
 				</MenuItem>
 				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
-					{t('Bulk send template using CSV')}
+					{t('Bulk send template with CSV')}
 				</MenuItem>*/}
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
 					{t(' Bulk send a voice message')}

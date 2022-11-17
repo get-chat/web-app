@@ -59,6 +59,8 @@ import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '../../store/reducers/currentUserReducer';
 import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 import TemplatesResponse from '../../api/responses/TemplatesResponse';
+import UploadRecipientsCSV from '../UploadRecipientsCSV';
+import { findTagByName } from '../../helpers/TagHelper';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -131,6 +133,9 @@ function Main() {
 	const [bulkSendPayload, setBulkSendPayload] = useState();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
+		useState(false);
+
+	const [isUploadRecipientsCSVVisible, setUploadRecipientsCSVVisible] =
 		useState(false);
 
 	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
@@ -1025,6 +1030,24 @@ function Main() {
 		listTags();
 	}, [bulkSendPayload]);
 
+	const addBulkSendRecipients = (newWaIds, newTags) => {
+		// Combine with selected chats
+		if (newWaIds.length > 0) {
+			setSelectedChats([...new Set([...newWaIds, ...selectedChats])]);
+		}
+
+		if (newTags.length > 0) {
+			const preparedNewTags = [];
+			newTags.forEach((tagName) => {
+				const curTag = findTagByName(tags, tagName);
+				if (curTag) {
+					preparedNewTags.push(curTag.id);
+				}
+			});
+			setSelectedTags([...new Set([...preparedNewTags, ...selectedTags])]);
+		}
+	};
+
 	return (
 		<Fade in={checked}>
 			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
@@ -1059,6 +1082,7 @@ function Main() {
 						finishBulkSendMessage={finishBulkSendMessage}
 						tags={tags}
 						setLoadingNow={setLoadingNow}
+						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
 						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
 						setInitialResourceFailed={setInitialResourceFailed}
@@ -1198,6 +1222,13 @@ function Main() {
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
 					setSelectionModeEnabled={setSelectionModeEnabled}
+				/>
+
+				<UploadRecipientsCSV
+					open={isUploadRecipientsCSVVisible}
+					setOpen={setUploadRecipientsCSVVisible}
+					tags={tags}
+					addBulkSendRecipients={addBulkSendRecipients}
 				/>
 
 				<BulkSendTemplateViaCSV

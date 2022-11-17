@@ -11,36 +11,7 @@
 	margin-bottom: 10px;
 }
 
-.bulkSendTemplateViaCSV .MuiTableCell-head {
-	font-weight: 600 !important;
-}
-
-.bulkSendTemplateViaCSV .MuiTableCell-root {
-	padding: 8px !important;
-}
-
 .bulkSendTemplateViaCSV .chat__message {
 	margin-top: 0 !important;
 	margin-bottom: 0 !important;
-}
-
-.bulkSendTemplateViaCSV .recipientsPreview {
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: row;
-	margin-top: 10px;
-}
-
-.bulkSendTemplateViaCSV .recipientsPreview > span {
-	padding: 3px 5px;
-	border-radius: 10px;
-	background-color: white;
-	display: flex;
-	align-items: center;
-	margin-right: 5px;
-	margin-bottom: 5px;
-}
-
-.bulkSendTemplateViaCSV .recipientsPreview > span > .MuiSvgIcon-root {
-	margin-right: 5px;
 }
