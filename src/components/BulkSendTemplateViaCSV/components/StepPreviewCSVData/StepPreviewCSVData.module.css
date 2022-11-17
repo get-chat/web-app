@@ -1,0 +1,8 @@
+.stepPreviewCSVData__tableHeaderCell {
+	font-weight: 600 !important;
+}
+
+.stepPreviewCSVData__tableHeaderCell,
+.stepPreviewCSVData__tableRootCell {
+	padding: 8px !important;
+}
