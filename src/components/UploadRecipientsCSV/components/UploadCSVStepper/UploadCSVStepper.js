@@ -9,7 +9,6 @@ const UploadCSVStepper = ({ activeStep }) => {
 		t('Upload a CSV file'),
 		t('Preview the data'),
 		t('Select recipients'),
-		t('Preview'),
 	];
 
 	return (

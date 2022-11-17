@@ -20,7 +20,6 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
-	const STEP_PREVIEW_RESULT = 3;
 
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
 	const [csvHeader, setCsvHeader] = useState();
@@ -117,7 +116,7 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 			case STEP_UPLOAD_CSV:
 				csvFileInput.current.click();
 				break;
-			case STEP_PREVIEW_RESULT:
+			case STEP_SELECT_PRIMARY_KEY:
 				complete();
 				break;
 			default:
@@ -130,8 +129,8 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 		switch (activeStep) {
 			case STEP_UPLOAD_CSV:
 				return t('Upload CSV');
-			case STEP_PREVIEW_RESULT:
-				return t('Send');
+			case STEP_SELECT_PRIMARY_KEY:
+				return t('Done');
 			default:
 				return t('Next');
 		}
