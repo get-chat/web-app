@@ -87,28 +87,23 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 
 	const complete = () => {
 		// Preparing recipients
-		const recipients = [];
-		const format = [];
+		const waIds = [];
+		const tags = [];
 		csvData?.forEach((dataItem) => {
 			let recipient = dataItem[primaryKeyColumn];
 
 			// Formatting if recipients are phone numbers
 			if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
-				recipient = preparePhoneNumber(recipient);
-			}
-
-			if (recipient) {
-				recipients.push({ recipient: recipient });
-				const formatItem = {};
-				formatItem[primaryKeyType] = recipient;
-				format.push({
-					...formatItem,
-					params: dataItem,
-				});
+				const formattedWaId = preparePhoneNumber(recipient);
+				if (formattedWaId) {
+					waIds.push(formattedWaId);
+				}
+			} else if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
+				tags.push(recipient);
 			}
 		});
 
-		console.log(recipients);
+		console.log(waIds, tags);
 	};
 
 	const handleNext = () => {
