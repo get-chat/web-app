@@ -2,9 +2,9 @@ import React from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { useTranslation } from 'react-i18next';
 import {
-	APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT,
-	MAX_BULK_DIRECT_RECIPIENTS_DEFAULT,
-} from '../../../../Constants';
+	getMaxDirectRecipients,
+	getMaxTagRecipients,
+} from '../../../../helpers/BulkSendHelper';
 
 const StepUploadCSV = ({ csvError }) => {
 	const { t } = useTranslation();
@@ -20,10 +20,8 @@ const StepUploadCSV = ({ csvError }) => {
 			<Alert severity="info" className="mt-3">
 				{t(
 					'Please upload a CSV file that contains either up to %s direct recipients or tags that target up to %s recipients in total.',
-					window.config.APP_MAX_BULK_DIRECT_RECIPIENTS ??
-						MAX_BULK_DIRECT_RECIPIENTS_DEFAULT,
-					window.config.APP_MAX_BULK_TAG_RECIPIENTS ??
-						APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT
+					getMaxDirectRecipients(),
+					getMaxTagRecipients()
 				)}
 			</Alert>
 			{csvError !== undefined && (

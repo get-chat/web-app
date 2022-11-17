@@ -6,9 +6,9 @@ import { csvToObj } from '../../../helpers/CSVHelper';
 import { preparePhoneNumber } from '../../../helpers/PhoneNumberHelper';
 import { Alert } from '@material-ui/lab';
 import {
-	APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT,
-	MAX_BULK_DIRECT_RECIPIENTS_DEFAULT,
-} from '../../../Constants';
+	getMaxDirectRecipients,
+	getMaxTagRecipients,
+} from '../../../helpers/BulkSendHelper';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
@@ -63,16 +63,14 @@ function BulkSendActions(props) {
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
 				{t(
 					'Please select up to %s direct recipients.',
-					window.config.APP_MAX_BULK_DIRECT_RECIPIENTS ??
-						MAX_BULK_DIRECT_RECIPIENTS_DEFAULT
+					getMaxDirectRecipients()
 				)}
 			</Alert>
 
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
 				{t(
 					'Please select tags that target up to %s recipients in total.',
-					window.config.APP_MAX_BULK_TAG_RECIPIENTS ??
-						APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT
+					getMaxTagRecipients()
 				)}
 			</Alert>
 

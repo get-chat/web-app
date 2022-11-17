@@ -14,6 +14,7 @@ import UploadCSVStepper from './components/UploadCSVStepper';
 import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
 import StepUploadCSV from './components/StepUploadCSV';
 import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
+import { getMaxDirectRecipients } from '../../helpers/BulkSendHelper';
 
 const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 	const STEP_UPLOAD_CSV = 0;
@@ -25,6 +26,7 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 	const [csvHeader, setCsvHeader] = useState();
 	const [csvData, setCsvData] = useState();
 	const [csvError, setCsvError] = useState();
+	const [isExceededLimits, setExceededLimits] = useState(false);
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
 	const [primaryKeyType, setPrimaryKeyType] = useState('');
 
@@ -36,6 +38,7 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 		if (!file) return;
 
 		setCsvError(undefined);
+		setExceededLimits(false);
 
 		csvToObj(file[0], (result) => {
 			let hasHeaderError = false;
@@ -65,6 +68,15 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 			}
 
 			setCsvHeader(result.header);
+
+			const maxDirectRecipients = getMaxDirectRecipients();
+
+			// Apply the limits
+			if (result.data.length > maxDirectRecipients) {
+				setExceededLimits(true);
+				result.data = result.data.slice(0, maxDirectRecipients);
+			}
+
 			setCsvData(result.data);
 			setPrimaryKeyColumn(result.header[0]);
 
@@ -142,6 +154,7 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 			setCsvHeader(undefined);
 			setCsvData(undefined);
 			setCsvError(undefined);
+			setExceededLimits(false);
 			setPrimaryKeyColumn('');
 			setPrimaryKeyType('');
 			setActiveStep(STEP_UPLOAD_CSV);
@@ -162,7 +175,11 @@ const UploadRecipientsCSV = ({ open, setOpen, tags }) => {
 					<StepUploadCSV csvError={csvError} />
 				)}
 				{activeStep === STEP_PREVIEW_CSV_DATA && (
-					<StepPreviewCSVData csvHeader={csvHeader} csvData={csvData} />
+					<StepPreviewCSVData
+						csvHeader={csvHeader}
+						csvData={csvData}
+						isExceededLimits={isExceededLimits}
+					/>
 				)}
 				{activeStep === STEP_SELECT_PRIMARY_KEY && (
 					<StepSelectPrimaryKey

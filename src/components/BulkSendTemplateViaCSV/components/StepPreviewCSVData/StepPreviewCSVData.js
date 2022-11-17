@@ -9,8 +9,10 @@ import {
 } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import style from './StepPreviewCSVData.module.css';
+import { Alert } from '@material-ui/lab';
+import { getMaxDirectRecipients } from '../../../../helpers/BulkSendHelper';
 
-const StepPreviewCSVData = ({ csvHeader, csvData }) => {
+const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {
 	const { t } = useTranslation();
 
 	const PREVIEW_LIMIT = 5;
@@ -54,6 +56,16 @@ const StepPreviewCSVData = ({ csvHeader, csvData }) => {
 				<div className="mt-3">
 					{t('There are %d more row(s)...', csvData.length - PREVIEW_LIMIT)}
 				</div>
+			)}
+
+			{isExceededLimits && (
+				<Alert severity="warning" className="mt-3">
+					{t(
+						'Your data contains more than %s rows! Only first %s rows will be taken into account.',
+						getMaxDirectRecipients(),
+						getMaxDirectRecipients()
+					)}
+				</Alert>
 			)}
 		</>
 	);
