@@ -1,18 +1,38 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const { NODE_ENV = 'development' } = process.env;
+
+console.log(`Running ${NODE_ENV} environment`);
 
 module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	entry: './src/index.js',
+	mode: NODE_ENV,
+	devtool: 'source-map',
+	entry: path.resolve(__dirname, '../src/index.js'),
 	output: {
-		filename: 'main.js',
 		path: path.resolve(__dirname, '../build'),
+		filename: '[name].[contenthash:8].js',
 		clean: true,
 	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.css', '.json'],
+		alias: {
+			'@src': path.resolve(__dirname, '../src'),
+		},
+	},
+	optimization: {
+		runtimeChunk: 'single',
+		splitChunks: {
+			cacheGroups: {
+				vendor: {
+					test: /[\\/]node_modules[\\/]/,
+					name: 'vendors',
+					chunks: 'all',
+				},
+			},
+		},
 	},
 	module: {
 		rules: [
@@ -23,7 +43,7 @@ module.exports = {
 			},
 			{
 				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
+				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
 			{
 				test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -44,6 +64,7 @@ module.exports = {
 				process.env.REACT_APP_LOGO_BLACK_URL
 			),
 		}),
+		new MiniCssExtractPlugin(),
 		new HtmlWebpackPlugin({
 			title: 'Output Management',
 			template: path.resolve(__dirname, '../public/index.html'),

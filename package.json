@@ -5,7 +5,7 @@
 	"scripts": {
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
 		"serve": "webpack serve --progress --config webpack/webpack.config.js ",
-		"build": "webpack --config webpack/webpack.config.js",
+		"build": "webpack --progress --config webpack/webpack.config.js",
 		"test:e2e": "cypress run",
 		"i18next-conv": "i18next-conv -l en -s src/locales/en/translation.po src/locales/en/translation.json",
 		"prepare": "husky install",
@@ -102,8 +102,8 @@
 		"html-webpack-plugin": "^4.5.2",
 		"husky": "^8.0.1",
 		"lint-staged": "^13.0.3",
+		"mini-css-extract-plugin": "^2.7.0",
 		"prettier": "2.7.1",
-		"style-loader": "^3.3.1",
 		"webpack": "^5.75.0",
 		"webpack-cli": "^4.10.0",
 		"webpack-dev-server": "^4.11.1"
