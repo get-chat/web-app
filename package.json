@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
-		"dev": "webpack serve --config webpack/webpack.dev.js ",
+		"start": "webpack serve --config webpack/webpack.dev.js ",
 		"build": "webpack --config webpack/webpack.prod.js",
 		"test": "jest",
 		"test:e2e": "cypress run",
@@ -108,7 +108,6 @@
 		"webpack-merge": "^5.8.0"
 	},
 	"engines": {
-		"node": "^16.13.0",
-		"npm": "^8.1.0"
+		"node": "^16.13.0"
 	}
 }

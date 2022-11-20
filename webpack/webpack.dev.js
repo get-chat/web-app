@@ -13,7 +13,7 @@ module.exports = merge(commonWebpackConfig, {
 		},
 		historyApiFallback: true,
 		compress: true,
-		port: 9000,
+		port: 3000,
 		open: true,
 	},
 });
