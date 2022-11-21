@@ -33,7 +33,6 @@
 	padding: 10px 15px;
 	background-color: var(--color-primary);
 	color: white;
-	cursor: pointer;
 	font-size: 16px;
 }
 
@@ -48,16 +47,10 @@
 }
 
 .sidebar__clearFilter__clear {
-	font-size: 12px;
-	font-weight: 600;
-	border-radius: 10px;
-	background-color: white;
-	color: var(--color-primary);
-	padding: 2px 7px 2px 5px;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+	background-color: white !important;
+	border-radius: 10px !important;
+	padding: 0 10px !important;
+	color: var(--color-primary) !important;
 }
 
 .sidebar__clearFilter__clear .MuiSvgIcon-root {

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
 	Avatar,
+	Button,
 	CircularProgress,
 	Divider,
 	Fade,
@@ -717,8 +718,8 @@ function Sidebar(props) {
 			<SearchBar onChange={(_keyword) => search(_keyword)} />
 
 			{filterTag && (
-				<div className="sidebar__clearFilter" onClick={clearFilter}>
-					<div className="sidebar__clearFilter__body">
+				<div className="sidebar__clearFilter">
+					<div className="sidebar__clearFilter__body mb-1">
 						<Trans
 							values={{
 								postProcess: 'sprintf',
@@ -730,10 +731,14 @@ function Sidebar(props) {
 							&nbsp;<span className="bold">%s</span>&nbsp;(%d chats)
 						</Trans>
 					</div>
-					<div className="sidebar__clearFilter__clear mt-1">
-						<CloseIcon className="mr-1" />
+					<Button
+						className="sidebar__clearFilter__clear"
+						size="small"
+						startIcon={<CloseIcon />}
+						onClick={clearFilter}
+					>
 						{t('Click to clear filter')}
-					</div>
+					</Button>
 				</div>
 			)}
 

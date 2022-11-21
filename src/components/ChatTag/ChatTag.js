@@ -11,12 +11,8 @@ const ChatTag = ({ id }) => {
 		if (tags) {
 			for (let i = 0; i < tags.length; i++) {
 				const curTag = tags[i];
-				console.log(curTag);
-				console.log(curTag.id);
 				if (curTag.id === id) {
 					setTag(curTag);
-
-					console.log(curTag);
 					break;
 				}
 			}
