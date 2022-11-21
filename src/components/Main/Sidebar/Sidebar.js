@@ -70,6 +70,7 @@ import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
 import { setTemplates } from '../../../store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
 import { setFilterTag } from '../../../store/reducers/filterTagReducer';
+import { setChatsCount } from '../../../store/reducers/chatsCountReducer';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -77,6 +78,7 @@ function Sidebar(props) {
 
 	const currentUser = useSelector((state) => state.currentUser.value);
 	const filterTag = useSelector((state) => state.filterTag.value);
+	const chatsCount = useSelector((state) => state.chatsCount.value);
 
 	const { t } = useTranslation();
 
@@ -420,6 +422,9 @@ function Sidebar(props) {
 			props.setLoadingNow('chats');
 		}
 
+		// Reset chats count
+		dispatch(setChatsCount(undefined));
+
 		if (replaceAll) {
 			setLoadingChats(true);
 		}
@@ -438,6 +443,8 @@ function Sidebar(props) {
 			cancelTokenSource.token,
 			(response) => {
 				const chatsResponse = new ChatsResponse(response.data);
+
+				dispatch(setChatsCount(chatsResponse.count));
 
 				const preparedChats = chatsResponse.chats;
 
@@ -713,7 +720,7 @@ function Sidebar(props) {
 					<Trans
 						values={{
 							postProcess: 'sprintf',
-							sprintf: [filterTag.name, 0],
+							sprintf: [filterTag.name, chatsCount ?? 0],
 						}}
 					>
 						Showing only: <span className="bold ml-1">%s</span>&nbsp;(%d chats)
