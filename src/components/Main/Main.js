@@ -94,7 +94,6 @@ function Main() {
 
 	const [chats, setChats] = useState({});
 	const [newMessages, setNewMessages] = useState({});
-	const [filterTag, setFilterTag] = useState();
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
@@ -1063,8 +1062,6 @@ function Main() {
 						setChats={setChats}
 						newMessages={newMessages}
 						setNewMessages={setNewMessages}
-						filterTag={filterTag}
-						setFilterTag={setFilterTag}
 						setProgress={setProgress}
 						displayNotification={displayNotification}
 						isBlurred={isBlurred}
@@ -1131,8 +1128,6 @@ function Main() {
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						chats={chats}
-						filterTag={filterTag}
-						setFilterTag={setFilterTag}
 						users={users}
 					/>
 				)}
@@ -1162,8 +1157,6 @@ function Main() {
 						open={isChatTagsListVisible}
 						setOpen={setChatTagsListVisible}
 						tags={tags}
-						filterTag={filterTag}
-						setFilterTag={setFilterTag}
 					/>
 				)}
 

@@ -69,12 +69,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
 import { setTemplates } from '../../../store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
+import { setFilterTag } from '../../../store/reducers/filterTagReducer';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
 	const currentUser = useSelector((state) => state.currentUser.value);
+	const filterTag = useSelector((state) => state.filterTag.value);
 
 	const { t } = useTranslation();
 
@@ -165,7 +167,7 @@ function Sidebar(props) {
 				);
 			}
 		};
-	}, [keyword, tabCase, props.filterTag]);
+	}, [keyword, tabCase, filterTag]);
 
 	useEffect(() => {
 		// New chatMessages
@@ -392,7 +394,7 @@ function Sidebar(props) {
 			clearTimeout(debounceTimer);
 			chatsContainerCopy.removeEventListener('scroll', handleScroll);
 		};
-	}, [props.chats, keyword, props.filterTag]);
+	}, [props.chats, keyword, filterTag]);
 
 	const search = async (_keyword) => {
 		setKeyword(_keyword);
@@ -428,7 +430,7 @@ function Sidebar(props) {
 
 		apiService.listChatsCall(
 			keyword,
-			props.filterTag?.id,
+			filterTag?.id,
 			20,
 			offset,
 			assignedToMe,
@@ -575,7 +577,7 @@ function Sidebar(props) {
 		apiService.listMessagesCall(
 			undefined,
 			keyword,
-			props.filterTag?.id,
+			filterTag?.id,
 			30,
 			undefined,
 			undefined,
@@ -637,7 +639,7 @@ function Sidebar(props) {
 	};
 
 	const clearFilter = () => {
-		props.setFilterTag(undefined);
+		dispatch(setFilterTag(undefined));
 	};
 
 	const cancelSelection = () => {
@@ -705,13 +707,13 @@ function Sidebar(props) {
 
 			<SearchBar onChange={(_keyword) => search(_keyword)} />
 
-			{props.filterTag && (
+			{filterTag && (
 				<div className="sidebar__clearFilter" onClick={clearFilter}>
 					<CloseIcon />
 					<Trans
 						values={{
 							postProcess: 'sprintf',
-							sprintf: [props.filterTag.name, 0],
+							sprintf: [filterTag.name, 0],
 						}}
 					>
 						Showing only: <span className="bold ml-1">%s</span>&nbsp;(%d chats)

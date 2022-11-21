@@ -19,11 +19,15 @@ import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { addPlus } from '../../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
+import { useDispatch } from 'react-redux';
+import { setFilterTag } from '../../store/reducers/filterTagReducer';
 
 function ContactDetails(props) {
 	const { t } = useTranslation();
 
 	const [chat, setChat] = useState({});
+
+	const dispatch = useDispatch();
 
 	const hideContactDetails = () => {
 		PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
@@ -112,7 +116,7 @@ function ContactDetails(props) {
 									<div
 										className="contactDetails__body__tags__tag"
 										key={index}
-										onClick={() => props.setFilterTag(tag)}
+										onClick={() => dispatch(setFilterTag(tag))}
 									>
 										<LabelIcon
 											style={{

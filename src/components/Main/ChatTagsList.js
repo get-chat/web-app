@@ -14,6 +14,8 @@ import LabelIcon from '@material-ui/icons/Label';
 import { getHubURL } from '../../helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '../../contexts/AppConfig';
+import { useDispatch } from 'react-redux';
+import { setFilterTag } from '../../store/reducers/filterTagReducer';
 
 function ChatTagsList(props) {
 	const config = React.useContext(AppConfig);
@@ -22,12 +24,14 @@ function ChatTagsList(props) {
 
 	const [isLoading, setLoading] = useState(false);
 
+	const dispatch = useDispatch();
+
 	const close = () => {
 		props.setOpen(false);
 	};
 
 	const handleClick = (tag) => {
-		props.setFilterTag(tag);
+		dispatch(setFilterTag(tag));
 		close();
 	};
 
