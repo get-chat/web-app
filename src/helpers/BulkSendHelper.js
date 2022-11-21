@@ -1,16 +1,14 @@
 import {
-	APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT,
 	MAX_BULK_DIRECT_RECIPIENTS_DEFAULT,
+	MAX_BULK_TAG_RECIPIENTS_DEFAULT,
 } from '../Constants';
 import { isString } from './Helpers';
 
-export const getMaxDirectRecipients = () => {
-	const configValue = window.config.APP_MAX_BULK_DIRECT_RECIPIENTS;
-	const defaultValue = MAX_BULK_DIRECT_RECIPIENTS_DEFAULT;
-
+export const prepareValue = (configValue, defaultValue) => {
 	if (configValue) {
 		if (isString(configValue)) {
-			return parseInt(configValue) ?? defaultValue;
+			const parsed = parseInt(configValue);
+			return !isNaN(parsed) ? parsed : defaultValue;
 		}
 
 		return configValue;
@@ -19,9 +17,16 @@ export const getMaxDirectRecipients = () => {
 	return defaultValue;
 };
 
+export const getMaxDirectRecipients = () => {
+	return prepareValue(
+		window.config.APP_MAX_BULK_DIRECT_RECIPIENTS,
+		MAX_BULK_DIRECT_RECIPIENTS_DEFAULT
+	);
+};
+
 export const getMaxTagRecipients = () => {
-	return (
-		window.config.APP_MAX_BULK_TAG_RECIPIENTS ??
-		APP_MAX_BULK_TAG_RECIPIENTS_DEFAULT
+	return prepareValue(
+		window.config.APP_MAX_BULK_TAG_RECIPIENTS,
+		MAX_BULK_TAG_RECIPIENTS_DEFAULT
 	);
 };
