@@ -53,7 +53,7 @@ import { AppConfig } from '../../contexts/AppConfig';
 import { ApplicationContext } from '../../contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setTemplates } from '../../store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '../../store/reducers/currentUserReducer';
@@ -61,6 +61,7 @@ import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '../../helpers/TagHelper';
+import { setTags } from '../../store/reducers/tagsReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -69,6 +70,8 @@ function useQuery() {
 function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
+
+	const tags = useSelector((state) => state.tags.value);
 
 	const dispatch = useDispatch();
 
@@ -100,8 +103,6 @@ function Main() {
 	const [savedResponses, setSavedResponses] = useState({});
 	const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 	const [templatesReady, setTemplatesReady] = useState(false);
-
-	const [tags, setTags] = useState([]);
 
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
 	const [successMessage, setSuccessMessage] = useState('');
@@ -1018,7 +1019,7 @@ function Main() {
 	const listTags = async () => {
 		try {
 			await apiService.listTagsCall((response) => {
-				setTags(response.data.results);
+				dispatch(setTags(response.data.results));
 			});
 		} catch (error) {
 			console.error('Error in listTags', error);
@@ -1077,7 +1078,6 @@ function Main() {
 						selectedTags={selectedTags}
 						setSelectedTags={setSelectedTags}
 						finishBulkSendMessage={finishBulkSendMessage}
-						tags={tags}
 						setLoadingNow={setLoadingNow}
 						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
@@ -1156,7 +1156,6 @@ function Main() {
 						waId={waId}
 						open={isChatTagsListVisible}
 						setOpen={setChatTagsListVisible}
-						tags={tags}
 					/>
 				)}
 
@@ -1220,14 +1219,12 @@ function Main() {
 				<UploadRecipientsCSV
 					open={isUploadRecipientsCSVVisible}
 					setOpen={setUploadRecipientsCSVVisible}
-					tags={tags}
 					addBulkSendRecipients={addBulkSendRecipients}
 				/>
 
 				<BulkSendTemplateViaCSV
 					open={isBulkSendTemplateViaCSVVisible}
 					setOpen={setBulkSendTemplateViaCSVVisible}
-					tags={tags}
 				/>
 
 				<SendBulkVoiceMessageDialog

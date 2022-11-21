@@ -71,11 +71,13 @@ import { setTemplates } from '../../../store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
 import { setFilterTag } from '../../../store/reducers/filterTagReducer';
 import { setChatsCount } from '../../../store/reducers/chatsCountReducer';
+import ChatTag from '../../ChatTag';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
+	const tags = useSelector((state) => state.tags.value);
 	const currentUser = useSelector((state) => state.currentUser.value);
 	const filterTag = useSelector((state) => state.filterTag.value);
 	const chatsCount = useSelector((state) => state.chatsCount.value);
@@ -716,15 +718,22 @@ function Sidebar(props) {
 
 			{filterTag && (
 				<div className="sidebar__clearFilter" onClick={clearFilter}>
-					<CloseIcon />
-					<Trans
-						values={{
-							postProcess: 'sprintf',
-							sprintf: [filterTag.name, chatsCount ?? 0],
-						}}
-					>
-						Showing only: <span className="bold ml-1">%s</span>&nbsp;(%d chats)
-					</Trans>
+					<div className="sidebar__clearFilter__body">
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [filterTag.name, chatsCount ?? 0],
+							}}
+						>
+							Showing only:&nbsp;
+							<ChatTag id={filterTag.id} />
+							&nbsp;<span className="bold">%s</span>&nbsp;(%d chats)
+						</Trans>
+					</div>
+					<div className="sidebar__clearFilter__clear mt-1">
+						<CloseIcon className="mr-1" />
+						{t('Click to clear filter')}
+					</div>
 				</div>
 			)}
 
@@ -771,11 +780,11 @@ function Sidebar(props) {
 			</div>
 
 			<div className="sidebar__results" ref={chatsContainer}>
-				{props.isSelectionModeEnabled && props.tags && <h3>Tags</h3>}
+				{props.isSelectionModeEnabled && tags && <h3>Tags</h3>}
 
-				{props.isSelectionModeEnabled && props.tags && (
+				{props.isSelectionModeEnabled && tags && (
 					<div>
-						{Object.entries(props.tags).map((tag) => (
+						{Object.entries(tags).map((tag) => (
 							<SelectableChatTag
 								key={tag[0]}
 								data={tag[1]}

@@ -447,7 +447,10 @@ msgstr ""
 msgid "You have new messages!"
 msgstr ""
 
-msgid "Showing only: <1>%s</1> (%d chats)"
+msgid "Showing only: <1></1> <3>%s</3> (%d chats)"
+msgstr ""
+
+msgid "Click to clear filter"
 msgstr ""
 
 msgid "All"

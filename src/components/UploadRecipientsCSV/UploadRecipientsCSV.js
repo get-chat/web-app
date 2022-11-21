@@ -18,16 +18,14 @@ import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreview
 import StepUploadCSV from './components/StepUploadCSV';
 import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
 import { getMaxDirectRecipients } from '../../helpers/BulkSendHelper';
+import { useSelector } from 'react-redux';
 
-const UploadRecipientsCSV = ({
-	open,
-	setOpen,
-	tags,
-	addBulkSendRecipients,
-}) => {
+const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
+
+	const tags = useSelector((state) => state.tags.value);
 
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
 	const [csvHeader, setCsvHeader] = useState();
@@ -188,7 +186,6 @@ const UploadRecipientsCSV = ({
 					<StepSelectPrimaryKey
 						csvHeader={csvHeader}
 						csvData={csvData}
-						tags={tags}
 						primaryKeyColumn={primaryKeyColumn}
 						setPrimaryKeyColumn={setPrimaryKeyColumn}
 						primaryKeyType={primaryKeyType}

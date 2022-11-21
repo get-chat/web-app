@@ -27,7 +27,7 @@ import { generateTemplateMessagePayload } from '../../helpers/ChatHelper';
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
 
-const BulkSendTemplateViaCSV = ({ open, setOpen, tags }) => {
+const BulkSendTemplateViaCSV = ({ open, setOpen }) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
@@ -258,7 +258,6 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, tags }) => {
 					<StepSelectPrimaryKey
 						csvHeader={csvHeader}
 						csvData={csvData}
-						tags={tags}
 						primaryKeyColumn={primaryKeyColumn}
 						setPrimaryKeyColumn={setPrimaryKeyColumn}
 						primaryKeyType={primaryKeyType}
