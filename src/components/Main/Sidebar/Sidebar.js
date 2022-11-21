@@ -711,10 +711,10 @@ function Sidebar(props) {
 					<Trans
 						values={{
 							postProcess: 'sprintf',
-							sprintf: [props.filterTag.name],
+							sprintf: [props.filterTag.name, 0],
 						}}
 					>
-						Clear filter: <span className="bold ml-1">%s</span>
+						Showing only: <span className="bold ml-1">%s</span>&nbsp;(%d chats)
 					</Trans>
 				</div>
 			)}

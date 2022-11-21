@@ -447,7 +447,7 @@ msgstr ""
 msgid "You have new messages!"
 msgstr ""
 
-msgid "Clear filter: <1>%s</1>"
+msgid "Showing only: <1>%s</1> (%d chats)"
 msgstr ""
 
 msgid "All"

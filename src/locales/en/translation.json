@@ -145,7 +145,7 @@
 	"Last attempt at: <1></1>": "",
 	"New messages": "",
 	"You have new messages!": "",
-	"Clear filter: <1>%s</1>": "",
+	"Showing only: <1>%s</1> (%d chats)": "",
 	"All": "",
 	"Me": "",
 	"Group": "",
