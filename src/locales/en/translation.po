@@ -30,8 +30,10 @@ msgstr ""
 msgid "There is no phone number"
 msgstr ""
 
-msgid "%d more phone number(s)"
-msgstr ""
+msgid "%d more phone number"
+msgid_plural "%d more phone numbers"
+msgstr[0] "%d more phone number"
+msgstr[1] "%d more phone numbers"
 
 msgid "Choose a phone number"
 msgstr ""
@@ -449,8 +451,8 @@ msgstr ""
 
 msgid "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
 msgid_plural "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
+msgstr[1] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
 
 msgid "Click to clear filter"
 msgstr ""

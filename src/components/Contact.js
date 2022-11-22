@@ -53,10 +53,11 @@ function Contact(props) {
 						{props.data.phoneNumbers && props.data.phoneNumbers.length > 1 && (
 							<div className="contact__info__otherPhoneNumbers">
 								<span>
-									{t(
-										'%d more phone number(s)',
-										props.data.phoneNumbers?.length - 1
-									)}
+									{t('%d more phone number', {
+										postProcess: 'sprintf',
+										sprintf: [props.data.phoneNumbers?.length - 1],
+										count: props.data.phoneNumbers?.length - 1,
+									})}
 								</span>
 							</div>
 						)}

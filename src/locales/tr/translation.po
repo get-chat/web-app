@@ -30,8 +30,10 @@ msgstr "atanmış grup temizlendi"
 msgid "There is no phone number"
 msgstr "Telefon numarası yok"
 
-msgid "%d more phone number(s)"
-msgstr ""
+msgid "%d more phone number"
+msgid_plural "%d more phone numbers"
+msgstr[0] "%d telefon numarası daha"
+msgstr[1] "%d telefon numarası daha"
 
 msgid "Choose a phone number"
 msgstr "Bir telefon numarası seçin"
@@ -52,7 +54,7 @@ msgid "Contacts"
 msgstr "Kontaklar"
 
 msgid "No persons or contacts found for <1>%s</1>"
-msgstr ""
+msgstr "Hiç kişi veya kontak bulunamadı: <1>%s</1>"
 
 msgid "Unsupported file type"
 msgstr "Desteklenmeyen dosya türü"
@@ -100,16 +102,16 @@ msgid "Search for messages"
 msgstr "Mesajlarda ara"
 
 msgid "This chat could not be assigned as its assignments have been changed by another user recently."
-msgstr ""
+msgstr "Bu sohbetin atamaları değiştirilemedi çünkü yakın zamanda başka bir kullanıcı tarafından değiştirildi."
 
 msgid "This contact has no phone number."
 msgstr "Bu kontak bir telefon numarasına sahip değil."
 
 msgid "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment."
-msgstr ""
+msgstr "Bu sohbet zaten bir başka kullanıcıya atanmış. Bu sohbeti ancak atanmış kişi kendi atamasını kaldırır veya admin yetkileri olan birisi atamaları temizlerse yeniden atayabilirsin."
 
 msgid "You can assign this chat to a user or a group."
-msgstr ""
+msgstr "Bu sohbeti bir kullanıcı veya gruba atayabilirsin."
 
 msgid "Unassigned"
 msgstr "Atanmamış"
@@ -136,25 +138,25 @@ msgid "Tags"
 msgstr "Etiketler"
 
 msgid "You can filter chats by tags."
-msgstr ""
+msgstr "Sohbetleri etiketler ile filtreleyebilirsin."
 
 msgid "Contact Details"
-msgstr ""
+msgstr "Kontak Detayları"
 
 msgid "Contact details"
-msgstr ""
+msgstr "Kontak detayları"
 
 msgid "Never"
-msgstr ""
+msgstr "Asla"
 
-msgid "Whatsapp Phone Number"
-msgstr ""
+msgid "WhatsApp Phone Number"
+msgstr "WhatsApp Telefon Numarası"
 
 msgid "Assigned to: <1>%s</1>"
-msgstr ""
+msgstr "Atanmış kullanıcı: <1>%s</1>"
 
 msgid "Assigned group: <1>%s</1>"
-msgstr ""
+msgstr "Atanmış kullanıcı"
 
 msgid "Phone number"
 msgstr "Telefon numarası"
@@ -166,25 +168,25 @@ msgid "Loading: %s"
 msgstr "Yükleniyor: %s"
 
 msgid "Contact us"
-msgstr ""
+msgstr "Bize ulaş"
 
 msgid "Skip"
-msgstr ""
+msgstr "Geç"
 
 msgid "Something went wrong, this will be fixed automatically"
-msgstr ""
+msgstr "Bir şeyler ters gitti, bu otomatik olarak düzelecek"
 
 msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
-msgstr ""
+msgstr "Sohbette gönderilmemiş mesajlar var. Devam edersen silinecekler. Devam etmek istediğine emin misin?"
 
 msgid "An error has occurred."
-msgstr ""
+msgstr "Bir hata oluştu."
 
 msgid "Saved as response successfully!"
-msgstr ""
+msgstr "Yanıt olarak başarıyla kaydedildi!"
 
 msgid "Deleted response successfully!"
-msgstr ""
+msgstr "Yanıt, başarıyla silindi!"
 
 msgid "Hey"
 msgstr "Hey"
@@ -205,7 +207,7 @@ msgid "Change tags"
 msgstr "Etiketleri değiştir"
 
 msgid "Toggle assignment and tagging history"
-msgstr ""
+msgstr "Atama ve etiketleme geçmişini aç/kapat"
 
 msgid "Preview"
 msgstr "Önizleme"
@@ -220,7 +222,7 @@ msgid "Drag and drop here"
 msgstr "Sürükle ve buraya bırak"
 
 msgid "No response message have been saved yet."
-msgstr ""
+msgstr "Henüz hiç yanıt mesajı kaydedilmemiş."
 
 msgid "Send"
 msgstr "Gönder"
@@ -229,7 +231,7 @@ msgid "Oops!"
 msgstr "Ups!"
 
 msgid "Are you sure you want to delete this saved response?"
-msgstr ""
+msgstr "Bu kaydedilmiş yanıtı silmek istediğine emin misin?"
 
 msgid "Yes"
 msgstr "Evet"
@@ -247,16 +249,16 @@ msgid "Send a message"
 msgstr "Bir mesaj gönder"
 
 msgid "You must grant microphone permission."
-msgstr ""
+msgstr "Mikrofon izni sağlamalısın."
 
 msgid "This feature is not supported on your browser."
-msgstr ""
+msgstr "Bu özellik, tarayıcında desteklenmiyor."
 
 msgid "You must open the inbox in a new tab to access this feature."
-msgstr ""
+msgstr "Bu özelliğe erişmek için inbox'ı yeni sekmede açmalısın."
 
 msgid "Go to inbox"
-msgstr ""
+msgstr "Inbox'a git"
 
 msgid "Forwarded"
 msgstr "Yönlendirildi"
@@ -265,19 +267,19 @@ msgid "Document"
 msgstr "Döküman"
 
 msgid "Save this response"
-msgstr ""
+msgstr "Bu yanıtı kaydet"
 
 msgid "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!"
-msgstr ""
+msgstr "Taslak mesajınız kullanıcıya başarıyla gönderildi fakat şu anda taslakları yükleyemiyoruz. Lütfen daha sonra tekrar deneyin!"
 
 msgid "Missing template"
-msgstr ""
+msgstr "Eksik taslak"
 
 msgid "Template message:"
-msgstr ""
+msgstr "Taslak mesajı"
 
 msgid "Interactive message:"
-msgstr ""
+msgstr "İnteraktif mesaj:"
 
 msgid "Image"
 msgstr "Görsel"
@@ -450,7 +452,7 @@ msgstr ""
 msgid "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
 msgid_plural "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
 msgstr[0] "Yalnızca gösterilen: <1></1> <3>%(tag)s</3> (%(count)d sohbet)"
-msgstr[1] "Yalnızca gösterilen: <1></1> <3>%(tag)s</3> (%(count)d sohbetler)"
+msgstr[1] "Yalnızca gösterilen: <1></1> <3>%(tag)s</3> (%(count)d sohbet)"
 
 msgid "Click to clear filter"
 msgstr "Filtreyi kaldırmak için tıkla"

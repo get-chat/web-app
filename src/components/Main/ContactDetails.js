@@ -164,7 +164,7 @@ function ContactDetails(props) {
 
 					<div className="contactDetails__body__section">
 						<div className="contactDetails__body__section__title">
-							{t('Whatsapp Phone Number')}
+							{t('WhatsApp Phone Number')}
 						</div>
 						<a href={'tel:+' + props.contactData.waId}>
 							{addPlus(props.contactData.waId)}
