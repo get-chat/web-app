@@ -47,7 +47,6 @@ specifiers:
   react: ^17.0.2
   react-device-detect: ^2.0.2
   react-dom: ^17.0.2
-  react-global-configuration: ^1.4.1
   react-i18next: ^11.15.5
   react-linkify: 1.0.0-alpha
   react-moment: ^1.1.1
@@ -96,7 +95,6 @@ dependencies:
   react: 17.0.2
   react-device-detect: 2.2.2_sfoxds7t5ydpegc3knd667wn6m
   react-dom: 17.0.2_react@17.0.2
-  react-global-configuration: 1.4.1
   react-i18next: 11.17.3_ko2ldqjxck36wr4kowzb5nw4ca
   react-linkify: 1.0.0-alpha
   react-moment: 1.1.2_ba2jrvgygmh2fdmvstgt5hjk4e
@@ -4869,10 +4867,6 @@ packages:
 
   /dedent/0.7.0:
     resolution: {integrity: sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==}
-    dev: false
-
-  /deep-freeze/0.0.1:
-    resolution: {integrity: sha512-Z+z8HiAvsGwmjqlphnHW5oz6yWlOwu6EQfFTjmeTWlDeda3FS2yv3jhq35TX/ewmsnqB+RX2IdsIOyjJCQN5tg==}
     dev: false
 
   /deep-is/0.1.4:
@@ -10040,14 +10034,6 @@ packages:
 
   /react-error-overlay/6.0.11:
     resolution: {integrity: sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==}
-    dev: false
-
-  /react-global-configuration/1.4.1:
-    resolution: {integrity: sha512-Sop75icLBD6H8R+h57OH4Tu4/aWelqMizZ8My43RA93LEd0Cyxy71p5bxsbXSwNU7i1xFb/ScbuUOlL5+4DJhg==}
-    dependencies:
-      deep-freeze: 0.0.1
-      object-assign: 4.1.1
-      serialize-javascript: 4.0.0
     dev: false
 
   /react-i18next/11.17.3_ko2ldqjxck36wr4kowzb5nw4ca:

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Button } from '@material-ui/core';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
@@ -9,14 +9,6 @@ import {
 } from '../../../helpers/BulkSendHelper';
 
 function BulkSendActions(props) {
-	const maxDirectRecipients = useMemo(() => {
-		return getMaxDirectRecipients();
-	}, []);
-
-	const maxTagRecipients = useMemo(() => {
-		return getMaxTagRecipients();
-	}, []);
-
 	const { t } = useTranslation();
 
 	return (
@@ -38,13 +30,16 @@ function BulkSendActions(props) {
 			</div>
 
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
-				{t('Please select up to %s direct recipients.', maxDirectRecipients)}
+				{t(
+					'Please select up to %s direct recipients.',
+					getMaxDirectRecipients()
+				)}
 			</Alert>
 
 			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
 				{t(
 					'Please select tags that target up to %s recipients in total.',
-					maxTagRecipients
+					getMaxTagRecipients()
 				)}
 			</Alert>
 

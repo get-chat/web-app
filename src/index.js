@@ -12,7 +12,6 @@ import './i18n';
 import axios from 'axios';
 import { ApiService } from './api/ApiService';
 import { isEmptyString } from './helpers/Helpers';
-import globalConfig from 'react-global-configuration';
 
 // Init storage type
 initStorageType();
@@ -23,8 +22,8 @@ axios
 	.then((response) => {
 		const config = response.data;
 
-		// Store config globally
-		globalConfig.set(config);
+		// It is needed for ChatMessageModel
+		window.config = config;
 
 		// Init Sentry
 		if (!isLocalHost()) {

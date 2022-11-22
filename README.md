@@ -26,7 +26,7 @@ Specify the Rest API URL as the value of `API_BASE_URL` inside the config.
 `API_BASE_URL` should be set to `/api/v1/` to use same address as get.chat Web App runs on.
 
 
-### Sentry
+### Serntry
 Sentry is a developer-first error tracking and performance monitoring platform that helps developers see what actually matters, solve quicker, and learn continuously about their applications.
 #### Change Sentry DSN Key
 
@@ -47,6 +47,9 @@ axios
 	.get(`/config.json`)
 	.then((response) => {
 		const config = response.data;
+
+		// It is needed for ChatMessageModel
+		window.config = config;
 
  		// Init Sentry
 +		// if (!isLocalHost()) {
