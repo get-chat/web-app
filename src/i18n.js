@@ -22,7 +22,7 @@ i18n
 	// init i18next
 	// for all options read: https://www.i18next.com/overview/configuration-options
 	.init({
-		lng: 'tr',
+		// lng: 'en',
 		fallbackLng: 'en',
 		compatibilityJSON: 'v4',
 		debug: false,
@@ -37,7 +37,7 @@ i18n
 		// saveMissing: true,
 		resources: {
 			en: { translation: TRANSLATION_EN },
-			tr: { translation: TRANSLATION_TR },
+			// tr: { translation: TRANSLATION_TR },
 		},
 		interpolation: {
 			escapeValue: false, // not needed for react as it escapes by default

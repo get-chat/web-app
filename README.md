@@ -119,6 +119,8 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 - Run the following command by changing `en` to the new language code:
 `lang="en";i18next-conv --compatibilityJSON v4 -l $lang -s ./src/locales/${lang}/translation.po -t ./src/locales/${lang}/translation.json`
 
+- Open `/src/i18n.js` and add the new language to `resources` object in `init` options by importing the JSON translation output.
+
 ## Available Scripts
 
 In the project directory, you can run:
