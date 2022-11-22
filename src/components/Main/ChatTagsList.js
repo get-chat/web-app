@@ -14,20 +14,26 @@ import LabelIcon from '@material-ui/icons/Label';
 import { getHubURL } from '../../helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '../../contexts/AppConfig';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilterTag } from '../../store/reducers/filterTagReducer';
 
 function ChatTagsList(props) {
 	const config = React.useContext(AppConfig);
 
+	const tags = useSelector((state) => state.tags.value);
+
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(false);
+
+	const dispatch = useDispatch();
 
 	const close = () => {
 		props.setOpen(false);
 	};
 
 	const handleClick = (tag) => {
-		props.setFilterTag(tag);
+		dispatch(setFilterTag(tag));
 		close();
 	};
 
@@ -37,11 +43,11 @@ function ChatTagsList(props) {
 			<DialogContent className="chatTagsListWrapper">
 				<div className="mb-3">{t('You can filter chats by tags.')}</div>
 
-				{props.tags && (
+				{tags && (
 					<div className="chatTagsList">
-						{props.tags.length > 0 ? (
+						{tags.length > 0 ? (
 							<div>
-								{props.tags.map((tag) => (
+								{tags.map((tag) => (
 									<ListItem
 										key={tag.id}
 										button

@@ -6,7 +6,8 @@
 	"cleared assigned user": "",
 	"cleared assigned group": "",
 	"There is no phone number": "",
-	"%d more phone number(s)": "",
+	"%d more phone number_one": "%d more phone number",
+	"%d more phone number_other": "%d more phone numbers",
 	"Choose a phone number": "",
 	"New chat": "",
 	"Start a chat with a phone number": "",
@@ -145,7 +146,9 @@
 	"Last attempt at: <1></1>": "",
 	"New messages": "",
 	"You have new messages!": "",
-	"Clear filter: <1>%s</1>": "",
+	"Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)_one": "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)",
+	"Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)_other": "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)",
+	"Click to clear filter": "",
 	"All": "",
 	"Me": "",
 	"Group": "",
@@ -185,7 +188,11 @@
 	"Please wait, as %s are being loaded...": "",
 	"Upload CSV": "",
 	"Next": "",
+	"Bulk send a template": "",
+	"Bulk send a voice message": "",
 	"Bulk send template with CSV": "",
 	"Please select up to %s direct recipients.": "",
-	"Please select tags that target up to %s recipients in total.": ""
+	"Please select tags that target up to %s recipients in total.": "",
+	"Search": "",
+	"Search for contacts": ""
 }

@@ -17,6 +17,7 @@ class ChatsResponse {
 			const prepared = new NewMessageModel(newWaId, newAmount);
 			newMessages[prepared.waId] = prepared;
 		});
+		this.count = data.count;
 		this.chats = chats;
 		this.newMessages = newMessages;
 	}

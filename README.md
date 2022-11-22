@@ -116,13 +116,16 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - Copy the main PO file `/src/locales/en/translation.po` into the new language directory and add the translations.
 
-- Run the following command by changing `en` to the new language code: `lang="en";i18next-conv -l $lang -s ./src/locales/${lang}/translation.po -t ./src/locales/${lang}/translation.json`
+- Run the following command by changing `en` to the new language code:
+`lang="en";i18next-conv --compatibilityJSON v4 -l $lang -s ./src/locales/${lang}/translation.po -t ./src/locales/${lang}/translation.json`
+
+- Open `/src/i18n.js` and add the new language to `resources` object in `init` options by importing the JSON translation output.
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `lang="en";i18next-conv -l $lang -s ./src/locales/${lang}/translation.po -t ./src/locales/${lang}/translation.json`
+### `lang="en";i18next-conv --compatibilityJSON v4 -l $lang -s ./src/locales/${lang}/translation.po -t ./src/locales/${lang}/translation.json`
 
 Converts the PO file to a JSON file. **Do not forget to specify the target language.**
 

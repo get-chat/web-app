@@ -28,19 +28,35 @@
 
 .sidebar__clearFilter {
 	display: flex;
+	flex-direction: column;
 	align-items: center;
-	padding: 15px 15px;
+	padding: 10px 15px;
 	background-color: var(--color-primary);
 	color: white;
-	cursor: pointer;
 	font-size: 16px;
 }
 
-.sidebar__clearFilter .MuiSvgIcon-root {
-	color: white !important;
-	margin-right: 10px;
+.sidebar__clearFilter__body {
+	font-size: 15px;
+	text-align: center;
+}
+
+.sidebar__clearFilter__body > .MuiSvgIcon-root {
 	height: 0.8em;
 	width: 0.8em;
+}
+
+.sidebar__clearFilter__clear {
+	background-color: white !important;
+	border-radius: 10px !important;
+	padding: 0 10px !important;
+	color: var(--color-primary) !important;
+}
+
+.sidebar__clearFilter__clear .MuiSvgIcon-root {
+	color: var(--color-primary) !important;
+	height: 0.6em;
+	width: 0.6em;
 }
 
 .sidebar__tabs {

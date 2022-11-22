@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
 	Avatar,
+	Button,
 	CircularProgress,
 	Divider,
 	Fade,
@@ -69,12 +70,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
 import { setTemplates } from '../../../store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
+import { setFilterTag } from '../../../store/reducers/filterTagReducer';
+import { setChatsCount } from '../../../store/reducers/chatsCountReducer';
+import ChatTag from '../../ChatTag';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
+	const tags = useSelector((state) => state.tags.value);
 	const currentUser = useSelector((state) => state.currentUser.value);
+	const filterTag = useSelector((state) => state.filterTag.value);
+	const chatsCount = useSelector((state) => state.chatsCount.value);
 
 	const { t } = useTranslation();
 
@@ -165,7 +172,7 @@ function Sidebar(props) {
 				);
 			}
 		};
-	}, [keyword, tabCase, props.filterTag]);
+	}, [keyword, tabCase, filterTag]);
 
 	useEffect(() => {
 		// New chatMessages
@@ -392,7 +399,7 @@ function Sidebar(props) {
 			clearTimeout(debounceTimer);
 			chatsContainerCopy.removeEventListener('scroll', handleScroll);
 		};
-	}, [props.chats, keyword, props.filterTag]);
+	}, [props.chats, keyword, filterTag]);
 
 	const search = async (_keyword) => {
 		setKeyword(_keyword);
@@ -418,6 +425,9 @@ function Sidebar(props) {
 			props.setLoadingNow('chats');
 		}
 
+		// Reset chats count
+		dispatch(setChatsCount(undefined));
+
 		if (replaceAll) {
 			setLoadingChats(true);
 		}
@@ -428,7 +438,7 @@ function Sidebar(props) {
 
 		apiService.listChatsCall(
 			keyword,
-			props.filterTag?.id,
+			filterTag?.id,
 			20,
 			offset,
 			assignedToMe,
@@ -436,6 +446,8 @@ function Sidebar(props) {
 			cancelTokenSource.token,
 			(response) => {
 				const chatsResponse = new ChatsResponse(response.data);
+
+				dispatch(setChatsCount(chatsResponse.count));
 
 				const preparedChats = chatsResponse.chats;
 
@@ -575,7 +587,7 @@ function Sidebar(props) {
 		apiService.listMessagesCall(
 			undefined,
 			keyword,
-			props.filterTag?.id,
+			filterTag?.id,
 			30,
 			undefined,
 			undefined,
@@ -637,7 +649,7 @@ function Sidebar(props) {
 	};
 
 	const clearFilter = () => {
-		props.setFilterTag(undefined);
+		dispatch(setFilterTag(undefined));
 	};
 
 	const cancelSelection = () => {
@@ -705,17 +717,32 @@ function Sidebar(props) {
 
 			<SearchBar onChange={(_keyword) => search(_keyword)} />
 
-			{props.filterTag && (
-				<div className="sidebar__clearFilter" onClick={clearFilter}>
-					<CloseIcon />
-					<Trans
-						values={{
-							postProcess: 'sprintf',
-							sprintf: [props.filterTag.name],
-						}}
+			{filterTag && (
+				<div className="sidebar__clearFilter">
+					<div className="sidebar__clearFilter__body mb-1">
+						<Trans
+							count={chatsCount ?? 0}
+							i18nKey="Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
+							values={{
+								postProcess: 'sprintf',
+								sprintf: {
+									tag: filterTag.name,
+									count: chatsCount ?? 0,
+								},
+							}}
+						>
+							Showing only: <ChatTag id={filterTag.id} />{' '}
+							<span className="bold">%(tag)s</span> (%(count)d chat)
+						</Trans>
+					</div>
+					<Button
+						className="sidebar__clearFilter__clear"
+						size="small"
+						startIcon={<CloseIcon />}
+						onClick={clearFilter}
 					>
-						Clear filter: <span className="bold ml-1">%s</span>
-					</Trans>
+						{t('Click to clear filter')}
+					</Button>
 				</div>
 			)}
 
@@ -762,11 +789,11 @@ function Sidebar(props) {
 			</div>
 
 			<div className="sidebar__results" ref={chatsContainer}>
-				{props.isSelectionModeEnabled && props.tags && <h3>Tags</h3>}
+				{props.isSelectionModeEnabled && tags && <h3>Tags</h3>}
 
-				{props.isSelectionModeEnabled && props.tags && (
+				{props.isSelectionModeEnabled && tags && (
 					<div>
-						{Object.entries(props.tags).map((tag) => (
+						{Object.entries(tags).map((tag) => (
 							<SelectableChatTag
 								key={tag[0]}
 								data={tag[1]}
@@ -950,13 +977,13 @@ function Sidebar(props) {
 				elevation={3}
 			>
 				<MenuItem onClick={showBulkSendTemplateDialog}>
-					{t(' Bulk send a template')}
+					{t('Bulk send a template')}
 				</MenuItem>
 				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
 					{t('Bulk send template with CSV')}
 				</MenuItem>*/}
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
-					{t(' Bulk send a voice message')}
+					{t('Bulk send a voice message')}
 				</MenuItem>
 			</Menu>
 
