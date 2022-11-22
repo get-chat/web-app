@@ -22,7 +22,7 @@ axios
 	.then((response) => {
 		const config = response.data;
 
-		// It is needed for ChatMessageModel
+		// TODO: Refactor global config
 		window.config = config;
 
 		// Init Sentry
