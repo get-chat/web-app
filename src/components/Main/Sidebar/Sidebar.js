@@ -721,14 +721,18 @@ function Sidebar(props) {
 				<div className="sidebar__clearFilter">
 					<div className="sidebar__clearFilter__body mb-1">
 						<Trans
+							count={chatsCount ?? 0}
+							i18nKey="Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
 							values={{
 								postProcess: 'sprintf',
-								sprintf: [filterTag.name, chatsCount ?? 0],
+								sprintf: {
+									tag: filterTag.name,
+									count: chatsCount ?? 0,
+								},
 							}}
 						>
-							Showing only:&nbsp;
-							<ChatTag id={filterTag.id} />
-							&nbsp;<span className="bold">%s</span>&nbsp;(%d chats)
+							Showing only: <ChatTag id={filterTag.id} />{' '}
+							<span className="bold">%(tag)s</span> (%(count)d chat)
 						</Trans>
 					</div>
 					<Button

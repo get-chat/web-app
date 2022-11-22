@@ -3,107 +3,107 @@ msgstr ""
 "Project-Id-Version: get.chat 1.0\n"
 "Report-Msgid-Bugs-To: support@get.chat \n"
 "Last-Translator: Berkay AKIN <berkay@get.chat>\n"
-"Language: en\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "<0>%s</0> has changed chat assignments."
-msgstr ""
+msgstr "<0>%s</0>, sohbet atamalarını değiştirdi."
 
 msgid "Chat assignments were changed."
-msgstr ""
+msgstr "Sohbet atamaları değiştirildi."
 
 msgid "assigned to user: <1>%s</1>"
-msgstr ""
+msgstr "kullanıcıya atandı: <1>%s</1>"
 
 msgid "assigned to group: <1>%s</1>"
-msgstr ""
+msgstr "gruba atandı: <1>%s</1>"
 
 msgid "cleared assigned user"
-msgstr ""
+msgstr "atanmış kullanıcı temizlendi"
 
 msgid "cleared assigned group"
-msgstr ""
+msgstr "atanmış grup temizlendi"
 
 msgid "There is no phone number"
-msgstr ""
+msgstr "Telefon numarası yok"
 
 msgid "%d more phone number(s)"
 msgstr ""
 
 msgid "Choose a phone number"
-msgstr ""
+msgstr "Bir telefon numarası seçin"
 
 msgid "New chat"
-msgstr ""
+msgstr "Yeni sohbet"
 
 msgid "Start a chat with a phone number"
-msgstr ""
+msgstr "Telefon numarası ile sohbet başlat"
 
 msgid "Start"
-msgstr ""
+msgstr "Başlat"
 
 msgid "Persons"
-msgstr ""
+msgstr "Kişiler"
 
 msgid "Contacts"
-msgstr ""
+msgstr "Kontaklar"
 
 msgid "No persons or contacts found for <1>%s</1>"
 msgstr ""
 
 msgid "Unsupported file type"
-msgstr ""
+msgstr "Desteklenmeyen dosya türü"
 
 msgid "Close"
-msgstr ""
+msgstr "Kapat"
 
 msgid "Download"
-msgstr ""
+msgstr "İndir"
 
 msgid "Only admins and users can access to our web app."
-msgstr ""
+msgstr "Yalnızca adminler ve kullanıcılar web uygulamamızı kullanabilir."
 
 msgid "You are not logged in."
-msgstr ""
+msgstr "Giriş yapmadın."
 
 msgid "Invalid token."
-msgstr ""
+msgstr "Geçersiz oturum."
 
 msgid "Incorrect username or password."
-msgstr ""
+msgstr "Geçersiz kullanıcı adı veya şifre."
 
 msgid "An error has occurred. Please try again later."
-msgstr ""
+msgstr "Bir hata oluştur. Lütfen daha sonra tekrar dene."
 
 msgid "Username"
-msgstr ""
+msgstr "Kullanıcı Adı"
 
 msgid "Password"
-msgstr ""
+msgstr "Şifre"
 
 msgid "Log in"
-msgstr ""
+msgstr "Giriş Yap"
 
 msgid "Welcome"
-msgstr ""
+msgstr "Hoş geldin"
 
 msgid "We are validating your session, please wait."
-msgstr ""
+msgstr "Oturumunu doğruluyoruz, lütfen bekle."
 
 msgid "Please login to start"
-msgstr ""
+msgstr "Lütfen başlamak için giriş yap"
 
 msgid "Search for messages"
-msgstr ""
+msgstr "Mesajlarda ara"
 
 msgid "This chat could not be assigned as its assignments have been changed by another user recently."
 msgstr ""
 
 msgid "This contact has no phone number."
-msgstr ""
+msgstr "Bu kontak bir telefon numarasına sahip değil."
 
 msgid "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment."
 msgstr ""
@@ -112,28 +112,28 @@ msgid "You can assign this chat to a user or a group."
 msgstr ""
 
 msgid "Unassigned"
-msgstr ""
+msgstr "Atanmamış"
 
 msgid "Update"
-msgstr ""
+msgstr "Güncelle"
 
 msgid "Chat tags"
-msgstr ""
+msgstr "Sohbet etiketleri"
 
 msgid "You can add or remove tags for this chat."
-msgstr ""
+msgstr "Bu sohbet için etiket ekleyebilir veya çıkarabilirsin."
 
 msgid "Current tags"
-msgstr ""
+msgstr "Seçili etiketler"
 
 msgid "Empty"
-msgstr ""
+msgstr "Boş"
 
 msgid "Manage tags"
-msgstr ""
+msgstr "Etiketleri yönet"
 
 msgid "Tags"
-msgstr ""
+msgstr "Etiketler"
 
 msgid "You can filter chats by tags."
 msgstr ""
@@ -157,13 +157,13 @@ msgid "Assigned group: <1>%s</1>"
 msgstr ""
 
 msgid "Phone number"
-msgstr ""
+msgstr "Telefon numarası"
 
 msgid "E-mail"
-msgstr ""
+msgstr "E-posta"
 
 msgid "Loading: %s"
-msgstr ""
+msgstr "Yükleniyor: %s"
 
 msgid "Contact us"
 msgstr ""
@@ -187,64 +187,64 @@ msgid "Deleted response successfully!"
 msgstr ""
 
 msgid "Hey"
-msgstr ""
+msgstr "Hey"
 
 msgid "Choose a contact to start a conversation"
-msgstr ""
+msgstr "Sohbet başlatmak için bir kontak seç"
 
 msgid "Inactive"
-msgstr ""
+msgstr "İnaktif"
 
 msgid "Failed to send some messages!"
-msgstr ""
+msgstr "Bazı mesajlar gönderilemedi!"
 
 msgid "Assign chat"
-msgstr ""
+msgstr "Sohbeti ata"
 
 msgid "Change tags"
-msgstr ""
+msgstr "Etiketleri değiştir"
 
 msgid "Toggle assignment and tagging history"
 msgstr ""
 
 msgid "Preview"
-msgstr ""
+msgstr "Önizleme"
 
 msgid "Add a caption..."
-msgstr ""
+msgstr "Bir başlık ekle..."
 
 msgid "Add more"
-msgstr ""
+msgstr "Daha fazla ekle"
 
 msgid "Drag and drop here"
-msgstr ""
+msgstr "Sürükle ve buraya bırak"
 
 msgid "No response message have been saved yet."
 msgstr ""
 
 msgid "Send"
-msgstr ""
+msgstr "Gönder"
 
 msgid "Oops!"
-msgstr ""
+msgstr "Ups!"
 
 msgid "Are you sure you want to delete this saved response?"
 msgstr ""
 
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 msgid "No"
-msgstr ""
+msgstr "Hayır"
 
 msgid "This chat has expired. You need to answer with template messages."
-msgstr ""
+msgstr "Bu sohbetin süresi doldu! Bir taslak mesajıyla yanıt vermelisin."
 
 msgid "Type a message"
-msgstr ""
+msgstr "Bir mesaj yaz"
 
 msgid "Send a message"
-msgstr ""
+msgstr "Bir mesaj gönder"
 
 msgid "You must grant microphone permission."
 msgstr ""
@@ -259,10 +259,10 @@ msgid "Go to inbox"
 msgstr ""
 
 msgid "Forwarded"
-msgstr ""
+msgstr "Yönlendirildi"
 
 msgid "Document"
-msgstr ""
+msgstr "Döküman"
 
 msgid "Save this response"
 msgstr ""
@@ -280,25 +280,25 @@ msgid "Interactive message:"
 msgstr ""
 
 msgid "Image"
-msgstr ""
+msgstr "Görsel"
 
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 msgid "Voice"
-msgstr ""
+msgstr "Ses Kaydı"
 
 msgid "Audio"
-msgstr ""
+msgstr "Ses"
 
 msgid "Sticker"
-msgstr ""
+msgstr "Çıkartma"
 
 msgid "Template"
-msgstr ""
+msgstr "Taslak"
 
 msgid "Interactive"
-msgstr ""
+msgstr "İnteraktif"
 
 msgid "<0>%(username)s</0> has added tag: <4>%(tag)s</4>."
 msgstr ""
@@ -313,13 +313,13 @@ msgid "A tag was removed: <3>%(tag)s</3>."
 msgstr ""
 
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
 msgid "Bulk send"
-msgstr ""
+msgstr "Toplu gönder"
 
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
 msgstr ""
@@ -379,61 +379,61 @@ msgid "Other"
 msgstr ""
 
 msgid "Personal Profile"
-msgstr ""
+msgstr "Kişisel Profil"
 
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 msgid "Change password"
-msgstr ""
+msgstr "Şifreni değiştir"
 
 msgid "Business Profile"
-msgstr ""
+msgstr "İş Profili"
 
 msgid "Loading"
-msgstr ""
+msgstr "Yükleniyor"
 
 msgid "About"
-msgstr ""
+msgstr "Hakkında"
 
 msgid "Address"
-msgstr ""
+msgstr "Adres"
 
 msgid "Description"
-msgstr ""
+msgstr "Tanım"
 
 msgid "None"
-msgstr ""
+msgstr "Hiçbiri"
 
 msgid "Vertical"
-msgstr ""
+msgstr "Dikey"
 
 msgid "You must fill all fields!"
-msgstr ""
+msgstr "Tüm alanları doldurmalısın!"
 
 msgid "Passwords must match!"
-msgstr ""
+msgstr "Şifreler uyuşmalı!"
 
 msgid "Changed password successfully"
-msgstr ""
+msgstr "Şifre başarıyla değiştirildi"
 
 msgid "Current password"
-msgstr ""
+msgstr "Mevcut şifre"
 
 msgid "New password"
-msgstr ""
+msgstr "Yeni şifre"
 
 msgid "New password (repeat)"
-msgstr ""
+msgstr "Yeni şifre (tekrar)"
 
 msgid "Error"
-msgstr ""
+msgstr "Hata"
 
 msgid "Success"
-msgstr ""
+msgstr "Başarılı"
 
 msgid "Change"
-msgstr ""
+msgstr "Değiştir"
 
 msgid "Click to retry."
 msgstr ""
@@ -449,74 +449,74 @@ msgstr ""
 
 msgid "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
 msgid_plural "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
-msgstr[0] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
-msgstr[1] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
+msgstr[0] "Yalnızca gösterilen: <1></1> <3>%(tag)s</3> (%(count)d sohbet)"
+msgstr[1] "Yalnızca gösterilen: <1></1> <3>%(tag)s</3> (%(count)d sohbetler)"
 
 msgid "Click to clear filter"
-msgstr ""
+msgstr "Filtreyi kaldırmak için tıkla"
 
 msgid "All"
-msgstr ""
+msgstr "Hepsi"
 
 msgid "Me"
-msgstr ""
+msgstr "Ben"
 
 msgid "Group"
-msgstr ""
+msgstr "Grup"
 
 msgid "Messages"
-msgstr ""
+msgstr "Mesajlar"
 
 msgid "Refresh"
-msgstr ""
+msgstr "Yenile"
 
 msgid "Refresh contacts"
-msgstr ""
+msgstr "Kontakları yenile"
 
 msgid "Admin panel"
-msgstr ""
+msgstr "Admin paneli"
 
 msgid "Settings (App Only)"
-msgstr ""
+msgstr "Ayarlar (Uygulama)"
 
 msgid "Logout"
-msgstr ""
+msgstr "Çıkış"
 
 msgid "%d new messages"
-msgstr ""
+msgstr "%d yeni mesaj"
 
 msgid "%s left"
-msgstr ""
+msgstr "%s kaldı"
 
 msgid "Status"
-msgstr ""
+msgstr "Durum"
 
 msgid "Uploading a media file. Please wait..."
-msgstr ""
+msgstr "Bir medya dosyası yükleniyor. Lütfen bekle..."
 
 msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
 msgstr ""
 
 msgid "Recipient: <1>%s</1>"
-msgstr ""
+msgstr "Alıcı: <1>%s</1>"
 
 msgid "Message: <1>%s</1>"
-msgstr ""
+msgstr "Mesaj: <1>%s</1>"
 
 msgid "Notifications"
-msgstr ""
+msgstr "Bildirimler"
 
 msgid "You have no notifications"
-msgstr ""
+msgstr "Hiç bildirimin yok"
 
 msgid "Options"
-msgstr ""
+msgstr "Seçenekler"
 
 msgid "Location"
-msgstr ""
+msgstr "Lokasyon"
 
 msgid "Location: <1>%s</1>"
-msgstr ""
+msgstr "Lokasyon: <1>%s</1>"
 
 msgid "<0>Product retailer ID<0>: %s"
 msgstr ""
@@ -546,31 +546,31 @@ msgid "Enter a link to file"
 msgstr ""
 
 msgid "Link to file"
-msgstr ""
+msgstr "Dosya bağlantısı"
 
 msgid "Upload a file"
-msgstr ""
+msgstr "Bir dosya yükle"
 
 msgid "Enter a link to file instead"
-msgstr ""
+msgstr "Bunun yerine dosya bağlantısı ekle"
 
 msgid "Upload a file instead"
-msgstr ""
+msgstr "Bunun yerine dosya yükle"
 
 msgid "Type: %s"
 msgstr ""
 
 msgid "Retry"
-msgstr ""
+msgstr "Tekrar dene"
 
 msgid "Please wait, as %s are being loaded..."
 msgstr ""
 
 msgid "Upload CSV"
-msgstr ""
+msgstr "CSV Yükle"
 
 msgid "Next"
-msgstr ""
+msgstr "Sıradaki"
 
 msgid "Bulk send template with CSV"
 msgstr ""
@@ -582,7 +582,7 @@ msgid "Please select tags that target up to %s recipients in total."
 msgstr ""
 
 msgid "Search"
-msgstr ""
+msgstr "Ara"
 
 msgid "Search for contacts"
-msgstr ""
+msgstr "Kontaklarda ara"

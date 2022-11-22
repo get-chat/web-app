@@ -210,7 +210,7 @@ function Contacts(props) {
 			</div>
 
 			<SearchBar
-				placeholder="Search for contacts"
+				placeholder={t('Search for contacts')}
 				onChange={setKeyword}
 				isLoading={isLoading}
 			/>
