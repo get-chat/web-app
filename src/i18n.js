@@ -22,9 +22,9 @@ i18n
 	// init i18next
 	// for all options read: https://www.i18next.com/overview/configuration-options
 	.init({
-		// lng: 'en',
+		lng: 'en',
 		fallbackLng: 'en',
-		compatibilityJSON: 'v3',
+		compatibilityJSON: 'v4',
 		debug: false,
 		overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
 		keySeparator: false,

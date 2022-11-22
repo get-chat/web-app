@@ -218,7 +218,7 @@ function Contacts(props) {
 			<div className="contacts__body">
 				{getObjLength(persons) > 0 && (
 					<div className="contacts__body__headerWrapper">
-						<h3>{'Persons'}</h3>
+						<h3>{t('Persons')}</h3>
 						<IconButton
 							onClick={() => setPersonsVisible((prevState) => !prevState)}
 						>
@@ -241,7 +241,7 @@ function Contacts(props) {
 
 				{getObjLength(contacts) > 0 && (
 					<div className="contacts__body__headerWrapper">
-						<h3>{'Contacts'}</h3>
+						<h3>{t('Contacts')}</h3>
 						<IconButton
 							onClick={() => setContactsVisible((prevState) => !prevState)}
 						>

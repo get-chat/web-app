@@ -449,8 +449,8 @@ msgstr ""
 
 msgid "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
 msgid_plural "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
-msgstr[0] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
-msgstr[1] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Click to clear filter"
 msgstr ""
