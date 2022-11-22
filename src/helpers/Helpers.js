@@ -2,6 +2,10 @@ import dompurify from 'dompurify';
 import { getObjLength } from './ObjectHelper';
 import htmlToFormattedText from 'html-to-formatted-text';
 
+export const isString = (anyVar) => {
+	return typeof anyVar === 'string';
+};
+
 export const isEmptyString = (str) => {
 	return !str || str.length === 0;
 };
