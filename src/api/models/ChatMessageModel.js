@@ -1,4 +1,5 @@
 import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
+import globalConfig from 'react-global-configuration';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -212,7 +213,7 @@ export class ChatMessageModel {
 	}
 
 	generateMediaLink(id) {
-		return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
+		return id ? `${globalConfig.get()?.API_BASE_URL}media/${id}` : undefined;
 	}
 
 	generateImageLink(includeTemplateHeader) {

@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
+import globalConfig from 'react-global-configuration';
 
 function ChatMessageLocation(props) {
-	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${window.config.APP_GOOGLE_MAPS_API_KEY}&&q=${props.data.location?.latitude},${props.data.location?.longitude}&q=`;
+	const googleMapsApiKey = useMemo(() => {
+		return globalConfig.get()?.APP_GOOGLE_MAPS_API_KEY;
+	}, []);
+
+	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${googleMapsApiKey}&&q=${props.data.location?.latitude},${props.data.location?.longitude}&q=`;
 	const mapURL = `https://www.google.com/maps/place/${props.data.location?.latitude},${props.data.location?.longitude}`;
 
 	const share = async () => {
