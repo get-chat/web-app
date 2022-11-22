@@ -2,8 +2,11 @@ import React from 'react';
 import { SearchOutlined } from '@material-ui/icons';
 import '../styles/SearchBar.css';
 import { CircularProgress } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
 
 function SearchBar(props) {
+	const { t } = useTranslation();
+
 	const handleChange = (event) => {
 		props.onChange(event.target.value);
 	};
@@ -18,7 +21,7 @@ function SearchBar(props) {
 				)}
 
 				<input
-					placeholder={props.placeholder ?? 'Search'}
+					placeholder={props.placeholder ?? t('Search')}
 					type="text"
 					onChange={handleChange}
 				/>

@@ -16,16 +16,18 @@ import LabelIcon from '@material-ui/icons/Label';
 import { useTranslation } from 'react-i18next';
 import style from './StepSelectPrimaryKey.module.css';
 import { findTagByName } from '../../../../helpers/TagHelper';
+import { useSelector } from 'react-redux';
 
 const StepSelectPrimaryKey = ({
 	csvHeader,
 	csvData,
-	tags,
 	primaryKeyColumn,
 	setPrimaryKeyColumn,
 	primaryKeyType,
 	setPrimaryKeyType,
 }) => {
+	const tags = useSelector((state) => state.tags.value);
+
 	const { t } = useTranslation();
 
 	const prepareRecipientsPreview = () => {
