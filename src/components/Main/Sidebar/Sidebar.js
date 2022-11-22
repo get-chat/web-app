@@ -977,13 +977,13 @@ function Sidebar(props) {
 				elevation={3}
 			>
 				<MenuItem onClick={showBulkSendTemplateDialog}>
-					{t(' Bulk send a template')}
+					{t('Bulk send a template')}
 				</MenuItem>
 				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
 					{t('Bulk send template with CSV')}
 				</MenuItem>*/}
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
-					{t(' Bulk send a voice message')}
+					{t('Bulk send a voice message')}
 				</MenuItem>
 			</Menu>
 

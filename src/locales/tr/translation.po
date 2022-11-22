@@ -98,7 +98,7 @@ msgstr "Oturumunu doğruluyoruz, lütfen bekle."
 msgid "Please login to start"
 msgstr "Lütfen başlamak için giriş yap"
 
-msgid "Search for messages"
+msgid "Search For Messages"
 msgstr "Mesajlarda ara"
 
 msgid "This chat could not be assigned as its assignments have been changed by another user recently."
@@ -533,19 +533,19 @@ msgid "<0>Price</0>: %d %s"
 msgstr ""
 
 msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
-msgstr ""
+msgstr "Profil fotoğrafınız, WhatsApp'ta burada göründüğünden daha yüksek çözünürlüktedir."
 
 msgid "Copied!"
-msgstr ""
+msgstr "Kopyalandı!"
 
 msgid "Missing parameters"
-msgstr ""
+msgstr "Eksik parametre"
 
 msgid "You need to fill the parameters!"
-msgstr ""
+msgstr "Parametreleri girmelisin!"
 
 msgid "Enter a link to file"
-msgstr ""
+msgstr "Bir dosya bağlantısı gir"
 
 msgid "Link to file"
 msgstr "Dosya bağlantısı"
@@ -560,13 +560,13 @@ msgid "Upload a file instead"
 msgstr "Bunun yerine dosya yükle"
 
 msgid "Type: %s"
-msgstr ""
+msgstr "Tür: %s"
 
 msgid "Retry"
 msgstr "Tekrar dene"
 
 msgid "Please wait, as %s are being loaded..."
-msgstr ""
+msgstr "Lütfen bekle, %s yükleniyor..."
 
 msgid "Upload CSV"
 msgstr "CSV Yükle"
@@ -574,14 +574,20 @@ msgstr "CSV Yükle"
 msgid "Next"
 msgstr "Sıradaki"
 
+msgid "Bulk send a template"
+msgstr "Taslağı toplu gönder"
+
+msgid "Bulk send a voice message"
+msgstr "Sesli mesajı toplu gönder"
+
 msgid "Bulk send template with CSV"
-msgstr ""
+msgstr "CSV ile toplu gönder"
 
 msgid "Please select up to %s direct recipients."
-msgstr ""
+msgstr "Lütfen %s direk alıcıya kadar seçim yap."
 
 msgid "Please select tags that target up to %s recipients in total."
-msgstr ""
+msgstr "Lütfen toplamda en fazla %s alıcıyı hedefleyen etiketler seç."
 
 msgid "Search"
 msgstr "Ara"

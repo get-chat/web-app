@@ -98,7 +98,7 @@ msgstr ""
 msgid "Please login to start"
 msgstr ""
 
-msgid "Search for messages"
+msgid "Search For Messages"
 msgstr ""
 
 msgid "This chat could not be assigned as its assignments have been changed by another user recently."
@@ -572,6 +572,12 @@ msgid "Upload CSV"
 msgstr ""
 
 msgid "Next"
+msgstr ""
+
+msgid "Bulk send a template"
+msgstr ""
+
+msgid "Bulk send a voice message"
 msgstr ""
 
 msgid "Bulk send template with CSV"
