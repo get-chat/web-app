@@ -114,7 +114,12 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 	return preparedParams;
 };
 
-export const generateFinalTemplateParams = (template, params, onError) => {
+export const generateFinalTemplateParams = (
+	template,
+	params,
+	checkInvalidParams,
+	onError
+) => {
 	const preparedParams = {};
 	const components = { ...template.components };
 
@@ -151,9 +156,11 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 						throw BreakException;
 					}
 
-					// Check new lines, tab and 4 consecutive spaces
-					if (/[\r\n\t]/.exec(paramText) || paramText?.match('\\s{4}')) {
-						throw InvalidTemplateParamException;
+					if (checkInvalidParams) {
+						// Check new lines, tab and 4 consecutive spaces
+						if (/[\r\n\t]/.exec(paramText) || paramText?.match('\\s{4}')) {
+							throw InvalidTemplateParamException;
+						}
 					}
 				});
 

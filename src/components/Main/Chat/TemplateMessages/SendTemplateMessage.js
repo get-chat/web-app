@@ -78,6 +78,7 @@ function SendTemplateMessage({
 		const preparedParams = generateFinalTemplateParams(
 			template,
 			params,
+			true,
 			(error) => {
 				if (error === BreakException) {
 					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
