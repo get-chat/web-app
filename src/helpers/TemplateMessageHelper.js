@@ -151,8 +151,8 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 						throw BreakException;
 					}
 
-					// Check new lines
-					if (/[\r\n]/.exec(paramText)) {
+					// Check new lines, tab and 4 consecutive spaces
+					if (/[\r\n\t]/.exec(paramText) || paramText?.match('\\s{4}')) {
 						throw InvalidTemplateParamException;
 					}
 				});
