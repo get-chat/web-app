@@ -160,8 +160,6 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 					});
 				});*/
 
-				const paramsArrayCopy = [...paramsArray];
-
 				preparedParams[component.type] = {
 					type: component.type.toLowerCase(),
 					parameters: paramsArray,
