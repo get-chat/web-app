@@ -1,3 +1,5 @@
+// noinspection JSDeprecatedSymbols
+
 import { isEmptyString } from './Helpers';
 import { BreakException } from '../Constants';
 
@@ -125,8 +127,20 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 			if (params[key]) {
 				const paramsArray = Object.values(params[key]);
 
-				// Check if has empty params and throw BreakException if found
+				// Check if it has empty params and throw BreakException if found
 				paramsArray.forEach((param) => {
+					// Trim spaces
+					if (param.text) {
+						param.text = param.text?.trim();
+					} else if (param.image?.link) {
+						param.image.link = param.image.link.trim();
+					} else if (param.video?.link) {
+						param.video.link = param.video.link.trim();
+					} else if (param.document?.link) {
+						param.document.link = param.document.link.trim();
+					}
+
+					// Check if param is empty
 					if (
 						isEmptyString(
 							param.text ??
@@ -145,6 +159,8 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 						default: paramArrayItem.text,
 					});
 				});*/
+
+				const paramsArrayCopy = [...paramsArray];
 
 				preparedParams[component.type] = {
 					type: component.type.toLowerCase(),
