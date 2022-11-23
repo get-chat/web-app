@@ -91,7 +91,9 @@ function SendTemplateMessage({
 					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
 						{
 							title: t('Invalid parameters'),
-							details: t('At least one of the parameters is invalid!'),
+							details: t(
+								'Parameters cannot have new-line/tab characters or more than 4 consecutive spaces!'
+							),
 						},
 					]);
 					hasError = true;
