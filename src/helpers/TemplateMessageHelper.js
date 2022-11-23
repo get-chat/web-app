@@ -1,7 +1,7 @@
 // noinspection JSDeprecatedSymbols
 
 import { isEmptyString } from './Helpers';
-import { BreakException } from '../Constants';
+import { BreakException, InvalidTemplateParamException } from '../Constants';
 
 export const getTemplateParams = (text) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
@@ -140,16 +140,20 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 						param.document.link = param.document.link.trim();
 					}
 
+					const paramText =
+						param.text ??
+						param.image?.link ??
+						param.video?.link ??
+						param.document?.link;
+
 					// Check if param is empty
-					if (
-						isEmptyString(
-							param.text ??
-								param.image?.link ??
-								param.video?.link ??
-								param.document?.link
-						)
-					) {
+					if (isEmptyString(paramText)) {
 						throw BreakException;
+					}
+
+					// Check new lines
+					if (/[\r\n]/.exec(paramText)) {
+						throw InvalidTemplateParamException;
 					}
 				});
 

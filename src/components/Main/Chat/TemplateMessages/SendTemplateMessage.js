@@ -16,6 +16,7 @@ import PubSub from 'pubsub-js';
 import {
 	BreakException,
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
+	InvalidTemplateParamException,
 } from '../../../../Constants';
 import PublishIcon from '@material-ui/icons/Publish';
 import LinkIcon from '@material-ui/icons/Link';
@@ -85,11 +86,20 @@ function SendTemplateMessage({
 							details: t('You need to fill the parameters!'),
 						},
 					]);
-					setSending(false);
+					hasError = true;
+				} else if (error === InvalidTemplateParamException) {
+					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+						{
+							title: t('Invalid parameters'),
+							details: t('At least one of the parameters is invalid!'),
+						},
+					]);
 					hasError = true;
 				} else {
 					throw error;
 				}
+
+				setSending(false);
 			}
 		);
 
