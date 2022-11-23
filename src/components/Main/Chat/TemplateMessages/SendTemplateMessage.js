@@ -92,7 +92,7 @@ function SendTemplateMessage({
 						{
 							title: t('Invalid parameters'),
 							details: t(
-								'Parameters cannot have new-line/tab characters or more than 4 consecutive spaces!'
+								'Parameters cannot have new-line/tab characters or more than 3 consecutive spaces!'
 							),
 						},
 					]);
