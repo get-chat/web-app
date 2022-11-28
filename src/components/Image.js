@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { binaryToBase64 } from '../helpers/ImageHelper';
 import { isEmptyString } from '../helpers/Helpers';
 import { EMPTY_IMAGE_BASE64 } from '../Constants';
+import { generateCancelToken } from '../helpers/ApiHelper';
 
 const Image = ({
 	src,
@@ -17,10 +18,16 @@ const Image = ({
 	const [data, setData] = useState('');
 	const [mime, setMime] = useState('');
 
+	const cancelTokenSourceRef = useRef();
+
 	useEffect(() => {
+		// Generate a token
+		cancelTokenSourceRef.current = generateCancelToken();
+
 		axios
 			.get(src, {
 				responseType: 'arraybuffer',
+				cancelToken: cancelTokenSourceRef.current.token,
 			})
 			.then((res) => {
 				const mimetype = res.headers['content-type'];
@@ -32,6 +39,11 @@ const Image = ({
 			.catch((error) => {
 				console.log(error);
 			});
+
+		return () => {
+			// Cancelling ongoing requests
+			cancelTokenSourceRef.current.cancel();
+		};
 	}, [src]);
 
 	const getSrc = () => {
