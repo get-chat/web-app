@@ -130,7 +130,9 @@ export const generateFinalTemplateParams = (
 			const component = paramEntry[1];
 
 			if (params[key]) {
-				const paramsArray = Object.values(params[key]);
+				const paramsArray = [
+					...JSON.parse(JSON.stringify(Object.values(params[key]))),
+				];
 
 				// Check if it has empty params and throw BreakException if found
 				paramsArray.forEach((param) => {
