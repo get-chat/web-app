@@ -67,11 +67,7 @@ function SendTemplateMessage({
 	const updateParam = (event, index, paramKey) => {
 		setParams((prevState) => {
 			const nextState = prevState;
-			// Replace new lines with spaces and store in state
-			nextState[index][paramKey].text = event.target.value.replace(
-				/[\r\n]/g,
-				' '
-			);
+			nextState[index][paramKey].text = event.target.value;
 
 			return { ...nextState };
 		});

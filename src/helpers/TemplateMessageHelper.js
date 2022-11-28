@@ -136,7 +136,9 @@ export const generateFinalTemplateParams = (
 				paramsArray.forEach((param) => {
 					// Trim spaces
 					if (param.text) {
-						param.text = param.text?.trim();
+						// Trim spaces in every line and replace new lines with spaces
+						const textParamArray = param.text?.split(/\r?\n/);
+						param.text = textParamArray?.map((s) => s.trim())?.join(' ');
 					} else if (param.image?.link) {
 						param.image.link = param.image.link.trim();
 					} else if (param.video?.link) {
