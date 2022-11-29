@@ -32,7 +32,7 @@ import {
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '../../../Constants';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SearchBar from '../../SearchBar';
 import SidebarContactResult from './SidebarContactResult';
 import ChatModel from '../../../api/models/ChatModel';
@@ -103,12 +103,12 @@ function Sidebar(props) {
 
 	const [missingChats, setMissingChats] = useState([]);
 
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	const dispatch = useDispatch();
 
 	const logOut = () => {
-		clearUserSession(undefined, undefined, history);
+		clearUserSession(undefined, undefined, navigate);
 
 		// TODO: Consider calling it in clearUserSession method
 		dispatch(setCurrentUser({}));
@@ -539,7 +539,7 @@ function Sidebar(props) {
 					props.setInitialResourceFailed(true);
 				}
 			},
-			history
+			navigate
 		);
 	};
 
@@ -603,15 +603,16 @@ function Sidebar(props) {
 				setChatMessages(preparedMessages);
 			},
 			undefined,
-			history
+			navigate
 		);
 	};
 
 	const goToMessage = (chatMessage) => {
 		if (waId !== chatMessage.waId) {
-			history.push({
-				pathname: `/main/chat/${chatMessage.waId}`,
-				goToMessage: chatMessage,
+			navigate(`/main/chat/${chatMessage.waId}`, {
+				state: {
+					goToMessage: chatMessage,
+				},
 			});
 		} else {
 			PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, chatMessage);

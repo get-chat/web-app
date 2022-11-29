@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from './ChatMessage/ChatMessage';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
@@ -120,7 +120,7 @@ export default function Chat(props) {
 
 	const { waId } = useParams();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 	const location = useLocation();
 
 	const cancelTokenSourceRef = useRef();
@@ -1059,7 +1059,7 @@ export default function Chat(props) {
 					window.displayCustomError('Failed to load messages!');
 				}
 			},
-			history
+			navigate
 		);
 	};
 
@@ -1658,18 +1658,18 @@ export default function Chat(props) {
 			(error) => {
 				console.log(error);
 			},
-			history
+			navigate
 		);
 	};
 
 	const handleIfUnauthorized = (error) => {
 		if (error.response.status === 401) {
-			clearUserSession('invalidToken', undefined, history);
+			clearUserSession('invalidToken', undefined, navigate);
 		}
 	};
 
 	const closeChat = () => {
-		history.push('/main');
+		navigate('/main');
 	};
 
 	let lastPrintedDate;

@@ -38,13 +38,13 @@ export const getRequestConfig = (
 	return requestConfig;
 };
 
-export const handleIfUnauthorized = (error, history) => {
+export const handleIfUnauthorized = (error, navigate) => {
 	if (error?.response?.status === 401) {
-		clearUserSession('invalidToken', undefined, history);
+		clearUserSession('invalidToken', undefined, navigate);
 	}
 };
 
-export const clearUserSession = (errorCase, nextLocation, history) => {
+export const clearUserSession = (errorCase, nextLocation, navigate) => {
 	clearToken();
 	clearContactProvidersData();
 
@@ -56,11 +56,12 @@ export const clearUserSession = (errorCase, nextLocation, history) => {
 		path = '/';
 	}
 
-	if (history !== undefined) {
-		history.push({
-			pathname: path,
-			nextPath: nextLocation?.pathname,
-			search: nextLocation?.search,
+	if (navigate !== undefined) {
+		navigate(path, {
+			state: {
+				nextPath: nextLocation?.pathname,
+				search: nextLocation?.search,
+			},
 		});
 	}
 };

@@ -6,6 +6,8 @@ overrides:
 specifiers:
   '@cypress/react': ^7.0.1
   '@cypress/webpack-dev-server': ^3.1.0
+  '@emoji-mart/data': ^1.0.8
+  '@emoji-mart/react': ^1.0.1
   '@emotion/react': ^11.10.5
   '@emotion/styled': ^11.10.5
   '@mui/icons-material': ^5.10.16
@@ -62,6 +64,8 @@ specifiers:
   worker-loader: ^3.0.8
 
 dependencies:
+  '@emoji-mart/data': 1.0.8
+  '@emoji-mart/react': 1.0.1_flkxl6spvtjvsiujs6a55ujlt4
   '@emotion/react': 11.10.5_zavbqmrropwrojvx6ojaa4s7im
   '@emotion/styled': 11.10.5_6zylg4nrquqv5ym3qrguylbr3u
   '@mui/icons-material': 5.10.16_xutw6a5cgihjw5rn7pwgimhdum
@@ -1929,6 +1933,20 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@emoji-mart/data/1.0.8:
+    resolution: {integrity: sha512-AMpqLrR80dHfj8ZA6xaf8/t9reBy88vz07fBdwKVVoUX6X2Wi+R2p2uhIZFqNZe8zRd6kga3hKheqK+deElEZw==}
+    dev: false
+
+  /@emoji-mart/react/1.0.1_flkxl6spvtjvsiujs6a55ujlt4:
+    resolution: {integrity: sha512-ALhLD96BOL5w+a4NI5NpmfqfF1aVjjj2qJE0dLst/OhjBfVmpteWNgn/h8LZy9ulU6AnbeS+13KnPFzDjCvRRw==}
+    peerDependencies:
+      emoji-mart: ^5.2
+      react: ^16.8 || ^17 || ^18
+    dependencies:
+      emoji-mart: 5.3.3
+      react: 18.2.0
+    dev: false
 
   /@emotion/babel-plugin/11.10.5_@babel+core@7.20.5:
     resolution: {integrity: sha512-xE7/hyLHJac7D2Ve9dKroBBZqBT7WuPQmWcq7HSGb84sUuP4mlOWoB8dvVfD9yk5DHkU1m6RW7xSoDtnQHNQeA==}

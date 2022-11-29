@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Alert } from '@mui/lab';
 import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,7 @@ export default function Login(props) {
 	const [isValidatingToken, setValidatingToken] = useState(false);
 	const [loginError, setLoginError] = useState();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 	const location = useLocation();
 
 	useEffect(() => {
@@ -47,7 +47,7 @@ export default function Login(props) {
 			apiService.baseCall(
 				(response) => {
 					// Redirect to main route
-					history.push('/main');
+					navigate('/main');
 				},
 				(error) => {
 					setValidatingToken(false);
@@ -87,7 +87,7 @@ export default function Login(props) {
 				}
 
 				// Redirect to main route
-				history.push((location.nextPath ?? '/main') + (location.search ?? ''));
+				navigate((location.nextPath ?? '/main') + (location.search ?? ''));
 			},
 			(error) => {
 				// Hide the loading animation

@@ -133,13 +133,14 @@ function Contacts(props) {
 					response.data.contacts.length > 0 &&
 					response.data.contacts[0].status === 'valid'
 				) {
-					navigate({
-						pathname: `/main/chat/${waId}`,
-						person: {
-							name: data?.name,
-							initials: data?.initials,
-							avatar: data?.avatar,
-							waId: waId,
+					navigate(`/main/chat/${waId}`, {
+						state: {
+							person: {
+								name: data?.name,
+								initials: data?.initials,
+								avatar: data?.avatar,
+								waId: waId,
+							},
 						},
 					});
 

@@ -4,7 +4,7 @@ import Chat from './Chat/Chat';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios from 'axios';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
@@ -148,7 +148,7 @@ function Main() {
 
 	const [notificationHistory, setNotificationHistory] = useState({});
 
-	const history = useHistory();
+	const navigate = useNavigate();
 	const location = useLocation();
 	const query = useQuery();
 
@@ -259,7 +259,7 @@ function Main() {
 	};
 
 	const goToChatByWaId = (_waId) => {
-		history.push(`/main/chat/${_waId}`);
+		navigate(`/main/chat/${_waId}`);
 	};
 
 	const displayNotification = (title, body, chatWaId) => {
@@ -377,7 +377,7 @@ function Main() {
 		window.goToChatByWaId = goToChatByWaId;
 
 		if (!getToken()) {
-			clearUserSession('notLoggedIn', location, history);
+			clearUserSession('notLoggedIn', location, navigate);
 		}
 
 		// Retrieve current user, this will trigger other requests
@@ -820,11 +820,11 @@ function Main() {
 
 				// Only admins and users can access
 				if (role !== 'admin' && role !== 'user') {
-					clearUserSession('incorrectRole', location, history);
+					clearUserSession('incorrectRole', location, navigate);
 				}
 
 				setProgress(10);
-			}, history);
+			}, navigate);
 		} catch (error) {
 			console.error('Error retrieving current user', error);
 			setInitialResourceFailed(true);
