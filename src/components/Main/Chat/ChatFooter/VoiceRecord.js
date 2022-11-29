@@ -192,6 +192,7 @@ function VoiceRecord({
 			<IconButton
 				onClick={stopVoiceRecord}
 				className="voiceRecord__cancelButton"
+				size="large"
 			>
 				<CloseIcon />
 			</IconButton>
@@ -199,7 +200,11 @@ function VoiceRecord({
 			<FiberManualRecordIcon className="voiceRecord__recordIcon" />
 			<span className="voiceRecord__timer">{displaySeconds(timer)}</span>
 
-			<IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
+			<IconButton
+				onClick={sendVoiceRecord}
+				className="voiceRecord__sendButton"
+				size="large"
+			>
 				<DoneIcon />
 			</IconButton>
 

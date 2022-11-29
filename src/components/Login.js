@@ -127,6 +127,7 @@ export default function Login(props) {
 
 					<form onSubmit={doLogin}>
 						<TextField
+							variant="standard"
 							data-test-id="username"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
@@ -135,6 +136,7 @@ export default function Login(props) {
 							fullWidth={true}
 						/>
 						<TextField
+							variant="standard"
 							data-test-id="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}

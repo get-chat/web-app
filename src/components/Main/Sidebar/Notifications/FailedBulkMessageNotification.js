@@ -42,7 +42,12 @@ function FailedBulkMessageNotification(props) {
 					}}
 				>
 					Recipient:{' '}
-					<Link href="#" onClick={handleClick} className="bold">
+					<Link
+						href="#"
+						onClick={handleClick}
+						className="bold"
+						underline="hover"
+					>
 						%s
 					</Link>
 				</Trans>

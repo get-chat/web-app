@@ -23,10 +23,10 @@ import ContactModel from '../../api/models/ContactModel';
 import styles from './ContactsModal.module.css';
 
 const DialogHeader = ({ children, onClose, ...rest }) => (
-	<DialogTitle disableTypography className={styles.header} {...rest}>
+	<DialogTitle className={styles.header} {...rest}>
 		<Typography variant="h6">{children}</Typography>
 		{onClose && (
-			<IconButton aria-label="close" onClick={onClose}>
+			<IconButton aria-label="close" onClick={onClose} size="large">
 				<CloseIcon />
 			</IconButton>
 		)}

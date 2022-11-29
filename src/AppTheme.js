@@ -1,23 +1,25 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
 
-const AppTheme = createTheme({
-	palette: {
-		primary: {
-			main: '#65cbac',
+const AppTheme = createTheme(
+	adaptV4Theme({
+		palette: {
+			primary: {
+				main: '#65cbac',
+			},
+			secondary: {
+				main: '#E33E7F',
+			},
 		},
-		secondary: {
-			main: '#E33E7F',
+		typography: {
+			fontFamily: [
+				'Inter',
+				'Roboto',
+				'"Helvetica Neue"',
+				'Arial',
+				'sans-serif',
+			].join(','),
 		},
-	},
-	typography: {
-		fontFamily: [
-			'Inter',
-			'Roboto',
-			'"Helvetica Neue"',
-			'Arial',
-			'sans-serif',
-		].join(','),
-	},
-});
+	})
+);
 
 export default AppTheme;

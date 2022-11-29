@@ -74,6 +74,7 @@ function ChatTagsList(props) {
 					<Link
 						href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
 						target="_blank"
+						underline="hover"
 					>
 						{t('Manage tags')}
 					</Link>

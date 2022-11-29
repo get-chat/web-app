@@ -82,7 +82,7 @@ function Notifications(props) {
 	return (
 		<div className="notifications">
 			<div className="notifications__header">
-				<IconButton onClick={hideNotifications}>
+				<IconButton onClick={hideNotifications} size="large">
 					<CloseIcon />
 				</IconButton>
 

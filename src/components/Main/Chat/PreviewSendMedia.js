@@ -250,6 +250,7 @@ function PreviewSendMedia(props) {
 					chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO) && (
 					<div className="previewSendMedia__caption">
 						<TextField
+							variant="standard"
 							value={currentCaption}
 							onChange={(e) => setCurrentCaption(e.target.value)}
 							label={t('Add a caption...')}
@@ -303,6 +304,7 @@ function PreviewSendMedia(props) {
 								<IconButton
 									onClick={() => deleteByIndex(file[0])}
 									className="previewSendMedia__footer__thumbnail__delete"
+									size="large"
 								>
 									<CloseIcon />
 								</IconButton>
@@ -330,7 +332,11 @@ function PreviewSendMedia(props) {
 				</div>
 
 				<div className="previewSendMedia__footer__sendWrapper">
-					<IconButton className="previewSendMedia__footer__send" onClick={send}>
+					<IconButton
+						className="previewSendMedia__footer__send"
+						onClick={send}
+						size="large"
+					>
 						<Send />
 					</IconButton>
 				</div>

@@ -165,7 +165,7 @@ function Contacts(props) {
 	return (
 		<div className="contacts">
 			<div className="contacts__header">
-				<IconButton onClick={props.onHide}>
+				<IconButton onClick={props.onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 
@@ -191,6 +191,7 @@ function Contacts(props) {
 				{isPhoneNumberFormVisible && (
 					<div className="contacts__startByPhoneNumberWrapper__formWrapper">
 						<TextField
+							variant="standard"
 							label={t('Phone number')}
 							InputProps={{
 								startAdornment: (
@@ -222,6 +223,7 @@ function Contacts(props) {
 						<h3>{t('Persons')}</h3>
 						<IconButton
 							onClick={() => setPersonsVisible((prevState) => !prevState)}
+							size="large"
 						>
 							{isPersonsVisible ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>
@@ -245,6 +247,7 @@ function Contacts(props) {
 						<h3>{t('Contacts')}</h3>
 						<IconButton
 							onClick={() => setContactsVisible((prevState) => !prevState)}
+							size="large"
 						>
 							{isContactsVisible ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>

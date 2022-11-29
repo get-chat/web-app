@@ -88,7 +88,7 @@ function SearchMessage(props) {
 	return (
 		<div className="searchMessage">
 			<div className="searchMessage__header">
-				<IconButton onClick={hideSearchMessages}>
+				<IconButton onClick={hideSearchMessages} size="large">
 					<CloseIcon />
 				</IconButton>
 

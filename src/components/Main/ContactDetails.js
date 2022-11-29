@@ -46,7 +46,7 @@ function ContactDetails(props) {
 	return (
 		<div className="contactDetails">
 			<div className="contactDetails__header">
-				<IconButton onClick={hideContactDetails}>
+				<IconButton onClick={hideContactDetails} size="large">
 					<CloseIcon />
 				</IconButton>
 

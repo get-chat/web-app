@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from '@mui/styles';
+import { ThemeProvider, StyledEngineProvider } from '@mui/styles';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Login from './components/Login';
@@ -19,32 +19,34 @@ const App = ({ config, apiService }) => {
 
 	return (
 		<Provider store={store}>
-			<ThemeProvider theme={AppTheme}>
-				<div className={'app' + (isIPad13 ? ' absoluteFullscreen' : '')}>
-					<AppConfig.Provider value={config}>
-						<ApplicationContext.Provider
-							value={{
-								apiService,
-							}}
-						>
-							<Router>
-								<Routes>
-									{renderPaths(
-										[
-											'/main/chat/:waId',
-											'/main/chat/:waId/message/:msgId',
-											'/main',
-										],
-										<Main />
-									)}
+			<StyledEngineProvider injectFirst>
+				<ThemeProvider theme={AppTheme}>
+					<div className={'app' + (isIPad13 ? ' absoluteFullscreen' : '')}>
+						<AppConfig.Provider value={config}>
+							<ApplicationContext.Provider
+								value={{
+									apiService,
+								}}
+							>
+								<Router>
+									<Routes>
+										{renderPaths(
+											[
+												'/main/chat/:waId',
+												'/main/chat/:waId/message/:msgId',
+												'/main',
+											],
+											<Main />
+										)}
 
-									{renderPaths(['/login/error/:errorCase', '/'], <Login />)}
-								</Routes>
-							</Router>
-						</ApplicationContext.Provider>
-					</AppConfig.Provider>
-				</div>
-			</ThemeProvider>
+										{renderPaths(['/login/error/:errorCase', '/'], <Login />)}
+									</Routes>
+								</Router>
+							</ApplicationContext.Provider>
+						</AppConfig.Provider>
+					</div>
+				</ThemeProvider>
+			</StyledEngineProvider>
 		</Provider>
 	);
 };

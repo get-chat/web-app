@@ -82,6 +82,7 @@ function ChatHeader(props) {
 					<IconButton
 						className="chat__header__backButton"
 						onClick={props.closeChat}
+						size="large"
 					>
 						<ArrowBack />
 					</IconButton>
@@ -133,15 +134,15 @@ function ChatHeader(props) {
 			<div className="chat__headerRight">
 				{isMobileOnly && props.hasFailedMessages && (
 					<Tooltip title={t('Failed to send some messages!')}>
-						<IconButton onClick={props.closeChat}>
+						<IconButton onClick={props.closeChat} size="large">
 							<WarningIcon className="error" />
 						</IconButton>
 					</Tooltip>
 				)}
-				<IconButton onClick={showSearchMessages}>
+				<IconButton onClick={showSearchMessages} size="large">
 					<Search />
 				</IconButton>
-				<IconButton onClick={displayMenu}>
+				<IconButton onClick={displayMenu} size="large">
 					<MoreVert />
 				</IconButton>
 			</div>

@@ -253,6 +253,7 @@ function SendTemplateMessage({
 									{provideFileBy === FILE_PROVIDE_TYPE_FILE_URL && (
 										<div>
 											<TextField
+												variant="standard"
 												value={headerFileURL}
 												onChange={(event) =>
 													setHeaderFileURL(event.target.value)
@@ -282,6 +283,7 @@ function SendTemplateMessage({
 							<div>
 								{getTemplateParams(comp.text).map((param, paramIndex) => (
 									<TextField
+										variant="standard"
 										multiline
 										value={
 											params[compIndex]

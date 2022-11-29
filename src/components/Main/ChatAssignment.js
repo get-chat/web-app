@@ -138,9 +138,14 @@ function ChatAssignment(props) {
 					</DialogContentText>
 				)}
 
-				<FormControl fullWidth={true} disabled={isUnableToChange}>
+				<FormControl
+					variant="standard"
+					fullWidth={true}
+					disabled={isUnableToChange}
+				>
 					<InputLabel id="assign-user-select-label">User</InputLabel>
 					<Select
+						variant="standard"
 						labelId="assign-user-select-label"
 						id="assign-user-select"
 						value={tempAssignedToUser}
@@ -155,9 +160,14 @@ function ChatAssignment(props) {
 					</Select>
 				</FormControl>
 
-				<FormControl fullWidth={true} disabled={isUnableToChange}>
+				<FormControl
+					variant="standard"
+					fullWidth={true}
+					disabled={isUnableToChange}
+				>
 					<InputLabel id="assign-group-select-label">Group</InputLabel>
 					<Select
+						variant="standard"
 						labelId="assign-group-select-label"
 						id="assign-group-select"
 						value={tempAssignedGroup}

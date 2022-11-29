@@ -683,22 +683,30 @@ function Sidebar(props) {
 				</Avatar>
 				<div className="sidebar__headerRight">
 					<Tooltip title={t('New chat')}>
-						<IconButton onClick={displayContacts} data-test-id="new-chat">
+						<IconButton
+							onClick={displayContacts}
+							data-test-id="new-chat"
+							size="large"
+						>
 							<ChatIcon />
 						</IconButton>
 					</Tooltip>
 					<Tooltip title={t('Bulk send')}>
-						<IconButton onClick={displayBulkMessageMenu}>
+						<IconButton onClick={displayBulkMessageMenu} size="large">
 							<DynamicFeedIcon />
 						</IconButton>
 					</Tooltip>
 					<Tooltip title={t('Notifications')}>
-						<IconButton onClick={displayNotifications}>
+						<IconButton onClick={displayNotifications} size="large">
 							<NotificationsIcon />
 						</IconButton>
 					</Tooltip>
 					<Tooltip title={t('Options')}>
-						<IconButton onClick={displayMenu} data-test-id="options">
+						<IconButton
+							onClick={displayMenu}
+							data-test-id="options"
+							size="large"
+						>
 							<MoreVertIcon />
 						</IconButton>
 					</Tooltip>

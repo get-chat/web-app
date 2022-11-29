@@ -78,6 +78,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 					<IconButton
 						className="app__mediaPreview__close"
 						onClick={hideImageOrVideoPreview}
+						size="large"
 					>
 						<CloseIcon />
 					</IconButton>
@@ -105,7 +106,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 				</div>
 
 				<Tooltip title={t('Download')}>
-					<IconButton onClick={download}>
+					<IconButton onClick={download} size="large">
 						<GetApp />
 					</IconButton>
 				</Tooltip>

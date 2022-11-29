@@ -129,7 +129,7 @@ function ChatMessageVoice(props) {
 			<span ref={duration} className="chat__voice__duration">
 				{currentDuration}
 			</span>
-			<IconButton onClick={() => playVoice()}>
+			<IconButton onClick={() => playVoice()} size="large">
 				{isPlaying ? (
 					<PauseIcon style={playIconStyles} />
 				) : (

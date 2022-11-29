@@ -64,7 +64,7 @@ const StepSelectPrimaryKey = ({
 
 	return (
 		<>
-			<FormControl>
+			<FormControl variant="standard">
 				<FormLabel>{t('Select the column that contains recipients')}</FormLabel>
 				<RadioGroup
 					aria-label="primary-key"
@@ -85,7 +85,7 @@ const StepSelectPrimaryKey = ({
 				</RadioGroup>
 			</FormControl>
 
-			<FormControl>
+			<FormControl variant="standard">
 				<FormLabel>{t('Select the type of recipients')}</FormLabel>
 				<RadioGroup
 					aria-label="primary-key"

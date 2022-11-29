@@ -112,6 +112,7 @@ const SendBulkVoiceMessageDialog = ({
 								onClick={() =>
 									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'bulk')
 								}
+								size="large"
 							>
 								<MicIcon />
 							</IconButton>

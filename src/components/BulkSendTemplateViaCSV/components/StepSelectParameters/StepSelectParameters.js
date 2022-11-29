@@ -133,6 +133,7 @@ const StepSelectParameters = ({
 										rawValues[compIndex]?.[templateParamToInteger(param)]
 											?.length > 1 && (
 											<TextField
+												variant="standard"
 												value={
 													separators[compIndex]?.[
 														templateParamToInteger(param)
