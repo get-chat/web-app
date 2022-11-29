@@ -1,4 +1,5 @@
 export const BreakException = {};
+export const InvalidTemplateParamException = {};
 
 export const CHAT_KEY_PREFIX = 'chat_';
 

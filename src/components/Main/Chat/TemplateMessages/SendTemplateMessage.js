@@ -16,6 +16,7 @@ import PubSub from 'pubsub-js';
 import {
 	BreakException,
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
+	InvalidTemplateParamException,
 } from '../../../../Constants';
 import PublishIcon from '@material-ui/icons/Publish';
 import LinkIcon from '@material-ui/icons/Link';
@@ -77,6 +78,7 @@ function SendTemplateMessage({
 		const preparedParams = generateFinalTemplateParams(
 			template,
 			params,
+			true,
 			(error) => {
 				if (error === BreakException) {
 					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
@@ -85,11 +87,22 @@ function SendTemplateMessage({
 							details: t('You need to fill the parameters!'),
 						},
 					]);
-					setSending(false);
+					hasError = true;
+				} else if (error === InvalidTemplateParamException) {
+					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+						{
+							title: t('Invalid parameters'),
+							details: t(
+								'Parameters cannot have new-line/tab characters or more than 3 consecutive spaces!'
+							),
+						},
+					]);
 					hasError = true;
 				} else {
 					throw error;
 				}
+
+				setSending(false);
 			}
 		);
 

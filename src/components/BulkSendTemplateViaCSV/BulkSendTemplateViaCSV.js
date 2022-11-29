@@ -105,6 +105,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen }) => {
 		const preparedParams = generateFinalTemplateParams(
 			template,
 			params,
+			false,
 			(error) => {
 				if (error === BreakException) {
 					hasError = true;

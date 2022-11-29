@@ -12,7 +12,6 @@ export const isEmptyString = (str) => {
 
 export const translateHTMLInputToText = (html) => {
 	let result;
-	//const reg = new RegExp('((<span\\b[^>]*\\s\\bstyle=(["\'])([^"]*)\\3[^>]*>)(.*?)</span>)', 'g');
 	const reg = new RegExp(
 		'<img\\s[^>]*?src\\s*=\\s*[\'\\"]([^\'\\"]*?)[\'\\"][^>]*?>',
 		'g'
@@ -33,18 +32,6 @@ export const translateHTMLInputToText = (html) => {
 	result = htmlToFormattedText(result);
 
 	return result;
-};
-
-export const markOccurrences = (message, sub) => {
-	if (!message) return;
-
-	try {
-		const reg = new RegExp('(' + sub + ')', 'gi');
-		return message.replace(reg, '<span class="searchOccurrence">$1</span>');
-	} catch (error) {
-		console.error(error);
-		return message;
-	}
 };
 
 export const generateInitialsHelper = (name) => {
