@@ -3,7 +3,7 @@ import { ATTACHMENT_TYPE_AUDIO } from './Constants';
 
 import { Mp3MediaRecorder } from 'mp3-mediarecorder';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Mp3RecorderWorker from 'worker-loader!./recorder/worker';
+import Mp3RecorderWorker from './recorder/worker';
 
 class VoiceRecorder {
 	constructor() {

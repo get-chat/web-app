@@ -68,8 +68,7 @@
 		"react-scripts": "^5.0.1",
 		"react-string-replace-recursively": "^0.2.0",
 		"source-map-explorer": "^2.5.3",
-		"url-search-params-polyfill": "^8.1.1",
-		"worker-loader": "^3.0.8"
+		"url-search-params-polyfill": "^8.1.1"
 	},
 	"pnpm": {
 		"//HACK: override `nth-check`": [
