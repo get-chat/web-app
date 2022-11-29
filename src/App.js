@@ -1,6 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider, StyledEngineProvider } from '@mui/styles';
+import { ThemeProvider } from '@mui/styles';
+import { StyledEngineProvider } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Login from './components/Login';

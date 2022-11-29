@@ -153,7 +153,7 @@ function ChatFooter(props) {
 
 		if (editable.current) {
 			// TODO: Try to avoid creating an emoji object here, if possible
-			const emojiOutput = Emoji({
+			const emojiOutput = new Emoji({
 				html: true,
 				emoji: emoji.colons,
 				size: 22,

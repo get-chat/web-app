@@ -20,7 +20,6 @@ function ChatMessageOptionsMenu(props) {
 	return (
 		<Menu
 			anchorEl={props.menuAnchorEl}
-			getContentAnchorEl={null}
 			anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			keepMounted

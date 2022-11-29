@@ -935,7 +935,6 @@ function Sidebar(props) {
 
 			<Menu
 				anchorEl={anchorEl}
-				getContentAnchorEl={null}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 				keepMounted
@@ -961,7 +960,6 @@ function Sidebar(props) {
 						component={Link}
 						href={getHubURL(config.API_BASE_URL)}
 						target="_blank"
-						color="initial"
 					>
 						{t('Admin panel')}
 					</MenuItem>
@@ -977,7 +975,6 @@ function Sidebar(props) {
 
 			<Menu
 				anchorEl={bulkMessageMenuAnchorEl}
-				getContentAnchorEl={null}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 				keepMounted

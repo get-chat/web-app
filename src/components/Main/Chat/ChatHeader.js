@@ -149,7 +149,6 @@ function ChatHeader(props) {
 
 			<Menu
 				anchorEl={anchorEl}
-				getContentAnchorEl={null}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 				keepMounted
