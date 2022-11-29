@@ -53,7 +53,8 @@ const StepPreviewResult = ({ template, params, csvData }) => {
 
 		const preparedParams = generateFinalTemplateParams(
 			template,
-			replacedParams
+			replacedParams,
+			false
 		);
 
 		if (!preparedParams) return;

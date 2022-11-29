@@ -1,5 +1,7 @@
+// noinspection JSDeprecatedSymbols
+
 import { isEmptyString } from './Helpers';
-import { BreakException } from '../Constants';
+import { BreakException, InvalidTemplateParamException } from '../Constants';
 
 export const getTemplateParams = (text) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
@@ -112,7 +114,12 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 	return preparedParams;
 };
 
-export const generateFinalTemplateParams = (template, params, onError) => {
+export const generateFinalTemplateParams = (
+	template,
+	params,
+	checkInvalidParams,
+	onError
+) => {
 	const preparedParams = {};
 	const components = { ...template.components };
 
@@ -123,19 +130,41 @@ export const generateFinalTemplateParams = (template, params, onError) => {
 			const component = paramEntry[1];
 
 			if (params[key]) {
-				const paramsArray = Object.values(params[key]);
+				const paramsArray = [
+					...JSON.parse(JSON.stringify(Object.values(params[key]))),
+				];
 
-				// Check if has empty params and throw BreakException if found
+				// Check if it has empty params and throw BreakException if found
 				paramsArray.forEach((param) => {
-					if (
-						isEmptyString(
-							param.text ??
-								param.image?.link ??
-								param.video?.link ??
-								param.document?.link
-						)
-					) {
+					// Trim spaces
+					if (param.text) {
+						// Trim spaces in every line and replace new lines with spaces
+						const textParamArray = param.text?.split(/\r?\n/);
+						param.text = textParamArray?.map((s) => s.trim())?.join(' ');
+					} else if (param.image?.link) {
+						param.image.link = param.image.link.trim();
+					} else if (param.video?.link) {
+						param.video.link = param.video.link.trim();
+					} else if (param.document?.link) {
+						param.document.link = param.document.link.trim();
+					}
+
+					const paramText =
+						param.text ??
+						param.image?.link ??
+						param.video?.link ??
+						param.document?.link;
+
+					// Check if param is empty
+					if (isEmptyString(paramText)) {
 						throw BreakException;
+					}
+
+					if (checkInvalidParams) {
+						// Check new lines, tab and 4 consecutive spaces
+						if (/[\r\n\t]/.exec(paramText) || paramText?.match('\\s{4}')) {
+							throw InvalidTemplateParamException;
+						}
 					}
 				});
 
