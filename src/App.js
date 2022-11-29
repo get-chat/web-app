@@ -13,7 +13,10 @@ import configureAppStore from './store';
 
 const store = configureAppStore({});
 
-function App({ config, apiService }) {
+const App = ({ config, apiService }) => {
+	const renderPaths = (paths, Element) =>
+		paths.map((path) => <Route key={path} path={path} element={Element} />);
+
 	return (
 		<Provider store={store}>
 			<ThemeProvider theme={AppTheme}>
@@ -26,18 +29,16 @@ function App({ config, apiService }) {
 						>
 							<Router>
 								<Routes>
-									<Route
-										path={[
+									{renderPaths(
+										[
 											'/main/chat/:waId',
 											'/main/chat/:waId/message/:msgId',
 											'/main',
-										]}
-										component={Main}
-									/>
-									<Route
-										path={['/login/error/:errorCase', '/']}
-										component={Login}
-									/>
+										],
+										<Main />
+									)}
+
+									{renderPaths(['/login/error/:errorCase', '/'], <Login />)}
 								</Routes>
 							</Router>
 						</ApplicationContext.Provider>
@@ -46,6 +47,6 @@ function App({ config, apiService }) {
 			</ThemeProvider>
 		</Provider>
 	);
-}
+};
 
 export default App;
