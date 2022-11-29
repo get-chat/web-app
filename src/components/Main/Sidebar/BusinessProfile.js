@@ -9,8 +9,8 @@ import {
 	MenuItem,
 	Select,
 	TextField,
-} from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+} from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import { generateInitialsHelper } from '../../../helpers/Helpers';
 import FileInput from '../../FileInput';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';

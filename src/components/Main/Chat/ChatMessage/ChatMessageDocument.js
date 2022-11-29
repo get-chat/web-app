@@ -1,5 +1,5 @@
 import React from 'react';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { useTranslation } from 'react-i18next';
 
 function ChatMessageDocument(props) {

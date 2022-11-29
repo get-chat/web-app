@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/lab';
 import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,

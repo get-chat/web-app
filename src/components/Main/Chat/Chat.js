@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Chat.css';
-import { CircularProgress, Zoom } from '@material-ui/core';
+import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from './ChatMessage/ChatMessage';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import {

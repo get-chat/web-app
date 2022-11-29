@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, ButtonBase, TextField } from '@material-ui/core';
+import { Button, ButtonBase, TextField } from '@mui/material';
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@mui/lab';
 import {
 	componentHasMediaFormat,
 	generateFinalTemplateParams,
@@ -18,8 +18,8 @@ import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	InvalidTemplateParamException,
 } from '../../../../Constants';
-import PublishIcon from '@material-ui/icons/Publish';
-import LinkIcon from '@material-ui/icons/Link';
+import PublishIcon from '@mui/icons-material/Publish';
+import LinkIcon from '@mui/icons-material/Link';
 
 function SendTemplateMessage({
 	data,

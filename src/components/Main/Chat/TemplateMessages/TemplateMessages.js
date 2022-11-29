@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '@material-ui/core';
-import { Alert, AlertTitle } from '@material-ui/lab';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import Dialog from '@material-ui/core/Dialog';
+import { Button } from '@mui/material';
+import { Alert, AlertTitle } from '@mui/lab';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Dialog from '@mui/material/Dialog';
 import SendTemplateMessage from './SendTemplateMessage';
 import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,

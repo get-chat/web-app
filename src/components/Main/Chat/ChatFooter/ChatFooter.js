@@ -1,24 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Badge, Fab, IconButton, Tooltip, Zoom } from '@material-ui/core';
+import { Badge, Fab, IconButton, Tooltip, Zoom } from '@mui/material';
 import {
 	Add,
 	ArrowDownward,
 	AttachFile,
 	InsertEmoticon,
 	Send,
-} from '@material-ui/icons';
-import SmsIcon from '@material-ui/icons/Sms';
-import ImageIcon from '@material-ui/icons/Image';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import ContactsIcon from '@material-ui/icons/Contacts';
-import NotesIcon from '@material-ui/icons/Notes';
-import MicIcon from '@material-ui/icons/Mic';
+} from '@mui/icons-material';
+import SmsIcon from '@mui/icons-material/Sms';
+import ImageIcon from '@mui/icons-material/Image';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import NotesIcon from '@mui/icons-material/Notes';
+import MicIcon from '@mui/icons-material/Mic';
 import { Emoji, NimblePicker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/ChatFooter.css';
 import '../../../../styles/EmojiPicker.css';
 import data from 'emoji-mart/data/facebook.json';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
 import FileInput from '../../../FileInput';
 import {
@@ -37,7 +37,7 @@ import {
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { replaceEmojis } from '../../../../helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
-import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../../../ContactsModal';
 
 function ChatFooter(props) {

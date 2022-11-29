@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import Chat from './Chat/Chat';
-import { Fade, Snackbar } from '@material-ui/core';
+import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios from 'axios';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/lab';
 import 'url-search-params-polyfill';
 import {
 	CHAT_KEY_PREFIX,

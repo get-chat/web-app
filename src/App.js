@@ -1,11 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from '@material-ui/styles';
-import {
-	BrowserRouter as Router,
-	Route,
-	Switch as RouteSwitch,
-} from 'react-router-dom';
+import { ThemeProvider } from '@mui/styles';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Login from './components/Login';
 import Main from './components/Main/Main';
@@ -29,7 +25,7 @@ function App({ config, apiService }) {
 							}}
 						>
 							<Router>
-								<RouteSwitch>
+								<Routes>
 									<Route
 										path={[
 											'/main/chat/:waId',
@@ -42,7 +38,7 @@ function App({ config, apiService }) {
 										path={['/login/error/:errorCase', '/']}
 										component={Login}
 									/>
-								</RouteSwitch>
+								</Routes>
 							</Router>
 						</ApplicationContext.Provider>
 					</AppConfig.Provider>

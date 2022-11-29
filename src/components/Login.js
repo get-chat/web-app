@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
-import { Backdrop, CircularProgress, Fade, TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
+import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/lab';
 import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
-import { makeStyles } from '@material-ui/styles';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
-
-const useStyles = makeStyles((theme) => ({
-	backdrop: {
-		zIndex: theme.zIndex.drawer + 1,
-		color: '#fff',
-	},
-}));
 
 export default function Login(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -29,8 +21,6 @@ export default function Login(props) {
 		notLoggedIn: 'You are not logged in.',
 		invalidToken: 'Invalid token.',
 	};
-
-	const classes = useStyles();
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -181,7 +171,7 @@ export default function Login(props) {
 				</div>
 			</Fade>
 
-			<Backdrop className={classes.backdrop} open={isLoggingIn}>
+			<Backdrop className="login__backdrop" open={isLoggingIn}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
 		</div>

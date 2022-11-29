@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Button, Avatar } from '@material-ui/core';
+import { Button, Avatar } from '@mui/material';
 
 import styles from './ContactsMessage.module.css';
 

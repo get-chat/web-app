@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox, ListItem } from '@material-ui/core';
-import LabelIcon from '@material-ui/icons/Label';
+import { Checkbox, ListItem } from '@mui/material';
+import LabelIcon from '@mui/icons-material/Label';
 import '../../../styles/SelectableChatTag.css';
 
 function SelectableChatTag(props) {

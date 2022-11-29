@@ -1,15 +1,15 @@
 import React from 'react';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
-import VideocamIcon from '@material-ui/icons/Videocam';
-import MicIcon from '@material-ui/icons/Mic';
-import AudiotrackIcon from '@material-ui/icons/Audiotrack';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import NoteIcon from '@material-ui/icons/Note';
-import SmsIcon from '@material-ui/icons/Sms';
-import TouchAppIcon from '@material-ui/icons/TouchApp';
-import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import ContactsIcon from '@material-ui/icons/Contacts';
+import VideocamIcon from '@mui/icons-material/Videocam';
+import MicIcon from '@mui/icons-material/Mic';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import NoteIcon from '@mui/icons-material/Note';
+import SmsIcon from '@mui/icons-material/Sms';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import ContactsIcon from '@mui/icons-material/Contacts';
 
 function ChatMessageTypeIcon(props) {
 	return (

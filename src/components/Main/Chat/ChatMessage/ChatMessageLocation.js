@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
-import ShareIcon from '@material-ui/icons/Share';
+import { Button } from '@mui/material';
+import ShareIcon from '@mui/icons-material/Share';
 
 function ChatMessageLocation(props) {
 	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${window.config.APP_GOOGLE_MAPS_API_KEY}&&q=${props.data.location?.latitude},${props.data.location?.longitude}&q=`;

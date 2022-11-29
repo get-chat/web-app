@@ -1,6 +1,6 @@
 import React from 'react';
 import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 

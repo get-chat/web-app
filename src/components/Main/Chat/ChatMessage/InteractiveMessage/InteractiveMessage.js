@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TouchAppIcon from '@material-ui/icons/TouchApp';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { useTranslation } from 'react-i18next';
 
 import ButtonsMessage from './components/ButtonsMessage';

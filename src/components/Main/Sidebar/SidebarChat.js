@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/SidebarChat.css';
-import { Avatar, Checkbox, ListItem, Tooltip } from '@material-ui/core';
+import { Avatar, Checkbox, ListItem, Tooltip } from '@mui/material';
 import { useHistory, useParams } from 'react-router-dom';
-import LabelIcon from '@material-ui/icons/Label';
-import GroupIcon from '@material-ui/icons/Group';
-import WarningIcon from '@material-ui/icons/Warning';
+import LabelIcon from '@mui/icons-material/Label';
+import GroupIcon from '@mui/icons-material/Group';
+import WarningIcon from '@mui/icons-material/Warning';
 import Moment from 'react-moment';
 import moment from 'moment';
 import {

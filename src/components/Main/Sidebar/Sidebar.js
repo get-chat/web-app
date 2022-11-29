@@ -14,8 +14,8 @@ import {
 	Tabs,
 	Tooltip,
 	Zoom,
-} from '@material-ui/core';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+} from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SidebarChat from './SidebarChat';
 import {
 	containsLetters,
@@ -43,10 +43,10 @@ import ChangePasswordDialog from './ChangePasswordDialog';
 import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
-import ChatIcon from '@material-ui/icons/Chat';
+import ChatIcon from '@mui/icons-material/Chat';
 import Contacts from '../../Contacts';
 import { clearContactProvidersData } from '../../../helpers/StorageHelper';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import BulkSendActions from './BulkSendActions';
@@ -55,7 +55,7 @@ import {
 	generateCancelToken,
 } from '../../../helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
-import { Notifications as NotificationsIcon } from '@material-ui/icons';
+import { Notifications as NotificationsIcon } from '@mui/icons-material';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
 import { getObjLength } from '../../../helpers/ObjectHelper';
 import { getHubURL } from '../../../helpers/URLHelper';
@@ -64,7 +64,7 @@ import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
 import { AppConfig } from '../../../contexts/AppConfig';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
-import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { filterChat } from '../../../helpers/SidebarHelper';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '../../../store/reducers/currentUserReducer';

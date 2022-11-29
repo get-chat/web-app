@@ -6,11 +6,11 @@ import {
 	DialogContentText,
 	DialogTitle,
 	IconButton,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { displaySeconds } from '../../../../helpers/Helpers';
-import DoneIcon from '@material-ui/icons/Done';
+import DoneIcon from '@mui/icons-material/Done';
 import '../../../../styles/VoiceRecord.css';
 import VoiceRecorder from '../../../../VoiceRecorder';
 import {
@@ -20,7 +20,7 @@ import {
 } from '../../../../Constants';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 
 let timerIntervalId;

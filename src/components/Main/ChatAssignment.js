@@ -11,7 +11,7 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
-} from '@material-ui/core';
+} from '@mui/material';
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../contexts/ApplicationContext';

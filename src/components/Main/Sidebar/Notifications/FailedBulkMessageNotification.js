@@ -2,7 +2,7 @@ import React from 'react';
 import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '../../../../Constants';
 import { useHistory } from 'react-router-dom';
-import { Link } from '@material-ui/core';
+import { Link } from '@mui/material';
 import { generateMessagePreview } from '../../../../helpers/MessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
 

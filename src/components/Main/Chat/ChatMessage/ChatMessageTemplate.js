@@ -2,8 +2,8 @@ import React from 'react';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageVideo from './ChatMessageVideo';
 import ChatMessageDocument from './ChatMessageDocument';
-import { Button } from '@material-ui/core';
-import SmsIcon from '@material-ui/icons/Sms';
+import { Button } from '@mui/material';
+import SmsIcon from '@mui/icons-material/Sms';
 import {
 	insertTemplateComponentParameters,
 	sortTemplateComponents,

@@ -7,8 +7,8 @@ import {
 	Menu,
 	MenuItem,
 	Tooltip,
-} from '@material-ui/core';
-import { ArrowBack, MoreVert, Search } from '@material-ui/icons';
+} from '@mui/material';
+import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
 import {
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
 	EVENT_TOPIC_FORCE_REFRESH_CHAT,
@@ -18,7 +18,7 @@ import PubSub from 'pubsub-js';
 import { extractAvatarFromContactProviderData } from '../../../helpers/Helpers';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
 import { addPlus } from '../../../helpers/PhoneNumberHelper';
-import WarningIcon from '@material-ui/icons/Warning';
+import WarningIcon from '@mui/icons-material/Warning';
 import { isMobileOnly } from 'react-device-detect';
 import {
 	getDisplayAssignmentAndTaggingHistory,

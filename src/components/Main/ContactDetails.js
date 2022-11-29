@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import PersonIcon from '@material-ui/icons/Person';
-import GroupIcon from '@material-ui/icons/Group';
+import { Avatar, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
 import PubSub from 'pubsub-js';
 import {
 	CALENDAR_NORMAL,
@@ -14,7 +14,7 @@ import Moment from 'react-moment';
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '../../helpers/Helpers';
-import LabelIcon from '@material-ui/icons/Label';
+import LabelIcon from '@mui/icons-material/Label';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { addPlus } from '../../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';

@@ -6,7 +6,7 @@ import {
 	MenuItem,
 	Select,
 	TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 import '../styles/CreateTemplate.css';
 
 function CreateTemplate() {

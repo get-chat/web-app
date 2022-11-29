@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/PreviewSendMedia.css';
-import CloseIcon from '@material-ui/icons/Close';
-import { ButtonBase, IconButton, TextField } from '@material-ui/core';
-import Send from '@material-ui/icons/Send';
-import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import { ButtonBase, IconButton, TextField } from '@mui/material';
+import Send from '@mui/icons-material/Send';
+import AddIcon from '@mui/icons-material/Add';
 import {
 	ATTACHMENT_TYPE_AUDIO,
 	ATTACHMENT_TYPE_DOCUMENT,
@@ -18,8 +18,8 @@ import {
 	handleDragOver,
 	prepareSelectedFiles,
 } from '../../../helpers/FileHelper';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import AudiotrackIcon from '@material-ui/icons/Audiotrack';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 
 import { Document, Page, pdfjs } from 'react-pdf';
 import PubSub from 'pubsub-js';

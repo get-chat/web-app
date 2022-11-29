@@ -9,7 +9,7 @@ import {
 	DialogContentText,
 	DialogTitle,
 	Link,
-} from '@material-ui/core';
+} from '@mui/material';
 import '../../styles/ChatTags.css';
 import { getHubURL } from '../../helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
