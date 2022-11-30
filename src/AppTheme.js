@@ -10,6 +10,9 @@ const AppTheme = createTheme({
 		},
 	},
 	typography: {
+		button: {
+			textTransform: 'none',
+		},
 		fontFamily: [
 			'Inter',
 			'Roboto',
