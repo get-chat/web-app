@@ -3,7 +3,6 @@ import { ATTACHMENT_TYPE_AUDIO } from './Constants';
 
 import { Mp3MediaRecorder } from 'mp3-mediarecorder';
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Mp3RecorderWorker from 'worker-loader!./recorder/worker';
 
 class VoiceRecorder {
 	constructor() {
@@ -18,7 +17,7 @@ class VoiceRecorder {
 		// Create a media recorder with given stream
 		this.mediaRecorder = new Mp3MediaRecorder(
 			stream, // MediaStream instance
-			{ worker: Mp3RecorderWorker() }
+			{ worker: new Worker(new URL('./recorder/worker', import.meta.url)) }
 		);
 
 		this.mediaRecorder.onstart = () => {

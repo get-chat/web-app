@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 function ChatMessageVideo(props) {
 	return (

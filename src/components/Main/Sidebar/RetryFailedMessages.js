@@ -5,8 +5,8 @@ import {
 	setAllFailedPendingMessagesWillRetry,
 } from '../../../helpers/PendingMessagesHelper';
 import '../../../styles/RetryFailedMessages.css';
-import { Alert } from '@material-ui/lab';
-import { useHistory } from 'react-router-dom';
+import { Alert } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '../../../Constants';
 import { Trans, useTranslation } from 'react-i18next';
@@ -14,7 +14,7 @@ import { Trans, useTranslation } from 'react-i18next';
 function RetryFailedMessages(props) {
 	const { t } = useTranslation();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	const dateFormat = 'H:mm';
 
@@ -28,7 +28,7 @@ function RetryFailedMessages(props) {
 		);
 		const waId = firstFailedMessage.requestBody?.wa_id;
 		if (waId) {
-			history.push(`/main/chat/${waId}`);
+			navigate(`/main/chat/${waId}`);
 		}
 	};
 

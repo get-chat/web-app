@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { Button, Dialog } from '@material-ui/core';
-import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Button, Dialog } from '@mui/material';
+import DialogContent from '@mui/material/DialogContent';
 import FileInput from '../FileInput';
-import DialogActions from '@material-ui/core/DialogActions';
+import DialogActions from '@mui/material/DialogActions';
 import { csvToObj } from '../../helpers/CSVHelper';
 import { hasDuplicates } from '../../helpers/ArrayHelper';
 import { isEmptyString } from '../../helpers/Helpers';

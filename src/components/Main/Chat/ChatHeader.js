@@ -7,8 +7,8 @@ import {
 	Menu,
 	MenuItem,
 	Tooltip,
-} from '@material-ui/core';
-import { ArrowBack, MoreVert, Search } from '@material-ui/icons';
+} from '@mui/material';
+import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
 import {
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
 	EVENT_TOPIC_FORCE_REFRESH_CHAT,
@@ -18,7 +18,7 @@ import PubSub from 'pubsub-js';
 import { extractAvatarFromContactProviderData } from '../../../helpers/Helpers';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
 import { addPlus } from '../../../helpers/PhoneNumberHelper';
-import WarningIcon from '@material-ui/icons/Warning';
+import WarningIcon from '@mui/icons-material/Warning';
 import { isMobileOnly } from 'react-device-detect';
 import {
 	getDisplayAssignmentAndTaggingHistory,
@@ -82,6 +82,7 @@ function ChatHeader(props) {
 					<IconButton
 						className="chat__header__backButton"
 						onClick={props.closeChat}
+						size="large"
 					>
 						<ArrowBack />
 					</IconButton>
@@ -133,22 +134,21 @@ function ChatHeader(props) {
 			<div className="chat__headerRight">
 				{isMobileOnly && props.hasFailedMessages && (
 					<Tooltip title={t('Failed to send some messages!')}>
-						<IconButton onClick={props.closeChat}>
+						<IconButton onClick={props.closeChat} size="large">
 							<WarningIcon className="error" />
 						</IconButton>
 					</Tooltip>
 				)}
-				<IconButton onClick={showSearchMessages}>
+				<IconButton onClick={showSearchMessages} size="large">
 					<Search />
 				</IconButton>
-				<IconButton onClick={displayMenu}>
+				<IconButton onClick={displayMenu} size="large">
 					<MoreVert />
 				</IconButton>
 			</div>
 
 			<Menu
 				anchorEl={anchorEl}
-				getContentAnchorEl={null}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 				keepMounted

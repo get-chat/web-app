@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@mui/lab';
 import { useTranslation } from 'react-i18next';
 
 const StepUploadCSV = ({ csvError }) => {

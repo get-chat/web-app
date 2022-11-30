@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, IconButton } from '@material-ui/core';
-import PauseIcon from '@material-ui/icons/Pause';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import HeadsetIcon from '@material-ui/icons/Headset';
+import { Avatar, IconButton } from '@mui/material';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import HeadsetIcon from '@mui/icons-material/Headset';
 import PubSub from 'pubsub-js';
 import {
 	EVENT_TOPIC_CHAT_MESSAGE,
@@ -129,7 +129,7 @@ function ChatMessageVoice(props) {
 			<span ref={duration} className="chat__voice__duration">
 				{currentDuration}
 			</span>
-			<IconButton onClick={() => playVoice()}>
+			<IconButton onClick={() => playVoice()} size="large">
 				{isPlaying ? (
 					<PauseIcon style={playIconStyles} />
 				) : (

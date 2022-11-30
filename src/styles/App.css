@@ -146,15 +146,17 @@ a {
 	width: 100% !important;
 }
 
-.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
-		.MuiSvgIcon-root):not(.MuiCheckbox-root
-		.MuiSvgIcon-root):not(.MuiButton-root
-		.MuiSvgIcon-root):not(.MuiStepIcon-root) {
+.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(
+		.MuiRadio-root .MuiSvgIcon-root
+	):not(.MuiCheckbox-root .MuiSvgIcon-root):not(
+		.MuiButton-root .MuiSvgIcon-root
+	):not(.MuiStepIcon-root) {
 	color: #6f7385;
 }
 
-.MuiSvgIcon-root.error:not(.MuiAlert-root .MuiSvgIcon-root):not(.MuiRadio-root
-		.MuiSvgIcon-root):not(.MuiCheckbox-root .MuiSvgIcon-root) {
+.MuiSvgIcon-root.error:not(.MuiAlert-root .MuiSvgIcon-root):not(
+		.MuiRadio-root .MuiSvgIcon-root
+	):not(.MuiCheckbox-root .MuiSvgIcon-root) {
 	color: red;
 }
 
@@ -197,7 +199,7 @@ a {
 }
 
 .MuiDivider-root {
-	background-color: rgba(0, 0, 45, 0.05) !important;
+	border-color: rgba(0, 0, 45, 0.05) !important;
 }
 
 .MuiPaper-rounded {

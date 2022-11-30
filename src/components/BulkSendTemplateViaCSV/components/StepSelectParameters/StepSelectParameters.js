@@ -4,8 +4,8 @@ import {
 	getTemplateParams,
 	templateParamToInteger,
 } from '../../../../helpers/TemplateMessageHelper';
-import { Button, TextField } from '@material-ui/core';
-import { Alert, AlertTitle, Autocomplete } from '@material-ui/lab';
+import { Button, TextField } from '@mui/material';
+import { Alert, AlertTitle, Autocomplete } from '@mui/lab';
 import '../../../../styles/StepSelectParameters.css';
 import { useTranslation } from 'react-i18next';
 
@@ -133,6 +133,7 @@ const StepSelectParameters = ({
 										rawValues[compIndex]?.[templateParamToInteger(param)]
 											?.length > 1 && (
 											<TextField
+												variant="standard"
 												value={
 													separators[compIndex]?.[
 														templateParamToInteger(param)

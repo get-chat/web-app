@@ -1,6 +1,6 @@
 import React from 'react';
 import '../styles/Contact.css';
-import { Avatar, ListItem } from '@material-ui/core';
+import { Avatar, ListItem } from '@mui/material';
 import ContactProviderHeader from './ContactProviderHeader';
 import { generateAvatarColor } from '../helpers/AvatarHelper';
 

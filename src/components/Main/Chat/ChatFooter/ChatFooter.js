@@ -1,24 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Badge, Fab, IconButton, Tooltip, Zoom } from '@material-ui/core';
+import { Badge, Fab, IconButton, Tooltip, Zoom } from '@mui/material';
 import {
 	Add,
 	ArrowDownward,
 	AttachFile,
 	InsertEmoticon,
 	Send,
-} from '@material-ui/icons';
-import SmsIcon from '@material-ui/icons/Sms';
-import ImageIcon from '@material-ui/icons/Image';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import ContactsIcon from '@material-ui/icons/Contacts';
-import NotesIcon from '@material-ui/icons/Notes';
-import MicIcon from '@material-ui/icons/Mic';
+} from '@mui/icons-material';
+import SmsIcon from '@mui/icons-material/Sms';
+import ImageIcon from '@mui/icons-material/Image';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ContactsIcon from '@mui/icons-material/Contacts';
+import NotesIcon from '@mui/icons-material/Notes';
+import MicIcon from '@mui/icons-material/Mic';
 import { Emoji, NimblePicker } from 'emoji-mart';
-import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/ChatFooter.css';
+import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/EmojiPicker.css';
-import data from 'emoji-mart/data/facebook.json';
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
 import FileInput from '../../../FileInput';
 import {
@@ -37,8 +36,9 @@ import {
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { replaceEmojis } from '../../../../helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
-import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
+import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../../../ContactsModal';
+import data from 'emoji-mart/data/facebook.json';
 
 function ChatFooter(props) {
 	const { t } = useTranslation();
@@ -254,6 +254,7 @@ function ChatFooter(props) {
 						<IconButton
 							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
 							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
+							size="large"
 						>
 							<InsertEmoticon />
 						</IconButton>
@@ -263,7 +264,7 @@ function ChatFooter(props) {
 				{!props.isExpired && (
 					<div className="chat__footer__attachmentContainer desktopOnly">
 						<Tooltip title={t('Attachment')} placement="right">
-							<IconButton>
+							<IconButton size="large">
 								<AttachFile />
 							</IconButton>
 						</Tooltip>
@@ -273,6 +274,7 @@ function ChatFooter(props) {
 								<IconButton
 									className="chat__footer__attachmentContainer__options__document"
 									onClick={openContactsModal}
+									size="large"
 								>
 									<ContactsIcon />
 								</IconButton>
@@ -282,6 +284,7 @@ function ChatFooter(props) {
 								<IconButton
 									className="chat__footer__attachmentContainer__options__document"
 									onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
+									size="large"
 								>
 									<InsertDriveFileIcon />
 								</IconButton>
@@ -291,6 +294,7 @@ function ChatFooter(props) {
 								<IconButton
 									className="chat__footer__attachmentContainer__options__imageAndVideo"
 									onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
+									size="large"
 								>
 									<ImageIcon />
 								</IconButton>
@@ -310,6 +314,7 @@ function ChatFooter(props) {
 						className={
 							props.isTemplateMessagesVisible ? 'activeIconButton' : ''
 						}
+						size="large"
 					>
 						<SmsIcon />
 					</IconButton>
@@ -326,6 +331,7 @@ function ChatFooter(props) {
 							className={
 								props.isSavedResponsesVisible ? 'activeIconButton' : ''
 							}
+							size="large"
 						>
 							<NotesIcon />
 						</IconButton>
@@ -383,6 +389,7 @@ function ChatFooter(props) {
 							<IconButton
 								className="chat_footer__moreButton"
 								onClick={showMore}
+								size="large"
 							>
 								<Add />
 							</IconButton>
@@ -395,6 +402,7 @@ function ChatFooter(props) {
 						<IconButton
 							onClick={(e) => props.sendMessage(true, e)}
 							data-test-id="send-message-button"
+							size="large"
 						>
 							<Send />
 						</IconButton>
@@ -405,6 +413,7 @@ function ChatFooter(props) {
 					<Tooltip title={t('Bulk Send')} placement="top">
 						<IconButton
 							onClick={() => props.bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
+							size="large"
 						>
 							<DynamicFeedIcon />
 						</IconButton>
@@ -417,6 +426,7 @@ function ChatFooter(props) {
 							onClick={() =>
 								PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
 							}
+							size="large"
 						>
 							<MicIcon />
 						</IconButton>
@@ -434,16 +444,24 @@ function ChatFooter(props) {
 
 			{isMoreVisible && (
 				<div className="chat__footerMore">
-					<IconButton onClick={hideMore}>
+					<IconButton onClick={hideMore} size="large">
 						<CloseIcon />
 					</IconButton>
 
-					<IconButton onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}>
+					<IconButton onClick={openContactsModal} size="large">
+						<ContactsIcon />
+					</IconButton>
+
+					<IconButton
+						onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
+						size="large"
+					>
 						<InsertDriveFileIcon />
 					</IconButton>
 
 					<IconButton
 						onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
+						size="large"
 					>
 						<ImageIcon />
 					</IconButton>
@@ -453,6 +471,7 @@ function ChatFooter(props) {
 						className={
 							props.isTemplateMessagesVisible ? 'activeIconButton' : ''
 						}
+						size="large"
 					>
 						<SmsIcon />
 					</IconButton>
@@ -460,6 +479,7 @@ function ChatFooter(props) {
 					<IconButton
 						onClick={toggleSavedResponses}
 						className={props.isSavedResponsesVisible ? 'activeIconButton' : ''}
+						size="large"
 					>
 						<NotesIcon />
 					</IconButton>

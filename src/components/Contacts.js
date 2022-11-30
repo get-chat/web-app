@@ -9,13 +9,13 @@ import {
 	InputAdornment,
 	ListItem,
 	TextField,
-} from '@material-ui/core';
-import { ArrowBack, ExpandLess, ExpandMore } from '@material-ui/icons';
-import DialpadIcon from '@material-ui/icons/Dialpad';
+} from '@mui/material';
+import { ArrowBack, ExpandLess, ExpandMore } from '@mui/icons-material';
+import DialpadIcon from '@mui/icons-material/Dialpad';
 import Contact from './Contact';
 import ContactModel from '../api/models/ContactModel';
 import { isMobileOnly } from 'react-device-detect';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PersonModel from '../api/models/PersonModel';
 import Person from './Person';
 import { getObjLength } from '../helpers/ObjectHelper';
@@ -42,7 +42,7 @@ function Contacts(props) {
 	let cancelTokenSourceRef = useRef();
 	let verifyPhoneNumberCancelTokenSourceRef = useRef();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const handleKey = (event) => {
@@ -133,13 +133,14 @@ function Contacts(props) {
 					response.data.contacts.length > 0 &&
 					response.data.contacts[0].status === 'valid'
 				) {
-					history.push({
-						pathname: `/main/chat/${waId}`,
-						person: {
-							name: data?.name,
-							initials: data?.initials,
-							avatar: data?.avatar,
-							waId: waId,
+					navigate(`/main/chat/${waId}`, {
+						state: {
+							person: {
+								name: data?.name,
+								initials: data?.initials,
+								avatar: data?.avatar,
+								waId: waId,
+							},
 						},
 					});
 
@@ -164,7 +165,7 @@ function Contacts(props) {
 	return (
 		<div className="contacts">
 			<div className="contacts__header">
-				<IconButton onClick={props.onHide}>
+				<IconButton onClick={props.onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 
@@ -190,6 +191,7 @@ function Contacts(props) {
 				{isPhoneNumberFormVisible && (
 					<div className="contacts__startByPhoneNumberWrapper__formWrapper">
 						<TextField
+							variant="standard"
 							label={t('Phone number')}
 							InputProps={{
 								startAdornment: (
@@ -221,6 +223,7 @@ function Contacts(props) {
 						<h3>{t('Persons')}</h3>
 						<IconButton
 							onClick={() => setPersonsVisible((prevState) => !prevState)}
+							size="large"
 						>
 							{isPersonsVisible ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>
@@ -244,6 +247,7 @@ function Contacts(props) {
 						<h3>{t('Contacts')}</h3>
 						<IconButton
 							onClick={() => setContactsVisible((prevState) => !prevState)}
+							size="large"
 						>
 							{isContactsVisible ? <ExpandLess /> : <ExpandMore />}
 						</IconButton>

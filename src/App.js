@@ -1,11 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { ThemeProvider } from '@material-ui/styles';
-import {
-	BrowserRouter as Router,
-	Route,
-	Switch as RouteSwitch,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Login from './components/Login';
 import Main from './components/Main/Main';
@@ -14,10 +9,14 @@ import { isIPad13 } from 'react-device-detect';
 import { ApplicationContext } from './contexts/ApplicationContext';
 import { AppConfig } from './contexts/AppConfig';
 import configureAppStore from './store';
+import { ThemeProvider } from '@mui/material';
 
 const store = configureAppStore({});
 
-function App({ config, apiService }) {
+const App = ({ config, apiService }) => {
+	const renderPaths = (paths, Element) =>
+		paths.map((path) => <Route key={path} path={path} element={Element} />);
+
 	return (
 		<Provider store={store}>
 			<ThemeProvider theme={AppTheme}>
@@ -29,20 +28,18 @@ function App({ config, apiService }) {
 							}}
 						>
 							<Router>
-								<RouteSwitch>
-									<Route
-										path={[
+								<Routes>
+									{renderPaths(
+										[
 											'/main/chat/:waId',
 											'/main/chat/:waId/message/:msgId',
 											'/main',
-										]}
-										component={Main}
-									/>
-									<Route
-										path={['/login/error/:errorCase', '/']}
-										component={Login}
-									/>
-								</RouteSwitch>
+										],
+										<Main />
+									)}
+
+									{renderPaths(['/login/error/:errorCase', '/'], <Login />)}
+								</Routes>
 							</Router>
 						</ApplicationContext.Provider>
 					</AppConfig.Provider>
@@ -50,6 +47,6 @@ function App({ config, apiService }) {
 			</ThemeProvider>
 		</Provider>
 	);
-}
+};
 
 export default App;

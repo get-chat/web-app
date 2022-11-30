@@ -6,10 +6,10 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import style from './StepPreviewCSVData.module.css';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@mui/lab';
 import { getMaxDirectRecipients } from '../../../../helpers/BulkSendHelper';
 
 const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {

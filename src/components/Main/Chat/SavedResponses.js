@@ -6,7 +6,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import { getObjLength } from '../../../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 

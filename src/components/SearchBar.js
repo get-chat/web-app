@@ -1,7 +1,7 @@
 import React from 'react';
-import { SearchOutlined } from '@material-ui/icons';
+import { SearchOutlined } from '@mui/icons-material';
 import '../styles/SearchBar.css';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 function SearchBar(props) {

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/SidebarChat.css';
-import { Avatar, Checkbox, ListItem, Tooltip } from '@material-ui/core';
-import { useHistory, useParams } from 'react-router-dom';
-import LabelIcon from '@material-ui/icons/Label';
-import GroupIcon from '@material-ui/icons/Group';
-import WarningIcon from '@material-ui/icons/Warning';
+import { Avatar, Checkbox, ListItem, Tooltip } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import LabelIcon from '@mui/icons-material/Label';
+import GroupIcon from '@mui/icons-material/Group';
+import WarningIcon from '@mui/icons-material/Warning';
 import Moment from 'react-moment';
 import moment from 'moment';
 import {
@@ -29,7 +29,7 @@ import PrintMessage from '../../PrintMessage';
 function SidebarChat(props) {
 	const { t } = useTranslation();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	const [isSelected, setSelected] = useState(false);
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
@@ -114,7 +114,7 @@ function SidebarChat(props) {
 		const files = getDroppedFiles(event);
 
 		// Switching to related chat
-		history.push(`/main/chat/${props.chatData.waId}`);
+		navigate(`/main/chat/${props.chatData.waId}`);
 
 		// Sending files via eventbus
 		PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
@@ -140,7 +140,7 @@ function SidebarChat(props) {
 				return [...prevState];
 			});
 		} else {
-			history.push(`/main/chat/${props.chatData.waId}`);
+			navigate(`/main/chat/${props.chatData.waId}`);
 		}
 	};
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/ChangePasswordDialog.css';
-import { Button, Dialog, TextField } from '@material-ui/core';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Button, Dialog, TextField } from '@mui/material';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import { Alert, AlertTitle } from '@mui/lab';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
 
@@ -84,6 +84,7 @@ function ChangePasswordDialog(props) {
 			<DialogContent>
 				<div className="changePasswordDialog__fields">
 					<TextField
+						variant="standard"
 						value={currentPassword}
 						onChange={(event) => setCurrentPassword(event.target.value)}
 						label={t('Current password')}
@@ -93,6 +94,7 @@ function ChangePasswordDialog(props) {
 					/>
 
 					<TextField
+						variant="standard"
 						value={newPassword}
 						onChange={(event) => setNewPassword(event.target.value)}
 						label={t('New password')}
@@ -101,6 +103,7 @@ function ChangePasswordDialog(props) {
 					/>
 
 					<TextField
+						variant="standard"
 						value={newPasswordRepeat}
 						onChange={(event) => setNewPasswordRepeat(event.target.value)}
 						label={t('New password (repeat)')}

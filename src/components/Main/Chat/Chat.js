@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Chat.css';
-import { CircularProgress, Zoom } from '@material-ui/core';
+import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from './ChatMessage/ChatMessage';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import {
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
@@ -78,6 +78,7 @@ import { useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
+import axios from 'axios';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -120,7 +121,7 @@ export default function Chat(props) {
 
 	const { waId } = useParams();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 	const location = useLocation();
 
 	const cancelTokenSourceRef = useRef();
@@ -291,7 +292,7 @@ export default function Chat(props) {
 
 		if (!waId) {
 			console.log('waId is empty.');
-			return false;
+			return;
 		}
 
 		// Load contact and messages
@@ -775,9 +776,11 @@ export default function Chat(props) {
 		prevScrollTop,
 		offset
 	) => {
-		const nextScrollHeight = messagesContainer.current.scrollHeight;
-		messagesContainer.current.scrollTop =
-			nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
+		setTimeout(() => {
+			const nextScrollHeight = messagesContainer.current.scrollHeight;
+			messagesContainer.current.scrollTop =
+				nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
+		}, 0);
 	};
 
 	const scrollToChild = (msgId) => {
@@ -1055,11 +1058,11 @@ export default function Chat(props) {
 			(error) => {
 				setLoadingMoreMessages(false);
 
-				if (isInitial) {
+				if (isInitial && !axios.isCancel(error)) {
 					window.displayCustomError('Failed to load messages!');
 				}
 			},
-			history
+			navigate
 		);
 	};
 
@@ -1658,18 +1661,18 @@ export default function Chat(props) {
 			(error) => {
 				console.log(error);
 			},
-			history
+			navigate
 		);
 	};
 
 	const handleIfUnauthorized = (error) => {
 		if (error.response.status === 401) {
-			clearUserSession('invalidToken', undefined, history);
+			clearUserSession('invalidToken', undefined, navigate);
 		}
 	};
 
 	const closeChat = () => {
-		history.push('/main');
+		navigate('/main');
 	};
 
 	let lastPrintedDate;
