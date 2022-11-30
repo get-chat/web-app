@@ -20,8 +20,6 @@
 		"src/**/*": "pnpm lint:prettier"
 	},
 	"dependencies": {
-		"@emoji-mart/data": "^1.0.8",
-		"@emoji-mart/react": "^1.0.1",
 		"@emotion/react": "^11.10.5",
 		"@emotion/styled": "^11.10.5",
 		"@mui/icons-material": "^5.10.16",
@@ -39,7 +37,7 @@
 		"buffer": "^6.0.3",
 		"classnames": "^2.3.1",
 		"dompurify": "^2.3.8",
-		"emoji-mart": "^5.3.3",
+		"emoji-mart": "^3.0.0",
 		"emoji-regex": "^9.2.2",
 		"emoji-tree": "^1.1.2",
 		"html-to-formatted-text": "^2.7.0",

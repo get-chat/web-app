@@ -20,7 +20,7 @@ export const replaceEmojis = (message, ignoreOnlyEmojis) => {
 		// TODO: Finding emoji data is too slow, find an alternative or improve it
 		const emojiData = getEmojiDataFromNative(occurrence, EMOJI_SET, data);
 		if (emojiData) {
-			const emoji = new Emoji({
+			const emoji = Emoji({
 				html: true,
 				emoji: emojiData,
 				size: onlyEmojis ? 44 : 22,

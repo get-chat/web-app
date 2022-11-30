@@ -13,8 +13,9 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import NotesIcon from '@mui/icons-material/Notes';
 import MicIcon from '@mui/icons-material/Mic';
-import { Emoji, Picker } from 'emoji-mart';
+import { Emoji, NimblePicker } from 'emoji-mart';
 import '../../../../styles/ChatFooter.css';
+import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/EmojiPicker.css';
 import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
@@ -37,7 +38,7 @@ import { replaceEmojis } from '../../../../helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../../../ContactsModal';
-import data from '@emoji-mart/data';
+import data from 'emoji-mart/data/facebook.json';
 
 function ChatFooter(props) {
 	const { t } = useTranslation();
@@ -153,7 +154,7 @@ function ChatFooter(props) {
 
 		if (editable.current) {
 			// TODO: Try to avoid creating an emoji object here, if possible
-			const emojiOutput = new Emoji({
+			const emojiOutput = Emoji({
 				html: true,
 				emoji: emoji.colons,
 				size: 22,
@@ -229,7 +230,7 @@ function ChatFooter(props) {
 		>
 			{isEmojiPickerVisible && (
 				<div className="chat__footer__emojiPicker">
-					<Picker
+					<NimblePicker
 						set={EMOJI_SET}
 						sheetSize={EMOJI_SHEET_SIZE}
 						data={data}
