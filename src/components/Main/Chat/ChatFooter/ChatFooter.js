@@ -448,6 +448,10 @@ function ChatFooter(props) {
 						<CloseIcon />
 					</IconButton>
 
+					<IconButton onClick={openContactsModal} size="large">
+						<ContactsIcon />
+					</IconButton>
+
 					<IconButton
 						onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
 						size="large"
