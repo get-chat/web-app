@@ -21,6 +21,13 @@ const AppTheme = createTheme({
 			'sans-serif',
 		].join(','),
 	},
+	components: {
+		MuiMenuItem: {
+			defaultProps: {
+				dense: true,
+			},
+		},
+	},
 });
 
 export default AppTheme;

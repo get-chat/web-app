@@ -199,7 +199,7 @@ a {
 }
 
 .MuiDivider-root {
-	background-color: rgba(0, 0, 45, 0.05) !important;
+	border-color: rgba(0, 0, 45, 0.05) !important;
 }
 
 .MuiPaper-rounded {
