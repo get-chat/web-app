@@ -78,6 +78,7 @@ import { useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
+import axios from 'axios';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1057,7 +1058,7 @@ export default function Chat(props) {
 			(error) => {
 				setLoadingMoreMessages(false);
 
-				if (isInitial) {
+				if (isInitial && !axios.isCancel(error)) {
 					window.displayCustomError('Failed to load messages!');
 				}
 			},
