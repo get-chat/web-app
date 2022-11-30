@@ -9,9 +9,13 @@ class ChatMessagesResponse {
 		const messages = {};
 		data.results.forEach((message) => {
 			const prepared = new ChatMessageModel(message);
-			// Consider switching to getchat id only
-			const messageKey = prepared.id ?? prepared.generateInternalIdString();
-			messages[messageKey] = prepared;
+
+			// Ignore messages without timestamp
+			if (prepared.timestamp > 0) {
+				// Consider switching to getchat id only
+				const messageKey = prepared.id ?? prepared.generateInternalIdString();
+				messages[messageKey] = prepared;
+			}
 		});
 		this.messages = messages;
 
