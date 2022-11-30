@@ -15,6 +15,7 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.css', '.json'],
 		alias: {
 			'@src': path.resolve(__dirname, '../src'),
+			process: "process/browser"
 		},
 		fallback: { "url": require.resolve("url/") }
 	},
@@ -64,6 +65,9 @@ module.exports = {
 		],
 	},
 	plugins: [
+		new webpack.ProvidePlugin({
+			process: 'process/browser',
+		}),
 		new webpack.DefinePlugin({
 			'process.env.REACT_APP_LOGO_URL': JSON.stringify(
 				process.env.REACT_APP_LOGO_URL
