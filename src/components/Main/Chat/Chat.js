@@ -775,9 +775,11 @@ export default function Chat(props) {
 		prevScrollTop,
 		offset
 	) => {
-		const nextScrollHeight = messagesContainer.current.scrollHeight;
-		messagesContainer.current.scrollTop =
-			nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
+		setTimeout(() => {
+			const nextScrollHeight = messagesContainer.current.scrollHeight;
+			messagesContainer.current.scrollTop =
+				nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
+		}, 0);
 	};
 
 	const scrollToChild = (msgId) => {
