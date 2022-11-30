@@ -16,6 +16,7 @@ module.exports = {
 		alias: {
 			'@src': path.resolve(__dirname, '../src'),
 		},
+		fallback: { "url": require.resolve("url/") }
 	},
 	optimization: {
 		runtimeChunk: 'single',
