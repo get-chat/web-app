@@ -291,7 +291,7 @@ export default function Chat(props) {
 
 		if (!waId) {
 			console.log('waId is empty.');
-			return false;
+			return;
 		}
 
 		// Load contact and messages
