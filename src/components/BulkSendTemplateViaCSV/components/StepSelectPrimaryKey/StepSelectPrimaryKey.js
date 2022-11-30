@@ -11,7 +11,7 @@ import {
 	PRIMARY_KEY_TYPE_TAG,
 	PRIMARY_KEY_TYPE_WA_ID,
 } from '../../BulkSendTemplateViaCSV';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import LabelIcon from '@mui/icons-material/Label';
 import { useTranslation } from 'react-i18next';
 import style from './StepSelectPrimaryKey.module.css';

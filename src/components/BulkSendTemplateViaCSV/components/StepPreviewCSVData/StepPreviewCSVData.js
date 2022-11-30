@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import style from './StepPreviewCSVData.module.css';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import { getMaxDirectRecipients } from '../../../../helpers/BulkSendHelper';
 
 const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {

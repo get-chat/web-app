@@ -5,7 +5,7 @@ import {
 	setAllFailedPendingMessagesWillRetry,
 } from '../../../helpers/PendingMessagesHelper';
 import '../../../styles/RetryFailedMessages.css';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '../../../Constants';

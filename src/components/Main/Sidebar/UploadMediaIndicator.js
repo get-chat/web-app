@@ -1,6 +1,6 @@
 import React from 'react';
 import { LinearProgress } from '@mui/material';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import '../../../styles/UploadMediaIndicator.css';
 import { useTranslation } from 'react-i18next';
 

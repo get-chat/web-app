@@ -8,7 +8,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import 'url-search-params-polyfill';
 import {
 	CHAT_KEY_PREFIX,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import '../../styles/LoadingScreen.css';
 import { useTranslation } from 'react-i18next';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import packageJson from '../../../package.json';
 import { CircularProgress } from '@mui/material';
 

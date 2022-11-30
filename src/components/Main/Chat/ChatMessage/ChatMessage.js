@@ -24,7 +24,7 @@ import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
 
 const iconStyles = {

@@ -5,9 +5,11 @@ import {
 	templateParamToInteger,
 } from '../../../../helpers/TemplateMessageHelper';
 import { Button, TextField } from '@mui/material';
-import { Alert, AlertTitle, Autocomplete } from '@mui/lab';
+import Autocomplete from '@mui/material/Autocomplete';
 import '../../../../styles/StepSelectParameters.css';
 import { useTranslation } from 'react-i18next';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 const StepSelectParameters = ({
 	csvHeader,

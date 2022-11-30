@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, ButtonBase, TextField } from '@mui/material';
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
-import { Alert, AlertTitle } from '@mui/lab';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import {
 	componentHasMediaFormat,
 	generateFinalTemplateParams,

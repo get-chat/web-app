@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import '../../../styles/BulkSendActions.css';
 import { Trans, useTranslation } from 'react-i18next';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,

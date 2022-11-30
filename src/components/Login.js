@@ -3,7 +3,7 @@ import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';

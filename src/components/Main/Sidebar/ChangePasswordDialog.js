@@ -4,7 +4,8 @@ import { Button, Dialog, TextField } from '@mui/material';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import { Alert, AlertTitle } from '@mui/lab';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../../contexts/ApplicationContext';
 

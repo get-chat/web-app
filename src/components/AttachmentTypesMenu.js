@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SpeedDialIcon from '@mui/lab/SpeedDialIcon';
 import CloseIcon from '@mui/icons-material/Close';
 import SpeedDial from '@mui/lab/SpeedDial';
-import { SpeedDialAction } from '@mui/lab';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
 
 export function AttachmentTypesMenu() {
 	const [open, setOpen] = useState(false);

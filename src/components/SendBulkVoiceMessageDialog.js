@@ -10,7 +10,7 @@ import { EVENT_TOPIC_REQUEST_MIC_PERMISSION } from '../Constants';
 import MicIcon from '@mui/icons-material/Mic';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import { prepareSendFilePayload } from '../helpers/ChatHelper';
-import { Alert } from '@mui/lab';
+import Alert from '@mui/material/Alert';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
