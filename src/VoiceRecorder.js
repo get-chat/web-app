@@ -1,8 +1,6 @@
 import ChosenFileClass from './ChosenFileClass';
 import { ATTACHMENT_TYPE_AUDIO } from './Constants';
-
 import { Mp3MediaRecorder } from 'mp3-mediarecorder';
-// eslint-disable-next-line import/no-webpack-loader-syntax
 
 class VoiceRecorder {
 	constructor() {

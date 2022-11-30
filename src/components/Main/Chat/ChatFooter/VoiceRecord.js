@@ -111,7 +111,7 @@ function VoiceRecord({
 					startVoiceRecord(stream);
 				})
 				.catch(function (err) {
-					console.log('Permission denied');
+					console.log(err);
 
 					PubSub.publish(
 						EVENT_TOPIC_DISPLAY_ERROR,
