@@ -7,5 +7,8 @@
 				"runtime": "automatic"
 			}
 		]
+	],
+	"plugins": [
+		"babel-plugin-transform-import-meta"
 	]
 }
