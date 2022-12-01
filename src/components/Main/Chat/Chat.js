@@ -829,7 +829,7 @@ export default function Chat(props) {
 						callback,
 						undefined,
 						undefined,
-						timestamp,
+						timestamp - 1, // That calculation fixes loading message
 						true,
 						true
 					);
