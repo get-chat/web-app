@@ -59,7 +59,7 @@ const TemplatesList = ({
 						</div>
 
 						{template[1].status === 'approved' && (
-							<Button onClick={() => onClick?.(template[1])}>
+							<Button onClick={() => onClick?.(template[1])} color="black">
 								{customSelectButtonTitle ?? t('Send')}
 							</Button>
 						)}

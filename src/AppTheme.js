@@ -8,6 +8,10 @@ const AppTheme = createTheme({
 		secondary: {
 			main: '#E33E7F',
 		},
+		black: {
+			main: '#212329',
+			contrastText: '#fff',
+		},
 	},
 	typography: {
 		button: {
