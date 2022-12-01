@@ -24,6 +24,7 @@ specifiers:
   axios: ^0.21.4
   babel-jest: ^29.3.1
   babel-loader: ^9.1.0
+  babel-plugin-transform-import-meta: ^2.2.0
   buffer: ^6.0.3
   classnames: ^2.3.1
   css-loader: ^6.7.1
@@ -127,6 +128,7 @@ devDependencies:
   '@testing-library/user-event': 14.4.3_ihvo3xlg2d6kwqju3os3zitn3y
   babel-jest: 29.3.1_@babel+core@7.20.5
   babel-loader: 9.1.0_ztqwsvkb6z73luspkai6ilstpu
+  babel-plugin-transform-import-meta: 2.2.0_@babel+core@7.20.5
   css-loader: 6.7.2_webpack@5.75.0
   cypress: 11.2.0
   html-webpack-plugin: 5.5.0_webpack@5.75.0
@@ -4073,6 +4075,16 @@ packages:
       '@babel/helper-define-polyfill-provider': 0.3.3_@babel+core@7.20.5
     transitivePeerDependencies:
       - supports-color
+
+  /babel-plugin-transform-import-meta/2.2.0_@babel+core@7.20.5:
+    resolution: {integrity: sha512-+DNF2SJAj2Pd0b1sObz+hyzNgUlI9DccPtMcF7ulMM0BxPrMF83ERjvPQwcQ9FRFSddWcC7DOw0FuyWgkQRoqg==}
+    peerDependencies:
+      '@babel/core': ^7.10.0
+    dependencies:
+      '@babel/core': 7.20.5
+      '@babel/template': 7.18.10
+      tslib: 2.4.0
+    dev: true
 
   /babel-plugin-transform-react-remove-prop-types/0.4.24:
     resolution: {integrity: sha512-eqj0hVcJUR57/Ug2zE1Yswsw4LhuqqHhD+8v120T1cl3kjg76QwtyBrdIk4WVwK+lAhBJVYCd/v+4nc4y+8JsA==}

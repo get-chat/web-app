@@ -93,6 +93,7 @@
 		"@testing-library/user-event": "^14.4.3",
 		"babel-jest": "^29.3.1",
 		"babel-loader": "^9.1.0",
+		"babel-plugin-transform-import-meta": "^2.2.0",
 		"css-loader": "^6.7.1",
 		"cypress": "^11.2.0",
 		"html-webpack-plugin": "^5.5.0",
