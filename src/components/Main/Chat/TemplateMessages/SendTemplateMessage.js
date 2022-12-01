@@ -320,14 +320,14 @@ function SendTemplateMessage({
 				</div>
 			))}
 			<Button
-				innerRef={sendButtonInnerRef}
+				ref={sendButtonInnerRef}
 				onClick={sendAfterCheck}
 				className="hidden"
 			>
 				{t('Send')}
 			</Button>
 			<Button
-				innerRef={bulkSendButtonInnerRef}
+				ref={bulkSendButtonInnerRef}
 				onClick={() => sendAfterCheck(true)}
 				className="hidden"
 			>
