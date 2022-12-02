@@ -13,7 +13,7 @@ const ChatMessageReferral = ({ data, onPreview }) => {
 	const referral = data.referral;
 
 	const goToSourceURL = () => {
-		console.log(referral.source_url);
+		window.open(referral.source_url, '_blank').focus();
 	};
 
 	return (
