@@ -20,7 +20,7 @@ function ChatMessageTemplate(props) {
 		<div className="chat__template">
 			<span className="chat__templateHeader">
 				<SmsIcon />
-				{t('Template message:')}
+				{t('Template message')}
 				<br />
 			</span>
 

@@ -26,6 +26,7 @@ import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
 import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
+import ChatMessageReferral from './ChatMessageReferral';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -116,6 +117,8 @@ function ChatMessage({
 								goToMessageId={goToMessageId}
 							/>
 						)}
+
+						{data.referral && <ChatMessageReferral data={data} />}
 
 						{data.type === ChatMessageModel.TYPE_IMAGE && (
 							<ChatMessageImage

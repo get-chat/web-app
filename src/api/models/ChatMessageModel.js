@@ -47,6 +47,7 @@ export class ChatMessageModel {
 		this.senderName = this.getSenderName();
 		this.initials = this.generateInitials(); //this.senderName ? this.senderName[0] : "?";
 		this.text = payload.text?.body;
+		this.referral = payload.referral;
 		this.buttonText = payload.button?.text;
 		this.interactiveButtonText = payload.interactive?.button_reply?.title;
 		this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
