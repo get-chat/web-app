@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './styles/index.css';
 import './styles/App.css';
 import App from './App';
@@ -12,6 +11,7 @@ import './i18n';
 import axios from 'axios';
 import { ApiService } from './api/ApiService';
 import { isEmptyString } from './helpers/Helpers';
+import { createRoot } from 'react-dom/client';
 
 // Init storage type
 initStorageType();
@@ -50,10 +50,9 @@ axios
 
 		const apiService = new ApiService(config);
 
-		ReactDOM.render(
-			<App config={config} apiService={apiService} />,
-			document.getElementById('root')
-		);
+		const container = document.getElementById('root');
+		const root = createRoot(container);
+		root.render(<App config={config} apiService={apiService} />);
 	})
 	.catch((error) => {
 		console.error(error);

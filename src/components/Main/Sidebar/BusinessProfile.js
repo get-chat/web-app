@@ -9,8 +9,8 @@ import {
 	MenuItem,
 	Select,
 	TextField,
-} from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+} from '@mui/material';
+import { ArrowBack } from '@mui/icons-material';
 import { generateInitialsHelper } from '../../../helpers/Helpers';
 import FileInput from '../../FileInput';
 import { generateAvatarColor } from '../../../helpers/AvatarHelper';
@@ -211,7 +211,7 @@ function BusinessProfile(props) {
 	return (
 		<div className="sidebarBusinessProfile">
 			<div className="sidebarBusinessProfile__header">
-				<IconButton onClick={props.onHide}>
+				<IconButton onClick={props.onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 
@@ -307,6 +307,7 @@ function BusinessProfile(props) {
 							<form onSubmit={updateBusinessProfile}>
 								<div>
 									<TextField
+										variant="standard"
 										value={about}
 										onChange={(e) => setAbout(e.target.value)}
 										label={t('About')}
@@ -318,6 +319,7 @@ function BusinessProfile(props) {
 										}}
 									/>
 									<TextField
+										variant="standard"
 										value={address}
 										onChange={(e) => setAddress(e.target.value)}
 										label={t('Address')}
@@ -328,6 +330,7 @@ function BusinessProfile(props) {
 										}}
 									/>
 									<TextField
+										variant="standard"
 										value={description}
 										onChange={(e) => setDescription(e.target.value)}
 										label={t('Description')}
@@ -338,6 +341,7 @@ function BusinessProfile(props) {
 										}}
 									/>
 									<TextField
+										variant="standard"
 										value={email}
 										onChange={(e) => setEmail(e.target.value)}
 										label={t('E-mail')}
@@ -348,9 +352,14 @@ function BusinessProfile(props) {
 										}}
 									/>
 
-									<FormControl fullWidth={true} disabled={!isAdmin}>
+									<FormControl
+										variant="standard"
+										fullWidth={true}
+										disabled={!isAdmin}
+									>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
+											variant="standard"
 											value={vertical}
 											onChange={(event) => setVertical(event.target.value)}
 											labelId="vertical-label"

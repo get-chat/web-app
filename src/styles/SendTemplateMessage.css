@@ -20,8 +20,9 @@
 }
 
 .sendTemplateMessage__section
-	.MuiButtonBase-root:not(.sendTemplateMessage__section__provideFileChoices
-		.MuiButtonBase-root) {
+	.MuiButtonBase-root:not(
+		.sendTemplateMessage__section__provideFileChoices .MuiButtonBase-root
+	) {
 	margin-right: 10px;
 }
 

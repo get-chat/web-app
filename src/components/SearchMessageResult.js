@@ -2,11 +2,11 @@ import React from 'react';
 import '../styles/SearchMessageResult.css';
 import Moment from 'react-moment';
 import ChatMessageModel from '../api/models/ChatMessageModel';
-import DoneAll from '@material-ui/icons/DoneAll';
-import DoneIcon from '@material-ui/icons/Done';
+import DoneAll from '@mui/icons-material/DoneAll';
+import DoneIcon from '@mui/icons-material/Done';
 import { CALENDAR_NORMAL } from '../Constants';
 import ChatMessageTypeIcon from './Main/Chat/ChatMessage/ChatMessageTypeIcon';
-import { ListItem } from '@material-ui/core';
+import { ListItem } from '@mui/material';
 import PrintMessage from './PrintMessage';
 
 function SearchMessageResult(props) {

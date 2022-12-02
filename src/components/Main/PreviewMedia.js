@@ -4,12 +4,12 @@ import {
 	IconButton,
 	Tooltip,
 	Zoom as ZoomTransition,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '../../Constants';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
-import { GetApp } from '@material-ui/icons';
+import { GetApp } from '@mui/icons-material';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import { generateUniqueID } from '../../helpers/Helpers';
@@ -78,6 +78,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 					<IconButton
 						className="app__mediaPreview__close"
 						onClick={hideImageOrVideoPreview}
+						size="large"
 					>
 						<CloseIcon />
 					</IconButton>
@@ -105,7 +106,7 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 				</div>
 
 				<Tooltip title={t('Download')}>
-					<IconButton onClick={download}>
+					<IconButton onClick={download} size="large">
 						<GetApp />
 					</IconButton>
 				</Tooltip>

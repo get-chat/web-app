@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/BulkSendIndicator.css';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress } from '@mui/material';
 import PubSub from 'pubsub-js';
 import {
 	CALENDAR_SHORT,

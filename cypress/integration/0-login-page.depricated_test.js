@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/// <reference types="cypress" />
 
 describe('Login Page', () => {
 	it('should load the login page', () => {

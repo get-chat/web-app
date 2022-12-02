@@ -5,14 +5,14 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup,
-} from '@material-ui/core';
+} from '@mui/material';
 import { isEmptyString } from '../../../../helpers/Helpers';
 import {
 	PRIMARY_KEY_TYPE_TAG,
 	PRIMARY_KEY_TYPE_WA_ID,
 } from '../../BulkSendTemplateViaCSV';
-import { Alert } from '@material-ui/lab';
-import LabelIcon from '@material-ui/icons/Label';
+import Alert from '@mui/material/Alert';
+import LabelIcon from '@mui/icons-material/Label';
 import { useTranslation } from 'react-i18next';
 import style from './StepSelectPrimaryKey.module.css';
 import { findTagByName } from '../../../../helpers/TagHelper';
@@ -64,7 +64,7 @@ const StepSelectPrimaryKey = ({
 
 	return (
 		<>
-			<FormControl>
+			<FormControl variant="standard">
 				<FormLabel>{t('Select the column that contains recipients')}</FormLabel>
 				<RadioGroup
 					aria-label="primary-key"
@@ -85,7 +85,7 @@ const StepSelectPrimaryKey = ({
 				</RadioGroup>
 			</FormControl>
 
-			<FormControl>
+			<FormControl variant="standard">
 				<FormLabel>{t('Select the type of recipients')}</FormLabel>
 				<RadioGroup
 					aria-label="primary-key"

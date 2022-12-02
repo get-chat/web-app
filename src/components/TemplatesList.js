@@ -1,6 +1,6 @@
 import React from 'react';
 import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 
@@ -59,7 +59,7 @@ const TemplatesList = ({
 						</div>
 
 						{template[1].status === 'approved' && (
-							<Button onClick={() => onClick?.(template[1])}>
+							<Button onClick={() => onClick?.(template[1])} color="black">
 								{customSelectButtonTitle ?? t('Send')}
 							</Button>
 						)}

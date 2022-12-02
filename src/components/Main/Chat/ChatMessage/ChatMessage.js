@@ -1,17 +1,16 @@
 import React from 'react';
-import DoneAll from '@material-ui/icons/DoneAll';
-import DoneIcon from '@material-ui/icons/Done';
-import ErrorIcon from '@material-ui/icons/Error';
-import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import DoneAll from '@mui/icons-material/DoneAll';
+import DoneIcon from '@mui/icons-material/Done';
+import ErrorIcon from '@mui/icons-material/Error';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Moment from 'react-moment';
 import '../../../../styles/InputRange.css';
-import '../../../../AvatarStyles';
-import NoteIcon from '@material-ui/icons/Note';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import NoteIcon from '@mui/icons-material/Note';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import MessageDateIndicator from '../MessageDateIndicator';
 import ContextChatMessage from './ContextChatMessage';
-import ReplyIcon from '@material-ui/icons/Reply';
+import ReplyIcon from '@mui/icons-material/Reply';
 import ChatMessageVideo from './ChatMessageVideo';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageDocument from './ChatMessageDocument';
@@ -25,8 +24,8 @@ import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
-import { Alert } from '@material-ui/lab';
-import { Button } from '@material-ui/core';
+import Alert from '@mui/material/Alert';
+import { Button } from '@mui/material';
 
 const iconStyles = {
 	fontSize: '15px',

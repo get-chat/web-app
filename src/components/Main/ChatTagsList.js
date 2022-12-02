@@ -8,9 +8,9 @@ import {
 	DialogTitle,
 	Link,
 	ListItem,
-} from '@material-ui/core';
+} from '@mui/material';
 import '../../styles/ChatTagsList.css';
-import LabelIcon from '@material-ui/icons/Label';
+import LabelIcon from '@mui/icons-material/Label';
 import { getHubURL } from '../../helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '../../contexts/AppConfig';
@@ -74,6 +74,7 @@ function ChatTagsList(props) {
 					<Link
 						href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
 						target="_blank"
+						underline="hover"
 					>
 						{t('Manage tags')}
 					</Link>

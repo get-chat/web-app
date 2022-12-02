@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import { Button, Dialog, IconButton, Tooltip } from '@material-ui/core';
-import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import { Button, Dialog, IconButton, Tooltip } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
 import { useTranslation } from 'react-i18next';
 import VoiceRecord from './Main/Chat/ChatFooter/VoiceRecord';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_REQUEST_MIC_PERMISSION } from '../Constants';
-import MicIcon from '@material-ui/icons/Mic';
+import MicIcon from '@mui/icons-material/Mic';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import { prepareSendFilePayload } from '../helpers/ChatHelper';
-import { Alert } from '@material-ui/lab';
+import Alert from '@mui/material/Alert';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
@@ -112,6 +112,7 @@ const SendBulkVoiceMessageDialog = ({
 								onClick={() =>
 									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'bulk')
 								}
+								size="large"
 							>
 								<MicIcon />
 							</IconButton>

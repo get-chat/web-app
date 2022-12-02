@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
-import { Backdrop, CircularProgress, Fade, TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { Alert } from '@material-ui/lab';
+import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import Alert from '@mui/material/Alert';
 import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
-import { makeStyles } from '@material-ui/styles';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
-
-const useStyles = makeStyles((theme) => ({
-	backdrop: {
-		zIndex: theme.zIndex.drawer + 1,
-		color: '#fff',
-	},
-}));
 
 export default function Login(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -30,15 +22,13 @@ export default function Login(props) {
 		invalidToken: 'Invalid token.',
 	};
 
-	const classes = useStyles();
-
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [isLoggingIn, setLoggingIn] = useState(false);
 	const [isValidatingToken, setValidatingToken] = useState(false);
 	const [loginError, setLoginError] = useState();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 	const location = useLocation();
 
 	useEffect(() => {
@@ -57,7 +47,7 @@ export default function Login(props) {
 			apiService.baseCall(
 				(response) => {
 					// Redirect to main route
-					history.push('/main');
+					navigate('/main');
 				},
 				(error) => {
 					setValidatingToken(false);
@@ -97,7 +87,7 @@ export default function Login(props) {
 				}
 
 				// Redirect to main route
-				history.push((location.nextPath ?? '/main') + (location.search ?? ''));
+				navigate((location.nextPath ?? '/main') + (location.search ?? ''));
 			},
 			(error) => {
 				// Hide the loading animation
@@ -137,6 +127,7 @@ export default function Login(props) {
 
 					<form onSubmit={doLogin}>
 						<TextField
+							variant="standard"
 							data-test-id="username"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
@@ -145,6 +136,7 @@ export default function Login(props) {
 							fullWidth={true}
 						/>
 						<TextField
+							variant="standard"
 							data-test-id="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
@@ -181,7 +173,7 @@ export default function Login(props) {
 				</div>
 			</Fade>
 
-			<Backdrop className={classes.backdrop} open={isLoggingIn}>
+			<Backdrop className="login__backdrop" open={isLoggingIn}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
 		</div>

@@ -11,7 +11,7 @@ const ListMessage = ({ header, body, footer, action }) => {
 			{body && <div className={styles.body}>{body.text}</div>}
 			{footer && <div className={styles.footer}>{footer.text}</div>}
 
-			{sections && (
+			{sections && Array.isArray(sections) && (
 				<div className={styles.actions}>
 					<ul className={styles.list}>
 						{sections.map(({ title, rows }) => (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Contact.css';
-import { Avatar, ListItem } from '@material-ui/core';
+import { Avatar, ListItem } from '@mui/material';
 import ContactProviderHeader from './ContactProviderHeader';
 import { useTranslation } from 'react-i18next';
 

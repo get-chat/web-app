@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
-import ReplyIcon from '@material-ui/icons/Reply';
+import ReplyIcon from '@mui/icons-material/Reply';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import PrintMessage from '../../../PrintMessage';
 

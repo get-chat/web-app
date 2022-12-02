@@ -6,7 +6,7 @@ import {
 	MenuItem,
 	Select,
 	TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 import '../styles/CreateTemplate.css';
 
 function CreateTemplate() {
@@ -37,6 +37,7 @@ function CreateTemplate() {
 			<FormControl variant="outlined" fullWidth={true}>
 				<InputLabel>Language</InputLabel>
 				<Select
+					variant="standard"
 					labelId="demo-simple-select-outlined-label"
 					onChange={handleLanguageChange}
 					label="Language"
@@ -49,6 +50,7 @@ function CreateTemplate() {
 			<FormControl variant="outlined" fullWidth={true}>
 				<InputLabel>Category</InputLabel>
 				<Select
+					variant="standard"
 					labelId="demo-simple-select-outlined-label"
 					onChange={handleCategoryChange}
 					label="Category"

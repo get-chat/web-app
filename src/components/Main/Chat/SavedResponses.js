@@ -6,7 +6,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
-} from '@material-ui/core';
+} from '@mui/material';
 import { getObjLength } from '../../../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 
@@ -53,10 +53,16 @@ function SavedResponses(props) {
 								</div>
 							</div>
 
-							<Button onClick={() => sendSavedResponse(savedResponse[0])}>
+							<Button
+								onClick={() => sendSavedResponse(savedResponse[0])}
+								color="black"
+							>
 								{t('Send')}
 							</Button>
-							<Button onClick={() => attemptToDelete(savedResponse[0])}>
+							<Button
+								onClick={() => attemptToDelete(savedResponse[0])}
+								color="secondary"
+							>
 								{t('Delete')}
 							</Button>
 						</div>

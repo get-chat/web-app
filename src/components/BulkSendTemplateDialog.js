@@ -1,8 +1,8 @@
 import React from 'react';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import { Button, Dialog } from '@material-ui/core';
-import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import { Button, Dialog } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
 import { useTranslation } from 'react-i18next';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import TemplateMessages from './Main/Chat/TemplateMessages/TemplateMessages';

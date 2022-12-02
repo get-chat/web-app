@@ -4,8 +4,8 @@ import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT } from '../../../../Constants';
 import FailedBulkMessageNotification from './FailedBulkMessageNotification';
 import BulkMessageTaskElementModel from '../../../../api/models/BulkMessageTaskElementModel';
-import CloseIcon from '@material-ui/icons/Close';
-import { IconButton } from '@material-ui/core';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton } from '@mui/material';
 import { getObjLength } from '../../../../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../../../../contexts/ApplicationContext';
@@ -82,7 +82,7 @@ function Notifications(props) {
 	return (
 		<div className="notifications">
 			<div className="notifications__header">
-				<IconButton onClick={hideNotifications}>
+				<IconButton onClick={hideNotifications} size="large">
 					<CloseIcon />
 				</IconButton>
 

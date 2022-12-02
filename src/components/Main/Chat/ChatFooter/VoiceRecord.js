@@ -6,11 +6,11 @@ import {
 	DialogContentText,
 	DialogTitle,
 	IconButton,
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { displaySeconds } from '../../../../helpers/Helpers';
-import DoneIcon from '@material-ui/icons/Done';
+import DoneIcon from '@mui/icons-material/Done';
 import '../../../../styles/VoiceRecord.css';
 import VoiceRecorder from '../../../../VoiceRecorder';
 import {
@@ -20,7 +20,7 @@ import {
 } from '../../../../Constants';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 
 let timerIntervalId;
@@ -111,7 +111,7 @@ function VoiceRecord({
 					startVoiceRecord(stream);
 				})
 				.catch(function (err) {
-					console.log('Permission denied');
+					console.log(err);
 
 					PubSub.publish(
 						EVENT_TOPIC_DISPLAY_ERROR,
@@ -192,6 +192,7 @@ function VoiceRecord({
 			<IconButton
 				onClick={stopVoiceRecord}
 				className="voiceRecord__cancelButton"
+				size="large"
 			>
 				<CloseIcon />
 			</IconButton>
@@ -199,7 +200,11 @@ function VoiceRecord({
 			<FiberManualRecordIcon className="voiceRecord__recordIcon" />
 			<span className="voiceRecord__timer">{displaySeconds(timer)}</span>
 
-			<IconButton onClick={sendVoiceRecord} className="voiceRecord__sendButton">
+			<IconButton
+				onClick={sendVoiceRecord}
+				className="voiceRecord__sendButton"
+				size="large"
+			>
 				<DoneIcon />
 			</IconButton>
 

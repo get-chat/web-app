@@ -1,18 +1,18 @@
 import React from 'react';
 import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '../../../../Constants';
-import { useHistory } from 'react-router-dom';
-import { Link } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@mui/material';
 import { generateMessagePreview } from '../../../../helpers/MessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
 
 function FailedBulkMessageNotification(props) {
 	const { t } = useTranslation();
 
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	const handleClick = () => {
-		history.push(`/main/chat/${props.data.waId}`);
+		navigate(`/main/chat/${props.data.waId}`);
 	};
 
 	const extractReasonFromResponsePayload = (responsePayload) => {
@@ -42,7 +42,12 @@ function FailedBulkMessageNotification(props) {
 					}}
 				>
 					Recipient:{' '}
-					<Link href="#" onClick={handleClick} className="bold">
+					<Link
+						href="#"
+						onClick={handleClick}
+						className="bold"
+						underline="hover"
+					>
 						%s
 					</Link>
 				</Trans>

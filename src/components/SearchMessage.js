@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/SearchMessage.css';
-import { IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
 import {
 	EVENT_TOPIC_GO_TO_MSG_ID,
@@ -88,7 +88,7 @@ function SearchMessage(props) {
 	return (
 		<div className="searchMessage">
 			<div className="searchMessage__header">
-				<IconButton onClick={hideSearchMessages}>
+				<IconButton onClick={hideSearchMessages} size="large">
 					<CloseIcon />
 				</IconButton>
 

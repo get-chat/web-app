@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import '../../styles/LoadingScreen.css';
 import { useTranslation } from 'react-i18next';
-import { Alert } from '@material-ui/lab';
+import Alert from '@mui/material/Alert';
 import packageJson from '../../../package.json';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 
 function LoadingScreen(props) {
 	const { t } = useTranslation();

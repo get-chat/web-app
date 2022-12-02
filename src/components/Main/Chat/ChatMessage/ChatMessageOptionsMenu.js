@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, MenuItem } from '@material-ui/core';
+import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 function ChatMessageOptionsMenu(props) {
@@ -20,7 +20,6 @@ function ChatMessageOptionsMenu(props) {
 	return (
 		<Menu
 			anchorEl={props.menuAnchorEl}
-			getContentAnchorEl={null}
 			anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			keepMounted
