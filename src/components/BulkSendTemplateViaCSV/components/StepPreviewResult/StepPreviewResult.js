@@ -73,6 +73,7 @@ const StepPreviewResult = ({ template, params, csvData }) => {
 						<ChatMessage
 							data={messageData}
 							templateData={templates[messageData.templateName]}
+							disableMediaPreview={true}
 						/>
 					</ErrorBoundary>
 				)}

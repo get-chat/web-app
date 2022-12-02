@@ -6,6 +6,10 @@ import ChatMessageImage from '../ChatMessageImage';
 import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
 import { Tooltip } from '@mui/material';
+import {
+	ATTACHMENT_TYPE_IMAGE,
+	ATTACHMENT_TYPE_VIDEO,
+} from '../../../../../Constants';
 
 const ChatMessageReferral = ({ data, onPreview }) => {
 	const { t } = useTranslation();
@@ -31,7 +35,12 @@ const ChatMessageReferral = ({ data, onPreview }) => {
 							className={styles.referralMedia}
 							data={referral}
 							source={data.generateReferralImageLink()}
-							onPreview={onPreview}
+							onPreview={() =>
+								onPreview(
+									ATTACHMENT_TYPE_IMAGE,
+									data.generateReferralImageLink()
+								)
+							}
 						/>
 					)}
 
@@ -39,7 +48,12 @@ const ChatMessageReferral = ({ data, onPreview }) => {
 						<ChatMessageVideo
 							data={data}
 							source={data.generateReferralVideoLink()}
-							onPreview={onPreview}
+							onPreview={() =>
+								onPreview(
+									ATTACHMENT_TYPE_VIDEO,
+									data.generateReferralVideoLink()
+								)
+							}
 						/>
 					)}
 				</div>

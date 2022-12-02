@@ -7,7 +7,7 @@ function ChatMessageImage({ className, source, data, onPreview }) {
 			className={'chat__media' + (className ? ' ' + className : '')}
 			src={source}
 			alt={data.caption}
-			onClick={() => onPreview(data)}
+			onClick={onPreview}
 		/>
 	);
 }

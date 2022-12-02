@@ -7,7 +7,12 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Moment from 'react-moment';
-import { CALENDAR_NORMAL } from '../../Constants';
+import {
+	ATTACHMENT_TYPE_IMAGE,
+	ATTACHMENT_TYPE_VIDEO,
+	CALENDAR_NORMAL,
+	EVENT_TOPIC_CHAT_MESSAGE,
+} from '../../Constants';
 import { generateAvatarColor } from '../../helpers/AvatarHelper';
 import { GetApp } from '@mui/icons-material';
 import axios from 'axios';
@@ -17,13 +22,20 @@ import { useTranslation } from 'react-i18next';
 import { mimeToExtension } from '../../helpers/ImageHelper';
 import Image from '../Image';
 import PreviewMediaZoom from './PreviewMediaZoom';
+import PubSub from 'pubsub-js';
+import { setPreviewMediaObject } from '../../store/reducers/previewMediaObjectReducer';
+import { useDispatch } from 'react-redux';
 
-function PreviewMedia({ data, hideImageOrVideoPreview }) {
+function PreviewMedia({ data }) {
 	const { t } = useTranslation();
+
+	const dispatch = useDispatch();
 
 	const [isZoomEnabled, setZoomEnabled] = useState(false);
 
-	const chatMessageToPreview = data;
+	useEffect(() => {
+		PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
+	}, []);
 
 	useEffect(() => {
 		const handleKey = (event) => {
@@ -44,6 +56,10 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 		};
 	}, [isZoomEnabled]);
 
+	const hideImageOrVideoPreview = () => {
+		dispatch(setPreviewMediaObject(undefined));
+	};
+
 	const handleClick = (event) => {
 		if (event.target.className?.includes('app__mediaPreview__container')) {
 			hideImageOrVideoPreview();
@@ -51,14 +67,10 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 	};
 
 	const download = () => {
-		let fileURL =
-			chatMessageToPreview.generateImageLink(true) ??
-			chatMessageToPreview.generateVideoLink(true);
-
-		if (!fileURL) return;
+		if (!data.source) return;
 
 		axios
-			.get(fileURL, {
+			.get(data.source, {
 				responseType: 'blob',
 			})
 			.then((res) => {
@@ -86,22 +98,16 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 
 				<Avatar
 					style={{
-						backgroundColor: generateAvatarColor(
-							chatMessageToPreview.senderName
-						),
+						backgroundColor: generateAvatarColor(data.senderName),
 					}}
 				>
-					{chatMessageToPreview.initials}
+					{data.initials}
 				</Avatar>
 
 				<div className="app_imagePreview__header__senderInfo">
-					<h3>{chatMessageToPreview.senderName}</h3>
+					<h3>{data.senderName}</h3>
 					<span>
-						<Moment
-							calendar={CALENDAR_NORMAL}
-							date={chatMessageToPreview.timestamp}
-							unix
-						/>
+						<Moment calendar={CALENDAR_NORMAL} date={data.timestamp} unix />
 					</span>
 				</div>
 
@@ -114,22 +120,18 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 
 			<ZoomTransition in={true}>
 				<div className="app__mediaPreview__container" onClick={handleClick}>
-					{(chatMessageToPreview.imageId ||
-						chatMessageToPreview.imageLink ||
-						chatMessageToPreview.getHeaderFileLink('image')) && (
+					{data.type === ATTACHMENT_TYPE_IMAGE && (
 						<Image
 							className="app__mediaPreview__image"
-							src={chatMessageToPreview.generateImageLink(true)}
+							src={data.source}
 							alt="Preview"
 							onClick={() => setZoomEnabled(true)}
 						/>
 					)}
-					{(chatMessageToPreview.videoId ||
-						chatMessageToPreview.videoLink ||
-						chatMessageToPreview.getHeaderFileLink('video')) && (
+					{data.type === ATTACHMENT_TYPE_VIDEO && (
 						<video
 							className="app__mediaPreview__video"
-							src={chatMessageToPreview.generateVideoLink(true)}
+							src={data.source}
 							controls
 							autoPlay={true}
 						/>
@@ -137,15 +139,12 @@ function PreviewMedia({ data, hideImageOrVideoPreview }) {
 				</div>
 			</ZoomTransition>
 
-			{isZoomEnabled &&
-				(chatMessageToPreview.imageId ||
-					chatMessageToPreview.imageLink ||
-					chatMessageToPreview.getHeaderFileLink('image')) && (
-					<PreviewMediaZoom
-						src={chatMessageToPreview.generateImageLink(true)}
-						onClick={() => setZoomEnabled(false)}
-					/>
-				)}
+			{isZoomEnabled && data.type === ATTACHMENT_TYPE_IMAGE && (
+				<PreviewMediaZoom
+					src={data.source}
+					onClick={() => setZoomEnabled(false)}
+				/>
+			)}
 		</div>
 	);
 }

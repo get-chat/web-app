@@ -4,7 +4,7 @@ import Chat from './Chat/Chat';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios from 'axios';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
@@ -16,7 +16,6 @@ import {
 	EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
-	EVENT_TOPIC_CHAT_MESSAGE,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
 	EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
@@ -72,6 +71,9 @@ function Main() {
 	const config = React.useContext(AppConfig);
 
 	const tags = useSelector((state) => state.tags.value);
+	const previewMediaObject = useSelector(
+		(state) => state.previewMediaObject.value
+	);
 
 	const dispatch = useDispatch();
 
@@ -108,8 +110,6 @@ function Main() {
 	const [successMessage, setSuccessMessage] = useState('');
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
-
-	const [chatMessageToPreview, setChatMessageToPreview] = useState();
 
 	const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
 	const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
@@ -240,22 +240,6 @@ function Main() {
 				preparedBulkMessageTask
 			);
 		});
-	};
-
-	const hideImageOrVideoPreview = () => {
-		setChatMessageToPreview(null);
-	};
-
-	const previewMedia = (chatMessage) => {
-		if (!chatMessage) {
-			hideImageOrVideoPreview();
-			return false;
-		}
-
-		// Pause any playing audios
-		PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
-
-		setChatMessageToPreview(chatMessage);
 	};
 
 	const goToChatByWaId = (_waId) => {
@@ -1103,7 +1087,6 @@ function Main() {
 						setUploadingMedia={setUploadingMedia}
 						newMessages={newMessages}
 						setChosenContact={setChosenContact}
-						previewMedia={(chatMessage) => previewMedia(chatMessage)}
 						isTemplatesFailed={isTemplatesFailed}
 						isLoadingTemplates={isLoadingTemplates}
 						savedResponses={savedResponses}
@@ -1159,12 +1142,7 @@ function Main() {
 					/>
 				)}
 
-				{chatMessageToPreview && (
-					<PreviewMedia
-						data={chatMessageToPreview}
-						hideImageOrVideoPreview={hideImageOrVideoPreview}
-					/>
-				)}
+				{previewMediaObject && <PreviewMedia data={previewMediaObject} />}
 
 				{isDownloadUnsupportedFileVisible && (
 					<DownloadUnsupportedFile

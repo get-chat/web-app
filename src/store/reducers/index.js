@@ -4,6 +4,7 @@ import currentUserReducer from './currentUserReducer';
 import filterTagReducer from './filterTagReducer';
 import chatsCountReducer from './chatsCountReducer';
 import tagsReducer from './tagsReducer';
+import previewMediaObjectReducer from './previewMediaObjectReducer';
 
 const rootReducer = {
 	UI: UIReducer,
@@ -12,6 +13,7 @@ const rootReducer = {
 	currentUser: currentUserReducer,
 	filterTag: filterTagReducer,
 	chatsCount: chatsCountReducer,
+	previewMediaObject: previewMediaObjectReducer,
 };
 
 export default rootReducer;

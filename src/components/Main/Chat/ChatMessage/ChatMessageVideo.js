@@ -1,13 +1,10 @@
 import React from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-function ChatMessageVideo(props) {
+function ChatMessageVideo({ source, onPreview }) {
 	return (
-		<div
-			className="chat__videoWrapper"
-			onClick={() => props.onPreview(props.data)}
-		>
-			<video className="chat__media" src={props.source} preload="none" />
+		<div className="chat__videoWrapper" onClick={onPreview}>
+			<video className="chat__media" src={source} preload="none" />
 			<span className="chat__videoWrapper__iconWrapper">
 				<PlayArrowIcon
 					fontSize={'large'}
