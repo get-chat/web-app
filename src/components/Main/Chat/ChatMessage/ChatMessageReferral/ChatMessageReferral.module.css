@@ -14,3 +14,34 @@
 	height: 0.6em !important;
 	margin-right: 5px;
 }
+
+.referralContainer {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 6px;
+	overflow: hidden;
+	margin: -1px -6px 4px -6px;
+}
+
+.referralMedia {
+	margin: 0 !important;
+	border-radius: 0 !important;
+}
+
+.referralBody {
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.referralTextBody {
+	font-size: 12px;
+}
+
+.referralTextBody .emoji-mart-emoji {
+	height: 12px;
+	width: 12px;
+}
+
+.referralSourceURL {
+	font-size: 12px;
+	color: rgba(0, 0, 0, 0.6);
+}

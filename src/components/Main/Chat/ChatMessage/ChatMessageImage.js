@@ -1,13 +1,13 @@
 import React from 'react';
 import Image from '../../../Image';
 
-function ChatMessageImage(props) {
+function ChatMessageImage({ className, source, data, onPreview }) {
 	return (
 		<Image
-			className="chat__media"
-			src={props.source}
-			alt={props.data.caption}
-			onClick={() => props.onPreview(props.data)}
+			className={'chat__media' + (className ? ' ' + className : '')}
+			src={source}
+			alt={data.caption}
+			onClick={() => onPreview(data)}
 		/>
 	);
 }

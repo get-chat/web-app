@@ -256,6 +256,24 @@ export class ChatMessageModel {
 		return `https://www.google.com/maps/search/?api=1&query=${this.location?.latitude},${this.location?.longitude}`;
 	}
 
+	generateReferralImageLink() {
+		if (this.referral?.image) {
+			return (
+				this.referral.image.link ??
+				this.generateMediaLink(this.referral.image.id)
+			);
+		}
+	}
+
+	generateReferralVideoLink() {
+		if (this.referral?.video) {
+			return (
+				this.referral.video.link ??
+				this.generateMediaLink(this.referral.video.id)
+			);
+		}
+	}
+
 	getStatus() {
 		if (this.readTimestamp) {
 			return ChatMessageModel.STATUS_READ;
