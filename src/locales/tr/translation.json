@@ -195,5 +195,6 @@
 	"Please select tags that target up to %s recipients in total.": "Lütfen toplamda en fazla %s alıcıyı hedefleyen etiketler seç.",
 	"Search": "Ara",
 	"Search for contacts": "Kontaklarda ara",
-	"Message via ad": "Reklam aracılığıyla mesaj"
+	"Message via ad": "Reklam aracılığıyla mesaj",
+	"Message via post": "Gönderi aracılığıyla mesaj"
 }

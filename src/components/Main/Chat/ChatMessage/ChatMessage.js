@@ -118,7 +118,12 @@ function ChatMessage({
 							/>
 						)}
 
-						{data.referral && <ChatMessageReferral data={data} />}
+						{data.referral && (
+							<ChatMessageReferral
+								data={data}
+								onPreview={() => onPreview?.(data)}
+							/>
+						)}
 
 						{data.type === ChatMessageModel.TYPE_IMAGE && (
 							<ChatMessageImage

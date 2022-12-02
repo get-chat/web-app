@@ -195,5 +195,6 @@
 	"Please select tags that target up to %s recipients in total.": "",
 	"Search": "",
 	"Search for contacts": "",
-	"Message via ad": ""
+	"Message via ad": "",
+	"Message via post": ""
 }

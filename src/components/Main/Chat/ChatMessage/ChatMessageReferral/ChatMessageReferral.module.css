@@ -6,6 +6,7 @@
 	font-size: x-small;
 	color: rgba(0, 0, 45, 0.6);
 	margin-bottom: 5px;
+	cursor: pointer;
 }
 
 .headerIcon {

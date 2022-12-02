@@ -5,8 +5,9 @@ import styles from './ChatMessageReferral.module.css';
 import ChatMessageImage from '../ChatMessageImage';
 import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
+import { Tooltip } from '@mui/material';
 
-const ChatMessageReferral = ({ data }) => {
+const ChatMessageReferral = ({ data, onPreview }) => {
 	const { t } = useTranslation();
 
 	const referral = data.referral;
@@ -17,7 +18,7 @@ const ChatMessageReferral = ({ data }) => {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.header}>
+			<div className={styles.header} onClick={goToSourceURL}>
 				<ReviewsIcon className={styles.headerIcon} />
 				{t('Message via ' + referral.source_type)}
 				<br />
@@ -30,7 +31,7 @@ const ChatMessageReferral = ({ data }) => {
 							className={styles.referralMedia}
 							data={referral}
 							source={data.generateReferralImageLink()}
-							onPreview={goToSourceURL}
+							onPreview={onPreview}
 						/>
 					)}
 
@@ -38,14 +39,16 @@ const ChatMessageReferral = ({ data }) => {
 						<ChatMessageVideo
 							data={data}
 							source={data.generateReferralVideoLink()}
-							onPreview={goToSourceURL}
+							onPreview={onPreview}
 						/>
 					)}
 				</div>
 				<div className={styles.referralBody} onClick={goToSourceURL}>
-					<h4>
-						<PrintMessage message={referral.headline} />
-					</h4>
+					<Tooltip title={referral.source_id} placement="top-start">
+						<h4>
+							<PrintMessage message={referral.headline} />
+						</h4>
+					</Tooltip>
 					<div className={styles.referralTextBody}>
 						<PrintMessage message={referral.body} />
 					</div>
