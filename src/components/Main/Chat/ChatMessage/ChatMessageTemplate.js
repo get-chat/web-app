@@ -9,6 +9,10 @@ import {
 	sortTemplateComponents,
 } from '../../../../helpers/TemplateMessageHelper';
 import { useTranslation } from 'react-i18next';
+import {
+	ATTACHMENT_TYPE_IMAGE,
+	ATTACHMENT_TYPE_VIDEO,
+} from '../../../../Constants';
 
 function ChatMessageTemplate(props) {
 	const { t } = useTranslation();
@@ -20,7 +24,7 @@ function ChatMessageTemplate(props) {
 		<div className="chat__template">
 			<span className="chat__templateHeader">
 				<SmsIcon />
-				{t('Template message:')}
+				{t('Template message')}
 				<br />
 			</span>
 
@@ -36,14 +40,24 @@ function ChatMessageTemplate(props) {
 												<ChatMessageImage
 													data={data}
 													source={data.getHeaderFileLink('image')}
-													onPreview={() => props.onPreview(data)}
+													onPreview={() =>
+														props.onPreview(
+															ATTACHMENT_TYPE_IMAGE,
+															data.getHeaderFileLink('image')
+														)
+													}
 												/>
 											)}
 											{component.format === 'VIDEO' && (
 												<ChatMessageVideo
 													data={data}
 													source={data.getHeaderFileLink('video')}
-													onPreview={() => props.onPreview(data)}
+													onPreview={() =>
+														props.onPreview(
+															ATTACHMENT_TYPE_VIDEO,
+															data.getHeaderFileLink('video')
+														)
+													}
 												/>
 											)}
 											{component.format === 'DOCUMENT' && (

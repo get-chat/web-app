@@ -88,8 +88,8 @@
 	"Save this response": "Bu yanıtı kaydet",
 	"Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!": "Taslak mesajınız kullanıcıya başarıyla gönderildi fakat şu anda taslakları yükleyemiyoruz. Lütfen daha sonra tekrar deneyin!",
 	"Missing template": "Eksik taslak",
-	"Template message:": "Taslak mesajı",
-	"Interactive message:": "İnteraktif mesaj:",
+	"Template message": "Taslak mesajı",
+	"Interactive message": "İnteraktif mesaj",
 	"Image": "Görsel",
 	"Video": "Video",
 	"Voice": "Ses Kaydı",
@@ -194,5 +194,7 @@
 	"Please select up to %s direct recipients.": "Lütfen %s direk alıcıya kadar seçim yap.",
 	"Please select tags that target up to %s recipients in total.": "Lütfen toplamda en fazla %s alıcıyı hedefleyen etiketler seç.",
 	"Search": "Ara",
-	"Search for contacts": "Kontaklarda ara"
+	"Search for contacts": "Kontaklarda ara",
+	"Message via ad": "Reklam aracılığıyla mesaj",
+	"Message via post": "Gönderi aracılığıyla mesaj"
 }

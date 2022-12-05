@@ -74,11 +74,12 @@ import {
 	preparePhoneNumber,
 } from '../../../helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios from 'axios';
+import { setPreviewMediaObject } from '../../../store/reducers/previewMediaObjectReducer';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -89,6 +90,8 @@ export default function Chat(props) {
 	const currentUser = useSelector((state) => state.currentUser.value);
 
 	const { t } = useTranslation();
+
+	const dispatch = useDispatch();
 
 	const messagesContainer = useRef(null);
 
@@ -285,7 +288,7 @@ export default function Chat(props) {
 		setPreviewSendMediaVisible(false);
 		setPreviewSendMediaData(undefined);
 
-		props.previewMedia(null);
+		dispatch(setPreviewMediaObject(undefined));
 
 		// Close emoji picker
 		PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
@@ -1781,7 +1784,6 @@ export default function Chat(props) {
 								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}
 								date={curMsgDate}
-								onPreview={(chatMessage) => props.previewMedia(chatMessage)}
 								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}

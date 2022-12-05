@@ -16,20 +16,22 @@ const ProductMessage = ({ header, body, footer, action }) => {
 						{action.sections.map((section, idx) => (
 							<li className={styles.item} key={idx}>
 								<div>{section.title}</div>
-								<ul className={styles.list}>
-									{section.product_items.map(({ product_retailer_id }) => (
-										<li key={product_retailer_id}>
-											<Trans
-												values={{
-													postProcess: 'sprintf',
-													sprintf: [product_retailer_id],
-												}}
-											>
-												<b>Product retailer ID</b>: %s
-											</Trans>
-										</li>
-									))}
-								</ul>
+								{section.product_items && (
+									<ul className={styles.list}>
+										{section.product_items.map(({ product_retailer_id }) => (
+											<li key={product_retailer_id}>
+												<Trans
+													values={{
+														postProcess: 'sprintf',
+														sprintf: [product_retailer_id],
+													}}
+												>
+													<b>Product retailer ID</b>: %s
+												</Trans>
+											</li>
+										))}
+									</ul>
+								)}
 							</li>
 						))}
 					</ul>

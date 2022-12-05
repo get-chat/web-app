@@ -26,6 +26,14 @@ import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
 import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
+import ChatMessageReferral from './ChatMessageReferral';
+import { useDispatch } from 'react-redux';
+import { setPreviewMediaObject } from '../../../../store/reducers/previewMediaObjectReducer';
+import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
+import {
+	ATTACHMENT_TYPE_IMAGE,
+	ATTACHMENT_TYPE_VIDEO,
+} from '../../../../Constants';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -39,11 +47,27 @@ function ChatMessage({
 	contactProvidersData,
 	onOptionsClick,
 	goToMessageId,
-	onPreview,
 	isTemplatesFailed,
 	retryMessage,
+	disableMediaPreview,
 }) {
 	const { t } = useTranslation();
+
+	const dispatch = useDispatch();
+
+	const onPreview = (type, source) => {
+		if (!disableMediaPreview) {
+			const previewData = new PreviewMediaModel(
+				data.senderName,
+				data.initials,
+				type,
+				source,
+				data.timestamp
+			);
+
+			dispatch(setPreviewMediaObject(previewData));
+		}
+	};
 
 	const dateFormat = 'H:mm';
 
@@ -117,11 +141,17 @@ function ChatMessage({
 							/>
 						)}
 
+						{data.referral && (
+							<ChatMessageReferral data={data} onPreview={onPreview} />
+						)}
+
 						{data.type === ChatMessageModel.TYPE_IMAGE && (
 							<ChatMessageImage
 								data={data}
 								source={data.generateImageLink()}
-								onPreview={() => onPreview?.(data)}
+								onPreview={() =>
+									onPreview(ATTACHMENT_TYPE_IMAGE, data.generateImageLink())
+								}
 							/>
 						)}
 
@@ -129,7 +159,9 @@ function ChatMessage({
 							<ChatMessageVideo
 								data={data}
 								source={data.generateVideoLink()}
-								onPreview={() => onPreview?.(data)}
+								onPreview={() =>
+									onPreview(ATTACHMENT_TYPE_VIDEO, data.generateVideoLink())
+								}
 							/>
 						)}
 
@@ -157,7 +189,7 @@ function ChatMessage({
 								data={data}
 								templateData={templateData}
 								isTemplatesFailed={isTemplatesFailed}
-								onPreview={() => onPreview?.(data)}
+								onPreview={onPreview}
 							/>
 						)}
 

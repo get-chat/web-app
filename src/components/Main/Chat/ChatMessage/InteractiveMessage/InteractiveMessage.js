@@ -16,7 +16,7 @@ const InteractiveMessage = ({ data }) => {
 	return (
 		<>
 			<div className={styles.caption}>
-				<TouchAppIcon /> {t('Interactive message:')}
+				<TouchAppIcon /> {t('Interactive message')}
 			</div>
 
 			{/* TODO: FIXME: i don't know where right place in current architecture, but it works */}

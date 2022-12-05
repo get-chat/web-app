@@ -47,6 +47,7 @@ export class ChatMessageModel {
 		this.senderName = this.getSenderName();
 		this.initials = this.generateInitials(); //this.senderName ? this.senderName[0] : "?";
 		this.text = payload.text?.body;
+		this.referral = payload.referral;
 		this.buttonText = payload.button?.text;
 		this.interactiveButtonText = payload.interactive?.button_reply?.title;
 		this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
@@ -253,6 +254,24 @@ export class ChatMessageModel {
 
 	generateLocationURL() {
 		return `https://www.google.com/maps/search/?api=1&query=${this.location?.latitude},${this.location?.longitude}`;
+	}
+
+	generateReferralImageLink() {
+		if (this.referral?.image) {
+			return (
+				this.referral.image.link ??
+				this.generateMediaLink(this.referral.image.id)
+			);
+		}
+	}
+
+	generateReferralVideoLink() {
+		if (this.referral?.video) {
+			return (
+				this.referral.video.link ??
+				this.generateMediaLink(this.referral.video.id)
+			);
+		}
 	}
 
 	getStatus() {

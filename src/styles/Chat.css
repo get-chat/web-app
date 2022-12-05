@@ -52,6 +52,10 @@
 	white-space: pre-line;
 }
 
+.chat__message img {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
 .chat__media,
 .chat__location__iframe {
 	border-radius: 6px;

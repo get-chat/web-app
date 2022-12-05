@@ -275,10 +275,10 @@ msgstr ""
 msgid "Missing template"
 msgstr ""
 
-msgid "Template message:"
+msgid "Template message"
 msgstr ""
 
-msgid "Interactive message:"
+msgid "Interactive message"
 msgstr ""
 
 msgid "Image"
@@ -593,4 +593,10 @@ msgid "Search"
 msgstr ""
 
 msgid "Search for contacts"
+msgstr ""
+
+msgid "Message via ad"
+msgstr ""
+
+msgid "Message via post"
 msgstr ""

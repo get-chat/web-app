@@ -275,11 +275,11 @@ msgstr "Taslak mesajınız kullanıcıya başarıyla gönderildi fakat şu anda 
 msgid "Missing template"
 msgstr "Eksik taslak"
 
-msgid "Template message:"
+msgid "Template message"
 msgstr "Taslak mesajı"
 
-msgid "Interactive message:"
-msgstr "İnteraktif mesaj:"
+msgid "Interactive message"
+msgstr "İnteraktif mesaj"
 
 msgid "Image"
 msgstr "Görsel"
@@ -594,3 +594,9 @@ msgstr "Ara"
 
 msgid "Search for contacts"
 msgstr "Kontaklarda ara"
+
+msgid "Message via ad"
+msgstr "Reklam aracılığıyla mesaj"
+
+msgid "Message via post"
+msgstr "Gönderi aracılığıyla mesaj"

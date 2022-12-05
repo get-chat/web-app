@@ -88,8 +88,8 @@
 	"Save this response": "",
 	"Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!": "",
 	"Missing template": "",
-	"Template message:": "",
-	"Interactive message:": "",
+	"Template message": "",
+	"Interactive message": "",
 	"Image": "",
 	"Video": "",
 	"Voice": "",
@@ -194,5 +194,7 @@
 	"Please select up to %s direct recipients.": "",
 	"Please select tags that target up to %s recipients in total.": "",
 	"Search": "",
-	"Search for contacts": ""
+	"Search for contacts": "",
+	"Message via ad": "",
+	"Message via post": ""
 }
