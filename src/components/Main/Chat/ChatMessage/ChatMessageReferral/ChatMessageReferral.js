@@ -21,7 +21,7 @@ const ChatMessageReferral = ({ data, onPreview }) => {
 	};
 
 	return (
-		<div className={styles.container}>
+		<div>
 			<div className={styles.header} onClick={goToSourceURL}>
 				<ReviewsIcon className={styles.headerIcon} />
 				{t('Message via ' + referral.source_type)}
