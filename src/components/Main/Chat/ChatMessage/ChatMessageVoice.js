@@ -98,7 +98,7 @@ function ChatMessageVoice(props) {
 						}
 					}
 
-					if (audio.current.paused) {
+					if (audio.current?.paused) {
 						clearInterval(interval);
 					}
 				} else {
