@@ -6,19 +6,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
 	mode: 'none',
 	entry: path.resolve(__dirname, '../src/index.js'),
-	output: {
-		path: path.resolve(__dirname, '../build'),
-		publicPath: '/',
-		filename: '[name].[contenthash:8].js',
-		clean: true,
-	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.css', '.json'],
 		alias: {
 			'@src': path.resolve(__dirname, '../src'),
-			process: "process/browser"
+			process: 'process/browser',
 		},
-		fallback: { "url": require.resolve("url/") }
+		fallback: { url: require.resolve('url/') },
 	},
 	optimization: {
 		runtimeChunk: 'single',
@@ -77,7 +71,9 @@ module.exports = {
 				process.env.REACT_APP_LOGO_BLACK_URL
 			),
 		}),
-		new MiniCssExtractPlugin(),
+		new MiniCssExtractPlugin({
+			filename: 'static/css/[name].[contenthash:8].css',
+		}),
 		new HtmlWebpackPlugin({
 			title: 'Get.chat',
 			template: path.resolve(__dirname, '../public/index.html'),
