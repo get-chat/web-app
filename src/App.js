@@ -1,6 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Navigate,
+	Route,
+	Routes,
+} from 'react-router-dom';
 
 import Login from './components/Login';
 import Main from './components/Main/Main';
@@ -29,6 +34,7 @@ const App = ({ config, apiService }) => {
 						>
 							<Router>
 								<Routes>
+									<Route path="/app" element={<Navigate to="/main" />} />
 									{renderPaths(
 										[
 											'/main/chat/:waId',
