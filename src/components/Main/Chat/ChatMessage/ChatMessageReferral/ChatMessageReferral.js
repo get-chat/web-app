@@ -14,7 +14,7 @@ import {
 const ChatMessageReferral = ({ data, onPreview }) => {
 	const { t } = useTranslation();
 
-	const referral = data.referral;
+	const { referral } = data;
 
 	const goToSourceURL = () => {
 		window.open(referral.source_url, '_blank').focus();
