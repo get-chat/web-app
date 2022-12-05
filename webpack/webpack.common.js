@@ -6,19 +6,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
 	mode: 'none',
 	entry: path.resolve(__dirname, '../src/index.js'),
-	output: {
-		path: path.resolve(__dirname, '../build'),
-		publicPath: '/',
-		filename: '[name].[contenthash:8].js',
-		clean: true,
-	},
 	resolve: {
 		extensions: ['.js', '.jsx', '.css', '.json'],
 		alias: {
 			'@src': path.resolve(__dirname, '../src'),
-			process: "process/browser"
+			process: 'process/browser',
 		},
-		fallback: { "url": require.resolve("url/") }
+		fallback: { url: require.resolve('url/') },
 	},
 	optimization: {
 		runtimeChunk: 'single',
