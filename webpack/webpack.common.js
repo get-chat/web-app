@@ -71,7 +71,9 @@ module.exports = {
 				process.env.REACT_APP_LOGO_BLACK_URL
 			),
 		}),
-		new MiniCssExtractPlugin(),
+		new MiniCssExtractPlugin({
+			filename: 'static/css/[name].[contenthash:8].css',
+		}),
 		new HtmlWebpackPlugin({
 			title: 'Get.chat',
 			template: path.resolve(__dirname, '../public/index.html'),
