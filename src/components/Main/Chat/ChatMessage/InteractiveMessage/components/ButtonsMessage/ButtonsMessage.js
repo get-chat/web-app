@@ -9,11 +9,11 @@ const ButtonsMessage = ({ header, body, footer, action }) => {
 			{header && <div className={styles.header}>{header.text}</div>}
 			{body && <div className={styles.body}>{body.text}</div>}
 			{footer && <div className={styles.footer}>{footer.text}</div>}
-			{action?.buttons && (
+			{action?.buttons && Array.isArray(action?.buttons) && (
 				<div className={styles.actions}>
-					{action?.buttons.map(({ reply }) => (
-						<Button key={reply.id} color="primary" fullWidth disabled>
-							{reply.title}
+					{action?.buttons.map(({ reply }, index) => (
+						<Button key={reply?.id ?? index} color="primary" fullWidth disabled>
+							{reply?.title}
 						</Button>
 					))}
 				</div>

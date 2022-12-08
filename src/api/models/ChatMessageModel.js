@@ -197,7 +197,7 @@ export class ChatMessageModel {
 	hasMediaToPreview() {
 		return (
 			this.imageLink !== undefined ||
-			this.videoId !== undefined ||
+			this.videoLink !== undefined ||
 			this.getHeaderFileLink('image') ||
 			this.getHeaderFileLink('video')
 		);
