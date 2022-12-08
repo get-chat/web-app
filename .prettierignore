@@ -1,5 +1,6 @@
 /node_modules
 /coverage
 /build
+/src/locales
 
 EmojiData.json
