@@ -600,3 +600,6 @@ msgstr ""
 
 msgid "Message via post"
 msgstr ""
+
+msgid "The language pack for this template is not installed on the server yet, try sending this message later"
+msgstr ""

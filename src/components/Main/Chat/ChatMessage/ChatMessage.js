@@ -222,29 +222,61 @@ function ChatMessage({
 							'\u00A0'
 						)}
 
-						{data.errors && (
-							<Alert
-								variant="filled"
-								severity="error"
-								className="chat__errors"
-								action={
-									data.isFailed &&
-									data.canRetry() && (
-										<Button
-											color="inherit"
-											size="small"
-											onClick={() => retryMessage(data)}
+						{data.errors &&
+							data.errors.map((error, index) => {
+								// Could not find translation for the requested language and locale
+								if (error.code === 2003) {
+									return (
+										<Alert
+											key={index}
+											variant="filled"
+											severity="warning"
+											className="chat__errors"
+											action={
+												data.isFailed &&
+												data.canRetry() && (
+													<Button
+														color="inherit"
+														size="small"
+														onClick={() => retryMessage(data)}
+													>
+														{t('Retry')}
+													</Button>
+												)
+											}
 										>
-											{t('Retry')}
-										</Button>
-									)
+											<div>
+												{t(
+													'The language pack for this template is not installed on the server yet, try sending this message later'
+												)}
+											</div>
+										</Alert>
+									);
 								}
-							>
-								{data.errors.map((error, index) => (
-									<div key={index}>{t(error.details ?? error.title)}</div>
-								))}
-							</Alert>
-						)}
+
+								return (
+									<Alert
+										key={index}
+										variant="filled"
+										severity="error"
+										className="chat__errors"
+										action={
+											data.isFailed &&
+											data.canRetry() && (
+												<Button
+													color="inherit"
+													size="small"
+													onClick={() => retryMessage(data)}
+												>
+													{t('Retry')}
+												</Button>
+											)
+										}
+									>
+										<div>{t(error.details ?? error.title)}</div>
+									</Alert>
+								);
+							})}
 
 						<span className="chat__message__info">
 							<span className="chat__timestamp">
