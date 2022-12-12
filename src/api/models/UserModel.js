@@ -41,7 +41,7 @@ class UserModel {
 	isInGroup(groupId) {
 		let inGroup = false;
 
-		this.groups?.forEach((groupIndex, groupItem) => {
+		this.groups?.forEach((groupItem) => {
 			if (groupItem?.id === groupId) {
 				inGroup = true;
 			}
