@@ -7,7 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 
 function ChangePasswordDialog(props) {
 	const { apiService } = React.useContext(ApplicationContext);

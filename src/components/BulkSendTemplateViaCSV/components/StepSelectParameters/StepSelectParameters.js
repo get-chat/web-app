@@ -3,7 +3,7 @@ import {
 	componentHasMediaFormat,
 	getTemplateParams,
 	templateParamToInteger,
-} from '../../../../helpers/TemplateMessageHelper';
+} from '@src/helpers/TemplateMessageHelper';
 import { Button, TextField } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import '../../../../styles/StepSelectParameters.css';

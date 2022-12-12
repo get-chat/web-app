@@ -12,18 +12,18 @@ import {
 	ATTACHMENT_TYPE_VIDEO,
 	CALENDAR_NORMAL,
 	EVENT_TOPIC_CHAT_MESSAGE,
-} from '../../Constants';
-import { generateAvatarColor } from '../../helpers/AvatarHelper';
+} from '@src/Constants';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { GetApp } from '@mui/icons-material';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
-import { generateUniqueID } from '../../helpers/Helpers';
+import { generateUniqueID } from '@src/helpers/Helpers';
 import { useTranslation } from 'react-i18next';
-import { mimeToExtension } from '../../helpers/ImageHelper';
+import { mimeToExtension } from '@src/helpers/ImageHelper';
 import Image from '../Image';
 import PreviewMediaZoom from './PreviewMediaZoom';
 import PubSub from 'pubsub-js';
-import { setPreviewMediaObject } from '../../store/reducers/previewMediaObjectReducer';
+import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { useDispatch } from 'react-redux';
 
 function PreviewMedia({ data }) {

@@ -11,13 +11,13 @@ import {
 	TextField,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { generateInitialsHelper } from '../../../helpers/Helpers';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 import FileInput from '../../FileInput';
-import { generateAvatarColor } from '../../../helpers/AvatarHelper';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
-import { generateCancelToken } from '../../../helpers/ApiHelper';
-import { binaryToBase64 } from '../../../helpers/ImageHelper';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { generateCancelToken } from '@src/helpers/ApiHelper';
+import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import { useSelector } from 'react-redux';
 
 function BusinessProfile(props) {

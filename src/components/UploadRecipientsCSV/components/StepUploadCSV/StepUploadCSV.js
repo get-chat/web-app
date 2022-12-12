@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,
-} from '../../../../helpers/BulkSendHelper';
+} from '@src/helpers/BulkSendHelper';
 
 const StepUploadCSV = ({ csvError }) => {
 	const { t } = useTranslation();

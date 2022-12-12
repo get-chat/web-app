@@ -5,10 +5,10 @@ import { Button, Dialog } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
 import FileInput from '../FileInput';
 import DialogActions from '@mui/material/DialogActions';
-import { csvToObj } from '../../helpers/CSVHelper';
-import { hasDuplicates } from '../../helpers/ArrayHelper';
-import { isEmptyString } from '../../helpers/Helpers';
-import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
+import { csvToObj } from '@src/helpers/CSVHelper';
+import { hasDuplicates } from '@src/helpers/ArrayHelper';
+import { isEmptyString } from '@src/helpers/Helpers';
+import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import {
 	PRIMARY_KEY_TYPE_TAG,
 	PRIMARY_KEY_TYPE_WA_ID,
@@ -17,7 +17,7 @@ import UploadCSVStepper from './components/UploadCSVStepper';
 import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreviewCSVData';
 import StepUploadCSV from './components/StepUploadCSV';
 import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
-import { getMaxDirectRecipients } from '../../helpers/BulkSendHelper';
+import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
 import { useSelector } from 'react-redux';
 
 const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {

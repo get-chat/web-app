@@ -1,5 +1,5 @@
 import React from 'react';
-import { ATTACHMENT_TYPE_IMAGE } from '../../../../Constants';
+import { ATTACHMENT_TYPE_IMAGE } from '@src/Constants';
 import '../../../../styles/ContextChatMessage.css';
 import ChatMessageShortContent from './ChatMessageShortContent';
 

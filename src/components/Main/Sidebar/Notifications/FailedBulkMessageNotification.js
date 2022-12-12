@@ -1,9 +1,9 @@
 import React from 'react';
 import Moment from 'react-moment';
-import { CALENDAR_SHORT } from '../../../../Constants';
+import { CALENDAR_SHORT } from '@src/Constants';
 import { useNavigate } from 'react-router-dom';
 import { Link } from '@mui/material';
-import { generateMessagePreview } from '../../../../helpers/MessageHelper';
+import { generateMessagePreview } from '@src/helpers/MessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
 
 function FailedBulkMessageNotification(props) {

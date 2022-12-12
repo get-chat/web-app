@@ -21,7 +21,7 @@ import {
 	containsLetters,
 	generateInitialsHelper,
 	isScrollable,
-} from '../../../helpers/Helpers';
+} from '@src/helpers/Helpers';
 import {
 	CHAT_KEY_PREFIX,
 	CHAT_LIST_TAB_CASE_ALL,
@@ -31,7 +31,7 @@ import {
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
-} from '../../../Constants';
+} from '@src/Constants';
 import { useNavigate, useParams } from 'react-router-dom';
 import SearchBar from '../../SearchBar';
 import SidebarContactResult from './SidebarContactResult';
@@ -45,33 +45,30 @@ import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import Contacts from '../../Contacts';
-import { clearContactProvidersData } from '../../../helpers/StorageHelper';
+import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import CloseIcon from '@mui/icons-material/Close';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import BulkSendActions from './BulkSendActions';
-import {
-	clearUserSession,
-	generateCancelToken,
-} from '../../../helpers/ApiHelper';
+import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
-import { generateAvatarColor } from '../../../helpers/AvatarHelper';
-import { getObjLength } from '../../../helpers/ObjectHelper';
-import { getHubURL } from '../../../helpers/URLHelper';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
+import { getObjLength } from '@src/helpers/ObjectHelper';
+import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
 import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
-import { AppConfig } from '../../../contexts/AppConfig';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
+import { AppConfig } from '@src/contexts/AppConfig';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
-import { filterChat } from '../../../helpers/SidebarHelper';
+import { filterChat } from '@src/helpers/SidebarHelper';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentUser } from '../../../store/reducers/currentUserReducer';
-import { setTemplates } from '../../../store/reducers/templatesReducer';
+import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
+import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
-import { setFilterTag } from '../../../store/reducers/filterTagReducer';
-import { setChatsCount } from '../../../store/reducers/chatsCountReducer';
+import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import ChatTag from '../../ChatTag';
 
 function Sidebar(props) {

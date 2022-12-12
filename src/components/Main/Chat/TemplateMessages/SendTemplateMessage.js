@@ -10,15 +10,15 @@ import {
 	generateTemplateParamsByValues,
 	getTemplateParams,
 	templateParamToInteger,
-} from '../../../../helpers/TemplateMessageHelper';
+} from '@src/helpers/TemplateMessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../../../contexts/ApplicationContext';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
 import {
 	BreakException,
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	InvalidTemplateParamException,
-} from '../../../../Constants';
+} from '@src/Constants';
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
 

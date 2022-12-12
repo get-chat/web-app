@@ -6,7 +6,7 @@ import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,
-} from '../../../helpers/BulkSendHelper';
+} from '@src/helpers/BulkSendHelper';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();

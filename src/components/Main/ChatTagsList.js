@@ -11,11 +11,11 @@ import {
 } from '@mui/material';
 import '../../styles/ChatTagsList.css';
 import LabelIcon from '@mui/icons-material/Label';
-import { getHubURL } from '../../helpers/URLHelper';
+import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
-import { AppConfig } from '../../contexts/AppConfig';
+import { AppConfig } from '@src/contexts/AppConfig';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFilterTag } from '../../store/reducers/filterTagReducer';
+import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 
 function ChatTagsList(props) {
 	const config = React.useContext(AppConfig);

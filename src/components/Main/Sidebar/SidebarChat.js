@@ -10,8 +10,8 @@ import moment from 'moment';
 import {
 	extractAvatarFromContactProviderData,
 	generateInitialsHelper,
-} from '../../../helpers/Helpers';
-import { getDroppedFiles, handleDragOver } from '../../../helpers/FileHelper';
+} from '@src/helpers/Helpers';
+import { getDroppedFiles, handleDragOver } from '@src/helpers/FileHelper';
 import PubSub from 'pubsub-js';
 import {
 	CALENDAR_SHORT,
@@ -19,10 +19,10 @@ import {
 	CHAT_LIST_TAB_CASE_GROUP,
 	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_DROPPED_FILES,
-} from '../../../Constants';
+} from '@src/Constants';
 import ChatMessageShortContent from '../Chat/ChatMessage/ChatMessageShortContent';
-import { generateAvatarColor } from '../../../helpers/AvatarHelper';
-import { addPlus } from '../../../helpers/PhoneNumberHelper';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
+import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
 

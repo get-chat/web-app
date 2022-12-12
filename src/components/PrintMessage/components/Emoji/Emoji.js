@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { replaceEmojis } from '../../../../helpers/EmojiHelper';
+import { replaceEmojis } from '@src/helpers/EmojiHelper';
 
 const Emoji = ({ data: { text, single } }) => {
 	return (

@@ -17,7 +17,7 @@ import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
-} from '../../../Constants';
+} from '@src/Constants';
 import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
 import TemplateMessages from './TemplateMessages/TemplateMessages';
@@ -34,52 +34,46 @@ import {
 	isScrollable,
 	sortMessagesAsc,
 	translateHTMLInputToText,
-} from '../../../helpers/Helpers';
+} from '@src/helpers/Helpers';
 import PreviewSendMedia from './PreviewSendMedia';
 import {
 	getDroppedFiles,
 	handleDragOver,
 	prepareSelectedFiles,
-} from '../../../helpers/FileHelper';
+} from '@src/helpers/FileHelper';
 import SavedResponses from './SavedResponses';
 import {
 	generateTemplateMessagePayload,
 	prepareSendFilePayload,
-} from '../../../helpers/ChatHelper';
+} from '@src/helpers/ChatHelper';
 import { isMobileOnly } from 'react-device-detect';
-import {
-	clearUserSession,
-	generateCancelToken,
-} from '../../../helpers/ApiHelper';
+import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import {
 	getFirstObject,
 	getLastObject,
 	getObjLength,
-} from '../../../helpers/ObjectHelper';
+} from '@src/helpers/ObjectHelper';
 import {
 	extractTimestampFromMessage,
 	messageHelper,
-} from '../../../helpers/MessageHelper';
-import { isLocalHost } from '../../../helpers/URLHelper';
+} from '@src/helpers/MessageHelper';
+import { isLocalHost } from '@src/helpers/URLHelper';
 import {
 	getFirstPendingMessageToSend,
 	hasFailedPendingMessages,
 	setPendingMessageFailed,
-} from '../../../helpers/PendingMessagesHelper';
-import { getDisplayAssignmentAndTaggingHistory } from '../../../helpers/StorageHelper';
+} from '@src/helpers/PendingMessagesHelper';
+import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../../contexts/ApplicationContext';
-import {
-	addPlus,
-	preparePhoneNumber,
-} from '../../../helpers/PhoneNumberHelper';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { addPlus, preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios from 'axios';
-import { setPreviewMediaObject } from '../../../store/reducers/previewMediaObjectReducer';
+import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;

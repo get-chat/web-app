@@ -6,10 +6,10 @@ import {
 	CALENDAR_SHORT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
-} from '../../../Constants';
+} from '@src/Constants';
 import Moment from 'react-moment';
-import { getObjLength } from '../../../helpers/ObjectHelper';
-import { generateMessagePreview } from '../../../helpers/MessageHelper';
+import { getObjLength } from '@src/helpers/ObjectHelper';
+import { generateMessagePreview } from '@src/helpers/MessageHelper';
 import { Trans } from 'react-i18next';
 
 function BulkSendIndicator(props) {

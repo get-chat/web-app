@@ -6,10 +6,7 @@ import ChatMessageImage from '../ChatMessageImage';
 import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
 import { Tooltip } from '@mui/material';
-import {
-	ATTACHMENT_TYPE_IMAGE,
-	ATTACHMENT_TYPE_VIDEO,
-} from '../../../../../Constants';
+import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 
 const ChatMessageReferral = ({ data, onPreview }) => {
 	const { t } = useTranslation();
