@@ -6,7 +6,7 @@ import {
 	Radio,
 	RadioGroup,
 } from '@mui/material';
-import { isEmptyString } from '../../../../helpers/Helpers';
+import { isEmptyString } from '@src/helpers/Helpers';
 import {
 	PRIMARY_KEY_TYPE_TAG,
 	PRIMARY_KEY_TYPE_WA_ID,
@@ -15,7 +15,7 @@ import Alert from '@mui/material/Alert';
 import LabelIcon from '@mui/icons-material/Label';
 import { useTranslation } from 'react-i18next';
 import style from './StepSelectPrimaryKey.module.css';
-import { findTagByName } from '../../../../helpers/TagHelper';
+import { findTagByName } from '@src/helpers/TagHelper';
 import { useSelector } from 'react-redux';
 
 const StepSelectPrimaryKey = ({

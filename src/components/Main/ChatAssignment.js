@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { useSelector } from 'react-redux';
 
 function ChatAssignment(props) {

@@ -7,7 +7,7 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from '@mui/material';
-import { getObjLength } from '../../../helpers/ObjectHelper';
+import { getObjLength } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 
 function SavedResponses(props) {

@@ -24,7 +24,7 @@ import {
 	getSelectionHtml,
 	sanitize,
 	translateHTMLInputToText,
-} from '../../../../helpers/Helpers';
+} from '@src/helpers/Helpers';
 import VoiceRecord from './VoiceRecord';
 import {
 	EMOJI_SET,
@@ -32,9 +32,9 @@ import {
 	EMPTY_IMAGE_BASE64,
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
-} from '../../../../Constants';
+} from '@src/Constants';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
-import { replaceEmojis } from '../../../../helpers/EmojiHelper';
+import { replaceEmojis } from '@src/helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../../../ContactsModal';

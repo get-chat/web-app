@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import style from './StepPreviewCSVData.module.css';
 import Alert from '@mui/material/Alert';
-import { getMaxDirectRecipients } from '../../../../helpers/BulkSendHelper';
+import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
 
 const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {
 	const { t } = useTranslation();

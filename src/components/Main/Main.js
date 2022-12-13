@@ -25,14 +25,14 @@ import {
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
-} from '../../Constants';
+} from '@src/Constants';
 import ChatMessageModel from '../../api/models/ChatMessageModel';
 import PreviewMedia from './PreviewMedia';
 import {
 	getContactProvidersData,
 	getToken,
 	storeContactProvidersData,
-} from '../../helpers/StorageHelper';
+} from '@src/helpers/StorageHelper';
 import ChatAssignment from './ChatAssignment';
 import ChatTags from './ChatTags';
 import ChatTagsList from './ChatTagsList';
@@ -40,27 +40,27 @@ import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
 import SavedResponseClass from '../../SavedResponseClass';
 import moment from 'moment';
 import UserModel from '../../api/models/UserModel';
-import { clearUserSession } from '../../helpers/ApiHelper';
+import { clearUserSession } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
-import { getWebSocketURL } from '../../helpers/URLHelper';
-import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
+import { getWebSocketURL } from '@src/helpers/URLHelper';
+import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
-import { AppConfig } from '../../contexts/AppConfig';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { AppConfig } from '@src/contexts/AppConfig';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
 import { useDispatch, useSelector } from 'react-redux';
-import { setTemplates } from '../../store/reducers/templatesReducer';
+import { setTemplates } from '@src/store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
-import { setCurrentUser } from '../../store/reducers/currentUserReducer';
+import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
-import { findTagByName } from '../../helpers/TagHelper';
-import { setTags } from '../../store/reducers/tagsReducer';
+import { findTagByName } from '@src/helpers/TagHelper';
+import { setTags } from '@src/store/reducers/tagsReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);

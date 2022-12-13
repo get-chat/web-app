@@ -7,12 +7,9 @@ import SmsIcon from '@mui/icons-material/Sms';
 import {
 	insertTemplateComponentParameters,
 	sortTemplateComponents,
-} from '../../../../helpers/TemplateMessageHelper';
+} from '@src/helpers/TemplateMessageHelper';
 import { useTranslation } from 'react-i18next';
-import {
-	ATTACHMENT_TYPE_IMAGE,
-	ATTACHMENT_TYPE_VIDEO,
-} from '../../../../Constants';
+import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 
 function ChatMessageTemplate(props) {
 	const { t } = useTranslation();

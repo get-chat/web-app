@@ -1,5 +1,5 @@
-import { getPastHoursByTimestamp } from '../../helpers/DateHelper';
-import { generateInitialsHelper } from '../../helpers/Helpers';
+import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 class PersonModel {
 	constructor(data) {

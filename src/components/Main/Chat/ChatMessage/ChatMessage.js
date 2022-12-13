@@ -28,12 +28,9 @@ import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
 import ChatMessageReferral from './ChatMessageReferral';
 import { useDispatch } from 'react-redux';
-import { setPreviewMediaObject } from '../../../../store/reducers/previewMediaObjectReducer';
+import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
-import {
-	ATTACHMENT_TYPE_IMAGE,
-	ATTACHMENT_TYPE_VIDEO,
-} from '../../../../Constants';
+import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 
 const iconStyles = {
 	fontSize: '15px',

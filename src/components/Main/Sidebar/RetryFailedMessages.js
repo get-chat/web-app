@@ -3,12 +3,12 @@ import {
 	extractFailedWaIds,
 	getFirstFailedPendingMessage,
 	setAllFailedPendingMessagesWillRetry,
-} from '../../../helpers/PendingMessagesHelper';
+} from '@src/helpers/PendingMessagesHelper';
 import '../../../styles/RetryFailedMessages.css';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
-import { CHAT_KEY_PREFIX } from '../../../Constants';
+import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
 
 function RetryFailedMessages(props) {

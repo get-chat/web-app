@@ -11,24 +11,24 @@ import {
 	ATTACHMENT_TYPE_VIDEO,
 	EMPTY_IMAGE_BASE64,
 	EVENT_TOPIC_RELOAD_PREVIEW,
-} from '../../../Constants';
+} from '@src/Constants';
 import FileInput from '../../FileInput';
 import {
 	getDroppedFiles,
 	handleDragOver,
 	prepareSelectedFiles,
-} from '../../../helpers/FileHelper';
+} from '@src/helpers/FileHelper';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 
 import { Document, Page, pdfjs } from 'react-pdf';
 import PubSub from 'pubsub-js';
-import { useForceUpdate } from '../../../hooks/useForceUpdate';
+import { useForceUpdate } from '@src/hooks/useForceUpdate';
 import {
 	getFirstObject,
 	getLastObject,
 	getObjLength,
-} from '../../../helpers/ObjectHelper';
+} from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 
 function PreviewSendMedia(props) {

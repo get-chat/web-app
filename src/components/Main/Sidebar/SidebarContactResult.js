@@ -2,7 +2,7 @@ import React from 'react';
 import '../../../styles/SidebarContactResult.css';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@mui/material';
-import { generateAvatarColor } from '../../../helpers/AvatarHelper';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { useTranslation } from 'react-i18next';
 
 function SidebarContactResult(props) {

@@ -10,10 +10,10 @@ import SendTemplateMessage from './SendTemplateMessage';
 import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
-} from '../../../../Constants';
+} from '@src/Constants';
 import PubSub from 'pubsub-js';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
-import { generateTemplateMessagePayload } from '../../../../helpers/ChatHelper';
+import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 import TemplatesList from '../../../TemplatesList';
 import { useSelector } from 'react-redux';
 

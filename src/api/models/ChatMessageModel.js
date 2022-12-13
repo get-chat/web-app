@@ -1,4 +1,4 @@
-import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
+import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';

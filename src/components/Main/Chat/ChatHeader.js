@@ -13,17 +13,17 @@ import {
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
 	EVENT_TOPIC_FORCE_REFRESH_CHAT,
 	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-} from '../../../Constants';
+} from '@src/Constants';
 import PubSub from 'pubsub-js';
-import { extractAvatarFromContactProviderData } from '../../../helpers/Helpers';
-import { generateAvatarColor } from '../../../helpers/AvatarHelper';
-import { addPlus } from '../../../helpers/PhoneNumberHelper';
+import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
+import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import WarningIcon from '@mui/icons-material/Warning';
 import { isMobileOnly } from 'react-device-detect';
 import {
 	getDisplayAssignmentAndTaggingHistory,
 	setDisplayAssignmentAndTaggingHistory,
-} from '../../../helpers/StorageHelper';
+} from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
 

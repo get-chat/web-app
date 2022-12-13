@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { displaySeconds } from '../../../../helpers/Helpers';
+import { displaySeconds } from '@src/helpers/Helpers';
 import DoneIcon from '@mui/icons-material/Done';
 import '../../../../styles/VoiceRecord.css';
 import VoiceRecorder from '../../../../VoiceRecorder';
@@ -17,7 +17,7 @@ import {
 	EVENT_TOPIC_DISPLAY_ERROR,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
 	EVENT_TOPIC_VOICE_RECORD_STARTING,
-} from '../../../../Constants';
+} from '@src/Constants';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';

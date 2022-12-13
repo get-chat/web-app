@@ -8,19 +8,19 @@ import {
 	CALENDAR_NORMAL,
 	CHAT_KEY_PREFIX,
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-} from '../../Constants';
+} from '@src/Constants';
 import '../../styles/ContactDetails.css';
 import Moment from 'react-moment';
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
-import { extractAvatarFromContactProviderData } from '../../helpers/Helpers';
+import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import LabelIcon from '@mui/icons-material/Label';
-import { generateAvatarColor } from '../../helpers/AvatarHelper';
-import { addPlus } from '../../helpers/PhoneNumberHelper';
+import { generateAvatarColor } from '@src/helpers/AvatarHelper';
+import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import { useDispatch } from 'react-redux';
-import { setFilterTag } from '../../store/reducers/filterTagReducer';
+import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 
 function ContactDetails(props) {
 	const { t } = useTranslation();

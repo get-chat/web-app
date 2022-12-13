@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../../styles/Notifications.css';
 import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT } from '../../../../Constants';
+import { EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT } from '@src/Constants';
 import FailedBulkMessageNotification from './FailedBulkMessageNotification';
 import BulkMessageTaskElementModel from '../../../../api/models/BulkMessageTaskElementModel';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
-import { getObjLength } from '../../../../helpers/ObjectHelper';
+import { getObjLength } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../../../contexts/ApplicationContext';
-import { generateCancelToken } from '../../../../helpers/ApiHelper';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { generateCancelToken } from '@src/helpers/ApiHelper';
 
 function Notifications(props) {
 	const { apiService } = React.useContext(ApplicationContext);

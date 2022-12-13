@@ -16,7 +16,7 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 
 import ChatMessageModel from '../../api/models/ChatMessageModel';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import Contact from '../Contact';
 import ContactModel from '../../api/models/ContactModel';
 

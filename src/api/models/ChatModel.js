@@ -1,5 +1,5 @@
-import { getPastHoursByTimestamp } from '../../helpers/DateHelper';
-import { generateInitialsHelper, sanitize } from '../../helpers/Helpers';
+import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
+import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 
 class ChatModel {
 	constructor(data) {

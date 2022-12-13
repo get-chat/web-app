@@ -4,25 +4,25 @@ import DialogContent from '@mui/material/DialogContent';
 import { Button, Dialog } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import { useTranslation } from 'react-i18next';
-import { csvToObj } from '../../helpers/CSVHelper';
+import { csvToObj } from '@src/helpers/CSVHelper';
 import FileInput from '../FileInput';
 import '../../styles/BulkSendTemplateViaCSV.css';
 import {
 	generateFinalTemplateParams,
 	generateTemplateParamsByValues,
-} from '../../helpers/TemplateMessageHelper';
-import { isEmptyString } from '../../helpers/Helpers';
-import { hasDuplicates } from '../../helpers/ArrayHelper';
+} from '@src/helpers/TemplateMessageHelper';
+import { isEmptyString } from '@src/helpers/Helpers';
+import { hasDuplicates } from '@src/helpers/ArrayHelper';
 import StepUploadCSV from './components/StepUploadCSV';
 import StepPreviewCSVData from './components/StepPreviewCSVData';
 import StepSelectPrimaryKey from './components/StepSelectPrimaryKey';
 import StepSelectTemplate from './components/StepSelectTemplate';
 import StepSelectParameters from './components/StepSelectParameters';
 import StepPreviewResult from './components/StepPreviewResult';
-import { BreakException } from '../../Constants';
+import { BreakException } from '@src/Constants';
 import BulkSendStepper from './components/BulkSendStepper';
-import { preparePhoneNumber } from '../../helpers/PhoneNumberHelper';
-import { generateTemplateMessagePayload } from '../../helpers/ChatHelper';
+import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';

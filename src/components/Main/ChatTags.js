@@ -11,10 +11,10 @@ import {
 	Link,
 } from '@mui/material';
 import '../../styles/ChatTags.css';
-import { getHubURL } from '../../helpers/URLHelper';
+import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
-import { AppConfig } from '../../contexts/AppConfig';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { AppConfig } from '@src/contexts/AppConfig';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 
 function ChatTags(props) {
 	const { apiService } = React.useContext(ApplicationContext);
