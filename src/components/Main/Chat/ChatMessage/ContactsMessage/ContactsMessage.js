@@ -31,8 +31,9 @@ const ContactsMessage = ({ data }) => {
 						{Boolean(contact.phones.length) && (
 							<Button
 								color="primary"
-								variant="contained"
-								size="small"
+								variant="text"
+								size="medium"
+								className={styles.messageButton}
 								onClick={() => handleClick(contact)}
 							>
 								Message
