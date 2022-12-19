@@ -149,6 +149,10 @@ function BusinessProfile(props) {
 				if (error?.response?.status === 404) {
 					// Finish
 					setLoaded(true);
+				} else if (error?.response?.status === 503) {
+					window.displayCustomError(
+						error.response.data?.reason ?? 'An error has occurred.'
+					);
 				} else {
 					window.displayError(error);
 				}
