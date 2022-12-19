@@ -11,9 +11,21 @@
 }
 
 .header {
-	margin: 5px 0 10px;
+	margin: 0 -5px 10px -5px;
 	border-bottom: 1px solid #eee;
-	padding-bottom: 10px;
+	background-color: rgba(0, 0, 0, 0.07);
+	border-radius: 6px;
+	padding: 5px;
+}
+
+.avatar {
+	height: 32px !important;
+	width: 32px !important;
+	border-radius: 5px !important;
+}
+
+.name {
+	font-weight: 600;
 }
 
 .footer {
