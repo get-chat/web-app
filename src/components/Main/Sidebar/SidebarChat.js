@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/SidebarChat.css';
-import { Avatar, Checkbox, ListItem, Tooltip } from '@mui/material';
+import { Avatar, Badge, Checkbox, ListItem, Tooltip } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import LabelIcon from '@mui/icons-material/Label';
 import GroupIcon from '@mui/icons-material/Group';
@@ -205,6 +205,15 @@ function SidebarChat(props) {
 							{props.chatData.initials}
 						</Avatar>
 
+						{props.newMessages[props.chatData.waId]?.newMessages > 0 && (
+							<Badge
+								color="secondary"
+								badgeContent={
+									props.newMessages[props.chatData.waId]?.newMessages
+								}
+							></Badge>
+						)}
+
 						{props.chatData.assignedToUser &&
 							(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
 								props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
@@ -298,26 +307,16 @@ function SidebarChat(props) {
 						</div>
 
 						<div className="sidebarChat__info__lastMessage">
-							{(props.newMessages[props.chatData.waId]?.newMessages ?? 0) >
-							0 /*&& waId !== props.chatData.waId*/ ? (
-								<div className="sidebarChat__info__lastMessage__new">
-									{t(
-										'%d new message(s)',
-										props.newMessages[props.chatData.waId]?.newMessages
-									)}
-								</div>
-							) : (
-								<div className="sidebarChat__info__lastMessage__body">
-									<ChatMessageShortContent
-										type={props.chatData.lastMessageType}
-										buttonText={props.chatData.lastMessageButtonText}
-										interactiveButtonText={props.chatData.interactiveButtonText}
-										text={props.chatData.lastMessageBody}
-										caption={props.chatData.lastMessageCaption}
-										isLastMessageFromUs={props.chatData.isLastMessageFromUs}
-									/>
-								</div>
-							)}
+							<div className="sidebarChat__info__lastMessage__body">
+								<ChatMessageShortContent
+									type={props.chatData.lastMessageType}
+									buttonText={props.chatData.lastMessageButtonText}
+									interactiveButtonText={props.chatData.interactiveButtonText}
+									text={props.chatData.lastMessageBody}
+									caption={props.chatData.lastMessageCaption}
+									isLastMessageFromUs={props.chatData.isLastMessageFromUs}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
