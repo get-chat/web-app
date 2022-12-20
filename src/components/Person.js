@@ -1,8 +1,9 @@
 import React from 'react';
 import '../styles/Contact.css';
-import { Avatar, ListItem } from '@mui/material';
+import { ListItem } from '@mui/material';
 import ContactProviderHeader from './ContactProviderHeader';
 import { generateAvatarColor } from '../helpers/AvatarHelper';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function Person(props) {
 	const handleClick = () => {
@@ -18,14 +19,14 @@ function Person(props) {
 			<ListItem button>
 				<div className="contact" onClick={handleClick}>
 					<div className="contact__avatarWrapper">
-						<Avatar
+						<CustomAvatar
 							src={props.contactProvidersData[props.data.waId]?.[0]?.avatar}
 							style={{
 								backgroundColor: generateAvatarColor(props.data.name),
 							}}
 						>
 							{props.data.initials}
-						</Avatar>
+						</CustomAvatar>
 						<ContactProviderHeader type="whatsapp" />
 					</div>
 					<div className="contact__info">

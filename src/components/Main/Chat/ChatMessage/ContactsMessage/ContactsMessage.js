@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Avatar, Button } from '@mui/material';
+import { Button } from '@mui/material';
 
 import styles from './ContactsMessage.module.css';
 import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 const ContactsMessage = ({ data }) => {
 	const navigate = useNavigate();
@@ -17,7 +18,7 @@ const ContactsMessage = ({ data }) => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.header}>
-				<Avatar className={styles.avatar} />
+				<CustomAvatar className={styles.avatar} />
 				{data?.payload?.contacts?.map((contact, contactIndex) => (
 					<div key={contactIndex} className={styles.name}>
 						{contact.name.formatted_name}

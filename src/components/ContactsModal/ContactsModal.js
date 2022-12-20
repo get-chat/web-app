@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -11,16 +11,15 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 
 import ChatMessageModel from '../../api/models/ChatMessageModel';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import Contact from '../Contact';
 import ContactModel from '../../api/models/ContactModel';
 
 import styles from './ContactsModal.module.css';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 const DialogHeader = ({ children, onClose, ...rest }) => (
 	<DialogTitle className={styles.header} {...rest}>
@@ -121,7 +120,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 								onClick={() => setSelectedContact(value)}
 							>
 								<ListItemAvatar>
-									<Avatar alt={value.name}>{value.initials}</Avatar>
+									<CustomAvatar alt={value.name}>{value.initials}</CustomAvatar>
 								</ListItemAvatar>
 								<ListItemText primary={value.name} />
 								<ListItemSecondaryAction>

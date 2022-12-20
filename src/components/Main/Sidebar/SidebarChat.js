@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/SidebarChat.css';
-import { Avatar, Badge, Checkbox, ListItem, Tooltip } from '@mui/material';
+import { Badge, Checkbox, ListItem, Tooltip } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import LabelIcon from '@mui/icons-material/Label';
 import GroupIcon from '@mui/icons-material/Group';
@@ -25,6 +25,7 @@ import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function SidebarChat(props) {
 	const { t } = useTranslation();
@@ -189,7 +190,7 @@ function SidebarChat(props) {
 					)}
 
 					<div className="sidebarChat__avatarWrapper">
-						<Avatar
+						<CustomAvatar
 							className="sidebarChat__avatarWrapper__mainAvatar"
 							src={extractAvatarFromContactProviderData(
 								props.contactProvidersData[props.chatData.waId]
@@ -203,7 +204,7 @@ function SidebarChat(props) {
 							}
 						>
 							{props.chatData.initials}
-						</Avatar>
+						</CustomAvatar>
 
 						{props.newMessages[props.chatData.waId]?.newMessages > 0 && (
 							<Badge
@@ -218,7 +219,7 @@ function SidebarChat(props) {
 							(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
 								props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
 								<Tooltip title={props.chatData.generateAssignmentInformation()}>
-									<Avatar
+									<CustomAvatar
 										className="sidebarChat__avatarWrapper__assignee"
 										style={{
 											backgroundColor: generateAvatarColor(
@@ -229,7 +230,7 @@ function SidebarChat(props) {
 										{generateInitialsHelper(
 											props.chatData.generateAssignedToInitials()
 										)}
-									</Avatar>
+									</CustomAvatar>
 								</Tooltip>
 							)}
 
@@ -240,7 +241,7 @@ function SidebarChat(props) {
 								(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
 									!props.chatData.assignedToUser)) && (
 								<Tooltip title={props.chatData.generateAssignmentInformation()}>
-									<Avatar
+									<CustomAvatar
 										className="sidebarChat__avatarWrapper__assignee"
 										style={{
 											backgroundColor: generateAvatarColor(
@@ -249,7 +250,7 @@ function SidebarChat(props) {
 										}}
 									>
 										<GroupIcon />
-									</Avatar>
+									</CustomAvatar>
 								</Tooltip>
 							)}
 					</div>

@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-	Avatar,
-	IconButton,
-	Tooltip,
-	Zoom as ZoomTransition,
-} from '@mui/material';
+import { IconButton, Tooltip, Zoom as ZoomTransition } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Moment from 'react-moment';
 import {
@@ -25,6 +20,7 @@ import PreviewMediaZoom from './PreviewMediaZoom';
 import PubSub from 'pubsub-js';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { useDispatch } from 'react-redux';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function PreviewMedia({ data }) {
 	const { t } = useTranslation();
@@ -96,13 +92,13 @@ function PreviewMedia({ data }) {
 					</IconButton>
 				</Tooltip>
 
-				<Avatar
+				<CustomAvatar
 					style={{
 						backgroundColor: generateAvatarColor(data.senderName),
 					}}
 				>
 					{data.initials}
-				</Avatar>
+				</CustomAvatar>
 
 				<div className="app_imagePreview__header__senderInfo">
 					<h3>{data.senderName}</h3>
