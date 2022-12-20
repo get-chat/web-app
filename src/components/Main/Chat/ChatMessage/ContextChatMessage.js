@@ -22,6 +22,7 @@ function ContextChatMessage(props) {
 				<span className="chat__message__context__info__message">
 					<ChatMessageShortContent
 						type={props.contextMessage.type}
+						template={props.contextMessage.template}
 						buttonText={props.contextMessage.buttonText}
 						interactiveButtonText={props.contextMessage.interactiveButtonText}
 						text={props.contextMessage.text}
