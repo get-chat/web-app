@@ -314,7 +314,7 @@ function SidebarChat(props) {
 							<div className="sidebarChat__info__lastMessage__body">
 								<ChatMessageShortContent
 									type={props.chatData.lastMessageType}
-									template={props.chatData.lastMessagePayload}
+									template={props.chatData.lastMessage?.template}
 									buttonText={props.chatData.lastMessageButtonText}
 									interactiveButtonText={props.chatData.interactiveButtonText}
 									text={props.chatData.lastMessageBody}
