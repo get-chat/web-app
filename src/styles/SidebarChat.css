@@ -198,6 +198,9 @@
 }
 
 .sidebarChat__info__newMessagesBadge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	margin-left: 5px;
 	font-size: 10px;
 	border-radius: 10px;
