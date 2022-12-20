@@ -14,7 +14,7 @@
 }
 
 .referralContainer {
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 45, 0.1);
 	border-radius: 6px;
 	overflow: hidden;
 	margin: -1px -6px 4px -6px;
@@ -41,5 +41,5 @@
 
 .referralSourceURL {
 	font-size: 12px;
-	color: rgba(0, 0, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 }

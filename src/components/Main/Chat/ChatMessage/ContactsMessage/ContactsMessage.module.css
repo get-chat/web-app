@@ -12,8 +12,7 @@
 
 .header {
 	margin: 0 -5px 5px -5px;
-	border-bottom: 1px solid #eee;
-	background-color: rgba(0, 0, 0, 0.05);
+	background-color: rgba(0, 0, 45, 0.05);
 	border-radius: 6px;
 	padding: 8px;
 }
