@@ -162,6 +162,8 @@ function SidebarChat(props) {
 		return result;
 	};
 
+	const newMessages = props.newMessages[props.chatData.waId]?.newMessages;
+
 	return (
 		<ListItem button onClick={handleClick}>
 			<div
@@ -205,15 +207,6 @@ function SidebarChat(props) {
 						>
 							{props.chatData.initials}
 						</CustomAvatar>
-
-						{props.newMessages[props.chatData.waId]?.newMessages > 0 && (
-							<Badge
-								color="secondary"
-								badgeContent={
-									props.newMessages[props.chatData.waId]?.newMessages
-								}
-							></Badge>
-						)}
 
 						{props.chatData.assignedToUser &&
 							(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
@@ -305,6 +298,12 @@ function SidebarChat(props) {
 									</span>
 								)}
 							</div>
+
+							{newMessages > 0 && (
+								<div className="sidebarChat__info__newMessagesBadge">
+									{newMessages > 99 ? '99+' : newMessages}
+								</div>
+							)}
 						</div>
 
 						<div className="sidebarChat__info__lastMessage">
