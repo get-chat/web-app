@@ -180,11 +180,15 @@
 }
 
 .sidebarChatWrapper.almostExpired .sidebarChat__info__date {
-	outline-color: #fed167;
+	border-color: #fed167;
 }
 
 .sidebarChat__info__date__timeLeft {
 	margin-left: 5px;
+}
+
+.sidebarChatWrapper.almostExpired .sidebarChat__info__date__timeLeft {
+	color: #fed167;
 }
 
 .sidebarChat__info__expired,
