@@ -28,7 +28,6 @@ const AppTheme = createTheme({
 	components: {
 		MuiAvatar: {
 			styleOverrides: {
-				// Name of the slot
 				root: {
 					backgroundColor: '#e0e2e8',
 					color: '#fff',
