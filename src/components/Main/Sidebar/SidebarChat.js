@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/SidebarChat.css';
-import { Avatar, Checkbox, ListItem, Tooltip } from '@mui/material';
+import { Checkbox, ListItem, Tooltip } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import LabelIcon from '@mui/icons-material/Label';
 import GroupIcon from '@mui/icons-material/Group';
@@ -25,6 +25,7 @@ import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function SidebarChat(props) {
 	const { t } = useTranslation();
@@ -161,6 +162,8 @@ function SidebarChat(props) {
 		return result;
 	};
 
+	const newMessages = props.newMessages[props.chatData.waId]?.newMessages;
+
 	return (
 		<ListItem button onClick={handleClick}>
 			<div
@@ -189,7 +192,7 @@ function SidebarChat(props) {
 					)}
 
 					<div className="sidebarChat__avatarWrapper">
-						<Avatar
+						<CustomAvatar
 							className="sidebarChat__avatarWrapper__mainAvatar"
 							src={extractAvatarFromContactProviderData(
 								props.contactProvidersData[props.chatData.waId]
@@ -203,24 +206,26 @@ function SidebarChat(props) {
 							}
 						>
 							{props.chatData.initials}
-						</Avatar>
+						</CustomAvatar>
 
 						{props.chatData.assignedToUser &&
 							(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
 								props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
 								<Tooltip title={props.chatData.generateAssignmentInformation()}>
-									<Avatar
-										className="sidebarChat__avatarWrapper__assignee"
-										style={{
-											backgroundColor: generateAvatarColor(
-												props.chatData.getAssignedUserUsername()
-											),
-										}}
-									>
-										{generateInitialsHelper(
-											props.chatData.generateAssignedToInitials()
-										)}
-									</Avatar>
+									<div>
+										<CustomAvatar
+											className="sidebarChat__avatarWrapper__assignee"
+											style={{
+												backgroundColor: generateAvatarColor(
+													props.chatData.getAssignedUserUsername()
+												),
+											}}
+										>
+											{generateInitialsHelper(
+												props.chatData.generateAssignedToInitials()
+											)}
+										</CustomAvatar>
+									</div>
 								</Tooltip>
 							)}
 
@@ -231,16 +236,18 @@ function SidebarChat(props) {
 								(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
 									!props.chatData.assignedToUser)) && (
 								<Tooltip title={props.chatData.generateAssignmentInformation()}>
-									<Avatar
-										className="sidebarChat__avatarWrapper__assignee"
-										style={{
-											backgroundColor: generateAvatarColor(
-												props.chatData.assignedGroup?.name
-											),
-										}}
-									>
-										<GroupIcon />
-									</Avatar>
+									<div>
+										<CustomAvatar
+											className="sidebarChat__avatarWrapper__assignee"
+											style={{
+												backgroundColor: generateAvatarColor(
+													props.chatData.assignedGroup?.name
+												),
+											}}
+										>
+											<GroupIcon />
+										</CustomAvatar>
+									</div>
 								</Tooltip>
 							)}
 					</div>
@@ -295,29 +302,26 @@ function SidebarChat(props) {
 									</span>
 								)}
 							</div>
+
+							{newMessages > 0 && (
+								<div className="sidebarChat__info__newMessagesBadge">
+									{newMessages > 99 ? '99+' : newMessages}
+								</div>
+							)}
 						</div>
 
 						<div className="sidebarChat__info__lastMessage">
-							{(props.newMessages[props.chatData.waId]?.newMessages ?? 0) >
-							0 /*&& waId !== props.chatData.waId*/ ? (
-								<div className="sidebarChat__info__lastMessage__new">
-									{t(
-										'%d new message(s)',
-										props.newMessages[props.chatData.waId]?.newMessages
-									)}
-								</div>
-							) : (
-								<div className="sidebarChat__info__lastMessage__body">
-									<ChatMessageShortContent
-										type={props.chatData.lastMessageType}
-										buttonText={props.chatData.lastMessageButtonText}
-										interactiveButtonText={props.chatData.interactiveButtonText}
-										text={props.chatData.lastMessageBody}
-										caption={props.chatData.lastMessageCaption}
-										isLastMessageFromUs={props.chatData.isLastMessageFromUs}
-									/>
-								</div>
-							)}
+							<div className="sidebarChat__info__lastMessage__body">
+								<ChatMessageShortContent
+									type={props.chatData.lastMessageType}
+									template={props.chatData.lastMessage?.template}
+									buttonText={props.chatData.lastMessageButtonText}
+									interactiveButtonText={props.chatData.interactiveButtonText}
+									text={props.chatData.lastMessageBody}
+									caption={props.chatData.lastMessageCaption}
+									isLastMessageFromUs={props.chatData.isLastMessageFromUs}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>

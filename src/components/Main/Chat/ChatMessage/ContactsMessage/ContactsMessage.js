@@ -1,17 +1,28 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { Button, Avatar } from '@mui/material';
+import { Button } from '@mui/material';
 
 import styles from './ContactsMessage.module.css';
+import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 const ContactsMessage = ({ data }) => {
+	const navigate = useNavigate();
+
+	const handleClick = (contact) => {
+		const waId = preparePhoneNumber(contact.phones[0].wa_id);
+		navigate(`/main/chat/${waId}`);
+	};
+
 	return (
 		<div className={styles.root}>
 			<div className={styles.header}>
-				<Avatar />
+				<CustomAvatar className={styles.avatar} />
 				{data?.payload?.contacts?.map((contact, contactIndex) => (
-					<div key={contactIndex}>{contact.name.formatted_name}</div>
+					<div key={contactIndex} className={styles.name}>
+						{contact.name.formatted_name}
+					</div>
 				))}
 			</div>
 
@@ -19,11 +30,15 @@ const ContactsMessage = ({ data }) => {
 				{data?.payload?.contacts?.map((contact, contactIndex) => (
 					<Fragment key={contactIndex}>
 						{Boolean(contact.phones.length) && (
-							<Link to={contact.phones[0].wa_id}>
-								<Button color="primary" variant="outlined">
-									Message
-								</Button>
-							</Link>
+							<Button
+								color="primary"
+								variant="text"
+								size="medium"
+								className={styles.messageButton}
+								onClick={() => handleClick(contact)}
+							>
+								Message
+							</Button>
 						)}
 						{/* TODO: after adding redux */}
 						{/* <Button color="primary" variant="outlined">

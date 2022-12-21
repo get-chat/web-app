@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import '../styles/Contact.css';
-import { Avatar, ListItem } from '@mui/material';
+import { ListItem } from '@mui/material';
 import ContactProviderHeader from './ContactProviderHeader';
 import { useTranslation } from 'react-i18next';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function Contact(props) {
 	const { t } = useTranslation();
@@ -31,7 +32,9 @@ function Contact(props) {
 			<ListItem button>
 				<div className="contact" onClick={handleClick}>
 					<div className="contact__avatarWrapper">
-						<Avatar src={props.data.avatar}>{props.data.initials}</Avatar>
+						<CustomAvatar src={props.data.avatar}>
+							{props.data.initials}
+						</CustomAvatar>
 
 						{props.data.contactProvider !== undefined && (
 							<ContactProviderHeader type={props.data.contactProvider} />

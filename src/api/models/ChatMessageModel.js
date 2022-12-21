@@ -99,6 +99,7 @@ export class ChatMessageModel {
 
 		this.location = payload.location;
 
+		this.template = payload.template;
 		this.templateName = payload.template?.name;
 		this.templateNamespace = payload.template?.namespace;
 		this.templateLanguage = payload.template?.language?.code;

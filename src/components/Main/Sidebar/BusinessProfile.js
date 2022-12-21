@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/BusinessProfile.css';
 import {
-	Avatar,
 	Button,
 	FormControl,
 	IconButton,
@@ -19,6 +18,7 @@ import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import { useSelector } from 'react-redux';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -231,7 +231,7 @@ function BusinessProfile(props) {
 							</div>
 
 							<div className="sidebarBusinessProfile__body__avatarContainer">
-								<Avatar
+								<CustomAvatar
 									src={
 										currentUser?.profile?.large_avatar ??
 										currentUser?.profile?.avatar
@@ -241,7 +241,7 @@ function BusinessProfile(props) {
 									}}
 								>
 									{generateInitialsHelper(currentUser.username)}
-								</Avatar>
+								</CustomAvatar>
 							</div>
 
 							<h3>{currentUser.username}</h3>
@@ -280,7 +280,7 @@ function BusinessProfile(props) {
 									accept="image/jpeg, image/png"
 									multiple={false}
 								/>
-								<Avatar
+								<CustomAvatar
 									src={
 										profilePhoto
 											? 'data:image/png;base64,' + profilePhoto

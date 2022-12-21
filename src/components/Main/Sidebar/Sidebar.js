@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
-	Avatar,
 	Button,
 	CircularProgress,
 	Divider,
@@ -70,6 +69,7 @@ import ChatsResponse from '../../../api/responses/ChatsResponse';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import ChatTag from '../../ChatTag';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -668,7 +668,7 @@ function Sidebar(props) {
 	return (
 		<div className={'sidebar' + (props.isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
-				<Avatar
+				<CustomAvatar
 					src={currentUser?.profile?.avatar}
 					onClick={() => setProfileVisible(true)}
 					className="cursorPointer"
@@ -677,7 +677,7 @@ function Sidebar(props) {
 					}}
 				>
 					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
-				</Avatar>
+				</CustomAvatar>
 				<div className="sidebar__headerRight">
 					<Tooltip title={t('New chat')}>
 						<IconButton

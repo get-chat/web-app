@@ -138,11 +138,6 @@
 	color: rgba(0, 0, 45, 0.4);
 }
 
-.sidebarChat__info__lastMessage__new {
-	font-weight: 600;
-	color: var(--color-primary);
-}
-
 .sidebarChat__info__lastMessage__body,
 .sidebarChat__info__lastMessage__body > div {
 	text-overflow: ellipsis;
@@ -185,17 +180,35 @@
 }
 
 .sidebarChatWrapper.almostExpired .sidebarChat__info__date {
-	outline-color: #fed167;
+	border-color: #fed167;
 }
 
 .sidebarChat__info__date__timeLeft {
 	margin-left: 5px;
 }
 
+.sidebarChatWrapper.almostExpired .sidebarChat__info__date__timeLeft {
+	color: #fed167;
+}
+
 .sidebarChat__info__expired,
 .sidebarChat__info__date {
 	display: block;
 	margin-top: 5px;
+}
+
+.sidebarChat__info__newMessagesBadge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 5px;
+	font-size: 10px;
+	border-radius: 10px;
+	padding: 2px 6px;
+	font-weight: 600;
+	border: 1px solid red;
+	background-color: red;
+	color: white;
 }
 
 .sidebarChat__info {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
@@ -21,6 +21,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import { useDispatch } from 'react-redux';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function ContactDetails(props) {
 	const { t } = useTranslation();
@@ -57,7 +58,7 @@ function ContactDetails(props) {
 				<div className="contactDetails__body">
 					<div className="contactDetails__body__section">
 						<div className="contactDetails__body__avatarContainer">
-							<Avatar
+							<CustomAvatar
 								src={extractAvatarFromContactProviderData(
 									props.contactProvidersData[props.contactData.waId],
 									true
@@ -68,7 +69,7 @@ function ContactDetails(props) {
 								}}
 							>
 								{props.contactData.initials}
-							</Avatar>
+							</CustomAvatar>
 						</div>
 
 						<PrintMessage

@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/ChatHeader.css';
-import {
-	Avatar,
-	Divider,
-	IconButton,
-	Menu,
-	MenuItem,
-	Tooltip,
-} from '@mui/material';
+import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
 import {
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
@@ -26,6 +19,7 @@ import {
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function ChatHeader(props) {
 	const { t } = useTranslation();
@@ -90,7 +84,7 @@ function ChatHeader(props) {
 			)}
 
 			<div className="chat__header__clickable" onClick={showContactDetails}>
-				<Avatar
+				<CustomAvatar
 					src={extractAvatarFromContactProviderData(
 						props.contactProvidersData[props.person?.waId]
 					)}
@@ -106,7 +100,7 @@ function ChatHeader(props) {
 					}
 				>
 					{props.person?.initials}
-				</Avatar>
+				</CustomAvatar>
 
 				<div className="chat__headerInfo">
 					<PrintMessage

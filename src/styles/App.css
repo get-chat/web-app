@@ -188,16 +188,6 @@ a {
 	opacity: 0.3 !important;
 }
 
-.MuiAvatar-root {
-	text-shadow: 0 1px 3px #00000040;
-	font-weight: 600;
-}
-
-.MuiAvatar-root .MuiSvgIcon-root {
-	color: #fafafa !important;
-	filter: drop-shadow(0 1px 3px #00000020);
-}
-
 .MuiDivider-root {
 	border-color: rgba(0, 0, 45, 0.05) !important;
 }

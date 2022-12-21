@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import HeadsetIcon from '@mui/icons-material/Headset';
@@ -11,6 +11,7 @@ import {
 import { isAudioMimeTypeSupported } from '@src/helpers/FileHelper';
 import UnsupportedFileClass from '../../../../UnsupportedFileClass';
 import { generateAvatarColor } from '@src/helpers/AvatarHelper';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 function ChatMessageVoice(props) {
 	const data = props.data;
@@ -153,7 +154,7 @@ function ChatMessageVoice(props) {
 				onLoadedMetadata={(event) => console.log(event.target.duration)}
 			/>
 
-			<Avatar
+			<CustomAvatar
 				style={{
 					backgroundColor:
 						data.voiceId !== undefined ?? data.voiceLink !== undefined
@@ -167,7 +168,7 @@ function ChatMessageVoice(props) {
 				) : (
 					<HeadsetIcon />
 				)}
-			</Avatar>
+			</CustomAvatar>
 		</div>
 	);
 }

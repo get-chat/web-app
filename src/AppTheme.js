@@ -26,6 +26,15 @@ const AppTheme = createTheme({
 		].join(','),
 	},
 	components: {
+		MuiAvatar: {
+			styleOverrides: {
+				root: {
+					backgroundColor: '#e0e2e8',
+					color: '#fff',
+					fontWeight: 600,
+				},
+			},
+		},
 		MuiMenuItem: {
 			defaultProps: {
 				dense: true,

@@ -11,11 +11,25 @@
 }
 
 .header {
-	margin: 5px 0 10px;
-	border-bottom: 1px solid #eee;
-	padding-bottom: 10px;
+	margin: 0 -5px 5px -5px;
+	background-color: rgba(0, 0, 45, 0.05);
+	border-radius: 6px;
+	padding: 8px;
+}
+
+.avatar {
+	height: 35px !important;
+	width: 35px !important;
+}
+
+.name {
+	font-weight: 600;
 }
 
 .footer {
 	justify-content: center;
+}
+
+.messageButton {
+	flex: 1;
 }
