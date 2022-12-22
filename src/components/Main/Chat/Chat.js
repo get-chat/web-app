@@ -1697,6 +1697,7 @@ export default function Chat(props) {
 				setChatTagsVisible={props.setChatTagsVisible}
 				closeChat={closeChat}
 				hasFailedMessages={props.hasFailedMessages}
+				waId={waId}
 			/>
 
 			{/* FOR TESTING QUEUE */}

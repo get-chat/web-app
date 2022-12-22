@@ -126,17 +126,19 @@ function ChatAssignment(props) {
 		<Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
 			<DialogTitle>Assign chat</DialogTitle>
 			<DialogContent className="chatAssignment">
-				{isUnableToChange ? (
-					<DialogContentText>
-						{t(
-							'This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.'
-						)}
-					</DialogContentText>
-				) : (
-					<DialogContentText>
-						{t('You can assign this chat to a user or a group.')}
-					</DialogContentText>
-				)}
+				<div className="chatAssignmentWrapper__message">
+					{isUnableToChange ? (
+						<DialogContentText>
+							{t(
+								'This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.'
+							)}
+						</DialogContentText>
+					) : (
+						<DialogContentText>
+							{t('You can assign this chat to a user or a group.')}
+						</DialogContentText>
+					)}
+				</div>
 
 				<FormControl
 					variant="standard"

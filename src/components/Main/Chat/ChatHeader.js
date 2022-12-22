@@ -20,13 +20,28 @@ import {
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { useSelector } from 'react-redux';
 
 function ChatHeader(props) {
+	const { apiService } = React.useContext(ApplicationContext);
 	const { t } = useTranslation();
+	const currentUser = useSelector((state) => state.currentUser.value);
+	const [assignedUserId, setAssignedUserId] = useState(null);
+	const [assignedGroup, setAssignedGroup] = useState(null);
+
+	const chatAssignedToCurrentUser = assignedUserId === currentUser?.id;
 
 	const [anchorEl, setAnchorEl] = useState(null);
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		if (props.waId) {
+			apiService.retrieveChatAssignmentCall(props.waId, (response) => {
+				setAssignedUserId(response.data.assigned_to_user);
+				setAssignedGroup(response.data.assigned_group);
+			});
+		}
+	}, [props.waId]);
 
 	const displayMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -67,6 +82,30 @@ function ChatHeader(props) {
 
 		// Force refresh chat
 		PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
+	};
+
+	const onUnassignChat = () => {
+		const confirm = window.confirm(
+			'Are you sure you want to unassign this chat?'
+		);
+
+		if (confirm) {
+			apiService.updateChatAssignmentCall(
+				props.waId,
+				null,
+				assignedGroup,
+				(response) => {
+					setAssignedUserId(null);
+				},
+				(error) => {
+					if (error?.response?.status === 403) {
+						window.displayCustomError(
+							'This chat could not be assigned as its assignments have been changed by another user recently.'
+						);
+					}
+				}
+			);
+		}
 	};
 
 	return (
@@ -153,9 +192,16 @@ function ChatHeader(props) {
 				<MenuItem onClick={showContactDetailsAndHideMenu}>
 					{t('Contact details')}
 				</MenuItem>
-				<MenuItem onClick={showChatAssignmentAndHideMenu}>
-					{t('Assign chat')}
-				</MenuItem>
+				{chatAssignedToCurrentUser && (
+					<MenuItem onClick={onUnassignChat}>
+						{t('Unassign me from chat')}
+					</MenuItem>
+				)}
+				{currentUser?.isAdmin && (
+					<MenuItem onClick={showChatAssignmentAndHideMenu}>
+						{t('Assign chat')}
+					</MenuItem>
+				)}
 				<MenuItem onClick={showChatTagsAndHideMenu}>
 					{t('Change tags')}
 				</MenuItem>
