@@ -9,6 +9,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 
 const ContactsMessage = ({ data }) => {
 	const navigate = useNavigate();
+	const { contacts } = data?.payload || data?.resendPayload;
 
 	const handleClick = (contact) => {
 		const waId = preparePhoneNumber(contact.phones[0].wa_id);
@@ -19,7 +20,7 @@ const ContactsMessage = ({ data }) => {
 		<div className={styles.root}>
 			<div className={styles.header}>
 				<CustomAvatar className={styles.avatar} />
-				{data?.payload?.contacts?.map((contact, contactIndex) => (
+				{contacts?.map((contact, contactIndex) => (
 					<div key={contactIndex} className={styles.name}>
 						{contact.name.formatted_name}
 					</div>
@@ -27,7 +28,7 @@ const ContactsMessage = ({ data }) => {
 			</div>
 
 			<div className={styles.footer}>
-				{data?.payload?.contacts?.map((contact, contactIndex) => (
+				{contacts?.map((contact, contactIndex) => (
 					<Fragment key={contactIndex}>
 						{Boolean(contact.phones.length) && (
 							<Button
