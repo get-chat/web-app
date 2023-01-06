@@ -192,16 +192,18 @@ function ChatHeader(props) {
 				<MenuItem onClick={showContactDetailsAndHideMenu}>
 					{t('Contact details')}
 				</MenuItem>
-				{chatAssignedToCurrentUser && (
-					<MenuItem onClick={onUnassignChat}>
-						{t('Unassign me from chat')}
-					</MenuItem>
-				)}
-				{currentUser?.isAdmin && (
-					<MenuItem onClick={showChatAssignmentAndHideMenu}>
-						{t('Assign chat')}
-					</MenuItem>
-				)}
+				<MenuItem
+					onClick={showChatAssignmentAndHideMenu}
+					disabled={!currentUser?.isAdmin}
+				>
+					{t('Assign chat')}
+				</MenuItem>
+				<MenuItem
+					onClick={onUnassignChat}
+					disabled={!chatAssignedToCurrentUser}
+				>
+					{t('Unassign me from chat')}
+				</MenuItem>
 				<MenuItem onClick={showChatTagsAndHideMenu}>
 					{t('Change tags')}
 				</MenuItem>
