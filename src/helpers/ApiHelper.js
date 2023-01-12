@@ -51,7 +51,7 @@ export const clearUserSession = (errorCase, nextLocation, navigate) => {
 	let path;
 
 	if (errorCase) {
-		path = `/login/error/${errorCase}`;
+		path = `/main/login/error/${errorCase}`;
 	} else {
 		path = '/';
 	}

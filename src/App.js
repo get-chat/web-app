@@ -44,7 +44,15 @@ const App = ({ config, apiService }) => {
 										<Main />
 									)}
 
-									{renderPaths(['/login/error/:errorCase', '/'], <Login />)}
+									{renderPaths(
+										[
+											'/main/login',
+											'main/login/error',
+											'/main/login/error/:errorCase',
+											'/',
+										],
+										<Login />
+									)}
 								</Routes>
 							</Router>
 						</ApplicationContext.Provider>
