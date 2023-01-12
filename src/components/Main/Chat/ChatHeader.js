@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import '../../../styles/ChatHeader.css';
 import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
@@ -30,7 +30,10 @@ function ChatHeader(props) {
 	const [assignedUserId, setAssignedUserId] = useState(null);
 	const [assignedGroup, setAssignedGroup] = useState(null);
 
-	const chatAssignedToCurrentUser = assignedUserId === currentUser?.id;
+	const chatAssignedToCurrentUser = useMemo(
+		() => assignedUserId === currentUser?.id,
+		[currentUser?.id, assignedUserId]
+	);
 
 	const [anchorEl, setAnchorEl] = useState(null);
 
@@ -192,18 +195,15 @@ function ChatHeader(props) {
 				<MenuItem onClick={showContactDetailsAndHideMenu}>
 					{t('Contact details')}
 				</MenuItem>
-				<MenuItem
-					onClick={showChatAssignmentAndHideMenu}
-					disabled={!currentUser?.isAdmin}
-				>
+				<MenuItem onClick={showChatAssignmentAndHideMenu}>
 					{t('Assign chat')}
 				</MenuItem>
-				<MenuItem
+				{/* <MenuItem
 					onClick={onUnassignChat}
 					disabled={!chatAssignedToCurrentUser}
 				>
 					{t('Unassign me from chat')}
-				</MenuItem>
+				</MenuItem> */}
 				<MenuItem onClick={showChatTagsAndHideMenu}>
 					{t('Change tags')}
 				</MenuItem>

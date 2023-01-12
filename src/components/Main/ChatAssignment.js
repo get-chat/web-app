@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
 	Button,
 	CircularProgress,
@@ -26,20 +26,15 @@ function ChatAssignment(props) {
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
-	const [isUnableToChange, setUnableToChange] = useState(false);
 	const [groups, setGroups] = useState([]);
-	const [assignedToUser, setAssignedToUser] = useState();
-	const [assignedGroup, setAssignedGroup] = useState();
+	const [assignedToUser, setAssignedToUser] = useState(null);
+	const [assignedGroup, setAssignedGroup] = useState(null);
 	const [tempAssignedToUser, setTempAssignedToUser] = useState('null');
 	const [tempAssignedGroup, setTempAssignedGroup] = useState('null');
 
 	useEffect(() => {
 		listGroups();
 	}, []);
-
-	useEffect(() => {
-		checkIfUnableToChange();
-	}, [assignedGroup, assignedGroup]);
 
 	const close = () => {
 		props.setOpen(false);
@@ -113,21 +108,23 @@ function ChatAssignment(props) {
 		setTempAssignedGroup(event.target.value);
 	};
 
-	const checkIfUnableToChange = () => {
-		const isUnable =
-			!isAdmin &&
-			assignedToUser !== undefined &&
-			assignedToUser !== null &&
-			assignedToUser !== currentUser.id.toString();
-		setUnableToChange(isUnable);
-	};
+	const canChangeUserAssigment = useMemo(
+		() =>
+			assignedToUser === currentUser.id || assignedToUser === null || isAdmin,
+		[assignedToUser, currentUser.id, isAdmin]
+	);
+
+	const canChangeGroupAssigment = useMemo(
+		() => assignedGroup === null || isAdmin,
+		[assignedGroup, isAdmin]
+	);
 
 	return (
 		<Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
 			<DialogTitle>Assign chat</DialogTitle>
 			<DialogContent className="chatAssignment">
 				<div className="chatAssignmentWrapper__message">
-					{isUnableToChange ? (
+					{!canChangeUserAssigment ? (
 						<DialogContentText>
 							{t(
 								'This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.'
@@ -143,7 +140,7 @@ function ChatAssignment(props) {
 				<FormControl
 					variant="standard"
 					fullWidth={true}
-					disabled={isUnableToChange}
+					disabled={!canChangeUserAssigment}
 				>
 					<InputLabel id="assign-user-select-label">User</InputLabel>
 					<Select
@@ -155,7 +152,11 @@ function ChatAssignment(props) {
 					>
 						<MenuItem value="null">{t('Unassigned')}</MenuItem>
 						{Object.values(props.users)?.map((user) => (
-							<MenuItem key={user.id} value={user.id}>
+							<MenuItem
+								key={user.id}
+								value={user.id}
+								disabled={isAdmin ? false : user.id !== currentUser.id}
+							>
 								{user.prepareUserLabel()}
 							</MenuItem>
 						))}
@@ -165,7 +166,7 @@ function ChatAssignment(props) {
 				<FormControl
 					variant="standard"
 					fullWidth={true}
-					disabled={isUnableToChange}
+					disabled={!canChangeGroupAssigment}
 				>
 					<InputLabel id="assign-group-select-label">Group</InputLabel>
 					<Select
@@ -188,7 +189,7 @@ function ChatAssignment(props) {
 				<Button onClick={close} color="secondary">
 					Close
 				</Button>
-				{!isUnableToChange && (
+				{(canChangeUserAssigment || canChangeGroupAssigment) && (
 					<Button color="primary" onClick={updateChatAssignment}>
 						{t('Update')}
 					</Button>
