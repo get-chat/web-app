@@ -148,6 +148,8 @@ export default function Login(props) {
 						<Button
 							data-test-id="submit"
 							type="submit"
+							size="large"
+							variant="text"
 							color="primary"
 							fullWidth={true}
 							disableElevation

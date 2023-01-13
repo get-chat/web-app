@@ -54,7 +54,8 @@
 }
 
 .login__body > form > button {
-	margin: 0 auto;
+	border-radius: 10px;
+	margin: 5px auto 10px;
 }
 
 .login__body > form > .MuiFormControl-root {
