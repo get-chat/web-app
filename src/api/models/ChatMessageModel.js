@@ -1,4 +1,8 @@
-import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
+import {
+	generateInitialsHelper,
+	generateUniqueID,
+	sanitize,
+} from '@src/helpers/Helpers';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -145,7 +149,8 @@ export class ChatMessageModel {
 
 	static fromAssignmentEvent(assignmentEvent) {
 		const message = new ChatMessageModel();
-		message.id = 'assignmentEvent_' + assignmentEvent.timestamp;
+		message.id =
+			'assignmentEvent_' + assignmentEvent.timestamp + '_' + generateUniqueID();
 		message.waId = assignmentEvent.wa_id;
 		message.assignmentEvent = assignmentEvent;
 		message.timestamp = assignmentEvent.timestamp;
@@ -154,7 +159,8 @@ export class ChatMessageModel {
 
 	static fromTaggingEvent(taggingEvent) {
 		const message = new ChatMessageModel();
-		message.id = 'taggingEvent_' + taggingEvent.timestamp;
+		message.id =
+			'taggingEvent_' + taggingEvent.timestamp + '_' + generateUniqueID();
 		message.waId = taggingEvent.chat;
 		message.taggingEvent = taggingEvent;
 		message.timestamp = taggingEvent.timestamp;
