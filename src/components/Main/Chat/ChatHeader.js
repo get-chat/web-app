@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../../../styles/ChatHeader.css';
 import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
@@ -23,10 +23,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 
 function ChatHeader(props) {
 	const { t } = useTranslation();
-
 	const [anchorEl, setAnchorEl] = useState(null);
-
-	useEffect(() => {}, []);
 
 	const displayMenu = (event) => {
 		setAnchorEl(event.currentTarget);

@@ -9,7 +9,7 @@
 		"preview": "serve -s build",
 		"test": "jest",
 		"test:e2e": "cypress run",
-		"i18next-conv": "i18next-conv -l en -s src/locales/en/translation.po src/locales/en/translation.json",
+		"i18next-conv": "lang=en;i18next-conv --compatibilityJSON v4 -l $lang -s ./src/locales/${lang}/translation.po -t ./src/locales/${lang}/translation.json",
 		"prepare": "husky install",
 		"lint:staged": "lint-staged --allow-empty",
 		"lint:prettier": "prettier --check --ignore-unknown  src",

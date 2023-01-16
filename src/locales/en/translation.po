@@ -603,3 +603,14 @@ msgstr ""
 
 msgid "The language pack for this template is not installed on the server yet, try sending this message later"
 msgstr ""
+
+msgid "You can assign this chat to yourself and unassign from yourself."
+msgstr ""
+
+
+msgid "You can assign this chat to a group."
+msgstr ""
+
+
+msgid "This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment."
+msgstr ""

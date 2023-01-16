@@ -2,6 +2,14 @@
 	position: relative;
 }
 
+.chatAssignmentWrapper__main_message {
+	margin-bottom: 24px;
+}
+
+.chatAssignmentWrapper__message {
+	margin-bottom: 5px;
+}
+
 .chatAssignmentWrapper__loading {
 	display: flex;
 	align-items: center;
