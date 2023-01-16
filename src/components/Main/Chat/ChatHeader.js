@@ -20,26 +20,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { useSelector } from 'react-redux';
 
 function ChatHeader(props) {
-	const { apiService } = React.useContext(ApplicationContext);
 	const { t } = useTranslation();
-	const currentUser = useSelector((state) => state.currentUser.value);
-	const [assignedUserId, setAssignedUserId] = useState(null);
-	const [assignedGroup, setAssignedGroup] = useState(null);
-
 	const [anchorEl, setAnchorEl] = useState(null);
-
-	useEffect(() => {
-		if (props.waId) {
-			apiService.retrieveChatAssignmentCall(props.waId, (response) => {
-				setAssignedUserId(response.data.assigned_to_user);
-				setAssignedGroup(response.data.assigned_group);
-			});
-		}
-	}, [props.waId]);
 
 	const displayMenu = (event) => {
 		setAnchorEl(event.currentTarget);
