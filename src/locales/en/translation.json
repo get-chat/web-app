@@ -6,8 +6,8 @@
 	"cleared assigned user": "",
 	"cleared assigned group": "",
 	"There is no phone number": "",
-	"%d more phone number_one": "%d more phone number",
-	"%d more phone number_other": "%d more phone numbers",
+	"%d more phone number": "%d more phone number",
+	"%d more phone number_plural": "%d more phone numbers",
 	"Choose a phone number": "",
 	"New chat": "",
 	"Start a chat with a phone number": "",
@@ -146,8 +146,8 @@
 	"Last attempt at: <1></1>": "",
 	"New messages": "",
 	"You have new messages!": "",
-	"Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)_one": "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)",
-	"Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)_other": "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)",
+	"Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)": "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)",
+	"Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)_plural": "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)",
 	"Click to clear filter": "",
 	"All": "",
 	"Me": "",
@@ -197,5 +197,8 @@
 	"Search for contacts": "",
 	"Message via ad": "",
 	"Message via post": "",
-	"The language pack for this template is not installed on the server yet, try sending this message later": ""
+	"The language pack for this template is not installed on the server yet, try sending this message later": "",
+	"You can assign this chat to yourself and unassign from yourself.": "",
+	"You can assign this chat to a group.": "",
+	"This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.": ""
 }

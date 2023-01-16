@@ -30,11 +30,6 @@ function ChatHeader(props) {
 	const [assignedUserId, setAssignedUserId] = useState(null);
 	const [assignedGroup, setAssignedGroup] = useState(null);
 
-	const chatAssignedToCurrentUser = useMemo(
-		() => assignedUserId === currentUser?.id,
-		[currentUser?.id, assignedUserId]
-	);
-
 	const [anchorEl, setAnchorEl] = useState(null);
 
 	useEffect(() => {
@@ -85,30 +80,6 @@ function ChatHeader(props) {
 
 		// Force refresh chat
 		PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
-	};
-
-	const onUnassignChat = () => {
-		const confirm = window.confirm(
-			'Are you sure you want to unassign this chat?'
-		);
-
-		if (confirm) {
-			apiService.updateChatAssignmentCall(
-				props.waId,
-				null,
-				assignedGroup,
-				(response) => {
-					setAssignedUserId(null);
-				},
-				(error) => {
-					if (error?.response?.status === 403) {
-						window.displayCustomError(
-							'This chat could not be assigned as its assignments have been changed by another user recently.'
-						);
-					}
-				}
-			);
-		}
 	};
 
 	return (
