@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@mui/material';
@@ -18,18 +18,17 @@ const ContactsMessage = ({ data }) => {
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.header}>
-				<CustomAvatar className={styles.avatar} />
-				{contacts?.map((contact, contactIndex) => (
-					<div key={contactIndex} className={styles.name}>
-						{contact.name.formatted_name}
+			{contacts?.map((contact, contactIndex) => (
+				<div key={contactIndex} className={styles.item}>
+					<div className={styles.header}>
+						<>
+							<CustomAvatar className={styles.avatar} />
+							<div key={contactIndex} className={styles.name}>
+								{contact.name.formatted_name}
+							</div>
+						</>
 					</div>
-				))}
-			</div>
-
-			<div className={styles.footer}>
-				{contacts?.map((contact, contactIndex) => (
-					<Fragment key={contactIndex}>
+					<div className={styles.footer}>
 						{Boolean(contact.phones.length) && (
 							<Button
 								color="primary"
@@ -41,13 +40,9 @@ const ContactsMessage = ({ data }) => {
 								Message
 							</Button>
 						)}
-						{/* TODO: after adding redux */}
-						{/* <Button color="primary" variant="outlined">
-							View
-						</Button> */}
-					</Fragment>
-				))}
-			</div>
+					</div>
+				</div>
+			))}
 		</div>
 	);
 };

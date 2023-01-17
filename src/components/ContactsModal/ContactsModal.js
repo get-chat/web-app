@@ -34,7 +34,7 @@ const DialogHeader = ({ children, onClose, ...rest }) => (
 
 const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 	const { apiService } = React.useContext(ApplicationContext);
-	const [selectedContact, setSelectedContact] = useState(null);
+	const [selectedContacts, setSelectedContacts] = useState([]);
 	const [contacts, setContacts] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -64,23 +64,21 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 
 	const handleClose = () => {
 		onClose();
-		setSelectedContact(null);
+		setSelectedContacts([]);
 	};
 
 	const handleSendMessage = () => {
 		const payload = {
 			wa_id: recipientWaId,
 			type: ChatMessageModel.TYPE_CONTACTS,
-			contacts: [
-				{
-					name: {
-						formatted_name: selectedContact.name,
-					},
-					phones: selectedContact.phoneNumbers.map((phone) => ({
-						wa_id: phone?.phone_number || null,
-					})),
+			contacts: [...selectedContacts].map((contact) => ({
+				name: {
+					formatted_name: contact.name,
 				},
-			],
+				phones: contact.phoneNumbers.map((phone) => ({
+					wa_id: phone?.phone_number || null,
+				})),
+			})),
 		};
 
 		sendMessage(
@@ -95,6 +93,16 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 				handleClose();
 			}
 		);
+	};
+
+	const handleSetSelectedContacts = (contact) => {
+		if (selectedContacts.find((item) => item.name === contact.name)) {
+			setSelectedContacts(
+				selectedContacts.filter((item) => item.name !== contact.name)
+			);
+		} else {
+			setSelectedContacts([...selectedContacts, contact]);
+		}
 	};
 
 	if (isLoading) {
@@ -116,8 +124,10 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 								key={key}
 								divider={Object.keys(contacts).length !== index + 1}
 								button
-								selected={selectedContact?.name === value.name}
-								onClick={() => setSelectedContact(value)}
+								selected={selectedContacts.find(
+									(item) => item.name === value.name
+								)}
+								onClick={() => handleSetSelectedContacts(value)}
 							>
 								<ListItemAvatar>
 									<CustomAvatar alt={value.name}>{value.initials}</CustomAvatar>
@@ -126,8 +136,10 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 								<ListItemSecondaryAction>
 									<Checkbox
 										edge="end"
-										checked={selectedContact?.name === value.name}
-										onClick={() => setSelectedContact(value)}
+										checked={selectedContacts.find(
+											(item) => item.name === value.name
+										)}
+										onClick={() => handleSetSelectedContacts(value)}
 									/>
 								</ListItemSecondaryAction>
 							</ListItem>
@@ -135,7 +147,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 					</List>
 				)}
 			</DialogContent>
-			{selectedContact && (
+			{selectedContacts.length && (
 				<DialogActions>
 					<Button onClick={handleSendMessage}>Send</Button>
 				</DialogActions>
