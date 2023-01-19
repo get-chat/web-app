@@ -614,3 +614,9 @@ msgstr ""
 
 msgid "This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment."
 msgstr ""
+
+msgid "Register templates"
+msgstr ""
+
+msgid "Click here to refresh"
+msgstr ""
