@@ -32,14 +32,9 @@ const TemplatesList = ({
 
 					<div className="templateMessages__refresh">
 						<span>{t('Not seeing your new templates?')}</span>
-						<Button
-							color="primary"
-							onClick={() => console.log('Click')}
-							target="_blank"
-							size="small"
-						>
+						<a onClick={() => console.log('Click')} href="#">
 							{t('Click here to refresh')}
-						</Button>
+						</a>
 					</div>
 				</div>
 

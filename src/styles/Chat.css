@@ -444,6 +444,12 @@ a.chat__document:hover {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.templateMessages__actions a {
+	line-height: 1.2rem !important;
 }
 
 .templateMessages__create a {
@@ -454,10 +460,16 @@ a.chat__document:hover {
 
 .templateMessages__refresh {
 	font-size: 13px;
-	margin-bottom: 10px;
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: 4px;
+	padding: 3px 5px;
 }
 
-.templateMessages__refresh button {
+.templateMessages__refresh > span:first-child {
+	margin-right: 5px;
+}
+
+.templateMessages__refresh a {
 	font-size: 13px !important;
 	color: var(--default-text-color);
 	font-weight: 600;
@@ -624,5 +636,6 @@ a.chat__document:hover {
 
 	.templateMessages__refresh {
 		flex-direction: column;
+		text-align: center;
 	}
 }
