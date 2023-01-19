@@ -5,6 +5,7 @@ import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_REFRESH_TEMPLATES } from '@src/Constants';
+import useTemplates from '@src/hooks/useTemplates';
 
 const TemplatesList = ({
 	templates,
@@ -14,6 +15,12 @@ const TemplatesList = ({
 	isTemplatesFailed,
 }) => {
 	const { t } = useTranslation();
+
+	const { issueTemplateRefreshRequest } = useTemplates();
+
+	const doRefreshTemplates = async () => {
+		await issueTemplateRefreshRequest();
+	};
 
 	const emitRefreshTemplateMessageEvent = () => {
 		PubSub.publish(EVENT_TOPIC_REFRESH_TEMPLATES);
@@ -38,7 +45,7 @@ const TemplatesList = ({
 
 					<div className="templateMessages__refresh">
 						<span>{t('Not seeing your new templates?')}</span>
-						<a onClick={emitRefreshTemplateMessageEvent} href="#">
+						<a onClick={doRefreshTemplates} href="#">
 							{t('Click here to refresh')}
 						</a>
 					</div>
