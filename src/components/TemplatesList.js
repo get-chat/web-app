@@ -4,7 +4,6 @@ import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_REFRESH_TEMPLATES } from '@src/Constants';
 import useTemplates from '@src/hooks/useTemplates';
 import { useSelector } from 'react-redux';
 
@@ -25,10 +24,6 @@ const TemplatesList = ({
 
 	const doRefreshTemplates = async () => {
 		await issueTemplateRefreshRequest();
-	};
-
-	const emitRefreshTemplateMessageEvent = () => {
-		PubSub.publish(EVENT_TOPIC_REFRESH_TEMPLATES);
 	};
 
 	return (
@@ -72,7 +67,7 @@ const TemplatesList = ({
 					</div>
 				)}
 
-				{Object.entries(templates).map((template, index) => (
+				{Object.entries(templates).map((template) => (
 					<div key={template[0]} className="templateMessageWrapper">
 						<div className="chat__message chat__outgoing messageType__template">
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}

@@ -23,7 +23,6 @@ import {
 	EVENT_TOPIC_DISPLAY_ERROR,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
-	EVENT_TOPIC_REFRESH_TEMPLATES,
 	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 } from '@src/Constants';
@@ -344,10 +343,6 @@ function Main() {
 		}
 	};
 
-	const onRefreshTemplatesEvent = function (msg, data) {
-		listTemplates(true);
-	};
-
 	const onDisplayError = function (msg, data) {
 		displayCustomError(data);
 	};
@@ -394,17 +389,12 @@ function Main() {
 			EVENT_TOPIC_UNSUPPORTED_FILE,
 			onUnsupportedFileEvent
 		);
-		const refreshTemplatesEventToken = PubSub.subscribe(
-			EVENT_TOPIC_REFRESH_TEMPLATES,
-			onRefreshTemplatesEvent
-		);
 
 		return () => {
 			PubSub.unsubscribe(searchMessagesVisibilityEventToken);
 			PubSub.unsubscribe(contactDetailsVisibilityEventToken);
 			PubSub.unsubscribe(displayErrorEventToken);
 			PubSub.unsubscribe(unsupportedFileEventToken);
-			PubSub.unsubscribe(refreshTemplatesEventToken);
 		};
 	}, []);
 
