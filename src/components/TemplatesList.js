@@ -54,9 +54,9 @@ const TemplatesList = ({
 				{getObjLength(templates) === 0 && (
 					<div className="templateMessages__emptyInfo mt-3">
 						{isTemplatesFailed ? (
-							<span>Template messages couldn't be loaded.</span>
+							<span>{t("Template messages couldn't be loaded.")}</span>
 						) : (
-							<span>No templates have been registered yet.</span>
+							<span>{t('No templates have been registered yet.')}</span>
 						)}
 					</div>
 				)}

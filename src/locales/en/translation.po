@@ -620,3 +620,12 @@ msgstr ""
 
 msgid "Click here to refresh"
 msgstr ""
+
+msgid "Templates are refreshed successfully."
+msgstr ""
+
+msgid "Template messages couldn't be loaded."
+msgstr ""
+
+msgid "No templates have been registered yet."
+msgstr ""

@@ -202,5 +202,8 @@
 	"You can assign this chat to a group.": "",
 	"This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.": "",
 	"Register templates": "",
-	"Click here to refresh": ""
+	"Click here to refresh": "",
+	"Templates are refreshed successfully.": "",
+	"Template messages couldn't be loaded.": "",
+	"No templates have been registered yet.": ""
 }
