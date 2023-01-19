@@ -64,9 +64,11 @@ const useTemplates = () => {
 					console.log('Templates are still being refreshed.');
 
 					if (retryCount.current < MAX_RETRY) {
-						console.log('Retrying...');
-
 						retryCount.current = retryCount.current + 1;
+
+						console.log(
+							'Retrying, attempt: ' + retryCount.current + '/' + MAX_RETRY
+						);
 
 						setTimeout(() => {
 							checkTemplateRefreshStatus();
