@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_REFRESH_TEMPLATES } from '@src/Constants';
 import useTemplates from '@src/hooks/useTemplates';
+import { useSelector } from 'react-redux';
 
 const TemplatesList = ({
 	templates,
@@ -17,6 +18,10 @@ const TemplatesList = ({
 	const { t } = useTranslation();
 
 	const { issueTemplateRefreshRequest } = useTemplates();
+
+	const isRefreshingTemplates = useSelector(
+		(state) => state.isRefreshingTemplates.value
+	);
 
 	const doRefreshTemplates = async () => {
 		await issueTemplateRefreshRequest();
@@ -44,10 +49,16 @@ const TemplatesList = ({
 					</div>
 
 					<div className="templateMessages__refresh">
-						<span>{t('Not seeing your new templates?')}</span>
-						<a onClick={doRefreshTemplates} href="#">
-							{t('Click here to refresh')}
-						</a>
+						{isRefreshingTemplates ? (
+							<span>Refreshing templates...</span>
+						) : (
+							<>
+								<span>{t('Not seeing your new templates?')}</span>
+								<a onClick={doRefreshTemplates} href="#">
+									{t('Click here to refresh')}
+								</a>
+							</>
+						)}
 					</div>
 				</div>
 

@@ -4,6 +4,7 @@ import TemplatesResponse from '@src/api/responses/TemplatesResponse';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { useDispatch } from 'react-redux';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
+import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
 
 const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
@@ -29,6 +30,8 @@ const useTemplates = () => {
 	}, []);
 
 	const issueTemplateRefreshRequest = async () => {
+		dispatch(setIsRefreshingTemplates(true));
+
 		await apiService.issueTemplateRefreshRequestCall(
 			cancelTokenSourceRef.current.token,
 			() => {
@@ -40,6 +43,7 @@ const useTemplates = () => {
 				console.log(error);
 
 				console.log('Failed to issue a template refresh request.');
+				dispatch(setIsRefreshingTemplates(false));
 			}
 		);
 	};
@@ -69,11 +73,13 @@ const useTemplates = () => {
 						}, RETRY_DELAY);
 					} else {
 						console.log('Too many attempts to refresh templates!');
+						dispatch(setIsRefreshingTemplates(false));
 					}
 				}
 			},
 			(error) => {
 				console.log(error);
+				dispatch(setIsRefreshingTemplates(false));
 			}
 		);
 	};
@@ -86,6 +92,7 @@ const useTemplates = () => {
 
 				const templatesResponse = new TemplatesResponse(response.data);
 				dispatch(setTemplates(templatesResponse.templates));
+				dispatch(setIsRefreshingTemplates(false));
 
 				if (displaySuccessOnUI) {
 					window.displaySuccess('Templates are refreshed successfully.');
@@ -94,6 +101,7 @@ const useTemplates = () => {
 			(error) => {
 				console.log(error);
 				console.log('Failed to load templates.');
+				dispatch(setIsRefreshingTemplates(false));
 			}
 		);
 	};
