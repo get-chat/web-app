@@ -632,3 +632,6 @@ msgstr ""
 
 msgid "Refreshing..."
 msgstr ""
+
+msgid "Too many attempts to refresh templates! Please try again later."
+msgstr ""

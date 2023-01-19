@@ -206,5 +206,6 @@
 	"Templates are refreshed successfully.": "",
 	"Template messages couldn't be loaded.": "",
 	"No templates have been registered yet.": "",
-	"Refreshing...": ""
+	"Refreshing...": "",
+	"Too many attempts to refresh templates! Please try again later.": ""
 }

@@ -74,6 +74,10 @@ const useTemplates = () => {
 					} else {
 						console.log('Too many attempts to refresh templates!');
 						dispatch(setIsRefreshingTemplates(false));
+
+						window.displayCustomError(
+							'Too many attempts to refresh templates! Please try again later.'
+						);
 					}
 				}
 			},
