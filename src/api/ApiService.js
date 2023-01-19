@@ -206,9 +206,12 @@ export class ApiService {
 		);
 	};
 
-	listTemplatesCall = (successCallback, errorCallback) => {
+	listTemplatesCall = (cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}templates/`, getRequestConfig()),
+			axios.get(
+				`${this.apiBaseURL}templates/`,
+				getRequestConfig(undefined, cancelToken)
+			),
 			successCallback,
 			errorCallback
 		);

@@ -1,8 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import TemplatesResponse from '@src/api/responses/TemplatesResponse';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { useDispatch } from 'react-redux';
+import { generateCancelToken } from '@src/helpers/ApiHelper';
 
 const MAX_RETRY = 15;
 const RETRY_DELAY = 2000;
@@ -15,9 +16,21 @@ const useTemplates = () => {
 
 	const retryCount = useRef(0);
 
+	const cancelTokenSourceRef = useRef();
+
+	useEffect(() => {
+		// Generate a token
+		cancelTokenSourceRef.current = generateCancelToken();
+
+		return () => {
+			// Cancelling ongoing requests
+			cancelTokenSourceRef.current.cancel();
+		};
+	}, []);
+
 	const issueTemplateRefreshRequest = async () => {
 		await apiService.issueTemplateRefreshRequestCall(
-			undefined,
+			cancelTokenSourceRef.current.token,
 			() => {
 				checkTemplateRefreshStatus();
 
@@ -35,7 +48,7 @@ const useTemplates = () => {
 		console.log('Checking template refresh status');
 
 		await apiService.checkTemplateRefreshStatusCall(
-			undefined,
+			cancelTokenSourceRef.current.token,
 			(response) => {
 				// noinspection JSUnresolvedVariable
 				if (response.data?.currently_refreshing === false) {
@@ -66,6 +79,7 @@ const useTemplates = () => {
 
 	const listTemplates = async (displaySuccessOnUI) => {
 		await apiService.listTemplatesCall(
+			cancelTokenSourceRef.current.token,
 			(response) => {
 				const templatesResponse = new TemplatesResponse(response.data);
 				dispatch(setTemplates(templatesResponse.templates));
