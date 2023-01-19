@@ -629,3 +629,6 @@ msgstr ""
 
 msgid "No templates have been registered yet."
 msgstr ""
+
+msgid "Refreshing..."
+msgstr ""
