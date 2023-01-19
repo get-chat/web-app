@@ -3,6 +3,8 @@ import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
 import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
+import PubSub from 'pubsub-js';
+import { EVENT_TOPIC_REFRESH_TEMPLATES } from '@src/Constants';
 
 const TemplatesList = ({
 	templates,
@@ -12,6 +14,10 @@ const TemplatesList = ({
 	isTemplatesFailed,
 }) => {
 	const { t } = useTranslation();
+
+	const emitRefreshTemplateMessageEvent = () => {
+		PubSub.publish(EVENT_TOPIC_REFRESH_TEMPLATES);
+	};
 
 	return (
 		<div className="templateMessagesWrapper">
@@ -32,7 +38,7 @@ const TemplatesList = ({
 
 					<div className="templateMessages__refresh">
 						<span>{t('Not seeing your new templates?')}</span>
-						<a onClick={() => console.log('Click')} href="#">
+						<a onClick={emitRefreshTemplateMessageEvent} href="#">
 							{t('Click here to refresh')}
 						</a>
 					</div>
