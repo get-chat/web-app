@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 
 const MAX_RETRY = 15;
-const RETRY_DELAY = 2000;
+const RETRY_DELAY = 1000;
 
 const useTemplates = () => {
 	// noinspection JSCheckFunctionSignatures
@@ -45,30 +45,31 @@ const useTemplates = () => {
 	};
 
 	const checkTemplateRefreshStatus = async () => {
-		console.log('Checking template refresh status');
+		console.log('Checking template refresh status...');
 
 		await apiService.checkTemplateRefreshStatusCall(
 			cancelTokenSourceRef.current.token,
 			(response) => {
 				// noinspection JSUnresolvedVariable
 				if (response.data?.currently_refreshing === false) {
-					console.log('Templates are ready to be loaded!');
+					console.log('Templates are ready to be loaded.');
 
 					retryCount.current = 0;
 					listTemplates(true);
 				} else {
-					console.log('Templates are still being refreshed!');
+					console.log('Templates are still being refreshed.');
 
-					setTimeout(() => {
-						if (retryCount.current < MAX_RETRY) {
-							console.log('Retrying...');
+					if (retryCount.current < MAX_RETRY) {
+						console.log('Retrying...');
 
-							retryCount.current = retryCount.current + 1;
+						retryCount.current = retryCount.current + 1;
+
+						setTimeout(() => {
 							checkTemplateRefreshStatus();
-						} else {
-							console.log('Too many attempts to refresh templates!');
-						}
-					}, RETRY_DELAY);
+						}, RETRY_DELAY);
+					} else {
+						console.log('Too many attempts to refresh templates!');
+					}
 				}
 			},
 			(error) => {
@@ -81,15 +82,18 @@ const useTemplates = () => {
 		await apiService.listTemplatesCall(
 			cancelTokenSourceRef.current.token,
 			(response) => {
+				console.log('Loaded templates successfully!');
+
 				const templatesResponse = new TemplatesResponse(response.data);
 				dispatch(setTemplates(templatesResponse.templates));
 
 				if (displaySuccessOnUI) {
-					window.displaySuccess('Templates are refreshed successfully!');
+					window.displaySuccess('Templates are refreshed successfully.');
 				}
 			},
 			(error) => {
 				console.log(error);
+				console.log('Failed to load templates.');
 			}
 		);
 	};
