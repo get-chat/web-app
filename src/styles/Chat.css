@@ -460,9 +460,10 @@ a.chat__document:hover {
 
 .templateMessages__refresh {
 	font-size: 13px;
-	background-color: rgba(255, 255, 255, 0.3);
+	background-color: rgb(229, 246, 253);
 	border-radius: 4px;
 	padding: 3px 5px;
+	color: rgb(1, 67, 97);
 }
 
 .templateMessages__refresh > span:first-child {
@@ -471,7 +472,6 @@ a.chat__document:hover {
 
 .templateMessages__refresh a {
 	font-size: 13px !important;
-	color: var(--default-text-color);
 	font-weight: 600;
 	display: inline-block;
 }
