@@ -7,6 +7,7 @@ export const CHAT_LIST_TAB_CASE_ALL = 'all';
 export const CHAT_LIST_TAB_CASE_ME = 'me';
 export const CHAT_LIST_TAB_CASE_GROUP = 'group';
 
+export const EVENT_TOPIC_REFRESH_TEMPLATES = 'refresh_templates';
 export const EVENT_TOPIC_FORCE_LOGOUT = 'force_logout';
 export const EVENT_TOPIC_CHAT_MESSAGE = 'chat_message';
 export const EVENT_TOPIC_GO_TO_MSG_ID = 'go_to_msg_id';
