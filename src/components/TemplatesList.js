@@ -16,17 +16,31 @@ const TemplatesList = ({
 	return (
 		<div className="templateMessagesWrapper">
 			<div className="templateMessages" data-test-id="template-messages">
-				<div className="templateMessages__create">
-					{displayRegisterTemplate && (
+				<div className="templateMessages__actions">
+					<div className="templateMessages__create">
+						{displayRegisterTemplate && (
+							<Button
+								color="primary"
+								href="https://hub.360dialog.com/dashboard/home"
+								target="_blank"
+								size="small"
+							>
+								{t('Register templates')}
+							</Button>
+						)}
+					</div>
+
+					<div className="templateMessages__refresh">
+						<span>{t('Not seeing your new templates?')}</span>
 						<Button
 							color="primary"
-							href="https://hub.360dialog.com/dashboard/home"
+							onClick={() => console.log('Click')}
 							target="_blank"
-							size="medium"
+							size="small"
 						>
-							Register templates
+							{t('Click here to refresh')}
 						</Button>
-					)}
+					</div>
 				</div>
 
 				{getObjLength(templates) === 0 && (
