@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
-import {
-	Backdrop,
-	CircularProgress,
-	Fade,
-	Link,
-	TextField,
-} from '@mui/material';
+import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
@@ -17,7 +11,7 @@ import packageJson from '../../package.json';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { AppConfig } from '@src/contexts/AppConfig';
 
-export default function Login(props) {
+const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
@@ -55,11 +49,11 @@ export default function Login(props) {
 			setValidatingToken(true);
 
 			apiService.baseCall(
-				(response) => {
+				() => {
 					// Redirect to main route
 					navigate('/main');
 				},
-				(error) => {
+				() => {
 					setValidatingToken(false);
 
 					// TODO: Make sure the response is Unauthorized
@@ -202,4 +196,6 @@ export default function Login(props) {
 			</Backdrop>
 		</div>
 	);
-}
+};
+
+export default Login;
