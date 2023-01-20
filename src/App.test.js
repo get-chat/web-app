@@ -7,6 +7,12 @@ jest.mock('react-i18next', () => ({
 
 describe('App component', () => {
 	test('it renders', () => {
-		render(<App />);
+		render(
+			<App
+				config={{
+					API_BASE_URL: '',
+				}}
+			/>
+		);
 	});
 });

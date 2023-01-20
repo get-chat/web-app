@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
 import { getHubURL } from '@src/helpers/URLHelper';
+import { AppConfig } from '@src/contexts/AppConfig';
 
 export default function Login(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -22,6 +23,8 @@ export default function Login(props) {
 	const { t } = useTranslation();
 
 	const { errorCase } = useParams();
+
+	const config = React.useContext(AppConfig);
 
 	const errorMessages = {
 		incorrectRole: 'Only admins and users can access to our web app.',
