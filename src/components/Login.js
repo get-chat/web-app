@@ -36,7 +36,7 @@ export default function Login(props) {
 	const [password, setPassword] = useState('');
 	const [isLoggingIn, setLoggingIn] = useState(false);
 	const [isValidatingToken, setValidatingToken] = useState(false);
-	const [loginError, setLoginError] = useState();
+	const [loginError, setLoginError] = useState('');
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -76,6 +76,7 @@ export default function Login(props) {
 		if (username.trim() === '' || password.trim() === '') {
 			// TODO: Display error on UI
 			console.log('Empty credentials');
+			setLoginError('Please enter a valid username and a password!');
 			return false;
 		}
 
@@ -102,7 +103,7 @@ export default function Login(props) {
 			(error) => {
 				// Hide the loading animation
 				setLoggingIn(false);
-				setLoginError(undefined);
+				setLoginError('');
 
 				if (error.response) {
 					// Current status code for incorrect credentials must be changed to 401 or 403

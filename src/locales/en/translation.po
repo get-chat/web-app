@@ -641,3 +641,6 @@ msgstr ""
 
 msgid "Failed to issue a template refresh request."
 msgstr ""
+
+msgid "Please enter a valid username and a password!"
+msgstr ""
