@@ -446,6 +446,8 @@ a.chat__document:hover {
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 10px;
+	border-bottom: 1px solid rgba(0, 0, 45, 0.1);
+	padding-bottom: 5px;
 }
 
 .templateMessages__actions a {
@@ -460,10 +462,8 @@ a.chat__document:hover {
 
 .templateMessages__refresh {
 	font-size: 13px;
-	background-color: rgb(229, 246, 253);
-	border-radius: 4px;
 	padding: 3px 5px;
-	color: rgb(1, 67, 97);
+	color: var(--default-text-color);
 }
 
 .templateMessages__refresh > span:first-child {
