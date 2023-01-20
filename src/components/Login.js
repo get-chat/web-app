@@ -76,7 +76,7 @@ export default function Login(props) {
 		if (username.trim() === '' || password.trim() === '') {
 			// TODO: Display error on UI
 			console.log('Empty credentials');
-			setLoginError('Please enter a valid username and a password!');
+			setLoginError('Please enter a valid username and password!');
 			return false;
 		}
 
