@@ -57,6 +57,10 @@
 	margin: 5px auto 10px;
 }
 
+.login__body__adminPanel {
+	margin-top: 10px !important;
+}
+
 .login__body > form > .MuiFormControl-root {
 	margin-bottom: 15px;
 }

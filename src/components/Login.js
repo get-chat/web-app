@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
-import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
+import {
+	Backdrop,
+	CircularProgress,
+	Fade,
+	Link,
+	TextField,
+} from '@mui/material';
 import Button from '@mui/material/Button';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
@@ -8,6 +14,7 @@ import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
+import { getHubURL } from '@src/helpers/URLHelper';
 
 export default function Login(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -149,12 +156,23 @@ export default function Login(props) {
 							data-test-id="submit"
 							type="submit"
 							size="large"
-							variant="text"
+							variant="contained"
 							color="primary"
-							fullWidth={true}
+							fullWidth
 							disableElevation
 						>
 							{t('Log in')}
+						</Button>
+
+						<Button
+							className="login__body__adminPanel"
+							color="black"
+							href={getHubURL(config.API_BASE_URL)}
+							target="_blank"
+							fullWidth
+							variant="text"
+						>
+							{t('Admin panel')}
 						</Button>
 					</form>
 
