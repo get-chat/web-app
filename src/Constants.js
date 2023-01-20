@@ -73,3 +73,5 @@ export const CALENDAR_SHORT_DAYS = {
 	lastWeek: 'dddd',
 	sameElse: 'MMMM D, yyyy',
 };
+
+export const AXIOS_ERROR_CODE_TIMEOUT = 'ECONNABORTED';

@@ -5,6 +5,8 @@ import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { useDispatch } from 'react-redux';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
+import axios from 'axios';
+import { AXIOS_ERROR_CODE_TIMEOUT } from '@src/Constants';
 
 const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
@@ -51,6 +53,27 @@ const useTemplates = () => {
 	const checkTemplateRefreshStatus = async () => {
 		console.log('Checking template refresh status...');
 
+		const errorCallback = () => {
+			if (retryCount.current < MAX_RETRY) {
+				retryCount.current = retryCount.current + 1;
+
+				console.log(
+					'Retrying, attempt: ' + retryCount.current + '/' + MAX_RETRY
+				);
+
+				setTimeout(() => {
+					checkTemplateRefreshStatus();
+				}, RETRY_DELAY);
+			} else {
+				console.log('Too many attempts to refresh templates!');
+				dispatch(setIsRefreshingTemplates(false));
+
+				window.displayCustomError(
+					'Too many attempts to refresh templates! Please try again later.'
+				);
+			}
+		};
+
 		await apiService.checkTemplateRefreshStatusCall(
 			cancelTokenSourceRef.current.token,
 			(response) => {
@@ -62,30 +85,20 @@ const useTemplates = () => {
 					listTemplates(true);
 				} else {
 					console.log('Templates are still being refreshed.');
-
-					if (retryCount.current < MAX_RETRY) {
-						retryCount.current = retryCount.current + 1;
-
-						console.log(
-							'Retrying, attempt: ' + retryCount.current + '/' + MAX_RETRY
-						);
-
-						setTimeout(() => {
-							checkTemplateRefreshStatus();
-						}, RETRY_DELAY);
-					} else {
-						console.log('Too many attempts to refresh templates!');
-						dispatch(setIsRefreshingTemplates(false));
-
-						window.displayCustomError(
-							'Too many attempts to refresh templates! Please try again later.'
-						);
-					}
+					errorCallback();
 				}
 			},
 			(error) => {
 				console.log(error);
-				dispatch(setIsRefreshingTemplates(false));
+
+				if (
+					error.code === AXIOS_ERROR_CODE_TIMEOUT ||
+					error.response?.status === 504
+				) {
+					errorCallback();
+				} else {
+					dispatch(setIsRefreshingTemplates(false));
+				}
 			}
 		);
 	};
