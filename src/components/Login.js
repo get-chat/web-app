@@ -68,7 +68,6 @@ const Login = () => {
 
 		// Check if username or password is empty
 		if (username.trim() === '' || password.trim() === '') {
-			// TODO: Display error on UI
 			console.log('Empty credentials');
 			setLoginError('Please enter a valid username and password!');
 			return false;
