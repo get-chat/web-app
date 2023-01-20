@@ -33,7 +33,7 @@ const TemplatesList = ({
 					<div className="templateMessages__create">
 						{displayRegisterTemplate && (
 							<Button
-								color="primary"
+								color="black"
 								href="https://hub.360dialog.com/dashboard/home"
 								target="_blank"
 								size="small"
