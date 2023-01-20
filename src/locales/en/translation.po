@@ -635,3 +635,9 @@ msgstr ""
 
 msgid "Too many attempts to refresh templates! Please try again later."
 msgstr ""
+
+msgid "Failed to load templates."
+msgstr ""
+
+msgid "Failed to issue a template refresh request."
+msgstr ""

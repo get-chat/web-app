@@ -46,6 +46,10 @@ const useTemplates = () => {
 
 				console.log('Failed to issue a template refresh request.');
 				dispatch(setIsRefreshingTemplates(false));
+
+				window.displayCustomError(
+					'Failed to issue a template refresh request.'
+				);
 			}
 		);
 	};
@@ -121,6 +125,8 @@ const useTemplates = () => {
 				console.log(error);
 				console.log('Failed to load templates.');
 				dispatch(setIsRefreshingTemplates(false));
+
+				window.displayCustomError('Failed to load templates.');
 			}
 		);
 	};
