@@ -3,7 +3,6 @@ import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
 import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
-import PubSub from 'pubsub-js';
 import useTemplates from '@src/hooks/useTemplates';
 import { useSelector } from 'react-redux';
 
