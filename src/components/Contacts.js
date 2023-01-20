@@ -14,7 +14,6 @@ import { ArrowBack, ExpandLess, ExpandMore } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import Contact from './Contact';
 import ContactModel from '../api/models/ContactModel';
-import { isMobileOnly } from 'react-device-detect';
 import { useNavigate } from 'react-router-dom';
 import PersonModel from '../api/models/PersonModel';
 import Person from './Person';
@@ -144,10 +143,8 @@ function Contacts(props) {
 						},
 					});
 
-					// Hide contacts on mobile
-					if (isMobileOnly) {
-						props.onHide();
-					}
+					// Hide contacts
+					props.onHide();
 				} else {
 					window.displayCustomError(
 						'There is no WhatsApp account connected to this phone number.'
