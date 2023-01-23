@@ -200,5 +200,15 @@
 	"The language pack for this template is not installed on the server yet, try sending this message later": "",
 	"You can assign this chat to yourself and unassign from yourself.": "",
 	"You can assign this chat to a group.": "",
-	"This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.": ""
+	"This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.": "",
+	"Register templates": "",
+	"Click here to refresh": "",
+	"Templates are refreshed successfully.": "",
+	"Template messages couldn't be loaded.": "",
+	"No templates have been registered yet.": "",
+	"Refreshing...": "",
+	"Too many attempts to refresh templates! Please try again in a while.": "",
+	"Failed to load templates. Please try again in a while.": "",
+	"Failed to issue a template refresh request. Please try again in a while.": "",
+	"Please enter a valid username and password!": ""
 }

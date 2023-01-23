@@ -169,9 +169,49 @@ export class ApiService {
 		);
 	};
 
-	listTemplatesCall = (successCallback, errorCallback) => {
+	issueTemplateRefreshRequestCall = (
+		cancelToken,
+		successCallback,
+		errorCallback
+	) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}templates/`, getRequestConfig()),
+			axios.post(
+				`${this.apiBaseURL}templates/refresh/issue/`,
+				{},
+				getRequestConfig(undefined, cancelToken)
+			),
+			successCallback,
+			(error) => {
+				window.displayError(error);
+				errorCallback?.(error);
+			}
+		);
+	};
+
+	checkTemplateRefreshStatusCall = (
+		cancelToken,
+		successCallback,
+		errorCallback
+	) => {
+		this.handleRequest(
+			axios.get(
+				`${this.apiBaseURL}templates/refresh/status/`,
+				getRequestConfig(undefined, cancelToken)
+			),
+			successCallback,
+			(error) => {
+				window.displayError(error);
+				errorCallback?.(error);
+			}
+		);
+	};
+
+	listTemplatesCall = (cancelToken, successCallback, errorCallback) => {
+		this.handleRequest(
+			axios.get(
+				`${this.apiBaseURL}templates/`,
+				getRequestConfig(undefined, cancelToken)
+			),
 			successCallback,
 			errorCallback
 		);

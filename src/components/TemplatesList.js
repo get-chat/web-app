@@ -3,6 +3,8 @@ import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
 import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
+import useTemplates from '@src/hooks/useTemplates';
+import { useSelector } from 'react-redux';
 
 const TemplatesList = ({
 	templates,
@@ -13,33 +15,58 @@ const TemplatesList = ({
 }) => {
 	const { t } = useTranslation();
 
+	const { issueTemplateRefreshRequest } = useTemplates();
+
+	const isRefreshingTemplates = useSelector(
+		(state) => state.isRefreshingTemplates.value
+	);
+
+	const doRefreshTemplates = async () => {
+		await issueTemplateRefreshRequest();
+	};
+
 	return (
 		<div className="templateMessagesWrapper">
 			<div className="templateMessages" data-test-id="template-messages">
-				<div className="templateMessages__create">
-					{displayRegisterTemplate && (
-						<Button
-							color="primary"
-							href="https://hub.360dialog.com/dashboard/home"
-							target="_blank"
-							size="medium"
-						>
-							Register templates
-						</Button>
-					)}
+				<div className="templateMessages__actions">
+					<div className="templateMessages__create">
+						{displayRegisterTemplate && (
+							<Button
+								color="black"
+								href="https://hub.360dialog.com/dashboard/home"
+								target="_blank"
+								size="small"
+							>
+								{t('Register templates')}
+							</Button>
+						)}
+					</div>
+
+					<div className="templateMessages__refresh">
+						{isRefreshingTemplates ? (
+							<span>Refreshing templates...</span>
+						) : (
+							<>
+								<span>{t('Not seeing your new templates?')}</span>
+								<a onClick={doRefreshTemplates} href="#">
+									{t('Click here to refresh')}
+								</a>
+							</>
+						)}
+					</div>
 				</div>
 
 				{getObjLength(templates) === 0 && (
 					<div className="templateMessages__emptyInfo mt-3">
 						{isTemplatesFailed ? (
-							<span>Template messages couldn't be loaded.</span>
+							<span>{t("Template messages couldn't be loaded.")}</span>
 						) : (
-							<span>No templates have been registered yet.</span>
+							<span>{t('No templates have been registered yet.')}</span>
 						)}
 					</div>
 				)}
 
-				{Object.entries(templates).map((template, index) => (
+				{Object.entries(templates).map((template) => (
 					<div key={template[0]} className="templateMessageWrapper">
 						<div className="chat__message chat__outgoing messageType__template">
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}

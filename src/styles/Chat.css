@@ -440,14 +440,45 @@ a.chat__document:hover {
 	color: rgba(0, 0, 45, 0.8);
 }
 
+.templateMessages__actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+	border-bottom: 1px solid rgba(0, 0, 45, 0.1);
+	padding-bottom: 5px;
+}
+
+.templateMessages__actions a {
+	line-height: 1.2rem !important;
+}
+
 .templateMessages__create a {
 	color: var(--default-text-color);
 	font-weight: 600;
+	font-size: 13px;
+}
+
+.templateMessages__refresh {
+	font-size: 13px;
+	padding: 3px 5px;
+	color: var(--default-text-color);
+}
+
+.templateMessages__refresh > span:first-child {
+	margin-right: 5px;
+}
+
+.templateMessages__refresh a {
+	font-size: 13px !important;
+	font-weight: 600;
+	display: inline-block;
 }
 
 .templateMessages .templateMessageWrapper,
 .savedResponses .savedResponseWrapper {
-	margin-bottom: 15px !important;
+	margin-bottom: 10px !important;
 }
 
 .templateMessages .templateMessageWrapper:last-child,
@@ -597,5 +628,14 @@ a.chat__document:hover {
 
 	.templateMessages {
 		max-height: 200px;
+	}
+
+	.templateMessages__actions {
+		flex-direction: column;
+	}
+
+	.templateMessages__refresh {
+		flex-direction: column;
+		text-align: center;
 	}
 }

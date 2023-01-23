@@ -614,3 +614,33 @@ msgstr ""
 
 msgid "This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment."
 msgstr ""
+
+msgid "Register templates"
+msgstr ""
+
+msgid "Click here to refresh"
+msgstr ""
+
+msgid "Templates are refreshed successfully."
+msgstr ""
+
+msgid "Template messages couldn't be loaded."
+msgstr ""
+
+msgid "No templates have been registered yet."
+msgstr ""
+
+msgid "Refreshing..."
+msgstr ""
+
+msgid "Too many attempts to refresh templates! Please try again in a while."
+msgstr ""
+
+msgid "Failed to load templates. Please try again in a while."
+msgstr ""
+
+msgid "Failed to issue a template refresh request. Please try again in a while."
+msgstr ""
+
+msgid "Please enter a valid username and password!"
+msgstr ""

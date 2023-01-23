@@ -8,13 +8,17 @@ import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
+import { getHubURL } from '@src/helpers/URLHelper';
+import { AppConfig } from '@src/contexts/AppConfig';
 
-export default function Login(props) {
+const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
 
 	const { errorCase } = useParams();
+
+	const config = React.useContext(AppConfig);
 
 	const errorMessages = {
 		incorrectRole: 'Only admins and users can access to our web app.',
@@ -26,7 +30,7 @@ export default function Login(props) {
 	const [password, setPassword] = useState('');
 	const [isLoggingIn, setLoggingIn] = useState(false);
 	const [isValidatingToken, setValidatingToken] = useState(false);
-	const [loginError, setLoginError] = useState();
+	const [loginError, setLoginError] = useState('');
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -45,11 +49,11 @@ export default function Login(props) {
 			setValidatingToken(true);
 
 			apiService.baseCall(
-				(response) => {
+				() => {
 					// Redirect to main route
 					navigate('/main');
 				},
-				(error) => {
+				() => {
 					setValidatingToken(false);
 
 					// TODO: Make sure the response is Unauthorized
@@ -64,8 +68,8 @@ export default function Login(props) {
 
 		// Check if username or password is empty
 		if (username.trim() === '' || password.trim() === '') {
-			// TODO: Display error on UI
 			console.log('Empty credentials');
+			setLoginError('Please enter a valid username and password!');
 			return false;
 		}
 
@@ -92,7 +96,7 @@ export default function Login(props) {
 			(error) => {
 				// Hide the loading animation
 				setLoggingIn(false);
-				setLoginError(undefined);
+				setLoginError('');
 
 				if (error.response) {
 					// Current status code for incorrect credentials must be changed to 401 or 403
@@ -149,12 +153,23 @@ export default function Login(props) {
 							data-test-id="submit"
 							type="submit"
 							size="large"
-							variant="text"
+							variant="contained"
 							color="primary"
-							fullWidth={true}
+							fullWidth
 							disableElevation
 						>
 							{t('Log in')}
+						</Button>
+
+						<Button
+							className="login__body__adminPanel"
+							color="black"
+							href={getHubURL(config.API_BASE_URL)}
+							target="_blank"
+							fullWidth
+							variant="text"
+						>
+							{t('Admin panel')}
 						</Button>
 					</form>
 
@@ -180,4 +195,6 @@ export default function Login(props) {
 			</Backdrop>
 		</div>
 	);
-}
+};
+
+export default Login;

@@ -833,6 +833,7 @@ function Main() {
 		};
 
 		await apiService.listTemplatesCall(
+			undefined,
 			(response) => {
 				const templatesResponse = new TemplatesResponse(response.data);
 
