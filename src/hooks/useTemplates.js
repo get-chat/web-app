@@ -5,7 +5,6 @@ import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { useDispatch } from 'react-redux';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
-import axios from 'axios';
 import { AXIOS_ERROR_CODE_TIMEOUT } from '@src/Constants';
 
 const MAX_RETRY = 15;
@@ -48,7 +47,7 @@ const useTemplates = () => {
 				dispatch(setIsRefreshingTemplates(false));
 
 				window.displayCustomError(
-					'Failed to issue a template refresh request.'
+					'Failed to issue a template refresh request. Please try again in a while.'
 				);
 			}
 		);
@@ -73,7 +72,7 @@ const useTemplates = () => {
 				dispatch(setIsRefreshingTemplates(false));
 
 				window.displayCustomError(
-					'Too many attempts to refresh templates! Please try again later.'
+					'Too many attempts to refresh templates! Please try again in a while.'
 				);
 			}
 		};
@@ -126,7 +125,9 @@ const useTemplates = () => {
 				console.log('Failed to load templates.');
 				dispatch(setIsRefreshingTemplates(false));
 
-				window.displayCustomError('Failed to load templates.');
+				window.displayCustomError(
+					'Failed to load templates. Please try again in a while.'
+				);
 			}
 		);
 	};
