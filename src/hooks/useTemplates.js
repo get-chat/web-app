@@ -80,14 +80,14 @@ const useTemplates = () => {
 			cancelTokenSourceRef.current.token,
 			(response) => {
 				// noinspection JSUnresolvedVariable
-				if (!response.data?.currently_refreshing) {
+				if (response.data?.currently_refreshing) {
+					console.log('Templates are still being refreshed.');
+					errorCallback();
+				} else {
 					console.log('Templates are ready to be loaded.');
 
 					retryCount.current = 0;
 					listTemplates(true);
-				} else {
-					console.log('Templates are still being refreshed.');
-					errorCallback();
 				}
 			},
 			(error) => {
