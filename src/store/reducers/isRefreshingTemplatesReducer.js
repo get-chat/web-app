@@ -5,7 +5,7 @@ const initialState = {
 };
 
 export const isRefreshingTemplatesSlice = createSlice({
-	name: 'chatsCount',
+	name: 'isRefreshingTemplates',
 	initialState,
 	reducers: {
 		setIsRefreshingTemplates: (state, isRefreshing) => {
