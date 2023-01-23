@@ -8,8 +8,6 @@ export class ApiService {
 	constructor(config) {
 		this.config = config;
 		this.apiBaseURL = config.API_BASE_URL;
-
-		axios.defaults.timeoutErrorMessage = 'timeout';
 	}
 
 	handleRequest = (
