@@ -21,7 +21,6 @@ const useTemplates = () => {
 	const cancelTokenSourceRef = useRef();
 
 	useEffect(() => {
-		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
 		return () => {
