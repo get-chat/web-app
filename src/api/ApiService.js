@@ -181,10 +181,7 @@ export class ApiService {
 				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
+			errorCallback
 		);
 	};
 
@@ -199,10 +196,7 @@ export class ApiService {
 				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
+			errorCallback
 		);
 	};
 
