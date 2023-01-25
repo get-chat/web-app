@@ -269,21 +269,6 @@ function SidebarChat(props) {
 										}
 									/>
 								)}
-
-								{props.chatData.tags?.length > 0 && (
-									<div className="sidebarChat__info__tags">
-										<Tooltip title={generateTagNames()}>
-											<SellIcon
-												className={
-													props.chatData.tags.length > 1 ? 'multiple' : ''
-												}
-												style={{
-													fill: props.chatData.tags[0].web_inbox_color,
-												}}
-											/>
-										</Tooltip>
-									</div>
-								)}
 							</h2>
 
 							{!isExpired && (
@@ -314,14 +299,31 @@ function SidebarChat(props) {
 								/>
 							</div>
 
-							{props.chatData.lastMessageTimestamp && (
-								<Moment
-									className="sidebarChat__info__nameWrapper__lastMessageDate"
-									date={props.chatData.lastMessageTimestamp}
-									calendar={CALENDAR_SHORT}
-									unix
-								/>
-							)}
+							<div>
+								{props.chatData.tags?.length > 0 && (
+									<div className="sidebarChat__info__tags">
+										<Tooltip title={generateTagNames()}>
+											<SellIcon
+												className={
+													props.chatData.tags.length > 1 ? 'multiple' : ''
+												}
+												style={{
+													fill: props.chatData.tags[0].web_inbox_color,
+												}}
+											/>
+										</Tooltip>
+									</div>
+								)}
+
+								{props.chatData.lastMessageTimestamp && (
+									<Moment
+										className="sidebarChat__info__nameWrapper__lastMessageDate"
+										date={props.chatData.lastMessageTimestamp}
+										calendar={CALENDAR_SHORT}
+										unix
+									/>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
