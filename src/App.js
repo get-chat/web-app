@@ -53,6 +53,7 @@ const App = ({ config, apiService }) => {
 										],
 										<Login />
 									)}
+									<Route path="*" element={<Navigate to="/main" />} />
 								</Routes>
 							</Router>
 						</ApplicationContext.Provider>
