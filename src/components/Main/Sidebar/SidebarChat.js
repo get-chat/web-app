@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import '../../../styles/SidebarChat.css';
 import { Checkbox, ListItem, Tooltip } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import LabelIcon from '@mui/icons-material/Label';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
 import Moment from 'react-moment';
@@ -26,6 +25,7 @@ import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
+import SellIcon from '@mui/icons-material/Sell';
 
 function SidebarChat(props) {
 	const { t } = useTranslation();
@@ -273,7 +273,7 @@ function SidebarChat(props) {
 								{props.chatData.tags?.length > 0 && (
 									<div className="sidebarChat__info__tags">
 										<Tooltip title={generateTagNames()}>
-											<LabelIcon
+											<SellIcon
 												className={
 													props.chatData.tags.length > 1 ? 'multiple' : ''
 												}
@@ -286,22 +286,13 @@ function SidebarChat(props) {
 								)}
 							</h2>
 
-							<div className="sidebarChat__info__date">
-								{props.chatData.lastMessageTimestamp && (
-									<Moment
-										className="sidebarChat__info__nameWrapper__lastMessageDate"
-										date={props.chatData.lastMessageTimestamp}
-										calendar={CALENDAR_SHORT}
-										unix
-									/>
-								)}
-
-								{!isExpired && (
+							{!isExpired && (
+								<div className="sidebarChat__info__date">
 									<span className="sidebarChat__info__date__timeLeft">
 										{t('%s left', timeLeft)}
 									</span>
-								)}
-							</div>
+								</div>
+							)}
 
 							{newMessages > 0 && (
 								<div className="sidebarChat__info__newMessagesBadge">
@@ -322,6 +313,15 @@ function SidebarChat(props) {
 									isLastMessageFromUs={props.chatData.isLastMessageFromUs}
 								/>
 							</div>
+
+							{props.chatData.lastMessageTimestamp && (
+								<Moment
+									className="sidebarChat__info__nameWrapper__lastMessageDate"
+									date={props.chatData.lastMessageTimestamp}
+									calendar={CALENDAR_SHORT}
+									unix
+								/>
+							)}
 						</div>
 					</div>
 				</div>

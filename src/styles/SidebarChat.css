@@ -125,17 +125,24 @@
 }
 
 .sidebarChat__info__lastMessage {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: space-between;
 	color: rgba(0, 0, 45, 0.7);
 	font-size: 14px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	max-width: 100%;
-	width: 220px;
 }
 
 .sidebarChat.expired .sidebarChat__info__lastMessage {
 	color: rgba(0, 0, 45, 0.4);
+}
+
+.sidebarChat__info__lastMessage__body {
+	max-width: 100%;
+	width: 220px;
 }
 
 .sidebarChat__info__lastMessage__body,
@@ -170,25 +177,12 @@
 	border-radius: 10px;
 	padding: 2px 6px;
 	font-weight: 600;
-	background-color: white;
-	color: var(--color-primary);
-	border: 1px solid var(--color-primary);
-}
-
-.sidebarChatWrapper.expired .sidebarChat__info__date {
-	border-color: var(--gray-light);
+	background-color: var(--color-primary);
+	color: white;
 }
 
 .sidebarChatWrapper.almostExpired .sidebarChat__info__date {
-	border-color: #fed167;
-}
-
-.sidebarChat__info__date__timeLeft {
-	margin-left: 5px;
-}
-
-.sidebarChatWrapper.almostExpired .sidebarChat__info__date__timeLeft {
-	color: #fed167;
+	background-color: #f5ba31;
 }
 
 .sidebarChat__info__expired,
