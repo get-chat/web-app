@@ -207,49 +207,6 @@ function SidebarChat(props) {
 						>
 							{props.chatData.initials}
 						</CustomAvatar>
-
-						{props.chatData.assignedToUser &&
-							(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
-								props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
-								<Tooltip title={props.chatData.generateAssignmentInformation()}>
-									<div>
-										<CustomAvatar
-											className="sidebarChat__avatarWrapper__assignee"
-											style={{
-												backgroundColor: generateAvatarColor(
-													props.chatData.getAssignedUserUsername()
-												),
-											}}
-										>
-											{generateInitialsHelper(
-												props.chatData.generateAssignedToInitials()
-											)}
-										</CustomAvatar>
-									</div>
-								</Tooltip>
-							)}
-
-						{props.chatData.assignedGroup &&
-							((props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
-								!props.chatData.assignedToUser) ||
-								props.tabCase === CHAT_LIST_TAB_CASE_ME ||
-								(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
-									!props.chatData.assignedToUser)) && (
-								<Tooltip title={props.chatData.generateAssignmentInformation()}>
-									<div>
-										<CustomAvatar
-											className="sidebarChat__avatarWrapper__assignee"
-											style={{
-												backgroundColor: generateAvatarColor(
-													props.chatData.assignedGroup?.name
-												),
-											}}
-										>
-											<GroupIcon />
-										</CustomAvatar>
-									</div>
-								</Tooltip>
-							)}
 					</div>
 
 					<div className="sidebarChat__info">
@@ -271,11 +228,57 @@ function SidebarChat(props) {
 								)}
 							</h2>
 
+							{props.chatData.assignedToUser &&
+								(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
+									props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
+									<Tooltip
+										title={props.chatData.generateAssignmentInformation()}
+									>
+										<div className="sidebarChat__info__nameWrapper__assigneeChip">
+											<CustomAvatar
+												className="sidebarChat__info__nameWrapper__assignee"
+												style={{
+													backgroundColor: generateAvatarColor(
+														props.chatData.getAssignedUserUsername()
+													),
+												}}
+											>
+												{generateInitialsHelper(
+													props.chatData.generateAssignedToInitials()
+												)}
+											</CustomAvatar>
+											<span>{props.chatData.getAssignedUserUsername()}</span>
+										</div>
+									</Tooltip>
+								)}
+
+							{props.chatData.assignedGroup &&
+								((props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
+									!props.chatData.assignedToUser) ||
+									props.tabCase === CHAT_LIST_TAB_CASE_ME ||
+									(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
+										!props.chatData.assignedToUser)) && (
+									<Tooltip
+										title={props.chatData.generateAssignmentInformation()}
+									>
+										<div>
+											<CustomAvatar
+												className="sidebarChat__info__nameWrapper__assignee"
+												style={{
+													backgroundColor: generateAvatarColor(
+														props.chatData.assignedGroup?.name
+													),
+												}}
+											>
+												<GroupIcon />
+											</CustomAvatar>
+										</div>
+									</Tooltip>
+								)}
+
 							{!isExpired && (
-								<div className="sidebarChat__info__date">
-									<span className="sidebarChat__info__date__timeLeft">
-										{t('%s left', timeLeft)}
-									</span>
+								<div className="sidebarChat__info__timeLeft">
+									<span>{t('%s left', timeLeft)}</span>
 								</div>
 							)}
 

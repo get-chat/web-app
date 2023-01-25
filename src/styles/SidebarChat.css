@@ -35,24 +35,26 @@
 	width: 50px;
 }
 
-.sidebarChat__avatarWrapper {
-	position: relative;
-}
-
-.sidebarChat__avatarWrapper
-	.MuiAvatar-root.sidebarChat__avatarWrapper__assignee {
-	position: absolute;
-	bottom: -3px;
-	right: -3px;
-	height: 21px;
-	width: 21px;
+.sidebarChat__info__nameWrapper__assigneeChip {
+	background-color: var(--gray-light);
+	border-radius: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 	font-size: 12px;
-	box-shadow: 0 1px 3px var(--shadow-light);
+	height: 19px;
+	padding: 0 5px 0 2px;
 }
 
-.sidebarChat__avatarWrapper
-	.MuiAvatar-root.sidebarChat__avatarWrapper__assignee
-	.MuiSvgIcon-root {
+.MuiAvatar-root.sidebarChat__info__nameWrapper__assignee {
+	height: 15px;
+	width: 15px;
+	font-size: 9px;
+	margin-right: 3px;
+	align-self: center;
+}
+
+.MuiAvatar-root.sidebarChat__info__nameWrapper__assignee .MuiSvgIcon-root {
 	color: white !important;
 	height: 0.5em;
 	width: 0.5em;
@@ -168,26 +170,21 @@
 	color: #a9a92a;
 }
 
-.sidebarChat__info__date {
+.sidebarChat__info__timeLeft {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	font-size: 10px;
+	font-weight: 600;
 	border-radius: 10px;
 	padding: 2px 6px;
-	font-weight: 600;
 	background-color: var(--color-primary);
 	color: white;
+	margin-left: 5px;
 }
 
-.sidebarChatWrapper.almostExpired .sidebarChat__info__date {
+.sidebarChatWrapper.almostExpired .sidebarChat__info__timeLeft {
 	background-color: #f5ba31;
-}
-
-.sidebarChat__info__expired,
-.sidebarChat__info__date {
-	display: block;
-	margin-top: 5px;
 }
 
 .sidebarChat__info__newMessagesBadge {
