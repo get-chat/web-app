@@ -43,7 +43,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 
 		apiService.listContactsCall(
 			undefined,
-			0,
+			100,
 			undefined,
 			(response) => {
 				const preparedContacts = {};
