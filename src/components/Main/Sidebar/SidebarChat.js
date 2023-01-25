@@ -201,6 +201,12 @@ function SidebarChat(props) {
 						>
 							{data.initials}
 						</CustomAvatar>
+
+						{newMessages > 0 && (
+							<div className="sidebarChat__info__newMessagesBadge">
+								{newMessages > 99 ? '99+' : newMessages}
+							</div>
+						)}
 					</div>
 
 					<div className="sidebarChat__info">
@@ -276,12 +282,6 @@ function SidebarChat(props) {
 							{!isExpired && (
 								<div className="sidebarChat__info__timeLeft">
 									<span>{t('%s left', timeLeft)}</span>
-								</div>
-							)}
-
-							{newMessages > 0 && (
-								<div className="sidebarChat__info__newMessagesBadge">
-									{newMessages > 99 ? '99+' : newMessages}
 								</div>
 							)}
 						</div>
