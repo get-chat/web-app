@@ -232,6 +232,7 @@ function SidebarChat(props) {
 								(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
 									props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
 									<Tooltip
+										placement="top"
 										title={props.chatData.generateAssignmentInformation()}
 									>
 										<div className="sidebarChat__info__nameWrapper__assigneeChip">
@@ -259,9 +260,10 @@ function SidebarChat(props) {
 									(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
 										!props.chatData.assignedToUser)) && (
 									<Tooltip
+										placement="top"
 										title={props.chatData.generateAssignmentInformation()}
 									>
-										<div>
+										<div className="sidebarChat__info__nameWrapper__assigneeChip">
 											<CustomAvatar
 												className="sidebarChat__info__nameWrapper__assignee"
 												style={{
@@ -272,6 +274,7 @@ function SidebarChat(props) {
 											>
 												<GroupIcon />
 											</CustomAvatar>
+											<span>{props.chatData.assignedGroup?.name}</span>
 										</div>
 									</Tooltip>
 								)}
