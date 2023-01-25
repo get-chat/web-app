@@ -2,7 +2,6 @@
 	display: flex;
 	padding: 10px 15px;
 	cursor: pointer;
-	border-bottom: 1px solid #f2f3f6;
 }
 
 .sidebarContactResult.activeChat {
