@@ -44,6 +44,14 @@
 	font-size: 12px;
 	height: 19px;
 	padding: 0 5px 0 2px;
+	margin-left: 5px;
+}
+
+.sidebarChat__info__nameWrapper__assigneeChip > span {
+	max-width: 55px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .MuiAvatar-root.sidebarChat__info__nameWrapper__assignee {
@@ -83,6 +91,14 @@
 	font-weight: 600;
 	font-size: 14px;
 	flex: 1;
+}
+
+.sidebarChat__info__nameWrapper h2 > span {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	display: block;
+	max-width: 162px;
 }
 
 .sidebarChat__info__nameWrapper h2 .emoji-mart-emoji {
