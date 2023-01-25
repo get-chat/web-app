@@ -28,6 +28,8 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import SellIcon from '@mui/icons-material/Sell';
 
 function SidebarChat(props) {
+	const data = props.chatData;
+
 	const { t } = useTranslation();
 
 	const navigate = useNavigate();
@@ -39,12 +41,12 @@ function SidebarChat(props) {
 	const { waId } = useParams();
 
 	useEffect(() => {
-		setSelected(props.selectedChats.includes(props.chatData.waId));
+		setSelected(props.selectedChats.includes(data.waId));
 	}, [props.selectedChats]);
 
 	const generateTagNames = () => {
 		const generatedTagNames = [];
-		props.chatData.tags?.forEach((tag) => {
+		data.tags?.forEach((tag) => {
 			generatedTagNames.push(tag.name);
 		});
 		return generatedTagNames.join(', ');
@@ -52,9 +54,7 @@ function SidebarChat(props) {
 
 	useEffect(() => {
 		function calculateRemaining() {
-			const momentDate = moment.unix(
-				props.chatData.lastReceivedMessageTimestamp
-			);
+			const momentDate = moment.unix(data.lastReceivedMessageTimestamp);
 			momentDate.add(1, 'day');
 			const curDate = moment(new Date());
 			const hours = momentDate.diff(curDate, 'hours');
@@ -84,7 +84,7 @@ function SidebarChat(props) {
 			}
 		}
 
-		setExpired(props.chatData.isExpired);
+		setExpired(data.isExpired);
 
 		// Initial
 		calculateRemaining();
@@ -99,11 +99,7 @@ function SidebarChat(props) {
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [
-		isExpired,
-		props.chatData.isExpired,
-		props.chatData.lastMessageTimestamp,
-	]);
+	}, [isExpired, data.isExpired, data.lastMessageTimestamp]);
 
 	const handleDroppedFiles = (event) => {
 		if (isExpired) {
@@ -115,7 +111,7 @@ function SidebarChat(props) {
 		const files = getDroppedFiles(event);
 
 		// Switching to related chat
-		navigate(`/main/chat/${props.chatData.waId}`);
+		navigate(`/main/chat/${data.waId}`);
 
 		// Sending files via eventbus
 		PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
@@ -129,19 +125,17 @@ function SidebarChat(props) {
 
 			props.setSelectedChats((prevState) => {
 				if (newSelectedState) {
-					if (!prevState.includes(props.chatData.waId)) {
-						prevState.push(props.chatData.waId);
+					if (!prevState.includes(data.waId)) {
+						prevState.push(data.waId);
 					}
 				} else {
-					prevState = prevState.filter(
-						(arrayItem) => arrayItem !== props.chatData.waId
-					);
+					prevState = prevState.filter((arrayItem) => arrayItem !== data.waId);
 				}
 
 				return [...prevState];
 			});
 		} else {
-			navigate(`/main/chat/${props.chatData.waId}`);
+			navigate(`/main/chat/${data.waId}`);
 		}
 	};
 
@@ -153,7 +147,7 @@ function SidebarChat(props) {
 		let result = false;
 		props.pendingMessages.forEach((pendingMessage) => {
 			if (
-				pendingMessage.requestBody?.wa_id === props.chatData.waId &&
+				pendingMessage.requestBody?.wa_id === data.waId &&
 				pendingMessage.isFailed === true
 			)
 				result = true;
@@ -162,15 +156,15 @@ function SidebarChat(props) {
 		return result;
 	};
 
-	const newMessages = props.newMessages[props.chatData.waId]?.newMessages;
+	const newMessages = props.newMessages[data.waId]?.newMessages;
 
 	return (
 		<ListItem button onClick={handleClick}>
 			<div
-				id={props.chatData.waId}
+				id={data.waId}
 				className={
 					'sidebarChatWrapper ' +
-					(waId === props.chatData.waId ? 'activeChat ' : '') +
+					(waId === data.waId ? 'activeChat ' : '') +
 					(isExpired
 						? 'expired '
 						: remainingSeconds < 8 * 60 * 60
@@ -195,17 +189,17 @@ function SidebarChat(props) {
 						<CustomAvatar
 							className="sidebarChat__avatarWrapper__mainAvatar"
 							src={extractAvatarFromContactProviderData(
-								props.contactProvidersData[props.chatData.waId]
+								props.contactProvidersData[data.waId]
 							)}
 							style={
 								isExpired
 									? {}
 									: {
-											backgroundColor: generateAvatarColor(props.chatData.name),
+											backgroundColor: generateAvatarColor(data.name),
 									  }
 							}
 						>
-							{props.chatData.initials}
+							{data.initials}
 						</CustomAvatar>
 					</div>
 
@@ -215,66 +209,66 @@ function SidebarChat(props) {
 								{props.keyword !== undefined &&
 								props.keyword.trim().length > 0 ? (
 									<PrintMessage
-										message={props.chatData.name}
+										message={data.name}
 										highlightText={props.keyword}
 									/>
 								) : (
 									<PrintMessage
 										message={
-											props.contactProvidersData[props.chatData.waId]?.[0]
-												?.name ?? props.chatData.name
+											props.contactProvidersData[data.waId]?.[0]?.name ??
+											data.name
 										}
 									/>
 								)}
 							</h2>
 
-							{props.chatData.assignedToUser &&
+							{data.assignedToUser &&
 								(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
 									props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
 									<Tooltip
 										placement="top"
-										title={props.chatData.generateAssignmentInformation()}
+										title={data.generateAssignmentInformation()}
 									>
 										<div className="sidebarChat__info__nameWrapper__assigneeChip">
 											<CustomAvatar
 												className="sidebarChat__info__nameWrapper__assignee"
 												style={{
 													backgroundColor: generateAvatarColor(
-														props.chatData.getAssignedUserUsername()
+														data.getAssignedUserUsername()
 													),
 												}}
 											>
 												{generateInitialsHelper(
-													props.chatData.generateAssignedToInitials()
+													data.generateAssignedToInitials()
 												)}
 											</CustomAvatar>
-											<span>{props.chatData.getAssignedUserUsername()}</span>
+											<span>{data.getAssignedUserUsername()}</span>
 										</div>
 									</Tooltip>
 								)}
 
-							{props.chatData.assignedGroup &&
+							{data.assignedGroup &&
 								((props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
-									!props.chatData.assignedToUser) ||
+									!data.assignedToUser) ||
 									props.tabCase === CHAT_LIST_TAB_CASE_ME ||
 									(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
-										!props.chatData.assignedToUser)) && (
+										!data.assignedToUser)) && (
 									<Tooltip
 										placement="top"
-										title={props.chatData.generateAssignmentInformation()}
+										title={data.generateAssignmentInformation()}
 									>
 										<div className="sidebarChat__info__nameWrapper__assigneeChip">
 											<CustomAvatar
 												className="sidebarChat__info__nameWrapper__assignee"
 												style={{
 													backgroundColor: generateAvatarColor(
-														props.chatData.assignedGroup?.name
+														data.assignedGroup?.name
 													),
 												}}
 											>
 												<GroupIcon />
 											</CustomAvatar>
-											<span>{props.chatData.assignedGroup?.name}</span>
+											<span>{data.assignedGroup?.name}</span>
 										</div>
 									</Tooltip>
 								)}
@@ -295,43 +289,39 @@ function SidebarChat(props) {
 						<div className="sidebarChat__info__lastMessage">
 							<div className="sidebarChat__info__lastMessage__body">
 								<ChatMessageShortContent
-									type={props.chatData.lastMessageType}
-									template={props.chatData.lastMessage?.template}
-									buttonText={props.chatData.lastMessageButtonText}
-									interactiveButtonText={props.chatData.interactiveButtonText}
-									text={props.chatData.lastMessageBody}
-									caption={props.chatData.lastMessageCaption}
-									isLastMessageFromUs={props.chatData.isLastMessageFromUs}
+									type={data.lastMessageType}
+									template={data.lastMessage?.template}
+									buttonText={data.lastMessageButtonText}
+									interactiveButtonText={data.interactiveButtonText}
+									text={data.lastMessageBody}
+									caption={data.lastMessageCaption}
+									isLastMessageFromUs={data.isLastMessageFromUs}
 								/>
 							</div>
 
 							<div>
-								{props.chatData.tags?.length > 0 && (
+								{data.tags?.length > 0 && (
 									<div className="sidebarChat__info__tags">
 										<Tooltip title={generateTagNames()}>
 											<div>
-												{props.chatData.tags
-													.slice(0, 3)
-													.map((tagItem, tagIndex) => (
-														<SellIcon
-															key={tagIndex}
-															className={
-																props.chatData.tags.length > 1 ? 'multiple' : ''
-															}
-															style={{
-																fill: tagItem.web_inbox_color,
-															}}
-														/>
-													))}
+												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
+													<SellIcon
+														key={tagIndex}
+														className={data.tags.length > 1 ? 'multiple' : ''}
+														style={{
+															fill: tagItem.web_inbox_color,
+														}}
+													/>
+												))}
 											</div>
 										</Tooltip>
 									</div>
 								)}
 
-								{props.chatData.lastMessageTimestamp && (
+								{data.lastMessageTimestamp && (
 									<Moment
 										className="sidebarChat__info__nameWrapper__lastMessageDate"
-										date={props.chatData.lastMessageTimestamp}
+										date={data.lastMessageTimestamp}
 										calendar={CALENDAR_SHORT}
 										unix
 									/>
@@ -341,9 +331,7 @@ function SidebarChat(props) {
 					</div>
 				</div>
 
-				<span className="sidebarChatWrapper__waId">
-					{addPlus(props.chatData.waId)}
-				</span>
+				<span className="sidebarChatWrapper__waId">{addPlus(data.waId)}</span>
 
 				{hasFailedMessages() && (
 					<div className="sidebarChat__failedMessagesIndicator">
