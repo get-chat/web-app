@@ -102,7 +102,7 @@ function Contacts(props) {
 	const listContacts = () => {
 		apiService.listContactsCall(
 			keyword?.trim(),
-			0,
+			100,
 			cancelTokenSourceRef.current.token,
 			(response) => {
 				const preparedContacts = {};
