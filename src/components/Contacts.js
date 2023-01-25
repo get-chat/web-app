@@ -119,7 +119,18 @@ function Contacts(props) {
 	};
 
 	const verifyContact = (data, waId) => {
+		const failureCallback = () => {
+			window.displayCustomError(
+				'There is no WhatsApp account connected to this phone number.'
+			);
+		};
+
 		waId = preparePhoneNumber(waId);
+
+		if (!waId) {
+			failureCallback();
+			return;
+		}
 
 		setVerifying(true);
 
@@ -130,7 +141,8 @@ function Contacts(props) {
 				if (
 					response.data.contacts &&
 					response.data.contacts.length > 0 &&
-					response.data.contacts[0].status === 'valid'
+					response.data.contacts[0].status === 'valid' &&
+					response.data.contacts[0].wa_id !== 'invalid'
 				) {
 					navigate(`/main/chat/${waId}`, {
 						state: {
@@ -146,9 +158,7 @@ function Contacts(props) {
 					// Hide contacts
 					props.onHide();
 				} else {
-					window.displayCustomError(
-						'There is no WhatsApp account connected to this phone number.'
-					);
+					failureCallback();
 				}
 
 				setVerifying(false);
