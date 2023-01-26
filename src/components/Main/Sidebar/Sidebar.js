@@ -15,7 +15,7 @@ import {
 	Zoom,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SidebarChat from './SidebarChat';
+import ChatListItem from '@src/components/ChatListItem';
 import {
 	containsLetters,
 	generateInitialsHelper,
@@ -821,7 +821,7 @@ function Sidebar(props) {
 							return filterChat(currentUser, tabCase, chat[1]);
 						})
 						.map((chat) => (
-							<SidebarChat
+							<ChatListItem
 								key={chat[0]}
 								chatData={chat[1]}
 								pendingMessages={props.pendingMessages}
