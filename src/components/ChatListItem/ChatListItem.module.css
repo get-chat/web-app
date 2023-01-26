@@ -131,17 +131,14 @@
 .wrapper:hover .waId {
 	display: inline-block;
 	position: absolute;
-	bottom: 5px;
+	bottom: 1px;
 	right: 15px;
-	border-radius: 10px;
-	padding: 1px 4px;
-	background-color: white;
 }
 
 .waId {
 	display: none;
-	font-size: 10px;
-	color: rgba(0, 0, 45, 0.45);
+	font-size: 9px;
+	color: rgba(0, 0, 45, 0.65);
 	margin-left: 5px;
 	font-weight: 600;
 }
@@ -239,7 +236,7 @@
 }
 
 @media only screen and (max-width: 750px) {
-	.item:hover .waId {
+	.wrapper:hover .waId {
 		display: none;
 	}
 }
