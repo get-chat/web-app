@@ -97,8 +97,7 @@ const ChatListItem = (props) => {
 					<div className={styles.info}>
 						<div className={styles.nameWrapper}>
 							<h2>
-								{props.keyword !== undefined &&
-								props.keyword.trim().length > 0 ? (
+								{props.keyword && props.keyword.trim().length > 0 ? (
 									<PrintMessage
 										message={data.name}
 										highlightText={props.keyword}

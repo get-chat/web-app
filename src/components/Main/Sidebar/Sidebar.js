@@ -15,7 +15,7 @@ import {
 	Zoom,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import ChatListItem from '../../ChatListItem';
+import ChatListItem from '@src/components/ChatListItem';
 import {
 	containsLetters,
 	generateInitialsHelper,
