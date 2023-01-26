@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment/moment';
 import { getDroppedFiles } from '@src/helpers/FileHelper';
@@ -12,6 +12,10 @@ const useChatListItem = ({ props }) => {
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
 	const [timeLeft, setTimeLeft] = useState();
 	const [remainingSeconds, setRemainingSeconds] = useState();
+
+	const isDisabled = useMemo(() => {
+		return isExpired && props.bulkSendPayload?.type !== 'template';
+	}, [isExpired, props.bulkSendPayload]);
 
 	const { waId } = useParams();
 
@@ -96,7 +100,7 @@ const useChatListItem = ({ props }) => {
 
 	const handleClick = () => {
 		if (props.isSelectionModeEnabled) {
-			if (isDisabled()) return;
+			if (isDisabled) return;
 
 			let newSelectedState = !isSelected;
 
@@ -114,10 +118,6 @@ const useChatListItem = ({ props }) => {
 		} else {
 			navigate(`/main/chat/${data.waId}`);
 		}
-	};
-
-	const isDisabled = () => {
-		return isExpired && props.bulkSendPayload?.type !== 'template';
 	};
 
 	const hasFailedMessages = () => {

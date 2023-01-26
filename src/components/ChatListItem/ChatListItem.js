@@ -66,7 +66,7 @@ const ChatListItem = (props) => {
 							className={styles.selection}
 							checked={isSelected}
 							color="primary"
-							disabled={isDisabled()}
+							disabled={isDisabled}
 						/>
 					)}
 
