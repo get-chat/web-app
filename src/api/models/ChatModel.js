@@ -20,8 +20,6 @@ class ChatModel {
 		this.lastReceivedMessageTimestamp =
 			parseIntSafely(contact.last_message_timestamp) ?? undefined;
 
-		console.log(this.lastReceivedMessageTimestamp);
-
 		this.setLastMessage(lastMessagePayload);
 
 		// Use last message timestamp from contact object, if last message does not exist
