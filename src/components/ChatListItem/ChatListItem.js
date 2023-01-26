@@ -195,6 +195,7 @@ function ChatListItem(props) {
 												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
 													<SellIcon
 														key={tagIndex}
+														className={styles.tagIcon}
 														style={{
 															fill: tagItem.web_inbox_color,
 														}}

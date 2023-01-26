@@ -33,8 +33,8 @@
 	padding: 10px 15px;
 }
 
-.item .MuiAvatar-root {
-	align-self: baseline;
+.item :global(.MuiAvatar-root) {
+	align-self: center;
 	height: 50px;
 	width: 50px;
 }
@@ -66,7 +66,7 @@
 	align-self: center;
 }
 
-.assigneeAvatar .MuiSvgIcon-root {
+.assigneeAvatar :global(.MuiSvgIcon-root) {
 	color: white !important;
 	height: 0.5em;
 	width: 0.5em;
@@ -106,7 +106,7 @@
 	max-width: 162px;
 }
 
-.nameWrapper h2 .emoji-mart-emoji {
+.nameWrapper h2 :global(.emoji-mart-emoji) {
 	height: 14px !important;
 	width: 14px !important;
 }
@@ -122,9 +122,9 @@
 	display: inline-block;
 }
 
-.tags .MuiSvgIcon-root {
-	height: 0.7em;
-	width: 0.7em;
+.tagIcon {
+	height: 0.7em !important;
+	width: 0.7em !important;
 	margin-left: -7px;
 }
 
@@ -174,7 +174,7 @@
 	overflow: hidden;
 }
 
-.lastMessage .MuiSvgIcon-root {
+.lastMessage :global(.MuiSvgIcon-root) {
 	color: rgba(0, 0, 45, 0.3) !important;
 	height: 0.85em;
 	width: 0.85em;
@@ -232,17 +232,14 @@
 	left: 8px;
 }
 
-.failedMessagesIndicator .MuiSvgIcon-root {
+.failedMessagesIndicator :global(.MuiSvgIcon-root) {
 	height: 22px;
 	width: 22px;
-}
-
-.sidebar__results__chats .MuiListItem-root {
-	padding: 0;
+	color: red !important;
 }
 
 @media only screen and (max-width: 750px) {
-	.sidebarChat:hover .wrapper__waId {
+	.item:hover .waId {
 		display: none;
 	}
 }
