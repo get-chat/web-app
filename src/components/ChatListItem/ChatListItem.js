@@ -49,31 +49,34 @@ function ChatListItem(props) {
 			<div
 				id={data.waId}
 				className={
-					'sidebarChatWrapper ' +
-					(waId === data.waId ? 'activeChat ' : '') +
+					styles.wrapper +
+					' ' +
+					(waId === data.waId ? styles.active : '') +
+					' ' +
 					(isExpired
-						? 'expired '
+						? styles.expired
 						: remainingSeconds < 8 * 60 * 60
-						? 'almostExpired '
+						? styles.almostExpired
 						: '') +
-					(props.isSelectionModeEnabled && isSelected ? 'isSelected ' : '')
+					' ' +
+					(props.isSelectionModeEnabled && isSelected ? styles.selected : '')
 				}
 				onDrop={(event) => handleDroppedFiles(event)}
 				onDragOver={(event) => handleDragOver(event)}
 			>
-				<div className="sidebarChat">
+				<div className={styles.item}>
 					{props.isSelectionModeEnabled && (
 						<Checkbox
-							className="sidebarChat__selection"
+							className={styles.selection}
 							checked={isSelected}
 							color="primary"
 							disabled={isDisabled()}
 						/>
 					)}
 
-					<div className="sidebarChat__avatarWrapper">
+					<div className={styles.avatarWrapper}>
 						<CustomAvatar
-							className="sidebarChat__avatarWrapper__mainAvatar"
+							className={styles.mainAvatar}
 							src={extractAvatarFromContactProviderData(
 								props.contactProvidersData[data.waId]
 							)}
