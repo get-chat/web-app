@@ -1,5 +1,6 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
+import { parseIntSafely } from '@src/helpers/IntegerHelper';
 
 class ChatModel {
 	constructor(data) {
@@ -14,16 +15,19 @@ class ChatModel {
 
 		this.newMessages = data.new_messages;
 
-		this.lastReceivedMessageTimestamp = parseInt(
-			contact.last_message_timestamp
-		);
+		contact.last_message_timestamp = null;
+
+		this.lastReceivedMessageTimestamp =
+			parseIntSafely(contact.last_message_timestamp) ?? undefined;
+
+		console.log(this.lastReceivedMessageTimestamp);
 
 		this.setLastMessage(lastMessagePayload);
 
 		// Use last message timestamp from contact object, if last message does not exist
 		this.lastMessageTimestamp = this.lastMessageTimestamp
 			? this.lastMessageTimestamp
-			: parseInt(contact.last_message_timestamp);
+			: parseIntSafely(contact.last_message_timestamp);
 
 		this.assignedGroup = data.assigned_group;
 		this.assignedToUser = data.assigned_to_user;
@@ -64,7 +68,7 @@ class ChatModel {
 			lastMessagePayload?.audio?.caption ??
 			lastMessagePayload?.document?.caption;
 		this.lastMessageType = lastMessagePayload?.type;
-		this.lastMessageTimestamp = parseInt(this.lastMessage?.timestamp);
+		this.lastMessageTimestamp = parseIntSafely(this.lastMessage?.timestamp);
 		this.isLastMessageFromUs = lastMessagePayload?.hasOwnProperty('to');
 
 		if (this.lastMessage?.hasOwnProperty('from')) {

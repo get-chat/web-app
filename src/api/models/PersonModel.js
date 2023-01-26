@@ -1,5 +1,6 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import { parseIntSafely } from '@src/helpers/IntegerHelper';
 
 class PersonModel {
 	constructor(data) {
@@ -9,9 +10,8 @@ class PersonModel {
 
 		this.setName(payload?.profile?.name);
 
-		this.lastMessageTimestamp = data.last_message_timestamp
-			? parseInt(data.last_message_timestamp)
-			: -1;
+		this.lastMessageTimestamp =
+			parseIntSafely(data.last_message_timestamp) ?? -1;
 		this.isExpired = this.checkIfExpired();
 	}
 
