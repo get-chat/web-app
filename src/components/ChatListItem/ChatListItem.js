@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../styles/SidebarChat.css';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -92,14 +91,14 @@ function ChatListItem(props) {
 						</CustomAvatar>
 
 						{newMessages > 0 && (
-							<div className="sidebarChat__info__newMessagesBadge">
+							<div className={styles.newMessagesBadge}>
 								{newMessages > 99 ? '99+' : newMessages}
 							</div>
 						)}
 					</div>
 
-					<div className="sidebarChat__info">
-						<div className="sidebarChat__info__nameWrapper">
+					<div className={styles.info}>
+						<div className={styles.nameWrapper}>
 							<h2>
 								{props.keyword !== undefined &&
 								props.keyword.trim().length > 0 ? (
@@ -124,9 +123,9 @@ function ChatListItem(props) {
 										placement="top"
 										title={data.generateAssignmentInformation()}
 									>
-										<div className="sidebarChat__info__nameWrapper__assigneeChip">
+										<div className={styles.assigneeChip}>
 											<CustomAvatar
-												className="sidebarChat__info__nameWrapper__assignee"
+												className={styles.assigneeAvatar}
 												style={{
 													backgroundColor: generateAvatarColor(
 														data.getAssignedUserUsername()
@@ -152,9 +151,9 @@ function ChatListItem(props) {
 										placement="top"
 										title={data.generateAssignmentInformation()}
 									>
-										<div className="sidebarChat__info__nameWrapper__assigneeChip">
+										<div className={styles.assigneeChip}>
 											<CustomAvatar
-												className="sidebarChat__info__nameWrapper__assignee"
+												className={styles.assigneeAvatar}
 												style={{
 													backgroundColor: generateAvatarColor(
 														data.assignedGroup?.name
@@ -169,14 +168,14 @@ function ChatListItem(props) {
 								)}
 
 							{!isExpired && (
-								<div className="sidebarChat__info__timeLeft">
+								<div className={styles.timeLeft}>
 									<span>{t('%s left', timeLeft)}</span>
 								</div>
 							)}
 						</div>
 
-						<div className="sidebarChat__info__lastMessage">
-							<div className="sidebarChat__info__lastMessage__body">
+						<div className={styles.lastMessageWrapper}>
+							<div className={styles.lastMessage}>
 								<ChatMessageShortContent
 									type={data.lastMessageType}
 									template={data.lastMessage?.template}
@@ -190,13 +189,12 @@ function ChatListItem(props) {
 
 							<div>
 								{data.tags?.length > 0 && (
-									<div className="sidebarChat__info__tags">
+									<div className={styles.tags}>
 										<Tooltip title={generateTagNames()}>
 											<div>
 												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
 													<SellIcon
 														key={tagIndex}
-														className={data.tags.length > 1 ? 'multiple' : ''}
 														style={{
 															fill: tagItem.web_inbox_color,
 														}}
@@ -209,7 +207,7 @@ function ChatListItem(props) {
 
 								{data.lastMessageTimestamp && (
 									<Moment
-										className="sidebarChat__info__nameWrapper__lastMessageDate"
+										className={styles.lastMessageDate}
 										date={data.lastMessageTimestamp}
 										calendar={CALENDAR_SHORT}
 										unix
@@ -220,10 +218,10 @@ function ChatListItem(props) {
 					</div>
 				</div>
 
-				<span className="sidebarChatWrapper__waId">{addPlus(data.waId)}</span>
+				<span className={styles.waId}>{addPlus(data.waId)}</span>
 
 				{hasFailedMessages() && (
-					<div className="sidebarChat__failedMessagesIndicator">
+					<div className={styles.failedMessagesIndicator}>
 						<Tooltip title={t('This chat has failed messages!')}>
 							<WarningIcon className="error" />
 						</Tooltip>

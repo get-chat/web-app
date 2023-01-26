@@ -59,9 +59,9 @@
 }
 
 .assigneeAvatar {
-	height: 15px;
-	width: 15px;
-	font-size: 9px;
+	height: 15px !important;
+	width: 15px !important;
+	font-size: 9px !important;
 	margin-right: 3px;
 	align-self: center;
 }
@@ -85,20 +85,20 @@
 	margin-right: 5px !important;
 }
 
-.sidebarChat__info__nameWrapper {
+.nameWrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.sidebarChat__info__nameWrapper h2 {
+.nameWrapper h2 {
 	font-weight: 600;
 	font-size: 14px;
 	flex: 1;
 }
 
-.sidebarChat__info__nameWrapper h2 > span {
+.nameWrapper h2 > span {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -106,29 +106,29 @@
 	max-width: 162px;
 }
 
-.sidebarChat__info__nameWrapper h2 .emoji-mart-emoji {
+.nameWrapper h2 .emoji-mart-emoji {
 	height: 14px !important;
 	width: 14px !important;
 }
 
-.sidebarChat__info__nameWrapper__lastMessageDate {
+.lastMessageDate {
 	font-weight: 400;
 	font-size: 10px;
 	color: rgba(0, 0, 45, 0.6);
 }
 
-.sidebarChat__info__tags {
+.tags {
 	margin-right: 5px;
 	display: inline-block;
 }
 
-.sidebarChat__info__tags .MuiSvgIcon-root {
+.tags .MuiSvgIcon-root {
 	height: 0.7em;
 	width: 0.7em;
 	margin-left: -7px;
 }
 
-.wrapper:hover .wrapper__waId {
+.wrapper:hover .waId {
 	display: inline-block;
 	position: absolute;
 	bottom: 5px;
@@ -138,7 +138,7 @@
 	background-color: white;
 }
 
-.wrapper__waId {
+.waId {
 	display: none;
 	font-size: 10px;
 	color: rgba(0, 0, 45, 0.45);
@@ -146,7 +146,7 @@
 	font-weight: 600;
 }
 
-.sidebarChat__info__lastMessage {
+.lastMessageWrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: baseline;
@@ -158,23 +158,23 @@
 	overflow: hidden;
 }
 
-.sidebarChat.expired .sidebarChat__info__lastMessage {
+.item.expired .lastMessageWrapper {
 	color: rgba(0, 0, 45, 0.4);
 }
 
-.sidebarChat__info__lastMessage__body {
+.lastMessage {
 	max-width: 100%;
 	width: 220px;
 }
 
-.sidebarChat__info__lastMessage__body,
-.sidebarChat__info__lastMessage__body > div {
+.lastMessage,
+.lastMessage > div {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
 }
 
-.sidebarChat__info__lastMessage__body .MuiSvgIcon-root {
+.lastMessage .MuiSvgIcon-root {
 	color: rgba(0, 0, 45, 0.3) !important;
 	height: 0.85em;
 	width: 0.85em;
@@ -182,16 +182,11 @@
 	margin-right: 5px;
 }
 
-.sidebarChat__info__lastMessage__body .chatMessageTypeLabel {
+.lastMessage .chatMessageTypeLabel {
 	font-weight: 600;
 }
 
-.sidebarChat__info__expired {
-	font-size: 12px;
-	color: #a9a92a;
-}
-
-.sidebarChat__info__timeLeft {
+.timeLeft {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -205,11 +200,11 @@
 	margin-left: 5px;
 }
 
-.wrapper.almostExpired .sidebarChat__info__timeLeft {
+.wrapper.almostExpired .timeLeft {
 	background-color: #f5ba31;
 }
 
-.sidebarChat__info__newMessagesBadge {
+.newMessagesBadge {
 	position: absolute;
 	bottom: -3px;
 	left: 33px;
@@ -226,18 +221,18 @@
 	min-width: 18px;
 }
 
-.sidebarChat__info {
+.info {
 	flex: 1;
 	margin-left: 15px;
 }
 
-.sidebarChat__failedMessagesIndicator {
+.failedMessagesIndicator {
 	position: absolute;
 	top: 3px;
 	left: 8px;
 }
 
-.sidebarChat__failedMessagesIndicator .MuiSvgIcon-root {
+.failedMessagesIndicator .MuiSvgIcon-root {
 	height: 22px;
 	width: 22px;
 }
