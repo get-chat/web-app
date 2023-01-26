@@ -58,6 +58,13 @@
 	overflow: hidden;
 }
 
+.assigneeChip :global(.MuiSvgIcon-root) {
+	color: var(--default-text-color) !important;
+	height: 0.6em;
+	width: 0.6em;
+	margin: 0 3px;
+}
+
 .assigneeAvatar {
 	height: 15px !important;
 	width: 15px !important;

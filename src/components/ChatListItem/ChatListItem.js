@@ -152,16 +152,9 @@ function ChatListItem(props) {
 										title={data.generateAssignmentInformation()}
 									>
 										<div className={styles.assigneeChip}>
-											<CustomAvatar
-												className={styles.assigneeAvatar}
-												style={{
-													backgroundColor: generateAvatarColor(
-														data.assignedGroup?.name
-													),
-												}}
-											>
-												<GroupIcon />
-											</CustomAvatar>
+											<GroupIcon
+												color={generateAvatarColor(data.assignedGroup?.name)}
+											/>
 											<span>{data.assignedGroup?.name}</span>
 										</div>
 									</Tooltip>
