@@ -60,8 +60,8 @@ function ChatListItem(props) {
 					' ' +
 					(props.isSelectionModeEnabled && isSelected ? styles.selected : '')
 				}
-				onDrop={(event) => handleDroppedFiles(event)}
-				onDragOver={(event) => handleDragOver(event)}
+				onDrop={handleDroppedFiles}
+				onDragOver={handleDragOver}
 			>
 				<div className={styles.item}>
 					{props.isSelectionModeEnabled && (
