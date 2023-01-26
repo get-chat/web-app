@@ -17,8 +17,9 @@ class ChatModel {
 
 		contact.last_message_timestamp = null;
 
-		this.lastReceivedMessageTimestamp =
-			parseIntSafely(contact.last_message_timestamp) ?? undefined;
+		this.lastReceivedMessageTimestamp = parseIntSafely(
+			contact.last_message_timestamp
+		);
 
 		this.setLastMessage(lastMessagePayload);
 
