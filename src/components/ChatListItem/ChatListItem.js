@@ -23,8 +23,11 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import SellIcon from '@mui/icons-material/Sell';
 import useChatListItem from '@src/components/ChatListItem/useChatListItem';
 import styles from './ChatListItem.module.css';
+import classNames from 'classnames/bind';
 
-function ChatListItem(props) {
+let cx = classNames.bind(styles);
+
+const ChatListItem = (props) => {
 	const { t } = useTranslation();
 
 	const {
@@ -47,19 +50,13 @@ function ChatListItem(props) {
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
 			<div
 				id={data.waId}
-				className={
-					styles.wrapper +
-					' ' +
-					(waId === data.waId ? styles.active : '') +
-					' ' +
-					(isExpired
-						? styles.expired
-						: remainingSeconds < 8 * 60 * 60
-						? styles.almostExpired
-						: '') +
-					' ' +
-					(props.isSelectionModeEnabled && isSelected ? styles.selected : '')
-				}
+				className={cx({
+					wrapper: true,
+					active: waId === data.waId,
+					expired: isExpired,
+					almostExpired: remainingSeconds < 8 * 60 * 60,
+					selected: props.isSelectionModeEnabled && isSelected,
+				})}
 				onDrop={handleDroppedFiles}
 				onDragOver={handleDragOver}
 			>
@@ -222,6 +219,6 @@ function ChatListItem(props) {
 			</div>
 		</ListItemButton>
 	);
-}
+};
 
 export default ChatListItem;
