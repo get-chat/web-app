@@ -18,7 +18,6 @@
 
 .wrapper.selected {
 	background-color: rgb(217, 239, 236) !important;
-	border-bottom: 1px solid #d0e8e5;
 }
 
 .wrapper.activeChat.selected {
