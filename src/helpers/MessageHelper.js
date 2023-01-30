@@ -1,7 +1,7 @@
 import { replaceEmojis } from './EmojiHelper';
 import { getLastObject } from './ObjectHelper';
-
 import { sanitize } from 'dompurify';
+import { parseIntSafely } from '@src/helpers/IntegerHelper';
 
 export const formatMessage = (message) => {
 	if (!message) return;
@@ -12,13 +12,16 @@ export const formatMessage = (message) => {
 
 	return formatted;
 };
+
 export const messageHelper = (messagesObject) => {
 	const last = getLastObject(messagesObject);
 	return extractTimestampFromMessage(last);
 };
+
 export const extractTimestampFromMessage = (message) => {
-	return message ? parseInt(message.timestamp) : -1;
+	return parseIntSafely(message?.timestamp) ?? -1;
 };
+
 export const generateMessagePreview = (payload) => {
 	const messageType = payload?.type;
 	if (messageType === 'text') {

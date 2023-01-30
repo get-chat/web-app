@@ -3,6 +3,7 @@ import {
 	generateUniqueID,
 	sanitize,
 } from '@src/helpers/Helpers';
+import { parseIntSafely } from '@src/helpers/IntegerHelper';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -54,7 +55,7 @@ export class ChatMessageModel {
 		this.referral = payload.referral;
 		this.buttonText = payload.button?.text;
 		this.interactiveButtonText = payload.interactive?.button_reply?.title;
-		this.timestamp = payload.timestamp ? parseInt(payload.timestamp) : -1;
+		this.timestamp = parseIntSafely(payload.timestamp) ?? -1;
 		//this.isReceived = data.received;
 
 		this.imageId = payload.image?.id;
