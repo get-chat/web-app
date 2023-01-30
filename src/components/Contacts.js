@@ -144,13 +144,15 @@ function Contacts(props) {
 					response.data.contacts[0].status === 'valid' &&
 					response.data.contacts[0].wa_id !== 'invalid'
 				) {
-					navigate(`/main/chat/${waId}`, {
+					const returnedWaId = response.data.contacts[0].wa_id;
+
+					navigate(`/main/chat/${returnedWaId}`, {
 						state: {
 							person: {
 								name: data?.name,
 								initials: data?.initials,
 								avatar: data?.avatar,
-								waId: waId,
+								waId: returnedWaId,
 							},
 						},
 					});
