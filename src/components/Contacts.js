@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import PersonModel from '../api/models/PersonModel';
 import Person from './Person';
 import { getObjLength } from '../helpers/ObjectHelper';
-import { addPlus, preparePhoneNumber } from '../helpers/PhoneNumberHelper';
+import { addPlus, prepareWaId } from '../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
@@ -125,7 +125,7 @@ function Contacts(props) {
 			);
 		};
 
-		waId = preparePhoneNumber(waId);
+		waId = prepareWaId(waId);
 
 		if (!waId) {
 			failureCallback();

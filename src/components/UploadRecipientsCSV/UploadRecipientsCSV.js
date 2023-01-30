@@ -8,7 +8,7 @@ import DialogActions from '@mui/material/DialogActions';
 import { csvToObj } from '@src/helpers/CSVHelper';
 import { hasDuplicates } from '@src/helpers/ArrayHelper';
 import { isEmptyString } from '@src/helpers/Helpers';
-import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import {
 	PRIMARY_KEY_TYPE_TAG,
 	PRIMARY_KEY_TYPE_WA_ID,
@@ -100,7 +100,7 @@ const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {
 
 			// Formatting if recipients are phone numbers
 			if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
-				const formattedWaId = preparePhoneNumber(recipient);
+				const formattedWaId = prepareWaId(recipient);
 				if (formattedWaId) {
 					newWaIds.push(formattedWaId);
 				}

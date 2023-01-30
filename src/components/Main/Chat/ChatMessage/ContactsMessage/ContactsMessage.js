@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
 import styles from './ContactsMessage.module.css';
-import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 
 const ContactsMessage = ({ data }) => {
@@ -12,7 +12,7 @@ const ContactsMessage = ({ data }) => {
 	const { contacts } = data?.payload || data?.resendPayload;
 
 	const handleClick = (contact) => {
-		const waId = preparePhoneNumber(contact.phones[0].wa_id);
+		const waId = prepareWaId(contact.phones[0].wa_id);
 		navigate(`/main/chat/${waId}`);
 	};
 
