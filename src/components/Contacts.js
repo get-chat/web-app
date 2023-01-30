@@ -93,7 +93,7 @@ function Contacts(props) {
 				setPersons(preparedPersons);
 				listContacts();
 			},
-			(error) => {
+			() => {
 				setLoading(false);
 			}
 		);
@@ -112,7 +112,7 @@ function Contacts(props) {
 				setContacts(preparedContacts);
 				setLoading(false);
 			},
-			(error) => {
+			() => {
 				setLoading(false);
 			}
 		);
@@ -165,7 +165,7 @@ function Contacts(props) {
 
 				setVerifying(false);
 			},
-			(error) => {
+			() => {
 				setVerifying(false);
 			}
 		);
