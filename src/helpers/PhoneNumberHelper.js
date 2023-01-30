@@ -1,4 +1,4 @@
-export const preparePhoneNumber = (phoneNumber) => {
+export const prepareWaId = (phoneNumber) => {
 	return phoneNumber.replace(/[^0-9]/g, '');
 };
 export const addPlus = (phoneNumber) => {

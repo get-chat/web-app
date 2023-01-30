@@ -66,7 +66,7 @@ import {
 import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { addPlus, preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
 import { useDispatch, useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
@@ -923,7 +923,7 @@ export default function Chat(props) {
 			);
 		};
 
-		let phoneNumber = preparePhoneNumber(waId);
+		let phoneNumber = prepareWaId(waId);
 		phoneNumber = addPlus(phoneNumber);
 
 		apiService.verifyContactsCall(
@@ -933,9 +933,17 @@ export default function Chat(props) {
 				if (
 					response.data.contacts &&
 					response.data.contacts.length > 0 &&
-					response.data.contacts[0].status === 'valid'
+					response.data.contacts[0].status === 'valid' &&
+					response.data.contacts[0].wa_id !== 'invalid'
 				) {
-					createPersonAndStartChat(addPlus(waId), waId?.[0]);
+					const returnedWaId = response.data.contacts[0].wa_id;
+
+					if (returnedWaId !== prepareWaId(waId)) {
+						// verifyContact returned a different waId, redirecting to chat page with new waId
+						navigate(`/main/chat/${returnedWaId}`);
+					} else {
+						createPersonAndStartChat(addPlus(waId), waId?.[0]);
+					}
 				} else {
 					onError();
 				}

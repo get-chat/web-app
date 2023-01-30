@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import PersonModel from '../api/models/PersonModel';
 import Person from './Person';
 import { getObjLength } from '../helpers/ObjectHelper';
-import { addPlus, preparePhoneNumber } from '../helpers/PhoneNumberHelper';
+import { addPlus, prepareWaId } from '../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
@@ -93,7 +93,7 @@ function Contacts(props) {
 				setPersons(preparedPersons);
 				listContacts();
 			},
-			(error) => {
+			() => {
 				setLoading(false);
 			}
 		);
@@ -112,7 +112,7 @@ function Contacts(props) {
 				setContacts(preparedContacts);
 				setLoading(false);
 			},
-			(error) => {
+			() => {
 				setLoading(false);
 			}
 		);
@@ -125,7 +125,7 @@ function Contacts(props) {
 			);
 		};
 
-		waId = preparePhoneNumber(waId);
+		waId = prepareWaId(waId);
 
 		if (!waId) {
 			failureCallback();
@@ -144,13 +144,15 @@ function Contacts(props) {
 					response.data.contacts[0].status === 'valid' &&
 					response.data.contacts[0].wa_id !== 'invalid'
 				) {
-					navigate(`/main/chat/${waId}`, {
+					const returnedWaId = response.data.contacts[0].wa_id;
+
+					navigate(`/main/chat/${returnedWaId}`, {
 						state: {
 							person: {
 								name: data?.name,
 								initials: data?.initials,
 								avatar: data?.avatar,
-								waId: waId,
+								waId: returnedWaId,
 							},
 						},
 					});
@@ -163,7 +165,7 @@ function Contacts(props) {
 
 				setVerifying(false);
 			},
-			(error) => {
+			() => {
 				setVerifying(false);
 			}
 		);

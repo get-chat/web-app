@@ -44,7 +44,7 @@ import { clearUserSession } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
-import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
@@ -968,9 +968,7 @@ function Main() {
 					const processedPhoneNumbers = [];
 
 					contactPhoneNumbers.forEach((contactPhoneNumber) => {
-						const curPhoneNumber = preparePhoneNumber(
-							contactPhoneNumber.phone_number
-						);
+						const curPhoneNumber = prepareWaId(contactPhoneNumber.phone_number);
 
 						// Prevent duplicates from same provider with same phone numbers formatted differently
 						if (processedPhoneNumbers.includes(curPhoneNumber)) {

@@ -21,7 +21,7 @@ import StepSelectParameters from './components/StepSelectParameters';
 import StepPreviewResult from './components/StepPreviewResult';
 import { BreakException } from '@src/Constants';
 import BulkSendStepper from './components/BulkSendStepper';
-import { preparePhoneNumber } from '@src/helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
@@ -159,7 +159,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen }) => {
 
 			// Formatting if recipients are phone numbers
 			if (primaryKeyType === PRIMARY_KEY_TYPE_WA_ID) {
-				recipient = preparePhoneNumber(recipient);
+				recipient = prepareWaId(recipient);
 			}
 
 			if (recipient) {
