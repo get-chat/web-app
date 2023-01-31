@@ -14,8 +14,8 @@ const ContactsMessage = ({ data }) => {
 	const navigate = useNavigate();
 	const { contacts } = data?.payload || data?.resendPayload;
 
-	const handleClick = (contact) => {
-		const waId = prepareWaId(contact.phones[0].wa_id);
+	const handleClick = (targetWaId) => {
+		const waId = prepareWaId(targetWaId);
 		navigate(`/main/chat/${waId}`);
 	};
 
@@ -49,7 +49,7 @@ const ContactsMessage = ({ data }) => {
 								size="medium"
 								startIcon={<ChatIcon />}
 								className={styles.messageButton}
-								onClick={() => handleClick(contact)}
+								onClick={() => handleClick(phoneObj.wa_id)}
 							>
 								{phoneObj?.type && <span>{phoneObj.type}</span>}
 								{phoneObj.phone ?? phoneObj.wa_id}
