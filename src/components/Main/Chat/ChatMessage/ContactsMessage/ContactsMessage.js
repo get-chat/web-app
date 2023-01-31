@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button } from '@mui/material';
+import { Button, ButtonBase } from '@mui/material';
 
 import styles from './ContactsMessage.module.css';
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
@@ -42,18 +42,17 @@ const ContactsMessage = ({ data }) => {
 					</div>
 					<div className={styles.footer}>
 						{contact.phones?.map((phoneObj, phoneObjIndex) => (
-							<Button
+							<ButtonBase
 								key={phoneObjIndex}
-								color="primary"
-								variant="text"
-								size="medium"
-								startIcon={<ChatIcon />}
 								className={styles.messageButton}
 								onClick={() => handleClick(phoneObj.wa_id)}
 							>
-								{phoneObj?.type && <span>{phoneObj.type}</span>}
-								{phoneObj.phone ?? phoneObj.wa_id}
-							</Button>
+								<ChatIcon />
+								<div className={styles.phoneNumberContainer}>
+									{phoneObj?.type && <span>{phoneObj.type}</span>}
+									{phoneObj.phone ?? phoneObj.wa_id}
+								</div>
+							</ButtonBase>
 						))}
 					</div>
 				</div>
