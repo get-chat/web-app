@@ -174,7 +174,7 @@ const ChatListItem = (props) => {
 								/>
 							</div>
 
-							<div>
+							<div className={styles.dateTagWrapper}>
 								{data.tags?.length > 0 && (
 									<div className={styles.tags}>
 										<Tooltip title={generateTagNames()}>
