@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, ButtonBase } from '@mui/material';
+import { ButtonBase } from '@mui/material';
 
 import styles from './ContactsMessage.module.css';
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
@@ -42,17 +42,42 @@ const ContactsMessage = ({ data }) => {
 					</div>
 					<div className={styles.footer}>
 						{contact.phones?.map((phoneObj, phoneObjIndex) => (
-							<ButtonBase
-								key={phoneObjIndex}
-								className={styles.messageButton}
-								onClick={() => handleClick(phoneObj.wa_id)}
-							>
-								<ChatIcon />
-								<div className={styles.phoneNumberContainer}>
-									{phoneObj?.type && <span>{phoneObj.type}</span>}
-									{phoneObj.phone ?? phoneObj.wa_id}
-								</div>
-							</ButtonBase>
+							<>
+								<ButtonBase
+									key={phoneObjIndex}
+									className={styles.messageButton}
+									onClick={() => handleClick(phoneObj.wa_id)}
+								>
+									<ChatIcon className={styles.messageButtonIcon} />
+									<div className={styles.phoneNumberContainer}>
+										{phoneObj?.type && (
+											<div className={styles.phoneNumberType}>
+												{phoneObj.type}
+											</div>
+										)}
+										<div className={styles.phoneNumber}>
+											{phoneObj.phone ?? phoneObj.wa_id}
+										</div>
+									</div>
+								</ButtonBase>
+								<ButtonBase
+									key={phoneObjIndex}
+									className={styles.messageButton}
+									onClick={() => handleClick(phoneObj.wa_id)}
+								>
+									<ChatIcon className={styles.messageButtonIcon} />
+									<div className={styles.phoneNumberContainer}>
+										{phoneObj?.type && (
+											<div className={styles.phoneNumberType}>
+												{phoneObj.type}
+											</div>
+										)}
+										<div className={styles.phoneNumber}>
+											{phoneObj.phone ?? phoneObj.wa_id}
+										</div>
+									</div>
+								</ButtonBase>
+							</>
 						))}
 					</div>
 				</div>

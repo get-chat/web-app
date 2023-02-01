@@ -7,7 +7,6 @@
 .footer {
 	display: flex;
 	align-items: center;
-	gap: 10px;
 }
 
 .item + .item {
@@ -21,6 +20,7 @@
 .avatar {
 	height: 35px !important;
 	width: 35px !important;
+	margin-right: 10px;
 }
 
 .name {
@@ -31,6 +31,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
+	margin: 5px 0;
 }
 
 .messageButton {
@@ -39,6 +40,18 @@
 	flex-direction: row;
 	justify-content: center;
 	border-radius: 4px !important;
+	padding: 3px 5px !important;
+	margin-bottom: 5px !important;
+}
+
+.messageButton :global(.MuiTouchRipple-child) {
+	background-color: red;
+}
+
+.messageButtonIcon {
+	color: var(--color-primary) !important;
+	height: 0.8em !important;
+	width: 0.8em !important;
 }
 
 .phoneNumberContainer {
@@ -46,4 +59,13 @@
 	flex-direction: column;
 	align-items: flex-start;
 	margin-left: 15px;
+}
+
+.phoneNumberType {
+	font-size: 12px;
+	color: rgba(0, 0, 45, 0.6);
+}
+
+.phoneNumber {
+	color: var(--color-primary);
 }
