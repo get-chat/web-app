@@ -125,6 +125,12 @@
 	display: none !important;
 }
 
+@media only screen and (max-width: 1024px) {
+	.sidebar {
+		flex: 0.4;
+	}
+}
+
 @media only screen and (max-width: 750px) {
 	.sidebar {
 		position: absolute;

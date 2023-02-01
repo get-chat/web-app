@@ -105,16 +105,23 @@
 }
 
 .nameWrapper h2 > span {
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	display: -webkit-box;
 	overflow: hidden;
-	display: block;
-	max-width: 162px;
+	text-overflow: ellipsis;
+	word-break: break-word;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
 }
 
 .nameWrapper h2 :global(.emoji-mart-emoji) {
 	height: 14px !important;
 	width: 14px !important;
+}
+
+.dateTagWrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
 }
 
 .lastMessageDate {
@@ -125,7 +132,9 @@
 
 .tags {
 	margin-right: 5px;
-	display: inline-block;
+	display: flex;
+	flex-direction: row;
+	width: max-content;
 }
 
 .tagIcon {
@@ -155,25 +164,20 @@
 	justify-content: space-between;
 	color: rgba(0, 0, 45, 0.7);
 	font-size: 14px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
 }
 
 .item.expired .lastMessageWrapper {
 	color: rgba(0, 0, 45, 0.4);
 }
 
-.lastMessage {
-	max-width: 100%;
-	width: 220px;
-}
-
-.lastMessage,
 .lastMessage > div {
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	display: -webkit-box;
 	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: break-word;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 1;
+	margin-right: 5px;
 }
 
 .lastMessage :global(.MuiSvgIcon-root) {
