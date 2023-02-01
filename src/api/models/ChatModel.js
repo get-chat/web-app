@@ -15,8 +15,6 @@ class ChatModel {
 
 		this.newMessages = data.new_messages;
 
-		contact.last_message_timestamp = null;
-
 		this.lastReceivedMessageTimestamp = parseIntSafely(
 			contact.last_message_timestamp
 		);
@@ -26,7 +24,7 @@ class ChatModel {
 		// Use last message timestamp from contact object, if last message does not exist
 		this.lastMessageTimestamp = this.lastMessageTimestamp
 			? this.lastMessageTimestamp
-			: parseIntSafely(contact.last_message_timestamp);
+			: this.lastReceivedMessageTimestamp;
 
 		this.assignedGroup = data.assigned_group;
 		this.assignedToUser = data.assigned_to_user;
