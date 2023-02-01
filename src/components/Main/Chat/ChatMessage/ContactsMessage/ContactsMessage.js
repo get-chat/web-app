@@ -42,42 +42,23 @@ const ContactsMessage = ({ data }) => {
 					</div>
 					<div className={styles.footer}>
 						{contact.phones?.map((phoneObj, phoneObjIndex) => (
-							<>
-								<ButtonBase
-									key={phoneObjIndex}
-									className={styles.messageButton}
-									onClick={() => handleClick(phoneObj.wa_id)}
-								>
-									<ChatIcon className={styles.messageButtonIcon} />
-									<div className={styles.phoneNumberContainer}>
-										{phoneObj?.type && (
-											<div className={styles.phoneNumberType}>
-												{phoneObj.type}
-											</div>
-										)}
-										<div className={styles.phoneNumber}>
-											{phoneObj.phone ?? phoneObj.wa_id}
+							<ButtonBase
+								key={phoneObjIndex}
+								className={styles.messageButton}
+								onClick={() => handleClick(phoneObj.wa_id)}
+							>
+								<ChatIcon className={styles.messageButtonIcon} />
+								<div className={styles.phoneNumberContainer}>
+									{phoneObj?.type && (
+										<div className={styles.phoneNumberType}>
+											{phoneObj.type}
 										</div>
+									)}
+									<div className={styles.phoneNumber}>
+										{phoneObj.phone ?? phoneObj.wa_id}
 									</div>
-								</ButtonBase>
-								<ButtonBase
-									key={phoneObjIndex}
-									className={styles.messageButton}
-									onClick={() => handleClick(phoneObj.wa_id)}
-								>
-									<ChatIcon className={styles.messageButtonIcon} />
-									<div className={styles.phoneNumberContainer}>
-										{phoneObj?.type && (
-											<div className={styles.phoneNumberType}>
-												{phoneObj.type}
-											</div>
-										)}
-										<div className={styles.phoneNumber}>
-											{phoneObj.phone ?? phoneObj.wa_id}
-										</div>
-									</div>
-								</ButtonBase>
-							</>
+								</div>
+							</ButtonBase>
 						))}
 					</div>
 				</div>
