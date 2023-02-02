@@ -341,6 +341,7 @@ function ChatFooter(props) {
 				<div className="hidden">
 					<FileInput
 						innerRef={fileInput}
+						accept={props.accept}
 						handleSelectedFiles={(files) =>
 							props.setSelectedFiles({ ...files })
 						}
