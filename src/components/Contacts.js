@@ -23,6 +23,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
+import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
 
 function Contacts(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -103,7 +104,7 @@ function Contacts(props) {
 	const listContacts = () => {
 		apiService.listContactsCall(
 			keyword?.trim(),
-			100,
+			CONTACTS_TEMP_LIMIT,
 			cancelTokenSourceRef.current.token,
 			(response) => {
 				const contactsResponse = new ContactsResponse(response.data);
