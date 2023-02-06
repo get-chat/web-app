@@ -20,6 +20,7 @@ import ContactModel from '../../api/models/ContactModel';
 
 import styles from './ContactsModal.module.css';
 import CustomAvatar from '@src/components/CustomAvatar';
+import ContactsResponse from '@src/api/responses/ContactsResponse';
 
 const DialogHeader = ({ children, onClose, ...rest }) => (
 	<DialogTitle className={styles.header} {...rest}>
@@ -46,13 +47,8 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 			100,
 			undefined,
 			(response) => {
-				const preparedContacts = {};
-
-				response.data.results.forEach((contact, contactIndex) => {
-					preparedContacts[contactIndex] = new ContactModel(contact);
-				});
-
-				setContacts(preparedContacts);
+				const contactsResponse = new ContactsResponse(response.data);
+				setContacts(contactsResponse.contacts);
 				setIsLoading(false);
 			},
 			(error) => {

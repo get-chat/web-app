@@ -61,6 +61,7 @@ import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
+import ContactsResponse from '@src/api/responses/ContactsResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -951,7 +952,7 @@ function Main() {
 	const listContacts = async () => {
 		setLoadingNow('contacts');
 
-		// Check if needs to be loaded
+		// Check if it needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
 			setLoadingNow('saved responses');
@@ -961,30 +962,8 @@ function Main() {
 
 		try {
 			await apiService.listContactsCall(undefined, 0, undefined, (response) => {
-				const preparedContactProvidersData = {};
-
-				response.data.results.forEach((contact) => {
-					const contactPhoneNumbers = contact.phone_numbers;
-					const processedPhoneNumbers = [];
-
-					contactPhoneNumbers.forEach((contactPhoneNumber) => {
-						const curPhoneNumber = prepareWaId(contactPhoneNumber.phone_number);
-
-						// Prevent duplicates from same provider with same phone numbers formatted differently
-						if (processedPhoneNumbers.includes(curPhoneNumber)) {
-							return;
-						}
-
-						if (!(curPhoneNumber in preparedContactProvidersData)) {
-							preparedContactProvidersData[curPhoneNumber] = [];
-						}
-
-						preparedContactProvidersData[curPhoneNumber].push(contact);
-						processedPhoneNumbers.push(curPhoneNumber);
-					});
-				});
-
-				setContactProvidersData(preparedContactProvidersData);
+				const contactsResponse = new ContactsResponse(response.data);
+				setContactProvidersData(contactsResponse.contactProvidersData);
 
 				setProgress(35);
 				setLoadingNow('saved responses');

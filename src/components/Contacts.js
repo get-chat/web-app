@@ -22,6 +22,7 @@ import { addPlus, prepareWaId } from '../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
+import ContactsResponse from '@src/api/responses/ContactsResponse';
 
 function Contacts(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -105,11 +106,8 @@ function Contacts(props) {
 			100,
 			cancelTokenSourceRef.current.token,
 			(response) => {
-				const preparedContacts = {};
-				response.data.results.forEach((contact, contactIndex) => {
-					preparedContacts[contactIndex] = new ContactModel(contact);
-				});
-				setContacts(preparedContacts);
+				const contactsResponse = new ContactsResponse(response.data);
+				setContacts(contactsResponse.contacts);
 				setLoading(false);
 			},
 			() => {

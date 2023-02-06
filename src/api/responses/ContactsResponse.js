@@ -1,5 +1,5 @@
 import ContactModel from '../models/ContactModel';
-import PhoneNumberHelper from '../../helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 
 class ContactsResponse {
 	constructor(data) {
@@ -16,9 +16,7 @@ class ContactsResponse {
 
 			const processedPhoneNumbers = [];
 			contactPhoneNumbers.forEach((contactPhoneNumber) => {
-				const curPhoneNumber = PhoneNumberHelper.preparePhoneNumber(
-					contactPhoneNumber.phone_number
-				);
+				const curPhoneNumber = prepareWaId(contactPhoneNumber.phone_number);
 
 				// Prevent duplicates from same provider with same phone numbers formatted differently
 				if (processedPhoneNumbers.includes(curPhoneNumber)) {
