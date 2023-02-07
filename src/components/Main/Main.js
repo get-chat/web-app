@@ -961,9 +961,9 @@ function Main() {
 			return;
 		}
 
-		let completeList = [];
+		let mergedResults = [];
 		const completeCallback = () => {
-			const preparedData = prepareContactProvidersData(completeList);
+			const preparedData = prepareContactProvidersData(mergedResults);
 			setContactProvidersData(preparedData);
 
 			setProgress(35);
@@ -980,10 +980,10 @@ function Main() {
 				undefined,
 				(response) => {
 					const contactsResponse = new ContactsResponse(response.data);
-					completeList = completeList.concat(contactsResponse.results);
+					mergedResults = mergedResults.concat(contactsResponse.results);
 					if (
 						contactsResponse.next &&
-						completeList.length < contactsResponse.count
+						mergedResults.length < contactsResponse.count
 					) {
 						makeRequest(contactsResponse.next);
 					} else {
