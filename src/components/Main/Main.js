@@ -976,7 +976,7 @@ function Main() {
 		const makeRequest = async (pages) => {
 			await apiService.listContactsCall(
 				undefined,
-				1,
+				CONTACTS_TEMP_LIMIT,
 				pages,
 				undefined,
 				(response) => {
