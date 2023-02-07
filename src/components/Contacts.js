@@ -105,6 +105,7 @@ function Contacts(props) {
 		apiService.listContactsCall(
 			keyword?.trim(),
 			CONTACTS_TEMP_LIMIT,
+			undefined,
 			cancelTokenSourceRef.current.token,
 			(response) => {
 				const contactsResponse = new ContactsResponse(response.data);

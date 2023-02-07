@@ -973,10 +973,11 @@ function Main() {
 			listSavedResponses();
 		};
 
-		const makeRequest = async (next) => {
+		const makeRequest = async (pages) => {
 			await apiService.listContactsCall(
 				undefined,
-				CONTACTS_TEMP_LIMIT,
+				1,
+				pages,
 				undefined,
 				(response) => {
 					const contactsResponse = new ContactsResponse(response.data);
@@ -985,7 +986,9 @@ function Main() {
 						contactsResponse.next &&
 						mergedResults.length < contactsResponse.count
 					) {
-						makeRequest(contactsResponse.next);
+						const nextURL = new URL(contactsResponse.next);
+						const pages = nextURL.searchParams.get('pages');
+						makeRequest(pages);
 					} else {
 						completeCallback();
 					}
@@ -993,8 +996,7 @@ function Main() {
 				(error) => {
 					console.error('Error in listContacts', error);
 					setInitialResourceFailed(true);
-				},
-				next
+				}
 			);
 		};
 

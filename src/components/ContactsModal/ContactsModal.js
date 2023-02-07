@@ -47,6 +47,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 			undefined,
 			CONTACTS_TEMP_LIMIT,
 			undefined,
+			undefined,
 			(response) => {
 				const contactsResponse = new ContactsResponse(response.data);
 				setContacts(contactsResponse.contacts);

@@ -271,18 +271,19 @@ export class ApiService {
 	listContactsCall = (
 		search,
 		limit,
+		pages,
 		cancelToken,
 		successCallback,
-		errorCallback,
-		next
+		errorCallback
 	) => {
 		this.handleRequest(
 			axios.get(
-				next ?? `${this.apiBaseURL}contacts/`,
+				`${this.apiBaseURL}contacts/`,
 				getRequestConfig(
 					{
 						search: search,
 						limit: limit,
+						pages: pages,
 					},
 					cancelToken
 				)
