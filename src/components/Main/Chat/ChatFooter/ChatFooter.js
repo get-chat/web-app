@@ -219,8 +219,8 @@ function ChatFooter(props) {
 		setContactsModalVisible(false);
 	};
 
-	const ACCEPT_IMAGE_AND_VIDEO =
-		'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
+	// https://developers.facebook.com/docs/whatsapp/on-premises/reference/media#supported-files
+	const ACCEPT_IMAGE_AND_VIDEO = 'image/jpeg, image/png, video/mp4, video/3gpp';
 	const ACCEPT_DOCUMENT = '*.*';
 
 	return (
@@ -341,6 +341,7 @@ function ChatFooter(props) {
 				<div className="hidden">
 					<FileInput
 						innerRef={fileInput}
+						accept={props.accept}
 						handleSelectedFiles={(files) =>
 							props.setSelectedFiles({ ...files })
 						}
