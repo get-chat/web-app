@@ -12,6 +12,7 @@ import Alert from '@mui/material/Alert';
 import 'url-search-params-polyfill';
 import {
 	CHAT_KEY_PREFIX,
+	CONTACTS_TEMP_LIMIT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
@@ -44,7 +45,6 @@ import { clearUserSession } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
-import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +62,7 @@ import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
+import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -960,21 +961,44 @@ function Main() {
 			return;
 		}
 
-		try {
-			await apiService.listContactsCall(undefined, 0, undefined, (response) => {
-				const contactsResponse = new ContactsResponse(response.data);
-				setContactProvidersData(contactsResponse.contactProvidersData);
+		let completeList = [];
+		const completeCallback = () => {
+			const preparedData = prepareContactProvidersData(completeList);
+			setContactProvidersData(preparedData);
 
-				setProgress(35);
-				setLoadingNow('saved responses');
-			});
-		} catch (error) {
-			console.error('Error in listContacts', error);
-			setInitialResourceFailed(true);
-		} finally {
+			setProgress(35);
+			setLoadingNow('saved responses');
+
 			// Trigger next request
 			listSavedResponses();
-		}
+		};
+
+		const makeRequest = async (next) => {
+			await apiService.listContactsCall(
+				undefined,
+				CONTACTS_TEMP_LIMIT,
+				undefined,
+				(response) => {
+					const contactsResponse = new ContactsResponse(response.data);
+					completeList = completeList.concat(contactsResponse.results);
+					if (
+						contactsResponse.next &&
+						completeList.length < contactsResponse.count
+					) {
+						makeRequest(contactsResponse.next);
+					} else {
+						completeCallback();
+					}
+				},
+				(error) => {
+					console.error('Error in listContacts', error);
+					setInitialResourceFailed(true);
+				},
+				next
+			);
+		};
+
+		await makeRequest();
 	};
 
 	// ** 6 **
