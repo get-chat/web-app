@@ -152,6 +152,7 @@ function TemplateMessages({
 						data={chosenTemplate}
 						send={(template) => send(template)}
 						setSending={setSending}
+						setErrors={setErrors}
 						bulkSend={(template) => bulkSend(template)}
 						sendButtonInnerRef={sendButtonRef}
 						bulkSendButtonInnerRef={bulkSendButtonRef}

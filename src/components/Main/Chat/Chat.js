@@ -1822,6 +1822,7 @@ export default function Chat(props) {
 				isScrollButtonVisible={isScrollButtonVisible}
 				handleScrollButtonClick={handleScrollButtonClick}
 				closeChat={closeChat}
+				displayNotification={props.displayNotification}
 			/>
 
 			{isTemplateMessagesVisible && (
