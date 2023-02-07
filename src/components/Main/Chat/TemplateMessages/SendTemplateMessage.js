@@ -11,6 +11,7 @@ import {
 	getTemplateParams,
 	templateParamToInteger,
 } from '@src/helpers/TemplateMessageHelper';
+import { isImageSupported } from '@src/helpers/ImageHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
@@ -25,6 +26,7 @@ import LinkIcon from '@mui/icons-material/Link';
 function SendTemplateMessage({
 	data,
 	setSending,
+	setErrors,
 	bulkSend,
 	send,
 	sendButtonInnerRef,
@@ -125,6 +127,19 @@ function SendTemplateMessage({
 
 	const handleChosenImage = (file) => {
 		if (!file) return;
+
+		if (!isImageSupported(file[0].type)) {
+			PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+				{
+					title: t('Unsupported file type'),
+					details: t('Please choose a supported image type (png, jpg)'),
+				},
+			]);
+
+			return;
+		} else {
+			setErrors([]);
+		}
 
 		const formData = new FormData();
 		formData.append('file_encoded', file[0]);

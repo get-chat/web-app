@@ -18,6 +18,7 @@ import '../../../../styles/ChatFooter.css';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/EmojiPicker.css';
 import CloseIcon from '@mui/icons-material/Close';
+import { isImageSupported } from '@src/helpers/ImageHelper';
 import PubSub from 'pubsub-js';
 import FileInput from '../../../FileInput';
 import {
@@ -342,9 +343,17 @@ function ChatFooter(props) {
 					<FileInput
 						innerRef={fileInput}
 						accept={props.accept}
-						handleSelectedFiles={(files) =>
-							props.setSelectedFiles({ ...files })
-						}
+						handleSelectedFiles={(files) => {
+							if (!isImageSupported(files[0].type)) {
+								window.displayCustomError(
+									t('Please choose a supported image type (png, jpg)')
+								);
+
+								return;
+							}
+
+							props.setSelectedFiles({ ...files });
+						}}
 					/>
 				</div>
 
