@@ -12,6 +12,7 @@ import Alert from '@mui/material/Alert';
 import 'url-search-params-polyfill';
 import {
 	CHAT_KEY_PREFIX,
+	CONTACTS_TEMP_LIMIT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
@@ -44,7 +45,6 @@ import { clearUserSession } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
-import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
@@ -61,6 +61,8 @@ import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
+import ContactsResponse from '@src/api/responses/ContactsResponse';
+import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -951,7 +953,7 @@ function Main() {
 	const listContacts = async () => {
 		setLoadingNow('contacts');
 
-		// Check if needs to be loaded
+		// Check if it needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
 			setLoadingNow('saved responses');
@@ -959,43 +961,46 @@ function Main() {
 			return;
 		}
 
-		try {
-			await apiService.listContactsCall(undefined, 0, undefined, (response) => {
-				const preparedContactProvidersData = {};
+		let mergedResults = [];
+		const completeCallback = () => {
+			const preparedData = prepareContactProvidersData(mergedResults);
+			setContactProvidersData(preparedData);
 
-				response.data.results.forEach((contact) => {
-					const contactPhoneNumbers = contact.phone_numbers;
-					const processedPhoneNumbers = [];
+			setProgress(35);
+			setLoadingNow('saved responses');
 
-					contactPhoneNumbers.forEach((contactPhoneNumber) => {
-						const curPhoneNumber = prepareWaId(contactPhoneNumber.phone_number);
-
-						// Prevent duplicates from same provider with same phone numbers formatted differently
-						if (processedPhoneNumbers.includes(curPhoneNumber)) {
-							return;
-						}
-
-						if (!(curPhoneNumber in preparedContactProvidersData)) {
-							preparedContactProvidersData[curPhoneNumber] = [];
-						}
-
-						preparedContactProvidersData[curPhoneNumber].push(contact);
-						processedPhoneNumbers.push(curPhoneNumber);
-					});
-				});
-
-				setContactProvidersData(preparedContactProvidersData);
-
-				setProgress(35);
-				setLoadingNow('saved responses');
-			});
-		} catch (error) {
-			console.error('Error in listContacts', error);
-			setInitialResourceFailed(true);
-		} finally {
 			// Trigger next request
 			listSavedResponses();
-		}
+		};
+
+		const makeRequest = async (pages) => {
+			await apiService.listContactsCall(
+				undefined,
+				CONTACTS_TEMP_LIMIT,
+				pages,
+				undefined,
+				(response) => {
+					const contactsResponse = new ContactsResponse(response.data);
+					mergedResults = mergedResults.concat(contactsResponse.results);
+					if (
+						contactsResponse.next &&
+						mergedResults.length < contactsResponse.count
+					) {
+						const nextURL = new URL(contactsResponse.next);
+						const pages = nextURL.searchParams.get('pages');
+						makeRequest(pages);
+					} else {
+						completeCallback();
+					}
+				},
+				(error) => {
+					console.error('Error in listContacts', error);
+					setInitialResourceFailed(true);
+				}
+			);
+		};
+
+		await makeRequest();
 	};
 
 	// ** 6 **

@@ -20,6 +20,8 @@ import ContactModel from '../../api/models/ContactModel';
 
 import styles from './ContactsModal.module.css';
 import CustomAvatar from '@src/components/CustomAvatar';
+import ContactsResponse from '@src/api/responses/ContactsResponse';
+import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
 
 const DialogHeader = ({ children, onClose, ...rest }) => (
 	<DialogTitle className={styles.header} {...rest}>
@@ -43,16 +45,12 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 
 		apiService.listContactsCall(
 			undefined,
-			100,
+			CONTACTS_TEMP_LIMIT,
+			undefined,
 			undefined,
 			(response) => {
-				const preparedContacts = {};
-
-				response.data.results.forEach((contact, contactIndex) => {
-					preparedContacts[contactIndex] = new ContactModel(contact);
-				});
-
-				setContacts(preparedContacts);
+				const contactsResponse = new ContactsResponse(response.data);
+				setContacts(contactsResponse.contacts);
 				setIsLoading(false);
 			},
 			(error) => {
@@ -147,7 +145,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 					</List>
 				)}
 			</DialogContent>
-			{selectedContacts.length && (
+			{selectedContacts.length > 0 && (
 				<DialogActions>
 					<Button onClick={handleSendMessage}>Send</Button>
 				</DialogActions>

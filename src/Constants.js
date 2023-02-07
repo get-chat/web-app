@@ -75,3 +75,5 @@ export const CALENDAR_SHORT_DAYS = {
 };
 
 export const AXIOS_ERROR_CODE_TIMEOUT = 'ECONNABORTED';
+
+export const CONTACTS_TEMP_LIMIT = 100;

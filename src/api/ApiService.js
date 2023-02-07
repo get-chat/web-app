@@ -271,6 +271,7 @@ export class ApiService {
 	listContactsCall = (
 		search,
 		limit,
+		pages,
 		cancelToken,
 		successCallback,
 		errorCallback
@@ -282,6 +283,7 @@ export class ApiService {
 					{
 						search: search,
 						limit: limit,
+						pages: pages,
 					},
 					cancelToken
 				)
