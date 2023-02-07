@@ -145,7 +145,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 					</List>
 				)}
 			</DialogContent>
-			{selectedContacts.length && (
+			{selectedContacts.length > 0 && (
 				<DialogActions>
 					<Button onClick={handleSendMessage}>Send</Button>
 				</DialogActions>
