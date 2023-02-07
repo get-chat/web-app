@@ -18,6 +18,7 @@ import '../../../../styles/ChatFooter.css';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/EmojiPicker.css';
 import CloseIcon from '@mui/icons-material/Close';
+import { isImageSupported } from '@src/helpers/ImageHelper';
 import PubSub from 'pubsub-js';
 import FileInput from '../../../FileInput';
 import {
@@ -219,8 +220,8 @@ function ChatFooter(props) {
 		setContactsModalVisible(false);
 	};
 
-	const ACCEPT_IMAGE_AND_VIDEO =
-		'image/jpeg, image/png, image/webp, video/mp4, video/3gpp';
+	// https://developers.facebook.com/docs/whatsapp/on-premises/reference/media#supported-files
+	const ACCEPT_IMAGE_AND_VIDEO = 'image/jpeg, image/png, video/mp4, video/3gpp';
 	const ACCEPT_DOCUMENT = '*.*';
 
 	return (
@@ -341,9 +342,18 @@ function ChatFooter(props) {
 				<div className="hidden">
 					<FileInput
 						innerRef={fileInput}
-						handleSelectedFiles={(files) =>
-							props.setSelectedFiles({ ...files })
-						}
+						accept={props.accept}
+						handleSelectedFiles={(files) => {
+							if (!isImageSupported(files[0].type)) {
+								window.displayCustomError(
+									t('Please choose a supported image type (png, jpg)')
+								);
+
+								return;
+							}
+
+							props.setSelectedFiles({ ...files });
+						}}
 					/>
 				</div>
 

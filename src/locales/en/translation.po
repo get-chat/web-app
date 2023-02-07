@@ -644,3 +644,9 @@ msgstr ""
 
 msgid "Please enter a valid username and password!"
 msgstr ""
+
+msgid "Unsupported file type"
+msgstr ""
+
+msgid "Please choose a supported image type (png, jpg)"
+msgstr ""
