@@ -11,7 +11,10 @@ import {
 	getTemplateParams,
 	templateParamToInteger,
 } from '@src/helpers/TemplateMessageHelper';
-import { isImageSupported } from '@src/helpers/ImageHelper';
+import {
+	isImageSupported,
+	isVideoSupported,
+} from '@src/helpers/MediaFilesHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
@@ -125,20 +128,39 @@ function SendTemplateMessage({
 		});*/
 	};
 
-	const handleChosenImage = (file) => {
+	const handleChosenMedia = (file) => {
 		if (!file) return;
 
-		if (!isImageSupported(file[0].type)) {
-			PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
-				{
-					title: t('Unsupported file type'),
-					details: t('Please choose a supported image type (png, jpg)'),
-				},
-			]);
+		// Image
+		if (file[0].type.startsWith('image/')) {
+			if (!isImageSupported(file[0].type)) {
+				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+					{
+						title: t('Unsupported file type'),
+						details: t('Please choose a supported image type (png, jpg)'),
+					},
+				]);
 
-			return;
-		} else {
-			setErrors([]);
+				return;
+			} else {
+				setErrors([]);
+			}
+		}
+
+		// Video
+		if (file[0].type.startsWith('video/')) {
+			if (!isVideoSupported(file[0].type)) {
+				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
+					{
+						title: t('Unsupported file type'),
+						details: t('Please choose a supported video type (mp4, 3gp)'),
+					},
+				]);
+
+				return;
+			} else {
+				setErrors([]);
+			}
 		}
 
 		const formData = new FormData();
@@ -225,7 +247,7 @@ function SendTemplateMessage({
 												innerRef={headerFileInput}
 												multiple={false}
 												accept={getMimetypeByFormat(comp.format)}
-												handleSelectedFiles={handleChosenImage}
+												handleSelectedFiles={handleChosenMedia}
 											/>
 
 											<div className="sendTemplateMessage__section__uploadWrapper">
