@@ -211,5 +211,6 @@
 	"Failed to load templates. Please try again in a while.": "",
 	"Failed to issue a template refresh request. Please try again in a while.": "",
 	"Please enter a valid username and password!": "",
-	"Please choose a supported image type (png, jpg)": ""
+	"Please choose a supported image type (png, jpg)": "",
+	"Please choose a supported video type (mp4, 3gp)": ""
 }

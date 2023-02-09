@@ -650,3 +650,6 @@ msgstr ""
 
 msgid "Please choose a supported image type (png, jpg)"
 msgstr ""
+
+msgid "Please choose a supported video type (mp4, 3gp)"
+msgstr ""
