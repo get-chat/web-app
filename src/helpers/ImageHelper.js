@@ -19,10 +19,3 @@ export const mimeToExtension = (mime) => {
 	if (!mimeDB.hasOwnProperty(mime)) return '';
 	return mimeDB[mime][0];
 };
-
-// https://developers.facebook.com/docs/whatsapp/on-premises/reference/media#supported-files
-const WABA_SUPPORT_IMAGE_FORMAT = ['image/jpeg', 'image/png'];
-
-export const isImageSupported = (mime) => {
-	return WABA_SUPPORT_IMAGE_FORMAT.includes(mime);
-};
