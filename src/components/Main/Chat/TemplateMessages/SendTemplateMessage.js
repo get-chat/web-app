@@ -25,6 +25,7 @@ import {
 } from '@src/Constants';
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 function SendTemplateMessage({
 	data,
@@ -202,6 +203,23 @@ function SendTemplateMessage({
 									<div className="sendTemplateMessage__section__fileType">
 										{t('Type: %s', comp.format.toLowerCase())}
 									</div>
+
+									{headerFileURL && (
+										<div className="sendTemplateMessage__section__headerImage__preview">
+											{comp.format === 'IMAGE' && (
+												<img src={headerFileURL} alt="header" />
+											)}
+											{comp.format === 'VIDEO' && (
+												<video src={headerFileURL} controls />
+											)}
+											{comp.format === 'DOCUMENT' && (
+												<div className="sendTemplateMessage__section__headerImage__preview__document">
+													<AttachFileIcon />
+													<span>{t('Document')}</span>
+												</div>
+											)}
+										</div>
+									)}
 
 									{!provideFileBy && (
 										<div className="sendTemplateMessage__section__provideFileChoices">

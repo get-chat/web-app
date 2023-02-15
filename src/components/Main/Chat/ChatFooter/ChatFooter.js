@@ -347,7 +347,10 @@ function ChatFooter(props) {
 						innerRef={fileInput}
 						accept={props.accept}
 						handleSelectedFiles={(files) => {
-							if (!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)) {
+							if (
+								props.accept !== ACCEPT_DOCUMENT &&
+								!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)
+							) {
 								window.displayCustomError(
 									t('Please choose a supported image type (png, jpg, mp4, 3gp)')
 								);
