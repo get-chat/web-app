@@ -18,7 +18,10 @@ import '../../../../styles/ChatFooter.css';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/EmojiPicker.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { isImageSupported } from '@src/helpers/MediaFilesHelper';
+import {
+	isImageSupported,
+	isVideoSupported,
+} from '@src/helpers/MediaFilesHelper';
 import PubSub from 'pubsub-js';
 import FileInput from '../../../FileInput';
 import {
@@ -344,9 +347,9 @@ function ChatFooter(props) {
 						innerRef={fileInput}
 						accept={props.accept}
 						handleSelectedFiles={(files) => {
-							if (!isImageSupported(files[0].type)) {
+							if (!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)) {
 								window.displayCustomError(
-									t('Please choose a supported image type (png, jpg)')
+									t('Please choose a supported image type (png, jpg, mp4, 3gp)')
 								);
 
 								return;
