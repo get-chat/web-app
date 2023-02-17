@@ -18,10 +18,6 @@ import '../../../../styles/ChatFooter.css';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../../../styles/EmojiPicker.css';
 import CloseIcon from '@mui/icons-material/Close';
-import {
-	isImageSupported,
-	isVideoSupported,
-} from '@src/helpers/MediaFilesHelper';
 import PubSub from 'pubsub-js';
 import FileInput from '../../../FileInput';
 import {
