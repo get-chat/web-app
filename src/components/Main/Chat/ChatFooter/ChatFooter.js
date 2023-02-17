@@ -348,7 +348,7 @@ function ChatFooter(props) {
 								!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)
 							) {
 								window.displayCustomError(
-									t('Please choose a supported image type (png, jpg, mp4, 3gp)')
+									t('Please choose a supported file type (png, jpg, mp4, 3gp)')
 								);
 
 								return;
