@@ -25,6 +25,7 @@ import {
 } from '@src/Constants';
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 function SendTemplateMessage({
 	data,
@@ -128,12 +129,12 @@ function SendTemplateMessage({
 		});*/
 	};
 
-	const handleChosenMedia = (file) => {
+	const handleChosenMedia = (file, format) => {
 		if (!file) return;
 
 		// Image
 		if (file[0].type.startsWith('image/')) {
-			if (!isImageSupported(file[0].type)) {
+			if (format !== 'IMAGE' || !isImageSupported(file[0].type)) {
 				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
 					{
 						title: t('Unsupported file type'),
@@ -149,7 +150,7 @@ function SendTemplateMessage({
 
 		// Video
 		if (file[0].type.startsWith('video/')) {
-			if (!isVideoSupported(file[0].type)) {
+			if (format !== 'VIDEO' || !isVideoSupported(file[0].type)) {
 				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
 					{
 						title: t('Unsupported file type'),
@@ -203,6 +204,23 @@ function SendTemplateMessage({
 										{t('Type: %s', comp.format.toLowerCase())}
 									</div>
 
+									{headerFileURL && (
+										<div className="sendTemplateMessage__section__headerImage__preview">
+											{comp.format === 'IMAGE' && (
+												<img src={headerFileURL} alt="header" />
+											)}
+											{comp.format === 'VIDEO' && (
+												<video src={headerFileURL} controls />
+											)}
+											{comp.format === 'DOCUMENT' && (
+												<div className="sendTemplateMessage__section__headerImage__preview__document">
+													<AttachFileIcon />
+													<span>{t('Document')}</span>
+												</div>
+											)}
+										</div>
+									)}
+
 									{!provideFileBy && (
 										<div className="sendTemplateMessage__section__provideFileChoices">
 											<ButtonBase
@@ -247,7 +265,9 @@ function SendTemplateMessage({
 												innerRef={headerFileInput}
 												multiple={false}
 												accept={getMimetypeByFormat(comp.format)}
-												handleSelectedFiles={handleChosenMedia}
+												handleSelectedFiles={(file) =>
+													handleChosenMedia(file, comp.format)
+												}
 											/>
 
 											<div className="sendTemplateMessage__section__uploadWrapper">

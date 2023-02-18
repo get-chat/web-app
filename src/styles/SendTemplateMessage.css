@@ -91,6 +91,35 @@
 	border-radius: 3px;
 }
 
+.sendTemplateMessage__section__headerImage__preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 200px;
+	border: 1px solid #ebebeb;
+	border-radius: 8px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+.sendTemplateMessage__section__headerImage__preview > img,
+video {
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	object-fit: cover;
+}
+
+.sendTemplateMessage__section__headerImage__preview__document {
+	width: 140px;
+	height: 190px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+}
+
 @media only screen and (max-width: 750px) {
 	.sendTemplateMessage__section {
 		padding: 15px 15px;
