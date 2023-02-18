@@ -129,12 +129,12 @@ function SendTemplateMessage({
 		});*/
 	};
 
-	const handleChosenMedia = (file) => {
+	const handleChosenMedia = (file, format) => {
 		if (!file) return;
 
 		// Image
 		if (file[0].type.startsWith('image/')) {
-			if (!isImageSupported(file[0].type)) {
+			if (format !== 'IMAGE' || !isImageSupported(file[0].type)) {
 				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
 					{
 						title: t('Unsupported file type'),
@@ -150,7 +150,7 @@ function SendTemplateMessage({
 
 		// Video
 		if (file[0].type.startsWith('video/')) {
-			if (!isVideoSupported(file[0].type)) {
+			if (format !== 'VIDEO' || !isVideoSupported(file[0].type)) {
 				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
 					{
 						title: t('Unsupported file type'),
@@ -265,7 +265,9 @@ function SendTemplateMessage({
 												innerRef={headerFileInput}
 												multiple={false}
 												accept={getMimetypeByFormat(comp.format)}
-												handleSelectedFiles={handleChosenMedia}
+												handleSelectedFiles={(file) =>
+													handleChosenMedia(file, comp.format)
+												}
 											/>
 
 											<div className="sendTemplateMessage__section__uploadWrapper">
