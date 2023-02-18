@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import '../styles/ChatAssignmentEvent.css';
 import Moment from 'react-moment';

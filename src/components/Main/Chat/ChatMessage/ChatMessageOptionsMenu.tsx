@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';

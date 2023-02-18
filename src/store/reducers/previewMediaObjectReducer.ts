@@ -4,7 +4,7 @@ const initialState = {
 	value: undefined,
 };
 
-export const previewMediaObjectSlice = createSlice({
+const previewMediaObjectSlice = createSlice({
 	name: 'previewMediaObject',
 	initialState,
 	reducers: {

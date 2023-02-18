@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as Sentry from '@sentry/browser';
 import { mimeDB } from './MimeHelper';
 

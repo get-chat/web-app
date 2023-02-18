@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { Checkbox, ListItem } from '@mui/material';
 import LabelIcon from '@mui/icons-material/Label';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ChatMessageModel from '../models/ChatMessageModel';
 
 class ChatMessagesResponse {

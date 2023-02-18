@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const getObjLength = (obj) => {
 	return obj ? Object.keys(obj).length : 0;
 };

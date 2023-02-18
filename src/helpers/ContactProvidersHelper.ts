@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 
 export const prepareContactProvidersData = (rawData) => {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';

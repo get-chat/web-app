@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import '../../../styles/ChatHeader.css';
 import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';

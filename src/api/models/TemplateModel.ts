@@ -1,3 +1,4 @@
+// @ts-nocheck
 class TemplateModel {
 	constructor(data) {
 		this.namespace = data.namespace;

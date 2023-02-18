@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { sanitize } from './helpers/Helpers';
 
 class SavedResponseClass {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import { useTranslation } from 'react-i18next';

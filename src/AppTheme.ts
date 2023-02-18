@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { createTheme } from '@mui/material';
 
 const AppTheme = createTheme({

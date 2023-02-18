@@ -1,3 +1,4 @@
+// @ts-nocheck
 import TemplateModel from '../models/TemplateModel';
 
 class TemplatesResponse {

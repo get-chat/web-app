@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo } from 'react';
 import reactStringReplace from 'react-string-replace-recursively';
 

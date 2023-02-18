@@ -4,7 +4,7 @@ const initialState = {
 	value: [],
 };
 
-export const tagsSlice = createSlice({
+const tagsSlice = createSlice({
 	name: 'tags',
 	initialState,
 	reducers: {

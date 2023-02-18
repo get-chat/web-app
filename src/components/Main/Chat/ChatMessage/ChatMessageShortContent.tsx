@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import PersonModel from '../models/PersonModel';
 
 class PersonResponse {

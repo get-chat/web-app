@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { BaseStorage } from './BaseStorage';
 
 export class LocalStorage extends BaseStorage {

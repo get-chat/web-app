@@ -1,3 +1,4 @@
+// @ts-nocheck
 import axios from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_FORCE_LOGOUT } from '../Constants';

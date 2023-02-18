@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import TemplatesList from '../../../TemplatesList';
 import { useTranslation } from 'react-i18next';

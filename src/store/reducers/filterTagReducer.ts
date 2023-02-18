@@ -4,7 +4,7 @@ const initialState = {
 	value: undefined,
 };
 
-export const filterTagSlice = createSlice({
+const filterTagSlice = createSlice({
 	name: 'filterTag',
 	initialState,
 	reducers: {

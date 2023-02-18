@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import { IconButton } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';

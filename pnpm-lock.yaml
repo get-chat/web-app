@@ -22,6 +22,7 @@ specifiers:
   '@testing-library/jest-dom': ^5.16.5
   '@testing-library/react': ^13.4.0
   '@testing-library/user-event': ^14.4.3
+  '@types/i18next-sprintf-postprocessor': ^0.2.0
   '@types/jest': ^29.4.0
   '@types/node': ^18.14.0
   '@types/pubsub-js': ^1.8.3
@@ -141,6 +142,7 @@ devDependencies:
   '@testing-library/jest-dom': 5.16.5
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@testing-library/user-event': 14.4.3_ihvo3xlg2d6kwqju3os3zitn3y
+  '@types/i18next-sprintf-postprocessor': 0.2.0
   '@types/jest': 29.4.0
   '@types/pubsub-js': 1.8.3
   babel-jest: 29.3.1_@babel+core@7.20.5
@@ -1403,7 +1405,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.11
-    dev: false
 
   /@babel/runtime/7.20.6:
     resolution: {integrity: sha512-Q+8MqP7TiHMWzSfwiJwXCjyf4GYA4Dgw3emg/7xmwsdLJOZUp+nMqcOwOzzYheuM1rhDu8FSj2l0aoMygEuXuA==}
@@ -3099,6 +3100,12 @@ packages:
     resolution: {integrity: sha512-QsbSjA/fSk7xB+UXlCT3wHBy5ai9wOcNDWwZAtud+jXhwOM3l+EYZh8Lng4+/6n8uar0J7xILzqftJdJ/Wdfkw==}
     dependencies:
       '@types/node': 18.14.0
+
+  /@types/i18next-sprintf-postprocessor/0.2.0:
+    resolution: {integrity: sha512-xxmy96QF8dNZf8VbedZqxsJEAvuJKks1OYeEYOu1LI7g4Oyry1sci/5HBhkmvf+u+PV7kbXJmZMBlaqEhLbyRg==}
+    dependencies:
+      i18next: 22.0.6
+    dev: true
 
   /@types/istanbul-lib-coverage/2.0.4:
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
@@ -6941,7 +6948,6 @@ packages:
     resolution: {integrity: sha512-RlreNGoPIdDP4QG+qSA9PxZKGwlzmcozbI9ObI6+OyUa/Rp0EjZZA9ubyBjw887zVNZsC+7FI3sXX8oiTzAfig==}
     dependencies:
       '@babel/runtime': 7.18.6
-    dev: false
 
   /iconv-lite/0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { LocalStorage } from '../storage/LocalStorage';
 import { MemoryStorage } from '../storage/MemoryStorage';
 

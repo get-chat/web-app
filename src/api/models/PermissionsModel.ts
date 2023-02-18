@@ -1,3 +1,4 @@
+// @ts-nocheck
 class PermissionsModel {
 	constructor(data) {
 		this.canUseTags = data.can_use_tags;

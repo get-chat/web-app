@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { useTranslation } from 'react-i18next';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ChatMessageModel from '../api/models/ChatMessageModel';
 import {
 	ATTACHMENT_TYPE_DOCUMENT,

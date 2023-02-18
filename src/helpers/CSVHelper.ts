@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const csvToObj = (file, callback) => {
 	const fileReader = new FileReader();
 

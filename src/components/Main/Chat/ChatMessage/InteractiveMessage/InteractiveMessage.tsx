@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 
 import TouchAppIcon from '@mui/icons-material/TouchApp';

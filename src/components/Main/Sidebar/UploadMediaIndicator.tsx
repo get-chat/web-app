@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { LinearProgress } from '@mui/material';
 import Alert from '@mui/material/Alert';

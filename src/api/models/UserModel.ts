@@ -1,3 +1,4 @@
+// @ts-nocheck
 import PermissionsModel from './PermissionsModel';
 
 class UserModel {

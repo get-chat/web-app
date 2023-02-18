@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import '../styles/Contact.css';
 import { ListItem } from '@mui/material';

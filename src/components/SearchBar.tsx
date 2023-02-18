@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { SearchOutlined } from '@mui/icons-material';
 import '../styles/SearchBar.css';

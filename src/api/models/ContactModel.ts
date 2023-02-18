@@ -1,3 +1,4 @@
+// @ts-nocheck
 class ContactModel {
 	constructor(data) {
 		this.name = data.name;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';

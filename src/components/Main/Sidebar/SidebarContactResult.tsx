@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import '../../../styles/SidebarContactResult.css';
 import { Link } from 'react-router-dom';

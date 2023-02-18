@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/ChangePasswordDialog.css';
 import { Button, Dialog, TextField } from '@mui/material';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { ATTACHMENT_TYPE_IMAGE } from '@src/Constants';
 import '../../../../styles/ContextChatMessage.css';

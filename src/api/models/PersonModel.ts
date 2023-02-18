@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';

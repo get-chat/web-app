@@ -1,3 +1,4 @@
+// @ts-nocheck
 class BulkMessageTaskModel {
 	constructor(data) {
 		this.id = data.id;

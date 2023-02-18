@@ -1,10 +1,11 @@
+// @ts-nocheck
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
 	value: {},
 };
 
-export const templatesSlice = createSlice({
+const templatesSlice = createSlice({
 	name: 'templates',
 	initialState,
 	reducers: {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ChosenFileClass from '../ChosenFileClass';
 import {
 	ATTACHMENT_TYPE_AUDIO,

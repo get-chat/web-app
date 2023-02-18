@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import '../../styles/LoadingScreen.css';

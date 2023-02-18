@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageVideo from './ChatMessageVideo';

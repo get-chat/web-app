@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
 import { Button } from '@mui/material';

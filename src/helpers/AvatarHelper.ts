@@ -1,3 +1,4 @@
+// @ts-nocheck
 let cachedColors = {};
 export const generateAvatarColor = function (name) {
 	if (!name) return;

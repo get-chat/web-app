@@ -1,3 +1,4 @@
+// @ts-nocheck
 class NewMessageModel {
 	constructor(waId, newMessages) {
 		this.waId = waId;

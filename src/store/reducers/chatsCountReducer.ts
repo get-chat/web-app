@@ -4,7 +4,7 @@ const initialState = {
 	value: undefined,
 };
 
-export const chatsCountSlice = createSlice({
+const chatsCountSlice = createSlice({
 	name: 'chatsCount',
 	initialState,
 	reducers: {

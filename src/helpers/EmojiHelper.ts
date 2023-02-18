@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Emoji, getEmojiDataFromNative } from 'emoji-mart';
 import { EMOJI_SET, EMOJI_SHEET_SIZE } from '../Constants';
 import data from '../EmojiData.json';

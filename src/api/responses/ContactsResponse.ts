@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ContactModel from '../models/ContactModel';
 
 class ContactsResponse {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { replaceEmojis } from './EmojiHelper';
 import { getLastObject } from './ObjectHelper';
 import { sanitize } from 'dompurify';

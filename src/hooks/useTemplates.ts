@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import TemplatesResponse from '@src/api/responses/TemplatesResponse';

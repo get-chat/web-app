@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';

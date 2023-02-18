@@ -1,3 +1,4 @@
+// @ts-nocheck
 import BulkMessageTaskModel from './BulkMessageTaskModel';
 
 class BulkMessageTaskElementModel {

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import SpeedDialIcon from '@mui/lab/SpeedDialIcon';
 import CloseIcon from '@mui/icons-material/Close';

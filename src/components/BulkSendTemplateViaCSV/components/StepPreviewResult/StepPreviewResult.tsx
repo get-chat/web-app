@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import ChatMessage from '../../../Main/Chat/ChatMessage/ChatMessage';
 import { ErrorBoundary } from '@sentry/react';

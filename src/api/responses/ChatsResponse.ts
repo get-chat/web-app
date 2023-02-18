@@ -1,3 +1,4 @@
+// @ts-nocheck
 import ChatModel from '../models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import NewMessageModel from '../models/NewMessageModel';

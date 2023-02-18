@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Contacts.css';
 import SearchBar from './SearchBar';

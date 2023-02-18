@@ -4,7 +4,7 @@ const initialState = {
 	value: false,
 };
 
-export const isRefreshingTemplatesSlice = createSlice({
+const isRefreshingTemplatesSlice = createSlice({
 	name: 'isRefreshingTemplates',
 	initialState,
 	reducers: {

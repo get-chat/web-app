@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
 	CHAT_LIST_TAB_CASE_ALL,
 	CHAT_LIST_TAB_CASE_GROUP,

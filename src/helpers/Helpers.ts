@@ -1,3 +1,4 @@
+// @ts-nocheck
 import dompurify from 'dompurify';
 import { getObjLength } from './ObjectHelper';
 import htmlToFormattedText from 'html-to-formatted-text';

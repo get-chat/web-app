@@ -1,3 +1,4 @@
+// @ts-nocheck
 class PreviewMediaModel {
 	constructor(senderName, initials, type, source, timestamp) {
 		this.senderName = senderName;

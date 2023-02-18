@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { binaryToBase64 } from '../helpers/ImageHelper';

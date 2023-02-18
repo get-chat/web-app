@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import '../../../styles/BulkSendIndicator.css';
 import { LinearProgress } from '@mui/material';

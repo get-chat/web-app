@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react';
 import '../styles/ContactProviderHeader.css';
 import googleLogo from '../assets/images/ic-google.png';

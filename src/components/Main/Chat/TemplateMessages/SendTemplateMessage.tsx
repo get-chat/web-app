@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, ButtonBase, TextField } from '@mui/material';
 import '../../../../styles/SendTemplateMessage.css';

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import Chat from './Chat/Chat';

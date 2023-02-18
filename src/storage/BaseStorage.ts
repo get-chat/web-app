@@ -1,3 +1,4 @@
+// @ts-nocheck
 export class BaseStorage {
 	getItem(itemKey) {
 		throw new Error('Not implemented.');

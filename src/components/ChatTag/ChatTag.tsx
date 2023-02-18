@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo } from 'react';
 import LabelIcon from '@mui/icons-material/Label';
 import { useSelector } from 'react-redux';

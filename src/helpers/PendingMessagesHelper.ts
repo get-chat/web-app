@@ -1,3 +1,4 @@
+// @ts-nocheck
 const getPendingMessages = () => {
 	return window.pendingMessages;
 };
