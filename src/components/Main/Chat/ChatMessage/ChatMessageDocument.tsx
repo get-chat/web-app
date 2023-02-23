@@ -8,6 +8,7 @@ function ChatMessageDocument(props) {
 
 	return (
 		<a
+			download={props.data.documentFileName}
 			href={props.data.documentLink ?? props.data.getHeaderFileLink('document')}
 			target="_blank"
 			className="chat__document"
