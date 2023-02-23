@@ -20,6 +20,5 @@
 			"@src/*": ["./src/*"]
 		}
 	},
-	"include": ["src", "public"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	"include": ["src", "public", "src/declaration.d.ts"]
 }
