@@ -20,6 +20,9 @@ const initializeApp = async () => {
 		const config = await loadAppConfig();
 		const apiService = new ApiService(config);
 
+		// TODO: Refactor global config
+		window.config = config;
+
 		initializeSentry(config);
 
 		root.render(<App config={config} apiService={apiService} />);
