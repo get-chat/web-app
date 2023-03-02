@@ -83,11 +83,12 @@ function SendTemplateMessage({
 			const nextState = prevState;
 
 			if (isURLButton) {
-				nextState[index][paramKey].text = event.target.value;
-				nextState[index]['sub_type'] = 'url';
+				nextState[index][paramKey].button.text = event.target.value;
 			} else {
 				nextState[index][paramKey].text = event.target.value;
 			}
+
+			console.log(nextState);
 
 			return { ...nextState };
 		});
@@ -386,7 +387,6 @@ function SendTemplateMessage({
 										</Button>
 										{button.type === 'URL' && (
 											<>
-												{console.log('@@@', params[compIndex])}
 												<TextField
 													InputProps={{
 														startAdornment: (
@@ -400,7 +400,9 @@ function SendTemplateMessage({
 														updateParam(event, compIndex, idx, true)
 													}
 													value={
-														params[compIndex] ? params[compIndex][idx].text : ''
+														params[compIndex]
+															? params[compIndex][idx].button.text
+															: ''
 													}
 												/>
 											</>

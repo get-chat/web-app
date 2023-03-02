@@ -104,8 +104,11 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 					}
 
 					preparedParams[key][buttonIndex] = {
-						type: 'text',
-						text: paramValues ? paramValues[1] : '',
+						type: 'button',
+						button: {
+							text: paramValues ? paramValues[1] : '',
+							sub_type: 'url',
+						},
 					};
 				}
 			});
