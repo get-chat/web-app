@@ -83,7 +83,8 @@ function SendTemplateMessage({
 			const nextState = prevState;
 
 			if (isURLButton) {
-				nextState[index][paramKey].parameters[0].text = event.target.value;
+				nextState[index][paramKey].text = event.target.value;
+				nextState[index]['sub_type'] = 'url';
 			} else {
 				nextState[index][paramKey].text = event.target.value;
 			}
@@ -385,6 +386,7 @@ function SendTemplateMessage({
 										</Button>
 										{button.type === 'URL' && (
 											<>
+												{console.log('@@@', params[compIndex])}
 												<TextField
 													InputProps={{
 														startAdornment: (
@@ -398,9 +400,7 @@ function SendTemplateMessage({
 														updateParam(event, compIndex, idx, true)
 													}
 													value={
-														params[compIndex]
-															? params[compIndex][idx].parameters[0].text
-															: ''
+														params[compIndex] ? params[compIndex][idx].text : ''
 													}
 												/>
 											</>

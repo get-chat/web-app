@@ -104,14 +104,8 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 					}
 
 					preparedParams[key][buttonIndex] = {
-						type: 'button',
-						sub_type: 'url',
-						parameters: [
-							{
-								type: 'text',
-								text: paramValues ? paramValues[1] : '',
-							},
-						],
+						type: 'text',
+						text: paramValues ? paramValues[1] : '',
 					};
 				}
 			});
@@ -169,16 +163,13 @@ export const generateFinalTemplateParams = (
 						param.video.link = param.video.link.trim();
 					} else if (param.document?.link) {
 						param.document.link = param.document.link.trim();
-					} else if (param.parameters[0]) {
-						param.parameters[0].text = param.parameters[0].text.trim();
 					}
 
 					const paramText =
 						param.text ??
 						param.image?.link ??
 						param.video?.link ??
-						param.document?.link ??
-						param.parameters[0]?.text;
+						param.document?.link;
 
 					// Check if param is empty
 					if (isEmptyString(paramText)) {
