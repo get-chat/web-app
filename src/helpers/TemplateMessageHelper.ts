@@ -104,11 +104,8 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 					}
 
 					preparedParams[key][buttonIndex] = {
-						type: 'button',
-						button: {
-							text: paramValues ? paramValues[1] : '',
-							sub_type: 'url',
-						},
+						type: 'text',
+						text: paramValues ? paramValues[1] : '',
 					};
 				}
 			});
@@ -203,6 +200,11 @@ export const generateFinalTemplateParams = (
 					parameters: paramsArray,
 					//localizable_params: localizableParams
 				};
+
+				if (component['buttons']?.[0]?.type?.toLowerCase() === 'url') {
+					preparedParams[component.type]['sub_type'] = 'url';
+					preparedParams[component.type]['index'] = paramIndex; // TODO: Index is probably wrong here, it should be button index instead
+				}
 			}
 		});
 	} catch (error) {

@@ -82,11 +82,7 @@ function SendTemplateMessage({
 		setParams((prevState) => {
 			const nextState = prevState;
 
-			if (isURLButton) {
-				nextState[index][paramKey].button.text = event.target.value;
-			} else {
-				nextState[index][paramKey].text = event.target.value;
-			}
+			nextState[index][paramKey].text = event.target.value;
 
 			return { ...nextState };
 		});
@@ -398,9 +394,7 @@ function SendTemplateMessage({
 														updateParam(event, compIndex, idx, true)
 													}
 													value={
-														params[compIndex]
-															? params[compIndex][idx].button.text
-															: ''
+														params[compIndex] ? params[compIndex][idx].text : ''
 													}
 												/>
 											</>
