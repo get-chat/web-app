@@ -88,8 +88,6 @@ function SendTemplateMessage({
 				nextState[index][paramKey].text = event.target.value;
 			}
 
-			console.log(nextState);
-
 			return { ...nextState };
 		});
 	};

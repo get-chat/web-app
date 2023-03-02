@@ -172,7 +172,8 @@ export const generateFinalTemplateParams = (
 						param.text ??
 						param.image?.link ??
 						param.video?.link ??
-						param.document?.link;
+						param.document?.link ??
+						param.button?.text;
 
 					// Check if param is empty
 					if (isEmptyString(paramText)) {
