@@ -96,6 +96,27 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 			}
 		}
 
+		if (componentType === 'BUTTONS') {
+			component.buttons.forEach((button, buttonIndex) => {
+				if (button.type === 'URL') {
+					if (preparedParams[key] === undefined) {
+						preparedParams[key] = {};
+					}
+
+					preparedParams[key][buttonIndex] = {
+						type: 'button',
+						sub_type: 'url',
+						parameters: [
+							{
+								type: 'text',
+								text: paramValues ? paramValues[1] : '',
+							},
+						],
+					};
+				}
+			});
+		}
+
 		const paramText = component.text;
 		const templateParamsArray = getTemplateParams(paramText);
 
@@ -148,13 +169,16 @@ export const generateFinalTemplateParams = (
 						param.video.link = param.video.link.trim();
 					} else if (param.document?.link) {
 						param.document.link = param.document.link.trim();
+					} else if (param.parameters[0]) {
+						param.parameters[0].text = param.parameters[0].text.trim();
 					}
 
 					const paramText =
 						param.text ??
 						param.image?.link ??
 						param.video?.link ??
-						param.document?.link;
+						param.document?.link ??
+						param.parameters[0]?.text;
 
 					// Check if param is empty
 					if (isEmptyString(paramText)) {
@@ -177,7 +201,10 @@ export const generateFinalTemplateParams = (
 				});*/
 
 				preparedParams[component.type] = {
-					type: component.type.toLowerCase(),
+					type:
+						component.type.toLowerCase() === 'buttons'
+							? 'button'
+							: component.type.toLowerCase(),
 					parameters: paramsArray,
 					//localizable_params: localizableParams
 				};

@@ -79,6 +79,17 @@
 	margin-top: 10px !important;
 }
 
+.templateMessage__buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.templateMessage__buttons--button + .templateMessage__buttons--button {
+	border-top: 1px solid #ebebeb;
+	padding-top: 10px;
+}
+
 .templateMessagesDialogErrors .MuiAlert-root {
 	margin-bottom: 5px !important;
 }
