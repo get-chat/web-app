@@ -101,18 +101,47 @@ function ChatMessageTemplate(props) {
 
 									{component.type === 'BUTTONS' && (
 										<div className="chat__templateContent__buttons">
-											{component.buttons.map((button, buttonIndex) => (
-												<Button
-													href={button.type === 'URL' ? button.url : ''}
-													target={'_blank'}
-													key={buttonIndex}
-													color="primary"
-													fullWidth={true}
-													disabled={button.type !== 'URL'}
-												>
-													{button.text}
-												</Button>
-											))}
+											{component.buttons.map((button, buttonIndex) => {
+												let href: string;
+
+												const targetParams = data.templateParameters.find(
+													(item) => {
+														return (
+															item.type === 'button' &&
+															item.index === buttonIndex
+														);
+													}
+												);
+
+												switch (button.type) {
+													case 'URL':
+														href =
+															targetParams &&
+															button.url.replace(
+																/\{\{[\d]+\}\}/g,
+																targetParams.parameters[0].text
+															);
+														break;
+													case 'PHONE_NUMBER':
+														href = `tel:${button.phone_number}`;
+														break;
+													default:
+														href = '';
+														break;
+												}
+
+												return (
+													<Button
+														href={href}
+														target="_blank"
+														key={buttonIndex}
+														color="primary"
+														fullWidth={true}
+													>
+														{button.text}
+													</Button>
+												);
+											})}
 										</div>
 									)}
 								</div>

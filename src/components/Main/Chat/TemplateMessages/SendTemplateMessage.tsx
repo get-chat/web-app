@@ -78,7 +78,7 @@ function SendTemplateMessage({
 		});
 	}, [headerFileURL, params]);
 
-	const updateParam = (event, index, paramKey, isURLButton = false) => {
+	const updateParam = (event, index, paramKey) => {
 		setParams((prevState) => {
 			const nextState = prevState;
 
@@ -380,24 +380,20 @@ function SendTemplateMessage({
 											{button.text}
 										</Button>
 										{button.type === 'URL' && (
-											<>
-												<TextField
-													InputProps={{
-														startAdornment: (
-															<InputAdornment position="start">
-																{button.url}
-															</InputAdornment>
-														),
-													}}
-													variant="standard"
-													onChange={(event) =>
-														updateParam(event, compIndex, idx, true)
-													}
-													value={
-														params[compIndex] ? params[compIndex][idx].text : ''
-													}
-												/>
-											</>
+											<TextField
+												InputProps={{
+													startAdornment: (
+														<InputAdornment position="start">
+															{button.url.replace(/\{\{[\d]+\}\}/g, '')}
+														</InputAdornment>
+													),
+												}}
+												variant="standard"
+												onChange={(event) => updateParam(event, compIndex, idx)}
+												value={
+													params[compIndex] ? params[compIndex][idx].text : ''
+												}
+											/>
 										)}
 									</div>
 								))}

@@ -201,10 +201,14 @@ export const generateFinalTemplateParams = (
 					//localizable_params: localizableParams
 				};
 
-				if (component['buttons']?.[0]?.type?.toLowerCase() === 'url') {
-					preparedParams[component.type]['sub_type'] = 'url';
-					preparedParams[component.type]['index'] = paramIndex; // TODO: Index is probably wrong here, it should be button index instead
-				}
+				const buttonsComponents = component['buttons'];
+
+				buttonsComponents?.forEach((buttonComponent, buttonComponentIndex) => {
+					if (buttonComponent.type?.toLowerCase() === 'url') {
+						preparedParams[component.type]['sub_type'] = 'url';
+						preparedParams[component.type]['index'] = buttonComponentIndex;
+					}
+				});
 			}
 		});
 	} catch (error) {
