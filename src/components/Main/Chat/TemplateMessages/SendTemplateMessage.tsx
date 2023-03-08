@@ -1,6 +1,12 @@
 // @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, ButtonBase, TextField } from '@mui/material';
+import {
+	Grid,
+	Button,
+	ButtonBase,
+	TextField,
+	InputAdornment,
+} from '@mui/material';
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import Alert from '@mui/material/Alert';
@@ -75,6 +81,7 @@ function SendTemplateMessage({
 	const updateParam = (event, index, paramKey) => {
 		setParams((prevState) => {
 			const nextState = prevState;
+
 			nextState[index][paramKey].text = event.target.value;
 
 			return { ...nextState };
@@ -366,11 +373,29 @@ function SendTemplateMessage({
 						</div>
 
 						{comp.type === 'BUTTONS' && (
-							<div>
-								{comp.buttons.map((button, buttonIndex) => (
-									<Button key={buttonIndex} color="primary" disabled={true}>
-										{button.text}
-									</Button>
+							<div className="templateMessage__buttons">
+								{comp.buttons.map((button, idx) => (
+									<div className="templateMessage__buttons--button" key={idx}>
+										<Button color="primary" variant="outlined" disabled>
+											{button.text}
+										</Button>
+										{button.type === 'URL' && (
+											<TextField
+												InputProps={{
+													startAdornment: (
+														<InputAdornment position="start">
+															{button.url.replace(/\{\{[\d]+\}\}/g, '')}
+														</InputAdornment>
+													),
+												}}
+												variant="standard"
+												onChange={(event) => updateParam(event, compIndex, idx)}
+												value={
+													params[compIndex] ? params[compIndex][idx].text : ''
+												}
+											/>
+										)}
+									</div>
 								))}
 							</div>
 						)}

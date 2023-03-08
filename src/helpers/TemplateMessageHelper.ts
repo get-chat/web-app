@@ -96,6 +96,21 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 			}
 		}
 
+		if (componentType === 'BUTTONS') {
+			component.buttons.forEach((button, buttonIndex) => {
+				if (button.type === 'URL') {
+					if (preparedParams[key] === undefined) {
+						preparedParams[key] = {};
+					}
+
+					preparedParams[key][buttonIndex] = {
+						type: 'text',
+						text: paramValues ? paramValues[1] : '',
+					};
+				}
+			});
+		}
+
 		const paramText = component.text;
 		const templateParamsArray = getTemplateParams(paramText);
 
@@ -154,7 +169,8 @@ export const generateFinalTemplateParams = (
 						param.text ??
 						param.image?.link ??
 						param.video?.link ??
-						param.document?.link;
+						param.document?.link ??
+						param.button?.text;
 
 					// Check if param is empty
 					if (isEmptyString(paramText)) {
@@ -177,10 +193,22 @@ export const generateFinalTemplateParams = (
 				});*/
 
 				preparedParams[component.type] = {
-					type: component.type.toLowerCase(),
+					type:
+						component.type.toLowerCase() === 'buttons'
+							? 'button'
+							: component.type.toLowerCase(),
 					parameters: paramsArray,
 					//localizable_params: localizableParams
 				};
+
+				const buttonsComponents = component['buttons'];
+
+				buttonsComponents?.forEach((buttonComponent, buttonComponentIndex) => {
+					if (buttonComponent.type?.toLowerCase() === 'url') {
+						preparedParams[component.type]['sub_type'] = 'url';
+						preparedParams[component.type]['index'] = buttonComponentIndex;
+					}
+				});
 			}
 		});
 	} catch (error) {
