@@ -600,3 +600,9 @@ msgstr "Reklam aracılığıyla mesaj"
 
 msgid "Message via post"
 msgstr "Gönderi aracılığıyla mesaj"
+
+msgid "To be able to share contacts, you need to use one of our Contact Providers."
+msgstr "Kontakları paylaşabilmek için, bir Kontak Sağlayıcısı kullanmanız gerekiyor."
+
+msgid "Click here to go to our integrations page."
+msgstr "Bize entegrasyon sayfamıza gitmek için tıklayın."

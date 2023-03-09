@@ -196,5 +196,7 @@
 	"Search": "Ara",
 	"Search for contacts": "Kontaklarda ara",
 	"Message via ad": "Reklam aracılığıyla mesaj",
-	"Message via post": "Gönderi aracılığıyla mesaj"
+	"Message via post": "Gönderi aracılığıyla mesaj",
+	"To be able to share contacts, you need to use one of our Contact Providers.": "Kontakları paylaşmak için, bir Kontak Sağlayıcısı kullanmanız gerekiyor.",
+	"Click here to go to our integrations page.": "Birleştirmeler sayfamıza gitmek için buraya tıklayın."
 }

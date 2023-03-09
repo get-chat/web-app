@@ -656,3 +656,9 @@ msgstr ""
 
 msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
 msgstr ""
+
+msgid "To be able to share contacts, you need to use one of our Contact Providers."
+msgstr ""
+
+msgid "Click here to go to our integrations page."
+msgstr ""

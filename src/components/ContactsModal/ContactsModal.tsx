@@ -23,6 +23,8 @@ import styles from './ContactsModal.module.css';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
+import { Trans, useTranslation } from 'react-i18next';
+import { getHubURL } from '@src/helpers/URLHelper';
 
 const DialogHeader = ({ children, onClose, ...rest }) => (
 	<DialogTitle className={styles.header} {...rest}>
@@ -40,6 +42,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 	const [selectedContacts, setSelectedContacts] = useState([]);
 	const [contacts, setContacts] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -113,9 +116,34 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 			<DialogHeader onClose={handleClose}>Send contacts</DialogHeader>
 			<DialogContent classes={{ root: styles.content }} dividers>
 				{Object.keys(contacts).length === 0 ? (
-					<h3 className={styles.emptyTitle}>
-						You don't have contacts in your contact list
-					</h3>
+					<>
+						<Trans>
+							<h3 className={styles.emptyTitle}>
+								To be able to share contacts, you need to use one of our Contact
+								Providers.
+							</h3>
+						</Trans>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Trans>Click here to go to our integrations page.</Trans>
+							<Button
+								style={{
+									marginLeft: '10px',
+								}}
+								color="black"
+								href={getHubURL(config.API_BASE_URL)}
+								target="_blank"
+								variant="text"
+							>
+								{t('Admin panel')}
+							</Button>
+						</div>
+					</>
 				) : (
 					<List>
 						{Object.entries(contacts).map(([key, value], index) => (
