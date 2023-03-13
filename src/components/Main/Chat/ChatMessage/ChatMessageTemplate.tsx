@@ -104,7 +104,7 @@ function ChatMessageTemplate(props) {
 											{component.buttons.map((button, buttonIndex) => {
 												let href: string;
 
-												const targetParams = data.templateParameters.find(
+												const targetParams = data.templateParameters?.find(
 													(item) => {
 														return (
 															item.type === 'button' &&
