@@ -61,6 +61,7 @@ specifiers:
   mp3-mediarecorder: ^4.0.5
   music-metadata-browser: ^2.5.8
   postcss-loader: ^7.0.2
+  postcss-nested: ^6.0.1
   postcss-preset-env: ^8.0.1
   postcss-safe-parser: ^6.0.0
   prettier: 2.8.0
@@ -121,6 +122,7 @@ dependencies:
   mp3-mediarecorder: 4.0.5
   music-metadata-browser: 2.5.8
   postcss-loader: 7.0.2_upg3rk2kpasnbk27hkqapxaxfq
+  postcss-nested: 6.0.1_postcss@8.4.19
   postcss-preset-env: 8.0.1_postcss@8.4.19
   postcss-safe-parser: 6.0.0_postcss@8.4.19
   pubsub-js: 1.9.4
@@ -133,7 +135,7 @@ dependencies:
   react-pdf: 5.7.2_sjkfibpvkg33iagsiij4zgoske
   react-redux: 8.0.5_epqzsux5te4oifde32lbaj3ih4
   react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
-  react-scripts: 5.0.1_gqp5svecrz6nuwqj5ijpnlkleq
+  react-scripts: 5.0.1_qemhx46zsxzzlbv5prhob4t5ka
   react-string-replace-recursively: 0.2.0
   source-map-explorer: 2.5.3
   typescript: 4.9.5
@@ -227,7 +229,7 @@ packages:
       convert-source-map: 1.8.0
       debug: 4.3.4
       gensync: 1.0.0-beta.2
-      json5: 2.2.1
+      json5: 2.2.3
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
@@ -3963,10 +3965,8 @@ packages:
       indent-string: 4.0.0
     dev: true
 
-  /ajv-formats/2.1.1_ajv@8.11.0:
+  /ajv-formats/2.1.1:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
-    peerDependencies:
-      ajv: ^8.0.0
     peerDependenciesMeta:
       ajv:
         optional: true
@@ -8723,16 +8723,10 @@ packages:
     dependencies:
       minimist: 1.2.6
 
-  /json5/2.2.1:
-    resolution: {integrity: sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==}
-    engines: {node: '>=6'}
-    hasBin: true
-
   /json5/2.2.3:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
-    dev: false
 
   /jsonfile/6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
@@ -10317,6 +10311,16 @@ packages:
       postcss-selector-parser: 6.0.11
     dev: false
 
+  /postcss-nested/6.0.1_postcss@8.4.19:
+    resolution: {integrity: sha512-mEp4xPMi5bSWiMbsgoPfcP74lsWLHkQbZc3sY+jWYd65CUwXrUaTp0fmNpa01ZcETKlIgUdFN/MpS2xZtqL9dQ==}
+    engines: {node: '>=12.0'}
+    peerDependencies:
+      postcss: ^8.2.14
+    dependencies:
+      postcss: 8.4.19
+      postcss-selector-parser: 6.0.11
+    dev: false
+
   /postcss-nesting/10.2.0_postcss@8.4.19:
     resolution: {integrity: sha512-EwMkYchxiDiKUhlJGzWsD9b2zvq/r2SSubcRrgP+jujMXFzqvANLt16lJANC+5uZ6hjI7lpRmI6O8JIl+8l1KA==}
     engines: {node: ^12 || ^14 || >=16}
@@ -10964,12 +10968,6 @@ packages:
   /react-dev-utils/12.0.1_il6n76tm43djgh2rjnc76qjun4:
     resolution: {integrity: sha512-84Ivxmr17KjUupyqzFode6xKhjwuEJDROWKJy/BthkL7Wn6NJ8h4WE6k/exAv6ImS+0oZLRRW5j/aINMHyeGeQ==}
     engines: {node: '>=14'}
-    peerDependencies:
-      typescript: '>=2.7'
-      webpack: '>=4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       '@babel/code-frame': 7.18.6
       address: 1.2.1
@@ -11000,7 +10998,9 @@ packages:
     transitivePeerDependencies:
       - eslint
       - supports-color
+      - typescript
       - vue-template-compiler
+      - webpack
     dev: false
 
   /react-device-detect/2.2.2_biqbaboplfbrettd7655fr4n2y:
@@ -11161,12 +11161,11 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-scripts/5.0.1_gqp5svecrz6nuwqj5ijpnlkleq:
+  /react-scripts/5.0.1_qemhx46zsxzzlbv5prhob4t5ka:
     resolution: {integrity: sha512-8VAmEm/ZAwQzJ+GOMLbBsTdDKOpuZh7RPs0UymvBR2vRk4iZWCskjbFnxqjrzoIvlNNRZ3QJFx6/qDSi6zSnaQ==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     peerDependencies:
-      eslint: '*'
       react: '>= 16'
       typescript: ^3.2.1 || ^4
     peerDependenciesMeta:
@@ -11215,7 +11214,7 @@ packages:
       semver: 7.3.8
       source-map-loader: 3.0.2_webpack@5.75.0
       style-loader: 3.3.1_webpack@5.75.0
-      tailwindcss: 3.2.4_postcss@8.4.19
+      tailwindcss: 3.2.4
       terser-webpack-plugin: 5.3.5_webpack@5.75.0
       typescript: 4.9.5
       webpack: 5.75.0_webpack-cli@4.10.0
@@ -11704,7 +11703,7 @@ packages:
     dependencies:
       '@types/json-schema': 7.0.11
       ajv: 8.11.0
-      ajv-formats: 2.1.1_ajv@8.11.0
+      ajv-formats: 2.1.1
       ajv-keywords: 5.1.0_ajv@8.11.0
 
   /select-hose/2.0.0:
@@ -12301,12 +12300,10 @@ packages:
   /symbol-tree/3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
 
-  /tailwindcss/3.2.4_postcss@8.4.19:
+  /tailwindcss/3.2.4:
     resolution: {integrity: sha512-AhwtHCKMtR71JgeYDaswmZXhPcW9iuI9Sp2LvZPo9upDZ7231ZJ7eA9RaURbhpXGVlrjX4cFNlB4ieTetEb7hQ==}
     engines: {node: '>=12.13.0'}
     hasBin: true
-    peerDependencies:
-      postcss: ^8.0.9
     dependencies:
       arg: 5.0.2
       chokidar: 3.5.3
