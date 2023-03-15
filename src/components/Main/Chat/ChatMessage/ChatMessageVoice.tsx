@@ -127,49 +127,53 @@ function ChatMessageVoice(props) {
 	};
 
 	return (
-		<div className="chat__voice">
+		<div className="chat__voiceWrapper">
+			<div className="chat__voice">
+				<IconButton onClick={() => playVoice()} size="large">
+					{isPlaying ? (
+						<PauseIcon style={playIconStyles} />
+					) : (
+						<PlayArrowIcon style={playIconStyles} />
+					)}
+				</IconButton>
+				<input
+					ref={range}
+					dir="ltr"
+					type="range"
+					className="chat__voice__range"
+					min="0"
+					max="100"
+					value={progress}
+					onChange={(e) => changeDuration(e.target.value)}
+				/>
+				<audio
+					ref={audio}
+					src={
+						data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()
+					}
+					preload="none"
+					onLoadedMetadata={(event) => console.log(event.target.duration)}
+				/>
+
+				<CustomAvatar
+					style={{
+						backgroundColor:
+							data.voiceId !== undefined ?? data.voiceLink !== undefined
+								? generateAvatarColor(data.senderName)
+								: '#ff9a10',
+					}}
+					className="audioMessageAvatar"
+				>
+					{data.voiceId !== undefined ? (
+						<span>{data.initials}</span>
+					) : (
+						<HeadsetIcon />
+					)}
+				</CustomAvatar>
+			</div>
 			<span ref={duration} className="chat__voice__duration">
 				{currentDuration}
 			</span>
-			<IconButton onClick={() => playVoice()} size="large">
-				{isPlaying ? (
-					<PauseIcon style={playIconStyles} />
-				) : (
-					<PlayArrowIcon style={playIconStyles} />
-				)}
-			</IconButton>
-			<input
-				ref={range}
-				dir="ltr"
-				type="range"
-				className="chat__voice__range"
-				min="0"
-				max="100"
-				value={progress}
-				onChange={(e) => changeDuration(e.target.value)}
-			/>
-			<audio
-				ref={audio}
-				src={data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()}
-				preload="none"
-				onLoadedMetadata={(event) => console.log(event.target.duration)}
-			/>
-
-			<CustomAvatar
-				style={{
-					backgroundColor:
-						data.voiceId !== undefined ?? data.voiceLink !== undefined
-							? generateAvatarColor(data.senderName)
-							: '#ff9a10',
-				}}
-				className="audioMessageAvatar"
-			>
-				{data.voiceId !== undefined ? (
-					<span>{data.initials}</span>
-				) : (
-					<HeadsetIcon />
-				)}
-			</CustomAvatar>
 		</div>
 	);
 }

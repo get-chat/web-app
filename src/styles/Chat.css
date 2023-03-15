@@ -129,10 +129,14 @@ video.chat__media {
 }
 
 .chat__voice {
-	position: relative;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+}
+
+.chat__voiceWrapper {
+	display: flex;
+	flex-direction: column;
 	margin: 0 -4px;
 }
 
@@ -150,10 +154,10 @@ video.chat__media {
 }
 
 .chat__voice__duration {
-	position: absolute;
 	top: 55px;
 	left: 55px;
 	font-size: x-small;
+	margin-left: 55px;
 }
 
 .chat__voice__range {
