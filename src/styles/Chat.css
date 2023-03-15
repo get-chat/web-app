@@ -154,8 +154,6 @@ video.chat__media {
 }
 
 .chat__voice__duration {
-	top: 55px;
-	left: 55px;
 	font-size: x-small;
 	margin-left: 55px;
 }
