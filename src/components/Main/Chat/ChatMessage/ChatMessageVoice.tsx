@@ -129,7 +129,7 @@ function ChatMessageVoice(props) {
 	return (
 		<div className="chat__voiceWrapper">
 			<div className="chat__voice">
-				<IconButton onClick={() => playVoice()} size="large">
+				<IconButton onClick={playVoice} size="large">
 					{isPlaying ? (
 						<PauseIcon style={playIconStyles} />
 					) : (
