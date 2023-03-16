@@ -123,18 +123,10 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 								Providers.
 							</h3>
 						</Trans>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-							}}
-						>
+						<div className={styles.dialogoHeader}>
 							<Trans>Click here to go to our integrations page.</Trans>
 							<Button
-								style={{
-									marginLeft: '10px',
-								}}
+								className={styles.dialogoButton}
 								color="black"
 								href={getHubURL(config.API_BASE_URL)}
 								target="_blank"
