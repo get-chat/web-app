@@ -30,14 +30,14 @@ const ContactsMessage = ({ data }) => {
 								className={styles.avatar}
 								style={{
 									backgroundColor: generateAvatarColor(
-										contact.name.formatted_name
+										contact.name?.formatted_name ?? ''
 									),
 								}}
 							>
-								{generateInitialsHelper(contact.name.formatted_name)}
+								{generateInitialsHelper(contact.name?.formatted_name ?? '')}
 							</CustomAvatar>
 							<div key={contactIndex} className={styles.name}>
-								{contact.name.formatted_name}
+								{contact.name?.formatted_name ?? ''}
 							</div>
 						</>
 					</div>
