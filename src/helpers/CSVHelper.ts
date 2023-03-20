@@ -24,9 +24,6 @@ export const csvToObj = (
 				);
 			});
 
-			console.log(csvHeader);
-			console.log(rows);
-
 			callback?.({
 				header: csvHeader,
 				data: rows,
