@@ -22,7 +22,7 @@ export const csvToObj = (
 				);
 			});
 
-			callback?.({
+			callback({
 				header: csvHeader,
 				data: rows,
 			});
