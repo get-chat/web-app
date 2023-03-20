@@ -1,5 +1,5 @@
 export const csvToObj = (
-	file: File,
+	file: Blob,
 	callback: ({}: { header: string[]; data: { [key: string]: string }[] }) => any
 ) => {
 	const fileReader = new FileReader();
