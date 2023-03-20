@@ -10,13 +10,15 @@ export const csvToObj = (file, callback) => {
 
 		//const rows = csvRows.map((i) => i.split(','));
 
-		const rows = csvRows.map((i) => {
-			const values = i.split(',');
-			return csvHeader.reduce((object, header, index) => {
-				object[header] = values[index];
-				return object;
-			}, {});
-		});
+		const rows = csvRows
+			.filter((i) => i)
+			.map((i) => {
+				const values = i.split(',');
+				return csvHeader.reduce((object, header, index) => {
+					object[header] = values[index];
+					return object;
+				}, {});
+			});
 
 		callback?.({
 			header: csvHeader,
