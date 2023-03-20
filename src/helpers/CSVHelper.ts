@@ -7,8 +7,6 @@ export const csvToObj = (
 	fileReader.onload = function (event) {
 		const string = event.target?.result?.toString();
 
-		console.log(string);
-
 		if (string) {
 			const csvHeader = string.slice(0, string.indexOf('\n')).split(',');
 			const csvRows = string.slice(string.indexOf('\n') + 1).split('\n');
