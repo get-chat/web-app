@@ -79,6 +79,8 @@ import { flushSync } from 'react-dom';
 
 const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
+const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
+const MESSAGES_PER_PAGE = 30;
 
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -104,6 +106,7 @@ export default function Chat(props) {
 	const [messages, setMessages] = useState({});
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
+	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
 
 	const [selectedFiles, setSelectedFiles] = useState();
 	const [accept, setAccept] = useState('');
@@ -275,6 +278,7 @@ export default function Chat(props) {
 		// Clear values for next route
 		setPerson(null);
 		setMessages([]);
+		setHasOlderMessagesToLoad(true);
 		setTemplateMessagesVisible(false);
 		setSavedResponsesVisible(false);
 		setAtBottom(false);
@@ -338,7 +342,6 @@ export default function Chat(props) {
 			}
 
 			debounceTimer = setTimeout(function () {
-				const threshold = 0;
 				const el = e.target;
 
 				if (isScrollable(el)) {
@@ -355,7 +358,10 @@ export default function Chat(props) {
 						}
 					}
 
-					if (el.scrollTop <= threshold) {
+					if (
+						el.scrollTop <= SCROLL_TOP_OFFSET_TO_LOAD_MORE &&
+						hasOlderMessagesToLoad
+					) {
 						//console.log("Scrolled to top");
 						if (isLoaded && !isLoadingMoreMessages) {
 							setLoadingMoreMessages(true);
@@ -409,6 +415,7 @@ export default function Chat(props) {
 		isLoadingMoreMessages,
 		isAtBottom,
 		currentNewMessages,
+		hasOlderMessagesToLoad,
 	]);
 
 	useEffect(() => {
@@ -988,13 +995,17 @@ export default function Chat(props) {
 		isInitialWithSinceTime,
 		replaceAll
 	) => {
-		const limit = 30;
+		console.log('Loading messages...');
+
+		if (replaceAll) {
+			setHasOlderMessagesToLoad(true);
+		}
 
 		apiService.listMessagesCall(
 			waId,
 			undefined,
 			undefined,
-			limit,
+			MESSAGES_PER_PAGE,
 			offset ?? 0,
 			beforeTime,
 			sinceTime,
@@ -1002,6 +1013,7 @@ export default function Chat(props) {
 			(response) => {
 				const chatMessagesResponse = new ChatMessagesResponse(
 					response.data,
+					messages,
 					true
 				);
 
@@ -1017,7 +1029,7 @@ export default function Chat(props) {
 							false,
 							callback,
 							beforeTime,
-							count - limit,
+							count - MESSAGES_PER_PAGE,
 							sinceTime,
 							false,
 							replaceAll
@@ -1124,6 +1136,11 @@ export default function Chat(props) {
 				);
 			} else if (sinceTime) {
 				messagesContainer.current.scrollTop = prevScrollTop;
+			}
+		} else {
+			if (beforeTime) {
+				console.log('No more items to load.');
+				setHasOlderMessagesToLoad(false);
 			}
 		}
 

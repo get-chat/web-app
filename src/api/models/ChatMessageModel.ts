@@ -30,6 +30,9 @@ export class ChatMessageModel {
 		1018, 1023, 1024, 1026, 1031,
 	];
 
+	public id;
+	public timestamp = -1;
+
 	constructor(data) {
 		if (!data) return;
 
