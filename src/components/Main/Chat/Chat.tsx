@@ -77,7 +77,7 @@ import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 
-const SCROLL_OFFSET = 15;
+const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
@@ -373,7 +373,10 @@ export default function Chat(props) {
 						}
 					} else {
 						// TODO: Make sure user scrolls
-						if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+						if (
+							el.scrollHeight - el.scrollTop - el.clientHeight <
+							SCROLL_TOP_OFFSET_TO_LOAD_MORE
+						) {
 							//console.log('Scrolled to bottom');
 							if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
 								setLoadingMoreMessages(true);
