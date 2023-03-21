@@ -273,11 +273,8 @@ export default function Chat(props) {
 		setLoaded(false);
 
 		// Clear values for next route
-		flushSync(() => {
-			setMessages([]);
-		});
-
 		setPerson(null);
+		setMessages([]);
 		setTemplateMessagesVisible(false);
 		setSavedResponsesVisible(false);
 		setAtBottom(false);
