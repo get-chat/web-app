@@ -117,24 +117,16 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 			<DialogContent classes={{ root: styles.content }} dividers>
 				{Object.keys(contacts).length === 0 ? (
 					<>
-						<Trans>
-							<h3 className={styles.emptyTitle}>
-								To be able to share contacts, you need to use one of our Contact
-								Providers.
-							</h3>
+						<Trans
+							i18nKey={
+								'To be able to share contacts, you need to use one of our Contact Providers.'
+							}
+						>
+							To be able to share contacts, you need to use one of our Contact
+							Providers.
+							<a href={getHubURL(config.API_BASE_URL)}> Click here </a> to go to
+							our integrations page.
 						</Trans>
-						<div className={styles.dialogoHeader}>
-							<Trans>Click here to go to our integrations page.</Trans>
-							<Button
-								className={styles.dialogoButton}
-								color="black"
-								href={getHubURL(config.API_BASE_URL)}
-								target="_blank"
-								variant="text"
-							>
-								{t('Admin panel')}
-							</Button>
-						</div>
 					</>
 				) : (
 					<List>

@@ -33,3 +33,7 @@
 .dialogoButton {
 	margin-left: 10px;
 }
+
+.content a {
+	color: var(--color-light-blue);
+}
