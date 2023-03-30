@@ -796,7 +796,7 @@ function Sidebar(props) {
 			</div>
 
 			<div className="sidebar__results" ref={chatsContainer}>
-				{props.isSelectionModeEnabled && tags && <h3>Tags</h3>}
+				{props.isSelectionModeEnabled && tags && <h3>{t('Tags')}</h3>}
 
 				{props.isSelectionModeEnabled && tags && (
 					<div>
@@ -812,7 +812,7 @@ function Sidebar(props) {
 				)}
 
 				{(keyword.trim().length > 0 || props.isSelectionModeEnabled) && (
-					<h3>Chats</h3>
+					<h3>{t('Chats')}</h3>
 				)}
 
 				<div className="sidebar__results__chats">

@@ -17,6 +17,7 @@ import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 import TemplatesList from '../../../TemplatesList';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 function TemplateMessages({
 	waId,
@@ -42,6 +43,8 @@ function TemplateMessages({
 
 	const sendButtonRef = useRef();
 	const bulkSendButtonRef = useRef();
+
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		setDialogVisible(false);
@@ -136,7 +139,7 @@ function TemplateMessages({
 			{/*<SearchBar />*/}
 
 			{isLoadingTemplates ? (
-				<Alert severity="info">Loading template messages...</Alert>
+				<Alert severity="info">{t('Loading template messages...')}</Alert>
 			) : (
 				<TemplatesList
 					templates={templates}
@@ -147,7 +150,7 @@ function TemplateMessages({
 			)}
 
 			<Dialog open={isDialogVisible} onClose={hideDialog}>
-				<DialogTitle>{'Send a template message'}</DialogTitle>
+				<DialogTitle>{t('Send a template message')}</DialogTitle>
 				<DialogContent ref={dialogContent}>
 					<SendTemplateMessage
 						data={chosenTemplate}
@@ -172,7 +175,7 @@ function TemplateMessages({
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={hideDialog} color="secondary">
-						Close
+						{t('Close')}
 					</Button>
 					{!isBulkOnly && (
 						<Button
@@ -182,7 +185,7 @@ function TemplateMessages({
 							autoFocus
 							data-test-id="send-template-message-button"
 						>
-							Send
+							{t('Send')}
 						</Button>
 					)}
 					<Button
@@ -191,7 +194,7 @@ function TemplateMessages({
 						disabled={isSending}
 						autoFocus
 					>
-						Bulk send
+						{t('Bulk send')}
 					</Button>
 				</DialogActions>
 			</Dialog>
