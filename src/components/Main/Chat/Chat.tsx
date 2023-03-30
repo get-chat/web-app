@@ -75,9 +75,12 @@ import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentE
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
+import { flushSync } from 'react-dom';
 
-const SCROLL_OFFSET = 15;
+const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
+const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
+const MESSAGES_PER_PAGE = 30;
 
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -103,6 +106,7 @@ export default function Chat(props) {
 	const [messages, setMessages] = useState({});
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
+	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
 
 	const [selectedFiles, setSelectedFiles] = useState();
 	const [accept, setAccept] = useState('');
@@ -274,6 +278,7 @@ export default function Chat(props) {
 		// Clear values for next route
 		setPerson(null);
 		setMessages([]);
+		setHasOlderMessagesToLoad(true);
 		setTemplateMessagesVisible(false);
 		setSavedResponsesVisible(false);
 		setAtBottom(false);
@@ -337,7 +342,6 @@ export default function Chat(props) {
 			}
 
 			debounceTimer = setTimeout(function () {
-				const threshold = 0;
 				const el = e.target;
 
 				if (isScrollable(el)) {
@@ -354,7 +358,10 @@ export default function Chat(props) {
 						}
 					}
 
-					if (el.scrollTop <= threshold) {
+					if (
+						el.scrollTop <= SCROLL_TOP_OFFSET_TO_LOAD_MORE &&
+						hasOlderMessagesToLoad
+					) {
 						//console.log("Scrolled to top");
 						if (isLoaded && !isLoadingMoreMessages) {
 							setLoadingMoreMessages(true);
@@ -366,7 +373,10 @@ export default function Chat(props) {
 						}
 					} else {
 						// TODO: Make sure user scrolls
-						if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+						if (
+							el.scrollHeight - el.scrollTop - el.clientHeight <
+							SCROLL_TOP_OFFSET_TO_LOAD_MORE
+						) {
 							//console.log('Scrolled to bottom');
 							if (isLoaded && !isLoadingMoreMessages && !isAtBottom) {
 								setLoadingMoreMessages(true);
@@ -408,84 +418,87 @@ export default function Chat(props) {
 		isLoadingMoreMessages,
 		isAtBottom,
 		currentNewMessages,
+		hasOlderMessagesToLoad,
 	]);
 
 	useEffect(() => {
 		// New messages
 		const onNewMessages = function (msg, data) {
 			if (data && isLoaded) {
-				let hasAnyIncomingMsg = false;
+				flushSync(() => {
+					let hasAnyIncomingMsg = false;
 
-				setMessages((prevState) => {
-					let newState;
-					const preparedMessages = {};
-					Object.entries(data).forEach((message) => {
-						const msgId = message[0];
-						const chatMessage = message[1];
+					setMessages((prevState) => {
+						let newState;
+						const preparedMessages = {};
+						Object.entries(data).forEach((message) => {
+							const msgId = message[0];
+							const chatMessage = message[1];
 
-						if (waId === chatMessage.waId) {
-							// Check if any message is displayed with internal id
-							// Fix duplicated messages in this way
-							const internalIdString = chatMessage.generateInternalIdString();
-							if (!(internalIdString in prevState)) {
-								preparedMessages[msgId] = chatMessage;
-							}
-
-							if (!chatMessage.isFromUs) {
-								hasAnyIncomingMsg = true;
-							}
-						}
-					});
-
-					if (getObjLength(preparedMessages) > 0) {
-						const lastMessage = getLastObject(preparedMessages);
-
-						if (isAtBottom) {
-							const prevScrollTop = messagesContainer.current.scrollTop;
-							const prevScrollHeight = messagesContainer.current.scrollHeight;
-							const isCurrentlyLastMessageVisible = isLastMessageVisible();
-
-							newState = { ...prevState, ...preparedMessages };
-
-							if (!isCurrentlyLastMessageVisible) {
-								persistScrollStateFromBottom(
-									prevScrollHeight,
-									prevScrollTop,
-									0
-								);
-								displayScrollButton();
-							}
-
-							if (hasAnyIncomingMsg) {
-								const lastMessageTimestamp =
-									extractTimestampFromMessage(lastMessage);
-
-								// Mark new message as received if visible
-								if (canSeeLastMessage(messagesContainer.current)) {
-									markAsReceived(lastMessageTimestamp);
-								} else {
-									setCurrentNewMessages((prevState) => prevState + 1);
+							if (waId === chatMessage.waId) {
+								// Check if any message is displayed with internal id
+								// Fix duplicated messages in this way
+								const internalIdString = chatMessage.generateInternalIdString();
+								if (!(internalIdString in prevState)) {
+									preparedMessages[msgId] = chatMessage;
 								}
 
-								// Update contact
-								setPerson((prevState) => ({
-									...prevState,
-									lastMessageTimestamp: lastMessageTimestamp,
-									isExpired: false,
-								}));
-
-								// Chat is not expired anymore
-								setExpired(false);
+								if (!chatMessage.isFromUs) {
+									hasAnyIncomingMsg = true;
+								}
 							}
-						} else {
-							setCurrentNewMessages((prevState) => prevState + 1);
+						});
+
+						if (getObjLength(preparedMessages) > 0) {
+							const lastMessage = getLastObject(preparedMessages);
+
+							if (isAtBottom) {
+								const prevScrollTop = messagesContainer.current.scrollTop;
+								const prevScrollHeight = messagesContainer.current.scrollHeight;
+								const isCurrentlyLastMessageVisible = isLastMessageVisible();
+
+								newState = { ...prevState, ...preparedMessages };
+
+								if (!isCurrentlyLastMessageVisible) {
+									persistScrollStateFromBottom(
+										prevScrollHeight,
+										prevScrollTop,
+										0
+									);
+									displayScrollButton();
+								}
+
+								if (hasAnyIncomingMsg) {
+									const lastMessageTimestamp =
+										extractTimestampFromMessage(lastMessage);
+
+									// Mark new message as received if visible
+									if (canSeeLastMessage(messagesContainer.current)) {
+										markAsReceived(lastMessageTimestamp);
+									} else {
+										setCurrentNewMessages((prevState) => prevState + 1);
+									}
+
+									// Update contact
+									setPerson((prevState) => ({
+										...prevState,
+										lastMessageTimestamp: lastMessageTimestamp,
+										isExpired: false,
+									}));
+
+									// Chat is not expired anymore
+									setExpired(false);
+								}
+							} else {
+								setCurrentNewMessages((prevState) => prevState + 1);
+							}
+
+							// Update last message id
+							setLastMessageId(lastMessage.id);
 						}
 
-						// Update last message id
-						setLastMessageId(lastMessage.id);
-					}
-
-					return newState ?? prevState;
+						return newState ?? prevState;
+					});
 				});
 			}
 		};
@@ -504,64 +517,66 @@ export default function Chat(props) {
 				const prevScrollTop = messagesContainer.current.scrollTop;
 				const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-				setMessages((prevState) => {
-					const newState = prevState;
-					let changedAny = false;
+				flushSync(() => {
+					setMessages((prevState) => {
+						const newState = prevState;
+						let changedAny = false;
 
-					Object.entries(data).forEach((status) => {
-						let wabaIdOrGetchatId = status[0];
+						Object.entries(data).forEach((status) => {
+							let wabaIdOrGetchatId = status[0];
 
-						const statusObj = status[1];
+							const statusObj = status[1];
 
-						// Check if any message is displayed with internal id
-						// Fix duplicated messages in this way
-						const internalIdString =
-							ChatMessageModel.generateInternalIdStringStatic(
-								statusObj.getchatId
-							);
+							// Check if any message is displayed with internal id
+							// Fix duplicated messages in this way
+							const internalIdString =
+								ChatMessageModel.generateInternalIdStringStatic(
+									statusObj.getchatId
+								);
 
-						if (internalIdString in newState) {
-							wabaIdOrGetchatId = internalIdString;
-						}
-
-						if (wabaIdOrGetchatId in newState) {
-							if (statusObj.sentTimestamp) {
-								changedAny = true;
-								newState[wabaIdOrGetchatId].sentTimestamp =
-									statusObj.sentTimestamp;
+							if (internalIdString in newState) {
+								wabaIdOrGetchatId = internalIdString;
 							}
 
-							if (statusObj.deliveredTimestamp) {
-								changedAny = true;
-								newState[wabaIdOrGetchatId].deliveredTimestamp =
-									statusObj.deliveredTimestamp;
-							}
+							if (wabaIdOrGetchatId in newState) {
+								if (statusObj.sentTimestamp) {
+									changedAny = true;
+									newState[wabaIdOrGetchatId].sentTimestamp =
+										statusObj.sentTimestamp;
+								}
 
-							if (statusObj.readTimestamp) {
-								changedAny = true;
-								newState[wabaIdOrGetchatId].readTimestamp =
-									statusObj.readTimestamp;
-							}
+								if (statusObj.deliveredTimestamp) {
+									changedAny = true;
+									newState[wabaIdOrGetchatId].deliveredTimestamp =
+										statusObj.deliveredTimestamp;
+								}
 
-							if (statusObj.errors) {
-								receivedNewErrors = true;
-								changedAny = true;
-								newState[wabaIdOrGetchatId].isFailed = true;
-								// Merge with existing errors if exist
-								if (newState[wabaIdOrGetchatId].errors) {
-									newState[wabaIdOrGetchatId].errors.concat(statusObj.errors);
-								} else {
-									newState[wabaIdOrGetchatId].errors = statusObj.errors;
+								if (statusObj.readTimestamp) {
+									changedAny = true;
+									newState[wabaIdOrGetchatId].readTimestamp =
+										statusObj.readTimestamp;
+								}
+
+								if (statusObj.errors) {
+									receivedNewErrors = true;
+									changedAny = true;
+									newState[wabaIdOrGetchatId].isFailed = true;
+									// Merge with existing errors if exist
+									if (newState[wabaIdOrGetchatId].errors) {
+										newState[wabaIdOrGetchatId].errors.concat(statusObj.errors);
+									} else {
+										newState[wabaIdOrGetchatId].errors = statusObj.errors;
+									}
 								}
 							}
+						});
+
+						if (changedAny) {
+							return { ...newState };
+						} else {
+							return prevState;
 						}
 					});
-
-					if (changedAny) {
-						return { ...newState };
-					} else {
-						return prevState;
-					}
 				});
 
 				if (receivedNewErrors) {
@@ -586,8 +601,10 @@ export default function Chat(props) {
 					const isCurrentlyLastMessageVisible = isLastMessageVisible();
 
 					// Display as a new message
-					setMessages((prevState) => {
-						return { ...prevState, ...data };
+					flushSync(() => {
+						setMessages((prevState) => {
+							return { ...prevState, ...data };
+						});
 					});
 
 					if (!isCurrentlyLastMessageVisible) {
@@ -616,8 +633,10 @@ export default function Chat(props) {
 					const isCurrentlyLastMessageVisible = isLastMessageVisible();
 
 					// Display as a new message
-					setMessages((prevState) => {
-						return { ...prevState, ...data };
+					flushSync(() => {
+						setMessages((prevState) => {
+							return { ...prevState, ...data };
+						});
 					});
 
 					if (!isCurrentlyLastMessageVisible) {
@@ -639,7 +658,9 @@ export default function Chat(props) {
 		const onForceRefreshChat = function (msg, data) {
 			if (waId) {
 				// Clear existing messages
-				setMessages({});
+				flushSync(() => {
+					setMessages({});
+				});
 				setLoaded(false);
 
 				// This method triggers loading messages with proper callback
@@ -774,11 +795,9 @@ export default function Chat(props) {
 		prevScrollTop,
 		offset
 	) => {
-		setTimeout(() => {
-			const nextScrollHeight = messagesContainer.current.scrollHeight;
-			messagesContainer.current.scrollTop =
-				nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
-		}, 0);
+		const nextScrollHeight = messagesContainer.current.scrollHeight;
+		messagesContainer.current.scrollTop =
+			nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
 	};
 
 	const scrollToChild = (msgId) => {
@@ -979,13 +998,17 @@ export default function Chat(props) {
 		isInitialWithSinceTime,
 		replaceAll
 	) => {
-		const limit = 30;
+		console.log('Loading messages...');
+
+		if (replaceAll) {
+			setHasOlderMessagesToLoad(true);
+		}
 
 		apiService.listMessagesCall(
 			waId,
 			undefined,
 			undefined,
-			limit,
+			MESSAGES_PER_PAGE,
 			offset ?? 0,
 			beforeTime,
 			sinceTime,
@@ -993,6 +1016,7 @@ export default function Chat(props) {
 			(response) => {
 				const chatMessagesResponse = new ChatMessagesResponse(
 					response.data,
+					messages,
 					true
 				);
 
@@ -1008,7 +1032,7 @@ export default function Chat(props) {
 							false,
 							callback,
 							beforeTime,
-							count - limit,
+							count - MESSAGES_PER_PAGE,
 							sinceTime,
 							false,
 							replaceAll
@@ -1089,20 +1113,22 @@ export default function Chat(props) {
 			const prevScrollTop = messagesContainer.current.scrollTop;
 			const prevScrollHeight = messagesContainer.current.scrollHeight;
 
-			setMessages((prevState) => {
-				let nextState;
-				if (replaceAll) {
-					nextState = preparedMessages;
-				} else {
-					if (sinceTime) {
-						nextState = { ...prevState, ...preparedMessages };
+			flushSync(() => {
+				setMessages((prevState) => {
+					let nextState;
+					if (replaceAll) {
+						nextState = preparedMessages;
 					} else {
-						nextState = { ...preparedMessages, ...prevState };
+						if (sinceTime) {
+							nextState = { ...prevState, ...preparedMessages };
+						} else {
+							nextState = { ...preparedMessages, ...prevState };
+						}
 					}
-				}
 
-				// Sort final object
-				return sortMessagesAsc(nextState);
+					// Sort final object
+					return sortMessagesAsc(nextState);
+				});
 			});
 
 			if (!sinceTime || replaceAll) {
@@ -1113,6 +1139,11 @@ export default function Chat(props) {
 				);
 			} else if (sinceTime) {
 				messagesContainer.current.scrollTop = prevScrollTop;
+			}
+		} else {
+			if (beforeTime) {
+				console.log('No more items to load.');
+				setHasOlderMessagesToLoad(false);
 			}
 		}
 
@@ -1519,51 +1550,56 @@ export default function Chat(props) {
 	};
 
 	const displayMessageInChatManually = (requestBody, response) => {
-		setMessages((prevState) => {
-			let text;
+		flushSync(() => {
+			setMessages((prevState) => {
+				let text;
 
-			if (requestBody.type === ChatMessageModel.TYPE_TEXT || requestBody.text) {
-				text = requestBody.text.body;
-			}
+				if (
+					requestBody.type === ChatMessageModel.TYPE_TEXT ||
+					requestBody.text
+				) {
+					text = requestBody.text.body;
+				}
 
-			let getchatId;
-			if (response) {
-				getchatId = response.data.id;
-			}
+				let getchatId;
+				if (response) {
+					getchatId = response.data.id;
+				}
 
-			const timestamp = generateUnixTimestamp();
-			const storedMessage = new ChatMessageModel();
-			storedMessage.getchatId = getchatId;
-			storedMessage.id = storedMessage.generateInternalIdString();
-			storedMessage.waId = waId;
-			storedMessage.type = requestBody.type;
-			storedMessage.text = text;
+				const timestamp = generateUnixTimestamp();
+				const storedMessage = new ChatMessageModel();
+				storedMessage.getchatId = getchatId;
+				storedMessage.id = storedMessage.generateInternalIdString();
+				storedMessage.waId = waId;
+				storedMessage.type = requestBody.type;
+				storedMessage.text = text;
 
-			storedMessage.templateName = requestBody.template?.name;
-			storedMessage.templateNamespace = requestBody.template?.namespace;
-			storedMessage.templateLanguage = requestBody.template?.language?.code;
-			storedMessage.templateParameters = requestBody.template?.components;
+				storedMessage.templateName = requestBody.template?.name;
+				storedMessage.templateNamespace = requestBody.template?.namespace;
+				storedMessage.templateLanguage = requestBody.template?.language?.code;
+				storedMessage.templateParameters = requestBody.template?.components;
 
-			storedMessage.imageLink = requestBody.image?.link;
-			storedMessage.videoLink = requestBody.video?.link;
-			storedMessage.audioLink = requestBody.audio?.link;
-			storedMessage.documentLink = requestBody.document?.link;
+				storedMessage.imageLink = requestBody.image?.link;
+				storedMessage.videoLink = requestBody.video?.link;
+				storedMessage.audioLink = requestBody.audio?.link;
+				storedMessage.documentLink = requestBody.document?.link;
 
-			storedMessage.caption =
-				requestBody.image?.caption ??
-				requestBody.video?.caption ??
-				requestBody.audio?.caption ??
-				requestBody.document?.caption;
+				storedMessage.caption =
+					requestBody.image?.caption ??
+					requestBody.video?.caption ??
+					requestBody.audio?.caption ??
+					requestBody.document?.caption;
 
-			storedMessage.isFromUs = true;
-			storedMessage.username = currentUser?.username;
-			storedMessage.isFailed = false;
-			storedMessage.isStored = true;
-			storedMessage.timestamp = timestamp;
-			storedMessage.resendPayload = requestBody;
+				storedMessage.isFromUs = true;
+				storedMessage.username = currentUser?.username;
+				storedMessage.isFailed = false;
+				storedMessage.isStored = true;
+				storedMessage.timestamp = timestamp;
+				storedMessage.resendPayload = requestBody;
 
-			prevState[storedMessage.id] = storedMessage;
-			return { ...prevState };
+				prevState[storedMessage.id] = storedMessage;
+				return { ...prevState };
+			});
 		});
 	};
 

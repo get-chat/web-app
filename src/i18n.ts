@@ -38,7 +38,7 @@ i18n
 		// saveMissing: true,
 		resources: {
 			en: { translation: TRANSLATION_EN },
-			// tr: { translation: TRANSLATION_TR },
+			tr: { translation: TRANSLATION_TR },
 		},
 		interpolation: {
 			escapeValue: false, // not needed for react as it escapes by default

@@ -6,6 +6,7 @@ import {
 	STORAGE_TAG_TOKEN,
 } from './StorageHelper';
 import axios from 'axios';
+import { generateUniqueID } from '@src/helpers/Helpers';
 
 export const generateCancelToken = () => {
 	return axios.CancelToken.source();
@@ -24,6 +25,7 @@ export const getRequestConfig = (
 			Authorization: 'Token ' + getStorage().getItem(STORAGE_TAG_TOKEN),
 			'Content-Type': 'application/json',
 			Accept: 'application/json',
+			'X-Request-ID': generateUniqueID(),
 		},
 		cancelToken: cancelToken,
 	};

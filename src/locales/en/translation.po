@@ -320,6 +320,12 @@ msgstr ""
 msgid "Bulk send"
 msgstr ""
 
+msgid "Bulk Send"
+msgstr ""
+
+msgid "Send a template message"
+msgstr ""
+
 msgid "Cancel"
 msgstr ""
 
@@ -655,6 +661,39 @@ msgid "Please choose a supported video type (mp4, 3gp)"
 msgstr ""
 
 msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
+msgstr ""
+
+msgid "Send bulk voice message"
+msgstr ""
+
+msgid "Click to record your message"
+msgstr ""
+
+msgid "Documents"
+msgstr ""
+
+msgid "Attachment"
+msgstr ""
+
+msgid "More"
+msgstr ""
+
+msgid "Emoji"
+msgstr ""
+
+msgid "You can only send voice messages to users who wrote to you in last 24h."
+msgstr ""
+
+msgid "You don't have any chats yet."
+msgstr ""
+
+msgid "Images & Videos"
+msgstr ""
+
+msgid "Not seeing your new templates?"
+msgstr ""
+
+msgid "Chats"
 msgstr ""
 
 msgid "To be able to share contacts, you need to use one of our Contact Providers."

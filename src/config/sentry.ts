@@ -7,6 +7,7 @@ import { isEmptyString } from '@src/helpers/Helpers';
 import packageJson from '../../package.json';
 
 import type { AppConfig } from './application';
+import i18next from 'i18next';
 
 export const initializeSentry = (config: AppConfig) => {
 	if (!isLocalHost()) {
@@ -29,5 +30,8 @@ export const initializeSentry = (config: AppConfig) => {
 		if (!isEmptyString(config.APP_SENTRY_TAG_CLIENT)) {
 			Sentry.setTag('client', config.APP_SENTRY_TAG_CLIENT);
 		}
+
+		Sentry.setTag('browser_locale', navigator.language);
+		Sentry.setTag('page_locale', i18next.language);
 	}
 };
