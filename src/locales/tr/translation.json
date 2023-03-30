@@ -219,5 +219,5 @@
 	"Failed to issue a template refresh request. Please try again in a while.": "Taslak mesajı yenileme isteği oluşturulamadı. Lütfen daha sonra tekrar dene.",
 	"Not seeing your new templates?": "Taslaklarını görmüyor musun?",
 	"Chats": "Sohbetler",
-	"To be able to share contacts, you need to use one of our Contact Providers.": "Kontak paylaşabilmek için Kontak Sağlayıcılarımızdan birini kullanman gerekiyor. Entegrasyonlar sayfamıza gitmek için <1>buraya tıkla</1>."
+	"To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our integrations page.": "Kontak paylaşabilmek için Kontak Sağlayıcılarımızdan birini kullanman gerekiyor. Entegrasyonlar sayfamıza gitmek için <1>buraya tıkla</1>."
 }

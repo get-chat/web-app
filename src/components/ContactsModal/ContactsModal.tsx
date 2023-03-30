@@ -117,11 +117,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 			<DialogContent classes={{ root: styles.content }} dividers>
 				{Object.keys(contacts).length === 0 ? (
 					<>
-						<Trans
-							i18nKey={
-								'To be able to share contacts, you need to use one of our Contact Providers.'
-							}
-						>
+						<Trans>
 							To be able to share contacts, you need to use one of our Contact
 							Providers.
 							<a href={getHubURL(config.API_BASE_URL)}> Click here </a> to go to
