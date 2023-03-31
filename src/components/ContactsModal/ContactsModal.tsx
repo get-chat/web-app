@@ -25,6 +25,7 @@ import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
+import { AppConfig } from '@src/contexts/AppConfig';
 
 const DialogHeader = ({ children, onClose, ...rest }) => (
 	<DialogTitle className={styles.header} {...rest}>
@@ -38,10 +39,13 @@ const DialogHeader = ({ children, onClose, ...rest }) => (
 );
 
 const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
+	const config = React.useContext(AppConfig);
 	const { apiService } = React.useContext(ApplicationContext);
+
 	const [selectedContacts, setSelectedContacts] = useState([]);
 	const [contacts, setContacts] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+
 	const { t } = useTranslation();
 
 	useEffect(() => {
@@ -113,17 +117,15 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 
 	return (
 		<Dialog open={open} onClose={handleClose}>
-			<DialogHeader onClose={handleClose}>Send contacts</DialogHeader>
+			<DialogHeader onClose={handleClose}>{t('Send contacts')}</DialogHeader>
 			<DialogContent classes={{ root: styles.content }} dividers>
 				{Object.keys(contacts).length === 0 ? (
-					<>
-						<Trans>
-							To be able to share contacts, you need to use one of our Contact
-							Providers.
-							<a href={getHubURL(config.API_BASE_URL)}> Click here </a> to go to
-							our integrations page.
-						</Trans>
-					</>
+					<Trans>
+						To be able to share contacts, you need to use one of our Contact
+						Providers.
+						<a href={getHubURL(config.API_BASE_URL)}> Click here </a> to go to
+						our integrations page.
+					</Trans>
 				) : (
 					<List>
 						{Object.entries(contacts).map(([key, value], index) => (
@@ -156,7 +158,7 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 			</DialogContent>
 			{selectedContacts.length > 0 && (
 				<DialogActions>
-					<Button onClick={handleSendMessage}>Send</Button>
+					<Button onClick={handleSendMessage}>{t('Send')}</Button>
 				</DialogActions>
 			)}
 		</Dialog>
