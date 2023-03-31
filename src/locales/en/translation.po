@@ -695,3 +695,9 @@ msgstr ""
 
 msgid "Chats"
 msgstr ""
+
+msgid "To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our integrations page."
+msgstr ""
+
+msgid "Send contacts"
+msgstr ""
