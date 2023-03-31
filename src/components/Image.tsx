@@ -18,6 +18,7 @@ const Image = ({
 }) => {
 	const [data, setData] = useState('');
 	const [mime, setMime] = useState('');
+	const [fallbackSrc, setFallbackSrc] = useState<string | undefined>();
 
 	const cancelTokenSourceRef = useRef();
 
@@ -39,6 +40,9 @@ const Image = ({
 			})
 			.catch((error) => {
 				console.log(error);
+				if (error.response === undefined) {
+					setFallbackSrc(src);
+				}
 			});
 
 		return () => {
@@ -50,7 +54,7 @@ const Image = ({
 	const getSrc = () => {
 		return !isEmptyString(data) && !isEmptyString(mime) !== undefined
 			? `data:${mime};base64,${data}`
-			: EMPTY_IMAGE_BASE64;
+			: fallbackSrc ?? EMPTY_IMAGE_BASE64;
 	};
 
 	return (
