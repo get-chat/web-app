@@ -122,9 +122,8 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 				{Object.keys(contacts).length === 0 ? (
 					<Trans>
 						To be able to share contacts, you need to use one of our Contact
-						Providers.
-						<a href={getHubURL(config.API_BASE_URL)}> Click here </a> to go to
-						our integrations page.
+						Providers. <a href={getHubURL(config.API_BASE_URL)}>Click here</a>{' '}
+						to go to our integrations page.
 					</Trans>
 				) : (
 					<List>
