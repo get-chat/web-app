@@ -65,6 +65,7 @@ Build:
 
   <<: *install_pnpm
   script:
+    - ls
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
     - pnpm install --prefer-offline
