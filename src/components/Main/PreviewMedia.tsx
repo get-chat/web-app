@@ -25,6 +25,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 
 function PreviewMedia({ data }) {
 	const { t } = useTranslation();
+	const [, setVideoExtension] = useState();
 
 	const dispatch = useDispatch();
 
@@ -82,6 +83,25 @@ function PreviewMedia({ data }) {
 				}
 			});
 	};
+	useEffect(() => {
+		if (data.type === ATTACHMENT_TYPE_VIDEO) {
+			axios
+				.get(data.source, {
+					responseType: 'blob',
+				})
+				.then((res) => {
+					const extension = mimeToExtension(res.headers['content-type']);
+					data.source = URL.createObjectURL(res.data);
+					// This triggers a re-render with the download url
+					setVideoExtension(extension);
+				});
+		}
+		return () => {
+			if (data.type === ATTACHMENT_TYPE_VIDEO) {
+				URL.revokeObjectURL(data.source);
+			}
+		};
+	}, []);
 
 	return (
 		<div className="app__mediaPreview">
