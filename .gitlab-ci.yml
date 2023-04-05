@@ -17,14 +17,6 @@ variables:
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
-Create .env file:
-  stage: create_env_file
-  image: $NODE_IMAGE
-  script:
-    - chmod +x ./setup_env.sh
-    - ./setup_env.sh
-
-
 .cache_config: &cache_config
   key:
     files:
@@ -73,6 +65,8 @@ Build:
 
   <<: *install_pnpm
   script:
+    - chmod +x ./setup_env.sh
+    - ./setup_env.sh
     - pnpm install --prefer-offline
 
     # HACK: Using `CI=false` as a temporary workaround to ignore compilation
