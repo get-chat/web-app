@@ -63,6 +63,9 @@ Build:
   cache:
     <<: *cache_config
 
+  before_script:
+    - apk add --no-cache --upgrade bash
+
   <<: *install_pnpm
   script:
     - ls
