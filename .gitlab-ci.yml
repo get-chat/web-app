@@ -17,8 +17,8 @@ variables:
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
-Env:
-  before_script:
+Create .env file:
+  script:
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
 
