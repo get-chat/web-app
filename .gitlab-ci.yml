@@ -18,6 +18,8 @@ variables:
 
 
 Create .env file:
+  stage: create_env_file
+  image: $NODE_IMAGE
   script:
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
