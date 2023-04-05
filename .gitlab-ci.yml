@@ -17,6 +17,11 @@ variables:
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
+before_script:
+  - chmod +x ./setup_env.sh
+  - ./setup_env.sh
+
+
 .cache_config: &cache_config
   key:
     files:
@@ -30,8 +35,6 @@ variables:
 
 .install_pnpm: &install_pnpm
   before_script:
-    - chmod +x ./setup_env.sh
-    - ./setup_env.sh
     - npm install --location=global --no-fund pnpm
     - pnpm config set store-dir $PNPM_STORE_DIR
 
