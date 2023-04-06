@@ -18,7 +18,7 @@ import PubSub from 'pubsub-js';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { useDispatch } from 'react-redux';
 import CustomAvatar from '@src/components/CustomAvatar';
-import { download } from '@src/helpers/DowloadHelper';
+import { download } from '@src/helpers/DownloadHelper';
 
 function PreviewMedia({ data }) {
 	const { t } = useTranslation();

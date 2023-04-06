@@ -3,7 +3,7 @@ import React from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { download } from '@src/helpers/DowloadHelper';
+import { download } from '@src/helpers/DownloadHelper';
 
 function ChatMessageOptionsMenu(props) {
 	const { t } = useTranslation();
