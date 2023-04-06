@@ -111,6 +111,8 @@ In order to display Google Maps Embed API in location messages, you need to prov
 
 `REACT_APP_LOGO_BLACK_URL`: Black and white version of application logo (used inside the loading screen).
 
+`SENTRY_AUTH_TOKEN`: This token is used for uploading source maps to Sentry automatically.
+
 ## How to add translations of a new language
 
 - Find the ISO 639-1 code of the language you will be adding. For example `es` for Spanish.
