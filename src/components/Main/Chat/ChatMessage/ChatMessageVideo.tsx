@@ -2,9 +2,16 @@
 import React from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-function ChatMessageVideo({ source, onPreview }) {
+function ChatMessageVideo({ source, onPreview, onOptionsClick }) {
 	return (
-		<div className="chat__videoWrapper" onClick={onPreview}>
+		<div
+			className="chat__videoWrapper"
+			onClick={onPreview}
+			onContextMenu={(e) => {
+				onOptionsClick?.(e);
+				e.preventDefault();
+			}}
+		>
 			<video className="chat__media" src={source} preload="none" />
 			<span className="chat__videoWrapper__iconWrapper">
 				<PlayArrowIcon

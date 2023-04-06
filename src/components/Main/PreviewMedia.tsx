@@ -11,17 +11,14 @@ import {
 } from '@src/Constants';
 import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { GetApp } from '@mui/icons-material';
-import axios from 'axios';
-import fileDownload from 'js-file-download';
-import { generateUniqueID } from '@src/helpers/Helpers';
 import { useTranslation } from 'react-i18next';
-import { mimeToExtension } from '@src/helpers/ImageHelper';
 import Image from '../Image';
 import PreviewMediaZoom from './PreviewMediaZoom';
 import PubSub from 'pubsub-js';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { useDispatch } from 'react-redux';
 import CustomAvatar from '@src/components/CustomAvatar';
+import { download } from '@src/helpers/DownloadHelper';
 
 function PreviewMedia({ data }) {
 	const { t } = useTranslation();
@@ -63,26 +60,6 @@ function PreviewMedia({ data }) {
 		}
 	};
 
-	const download = () => {
-		if (!data.source) return;
-
-		axios
-			.get(data.source, {
-				responseType: 'blob',
-			})
-			.then((res) => {
-				const extension = mimeToExtension(res.headers['content-type']);
-				const fileName = `getchat_${generateUniqueID()}.${extension}`;
-				fileDownload(res.data, fileName);
-			})
-			.catch((error) => {
-				console.log(error);
-				if (error.response === undefined) {
-					window.open(data.source, '_blank');
-				}
-			});
-	};
-
 	return (
 		<div className="app__mediaPreview">
 			<div className="app__mediaPreview__header">
@@ -112,7 +89,7 @@ function PreviewMedia({ data }) {
 				</div>
 
 				<Tooltip title={t('Download')}>
-					<IconButton onClick={download} size="large">
+					<IconButton onClick={() => download(data)} size="large">
 						<GetApp />
 					</IconButton>
 				</Tooltip>

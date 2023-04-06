@@ -56,6 +56,7 @@ function ChatMessageTemplate(props) {
 															data.getHeaderFileLink('video')
 														)
 													}
+													onOptionsClick={props.onOptionsClick}
 												/>
 											)}
 											{component.format === 'DOCUMENT' && (
