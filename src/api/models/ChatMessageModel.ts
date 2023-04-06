@@ -238,12 +238,12 @@ export class ChatMessageModel {
 		);
 	}
 
-	generateVideoLink(includeTemplateHeader) {
+	generateVideoLink(includeTemplateHeaderOrReferral) {
 		return (
 			this.videoLink ??
 			this.generateMediaLink(this.videoId) ??
-			(includeTemplateHeader === true
-				? this.getHeaderFileLink('video')
+			(includeTemplateHeaderOrReferral === true
+				? this.getHeaderFileLink('video') ?? this.generateReferralVideoLink()
 				: undefined)
 		);
 	}
@@ -284,14 +284,6 @@ export class ChatMessageModel {
 				this.generateMediaLink(this.referral.video.id)
 			);
 		}
-	}
-
-	getAnyVideo() {
-		return (
-			this.videoLink ??
-			this.getHeaderFileLink('video') ??
-			this.generateReferralVideoLink()
-		);
 	}
 
 	getStatus() {
