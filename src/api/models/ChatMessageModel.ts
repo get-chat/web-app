@@ -286,6 +286,14 @@ export class ChatMessageModel {
 		}
 	}
 
+	getAnyVideo() {
+		return (
+			this.videoLink ??
+			this.getHeaderFileLink('video') ??
+			this.generateReferralVideoLink()
+		);
+	}
+
 	getStatus() {
 		if (this.readTimestamp) {
 			return ChatMessageModel.STATUS_READ;

@@ -9,7 +9,7 @@ function ChatMessageOptionsMenu(props) {
 	const { t } = useTranslation();
 
 	const hasVideo = () => {
-		return Boolean(props.data?.videoLink);
+		return Boolean(props.data?.getAnyVideo());
 	};
 
 	const createSavedResponse = () => {
@@ -22,7 +22,7 @@ function ChatMessageOptionsMenu(props) {
 
 	const downloadVideo = () => {
 		const data = {
-			source: props?.optionsChatMessage?.videoLink,
+			source: props.optionsChatMessage?.getAnyVideo(),
 		};
 		if (!data.source) {
 			hideMenu();
