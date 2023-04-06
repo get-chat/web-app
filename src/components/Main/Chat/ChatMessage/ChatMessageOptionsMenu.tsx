@@ -7,7 +7,7 @@ import ChatMessageModel from '@src/api/models/ChatMessageModel';
 function ChatMessageOptionsMenu(props) {
 	const { t } = useTranslation();
 
-	const isVideoOrTemplateWithVideo = () => {
+	const hasVideo = () => {
 		return Boolean(props.data?.videoLink);
 	};
 
@@ -48,9 +48,7 @@ function ChatMessageOptionsMenu(props) {
 						{t('Save this response')}
 					</MenuItem>
 				)}
-			{isVideoOrTemplateWithVideo && (
-				<MenuItem onClick={downloadVideo}>{t('Download')}</MenuItem>
-			)}
+			{hasVideo && <MenuItem onClick={downloadVideo}>{t('Download')}</MenuItem>}
 		</Menu>
 	);
 }
