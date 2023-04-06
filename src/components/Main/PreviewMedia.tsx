@@ -23,9 +23,28 @@ import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectRed
 import { useDispatch } from 'react-redux';
 import CustomAvatar from '@src/components/CustomAvatar';
 
+export const download = (data) => {
+	if (!data.source) return;
+
+	axios
+		.get(data.source, {
+			responseType: 'blob',
+		})
+		.then((res) => {
+			const extension = mimeToExtension(res.headers['content-type']);
+			const fileName = `getchat_${generateUniqueID()}.${extension}`;
+			fileDownload(res.data, fileName);
+		})
+		.catch((error) => {
+			console.log(error);
+			if (error.response === undefined) {
+				window.open(data.source, '_blank');
+			}
+		});
+};
+
 function PreviewMedia({ data }) {
 	const { t } = useTranslation();
-	const [, setVideoExtension] = useState();
 
 	const dispatch = useDispatch();
 
@@ -64,45 +83,6 @@ function PreviewMedia({ data }) {
 		}
 	};
 
-	const download = () => {
-		if (!data.source) return;
-
-		axios
-			.get(data.source, {
-				responseType: 'blob',
-			})
-			.then((res) => {
-				const extension = mimeToExtension(res.headers['content-type']);
-				const fileName = `getchat_${generateUniqueID()}.${extension}`;
-				fileDownload(res.data, fileName);
-			})
-			.catch((error) => {
-				console.log(error);
-				if (error.response === undefined) {
-					window.open(data.source, '_blank');
-				}
-			});
-	};
-	useEffect(() => {
-		if (data.type === ATTACHMENT_TYPE_VIDEO) {
-			axios
-				.get(data.source, {
-					responseType: 'blob',
-				})
-				.then((res) => {
-					const extension = mimeToExtension(res.headers['content-type']);
-					data.source = URL.createObjectURL(res.data);
-					// This triggers a re-render with the download url
-					setVideoExtension(extension);
-				});
-		}
-		return () => {
-			if (data.type === ATTACHMENT_TYPE_VIDEO) {
-				URL.revokeObjectURL(data.source);
-			}
-		};
-	}, []);
-
 	return (
 		<div className="app__mediaPreview">
 			<div className="app__mediaPreview__header">
@@ -132,7 +112,7 @@ function PreviewMedia({ data }) {
 				</div>
 
 				<Tooltip title={t('Download')}>
-					<IconButton onClick={download} size="large">
+					<IconButton onClick={() => download(data)} size="large">
 						<GetApp />
 					</IconButton>
 				</Tooltip>

@@ -3,6 +3,7 @@ import React from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { download } from '@src/components/Main/PreviewMedia';
 
 function ChatMessageOptionsMenu(props) {
 	const { t } = useTranslation();
@@ -20,7 +21,14 @@ function ChatMessageOptionsMenu(props) {
 	};
 
 	const downloadVideo = () => {
-		console.log('TODO: Implement!');
+		const data = {
+			source: props?.optionsChatMessage?.videoLink,
+		};
+		if (!data.source) {
+			hideMenu();
+			return;
+		}
+		download(data);
 		hideMenu();
 	};
 
