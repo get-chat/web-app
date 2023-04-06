@@ -9,7 +9,7 @@ import PrintMessage from '../../../../PrintMessage';
 import { Tooltip } from '@mui/material';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 
-const ChatMessageReferral = ({ data, onPreview }) => {
+const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
 	const { t } = useTranslation();
 
 	const { referral } = data;
@@ -52,6 +52,7 @@ const ChatMessageReferral = ({ data, onPreview }) => {
 									data.generateReferralVideoLink()
 								)
 							}
+							onOptionsClick={onOptionsClick}
 						/>
 					)}
 				</div>

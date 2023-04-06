@@ -2,15 +2,25 @@
 import React from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 function ChatMessageOptionsMenu(props) {
 	const { t } = useTranslation();
+
+	const isVideoOrTemplateWithVideo = () => {
+		return Boolean(props.data?.videoLink);
+	};
 
 	const createSavedResponse = () => {
 		if (props.optionsChatMessage) {
 			props.createSavedResponse(props.optionsChatMessage.text);
 		}
 
+		hideMenu();
+	};
+
+	const downloadVideo = () => {
+		console.log('TODO: Implement!');
 		hideMenu();
 	};
 
@@ -32,12 +42,15 @@ function ChatMessageOptionsMenu(props) {
 			{/*<MenuItem>Delete</MenuItem>*/}
 
 			{props.optionsChatMessage &&
-				props.optionsChatMessage.type === 'text' &&
+				props.optionsChatMessage.type === ChatMessageModel.TYPE_TEXT &&
 				props.optionsChatMessage.isFromUs && (
 					<MenuItem onClick={createSavedResponse}>
 						{t('Save this response')}
 					</MenuItem>
 				)}
+			{isVideoOrTemplateWithVideo && (
+				<MenuItem onClick={downloadVideo}>{t('Download')}</MenuItem>
+			)}
 		</Menu>
 	);
 }

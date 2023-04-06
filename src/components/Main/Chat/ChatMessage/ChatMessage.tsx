@@ -140,7 +140,11 @@ function ChatMessage({
 						)}
 
 						{data.referral && (
-							<ChatMessageReferral data={data} onPreview={onPreview} />
+							<ChatMessageReferral
+								data={data}
+								onPreview={onPreview}
+								onOptionsClick={(e) => onOptionsClick(e, data)}
+							/>
 						)}
 
 						{data.type === ChatMessageModel.TYPE_IMAGE && (
@@ -160,6 +164,7 @@ function ChatMessage({
 								onPreview={() =>
 									onPreview(ATTACHMENT_TYPE_VIDEO, data.generateVideoLink())
 								}
+								onOptionsClick={(e) => onOptionsClick(e, data)}
 							/>
 						)}
 
@@ -188,6 +193,7 @@ function ChatMessage({
 								templateData={templateData}
 								isTemplatesFailed={isTemplatesFailed}
 								onPreview={onPreview}
+								onOptionsClick={(e) => onOptionsClick(e, data)}
 							/>
 						)}
 
