@@ -65,11 +65,11 @@ Build:
 
   <<: *install_pnpm
   script:
-    - ls
     - apk add --no-cache --upgrade bash
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
-    - ls
+    - ls -a
+    - cat .env
     - pnpm install --prefer-offline
 
     # HACK: Using `CI=false` as a temporary workaround to ignore compilation
