@@ -1620,6 +1620,11 @@ export default function Chat(props) {
 	};
 
 	const retryMessage = (message) => {
+		if (!message.resendPayload) {
+			console.warn('Property is undefined: resendPayload', message);
+			return;
+		}
+
 		message.resendPayload.wa_id = message.waId;
 
 		switch (message.type) {
