@@ -13,6 +13,7 @@ const useChatListItem = ({ props }) => {
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
 	const [timeLeft, setTimeLeft] = useState();
 	const [remainingSeconds, setRemainingSeconds] = useState();
+	const [isCheckedMissingContact, setCheckedMissingContact] = useState(false);
 
 	const isDisabled = useMemo(() => {
 		return isExpired && props.bulkSendPayload?.type !== 'template';
@@ -33,6 +34,17 @@ const useChatListItem = ({ props }) => {
 		});
 		return generatedTagNames.join(', ');
 	};
+
+	useEffect(() => {
+		if (
+			!isCheckedMissingContact &&
+			data.waId &&
+			!props.contactProvidersData[data.waId]
+		) {
+			setCheckedMissingContact(true);
+			props.retrieveContactData(data.waId);
+		}
+	}, [isCheckedMissingContact, props.contactProvidersData]);
 
 	useEffect(() => {
 		function calculateRemaining() {

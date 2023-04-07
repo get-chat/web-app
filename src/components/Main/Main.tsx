@@ -932,6 +932,8 @@ function Main() {
 			return;
 		}
 
+		console.log('Resolving contact: ' + personWaId);
+
 		apiService.resolveContactCall(
 			personWaId,
 			(response) => {

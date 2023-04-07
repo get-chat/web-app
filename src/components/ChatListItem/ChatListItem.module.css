@@ -170,6 +170,10 @@
 	color: rgba(0, 0, 45, 0.4);
 }
 
+.lastMessage {
+	flex: 1;
+}
+
 .lastMessage > div {
 	display: -webkit-box;
 	overflow: hidden;
