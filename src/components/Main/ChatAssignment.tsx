@@ -115,6 +115,7 @@ function ChatAssignment(props) {
 		[assignedToUser, currentUser.id, isAdmin]
 	);
 
+
 	const canChangeGroupAssigment = useMemo(
 		() => assignedGroup === null || isAdmin,
 		[assignedGroup, isAdmin]
