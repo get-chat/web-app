@@ -153,7 +153,7 @@ function ChatAssignment(props) {
 				<FormControl
 					variant="standard"
 					fullWidth={true}
-// 					disabled={!canChangeUserAssigment}
+					disabled={canChangeUserAssigment}
 				>
 					<InputLabel id="assign-user-select-label">User</InputLabel>
 					<Select
@@ -195,7 +195,7 @@ function ChatAssignment(props) {
 				<FormControl
 					variant="standard"
 					fullWidth={true}
-// 					disabled={!canChangeGroupAssigment}
+					disabled={canChangeGroupAssigment}
 				>
 					<InputLabel id="assign-group-select-label">Group</InputLabel>
 					<Select
