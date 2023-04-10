@@ -111,10 +111,9 @@ function ChatAssignment(props) {
 
 	const canChangeUserAssigment = useMemo(
 		() =>
-			assignedToUser === currentUser.id || isAdmin,
+			assignedToUser === currentUser.id || assignedToUser === null || isAdmin,
 		[assignedToUser, currentUser.id, isAdmin]
 	);
-
 
 	const canChangeGroupAssigment = useMemo(
 		() => assignedGroup === null || isAdmin,
@@ -169,7 +168,7 @@ function ChatAssignment(props) {
 							<MenuItem
 								key={user.id}
 								value={user.id}
-								disabled={isAdmin ? false : user.id !== currentUser.id}
+// 								disabled={isAdmin ? false : user.id !== currentUser.id}
 							>
 								{user.prepareUserLabel()}
 							</MenuItem>
