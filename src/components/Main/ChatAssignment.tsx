@@ -168,7 +168,7 @@ function ChatAssignment(props) {
 							<MenuItem
 								key={user.id}
 								value={user.id}
-// 								disabled={isAdmin ? false : user.id !== currentUser.id}
+								disabled={isAdmin ? false : user.id !== currentUser.id}
 							>
 								{user.prepareUserLabel()}
 							</MenuItem>
