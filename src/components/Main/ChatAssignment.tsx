@@ -173,7 +173,6 @@ function ChatAssignment(props) {
 								{user.prepareUserLabel()}
 							</MenuItem>
 						))}
-
 					</Select>
 				</FormControl>
 
