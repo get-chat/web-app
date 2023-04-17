@@ -40,7 +40,7 @@ const BulkSendTemplateDialog = ({
 				/>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={close} color="secondary">
+				<Button onClick={close} color="secitondary">
 					{t('Close')}
 				</Button>
 			</DialogActions>

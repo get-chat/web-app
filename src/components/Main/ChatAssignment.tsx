@@ -233,5 +233,4 @@ function ChatAssignment(props) {
 		</Dialog>
 	);
 }
-
 export default ChatAssignment;

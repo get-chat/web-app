@@ -28,7 +28,7 @@ import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 export const PRIMARY_KEY_TYPE_WA_ID = 'wa_id';
 export const PRIMARY_KEY_TYPE_TAG = 'tag';
 
-const BulkSendTemplateViaCSV = ({ open, setOpen }) => {
+const BulkSendTemplateViaCSV = ({ open, setOpen, finishBulkSendMessage }) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
@@ -181,7 +181,8 @@ const BulkSendTemplateViaCSV = ({ open, setOpen }) => {
 		};
 
 		// TODO: Bulk send template messages and close the dialog
-		//close();
+		finishBulkSendMessage(payload);
+		close();
 	};
 
 	const handleNext = () => {
