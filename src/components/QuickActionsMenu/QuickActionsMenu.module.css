@@ -1,0 +1,10 @@
+.container {
+	border-radius: 10px;
+	overflow: hidden;
+	background: #fff;
+	margin: 10px;
+}
+
+.results {
+	padding: 5px 10px;
+}

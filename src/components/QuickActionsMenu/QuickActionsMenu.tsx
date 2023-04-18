@@ -1,4 +1,6 @@
 import React from 'react';
+import styles from './QuickActionsMenu.module.css';
+import SearchBar from '@src/components/SearchBar';
 
 export type Props = {
 	input: string;
@@ -13,7 +15,15 @@ const QuickActionsMenu: React.FC<Props> = ({
 	onProcessCommand,
 	isExpired,
 }) => {
-	return <div>{input}</div>;
+	return (
+		<div className={styles.container}>
+			<SearchBar
+				isLoading={false}
+				onChange={(text: string) => console.log(text)}
+			/>
+			<div className={styles.results}>{input}</div>
+		</div>
+	);
 };
 
 export default QuickActionsMenu;
