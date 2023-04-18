@@ -1,12 +1,6 @@
 // @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	Grid,
-	Button,
-	ButtonBase,
-	TextField,
-	InputAdornment,
-} from '@mui/material';
+import { Button, ButtonBase, TextField, InputAdornment } from '@mui/material';
 import '../../../../styles/SendTemplateMessage.css';
 import FileInput from '../../../FileInput';
 import Alert from '@mui/material/Alert';
@@ -26,8 +20,8 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
 import {
-	BreakException,
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
+	FORM_VALIDATION_ERROR,
 	InvalidTemplateParamException,
 } from '@src/Constants';
 import PublishIcon from '@mui/icons-material/Publish';
@@ -95,11 +89,11 @@ function SendTemplateMessage({
 			params,
 			true,
 			(error) => {
-				if (error === BreakException) {
+				if (error.type === FORM_VALIDATION_ERROR) {
 					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, [
 						{
 							title: t('Missing parameters'),
-							details: t('You need to fill the parameters!'),
+							details: error.message,
 						},
 					]);
 					hasError = true;
