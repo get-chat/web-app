@@ -13,7 +13,7 @@ const QuickActionsMenu: React.FC<Props> = ({
 	onProcessCommand,
 	isExpired,
 }) => {
-	return <div>Quick actions menu</div>;
+	return <div>{input}</div>;
 };
 
 export default QuickActionsMenu;

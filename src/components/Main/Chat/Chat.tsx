@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import '../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from './ChatMessage/ChatMessage';
@@ -76,6 +76,7 @@ import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsR
 import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
+import QuickActionsMenu from '@src/components/QuickActionsMenu';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -122,6 +123,10 @@ export default function Chat(props) {
 	const [lastMessageId, setLastMessageId] = useState();
 
 	const { waId } = useParams();
+
+	const isQuickActionsMenuVisible = useMemo(() => {
+		return input?.substring(0, 1) === '/';
+	}, [input]);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -1843,6 +1848,15 @@ export default function Chat(props) {
 				})}
 
 				<div className="chat__body__empty" />
+
+				{isQuickActionsMenuVisible && (
+					<QuickActionsMenu
+						input={input}
+						setInput={setInput}
+						onProcessCommand={(command) => console.log(command)}
+						isExpired={isExpired}
+					/>
+				)}
 			</div>
 
 			<ChatFooter
@@ -1856,10 +1870,10 @@ export default function Chat(props) {
 				setSelectedFiles={setSelectedFiles}
 				isTemplateMessagesVisible={isTemplateMessagesVisible}
 				setTemplateMessagesVisible={setTemplateMessagesVisible}
+				accept={accept}
 				isSavedResponsesVisible={isSavedResponsesVisible}
 				setSavedResponsesVisible={setSavedResponsesVisible}
 				sendHandledChosenFiles={sendHandledChosenFiles}
-				accept={accept}
 				setAccept={setAccept}
 				isScrollButtonVisible={isScrollButtonVisible}
 				handleScrollButtonClick={handleScrollButtonClick}
