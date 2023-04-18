@@ -69,13 +69,13 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import { useDispatch, useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -85,15 +85,15 @@ const MESSAGES_PER_PAGE = 30;
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const currentUser = useSelector((state) => state.currentUser.value);
+	const currentUser = useAppSelector((state) => state.currentUser.value);
 
 	const { t } = useTranslation();
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const messagesContainer = useRef(null);
 
-	const templates = useSelector((state) => state.templates.value);
+	const templates = useAppSelector((state) => state.templates.value);
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);

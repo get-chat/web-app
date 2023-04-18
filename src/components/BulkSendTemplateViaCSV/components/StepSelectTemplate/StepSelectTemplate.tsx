@@ -2,12 +2,12 @@
 import React from 'react';
 import TemplatesList from '../../../TemplatesList';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@src/store/hooks';
 
 const StepSelectTemplate = ({ selectTemplate }) => {
 	const { t } = useTranslation();
 
-	const templates = useSelector((state) => state.templates.value);
+	const templates = useAppSelector((state) => state.templates.value);
 
 	return (
 		<TemplatesList

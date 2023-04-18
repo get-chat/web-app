@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './QuickActionsMenu.module.css';
 import SearchBar from '@src/components/SearchBar';
+import useQuickActionsMenu from '@src/components/QuickActionsMenu/useQuickActionsMenu';
 
 export type Props = {
 	input: string;
@@ -17,10 +18,15 @@ const QuickActionsMenu: React.FC<Props> = ({
 }) => {
 	const [commandInput, setCommandInput] = useState('');
 
+	const { data, generateCommandString } = useQuickActionsMenu({
+		input: commandInput,
+		isExpired,
+	});
+
 	return (
 		<div className={styles.container}>
 			<SearchBar isLoading={false} onChange={setCommandInput} />
-			<div className={styles.results}>{commandInput}</div>
+			<div className={styles.results}>{JSON.stringify(data)}</div>
 		</div>
 	);
 };

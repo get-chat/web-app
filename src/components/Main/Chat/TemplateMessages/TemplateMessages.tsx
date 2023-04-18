@@ -16,8 +16,8 @@ import PubSub from 'pubsub-js';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 import TemplatesList from '../../../TemplatesList';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '@src/store/hooks';
 
 function TemplateMessages({
 	waId,
@@ -29,7 +29,7 @@ function TemplateMessages({
 	isTemplatesFailed,
 	isBulkOnly,
 }) {
-	const templates = useSelector((state) => state.templates.value);
+	const templates = useAppSelector((state) => state.templates.value);
 
 	const [chosenTemplate, setChosenTemplate] = useState();
 	const [isDialogVisible, setDialogVisible] = useState(false);

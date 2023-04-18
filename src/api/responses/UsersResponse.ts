@@ -1,10 +1,15 @@
-// @ts-nocheck
-import UserModel from '../models/UserModel';
+import UserModel from '@src/api/models/UserModel';
+
+export type UserList = {
+	[key: string]: UserModel;
+};
 
 class UsersResponse {
-	constructor(data) {
-		const users = {};
-		data.results.forEach((userData) => {
+	public users: UserList = {};
+
+	constructor(data: any) {
+		const users: UserList = {};
+		data.results.forEach((userData: any) => {
 			users[userData.id] = new UserModel(userData);
 		});
 		this.users = users;

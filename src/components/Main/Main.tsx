@@ -53,7 +53,6 @@ import { AppConfig } from '@src/contexts/AppConfig';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
-import { useDispatch, useSelector } from 'react-redux';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
@@ -64,6 +63,7 @@ import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -73,12 +73,12 @@ function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
-	const tags = useSelector((state) => state.tags.value);
-	const previewMediaObject = useSelector(
+	const tags = useAppSelector((state) => state.tags.value);
+	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
 	);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const { t } = useTranslation();
 

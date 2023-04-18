@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
 	Button,
 	CircularProgress,
@@ -16,12 +16,12 @@ import {
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@src/store/hooks';
 
 function ChatAssignment(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const currentUser = useSelector((state) => state.currentUser.value);
+	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isAdmin = currentUser?.isAdmin ?? false;
 
 	const { t } = useTranslation();

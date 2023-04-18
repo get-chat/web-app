@@ -63,7 +63,6 @@ import { AppConfig } from '@src/contexts/AppConfig';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { filterChat } from '@src/helpers/SidebarHelper';
-import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
@@ -71,15 +70,16 @@ import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import ChatTag from '../../ChatTag';
 import CustomAvatar from '@src/components/CustomAvatar';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
-	const tags = useSelector((state) => state.tags.value);
-	const currentUser = useSelector((state) => state.currentUser.value);
-	const filterTag = useSelector((state) => state.filterTag.value);
-	const chatsCount = useSelector((state) => state.chatsCount.value);
+	const tags = useAppSelector((state) => state.tags.value);
+	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const filterTag = useAppSelector((state) => state.filterTag.value);
+	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 
 	const { t } = useTranslation();
 
@@ -103,7 +103,7 @@ function Sidebar(props) {
 
 	const navigate = useNavigate();
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const logOut = () => {
 		clearUserSession(undefined, undefined, navigate);

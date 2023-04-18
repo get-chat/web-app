@@ -1,5 +1,7 @@
 import UIReducer from './UIReducer';
 import templatesReducer from './templatesReducer';
+import savedResponsesReducer from './savedResponsesReducer';
+import usersReducer from './usersReducer';
 import currentUserReducer from './currentUserReducer';
 import filterTagReducer from './filterTagReducer';
 import chatsCountReducer from './chatsCountReducer';
@@ -10,7 +12,9 @@ import isRefreshingTemplatesReducer from './isRefreshingTemplatesReducer';
 const rootReducer = {
 	UI: UIReducer,
 	templates: templatesReducer,
+	savedResponses: savedResponsesReducer,
 	tags: tagsReducer,
+	users: usersReducer,
 	currentUser: currentUserReducer,
 	filterTag: filterTagReducer,
 	chatsCount: chatsCountReducer,

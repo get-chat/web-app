@@ -5,12 +5,12 @@ import { ErrorBoundary } from '@sentry/react';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateFinalTemplateParams } from '@src/helpers/TemplateMessageHelper';
 import style from './StepPreviewResult.module.css';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@src/store/hooks';
 
 const StepPreviewResult = ({ template, params, csvData }) => {
 	const [messageData, setMessageData] = useState();
 
-	const templates = useSelector((state) => state.templates.value);
+	const templates = useAppSelector((state) => state.templates.value);
 
 	const replaceGetChatParamWithRealData = (string) => {
 		return string.replace(/\{{(.*?)\}}/g, function (match) {

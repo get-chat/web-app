@@ -17,7 +17,7 @@ import LabelIcon from '@mui/icons-material/Label';
 import { useTranslation } from 'react-i18next';
 import style from './StepSelectPrimaryKey.module.css';
 import { findTagByName } from '@src/helpers/TagHelper';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@src/store/hooks';
 
 const StepSelectPrimaryKey = ({
 	csvHeader,
@@ -27,7 +27,7 @@ const StepSelectPrimaryKey = ({
 	primaryKeyType,
 	setPrimaryKeyType,
 }) => {
-	const tags = useSelector((state) => state.tags.value);
+	const tags = useAppSelector((state) => state.tags.value);
 
 	const { t } = useTranslation();
 

@@ -20,16 +20,16 @@ import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
-import { useDispatch } from 'react-redux';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
+import { useAppDispatch } from '@src/store/hooks';
 
 function ContactDetails(props) {
 	const { t } = useTranslation();
 
 	const [chat, setChat] = useState({});
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const hideContactDetails = () => {
 		PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
