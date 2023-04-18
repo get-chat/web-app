@@ -1881,7 +1881,6 @@ export default function Chat(props) {
 
 			{isSavedResponsesVisible && (
 				<SavedResponses
-					savedResponses={props.savedResponses}
 					deleteSavedResponse={props.deleteSavedResponse}
 					sendCustomTextMessage={sendCustomTextMessage}
 				/>

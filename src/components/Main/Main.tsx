@@ -64,6 +64,10 @@ import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import UsersResponse from '@src/api/responses/UsersResponse';
+import { setUsers } from '@src/store/reducers/usersReducer';
+import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
+import SavedResponsesResponse from '@src/api/responses/SavedResponsesResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -91,8 +95,6 @@ function Main() {
 	const [checked, setChecked] = useState(false);
 	const [isBlurred, setBlurred] = useState(false);
 
-	const [users, setUsers] = useState({});
-
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState([]);
 	const [hasFailedMessages, setHasFailedMessages] = useState(false);
@@ -105,7 +107,6 @@ function Main() {
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
-	const [savedResponses, setSavedResponses] = useState({});
 	const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 	const [templatesReady, setTemplatesReady] = useState(false);
 
@@ -778,15 +779,11 @@ function Main() {
 
 		try {
 			await apiService.listUsersCall(5000, (response) => {
-				const preparedUsers = {};
+				const usersResponse = new UsersResponse(response.data);
 
-				response.data.results.forEach((user) => {
-					const prepared = new UserModel(user);
+				// Store
+				dispatch(setUsers(usersResponse.users));
 
-					preparedUsers[prepared.id] = prepared;
-				});
-
-				setUsers(preparedUsers);
 				setProgress(20);
 			});
 		} catch (error) {
@@ -885,15 +882,13 @@ function Main() {
 	const listSavedResponses = async () => {
 		try {
 			await apiService.listSavedResponsesCall((response) => {
-				const preparedSavedResponses = {};
+				const savedResponsesResponse = new SavedResponsesResponse(
+					response.data
+				);
 
-				response.data.results.forEach((savedResponse) => {
-					const prepared = new SavedResponseClass(savedResponse);
+				// Store
+				dispatch(setSavedResponses(savedResponsesResponse.savedResponses));
 
-					preparedSavedResponses[prepared.id] = prepared;
-				});
-
-				setSavedResponses(preparedSavedResponses);
 				setProgress(50);
 			});
 		} catch (error) {
@@ -1100,7 +1095,6 @@ function Main() {
 						setChosenContact={setChosenContact}
 						isTemplatesFailed={isTemplatesFailed}
 						isLoadingTemplates={isLoadingTemplates}
-						savedResponses={savedResponses}
 						createSavedResponse={createSavedResponse}
 						deleteSavedResponse={deleteSavedResponse}
 						contactProvidersData={contactProvidersData}
@@ -1123,7 +1117,6 @@ function Main() {
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						chats={chats}
-						users={users}
 					/>
 				)}
 
@@ -1133,7 +1126,6 @@ function Main() {
 						open={isChatAssignmentVisible}
 						setOpen={setChatAssignmentVisible}
 						setChats={setChats}
-						users={users}
 					/>
 				)}
 

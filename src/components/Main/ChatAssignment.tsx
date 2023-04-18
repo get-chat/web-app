@@ -21,6 +21,7 @@ import { useAppSelector } from '@src/store/hooks';
 function ChatAssignment(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
+	const users = useAppSelector((state) => state.users.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isAdmin = currentUser?.isAdmin ?? false;
 
@@ -100,7 +101,7 @@ function ChatAssignment(props) {
 
 		// Set group automatically, if assigned group was blank
 		if (!assignedGroup) {
-			const firstGroupOfUser = props.users[userId]?.groups?.[0]?.id;
+			const firstGroupOfUser = users[userId]?.groups?.[0]?.id;
 			setTempAssignedGroup(firstGroupOfUser);
 		}
 	};
@@ -164,7 +165,7 @@ function ChatAssignment(props) {
 						onChange={handleUserChange}
 					>
 						<MenuItem value="null">{t('Unassigned')}</MenuItem>
-						{Object.values(props.users)?.map((user) => (
+						{Object.values(users)?.map((user) => (
 							<MenuItem
 								key={user.id}
 								value={user.id}
