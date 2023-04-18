@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './QuickActionsMenu.module.css';
 import SearchBar from '@src/components/SearchBar';
 
@@ -15,13 +15,12 @@ const QuickActionsMenu: React.FC<Props> = ({
 	onProcessCommand,
 	isExpired,
 }) => {
+	const [commandInput, setCommandInput] = useState('');
+
 	return (
 		<div className={styles.container}>
-			<SearchBar
-				isLoading={false}
-				onChange={(text: string) => console.log(text)}
-			/>
-			<div className={styles.results}>{input}</div>
+			<SearchBar isLoading={false} onChange={setCommandInput} />
+			<div className={styles.results}>{commandInput}</div>
 		</div>
 	);
 };
