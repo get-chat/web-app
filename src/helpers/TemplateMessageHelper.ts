@@ -2,7 +2,10 @@
 // noinspection JSDeprecatedSymbols
 
 import { isEmptyString } from './Helpers';
-import { BreakException, InvalidTemplateParamException } from '../Constants';
+import {
+	FORM_VALIDATION_ERROR,
+	InvalidTemplateParamException,
+} from '../Constants';
 
 export const getTemplateParams = (text) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
@@ -141,7 +144,7 @@ export const generateFinalTemplateParams = (
 
 	try {
 		// noinspection DuplicatedCode
-		Object.entries(components).forEach((paramEntry, paramIndex) => {
+		Object.entries(components).forEach((paramEntry) => {
 			const key = paramEntry[0];
 			const component = paramEntry[1];
 
@@ -174,7 +177,10 @@ export const generateFinalTemplateParams = (
 
 					// Check if param is empty
 					if (isEmptyString(paramText)) {
-						throw BreakException;
+						throw {
+							type: FORM_VALIDATION_ERROR,
+							message: `You need to fill the ${component.type} section`,
+						};
 					}
 
 					if (checkInvalidParams) {
