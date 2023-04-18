@@ -204,7 +204,7 @@ function Main() {
 		setErrorVisible(false);
 	};
 
-	const finishBulkSendMessage = () => {
+	const finishBulkSendMessage = (payload) => {
 		const requestPayload = {};
 		const messagePayload = { ...bulkSendPayload };
 		const recipients = selectedChats;
@@ -220,9 +220,13 @@ function Main() {
 			preparedTags.push({ tag_id: tag });
 		});
 
-		requestPayload.recipients = preparedRecipients;
+		requestPayload.recipients = payload
+			? payload.recipients
+			: preparedRecipients;
 		requestPayload.tags = preparedTags;
-		requestPayload.payload = messagePayload;
+		requestPayload.payload = payload
+			? { template: payload.template, type: payload.type }
+			: messagePayload;
 
 		apiService.bulkSendCall(requestPayload, (response) => {
 			// Disable selection mode
@@ -1211,6 +1215,7 @@ function Main() {
 				<BulkSendTemplateViaCSV
 					open={isBulkSendTemplateViaCSVVisible}
 					setOpen={setBulkSendTemplateViaCSVVisible}
+					finishBulkSendMessage={finishBulkSendMessage}
 				/>
 
 				<SendBulkVoiceMessageDialog

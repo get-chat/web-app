@@ -11,7 +11,6 @@ import {
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
-
 	return (
 		<div className="bulkSendActions">
 			<h3>{t('Bulk Send')}</h3>

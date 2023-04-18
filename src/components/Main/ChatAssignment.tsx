@@ -153,7 +153,7 @@ function ChatAssignment(props) {
 				<FormControl
 					variant="standard"
 					fullWidth={true}
-					// 					disabled={!canChangeUserAssigment}
+					disabled={!canChangeUserAssigment}
 				>
 					<InputLabel id="assign-user-select-label">User</InputLabel>
 					<Select
@@ -168,7 +168,7 @@ function ChatAssignment(props) {
 							<MenuItem
 								key={user.id}
 								value={user.id}
-								// 								disabled={isAdmin ? false : user.id !== currentUser.id}
+								disabled={isAdmin ? false : user.id !== currentUser.id}
 							>
 								{user.prepareUserLabel()}
 							</MenuItem>
@@ -233,5 +233,4 @@ function ChatAssignment(props) {
 		</Dialog>
 	);
 }
-
 export default ChatAssignment;
