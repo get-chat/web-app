@@ -55,6 +55,7 @@ const QuickActionsMenu: React.FC<Props> = ({
 				close();
 			} else {
 				setCommandInput(commandString + ' ');
+				inputRef.current?.focus();
 			}
 		}, 0);
 	};
@@ -65,8 +66,11 @@ const QuickActionsMenu: React.FC<Props> = ({
 		indexPath: 'id',
 	});
 
-	const handleKeyDown = (e: React.KeyboardEvent) => {
+	const handleSearchInputKeyDown = (e: React.KeyboardEvent) => {
+		// Prevent cursor from moving when navigating between commands
 		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
+			e.preventDefault();
+
 			setTimeout(() => {
 				resultsRef.current
 					?.getElementsByClassName('active')[0]
@@ -75,19 +79,8 @@ const QuickActionsMenu: React.FC<Props> = ({
 		}
 	};
 
-	const handleSearchInputKeyDown = (e: React.KeyboardEvent) => {
-		// Prevent cursor from moving when navigating between commands
-		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
-			e.preventDefault();
-		}
-	};
-
 	return (
-		<div
-			className={styles.container}
-			ref={containerRef}
-			onKeyDown={handleKeyDown}
-		>
+		<div className={styles.container} ref={containerRef}>
 			<input
 				type="text"
 				placeholder={t('Search quick actions')}
