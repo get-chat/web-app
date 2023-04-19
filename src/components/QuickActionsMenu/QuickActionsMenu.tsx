@@ -47,26 +47,33 @@ const QuickActionsMenu: React.FC<Props> = ({
 	}, [inputRef.current]);
 
 	const handleItemRun = (item: QuickActionType) => {
-		const commandString = generateCommandString(item);
-		if (item.runCommand) {
-			onProcessCommand(commandString);
-			close();
-		} else {
-			setCommandInput(commandString + ' ');
-		}
+		// Running it in setTimeout to avoid incorrect click outside detections
+		setTimeout(() => {
+			const commandString = generateCommandString(item);
+			if (item.runCommand) {
+				onProcessCommand(commandString);
+				close();
+			} else {
+				setCommandInput(commandString + ' ');
+			}
+		}, 0);
 	};
 
 	const { activeIndex, itemProps } = useNavigateList({
 		list: data,
 		onSelect: handleItemRun,
+		indexPath: 'id',
 	});
 
-	useEffect(() => {
-		// Scroll to selected element
-		resultsRef.current
-			?.getElementsByClassName('active')[0]
-			?.scrollIntoView({ behavior: 'smooth' });
-	}, [activeIndex, resultsRef.current]);
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
+			setTimeout(() => {
+				resultsRef.current
+					?.getElementsByClassName('active')[0]
+					?.scrollIntoView({ behavior: 'smooth' });
+			}, 0);
+		}
+	};
 
 	const handleSearchInputKeyDown = (e: React.KeyboardEvent) => {
 		// Prevent cursor from moving when navigating between commands
@@ -76,7 +83,11 @@ const QuickActionsMenu: React.FC<Props> = ({
 	};
 
 	return (
-		<div className={styles.container} ref={containerRef}>
+		<div
+			className={styles.container}
+			ref={containerRef}
+			onKeyDown={handleKeyDown}
+		>
 			<input
 				type="text"
 				placeholder={t('Search quick actions')}
@@ -96,11 +107,10 @@ const QuickActionsMenu: React.FC<Props> = ({
 			>
 				{data.map((item, index) => (
 					<QuickActionItem
-						{...itemProps(item)}
 						key={index}
 						item={item}
 						isSelected={index === activeIndex}
-						onRun={handleItemRun}
+						itemProps={{ ...itemProps(item) }}
 					/>
 				))}
 			</div>

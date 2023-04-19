@@ -1,4 +1,5 @@
 export type QuickActionType = {
+	id?: string;
 	command: string;
 	isStatic: boolean;
 	parameters?: (string | undefined)[];

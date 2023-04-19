@@ -5,17 +5,10 @@ import styles from './QuickActionItem.module.css';
 export type Props = {
 	item: QuickActionType;
 	isSelected: boolean;
-	onRun: (item: QuickActionType) => void;
+	itemProps: {};
 };
 
-const QuickActionItem: React.FC<Props> = ({ item, isSelected, onRun }) => {
-	const handleClick = () => {
-		// Running it in setTimeout to avoid incorrect click outside detections
-		setTimeout(() => {
-			onRun(item);
-		}, 0);
-	};
-
+const QuickActionItem: React.FC<Props> = ({ item, isSelected, itemProps }) => {
 	return (
 		<div
 			className={
@@ -23,7 +16,8 @@ const QuickActionItem: React.FC<Props> = ({ item, isSelected, onRun }) => {
 				' ' +
 				(isSelected ? styles.containerSelected + ' active' : '')
 			}
-			onClick={handleClick}
+			{...itemProps}
+			//onClick={handleClick}
 		>
 			<div>
 				<span className="bold">
