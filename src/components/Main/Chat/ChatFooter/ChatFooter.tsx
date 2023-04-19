@@ -71,12 +71,10 @@ function ChatFooter({
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [isMoreVisible, setMoreVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
+	const [isQuickActionsMenuVisible, setQuickActionsMenuVisible] =
+		useState(false);
 
 	const [isRecording, setRecording] = useState(false);
-
-	const isQuickActionsMenuVisible = useMemo(() => {
-		return input?.substring(0, 1) === '/';
-	}, [input]);
 
 	const handleAttachmentClick = (acceptValue) => {
 		setAccept(acceptValue);
@@ -114,6 +112,12 @@ function ChatFooter({
 			PubSub.unsubscribe(token);
 		};
 	}, []);
+
+	useEffect(() => {
+		if (input.trim().startsWith('/')) {
+			setQuickActionsMenuVisible(true);
+		}
+	}, [input]);
 
 	useEffect(() => {
 		// Clear editable div when message is sent
@@ -256,8 +260,8 @@ function ChatFooter({
 		>
 			{isQuickActionsMenuVisible && (
 				<QuickActionsMenu
-					input={input}
 					setInput={setInput}
+					setVisible={setQuickActionsMenuVisible}
 					onProcessCommand={(command) => console.log(command)}
 					isExpired={isExpired}
 				/>

@@ -1,29 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './QuickActionsMenu.module.css';
-import SearchBar from '@src/components/SearchBar';
 import useQuickActionsMenu from '@src/components/QuickActionsMenu/useQuickActionsMenu';
 import QuickActionItem from '@src/components/QuickActionItem';
 import useNavigateList from 'react-use-navigate-list';
+import { useDetectClickOutside } from 'react-detect-click-outside';
+import { useTranslation } from 'react-i18next';
 
 export type Props = {
-	input: string;
-	setInput: (text?: string) => any;
-	onProcessCommand: (text?: string) => any;
+	setInput: (text?: string) => void;
+	setVisible: (isVisible: boolean) => void;
+	onProcessCommand: (text?: string) => void;
 	isExpired: boolean;
 };
 
 const QuickActionsMenu: React.FC<Props> = ({
-	input,
 	setInput,
+	setVisible,
 	onProcessCommand,
 	isExpired,
 }) => {
+	const { t } = useTranslation();
+
 	const [commandInput, setCommandInput] = useState('');
 
 	const { data, generateCommandString } = useQuickActionsMenu({
 		input: commandInput,
 		isExpired,
 	});
+
+	const close = () => {
+		setVisible(false);
+	};
+
+	const inputRef = useRef<HTMLInputElement>();
+	const containerRef = useDetectClickOutside({ onTriggered: close });
+
+	useEffect(() => {
+		// Clear message input on start
+		setInput('');
+	}, []);
+
+	useEffect(() => {
+		inputRef.current?.focus();
+	}, [inputRef.current]);
 
 	const { activeIndex, itemProps } = useNavigateList({
 		list: data,
@@ -33,8 +52,16 @@ const QuickActionsMenu: React.FC<Props> = ({
 	});
 
 	return (
-		<div className={styles.container}>
-			<SearchBar isLoading={false} onChange={setCommandInput} />
+		<div className={styles.container} ref={containerRef}>
+			<input
+				type="text"
+				placeholder={t('Search quick actions')}
+				value={commandInput}
+				onChange={(e) => setCommandInput(e.target.value)}
+				className={styles.searchInput}
+				// @ts-ignore
+				ref={inputRef}
+			/>
 			<div className={styles.results}>
 				{data.map((item, index) => (
 					<QuickActionItem
