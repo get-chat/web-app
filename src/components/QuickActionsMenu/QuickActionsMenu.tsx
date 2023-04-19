@@ -32,8 +32,9 @@ const QuickActionsMenu: React.FC<Props> = ({
 		setVisible(false);
 	};
 
-	const inputRef = useRef<HTMLInputElement>();
 	const containerRef = useDetectClickOutside({ onTriggered: close });
+	const inputRef = useRef<HTMLInputElement>();
+	const resultsRef = useRef<HTMLDivElement>();
 
 	useEffect(() => {
 		// Clear message input on start
@@ -51,6 +52,20 @@ const QuickActionsMenu: React.FC<Props> = ({
 		},
 	});
 
+	useEffect(() => {
+		// Scroll to selected element
+		resultsRef.current
+			?.getElementsByClassName('active')[0]
+			?.scrollIntoView({ behavior: 'smooth' });
+	}, [activeIndex, resultsRef.current]);
+
+	const handleSearchInputKeyDown = (e: React.KeyboardEvent) => {
+		// Prevent cursor from moving when navigating between commands
+		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
+			e.preventDefault();
+		}
+	};
+
 	return (
 		<div className={styles.container} ref={containerRef}>
 			<input
@@ -58,11 +73,18 @@ const QuickActionsMenu: React.FC<Props> = ({
 				placeholder={t('Search quick actions')}
 				value={commandInput}
 				onChange={(e) => setCommandInput(e.target.value)}
+				onKeyDown={handleSearchInputKeyDown}
 				className={styles.searchInput}
 				// @ts-ignore
 				ref={inputRef}
 			/>
-			<div className={styles.results}>
+			<div
+				className={styles.results}
+				// @ts-ignore
+				ref={resultsRef}
+				onKeyDown={(e) => e.preventDefault()}
+				tabIndex={0}
+			>
 				{data.map((item, index) => (
 					<QuickActionItem
 						{...itemProps(item)}

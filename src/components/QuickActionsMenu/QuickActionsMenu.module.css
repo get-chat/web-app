@@ -23,6 +23,8 @@
 	max-height: 300px;
 	overflow-y: auto;
 	overflow-x: hidden;
+	outline: 0;
+	border: none;
 }
 
 @media only screen and (max-width: 750px) {

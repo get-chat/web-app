@@ -33,7 +33,9 @@ const QuickActionItem: React.FC<Props> = ({
 	return (
 		<div
 			className={
-				styles.container + ' ' + (isSelected ? styles.containerSelected : '')
+				styles.container +
+				' ' +
+				(isSelected ? styles.containerSelected + ' active' : '')
 			}
 			onClick={handleClick}
 		>
