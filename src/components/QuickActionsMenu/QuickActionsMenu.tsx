@@ -48,7 +48,13 @@ const QuickActionsMenu: React.FC<Props> = ({
 	const { activeIndex, itemProps } = useNavigateList({
 		list: data,
 		onSelect: (item) => {
-			console.log(item);
+			const commandString = generateCommandString(item);
+			if (item.runCommand) {
+				onProcessCommand(commandString);
+				close();
+			} else {
+				setCommandInput(commandString + ' ');
+			}
 		},
 	});
 
@@ -94,6 +100,7 @@ const QuickActionsMenu: React.FC<Props> = ({
 						setInput={setCommandInput}
 						onProcessCommand={onProcessCommand}
 						isSelected={index === activeIndex}
+						close={close}
 					/>
 				))}
 			</div>

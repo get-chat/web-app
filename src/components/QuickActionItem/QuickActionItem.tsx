@@ -5,9 +5,10 @@ import styles from './QuickActionItem.module.css';
 export type Props = {
 	item: QuickActionType;
 	generateCommandString: any;
-	setInput: (text: string) => any;
-	onProcessCommand: (text?: string) => any;
+	setInput: (text: string) => void;
+	onProcessCommand: (text?: string) => void;
 	isSelected: boolean;
+	close: () => void;
 };
 
 const QuickActionItem: React.FC<Props> = ({
@@ -16,6 +17,7 @@ const QuickActionItem: React.FC<Props> = ({
 	setInput,
 	onProcessCommand,
 	isSelected,
+	close,
 }) => {
 	const handleClick = () => {
 		// Running it in setTimeout to avoid incorrect click outside detections
@@ -23,7 +25,7 @@ const QuickActionItem: React.FC<Props> = ({
 			const commandString = generateCommandString(item);
 			if (item.runCommand) {
 				onProcessCommand(commandString);
-				setInput('');
+				close();
 			} else {
 				setInput(commandString + ' ');
 			}
