@@ -3,6 +3,7 @@ import styles from './QuickActionsMenu.module.css';
 import SearchBar from '@src/components/SearchBar';
 import useQuickActionsMenu from '@src/components/QuickActionsMenu/useQuickActionsMenu';
 import QuickActionItem from '@src/components/QuickActionItem';
+import useNavigateList from 'react-use-navigate-list';
 
 export type Props = {
 	input: string;
@@ -24,17 +25,26 @@ const QuickActionsMenu: React.FC<Props> = ({
 		isExpired,
 	});
 
+	const { activeIndex, itemProps } = useNavigateList({
+		list: data,
+		onSelect: (item) => {
+			console.log(item);
+		},
+	});
+
 	return (
 		<div className={styles.container}>
 			<SearchBar isLoading={false} onChange={setCommandInput} />
 			<div className={styles.results}>
 				{data.map((item, index) => (
 					<QuickActionItem
+						{...itemProps(item)}
 						key={index}
 						item={item}
 						generateCommandString={generateCommandString}
 						setInput={setCommandInput}
 						onProcessCommand={onProcessCommand}
+						isSelected={index === activeIndex}
 					/>
 				))}
 			</div>

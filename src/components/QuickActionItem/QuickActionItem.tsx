@@ -7,6 +7,7 @@ export type Props = {
 	generateCommandString: any;
 	setInput: (text: string) => any;
 	onProcessCommand: (text?: string) => any;
+	isSelected: boolean;
 };
 
 const QuickActionItem: React.FC<Props> = ({
@@ -14,6 +15,7 @@ const QuickActionItem: React.FC<Props> = ({
 	generateCommandString,
 	setInput,
 	onProcessCommand,
+	isSelected,
 }) => {
 	const handleClick = () => {
 		const commandString = generateCommandString(item);
@@ -26,7 +28,12 @@ const QuickActionItem: React.FC<Props> = ({
 	};
 
 	return (
-		<div className={styles.container} onClick={handleClick}>
+		<div
+			className={
+				styles.container + ' ' + (isSelected ? styles.containerSelected : '')
+			}
+			onClick={handleClick}
+		>
 			<div>
 				<span className="bold">
 					{item.isStatic ? item.command : item.command.substring(1)}
