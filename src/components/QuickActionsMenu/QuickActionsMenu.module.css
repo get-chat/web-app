@@ -11,3 +11,10 @@
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+
+@media only screen and (max-width: 750px) {
+	.container {
+		border-radius: 0;
+		margin: 0;
+	}
+}

@@ -15,8 +15,18 @@ const QuickActionItem: React.FC<Props> = ({
 	setInput,
 	onProcessCommand,
 }) => {
+	const handleClick = () => {
+		const commandString = generateCommandString(item);
+		if (item.runCommand) {
+			onProcessCommand(commandString);
+			setInput('');
+		} else {
+			setInput(commandString + ' ');
+		}
+	};
+
 	return (
-		<div className={styles.container}>
+		<div className={styles.container} onClick={handleClick}>
 			<div>
 				<span className="bold">{item.command}</span> {item.parameterHint}{' '}
 				{item.parameters?.join(' ')}

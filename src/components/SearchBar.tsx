@@ -21,7 +21,7 @@ const SearchBar: React.FC<Props> = ({ onChange, isLoading, placeholder }) => {
 	return (
 		<div className="searchBar__search">
 			<div className="searchBar__searchContainer">
-				{isLoading === true ? (
+				{isLoading ? (
 					<CircularProgress />
 				) : (
 					<SearchOutlined className="searchBar__searchContainer__searchIcon" />

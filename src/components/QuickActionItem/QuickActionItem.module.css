@@ -2,9 +2,15 @@
 	padding: 5px 15px;
 	display: flex;
 	flex-direction: column;
+	cursor: pointer;
+	font-size: 14px;
 }
 
 .descriptionContainer {
 	font-size: 12px;
 	color: rgba(0, 45, 0, 0.6);
+}
+
+.container:hover {
+	background-color: #f2f3f6;
 }
