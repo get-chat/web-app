@@ -6,5 +6,8 @@
 }
 
 .results {
-	padding: 10px 15px;
+	padding: 5px 0;
+	max-height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }

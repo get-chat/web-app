@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './QuickActionsMenu.module.css';
 import SearchBar from '@src/components/SearchBar';
 import useQuickActionsMenu from '@src/components/QuickActionsMenu/useQuickActionsMenu';
+import QuickActionItem from '@src/components/QuickActionItem';
 
 export type Props = {
 	input: string;
@@ -26,7 +27,16 @@ const QuickActionsMenu: React.FC<Props> = ({
 	return (
 		<div className={styles.container}>
 			<SearchBar isLoading={false} onChange={setCommandInput} />
-			<div className={styles.results}>{JSON.stringify(data)}</div>
+			<div className={styles.results}>
+				{data.map((item) => (
+					<QuickActionItem
+						item={item}
+						generateCommandString={generateCommandString}
+						setInput={setCommandInput}
+						onProcessCommand={onProcessCommand}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };
