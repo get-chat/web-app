@@ -4,32 +4,16 @@ import styles from './QuickActionItem.module.css';
 
 export type Props = {
 	item: QuickActionType;
-	generateCommandString: any;
-	setInput: (text: string) => void;
-	onProcessCommand: (text?: string) => void;
 	isSelected: boolean;
-	close: () => void;
+	onRun: (item: QuickActionType) => void;
 };
 
-const QuickActionItem: React.FC<Props> = ({
-	item,
-	generateCommandString,
-	setInput,
-	onProcessCommand,
-	isSelected,
-	close,
-}) => {
+const QuickActionItem: React.FC<Props> = ({ item, isSelected, onRun }) => {
 	const handleClick = () => {
 		// Running it in setTimeout to avoid incorrect click outside detections
 		setTimeout(() => {
-			const commandString = generateCommandString(item);
-			if (item.runCommand) {
-				onProcessCommand(commandString);
-				close();
-			} else {
-				setInput(commandString + ' ');
-			}
-		}, 1);
+			onRun(item);
+		}, 0);
 	};
 
 	return (

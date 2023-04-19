@@ -5,6 +5,7 @@ import QuickActionItem from '@src/components/QuickActionItem';
 import useNavigateList from 'react-use-navigate-list';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { useTranslation } from 'react-i18next';
+import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
 
 export type Props = {
 	setInput: (text?: string) => void;
@@ -45,17 +46,19 @@ const QuickActionsMenu: React.FC<Props> = ({
 		inputRef.current?.focus();
 	}, [inputRef.current]);
 
+	const handleItemRun = (item: QuickActionType) => {
+		const commandString = generateCommandString(item);
+		if (item.runCommand) {
+			onProcessCommand(commandString);
+			close();
+		} else {
+			setCommandInput(commandString + ' ');
+		}
+	};
+
 	const { activeIndex, itemProps } = useNavigateList({
 		list: data,
-		onSelect: (item) => {
-			const commandString = generateCommandString(item);
-			if (item.runCommand) {
-				onProcessCommand(commandString);
-				close();
-			} else {
-				setCommandInput(commandString + ' ');
-			}
-		},
+		onSelect: handleItemRun,
 	});
 
 	useEffect(() => {
@@ -96,11 +99,8 @@ const QuickActionsMenu: React.FC<Props> = ({
 						{...itemProps(item)}
 						key={index}
 						item={item}
-						generateCommandString={generateCommandString}
-						setInput={setCommandInput}
-						onProcessCommand={onProcessCommand}
 						isSelected={index === activeIndex}
-						close={close}
+						onRun={handleItemRun}
 					/>
 				))}
 			</div>
