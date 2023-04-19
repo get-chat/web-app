@@ -114,7 +114,8 @@ function ChatFooter({
 	}, []);
 
 	useEffect(() => {
-		if (input.trim().startsWith('/')) {
+		const preparedInput = translateHTMLInputToText(input).trim();
+		if (preparedInput.startsWith('/')) {
 			setQuickActionsMenuVisible(true);
 		}
 	}, [input]);
