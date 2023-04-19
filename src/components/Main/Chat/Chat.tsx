@@ -1722,6 +1722,17 @@ export default function Chat(props) {
 		navigate('/main');
 	};
 
+	const processCommand = (text: string) => {
+		// Check if command matches with a template
+		const commandWithoutSlash = text.substring(1);
+		const template = templates[commandWithoutSlash];
+		if (template) {
+			console.log('Send template', template);
+
+			return;
+		}
+	};
+
 	let lastPrintedDate;
 	let lastSenderWaId;
 
@@ -1863,8 +1874,7 @@ export default function Chat(props) {
 				setAccept={setAccept}
 				isScrollButtonVisible={isScrollButtonVisible}
 				handleScrollButtonClick={handleScrollButtonClick}
-				closeChat={closeChat}
-				displayNotification={props.displayNotification}
+				processCommand={processCommand}
 			/>
 
 			{isTemplateMessagesVisible && (

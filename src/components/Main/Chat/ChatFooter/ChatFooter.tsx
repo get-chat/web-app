@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Badge, Fab, IconButton, Tooltip, Zoom } from '@mui/material';
 import {
 	Add,
@@ -42,7 +42,7 @@ import ContactsModal from '../../../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 
-function ChatFooter({
+const ChatFooter: React.FC = ({
 	waId,
 	currentNewMessages,
 	isExpired,
@@ -60,9 +60,8 @@ function ChatFooter({
 	setAccept,
 	isScrollButtonVisible,
 	handleScrollButtonClick,
-	closeChat,
-	displayNotification,
-}) {
+	processCommand,
+}) => {
 	const { t } = useTranslation();
 
 	const fileInput = useRef(null);
@@ -263,7 +262,7 @@ function ChatFooter({
 				<QuickActionsMenu
 					setInput={setInput}
 					setVisible={setQuickActionsMenuVisible}
-					onProcessCommand={(command) => console.log(command)}
+					onProcessCommand={processCommand}
 					isExpired={isExpired}
 				/>
 			)}
@@ -555,6 +554,6 @@ function ChatFooter({
 			</Zoom>
 		</div>
 	);
-}
+};
 
 export default ChatFooter;
