@@ -74,7 +74,7 @@ const QuickActionsMenu: React.FC<Props> = ({
 			setTimeout(() => {
 				resultsRef.current
 					?.getElementsByClassName('active')[0]
-					?.scrollIntoView({ behavior: 'smooth' });
+					?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			}, 0);
 		}
 	};
