@@ -1734,7 +1734,8 @@ export default function Chat(props) {
 		const template = templates[commandWithoutSlash];
 		if (template) {
 			console.log('Send template', template);
-
+			setChosenTemplate(template);
+			setSendTemplateDialogVisible(true);
 			return;
 		}
 	};
