@@ -18,13 +18,16 @@ const QuickActionItem: React.FC<Props> = ({
 	isSelected,
 }) => {
 	const handleClick = () => {
-		const commandString = generateCommandString(item);
-		if (item.runCommand) {
-			onProcessCommand(commandString);
-			setInput('');
-		} else {
-			setInput(commandString + ' ');
-		}
+		// Running it in setTimeout to avoid incorrect click outside detections
+		setTimeout(() => {
+			const commandString = generateCommandString(item);
+			if (item.runCommand) {
+				onProcessCommand(commandString);
+				setInput('');
+			} else {
+				setInput(commandString + ' ');
+			}
+		}, 1);
 	};
 
 	return (
