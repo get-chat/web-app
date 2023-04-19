@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { RootState } from '@src/store';
 import { QuickActionType } from '../QuickActionItem/QuickActionType';
 import {
 	COMMAND_ASSIGN,
@@ -38,6 +37,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				? [
 						{
 							command: COMMAND_SAVED_RESPONSE,
+							isStatic: true,
 							parameterHint: '<id>',
 							description: [
 								'Send a saved response',
@@ -48,6 +48,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				: []),
 			{
 				command: COMMAND_TEMPLATE,
+				isStatic: true,
 				parameterHint: '<name>',
 				description: [
 					'Send a template message',
@@ -56,6 +57,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			},
 			{
 				command: COMMAND_ASSIGN,
+				isStatic: true,
 				parameterHint: '<name>',
 				description: [
 					'Assign this chat',
@@ -64,6 +66,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			},
 			{
 				command: COMMAND_SEARCH,
+				isStatic: true,
 				parameterHint: '<message>',
 				description: [
 					'Search for a message',
@@ -82,6 +85,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			Object.values(savedResponses).forEach((savedResponse: any) => {
 				items.push({
 					command: COMMAND_SAVED_RESPONSE,
+					isStatic: true,
 					parameters: [savedResponse.id?.toString() ?? 'undefined'],
 					description: savedResponse.text,
 					runCommand: true,
@@ -105,6 +109,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 
 				items.push({
 					command: COMMAND_TEMPLATE,
+					isStatic: true,
 					parameters: [template.name?.toLowerCase()],
 					description: descriptionArray.join('\n'),
 					runCommand: true,
@@ -119,6 +124,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			Object.values(users).forEach((user: any) => {
 				items.push({
 					command: COMMAND_ASSIGN,
+					isStatic: true,
 					parameters: [user.username],
 					description: [
 						'Assign this chat to ' + user.username,
@@ -140,6 +146,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				// Display search option with input key
 				items.push({
 					command: COMMAND_SEARCH,
+					isStatic: true,
 					parameters: searchKeyword.split(' '),
 					description: 'Search for a message',
 					runCommand: true,
@@ -150,6 +157,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		Object.values(templates).forEach((template: any) => {
 			items.push({
 				command: '/' + template.name?.toLowerCase(),
+				isStatic: false,
 				parameters: [],
 				description: 'Send this template',
 				runCommand: true,

@@ -28,8 +28,9 @@ const QuickActionsMenu: React.FC<Props> = ({
 		<div className={styles.container}>
 			<SearchBar isLoading={false} onChange={setCommandInput} />
 			<div className={styles.results}>
-				{data.map((item) => (
+				{data.map((item, index) => (
 					<QuickActionItem
+						key={index}
 						item={item}
 						generateCommandString={generateCommandString}
 						setInput={setCommandInput}

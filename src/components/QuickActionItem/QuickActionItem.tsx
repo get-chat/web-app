@@ -28,8 +28,10 @@ const QuickActionItem: React.FC<Props> = ({
 	return (
 		<div className={styles.container} onClick={handleClick}>
 			<div>
-				<span className="bold">{item.command}</span> {item.parameterHint}{' '}
-				{item.parameters?.join(' ')}
+				<span className="bold">
+					{item.isStatic ? item.command : item.command.substring(1)}
+				</span>{' '}
+				{item.parameterHint} {item.parameters?.join(' ')}
 			</div>
 			<div className={styles.descriptionContainer}>{item.description}</div>
 		</div>
