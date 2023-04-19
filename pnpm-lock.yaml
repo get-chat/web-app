@@ -155,8 +155,8 @@ dependencies:
     specifier: ^0.2.0
     version: 0.2.0
   react-use-navigate-list:
-    specifier: ^0.1.6
-    version: 0.1.6(react-dom@18.2.0)(react@18.2.0)
+    specifier: github:berkayakin/react-use-navigate-list
+    version: github.com/berkayakin/react-use-navigate-list/77d71927ab1e966395517c2ea853348584495fb0(react-dom@18.2.0)(react@18.2.0)
   source-map-explorer:
     specifier: ^2.5.3
     version: 2.5.3
@@ -11391,16 +11391,6 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /react-use-navigate-list@0.1.6(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-EjrDrLGqJtkMgfDCxZSWYLP98akpqSkvx7DBLqdZ4SnKnlgUSUsk5gLK6GLHzwdmqyIjqomVD72znUQvWRNrFA==}
-    peerDependencies:
-      react: ^18.1.0
-      react-dom: ^18.1.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
   /react@18.2.0:
     resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
     engines: {node: '>=0.10.0'}
@@ -13597,3 +13587,16 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
     dev: true
+
+  github.com/berkayakin/react-use-navigate-list/77d71927ab1e966395517c2ea853348584495fb0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {tarball: https://codeload.github.com/berkayakin/react-use-navigate-list/tar.gz/77d71927ab1e966395517c2ea853348584495fb0}
+    id: github.com/berkayakin/react-use-navigate-list/77d71927ab1e966395517c2ea853348584495fb0
+    name: react-use-navigate-list
+    version: 0.1.6
+    peerDependencies:
+      react: ^18.1.0
+      react-dom: ^18.1.0
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
