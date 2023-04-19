@@ -25,8 +25,7 @@ export type Props = {
 	sendCallback?: () => void;
 	onBulkSend: (template: TemplateModel, payload: {}) => void;
 	isBulkOnly: boolean;
-	selectTemplateCallback: () => void;
-	dialogContentRef: React.MutableRefObject<any>;
+	selectTemplateCallback?: () => void;
 };
 
 const SendTemplateDialog: React.FC<Props> = ({
@@ -36,9 +35,8 @@ const SendTemplateDialog: React.FC<Props> = ({
 	onSend,
 	sendCallback,
 	onBulkSend,
-	isBulkOnly = false,
+	isBulkOnly,
 	selectTemplateCallback,
-	dialogContentRef,
 }) => {
 	const { t } = useTranslation();
 
@@ -47,6 +45,7 @@ const SendTemplateDialog: React.FC<Props> = ({
 	const [sentTemplateMessage, setSentTemplateMessage] =
 		useState<TemplateModel>();
 
+	const dialogContentRef = useRef<HTMLDivElement>();
 	const sendButtonRef = useRef<HTMLButtonElement>();
 	const bulkSendButtonRef = useRef<HTMLButtonElement>();
 

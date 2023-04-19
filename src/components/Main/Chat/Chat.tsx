@@ -76,6 +76,8 @@ import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import SendTemplateDialog from '@src/components/SendTemplateDialog';
+import TemplateModel from '@src/api/models/TemplateModel';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -120,6 +122,10 @@ export default function Chat(props) {
 	const [isAtBottom, setAtBottom] = useState(false);
 
 	const [lastMessageId, setLastMessageId] = useState();
+
+	const [chosenTemplate, setChosenTemplate] = useState();
+	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
+		useState(false);
 
 	const { waId } = useParams();
 
@@ -1879,15 +1885,23 @@ export default function Chat(props) {
 
 			{isTemplateMessagesVisible && (
 				<TemplateMessages
-					waId={waId}
-					onSend={(templateMessage) =>
-						sendTemplateMessage(true, templateMessage)
-					}
-					onBulkSend={bulkSendMessage}
 					isTemplatesFailed={props.isTemplatesFailed}
 					isLoadingTemplates={props.isLoadingTemplates}
+					onSelect={(template: TemplateModel) => {
+						setChosenTemplate(template);
+						setSendTemplateDialogVisible(true);
+					}}
 				/>
 			)}
+
+			<SendTemplateDialog
+				isVisible={isSendTemplateDialogVisible}
+				setVisible={setSendTemplateDialogVisible}
+				chosenTemplate={chosenTemplate}
+				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
+				onBulkSend={bulkSendMessage}
+				isBulkOnly={false}
+			/>
 
 			{isSavedResponsesVisible && (
 				<SavedResponses

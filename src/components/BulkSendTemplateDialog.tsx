@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from 'react';
+import React, { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { Button, Dialog } from '@mui/material';
@@ -7,6 +7,8 @@ import DialogActions from '@mui/material/DialogActions';
 import { useTranslation } from 'react-i18next';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import TemplateMessages from './Main/Chat/TemplateMessages/TemplateMessages';
+import SendTemplateDialog from '@src/components/SendTemplateDialog';
+import TemplateModel from '@src/api/models/TemplateModel';
 
 const BulkSendTemplateDialog = ({
 	open,
@@ -17,6 +19,10 @@ const BulkSendTemplateDialog = ({
 	isLoadingTemplates,
 }) => {
 	const { t } = useTranslation();
+
+	const [chosenTemplate, setChosenTemplate] = useState();
+	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
+		useState(false);
 
 	const close = () => {
 		setOpen(false);
@@ -32,9 +38,23 @@ const BulkSendTemplateDialog = ({
 			<DialogTitle>{t('Bulk send a template')}</DialogTitle>
 			<DialogContent className="sendBulkTemplateDialogContent">
 				<TemplateMessages
-					onBulkSend={bulkSendMessage}
 					isTemplatesFailed={isTemplatesFailed}
 					isLoadingTemplates={isLoadingTemplates}
+					onSelect={(template: TemplateModel) => {
+						setChosenTemplate(template);
+						setSendTemplateDialogVisible(true);
+					}}
+					isBulkOnly={true}
+				/>
+
+				<SendTemplateDialog
+					isVisible={isSendTemplateDialogVisible}
+					setVisible={setSendTemplateDialogVisible}
+					chosenTemplate={chosenTemplate}
+					onSend={(templateMessage) =>
+						sendTemplateMessage(true, templateMessage)
+					}
+					onBulkSend={bulkSendMessage}
 					sendCallback={close}
 					isBulkOnly={true}
 				/>

@@ -1,42 +1,24 @@
-// @ts-nocheck
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Alert from '@mui/material/Alert';
 import TemplatesList from '../../../TemplatesList';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
-import SendTemplateDialog from '@src/components/SendTemplateDialog';
+import TemplateModel from '@src/api/models/TemplateModel';
 
-function TemplateMessages({
-	waId,
-	onSend,
-	sendCallback,
-	onBulkSend,
-	selectTemplateCallback,
+export type Props = {
+	isLoadingTemplates: boolean;
+	isTemplatesFailed: boolean;
+	onSelect: (template: TemplateModel) => void;
+};
+
+const TemplateMessages: React.FC<Props> = ({
 	isLoadingTemplates,
 	isTemplatesFailed,
-	isBulkOnly,
-}) {
+	onSelect,
+}) => {
 	const templates = useAppSelector((state) => state.templates.value);
 
-	const [chosenTemplate, setChosenTemplate] = useState();
-	const [isDialogVisible, setDialogVisible] = useState(false);
-
-	const dialogContentRef = useRef();
-
 	const { t } = useTranslation();
-
-	useEffect(() => {
-		setDialogVisible(false);
-	}, [waId]);
-
-	const showDialog = () => {
-		setDialogVisible(true);
-	};
-
-	const chooseTemplate = (template) => {
-		setChosenTemplate(template);
-		showDialog();
-	};
 
 	return (
 		<div className="templateMessagesOuter">
@@ -47,25 +29,14 @@ function TemplateMessages({
 			) : (
 				<TemplatesList
 					templates={templates}
-					onClick={(templateData) => chooseTemplate(templateData)}
+					onClick={onSelect}
 					displayRegisterTemplate={true}
 					isTemplatesFailed={isTemplatesFailed}
+					customSelectButtonTitle={undefined}
 				/>
 			)}
-
-			<SendTemplateDialog
-				isVisible={isDialogVisible}
-				setVisible={setDialogVisible}
-				chosenTemplate={chosenTemplate}
-				onSend={onSend}
-				sendCallback={sendCallback}
-				onBulkSend={onBulkSend}
-				isBulkOnly={isBulkOnly}
-				selectTemplateCallback={selectTemplateCallback}
-				dialogContentRef={dialogContentRef}
-			/>
 		</div>
 	);
-}
+};
 
 export default TemplateMessages;
