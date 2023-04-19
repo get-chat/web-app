@@ -17,8 +17,11 @@ const QuickActionItem: React.FC<Props> = ({
 }) => {
 	return (
 		<div className={styles.container}>
-			<span className="bold">{item.command}</span> {item.parameterHint}{' '}
-			{item.parameters?.join(' ')}
+			<div>
+				<span className="bold">{item.command}</span> {item.parameterHint}{' '}
+				{item.parameters?.join(' ')}
+			</div>
+			<div className={styles.descriptionContainer}>{item.description}</div>
 		</div>
 	);
 };
