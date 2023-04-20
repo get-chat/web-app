@@ -6,4 +6,5 @@ export type QuickActionType = {
 	parameterHint?: string;
 	description?: string;
 	runCommand?: boolean;
+	customActionCommand?: string;
 };

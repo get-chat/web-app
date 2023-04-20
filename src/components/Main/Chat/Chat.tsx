@@ -5,6 +5,14 @@ import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from './ChatMessage/ChatMessage';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
+	COMMAND_ASSIGN,
+	COMMAND_ASSIGN_ALIAS,
+	COMMAND_SAVED_RESPONSE,
+	COMMAND_SAVED_RESPONSE_ALIAS,
+	COMMAND_SEARCH,
+	COMMAND_SEARCH_ALIAS,
+	COMMAND_TEMPLATE,
+	COMMAND_TEMPLATE_ALIAS,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
@@ -96,6 +104,7 @@ export default function Chat(props) {
 	const messagesContainer = useRef(null);
 
 	const templates = useAppSelector((state) => state.templates.value);
+	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);
@@ -1729,14 +1738,126 @@ export default function Chat(props) {
 	};
 
 	const processCommand = (text: string) => {
+		console.log('Command: ' + text);
+
 		// Check if command matches with a template
 		const commandWithoutSlash = text.substring(1);
 		const template = templates[commandWithoutSlash];
+
 		if (template) {
 			console.log('Send template', template);
 			setChosenTemplate(template);
 			setSendTemplateDialogVisible(true);
 			return;
+		}
+
+		// Process static commands
+		const commandArray = text.split(' ').filter((e) => e);
+
+		const handleTemplateCommand = () => {
+			const templateName = commandArray[1] ?? '';
+			if (templateName) {
+				console.log('Send template: ' + templateName);
+
+				const template = templates[templateName];
+
+				if (template) {
+					setChosenTemplate(template);
+					setSendTemplateDialogVisible(true);
+				} else {
+					window.displayCustomError('Template not found!');
+				}
+			}
+		};
+
+		const handleSavedResponseCommand = () => {
+			const savedResponseId = commandArray[1] ?? '';
+			if (savedResponseId > 0) {
+				console.log('Send saved response: ' + savedResponseId);
+
+				const savedResponse = Object.values(savedResponses).filter(
+					(curSavedResponse) =>
+						curSavedResponse.id?.toString() === savedResponseId
+				)[0];
+
+				if (savedResponse) {
+					sendCustomTextMessage(savedResponse.text);
+				} else {
+					window.displayCustomError('Saved response not found!');
+				}
+			}
+		};
+
+		const handleAssignCommand = () => {
+			const assignedUsername = commandArray[1] ?? '';
+			if (assignedUsername) {
+				console.log('Assign to: ' + assignedUsername);
+
+				const assignedUserId = Object.values(users).filter(
+					(curUser) => curUser.username === assignedUsername
+				)[0]?.id;
+
+				if (assignedUserId) {
+					// TODO: Implement handleAssignCommand
+					//partialUpdateChatAssignment(assignedUserId);
+				} else {
+					window.displayCustomError('User not found!');
+				}
+			}
+		};
+
+		const handleSearchCommand = () => {
+			const searchKeyword = commandArray
+				.filter((item, index) => index !== 0)
+				.join(' ');
+
+			if (searchKeyword.trim().length > 0) {
+				// TODO: Implement handleSearchCommand
+				//setInitialSearchKeyword(searchKeyword);
+				//setSearchInChatVisible(true);
+			} else {
+				window.displayCustomError('You need to enter a keyword!');
+			}
+		};
+
+		if (commandArray.length > 0) {
+			switch (commandArray[0]) {
+				case COMMAND_TEMPLATE: {
+					handleTemplateCommand();
+					break;
+				}
+				case COMMAND_TEMPLATE_ALIAS: {
+					handleTemplateCommand();
+					break;
+				}
+				case COMMAND_SAVED_RESPONSE: {
+					handleSavedResponseCommand();
+					break;
+				}
+				case COMMAND_SAVED_RESPONSE_ALIAS: {
+					handleSavedResponseCommand();
+					break;
+				}
+				case COMMAND_ASSIGN: {
+					handleAssignCommand();
+					break;
+				}
+				case COMMAND_ASSIGN_ALIAS: {
+					handleAssignCommand();
+					break;
+				}
+				case COMMAND_SEARCH: {
+					handleSearchCommand();
+					break;
+				}
+				case COMMAND_SEARCH_ALIAS: {
+					handleSearchCommand();
+					break;
+				}
+				default:
+					setUIFeedback('Command not recognized!');
+					break;
+			}
 		}
 	};
 

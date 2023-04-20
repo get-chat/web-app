@@ -50,7 +50,10 @@ const QuickActionsMenu: React.FC<Props> = ({
 		// Running it in setTimeout to avoid incorrect click outside detections
 		setTimeout(() => {
 			const commandString = generateCommandString(item);
-			if (item.runCommand) {
+			if (item.customActionCommand) {
+				onProcessCommand(item.customActionCommand);
+				close();
+			} else if (item.runCommand) {
 				onProcessCommand(commandString);
 				close();
 			} else {

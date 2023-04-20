@@ -172,6 +172,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				parameters: [],
 				description: 'Send this quick response',
 				runCommand: true,
+				customActionCommand: COMMAND_SAVED_RESPONSE + ' ' + savedResponse.id,
 			});
 		});
 
