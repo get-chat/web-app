@@ -116,6 +116,9 @@ const ChatFooter: React.FC = ({
 		const preparedInput = translateHTMLInputToText(input).trim();
 		if (preparedInput.startsWith('/')) {
 			setQuickActionsMenuVisible(true);
+			setTemplateMessagesVisible(false);
+			setSavedResponsesVisible(false);
+			setEmojiPickerVisible(false);
 		}
 	}, [input]);
 
