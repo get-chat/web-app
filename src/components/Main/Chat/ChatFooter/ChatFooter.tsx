@@ -313,18 +313,6 @@ const ChatFooter: React.FC = ({
 				</Tooltip>
 
 				{!isExpired && (
-					<Tooltip title={t('Emoji')} placement="top">
-						<IconButton
-							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
-							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
-							size="large"
-						>
-							<InsertEmoticon />
-						</IconButton>
-					</Tooltip>
-				)}
-
-				{!isExpired && (
 					<div className="chat__footer__attachmentContainer desktopOnly">
 						<Tooltip title={t('Attachment')} placement="right">
 							<IconButton size="large">
@@ -393,6 +381,18 @@ const ChatFooter: React.FC = ({
 							size="large"
 						>
 							<NotesIcon />
+						</IconButton>
+					</Tooltip>
+				)}
+
+				{!isExpired && (
+					<Tooltip title={t('Emoji')} placement="top">
+						<IconButton
+							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
+							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
+							size="large"
+						>
+							<InsertEmoticon />
 						</IconButton>
 					</Tooltip>
 				)}
