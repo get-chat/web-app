@@ -166,16 +166,18 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		});
 
 		// Dynamic commands: saved responses
-		Object.values(savedResponses).forEach((savedResponse) => {
-			items.push({
-				command: '/' + savedResponse.text.toLowerCase(),
-				isStatic: false,
-				parameters: [],
-				description: 'Send this quick response',
-				runCommand: true,
-				customActionCommand: COMMAND_SAVED_RESPONSE + ' ' + savedResponse.id,
+		if (!isExpired) {
+			Object.values(savedResponses).forEach((savedResponse) => {
+				items.push({
+					command: '/' + savedResponse.text.toLowerCase(),
+					isStatic: false,
+					parameters: [],
+					description: 'Send this quick response',
+					runCommand: true,
+					customActionCommand: COMMAND_SAVED_RESPONSE + ' ' + savedResponse.id,
+				});
 			});
-		});
+		}
 
 		return items
 			.filter((item) => {
