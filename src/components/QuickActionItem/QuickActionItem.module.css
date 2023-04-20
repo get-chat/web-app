@@ -10,7 +10,15 @@
 	background-color: #f2f3f6;
 }
 
-.descriptionContainer {
+.command {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+.description {
 	font-size: 12px;
 	color: rgba(0, 45, 0, 0.6);
 	white-space: pre-line;
