@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
 
 export type Props = {
+	input: string;
 	setInput: (text?: string) => void;
 	setVisible: (isVisible: boolean) => void;
 	onProcessCommand: (text?: string) => void;
@@ -15,6 +16,7 @@ export type Props = {
 };
 
 const QuickActionsMenu: React.FC<Props> = ({
+	input,
 	setInput,
 	setVisible,
 	onProcessCommand,
@@ -39,7 +41,9 @@ const QuickActionsMenu: React.FC<Props> = ({
 
 	useEffect(() => {
 		// Clear message input on start
-		setInput('');
+		if (input.startsWith('/')) {
+			setInput('');
+		}
 	}, []);
 
 	useEffect(() => {

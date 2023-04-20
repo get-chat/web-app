@@ -273,6 +273,7 @@ const ChatFooter: React.FC = ({
 		>
 			{isQuickActionsMenuVisible && (
 				<QuickActionsMenu
+					input={translateHTMLInputToText(input).trim()}
 					setInput={setInput}
 					setVisible={setQuickActionsMenuVisible}
 					onProcessCommand={processCommand}
