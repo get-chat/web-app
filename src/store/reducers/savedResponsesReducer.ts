@@ -1,6 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SavedResponseList } from '@src/api/responses/SavedResponsesResponse';
 
-const initialState = {
+interface SavedResponsesState {
+	value: SavedResponseList;
+}
+
+const initialState: SavedResponsesState = {
 	value: {},
 };
 
@@ -8,8 +13,8 @@ export const savedResponsesSlice = createSlice({
 	name: 'savedResponses',
 	initialState,
 	reducers: {
-		setSavedResponses: (state, savedResponses) => {
-			state.value = savedResponses.payload;
+		setSavedResponses: (state, action: PayloadAction<SavedResponseList>) => {
+			state.value = action.payload;
 		},
 	},
 });

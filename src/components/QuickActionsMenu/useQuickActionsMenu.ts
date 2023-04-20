@@ -12,6 +12,8 @@ import {
 } from '@src/Constants';
 import { sortTemplateComponents } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
+import TemplateModel from '@src/api/models/TemplateModel';
+import SavedResponseModel from '@src/api/models/SavedResponseModel';
 
 export type Props = {
 	input: string;
@@ -153,7 +155,8 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			}
 		}
 
-		Object.values(templates).forEach((template: any) => {
+		// Dynamic commands: templates
+		Object.values(templates).forEach((template: TemplateModel) => {
 			items.push({
 				command: '/' + template.name?.toLowerCase(),
 				isStatic: false,
@@ -162,6 +165,19 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				runCommand: true,
 			});
 		});
+
+		// Dynamic commands: saved responses
+		Object.values(savedResponses).forEach(
+			(savedResponse: SavedResponseModel) => {
+				items.push({
+					command: '/' + savedResponse.text.toLowerCase(),
+					isStatic: false,
+					parameters: [],
+					description: 'Send this quick response',
+					runCommand: true,
+				});
+			}
+		);
 
 		return items
 			.filter((item) => {

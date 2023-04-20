@@ -1,5 +1,7 @@
 // @ts-nocheck
 class TemplateModel {
+	public name: string;
+
 	constructor(data) {
 		this.namespace = data.namespace;
 		this.name = data.name;

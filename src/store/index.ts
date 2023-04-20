@@ -3,7 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import rootReducer from './reducers';
 
-export default function configureAppStore(preloadedState) {
+function configureAppStore(preloadedState) {
 	const store = configureStore({
 		reducer: rootReducer,
 		preloadedState,
@@ -19,6 +19,8 @@ export default function configureAppStore(preloadedState) {
 
 	return store;
 }
+
+export const store = configureAppStore({});
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

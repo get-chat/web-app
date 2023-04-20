@@ -14,10 +14,8 @@ import AppTheme from './AppTheme';
 import { isIPad13 } from 'react-device-detect';
 import { ApplicationContext } from './contexts/ApplicationContext';
 import { AppConfig } from './contexts/AppConfig';
-import configureAppStore from './store';
+import { store } from './store';
 import { ThemeProvider } from '@mui/material';
-
-const store = configureAppStore({});
 
 const App = ({ config, apiService }) => {
 	const renderPaths = (paths, Element) =>
