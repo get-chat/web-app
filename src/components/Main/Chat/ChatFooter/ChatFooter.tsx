@@ -221,7 +221,14 @@ const ChatFooter: React.FC = ({
 	const handleFocus = (event) => {
 		if (isExpired) {
 			event.target.blur();
-			setTemplateMessagesVisible(true);
+
+			if (!isQuickActionsMenuVisible) {
+				// Using setTimeout to avoid instant disappear bug with handle click outside library
+				setTimeout(() => {
+					setQuickActionsMenuVisible(true);
+				}, 150);
+			}
+
 			return;
 		}
 
