@@ -31,6 +31,15 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		return commandString;
 	};
 
+	const startsWithCommand = (command: string, alias: string): boolean => {
+		return (
+			input.startsWith(command.substring(1)) ||
+			input.startsWith(alias.substring(1) + ' ') ||
+			input.startsWith(command) ||
+			input.startsWith(alias + ' ')
+		);
+	};
+
 	const data = useMemo(() => {
 		const items: QuickActionType[] = [
 			...(!isExpired
@@ -79,8 +88,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 
 		if (
 			!isExpired &&
-			(input.startsWith(COMMAND_SAVED_RESPONSE) ||
-				input.startsWith(COMMAND_SAVED_RESPONSE_ALIAS + ' '))
+			startsWithCommand(COMMAND_SAVED_RESPONSE, COMMAND_SAVED_RESPONSE_ALIAS)
 		) {
 			Object.values(savedResponses).forEach((savedResponse: any) => {
 				items.push({
@@ -93,10 +101,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			});
 		}
 
-		if (
-			input.startsWith(COMMAND_TEMPLATE) ||
-			input.startsWith(COMMAND_TEMPLATE_ALIAS + ' ')
-		) {
+		if (startsWithCommand(COMMAND_TEMPLATE, COMMAND_TEMPLATE_ALIAS)) {
 			Object.values(templates).forEach((template: any) => {
 				const descriptionArray = sortTemplateComponents(
 					template.components
@@ -117,10 +122,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			});
 		}
 
-		if (
-			input.startsWith(COMMAND_ASSIGN) ||
-			input.startsWith(COMMAND_ASSIGN_ALIAS + ' ')
-		) {
+		if (startsWithCommand(COMMAND_ASSIGN, COMMAND_ASSIGN_ALIAS)) {
 			Object.values(users).forEach((user: any) => {
 				items.push({
 					command: COMMAND_ASSIGN,
@@ -135,10 +137,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 			});
 		}
 
-		if (
-			input.startsWith(COMMAND_SEARCH) ||
-			input.startsWith(COMMAND_SEARCH_ALIAS + ' ')
-		) {
+		if (startsWithCommand(COMMAND_SEARCH, COMMAND_SEARCH_ALIAS)) {
 			const searchKeyword = inputArray
 				.filter((item, index) => index !== 0)
 				.join(' ');
