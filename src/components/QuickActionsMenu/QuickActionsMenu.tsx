@@ -75,6 +75,13 @@ const QuickActionsMenu: React.FC<Props> = ({
 		// Prevent cursor from moving when navigating between commands
 		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
 			e.preventDefault();
+		}
+	};
+
+	const handleSearchInputKeyUp = (e: React.KeyboardEvent) => {
+		// Prevent cursor from moving when navigating between commands
+		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
+			e.preventDefault();
 
 			setTimeout(() => {
 				resultsRef.current
@@ -92,6 +99,7 @@ const QuickActionsMenu: React.FC<Props> = ({
 				value={commandInput}
 				onChange={(e) => setCommandInput(e.target.value)}
 				onKeyDown={handleSearchInputKeyDown}
+				onKeyUp={handleSearchInputKeyUp}
 				className={styles.searchInput}
 				// @ts-ignore
 				ref={inputRef}
