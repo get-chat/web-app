@@ -1738,18 +1738,6 @@ export default function Chat(props) {
 	const processCommand = (text: string) => {
 		console.log('Command: ' + text);
 
-		// Check if command matches with a template
-		const commandWithoutSlash = text.substring(1);
-		const template = templates[commandWithoutSlash];
-
-		if (template) {
-			console.log('Send template', template);
-			setChosenTemplate(template);
-			setSendTemplateDialogVisible(true);
-			return;
-		}
-
-		// Process static commands
 		const commandArray = text.split(' ').filter((e) => e);
 
 		const handleTemplateCommand = () => {

@@ -46,7 +46,9 @@ const QuickActionsMenu: React.FC<Props> = ({
 		inputRef.current?.focus();
 	}, [inputRef.current]);
 
-	const handleItemRun = (item: QuickActionType) => {
+	const handleItemRun = (item?: QuickActionType) => {
+		if (!item) return;
+
 		// Running it in setTimeout to avoid incorrect click outside detections
 		setTimeout(() => {
 			const commandString = generateCommandString(item);
@@ -109,6 +111,10 @@ const QuickActionsMenu: React.FC<Props> = ({
 						itemProps={{ ...itemProps(item) }}
 					/>
 				))}
+
+				{data.length === 0 && (
+					<div className={styles.noResult}>{t('No results found.')}</div>
+				)}
 			</div>
 		</div>
 	);

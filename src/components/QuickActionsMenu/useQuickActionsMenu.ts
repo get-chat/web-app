@@ -161,6 +161,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				parameters: [],
 				description: 'Send this template',
 				runCommand: true,
+				customActionCommand: COMMAND_TEMPLATE + ' ' + template.name,
 			});
 		});
 
