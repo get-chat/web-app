@@ -9,7 +9,7 @@ const initialState: SavedResponsesState = {
 	value: {},
 };
 
-export const savedResponsesSlice = createSlice({
+const savedResponsesSlice = createSlice({
 	name: 'savedResponses',
 	initialState,
 	reducers: {

@@ -1,5 +1,5 @@
-// @ts-nocheck
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TemplateList } from '@src/api/responses/TemplatesResponse';
 
 interface TemplatesState {
 	value: TemplateList;

@@ -8,13 +8,14 @@ import useTemplates from '@src/hooks/useTemplates';
 import { useAppSelector } from '@src/store/hooks';
 
 const TemplatesList = ({
-	templates,
 	onClick,
 	customSelectButtonTitle,
 	displayRegisterTemplate,
 	isTemplatesFailed,
 }) => {
 	const { t } = useTranslation();
+
+	const templates = useAppSelector((state) => state.templates.value);
 
 	const { issueTemplateRefreshRequest } = useTemplates();
 

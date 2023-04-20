@@ -2,7 +2,6 @@ import React from 'react';
 import Alert from '@mui/material/Alert';
 import TemplatesList from '../../../TemplatesList';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '@src/store/hooks';
 import TemplateModel from '@src/api/models/TemplateModel';
 
 export type Props = {
@@ -16,8 +15,6 @@ const TemplateMessages: React.FC<Props> = ({
 	isTemplatesFailed,
 	onSelect,
 }) => {
-	const templates = useAppSelector((state) => state.templates.value);
-
 	const { t } = useTranslation();
 
 	return (
@@ -28,7 +25,6 @@ const TemplateMessages: React.FC<Props> = ({
 				<Alert severity="info">{t('Loading template messages...')}</Alert>
 			) : (
 				<TemplatesList
-					templates={templates}
 					onClick={onSelect}
 					displayRegisterTemplate={true}
 					isTemplatesFailed={isTemplatesFailed}
