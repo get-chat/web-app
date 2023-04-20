@@ -20,9 +20,9 @@ const QuickActionItem: React.FC<Props> = ({ item, isSelected, itemProps }) => {
 			//onClick={handleClick}
 		>
 			<div>
-				<div className={styles.command + ' bold'}>
+				<span className={styles.command + ' bold'}>
 					{item.isStatic ? item.command : item.command.substring(1)}
-				</div>{' '}
+				</span>{' '}
 				{item.parameterHint} {item.parameters?.join(' ')}
 			</div>
 			<div className={styles.description}>{item.description}</div>
