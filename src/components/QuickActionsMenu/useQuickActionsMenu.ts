@@ -64,7 +64,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 					'Alias: ' + COMMAND_TEMPLATE_ALIAS,
 				].join('\n'),
 			},
-			{
+			/*{
 				command: COMMAND_ASSIGN,
 				isStatic: true,
 				parameterHint: '<name>',
@@ -81,7 +81,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 					'Search for a message',
 					'Alias: ' + COMMAND_SEARCH_ALIAS,
 				].join('\n'),
-			},
+			},*/
 		];
 
 		const inputArray = input?.split(' ').filter((e) => e);
