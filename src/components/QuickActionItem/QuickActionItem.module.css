@@ -14,6 +14,26 @@
 	overflow: hidden;
 }
 
+.staticCommand {
+	background-color: var(--gray-light);
+	border-radius: 4px;
+	padding: 2px 4px;
+}
+
+.commandIcon {
+	height: 20px !important;
+	width: 20px !important;
+	margin-right: 5px;
+}
+
+.staticCommandIconStatic {
+	color: #50da26 !important;
+}
+
+.dynamicCommandIcon {
+	color: #ffbe1b !important;
+}
+
 .description {
 	font-size: 12px;
 	color: rgba(0, 45, 0, 0.6);
