@@ -13,4 +13,5 @@
 .descriptionContainer {
 	font-size: 12px;
 	color: rgba(0, 45, 0, 0.6);
+	white-space: pre-line;
 }
