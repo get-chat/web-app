@@ -95,14 +95,11 @@ const MESSAGES_PER_PAGE = 30;
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const currentUser = useAppSelector((state) => state.currentUser.value);
-
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
 
-	const messagesContainer = useRef(null);
-
+	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const templates = useAppSelector((state) => state.templates.value);
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
@@ -136,12 +133,13 @@ export default function Chat(props) {
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 
+	const messagesContainer = useRef(null);
+	const cancelTokenSourceRef = useRef();
+
 	const { waId } = useParams();
 
 	const navigate = useNavigate();
 	const location = useLocation();
-
-	const cancelTokenSourceRef = useRef();
 
 	useEffect(() => {
 		props.retrieveContactData(waId);
