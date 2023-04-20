@@ -41,6 +41,7 @@ import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../../../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 
 const ChatFooter: React.FC = ({
 	waId,
@@ -115,10 +116,7 @@ const ChatFooter: React.FC = ({
 	useEffect(() => {
 		const preparedInput = translateHTMLInputToText(input).trim();
 		if (preparedInput.startsWith('/')) {
-			setQuickActionsMenuVisible(true);
-			setTemplateMessagesVisible(false);
-			setSavedResponsesVisible(false);
-			setEmojiPickerVisible(false);
+			displayQuickActionsMenu();
 		}
 	}, [input]);
 
@@ -218,17 +216,22 @@ const ChatFooter: React.FC = ({
 		event.preventDefault();
 	};
 
+	const displayQuickActionsMenu = () => {
+		if (!isQuickActionsMenuVisible) {
+			// Using setTimeout to avoid instant disappear bug with handle click outside library
+			setTimeout(() => {
+				setQuickActionsMenuVisible(true);
+				setTemplateMessagesVisible(false);
+				setSavedResponsesVisible(false);
+				setEmojiPickerVisible(false);
+			}, 150);
+		}
+	};
+
 	const handleFocus = (event) => {
 		if (isExpired) {
 			event.target.blur();
-
-			if (!isQuickActionsMenuVisible) {
-				// Using setTimeout to avoid instant disappear bug with handle click outside library
-				setTimeout(() => {
-					setQuickActionsMenuVisible(true);
-				}, 150);
-			}
-
+			displayQuickActionsMenu();
 			return;
 		}
 
@@ -298,6 +301,16 @@ const ChatFooter: React.FC = ({
 			/>
 
 			<div className="chat__footer">
+				<Tooltip title={t('Quick Actions')} placement="top">
+					<IconButton
+						className={isQuickActionsMenuVisible ? 'activeIconButton' : ''}
+						onClick={displayQuickActionsMenu}
+						size="large"
+					>
+						<KeyboardCommandKeyIcon />
+					</IconButton>
+				</Tooltip>
+
 				{!isExpired && (
 					<Tooltip title={t('Emoji')} placement="top">
 						<IconButton
