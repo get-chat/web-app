@@ -6,7 +6,7 @@ import { Button, Dialog } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import { useTranslation } from 'react-i18next';
 import '../styles/SendBulkVoiceMessageDialog.css';
-import TemplateMessages from './Main/Chat/TemplateMessages/TemplateMessages';
+import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 
@@ -37,7 +37,7 @@ const BulkSendTemplateDialog = ({
 		<Dialog open={open} onClose={close} className="sendBulkTemplateDialog">
 			<DialogTitle>{t('Bulk send a template')}</DialogTitle>
 			<DialogContent className="sendBulkTemplateDialogContent">
-				<TemplateMessages
+				<TemplateListWithControls
 					isTemplatesFailed={isTemplatesFailed}
 					isLoadingTemplates={isLoadingTemplates}
 					onSelect={(template: TemplateModel) => {

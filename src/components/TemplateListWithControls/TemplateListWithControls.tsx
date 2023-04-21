@@ -1,6 +1,6 @@
 import React from 'react';
 import Alert from '@mui/material/Alert';
-import TemplatesList from '../../../TemplatesList';
+import TemplatesList from '../TemplatesList';
 import { useTranslation } from 'react-i18next';
 import TemplateModel from '@src/api/models/TemplateModel';
 
@@ -10,7 +10,7 @@ export type Props = {
 	onSelect: (template: TemplateModel) => void;
 };
 
-const TemplateMessages: React.FC<Props> = ({
+const TemplateListWithControls: React.FC<Props> = ({
 	isLoadingTemplates,
 	isTemplatesFailed,
 	onSelect,
@@ -35,4 +35,4 @@ const TemplateMessages: React.FC<Props> = ({
 	);
 };
 
-export default TemplateMessages;
+export default TemplateListWithControls;

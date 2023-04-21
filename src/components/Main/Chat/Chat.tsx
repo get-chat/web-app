@@ -29,7 +29,7 @@ import {
 } from '@src/Constants';
 import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
-import TemplateMessages from './TemplateMessages/TemplateMessages';
+import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from './ChatFooter/ChatFooter';
 import ChatHeader from './ChatHeader';
 import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
@@ -1992,7 +1992,7 @@ export default function Chat(props) {
 			/>
 
 			{isTemplateMessagesVisible && (
-				<TemplateMessages
+				<TemplateListWithControls
 					isTemplatesFailed={props.isTemplatesFailed}
 					isLoadingTemplates={props.isLoadingTemplates}
 					onSelect={(template: TemplateModel) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import SendTemplateMessage from '@src/components/Main/Chat/TemplateMessages/SendTemplateMessage';
+import SendTemplateMessage from '@src/components/SendTemplateDialog/SendTemplateMessage';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import DialogActions from '@mui/material/DialogActions';
