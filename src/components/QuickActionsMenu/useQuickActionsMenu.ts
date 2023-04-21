@@ -180,25 +180,17 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		}
 
 		return items
-			.filter((item) => {
-				// Check if every word matches
-				let include = true;
-				for (let i = 0; i < inputArray.length; i++) {
-					if (i === 0) {
-						if (!item.command.includes(inputArray[i])) {
-							include = false;
-							break;
+			.filter(
+				(item) =>
+					inputArray.every((inputWord, index) => {
+						// Check if a word matches
+						if (index === 0) {
+							return item.command.includes(inputWord);
 						}
-					} else {
-						if (!item.parameters?.[i - 1]?.includes(inputArray[i])) {
-							include = false;
-							break;
-						}
-					}
-				}
+						return item.parameters?.[index - 1]?.includes(inputWord);
+					}) || item.command.includes(input.substring(1).trim())
+			)
 
-				return include || item.command.includes(input.substring(1).trim());
-			})
 			.map((item) => {
 				item.id = generateCommandString(item);
 				return item;
