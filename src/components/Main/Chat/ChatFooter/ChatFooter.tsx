@@ -68,6 +68,7 @@ const ChatFooter: React.FC = ({
 	const fileInput = useRef(null);
 	const editable = useRef(null);
 
+	const [isInputFocused, setInputFocused] = useState(false);
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [isMoreVisible, setMoreVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
@@ -229,6 +230,8 @@ const ChatFooter: React.FC = ({
 	};
 
 	const handleFocus = (event) => {
+		setInputFocused(true);
+
 		if (isExpired) {
 			event.target.blur();
 			displayQuickActionsMenu();
@@ -354,22 +357,24 @@ const ChatFooter: React.FC = ({
 					</div>
 				)}
 
-				<Tooltip
-					title="Templates"
-					placement="top"
-					className={!isExpired ? 'desktopOnly' : ''}
-				>
-					<IconButton
-						data-test-id="templates-button"
-						onClick={toggleTemplateMessages}
-						className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
-						size="large"
+				{!isInputFocused && (
+					<Tooltip
+						title="Templates"
+						placement="top"
+						className={!isExpired ? 'desktopOnly' : ''}
 					>
-						<SmsIcon />
-					</IconButton>
-				</Tooltip>
+						<IconButton
+							data-test-id="templates-button"
+							onClick={toggleTemplateMessages}
+							className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
+							size="large"
+						>
+							<SmsIcon />
+						</IconButton>
+					</Tooltip>
+				)}
 
-				{!isExpired && (
+				{!isExpired && !isInputFocused && (
 					<Tooltip
 						title="Saved Responses"
 						placement="top"
@@ -439,6 +444,7 @@ const ChatFooter: React.FC = ({
 							className="typeBox__editable"
 							contentEditable="true"
 							onFocus={(event) => handleFocus(event)}
+							onBlur={() => setInputFocused(false)}
 							onPaste={(event) => handlePaste(event)}
 							onCopy={(event) => handleCopy(event)}
 							onDrop={(event) => event.preventDefault()}

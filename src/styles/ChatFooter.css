@@ -28,6 +28,10 @@
 	border-left: 1px solid lightgray;
 }
 
+.chat__footer > .MuiIconButton-root {
+	padding: 10px !important;
+}
+
 .chat__footer > form {
 	flex: 1;
 	display: flex;
