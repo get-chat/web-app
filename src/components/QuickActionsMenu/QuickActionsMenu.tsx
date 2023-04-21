@@ -6,6 +6,7 @@ import useNavigateList from 'react-use-navigate-list';
 import { useDetectClickOutside } from 'react-detect-click-outside';
 import { useTranslation } from 'react-i18next';
 import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
+import { isEmptyString } from '@src/helpers/Helpers';
 
 export type Props = {
 	input: string;
@@ -79,6 +80,10 @@ const QuickActionsMenu: React.FC<Props> = ({
 		// Prevent cursor from moving when navigating between commands
 		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
 			e.preventDefault();
+		} else if (e.code === 'Backspace') {
+			if (isEmptyString(commandInput)) {
+				close();
+			}
 		}
 	};
 

@@ -10,7 +10,7 @@
 	margin: 10px;
 	border-radius: 10px;
 	border: 2px solid #fff;
-	z-index: 10;
+	z-index: 999;
 }
 
 .searchInput {
