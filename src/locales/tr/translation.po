@@ -672,3 +672,9 @@ msgstr "Kontakları paylaşabilmek için bir Kontak Sağlayıcısı kullanman ge
 
 msgid "Send contacts"
 msgstr "Kontak gönder"
+
+msgid "No results found."
+msgstr "Sonuç bulunamadı."
+
+msgid "Search quick actions"
+msgstr "Hızlı eylemleri ara"

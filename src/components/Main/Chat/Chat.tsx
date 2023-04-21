@@ -3,8 +3,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from './ChatMessage/ChatMessage';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
+	COMMAND_ASSIGN,
+	COMMAND_ASSIGN_ALIAS,
+	COMMAND_SAVED_RESPONSE,
+	COMMAND_SAVED_RESPONSE_ALIAS,
+	COMMAND_SEARCH,
+	COMMAND_SEARCH_ALIAS,
+	COMMAND_TEMPLATE,
+	COMMAND_TEMPLATE_ALIAS,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
@@ -21,7 +29,7 @@ import {
 } from '@src/Constants';
 import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
-import TemplateMessages from './TemplateMessages/TemplateMessages';
+import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from './ChatFooter/ChatFooter';
 import ChatHeader from './ChatHeader';
 import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
@@ -42,7 +50,7 @@ import {
 	handleDragOver,
 	prepareSelectedFiles,
 } from '@src/helpers/FileHelper';
-import SavedResponses from './SavedResponses';
+import SavedResponseList from '../../SavedResponseList';
 import {
 	generateTemplateMessagePayload,
 	prepareSendFilePayload,
@@ -69,13 +77,15 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import { useDispatch, useSelector } from 'react-redux';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import SendTemplateDialog from '@src/components/SendTemplateDialog';
+import TemplateModel from '@src/api/models/TemplateModel';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -85,15 +95,13 @@ const MESSAGES_PER_PAGE = 30;
 export default function Chat(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const currentUser = useSelector((state) => state.currentUser.value);
-
 	const { t } = useTranslation();
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
-	const messagesContainer = useRef(null);
-
-	const templates = useSelector((state) => state.templates.value);
+	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const templates = useAppSelector((state) => state.templates.value);
+	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);
@@ -121,12 +129,17 @@ export default function Chat(props) {
 
 	const [lastMessageId, setLastMessageId] = useState();
 
+	const [chosenTemplate, setChosenTemplate] = useState();
+	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
+		useState(false);
+
+	const messagesContainer = useRef(null);
+	const cancelTokenSourceRef = useRef();
+
 	const { waId } = useParams();
 
 	const navigate = useNavigate();
 	const location = useLocation();
-
-	const cancelTokenSourceRef = useRef();
 
 	useEffect(() => {
 		props.retrieveContactData(waId);
@@ -1722,6 +1735,106 @@ export default function Chat(props) {
 		navigate('/main');
 	};
 
+	const processCommand = (text: string) => {
+		console.log('Command: ' + text);
+
+		const commandArray = text.split(' ').filter((e) => e);
+
+		const handleTemplateCommand = () => {
+			const templateName = commandArray[1] ?? '';
+			if (templateName) {
+				console.log('Send template: ' + templateName);
+
+				const template = templates[templateName];
+
+				if (template) {
+					setChosenTemplate(template);
+					setSendTemplateDialogVisible(true);
+				} else {
+					window.displayCustomError('Template not found!');
+				}
+			}
+		};
+
+		const handleSavedResponseCommand = () => {
+			const savedResponseId = commandArray[1] ?? '';
+			if (savedResponseId > 0) {
+				console.log('Send saved response: ' + savedResponseId);
+
+				const savedResponse = Object.values(savedResponses).filter(
+					(curSavedResponse) =>
+						curSavedResponse.id?.toString() === savedResponseId
+				)[0];
+
+				if (savedResponse) {
+					sendCustomTextMessage(savedResponse.text);
+				} else {
+					window.displayCustomError('Saved response not found!');
+				}
+			}
+		};
+
+		const handleAssignCommand = () => {
+			const assignedUsername = commandArray[1] ?? '';
+			if (assignedUsername) {
+				console.log('Assign to: ' + assignedUsername);
+
+				const assignedUserId = Object.values(users).filter(
+					(curUser) => curUser.username === assignedUsername
+				)[0]?.id;
+
+				if (assignedUserId) {
+					// TODO: Implement handleAssignCommand
+					//partialUpdateChatAssignment(assignedUserId);
+				} else {
+					window.displayCustomError('User not found!');
+				}
+			}
+		};
+
+		const handleSearchCommand = () => {
+			const searchKeyword = commandArray
+				.filter((item, index) => index !== 0)
+				.join(' ');
+
+			if (searchKeyword.trim().length > 0) {
+				// TODO: Implement handleSearchCommand
+				//setInitialSearchKeyword(searchKeyword);
+				//setSearchInChatVisible(true);
+			} else {
+				window.displayCustomError('You need to enter a keyword!');
+			}
+		};
+
+		if (commandArray.length > 0) {
+			switch (commandArray[0]) {
+				case COMMAND_TEMPLATE:
+				case COMMAND_TEMPLATE_ALIAS: {
+					handleTemplateCommand();
+					break;
+				}
+				case COMMAND_SAVED_RESPONSE:
+				case COMMAND_SAVED_RESPONSE_ALIAS: {
+					handleSavedResponseCommand();
+					break;
+				}
+				case COMMAND_ASSIGN:
+				case COMMAND_ASSIGN_ALIAS: {
+					handleAssignCommand();
+					break;
+				}
+				case COMMAND_SEARCH:
+				case COMMAND_SEARCH_ALIAS: {
+					handleSearchCommand();
+					break;
+				}
+				default:
+					window.displayError('Command not recognized!');
+					break;
+			}
+		}
+	};
+
 	let lastPrintedDate;
 	let lastSenderWaId;
 
@@ -1856,35 +1969,38 @@ export default function Chat(props) {
 				setSelectedFiles={setSelectedFiles}
 				isTemplateMessagesVisible={isTemplateMessagesVisible}
 				setTemplateMessagesVisible={setTemplateMessagesVisible}
+				accept={accept}
 				isSavedResponsesVisible={isSavedResponsesVisible}
 				setSavedResponsesVisible={setSavedResponsesVisible}
 				sendHandledChosenFiles={sendHandledChosenFiles}
-				accept={accept}
 				setAccept={setAccept}
 				isScrollButtonVisible={isScrollButtonVisible}
 				handleScrollButtonClick={handleScrollButtonClick}
-				closeChat={closeChat}
-				displayNotification={props.displayNotification}
+				processCommand={processCommand}
 			/>
 
 			{isTemplateMessagesVisible && (
-				<TemplateMessages
-					waId={waId}
-					onSend={(templateMessage) =>
-						sendTemplateMessage(true, templateMessage)
-					}
-					onBulkSend={bulkSendMessage}
+				<TemplateListWithControls
 					isTemplatesFailed={props.isTemplatesFailed}
 					isLoadingTemplates={props.isLoadingTemplates}
+					onSelect={(template: TemplateModel) => {
+						setChosenTemplate(template);
+						setSendTemplateDialogVisible(true);
+					}}
 				/>
 			)}
 
+			<SendTemplateDialog
+				isVisible={isSendTemplateDialogVisible}
+				setVisible={setSendTemplateDialogVisible}
+				chosenTemplate={chosenTemplate}
+				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
+				onBulkSend={bulkSendMessage}
+				isBulkOnly={false}
+			/>
+
 			{isSavedResponsesVisible && (
-				<SavedResponses
-					savedResponses={props.savedResponses}
-					deleteSavedResponse={props.deleteSavedResponse}
-					sendCustomTextMessage={sendCustomTextMessage}
-				/>
+				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
 
 			{!waId && (

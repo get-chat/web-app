@@ -16,14 +16,14 @@ import Image from '../Image';
 import PreviewMediaZoom from './PreviewMediaZoom';
 import PubSub from 'pubsub-js';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
-import { useDispatch } from 'react-redux';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { download } from '@src/helpers/DownloadHelper';
+import { useAppDispatch } from '@src/store/hooks';
 
 function PreviewMedia({ data }) {
 	const { t } = useTranslation();
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const [isZoomEnabled, setZoomEnabled] = useState(false);
 

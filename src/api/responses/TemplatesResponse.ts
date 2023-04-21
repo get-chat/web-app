@@ -1,9 +1,15 @@
 // @ts-nocheck
 import TemplateModel from '../models/TemplateModel';
 
+export type TemplateList = {
+	[key: string]: TemplateModel;
+};
+
 class TemplatesResponse {
+	public templates: TemplateList = {};
+
 	constructor(data) {
-		const templates = {};
+		const templates: TemplateList = {};
 		data.results.forEach((templateData) => {
 			const prepared = new TemplateModel(templateData);
 

@@ -79,3 +79,15 @@ export const AXIOS_ERROR_CODE_TIMEOUT = 'ECONNABORTED';
 export const CONTACTS_TEMP_LIMIT = 100;
 
 export const FORM_VALIDATION_ERROR = 'FORM_VALIDATION_ERROR';
+
+export const COMMAND_SAVED_RESPONSE = '/response';
+export const COMMAND_SAVED_RESPONSE_ALIAS = '/r';
+
+export const COMMAND_TEMPLATE = '/template';
+export const COMMAND_TEMPLATE_ALIAS = '/t';
+
+export const COMMAND_ASSIGN = '/assign';
+export const COMMAND_ASSIGN_ALIAS = '/a';
+
+export const COMMAND_SEARCH = '/search';
+export const COMMAND_SEARCH_ALIAS = '/s';

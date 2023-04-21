@@ -40,21 +40,45 @@ import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../../../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
+import QuickActionsMenu from '@src/components/QuickActionsMenu';
+import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 
-function ChatFooter(props) {
+const ChatFooter: React.FC = ({
+	waId,
+	currentNewMessages,
+	isExpired,
+	input,
+	setInput,
+	sendMessage,
+	bulkSendMessage,
+	setSelectedFiles,
+	isTemplateMessagesVisible,
+	setTemplateMessagesVisible,
+	accept,
+	isSavedResponsesVisible,
+	setSavedResponsesVisible,
+	sendHandledChosenFiles,
+	setAccept,
+	isScrollButtonVisible,
+	handleScrollButtonClick,
+	processCommand,
+}) => {
 	const { t } = useTranslation();
 
 	const fileInput = useRef(null);
 	const editable = useRef(null);
 
+	const [isInputFocused, setInputFocused] = useState(false);
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [isMoreVisible, setMoreVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
+	const [isQuickActionsMenuVisible, setQuickActionsMenuVisible] =
+		useState(false);
 
 	const [isRecording, setRecording] = useState(false);
 
 	const handleAttachmentClick = (acceptValue) => {
-		props.setAccept(acceptValue);
+		setAccept(acceptValue);
 
 		fileInput.current.setAttribute('accept', acceptValue);
 		fileInput.current.click();
@@ -75,7 +99,7 @@ function ChatFooter(props) {
 		}
 
 		timeout.current = setTimeout(function () {
-			props.setInput(event.target.innerHTML);
+			setInput(event.target.innerHTML);
 		}, 5);
 	};
 
@@ -91,11 +115,18 @@ function ChatFooter(props) {
 	}, []);
 
 	useEffect(() => {
+		const preparedInput = translateHTMLInputToText(input).trim();
+		if (preparedInput.startsWith('/')) {
+			displayQuickActionsMenu();
+		}
+	}, [input]);
+
+	useEffect(() => {
 		// Clear editable div when message is sent
-		if (props.input === '') {
+		if (input === '') {
 			editable.current.innerHTML = '';
 		}
-	}, [editable, props.input]);
+	}, [editable, input]);
 
 	const toggleTemplateMessages = () => {
 		// If messages container is already scrolled to bottom
@@ -108,16 +139,16 @@ function ChatFooter(props) {
         }*/
 
 		// Hide saved responses first
-		props.setSavedResponsesVisible(false);
+		setSavedResponsesVisible(false);
 
-		props.setTemplateMessagesVisible((prevState) => !prevState);
+		setTemplateMessagesVisible((prevState) => !prevState);
 	};
 
 	const toggleSavedResponses = () => {
 		// Hide template messages first
-		props.setTemplateMessagesVisible(false);
+		setTemplateMessagesVisible(false);
 
-		props.setSavedResponsesVisible((prevState) => !prevState);
+		setSavedResponsesVisible((prevState) => !prevState);
 	};
 
 	function insertAtCursor(el, html) {
@@ -145,7 +176,7 @@ function ChatFooter(props) {
 		selection.collapseToEnd();
 
 		//el.dispatchEvent(new Event('input'));
-		props.setInput(el.innerHTML);
+		setInput(el.innerHTML);
 	}
 
 	const handleEmojiSelect = (emoji) => {
@@ -186,10 +217,24 @@ function ChatFooter(props) {
 		event.preventDefault();
 	};
 
+	const displayQuickActionsMenu = () => {
+		if (!isQuickActionsMenuVisible) {
+			// Using setTimeout to avoid instant disappear bug with handle click outside library
+			setTimeout(() => {
+				setQuickActionsMenuVisible(true);
+				setTemplateMessagesVisible(false);
+				setSavedResponsesVisible(false);
+				setEmojiPickerVisible(false);
+			}, 150);
+		}
+	};
+
 	const handleFocus = (event) => {
-		if (props.isExpired) {
+		setInputFocused(true);
+
+		if (isExpired) {
 			event.target.blur();
-			props.setTemplateMessagesVisible(true);
+			displayQuickActionsMenu();
 			return;
 		}
 
@@ -199,7 +244,7 @@ function ChatFooter(props) {
 	};
 
 	const hasInput = () => {
-		return props.input && props.input.length > 0;
+		return input && input.length > 0;
 	};
 
 	const showMore = () => {
@@ -208,7 +253,7 @@ function ChatFooter(props) {
 	};
 
 	const hideMore = () => {
-		props.setTemplateMessagesVisible(false);
+		setTemplateMessagesVisible(false);
 		setMoreVisible(false);
 	};
 
@@ -229,6 +274,16 @@ function ChatFooter(props) {
 			className="chat__footerOuter"
 			onDrop={(event) => event.preventDefault()}
 		>
+			{isQuickActionsMenuVisible && (
+				<QuickActionsMenu
+					input={translateHTMLInputToText(input).trim()}
+					setInput={setInput}
+					setVisible={setQuickActionsMenuVisible}
+					onProcessCommand={processCommand}
+					isExpired={isExpired}
+				/>
+			)}
+
 			{isEmojiPickerVisible && (
 				<div className="chat__footer__emojiPicker">
 					<NimblePicker
@@ -245,24 +300,22 @@ function ChatFooter(props) {
 			<ContactsModal
 				open={contactsModalVisible}
 				onClose={closeContactsModal}
-				sendMessage={props.sendMessage}
-				recipientWaId={props.waId}
+				sendMessage={sendMessage}
+				recipientWaId={waId}
 			/>
 
 			<div className="chat__footer">
-				{!props.isExpired && (
-					<Tooltip title={t('Emoji')} placement="top">
-						<IconButton
-							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
-							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
-							size="large"
-						>
-							<InsertEmoticon />
-						</IconButton>
-					</Tooltip>
-				)}
+				<Tooltip title={t('Quick Actions')} placement="top">
+					<IconButton
+						className={isQuickActionsMenuVisible ? 'activeIconButton' : ''}
+						onClick={displayQuickActionsMenu}
+						size="large"
+					>
+						<KeyboardCommandKeyIcon />
+					</IconButton>
+				</Tooltip>
 
-				{!props.isExpired && (
+				{!isExpired && (
 					<div className="chat__footer__attachmentContainer desktopOnly">
 						<Tooltip title={t('Attachment')} placement="right">
 							<IconButton size="large">
@@ -304,24 +357,24 @@ function ChatFooter(props) {
 					</div>
 				)}
 
-				<Tooltip
-					title="Templates"
-					placement="top"
-					className={!props.isExpired ? 'desktopOnly' : ''}
-				>
-					<IconButton
-						data-test-id="templates-button"
-						onClick={toggleTemplateMessages}
-						className={
-							props.isTemplateMessagesVisible ? 'activeIconButton' : ''
-						}
-						size="large"
+				{!isInputFocused && (
+					<Tooltip
+						title="Templates"
+						placement="top"
+						className={!isExpired ? 'desktopOnly' : ''}
 					>
-						<SmsIcon />
-					</IconButton>
-				</Tooltip>
+						<IconButton
+							data-test-id="templates-button"
+							onClick={toggleTemplateMessages}
+							className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
+							size="large"
+						>
+							<SmsIcon />
+						</IconButton>
+					</Tooltip>
+				)}
 
-				{!props.isExpired && (
+				{!isExpired && !isInputFocused && (
 					<Tooltip
 						title="Saved Responses"
 						placement="top"
@@ -329,9 +382,7 @@ function ChatFooter(props) {
 					>
 						<IconButton
 							onClick={toggleSavedResponses}
-							className={
-								props.isSavedResponsesVisible ? 'activeIconButton' : ''
-							}
+							className={isSavedResponsesVisible ? 'activeIconButton' : ''}
 							size="large"
 						>
 							<NotesIcon />
@@ -339,13 +390,25 @@ function ChatFooter(props) {
 					</Tooltip>
 				)}
 
+				{!isExpired && (
+					<Tooltip title={t('Emoji')} placement="top">
+						<IconButton
+							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
+							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
+							size="large"
+						>
+							<InsertEmoticon />
+						</IconButton>
+					</Tooltip>
+				)}
+
 				<div className="hidden">
 					<FileInput
 						innerRef={fileInput}
-						accept={props.accept}
+						accept={accept}
 						handleSelectedFiles={(files) => {
 							if (
-								props.accept !== ACCEPT_DOCUMENT &&
+								accept !== ACCEPT_DOCUMENT &&
 								!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)
 							) {
 								window.displayCustomError(
@@ -355,16 +418,16 @@ function ChatFooter(props) {
 								return;
 							}
 
-							props.setSelectedFiles({ ...files });
+							setSelectedFiles({ ...files });
 						}}
 					/>
 				</div>
 
 				<form>
-					<div className={'typeBox ' + (props.isExpired ? 'expired' : '')}>
-						{!props.input && (
+					<div className={'typeBox ' + (isExpired ? 'expired' : '')}>
+						{!input && (
 							<div className="typeBox__hint">
-								{props.isExpired ? (
+								{isExpired ? (
 									<span>
 										{t(
 											'This chat has expired. You need to answer with template messages.'
@@ -381,22 +444,23 @@ function ChatFooter(props) {
 							className="typeBox__editable"
 							contentEditable="true"
 							onFocus={(event) => handleFocus(event)}
+							onBlur={() => setInputFocused(false)}
 							onPaste={(event) => handlePaste(event)}
 							onCopy={(event) => handleCopy(event)}
 							onDrop={(event) => event.preventDefault()}
 							spellCheck="true"
 							onInput={(event) => handleEditableChange(event)}
 							onKeyDown={(e) => {
-								if (e.keyCode === 13 && !e.shiftKey) props.sendMessage(true, e);
+								if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
 							}}
 						/>
 					</div>
-					<button onClick={(e) => props.sendMessage(true, e)} type="submit">
+					<button onClick={(e) => sendMessage(true, e)} type="submit">
 						{t('Send a message')}
 					</button>
 				</form>
 
-				{!hasInput() && !props.isExpired && (
+				{!hasInput() && !isExpired && (
 					<div className="mobileOnly">
 						<Tooltip title={t('More')}>
 							<IconButton
@@ -413,7 +477,7 @@ function ChatFooter(props) {
 				{hasInput() && (
 					<Tooltip title={t('Send')} placement="top">
 						<IconButton
-							onClick={(e) => props.sendMessage(true, e)}
+							onClick={(e) => sendMessage(true, e)}
 							data-test-id="send-message-button"
 							size="large"
 						>
@@ -425,7 +489,7 @@ function ChatFooter(props) {
 				{hasInput() && (
 					<Tooltip title={t('Bulk Send')} placement="top">
 						<IconButton
-							onClick={() => props.bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
+							onClick={() => bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
 							size="large"
 						>
 							<DynamicFeedIcon />
@@ -433,7 +497,7 @@ function ChatFooter(props) {
 					</Tooltip>
 				)}
 
-				{!props.isExpired && !hasInput() && !isRecording && (
+				{!isExpired && !hasInput() && !isRecording && (
 					<Tooltip title={t('Voice')} placement="top">
 						<IconButton
 							onClick={() =>
@@ -450,7 +514,7 @@ function ChatFooter(props) {
 					<VoiceRecord
 						voiceRecordCase="chat"
 						setRecording={setRecording}
-						sendHandledChosenFiles={props.sendHandledChosenFiles}
+						sendHandledChosenFiles={sendHandledChosenFiles}
 					/>
 				</div>
 			</div>
@@ -481,9 +545,7 @@ function ChatFooter(props) {
 
 					<IconButton
 						onClick={toggleTemplateMessages}
-						className={
-							props.isTemplateMessagesVisible ? 'activeIconButton' : ''
-						}
+						className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
 						size="large"
 					>
 						<SmsIcon />
@@ -491,7 +553,7 @@ function ChatFooter(props) {
 
 					<IconButton
 						onClick={toggleSavedResponses}
-						className={props.isSavedResponsesVisible ? 'activeIconButton' : ''}
+						className={isSavedResponsesVisible ? 'activeIconButton' : ''}
 						size="large"
 					>
 						<NotesIcon />
@@ -499,20 +561,20 @@ function ChatFooter(props) {
 				</div>
 			)}
 
-			<Zoom in={props.isScrollButtonVisible}>
+			<Zoom in={isScrollButtonVisible}>
 				<Badge
 					className="chat__scrollButtonWrapper"
 					color="primary"
 					overlap="rectangular"
-					badgeContent={props.currentNewMessages}
-					invisible={props.currentNewMessages === 0}
+					badgeContent={currentNewMessages}
+					invisible={currentNewMessages === 0}
 					anchorOrigin={{
 						vertical: 'top',
 						horizontal: 'left',
 					}}
 				>
 					<Fab
-						onClick={props.handleScrollButtonClick}
+						onClick={handleScrollButtonClick}
 						className="chat__scrollButton"
 						size="small"
 					>
@@ -522,6 +584,6 @@ function ChatFooter(props) {
 			</Zoom>
 		</div>
 	);
-}
+};
 
 export default ChatFooter;

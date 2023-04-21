@@ -5,10 +5,9 @@ import { Button } from '@mui/material';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@src/store/hooks';
 
 const TemplatesList = ({
-	templates,
 	onClick,
 	customSelectButtonTitle,
 	displayRegisterTemplate,
@@ -16,9 +15,11 @@ const TemplatesList = ({
 }) => {
 	const { t } = useTranslation();
 
+	const templates = useAppSelector((state) => state.templates.value);
+
 	const { issueTemplateRefreshRequest } = useTemplates();
 
-	const isRefreshingTemplates = useSelector(
+	const isRefreshingTemplates = useAppSelector(
 		(state) => state.isRefreshingTemplates.value
 	);
 

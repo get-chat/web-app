@@ -3,10 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import TemplatesResponse from '@src/api/responses/TemplatesResponse';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
-import { useDispatch } from 'react-redux';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
 import { AXIOS_ERROR_CODE_TIMEOUT } from '@src/Constants';
+import { useAppDispatch } from '@src/store/hooks';
 
 const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
@@ -15,7 +15,7 @@ const useTemplates = () => {
 	// noinspection JSCheckFunctionSignatures
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const retryCount = useRef(0);
 

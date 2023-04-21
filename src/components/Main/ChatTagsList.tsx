@@ -15,19 +15,19 @@ import LabelIcon from '@mui/icons-material/Label';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '@src/contexts/AppConfig';
-import { useDispatch, useSelector } from 'react-redux';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 
 function ChatTagsList(props) {
 	const config = React.useContext(AppConfig);
 
-	const tags = useSelector((state) => state.tags.value);
+	const tags = useAppSelector((state) => state.tags.value);
 
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(false);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const close = () => {
 		props.setOpen(false);

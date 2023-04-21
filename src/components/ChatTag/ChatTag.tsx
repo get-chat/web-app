@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React, { useMemo } from 'react';
 import LabelIcon from '@mui/icons-material/Label';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@src/store/hooks';
 
 const ChatTag = ({ id }) => {
-	const tags = useSelector((state) => state.tags.value);
+	const tags = useAppSelector((state) => state.tags.value);
 
 	const tag = useMemo(() => {
 		if (tags && id) {

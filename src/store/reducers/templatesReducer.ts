@@ -1,7 +1,11 @@
-// @ts-nocheck
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TemplateList } from '@src/api/responses/TemplatesResponse';
 
-const initialState = {
+interface TemplatesState {
+	value: TemplateList;
+}
+
+const initialState: TemplatesState = {
 	value: {},
 };
 
@@ -9,8 +13,8 @@ const templatesSlice = createSlice({
 	name: 'templates',
 	initialState,
 	reducers: {
-		setTemplates: (state, templates) => {
-			state.value = templates.payload;
+		setTemplates: (state, action: PayloadAction<TemplateList>) => {
+			state.value = action.payload;
 		},
 	},
 });

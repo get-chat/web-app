@@ -701,3 +701,9 @@ msgstr ""
 
 msgid "Send contacts"
 msgstr ""
+
+msgid "No results found."
+msgstr ""
+
+msgid "Search quick actions"
+msgstr ""

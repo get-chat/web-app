@@ -5,11 +5,11 @@ import ChatMessageTypeLabel from './ChatMessageTypeLabel';
 import ReplyIcon from '@mui/icons-material/Reply';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import PrintMessage from '../../../PrintMessage';
-import { useSelector } from 'react-redux';
 import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
+import { useAppSelector } from '@src/store/hooks';
 
 function ChatMessageShortContent(props) {
-	const templates = useSelector((state) => state.templates.value);
+	const templates = useAppSelector((state) => state.templates.value);
 
 	const print = () => {
 		if (props.type === ChatMessageModel.TYPE_TEMPLATE && props.template) {

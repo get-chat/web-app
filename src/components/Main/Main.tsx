@@ -53,7 +53,6 @@ import { AppConfig } from '@src/contexts/AppConfig';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
-import { useDispatch, useSelector } from 'react-redux';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
@@ -64,6 +63,11 @@ import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import UsersResponse from '@src/api/responses/UsersResponse';
+import { setUsers } from '@src/store/reducers/usersReducer';
+import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
+import SavedResponsesResponse from '@src/api/responses/SavedResponsesResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -73,12 +77,12 @@ function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
-	const tags = useSelector((state) => state.tags.value);
-	const previewMediaObject = useSelector(
+	const tags = useAppSelector((state) => state.tags.value);
+	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
 	);
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const { t } = useTranslation();
 
@@ -90,8 +94,6 @@ function Main() {
 
 	const [checked, setChecked] = useState(false);
 	const [isBlurred, setBlurred] = useState(false);
-
-	const [users, setUsers] = useState({});
 
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState([]);
@@ -105,7 +107,6 @@ function Main() {
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
-	const [savedResponses, setSavedResponses] = useState({});
 	const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 	const [templatesReady, setTemplatesReady] = useState(false);
 
@@ -778,15 +779,11 @@ function Main() {
 
 		try {
 			await apiService.listUsersCall(5000, (response) => {
-				const preparedUsers = {};
+				const usersResponse = new UsersResponse(response.data);
 
-				response.data.results.forEach((user) => {
-					const prepared = new UserModel(user);
+				// Store
+				dispatch(setUsers(usersResponse.users));
 
-					preparedUsers[prepared.id] = prepared;
-				});
-
-				setUsers(preparedUsers);
 				setProgress(20);
 			});
 		} catch (error) {
@@ -885,15 +882,13 @@ function Main() {
 	const listSavedResponses = async () => {
 		try {
 			await apiService.listSavedResponsesCall((response) => {
-				const preparedSavedResponses = {};
+				const savedResponsesResponse = new SavedResponsesResponse(
+					response.data
+				);
 
-				response.data.results.forEach((savedResponse) => {
-					const prepared = new SavedResponseClass(savedResponse);
+				// Store
+				dispatch(setSavedResponses(savedResponsesResponse.savedResponses));
 
-					preparedSavedResponses[prepared.id] = prepared;
-				});
-
-				setSavedResponses(preparedSavedResponses);
 				setProgress(50);
 			});
 		} catch (error) {
@@ -909,16 +904,6 @@ function Main() {
 		apiService.createSavedResponseCall(text, (response) => {
 			// Display a success message
 			displaySuccess('Saved as response successfully!');
-
-			// Reload saved responses
-			listSavedResponses();
-		});
-	};
-
-	const deleteSavedResponse = (id) => {
-		apiService.deleteSavedResponseCall(id, (response) => {
-			// Display a success message
-			displaySuccess('Deleted response successfully!');
 
 			// Reload saved responses
 			listSavedResponses();
@@ -1100,9 +1085,7 @@ function Main() {
 						setChosenContact={setChosenContact}
 						isTemplatesFailed={isTemplatesFailed}
 						isLoadingTemplates={isLoadingTemplates}
-						savedResponses={savedResponses}
 						createSavedResponse={createSavedResponse}
-						deleteSavedResponse={deleteSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}
@@ -1123,7 +1106,6 @@ function Main() {
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						chats={chats}
-						users={users}
 					/>
 				)}
 
@@ -1133,7 +1115,6 @@ function Main() {
 						open={isChatAssignmentVisible}
 						setOpen={setChatAssignmentVisible}
 						setChats={setChats}
-						users={users}
 					/>
 				)}
 

@@ -220,5 +220,7 @@
 	"Not seeing your new templates?": "Taslaklarını görmüyor musun?",
 	"Chats": "Sohbetler",
 	"To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our integrations page.": "Kontakları paylaşabilmek için bir Kontak Sağlayıcısı kullanman gerekiyor. Entegrasyon sayfamıza gitmek için <1>tıkla</1>.",
-	"Send contacts": "Kontak gönder"
+	"Send contacts": "Kontak gönder",
+	"No results found.": "Sonuç bulunamadı.",
+	"Search quick actions": "Hızlı eylemleri ara"
 }

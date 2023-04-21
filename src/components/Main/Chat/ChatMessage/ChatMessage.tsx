@@ -28,10 +28,10 @@ import PrintMessage from '../../../PrintMessage';
 import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
 import ChatMessageReferral from './ChatMessageReferral';
-import { useDispatch } from 'react-redux';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
+import { useAppDispatch } from '@src/store/hooks';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -51,7 +51,7 @@ function ChatMessage({
 }) {
 	const { t } = useTranslation();
 
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const onPreview = (type, source) => {
 		if (!disableMediaPreview) {
