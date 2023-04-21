@@ -1808,40 +1808,28 @@ export default function Chat(props) {
 
 		if (commandArray.length > 0) {
 			switch (commandArray[0]) {
-				case COMMAND_TEMPLATE: {
-					handleTemplateCommand();
-					break;
-				}
+				case COMMAND_TEMPLATE:
 				case COMMAND_TEMPLATE_ALIAS: {
 					handleTemplateCommand();
 					break;
 				}
-				case COMMAND_SAVED_RESPONSE: {
-					handleSavedResponseCommand();
-					break;
-				}
+				case COMMAND_SAVED_RESPONSE:
 				case COMMAND_SAVED_RESPONSE_ALIAS: {
 					handleSavedResponseCommand();
 					break;
 				}
-				case COMMAND_ASSIGN: {
-					handleAssignCommand();
-					break;
-				}
+				case COMMAND_ASSIGN:
 				case COMMAND_ASSIGN_ALIAS: {
 					handleAssignCommand();
 					break;
 				}
-				case COMMAND_SEARCH: {
-					handleSearchCommand();
-					break;
-				}
+				case COMMAND_SEARCH:
 				case COMMAND_SEARCH_ALIAS: {
 					handleSearchCommand();
 					break;
 				}
 				default:
-					setUIFeedback('Command not recognized!');
+					window.displayError('Command not recognized!');
 					break;
 			}
 		}
