@@ -50,7 +50,7 @@ import {
 	handleDragOver,
 	prepareSelectedFiles,
 } from '@src/helpers/FileHelper';
-import SavedResponses from './SavedResponses';
+import SavedResponseList from '../../SavedResponseList';
 import {
 	generateTemplateMessagePayload,
 	prepareSendFilePayload,
@@ -2012,10 +2012,7 @@ export default function Chat(props) {
 			/>
 
 			{isSavedResponsesVisible && (
-				<SavedResponses
-					deleteSavedResponse={props.deleteSavedResponse}
-					sendCustomTextMessage={sendCustomTextMessage}
-				/>
+				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
 
 			{!waId && (

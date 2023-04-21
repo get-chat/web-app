@@ -910,16 +910,6 @@ function Main() {
 		});
 	};
 
-	const deleteSavedResponse = (id) => {
-		apiService.deleteSavedResponseCall(id, (response) => {
-			// Display a success message
-			displaySuccess('Deleted response successfully!');
-
-			// Reload saved responses
-			listSavedResponses();
-		});
-	};
-
 	const resolveContact = (personWaId) => {
 		if (contactProvidersData?.[personWaId] !== undefined) {
 			// Already retrieved
@@ -1096,7 +1086,6 @@ function Main() {
 						isTemplatesFailed={isTemplatesFailed}
 						isLoadingTemplates={isLoadingTemplates}
 						createSavedResponse={createSavedResponse}
-						deleteSavedResponse={deleteSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}
