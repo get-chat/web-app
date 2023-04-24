@@ -1,9 +1,9 @@
-.chat__footerOuter {
+.container {
 	position: relative;
 	border-left: 1px solid lightgray;
 }
 
-.chat__footer {
+.footer {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -14,13 +14,13 @@
 	background-color: var(--gray-light);
 }
 
-.chat__footer__emojiPicker {
+.emojiPicker {
 	flex: 1 0 100%;
 	margin-bottom: -6px;
 	background-color: var(--gray-light);
 }
 
-.chat__footer.expired {
+.footer.expired {
 	height: auto !important;
 	align-items: normal;
 	flex-direction: column;
@@ -28,16 +28,16 @@
 	border-left: 1px solid lightgray;
 }
 
-.chat__footer > .MuiIconButton-root {
+.footer > .MuiIconButton-root {
 	padding: 10px !important;
 }
 
-.chat__footer > form {
+.footer > form {
 	flex: 1;
 	display: flex;
 }
 
-.chat__footer > form > textarea,
+.footer > form > textarea,
 .typeBox {
 	position: relative;
 	background-color: white;
@@ -57,13 +57,13 @@
 	background-color: #dcdfea;
 }
 
-.chat__footer > form > textarea:focus,
+.footer > form > textarea:focus,
 .typeBox {
 	outline: none;
 	border: none;
 }
 
-.typeBox__hint {
+.typeBoxHint {
 	position: absolute;
 	/*top: 50%;
     transform: translateY(-50%);*/
@@ -76,7 +76,7 @@
 	padding-right: 25px;
 }
 
-.typeBox.expired .typeBox__hint {
+.typeBox.expired .typeBoxHint {
 	color: #626573;
 }
 
@@ -84,7 +84,7 @@
 	outline: 1px solid transparent;
 }
 
-.typeBox__editable {
+.typeBoxEditable {
 	position: relative;
 	z-index: 100;
 	width: 100%;
@@ -94,31 +94,30 @@
 	word-break: break-word;
 }
 
-.chat__footer > form > button {
+.footer > form > button {
 	display: none;
 }
 
-.chat__footer > .MuiSvgIcon-root {
+.footer > .MuiSvgIcon-root {
 	/*padding: 10px;*/
 	color: var(--lighter-text-color);
 }
 
-.chat__footer__expiredWarning {
+.expiredWarning {
 	font-size: 14px;
 	color: var(--lighter-text-color);
 }
 
-.chat__footer__attachmentContainer {
+.attachmentContainer {
 	position: relative;
 }
 
-.chat__footer__attachmentContainer:hover
-	.chat__footer__attachmentContainer__options,
-.chat__footer__attachmentContainer__options:hover {
+.attachmentContainer:hover .attachmentOptions,
+.attachmentOptions:hover {
 	display: block;
 }
 
-.chat__footer__attachmentContainer__options {
+.attachmentOptions {
 	display: none;
 	position: absolute;
 	bottom: 0;
@@ -128,28 +127,28 @@
 	margin-bottom: 48px;
 }
 
-.chat__footer__attachmentContainer__options .MuiButtonBase-root {
+.attachmentOptions .MuiButtonBase-root {
 	box-shadow: -1px 4px 12px -6px rgba(0, 0, 45, 0.85);
 	margin-bottom: 15px;
 }
 
-.chat__footer__attachmentContainer__options__document {
+.attachmentOptionDocument {
 	background: linear-gradient(0deg, #5f66cd 50%, #5157ae 50%) !important;
 }
 
-.chat__footer__attachmentContainer__options__document .MuiSvgIcon-root {
+.attachmentOptionDocument .MuiSvgIcon-root {
 	color: white !important;
 }
 
-.chat__footer__attachmentContainer__options__imageAndVideo {
+.attachmentOptionImageAndVideo {
 	background: linear-gradient(0deg, #bf59cf 50%, #ac44cf 50%) !important;
 }
 
-.chat__footer__attachmentContainer__options__imageAndVideo .MuiSvgIcon-root {
+.attachmentOptionImageAndVideo .MuiSvgIcon-root {
 	color: white !important;
 }
 
-.chat__footerMore {
+.footerMore {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -163,31 +162,31 @@
 	z-index: 101;
 }
 
-.chat__scrollButtonWrapper {
+.scrollButtonWrapper {
 	position: absolute !important;
 	bottom: 80px;
 	right: 20px;
 }
 
-.chat__scrollButtonWrapper .MuiBadge-anchorOriginTopLeftRectangle {
+.scrollButtonWrapper .MuiBadge-anchorOriginTopLeftRectangle {
 	top: 3px;
 	left: 3px;
 }
 
-.chat__scrollButton {
+.scrollButton {
 	background-color: white !important;
 }
 
-.chat__scrollButton .MuiSvgIcon-root {
+.scrollButton .MuiSvgIcon-root {
 	color: var(--color-primary-light) !important;
 }
 
 @media only screen and (max-width: 750px) {
-	.chat__footerOuter {
+	.container {
 		border-left: none;
 	}
 
-	.chat__footer.expired {
+	.footer.expired {
 		padding: 10px 15px;
 		border-left: none;
 	}

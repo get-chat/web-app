@@ -12,8 +12,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { displaySeconds } from '@src/helpers/Helpers';
 import DoneIcon from '@mui/icons-material/Done';
-import '../../../../styles/VoiceRecord.css';
-import VoiceRecorder from '../../../../VoiceRecorder';
+import '@src/styles/VoiceRecord.css';
+import VoiceRecorder from '../../VoiceRecorder';
 import {
 	EVENT_TOPIC_DISPLAY_ERROR,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,

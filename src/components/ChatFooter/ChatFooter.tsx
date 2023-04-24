@@ -15,12 +15,12 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import NotesIcon from '@mui/icons-material/Notes';
 import MicIcon from '@mui/icons-material/Mic';
 import { Emoji, NimblePicker } from 'emoji-mart';
-import '../../../../styles/ChatFooter.css';
+import styles from './ChatFooter.module.css';
 import 'emoji-mart/css/emoji-mart.css';
-import '../../../../styles/EmojiPicker.css';
+import '../../styles/EmojiPicker.css';
 import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
-import FileInput from '../../../FileInput';
+import FileInput from '../FileInput';
 import {
 	getSelectionHtml,
 	sanitize,
@@ -34,11 +34,11 @@ import {
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
 } from '@src/Constants';
-import ChatMessageModel from '../../../../api/models/ChatMessageModel';
+import ChatMessageModel from '../../api/models/ChatMessageModel';
 import { replaceEmojis } from '@src/helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
-import ContactsModal from '../../../ContactsModal';
+import ContactsModal from '../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
@@ -271,7 +271,7 @@ const ChatFooter: React.FC = ({
 
 	return (
 		<div
-			className="chat__footerOuter"
+			className={styles.container}
 			onDrop={(event) => event.preventDefault()}
 		>
 			{isQuickActionsMenuVisible && (
@@ -285,7 +285,7 @@ const ChatFooter: React.FC = ({
 			)}
 
 			{isEmojiPickerVisible && (
-				<div className="chat__footer__emojiPicker">
+				<div className={styles.emojiPicker}>
 					<NimblePicker
 						set={EMOJI_SET}
 						sheetSize={EMOJI_SHEET_SIZE}
@@ -304,7 +304,7 @@ const ChatFooter: React.FC = ({
 				recipientWaId={waId}
 			/>
 
-			<div className="chat__footer">
+			<div className={styles.footer}>
 				<Tooltip title={t('Quick Actions')} placement="top">
 					<IconButton
 						className={isQuickActionsMenuVisible ? 'activeIconButton' : ''}
@@ -316,17 +316,17 @@ const ChatFooter: React.FC = ({
 				</Tooltip>
 
 				{!isExpired && (
-					<div className="chat__footer__attachmentContainer desktopOnly">
+					<div className={styles.attachmentContainer + ' desktopOnly'}>
 						<Tooltip title={t('Attachment')} placement="right">
 							<IconButton size="large">
 								<AttachFile />
 							</IconButton>
 						</Tooltip>
 
-						<div className="chat__footer__attachmentContainer__options">
+						<div className={styles.attachmentOptions}>
 							<Tooltip title={t('Contacts')} placement="right">
 								<IconButton
-									className="chat__footer__attachmentContainer__options__document"
+									className={styles.attachmentOptionDocument}
 									onClick={openContactsModal}
 									size="large"
 								>
@@ -336,7 +336,7 @@ const ChatFooter: React.FC = ({
 
 							<Tooltip title={t('Documents')} placement="right">
 								<IconButton
-									className="chat__footer__attachmentContainer__options__document"
+									className={styles.attachmentOptionDocument}
 									onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
 									size="large"
 								>
@@ -346,7 +346,7 @@ const ChatFooter: React.FC = ({
 
 							<Tooltip title={t('Images & Videos')} placement="right">
 								<IconButton
-									className="chat__footer__attachmentContainer__options__imageAndVideo"
+									className={styles.attachmentOptionImageAndVideo}
 									onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
 									size="large"
 								>
@@ -424,9 +424,9 @@ const ChatFooter: React.FC = ({
 				</div>
 
 				<form>
-					<div className={'typeBox ' + (isExpired ? 'expired' : '')}>
+					<div className={styles.typeBox + (isExpired ? ' expired' : '')}>
 						{!input && (
-							<div className="typeBox__hint">
+							<div className={styles.typeBoxHint}>
 								{isExpired ? (
 									<span>
 										{t(
@@ -441,7 +441,7 @@ const ChatFooter: React.FC = ({
 						<div
 							id="typeBox__editable"
 							ref={editable}
-							className="typeBox__editable"
+							className={styles.typeBoxEditable}
 							contentEditable="true"
 							onFocus={(event) => handleFocus(event)}
 							onBlur={() => setInputFocused(false)}
@@ -463,11 +463,7 @@ const ChatFooter: React.FC = ({
 				{!hasInput() && !isExpired && (
 					<div className="mobileOnly">
 						<Tooltip title={t('More')}>
-							<IconButton
-								className="chat_footer__moreButton"
-								onClick={showMore}
-								size="large"
-							>
+							<IconButton onClick={showMore} size="large">
 								<Add />
 							</IconButton>
 						</Tooltip>
@@ -520,7 +516,7 @@ const ChatFooter: React.FC = ({
 			</div>
 
 			{isMoreVisible && (
-				<div className="chat__footerMore">
+				<div className={styles.footerMore}>
 					<IconButton onClick={hideMore} size="large">
 						<CloseIcon />
 					</IconButton>
@@ -563,7 +559,7 @@ const ChatFooter: React.FC = ({
 
 			<Zoom in={isScrollButtonVisible}>
 				<Badge
-					className="chat__scrollButtonWrapper"
+					className={styles.scrollButtonWrapper}
 					color="primary"
 					overlap="rectangular"
 					badgeContent={currentNewMessages}
@@ -575,7 +571,7 @@ const ChatFooter: React.FC = ({
 				>
 					<Fab
 						onClick={handleScrollButtonClick}
-						className="chat__scrollButton"
+						className={styles.scrollButton}
 						size="small"
 					>
 						<ArrowDownward />
