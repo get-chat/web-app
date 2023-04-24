@@ -17,18 +17,27 @@
 	gap: 5px;
 }
 
-.actionsRow :global(.MuiSvgIcon-root) {
-	height: 20px;
-	width: 20px;
-	color: #5d5958 !important;
-}
-
 .actionsRowRight {
 	flex: 1;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	gap: 5px;
+}
+
+.actionsRow :global(.MuiSvgIcon-root),
+.actionsRowRight :global(.MuiSvgIcon-root) {
+	height: 20px;
+	width: 20px;
+}
+
+.actionsRow
+	> :global(.MuiButtonBase-root)
+	:global(.MuiSvgIcon-root):not(:global(.activeIconButton .MuiSvgIcon-root)),
+.actionsRowRight
+	> :global(.MuiButtonBase-root)
+	:global(.MuiSvgIcon-root):not(:global(.activeIconButton .MuiSvgIcon-root)) {
+	color: #5d5958 !important;
 }
 
 .footer {
@@ -75,7 +84,7 @@
 	flex: 1;
 	border-radius: 10px;
 	padding: 8px 15px;
-	margin: 10px 0 5px 0;
+	margin-bottom: 5px;
 	border: none;
 	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
 }
@@ -191,7 +200,7 @@
 
 .scrollButtonWrapper {
 	position: absolute !important;
-	bottom: 80px;
+	bottom: 112px;
 	right: 20px;
 }
 

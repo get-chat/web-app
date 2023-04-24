@@ -403,7 +403,7 @@ a.chat__document:hover {
 
 .chat .templateMessagesOuter,
 .savedResponsesOuter {
-	background-color: var(--gray-light);
+	background-color: var(--chat-bg);
 	padding: 0 15px 15px 15px;
 	border-left: 1px solid lightgray;
 }

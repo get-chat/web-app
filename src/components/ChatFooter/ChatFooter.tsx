@@ -347,14 +347,6 @@ const ChatFooter: React.FC = ({
 						</Tooltip>
 					</div>
 				)}
-
-				<div className={!isRecording ? 'hidden' : ''}>
-					<VoiceRecord
-						voiceRecordCase="chat"
-						setRecording={setRecording}
-						sendHandledChosenFiles={sendHandledChosenFiles}
-					/>
-				</div>
 			</div>
 
 			<div className={styles.row + ' ' + styles.actionsRow}>
@@ -370,7 +362,7 @@ const ChatFooter: React.FC = ({
 
 				{!isExpired && (
 					<div className={styles.attachmentContainer + ' desktopOnly'}>
-						<Tooltip title={t('Attachment')} placement="right">
+						<Tooltip title={t('Attachment')} placement="top">
 							<IconButton size="small">
 								<AttachFile />
 							</IconButton>
@@ -454,6 +446,14 @@ const ChatFooter: React.FC = ({
 				)}
 
 				<div className={styles.actionsRowRight}>
+					<div className={!isRecording ? 'hidden' : ''}>
+						<VoiceRecord
+							voiceRecordCase="chat"
+							setRecording={setRecording}
+							sendHandledChosenFiles={sendHandledChosenFiles}
+						/>
+					</div>
+
 					{hasInput() && (
 						<Tooltip title={t('Bulk Send')} placement="top">
 							<IconButton

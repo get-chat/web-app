@@ -193,7 +193,7 @@ function VoiceRecord({
 			<IconButton
 				onClick={stopVoiceRecord}
 				className="voiceRecord__cancelButton"
-				size="large"
+				size="small"
 			>
 				<CloseIcon />
 			</IconButton>
@@ -204,7 +204,7 @@ function VoiceRecord({
 			<IconButton
 				onClick={sendVoiceRecord}
 				className="voiceRecord__sendButton"
-				size="large"
+				size="small"
 			>
 				<DoneIcon />
 			</IconButton>
