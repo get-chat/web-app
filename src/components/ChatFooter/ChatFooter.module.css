@@ -28,7 +28,7 @@
 	border-left: 1px solid lightgray;
 }
 
-.footer > .MuiIconButton-root {
+.footer > :global(.MuiIconButton-root) {
 	padding: 10px !important;
 }
 
@@ -98,7 +98,7 @@
 	display: none;
 }
 
-.footer > .MuiSvgIcon-root {
+.footer > :global(.MuiSvgIcon-root) {
 	/*padding: 10px;*/
 	color: var(--lighter-text-color);
 }
@@ -127,7 +127,7 @@
 	margin-bottom: 48px;
 }
 
-.attachmentOptions .MuiButtonBase-root {
+.attachmentOptions :global(.MuiButtonBase-root) {
 	box-shadow: -1px 4px 12px -6px rgba(0, 0, 45, 0.85);
 	margin-bottom: 15px;
 }
@@ -136,7 +136,7 @@
 	background: linear-gradient(0deg, #5f66cd 50%, #5157ae 50%) !important;
 }
 
-.attachmentOptionDocument .MuiSvgIcon-root {
+.attachmentOptionDocument :global(.MuiSvgIcon-root) {
 	color: white !important;
 }
 
@@ -144,7 +144,7 @@
 	background: linear-gradient(0deg, #bf59cf 50%, #ac44cf 50%) !important;
 }
 
-.attachmentOptionImageAndVideo .MuiSvgIcon-root {
+.attachmentOptionImageAndVideo :global(.MuiSvgIcon-root) {
 	color: white !important;
 }
 
@@ -168,7 +168,7 @@
 	right: 20px;
 }
 
-.scrollButtonWrapper .MuiBadge-anchorOriginTopLeftRectangle {
+.scrollButtonWrapper :global(.MuiBadge-anchorOriginTopLeftRectangle) {
 	top: 3px;
 	left: 3px;
 }
@@ -177,7 +177,7 @@
 	background-color: white !important;
 }
 
-.scrollButton .MuiSvgIcon-root {
+.scrollButton :global(.MuiSvgIcon-root) {
 	color: var(--color-primary-light) !important;
 }
 
