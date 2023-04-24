@@ -48,10 +48,11 @@ function Contacts(props) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const handleKey = (event) => {
-			if (event.keyCode === 27) {
-				// Escape
+		const handleKey = (event: KeyboardEvent) => {
+			// Escape
+			if (event.key === 'Escape') {
 				props.onHide();
+				event.stopPropagation();
 			}
 		};
 

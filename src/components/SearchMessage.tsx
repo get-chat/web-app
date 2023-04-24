@@ -41,7 +41,19 @@ const SearchMessage: React.FC<Props> = ({
 	const { waId } = useParams();
 
 	useEffect(() => {
+		const handleKey = (event: KeyboardEvent) => {
+			// Escape
+			if (event.key === 'Escape') {
+				close();
+				event.stopPropagation();
+			}
+		};
+
+		document.addEventListener('keydown', handleKey);
+
 		return () => {
+			document.removeEventListener('keydown', handleKey);
+
 			// Clear initial keyword for next session
 			setInitialKeyword('');
 		};
@@ -67,7 +79,7 @@ const SearchMessage: React.FC<Props> = ({
 		}
 	}, [initialKeyword]);
 
-	const hideSearchMessages = () => {
+	const close = () => {
 		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
 	};
 
@@ -112,14 +124,14 @@ const SearchMessage: React.FC<Props> = ({
 		PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
 
 		if (isMobileOnly) {
-			hideSearchMessages();
+			close();
 		}
 	};
 
 	return (
 		<div className="searchMessage">
 			<div className="searchMessage__header">
-				<IconButton onClick={hideSearchMessages} size="large">
+				<IconButton onClick={close} size="large">
 					<CloseIcon />
 				</IconButton>
 
