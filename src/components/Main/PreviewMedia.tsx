@@ -34,7 +34,7 @@ function PreviewMedia({ data }) {
 	useEffect(() => {
 		const handleKey = (event) => {
 			// Escape
-			if (event.keyCode === 27) {
+			if (event.key === 'Escape') {
 				if (isZoomEnabled) {
 					setZoomEnabled(false);
 				} else {

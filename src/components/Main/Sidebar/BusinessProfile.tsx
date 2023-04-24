@@ -45,7 +45,7 @@ function BusinessProfile(props) {
 
 	useEffect(() => {
 		const handleKey = (event) => {
-			if (event.keyCode === 27) {
+			if (event.key === 'Escape') {
 				// Escape
 				props.onHide();
 			}
