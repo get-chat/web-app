@@ -368,6 +368,7 @@ const ChatFooter: React.FC = ({
 						className={cx({
 							actionIcon: true,
 							active: isQuickActionsMenuVisible,
+							commandActionIcon: true,
 						})}
 						onClick={displayQuickActionsMenu}
 						size="small"
