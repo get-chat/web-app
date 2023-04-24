@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/SearchMessage.css';
 import { IconButton } from '@mui/material';
@@ -16,8 +15,11 @@ import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
+import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 
-function SearchMessage(props) {
+function SearchMessage() {
+	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
@@ -36,9 +38,9 @@ function SearchMessage(props) {
 		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
 	};
 
-	let cancelTokenSourceRef = useRef();
+	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
-	const search = async (_keyword) => {
+	const search = async (_keyword: string) => {
 		setKeyword(_keyword);
 
 		// Check if there are any previous pending requests
@@ -63,22 +65,19 @@ function SearchMessage(props) {
 			_keyword,
 			30,
 			cancelTokenSourceRef.current.token,
-			(response) => {
-				const preparedMessages = {};
-				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageModel(message);
-					preparedMessages[prepared.id] = prepared;
-				});
-				setResults(preparedMessages);
+			(response: AxiosResponse) => {
+				const chatMessagesResponse = new ChatMessagesResponse(response.data);
+				setResults(chatMessagesResponse.messages);
 				setLoading(false);
 			},
-			(error) => {
+			(error: AxiosError) => {
+				console.log(error);
 				setLoading(false);
 			}
 		);
 	};
 
-	const goToMessage = (data) => {
+	const goToMessage = (data: ChatMessageModel) => {
 		PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
 
 		if (isMobileOnly) {
@@ -105,7 +104,7 @@ function SearchMessage(props) {
 						waId={waId}
 						messageData={message[1]}
 						keyword={keyword}
-						onClick={(chatMessage) => goToMessage(chatMessage)}
+						onClick={goToMessage}
 					/>
 				))}
 			</div>
