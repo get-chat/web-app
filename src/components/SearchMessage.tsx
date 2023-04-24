@@ -36,6 +36,8 @@ const SearchMessage: React.FC<Props> = ({
 	const [keyword, setKeyword] = useState('');
 	const [isLoading, setLoading] = useState(false);
 
+	const timer = useRef<NodeJS.Timeout>();
+
 	const { waId } = useParams();
 
 	useEffect(() => {
@@ -50,7 +52,13 @@ const SearchMessage: React.FC<Props> = ({
 	}, [waId]);
 
 	useEffect(() => {
-		search();
+		timer.current = setTimeout(() => {
+			search();
+		}, 500);
+
+		return () => {
+			clearTimeout(timer.current);
+		};
 	}, [keyword]);
 
 	useEffect(() => {

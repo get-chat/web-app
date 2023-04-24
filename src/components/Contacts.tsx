@@ -43,6 +43,7 @@ function Contacts(props) {
 
 	let cancelTokenSourceRef = useRef();
 	let verifyPhoneNumberCancelTokenSourceRef = useRef();
+	let timeout = useRef();
 
 	const navigate = useNavigate();
 
@@ -64,8 +65,6 @@ function Contacts(props) {
 			verifyPhoneNumberCancelTokenSourceRef.current.cancel();
 		};
 	}, []);
-
-	let timeout = useRef();
 
 	useEffect(() => {
 		// Generate a token
