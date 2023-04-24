@@ -17,27 +17,22 @@
 	gap: 5px;
 }
 
+.actionIcon :global(.MuiSvgIcon-root) {
+	height: 20px;
+	width: 20px;
+	color: #5d5958 !important;
+}
+
+.actionIcon.active :global(.MuiSvgIcon-root) {
+	color: var(--color-primary) !important;
+}
+
 .actionsRowRight {
 	flex: 1;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 	gap: 5px;
-}
-
-.actionsRow :global(.MuiSvgIcon-root),
-.actionsRowRight :global(.MuiSvgIcon-root) {
-	height: 20px;
-	width: 20px;
-}
-
-.actionsRow
-	> :global(.MuiButtonBase-root)
-	:global(.MuiSvgIcon-root):not(:global(.activeIconButton .MuiSvgIcon-root)),
-.actionsRowRight
-	> :global(.MuiButtonBase-root)
-	:global(.MuiSvgIcon-root):not(:global(.activeIconButton .MuiSvgIcon-root)) {
-	color: #5d5958 !important;
 }
 
 .footer {

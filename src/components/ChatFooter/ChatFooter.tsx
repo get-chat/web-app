@@ -42,6 +42,9 @@ import ContactsModal from '../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 const ChatFooter: React.FC = ({
 	waId,
@@ -349,10 +352,18 @@ const ChatFooter: React.FC = ({
 				)}
 			</div>
 
-			<div className={styles.row + ' ' + styles.actionsRow}>
+			<div
+				className={cx({
+					row: true,
+					actionsRow: true,
+				})}
+			>
 				<Tooltip title={t('Quick Actions')} placement="top">
 					<IconButton
-						className={isQuickActionsMenuVisible ? 'activeIconButton' : ''}
+						className={cx({
+							actionIcon: true,
+							active: isQuickActionsMenuVisible,
+						})}
 						onClick={displayQuickActionsMenu}
 						size="small"
 					>
@@ -363,7 +374,7 @@ const ChatFooter: React.FC = ({
 				{!isExpired && (
 					<div className={styles.attachmentContainer + ' desktopOnly'}>
 						<Tooltip title={t('Attachment')} placement="top">
-							<IconButton size="small">
+							<IconButton className={styles.actionIcon} size="small">
 								<AttachFile />
 							</IconButton>
 						</Tooltip>
@@ -410,7 +421,10 @@ const ChatFooter: React.FC = ({
 					<IconButton
 						data-test-id="templates-button"
 						onClick={toggleTemplateMessages}
-						className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
+						className={cx({
+							actionIcon: true,
+							active: isTemplateMessagesVisible,
+						})}
 						size="small"
 					>
 						<SmsIcon />
@@ -425,7 +439,10 @@ const ChatFooter: React.FC = ({
 					>
 						<IconButton
 							onClick={toggleSavedResponses}
-							className={isSavedResponsesVisible ? 'activeIconButton' : ''}
+							className={cx({
+								actionIcon: true,
+								active: isSavedResponsesVisible,
+							})}
 							size="small"
 						>
 							<NotesIcon />
@@ -436,7 +453,10 @@ const ChatFooter: React.FC = ({
 				{!isExpired && (
 					<Tooltip title={t('Emoji')} placement="top">
 						<IconButton
-							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
+							className={cx({
+								actionIcon: true,
+								active: isEmojiPickerVisible,
+							})}
 							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
 							size="small"
 						>
@@ -457,6 +477,7 @@ const ChatFooter: React.FC = ({
 					{hasInput() && (
 						<Tooltip title={t('Bulk Send')} placement="top">
 							<IconButton
+								className={styles.actionIcon}
 								onClick={() => bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
 								size="small"
 							>
@@ -468,6 +489,7 @@ const ChatFooter: React.FC = ({
 					{!isExpired && !hasInput() && !isRecording && (
 						<Tooltip title={t('Voice')} placement="top">
 							<IconButton
+								className={styles.actionIcon}
 								onClick={() =>
 									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
 								}
@@ -481,6 +503,7 @@ const ChatFooter: React.FC = ({
 					{hasInput() && (
 						<Tooltip title={t('Send')} placement="top">
 							<IconButton
+								className={styles.actionIcon}
 								onClick={(e) => sendMessage(true, e)}
 								data-test-id="send-message-button"
 								size="small"

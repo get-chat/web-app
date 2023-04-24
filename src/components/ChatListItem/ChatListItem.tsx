@@ -26,7 +26,7 @@ import useChatListItem from '@src/components/ChatListItem/useChatListItem';
 import styles from './ChatListItem.module.css';
 import classNames from 'classnames/bind';
 
-let cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
 const ChatListItem = (props) => {
 	const { t } = useTranslation();
