@@ -86,7 +86,8 @@
 }
 
 .typeBox.expired {
-	background-color: #dcdfea;
+	background-color: #f2edea;
+	box-shadow: none;
 }
 
 .footer > form > textarea:focus,
