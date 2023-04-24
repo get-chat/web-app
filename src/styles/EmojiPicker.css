@@ -1,8 +1,13 @@
 .emoji-mart {
+	display: block !important;
 	width: 100% !important;
-	border: none;
+	border: none !important;
 	border-radius: 0;
 	background: none;
+}
+
+.emoji-mart-bar {
+	border: none !important;
 }
 
 .emoji-mart-scroll {
@@ -14,7 +19,6 @@
 }
 
 .emoji-mart-category-label span {
-	background: var(--gray-light) none;
 	font-size: 13px;
 	padding: 15px 6px 5px 6px;
 	color: rgba(0, 0, 45, 0.46);

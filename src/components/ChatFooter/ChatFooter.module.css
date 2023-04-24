@@ -47,8 +47,9 @@
 
 .emojiPicker {
 	flex: 1;
-	margin-bottom: -6px;
-	background-color: var(--gray-light);
+	background-color: #fff;
+	border-radius: 10px;
+	margin: 10px;
 }
 
 .footer.expired {
