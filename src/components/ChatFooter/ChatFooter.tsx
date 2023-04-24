@@ -304,9 +304,14 @@ const ChatFooter: React.FC = ({
 				recipientWaId={waId}
 			/>
 
-			<div className={styles.row + ' ' + styles.footer}>
+			<div className={cx({ row: true, footer: true })}>
 				<form>
-					<div className={styles.typeBox + (isExpired ? ' expired' : '')}>
+					<div
+						className={cx({
+							typeBox: true,
+							expired: isExpired,
+						})}
+					>
 						{!input && (
 							<div className={styles.typeBoxHint}>
 								{isExpired ? (
@@ -372,7 +377,12 @@ const ChatFooter: React.FC = ({
 				</Tooltip>
 
 				{!isExpired && (
-					<div className={styles.attachmentContainer + ' desktopOnly'}>
+					<div
+						className={cx({
+							attachmentContainer: true,
+							desktopOnly: true,
+						})}
+					>
 						<Tooltip title={t('Attachment')} placement="top">
 							<IconButton className={styles.actionIcon} size="small">
 								<AttachFile />
@@ -416,7 +426,9 @@ const ChatFooter: React.FC = ({
 				<Tooltip
 					title="Templates"
 					placement="top"
-					className={!isExpired ? 'desktopOnly' : ''}
+					className={cx({
+						desktopOnly: !isExpired,
+					})}
 				>
 					<IconButton
 						data-test-id="templates-button"
@@ -466,7 +478,11 @@ const ChatFooter: React.FC = ({
 				)}
 
 				<div className={styles.actionsRowRight}>
-					<div className={!isRecording ? 'hidden' : ''}>
+					<div
+						className={cx({
+							hidden: !isRecording,
+						})}
+					>
 						<VoiceRecord
 							voiceRecordCase="chat"
 							setRecording={setRecording}
@@ -562,7 +578,10 @@ const ChatFooter: React.FC = ({
 
 					<IconButton
 						onClick={toggleTemplateMessages}
-						className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
+						className={cx({
+							actionButton: true,
+							active: isTemplateMessagesVisible,
+						})}
 						size="large"
 					>
 						<SmsIcon />
@@ -570,7 +589,10 @@ const ChatFooter: React.FC = ({
 
 					<IconButton
 						onClick={toggleSavedResponses}
-						className={isSavedResponsesVisible ? 'activeIconButton' : ''}
+						className={cx({
+							actionButton: true,
+							active: isSavedResponsesVisible,
+						})}
 						size="large"
 					>
 						<NotesIcon />
