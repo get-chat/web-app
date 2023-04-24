@@ -6,12 +6,18 @@ import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 export type Props = {
+	value: string;
 	onChange?: (text) => void;
 	isLoading: boolean;
 	placeholder?: string;
 };
 
-const SearchBar: React.FC<Props> = ({ onChange, isLoading, placeholder }) => {
+const SearchBar: React.FC<Props> = ({
+	value,
+	onChange,
+	isLoading,
+	placeholder,
+}) => {
 	const { t } = useTranslation();
 
 	const handleChange = (event) => {
@@ -30,6 +36,7 @@ const SearchBar: React.FC<Props> = ({ onChange, isLoading, placeholder }) => {
 				<input
 					placeholder={placeholder ?? t('Search')}
 					type="text"
+					value={value}
 					onChange={handleChange}
 				/>
 			</div>

@@ -18,7 +18,15 @@ import { generateCancelToken } from '../helpers/ApiHelper';
 import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 
-function SearchMessage() {
+export type Props = {
+	initialKeyword: string;
+	setInitialKeyword: (_keyword: string) => void;
+};
+
+const SearchMessage: React.FC<Props> = ({
+	initialKeyword,
+	setInitialKeyword,
+}) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
@@ -31,8 +39,25 @@ function SearchMessage() {
 	const { waId } = useParams();
 
 	useEffect(() => {
+		return () => {
+			// Clear initial keyword for next session
+			setInitialKeyword('');
+		};
+	}, []);
+
+	useEffect(() => {
 		setResults({});
 	}, [waId]);
+
+	useEffect(() => {
+		search();
+	}, [keyword]);
+
+	useEffect(() => {
+		if (initialKeyword) {
+			setKeyword(initialKeyword);
+		}
+	}, [initialKeyword]);
 
 	const hideSearchMessages = () => {
 		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
@@ -40,9 +65,7 @@ function SearchMessage() {
 
 	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
-	const search = async (_keyword: string) => {
-		setKeyword(_keyword);
-
+	const search = async () => {
 		// Check if there are any previous pending requests
 		if (cancelTokenSourceRef.current) {
 			cancelTokenSourceRef.current.cancel(
@@ -53,7 +76,7 @@ function SearchMessage() {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
-		if (_keyword.trim().length === 0) {
+		if (keyword.trim().length === 0) {
 			setResults({});
 			return false;
 		}
@@ -62,7 +85,7 @@ function SearchMessage() {
 
 		apiService.searchMessagesCall(
 			waId,
-			_keyword,
+			keyword,
 			30,
 			cancelTokenSourceRef.current.token,
 			(response: AxiosResponse) => {
@@ -95,7 +118,7 @@ function SearchMessage() {
 				<h3>{t('Search For Messages')}</h3>
 			</div>
 
-			<SearchBar onChange={search} isLoading={isLoading} />
+			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
 
 			<div className="searchMessage__body">
 				{Object.entries(results).map((message) => (
@@ -110,6 +133,6 @@ function SearchMessage() {
 			</div>
 		</div>
 	);
-}
+};
 
 export default SearchMessage;

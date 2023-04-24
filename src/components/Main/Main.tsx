@@ -123,6 +123,9 @@ function Main() {
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
 		useState(false);
 
+	const [searchMessagesInitialKeyword, setSearchMessagesInitialKeyword] =
+		useState('');
+
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
 	const [chosenContact, setChosenContact] = useState();
@@ -1028,6 +1031,11 @@ function Main() {
 		}
 	};
 
+	const searchMessagesByKeyword = (_keyword: string) => {
+		setSearchMessagesInitialKeyword(_keyword);
+		setSearchMessagesVisible(true);
+	};
+
 	return (
 		<Fade in={checked}>
 			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
@@ -1095,10 +1103,16 @@ function Main() {
 						setChatTagsVisible={setChatTagsVisible}
 						setSelectionModeEnabled={setSelectionModeEnabled}
 						setBulkSendPayload={setBulkSendPayload}
+						searchMessagesByKeyword={searchMessagesByKeyword}
 					/>
 				)}
 
-				{isSearchMessagesVisible && <SearchMessage />}
+				{isSearchMessagesVisible && (
+					<SearchMessage
+						initialKeyword={searchMessagesInitialKeyword}
+						setInitialKeyword={setSearchMessagesInitialKeyword}
+					/>
+				)}
 
 				{isContactDetailsVisible && (
 					<ContactDetails

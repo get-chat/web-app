@@ -1798,9 +1798,7 @@ export default function Chat(props) {
 				.join(' ');
 
 			if (searchKeyword.trim().length > 0) {
-				// TODO: Implement handleSearchCommand
-				//setInitialSearchKeyword(searchKeyword);
-				//setSearchInChatVisible(true);
+				props.searchMessagesByKeyword(searchKeyword);
 			} else {
 				window.displayCustomError('You need to enter a keyword!');
 			}
