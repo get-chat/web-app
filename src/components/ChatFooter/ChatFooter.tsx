@@ -68,7 +68,6 @@ const ChatFooter: React.FC = ({
 	const fileInput = useRef(null);
 	const editable = useRef(null);
 
-	const [isInputFocused, setInputFocused] = useState(false);
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [isMoreVisible, setMoreVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
@@ -230,8 +229,6 @@ const ChatFooter: React.FC = ({
 	};
 
 	const handleFocus = (event) => {
-		setInputFocused(true);
-
 		if (isExpired) {
 			event.target.blur();
 			displayQuickActionsMenu();
@@ -304,12 +301,68 @@ const ChatFooter: React.FC = ({
 				recipientWaId={waId}
 			/>
 
-			<div className={styles.footer}>
+			<div className={styles.row + ' ' + styles.footer}>
+				<form>
+					<div className={styles.typeBox + (isExpired ? ' expired' : '')}>
+						{!input && (
+							<div className={styles.typeBoxHint}>
+								{isExpired ? (
+									<span>
+										{t(
+											'This chat has expired. You need to answer with template messages.'
+										)}
+									</span>
+								) : (
+									<span>{t('Type a message')}</span>
+								)}
+							</div>
+						)}
+						<div
+							id="typeBox__editable"
+							ref={editable}
+							className={styles.typeBoxEditable}
+							contentEditable="true"
+							onFocus={(event) => handleFocus(event)}
+							onPaste={(event) => handlePaste(event)}
+							onCopy={(event) => handleCopy(event)}
+							onDrop={(event) => event.preventDefault()}
+							spellCheck="true"
+							onInput={(event) => handleEditableChange(event)}
+							onKeyDown={(e) => {
+								if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
+							}}
+						/>
+					</div>
+					<button onClick={(e) => sendMessage(true, e)} type="submit">
+						{t('Send a message')}
+					</button>
+				</form>
+
+				{!hasInput() && !isExpired && (
+					<div className="mobileOnly">
+						<Tooltip title={t('More')}>
+							<IconButton onClick={showMore} size="large">
+								<Add />
+							</IconButton>
+						</Tooltip>
+					</div>
+				)}
+
+				<div className={!isRecording ? 'hidden' : ''}>
+					<VoiceRecord
+						voiceRecordCase="chat"
+						setRecording={setRecording}
+						sendHandledChosenFiles={sendHandledChosenFiles}
+					/>
+				</div>
+			</div>
+
+			<div className={styles.row + ' ' + styles.actionsRow}>
 				<Tooltip title={t('Quick Actions')} placement="top">
 					<IconButton
 						className={isQuickActionsMenuVisible ? 'activeIconButton' : ''}
 						onClick={displayQuickActionsMenu}
-						size="large"
+						size="small"
 					>
 						<KeyboardCommandKeyIcon />
 					</IconButton>
@@ -318,7 +371,7 @@ const ChatFooter: React.FC = ({
 				{!isExpired && (
 					<div className={styles.attachmentContainer + ' desktopOnly'}>
 						<Tooltip title={t('Attachment')} placement="right">
-							<IconButton size="large">
+							<IconButton size="small">
 								<AttachFile />
 							</IconButton>
 						</Tooltip>
@@ -357,24 +410,22 @@ const ChatFooter: React.FC = ({
 					</div>
 				)}
 
-				{!isInputFocused && (
-					<Tooltip
-						title="Templates"
-						placement="top"
-						className={!isExpired ? 'desktopOnly' : ''}
+				<Tooltip
+					title="Templates"
+					placement="top"
+					className={!isExpired ? 'desktopOnly' : ''}
+				>
+					<IconButton
+						data-test-id="templates-button"
+						onClick={toggleTemplateMessages}
+						className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
+						size="small"
 					>
-						<IconButton
-							data-test-id="templates-button"
-							onClick={toggleTemplateMessages}
-							className={isTemplateMessagesVisible ? 'activeIconButton' : ''}
-							size="large"
-						>
-							<SmsIcon />
-						</IconButton>
-					</Tooltip>
-				)}
+						<SmsIcon />
+					</IconButton>
+				</Tooltip>
 
-				{!isExpired && !isInputFocused && (
+				{!isExpired && (
 					<Tooltip
 						title="Saved Responses"
 						placement="top"
@@ -383,7 +434,7 @@ const ChatFooter: React.FC = ({
 						<IconButton
 							onClick={toggleSavedResponses}
 							className={isSavedResponsesVisible ? 'activeIconButton' : ''}
-							size="large"
+							size="small"
 						>
 							<NotesIcon />
 						</IconButton>
@@ -395,124 +446,71 @@ const ChatFooter: React.FC = ({
 						<IconButton
 							className={isEmojiPickerVisible ? 'activeIconButton' : ''}
 							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
-							size="large"
+							size="small"
 						>
 							<InsertEmoticon />
 						</IconButton>
 					</Tooltip>
 				)}
 
-				<div className="hidden">
-					<FileInput
-						innerRef={fileInput}
-						accept={accept}
-						handleSelectedFiles={(files) => {
-							if (
-								accept !== ACCEPT_DOCUMENT &&
-								!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)
-							) {
-								window.displayCustomError(
-									t('Please choose a supported file type (png, jpg, mp4, 3gp)')
-								);
-
-								return;
-							}
-
-							setSelectedFiles({ ...files });
-						}}
-					/>
-				</div>
-
-				<form>
-					<div className={styles.typeBox + (isExpired ? ' expired' : '')}>
-						{!input && (
-							<div className={styles.typeBoxHint}>
-								{isExpired ? (
-									<span>
-										{t(
-											'This chat has expired. You need to answer with template messages.'
-										)}
-									</span>
-								) : (
-									<span>{t('Type a message')}</span>
-								)}
-							</div>
-						)}
-						<div
-							id="typeBox__editable"
-							ref={editable}
-							className={styles.typeBoxEditable}
-							contentEditable="true"
-							onFocus={(event) => handleFocus(event)}
-							onBlur={() => setInputFocused(false)}
-							onPaste={(event) => handlePaste(event)}
-							onCopy={(event) => handleCopy(event)}
-							onDrop={(event) => event.preventDefault()}
-							spellCheck="true"
-							onInput={(event) => handleEditableChange(event)}
-							onKeyDown={(e) => {
-								if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
-							}}
-						/>
-					</div>
-					<button onClick={(e) => sendMessage(true, e)} type="submit">
-						{t('Send a message')}
-					</button>
-				</form>
-
-				{!hasInput() && !isExpired && (
-					<div className="mobileOnly">
-						<Tooltip title={t('More')}>
-							<IconButton onClick={showMore} size="large">
-								<Add />
+				<div className={styles.actionsRowRight}>
+					{hasInput() && (
+						<Tooltip title={t('Bulk Send')} placement="top">
+							<IconButton
+								onClick={() => bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
+								size="small"
+							>
+								<DynamicFeedIcon />
 							</IconButton>
 						</Tooltip>
-					</div>
-				)}
+					)}
 
-				{hasInput() && (
-					<Tooltip title={t('Send')} placement="top">
-						<IconButton
-							onClick={(e) => sendMessage(true, e)}
-							data-test-id="send-message-button"
-							size="large"
-						>
-							<Send />
-						</IconButton>
-					</Tooltip>
-				)}
+					{!isExpired && !hasInput() && !isRecording && (
+						<Tooltip title={t('Voice')} placement="top">
+							<IconButton
+								onClick={() =>
+									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
+								}
+								size="small"
+							>
+								<MicIcon />
+							</IconButton>
+						</Tooltip>
+					)}
 
-				{hasInput() && (
-					<Tooltip title={t('Bulk Send')} placement="top">
-						<IconButton
-							onClick={() => bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
-							size="large"
-						>
-							<DynamicFeedIcon />
-						</IconButton>
-					</Tooltip>
-				)}
-
-				{!isExpired && !hasInput() && !isRecording && (
-					<Tooltip title={t('Voice')} placement="top">
-						<IconButton
-							onClick={() =>
-								PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
-							}
-							size="large"
-						>
-							<MicIcon />
-						</IconButton>
-					</Tooltip>
-				)}
-
-				<div className={!isRecording ? 'hidden' : ''}>
-					<VoiceRecord
-						voiceRecordCase="chat"
-						setRecording={setRecording}
-						sendHandledChosenFiles={sendHandledChosenFiles}
-					/>
+					{hasInput() && (
+						<Tooltip title={t('Send')} placement="top">
+							<IconButton
+								onClick={(e) => sendMessage(true, e)}
+								data-test-id="send-message-button"
+								size="small"
+							>
+								<Send />
+							</IconButton>
+						</Tooltip>
+					)}
 				</div>
+			</div>
+
+			<div className="hidden">
+				<FileInput
+					innerRef={fileInput}
+					accept={accept}
+					handleSelectedFiles={(files) => {
+						if (
+							accept !== ACCEPT_DOCUMENT &&
+							!ACCEPT_IMAGE_AND_VIDEO.includes(files[0].type)
+						) {
+							window.displayCustomError(
+								t('Please choose a supported file type (png, jpg, mp4, 3gp)')
+							);
+
+							return;
+						}
+
+						setSelectedFiles({ ...files });
+					}}
+				/>
 			</div>
 
 			{isMoreVisible && (

@@ -1,21 +1,48 @@
 .container {
 	position: relative;
 	border-left: 1px solid lightgray;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--chat-bg);
+}
+
+.row {
+	flex: 1;
+}
+
+.actionsRow {
+	display: flex;
+	flex-direction: row;
+	padding: 5px 10px 10px 10px;
+	gap: 5px;
+}
+
+.actionsRow :global(.MuiSvgIcon-root) {
+	height: 20px;
+	width: 20px;
+	color: #393d56 !important;
+}
+
+.actionsRowRight {
+	flex: 1;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	gap: 5px;
 }
 
 .footer {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	padding: 0 10px;
 	/*min-height: 62px;*/
 	max-height: 400px;
 	/*border-top: 1px solid lightgray;*/
-	padding: 0 10px;
-	background-color: var(--gray-light);
 }
 
 .emojiPicker {
-	flex: 1 0 100%;
+	flex: 1;
 	margin-bottom: -6px;
 	background-color: var(--gray-light);
 }
@@ -48,9 +75,9 @@
 	flex: 1;
 	border-radius: 10px;
 	padding: 8px 15px;
-	margin: 10px 10px;
+	margin: 10px 0 5px 0;
 	border: none;
-	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
+	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
 }
 
 .typeBox.expired {
