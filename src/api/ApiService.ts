@@ -587,6 +587,36 @@ export class ApiService {
 		);
 	};
 
+	partialUpdateChatAssignmentCall = (
+		waId,
+		assignedToUser,
+		assignedGroup,
+		successCallback,
+		errorCallback
+	) => {
+		const data = {
+			wa_id: waId,
+		};
+
+		if (assignedToUser !== undefined) {
+			data.assigned_to_user = assignedToUser;
+		}
+
+		if (assignedGroup !== undefined) {
+			data.assigned_group = assignedGroup;
+		}
+
+		this.handleRequest(
+			axios.patch(
+				`${this.apiBaseURL}chat_assignment/${waId}/`,
+				data,
+				getRequestConfig()
+			),
+			successCallback,
+			errorCallback
+		);
+	};
+
 	listGroupsCall = (successCallback) => {
 		this.handleRequest(
 			axios.get(`${this.apiBaseURL}groups/`, getRequestConfig()),
