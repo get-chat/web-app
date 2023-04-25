@@ -3,6 +3,7 @@
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	background-color: var(--chat-bg);
 }
 
 .chat.chatFullWidth {
@@ -345,7 +346,6 @@ a.chat__document:hover {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-	background-color: var(--chat-bg);
 	padding: 10px 20px 0 20px;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -403,7 +403,6 @@ a.chat__document:hover {
 
 .chat .templateMessagesOuter,
 .savedResponsesOuter {
-	background-color: var(--chat-bg);
 	padding: 0 15px 15px 15px;
 	border-left: 1px solid lightgray;
 }
