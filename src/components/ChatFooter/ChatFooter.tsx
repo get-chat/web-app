@@ -141,17 +141,39 @@ const ChatFooter: React.FC = ({
             willScroll = true;
         }*/
 
-		// Hide saved responses first
-		setSavedResponsesVisible(false);
+		setTemplateMessagesVisible((prevState) => {
+			if (!prevState) {
+				setAttachmentOptionsVisible(false);
+				setSavedResponsesVisible(false);
+				setEmojiPickerVisible(false);
+			}
 
-		setTemplateMessagesVisible((prevState) => !prevState);
+			return !prevState;
+		});
 	};
 
 	const toggleSavedResponses = () => {
-		// Hide template messages first
-		setTemplateMessagesVisible(false);
+		setSavedResponsesVisible((prevState) => {
+			if (!prevState) {
+				setAttachmentOptionsVisible(false);
+				setTemplateMessagesVisible(false);
+				setEmojiPickerVisible(false);
+			}
 
-		setSavedResponsesVisible((prevState) => !prevState);
+			return !prevState;
+		});
+	};
+
+	const toggleEmojiPicker = () => {
+		setEmojiPickerVisible((prevState) => {
+			if (!prevState) {
+				setAttachmentOptionsVisible(false);
+				setTemplateMessagesVisible(false);
+				setSavedResponsesVisible(false);
+			}
+
+			return !prevState;
+		});
 	};
 
 	function insertAtCursor(el, html) {
@@ -489,7 +511,7 @@ const ChatFooter: React.FC = ({
 									actionIcon: true,
 									active: isEmojiPickerVisible,
 								})}
-								onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
+								onClick={toggleEmojiPicker}
 								size="small"
 							>
 								<InsertEmoticon />
