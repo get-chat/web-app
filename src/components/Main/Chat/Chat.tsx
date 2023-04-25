@@ -101,6 +101,7 @@ export default function Chat(props) {
 	const dispatch = useAppDispatch();
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const users = useAppSelector((state) => state.users.value);
 	const templates = useAppSelector((state) => state.templates.value);
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 

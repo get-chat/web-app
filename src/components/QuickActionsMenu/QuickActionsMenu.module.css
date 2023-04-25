@@ -17,7 +17,7 @@
 	outline: 0;
 	border: none;
 	background-color: var(--gray-light);
-	padding: 15px;
+	padding: 10px 15px;
 	font-size: 16px;
 	flex: 1;
 }
