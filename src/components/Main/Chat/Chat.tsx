@@ -1964,27 +1964,6 @@ export default function Chat(props) {
 				<div className="chat__body__empty" />
 			</div>
 
-			<ChatFooter
-				waId={waId}
-				currentNewMessages={currentNewMessages}
-				isExpired={isExpired}
-				input={input}
-				setInput={setInput}
-				sendMessage={sendMessage}
-				bulkSendMessage={bulkSendMessage}
-				setSelectedFiles={setSelectedFiles}
-				isTemplateMessagesVisible={isTemplateMessagesVisible}
-				setTemplateMessagesVisible={setTemplateMessagesVisible}
-				accept={accept}
-				isSavedResponsesVisible={isSavedResponsesVisible}
-				setSavedResponsesVisible={setSavedResponsesVisible}
-				sendHandledChosenFiles={sendHandledChosenFiles}
-				setAccept={setAccept}
-				isScrollButtonVisible={isScrollButtonVisible}
-				handleScrollButtonClick={handleScrollButtonClick}
-				processCommand={processCommand}
-			/>
-
 			{isTemplateMessagesVisible && (
 				<TemplateListWithControls
 					isTemplatesFailed={props.isTemplatesFailed}
@@ -2008,6 +1987,27 @@ export default function Chat(props) {
 			{isSavedResponsesVisible && (
 				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
+
+			<ChatFooter
+				waId={waId}
+				currentNewMessages={currentNewMessages}
+				isExpired={isExpired}
+				input={input}
+				setInput={setInput}
+				sendMessage={sendMessage}
+				bulkSendMessage={bulkSendMessage}
+				setSelectedFiles={setSelectedFiles}
+				isTemplateMessagesVisible={isTemplateMessagesVisible}
+				setTemplateMessagesVisible={setTemplateMessagesVisible}
+				accept={accept}
+				isSavedResponsesVisible={isSavedResponsesVisible}
+				setSavedResponsesVisible={setSavedResponsesVisible}
+				sendHandledChosenFiles={sendHandledChosenFiles}
+				setAccept={setAccept}
+				isScrollButtonVisible={isScrollButtonVisible}
+				handleScrollButtonClick={handleScrollButtonClick}
+				processCommand={processCommand}
+			/>
 
 			{!waId && (
 				<div className="chat__default">
