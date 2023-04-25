@@ -74,7 +74,6 @@ const ChatFooter: React.FC = ({
 	const [isAttachmentOptionsVisible, setAttachmentOptionsVisible] =
 		useState(false);
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
-	const [isMoreVisible, setMoreVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
 	const [isQuickActionsMenuVisible, setQuickActionsMenuVisible] =
 		useState(false);
@@ -249,16 +248,6 @@ const ChatFooter: React.FC = ({
 		return input && input.length > 0;
 	};
 
-	const showMore = () => {
-		setEmojiPickerVisible(false);
-		setMoreVisible(true);
-	};
-
-	const hideMore = () => {
-		setTemplateMessagesVisible(false);
-		setMoreVisible(false);
-	};
-
 	const openContactsModal = () => {
 		setContactsModalVisible(true);
 	};
@@ -347,16 +336,6 @@ const ChatFooter: React.FC = ({
 						{t('Send a message')}
 					</button>
 				</form>
-
-				{!hasInput() && !isExpired && (
-					<div className="mobileOnly">
-						<Tooltip title={t('More')}>
-							<IconButton onClick={showMore} size="large">
-								<Add />
-							</IconButton>
-						</Tooltip>
-					</div>
-				)}
 			</div>
 
 			<div
@@ -383,7 +362,6 @@ const ChatFooter: React.FC = ({
 					<div
 						className={cx({
 							attachmentContainer: true,
-							desktopOnly: true,
 							open: isAttachmentOptionsVisible,
 						})}
 					>
@@ -453,7 +431,7 @@ const ChatFooter: React.FC = ({
 					title="Templates"
 					placement="top"
 					className={cx({
-						desktopOnly: !isExpired,
+						desktopOnly: isAttachmentOptionsVisible,
 					})}
 				>
 					<IconButton
@@ -473,7 +451,9 @@ const ChatFooter: React.FC = ({
 					<Tooltip
 						title="Saved Responses"
 						placement="top"
-						className="desktopOnly"
+						className={cx({
+							desktopOnly: isAttachmentOptionsVisible,
+						})}
 					>
 						<IconButton
 							onClick={toggleSavedResponses}
@@ -489,7 +469,13 @@ const ChatFooter: React.FC = ({
 				)}
 
 				{!isExpired && (
-					<Tooltip title={t('Emoji')} placement="top">
+					<Tooltip
+						title={t('Emoji')}
+						placement="top"
+						className={cx({
+							desktopOnly: isAttachmentOptionsVisible,
+						})}
+					>
 						<IconButton
 							className={cx({
 								actionIcon: true,
@@ -502,6 +488,16 @@ const ChatFooter: React.FC = ({
 						</IconButton>
 					</Tooltip>
 				)}
+
+				{/*{!hasInput() && !isExpired && (
+					<div className="mobileOnly">
+						<Tooltip title={t('More')}>
+							<IconButton className={styles.actionIcon} onClick={showMore} size="large">
+								<Add />
+							</IconButton>
+						</Tooltip>
+					</div>
+				)}*/}
 
 				<div className={styles.actionsRowRight}>
 					<div
@@ -577,54 +573,6 @@ const ChatFooter: React.FC = ({
 					}}
 				/>
 			</div>
-
-			{isMoreVisible && (
-				<div className={styles.footerMore}>
-					<IconButton onClick={hideMore} size="large">
-						<CloseIcon />
-					</IconButton>
-
-					<IconButton onClick={openContactsModal} size="large">
-						<ContactsIcon />
-					</IconButton>
-
-					<IconButton
-						onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
-						size="large"
-					>
-						<InsertDriveFileIcon />
-					</IconButton>
-
-					<IconButton
-						onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
-						size="large"
-					>
-						<ImageIcon />
-					</IconButton>
-
-					<IconButton
-						onClick={toggleTemplateMessages}
-						className={cx({
-							actionButton: true,
-							active: isTemplateMessagesVisible,
-						})}
-						size="large"
-					>
-						<SmsIcon />
-					</IconButton>
-
-					<IconButton
-						onClick={toggleSavedResponses}
-						className={cx({
-							actionButton: true,
-							active: isSavedResponsesVisible,
-						})}
-						size="large"
-					>
-						<NotesIcon />
-					</IconButton>
-				</div>
-			)}
 
 			<Zoom in={isScrollButtonVisible}>
 				<Badge
