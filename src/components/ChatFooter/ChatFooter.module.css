@@ -41,7 +41,7 @@
 }
 
 .actionIcon.active :global(.MuiSvgIcon-root) {
-	color: var(--color-primary) !important;
+	color: #463732 !important;
 }
 
 .commandActionIcon :global(.MuiSvgIcon-root) {
@@ -127,7 +127,7 @@
 	/*top: 50%;
     transform: translateY(-50%);*/
 	z-index: 0;
-	color: #868a9b;
+	color: #9c8173;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
@@ -136,7 +136,7 @@
 }
 
 .typeBox.expired .typeBoxHint {
-	color: #626573;
+	color: #736054;
 }
 
 [contenteditable] {
