@@ -83,6 +83,10 @@
 	display: flex;
 }
 
+.typeBox {
+	overflow: hidden;
+}
+
 .footer > form > textarea,
 .typeBox {
 	position: relative;
@@ -93,7 +97,6 @@
 	/*resize: none;*/
 	flex: 1;
 	border-radius: 10px;
-	padding: 8px 15px;
 	margin-bottom: 5px;
 	border: none;
 	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
@@ -108,6 +111,11 @@
 .typeBox {
 	outline: none;
 	border: none;
+}
+
+.typeBoxEditable,
+.typeBoxHint {
+	padding: 8px 15px;
 }
 
 .typeBoxHint {
@@ -174,28 +182,6 @@
 	flex-direction: row;
 	gap: 5px;
 	margin-left: 5px;
-}
-
-/*.attachmentOptionDocument :global(.MuiSvgIcon-root) {
-	color: #5f66cd !important;
-}
-
-.attachmentOptionImageAndVideo :global(.MuiSvgIcon-root) {
-	color: #bf59cf !important;
-}*/
-
-.footerMore {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: var(--gray-light);
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
-	padding: 0;
-	z-index: 101;
 }
 
 .scrollButtonWrapper {
