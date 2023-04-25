@@ -17,6 +17,16 @@
 	gap: 5px;
 }
 
+.actionIcon {
+	transition: all ease-in 0.2s;
+}
+
+.actionIcon.active {
+	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
+	background-color: #fff !important;
+	transition: all ease-in 0.2s;
+}
+
 .actionIcon :global(.MuiSvgIcon-root) {
 	height: 20px;
 	width: 20px;
@@ -146,44 +156,33 @@
 }
 
 .attachmentContainer {
-	position: relative;
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+	border-radius: 20px;
+	transition: background-color ease-in 0.2s;
 }
 
-.attachmentContainer:hover .attachmentOptions,
-.attachmentOptions:hover {
-	display: block;
+.attachmentContainer.open {
+	background-color: #fff;
+	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
+	transition: all ease-in 0.2s;
 }
 
 .attachmentOptions {
-	display: none;
-	position: absolute;
-	bottom: 0;
-	left: 50%;
-	transform: translateX(-50%);
-	padding: 0 15px 9px 15px;
-	margin-bottom: 48px;
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+	margin-left: 5px;
 }
 
-.attachmentOptions :global(.MuiButtonBase-root) {
-	box-shadow: -1px 4px 12px -6px rgba(0, 0, 45, 0.85);
-	margin-bottom: 15px;
-}
-
-.attachmentOptionDocument {
-	background: linear-gradient(0deg, #5f66cd 50%, #5157ae 50%) !important;
-}
-
-.attachmentOptionDocument :global(.MuiSvgIcon-root) {
-	color: white !important;
-}
-
-.attachmentOptionImageAndVideo {
-	background: linear-gradient(0deg, #bf59cf 50%, #ac44cf 50%) !important;
+/*.attachmentOptionDocument :global(.MuiSvgIcon-root) {
+	color: #5f66cd !important;
 }
 
 .attachmentOptionImageAndVideo :global(.MuiSvgIcon-root) {
-	color: white !important;
-}
+	color: #bf59cf !important;
+}*/
 
 .footerMore {
 	position: absolute;

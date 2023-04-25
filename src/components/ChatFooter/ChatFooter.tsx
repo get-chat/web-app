@@ -71,6 +71,8 @@ const ChatFooter: React.FC = ({
 	const fileInput = useRef(null);
 	const editable = useRef(null);
 
+	const [isAttachmentOptionsVisible, setAttachmentOptionsVisible] =
+		useState(false);
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [isMoreVisible, setMoreVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
@@ -382,40 +384,63 @@ const ChatFooter: React.FC = ({
 						className={cx({
 							attachmentContainer: true,
 							desktopOnly: true,
+							open: isAttachmentOptionsVisible,
 						})}
 					>
 						<Tooltip title={t('Attachment')} placement="top">
-							<IconButton className={styles.actionIcon} size="small">
+							<IconButton
+								className={cx({
+									actionIcon: true,
+									active: isAttachmentOptionsVisible,
+								})}
+								size="small"
+								onClick={() =>
+									setAttachmentOptionsVisible(!isAttachmentOptionsVisible)
+								}
+							>
 								<AttachFile />
 							</IconButton>
 						</Tooltip>
 
-						<div className={styles.attachmentOptions}>
-							<Tooltip title={t('Contacts')} placement="right">
+						<div
+							className={cx({
+								attachmentOptions: true,
+								hidden: !isAttachmentOptionsVisible,
+							})}
+						>
+							<Tooltip title={t('Contacts')} placement="top">
 								<IconButton
-									className={styles.attachmentOptionDocument}
+									className={cx({
+										actionIcon: true,
+									})}
 									onClick={openContactsModal}
-									size="large"
+									size="small"
 								>
 									<ContactsIcon />
 								</IconButton>
 							</Tooltip>
 
-							<Tooltip title={t('Documents')} placement="right">
+							<Tooltip title={t('Documents')} placement="top">
 								<IconButton
-									className={styles.attachmentOptionDocument}
+									className={cx({
+										actionIcon: true,
+										attachmentOptionDocument: true,
+									})}
 									onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
-									size="large"
+									size="small"
 								>
 									<InsertDriveFileIcon />
 								</IconButton>
 							</Tooltip>
 
-							<Tooltip title={t('Images & Videos')} placement="right">
+							<Tooltip title={t('Images & Videos')} placement="top">
 								<IconButton
-									className={styles.attachmentOptionImageAndVideo}
+									className={cx({
+										actionIcon: true,
+										attachmentOptionImageAndVideo: true,
+									})}
 									onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
-									size="large"
+									size="small"
 								>
 									<ImageIcon />
 								</IconButton>
