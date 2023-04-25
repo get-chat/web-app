@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Badge, Fab, IconButton, Tooltip, Zoom } from '@mui/material';
 import {
-	Add,
 	ArrowDownward,
 	AttachFile,
 	InsertEmoticon,
@@ -18,19 +17,13 @@ import { Emoji, NimblePicker } from 'emoji-mart';
 import styles from './ChatFooter.module.css';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../styles/EmojiPicker.css';
-import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
 import FileInput from '../FileInput';
-import {
-	getSelectionHtml,
-	sanitize,
-	translateHTMLInputToText,
-} from '@src/helpers/Helpers';
+import { translateHTMLInputToText } from '@src/helpers/Helpers';
 import VoiceRecord from './VoiceRecord';
 import {
 	EMOJI_SET,
 	EMOJI_SHEET_SIZE,
-	EMPTY_IMAGE_BASE64,
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
 } from '@src/Constants';
@@ -43,6 +36,7 @@ import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 import classNames from 'classnames/bind';
+import useChatFooter from '@src/components/ChatFooter/useChatFooter';
 
 const cx = classNames.bind(styles);
 
@@ -79,6 +73,8 @@ const ChatFooter: React.FC = ({
 		useState(false);
 
 	const [isRecording, setRecording] = useState(false);
+
+	const { insertAtCursor, handleCopy } = useChatFooter({ setInput });
 
 	const handleAttachmentClick = (acceptValue) => {
 		setAccept(acceptValue);
@@ -176,34 +172,6 @@ const ChatFooter: React.FC = ({
 		});
 	};
 
-	function insertAtCursor(el, html) {
-		if (!html) return;
-
-		// Sanitize input
-		html = sanitize(html);
-
-		// Preserving new lines
-		html = html.replace(/(?:\r\n|\r|\n)/g, '<br>');
-
-		//html = html.replace('<span', '<span contentEditable="false"');
-		html = html
-			.replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"')
-			.replace('</span>', '');
-		el.focus();
-
-		let selection = window.getSelection();
-		let range = selection.getRangeAt(0);
-		range.deleteContents();
-		let node = range.createContextualFragment(html);
-		range.insertNode(node);
-
-		// Persist cursor position
-		selection.collapseToEnd();
-
-		//el.dispatchEvent(new Event('input'));
-		setInput(el.innerHTML);
-	}
-
 	const handleEmojiSelect = (emoji) => {
 		if (isRecording) {
 			return;
@@ -230,14 +198,6 @@ const ChatFooter: React.FC = ({
 		text = replaceEmojis(text, true);
 
 		insertAtCursor(editable.current, text);
-
-		event.preventDefault();
-	};
-
-	const handleCopy = (event) => {
-		let data = getSelectionHtml();
-		data = translateHTMLInputToText(data);
-		event.clipboardData.setData('text', data);
 
 		event.preventDefault();
 	};
