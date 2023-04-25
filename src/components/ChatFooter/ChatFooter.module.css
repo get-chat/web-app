@@ -166,7 +166,6 @@
 }
 
 .footer > :global(.MuiSvgIcon-root) {
-	/*padding: 10px;*/
 	color: var(--lighter-text-color);
 }
 
