@@ -414,15 +414,18 @@ const ChatFooter: React.FC = ({
 									hidden: !isAttachmentOptionsVisible,
 								})}
 							>
-								<Tooltip title={t('Contacts')} placement="top">
+								<Tooltip title={t('Images & Videos')} placement="top">
 									<IconButton
 										className={cx({
 											actionIcon: true,
+											attachmentOptionImageAndVideo: true,
 										})}
-										onClick={openContactsModal}
+										onClick={() =>
+											handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
+										}
 										size="small"
 									>
-										<ContactsIcon />
+										<ImageIcon />
 									</IconButton>
 								</Tooltip>
 
@@ -439,18 +442,15 @@ const ChatFooter: React.FC = ({
 									</IconButton>
 								</Tooltip>
 
-								<Tooltip title={t('Images & Videos')} placement="top">
+								<Tooltip title={t('Contacts')} placement="top">
 									<IconButton
 										className={cx({
 											actionIcon: true,
-											attachmentOptionImageAndVideo: true,
 										})}
-										onClick={() =>
-											handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
-										}
+										onClick={openContactsModal}
 										size="small"
 									>
-										<ImageIcon />
+										<ContactsIcon />
 									</IconButton>
 								</Tooltip>
 							</div>
