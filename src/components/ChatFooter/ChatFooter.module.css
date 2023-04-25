@@ -156,7 +156,7 @@
 	z-index: 100;
 	width: 100%;
 	min-height: 26px;
-	max-height: 350px;
+	max-height: 250px;
 	overflow-y: auto;
 	word-break: break-word;
 }
@@ -219,6 +219,10 @@
 
 	.footer.expired {
 		border-left: none;
+	}
+
+	.typeBoxEditable {
+		max-height: 160px;
 	}
 
 	.attachmentOptions {
