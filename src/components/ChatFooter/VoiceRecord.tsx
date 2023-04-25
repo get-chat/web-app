@@ -7,6 +7,7 @@ import {
 	DialogContentText,
 	DialogTitle,
 	IconButton,
+	Tooltip,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -190,27 +191,31 @@ function VoiceRecord({
 
 	return (
 		<div className="voiceRecord">
-			<IconButton
-				onClick={stopVoiceRecord}
-				className="voiceRecord__cancelButton"
-				size="small"
-			>
-				<CloseIcon />
-			</IconButton>
+			<Tooltip title={t('Cancel')} placement="top">
+				<IconButton
+					onClick={stopVoiceRecord}
+					className="voiceRecord__cancelButton"
+					size="small"
+				>
+					<CloseIcon />
+				</IconButton>
+			</Tooltip>
 
 			<FiberManualRecordIcon className="voiceRecord__recordIcon" />
 			<span className="voiceRecord__timer">{displaySeconds(timer)}</span>
 
-			<IconButton
-				onClick={sendVoiceRecord}
-				className="voiceRecord__sendButton"
-				size="small"
-			>
-				<DoneIcon />
-			</IconButton>
+			<Tooltip title={t('Send')} placement="top">
+				<IconButton
+					onClick={sendVoiceRecord}
+					className="voiceRecord__sendButton"
+					size="small"
+				>
+					<DoneIcon />
+				</IconButton>
+			</Tooltip>
 
 			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Oops!</DialogTitle>
+				<DialogTitle>{t('Oops!')}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
 						{t('You must open the inbox in a new tab to access this feature.')}
