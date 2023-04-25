@@ -7,6 +7,7 @@ import { useDetectClickOutside } from 'react-detect-click-outside';
 import { useTranslation } from 'react-i18next';
 import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
 import { isEmptyString } from '@src/helpers/Helpers';
+import { SearchOutlined } from '@mui/icons-material';
 
 export type Props = {
 	input: string;
@@ -102,17 +103,20 @@ const QuickActionsMenu: React.FC<Props> = ({
 
 	return (
 		<div className={styles.container} ref={containerRef}>
-			<input
-				type="text"
-				placeholder={t('Search quick actions')}
-				value={commandInput}
-				onChange={(e) => setCommandInput(e.target.value)}
-				onKeyDown={handleSearchInputKeyDown}
-				onKeyUp={handleSearchInputKeyUp}
-				className={styles.searchInput}
-				// @ts-ignore
-				ref={inputRef}
-			/>
+			<div className={styles.searchContainer}>
+				<SearchOutlined className={styles.searchIcon} />
+				<input
+					type="text"
+					placeholder={t('Search quick actions')}
+					value={commandInput}
+					onChange={(e) => setCommandInput(e.target.value)}
+					onKeyDown={handleSearchInputKeyDown}
+					onKeyUp={handleSearchInputKeyUp}
+					className={styles.searchInput}
+					// @ts-ignore
+					ref={inputRef}
+				/>
+			</div>
 			<div
 				className={styles.results}
 				// @ts-ignore

@@ -5,11 +5,11 @@
 }
 
 .sidebarContactResult.activeChat {
-	background-color: #f2f3f6;
+	background-color: var(--gray-lighter);
 }
 
 .sidebarContactResult:hover {
-	background-color: #f2f3f6;
+	background-color: var(--gray-lighter);
 }
 
 .sidebarContactResult__info > h2 {

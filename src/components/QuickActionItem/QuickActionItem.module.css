@@ -6,8 +6,8 @@
 	font-size: 14px;
 }
 
-.containerSelected {
-	background-color: #f2f3f6;
+.container.selected {
+	background-color: var(--gray-lighter);
 }
 
 .command {
@@ -37,7 +37,7 @@
 
 .description {
 	font-size: 12px;
-	color: rgba(0, 45, 0, 0.6);
+	color: rgba(0, 0, 45, 0.6);
 	white-space: pre-line;
 	margin: 1px 0 0 25px;
 }
