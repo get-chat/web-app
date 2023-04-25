@@ -1164,13 +1164,14 @@ export default function Chat(props) {
 		setLoaded(true);
 		setLoadingMoreMessages(false);
 
-		// TODO: Check unread messages first and then decide to do it or not
 		if (isInitial) {
+			// TODO: Check unread messages first and then decide to do it or not
 			// beforeTime is not passed only for initial request
 			// Mark messages as received
 			const lastMessageTimestamp = messageHelper(preparedMessages);
 			markAsReceived(lastMessageTimestamp);
 
+			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
 		}
 
