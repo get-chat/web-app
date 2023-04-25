@@ -17,6 +17,13 @@
 	gap: 5px;
 }
 
+.actionsRowLeft,
+.actionsRowRight {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+}
+
 .actionIcon {
 	transition: all ease-in 0.2s;
 }
@@ -43,10 +50,7 @@
 
 .actionsRowRight {
 	flex: 1;
-	display: flex;
-	flex-direction: row;
 	justify-content: flex-end;
-	gap: 5px;
 }
 
 .footer {

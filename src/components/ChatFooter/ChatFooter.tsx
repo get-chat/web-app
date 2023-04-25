@@ -344,160 +344,159 @@ const ChatFooter: React.FC = ({
 					actionsRow: true,
 				})}
 			>
-				<Tooltip title={t('Quick Actions')} placement="top">
-					<IconButton
-						className={cx({
-							actionIcon: true,
-							active: isQuickActionsMenuVisible,
-							commandActionIcon: true,
-						})}
-						onClick={displayQuickActionsMenu}
-						size="small"
-					>
-						<KeyboardCommandKeyIcon />
-					</IconButton>
-				</Tooltip>
+				<div
+					className={cx({
+						actionsRowLeft: true,
+						desktopOnly: isRecording,
+					})}
+				>
+					<Tooltip title={t('Quick Actions')} placement="top">
+						<IconButton
+							className={cx({
+								actionIcon: true,
+								active: isQuickActionsMenuVisible,
+								commandActionIcon: true,
+							})}
+							onClick={displayQuickActionsMenu}
+							size="small"
+						>
+							<KeyboardCommandKeyIcon />
+						</IconButton>
+					</Tooltip>
 
-				{!isExpired && (
-					<div
+					{!isExpired && (
+						<div
+							className={cx({
+								attachmentContainer: true,
+								open: isAttachmentOptionsVisible,
+							})}
+						>
+							<Tooltip title={t('Attachment')} placement="top">
+								<IconButton
+									className={cx({
+										actionIcon: true,
+										active: isAttachmentOptionsVisible,
+									})}
+									size="small"
+									onClick={() =>
+										setAttachmentOptionsVisible(!isAttachmentOptionsVisible)
+									}
+								>
+									<AttachFile />
+								</IconButton>
+							</Tooltip>
+
+							<div
+								className={cx({
+									attachmentOptions: true,
+									hidden: !isAttachmentOptionsVisible,
+								})}
+							>
+								<Tooltip title={t('Contacts')} placement="top">
+									<IconButton
+										className={cx({
+											actionIcon: true,
+										})}
+										onClick={openContactsModal}
+										size="small"
+									>
+										<ContactsIcon />
+									</IconButton>
+								</Tooltip>
+
+								<Tooltip title={t('Documents')} placement="top">
+									<IconButton
+										className={cx({
+											actionIcon: true,
+											attachmentOptionDocument: true,
+										})}
+										onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
+										size="small"
+									>
+										<InsertDriveFileIcon />
+									</IconButton>
+								</Tooltip>
+
+								<Tooltip title={t('Images & Videos')} placement="top">
+									<IconButton
+										className={cx({
+											actionIcon: true,
+											attachmentOptionImageAndVideo: true,
+										})}
+										onClick={() =>
+											handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
+										}
+										size="small"
+									>
+										<ImageIcon />
+									</IconButton>
+								</Tooltip>
+							</div>
+						</div>
+					)}
+
+					<Tooltip
+						title="Templates"
+						placement="top"
 						className={cx({
-							attachmentContainer: true,
-							open: isAttachmentOptionsVisible,
+							desktopOnly: isAttachmentOptionsVisible,
 						})}
 					>
-						<Tooltip title={t('Attachment')} placement="top">
+						<IconButton
+							data-test-id="templates-button"
+							onClick={toggleTemplateMessages}
+							className={cx({
+								actionIcon: true,
+								active: isTemplateMessagesVisible,
+							})}
+							size="small"
+						>
+							<SmsIcon />
+						</IconButton>
+					</Tooltip>
+
+					{!isExpired && (
+						<Tooltip
+							title="Saved Responses"
+							placement="top"
+							className={cx({
+								desktopOnly: isAttachmentOptionsVisible,
+							})}
+						>
+							<IconButton
+								onClick={toggleSavedResponses}
+								className={cx({
+									actionIcon: true,
+									active: isSavedResponsesVisible,
+								})}
+								size="small"
+							>
+								<NotesIcon />
+							</IconButton>
+						</Tooltip>
+					)}
+
+					{!isExpired && (
+						<Tooltip
+							title={t('Emoji')}
+							placement="top"
+							className={cx({
+								desktopOnly: isAttachmentOptionsVisible,
+							})}
+						>
 							<IconButton
 								className={cx({
 									actionIcon: true,
-									active: isAttachmentOptionsVisible,
+									active: isEmojiPickerVisible,
 								})}
+								onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
 								size="small"
-								onClick={() =>
-									setAttachmentOptionsVisible(!isAttachmentOptionsVisible)
-								}
 							>
-								<AttachFile />
+								<InsertEmoticon />
 							</IconButton>
 						</Tooltip>
-
-						<div
-							className={cx({
-								attachmentOptions: true,
-								hidden: !isAttachmentOptionsVisible,
-							})}
-						>
-							<Tooltip title={t('Contacts')} placement="top">
-								<IconButton
-									className={cx({
-										actionIcon: true,
-									})}
-									onClick={openContactsModal}
-									size="small"
-								>
-									<ContactsIcon />
-								</IconButton>
-							</Tooltip>
-
-							<Tooltip title={t('Documents')} placement="top">
-								<IconButton
-									className={cx({
-										actionIcon: true,
-										attachmentOptionDocument: true,
-									})}
-									onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
-									size="small"
-								>
-									<InsertDriveFileIcon />
-								</IconButton>
-							</Tooltip>
-
-							<Tooltip title={t('Images & Videos')} placement="top">
-								<IconButton
-									className={cx({
-										actionIcon: true,
-										attachmentOptionImageAndVideo: true,
-									})}
-									onClick={() => handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)}
-									size="small"
-								>
-									<ImageIcon />
-								</IconButton>
-							</Tooltip>
-						</div>
-					</div>
-				)}
-
-				<Tooltip
-					title="Templates"
-					placement="top"
-					className={cx({
-						desktopOnly: isAttachmentOptionsVisible,
-					})}
-				>
-					<IconButton
-						data-test-id="templates-button"
-						onClick={toggleTemplateMessages}
-						className={cx({
-							actionIcon: true,
-							active: isTemplateMessagesVisible,
-						})}
-						size="small"
-					>
-						<SmsIcon />
-					</IconButton>
-				</Tooltip>
-
-				{!isExpired && (
-					<Tooltip
-						title="Saved Responses"
-						placement="top"
-						className={cx({
-							desktopOnly: isAttachmentOptionsVisible,
-						})}
-					>
-						<IconButton
-							onClick={toggleSavedResponses}
-							className={cx({
-								actionIcon: true,
-								active: isSavedResponsesVisible,
-							})}
-							size="small"
-						>
-							<NotesIcon />
-						</IconButton>
-					</Tooltip>
-				)}
-
-				{!isExpired && (
-					<Tooltip
-						title={t('Emoji')}
-						placement="top"
-						className={cx({
-							desktopOnly: isAttachmentOptionsVisible,
-						})}
-					>
-						<IconButton
-							className={cx({
-								actionIcon: true,
-								active: isEmojiPickerVisible,
-							})}
-							onClick={() => setEmojiPickerVisible((prevState) => !prevState)}
-							size="small"
-						>
-							<InsertEmoticon />
-						</IconButton>
-					</Tooltip>
-				)}
-
-				{/*{!hasInput() && !isExpired && (
-					<div className="mobileOnly">
-						<Tooltip title={t('More')}>
-							<IconButton className={styles.actionIcon} onClick={showMore} size="large">
-								<Add />
-							</IconButton>
-						</Tooltip>
-					</div>
-				)}*/}
+					)}
+				</div>
 
 				<div className={styles.actionsRowRight}>
 					<div
