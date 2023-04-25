@@ -19,6 +19,7 @@ import {
 	EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
 	EVENT_TOPIC_DROPPED_FILES,
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+	EVENT_TOPIC_FOCUS_MESSAGE_INPUT,
 	EVENT_TOPIC_FORCE_REFRESH_CHAT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
@@ -1169,6 +1170,8 @@ export default function Chat(props) {
 			// Mark messages as received
 			const lastMessageTimestamp = messageHelper(preparedMessages);
 			markAsReceived(lastMessageTimestamp);
+
+			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
 		}
 
 		// Promise

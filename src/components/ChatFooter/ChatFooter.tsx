@@ -25,6 +25,7 @@ import {
 	EMOJI_SET,
 	EMOJI_SHEET_SIZE,
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+	EVENT_TOPIC_FOCUS_MESSAGE_INPUT,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
 } from '@src/Constants';
 import ChatMessageModel from '../../api/models/ChatMessageModel';
@@ -112,6 +113,24 @@ const ChatFooter: React.FC = ({
 			PubSub.unsubscribe(token);
 		};
 	}, []);
+
+	useEffect(() => {
+		// Workaround for focused input for expired chats
+		if (isExpired) {
+			editable.current?.blur();
+		}
+
+		// Focus on the message input when chat is loaded
+		const eventToken = PubSub.subscribe(EVENT_TOPIC_FOCUS_MESSAGE_INPUT, () => {
+			if (!isExpired) {
+				editable.current?.focus();
+			}
+		});
+
+		return () => {
+			PubSub.unsubscribe(eventToken);
+		};
+	}, [editable.current, isExpired]);
 
 	useEffect(() => {
 		const preparedInput = translateHTMLInputToText(input).trim();
