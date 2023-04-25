@@ -104,9 +104,6 @@
 	position: relative;
 	background-color: white;
 	height: auto;
-	/*height: 25px;*/
-	/*max-height: 400px;*/
-	/*resize: none;*/
 	flex: 1;
 	border-radius: 10px;
 	margin-bottom: 5px;
