@@ -263,7 +263,10 @@ const ChatFooter: React.FC = ({
 
 	return (
 		<div
-			className={styles.container}
+			className={cx({
+				chatFooterGlobal: true,
+				container: true,
+			})}
 			onDrop={(event) => event.preventDefault()}
 		>
 			{isQuickActionsMenuVisible && (
