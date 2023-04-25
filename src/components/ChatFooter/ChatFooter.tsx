@@ -368,26 +368,12 @@ const ChatFooter: React.FC = ({
 						</IconButton>
 					</Tooltip>
 
-					{!isExpired && (
-						<Tooltip
-							title={t('Emoji')}
-							placement="top"
-							className={cx({
-								desktopOnly: isAttachmentOptionsVisible,
-							})}
-						>
-							<IconButton
-								className={cx({
-									actionIcon: true,
-									active: isEmojiPickerVisible,
-								})}
-								onClick={toggleEmojiPicker}
-								size="small"
-							>
-								<InsertEmoticon />
-							</IconButton>
-						</Tooltip>
-					)}
+					<div
+						className={cx({
+							actionSeparator: true,
+							desktopOnly: isAttachmentOptionsVisible,
+						})}
+					/>
 
 					<Tooltip
 						title="Templates"
@@ -426,6 +412,29 @@ const ChatFooter: React.FC = ({
 								size="small"
 							>
 								<NotesIcon />
+							</IconButton>
+						</Tooltip>
+					)}
+
+					<div className={styles.actionSeparator} />
+
+					{!isExpired && (
+						<Tooltip
+							title={t('Emoji')}
+							placement="top"
+							className={cx({
+								desktopOnly: isAttachmentOptionsVisible,
+							})}
+						>
+							<IconButton
+								className={cx({
+									actionIcon: true,
+									active: isEmojiPickerVisible,
+								})}
+								onClick={toggleEmojiPicker}
+								size="small"
+							>
+								<InsertEmoticon />
 							</IconButton>
 						</Tooltip>
 					)}

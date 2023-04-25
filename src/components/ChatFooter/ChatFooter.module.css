@@ -21,6 +21,14 @@
 	display: flex;
 	flex-direction: row;
 	gap: 7px;
+	align-items: center;
+}
+
+.actionSeparator {
+	width: 1px;
+	height: 20px;
+	background-color: rgba(0, 0, 0, 0.1);
+	margin: 0 5px;
 }
 
 .actionIcon {
@@ -37,6 +45,7 @@
 	height: 20px;
 	width: 20px;
 	color: #5d5958 !important;
+	transition: color ease-in 0.2s;
 }
 
 .actionIcon.active :global(.MuiSvgIcon-root) {
@@ -171,13 +180,10 @@
 	flex-direction: row;
 	gap: 5px;
 	border-radius: 20px;
-	transition: background-color ease-in 0.2s;
 }
 
 .attachmentContainer.open {
-	background-color: #fff;
-	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
-	transition: all ease-in 0.2s;
+	background-color: rgba(0, 0, 0, 0.05);
 }
 
 .attachmentOptions {
