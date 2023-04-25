@@ -13,14 +13,14 @@
 	display: flex;
 	flex-direction: row;
 	padding: 5px 10px 10px 10px;
-	gap: 5px;
+	gap: 7px;
 }
 
 .actionsRowLeft,
 .actionsRowRight {
 	display: flex;
 	flex-direction: row;
-	gap: 5px;
+	gap: 7px;
 }
 
 .actionIcon {
@@ -183,7 +183,7 @@
 .attachmentOptions {
 	display: flex;
 	flex-direction: row;
-	gap: 5px;
+	gap: 7px;
 	margin-left: 5px;
 }
 
