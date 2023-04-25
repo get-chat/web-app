@@ -416,7 +416,7 @@ const ChatFooter: React.FC = ({
 						</Tooltip>
 					)}
 
-					<div className={styles.actionSeparator} />
+					{!isExpired && <div className={styles.actionSeparator} />}
 
 					{!isExpired && (
 						<Tooltip
