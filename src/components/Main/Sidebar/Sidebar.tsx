@@ -865,37 +865,37 @@ function Sidebar(props) {
 				</div>
 
 				{searchedKeyword.trim().length > 0 &&
-					getObjLength(contactResults) > 0 && <h3>{t('Contacts')}</h3>}
-
-				{searchedKeyword.trim().length > 0 &&
 					getObjLength(contactResults) > 0 && (
-						<div className="sidebar__results__contacts">
-							{Object.entries(contactResults).map((contactResult) => (
-								<SidebarContactResult
-									key={contactResult[0]}
-									chatData={contactResult[1]}
-								/>
-							))}
-						</div>
+						<>
+							<h3>{t('Contacts')}</h3>
+							<div className="sidebar__results__contacts">
+								{Object.entries(contactResults).map((contactResult) => (
+									<SidebarContactResult
+										key={contactResult[0]}
+										chatData={contactResult[1]}
+									/>
+								))}
+							</div>
+						</>
 					)}
 
 				{searchedKeyword.trim().length > 0 &&
-					getObjLength(chatMessages) > 0 && <h3>{t('Messages')}</h3>}
-
-				{searchedKeyword.trim().length > 0 &&
 					getObjLength(chatMessages) > 0 && (
-						<div className="sidebar__results__messages">
-							{Object.entries(chatMessages).map((message) => (
-								<SearchMessageResult
-									key={message[0]}
-									waId={waId}
-									messageData={message[1]}
-									keyword={searchedKeyword}
-									displaySender={true}
-									onClick={(chatMessage) => goToMessage(chatMessage)}
-								/>
-							))}
-						</div>
+						<>
+							<h3>{t('Messages')}</h3>
+							<div className="sidebar__results__messages">
+								{Object.entries(chatMessages).map((message) => (
+									<SearchMessageResult
+										key={message[0]}
+										waId={waId}
+										messageData={message[1]}
+										keyword={searchedKeyword}
+										displaySender={true}
+										onClick={(chatMessage) => goToMessage(chatMessage)}
+									/>
+								))}
+							</div>
+						</>
 					)}
 			</div>
 
