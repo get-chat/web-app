@@ -88,6 +88,7 @@ function Sidebar(props) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState(null);
 	const [keyword, setKeyword] = useState('');
+	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState({});
 	const [contactResults, setContactResults] = useState({});
 	const [isProfileVisible, setProfileVisible] = useState(false);
@@ -100,6 +101,8 @@ function Sidebar(props) {
 	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
 
 	const [missingChats, setMissingChats] = useState([]);
+
+	const timer = useRef<NodeJS.Timeout>();
 
 	const navigate = useNavigate();
 
@@ -157,11 +160,15 @@ function Sidebar(props) {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
-		listChats(cancelTokenSourceRef.current, true, undefined, true);
+		timer.current = setTimeout(() => {
+			listChats(cancelTokenSourceRef.current, true, undefined, true);
 
-		if (keyword.trim().length > 0) {
-			searchMessages(cancelTokenSourceRef.current);
-		}
+			if (keyword.trim().length > 0) {
+				searchMessages(cancelTokenSourceRef.current);
+			}
+
+			setSearchedKeyword(keyword);
+		}, 500);
 
 		return () => {
 			if (cancelTokenSourceRef.current) {
@@ -169,6 +176,8 @@ function Sidebar(props) {
 					'Operation canceled due to new request.'
 				);
 			}
+
+			clearTimeout(timer.current);
 		};
 	}, [keyword, tabCase, filterTag]);
 
@@ -811,9 +820,8 @@ function Sidebar(props) {
 					</div>
 				)}
 
-				{(keyword.trim().length > 0 || props.isSelectionModeEnabled) && (
-					<h3>{t('Chats')}</h3>
-				)}
+				{(searchedKeyword.trim().length > 0 ||
+					props.isSelectionModeEnabled) && <h3>{t('Chats')}</h3>}
 
 				<div className="sidebar__results__chats">
 					{Object.entries(props.chats)
@@ -827,7 +835,7 @@ function Sidebar(props) {
 								chatData={chat[1]}
 								pendingMessages={props.pendingMessages}
 								newMessages={props.newMessages}
-								keyword={keyword}
+								keyword={searchedKeyword}
 								contactProvidersData={props.contactProvidersData}
 								retrieveContactData={props.retrieveContactData}
 								tabCase={tabCase}
@@ -840,11 +848,11 @@ function Sidebar(props) {
 
 					{Object.keys(props.chats).length === 0 && (
 						<span className="sidebar__results__chats__noResult">
-							{keyword.trim().length > 0 ? (
+							{searchedKeyword.trim().length > 0 ? (
 								<span>
 									<Trans>
 										No chats found for:{' '}
-										<span className="searchOccurrence">{keyword}</span>
+										<span className="searchOccurrence">{searchedKeyword}</span>
 									</Trans>
 								</span>
 							) : (
@@ -856,39 +864,39 @@ function Sidebar(props) {
 					)}
 				</div>
 
-				{keyword.trim().length > 0 && getObjLength(contactResults) > 0 && (
-					<h3>{t('Contacts')}</h3>
-				)}
+				{searchedKeyword.trim().length > 0 &&
+					getObjLength(contactResults) > 0 && <h3>{t('Contacts')}</h3>}
 
-				{keyword.trim().length > 0 && getObjLength(contactResults) > 0 && (
-					<div className="sidebar__results__contacts">
-						{Object.entries(contactResults).map((contactResult) => (
-							<SidebarContactResult
-								key={contactResult[0]}
-								chatData={contactResult[1]}
-							/>
-						))}
-					</div>
-				)}
+				{searchedKeyword.trim().length > 0 &&
+					getObjLength(contactResults) > 0 && (
+						<div className="sidebar__results__contacts">
+							{Object.entries(contactResults).map((contactResult) => (
+								<SidebarContactResult
+									key={contactResult[0]}
+									chatData={contactResult[1]}
+								/>
+							))}
+						</div>
+					)}
 
-				{keyword.trim().length > 0 && getObjLength(chatMessages) > 0 && (
-					<h3>{t('Messages')}</h3>
-				)}
+				{searchedKeyword.trim().length > 0 &&
+					getObjLength(chatMessages) > 0 && <h3>{t('Messages')}</h3>}
 
-				{keyword.trim().length > 0 && getObjLength(chatMessages) > 0 && (
-					<div className="sidebar__results__messages">
-						{Object.entries(chatMessages).map((message) => (
-							<SearchMessageResult
-								key={message[0]}
-								waId={waId}
-								messageData={message[1]}
-								keyword={keyword}
-								displaySender={true}
-								onClick={(chatMessage) => goToMessage(chatMessage)}
-							/>
-						))}
-					</div>
-				)}
+				{searchedKeyword.trim().length > 0 &&
+					getObjLength(chatMessages) > 0 && (
+						<div className="sidebar__results__messages">
+							{Object.entries(chatMessages).map((message) => (
+								<SearchMessageResult
+									key={message[0]}
+									waId={waId}
+									messageData={message[1]}
+									keyword={searchedKeyword}
+									displaySender={true}
+									onClick={(chatMessage) => goToMessage(chatMessage)}
+								/>
+							))}
+						</div>
+					)}
 			</div>
 
 			<Fade in={isLoadingMoreChats} unmountOnExit>
