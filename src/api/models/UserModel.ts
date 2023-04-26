@@ -2,6 +2,9 @@
 import PermissionsModel from './PermissionsModel';
 
 class UserModel {
+	public id?: Number;
+	public username?: string;
+
 	constructor(data) {
 		if (!data) return;
 

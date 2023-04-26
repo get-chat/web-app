@@ -17,8 +17,8 @@ class ChatMessagesResponse {
 
 	constructor(
 		data: ResponseData,
-		existingMessages: ChatMessageList,
-		reverse: boolean
+		existingMessages: ChatMessageList = {},
+		reverse: boolean = false
 	) {
 		if (reverse) {
 			data.results.reverse();

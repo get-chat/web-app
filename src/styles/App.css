@@ -377,7 +377,7 @@ h3 .emoji-mart-emoji {
 		padding: 4px 10px;
 	}
 
-	.MuiIconButton-root {
+	.MuiIconButton-root:not(.chatFooterGlobal .MuiIconButton-root) {
 		padding: 10px !important;
 	}
 

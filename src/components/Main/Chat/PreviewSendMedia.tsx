@@ -151,7 +151,7 @@ function PreviewSendMedia(props) {
 					return false;
 				}
 
-				if (event.keyCode === 27) {
+				if (event.key === 'Escape') {
 					// Escape
 					hidePreview();
 				} else if (event.keyCode === 37) {

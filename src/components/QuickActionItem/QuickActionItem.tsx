@@ -14,9 +14,7 @@ const QuickActionItem: React.FC<Props> = ({ item, isSelected, itemProps }) => {
 	return (
 		<div
 			className={
-				styles.container +
-				' ' +
-				(isSelected ? styles.containerSelected + ' active' : '')
+				styles.container + ' ' + (isSelected ? styles.selected + ' active' : '')
 			}
 			{...itemProps}
 		>

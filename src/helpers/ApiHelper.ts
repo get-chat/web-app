@@ -5,10 +5,10 @@ import {
 	getStorage,
 	STORAGE_TAG_TOKEN,
 } from './StorageHelper';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { generateUniqueID } from '@src/helpers/Helpers';
 
-export const generateCancelToken = () => {
+export const generateCancelToken = (): CancelTokenSource => {
 	return axios.CancelToken.source();
 };
 

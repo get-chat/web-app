@@ -43,14 +43,16 @@ function Contacts(props) {
 
 	let cancelTokenSourceRef = useRef();
 	let verifyPhoneNumberCancelTokenSourceRef = useRef();
+	let timeout = useRef();
 
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const handleKey = (event) => {
-			if (event.keyCode === 27) {
-				// Escape
+		const handleKey = (event: KeyboardEvent) => {
+			// Escape
+			if (event.key === 'Escape') {
 				props.onHide();
+				event.stopPropagation();
 			}
 		};
 
@@ -64,8 +66,6 @@ function Contacts(props) {
 			verifyPhoneNumberCancelTokenSourceRef.current.cancel();
 		};
 	}, []);
-
-	let timeout = useRef();
 
 	useEffect(() => {
 		// Generate a token

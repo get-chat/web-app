@@ -5,7 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { Button, Dialog, IconButton, Tooltip } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import { useTranslation } from 'react-i18next';
-import VoiceRecord from './Main/Chat/ChatFooter/VoiceRecord';
+import VoiceRecord from '@src/components/ChatFooter/VoiceRecord';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_REQUEST_MIC_PERMISSION } from '../Constants';
 import MicIcon from '@mui/icons-material/Mic';

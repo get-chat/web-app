@@ -3,11 +3,18 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
+	background-color: #fff;
+	border-radius: 20px;
+	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
 }
 
 .voiceRecord__cancelButton {
-	background-color: rgba(255, 0, 0, 0.1) !important;
+	background-color: transparent !important;
 	margin-right: 20px !important;
+}
+
+.voiceRecord__cancelButton:hover {
+	background-color: rgba(255, 0, 0, 0.2) !important;
 }
 
 .voiceRecord__cancelButton .MuiSvgIcon-root {
@@ -15,21 +22,39 @@
 }
 
 .voiceRecord__sendButton {
-	background-color: rgba(0, 255, 0, 0.1) !important;
+	background-color: transparent !important;
+}
+
+.voiceRecord__sendButton:hover {
+	background-color: rgba(0, 255, 0, 0.2) !important;
 }
 
 .voiceRecord__sendButton .MuiSvgIcon-root {
 	color: green !important;
 }
 
+.voiceRecord__cancelButton .MuiSvgIcon-root,
+.voiceRecord__sendButton .MuiSvgIcon-root {
+	height: 20px;
+	width: 20px;
+}
+
 .voiceRecord__recordIcon {
 	color: red !important;
 	margin-right: 2px;
+	animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+	50% {
+		opacity: 0.3;
+	}
 }
 
 .voiceRecord__timer {
-	font-size: 16px;
-	color: rgba(0, 0, 45, 0.4);
+	font-size: 14px;
+	font-weight: 600;
+	color: rgba(0, 0, 45, 0.82);
 	margin-right: 20px;
 	min-width: 48px;
 	text-align: center;

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../styles/SearchMessage.css';
 import { IconButton } from '@mui/material';
@@ -16,8 +15,19 @@ import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
+import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 
-function SearchMessage(props) {
+export type Props = {
+	initialKeyword: string;
+	setInitialKeyword: (_keyword: string) => void;
+};
+
+const SearchMessage: React.FC<Props> = ({
+	initialKeyword,
+	setInitialKeyword,
+}) => {
+	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
@@ -26,21 +36,56 @@ function SearchMessage(props) {
 	const [keyword, setKeyword] = useState('');
 	const [isLoading, setLoading] = useState(false);
 
+	const timer = useRef<NodeJS.Timeout>();
+
 	const { waId } = useParams();
+
+	useEffect(() => {
+		const handleKey = (event: KeyboardEvent) => {
+			// Escape
+			if (event.key === 'Escape') {
+				close();
+				event.stopPropagation();
+			}
+		};
+
+		document.addEventListener('keydown', handleKey);
+
+		return () => {
+			document.removeEventListener('keydown', handleKey);
+
+			// Clear initial keyword for next session
+			setInitialKeyword('');
+		};
+	}, []);
 
 	useEffect(() => {
 		setResults({});
 	}, [waId]);
 
-	const hideSearchMessages = () => {
+	useEffect(() => {
+		timer.current = setTimeout(() => {
+			search();
+		}, 500);
+
+		return () => {
+			clearTimeout(timer.current);
+		};
+	}, [keyword]);
+
+	useEffect(() => {
+		if (initialKeyword) {
+			setKeyword(initialKeyword);
+		}
+	}, [initialKeyword]);
+
+	const close = () => {
 		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
 	};
 
-	let cancelTokenSourceRef = useRef();
+	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
-	const search = async (_keyword) => {
-		setKeyword(_keyword);
-
+	const search = async () => {
 		// Check if there are any previous pending requests
 		if (cancelTokenSourceRef.current) {
 			cancelTokenSourceRef.current.cancel(
@@ -51,7 +96,7 @@ function SearchMessage(props) {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
-		if (_keyword.trim().length === 0) {
+		if (keyword.trim().length === 0) {
 			setResults({});
 			return false;
 		}
@@ -60,43 +105,40 @@ function SearchMessage(props) {
 
 		apiService.searchMessagesCall(
 			waId,
-			_keyword,
+			keyword,
 			30,
 			cancelTokenSourceRef.current.token,
-			(response) => {
-				const preparedMessages = {};
-				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageModel(message);
-					preparedMessages[prepared.id] = prepared;
-				});
-				setResults(preparedMessages);
+			(response: AxiosResponse) => {
+				const chatMessagesResponse = new ChatMessagesResponse(response.data);
+				setResults(chatMessagesResponse.messages);
 				setLoading(false);
 			},
-			(error) => {
+			(error: AxiosError) => {
+				console.log(error);
 				setLoading(false);
 			}
 		);
 	};
 
-	const goToMessage = (data) => {
+	const goToMessage = (data: ChatMessageModel) => {
 		PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
 
 		if (isMobileOnly) {
-			hideSearchMessages();
+			close();
 		}
 	};
 
 	return (
 		<div className="searchMessage">
 			<div className="searchMessage__header">
-				<IconButton onClick={hideSearchMessages} size="large">
+				<IconButton onClick={close} size="large">
 					<CloseIcon />
 				</IconButton>
 
 				<h3>{t('Search For Messages')}</h3>
 			</div>
 
-			<SearchBar onChange={search} isLoading={isLoading} />
+			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
 
 			<div className="searchMessage__body">
 				{Object.entries(results).map((message) => (
@@ -105,12 +147,12 @@ function SearchMessage(props) {
 						waId={waId}
 						messageData={message[1]}
 						keyword={keyword}
-						onClick={(chatMessage) => goToMessage(chatMessage)}
+						onClick={goToMessage}
 					/>
 				))}
 			</div>
 		</div>
 	);
-}
+};
 
 export default SearchMessage;

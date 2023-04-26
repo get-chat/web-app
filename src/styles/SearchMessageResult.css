@@ -1,5 +1,5 @@
 /*.searchResult__message:hover {
-    background-color: #f2f3f6;
+    background-color: var(--gray-lighter);
 }*/
 
 .searchResult__message__header {

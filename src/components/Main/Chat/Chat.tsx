@@ -19,6 +19,7 @@ import {
 	EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
 	EVENT_TOPIC_DROPPED_FILES,
 	EVENT_TOPIC_EMOJI_PICKER_VISIBILITY,
+	EVENT_TOPIC_FOCUS_MESSAGE_INPUT,
 	EVENT_TOPIC_FORCE_REFRESH_CHAT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
@@ -30,7 +31,7 @@ import {
 import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
-import ChatFooter from './ChatFooter/ChatFooter';
+import ChatFooter from '@src/components/ChatFooter';
 import ChatHeader from './ChatHeader';
 import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
 import moment from 'moment';
@@ -86,6 +87,8 @@ import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
+import useChatAssignment from '@src/hooks/useChatAssignment';
+import UserModel from '@src/api/models/UserModel';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -100,6 +103,7 @@ export default function Chat(props) {
 	const dispatch = useAppDispatch();
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const users = useAppSelector((state) => state.users.value);
 	const templates = useAppSelector((state) => state.templates.value);
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
@@ -137,6 +141,8 @@ export default function Chat(props) {
 	const cancelTokenSourceRef = useRef();
 
 	const { waId } = useParams();
+
+	const { partialUpdateChatAssignment } = useChatAssignment();
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -1163,12 +1169,15 @@ export default function Chat(props) {
 		setLoaded(true);
 		setLoadingMoreMessages(false);
 
-		// TODO: Check unread messages first and then decide to do it or not
 		if (isInitial) {
+			// TODO: Check unread messages first and then decide to do it or not
 			// beforeTime is not passed only for initial request
 			// Mark messages as received
 			const lastMessageTimestamp = messageHelper(preparedMessages);
 			markAsReceived(lastMessageTimestamp);
+
+			// Auto focus
+			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
 		}
 
 		// Promise
@@ -1784,8 +1793,7 @@ export default function Chat(props) {
 				)[0]?.id;
 
 				if (assignedUserId) {
-					// TODO: Implement handleAssignCommand
-					//partialUpdateChatAssignment(assignedUserId);
+					partialUpdateChatAssignment(waId, assignedUserId);
 				} else {
 					window.displayCustomError('User not found!');
 				}
@@ -1798,9 +1806,7 @@ export default function Chat(props) {
 				.join(' ');
 
 			if (searchKeyword.trim().length > 0) {
-				// TODO: Implement handleSearchCommand
-				//setInitialSearchKeyword(searchKeyword);
-				//setSearchInChatVisible(true);
+				props.searchMessagesByKeyword(searchKeyword);
 			} else {
 				window.displayCustomError('You need to enter a keyword!');
 			}
@@ -1958,27 +1964,6 @@ export default function Chat(props) {
 				<div className="chat__body__empty" />
 			</div>
 
-			<ChatFooter
-				waId={waId}
-				currentNewMessages={currentNewMessages}
-				isExpired={isExpired}
-				input={input}
-				setInput={setInput}
-				sendMessage={sendMessage}
-				bulkSendMessage={bulkSendMessage}
-				setSelectedFiles={setSelectedFiles}
-				isTemplateMessagesVisible={isTemplateMessagesVisible}
-				setTemplateMessagesVisible={setTemplateMessagesVisible}
-				accept={accept}
-				isSavedResponsesVisible={isSavedResponsesVisible}
-				setSavedResponsesVisible={setSavedResponsesVisible}
-				sendHandledChosenFiles={sendHandledChosenFiles}
-				setAccept={setAccept}
-				isScrollButtonVisible={isScrollButtonVisible}
-				handleScrollButtonClick={handleScrollButtonClick}
-				processCommand={processCommand}
-			/>
-
 			{isTemplateMessagesVisible && (
 				<TemplateListWithControls
 					isTemplatesFailed={props.isTemplatesFailed}
@@ -2002,6 +1987,27 @@ export default function Chat(props) {
 			{isSavedResponsesVisible && (
 				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
+
+			<ChatFooter
+				waId={waId}
+				currentNewMessages={currentNewMessages}
+				isExpired={isExpired}
+				input={input}
+				setInput={setInput}
+				sendMessage={sendMessage}
+				bulkSendMessage={bulkSendMessage}
+				setSelectedFiles={setSelectedFiles}
+				isTemplateMessagesVisible={isTemplateMessagesVisible}
+				setTemplateMessagesVisible={setTemplateMessagesVisible}
+				accept={accept}
+				isSavedResponsesVisible={isSavedResponsesVisible}
+				setSavedResponsesVisible={setSavedResponsesVisible}
+				sendHandledChosenFiles={sendHandledChosenFiles}
+				setAccept={setAccept}
+				isScrollButtonVisible={isScrollButtonVisible}
+				handleScrollButtonClick={handleScrollButtonClick}
+				processCommand={processCommand}
+			/>
 
 			{!waId && (
 				<div className="chat__default">
