@@ -78,12 +78,19 @@ const QuickActionsMenu: React.FC<Props> = ({
 
 	const handleSearchInputKeyDown = (e: React.KeyboardEvent) => {
 		// Prevent cursor from moving when navigating between commands
-		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
-			e.preventDefault();
-		} else if (e.code === 'Backspace') {
-			if (isEmptyString(commandInput)) {
+		switch (e.code) {
+			case 'ArrowUp':
+			case 'ArrowDown':
+				e.preventDefault();
+				break;
+			case 'Backspace':
+				if (isEmptyString(commandInput)) {
+					close();
+				}
+				break;
+			case 'Escape':
 				close();
-			}
+				break;
 		}
 	};
 
