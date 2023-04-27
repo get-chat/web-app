@@ -422,7 +422,7 @@ a.chat__document:hover {
 .templateMessagesWrapper,
 .savedResponsesWrapper {
 	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0.1);
+	background-color: rgba(0, 0, 0, 0.05);
 	border-radius: 10px; /*0 0 10px 10px;*/
 	/*box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);*/
 }

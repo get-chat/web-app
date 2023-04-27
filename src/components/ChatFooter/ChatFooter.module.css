@@ -52,10 +52,6 @@
 	color: #463732 !important;
 }
 
-.commandActionIcon :global(.MuiSvgIcon-root) {
-	color: #44c21e !important;
-}
-
 .actionsRowRight {
 	flex: 1;
 	justify-content: flex-end;
