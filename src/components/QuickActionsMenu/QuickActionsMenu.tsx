@@ -3,11 +3,11 @@ import styles from './QuickActionsMenu.module.css';
 import useQuickActionsMenu from '@src/components/QuickActionsMenu/useQuickActionsMenu';
 import QuickActionItem from '@src/components/QuickActionItem';
 import useNavigateList from 'react-use-navigate-list';
-import { useDetectClickOutside } from 'react-detect-click-outside';
 import { useTranslation } from 'react-i18next';
 import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
 import { isEmptyString } from '@src/helpers/Helpers';
 import { SearchOutlined } from '@mui/icons-material';
+import { ClickAwayListener } from '@mui/material';
 
 export type Props = {
 	input: string;
@@ -37,7 +37,6 @@ const QuickActionsMenu: React.FC<Props> = ({
 		setVisible(false);
 	};
 
-	const containerRef = useDetectClickOutside({ onTriggered: close });
 	const inputRef = useRef<HTMLInputElement>();
 	const resultsRef = useRef<HTMLDivElement>();
 
@@ -79,12 +78,19 @@ const QuickActionsMenu: React.FC<Props> = ({
 
 	const handleSearchInputKeyDown = (e: React.KeyboardEvent) => {
 		// Prevent cursor from moving when navigating between commands
-		if (['ArrowUp', 'ArrowDown'].indexOf(e.code) > -1) {
-			e.preventDefault();
-		} else if (e.code === 'Backspace') {
-			if (isEmptyString(commandInput)) {
+		switch (e.code) {
+			case 'ArrowUp':
+			case 'ArrowDown':
+				e.preventDefault();
+				break;
+			case 'Backspace':
+				if (isEmptyString(commandInput)) {
+					close();
+				}
+				break;
+			case 'Escape':
 				close();
-			}
+				break;
 		}
 	};
 
@@ -102,42 +108,44 @@ const QuickActionsMenu: React.FC<Props> = ({
 	};
 
 	return (
-		<div className={styles.container} ref={containerRef}>
-			<div className={styles.searchContainer}>
-				<SearchOutlined className={styles.searchIcon} />
-				<input
-					type="text"
-					placeholder={t('Search quick actions')}
-					value={commandInput}
-					onChange={(e) => setCommandInput(e.target.value)}
-					onKeyDown={handleSearchInputKeyDown}
-					onKeyUp={handleSearchInputKeyUp}
-					className={styles.searchInput}
-					// @ts-ignore
-					ref={inputRef}
-				/>
-			</div>
-			<div
-				className={styles.results}
-				// @ts-ignore
-				ref={resultsRef}
-				onKeyDown={(e) => e.preventDefault()}
-				tabIndex={0}
-			>
-				{data.map((item, index) => (
-					<QuickActionItem
-						key={index}
-						item={item}
-						isSelected={index === activeIndex}
-						itemProps={{ ...itemProps(item) }}
+		<ClickAwayListener onClickAway={close}>
+			<div className={styles.container}>
+				<div className={styles.searchContainer}>
+					<SearchOutlined className={styles.searchIcon} />
+					<input
+						type="text"
+						placeholder={t('Search quick actions')}
+						value={commandInput}
+						onChange={(e) => setCommandInput(e.target.value)}
+						onKeyDown={handleSearchInputKeyDown}
+						onKeyUp={handleSearchInputKeyUp}
+						className={styles.searchInput}
+						// @ts-ignore
+						ref={inputRef}
 					/>
-				))}
+				</div>
+				<div
+					className={styles.results}
+					// @ts-ignore
+					ref={resultsRef}
+					onKeyDown={(e) => e.preventDefault()}
+					tabIndex={0}
+				>
+					{data.map((item, index) => (
+						<QuickActionItem
+							key={index}
+							item={item}
+							isSelected={index === activeIndex}
+							itemProps={{ ...itemProps(item) }}
+						/>
+					))}
 
-				{data.length === 0 && (
-					<div className={styles.noResult}>{t('No results found.')}</div>
-				)}
+					{data.length === 0 && (
+						<div className={styles.noResult}>{t('No results found.')}</div>
+					)}
+				</div>
 			</div>
-		</div>
+		</ClickAwayListener>
 	);
 };
 
