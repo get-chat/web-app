@@ -23,7 +23,7 @@ export type Props = {
 	chosenTemplate?: TemplateModel;
 	onSend: (template: TemplateModel) => void;
 	sendCallback?: () => void;
-	onBulkSend: (template: TemplateModel, payload: {}) => void;
+	onBulkSend: (type: string, payload: {}) => void;
 	isBulkOnly: boolean;
 	selectTemplateCallback?: () => void;
 };
