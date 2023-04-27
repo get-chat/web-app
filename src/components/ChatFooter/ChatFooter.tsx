@@ -223,25 +223,22 @@ const ChatFooter: React.FC = ({
 
 	const displayQuickActionsMenu = () => {
 		if (!isQuickActionsMenuVisible) {
-			// Using setTimeout to avoid instant disappear bug with handle click outside library
-			setTimeout(() => {
-				setQuickActionsMenuVisible(true);
-				setTemplateMessagesVisible(false);
-				setSavedResponsesVisible(false);
-				setEmojiPickerVisible(false);
-			}, 150);
+			setQuickActionsMenuVisible(true);
+			setTemplateMessagesVisible(false);
+			setSavedResponsesVisible(false);
+			setEmojiPickerVisible(false);
 		}
 	};
 
 	const handleFocus = (event) => {
-		if (isExpired) {
-			event.target.blur();
-			displayQuickActionsMenu();
-			return;
-		}
-
 		if (isRecording) {
 			event.target.blur();
+		}
+	};
+
+	const handleMouseUp = (event) => {
+		if (isExpired) {
+			displayQuickActionsMenu();
 		}
 	};
 
@@ -325,7 +322,8 @@ const ChatFooter: React.FC = ({
 							ref={editable}
 							className={styles.typeBoxEditable}
 							contentEditable="true"
-							onFocus={(event) => handleFocus(event)}
+							onFocus={handleFocus}
+							onMouseUp={handleMouseUp}
 							onPaste={(event) => handlePaste(event)}
 							onCopy={(event) => handleCopy(event)}
 							onDrop={(event) => event.preventDefault()}
