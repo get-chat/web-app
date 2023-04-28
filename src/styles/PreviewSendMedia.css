@@ -95,7 +95,7 @@
 .previewSendMedia__footer__send {
 	padding: 20px !important;
 	background-color: #09e85e !important;
-	box-shadow: -1px 4px 10px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
 }
 
 .previewSendMedia__footer__send .MuiSvgIcon-root {
@@ -119,7 +119,7 @@
 
 .previewSendMedia__footer__thumbnail.chosenFile {
 	border-color: white;
-	box-shadow: -1px 4px 6px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 4px 6px -6px rgba(0, 0, 45, 0.4);
 }
 
 .previewSendMedia__footer__thumbnail__image {
