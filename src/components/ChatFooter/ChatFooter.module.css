@@ -44,12 +44,12 @@
 .actionIcon :global(.MuiSvgIcon-root) {
 	height: 20px;
 	width: 20px;
-	color: #5d5958 !important;
+	color: var(--chat-icon) !important;
 	transition: color ease-in 0.2s;
 }
 
 .actionIcon.active :global(.MuiSvgIcon-root) {
-	color: #463732 !important;
+	color: var(--chat-icon-dark) !important;
 }
 
 .actionsRowRight {
