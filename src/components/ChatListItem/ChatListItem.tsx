@@ -3,6 +3,7 @@ import React from 'react';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Moment from 'react-moment';
 import {
 	extractAvatarFromContactProviderData,
@@ -149,16 +150,26 @@ const ChatListItem = (props) => {
 										title={data.generateAssignmentInformation()}
 									>
 										<div className={styles.assigneeChip}>
-											<GroupIcon />
+											<div className={styles.assignedGroupIconWrapper}>
+												<GroupIcon />
+											</div>
 											<span>{data.assignedGroup?.name}</span>
 										</div>
 									</Tooltip>
 								)}
 
 							{!isExpired && (
-								<div className={styles.timeLeft}>
-									<span>{t('%s left', timeLeft)}</span>
-								</div>
+								<Tooltip
+									title={t('This chat will become inactive in %s', timeLeft)}
+									placement="top"
+								>
+									<div className={styles.timeLeft}>
+										<div className={styles.timeLeftIconWrapper}>
+											<HourglassBottomIcon />
+										</div>
+										<span>{timeLeft}</span>
+									</div>
+								</Tooltip>
 							)}
 						</div>
 

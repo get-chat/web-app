@@ -678,3 +678,6 @@ msgstr "Sonuç bulunamadı."
 
 msgid "Search quick actions"
 msgstr "Hızlı eylemleri ara"
+
+msgid "This chat will become inactive in %s"
+msgstr "Bu sohbet %s içinde inaktif olacak"
