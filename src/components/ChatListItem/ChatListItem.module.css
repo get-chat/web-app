@@ -108,7 +108,7 @@
 	display: -webkit-box;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	word-break: break-word;
+	word-break: break-all;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 1;
 }
@@ -178,7 +178,7 @@
 	display: -webkit-box;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	word-break: break-word;
+	word-break: break-all;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 1;
 	margin-right: 5px;
