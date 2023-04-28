@@ -85,12 +85,21 @@ const decomposeMessage = (message, highlightText) => {
 		}));
 };
 
-const PrintMessage = ({
+interface PrintMessageProps {
+	message: string;
+	as?: string;
+	linkify?: boolean;
+	smallEmoji?: boolean;
+	highlightText?: boolean;
+	className?: string;
+}
+
+const PrintMessage: React.FC<PrintMessageProps> = ({
 	message,
 	as: Tag = 'span',
-	linkify,
+	linkify = false,
 	smallEmoji = false,
-	highlightText,
+	highlightText = false,
 	className,
 }) => {
 	const splitMessage = useMemo(
