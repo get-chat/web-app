@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React, { useMemo } from 'react';
 import reactStringReplace from 'react-string-replace-recursively';
+import Linkify from 'react-linkify';
 
 const Text = ({ data: { text } }) => {
 	return useMemo(() => {
@@ -36,7 +37,17 @@ const Text = ({ data: { text } }) => {
 			},
 		};
 
-		return reactStringReplace(config)(text);
+		return (
+			<Linkify
+				componentDecorator={(decoratedHref, decoratedText, key) => (
+					<a target="blank" href={decoratedHref} key={key}>
+						{decoratedText}
+					</a>
+				)}
+			>
+				{reactStringReplace(config)(text)}
+			</Linkify>
+		);
 	}, [text]);
 };
 
