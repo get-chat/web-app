@@ -38,11 +38,6 @@
 	width: 50px;
 }
 
-.item a {
-	pointer-events: none;
-	cursor: default;
-}
-
 .assigneeChip {
 	background-color: var(--gray-light);
 	border-radius: 10px;

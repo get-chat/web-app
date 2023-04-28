@@ -26,11 +26,6 @@
 	padding-left: 15px;
 }
 
-.chat__headerInfo a {
-	pointer-events: none;
-	cursor: default;
-}
-
 .chat__headerInfo > h3 {
 	font-size: 16px;
 	margin-bottom: 0;

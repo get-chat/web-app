@@ -20,11 +20,6 @@
 	word-break: break-all;
 }
 
-.searchResult__message__body a {
-	pointer-events: none;
-	cursor: default;
-}
-
 searchResult__message__body__text {
 	word-break: break-all;
 }
