@@ -210,10 +210,6 @@
 	margin-left: 5px;
 }
 
-.assignedGroupIconWrapper {
-	background-color: rgba(0, 0, 0, 0.1);
-}
-
 .assignedGroupIconWrapper,
 .timeLeftIconWrapper {
 	height: 19px;
@@ -229,14 +225,11 @@
 .timeLeftIconWrapper :global(.MuiSvgIcon-root) {
 	height: 11px !important;
 	width: 11px !important;
+	color: #fff !important;
 }
 
 .timeLeftIconWrapper {
 	background-color: rgba(0, 0, 0, 0.2);
-}
-
-.timeLeftIconWrapper :global(.MuiSvgIcon-root) {
-	color: #fff !important;
 }
 
 .wrapper.almostExpired .timeLeft {

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -48,6 +48,18 @@ const ChatListItem = (props) => {
 
 	const newMessages = props.newMessages[data.waId]?.newMessages;
 
+	const avatarBg = useMemo(() => {
+		return isExpired ? undefined : generateAvatarColor(data.name);
+	}, [isExpired, data.name]);
+
+	const assignedUserBgColor = useMemo(() => {
+		return generateAvatarColor(data.assignedToUser?.username);
+	}, [data.assignedToUser?.username]);
+
+	const assignedGroupBgColor = useMemo(() => {
+		return generateAvatarColor(data.assignedGroup?.name);
+	}, [data.assignedGroup?.name]);
+
 	return (
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
 			<div
@@ -82,7 +94,7 @@ const ChatListItem = (props) => {
 								isExpired
 									? {}
 									: {
-											backgroundColor: generateAvatarColor(data.name),
+											backgroundColor: avatarBg,
 									  }
 							}
 						>
@@ -125,9 +137,7 @@ const ChatListItem = (props) => {
 											<CustomAvatar
 												className={styles.assigneeAvatar}
 												style={{
-													backgroundColor: generateAvatarColor(
-														data.getAssignedUserUsername()
-													),
+													backgroundColor: assignedUserBgColor,
 												}}
 											>
 												{generateInitialsHelper(
@@ -150,7 +160,12 @@ const ChatListItem = (props) => {
 										title={data.generateAssignmentInformation()}
 									>
 										<div className={styles.assigneeChip}>
-											<div className={styles.assignedGroupIconWrapper}>
+											<div
+												className={styles.assignedGroupIconWrapper}
+												style={{
+													backgroundColor: assignedGroupBgColor,
+												}}
+											>
 												<GroupIcon />
 											</div>
 											<span>{data.assignedGroup?.name}</span>
