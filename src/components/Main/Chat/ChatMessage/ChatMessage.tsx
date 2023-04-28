@@ -221,6 +221,7 @@ function ChatMessage({
 									data.buttonText ??
 									data.interactiveButtonText
 								}
+								linkify={true}
 							/>
 						) : (
 							'\u00A0'

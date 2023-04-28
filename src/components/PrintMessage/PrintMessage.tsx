@@ -88,6 +88,7 @@ const decomposeMessage = (message, highlightText) => {
 const PrintMessage = ({
 	message,
 	as: Tag = 'span',
+	linkify,
 	smallEmoji = false,
 	highlightText,
 	className,
@@ -108,7 +109,7 @@ const PrintMessage = ({
 			{splitMessage.map((item) => {
 				const Component = item.component;
 
-				return <Component data={item} key={item.index} />;
+				return <Component data={item} key={item.index} linkify={linkify} />;
 			})}
 		</Tag>
 	);

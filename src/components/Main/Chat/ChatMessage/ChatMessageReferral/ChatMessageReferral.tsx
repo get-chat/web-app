@@ -59,11 +59,11 @@ const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
 				<div className={styles.referralBody} onClick={goToSourceURL}>
 					<Tooltip title={referral.source_id} placement="top-start">
 						<h4>
-							<PrintMessage message={referral.headline} />
+							<PrintMessage message={referral.headline} linkify={true} />
 						</h4>
 					</Tooltip>
 					<div className={styles.referralTextBody}>
-						<PrintMessage message={referral.body} />
+						<PrintMessage message={referral.body} linkify={true} />
 					</div>
 					<div className={styles.referralSourceURL}>{referral.source_url}</div>
 				</div>
