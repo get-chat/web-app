@@ -147,7 +147,7 @@ function PreviewSendMedia(props) {
 		if (chosenFile && data) {
 			const handleKey = (event) => {
 				// If any element is focused, ignore key
-				if (document.activeElement.tagName === 'INPUT') {
+				if (document.activeElement?.tagName === 'INPUT') {
 					return false;
 				}
 
