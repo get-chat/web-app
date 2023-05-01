@@ -1,10 +1,22 @@
-// @ts-nocheck
 import React from 'react';
 import { Avatar } from '@mui/material';
 
 import styles from './CustomAvatar.module.css';
+import classNames from 'classnames/bind';
 
-const CustomAvatar = ({
+interface Props {
+	className?: string;
+	src?: string;
+	style?: any;
+	alt?: string;
+	ref?: React.MutableRefObject<any>;
+	onClick?: () => void;
+	children?: any;
+}
+
+const cx = classNames.bind(styles);
+
+const CustomAvatar: React.FC<Props> = ({
 	className,
 	src,
 	style,
@@ -15,7 +27,10 @@ const CustomAvatar = ({
 }) => {
 	return (
 		<Avatar
-			className={className + (style?.backgroundColor ? '' : ' ' + styles.light)}
+			className={cx({
+				[className ?? '']: true,
+				light: !Boolean(style?.backgroundColor),
+			})}
 			src={src}
 			style={style}
 			alt={alt}
