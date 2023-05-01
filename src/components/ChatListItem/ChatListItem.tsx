@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -17,7 +17,6 @@ import {
 	CHAT_LIST_TAB_CASE_ME,
 } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
@@ -47,18 +46,6 @@ const ChatListItem = (props) => {
 	} = useChatListItem({ props });
 
 	const newMessages = props.newMessages[data.waId]?.newMessages;
-
-	const avatarBg = useMemo(() => {
-		return isExpired ? undefined : generateAvatarColor(data.name);
-	}, [isExpired, data.name]);
-
-	const assignedUserBgColor = useMemo(() => {
-		return generateAvatarColor(data.assignedToUser?.username);
-	}, [data.assignedToUser?.username]);
-
-	const assignedGroupBgColor = useMemo(() => {
-		return generateAvatarColor(data.assignedGroup?.name);
-	}, [data.assignedGroup?.name]);
 
 	return (
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
@@ -90,13 +77,7 @@ const ChatListItem = (props) => {
 							src={extractAvatarFromContactProviderData(
 								props.contactProvidersData[data.waId]
 							)}
-							style={
-								isExpired
-									? {}
-									: {
-											backgroundColor: avatarBg,
-									  }
-							}
+							generateBgColorBy={!isExpired ? data.name : undefined}
 						>
 							{data.initials}
 						</CustomAvatar>
@@ -136,9 +117,7 @@ const ChatListItem = (props) => {
 										<div className={styles.assigneeChip}>
 											<CustomAvatar
 												className={styles.assigneeAvatar}
-												style={{
-													backgroundColor: assignedUserBgColor,
-												}}
+												generateBgColorBy={data.assignedToUser?.username}
 											>
 												{generateInitialsHelper(
 													data.generateAssignedToInitials()
@@ -160,14 +139,12 @@ const ChatListItem = (props) => {
 										title={data.generateAssignmentInformation()}
 									>
 										<div className={styles.assigneeChip}>
-											<div
-												className={styles.assignedGroupIconWrapper}
-												style={{
-													backgroundColor: assignedGroupBgColor,
-												}}
+											<CustomAvatar
+												className={styles.assigneeAvatar}
+												generateBgColorBy={data.assignedGroup?.name}
 											>
 												<GroupIcon />
-											</div>
+											</CustomAvatar>
 											<span>{data.assignedGroup?.name}</span>
 										</div>
 									</Tooltip>

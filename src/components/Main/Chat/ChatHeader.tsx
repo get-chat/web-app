@@ -10,7 +10,6 @@ import {
 } from '@src/Constants';
 import PubSub from 'pubsub-js';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import WarningIcon from '@mui/icons-material/Warning';
 import { isMobileOnly } from 'react-device-detect';
@@ -89,12 +88,8 @@ function ChatHeader(props) {
 					className={
 						'chat__header__avatar ' + (props.person?.isExpired ? 'expired' : '')
 					}
-					style={
-						props.person?.isExpired
-							? {}
-							: {
-									backgroundColor: generateAvatarColor(props.person?.name),
-							  }
+					generateBgColorBy={
+						!props.person?.isExpired ? props.person?.name : undefined
 					}
 				>
 					{props.person?.initials}

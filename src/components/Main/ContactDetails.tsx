@@ -16,7 +16,6 @@ import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import LabelIcon from '@mui/icons-material/Label';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
@@ -65,9 +64,7 @@ function ContactDetails(props) {
 									true
 								)}
 								className="contactDetails__body__avatar"
-								style={{
-									backgroundColor: generateAvatarColor(props.contactData.name),
-								}}
+								generateBgColorBy={props.contactData.name}
 							>
 								{props.contactData.initials}
 							</CustomAvatar>

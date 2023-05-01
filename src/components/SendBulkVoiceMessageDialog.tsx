@@ -12,6 +12,7 @@ import MicIcon from '@mui/icons-material/Mic';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import { prepareSendFilePayload } from '../helpers/ChatHelper';
 import Alert from '@mui/material/Alert';
+import { AxiosError, AxiosResponse } from 'axios';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
@@ -53,7 +54,7 @@ const SendBulkVoiceMessageDialog = ({
 
 		apiService.uploadMediaCall(
 			formData,
-			(response) => {
+			(response: AxiosResponse) => {
 				// Convert parameters to a ChosenFile object
 				sendFile(
 					payload?.wa_id,
@@ -66,9 +67,11 @@ const SendBulkVoiceMessageDialog = ({
 					}
 				);
 			},
-			(error) => {
+			(error: AxiosError) => {
+				console.log(error);
+
 				// A retry can be considered
-				completeCallback();
+				completeCallback?.();
 				setUploadingMedia(false);
 			}
 		);

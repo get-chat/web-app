@@ -3,7 +3,6 @@ import React from 'react';
 import '../styles/Contact.css';
 import { ListItem } from '@mui/material';
 import ContactProviderHeader from './ContactProviderHeader';
-import { generateAvatarColor } from '../helpers/AvatarHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 
 function Person(props) {
@@ -22,9 +21,7 @@ function Person(props) {
 					<div className="contact__avatarWrapper">
 						<CustomAvatar
 							src={props.contactProvidersData[props.data.waId]?.[0]?.avatar}
-							style={{
-								backgroundColor: generateAvatarColor(props.data.name),
-							}}
+							generateBgColorBy={props.data.name}
 						>
 							{props.data.initials}
 						</CustomAvatar>
