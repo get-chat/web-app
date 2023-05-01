@@ -1,6 +1,12 @@
-// @ts-nocheck
 class ContactModel {
-	constructor(data) {
+	public name?: string;
+	public initials?: string;
+	public avatar?: string;
+	public largeAvatar?: string;
+	public phoneNumbers = [];
+	public contactProvider: string;
+
+	constructor(data: any) {
 		this.name = data.name;
 		this.initials = data.initials;
 		this.avatar = data.avatar;
