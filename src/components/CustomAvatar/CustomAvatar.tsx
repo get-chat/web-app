@@ -4,6 +4,8 @@ import { Avatar } from '@mui/material';
 import styles from './CustomAvatar.module.css';
 import classNames from 'classnames/bind';
 
+const cx = classNames.bind(styles);
+
 interface Props {
 	className?: string;
 	src?: string;
@@ -13,8 +15,6 @@ interface Props {
 	onClick?: () => void;
 	children?: any;
 }
-
-const cx = classNames.bind(styles);
 
 const CustomAvatar: React.FC<Props> = ({
 	className,
