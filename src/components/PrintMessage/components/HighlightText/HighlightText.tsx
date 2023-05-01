@@ -1,8 +1,11 @@
-// @ts-nocheck
 import React from 'react';
+// @ts-ignore
 import DOMPurify from 'dompurify';
+import { PrintMessageComponentProps } from '@src/components/PrintMessage/components/PrintMessageComponentProps';
 
-const HighlightText = ({ data: { text } }) => {
+const HighlightText: React.FC<PrintMessageComponentProps> = ({
+	data: { text },
+}) => {
 	return (
 		<span
 			dangerouslySetInnerHTML={{

@@ -8,7 +8,6 @@ import isEmoji from 'emoji-tree/lib/isEmoji';
 import Text from './components/Text';
 import HighlightText from './components/HighlightText';
 import Emoji from './components/Emoji';
-import Linkify from 'react-linkify';
 
 const getTextNodeType = (node) => {
 	if (isEmoji(node)) {
@@ -86,11 +85,21 @@ const decomposeMessage = (message, highlightText) => {
 		}));
 };
 
-const PrintMessage = ({
+interface PrintMessageProps {
+	message: string;
+	as?: string;
+	linkify?: boolean;
+	smallEmoji?: boolean;
+	highlightText?: boolean;
+	className?: string;
+}
+
+const PrintMessage: React.FC<PrintMessageProps> = ({
 	message,
 	as: Tag = 'span',
+	linkify = false,
 	smallEmoji = false,
-	highlightText,
+	highlightText = false,
 	className,
 }) => {
 	const splitMessage = useMemo(
@@ -105,21 +114,13 @@ const PrintMessage = ({
 	}
 
 	return (
-		<Linkify
-			componentDecorator={(decoratedHref, decoratedText, key) => (
-				<a target="blank" href={decoratedHref} key={key}>
-					{decoratedText}
-				</a>
-			)}
-		>
-			<Tag className={classNames}>
-				{splitMessage.map((item) => {
-					const Component = item.component;
+		<Tag className={classNames}>
+			{splitMessage.map((item) => {
+				const Component = item.component;
 
-					return <Component data={item} key={item.index} />;
-				})}
-			</Tag>
-		</Linkify>
+				return <Component data={item} key={item.index} linkify={linkify} />;
+			})}
+		</Tag>
 	);
 };
 

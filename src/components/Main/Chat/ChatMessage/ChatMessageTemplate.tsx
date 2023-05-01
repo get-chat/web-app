@@ -11,6 +11,7 @@ import {
 } from '@src/helpers/TemplateMessageHelper';
 import { useTranslation } from 'react-i18next';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
+import PrintMessage from '@src/components/PrintMessage';
 
 function ChatMessageTemplate(props) {
 	const { t } = useTranslation();
@@ -63,40 +64,40 @@ function ChatMessageTemplate(props) {
 												<ChatMessageDocument data={data} />
 											)}
 											{component.format === 'TEXT' && (
-												<div
+												<PrintMessage
+													message={insertTemplateComponentParameters(
+														component,
+														data.templateParameters
+													)}
+													as="div"
+													linkify={true}
 													className="bold wordBreakAll"
-													dangerouslySetInnerHTML={{
-														__html: insertTemplateComponentParameters(
-															component,
-															data.templateParameters
-														),
-													}}
 												/>
 											)}
 										</div>
 									)}
 
 									{component.type === 'BODY' && (
-										<div
+										<PrintMessage
+											message={insertTemplateComponentParameters(
+												component,
+												data.templateParameters
+											)}
+											as="div"
+											linkify={true}
 											className="chat__templateContent__body wordBreakAll"
-											dangerouslySetInnerHTML={{
-												__html: insertTemplateComponentParameters(
-													component,
-													data.templateParameters
-												),
-											}}
 										/>
 									)}
 
 									{component.type === 'FOOTER' && (
-										<div
+										<PrintMessage
+											message={insertTemplateComponentParameters(
+												component,
+												data.templateParameters
+											)}
+											as="div"
+											linkify={true}
 											className="chat__templateContent__footer wordBreakAll mt-1"
-											dangerouslySetInnerHTML={{
-												__html: insertTemplateComponentParameters(
-													component,
-													data.templateParameters
-												),
-											}}
 										/>
 									)}
 

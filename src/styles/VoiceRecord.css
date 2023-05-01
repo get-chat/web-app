@@ -5,7 +5,7 @@
 	justify-content: space-between;
 	background-color: #fff;
 	border-radius: 20px;
-	box-shadow: -1px 4px 5px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
 }
 
 .voiceRecord__cancelButton {

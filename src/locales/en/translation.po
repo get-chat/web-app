@@ -707,3 +707,6 @@ msgstr ""
 
 msgid "Search quick actions"
 msgstr ""
+
+msgid "This chat will become inactive in %s"
+msgstr ""

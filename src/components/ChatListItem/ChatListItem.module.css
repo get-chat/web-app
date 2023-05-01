@@ -46,7 +46,7 @@
 	align-items: center;
 	font-size: 12px;
 	height: 19px;
-	padding: 0 5px 0 2px;
+	padding: 0 5px 0 0;
 	margin-left: 5px;
 }
 
@@ -65,9 +65,9 @@
 }
 
 .assigneeAvatar {
-	height: 15px !important;
-	width: 15px !important;
-	font-size: 9px !important;
+	height: 19px !important;
+	width: 19px !important;
+	font-size: 11px !important;
 	margin-right: 3px;
 	align-self: center;
 }
@@ -108,7 +108,7 @@
 	display: -webkit-box;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	word-break: break-word;
+	word-break: break-all;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 1;
 }
@@ -178,7 +178,7 @@
 	display: -webkit-box;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	word-break: break-word;
+	word-break: break-all;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 1;
 	margin-right: 5px;
@@ -203,11 +203,31 @@
 	font-size: 12px;
 	font-weight: 600;
 	border-radius: 10px;
-	padding: 0 6px;
+	padding: 0 5px 0 0;
 	height: 19px;
 	background-color: var(--color-primary);
 	color: white;
 	margin-left: 5px;
+}
+
+.timeLeftIconWrapper {
+	height: 19px;
+	width: 19px;
+	border-radius: 15px;
+	margin-right: 3px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.timeLeftIconWrapper :global(.MuiSvgIcon-root) {
+	height: 11px !important;
+	width: 11px !important;
+	color: #fff !important;
+}
+
+.timeLeftIconWrapper {
+	background-color: rgba(0, 0, 0, 0.2);
 }
 
 .wrapper.almostExpired .timeLeft {

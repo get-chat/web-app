@@ -53,7 +53,6 @@ import BulkSendActions from './BulkSendActions';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
@@ -682,9 +681,7 @@ function Sidebar(props) {
 					src={currentUser?.profile?.avatar}
 					onClick={() => setProfileVisible(true)}
 					className="cursorPointer"
-					style={{
-						backgroundColor: generateAvatarColor(currentUser?.username),
-					}}
+					generateBgColorBy={currentUser?.username}
 				>
 					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</CustomAvatar>

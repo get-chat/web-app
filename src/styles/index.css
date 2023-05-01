@@ -14,6 +14,8 @@
 		BlinkMacSystemFont, 'Arial', sans-serif;
 	--wrapper-border-radius: 10px;
 	--chat-bg: #e8e0dc;
+	--chat-icon: #645652;
+	--chat-icon-dark: #463732;
 }
 
 @media only screen and (max-width: 1500px) {

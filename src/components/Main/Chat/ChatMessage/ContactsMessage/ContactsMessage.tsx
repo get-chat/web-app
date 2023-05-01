@@ -9,7 +9,6 @@ import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ChatIcon from '@mui/icons-material/Chat';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 
 const ContactsMessage = ({ data }) => {
 	const navigate = useNavigate();
@@ -28,11 +27,7 @@ const ContactsMessage = ({ data }) => {
 						<>
 							<CustomAvatar
 								className={styles.avatar}
-								style={{
-									backgroundColor: generateAvatarColor(
-										contact.name?.formatted_name ?? ''
-									),
-								}}
+								generateBgColorBy={contact.name?.formatted_name}
 							>
 								{generateInitialsHelper(contact.name?.formatted_name ?? '')}
 							</CustomAvatar>

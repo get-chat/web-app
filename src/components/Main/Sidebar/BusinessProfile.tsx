@@ -13,7 +13,6 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import FileInput from '../../FileInput';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
@@ -237,9 +236,7 @@ function BusinessProfile(props) {
 										currentUser?.profile?.large_avatar ??
 										currentUser?.profile?.avatar
 									}
-									style={{
-										backgroundColor: generateAvatarColor(currentUser.username),
-									}}
+									generateBgColorBy={currentUser.username}
 								>
 									{generateInitialsHelper(currentUser.username)}
 								</CustomAvatar>
