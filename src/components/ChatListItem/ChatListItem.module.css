@@ -210,7 +210,6 @@
 	margin-left: 5px;
 }
 
-.assignedGroupIconWrapper,
 .timeLeftIconWrapper {
 	height: 19px;
 	width: 19px;
@@ -221,7 +220,6 @@
 	align-items: center;
 }
 
-.assignedGroupIconWrapper :global(.MuiSvgIcon-root),
 .timeLeftIconWrapper :global(.MuiSvgIcon-root) {
 	height: 11px !important;
 	width: 11px !important;
