@@ -11,7 +11,6 @@ import {
 } from '@src/Constants';
 import { isAudioMimeTypeSupported } from '@src/helpers/FileHelper';
 import UnsupportedFileClass from '../../../../UnsupportedFileClass';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 
 function ChatMessageVoice(props) {
@@ -156,11 +155,13 @@ function ChatMessageVoice(props) {
 				/>
 
 				<CustomAvatar
+					generateBgColorBy={
+						Boolean(data.voiceId !== undefined ?? data.voiceLink !== undefined)
+							? data.senderName
+							: undefined
+					}
 					style={{
-						backgroundColor:
-							data.voiceId !== undefined ?? data.voiceLink !== undefined
-								? generateAvatarColor(data.senderName)
-								: '#ff9a10',
+						backgroundColor: '#ff9a10',
 					}}
 					className="audioMessageAvatar"
 				>

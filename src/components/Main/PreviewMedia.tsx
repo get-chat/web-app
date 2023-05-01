@@ -9,7 +9,6 @@ import {
 	CALENDAR_NORMAL,
 	EVENT_TOPIC_CHAT_MESSAGE,
 } from '@src/Constants';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { GetApp } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Image from '../Image';
@@ -73,11 +72,7 @@ function PreviewMedia({ data }) {
 					</IconButton>
 				</Tooltip>
 
-				<CustomAvatar
-					style={{
-						backgroundColor: generateAvatarColor(data.senderName),
-					}}
-				>
+				<CustomAvatar generateBgColorBy={data.senderName}>
 					{data.initials}
 				</CustomAvatar>
 

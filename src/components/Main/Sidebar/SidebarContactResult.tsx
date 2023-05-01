@@ -2,7 +2,6 @@
 import React from 'react';
 import '../../../styles/SidebarContactResult.css';
 import { Link } from 'react-router-dom';
-import { generateAvatarColor } from '@src/helpers/AvatarHelper';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 
@@ -14,11 +13,7 @@ function SidebarContactResult(props) {
 	return (
 		<Link>
 			<div id={data.waId}>
-				<CustomAvatar
-					style={{
-						backgroundColor: generateAvatarColor(props.chatData.name),
-					}}
-				>
+				<CustomAvatar generateBgColorBy={props.chatData.name}>
 					{props.chatData.initials}
 				</CustomAvatar>
 				<div className="sidebarContactResult__info">
