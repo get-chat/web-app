@@ -63,3 +63,8 @@
 	font-size: 14px;
 	color: var(--color-primary);
 }
+
+.missingPhoneNumber {
+	font-size: 12px;
+	color: rgba(0, 0, 45, 0.4);
+}

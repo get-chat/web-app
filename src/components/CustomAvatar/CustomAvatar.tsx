@@ -29,10 +29,10 @@ const CustomAvatar: React.FC<Props> = ({
 	children,
 }) => {
 	const bgColor = useMemo(() => {
-		return generateBgColorBy
+		return !src && generateBgColorBy
 			? generateAvatarColor(generateBgColorBy)
 			: undefined;
-	}, [generateBgColorBy]);
+	}, [generateBgColorBy, src]);
 
 	return (
 		<Avatar

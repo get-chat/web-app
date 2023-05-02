@@ -68,9 +68,16 @@ const RecipientItem: React.FC<Props> = ({
 					</div>
 					<div className={styles.info}>
 						<div className={styles.name}>{data.name}</div>
-						<div className={styles.phoneNumber}>
-							{data.phoneNumbers[0]?.phoneNumber}
-						</div>
+
+						{data.phoneNumbers?.length > 0 ? (
+							<div className={styles.phoneNumber}>
+								{data.phoneNumbers[0]?.phoneNumber}
+							</div>
+						) : (
+							<div className={styles.missingPhoneNumber}>
+								{t('There is no phone number')}
+							</div>
+						)}
 					</div>
 				</div>
 			</ListItemButton>
