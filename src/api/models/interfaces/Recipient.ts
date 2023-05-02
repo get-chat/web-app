@@ -5,6 +5,7 @@ interface Recipient {
 	initials?: string;
 	avatar?: string;
 	phoneNumbers: PhoneNumberWithDescription[];
+	provider?: string;
 }
 
 export default Recipient;

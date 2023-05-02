@@ -4,6 +4,7 @@ import styles from './RecipientItem.module.css';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { ListItemButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import ContactProviderHeader from '@src/components/ContactProviderHeader';
 
 interface Props {
 	data: Recipient;
@@ -41,6 +42,10 @@ const RecipientItem: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 						<CustomAvatar src={data.avatar} generateBgColorBy={data.name}>
 							{data.initials}
 						</CustomAvatar>
+
+						{data.provider !== undefined && (
+							<ContactProviderHeader type={data.provider} />
+						)}
 					</div>
 					<div className={styles.info}>
 						<div className={styles.name}>{data.name}</div>

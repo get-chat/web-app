@@ -11,6 +11,7 @@ class PersonModel implements Recipient {
 	public lastMessageTimestamp: Number = -1;
 	public isExpired = false;
 	public phoneNumbers: PhoneNumberWithDescription[] = [];
+	public provider = 'whatsapp';
 
 	constructor(data: any) {
 		const payload = data.waba_payload;

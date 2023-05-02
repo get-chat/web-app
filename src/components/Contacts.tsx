@@ -239,9 +239,10 @@ function Contacts(props) {
 			</div>
 
 			<SearchBar
-				placeholder={t('Search for contacts')}
+				value={keyword}
 				onChange={setKeyword}
 				isLoading={isLoading}
+				placeholder={t('Search for contacts')}
 			/>
 
 			<div className="contacts__body">
@@ -254,53 +255,6 @@ function Contacts(props) {
 						}
 					/>
 				))}
-
-				{getObjLength(persons) > 0 && (
-					<div className="contacts__body__headerWrapper">
-						<h3>{t('Persons')}</h3>
-						<IconButton
-							onClick={() => setPersonsVisible((prevState) => !prevState)}
-							size="large"
-						>
-							{isPersonsVisible ? <ExpandLess /> : <ExpandMore />}
-						</IconButton>
-					</div>
-				)}
-
-				<Collapse in={isPersonsVisible} data-test-id="contacts-list">
-					{Object.entries(persons).map((person, index) => (
-						<Person
-							key={index}
-							data={person[1]}
-							verifyPhoneNumber={verifyContact}
-							onHide={props.onHide}
-							contactProvidersData={props.contactProvidersData}
-						/>
-					))}
-				</Collapse>
-
-				{getObjLength(contacts) > 0 && (
-					<div className="contacts__body__headerWrapper">
-						<h3>{t('Contacts')}</h3>
-						<IconButton
-							onClick={() => setContactsVisible((prevState) => !prevState)}
-							size="large"
-						>
-							{isContactsVisible ? <ExpandLess /> : <ExpandMore />}
-						</IconButton>
-					</div>
-				)}
-
-				<Collapse in={isContactsVisible}>
-					{Object.entries(contacts).map((contact, index) => (
-						<Contact
-							key={index}
-							data={contact[1]}
-							verifyPhoneNumber={verifyContact}
-							onHide={props.onHide}
-						/>
-					))}
-				</Collapse>
 
 				{isVerifying && (
 					<div className="contacts__body__loading">

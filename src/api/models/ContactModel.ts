@@ -8,6 +8,7 @@ class ContactModel implements Recipient {
 	public largeAvatar?: string;
 	public phoneNumbers: PhoneNumberWithDescription[] = [];
 	public contactProvider: string;
+	public provider?: string;
 
 	constructor(data: any) {
 		this.name = data.name;
@@ -18,6 +19,7 @@ class ContactModel implements Recipient {
 			phoneNumber: item.phone_number,
 			description: item.description,
 		}));
+		this.provider = data.contact_provider?.type;
 		this.contactProvider = data.contact_provider?.type;
 	}
 }
