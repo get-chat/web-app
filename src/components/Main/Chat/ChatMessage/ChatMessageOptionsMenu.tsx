@@ -1,20 +1,25 @@
 // @ts-nocheck
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { download } from '@src/helpers/DownloadHelper';
 
-function ChatMessageOptionsMenu(props) {
+function ChatMessageOptionsMenu({
+	optionsChatMessage,
+	menuAnchorEl,
+	setMenuAnchorEl,
+	createSavedResponse,
+}) {
 	const { t } = useTranslation();
 
-	const hasVideo = () => {
-		return Boolean(props.data?.generateVideoLink(true));
-	};
+	const hasVideo = useMemo(() => {
+		return Boolean(optionsChatMessage?.generateVideoLink(true));
+	}, [optionsChatMessage]);
 
-	const createSavedResponse = () => {
-		if (props.optionsChatMessage) {
-			props.createSavedResponse(props.optionsChatMessage.text);
+	const handleCreateSavedResponse = () => {
+		if (optionsChatMessage) {
+			createSavedResponse(optionsChatMessage.text);
 		}
 
 		hideMenu();
@@ -22,7 +27,7 @@ function ChatMessageOptionsMenu(props) {
 
 	const downloadVideo = () => {
 		const data = {
-			source: props.optionsChatMessage?.generateVideoLink(true),
+			source: optionsChatMessage?.generateVideoLink(true),
 		};
 		if (!data.source) {
 			hideMenu();
@@ -33,26 +38,26 @@ function ChatMessageOptionsMenu(props) {
 	};
 
 	const hideMenu = () => {
-		props.setMenuAnchorEl(null);
+		setMenuAnchorEl(null);
 	};
 
 	return (
 		<Menu
-			anchorEl={props.menuAnchorEl}
+			anchorEl={menuAnchorEl}
 			anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 			keepMounted
-			open={Boolean(props.menuAnchorEl)}
+			open={Boolean(menuAnchorEl)}
 			onClose={hideMenu}
 			elevation={3}
 			disableAutoFocusItem={true}
 		>
 			{/*<MenuItem>Delete</MenuItem>*/}
 
-			{props.optionsChatMessage &&
-				props.optionsChatMessage.type === ChatMessageModel.TYPE_TEXT &&
-				props.optionsChatMessage.isFromUs && (
-					<MenuItem onClick={createSavedResponse}>
+			{optionsChatMessage &&
+				optionsChatMessage.type === ChatMessageModel.TYPE_TEXT &&
+				optionsChatMessage.isFromUs && (
+					<MenuItem onClick={handleCreateSavedResponse}>
 						{t('Save this response')}
 					</MenuItem>
 				)}
