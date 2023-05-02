@@ -2,21 +2,32 @@ import React, { useState } from 'react';
 import Recipient from '@src/api/models/interfaces/Recipient';
 import styles from './RecipientItem.module.css';
 import CustomAvatar from '@src/components/CustomAvatar';
-import { ListItemButton } from '@mui/material';
+import { Checkbox, ListItemButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
 
 interface Props {
 	data: Recipient;
 	verifyPhoneNumber: (phoneNumber: string, data: Recipient) => void;
+	isSelectionModeEnabled?: boolean;
 }
 
-const RecipientItem: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
+const RecipientItem: React.FC<Props> = ({
+	data,
+	verifyPhoneNumber,
+	isSelectionModeEnabled = false,
+}) => {
 	const [isPhoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
+	const [isSelected, setSelected] = useState(false);
 
 	const { t } = useTranslation();
 
 	const handleClick = () => {
+		if (isSelectionModeEnabled) {
+			setSelected((prevState) => !prevState);
+			return;
+		}
+
 		if (data.phoneNumbers && data.phoneNumbers.length > 0) {
 			if (data.phoneNumbers.length === 1) {
 				const phoneNumber = data.phoneNumbers[0].phoneNumber;
@@ -38,6 +49,14 @@ const RecipientItem: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 		<div className={styles.wrapper}>
 			<ListItemButton className={styles.listItem} onClick={handleClick}>
 				<div className={styles.container}>
+					{isSelectionModeEnabled && (
+						<Checkbox
+							className={styles.selection}
+							checked={isSelected}
+							color="primary"
+						/>
+					)}
+
 					<div className={styles.avatarWrapper}>
 						<CustomAvatar src={data.avatar} generateBgColorBy={data.name}>
 							{data.initials}
