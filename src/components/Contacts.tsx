@@ -36,8 +36,6 @@ function Contacts(props) {
 	const [isVerifying, setVerifying] = useState(false);
 	const [isPhoneNumberFormVisible, setPhoneNumberFormVisible] = useState(false);
 	const [phoneNumber, setPhoneNumber] = useState('');
-	const [isPersonsVisible, setPersonsVisible] = useState(true);
-	const [isContactsVisible, setContactsVisible] = useState(true);
 
 	const [unifiedList, setUnifiedList] = useState<Recipient>([]);
 
