@@ -1,15 +1,16 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
-import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
+import Recipient from '@src/api/models/interfaces/Recipient';
+import PhoneNumberWithDescription from '@src/api/models/interfaces/PhoneNumberWithDescription';
 
-class PersonModel implements RecipientInterface {
+class PersonModel implements Recipient {
 	public waId?: string;
 	public name?: string;
 	public initials?: string;
 	public lastMessageTimestamp: Number = -1;
 	public isExpired = false;
-	public phoneNumbers: string[] = [];
+	public phoneNumbers: PhoneNumberWithDescription[] = [];
 
 	constructor(data: any) {
 		const payload = data.waba_payload;
@@ -18,7 +19,12 @@ class PersonModel implements RecipientInterface {
 		this.setName(payload?.profile?.name);
 
 		if (this.waId) {
-			this.phoneNumbers = [this.waId];
+			this.phoneNumbers = [
+				{
+					phoneNumber: this.waId,
+					description: undefined,
+				},
+			];
 		}
 
 		this.lastMessageTimestamp =

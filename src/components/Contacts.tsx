@@ -24,7 +24,7 @@ import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
-import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
+import Recipient from '@src/api/models/interfaces/Recipient';
 import RecipientItem from '@src/components/RecipientItem';
 
 function Contacts(props) {
@@ -42,7 +42,7 @@ function Contacts(props) {
 	const [isPersonsVisible, setPersonsVisible] = useState(true);
 	const [isContactsVisible, setContactsVisible] = useState(true);
 
-	const [unifiedList, setUnifiedList] = useState<RecipientInterface>([]);
+	const [unifiedList, setUnifiedList] = useState<Recipient>([]);
 
 	let cancelTokenSourceRef = useRef();
 	let verifyPhoneNumberCancelTokenSourceRef = useRef();
@@ -74,8 +74,8 @@ function Contacts(props) {
 		// Creating a unified list and sorting alphabetically
 		setUnifiedList(
 			[...Object.values(persons), ...Object.values(contacts)].sort(function (
-				a: RecipientInterface,
-				b: RecipientInterface
+				a: Recipient,
+				b: Recipient
 			) {
 				return (
 					a.name?.toLowerCase()?.localeCompare(b.name?.toLowerCase()) ?? -1

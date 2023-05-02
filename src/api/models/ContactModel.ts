@@ -1,11 +1,12 @@
-import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
+import Recipient from '@src/api/models/interfaces/Recipient';
+import PhoneNumberWithDescription from '@src/api/models/interfaces/PhoneNumberWithDescription';
 
-class ContactModel implements RecipientInterface {
+class ContactModel implements Recipient {
 	public name?: string;
 	public initials?: string;
 	public avatar?: string;
 	public largeAvatar?: string;
-	public phoneNumbers = [];
+	public phoneNumbers: PhoneNumberWithDescription[] = [];
 	public contactProvider: string;
 
 	constructor(data: any) {
@@ -13,7 +14,10 @@ class ContactModel implements RecipientInterface {
 		this.initials = data.initials;
 		this.avatar = data.avatar;
 		this.largeAvatar = data.largeAvatar;
-		this.phoneNumbers = data.phone_numbers;
+		this.phoneNumbers = data.phone_numbers?.map((item: any) => ({
+			phoneNumber: item.phone_number,
+			description: item.description,
+		}));
 		this.contactProvider = data.contact_provider?.type;
 	}
 }
