@@ -84,14 +84,15 @@ const RecipientItem: React.FC<Props> = ({
 
 			{isPhoneNumbersVisible && (
 				<div className={styles.phoneNumbers}>
-					<div>{t('Choose a phone number')}</div>
+					<div className={styles.phoneNumbersTitle}>
+						{t('Choose a phone number')}
+					</div>
 					{Object.entries(data.phoneNumbers).map((phoneNumber) => (
 						<div
 							key={phoneNumber[0]}
 							className={styles.choice}
 							onClick={() => goToChat(phoneNumber[1].phoneNumber)}
 						>
-							{phoneNumber[1].phoneNumber}
 							{phoneNumber[1].phoneNumber}
 						</div>
 					))}
