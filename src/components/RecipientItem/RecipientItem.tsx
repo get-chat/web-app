@@ -1,5 +1,5 @@
 import React from 'react';
-import RecipientInterface from '@src/api/models/RecipientInterface';
+import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
 
 interface Props {
 	data: RecipientInterface;

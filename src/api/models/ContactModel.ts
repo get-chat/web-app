@@ -1,4 +1,4 @@
-import RecipientInterface from '@src/api/models/RecipientInterface';
+import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
 
 class ContactModel implements RecipientInterface {
 	public name?: string;

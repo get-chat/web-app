@@ -14,7 +14,6 @@ import {
 import { ArrowBack, ExpandLess, ExpandMore } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import Contact from './Contact';
-import ContactModel from '../api/models/ContactModel';
 import { useNavigate } from 'react-router-dom';
 import PersonModel from '../api/models/PersonModel';
 import Person from './Person';
@@ -25,7 +24,7 @@ import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
-import RecipientInterface from '@src/api/models/RecipientInterface';
+import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
 import RecipientItem from 'src/components/RecipientItem';
 
 function Contacts(props) {
