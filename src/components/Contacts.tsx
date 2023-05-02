@@ -25,6 +25,8 @@ import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
+import RecipientInterface from '@src/api/models/RecipientInterface';
+import RecipientItem from 'src/components/RecipientItem';
 
 function Contacts(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -40,6 +42,8 @@ function Contacts(props) {
 	const [phoneNumber, setPhoneNumber] = useState('');
 	const [isPersonsVisible, setPersonsVisible] = useState(true);
 	const [isContactsVisible, setContactsVisible] = useState(true);
+
+	const [unifiedList, setUnifiedList] = useState<RecipientInterface>([]);
 
 	let cancelTokenSourceRef = useRef();
 	let verifyPhoneNumberCancelTokenSourceRef = useRef();
@@ -66,6 +70,10 @@ function Contacts(props) {
 			verifyPhoneNumberCancelTokenSourceRef.current.cancel();
 		};
 	}, []);
+
+	useEffect(() => {
+		setUnifiedList([...Object.values(persons), ...Object.values(contacts)]);
+	}, [contacts, persons]);
 
 	useEffect(() => {
 		// Generate a token
@@ -228,6 +236,10 @@ function Contacts(props) {
 			/>
 
 			<div className="contacts__body">
+				{unifiedList.map((item, index) => (
+					<RecipientItem data={item} onClick={(data) => console.log(data)} />
+				))}
+
 				{getObjLength(persons) > 0 && (
 					<div className="contacts__body__headerWrapper">
 						<h3>{t('Persons')}</h3>
