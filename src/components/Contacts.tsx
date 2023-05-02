@@ -136,14 +136,14 @@ function Contacts(props) {
 		);
 	};
 
-	const verifyContact = (data, waId) => {
+	const verifyContact = (data?: Recipient, phoneNumber: string) => {
 		const failureCallback = () => {
 			window.displayCustomError(
 				'There is no WhatsApp account connected to this phone number.'
 			);
 		};
 
-		waId = prepareWaId(waId);
+		const waId = prepareWaId(phoneNumber);
 
 		if (!waId) {
 			failureCallback();
@@ -249,7 +249,9 @@ function Contacts(props) {
 					<RecipientItem
 						key={index}
 						data={item}
-						onClick={(data) => console.log(data)}
+						verifyPhoneNumber={(phoneNumber: string, data: Recipient) =>
+							verifyContact(data, phoneNumber)
+						}
 					/>
 				))}
 
