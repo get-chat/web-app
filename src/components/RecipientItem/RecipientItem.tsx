@@ -1,6 +1,7 @@
 import React from 'react';
 import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
-import style from './RecipientItem.module.css';
+import styles from './RecipientItem.module.css';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 interface Props {
 	data: RecipientInterface;
@@ -8,7 +9,20 @@ interface Props {
 }
 
 const RecipientItem: React.FC<Props> = ({ data, onClick }) => {
-	return <div onClick={onClick}>{data.name}</div>;
+	return (
+		<div className={styles.wrapper} onClick={onClick}>
+			<div className={styles.container}>
+				<div className={styles.avatarWrapper}>
+					<CustomAvatar src={data.avatar} generateBgColorBy={data.name}>
+						{data.initials}
+					</CustomAvatar>
+				</div>
+				<div className={styles.info}>
+					<div className={styles.name}>{data.name}</div>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default RecipientItem;

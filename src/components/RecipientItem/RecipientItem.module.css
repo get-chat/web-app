@@ -1,0 +1,43 @@
+.wrapper {
+	background-color: white;
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	flex: 1 1;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+.container :global(.MuiAvatar-root) {
+	align-self: baseline;
+	height: 50px;
+	width: 50px;
+}
+
+.avatarWrapper {
+	position: relative;
+}
+
+.contactProviderHeader {
+	display: flex;
+	position: absolute;
+	bottom: -3px;
+	right: -3px;
+	padding: 3px;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 0 1px 3px var(--shadow-light);
+}
+
+.info {
+	display: flex;
+	flex: 1 1;
+	margin-left: 15px;
+}
+
+.name {
+	font-weight: 600;
+	font-size: 14px;
+}

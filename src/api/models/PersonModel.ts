@@ -9,13 +9,17 @@ class PersonModel implements RecipientInterface {
 	public initials?: string;
 	public lastMessageTimestamp: Number = -1;
 	public isExpired = false;
+	public phoneNumbers: string[] = [];
 
 	constructor(data: any) {
 		const payload = data.waba_payload;
 
 		this.waId = data.wa_id;
-
 		this.setName(payload?.profile?.name);
+
+		if (this.waId) {
+			this.phoneNumbers = [this.waId];
+		}
 
 		this.lastMessageTimestamp =
 			parseIntSafely(data.last_message_timestamp) ?? -1;
