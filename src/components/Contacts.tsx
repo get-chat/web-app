@@ -25,7 +25,7 @@ import { generateCancelToken } from '../helpers/ApiHelper';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
 import RecipientInterface from '@src/api/models/interfaces/RecipientInterface';
-import RecipientItem from 'src/components/RecipientItem';
+import RecipientItem from '@src/components/RecipientItem';
 
 function Contacts(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -71,7 +71,17 @@ function Contacts(props) {
 	}, []);
 
 	useEffect(() => {
-		setUnifiedList([...Object.values(persons), ...Object.values(contacts)]);
+		// Creating a unified list and sorting alphabetically
+		setUnifiedList(
+			[...Object.values(persons), ...Object.values(contacts)].sort(function (
+				a: RecipientInterface,
+				b: RecipientInterface
+			) {
+				return (
+					a.name?.toLowerCase()?.localeCompare(b.name?.toLowerCase()) ?? -1
+				);
+			})
+		);
 	}, [contacts, persons]);
 
 	useEffect(() => {
@@ -236,7 +246,11 @@ function Contacts(props) {
 
 			<div className="contacts__body">
 				{unifiedList.map((item, index) => (
-					<RecipientItem data={item} onClick={(data) => console.log(data)} />
+					<RecipientItem
+						key={index}
+						data={item}
+						onClick={(data) => console.log(data)}
+					/>
 				))}
 
 				{getObjLength(persons) > 0 && (
