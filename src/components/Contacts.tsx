@@ -5,18 +5,15 @@ import SearchBar from './SearchBar';
 import {
 	Button,
 	CircularProgress,
-	Collapse,
 	IconButton,
 	InputAdornment,
 	ListItem,
 	TextField,
 } from '@mui/material';
-import { ArrowBack, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
-import Contact from './Contact';
 import { useNavigate } from 'react-router-dom';
 import PersonModel from '../api/models/PersonModel';
-import Person from './Person';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { addPlus, prepareWaId } from '../helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
