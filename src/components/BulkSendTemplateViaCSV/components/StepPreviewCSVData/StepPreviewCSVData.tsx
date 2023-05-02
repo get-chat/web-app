@@ -9,7 +9,7 @@ import {
 	TableRow,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import style from './StepPreviewCSVData.module.css';
+import styles from './StepPreviewCSVData.module.css';
 import Alert from '@mui/material/Alert';
 import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
 
@@ -27,7 +27,7 @@ const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {
 							{csvHeader?.map((headerItem, headerIndex) => (
 								<TableCell
 									key={headerIndex}
-									className={style.stepPreviewCSVData__tableHeaderCell}
+									className={styles.stepPreviewCSVData__tableHeaderCell}
 								>
 									{headerItem}
 								</TableCell>
@@ -42,7 +42,7 @@ const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {
 										key={columnIndex}
 										component="th"
 										scope="row"
-										className={style.stepPreviewCSVData__tableRootCell}
+										className={styles.stepPreviewCSVData__tableRootCell}
 									>
 										{column}
 									</TableCell>
