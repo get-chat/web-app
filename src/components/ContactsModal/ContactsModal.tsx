@@ -102,7 +102,11 @@ const ContactsModal: React.FC<Props> = ({
 				className={'noPadding'}
 				dividers
 			>
-				<Contacts isSelectionModeEnabled={true} onSelect={handleSelect} />
+				<Contacts
+					isSelectionModeEnabled={true}
+					selectedContacts={selectedContacts}
+					onSelect={handleSelect}
+				/>
 
 				{/*<Trans>
 					To be able to share contacts, you need to use one of our Contact

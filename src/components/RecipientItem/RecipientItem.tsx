@@ -10,6 +10,7 @@ interface Props {
 	data: Recipient;
 	verifyPhoneNumber?: (phoneNumber: string, data: Recipient) => void;
 	isSelectionModeEnabled?: boolean;
+	isSelected?: boolean;
 	onSelect?: (recipient: Recipient) => void;
 }
 
@@ -17,19 +18,16 @@ const RecipientItem: React.FC<Props> = ({
 	data,
 	verifyPhoneNumber,
 	isSelectionModeEnabled = false,
+	isSelected = false,
 	onSelect,
 }) => {
 	const [isPhoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
-	const [isSelected, setSelected] = useState(false);
 
 	const { t } = useTranslation();
 
 	const handleClick = () => {
 		if (isSelectionModeEnabled) {
-			setSelected((prevState) => {
-				onSelect?.(data);
-				return !prevState;
-			});
+			onSelect?.(data);
 			return;
 		}
 

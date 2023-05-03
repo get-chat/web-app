@@ -9,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 interface Props {
 	isSelectionModeEnabled?: boolean;
 	onSelect?: (recipient: Recipient) => void;
+	selectedContacts?: Recipient[];
 	verifyContact?: (phoneNumber: string, data: Recipient) => void;
 	isVerifying?: boolean;
 }
@@ -16,6 +17,7 @@ interface Props {
 const Contacts: React.FC<Props> = ({
 	isSelectionModeEnabled = false,
 	onSelect,
+	selectedContacts,
 	verifyContact,
 	isVerifying = false,
 }) => {
@@ -41,6 +43,11 @@ const Contacts: React.FC<Props> = ({
 							verifyContact?.(phoneNumber, data)
 						}
 						isSelectionModeEnabled={isSelectionModeEnabled}
+						isSelected={Boolean(
+							selectedContacts?.find(
+								(recipient) => recipient.name === item.name
+							)
+						)}
 						onSelect={onSelect}
 					/>
 				))}
