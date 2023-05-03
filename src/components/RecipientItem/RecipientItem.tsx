@@ -8,14 +8,16 @@ import ContactProviderHeader from '@src/components/ContactProviderHeader';
 
 interface Props {
 	data: Recipient;
-	verifyPhoneNumber: (phoneNumber: string, data: Recipient) => void;
+	verifyPhoneNumber?: (phoneNumber: string, data: Recipient) => void;
 	isSelectionModeEnabled?: boolean;
+	onSelect?: (recipient: Recipient) => void;
 }
 
 const RecipientItem: React.FC<Props> = ({
 	data,
 	verifyPhoneNumber,
 	isSelectionModeEnabled = false,
+	onSelect,
 }) => {
 	const [isPhoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
 	const [isSelected, setSelected] = useState(false);
@@ -24,7 +26,10 @@ const RecipientItem: React.FC<Props> = ({
 
 	const handleClick = () => {
 		if (isSelectionModeEnabled) {
-			setSelected((prevState) => !prevState);
+			setSelected((prevState) => {
+				onSelect?.(data);
+				return !prevState;
+			});
 			return;
 		}
 
@@ -42,7 +47,7 @@ const RecipientItem: React.FC<Props> = ({
 	};
 
 	const goToChat = (phoneNumber?: string) => {
-		verifyPhoneNumber(phoneNumber ?? '', data);
+		verifyPhoneNumber?.(phoneNumber ?? '', data);
 	};
 
 	return (
@@ -82,7 +87,7 @@ const RecipientItem: React.FC<Props> = ({
 				</div>
 			</ListItemButton>
 
-			{isPhoneNumbersVisible && (
+			{!isSelectionModeEnabled && isPhoneNumbersVisible && (
 				<div className={styles.phoneNumbers}>
 					<div className={styles.phoneNumbersTitle}>
 						{t('Choose a phone number')}

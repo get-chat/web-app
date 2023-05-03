@@ -4,15 +4,21 @@ import SearchBar from '@src/components/SearchBar';
 import RecipientItem from '@src/components/RecipientItem';
 import Recipient from '@src/api/models/interfaces/Recipient';
 import { CircularProgress } from '@mui/material';
-import { getObjLength } from '@src/helpers/ObjectHelper';
 import { Trans, useTranslation } from 'react-i18next';
 
 interface Props {
-	verifyContact: (phoneNumber: string, data: Recipient) => void;
+	isSelectionModeEnabled?: boolean;
+	onSelect?: (recipient: Recipient) => void;
+	verifyContact?: (phoneNumber: string, data: Recipient) => void;
 	isVerifying?: boolean;
 }
 
-const Contacts: React.FC<Props> = ({ verifyContact, isVerifying = false }) => {
+const Contacts: React.FC<Props> = ({
+	isSelectionModeEnabled = false,
+	onSelect,
+	verifyContact,
+	isVerifying = false,
+}) => {
 	const { keyword, setKeyword, isLoading, unifiedList } = useContacts();
 
 	const { t } = useTranslation();
@@ -32,8 +38,10 @@ const Contacts: React.FC<Props> = ({ verifyContact, isVerifying = false }) => {
 						key={index}
 						data={item}
 						verifyPhoneNumber={(phoneNumber: string, data: Recipient) =>
-							verifyContact(phoneNumber, data)
+							verifyContact?.(phoneNumber, data)
 						}
+						isSelectionModeEnabled={isSelectionModeEnabled}
+						onSelect={onSelect}
 					/>
 				))}
 

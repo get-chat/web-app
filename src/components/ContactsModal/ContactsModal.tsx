@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,27 +6,28 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 
 import ChatMessageModel from '../../api/models/ChatMessageModel';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import ContactModel from '../../api/models/ContactModel';
 
 import styles from './ContactsModal.module.css';
-import CustomAvatar from '@src/components/CustomAvatar';
-import ContactsResponse from '@src/api/responses/ContactsResponse';
-import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { AppConfig } from '@src/contexts/AppConfig';
+import Contacts from '@src/components/Contacts';
+import Recipient from '@src/api/models/interfaces/Recipient';
+import { AxiosResponse } from 'axios';
 
-const DialogHeader = ({ children, onClose, ...rest }) => (
+interface DialogHeaderProps {
+	children?: JSX.Element | string;
+	onClose: () => void;
+}
+
+const DialogHeader: React.FC<DialogHeaderProps> = ({
+	children,
+	onClose,
+	...rest
+}) => (
 	<DialogTitle className={styles.header} {...rest}>
 		<Typography variant="h6">{children}</Typography>
 		{onClose && (
@@ -38,35 +38,28 @@ const DialogHeader = ({ children, onClose, ...rest }) => (
 	</DialogTitle>
 );
 
-const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
-	const config = React.useContext(AppConfig);
-	const { apiService } = React.useContext(ApplicationContext);
+interface Props {
+	open: boolean;
+	onClose: () => void;
+	sendMessage: (
+		payload: any,
+		onSuccess: (response: AxiosResponse) => void,
+		onError: (error: AxiosResponse) => void
+	) => void;
+	recipientWaId: string;
+}
 
-	const [selectedContacts, setSelectedContacts] = useState<ContactModel[]>([]);
-	const [contacts, setContacts] = useState<ContactModel[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
+const ContactsModal: React.FC<Props> = ({
+	open,
+	onClose,
+	sendMessage,
+	recipientWaId,
+}) => {
+	const config: any = React.useContext(AppConfig);
+
+	const [selectedContacts, setSelectedContacts] = useState<Recipient[]>([]);
 
 	const { t } = useTranslation();
-
-	useEffect(() => {
-		setIsLoading(true);
-
-		apiService.listContactsCall(
-			undefined,
-			CONTACTS_TEMP_LIMIT,
-			undefined,
-			undefined,
-			(response) => {
-				const contactsResponse = new ContactsResponse(response.data);
-				setContacts(contactsResponse.contacts);
-				setIsLoading(false);
-			},
-			(error) => {
-				console.error(error);
-				setIsLoading(false);
-			}
-		);
-	}, []);
 
 	const handleClose = () => {
 		onClose();
@@ -82,77 +75,51 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 					formatted_name: contact.name,
 				},
 				phones: contact.phoneNumbers.map((phone) => ({
-					wa_id: phone?.phone_number || null,
+					wa_id: phone?.phoneNumber || null,
 				})),
 			})),
 		};
 
 		sendMessage(
-			false,
-			undefined,
 			payload,
 			() => {
 				handleClose();
 			},
-			(error) => {
+			(error: AxiosResponse) => {
 				console.log('error', error);
 				handleClose();
 			}
 		);
 	};
 
-	const handleSetSelectedContacts = (contact) => {
-		if (selectedContacts.find((item) => item.name === contact.name)) {
+	const handleSelect = (recipient: Recipient) => {
+		if (selectedContacts.find((item) => item.name === recipient.name)) {
 			setSelectedContacts(
-				selectedContacts.filter((item) => item.name !== contact.name)
+				selectedContacts.filter((item) => item.name !== recipient.name)
 			);
 		} else {
-			setSelectedContacts([...selectedContacts, contact]);
+			setSelectedContacts([...selectedContacts, recipient]);
 		}
 	};
-
-	if (isLoading) {
-		return null;
-	}
 
 	return (
 		<Dialog open={open} onClose={handleClose}>
 			<DialogHeader onClose={handleClose}>{t('Send contacts')}</DialogHeader>
-			<DialogContent classes={{ root: styles.content }} dividers>
-				{Object.keys(contacts).length === 0 ? (
+			<DialogContent
+				classes={{ root: styles.content }}
+				className={'noPadding'}
+				dividers
+			>
+				{Object.keys({ test: 1 }).length === 0 ? (
 					<Trans>
 						To be able to share contacts, you need to use one of our Contact
 						Providers. <a href={getHubURL(config.API_BASE_URL)}>Click here</a>{' '}
 						to go to our integrations page.
 					</Trans>
 				) : (
-					<List>
-						{Object.entries(contacts).map(([key, value], index) => (
-							<ListItem
-								key={key}
-								divider={Object.keys(contacts).length !== index + 1}
-								button
-								selected={selectedContacts.find(
-									(item) => item.name === value.name
-								)}
-								onClick={() => handleSetSelectedContacts(value)}
-							>
-								<ListItemAvatar>
-									<CustomAvatar alt={value.name}>{value.initials}</CustomAvatar>
-								</ListItemAvatar>
-								<ListItemText primary={value.name} />
-								<ListItemSecondaryAction>
-									<Checkbox
-										edge="end"
-										checked={selectedContacts.find(
-											(item) => item.name === value.name
-										)}
-										onClick={() => handleSetSelectedContacts(value)}
-									/>
-								</ListItemSecondaryAction>
-							</ListItem>
-						))}
-					</List>
+					<>
+						<Contacts isSelectionModeEnabled={true} onSelect={handleSelect} />
+					</>
 				)}
 			</DialogContent>
 			{selectedContacts.length > 0 && (

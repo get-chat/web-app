@@ -204,7 +204,7 @@ a {
 	font-size: 18px !important;
 }
 
-.MuiDialogContent-root {
+.MuiDialogContent-root:not(.MuiDialogContent-root.noPadding) {
 	padding: 5px 20px !important;
 }
 

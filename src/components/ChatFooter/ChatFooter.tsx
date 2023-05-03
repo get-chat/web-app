@@ -292,7 +292,9 @@ const ChatFooter: React.FC = ({
 			<ContactsModal
 				open={contactsModalVisible}
 				onClose={closeContactsModal}
-				sendMessage={sendMessage}
+				sendMessage={(payload, onSuccess, onError) =>
+					sendMessage(false, undefined, payload, onSuccess, onError)
+				}
 				recipientWaId={waId}
 			/>
 
