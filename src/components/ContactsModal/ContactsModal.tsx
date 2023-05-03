@@ -3,9 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 import ChatMessageModel from '../../api/models/ChatMessageModel';
@@ -29,12 +26,7 @@ const DialogHeader: React.FC<DialogHeaderProps> = ({
 	...rest
 }) => (
 	<DialogTitle className={styles.header} {...rest}>
-		<Typography variant="h6">{children}</Typography>
-		{onClose && (
-			<IconButton aria-label="close" onClick={onClose} size="large">
-				<CloseIcon />
-			</IconButton>
-		)}
+		{children}
 	</DialogTitle>
 );
 
@@ -110,17 +102,13 @@ const ContactsModal: React.FC<Props> = ({
 				className={'noPadding'}
 				dividers
 			>
-				{Object.keys({ test: 1 }).length === 0 ? (
-					<Trans>
-						To be able to share contacts, you need to use one of our Contact
-						Providers. <a href={getHubURL(config.API_BASE_URL)}>Click here</a>{' '}
-						to go to our integrations page.
-					</Trans>
-				) : (
-					<>
-						<Contacts isSelectionModeEnabled={true} onSelect={handleSelect} />
-					</>
-				)}
+				<Contacts isSelectionModeEnabled={true} onSelect={handleSelect} />
+
+				{/*<Trans>
+					To be able to share contacts, you need to use one of our Contact
+					Providers. <a href={getHubURL(config.API_BASE_URL)}>Click here</a>{' '}
+					to go to our integrations page.
+				</Trans>*/}
 			</DialogContent>
 			{selectedContacts.length > 0 && (
 				<DialogActions>
