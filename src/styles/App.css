@@ -397,7 +397,7 @@ h3 .emoji-mart-emoji {
 		padding: 15px 15px 10px 15px !important;
 	}
 
-	.MuiDialogContent-root {
+	.MuiDialogContent-root:not(.MuiDialogContent-root.noPadding) {
 		padding: 5px 15px !important;
 	}
 

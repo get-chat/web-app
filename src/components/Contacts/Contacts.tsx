@@ -28,7 +28,7 @@ const Contacts: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	return (
-		<div>
+		<>
 			<SearchBar
 				value={keyword}
 				onChange={setKeyword}
@@ -80,7 +80,7 @@ const Contacts: React.FC<Props> = ({
 					</span>
 				)}
 			</div>
-		</div>
+		</>
 	);
 };
 

@@ -1,5 +1,4 @@
 .root {
-	width: 400px;
 	min-height: 200px;
 }
 
@@ -23,6 +22,8 @@
 	/* override default material-ui padding */
 	padding: 0 !important;
 	flex: 1;
+	display: flex;
+	flex-direction: column;
 }
 
 .dialogoHeader {

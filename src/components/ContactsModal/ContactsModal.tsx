@@ -95,7 +95,7 @@ const ContactsModal: React.FC<Props> = ({
 	};
 
 	return (
-		<Dialog open={open} onClose={handleClose}>
+		<Dialog open={open} onClose={handleClose} fullWidth>
 			<DialogHeader onClose={handleClose}>{t('Send contacts')}</DialogHeader>
 			<DialogContent
 				classes={{ root: styles.content }}
