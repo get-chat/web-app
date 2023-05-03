@@ -684,3 +684,6 @@ msgstr "Bu sohbet %s içinde inaktif olacak"
 
 msgid "Templates"
 msgstr "Taslaklar"
+
+msgid "Filter chats by tag"
+msgstr "Sohbetleri etikete göre filtrele"

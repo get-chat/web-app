@@ -713,3 +713,6 @@ msgstr ""
 
 msgid "Templates"
 msgstr ""
+
+msgid "Filter chats by tag"
+msgstr ""

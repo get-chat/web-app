@@ -224,5 +224,6 @@
 	"No results found.": "Sonuç bulunamadı.",
 	"Search quick actions": "Hızlı eylemleri ara",
 	"This chat will become inactive in %s": "Bu sohbet %s içinde inaktif olacak",
-	"Templates": "Taslaklar"
+	"Templates": "Taslaklar",
+	"Filter chats by tag": "Sohbetleri etikete göre filtrele"
 }
