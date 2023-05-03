@@ -52,6 +52,11 @@ const useContacts = () => {
 		setLoading(true);
 
 		timeout.current = setTimeout(function () {
+			// Clear contacts and persons
+			setContacts([]);
+			setPersons({});
+
+			// Load persons
 			listPersons();
 		}, 500);
 
