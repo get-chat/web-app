@@ -1,8 +1,9 @@
-// @ts-nocheck
 import PersonModel from '../models/PersonModel';
 
 class PersonResponse {
-	constructor(data) {
+	public person: PersonModel;
+
+	constructor(data: any) {
 		this.person = new PersonModel(data);
 	}
 }

@@ -44,7 +44,7 @@ import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
-import Contacts from '../../Contacts';
+import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import CloseIcon from '@mui/icons-material/Close';
 import BulkSendIndicator from './BulkSendIndicator';
@@ -907,10 +907,7 @@ function Sidebar(props) {
 			</Fade>
 
 			{isContactsVisible && (
-				<Contacts
-					contactProvidersData={props.contactProvidersData}
-					onHide={() => setContactsVisible(false)}
-				/>
+				<StartChat onHide={() => setContactsVisible(false)} />
 			)}
 
 			{isProfileVisible && (

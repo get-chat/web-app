@@ -1,11 +1,16 @@
-// @ts-nocheck
 import PersonModel from '../models/PersonModel';
 
+export type PersonList = {
+	[key: string]: PersonModel;
+};
+
 class PersonsResponse {
-	constructor(data) {
-		const persons = {};
-		data.results.forEach((personData, personIndex) => {
-			persons[personIndex] = new PersonModel(personData);
+	public persons: PersonList = {};
+
+	constructor(data: any) {
+		const persons: PersonList = {};
+		data.results.forEach((personData: any, personIndex: number) => {
+			persons[personIndex.toString()] = new PersonModel(personData);
 		});
 		this.persons = persons;
 	}

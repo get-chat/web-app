@@ -1,14 +1,24 @@
-// @ts-nocheck
 import ContactModel from '../models/ContactModel';
 
+interface ResponseData {
+	results: [];
+	count: Number;
+	next: string | null;
+}
+
 class ContactsResponse {
-	constructor(data) {
+	public contacts: ContactModel[];
+	public results;
+	public count;
+	public next;
+
+	constructor(data: ResponseData) {
 		this.next = data.next;
 		this.count = data.count;
 		this.results = data.results;
 
-		let contacts = [];
-		data.results.forEach((contact) => {
+		let contacts: ContactModel[] = [];
+		data.results.forEach((contact: any) => {
 			const contactInstance = new ContactModel(contact);
 			contacts.push(contactInstance);
 		});
