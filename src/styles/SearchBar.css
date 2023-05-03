@@ -20,9 +20,6 @@
 
 .searchBar__searchContainer > .MuiSvgIcon-root {
 	color: var(--lighter-text-color);
-	margin: 10px;
-	height: 0.8em;
-	width: 0.8em;
 }
 
 .searchBar__searchContainer > .MuiCircularProgress-root {
@@ -32,10 +29,13 @@
 .searchBar__searchContainer > .MuiSvgIcon-root,
 .searchBar__searchContainer > .MuiCircularProgress-root {
 	position: absolute;
-	left: 0;
+	left: 10px;
 	margin-top: auto;
 	margin-bottom: auto;
 	pointer-events: none;
+	width: 20px !important;
+	height: 20px !important;
+	padding: 0 !important;
 }
 
 .searchBar__searchContainer > input {
@@ -50,20 +50,3 @@
 .searchBar__searchContainer > input:focus {
 	outline: none;
 }
-
-/*
-.searchBar__searchContainer > span {
-    display: inline-block;
-}
-
-.searchBar__searchContainer > input:placeholder-shown ~ span {
-    display: none;
-}
-
-.searchBar__searchContainer > .searchBar__searchContainer__searchIcon {
-    display: none;
-}
-
-.searchBar__searchContainer > input:placeholder-shown ~ .searchBar__searchContainer__searchIcon {
-    display: block;
-}*/
