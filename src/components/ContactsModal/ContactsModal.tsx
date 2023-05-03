@@ -42,8 +42,8 @@ const ContactsModal = ({ open, onClose, sendMessage, recipientWaId }) => {
 	const config = React.useContext(AppConfig);
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const [selectedContacts, setSelectedContacts] = useState([]);
-	const [contacts, setContacts] = useState([]);
+	const [selectedContacts, setSelectedContacts] = useState<ContactModel[]>([]);
+	const [contacts, setContacts] = useState<ContactModel[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const { t } = useTranslation();
