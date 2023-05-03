@@ -1,0 +1,64 @@
+import React from 'react';
+import useContacts from '@src/components/Contacts/useContacts';
+import SearchBar from '@src/components/SearchBar';
+import RecipientItem from '@src/components/RecipientItem';
+import Recipient from '@src/api/models/interfaces/Recipient';
+import { CircularProgress } from '@mui/material';
+import { getObjLength } from '@src/helpers/ObjectHelper';
+import { Trans, useTranslation } from 'react-i18next';
+
+interface Props {
+	verifyContact: (phoneNumber: string, data: Recipient) => void;
+	isVerifying?: boolean;
+}
+
+const Contacts: React.FC<Props> = ({ verifyContact, isVerifying = false }) => {
+	const { keyword, setKeyword, isLoading, unifiedList } = useContacts();
+
+	const { t } = useTranslation();
+
+	return (
+		<div>
+			<SearchBar
+				value={keyword}
+				onChange={setKeyword}
+				isLoading={isLoading}
+				placeholder={t('Search for contacts')}
+			/>
+
+			<div className="contacts__body">
+				{unifiedList.map((item, index) => (
+					<RecipientItem
+						key={index}
+						data={item}
+						verifyPhoneNumber={(phoneNumber: string, data: Recipient) =>
+							verifyContact(phoneNumber, data)
+						}
+					/>
+				))}
+
+				{isVerifying && (
+					<div className="contacts__body__loading">
+						<CircularProgress color="inherit" />
+					</div>
+				)}
+
+				{!isLoading && keyword?.length > 0 && unifiedList.length === 0 && (
+					<span className="contacts__body__hint">
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [keyword],
+							}}
+						>
+							No persons or contacts found for{' '}
+							<span className="searchOccurrence">%s</span>
+						</Trans>
+					</span>
+				)}
+			</div>
+		</div>
+	);
+};
+
+export default Contacts;
