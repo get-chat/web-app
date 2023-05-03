@@ -48,7 +48,7 @@ function LoadingScreen(props) {
 				{t(props.loadingNow)}
 			</div>
 
-			{!isLongTransactionInfoVisible && (
+			{isLongTransactionInfoVisible && (
 				<div className="loadingScreen__longTransactionInfo">
 					{t('We are loading initial resources, please wait...')}
 				</div>
