@@ -13,11 +13,11 @@ import {
 	PRIMARY_KEY_TYPE_WA_ID,
 } from '../../BulkSendTemplateViaCSV';
 import Alert from '@mui/material/Alert';
-import LabelIcon from '@mui/icons-material/Label';
 import { useTranslation } from 'react-i18next';
 import styles from './StepSelectPrimaryKey.module.css';
 import { findTagByName } from '@src/helpers/TagHelper';
 import { useAppSelector } from '@src/store/hooks';
+import SellIcon from '@mui/icons-material/Sell';
 
 const StepSelectPrimaryKey = ({
 	csvHeader,
@@ -42,7 +42,7 @@ const StepSelectPrimaryKey = ({
 						const tag = findTagByName(tags, tagName);
 						return (
 							<span key={itemIndex}>
-								<LabelIcon style={{ fill: tag?.web_inbox_color }} />{' '}
+								<SellIcon style={{ fill: tag?.web_inbox_color }} />{' '}
 								{tagName ? tagName : t('(empty)')}
 							</span>
 						);

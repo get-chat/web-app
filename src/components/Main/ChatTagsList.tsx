@@ -11,12 +11,12 @@ import {
 	ListItem,
 } from '@mui/material';
 import '../../styles/ChatTagsList.css';
-import LabelIcon from '@mui/icons-material/Label';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '@src/contexts/AppConfig';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import SellIcon from '@mui/icons-material/Sell';
 
 function ChatTagsList(props) {
 	const config = React.useContext(AppConfig);
@@ -55,7 +55,7 @@ function ChatTagsList(props) {
 										onClick={() => handleClick(tag)}
 									>
 										<div className="chatTagsListWrapper__tag">
-											<LabelIcon
+											<SellIcon
 												style={{
 													fill: tag.web_inbox_color,
 												}}
