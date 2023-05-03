@@ -12,6 +12,7 @@ interface Props {
 	selectedContacts?: Recipient[];
 	verifyContact?: (phoneNumber: string, data: Recipient) => void;
 	isVerifying?: boolean;
+	noContactsContent?: JSX.Element;
 }
 
 const Contacts: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const Contacts: React.FC<Props> = ({
 	selectedContacts,
 	verifyContact,
 	isVerifying = false,
+	noContactsContent,
 }) => {
 	const { keyword, setKeyword, isLoading, unifiedList } = useContacts();
 
@@ -35,22 +37,28 @@ const Contacts: React.FC<Props> = ({
 			/>
 
 			<div className="contacts__body">
-				{unifiedList.map((item, index) => (
-					<RecipientItem
-						key={index}
-						data={item}
-						verifyPhoneNumber={(phoneNumber: string, data: Recipient) =>
-							verifyContact?.(phoneNumber, data)
-						}
-						isSelectionModeEnabled={isSelectionModeEnabled}
-						isSelected={Boolean(
-							selectedContacts?.find(
-								(recipient) => recipient.name === item.name
-							)
-						)}
-						onSelect={onSelect}
-					/>
-				))}
+				{!isLoading && unifiedList.length === 0 && noContactsContent ? (
+					<>{noContactsContent}</>
+				) : (
+					<>
+						{unifiedList.map((item, index) => (
+							<RecipientItem
+								key={index}
+								data={item}
+								verifyPhoneNumber={(phoneNumber: string, data: Recipient) =>
+									verifyContact?.(phoneNumber, data)
+								}
+								isSelectionModeEnabled={isSelectionModeEnabled}
+								isSelected={Boolean(
+									selectedContacts?.find(
+										(recipient) => recipient.name === item.name
+									)
+								)}
+								onSelect={onSelect}
+							/>
+						))}
+					</>
+				)}
 
 				{isVerifying && (
 					<div className="contacts__body__loading">

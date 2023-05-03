@@ -106,13 +106,21 @@ const ContactsModal: React.FC<Props> = ({
 					isSelectionModeEnabled={true}
 					selectedContacts={selectedContacts}
 					onSelect={handleSelect}
+					noContactsContent={
+						<div
+							style={{
+								padding: '10px 15px',
+							}}
+						>
+							<Trans>
+								To be able to share contacts, you need to use one of our Contact
+								Providers.{' '}
+								<a href={getHubURL(config.API_BASE_URL)}>Click here</a> to go to
+								our integrations page.
+							</Trans>
+						</div>
+					}
 				/>
-
-				{/*<Trans>
-					To be able to share contacts, you need to use one of our Contact
-					Providers. <a href={getHubURL(config.API_BASE_URL)}>Click here</a>{' '}
-					to go to our integrations page.
-				</Trans>*/}
 			</DialogContent>
 			{selectedContacts.length > 0 && (
 				<DialogActions>
