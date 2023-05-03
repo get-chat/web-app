@@ -571,7 +571,7 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-msgid "Please wait, as %s are being loaded..."
+msgid "We are loading initial resources, please wait..."
 msgstr ""
 
 msgid "Upload CSV"
@@ -709,4 +709,7 @@ msgid "Search quick actions"
 msgstr ""
 
 msgid "This chat will become inactive in %s"
+msgstr ""
+
+msgid "Templates"
 msgstr ""

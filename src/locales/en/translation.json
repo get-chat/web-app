@@ -187,7 +187,7 @@
 	"Upload a file instead": "",
 	"Type: %s": "",
 	"Retry": "",
-	"Please wait, as %s are being loaded...": "",
+	"We are loading initial resources, please wait...": "",
 	"Upload CSV": "",
 	"Next": "",
 	"Bulk send a template": "",
@@ -231,5 +231,6 @@
 	"Send contacts": "",
 	"No results found.": "",
 	"Search quick actions": "",
-	"This chat will become inactive in %s": ""
+	"This chat will become inactive in %s": "",
+	"Templates": ""
 }

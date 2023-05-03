@@ -571,8 +571,8 @@ msgstr "Tür: %s"
 msgid "Retry"
 msgstr "Tekrar dene"
 
-msgid "Please wait, as %s are being loaded..."
-msgstr "Lütfen bekle, %s yükleniyor..."
+msgid "We are loading initial resources, please wait..."
+msgstr "Kaynakları yüklüyoruz, lütfen bekle..."
 
 msgid "Upload CSV"
 msgstr "CSV Yükle"
@@ -681,3 +681,6 @@ msgstr "Hızlı eylemleri ara"
 
 msgid "This chat will become inactive in %s"
 msgstr "Bu sohbet %s içinde inaktif olacak"
+
+msgid "Templates"
+msgstr "Taslaklar"

@@ -44,13 +44,13 @@ function LoadingScreen(props) {
 			</div>
 
 			<div className="loadingScreen__details">
-				{t('Loading: %s', props.loadingNow)}
+				<CircularProgress size={20} />
+				{t(props.loadingNow)}
 			</div>
 
-			{isLongTransactionInfoVisible && (
+			{!isLongTransactionInfoVisible && (
 				<div className="loadingScreen__longTransactionInfo">
-					<CircularProgress size={14} />
-					{t('Please wait, as %s are being loaded...', props.loadingNow)}
+					{t('We are loading initial resources, please wait...')}
 				</div>
 			)}
 
