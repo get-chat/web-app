@@ -428,7 +428,7 @@ function Sidebar(props) {
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
-			props.setLoadingNow('chats');
+			props.setLoadingNow('Chats');
 		}
 
 		// Reset chats count

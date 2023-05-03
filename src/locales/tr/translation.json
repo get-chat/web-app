@@ -187,7 +187,7 @@
 	"Upload a file instead": "Bunun yerine dosya yükle",
 	"Type: %s": "Tür: %s",
 	"Retry": "Tekrar dene",
-	"Please wait, as %s are being loaded...": "Lütfen bekle, %s yükleniyor...",
+	"We are loading initial resources, please wait...": "Kaynakları yüklüyoruz, lütfen bekle...",
 	"Upload CSV": "CSV Yükle",
 	"Next": "Sıradaki",
 	"Bulk send a template": "Taslağı toplu gönder",
@@ -223,5 +223,6 @@
 	"Send contacts": "Kontak gönder",
 	"No results found.": "Sonuç bulunamadı.",
 	"Search quick actions": "Hızlı eylemleri ara",
-	"This chat will become inactive in %s": "Bu sohbet %s içinde inaktif olacak"
+	"This chat will become inactive in %s": "Bu sohbet %s içinde inaktif olacak",
+	"Templates": "Taslaklar"
 }

@@ -778,7 +778,7 @@ function Main() {
 
 	// ** 2 **
 	const listUsers = async () => {
-		setLoadingNow('users');
+		setLoadingNow('Users');
 
 		try {
 			await apiService.listUsersCall(5000, (response) => {
@@ -800,7 +800,7 @@ function Main() {
 
 	// ** 1 **
 	const retrieveCurrentUser = async () => {
-		setLoadingNow('current user');
+		setLoadingNow('Current User');
 
 		try {
 			await apiService.retrieveCurrentUserCall((response) => {
@@ -827,7 +827,7 @@ function Main() {
 
 	// ** 5 **
 	const listTemplates = async (isRetry) => {
-		setLoadingNow('templates');
+		setLoadingNow('Templates');
 
 		const completeCallback = () => {
 			setLoadingTemplates(false);
@@ -946,12 +946,12 @@ function Main() {
 
 	// ** 3 **
 	const listContacts = async () => {
-		setLoadingNow('contacts');
+		setLoadingNow('Contacts');
 
 		// Check if it needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
-			setLoadingNow('saved responses');
+			setLoadingNow('Saved Responses');
 			listSavedResponses();
 			return;
 		}
@@ -962,7 +962,7 @@ function Main() {
 			setContactProvidersData(preparedData);
 
 			setProgress(35);
-			setLoadingNow('saved responses');
+			setLoadingNow('Saved Responses');
 
 			// Trigger next request
 			listSavedResponses();

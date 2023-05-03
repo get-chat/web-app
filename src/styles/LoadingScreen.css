@@ -38,22 +38,28 @@
 }
 
 .loadingScreen__details {
-	font-size: 12px;
+	font-size: 16px;
+	font-weight: 600;
 	color: rgba(0, 0, 45, 0.4);
 	margin: 15px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.loadingScreen__details .MuiCircularProgress-root {
+	margin: 10px;
 }
 
 .loadingScreen__longTransactionInfo {
 	margin-bottom: 10px;
 	font-size: 14px;
+	color: rgba(0, 0, 45, 0.3);
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-}
-
-.loadingScreen__longTransactionInfo .MuiCircularProgress-root {
-	margin-right: 15px;
 }
 
 .loadingScreen__actions {
