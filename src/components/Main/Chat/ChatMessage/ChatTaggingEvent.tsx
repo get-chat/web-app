@@ -12,7 +12,7 @@ function ChatTaggingEvent(props) {
 		<div className="chatTaggingEvent">
 			<div className="chatTaggingEvent__content">
 				<div className="chatTaggingEvent__content__title">
-					{!props.data.done_by ? (
+					{props.data.done_by ? (
 						<div>
 							<Trans
 								values={{
