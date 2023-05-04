@@ -26,7 +26,7 @@ i18n
 		// lng: 'en',
 		fallbackLng: 'en',
 		compatibilityJSON: 'v4',
-		debug: false,
+		debug: true,
 		overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
 		keySeparator: false,
 		nsSeparator: false,
