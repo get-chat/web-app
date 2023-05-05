@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useMemo } from 'react';
-import LabelIcon from '@mui/icons-material/Label';
 import { useAppSelector } from '@src/store/hooks';
+import SellIcon from '@mui/icons-material/Sell';
 
 const ChatTag = ({ id }) => {
 	const tags = useAppSelector((state) => state.tags.value);
@@ -13,7 +13,7 @@ const ChatTag = ({ id }) => {
 	}, [tags, id]);
 
 	return (
-		<LabelIcon
+		<SellIcon
 			style={{
 				fill: tag?.web_inbox_color ?? 'white',
 			}}

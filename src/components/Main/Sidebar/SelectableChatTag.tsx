@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { Checkbox, ListItem } from '@mui/material';
-import LabelIcon from '@mui/icons-material/Label';
 import '../../../styles/SelectableChatTag.css';
+import SellIcon from '@mui/icons-material/Sell';
 
 function SelectableChatTag(props) {
 	const [isSelected, setSelected] = useState(false);
@@ -34,7 +34,7 @@ function SelectableChatTag(props) {
 					color="primary"
 				/>
 				<div className="sidebarTag__selection__tag">
-					<LabelIcon style={{ fill: props.data.web_inbox_color }} />
+					<SellIcon style={{ fill: props.data.web_inbox_color }} />
 					{props.data.name}
 				</div>
 			</div>

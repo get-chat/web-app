@@ -3,6 +3,7 @@ import React from 'react';
 import '../../../../styles/ChatTaggingEvent.css';
 import Moment from 'react-moment';
 import { Trans } from 'react-i18next';
+import SellIcon from '@mui/icons-material/Sell';
 
 function ChatTaggingEvent(props) {
 	const dateFormat = 'H:mm';
@@ -24,15 +25,12 @@ function ChatTaggingEvent(props) {
 							>
 								<span className="bold">%(username)s</span> has{' '}
 								{props.data.action} tag:{' '}
-								<span
-									className="bold"
+								<SellIcon
 									style={{
-										color: props.data.tag?.web_inbox_color,
+										fill: props.data.tag?.web_inbox_color,
 									}}
-								>
-									%(tag)s
-								</span>
-								.
+								/>
+								<span className="bold">%(tag)s</span>.
 							</Trans>
 						</div>
 					) : (
@@ -44,15 +42,12 @@ function ChatTaggingEvent(props) {
 								}}
 							>
 								A tag was {props.data.action}:{' '}
-								<span
-									className="bold"
+								<SellIcon
 									style={{
-										color: props.data.tag?.web_inbox_color,
+										fill: props.data.tag?.web_inbox_color,
 									}}
-								>
-									%(tag)s
-								</span>
-								.
+								/>
+								<span className="bold">%(tag)s</span>.
 							</Trans>
 						</div>
 					)}

@@ -70,6 +70,8 @@ import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import ChatTag from '../../ChatTag';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
+import SellIcon from '@mui/icons-material/Sell';
 
 function Sidebar(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -728,7 +730,18 @@ function Sidebar(props) {
 				/>
 			)}
 
-			<SearchBar onChange={(_keyword) => search(_keyword)} />
+			<div className={styles.searchContainer}>
+				<SearchBar onChange={(_keyword) => search(_keyword)} />
+				<Tooltip title={t('Filter chats by tag')}>
+					<IconButton
+						onClick={showChatTagsList}
+						size="small"
+						className={styles.tagFilterButton}
+					>
+						<SellIcon />
+					</IconButton>
+				</Tooltip>
+			</div>
 
 			{filterTag && (
 				<div className="sidebar__clearFilter">

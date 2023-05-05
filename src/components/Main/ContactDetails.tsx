@@ -15,13 +15,13 @@ import Moment from 'react-moment';
 import googleLogo from '../../assets/images/ic-google.png';
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
-import LabelIcon from '@mui/icons-material/Label';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch } from '@src/store/hooks';
+import SellIcon from '@mui/icons-material/Sell';
 
 function ContactDetails(props) {
 	const { t } = useTranslation();
@@ -117,7 +117,7 @@ function ContactDetails(props) {
 										key={index}
 										onClick={() => dispatch(setFilterTag(tag))}
 									>
-										<LabelIcon
+										<SellIcon
 											style={{
 												fill: tag.web_inbox_color,
 											}}

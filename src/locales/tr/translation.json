@@ -97,10 +97,10 @@
 	"Sticker": "Çıkartma",
 	"Template": "Taslak",
 	"Interactive": "İnteraktif",
-	"<0>%(username)s</0> has added tag: <4>%(tag)s</4>.": "",
-	"<0>%(username)s</0> has removed tag: <4>%(tag)s</4>.": "",
-	"A tag was added: <3>%(tag)s</3>.": "",
-	"A tag was removed: <3>%(tag)s</3>.": "",
+	"<0>%(username)s</0> has added tag: <6></6><7>%(tag)s</7>.": "<0>%(username)s</0> bir etiket ekledi: <6></6><7>%(tag)s</7>.",
+	"<0>%(username)s</0> has removed tag: <6></6><7>%(tag)s</7>.": "<0>%(username)s</0> bir etiketi sildi: <6></6><7>%(tag)s</7>.",
+	"A tag was added: <4></4><5>%(tag)s</5>.": "Bir etiket eklendi: <4></4><5>%(tag)s</5>.",
+	"A tag was removed: <4></4><5>%(tag)s</5>.": "A tag was silindi: <4></4><5>%(tag)s</5>.",
 	"Delete": "Sil",
 	"Bulk send": "Toplu gönder",
 	"Bulk Send": "Toplu Gönder",
@@ -224,5 +224,6 @@
 	"No results found.": "Sonuç bulunamadı.",
 	"Search quick actions": "Hızlı eylemleri ara",
 	"This chat will become inactive in %s": "Bu sohbet %s içinde inaktif olacak",
-	"Templates": "Taslaklar"
+	"Templates": "Taslaklar",
+	"Filter chats by tag": "Sohbetleri etikete göre filtrele"
 }

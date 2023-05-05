@@ -1,0 +1,22 @@
+.searchContainer {
+	display: flex;
+	flex-direction: row;
+	background-color: #fff;
+	padding-right: 15px;
+	align-items: center;
+}
+
+.searchContainer :global(.searchBar__search) {
+	flex: 1;
+}
+
+.tagFilterButton {
+	height: 35px;
+	width: 35px;
+	margin-left: -5px !important;
+}
+
+.tagFilterButton :global(.MuiSvgIcon-root) {
+	height: 20px !important;
+	width: 20px !important;
+}

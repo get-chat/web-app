@@ -302,17 +302,17 @@ msgstr "Taslak"
 msgid "Interactive"
 msgstr "İnteraktif"
 
-msgid "<0>%(username)s</0> has added tag: <4>%(tag)s</4>."
-msgstr ""
+msgid "<0>%(username)s</0> has added tag: <6></6><7>%(tag)s</7>."
+msgstr "<0>%(username)s</0> bir etiket ekledi: <6></6><7>%(tag)s</7>."
 
-msgid "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>."
-msgstr ""
+msgid "<0>%(username)s</0> has removed tag: <6></6><7>%(tag)s</7>."
+msgstr "<0>%(username)s</0> bir etiketi sildi: <6></6><7>%(tag)s</7>."
 
-msgid "A tag was added: <3>%(tag)s</3>."
-msgstr ""
+msgid "A tag was added: <4></4><5>%(tag)s</5>."
+msgstr "Bir etiket eklendi: <4></4><5>%(tag)s</5>."
 
-msgid "A tag was removed: <3>%(tag)s</3>."
-msgstr ""
+msgid "A tag was removed: <4></4><5>%(tag)s</5>."
+msgstr "A tag was silindi: <4></4><5>%(tag)s</5>."
 
 msgid "Delete"
 msgstr "Sil"
@@ -684,3 +684,6 @@ msgstr "Bu sohbet %s içinde inaktif olacak"
 
 msgid "Templates"
 msgstr "Taslaklar"
+
+msgid "Filter chats by tag"
+msgstr "Sohbetleri etikete göre filtrele"

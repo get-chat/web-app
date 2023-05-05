@@ -16,6 +16,7 @@ import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '@src/contexts/AppConfig';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import SellIcon from '@mui/icons-material/Sell';
 
 function ChatTags(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -133,7 +134,7 @@ function ChatTags(props) {
 				</DialogContentText>
 
 				{chatTags && (
-					<div className="chatTags__tags current">
+					<div className="chatTags__tags current mt-3">
 						<h5>{t('Current tags')}</h5>
 						{chatTags?.length > 0 ? (
 							<div>
@@ -142,6 +143,13 @@ function ChatTags(props) {
 										key={tag.id}
 										label={tag.name}
 										onDelete={() => onDeleteTag(tag)}
+										icon={
+											<SellIcon
+												style={{
+													fill: tag.web_inbox_color,
+												}}
+											/>
+										}
 									/>
 								))}
 							</div>
@@ -162,6 +170,13 @@ function ChatTags(props) {
 										label={tag.name}
 										clickable
 										onClick={() => onClickTag(tag)}
+										icon={
+											<SellIcon
+												style={{
+													fill: tag.web_inbox_color,
+												}}
+											/>
+										}
 									/>
 								))}
 							</div>

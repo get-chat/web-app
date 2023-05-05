@@ -302,16 +302,16 @@ msgstr ""
 msgid "Interactive"
 msgstr ""
 
-msgid "<0>%(username)s</0> has added tag: <4>%(tag)s</4>."
+msgid "<0>%(username)s</0> has added tag: <6></6><7>%(tag)s</7>."
 msgstr ""
 
-msgid "<0>%(username)s</0> has removed tag: <4>%(tag)s</4>."
+msgid "<0>%(username)s</0> has removed tag: <6></6><7>%(tag)s</7>."
 msgstr ""
 
-msgid "A tag was added: <3>%(tag)s</3>."
+msgid "A tag was added: <4></4><5>%(tag)s</5>."
 msgstr ""
 
-msgid "A tag was removed: <3>%(tag)s</3>."
+msgid "A tag was removed: <4></4><5>%(tag)s</5>."
 msgstr ""
 
 msgid "Delete"
@@ -712,4 +712,7 @@ msgid "This chat will become inactive in %s"
 msgstr ""
 
 msgid "Templates"
+msgstr ""
+
+msgid "Filter chats by tag"
 msgstr ""
