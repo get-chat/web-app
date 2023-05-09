@@ -847,21 +847,23 @@ const Sidebar: React.FC = ({
 			</div>
 
 			<div className="sidebar__results" ref={chatsContainer}>
-				{isSelectionModeEnabled && tags && (
-					<>
-						<h3>{t('Tags')}</h3>
-						<div>
-							{Object.entries(tags).map((tag) => (
-								<SelectableChatTag
-									key={tag[0]}
-									data={tag[1]}
-									selectedTags={selectedTags}
-									setSelectedTags={setSelectedTags}
-								/>
-							))}
-						</div>
-					</>
-				)}
+				{isSelectionModeEnabled &&
+					tags &&
+					bulkSendPayload?.type === ChatMessageModel.TYPE_TEMPLATE && (
+						<>
+							<h3>{t('Tags')}</h3>
+							<div>
+								{Object.entries(tags).map((tag) => (
+									<SelectableChatTag
+										key={tag[0]}
+										data={tag[1]}
+										selectedTags={selectedTags}
+										setSelectedTags={setSelectedTags}
+									/>
+								))}
+							</div>
+						</>
+					)}
 
 				{(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) && (
 					<h3>{t('Chats')}</h3>
