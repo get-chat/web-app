@@ -20,11 +20,13 @@ import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
-import { useAppDispatch } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
 
 function ContactDetails(props) {
 	const { t } = useTranslation();
+
+	const chats = useAppSelector((state) => state.chats.value);
 
 	const [chat, setChat] = useState({});
 
@@ -39,9 +41,10 @@ function ContactDetails(props) {
 		setChat(findChatByWaId());
 	}, []);
 
+	// TODO: Load chat via API instead as it might not be loaded yet in chat list
 	const findChatByWaId = () => {
 		const waId = props.contactData?.waId;
-		return props.chats[CHAT_KEY_PREFIX + waId];
+		return chats[CHAT_KEY_PREFIX + waId];
 	};
 
 	return (

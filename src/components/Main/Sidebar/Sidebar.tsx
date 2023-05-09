@@ -74,6 +74,7 @@ import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
 import { CancelTokenSource } from 'axios';
 import ChatMessageList from '@src/api/models/interfaces/ChatMessageList';
+import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -82,8 +83,6 @@ const Sidebar: React.FC = ({
 	hasFailedMessages,
 	lastSendAttemptAt,
 	isUploadingMedia,
-	chats,
-	setChats,
 	newMessages,
 	setNewMessages,
 	setProgress,
@@ -112,6 +111,7 @@ const Sidebar: React.FC = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
+	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTag = useAppSelector((state) => state.filterTag.value);
@@ -310,7 +310,7 @@ const Sidebar: React.FC = ({
 				if (changedAny) {
 					// Sorting
 					const sortedNextState = sortChats(nextState);
-					setChats({ ...sortedNextState });
+					dispatch(setChats({ ...sortedNextState }));
 				}
 
 				// Collect missing chats to load them periodically
@@ -489,15 +489,12 @@ const Sidebar: React.FC = ({
 
 				dispatch(setChatsCount(chatsResponse.count));
 
-				const preparedChats = chatsResponse.chats;
-
-				setChats((prevState) => {
-					if (replaceAll) {
-						return preparedChats;
-					} else {
-						return { ...prevState, ...preparedChats };
-					}
-				});
+				// Store
+				if (replaceAll) {
+					dispatch(setChats(chatsResponse.chats));
+				} else {
+					dispatch(addChats(chatsResponse.chats));
+				}
 
 				// In case param is undefined
 				isInitial = isInitial === true;
@@ -615,11 +612,11 @@ const Sidebar: React.FC = ({
 				}
 			}
 
-			setChats((prevState) => {
-				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
-				const sortedNextState = sortChats(prevState);
-				return { ...sortedNextState };
-			});
+			const prevState = { ...chats };
+			prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
+			const sortedNextState = sortChats(prevState);
+
+			dispatch(setChats({ ...sortedNextState }));
 		});
 	};
 
