@@ -73,7 +73,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
 import { CancelTokenSource } from 'axios';
-import ChatMessageList from '@src/api/models/interfaces/ChatMessageList';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 
 const Sidebar: React.FC = ({

@@ -3,7 +3,7 @@ import ContactModel from '@src/api/models/ContactModel';
 import PersonsResponse, {
 	PersonList,
 } from '@src/api/responses/PersonsResponse';
-import Recipient from '@src/api/models/interfaces/Recipient';
+import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse, CancelTokenSource } from 'axios';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';

@@ -1,8 +1,8 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
-import Recipient from '@src/api/models/interfaces/Recipient';
-import PhoneNumberWithDescription from '@src/api/models/interfaces/PhoneNumberWithDescription';
+import Recipient from '@src/interfaces/Recipient';
+import PhoneNumberWithDescription from '@src/interfaces/PhoneNumberWithDescription';
 
 class PersonModel implements Recipient {
 	public waId?: string;

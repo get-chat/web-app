@@ -2,7 +2,7 @@ import React from 'react';
 import useContacts from '@src/components/Contacts/useContacts';
 import SearchBar from '@src/components/SearchBar';
 import RecipientItem from '@src/components/RecipientItem';
-import Recipient from '@src/api/models/interfaces/Recipient';
+import Recipient from '@src/interfaces/Recipient';
 import { CircularProgress } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 

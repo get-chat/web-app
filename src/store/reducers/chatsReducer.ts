@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
-import ChatList from '@src/api/models/interfaces/ChatList';
+import ChatList from '@src/interfaces/ChatList';
 
 interface ChatsState {
 	value: ChatList;

@@ -1,5 +1,5 @@
 import ChatMessageModel from '../models/ChatMessageModel';
-import ChatMessageList from '@src/api/models/interfaces/ChatMessageList';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
 
 interface ResponseData {
 	results: [];

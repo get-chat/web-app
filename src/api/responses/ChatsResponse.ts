@@ -1,8 +1,8 @@
 import ChatModel from '../models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import NewMessageModel from '../models/NewMessageModel';
-import ChatList from '@src/api/models/interfaces/ChatList';
-import NewMessagesList from '@src/api/models/interfaces/NewMessagesList';
+import ChatList from '@src/interfaces/ChatList';
+import NewMessagesList from '@src/interfaces/NewMessagesList';
 
 class ChatsResponse {
 	public count: Number;

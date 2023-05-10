@@ -1,5 +1,5 @@
-import Recipient from '@src/api/models/interfaces/Recipient';
-import PhoneNumberWithDescription from '@src/api/models/interfaces/PhoneNumberWithDescription';
+import Recipient from '@src/interfaces/Recipient';
+import PhoneNumberWithDescription from '@src/interfaces/PhoneNumberWithDescription';
 
 class ContactModel implements Recipient {
 	public name?: string;

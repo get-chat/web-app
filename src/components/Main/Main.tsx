@@ -69,6 +69,7 @@ import {
 	setChatAssignment,
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -138,7 +139,7 @@ function Main() {
 	const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
 	const [selectedChats, setSelectedChats] = useState([]);
 	const [selectedTags, setSelectedTags] = useState([]);
-	const [bulkSendPayload, setBulkSendPayload] = useState();
+	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
 		useState(false);
@@ -1165,6 +1166,7 @@ function Main() {
 					open={isUploadRecipientsCSVVisible}
 					setOpen={setUploadRecipientsCSVVisible}
 					addBulkSendRecipients={addBulkSendRecipients}
+					bulkSendPayload={bulkSendPayload}
 				/>
 
 				<BulkSendTemplateViaCSV

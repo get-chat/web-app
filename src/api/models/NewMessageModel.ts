@@ -1,4 +1,4 @@
-import NewMessagesList from '@src/api/models/interfaces/NewMessagesList';
+import NewMessagesList from '@src/interfaces/NewMessagesList';
 
 class NewMessageModel {
 	public waId: string;
