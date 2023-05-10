@@ -147,7 +147,8 @@ function Sidebar(props) {
 
 	const showBulkSendTemplateViaCSVDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
-		props.setBulkSendTemplateViaCSVVisible(true);
+		//props.setBulkSendTemplateViaCSVVisible(true);
+		props.setBulkSendTemplateWithCallbackDialogVisible(true);
 	};
 
 	const showSendBulkVoiceMessageDialog = () => {
@@ -998,9 +999,9 @@ function Sidebar(props) {
 				<MenuItem onClick={showBulkSendTemplateDialog}>
 					{t('Bulk send a template')}
 				</MenuItem>
-				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
+				<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
 					{t('Bulk send template with CSV')}
-				</MenuItem>*/}
+				</MenuItem>
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
 					{t('Bulk send a voice message')}
 				</MenuItem>

@@ -17,6 +17,7 @@ const BulkSendTemplateDialog = ({
 	setSelectionModeEnabled,
 	isTemplatesFailed,
 	isLoadingTemplates,
+	sendCallback,
 }) => {
 	const { t } = useTranslation();
 
@@ -31,6 +32,8 @@ const BulkSendTemplateDialog = ({
 	const bulkSendMessage = (type, payload) => {
 		setSelectionModeEnabled(true);
 		setBulkSendPayload(payload);
+
+		sendCallback?.();
 	};
 
 	return (
