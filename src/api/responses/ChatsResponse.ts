@@ -1,13 +1,18 @@
-// @ts-nocheck
 import ChatModel from '../models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import NewMessageModel from '../models/NewMessageModel';
+import ChatList from '@src/interfaces/ChatList';
+import NewMessagesList from '@src/interfaces/NewMessagesList';
 
 class ChatsResponse {
-	constructor(data) {
-		let chats = {};
-		let newMessages = {};
-		data.results.forEach((chatData) => {
+	public count: Number;
+	public chats: ChatList;
+	public newMessages: NewMessagesList;
+
+	constructor(data: any) {
+		let chats: ChatList = {};
+		let newMessages: NewMessagesList = {};
+		data.results.forEach((chatData: any) => {
 			// Chat
 			const chat = new ChatModel(chatData);
 			chats[CHAT_KEY_PREFIX + chat.waId] = chat;

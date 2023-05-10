@@ -30,7 +30,11 @@ export class ChatMessageModel {
 		1018, 1023, 1024, 1026, 1031,
 	];
 
-	public id;
+	public id: string;
+	public waId: string;
+	public payload: any;
+	public isFromUs = false;
+	public senderName: string | undefined;
 	public timestamp = -1;
 
 	constructor(data) {

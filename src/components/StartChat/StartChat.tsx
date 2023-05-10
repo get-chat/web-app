@@ -14,7 +14,7 @@ import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import Recipient from '@src/api/models/interfaces/Recipient';
+import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse, CancelTokenSource } from 'axios';
 import Contacts from '@src/components/Contacts';
 

@@ -12,7 +12,6 @@ import LoadingScreen from './LoadingScreen';
 import Alert from '@mui/material/Alert';
 import 'url-search-params-polyfill';
 import {
-	CHAT_KEY_PREFIX,
 	CONTACTS_TEMP_LIMIT,
 	EVENT_TOPIC_BULK_MESSAGE_TASK,
 	EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
@@ -39,9 +38,7 @@ import ChatAssignment from './ChatAssignment';
 import ChatTags from './ChatTags';
 import ChatTagsList from './ChatTagsList';
 import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
-import SavedResponseClass from '../../SavedResponseClass';
 import moment from 'moment';
-import UserModel from '../../api/models/UserModel';
 import { clearUserSession } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
@@ -68,6 +65,11 @@ import UsersResponse from '@src/api/responses/UsersResponse';
 import { setUsers } from '@src/store/reducers/usersReducer';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
 import SavedResponsesResponse from '@src/api/responses/SavedResponsesResponse';
+import {
+	setChatAssignment,
+	setChatTagging,
+} from '@src/store/reducers/chatsReducer';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -77,6 +79,7 @@ function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
+	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
@@ -102,7 +105,6 @@ function Main() {
 
 	const [isUploadingMedia, setUploadingMedia] = useState(false);
 
-	const [chats, setChats] = useState({});
 	const [newMessages, setNewMessages] = useState({});
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
@@ -137,7 +139,7 @@ function Main() {
 	const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
 	const [selectedChats, setSelectedChats] = useState([]);
 	const [selectedTags, setSelectedTags] = useState([]);
-	const [bulkSendPayload, setBulkSendPayload] = useState();
+	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
 		useState(false);
@@ -548,37 +550,14 @@ function Main() {
 
 							PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
 
-							const chatKey = CHAT_KEY_PREFIX + prepared.waId;
-
 							// Update chats with delay not to break EventBus
 							setTimeout(function () {
-								setChats((prevState) => {
-									if (prevState.hasOwnProperty(chatKey)) {
-										const assignedToUserSet =
-											prepared.assignmentEvent.assigned_to_user_set;
-										if (assignedToUserSet) {
-											prevState[chatKey].assignedToUser = assignedToUserSet;
-										} else if (
-											prepared.assignmentEvent.assigned_to_user_was_cleared
-										) {
-											prevState[chatKey].assignedToUser = undefined;
-										}
-
-										const assignedGroupSet =
-											prepared.assignmentEvent.assigned_group_set;
-										if (assignedGroupSet) {
-											prevState[chatKey].assignedGroup = assignedGroupSet;
-										} else if (
-											prepared.assignmentEvent.assigned_group_was_cleared
-										) {
-											prevState[chatKey].assignedGroup = undefined;
-										}
-
-										return { ...prevState };
-									}
-
-									return prevState;
-								});
+								dispatch(
+									setChatAssignment({
+										waId: prepared.waId,
+										assignmentEvent: prepared.assignmentEvent,
+									})
+								);
 							}, 100);
 						}
 
@@ -592,27 +571,15 @@ function Main() {
 
 							PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
 
-							const chatKey = CHAT_KEY_PREFIX + prepared.waId;
-
 							// Update chats with delay not to break EventBus
 							setTimeout(function () {
-								setChats((prevState) => {
-									if (prevState.hasOwnProperty(chatKey)) {
-										if (chatTagging.action === 'added') {
-											prevState[chatKey].tags.push(prepared.taggingEvent.tag);
-										} else if (chatTagging.action === 'removed') {
-											prevState[chatKey].tags = prevState[chatKey].tags.filter(
-												(tag) => {
-													return tag.id !== prepared.taggingEvent.tag.id;
-												}
-											);
-										}
-
-										return { ...prevState };
-									}
-
-									return prevState;
-								});
+								// Update chats
+								dispatch(
+									setChatTagging({
+										waId: prepared.waId,
+										taggingEvent: prepared.taggingEvent,
+									})
+								);
 							}, 100);
 						}
 
@@ -1047,8 +1014,6 @@ function Main() {
 						hasFailedMessages={hasFailedMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
 						isUploadingMedia={isUploadingMedia}
-						chats={chats}
-						setChats={setChats}
 						newMessages={newMessages}
 						setNewMessages={setNewMessages}
 						setProgress={setProgress}
@@ -1097,7 +1062,6 @@ function Main() {
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}
-						chats={chats}
 						isChatOnly={isChatOnly}
 						setChatAssignmentVisible={setChatAssignmentVisible}
 						setChatTagsVisible={setChatTagsVisible}
@@ -1119,7 +1083,6 @@ function Main() {
 						contactData={chosenContact}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
-						chats={chats}
 					/>
 				)}
 
@@ -1128,7 +1091,6 @@ function Main() {
 						waId={waId}
 						open={isChatAssignmentVisible}
 						setOpen={setChatAssignmentVisible}
-						setChats={setChats}
 					/>
 				)}
 
@@ -1137,7 +1099,6 @@ function Main() {
 						waId={waId}
 						open={isChatTagsVisible}
 						setOpen={setChatTagsVisible}
-						setChats={setChats}
 					/>
 				)}
 
@@ -1205,6 +1166,7 @@ function Main() {
 					open={isUploadRecipientsCSVVisible}
 					setOpen={setUploadRecipientsCSVVisible}
 					addBulkSendRecipients={addBulkSendRecipients}
+					bulkSendPayload={bulkSendPayload}
 				/>
 
 				<BulkSendTemplateViaCSV

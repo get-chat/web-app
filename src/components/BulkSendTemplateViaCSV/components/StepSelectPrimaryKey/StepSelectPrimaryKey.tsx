@@ -26,6 +26,7 @@ const StepSelectPrimaryKey = ({
 	setPrimaryKeyColumn,
 	primaryKeyType,
 	setPrimaryKeyType,
+	isTagsDisabled,
 }) => {
 	const tags = useAppSelector((state) => state.tags.value);
 
@@ -99,11 +100,13 @@ const StepSelectPrimaryKey = ({
 						control={<Radio />}
 						label={t('Phone numbers')}
 					/>
-					<FormControlLabel
-						value={PRIMARY_KEY_TYPE_TAG}
-						control={<Radio />}
-						label={t('Tags')}
-					/>
+					{!isTagsDisabled && (
+						<FormControlLabel
+							value={PRIMARY_KEY_TYPE_TAG}
+							control={<Radio />}
+							label={t('Tags')}
+						/>
+					)}
 				</RadioGroup>
 			</FormControl>
 

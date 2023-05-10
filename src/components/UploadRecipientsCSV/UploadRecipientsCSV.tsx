@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -19,28 +18,39 @@ import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreview
 import StepUploadCSV from './components/StepUploadCSV';
 import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
 import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
-import { useAppSelector } from '@src/store/hooks';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 
-const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {
+interface Props {
+	open: boolean;
+	setOpen: (isOpen: boolean) => void;
+	addBulkSendRecipients: (waIds: string[], tags: string[]) => void;
+	bulkSendPayload?: BulkSendPayload;
+}
+
+const UploadRecipientsCSV: React.FC<Props> = ({
+	open,
+	setOpen,
+	addBulkSendRecipients,
+	bulkSendPayload,
+}) => {
 	const STEP_UPLOAD_CSV = 0;
 	const STEP_PREVIEW_CSV_DATA = 1;
 	const STEP_SELECT_PRIMARY_KEY = 2;
 
-	const tags = useAppSelector((state) => state.tags.value);
-
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
-	const [csvHeader, setCsvHeader] = useState();
-	const [csvData, setCsvData] = useState();
-	const [csvError, setCsvError] = useState();
+	const [csvHeader, setCsvHeader] = useState<{}>();
+	const [csvData, setCsvData] = useState<{}[]>();
+	const [csvError, setCsvError] = useState<string>();
 	const [isExceededLimits, setExceededLimits] = useState(false);
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');
 	const [primaryKeyType, setPrimaryKeyType] = useState('');
 
 	const { t } = useTranslation();
 
-	const csvFileInput = useRef();
+	const csvFileInput = useRef<HTMLInputElement>();
 
-	const handleCSV = (file) => {
+	const handleCSV = (file: any) => {
 		if (!file) return;
 
 		setCsvError(undefined);
@@ -94,9 +104,9 @@ const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {
 
 	const complete = () => {
 		// Preparing recipients
-		const newWaIds = [];
-		const newTags = [];
-		csvData?.forEach((dataItem) => {
+		const newWaIds: string[] = [];
+		const newTags: string[] = [];
+		csvData?.forEach((dataItem: { [key: string]: string }) => {
 			let recipient = dataItem[primaryKeyColumn];
 
 			// Formatting if recipients are phone numbers
@@ -117,7 +127,7 @@ const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {
 	const handleNext = () => {
 		switch (activeStep) {
 			case STEP_UPLOAD_CSV:
-				csvFileInput.current.click();
+				csvFileInput.current?.click();
 				break;
 			case STEP_SELECT_PRIMARY_KEY:
 				complete();
@@ -191,6 +201,9 @@ const UploadRecipientsCSV = ({ open, setOpen, addBulkSendRecipients }) => {
 						setPrimaryKeyColumn={setPrimaryKeyColumn}
 						primaryKeyType={primaryKeyType}
 						setPrimaryKeyType={setPrimaryKeyType}
+						isTagsDisabled={
+							bulkSendPayload?.type !== ChatMessageModel.TYPE_TEMPLATE
+						}
 					/>
 				)}
 			</DialogContent>

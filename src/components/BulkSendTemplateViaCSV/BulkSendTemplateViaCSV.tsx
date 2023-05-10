@@ -155,7 +155,7 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, finishBulkSendMessage }) => {
 		// Preparing recipients
 		const recipients = [];
 		const format = [];
-		csvData?.forEach((dataItem) => {
+		csvData?.forEach((dataItem: { [key: string]: string }) => {
 			let recipient = dataItem[primaryKeyColumn];
 
 			// Formatting if recipients are phone numbers

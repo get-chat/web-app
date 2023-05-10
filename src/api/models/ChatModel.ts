@@ -4,6 +4,11 @@ import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 
 class ChatModel {
+	public waId: string;
+	public tags: any[];
+	public assignedToUser: any;
+	public assignedGroup: any;
+
 	constructor(data) {
 		const contact = data.contact;
 		const lastMessage = data.last_message;

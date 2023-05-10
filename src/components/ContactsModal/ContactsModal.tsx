@@ -12,7 +12,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { AppConfig } from '@src/contexts/AppConfig';
 import Contacts from '@src/components/Contacts';
-import Recipient from '@src/api/models/interfaces/Recipient';
+import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse } from 'axios';
 
 interface DialogHeaderProps {
