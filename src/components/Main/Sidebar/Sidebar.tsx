@@ -103,7 +103,7 @@ const Sidebar: React.FC = ({
 	setLoadingNow,
 	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
-	setBulkSendTemplateViaCSVVisible,
+	setBulkSendTemplateWithCallbackDialogVisible,
 	setInitialResourceFailed,
 	setSendBulkVoiceMessageDialogVisible,
 }) => {
@@ -187,7 +187,7 @@ const Sidebar: React.FC = ({
 	const showBulkSendTemplateViaCSVDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
 		//props.setBulkSendTemplateViaCSVVisible(true);
-		props.setBulkSendTemplateWithCallbackDialogVisible(true);
+		setBulkSendTemplateWithCallbackDialogVisible(true);
 	};
 
 	const showSendBulkVoiceMessageDialog = () => {
