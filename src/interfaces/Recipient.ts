@@ -1,4 +1,4 @@
-import PhoneNumberWithDescription from '@src/api/models/interfaces/PhoneNumberWithDescription';
+import PhoneNumberWithDescription from '@src/interfaces/PhoneNumberWithDescription';
 
 interface Recipient {
 	name?: string;

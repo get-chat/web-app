@@ -20,11 +20,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
-import { useAppDispatch } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
 
-function ContactDetails(props) {
+const ContactDetails: React.FC = ({
+	contactData,
+	contactProvidersData,
+	retrieveContactData,
+}) => {
 	const { t } = useTranslation();
+
+	const chats = useAppSelector((state) => state.chats.value);
 
 	const [chat, setChat] = useState({});
 
@@ -35,13 +41,14 @@ function ContactDetails(props) {
 	};
 
 	useEffect(() => {
-		props.retrieveContactData(props.contactData?.waId);
+		retrieveContactData(contactData?.waId);
 		setChat(findChatByWaId());
 	}, []);
 
+	// TODO: Load chat via API instead as it might not be loaded yet in chat list
 	const findChatByWaId = () => {
-		const waId = props.contactData?.waId;
-		return props.chats[CHAT_KEY_PREFIX + waId];
+		const waId = contactData?.waId;
+		return chats[CHAT_KEY_PREFIX + waId];
 	};
 
 	return (
@@ -54,44 +61,44 @@ function ContactDetails(props) {
 				<h3>{t('Contact Details')}</h3>
 			</div>
 
-			{props.contactData && (
+			{contactData && (
 				<div className="contactDetails__body">
 					<div className="contactDetails__body__section">
 						<div className="contactDetails__body__avatarContainer">
 							<CustomAvatar
 								src={extractAvatarFromContactProviderData(
-									props.contactProvidersData[props.contactData.waId],
+									contactProvidersData[contactData.waId],
 									true
 								)}
 								className="contactDetails__body__avatar"
-								generateBgColorBy={props.contactData.name}
+								generateBgColorBy={contactData.name}
 							>
-								{props.contactData.initials}
+								{contactData.initials}
 							</CustomAvatar>
 						</div>
 
 						<PrintMessage
 							as="h3"
 							message={
-								props.contactProvidersData[props.contactData.waId]?.[0]?.name ??
-								props.contactData.name
+								contactProvidersData[contactData.waId]?.[0]?.name ??
+								contactData.name
 							}
 						/>
 
-						{props.contactProvidersData[props.contactData.waId]?.[0]
-							?.companies?.[0] !== undefined && (
+						{contactProvidersData[contactData.waId]?.[0]?.companies?.[0] !==
+							undefined && (
 							<div className="contactDetails__body__job">
 								<span>
 									{
-										props.contactProvidersData[props.contactData.waId]?.[0]
-											?.companies?.[0]?.job_title
+										contactProvidersData[contactData.waId]?.[0]?.companies?.[0]
+											?.job_title
 									}
 								</span>{' '}
 								at{' '}
 								<span>
 									{
-										props.contactProvidersData[props.contactData.waId]?.[0]
-											?.companies?.[0]?.company_name
+										contactProvidersData[contactData.waId]?.[0]?.companies?.[0]
+											?.company_name
 									}
 								</span>
 							</div>
@@ -99,10 +106,10 @@ function ContactDetails(props) {
 
 						<div className="contactDetails__body__lastMessageAt">
 							Last message:{' '}
-							{props.contactData.lastMessageTimestamp &&
-							props.contactData.lastMessageTimestamp > 0 ? (
+							{contactData.lastMessageTimestamp &&
+							contactData.lastMessageTimestamp > 0 ? (
 								<Moment unix calendar={CALENDAR_NORMAL}>
-									{props.contactData.lastMessageTimestamp}
+									{contactData.lastMessageTimestamp}
 								</Moment>
 							) : (
 								t('Never')
@@ -165,12 +172,10 @@ function ContactDetails(props) {
 						<div className="contactDetails__body__section__title">
 							{t('WhatsApp Phone Number')}
 						</div>
-						<a href={'tel:+' + props.contactData.waId}>
-							{addPlus(props.contactData.waId)}
-						</a>
+						<a href={'tel:+' + contactData.waId}>{addPlus(contactData.waId)}</a>
 					</div>
 
-					{props.contactProvidersData[props.contactData.waId]?.map(
+					{contactProvidersData[contactData.waId]?.map(
 						(providerData, index) => (
 							<div
 								className="contactDetails__body__section"
@@ -246,6 +251,6 @@ function ContactDetails(props) {
 			)}
 		</div>
 	);
-}
+};
 
 export default ContactDetails;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Recipient from '@src/api/models/interfaces/Recipient';
+import Recipient from '@src/interfaces/Recipient';
 import styles from './RecipientItem.module.css';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { Checkbox, ListItemButton } from '@mui/material';

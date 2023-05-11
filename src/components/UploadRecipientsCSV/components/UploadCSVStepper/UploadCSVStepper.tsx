@@ -13,7 +13,7 @@ const UploadCSVStepper = ({ activeStep }) => {
 	];
 
 	return (
-		<Stepper activeStep={activeStep} alternativeLabel>
+		<Stepper activeStep={activeStep} className="mb-3" alternativeLabel>
 			{steps.map((label) => (
 				<Step key={label}>
 					<StepLabel>{label}</StepLabel>

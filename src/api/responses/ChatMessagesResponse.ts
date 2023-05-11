@@ -1,13 +1,10 @@
 import ChatMessageModel from '../models/ChatMessageModel';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
 
 interface ResponseData {
 	results: [];
 	count: Number;
 	next: string | null;
-}
-
-interface ChatMessageList {
-	[key: string]: ChatMessageModel;
 }
 
 class ChatMessagesResponse {

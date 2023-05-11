@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
 	Button,
@@ -72,11 +72,46 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
+import { CancelTokenSource } from 'axios';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
+import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 
-function Sidebar(props) {
+const Sidebar: React.FC = ({
+	pendingMessages,
+	setPendingMessages,
+	isSendingPendingMessages,
+	hasFailedMessages,
+	lastSendAttemptAt,
+	isUploadingMedia,
+	newMessages,
+	setNewMessages,
+	setProgress,
+	displayNotification,
+	isBlurred,
+	contactProvidersData,
+	retrieveContactData,
+	isChatOnly,
+	setChatTagsListVisible,
+	isSelectionModeEnabled,
+	setSelectionModeEnabled,
+	bulkSendPayload,
+	selectedChats,
+	setSelectedChats,
+	selectedTags,
+	setSelectedTags,
+	finishBulkSendMessage,
+	setLoadingNow,
+	setUploadRecipientsCSVVisible,
+	setBulkSendTemplateDialogVisible,
+	setBulkSendTemplateViaCSVVisible,
+	setInitialResourceFailed,
+	setSendBulkVoiceMessageDialogVisible,
+}) => {
+	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfig);
 
+	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTag = useAppSelector((state) => state.filterTag.value);
@@ -86,8 +121,12 @@ function Sidebar(props) {
 
 	const { waId } = useParams();
 	const chatsContainer = useRef(null);
-	const [anchorEl, setAnchorEl] = useState(null);
-	const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState(null);
+	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
+		null
+	);
+	const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState<
+		(EventTarget & Element) | null
+	>(null);
 	const [keyword, setKeyword] = useState('');
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState({});
@@ -101,7 +140,7 @@ function Sidebar(props) {
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
 
-	const [missingChats, setMissingChats] = useState([]);
+	const [missingChats, setMissingChats] = useState<string[]>([]);
 
 	const timer = useRef<NodeJS.Timeout>();
 
@@ -124,7 +163,7 @@ function Sidebar(props) {
 		window.location.reload();
 	};
 
-	const displayMenu = (event) => {
+	const displayMenu = (event: MouseEvent) => {
 		setAnchorEl(event.currentTarget);
 	};
 
@@ -132,7 +171,7 @@ function Sidebar(props) {
 		setAnchorEl(null);
 	};
 
-	const displayBulkMessageMenu = (event) => {
+	const displayBulkMessageMenu = (event: MouseEvent) => {
 		setBulkMessageMenuAnchorEl(event.currentTarget);
 	};
 
@@ -142,7 +181,7 @@ function Sidebar(props) {
 
 	const showBulkSendTemplateDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
-		props.setBulkSendTemplateDialogVisible(true);
+		setBulkSendTemplateDialogVisible(true);
 	};
 
 	const showBulkSendTemplateViaCSVDialog = () => {
@@ -153,10 +192,10 @@ function Sidebar(props) {
 
 	const showSendBulkVoiceMessageDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
-		props.setSendBulkVoiceMessageDialogVisible(true);
+		setSendBulkVoiceMessageDialogVisible(true);
 	};
 
-	let cancelTokenSourceRef = useRef();
+	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
 	useEffect(() => {
 		// Generate a token
@@ -185,11 +224,11 @@ function Sidebar(props) {
 
 	useEffect(() => {
 		// New chatMessages
-		const onNewMessages = function (msg, data) {
+		const onNewMessages = function (msg: string, data: ChatMessageList) {
 			// We don't need to update if chats are filtered
 			if (keyword.trim().length === 0) {
-				let newMissingChats = [];
-				const nextState = { ...props.chats };
+				let newMissingChats: string[] = [];
+				const nextState = { ...chats };
 				let changedAny = false;
 
 				Object.entries(data).forEach((message) => {
@@ -242,10 +281,10 @@ function Sidebar(props) {
 						!chatMessage.isFromUs &&
 						(waId !== chatMessageWaId ||
 							document.visibilityState === 'hidden' ||
-							props.isBlurred)
+							isBlurred)
 					) {
-						const preparedNewMessages = props.newMessages;
-						if (props.newMessages[chatMessageWaId] === undefined) {
+						const preparedNewMessages = newMessages;
+						if (newMessages[chatMessageWaId] === undefined) {
 							preparedNewMessages[chatMessageWaId] = new NewMessageModel(
 								chatMessageWaId,
 								0
@@ -255,11 +294,11 @@ function Sidebar(props) {
 						// Increase number of new chatMessages
 						preparedNewMessages[chatMessageWaId].newMessages++;
 
-						props.setNewMessages({ ...preparedNewMessages });
+						setNewMessages({ ...preparedNewMessages });
 
 						// Display a notification
 						if (!chatMessage.isFromUs) {
-							props.displayNotification(
+							displayNotification(
 								t('New messages'),
 								t('You have new messages!'),
 								chatMessageWaId
@@ -272,7 +311,7 @@ function Sidebar(props) {
 				if (changedAny) {
 					// Sorting
 					const sortedNextState = sortChats(nextState);
-					props.setChats({ ...sortedNextState });
+					dispatch(setChats({ ...sortedNextState }));
 				}
 
 				// Collect missing chats to load them periodically
@@ -295,19 +334,12 @@ function Sidebar(props) {
 		return () => {
 			PubSub.unsubscribe(newChatMessagesEventToken);
 		};
-	}, [
-		waId,
-		props.isBlurred,
-		props.chats,
-		props.newMessages,
-		missingChats,
-		keyword,
-	]);
+	}, [waId, isBlurred, chats, newMessages, missingChats, keyword]);
 
 	useEffect(() => {
-		const onChatAssignment = function (msg, data) {
-			let newMissingChats = [];
-			const nextState = { ...props.chats };
+		const onChatAssignment = function (msg: string, data: any) {
+			let newMissingChats: string[] = [];
+			const nextState = { ...chats };
 
 			Object.entries(data).forEach((message) => {
 				//const msgId = message[0];
@@ -350,7 +382,7 @@ function Sidebar(props) {
 		return () => {
 			PubSub.unsubscribe(chatAssignmentEventToken);
 		};
-	}, [props.chats, missingChats]);
+	}, [chats, missingChats]);
 
 	useEffect(() => {
 		let intervalId = setInterval(function () {
@@ -394,7 +426,7 @@ function Sidebar(props) {
 						listChats(
 							cancelTokenSourceRef.current,
 							false,
-							getObjLength(props.chats),
+							getObjLength(chats),
 							false
 						);
 					}
@@ -408,17 +440,17 @@ function Sidebar(props) {
 			clearTimeout(debounceTimer);
 			chatsContainerCopy.removeEventListener('scroll', handleScroll);
 		};
-	}, [props.chats, keyword, filterTag]);
+	}, [chats, keyword, filterTag]);
 
 	const search = async (_keyword) => {
 		setKeyword(_keyword);
 	};
 
 	useEffect(() => {
-		if (props.isSelectionModeEnabled) {
+		if (isSelectionModeEnabled) {
 			setContactsVisible(false);
 		}
-	}, [props.isSelectionModeEnabled]);
+	}, [isSelectionModeEnabled]);
 
 	const sortChats = (state) => {
 		let sortedState = Object.entries(state).sort(
@@ -431,7 +463,7 @@ function Sidebar(props) {
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
-			props.setLoadingNow('Chats');
+			setLoadingNow('Chats');
 		}
 
 		// Reset chats count
@@ -458,21 +490,18 @@ function Sidebar(props) {
 
 				dispatch(setChatsCount(chatsResponse.count));
 
-				const preparedChats = chatsResponse.chats;
-
-				props.setChats((prevState) => {
-					if (replaceAll) {
-						return preparedChats;
-					} else {
-						return { ...prevState, ...preparedChats };
-					}
-				});
+				// Store
+				if (replaceAll) {
+					dispatch(setChats(chatsResponse.chats));
+				} else {
+					dispatch(addChats(chatsResponse.chats));
+				}
 
 				// In case param is undefined
 				isInitial = isInitial === true;
 
 				if (isInitial) {
-					props.setProgress(100);
+					setProgress(100);
 				}
 
 				const willNotify = !isInitial;
@@ -489,7 +518,7 @@ function Sidebar(props) {
 					let hasAnyNewMessages = false;
 					let chatMessageWaId;
 
-					props.setNewMessages((prevState) => {
+					setNewMessages((prevState) => {
 						Object.entries(preparedNewMessages).forEach((newMsg) => {
 							const newMsgWaId = newMsg[0];
 							const number = newMsg[1].newMessages;
@@ -523,14 +552,14 @@ function Sidebar(props) {
 
 					// Display a notification
 					if (hasAnyNewMessages) {
-						props.displayNotification(
+						displayNotification(
 							t('New messages'),
 							t('You have new messages!'),
 							chatMessageWaId
 						);
 					}
 				} else {
-					props.setNewMessages((prevState) => {
+					setNewMessages((prevState) => {
 						return { ...prevState, ...preparedNewMessages };
 					});
 				}
@@ -545,7 +574,7 @@ function Sidebar(props) {
 				setLoadingChats(false);
 
 				if (isInitial) {
-					props.setInitialResourceFailed(true);
+					setInitialResourceFailed(true);
 				}
 			},
 			navigate
@@ -584,11 +613,11 @@ function Sidebar(props) {
 				}
 			}
 
-			props.setChats((prevState) => {
-				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
-				const sortedNextState = sortChats(prevState);
-				return { ...sortedNextState };
-			});
+			const prevState = { ...chats };
+			prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
+			const sortedNextState = sortChats(prevState);
+
+			dispatch(setChats({ ...sortedNextState }));
 		});
 	};
 
@@ -647,7 +676,7 @@ function Sidebar(props) {
 
 	const showChatTagsList = () => {
 		setAnchorEl(null);
-		props.setChatTagsListVisible(true);
+		setChatTagsListVisible(true);
 	};
 
 	const displayContacts = () => {
@@ -663,14 +692,14 @@ function Sidebar(props) {
 	};
 
 	const cancelSelection = () => {
-		props.setSelectionModeEnabled(false);
-		props.setSelectedChats([]);
-		props.setSelectedTags([]);
+		setSelectionModeEnabled(false);
+		setSelectedChats([]);
+		setSelectedTags([]);
 	};
 
-	const finishBulkSendMessage = () => {
-		props.setSelectionModeEnabled(false);
-		props.finishBulkSendMessage();
+	const handleFinishBulkSendMessage = () => {
+		setSelectionModeEnabled(false);
+		finishBulkSendMessage();
 	};
 
 	const displayNotifications = () => {
@@ -678,7 +707,7 @@ function Sidebar(props) {
 	};
 
 	return (
-		<div className={'sidebar' + (props.isChatOnly ? ' hidden' : '')}>
+		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
 				<CustomAvatar
 					src={currentUser?.profile?.avatar}
@@ -720,14 +749,14 @@ function Sidebar(props) {
 				</div>
 			</div>
 
-			{props.isSelectionModeEnabled && (
+			{isSelectionModeEnabled && (
 				<BulkSendActions
-					selectedChats={props.selectedChats}
-					setSelectedChats={props.setSelectedChats}
-					selectedTags={props.selectedTags}
+					selectedChats={selectedChats}
+					setSelectedChats={setSelectedChats}
+					selectedTags={selectedTags}
 					cancelSelection={cancelSelection}
-					finishBulkSendMessage={finishBulkSendMessage}
-					setUploadRecipientsCSVVisible={props.setUploadRecipientsCSVVisible}
+					finishBulkSendMessage={handleFinishBulkSendMessage}
+					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 				/>
 			)}
 
@@ -816,26 +845,30 @@ function Sidebar(props) {
 			</div>
 
 			<div className="sidebar__results" ref={chatsContainer}>
-				{props.isSelectionModeEnabled && tags && <h3>{t('Tags')}</h3>}
+				{isSelectionModeEnabled &&
+					tags &&
+					bulkSendPayload?.type === ChatMessageModel.TYPE_TEMPLATE && (
+						<>
+							<h3>{t('Tags')}</h3>
+							<div>
+								{Object.entries(tags).map((tag) => (
+									<SelectableChatTag
+										key={tag[0]}
+										data={tag[1]}
+										selectedTags={selectedTags}
+										setSelectedTags={setSelectedTags}
+									/>
+								))}
+							</div>
+						</>
+					)}
 
-				{props.isSelectionModeEnabled && tags && (
-					<div>
-						{Object.entries(tags).map((tag) => (
-							<SelectableChatTag
-								key={tag[0]}
-								data={tag[1]}
-								selectedTags={props.selectedTags}
-								setSelectedTags={props.setSelectedTags}
-							/>
-						))}
-					</div>
+				{(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) && (
+					<h3>{t('Chats')}</h3>
 				)}
 
-				{(searchedKeyword.trim().length > 0 ||
-					props.isSelectionModeEnabled) && <h3>{t('Chats')}</h3>}
-
 				<div className="sidebar__results__chats">
-					{Object.entries(props.chats)
+					{Object.entries(chats)
 						.filter((chat) => {
 							// Filter by helper method
 							return filterChat(currentUser, tabCase, chat[1]);
@@ -844,20 +877,20 @@ function Sidebar(props) {
 							<ChatListItem
 								key={chat[0]}
 								chatData={chat[1]}
-								pendingMessages={props.pendingMessages}
-								newMessages={props.newMessages}
+								pendingMessages={pendingMessages}
+								newMessages={newMessages}
 								keyword={searchedKeyword}
-								contactProvidersData={props.contactProvidersData}
-								retrieveContactData={props.retrieveContactData}
+								contactProvidersData={contactProvidersData}
+								retrieveContactData={retrieveContactData}
 								tabCase={tabCase}
-								bulkSendPayload={props.bulkSendPayload}
-								isSelectionModeEnabled={props.isSelectionModeEnabled}
-								selectedChats={props.selectedChats}
-								setSelectedChats={props.setSelectedChats}
+								bulkSendPayload={bulkSendPayload}
+								isSelectionModeEnabled={isSelectionModeEnabled}
+								selectedChats={selectedChats}
+								setSelectedChats={setSelectedChats}
 							/>
 						))}
 
-					{Object.keys(props.chats).length === 0 && (
+					{Object.keys(chats).length === 0 && (
 						<span className="sidebar__results__chats__noResult">
 							{searchedKeyword.trim().length > 0 ? (
 								<span>
@@ -932,16 +965,16 @@ function Sidebar(props) {
 				/>
 			)}
 
-			{props.isUploadingMedia && !isMobileOnly && <UploadMediaIndicator />}
+			{isUploadingMedia && !isMobileOnly && <UploadMediaIndicator />}
 
-			{props.hasFailedMessages && (
+			{hasFailedMessages && (
 				<RetryFailedMessages
-					pendingMessages={props.pendingMessages}
-					setPendingMessages={props.setPendingMessages}
-					isSendingPendingMessages={props.isSendingPendingMessages}
-					lastSendAttemptAt={props.lastSendAttemptAt}
-					contactProvidersData={props.contactProvidersData}
-					chats={props.chats}
+					pendingMessages={pendingMessages}
+					setPendingMessages={setPendingMessages}
+					isSendingPendingMessages={isSendingPendingMessages}
+					lastSendAttemptAt={lastSendAttemptAt}
+					contactProvidersData={contactProvidersData}
+					chats={chats}
 				/>
 			)}
 
@@ -1017,6 +1050,6 @@ function Sidebar(props) {
 			)}
 		</div>
 	);
-}
+};
 
 export default Sidebar;
