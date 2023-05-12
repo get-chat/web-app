@@ -104,6 +104,7 @@ const Sidebar: React.FC = ({
 	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
 	setBulkSendTemplateViaCSVVisible,
+	setBulkSendTemplateWithCallbackDialogVisible,
 	setInitialResourceFailed,
 	setSendBulkVoiceMessageDialogVisible,
 }) => {
@@ -186,7 +187,8 @@ const Sidebar: React.FC = ({
 
 	const showBulkSendTemplateViaCSVDialog = () => {
 		setBulkMessageMenuAnchorEl(null);
-		setBulkSendTemplateViaCSVVisible(true);
+		//setBulkSendTemplateViaCSVVisible(true);
+		setBulkSendTemplateWithCallbackDialogVisible(true);
 	};
 
 	const showSendBulkVoiceMessageDialog = () => {
@@ -1031,9 +1033,9 @@ const Sidebar: React.FC = ({
 				<MenuItem onClick={showBulkSendTemplateDialog}>
 					{t('Bulk send a template')}
 				</MenuItem>
-				{/*<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
+				<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
 					{t('Bulk send template with CSV')}
-				</MenuItem>*/}
+				</MenuItem>
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
 					{t('Bulk send a voice message')}
 				</MenuItem>
