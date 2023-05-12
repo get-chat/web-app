@@ -1038,19 +1038,15 @@ export default function Chat(props) {
 					true
 				);
 
-				const count = chatMessagesResponse.count;
-				//const previous = response.data.previous;
-				const next = chatMessagesResponse.next;
-
 				if (sinceTime && isInitialWithSinceTime === true) {
-					if (next) {
+					if (chatMessagesResponse.next) {
 						/*count > limit*/
 						setAtBottom(false);
 						listMessages(
 							false,
 							callback,
 							beforeTime,
-							count - MESSAGES_PER_PAGE,
+							chatMessagesResponse.count - MESSAGES_PER_PAGE,
 							sinceTime,
 							false,
 							replaceAll
