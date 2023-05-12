@@ -88,6 +88,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignment from '@src/hooks/useChatAssignment';
+import useChat from '@src/components/Main/Chat/useChat';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -100,6 +101,10 @@ export default function Chat(props) {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
+
+	const { messages, setMessages, isTimestampsSame } = useChat({
+		MESSAGES_PER_PAGE,
+	});
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const users = useAppSelector((state) => state.users.value);
@@ -114,7 +119,6 @@ export default function Chat(props) {
 		useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 	const [person, setPerson] = useState();
-	const [messages, setMessages] = useState({});
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
@@ -1022,6 +1026,13 @@ export default function Chat(props) {
 			setHasOlderMessagesToLoad(true);
 		}
 
+		// If loading older messages
+		if (beforeTime && getObjLength(messages) > 0) {
+			console.log(isTimestampsSame());
+		}
+
+		if (beforeTime) beforeTime -= 1;
+
 		apiService.listMessagesCall(
 			waId,
 			undefined,
@@ -1056,6 +1067,13 @@ export default function Chat(props) {
 				}
 
 				const preparedMessages = chatMessagesResponse.messages;
+
+				console.log(response.data.results);
+				console.log(chatMessagesResponse);
+
+				Object.values(preparedMessages).forEach((item) => {
+					console.log('zort');
+				});
 
 				const lastMessage = getLastObject(preparedMessages);
 
