@@ -144,6 +144,11 @@ function Main() {
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
 		useState(false);
 
+	const [
+		isBulkSendTemplateWithCallbackDialogVisible,
+		setBulkSendTemplateWithCallbackDialogVisible,
+	] = useState(false);
+
 	const [isUploadRecipientsCSVVisible, setUploadRecipientsCSVVisible] =
 		useState(false);
 
@@ -1034,6 +1039,9 @@ function Main() {
 						setLoadingNow={setLoadingNow}
 						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
+						setBulkSendTemplateWithCallbackDialogVisible={
+							setBulkSendTemplateWithCallbackDialogVisible
+						}
 						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
 						setInitialResourceFailed={setInitialResourceFailed}
 						setSendBulkVoiceMessageDialogVisible={
@@ -1160,6 +1168,16 @@ function Main() {
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
 					setSelectionModeEnabled={setSelectionModeEnabled}
+				/>
+
+				<BulkSendTemplateDialog
+					open={isBulkSendTemplateWithCallbackDialogVisible}
+					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
+					setBulkSendPayload={setBulkSendPayload}
+					setSelectionModeEnabled={setSelectionModeEnabled}
+					sendCallback={() => {
+						setUploadRecipientsCSVVisible(true);
+					}}
 				/>
 
 				<UploadRecipientsCSV
