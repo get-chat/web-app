@@ -1,10 +1,20 @@
-// @ts-nocheck
 import React from 'react';
 import styles from './ChatAssignmentEvent.module.css';
 import Moment from 'react-moment';
 import { Trans, useTranslation } from 'react-i18next';
 
-function ChatAssignmentEvent(props) {
+interface Props {
+	data: {
+		done_by: any;
+		assigned_to_user_set: any;
+		assigned_group_set: any;
+		assigned_to_user_was_cleared: any;
+		assigned_group_was_cleared: any;
+		timestamp?: string;
+	};
+}
+
+const ChatAssignmentEvent: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
 
 	const dateFormat = 'H:mm';
@@ -14,12 +24,12 @@ function ChatAssignmentEvent(props) {
 			<div className={styles.content}>
 				<div className={styles.wrapper}>
 					<div className={styles.title}>
-						{props.data.done_by ? (
+						{data.done_by ? (
 							<div>
 								<Trans
 									values={{
 										postProcess: 'sprintf',
-										sprintf: [props.data.done_by?.username ?? 'a user'],
+										sprintf: [data.done_by?.username ?? 'a user'],
 									}}
 								>
 									<span className="bold">%s</span> has changed chat assignments.
@@ -30,12 +40,12 @@ function ChatAssignmentEvent(props) {
 						)}
 					</div>
 
-					{props.data.assigned_to_user_set && (
+					{data.assigned_to_user_set && (
 						<div>
 							<Trans
 								values={{
 									postProcess: 'sprintf',
-									sprintf: [props.data.assigned_to_user_set.username],
+									sprintf: [data.assigned_to_user_set.username],
 								}}
 							>
 								assigned to user: <span className="bold">%s</span>
@@ -43,12 +53,12 @@ function ChatAssignmentEvent(props) {
 						</div>
 					)}
 
-					{props.data.assigned_group_set && (
+					{data.assigned_group_set && (
 						<div>
 							<Trans
 								values={{
 									postProcess: 'sprintf',
-									sprintf: [props.data.assigned_group_set.name],
+									sprintf: [data.assigned_group_set.name],
 								}}
 							>
 								assigned to group: <span className="bold">%s</span>
@@ -56,21 +66,21 @@ function ChatAssignmentEvent(props) {
 						</div>
 					)}
 
-					{props.data.assigned_to_user_was_cleared && (
+					{data.assigned_to_user_was_cleared && (
 						<div>{t('cleared assigned user')}</div>
 					)}
 
-					{props.data.assigned_group_was_cleared && (
+					{data.assigned_group_was_cleared && (
 						<div>{t('cleared assigned group')}</div>
 					)}
 				</div>
 
 				<div className={styles.timestamp}>
-					<Moment date={props.data.timestamp} format={dateFormat} unix />
+					<Moment date={data.timestamp} format={dateFormat} unix />
 				</div>
 			</div>
 		</div>
 	);
-}
+};
 
 export default ChatAssignmentEvent;
