@@ -17,7 +17,7 @@ import ChatMessageImage from './ChatMessageImage';
 import ChatMessageDocument from './ChatMessageDocument';
 import ChatMessageVoice from './ChatMessageVoice';
 import ChatMessageTemplate from './ChatMessageTemplate';
-import ChatAssignmentEvent from '../../../ChatAssignmentEvent';
+import ChatAssignmentEvent from '../../../ChatAssignmentEvent/ChatAssignmentEvent';
 import ChatTaggingEvent from './ChatTaggingEvent';
 import ChatMessageLocation from './ChatMessageLocation';
 import { useTranslation } from 'react-i18next';
