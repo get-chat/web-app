@@ -84,7 +84,7 @@ import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsR
 import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
-import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { useAppDispatch } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignment from '@src/hooks/useChatAssignment';
@@ -102,14 +102,17 @@ const Chat: React.FC = (props) => {
 
 	const dispatch = useAppDispatch();
 
-	const { messages, setMessages, isTimestampsSame } = useChat({
+	const {
+		currentUser,
+		users,
+		templates,
+		savedResponses,
+		messages,
+		setMessages,
+		isTimestampsSame,
+	} = useChat({
 		MESSAGES_PER_PAGE,
 	});
-
-	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const users = useAppSelector((state) => state.users.value);
-	const templates = useAppSelector((state) => state.templates.value);
-	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);
@@ -214,10 +217,10 @@ const Chat: React.FC = (props) => {
 		window.pendingMessages = pendingMessages;
 
 		// Log state changes
-		console.log(
-			isSendingPendingMessages.toString(),
-			JSON.parse(JSON.stringify(pendingMessages))
-		);
+		console.log({
+			isSendingPendingMessages: isSendingPendingMessages,
+			pendingMessages: pendingMessages,
+		});
 
 		const sendNextPending = () => {
 			const pendingMessageToSend =
