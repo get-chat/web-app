@@ -1068,13 +1068,6 @@ export default function Chat(props) {
 
 				const preparedMessages = chatMessagesResponse.messages;
 
-				console.log(response.data.results);
-				console.log(chatMessagesResponse);
-
-				Object.values(preparedMessages).forEach((item) => {
-					console.log('zort');
-				});
-
 				const lastMessage = getLastObject(preparedMessages);
 
 				// Pagination filters for events
