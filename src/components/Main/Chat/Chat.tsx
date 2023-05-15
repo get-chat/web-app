@@ -95,7 +95,7 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
-export default function Chat(props) {
+const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
@@ -894,6 +894,15 @@ export default function Chat(props) {
 		};
 	}, [messages, isAtBottom]);
 
+	const handleChosenFiles = () => {
+		if (getObjLength(selectedFiles) > 0) {
+			const preparedFiles = prepareSelectedFiles(selectedFiles);
+
+			setPreviewSendMediaData(preparedFiles);
+			setPreviewSendMediaVisible(true);
+		}
+	};
+
 	useEffect(() => {
 		if (selectedFiles) {
 			handleChosenFiles();
@@ -1024,12 +1033,18 @@ export default function Chat(props) {
 
 		if (replaceAll) {
 			setHasOlderMessagesToLoad(true);
-		}
+		} else {
+			// If loading older messages
+			if (beforeTime && getObjLength(messages) > 0) {
+				// If there are messages more than MESSAGES_PER_PAGE with same timestamp
+				if (isTimestampsSame()) beforeTime -= 1;
+			}
 
-		// If loading older messages
-		if (beforeTime && getObjLength(messages) > 0) {
-			// If there are messages more than MESSAGES_PER_PAGE with same timestamp
-			if (isTimestampsSame()) beforeTime -= 1;
+			// If loading newer messages
+			if (sinceTime && getObjLength(messages) >= MESSAGES_PER_PAGE) {
+				// If there are messages more than MESSAGES_PER_PAGE with same timestamp
+				if (isTimestampsSame(true)) sinceTime += 1;
+			}
 		}
 
 		apiService.listMessagesCall(
@@ -1674,15 +1689,6 @@ export default function Chat(props) {
 		setInput('');
 	};
 
-	const handleChosenFiles = () => {
-		if (getObjLength(selectedFiles) > 0) {
-			const preparedFiles = prepareSelectedFiles(selectedFiles);
-
-			setPreviewSendMediaData(preparedFiles);
-			setPreviewSendMediaVisible(true);
-		}
-	};
-
 	const sendHandledChosenFiles = (preparedFiles) => {
 		if (isLoaded && preparedFiles) {
 			// Prepare and queue uploading and sending processes
@@ -2033,4 +2039,6 @@ export default function Chat(props) {
 			)}
 		</div>
 	);
-}
+};
+
+export default Chat;

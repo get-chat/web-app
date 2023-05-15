@@ -8,8 +8,9 @@ interface Props {
 const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 	const [messages, setMessages] = useState<ChatMessageList>({});
 
-	const isTimestampsSame = (): boolean => {
+	const isTimestampsSame = (checkInReverse: boolean = false): boolean => {
 		const messagesArray = Object.values(messages);
+		if (checkInReverse) messagesArray.reverse();
 		let previousTimestamp = -1;
 		let isSame = true;
 		for (let i = 0; i < MESSAGES_PER_PAGE; i++) {
