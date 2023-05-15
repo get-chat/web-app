@@ -1028,10 +1028,9 @@ export default function Chat(props) {
 
 		// If loading older messages
 		if (beforeTime && getObjLength(messages) > 0) {
-			console.log(isTimestampsSame());
+			// If there are messages more than MESSAGES_PER_PAGE with same timestamp
+			if (isTimestampsSame()) beforeTime -= 1;
 		}
-
-		if (beforeTime) beforeTime -= 1;
 
 		apiService.listMessagesCall(
 			waId,
