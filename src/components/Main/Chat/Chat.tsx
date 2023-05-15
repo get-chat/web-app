@@ -1349,7 +1349,7 @@ export default function Chat(props) {
 	) => {
 		e?.preventDefault();
 
-		// Check if has internet connection
+		// Check if there is internet connection
 		if (!hasInternetConnection()) {
 			window.displayCustomError('Check your internet connection.');
 			return false;
@@ -1389,12 +1389,6 @@ export default function Chat(props) {
 			clearInput();
 			return;
 		}
-
-		// Testing
-		/*if (Math.random() >= 0.5) {
-            handleFailedMessage(requestBody);
-            return;
-        }*/
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
