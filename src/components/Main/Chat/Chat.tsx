@@ -84,27 +84,35 @@ import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsR
 import axios from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
-import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { useAppDispatch } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignment from '@src/hooks/useChatAssignment';
+import useChat from '@src/components/Main/Chat/useChat';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
-export default function Chat(props) {
+const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
 
-	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const users = useAppSelector((state) => state.users.value);
-	const templates = useAppSelector((state) => state.templates.value);
-	const savedResponses = useAppSelector((state) => state.savedResponses.value);
+	const {
+		currentUser,
+		users,
+		templates,
+		savedResponses,
+		messages,
+		setMessages,
+		isTimestampsSame,
+	} = useChat({
+		MESSAGES_PER_PAGE,
+	});
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);
@@ -114,7 +122,6 @@ export default function Chat(props) {
 		useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 	const [person, setPerson] = useState();
-	const [messages, setMessages] = useState({});
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
@@ -210,10 +217,10 @@ export default function Chat(props) {
 		window.pendingMessages = pendingMessages;
 
 		// Log state changes
-		console.log(
-			isSendingPendingMessages.toString(),
-			JSON.parse(JSON.stringify(pendingMessages))
-		);
+		console.log({
+			isSendingPendingMessages: isSendingPendingMessages,
+			pendingMessages: pendingMessages,
+		});
 
 		const sendNextPending = () => {
 			const pendingMessageToSend =
@@ -890,6 +897,15 @@ export default function Chat(props) {
 		};
 	}, [messages, isAtBottom]);
 
+	const handleChosenFiles = () => {
+		if (getObjLength(selectedFiles) > 0) {
+			const preparedFiles = prepareSelectedFiles(selectedFiles);
+
+			setPreviewSendMediaData(preparedFiles);
+			setPreviewSendMediaVisible(true);
+		}
+	};
+
 	useEffect(() => {
 		if (selectedFiles) {
 			handleChosenFiles();
@@ -1020,6 +1036,18 @@ export default function Chat(props) {
 
 		if (replaceAll) {
 			setHasOlderMessagesToLoad(true);
+		} else {
+			// If loading older messages
+			if (beforeTime && getObjLength(messages) > 0) {
+				// If there are messages more than MESSAGES_PER_PAGE with same timestamp
+				if (isTimestampsSame()) beforeTime -= 1;
+			}
+
+			// If loading newer messages
+			if (sinceTime && getObjLength(messages) >= MESSAGES_PER_PAGE) {
+				// If there are messages more than MESSAGES_PER_PAGE with same timestamp
+				if (isTimestampsSame(true)) sinceTime += 1;
+			}
 		}
 
 		apiService.listMessagesCall(
@@ -1038,19 +1066,15 @@ export default function Chat(props) {
 					true
 				);
 
-				const count = chatMessagesResponse.count;
-				//const previous = response.data.previous;
-				const next = chatMessagesResponse.next;
-
 				if (sinceTime && isInitialWithSinceTime === true) {
-					if (next) {
+					if (chatMessagesResponse.next) {
 						/*count > limit*/
 						setAtBottom(false);
 						listMessages(
 							false,
 							callback,
 							beforeTime,
-							count - MESSAGES_PER_PAGE,
+							chatMessagesResponse.count - MESSAGES_PER_PAGE,
 							sinceTime,
 							false,
 							replaceAll
@@ -1342,7 +1366,7 @@ export default function Chat(props) {
 	) => {
 		e?.preventDefault();
 
-		// Check if has internet connection
+		// Check if there is internet connection
 		if (!hasInternetConnection()) {
 			window.displayCustomError('Check your internet connection.');
 			return false;
@@ -1382,12 +1406,6 @@ export default function Chat(props) {
 			clearInput();
 			return;
 		}
-
-		// Testing
-		/*if (Math.random() >= 0.5) {
-            handleFailedMessage(requestBody);
-            return;
-        }*/
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
@@ -1672,15 +1690,6 @@ export default function Chat(props) {
 
 	const clearInput = () => {
 		setInput('');
-	};
-
-	const handleChosenFiles = () => {
-		if (getObjLength(selectedFiles) > 0) {
-			const preparedFiles = prepareSelectedFiles(selectedFiles);
-
-			setPreviewSendMediaData(preparedFiles);
-			setPreviewSendMediaVisible(true);
-		}
 	};
 
 	const sendHandledChosenFiles = (preparedFiles) => {
@@ -2033,4 +2042,6 @@ export default function Chat(props) {
 			)}
 		</div>
 	);
-}
+};
+
+export default Chat;
