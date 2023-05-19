@@ -32,7 +32,7 @@ import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
-import ChatHeader from './ChatHeader';
+import ChatHeader from '@src/components/ChatHeader';
 import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
 import moment from 'moment';
 import PubSub from 'pubsub-js';

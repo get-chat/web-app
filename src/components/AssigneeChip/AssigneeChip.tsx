@@ -3,6 +3,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import styles from './AssigneeChip.module.css';
 import GroupIcon from '@mui/icons-material/Group';
+import classNames from 'classnames/bind';
 
 enum AssigneeType {
 	user = 'user',
@@ -14,9 +15,16 @@ interface Props {
 	name?: string;
 }
 
+const cx = classNames.bind(styles);
+
 const AssigneeChip: React.FC<Props> = ({ assigneeType, name }) => {
 	return (
-		<div className={styles.container}>
+		<div
+			className={cx({
+				assigneeChip: true,
+				container: true,
+			})}
+		>
 			<CustomAvatar className={styles.avatar} generateBgColorBy={name}>
 				{assigneeType === 'group' ? (
 					<GroupIcon />
