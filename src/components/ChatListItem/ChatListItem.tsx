@@ -25,6 +25,7 @@ import SellIcon from '@mui/icons-material/Sell';
 import useChatListItem from '@src/components/ChatListItem/useChatListItem';
 import styles from './ChatListItem.module.css';
 import classNames from 'classnames/bind';
+import AssigneeChip from '@src/components/AssigneeChip';
 
 const cx = classNames.bind(styles);
 
@@ -114,16 +115,11 @@ const ChatListItem = (props) => {
 										placement="top"
 										title={data.generateAssignmentInformation()}
 									>
-										<div className={styles.assigneeChip}>
-											<CustomAvatar
-												className={styles.assigneeAvatar}
-												generateBgColorBy={data.assignedToUser?.username}
-											>
-												{generateInitialsHelper(
-													data.generateAssignedToInitials()
-												)}
-											</CustomAvatar>
-											<span>{data.getAssignedUserUsername()}</span>
+										<div>
+											<AssigneeChip
+												assigneeType={'user'}
+												name={data.assignedToUser?.username}
+											/>
 										</div>
 									</Tooltip>
 								)}
@@ -138,14 +134,11 @@ const ChatListItem = (props) => {
 										placement="top"
 										title={data.generateAssignmentInformation()}
 									>
-										<div className={styles.assigneeChip}>
-											<CustomAvatar
-												className={styles.assigneeAvatar}
-												generateBgColorBy={data.assignedGroup?.name}
-											>
-												<GroupIcon />
-											</CustomAvatar>
-											<span>{data.assignedGroup?.name}</span>
+										<div>
+											<AssigneeChip
+												assigneeType={'group'}
+												name={data.assignedGroup?.name}
+											/>
 										</div>
 									</Tooltip>
 								)}
