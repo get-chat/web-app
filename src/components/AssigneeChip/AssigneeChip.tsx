@@ -10,6 +10,7 @@ import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import { UserList } from '@src/api/responses/UsersResponse';
+import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 
 enum AssigneeType {
 	user = 'user',
@@ -31,23 +32,9 @@ const AssigneeChip: React.FC<Props> = ({
 }) => {
 	const { t } = useTranslation();
 
-	let users: UserList = {};
-
-	if (isActionable) {
-		users = useAppSelector((state) => state.users.value);
-	}
-
-	const [anchorEl, setAnchorEl] = useState<Element>();
-
-	const displayMenu = (event: MouseEvent) => {
-		if (event.currentTarget instanceof Element) {
-			setAnchorEl(event.currentTarget);
-		}
-	};
-
-	const hideMenu = () => {
-		setAnchorEl(undefined);
-	};
+	const { menuAnchorEl, displayMenu, hideMenu, users } = useAssigneeChip({
+		isActionable,
+	});
 
 	return (
 		<div
@@ -86,11 +73,11 @@ const AssigneeChip: React.FC<Props> = ({
 
 					{assigneeType === AssigneeType.user && (
 						<Menu
-							anchorEl={anchorEl}
+							anchorEl={menuAnchorEl}
 							anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 							transformOrigin={{ vertical: 'top', horizontal: 'right' }}
 							keepMounted
-							open={Boolean(anchorEl)}
+							open={Boolean(menuAnchorEl)}
 							onClose={hideMenu}
 							elevation={3}
 						>
