@@ -96,8 +96,8 @@ const AssigneeChip: React.FC<Props> = ({
 					>
 						{assigneeType === AssigneeType.user &&
 							Object.values(users)?.map((user) => (
-								// @ts-ignore
 								<MenuItem
+									// @ts-ignore
 									key={user.id}
 									value={user.id}
 									onClick={() => selectUser(user)}
@@ -108,8 +108,8 @@ const AssigneeChip: React.FC<Props> = ({
 
 						{assigneeType === AssigneeType.group &&
 							Object.values(groups)?.map((group) => (
-								// @ts-ignore
 								<MenuItem
+									// @ts-ignore
 									key={group.id}
 									value={group.id}
 									onClick={() => selectGroup(group)}
