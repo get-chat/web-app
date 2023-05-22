@@ -72,7 +72,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
-import { CancelTokenSource } from 'axios';
+import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 
@@ -583,43 +583,48 @@ const Sidebar: React.FC = ({
 	};
 
 	const retrieveChat = (chatWaId) => {
-		apiService.retrieveChatCall(chatWaId, (response) => {
-			// Remove this chat from missing chats list
-			setMissingChats((prevState) =>
-				prevState.filter((item) => item !== chatWaId)
-			);
+		apiService.retrieveChatCall(
+			chatWaId,
+			undefined,
+			(response: AxiosResponse) => {
+				// Remove this chat from missing chats list
+				setMissingChats((prevState) =>
+					prevState.filter((item) => item !== chatWaId)
+				);
 
-			const preparedChat = new ChatModel(response.data);
+				const preparedChat = new ChatModel(response.data);
 
-			// Don't display chat if tab case is "me" and chat is not assigned to user
-			if (tabCase === CHAT_LIST_TAB_CASE_ME) {
-				if (
-					!preparedChat.assignedToUser ||
-					preparedChat.assignedToUser.id !== currentUser?.id
-				) {
-					console.log(
-						'Chat will not be displayed as it does not belong to current tab.'
-					);
-					return;
+				// Don't display chat if tab case is "me" and chat is not assigned to user
+				if (tabCase === CHAT_LIST_TAB_CASE_ME) {
+					if (
+						!preparedChat.assignedToUser ||
+						preparedChat.assignedToUser.id !== currentUser?.id
+					) {
+						console.log(
+							'Chat will not be displayed as it does not belong to current tab.'
+						);
+						return;
+					}
+				} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+					if (
+						!preparedChat.assignedGroup ||
+						currentUser?.isInGroup(preparedChat.assignedGroup.id)
+					) {
+						console.log(
+							'Chat will not be displayed as it does not belong to current tab.'
+						);
+						return;
+					}
 				}
-			} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
-				if (
-					!preparedChat.assignedGroup ||
-					currentUser?.isInGroup(preparedChat.assignedGroup.id)
-				) {
-					console.log(
-						'Chat will not be displayed as it does not belong to current tab.'
-					);
-					return;
-				}
-			}
 
-			const prevState = { ...chats };
-			prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
-			const sortedNextState = sortChats(prevState);
+				const prevState = { ...chats };
+				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
+				const sortedNextState = sortChats(prevState);
 
-			dispatch(setChats({ ...sortedNextState }));
-		});
+				dispatch(setChats({ ...sortedNextState }));
+			},
+			(error: AxiosError) => console.log(error)
+		);
 	};
 
 	const searchMessages = (cancelTokenSource) => {

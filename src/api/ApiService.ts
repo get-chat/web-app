@@ -485,13 +485,14 @@ export class ApiService {
 		);
 	};
 
-	retrieveChatCall = (waId, successCallback) => {
+	retrieveChatCall = (waId, cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}chats/${waId}/`, getRequestConfig()),
+			axios.get(
+				`${this.apiBaseURL}chats/${waId}/`,
+				getRequestConfig(undefined, cancelToken)
+			),
 			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
+			errorCallback
 		);
 	};
 

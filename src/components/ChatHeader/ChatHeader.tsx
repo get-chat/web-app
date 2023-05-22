@@ -24,6 +24,7 @@ import AssigneeChip from '@src/components/AssigneeChip';
 import styles from './ChatHeader.module.css';
 
 const ChatHeader: React.FC = ({
+	chat,
 	person,
 	contactProvidersData,
 	retrieveContactData,
@@ -33,7 +34,6 @@ const ChatHeader: React.FC = ({
 	closeChat,
 	hasFailedMessages,
 	waId,
-	isLoaded,
 }) => {
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -131,10 +131,20 @@ const ChatHeader: React.FC = ({
 			</div>
 
 			<div className="chat__headerRight">
-				{isLoaded && (
+				{chat && (
 					<div className={styles.assigneeActions}>
-						<AssigneeChip assigneeType={'user'} name={'test user'} />
-						<AssigneeChip assigneeType={'group'} name={'test group'} />
+						{chat.assignedToUser && (
+							<AssigneeChip
+								assigneeType={'user'}
+								name={chat.assignedToUser?.username}
+							/>
+						)}
+						{chat.assignedGroup && (
+							<AssigneeChip
+								assigneeType={'group'}
+								name={chat.assignedGroup?.name}
+							/>
+						)}
 					</div>
 				)}
 
