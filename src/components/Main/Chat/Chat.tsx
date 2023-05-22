@@ -87,7 +87,7 @@ import { flushSync } from 'react-dom';
 import { useAppDispatch } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
-import useChatAssignment from '@src/hooks/useChatAssignment';
+import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 import ChatModel from '@src/api/models/ChatModel';
 
@@ -152,7 +152,7 @@ const Chat: React.FC = (props) => {
 
 	const { waId } = useParams();
 
-	const { partialUpdateChatAssignment } = useChatAssignment();
+	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
 	const navigate = useNavigate();
 	const location = useLocation();

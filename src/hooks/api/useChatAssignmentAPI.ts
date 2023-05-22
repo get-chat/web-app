@@ -1,23 +1,20 @@
 import React from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { AxiosError, AxiosResponse } from 'axios';
+import APICallProps from '@src/api/APICallProps';
 
-const useChatAssignment = () => {
+const useChatAssignmentAPI = () => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const retrieveChatAssignment = (
-		waId: string,
-		onSuccess?: (response: AxiosResponse) => void,
-		onError?: (error: AxiosError) => void
-	) => {
+	const retrieveChatAssignment = (waId: string, apiCallProps: APICallProps) => {
 		apiService.retrieveChatAssignmentCall(
 			waId,
 			(response: AxiosResponse) => {
-				onSuccess?.(response);
+				apiCallProps.onSuccess?.(response);
 			},
 			(error: AxiosError) => {
-				onError?.(error);
+				apiCallProps.onError?.(error);
 			}
 		);
 	};
@@ -25,7 +22,8 @@ const useChatAssignment = () => {
 	const partialUpdateChatAssignment = (
 		waId: string,
 		assignedToUser?: Number,
-		assignedGroup?: Number
+		assignedGroup?: Number,
+		apiCallProps?: APICallProps
 	) => {
 		console.log('Partially updating chat assignment...');
 
@@ -33,8 +31,11 @@ const useChatAssignment = () => {
 			waId,
 			assignedToUser,
 			assignedGroup,
+			apiCallProps?.cancelToken,
 			(response: AxiosResponse) => {
 				console.log(response.data);
+
+				apiCallProps?.onSuccess?.(response);
 			},
 			(error: AxiosError) => {
 				if (error?.response?.status === 403) {
@@ -43,6 +44,8 @@ const useChatAssignment = () => {
 						'This chat could not be assigned as its assignments have been changed by another user recently.'
 					);
 				}
+
+				apiCallProps?.onError?.(error);
 			}
 		);
 	};
@@ -53,4 +56,4 @@ const useChatAssignment = () => {
 	};
 };
 
-export default useChatAssignment;
+export default useChatAssignmentAPI;

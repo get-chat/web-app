@@ -10,11 +10,11 @@ const useGroupsAPI = () => {
 
 	const [groups, setGroups] = useState<GroupList>({});
 
-	const listGroups = async (params: APICallProps) => {
+	const listGroups = async (apiCallProps: APICallProps) => {
 		apiService.listGroupsCall(
-			params.cancelToken,
-			params.onSuccess,
-			params.onError
+			apiCallProps.cancelToken,
+			apiCallProps.onSuccess,
+			apiCallProps.onError
 		);
 	};
 

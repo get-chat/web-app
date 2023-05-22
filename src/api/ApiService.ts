@@ -592,6 +592,7 @@ export class ApiService {
 		waId,
 		assignedToUser,
 		assignedGroup,
+		cancelToken,
 		successCallback,
 		errorCallback
 	) => {
@@ -611,7 +612,7 @@ export class ApiService {
 			axios.patch(
 				`${this.apiBaseURL}chat_assignment/${waId}/`,
 				data,
-				getRequestConfig()
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			errorCallback

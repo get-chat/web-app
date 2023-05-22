@@ -22,6 +22,7 @@ import PrintMessage from '../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
 import AssigneeChip from '@src/components/AssigneeChip';
 import styles from './ChatHeader.module.css';
+import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 
 const ChatHeader: React.FC = ({
 	chat,
@@ -37,6 +38,8 @@ const ChatHeader: React.FC = ({
 }) => {
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState(null);
+
+	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
 	const displayMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -137,13 +140,17 @@ const ChatHeader: React.FC = ({
 							assigneeType={'user'}
 							name={chat.assignedToUser?.username}
 							isActionable={true}
-							onAction={(user, group) => {}}
+							onAction={(user, group) => {
+								partialUpdateChatAssignment(waId, user?.id);
+							}}
 						/>
 						<AssigneeChip
 							assigneeType={'group'}
 							name={chat.assignedGroup?.name}
 							isActionable={true}
-							onAction={(user, group) => {}}
+							onAction={(user, group) => {
+								partialUpdateChatAssignment(waId, undefined, group?.id);
+							}}
 						/>
 					</div>
 				)}
