@@ -133,20 +133,24 @@ const ChatHeader: React.FC = ({
 			<div className="chat__headerRight">
 				{chat && (
 					<div className={styles.assigneeActions}>
-						{chat.assignedToUser && (
-							<AssigneeChip
-								assigneeType={'user'}
-								name={chat.assignedToUser?.username}
-								isActionable={true}
-							/>
-						)}
-						{chat.assignedGroup && (
-							<AssigneeChip
-								assigneeType={'group'}
-								name={chat.assignedGroup?.name}
-								isActionable={true}
-							/>
-						)}
+						<Tooltip title={t('Assigned user')} placement="left">
+							<div>
+								<AssigneeChip
+									assigneeType={'user'}
+									name={chat.assignedToUser?.username}
+									isActionable={true}
+								/>
+							</div>
+						</Tooltip>
+						<Tooltip title={t('Assigned group')} placement="left">
+							<div>
+								<AssigneeChip
+									assigneeType={'group'}
+									name={chat.assignedGroup?.name}
+									isActionable={true}
+								/>
+							</div>
+						</Tooltip>
 					</div>
 				)}
 

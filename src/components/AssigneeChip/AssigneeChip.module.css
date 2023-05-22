@@ -31,10 +31,18 @@
 	align-self: center;
 }
 
+.avatar.unassigned {
+	background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
 .avatar :global(.MuiSvgIcon-root) {
 	color: white !important;
 	height: 0.5em;
 	width: 0.5em;
+}
+
+.avatar.unassigned :global(.MuiSvgIcon-root) {
+	color: rgba(0, 0, 0, 0.6) !important;
 }
 
 .actionIcon {

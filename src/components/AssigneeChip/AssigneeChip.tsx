@@ -3,9 +3,11 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import styles from './AssigneeChip.module.css';
 import GroupIcon from '@mui/icons-material/Group';
+import PersonIcon from '@mui/icons-material/Person';
 import classNames from 'classnames/bind';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconButton } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 enum AssigneeType {
 	user = 'user',
@@ -25,6 +27,8 @@ const AssigneeChip: React.FC<Props> = ({
 	name,
 	isActionable = false,
 }) => {
+	const { t } = useTranslation();
+
 	return (
 		<div
 			className={cx({
@@ -32,15 +36,23 @@ const AssigneeChip: React.FC<Props> = ({
 				container: true,
 			})}
 		>
-			<CustomAvatar className={styles.avatar} generateBgColorBy={name}>
+			<CustomAvatar
+				className={cx({
+					avatar: true,
+					unassigned: !Boolean(name),
+				})}
+				generateBgColorBy={name}
+			>
 				{assigneeType === 'group' ? (
 					<GroupIcon />
-				) : (
+				) : name ? (
 					generateInitialsHelper(name)
+				) : (
+					<PersonIcon />
 				)}
 			</CustomAvatar>
 
-			<span className={styles.name}>{name}</span>
+			<span className={styles.name}>{name ?? t('Unassigned')}</span>
 
 			{isActionable && (
 				<IconButton

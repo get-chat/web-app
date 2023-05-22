@@ -14,6 +14,6 @@
 	gap: 5px;
 }
 
-.assigneeActions > :global(.assigneeChip) {
+.assigneeActions :global(.assigneeChip) {
 	background-color: rgba(0, 0, 45, 0.06);
 }
