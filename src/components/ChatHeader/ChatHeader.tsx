@@ -33,6 +33,7 @@ const ChatHeader: React.FC = ({
 	closeChat,
 	hasFailedMessages,
 	waId,
+	isLoaded,
 }) => {
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -130,10 +131,12 @@ const ChatHeader: React.FC = ({
 			</div>
 
 			<div className="chat__headerRight">
-				<div className={styles.assigneeActions}>
-					<AssigneeChip assigneeType={'user'} name={'test user'} />
-					<AssigneeChip assigneeType={'group'} name={'test group'} />
-				</div>
+				{isLoaded && (
+					<div className={styles.assigneeActions}>
+						<AssigneeChip assigneeType={'user'} name={'test user'} />
+						<AssigneeChip assigneeType={'group'} name={'test group'} />
+					</div>
+				)}
 
 				{isMobileOnly && hasFailedMessages && (
 					<Tooltip title={t('Failed to send some messages!')}>

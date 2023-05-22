@@ -1875,6 +1875,7 @@ const Chat: React.FC = (props) => {
 				closeChat={closeChat}
 				hasFailedMessages={props.hasFailedMessages}
 				waId={waId}
+				isLoaded={isLoaded}
 			/>
 
 			{/* FOR TESTING QUEUE */}
