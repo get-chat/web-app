@@ -16,6 +16,10 @@
 	margin-right: 5px;
 }
 
+.name.wider {
+	max-width: 100px;
+}
+
 .container :global(.MuiSvgIcon-root) {
 	color: var(--default-text-color) !important;
 	height: 0.6em;

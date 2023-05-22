@@ -73,7 +73,14 @@ const AssigneeChip: React.FC<Props> = ({
 				)}
 			</CustomAvatar>
 
-			<span className={styles.name}>{name ?? t('Unassigned')}</span>
+			<span
+				className={cx({
+					name: true,
+					wider: isActionable,
+				})}
+			>
+				{name ?? t('Unassigned')}
+			</span>
 
 			{isActionable && (
 				<>
