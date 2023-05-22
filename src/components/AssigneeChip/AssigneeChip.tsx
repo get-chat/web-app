@@ -9,6 +9,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
+import UserModel from '@src/api/models/UserModel';
+import GroupModel from '@src/api/models/GroupModel';
 
 export enum AssigneeType {
 	user = 'user',
@@ -19,6 +21,7 @@ interface Props {
 	assigneeType: AssigneeType;
 	name?: string;
 	isActionable?: boolean;
+	onAction?: (selectedUser?: UserModel, selectedGroup?: GroupModel) => void;
 }
 
 const cx = classNames.bind(styles);
@@ -27,6 +30,7 @@ const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
 	name,
 	isActionable = false,
+	onAction,
 }) => {
 	const { t } = useTranslation();
 
@@ -35,6 +39,16 @@ const AssigneeChip: React.FC<Props> = ({
 			assigneeType,
 			isActionable,
 		});
+
+	const selectUser = (user: UserModel) => {
+		onAction?.(user);
+		hideMenu();
+	};
+
+	const selectGroup = (group: GroupModel) => {
+		onAction?.(undefined, group);
+		hideMenu();
+	};
 
 	return (
 		<div
@@ -83,7 +97,11 @@ const AssigneeChip: React.FC<Props> = ({
 						{assigneeType === AssigneeType.user &&
 							Object.values(users)?.map((user) => (
 								// @ts-ignore
-								<MenuItem key={user.id} value={user.id}>
+								<MenuItem
+									key={user.id}
+									value={user.id}
+									onClick={() => selectUser(user)}
+								>
 									{user.prepareUserLabel()}
 								</MenuItem>
 							))}
@@ -91,7 +109,11 @@ const AssigneeChip: React.FC<Props> = ({
 						{assigneeType === AssigneeType.group &&
 							Object.values(groups)?.map((group) => (
 								// @ts-ignore
-								<MenuItem key={group.id} value={group.id}>
+								<MenuItem
+									key={group.id}
+									value={group.id}
+									onClick={() => selectGroup(group)}
+								>
 									{group.name}
 								</MenuItem>
 							))}
