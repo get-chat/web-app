@@ -16,9 +16,7 @@ interface Props {
 const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
-	const [groups, setGroups] = useState<GroupList>({});
-
-	const { listGroups } = useGroupsAPI();
+	const { groups, initGroups } = useGroupsAPI();
 
 	let users: UserList = {};
 
@@ -40,7 +38,7 @@ const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 
 	const displayMenu = (event: MouseEvent) => {
 		if (assigneeType === AssigneeType.group && getObjLength(groups) === 0) {
-			doListGroups();
+			initGroups(cancelTokenSourceRef.current?.token);
 		}
 
 		if (event.currentTarget instanceof Element) {
@@ -50,16 +48,6 @@ const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 
 	const hideMenu = () => {
 		setMenuAnchorEl(undefined);
-	};
-
-	const doListGroups = async () => {
-		await listGroups({
-			cancelToken: cancelTokenSourceRef.current?.token,
-			onSuccess: (response) => {
-				const groupsResponse = new GroupsResponse(response.data);
-				setGroups(groupsResponse.groups);
-			},
-		});
 	};
 
 	return {

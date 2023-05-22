@@ -1,10 +1,14 @@
 import APICallProps from '@src/api/APICallProps';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { CancelToken } from 'axios';
+import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
 
 const useGroupsAPI = () => {
 	// @ts-ignore
 	const { apiService } = useContext(ApplicationContext);
+
+	const [groups, setGroups] = useState<GroupList>({});
 
 	const listGroups = async (params: APICallProps) => {
 		apiService.listGroupsCall(
@@ -14,7 +18,19 @@ const useGroupsAPI = () => {
 		);
 	};
 
+	const initGroups = async (cancelToken?: CancelToken) => {
+		await listGroups({
+			cancelToken: cancelToken,
+			onSuccess: (response) => {
+				const groupsResponse = new GroupsResponse(response.data);
+				setGroups(groupsResponse.groups);
+			},
+		});
+	};
+
 	return {
+		groups,
+		initGroups,
 		listGroups,
 	};
 };
