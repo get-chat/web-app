@@ -39,7 +39,8 @@ const AssigneeChip: React.FC<Props> = ({
 					generateInitialsHelper(name)
 				)}
 			</CustomAvatar>
-			<span>{name}</span>
+
+			<span className={styles.name}>{name}</span>
 
 			{isActionable && (
 				<IconButton

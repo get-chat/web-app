@@ -8,7 +8,7 @@
 	height: 19px;
 }
 
-.container > span {
+.name {
 	max-width: 55px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
