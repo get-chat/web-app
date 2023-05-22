@@ -6,6 +6,7 @@ import { AssigneeType } from '@src/components/AssigneeChip/AssigneeChip';
 import { CancelTokenSource } from 'axios';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
+import { getObjLength } from '@src/helpers/ObjectHelper';
 
 interface Props {
 	assigneeType: AssigneeType;
@@ -38,7 +39,7 @@ const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 	}, [isActionable]);
 
 	const displayMenu = (event: MouseEvent) => {
-		if (assigneeType === AssigneeType.group) {
+		if (assigneeType === AssigneeType.group && getObjLength(groups) === 0) {
 			doListGroups();
 		}
 
