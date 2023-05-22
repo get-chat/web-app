@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import styles from './AssigneeChip.module.css';
@@ -8,8 +8,6 @@ import classNames from 'classnames/bind';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '@src/store/hooks';
-import { UserList } from '@src/api/responses/UsersResponse';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 
 enum AssigneeType {
