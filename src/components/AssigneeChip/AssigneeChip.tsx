@@ -10,7 +10,7 @@ import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 
-enum AssigneeType {
+export enum AssigneeType {
 	user = 'user',
 	group = 'group',
 }
@@ -30,9 +30,11 @@ const AssigneeChip: React.FC<Props> = ({
 }) => {
 	const { t } = useTranslation();
 
-	const { menuAnchorEl, displayMenu, hideMenu, users } = useAssigneeChip({
-		isActionable,
-	});
+	const { menuAnchorEl, displayMenu, hideMenu, users, groups } =
+		useAssigneeChip({
+			assigneeType,
+			isActionable,
+		});
 
 	return (
 		<div
@@ -69,24 +71,31 @@ const AssigneeChip: React.FC<Props> = ({
 						<ExpandMoreIcon />
 					</IconButton>
 
-					{assigneeType === AssigneeType.user && (
-						<Menu
-							anchorEl={menuAnchorEl}
-							anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-							transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-							keepMounted
-							open={Boolean(menuAnchorEl)}
-							onClose={hideMenu}
-							elevation={3}
-						>
-							{Object.values(users)?.map((user) => (
+					<Menu
+						anchorEl={menuAnchorEl}
+						anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+						transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+						keepMounted
+						open={Boolean(menuAnchorEl)}
+						onClose={hideMenu}
+						elevation={3}
+					>
+						{assigneeType === AssigneeType.user &&
+							Object.values(users)?.map((user) => (
 								// @ts-ignore
 								<MenuItem key={user.id} value={user.id}>
 									{user.prepareUserLabel()}
 								</MenuItem>
 							))}
-						</Menu>
-					)}
+
+						{assigneeType === AssigneeType.group &&
+							Object.values(groups)?.map((group) => (
+								// @ts-ignore
+								<MenuItem key={group.id} value={group.id}>
+									{group.name}
+								</MenuItem>
+							))}
+					</Menu>
 				</>
 			)}
 		</div>

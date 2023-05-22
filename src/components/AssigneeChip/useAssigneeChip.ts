@@ -1,12 +1,24 @@
 import { UserList } from '@src/api/responses/UsersResponse';
 import { useAppSelector } from '@src/store/hooks';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
+import useGroupsAPI from '@src/hooks/api/useGroupsAPI';
+import { AssigneeType } from '@src/components/AssigneeChip/AssigneeChip';
+import { CancelTokenSource } from 'axios';
+import { generateCancelToken } from '@src/helpers/ApiHelper';
+import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
 
 interface Props {
+	assigneeType: AssigneeType;
 	isActionable: boolean;
 }
 
-const useAssigneeChip = ({ isActionable }: Props) => {
+const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
+	const cancelTokenSourceRef = useRef<CancelTokenSource>();
+
+	const [groups, setGroups] = useState<GroupList>({});
+
+	const { listGroups } = useGroupsAPI();
+
 	let users: UserList = {};
 
 	if (isActionable) {
@@ -15,7 +27,21 @@ const useAssigneeChip = ({ isActionable }: Props) => {
 
 	const [menuAnchorEl, setMenuAnchorEl] = useState<Element>();
 
+	useEffect(() => {
+		if (isActionable) {
+			cancelTokenSourceRef.current = generateCancelToken();
+		}
+
+		return () => {
+			cancelTokenSourceRef.current?.cancel();
+		};
+	}, [isActionable]);
+
 	const displayMenu = (event: MouseEvent) => {
+		if (assigneeType === AssigneeType.group) {
+			doListGroups();
+		}
+
 		if (event.currentTarget instanceof Element) {
 			setMenuAnchorEl(event.currentTarget);
 		}
@@ -25,11 +51,22 @@ const useAssigneeChip = ({ isActionable }: Props) => {
 		setMenuAnchorEl(undefined);
 	};
 
+	const doListGroups = async () => {
+		await listGroups({
+			cancelToken: cancelTokenSourceRef.current?.token,
+			onSuccess: (response) => {
+				const groupsResponse = new GroupsResponse(response.data);
+				setGroups(groupsResponse.groups);
+			},
+		});
+	};
+
 	return {
 		menuAnchorEl,
 		displayMenu,
 		hideMenu,
 		users,
+		groups,
 	};
 };
 

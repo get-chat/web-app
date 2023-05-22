@@ -618,13 +618,14 @@ export class ApiService {
 		);
 	};
 
-	listGroupsCall = (successCallback) => {
+	listGroupsCall = (cancelToken?, successCallback?, errorCallback?) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}groups/`, getRequestConfig()),
+			axios.get(
+				`${this.apiBaseURL}groups/`,
+				getRequestConfig(undefined, cancelToken)
+			),
 			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
+			errorCallback
 		);
 	};
 
