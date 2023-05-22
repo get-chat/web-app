@@ -647,6 +647,9 @@ const Chat: React.FC = (props) => {
 				} else {
 					displayScrollButton();
 				}
+
+				// Reload chat to update assignee information
+				retrieveChat();
 			}
 		};
 
