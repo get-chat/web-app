@@ -137,12 +137,14 @@ const ChatHeader: React.FC = ({
 							<AssigneeChip
 								assigneeType={'user'}
 								name={chat.assignedToUser?.username}
+								isActionable={true}
 							/>
 						)}
 						{chat.assignedGroup && (
 							<AssigneeChip
 								assigneeType={'group'}
 								name={chat.assignedGroup?.name}
+								isActionable={true}
 							/>
 						)}
 					</div>

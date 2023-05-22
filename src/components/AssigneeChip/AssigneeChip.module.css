@@ -6,7 +6,6 @@
 	align-items: center;
 	font-size: 12px;
 	height: 19px;
-	padding: 0 5px 0 0;
 }
 
 .container > span {
@@ -14,6 +13,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
+	margin-right: 5px;
 }
 
 .container :global(.MuiSvgIcon-root) {
@@ -35,4 +35,9 @@
 	color: white !important;
 	height: 0.5em;
 	width: 0.5em;
+}
+
+.actionIcon {
+	height: 19px !important;
+	width: 19px !important;
 }
