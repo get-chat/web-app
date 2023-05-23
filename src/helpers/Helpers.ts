@@ -88,8 +88,8 @@ export const containsLetters = (text) => {
 };
 
 export const extractAvatarFromContactProviderData = (
-	contactProviderData,
-	isLarge
+	contactProviderData: any,
+	isLarge?: boolean
 ) => {
 	if (contactProviderData) {
 		for (let i = 0; i < getObjLength(contactProviderData); i++) {

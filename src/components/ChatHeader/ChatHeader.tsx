@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import '../../styles/ChatHeader.css';
 import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
@@ -24,10 +23,26 @@ import AssigneeChip from '@src/components/AssigneeChip';
 import styles from './ChatHeader.module.css';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import classNames from 'classnames/bind';
+import PersonModel from '@src/api/models/PersonModel';
+import ChatModel from '@src/api/models/ChatModel';
+import { AssigneeType } from '@src/components/AssigneeChip/AssigneeChip';
 
 const cx = classNames.bind(styles);
 
-const ChatHeader: React.FC = ({
+interface Props {
+	chat?: ChatModel;
+	person?: PersonModel;
+	contactProvidersData: any;
+	retrieveContactData: (waId: string) => void;
+	isChatOnly: boolean | Number;
+	setChatAssignmentVisible: (isVisible: boolean) => void;
+	setChatTagsVisible: (isVisible: boolean) => void;
+	closeChat: () => void;
+	hasFailedMessages: boolean;
+	waId: string;
+}
+
+const ChatHeader: React.FC<Props> = ({
 	chat,
 	person,
 	contactProvidersData,
@@ -40,16 +55,18 @@ const ChatHeader: React.FC = ({
 	waId,
 }) => {
 	const { t } = useTranslation();
-	const [anchorEl, setAnchorEl] = useState(null);
+	const [anchorEl, setAnchorEl] = useState<Element>();
 
 	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
-	const displayMenu = (event) => {
-		setAnchorEl(event.currentTarget);
+	const displayMenu = (event: MouseEvent) => {
+		if (event.currentTarget instanceof Element) {
+			setAnchorEl(event.currentTarget);
+		}
 	};
 
 	const hideMenu = () => {
-		setAnchorEl(null);
+		setAnchorEl(undefined);
 	};
 
 	const showSearchMessages = () => {
@@ -101,9 +118,7 @@ const ChatHeader: React.FC = ({
 
 			<div className="chat__header__clickable" onClick={showContactDetails}>
 				<CustomAvatar
-					src={extractAvatarFromContactProviderData(
-						contactProvidersData[person?.waId]
-					)}
+					src={extractAvatarFromContactProviderData(contactProvidersData[waId])}
 					className={
 						'chat__header__avatar ' + (person?.isExpired ? 'expired' : '')
 					}
@@ -116,7 +131,7 @@ const ChatHeader: React.FC = ({
 					<PrintMessage
 						as="h3"
 						message={
-							contactProvidersData[person?.waId]?.[0]?.name ??
+							contactProvidersData[waId]?.[0]?.name ??
 							person?.name ??
 							(person?.waId ? addPlus(person?.waId) : '')
 						}
@@ -145,7 +160,7 @@ const ChatHeader: React.FC = ({
 				{chat && (
 					<div className={styles.assigneeActions}>
 						<AssigneeChip
-							assigneeType={'user'}
+							assigneeType={AssigneeType.user}
 							name={chat.assignedToUser?.username}
 							isActionable={true}
 							onAction={(user, group) => {
@@ -153,7 +168,7 @@ const ChatHeader: React.FC = ({
 							}}
 						/>
 						<AssigneeChip
-							assigneeType={'group'}
+							assigneeType={AssigneeType.group}
 							name={chat.assignedGroup?.name}
 							isActionable={true}
 							onAction={(user, group) => {
