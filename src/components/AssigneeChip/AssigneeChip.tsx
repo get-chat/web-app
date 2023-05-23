@@ -12,10 +12,7 @@ import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 import UserModel from '@src/api/models/UserModel';
 import GroupModel from '@src/api/models/GroupModel';
 
-export enum AssigneeType {
-	user = 'user',
-	group = 'group',
-}
+export type AssigneeType = 'user' | 'group';
 
 interface Props {
 	assigneeType: AssigneeType;
@@ -103,7 +100,7 @@ const AssigneeChip: React.FC<Props> = ({
 					>
 						<MenuItem
 							onClick={() =>
-								assigneeType === AssigneeType.user
+								assigneeType === 'user'
 									? selectUser(undefined)
 									: selectGroup(undefined)
 							}
@@ -111,7 +108,7 @@ const AssigneeChip: React.FC<Props> = ({
 							{t('Unassigned')}
 						</MenuItem>
 
-						{assigneeType === AssigneeType.user &&
+						{assigneeType === 'user' &&
 							Object.values(users)?.map((user) => (
 								<MenuItem
 									// @ts-ignore
@@ -123,7 +120,7 @@ const AssigneeChip: React.FC<Props> = ({
 								</MenuItem>
 							))}
 
-						{assigneeType === AssigneeType.group &&
+						{assigneeType === 'group' &&
 							Object.values(groups)?.map((group) => (
 								<MenuItem
 									// @ts-ignore

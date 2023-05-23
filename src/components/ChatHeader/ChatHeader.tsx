@@ -25,7 +25,6 @@ import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import classNames from 'classnames/bind';
 import PersonModel from '@src/api/models/PersonModel';
 import ChatModel from '@src/api/models/ChatModel';
-import { AssigneeType } from '@src/components/AssigneeChip/AssigneeChip';
 
 const cx = classNames.bind(styles);
 
@@ -160,7 +159,7 @@ const ChatHeader: React.FC<Props> = ({
 				{chat && (
 					<div className={styles.assigneeActions}>
 						<AssigneeChip
-							assigneeType={AssigneeType.user}
+							assigneeType="user"
 							name={chat.assignedToUser?.username}
 							isActionable={true}
 							onAction={(user, group) => {
@@ -168,7 +167,7 @@ const ChatHeader: React.FC<Props> = ({
 							}}
 						/>
 						<AssigneeChip
-							assigneeType={AssigneeType.group}
+							assigneeType="group"
 							name={chat.assignedGroup?.name}
 							isActionable={true}
 							onAction={(user, group) => {
