@@ -23,9 +23,6 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import AssigneeChip from '@src/components/AssigneeChip';
 import styles from './ChatHeader.module.css';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import classNames from 'classnames/bind';
-
-const cx = classNames.bind(styles);
 
 const ChatHeader: React.FC = ({
 	chat,
@@ -138,12 +135,7 @@ const ChatHeader: React.FC = ({
 
 			<div className="chat__headerRight">
 				{chat && (
-					<div
-						className={cx({
-							assigneeActions: true,
-							desktopOnly: true,
-						})}
-					>
+					<div className={styles.assigneeActions}>
 						<AssigneeChip
 							assigneeType={'user'}
 							name={chat.assignedToUser?.username}

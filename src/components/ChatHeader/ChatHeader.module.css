@@ -17,3 +17,9 @@
 .assigneeActions :global(.assigneeChip) {
 	background-color: rgba(0, 0, 45, 0.06);
 }
+
+@media only screen and (max-width: 500px) {
+	.assigneeActions {
+		display: none;
+	}
+}
