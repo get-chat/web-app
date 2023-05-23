@@ -13,7 +13,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	margin-right: 3px;
+	margin-right: 5px;
 }
 
 .name.wider {
@@ -52,4 +52,5 @@
 .actionIcon {
 	height: 19px !important;
 	width: 19px !important;
+	margin-left: -2px !important;
 }
