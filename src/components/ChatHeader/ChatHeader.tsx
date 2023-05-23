@@ -141,7 +141,7 @@ const ChatHeader: React.FC = ({
 							name={chat.assignedToUser?.username}
 							isActionable={true}
 							onAction={(user, group) => {
-								partialUpdateChatAssignment(waId, user?.id);
+								partialUpdateChatAssignment(waId, user?.id ?? null);
 							}}
 						/>
 						<AssigneeChip
@@ -149,7 +149,7 @@ const ChatHeader: React.FC = ({
 							name={chat.assignedGroup?.name}
 							isActionable={true}
 							onAction={(user, group) => {
-								partialUpdateChatAssignment(waId, undefined, group?.id);
+								partialUpdateChatAssignment(waId, undefined, group?.id ?? null);
 							}}
 						/>
 					</div>

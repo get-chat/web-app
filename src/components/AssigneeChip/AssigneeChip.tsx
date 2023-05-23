@@ -40,12 +40,12 @@ const AssigneeChip: React.FC<Props> = ({
 			isActionable,
 		});
 
-	const selectUser = (user: UserModel) => {
+	const selectUser = (user?: UserModel) => {
 		onAction?.(user);
 		hideMenu();
 	};
 
-	const selectGroup = (group: GroupModel) => {
+	const selectGroup = (group?: GroupModel) => {
 		onAction?.(undefined, group);
 		hideMenu();
 	};
@@ -101,6 +101,16 @@ const AssigneeChip: React.FC<Props> = ({
 						onClose={hideMenu}
 						elevation={3}
 					>
+						<MenuItem
+							onClick={() =>
+								assigneeType === AssigneeType.user
+									? selectUser(undefined)
+									: selectGroup(undefined)
+							}
+						>
+							{t('Unassigned')}
+						</MenuItem>
+
 						{assigneeType === AssigneeType.user &&
 							Object.values(users)?.map((user) => (
 								<MenuItem
