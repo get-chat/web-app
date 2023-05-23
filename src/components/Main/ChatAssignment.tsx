@@ -87,7 +87,7 @@ function ChatAssignment(props) {
 	};
 
 	const listGroups = () => {
-		apiService.listGroupsCall((response) => {
+		apiService.listGroupsCall(undefined, (response) => {
 			setGroups(response.data.results);
 
 			// Next

@@ -32,7 +32,7 @@ import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
-import ChatHeader from './ChatHeader';
+import ChatHeader from '@src/components/ChatHeader';
 import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
 import moment from 'moment';
 import PubSub from 'pubsub-js';
@@ -81,14 +81,15 @@ import { ErrorBoundary } from '@sentry/react';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
-import useChatAssignment from '@src/hooks/useChatAssignment';
+import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
+import ChatModel from '@src/api/models/ChatModel';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -121,7 +122,10 @@ const Chat: React.FC = (props) => {
 	const [isTemplateMessagesVisible, setTemplateMessagesVisible] =
 		useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
+
 	const [person, setPerson] = useState();
+	const [chat, setChat] = useState<ChatModel>();
+
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
@@ -148,7 +152,7 @@ const Chat: React.FC = (props) => {
 
 	const { waId } = useParams();
 
-	const { partialUpdateChatAssignment } = useChatAssignment();
+	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -301,7 +305,8 @@ const Chat: React.FC = (props) => {
 		setLoaded(false);
 
 		// Clear values for next route
-		setPerson(null);
+		setPerson(undefined);
+		setChat(undefined);
 		setMessages([]);
 		setHasOlderMessagesToLoad(true);
 		setTemplateMessagesVisible(false);
@@ -322,6 +327,9 @@ const Chat: React.FC = (props) => {
 			console.log('waId is empty.');
 			return;
 		}
+
+		// Load chat
+		retrieveChat();
 
 		// Load contact and messages
 		retrievePerson(true);
@@ -639,6 +647,9 @@ const Chat: React.FC = (props) => {
 				} else {
 					displayScrollButton();
 				}
+
+				// Reload chat to update assignee information
+				retrieveChat();
 			}
 		};
 
@@ -919,6 +930,18 @@ const Chat: React.FC = (props) => {
 		// We need to use parent because menu view gets hidden
 		setMenuAnchorEl(event.currentTarget.parentElement);
 		setOptionsChatMessage(chatMessage);
+	};
+
+	const retrieveChat = () => {
+		apiService.retrieveChatCall(
+			waId,
+			cancelTokenSourceRef.current.token,
+			(response: AxiosResponse) => {
+				const preparedChat = new ChatModel(response.data);
+				setChat(preparedChat);
+			},
+			(error: AxiosError) => console.log(error)
+		);
 	};
 
 	const retrievePerson = (loadMessages) => {
@@ -1866,6 +1889,7 @@ const Chat: React.FC = (props) => {
                     message={confirmationMessage} />*/}
 
 			<ChatHeader
+				chat={chat}
 				person={person}
 				contactProvidersData={props.contactProvidersData}
 				retrieveContactData={props.retrieveContactData}

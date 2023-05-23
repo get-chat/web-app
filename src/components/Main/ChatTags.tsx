@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { AppConfig } from '@src/contexts/AppConfig';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
+import { AxiosError, AxiosResponse } from 'axios';
 
 function ChatTags(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -80,13 +81,18 @@ function ChatTags(props) {
 	};
 
 	const retrieveChat = () => {
-		apiService.retrieveChatCall(props.waId, (response) => {
-			setChat(response.data);
-			setChatTags(response.data.tags);
+		apiService.retrieveChatCall(
+			props.waId,
+			undefined,
+			(response: AxiosResponse) => {
+				setChat(response.data);
+				setChatTags(response.data.tags);
 
-			// Next
-			listTags();
-		});
+				// Next
+				listTags();
+			},
+			(error: AxiosError) => console.log(error)
+		);
 	};
 
 	const listTags = () => {

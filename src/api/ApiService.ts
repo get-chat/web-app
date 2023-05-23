@@ -485,13 +485,14 @@ export class ApiService {
 		);
 	};
 
-	retrieveChatCall = (waId, successCallback) => {
+	retrieveChatCall = (waId, cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}chats/${waId}/`, getRequestConfig()),
+			axios.get(
+				`${this.apiBaseURL}chats/${waId}/`,
+				getRequestConfig(undefined, cancelToken)
+			),
 			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
+			errorCallback
 		);
 	};
 
@@ -591,6 +592,7 @@ export class ApiService {
 		waId,
 		assignedToUser,
 		assignedGroup,
+		cancelToken,
 		successCallback,
 		errorCallback
 	) => {
@@ -610,20 +612,21 @@ export class ApiService {
 			axios.patch(
 				`${this.apiBaseURL}chat_assignment/${waId}/`,
 				data,
-				getRequestConfig()
+				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,
 			errorCallback
 		);
 	};
 
-	listGroupsCall = (successCallback) => {
+	listGroupsCall = (cancelToken?, successCallback?, errorCallback?) => {
 		this.handleRequest(
-			axios.get(`${this.apiBaseURL}groups/`, getRequestConfig()),
+			axios.get(
+				`${this.apiBaseURL}groups/`,
+				getRequestConfig(undefined, cancelToken)
+			),
 			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
+			errorCallback
 		);
 	};
 

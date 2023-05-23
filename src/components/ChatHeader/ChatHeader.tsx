@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { useState } from 'react';
-import '../../../styles/ChatHeader.css';
+import '../../styles/ChatHeader.css';
 import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
 import {
@@ -18,12 +18,31 @@ import {
 	setDisplayAssignmentAndTaggingHistory,
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import PrintMessage from '../../PrintMessage';
+import PrintMessage from '../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
+import AssigneeChip from '@src/components/AssigneeChip';
+import styles from './ChatHeader.module.css';
+import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
+import classNames from 'classnames/bind';
 
-function ChatHeader(props) {
+const cx = classNames.bind(styles);
+
+const ChatHeader: React.FC = ({
+	chat,
+	person,
+	contactProvidersData,
+	retrieveContactData,
+	isChatOnly,
+	setChatAssignmentVisible,
+	setChatTagsVisible,
+	closeChat,
+	hasFailedMessages,
+	waId,
+}) => {
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState(null);
+
+	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
 	const displayMenu = (event) => {
 		setAnchorEl(event.currentTarget);
@@ -47,12 +66,12 @@ function ChatHeader(props) {
 	};
 
 	const showChatAssignmentAndHideMenu = () => {
-		props.setChatAssignmentVisible(true);
+		setChatAssignmentVisible(true);
 		hideMenu();
 	};
 
 	const showChatTagsAndHideMenu = () => {
-		props.setChatTagsVisible(true);
+		setChatTagsVisible(true);
 		hideMenu();
 	};
 
@@ -68,11 +87,11 @@ function ChatHeader(props) {
 
 	return (
 		<div className="chat__header" onDrop={(event) => event.preventDefault()}>
-			{!props.isChatOnly && (
+			{!isChatOnly && (
 				<div className="mobileOnly">
 					<IconButton
 						className="chat__header__backButton"
-						onClick={props.closeChat}
+						onClick={closeChat}
 						size="large"
 					>
 						<ArrowBack />
@@ -83,45 +102,70 @@ function ChatHeader(props) {
 			<div className="chat__header__clickable" onClick={showContactDetails}>
 				<CustomAvatar
 					src={extractAvatarFromContactProviderData(
-						props.contactProvidersData[props.person?.waId]
+						contactProvidersData[person?.waId]
 					)}
 					className={
-						'chat__header__avatar ' + (props.person?.isExpired ? 'expired' : '')
+						'chat__header__avatar ' + (person?.isExpired ? 'expired' : '')
 					}
-					generateBgColorBy={
-						!props.person?.isExpired ? props.person?.name : undefined
-					}
+					generateBgColorBy={!person?.isExpired ? person?.name : undefined}
 				>
-					{props.person?.initials}
+					{person?.initials}
 				</CustomAvatar>
 
 				<div className="chat__headerInfo">
 					<PrintMessage
 						as="h3"
 						message={
-							props.contactProvidersData[props.person?.waId]?.[0]?.name ??
-							props.person?.name ??
-							(props.person?.waId ? addPlus(props.person?.waId) : '')
+							contactProvidersData[person?.waId]?.[0]?.name ??
+							person?.name ??
+							(person?.waId ? addPlus(person?.waId) : '')
 						}
 					/>
 
 					{/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
-					{props.person?.isExpired && (
-						<p className="chat__header__expired">{t('Inactive')}</p>
-					)}
-				</div>
 
-				<div className="chat__headerInfo_2">
-					<span className="chat__headerInfo_2__waId desktopOnly">
-						{props.person?.waId ? addPlus(props.person?.waId) : ''}
-					</span>
+					<div className={styles.subRow}>
+						<span
+							className={cx({
+								waId: true,
+								desktopOnly: true,
+							})}
+						>
+							{person?.waId ? addPlus(person?.waId) : ''}
+						</span>
+
+						{person?.isExpired && (
+							<span className={styles.expiredIndicator}>{t('Inactive')}</span>
+						)}
+					</div>
 				</div>
 			</div>
 
 			<div className="chat__headerRight">
-				{isMobileOnly && props.hasFailedMessages && (
+				{chat && (
+					<div className={styles.assigneeActions}>
+						<AssigneeChip
+							assigneeType={'user'}
+							name={chat.assignedToUser?.username}
+							isActionable={true}
+							onAction={(user, group) => {
+								partialUpdateChatAssignment(waId, user?.id ?? null);
+							}}
+						/>
+						<AssigneeChip
+							assigneeType={'group'}
+							name={chat.assignedGroup?.name}
+							isActionable={true}
+							onAction={(user, group) => {
+								partialUpdateChatAssignment(waId, undefined, group?.id ?? null);
+							}}
+						/>
+					</div>
+				)}
+
+				{isMobileOnly && hasFailedMessages && (
 					<Tooltip title={t('Failed to send some messages!')}>
-						<IconButton onClick={props.closeChat} size="large">
+						<IconButton onClick={closeChat} size="large">
 							<WarningIcon className="error" />
 						</IconButton>
 					</Tooltip>
@@ -159,6 +203,6 @@ function ChatHeader(props) {
 			</Menu>
 		</div>
 	);
-}
+};
 
 export default ChatHeader;
