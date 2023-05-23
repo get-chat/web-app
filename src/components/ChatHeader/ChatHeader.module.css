@@ -5,6 +5,20 @@
 	gap: 10px;
 }
 
+.waId {
+	font-size: 12px;
+	color: rgba(0, 0, 45, 0.45);
+}
+
+.expiredIndicator {
+	font-size: 12px;
+	color: #7a7a18 !important;
+	margin-top: -2px;
+	background-color: #a9a92a36;
+	border-radius: 5px;
+	padding: 0 4px;
+}
+
 .assigneeActions {
 	display: flex;
 	flex-direction: column;

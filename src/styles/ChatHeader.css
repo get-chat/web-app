@@ -49,17 +49,6 @@
 	filter: grayscale(100%);
 }
 
-.chat__header__expired {
-	font-size: 12px;
-	color: #a9a92a !important;
-	margin-top: -2px;
-}
-
-.chat__headerInfo_2__waId {
-	font-size: 12px;
-	color: rgba(0, 0, 45, 0.45);
-}
-
 @media only screen and (max-width: 750px) {
 	.chat__header {
 		padding: 4px 10px;

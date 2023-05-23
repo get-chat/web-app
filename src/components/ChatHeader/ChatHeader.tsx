@@ -23,6 +23,9 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import AssigneeChip from '@src/components/AssigneeChip';
 import styles from './ChatHeader.module.css';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 const ChatHeader: React.FC = ({
 	chat,
@@ -122,12 +125,17 @@ const ChatHeader: React.FC = ({
 					{/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
 
 					<div className={styles.subRow}>
-						<span className="chat__headerInfo_2__waId desktopOnly">
+						<span
+							className={cx({
+								waId: true,
+								desktopOnly: true,
+							})}
+						>
 							{person?.waId ? addPlus(person?.waId) : ''}
 						</span>
 
 						{person?.isExpired && (
-							<p className="chat__header__expired">{t('Inactive')}</p>
+							<span className={styles.expiredIndicator}>{t('Inactive')}</span>
 						)}
 					</div>
 				</div>
