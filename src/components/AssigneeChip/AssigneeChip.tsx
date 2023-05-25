@@ -48,15 +48,13 @@ const AssigneeChip: React.FC<Props> = ({
 	};
 
 	return (
-		<div
-			className={cx({
-				assigneeChip: true,
-				container: true,
-				clickable: isActionable,
-			})}
-		>
+		<>
 			<div
-				className={styles.contentWrapper}
+				className={cx({
+					assigneeChip: true,
+					container: true,
+					clickable: isActionable,
+				})}
 				onClick={isActionable ? displayMenu : undefined}
 			>
 				<CustomAvatar
@@ -136,7 +134,7 @@ const AssigneeChip: React.FC<Props> = ({
 						))}
 				</Menu>
 			)}
-		</div>
+		</>
 	);
 };
 

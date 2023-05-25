@@ -3,16 +3,13 @@
 	border-radius: 10px;
 	font-size: 12px;
 	height: 19px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .container.clickable {
 	cursor: pointer;
-}
-
-.contentWrapper {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
 }
 
 .name {
