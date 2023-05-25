@@ -1,11 +1,18 @@
 .container {
 	background-color: var(--gray-light);
 	border-radius: 10px;
+	font-size: 12px;
+	height: 19px;
+}
+
+.container.clickable {
+	cursor: pointer;
+}
+
+.contentWrapper {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	font-size: 12px;
-	height: 19px;
 }
 
 .name {

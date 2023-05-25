@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import styles from './AssigneeChip.module.css';
@@ -52,87 +52,89 @@ const AssigneeChip: React.FC<Props> = ({
 			className={cx({
 				assigneeChip: true,
 				container: true,
+				clickable: isActionable,
 			})}
 		>
-			<CustomAvatar
-				className={cx({
-					avatar: true,
-					unassigned: !Boolean(name),
-				})}
-				generateBgColorBy={name}
+			<div
+				className={styles.contentWrapper}
+				onClick={isActionable ? displayMenu : undefined}
 			>
-				{assigneeType === 'group' ? (
-					<GroupIcon />
-				) : name ? (
-					generateInitialsHelper(name)
-				) : (
-					<PersonIcon />
-				)}
-			</CustomAvatar>
+				<CustomAvatar
+					className={cx({
+						avatar: true,
+						unassigned: !Boolean(name),
+					})}
+					generateBgColorBy={name}
+				>
+					{assigneeType === 'group' ? (
+						<GroupIcon />
+					) : name ? (
+						generateInitialsHelper(name)
+					) : (
+						<PersonIcon />
+					)}
+				</CustomAvatar>
 
-			<span
-				className={cx({
-					name: true,
-					wider: isActionable,
-				})}
-			>
-				{name ?? t('Unassigned')}
-			</span>
+				<span
+					className={cx({
+						name: true,
+						wider: isActionable,
+					})}
+				>
+					{name ?? t('Unassigned')}
+				</span>
 
-			{isActionable && (
-				<>
-					<IconButton
-						className={styles.actionIcon}
-						onClick={displayMenu}
-						size="small"
-					>
+				{isActionable && (
+					<IconButton className={styles.actionIcon} size="small">
 						<ExpandMoreIcon />
 					</IconButton>
+				)}
+			</div>
 
-					<Menu
-						anchorEl={menuAnchorEl}
-						anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-						transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-						keepMounted
-						open={Boolean(menuAnchorEl)}
-						onClose={hideMenu}
-						elevation={3}
+			{isActionable && (
+				<Menu
+					anchorEl={menuAnchorEl}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+					transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+					keepMounted
+					open={Boolean(menuAnchorEl)}
+					onClose={hideMenu}
+					elevation={3}
+				>
+					<MenuItem
+						onClick={() =>
+							assigneeType === 'user'
+								? selectUser(undefined)
+								: selectGroup(undefined)
+						}
 					>
-						<MenuItem
-							onClick={() =>
-								assigneeType === 'user'
-									? selectUser(undefined)
-									: selectGroup(undefined)
-							}
-						>
-							{t('Unassigned')}
-						</MenuItem>
+						{t('Unassigned')}
+					</MenuItem>
 
-						{assigneeType === 'user' &&
-							Object.values(users)?.map((user) => (
-								<MenuItem
-									// @ts-ignore
-									key={user.id}
-									value={user.id}
-									onClick={() => selectUser(user)}
-								>
-									{user.prepareUserLabel()}
-								</MenuItem>
-							))}
+					{assigneeType === 'user' &&
+						Object.values(users)?.map((user) => (
+							<MenuItem
+								// @ts-ignore
+								key={user.id}
+								value={user.id}
+								onClick={() => selectUser(user)}
+							>
+								{user.prepareUserLabel()}
+							</MenuItem>
+						))}
 
-						{assigneeType === 'group' &&
-							Object.values(groups)?.map((group) => (
-								<MenuItem
-									// @ts-ignore
-									key={group.id}
-									value={group.id}
-									onClick={() => selectGroup(group)}
-								>
-									{group.name}
-								</MenuItem>
-							))}
-					</Menu>
-				</>
+					{assigneeType === 'group' &&
+						Object.values(groups)?.map((group) => (
+							<MenuItem
+								// @ts-ignore
+								key={group.id}
+								value={group.id}
+								onClick={() => selectGroup(group)}
+							>
+								{group.name}
+							</MenuItem>
+						))}
+				</Menu>
 			)}
 		</div>
 	);
