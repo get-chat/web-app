@@ -156,7 +156,7 @@ msgid "Assigned to: <1>%s</1>"
 msgstr "Atanmış kullanıcı: <1>%s</1>"
 
 msgid "Assigned group: <1>%s</1>"
-msgstr "Atanmış kullanıcı"
+msgstr "Atanmış grup: <1>%s</1>"
 
 msgid "Phone number"
 msgstr "Telefon numarası"
