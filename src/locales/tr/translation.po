@@ -156,7 +156,7 @@ msgid "Assigned to: <1>%s</1>"
 msgstr "Atanmış kullanıcı: <1>%s</1>"
 
 msgid "Assigned group: <1>%s</1>"
-msgstr "Atanmış kullanıcı"
+msgstr "Atanmış grup: <1>%s</1>"
 
 msgid "Phone number"
 msgstr "Telefon numarası"
@@ -634,7 +634,7 @@ msgstr "Henüz hiç sohbetin yok."
 msgid "Images & Videos"
 msgstr "Fotoğraf & Video"
 
-msgid "Register templates"
+msgid "Register Templates"
 msgstr "Taslak oluştur"
 
 msgid "Click here to refresh"
@@ -687,3 +687,81 @@ msgstr "Taslaklar"
 
 msgid "Filter chats by tag"
 msgstr "Sohbetleri etikete göre filtrele"
+
+msgid "Change inbox URL"
+msgstr "Inbox URL'ini değiştir"
+
+msgid "Settings"
+msgstr "Ayarlar"
+
+msgid "Delete profile photo"
+msgstr "Profil fotoğrafını sil"
+
+msgid "Start a chat"
+msgstr "Bir sohbet başlat"
+
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Gallery"
+msgstr "Galeri"
+
+msgid "Contact"
+msgstr "Kişiler"
+
+msgid "Preparing"
+msgstr "Hazırlanıyor"
+
+msgid "Recording"
+msgstr "Kaydediyor"
+
+msgid "Toggle event history"
+msgstr "Olay geçmişini aç/kapa"
+
+msgid "Register templates"
+msgstr "Taslak yarat"
+
+msgid "Saved Responses"
+msgstr "Kaydedilmiş Yanıtlar"
+
+msgid "Expired (commands only)"
+msgstr "Süresi doldu (yalnızca komutlar)"
+
+msgid "Back"
+msgstr "Geri"
+
+msgid "Change your inbox URL"
+msgstr "Inbox URL'ini değiştir"
+
+msgid "Please enter your get.chat inbox link (URL)"
+msgstr "Lütfen get.chat inbox bağlantını (URL) gir"
+
+msgid "Complete the link automatically"
+msgstr "Bağlantıyı otomatik tamamla"
+
+msgid "You don't have an inbox yet?"
+msgstr "Henüz bir inbox'ın yok mu?"
+
+msgid "Continue"
+msgstr "Devam"
+
+msgid "Please enter a valid URL."
+msgstr "Lütfen geçerli bir URL girin."
+
+msgid "Please enter a valid inbox link"
+msgstr "Lütfen geçerli bir inbox URL'i girin"
+
+msgid "Successful! Your inbox link works!"
+msgstr "Başarılı! Inbox bağlantın çalışıyor!"
+
+msgid "Chat"
+msgstr "Sohbet"
+
+msgid "Developer Options"
+msgstr "Geliştirici Seçenekleri"
+
+msgid "Available tags"
+msgstr "Boştaki etiketler"
+
+msgid "Notification sounds"
+msgstr "Bildirim sesleri"

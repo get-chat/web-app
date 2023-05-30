@@ -149,7 +149,7 @@ msgstr ""
 msgid "Never"
 msgstr ""
 
-msgid "Whatsapp Phone Number"
+msgid "WhatsApp Phone Number"
 msgstr ""
 
 msgid "Assigned to: <1>%s</1>"
@@ -715,4 +715,82 @@ msgid "Templates"
 msgstr ""
 
 msgid "Filter chats by tag"
+msgstr ""
+
+msgid "Change inbox URL"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Delete profile photo"
+msgstr ""
+
+msgid "Start a chat"
+msgstr ""
+
+msgid "Camera"
+msgstr ""
+
+msgid "Gallery"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Preparing"
+msgstr ""
+
+msgid "Recording"
+msgstr ""
+
+msgid "Toggle event history"
+msgstr ""
+
+msgid "Register Templates"
+msgstr ""
+
+msgid "Saved Responses"
+msgstr ""
+
+msgid "Expired (commands only)"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
+msgid "Change your inbox URL"
+msgstr ""
+
+msgid "Please enter your get.chat inbox link (URL)"
+msgstr ""
+
+msgid "Complete the link automatically"
+msgstr ""
+
+msgid "You don't have an inbox yet?"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Please enter a valid URL."
+msgstr ""
+
+msgid "Please enter a valid inbox link"
+msgstr ""
+
+msgid "Successful! Your inbox link works!"
+msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Developer Options"
+msgstr ""
+
+msgid "Available tags"
+msgstr ""
+
+msgid "Notification sounds"
 msgstr ""
