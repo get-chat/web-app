@@ -149,7 +149,7 @@ msgstr ""
 msgid "Never"
 msgstr ""
 
-msgid "Whatsapp Phone Number"
+msgid "WhatsApp Phone Number"
 msgstr ""
 
 msgid "Assigned to: <1>%s</1>"
@@ -747,7 +747,7 @@ msgstr ""
 msgid "Toggle event history"
 msgstr ""
 
-msgid "Register templates"
+msgid "Register Templates"
 msgstr ""
 
 msgid "Saved Responses"

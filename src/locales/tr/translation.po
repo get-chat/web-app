@@ -634,7 +634,7 @@ msgstr "Henüz hiç sohbetin yok."
 msgid "Images & Videos"
 msgstr "Fotoğraf & Video"
 
-msgid "Register templates"
+msgid "Register Templates"
 msgstr "Taslak oluştur"
 
 msgid "Click here to refresh"
