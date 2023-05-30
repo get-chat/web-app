@@ -762,3 +762,6 @@ msgstr "Geliştirici Seçenekleri"
 
 msgid "Available tags"
 msgstr "Boştaki etiketler"
+
+msgid "Notification sounds"
+msgstr "Bildirim sesleri"

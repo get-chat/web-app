@@ -791,3 +791,6 @@ msgstr ""
 
 msgid "Available tags"
 msgstr ""
+
+msgid "Notification sounds"
+msgstr ""
