@@ -753,3 +753,12 @@ msgstr "Lütfen geçerli bir inbox URL'i girin"
 
 msgid "Successful! Your inbox link works!"
 msgstr "Başarılı! Inbox bağlantın çalışıyor!"
+
+msgid "Chat"
+msgstr "Sohbet"
+
+msgid "Developer Options"
+msgstr "Geliştirici Seçenekleri"
+
+msgid "Available tags"
+msgstr "Boştaki etiketler"

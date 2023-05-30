@@ -255,5 +255,8 @@
 	"Continue": "",
 	"Please enter a valid URL.": "",
 	"Please enter a valid inbox link": "",
-	"Successful! Your inbox link works!": ""
+	"Successful! Your inbox link works!": "",
+	"Chat": "",
+	"Developer Options": "",
+	"Available tags": ""
 }

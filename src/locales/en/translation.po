@@ -782,3 +782,12 @@ msgstr ""
 
 msgid "Successful! Your inbox link works!"
 msgstr ""
+
+msgid "Chat"
+msgstr ""
+
+msgid "Developer Options"
+msgstr ""
+
+msgid "Available tags"
+msgstr ""

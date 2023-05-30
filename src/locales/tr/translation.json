@@ -247,5 +247,8 @@
 	"Continue": "Devam",
 	"Please enter a valid URL.": "Lütfen geçerli bir URL girin.",
 	"Please enter a valid inbox link": "Lütfen geçerli bir inbox URL'i girin",
-	"Successful! Your inbox link works!": "Başarılı! Inbox bağlantın çalışıyor!"
+	"Successful! Your inbox link works!": "Başarılı! Inbox bağlantın çalışıyor!",
+	"Chat": "Sohbet",
+	"Developer Options": "Geliştirici Seçenekleri",
+	"Available tags": "Boştaki etiketler"
 }
