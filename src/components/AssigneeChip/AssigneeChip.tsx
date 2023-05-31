@@ -6,7 +6,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
 import classNames from 'classnames/bind';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 import UserModel from '@src/api/models/UserModel';
@@ -99,6 +99,8 @@ const AssigneeChip: React.FC<Props> = ({
 					onClose={hideMenu}
 					elevation={3}
 				>
+					<h6 className={styles.menuHeader}>Users</h6>
+
 					<MenuItem
 						onClick={() =>
 							assigneeType === 'user'
@@ -109,29 +111,31 @@ const AssigneeChip: React.FC<Props> = ({
 						{t('Unassigned')}
 					</MenuItem>
 
-					{assigneeType === 'user' &&
-						Object.values(users)?.map((user) => (
-							<MenuItem
-								// @ts-ignore
-								key={user.id}
-								value={user.id}
-								onClick={() => selectUser(user)}
-							>
-								{user.prepareUserLabel()}
-							</MenuItem>
-						))}
+					{Object.values(users)?.map((user) => (
+						<MenuItem
+							// @ts-ignore
+							key={user.id}
+							value={user.id}
+							onClick={() => selectUser(user)}
+						>
+							{user.prepareUserLabel()}
+						</MenuItem>
+					))}
 
-					{assigneeType === 'group' &&
-						Object.values(groups)?.map((group) => (
-							<MenuItem
-								// @ts-ignore
-								key={group.id}
-								value={group.id}
-								onClick={() => selectGroup(group)}
-							>
-								{group.name}
-							</MenuItem>
-						))}
+					<Divider />
+
+					<h6 className={styles.menuHeader}>Groups</h6>
+
+					{Object.values(groups)?.map((group) => (
+						<MenuItem
+							// @ts-ignore
+							key={group.id}
+							value={group.id}
+							onClick={() => selectGroup(group)}
+						>
+							{group.name}
+						</MenuItem>
+					))}
 				</Menu>
 			)}
 		</>

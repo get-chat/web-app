@@ -58,3 +58,7 @@
 	width: 19px !important;
 	margin-left: -2px !important;
 }
+
+.menuHeader {
+	padding: 8px 16px;
+}
