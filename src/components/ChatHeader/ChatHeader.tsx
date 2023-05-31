@@ -170,6 +170,7 @@ const ChatHeader: React.FC<Props> = ({
 						<AssigneeChip
 							assigneeType="user"
 							name={chat.assignedToUser?.username}
+							secondaryName={chat.assignedGroup?.name}
 							assignedUserId={chat.assignedToUser?.id}
 							isActionable={true}
 							onAction={(userId, groupId) => {

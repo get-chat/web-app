@@ -21,7 +21,7 @@
 }
 
 .name.wider {
-	max-width: 100px;
+	max-width: 110px;
 }
 
 .container :global(.MuiSvgIcon-root) {

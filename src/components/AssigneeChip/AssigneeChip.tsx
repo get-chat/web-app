@@ -22,6 +22,7 @@ export type AssigneeType = 'user' | 'group';
 interface Props {
 	assigneeType: AssigneeType;
 	name?: string;
+	secondaryName?: string;
 	assignedUserId?: Number;
 	assignedGroupId?: Number;
 	isActionable?: boolean;
@@ -33,6 +34,7 @@ const cx = classNames.bind(styles);
 const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
 	name,
+	secondaryName,
 	assignedUserId,
 	assignedGroupId,
 	isActionable = false,
@@ -89,6 +91,7 @@ const AssigneeChip: React.FC<Props> = ({
 					})}
 				>
 					{name ?? t('Unassigned')}
+					{secondaryName && ', ' + secondaryName}
 				</span>
 
 				{isActionable && (
