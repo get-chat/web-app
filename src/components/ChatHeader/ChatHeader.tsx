@@ -1,6 +1,13 @@
 import React, { MouseEvent, useState } from 'react';
 import '../../styles/ChatHeader.css';
-import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import {
+	Divider,
+	IconButton,
+	ListItemIcon,
+	Menu,
+	MenuItem,
+	Tooltip,
+} from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
 import {
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
@@ -25,6 +32,10 @@ import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import classNames from 'classnames/bind';
 import PersonModel from '@src/api/models/PersonModel';
 import ChatModel from '@src/api/models/ChatModel';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import SellIcon from '@mui/icons-material/Sell';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 const cx = classNames.bind(styles);
 
@@ -195,17 +206,29 @@ const ChatHeader: React.FC<Props> = ({
 				elevation={3}
 			>
 				<MenuItem onClick={showContactDetailsAndHideMenu}>
+					<ListItemIcon>
+						<AccountBoxIcon />
+					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
 				<MenuItem onClick={showChatAssignmentAndHideMenu}>
+					<ListItemIcon>
+						<AssignmentTurnedInIcon />
+					</ListItemIcon>
 					{t('Assign chat')}
 				</MenuItem>
 				<MenuItem onClick={showChatTagsAndHideMenu}>
+					<ListItemIcon>
+						<SellIcon />
+					</ListItemIcon>
 					{t('Change tags')}
 				</MenuItem>
 				<Divider />
 				<MenuItem onClick={toggleAssignmentAndTaggingHistory}>
-					{t('Toggle assignment and tagging history')}
+					<ListItemIcon>
+						<EventNoteIcon />
+					</ListItemIcon>
+					{t('Toggle event history')}
 				</MenuItem>
 			</Menu>
 		</div>

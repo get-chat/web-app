@@ -110,7 +110,7 @@ const AssigneeChip: React.FC<Props> = ({
 					elevation={3}
 				>
 					<h6 className={styles.menuHeader}>
-						<PersonIcon /> Users
+						<PersonIcon /> {t('Users')}
 					</h6>
 
 					<MenuItem
@@ -151,7 +151,7 @@ const AssigneeChip: React.FC<Props> = ({
 					<Divider />
 
 					<h6 className={styles.menuHeader}>
-						<GroupIcon /> Groups
+						<GroupIcon /> {t('Groups')}
 					</h6>
 
 					<MenuItem

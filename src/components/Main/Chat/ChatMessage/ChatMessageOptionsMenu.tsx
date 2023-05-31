@@ -1,9 +1,11 @@
 // @ts-nocheck
 import React, { useMemo } from 'react';
-import { Menu, MenuItem } from '@mui/material';
+import { ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { download } from '@src/helpers/DownloadHelper';
+import DownloadIcon from '@mui/icons-material/Download';
+import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
 
 function ChatMessageOptionsMenu({
 	optionsChatMessage,
@@ -58,10 +60,20 @@ function ChatMessageOptionsMenu({
 				optionsChatMessage.type === ChatMessageModel.TYPE_TEXT &&
 				optionsChatMessage.isFromUs && (
 					<MenuItem onClick={handleCreateSavedResponse}>
+						<ListItemIcon>
+							<MarkChatReadIcon />
+						</ListItemIcon>
 						{t('Save this response')}
 					</MenuItem>
 				)}
-			{hasVideo && <MenuItem onClick={downloadVideo}>{t('Download')}</MenuItem>}
+			{hasVideo && (
+				<MenuItem onClick={downloadVideo}>
+					<ListItemIcon>
+						<DownloadIcon />
+					</ListItemIcon>
+					{t('Download')}
+				</MenuItem>
+			)}
 		</Menu>
 	);
 }
