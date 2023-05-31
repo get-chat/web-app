@@ -78,6 +78,14 @@
 	min-width: 31px !important;
 }
 
+.menuItem:not(.menuItemDefault) {
+	font-weight: 600;
+}
+
 .menuItemDefault {
 	padding-left: 47px !important;
+}
+
+.menuItem :global(.MuiSvgIcon-root) {
+	color: var(--color-primary) !important;
 }

@@ -115,6 +115,7 @@ const AssigneeChip: React.FC<Props> = ({
 
 					<MenuItem
 						className={cx({
+							menuItem: true,
 							menuItemDefault: assignedUserId,
 						})}
 						onClick={() => selectUser(null)}
@@ -130,6 +131,7 @@ const AssigneeChip: React.FC<Props> = ({
 					{Object.values(users)?.map((user) => (
 						<MenuItem
 							className={cx({
+								menuItem: true,
 								menuItemDefault: user.id !== assignedUserId,
 							})}
 							// @ts-ignore
@@ -154,6 +156,7 @@ const AssigneeChip: React.FC<Props> = ({
 
 					<MenuItem
 						className={cx({
+							menuItem: true,
 							menuItemDefault: assignedGroupId,
 						})}
 						onClick={() => selectGroup(null)}
@@ -169,6 +172,7 @@ const AssigneeChip: React.FC<Props> = ({
 					{Object.values(groups)?.map((group) => (
 						<MenuItem
 							className={cx({
+								menuItem: true,
 								menuItemDefault: group.id !== assignedGroupId,
 							})}
 							// @ts-ignore

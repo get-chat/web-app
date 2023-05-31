@@ -162,7 +162,6 @@ const ChatHeader: React.FC<Props> = ({
 							assigneeType="user"
 							name={chat.assignedToUser?.username}
 							assignedUserId={chat.assignedToUser?.id}
-							assignedGroupId={chat.assignedGroup?.id}
 							isActionable={true}
 							onAction={(userId, groupId) => {
 								partialUpdateChatAssignment(waId, userId, groupId);
