@@ -60,7 +60,7 @@
 }
 
 .menuHeader {
-	padding: 4px 16px;
+	padding: 4px 12px;
 	display: flex;
 	align-items: center;
 }
@@ -75,7 +75,11 @@
 }
 
 .menu :global(.MuiListItemIcon-root) {
-	min-width: 31px !important;
+	min-width: 29px !important;
+}
+
+.menuItem {
+	padding: 0 12px !important;
 }
 
 .menuItem:not(.menuItemDefault) {
@@ -83,7 +87,7 @@
 }
 
 .menuItemDefault {
-	padding-left: 47px !important;
+	padding-left: 41px !important;
 }
 
 .menuItem :global(.MuiSvgIcon-root) {
