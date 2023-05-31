@@ -60,5 +60,24 @@
 }
 
 .menuHeader {
-	padding: 8px 16px;
+	padding: 4px 16px;
+	display: flex;
+	align-items: center;
+}
+
+.menuHeader :global(.MuiSvgIcon-root) {
+	height: 13px;
+	width: 13px;
+	margin-right: 5px;
+}
+
+.menu {
+}
+
+.menu :global(.MuiListItemIcon-root) {
+	min-width: 31px !important;
+}
+
+.menuItemDefault {
+	padding-left: 47px !important;
 }

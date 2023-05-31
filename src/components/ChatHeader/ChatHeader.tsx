@@ -161,17 +161,11 @@ const ChatHeader: React.FC<Props> = ({
 						<AssigneeChip
 							assigneeType="user"
 							name={chat.assignedToUser?.username}
+							assignedUserId={chat.assignedToUser?.id}
+							assignedGroupId={chat.assignedGroup?.id}
 							isActionable={true}
-							onAction={(user, group) => {
-								partialUpdateChatAssignment(waId, user?.id ?? null);
-							}}
-						/>
-						<AssigneeChip
-							assigneeType="group"
-							name={chat.assignedGroup?.name}
-							isActionable={true}
-							onAction={(user, group) => {
-								partialUpdateChatAssignment(waId, undefined, group?.id ?? null);
+							onAction={(userId, groupId) => {
+								partialUpdateChatAssignment(waId, userId, groupId);
 							}}
 						/>
 					</div>

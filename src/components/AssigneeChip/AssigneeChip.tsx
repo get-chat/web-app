@@ -6,19 +6,26 @@ import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
 import classNames from 'classnames/bind';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
+import {
+	Divider,
+	IconButton,
+	ListItemIcon,
+	Menu,
+	MenuItem,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
-import UserModel from '@src/api/models/UserModel';
-import GroupModel from '@src/api/models/GroupModel';
+import CheckIcon from '@mui/icons-material/Check';
 
 export type AssigneeType = 'user' | 'group';
 
 interface Props {
 	assigneeType: AssigneeType;
 	name?: string;
+	assignedUserId?: Number;
+	assignedGroupId?: Number;
 	isActionable?: boolean;
-	onAction?: (selectedUser?: UserModel, selectedGroup?: GroupModel) => void;
+	onAction?: (userId?: Number | null, groupId?: Number | null) => void;
 }
 
 const cx = classNames.bind(styles);
@@ -26,6 +33,8 @@ const cx = classNames.bind(styles);
 const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
 	name,
+	assignedUserId,
+	assignedGroupId,
 	isActionable = false,
 	onAction,
 }) => {
@@ -37,13 +46,13 @@ const AssigneeChip: React.FC<Props> = ({
 			isActionable,
 		});
 
-	const selectUser = (user?: UserModel) => {
-		onAction?.(user);
+	const selectUser = (userId?: Number | null) => {
+		onAction?.(userId);
 		hideMenu();
 	};
 
-	const selectGroup = (group?: GroupModel) => {
-		onAction?.(undefined, group);
+	const selectGroup = (groupId?: Number | null) => {
+		onAction?.(undefined, groupId);
 		hideMenu();
 	};
 
@@ -91,6 +100,7 @@ const AssigneeChip: React.FC<Props> = ({
 
 			{isActionable && (
 				<Menu
+					className={styles.menu}
 					anchorEl={menuAnchorEl}
 					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 					transformOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -99,40 +109,78 @@ const AssigneeChip: React.FC<Props> = ({
 					onClose={hideMenu}
 					elevation={3}
 				>
-					<h6 className={styles.menuHeader}>Users</h6>
+					<h6 className={styles.menuHeader}>
+						<PersonIcon /> Users
+					</h6>
 
 					<MenuItem
-						onClick={() =>
-							assigneeType === 'user'
-								? selectUser(undefined)
-								: selectGroup(undefined)
-						}
+						className={cx({
+							menuItemDefault: assignedUserId,
+						})}
+						onClick={() => selectUser(null)}
 					>
+						{!assignedUserId && (
+							<ListItemIcon>
+								<CheckIcon />
+							</ListItemIcon>
+						)}
 						{t('Unassigned')}
 					</MenuItem>
 
 					{Object.values(users)?.map((user) => (
 						<MenuItem
+							className={cx({
+								menuItemDefault: user.id !== assignedUserId,
+							})}
 							// @ts-ignore
 							key={user.id}
 							value={user.id}
-							onClick={() => selectUser(user)}
+							onClick={() => selectUser(user.id)}
 						>
+							{user.id === assignedUserId && (
+								<ListItemIcon>
+									<CheckIcon />
+								</ListItemIcon>
+							)}
 							{user.prepareUserLabel()}
 						</MenuItem>
 					))}
 
 					<Divider />
 
-					<h6 className={styles.menuHeader}>Groups</h6>
+					<h6 className={styles.menuHeader}>
+						<GroupIcon /> Groups
+					</h6>
+
+					<MenuItem
+						className={cx({
+							menuItemDefault: assignedGroupId,
+						})}
+						onClick={() => selectGroup(null)}
+					>
+						{!assignedGroupId && (
+							<ListItemIcon>
+								<CheckIcon />
+							</ListItemIcon>
+						)}
+						{t('Unassigned')}
+					</MenuItem>
 
 					{Object.values(groups)?.map((group) => (
 						<MenuItem
+							className={cx({
+								menuItemDefault: group.id !== assignedGroupId,
+							})}
 							// @ts-ignore
 							key={group.id}
 							value={group.id}
-							onClick={() => selectGroup(group)}
+							onClick={() => selectGroup(group.id)}
 						>
+							{group.id === assignedGroupId && (
+								<ListItemIcon>
+									<CheckIcon />
+								</ListItemIcon>
+							)}
 							{group.name}
 						</MenuItem>
 					))}
