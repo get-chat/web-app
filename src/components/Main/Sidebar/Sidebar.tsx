@@ -80,6 +80,9 @@ import PasswordIcon from '@mui/icons-material/Password';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import SmsIcon from '@mui/icons-material/Sms';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -1060,12 +1063,21 @@ const Sidebar: React.FC = ({
 				elevation={3}
 			>
 				<MenuItem onClick={showBulkSendTemplateDialog}>
+					<ListItemIcon>
+						<SmsIcon />
+					</ListItemIcon>
 					{t('Bulk send a template')}
 				</MenuItem>
 				<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
+					<ListItemIcon>
+						<UploadFileIcon />
+					</ListItemIcon>
 					{t('Bulk send template with CSV')}
 				</MenuItem>
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
+					<ListItemIcon>
+						<KeyboardVoiceIcon />
+					</ListItemIcon>
 					{t('Bulk send a voice message')}
 				</MenuItem>
 			</Menu>

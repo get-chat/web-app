@@ -43,7 +43,6 @@ interface Props {
 	chat?: ChatModel;
 	person?: PersonModel;
 	contactProvidersData: any;
-	retrieveContactData: (waId: string) => void;
 	isChatOnly: boolean | Number;
 	setChatAssignmentVisible: (isVisible: boolean) => void;
 	setChatTagsVisible: (isVisible: boolean) => void;
@@ -56,7 +55,6 @@ const ChatHeader: React.FC<Props> = ({
 	chat,
 	person,
 	contactProvidersData,
-	retrieveContactData,
 	isChatOnly,
 	setChatAssignmentVisible,
 	setChatTagsVisible,
