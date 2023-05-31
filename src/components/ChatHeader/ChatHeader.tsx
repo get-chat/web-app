@@ -209,6 +209,7 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
+				<Divider />
 				<MenuItem onClick={showChatAssignmentAndHideMenu}>
 					<ListItemIcon>
 						<AssignmentTurnedInIcon />
