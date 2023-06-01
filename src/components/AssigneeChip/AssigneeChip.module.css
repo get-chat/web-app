@@ -21,7 +21,7 @@
 }
 
 .name.wider {
-	max-width: 100px;
+	max-width: 110px;
 }
 
 .container :global(.MuiSvgIcon-root) {
@@ -57,4 +57,39 @@
 	height: 19px !important;
 	width: 19px !important;
 	margin-left: -2px !important;
+}
+
+.menuHeader {
+	padding: 4px 12px;
+	display: flex;
+	align-items: center;
+}
+
+.menuHeader :global(.MuiSvgIcon-root) {
+	height: 13px;
+	width: 13px;
+	margin-right: 5px;
+}
+
+.menu {
+}
+
+.menu :global(.MuiListItemIcon-root) {
+	min-width: 29px !important;
+}
+
+.menuItem {
+	padding: 0 12px !important;
+}
+
+.menuItem:not(.menuItemDefault) {
+	font-weight: 600;
+}
+
+.menuItemDefault {
+	padding-left: 41px !important;
+}
+
+.menuItem :global(.MuiSvgIcon-root) {
+	color: var(--color-primary) !important;
 }

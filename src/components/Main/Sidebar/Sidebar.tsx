@@ -8,6 +8,7 @@ import {
 	Fade,
 	IconButton,
 	Link,
+	ListItemIcon,
 	Menu,
 	MenuItem,
 	Tab,
@@ -75,6 +76,13 @@ import SellIcon from '@mui/icons-material/Sell';
 import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
+import PasswordIcon from '@mui/icons-material/Password';
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import SmsIcon from '@mui/icons-material/Sms';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -995,7 +1003,12 @@ const Sidebar: React.FC = ({
 				onClose={hideMenu}
 				elevation={3}
 			>
-				<MenuItem onClick={showChatTagsList}>{t('Tags')}</MenuItem>
+				<MenuItem onClick={showChatTagsList}>
+					<ListItemIcon>
+						<SellIcon />
+					</ListItemIcon>
+					{t('Tags')}
+				</MenuItem>
 				<Divider />
 				<MenuItem
 					className="sidebar__menu__refresh"
@@ -1003,8 +1016,16 @@ const Sidebar: React.FC = ({
 				>
 					{t('Refresh')}
 				</MenuItem>
-				<MenuItem onClick={showChangePassword}>{t('Change password')}</MenuItem>
+				<MenuItem onClick={showChangePassword}>
+					<ListItemIcon>
+						<PasswordIcon />
+					</ListItemIcon>
+					{t('Change password')}
+				</MenuItem>
 				<MenuItem onClick={forceClearContactProvidersData}>
+					<ListItemIcon>
+						<CloudSyncIcon />
+					</ListItemIcon>
 					{t('Refresh contacts')}
 				</MenuItem>
 				{currentUser?.isAdmin && <Divider />}
@@ -1014,6 +1035,9 @@ const Sidebar: React.FC = ({
 						href={getHubURL(config.API_BASE_URL)}
 						target="_blank"
 					>
+						<ListItemIcon>
+							<AdminPanelSettingsIcon />
+						</ListItemIcon>
 						{t('Admin panel')}
 					</MenuItem>
 				)}
@@ -1022,6 +1046,9 @@ const Sidebar: React.FC = ({
 				)}
 				<Divider />
 				<MenuItem onClick={logOut} data-test-id="logout-button">
+					<ListItemIcon>
+						<LogoutIcon />
+					</ListItemIcon>
 					{t('Logout')}
 				</MenuItem>
 			</Menu>
@@ -1036,12 +1063,21 @@ const Sidebar: React.FC = ({
 				elevation={3}
 			>
 				<MenuItem onClick={showBulkSendTemplateDialog}>
+					<ListItemIcon>
+						<SmsIcon />
+					</ListItemIcon>
 					{t('Bulk send a template')}
 				</MenuItem>
 				<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
+					<ListItemIcon>
+						<UploadFileIcon />
+					</ListItemIcon>
 					{t('Bulk send template with CSV')}
 				</MenuItem>
 				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
+					<ListItemIcon>
+						<KeyboardVoiceIcon />
+					</ListItemIcon>
 					{t('Bulk send a voice message')}
 				</MenuItem>
 			</Menu>

@@ -36,7 +36,7 @@ const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 	}, [isActionable]);
 
 	const displayMenu = (event: MouseEvent) => {
-		if (assigneeType === 'group' && getObjLength(groups) === 0) {
+		if (getObjLength(groups) === 0) {
 			initGroups(cancelTokenSourceRef.current?.token);
 		}
 

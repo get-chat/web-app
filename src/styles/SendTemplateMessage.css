@@ -114,7 +114,7 @@
 }
 
 .sendTemplateMessage__section__headerImage__preview > img,
-video {
+.sendTemplateMessage__section__headerImage__preview > video {
 	width: 100%;
 	height: auto;
 	border-radius: 8px;

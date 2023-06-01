@@ -1892,7 +1892,6 @@ const Chat: React.FC = (props) => {
 				chat={chat}
 				person={person}
 				contactProvidersData={props.contactProvidersData}
-				retrieveContactData={props.retrieveContactData}
 				isChatOnly={props.isChatOnly}
 				setChatAssignmentVisible={props.setChatAssignmentVisible}
 				setChatTagsVisible={props.setChatTagsVisible}

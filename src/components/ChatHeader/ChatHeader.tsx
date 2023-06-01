@@ -1,6 +1,13 @@
 import React, { MouseEvent, useState } from 'react';
 import '../../styles/ChatHeader.css';
-import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import {
+	Divider,
+	IconButton,
+	ListItemIcon,
+	Menu,
+	MenuItem,
+	Tooltip,
+} from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
 import {
 	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
@@ -25,6 +32,10 @@ import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import classNames from 'classnames/bind';
 import PersonModel from '@src/api/models/PersonModel';
 import ChatModel from '@src/api/models/ChatModel';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import SellIcon from '@mui/icons-material/Sell';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +43,6 @@ interface Props {
 	chat?: ChatModel;
 	person?: PersonModel;
 	contactProvidersData: any;
-	retrieveContactData: (waId: string) => void;
 	isChatOnly: boolean | Number;
 	setChatAssignmentVisible: (isVisible: boolean) => void;
 	setChatTagsVisible: (isVisible: boolean) => void;
@@ -45,7 +55,6 @@ const ChatHeader: React.FC<Props> = ({
 	chat,
 	person,
 	contactProvidersData,
-	retrieveContactData,
 	isChatOnly,
 	setChatAssignmentVisible,
 	setChatTagsVisible,
@@ -161,17 +170,12 @@ const ChatHeader: React.FC<Props> = ({
 						<AssigneeChip
 							assigneeType="user"
 							name={chat.assignedToUser?.username}
+							secondaryName={chat.assignedGroup?.name}
+							assignedUserId={chat.assignedToUser?.id}
+							assignedGroupId={chat.assignedGroup?.id}
 							isActionable={true}
-							onAction={(user, group) => {
-								partialUpdateChatAssignment(waId, user?.id ?? null);
-							}}
-						/>
-						<AssigneeChip
-							assigneeType="group"
-							name={chat.assignedGroup?.name}
-							isActionable={true}
-							onAction={(user, group) => {
-								partialUpdateChatAssignment(waId, undefined, group?.id ?? null);
+							onAction={(userId, groupId) => {
+								partialUpdateChatAssignment(waId, userId, groupId);
 							}}
 						/>
 					</div>
@@ -202,17 +206,30 @@ const ChatHeader: React.FC<Props> = ({
 				elevation={3}
 			>
 				<MenuItem onClick={showContactDetailsAndHideMenu}>
+					<ListItemIcon>
+						<AccountBoxIcon />
+					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
+				<Divider />
 				<MenuItem onClick={showChatAssignmentAndHideMenu}>
+					<ListItemIcon>
+						<AssignmentTurnedInIcon />
+					</ListItemIcon>
 					{t('Assign chat')}
 				</MenuItem>
 				<MenuItem onClick={showChatTagsAndHideMenu}>
+					<ListItemIcon>
+						<SellIcon />
+					</ListItemIcon>
 					{t('Change tags')}
 				</MenuItem>
 				<Divider />
 				<MenuItem onClick={toggleAssignmentAndTaggingHistory}>
-					{t('Toggle assignment and tagging history')}
+					<ListItemIcon>
+						<EventNoteIcon />
+					</ListItemIcon>
+					{t('Toggle event history')}
 				</MenuItem>
 			</Menu>
 		</div>
