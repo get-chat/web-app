@@ -9,7 +9,7 @@ class ChatModel {
 	public assignedToUser: any;
 	public assignedGroup: any;
 
-	constructor(data) {
+	constructor(data: any) {
 		const contact = data.contact;
 		const lastMessage = data.last_message;
 		const contactPayload = contact.waba_payload;
