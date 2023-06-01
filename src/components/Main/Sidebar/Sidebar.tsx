@@ -463,7 +463,9 @@ const Sidebar: React.FC = ({
 
 	const sortChats = (state) => {
 		let sortedState = Object.entries(state).sort(
-			(a, b) => b[1].lastMessageTimestamp - a[1].lastMessageTimestamp
+			(a, b) =>
+				(b[1].lastReceivedMessageTimestamp ?? b[1].lastMessageTimestamp) -
+				(a[1].lastReceivedMessageTimestamp ?? a[1].lastMessageTimestamp)
 		);
 		return Object.fromEntries(sortedState);
 	};
