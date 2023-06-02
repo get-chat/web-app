@@ -131,6 +131,7 @@ const ChatListItem = (props: any) => {
 									<Tooltip
 										placement="top"
 										title={data.generateAssignmentInformation()}
+										PopperProps={{ style: { zIndex: 1 } }}
 									>
 										<div
 											onClick={preventEvents}
@@ -165,6 +166,7 @@ const ChatListItem = (props: any) => {
 									<Tooltip
 										placement="top"
 										title={data.generateAssignmentInformation()}
+										PopperProps={{ style: { zIndex: 1 } }}
 									>
 										<div
 											onClick={preventEvents}
