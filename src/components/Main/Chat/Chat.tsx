@@ -119,8 +119,7 @@ const Chat: React.FC = (props) => {
 	const [isLoaded, setLoaded] = useState(false);
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
-	const [isTemplateMessagesVisible, setTemplateMessagesVisible] =
-		useState(false);
+	const [isTemplatesVisible, setTemplatesVisible] = useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 
 	const [person, setPerson] = useState();
@@ -309,7 +308,7 @@ const Chat: React.FC = (props) => {
 		setChat(undefined);
 		setMessages([]);
 		setHasOlderMessagesToLoad(true);
-		setTemplateMessagesVisible(false);
+		setTemplatesVisible(false);
 		setSavedResponsesVisible(false);
 		setAtBottom(false);
 		setInput('');
@@ -1995,7 +1994,7 @@ const Chat: React.FC = (props) => {
 				<div className="chat__body__empty" />
 			</div>
 
-			{isTemplateMessagesVisible && (
+			{isTemplatesVisible && (
 				<TemplateListWithControls
 					isTemplatesFailed={props.isTemplatesFailed}
 					isLoadingTemplates={props.isLoadingTemplates}
@@ -2011,6 +2010,7 @@ const Chat: React.FC = (props) => {
 				setVisible={setSendTemplateDialogVisible}
 				chosenTemplate={chosenTemplate}
 				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
+				sendCallback={() => setTemplatesVisible(false)}
 				onBulkSend={bulkSendMessage}
 				isBulkOnly={false}
 			/>
@@ -2028,8 +2028,8 @@ const Chat: React.FC = (props) => {
 				sendMessage={sendMessage}
 				bulkSendMessage={bulkSendMessage}
 				setSelectedFiles={setSelectedFiles}
-				isTemplateMessagesVisible={isTemplateMessagesVisible}
-				setTemplateMessagesVisible={setTemplateMessagesVisible}
+				isTemplatesVisible={isTemplatesVisible}
+				setTemplatesVisible={setTemplatesVisible}
 				accept={accept}
 				isSavedResponsesVisible={isSavedResponsesVisible}
 				setSavedResponsesVisible={setSavedResponsesVisible}
