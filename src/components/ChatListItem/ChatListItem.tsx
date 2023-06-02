@@ -1,14 +1,9 @@
-// @ts-nocheck
-import React from 'react';
+import React, { MouseEvent, TouchEvent } from 'react';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
-import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Moment from 'react-moment';
-import {
-	extractAvatarFromContactProviderData,
-	generateInitialsHelper,
-} from '@src/helpers/Helpers';
+import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
 import {
 	CALENDAR_SHORT,
@@ -30,7 +25,7 @@ import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 
 const cx = classNames.bind(styles);
 
-const ChatListItem = (props) => {
+const ChatListItem = (props: any) => {
 	const { t } = useTranslation();
 
 	const {
@@ -51,7 +46,7 @@ const ChatListItem = (props) => {
 
 	const newMessages = props.newMessages[data.waId]?.newMessages;
 
-	const preventEvents = (event: MouseEvent) => {
+	const preventEvents = (event: MouseEvent | TouchEvent) => {
 		event.stopPropagation();
 		event.preventDefault();
 	};
@@ -141,6 +136,7 @@ const ChatListItem = (props) => {
 											onClick={preventEvents}
 											onMouseDown={preventEvents}
 											onMouseUp={preventEvents}
+											onTouchStart={preventEvents}
 										>
 											<AssigneeChip
 												assigneeType={'user'}
@@ -212,15 +208,17 @@ const ChatListItem = (props) => {
 									<div className={styles.tags}>
 										<Tooltip title={generateTagNames()}>
 											<div>
-												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
-													<SellIcon
-														key={tagIndex}
-														className={styles.tagIcon}
-														style={{
-															fill: tagItem.web_inbox_color,
-														}}
-													/>
-												))}
+												{data.tags
+													.slice(0, 3)
+													.map((tagItem: any, tagIndex: Number) => (
+														<SellIcon
+															key={tagIndex.toString()}
+															className={styles.tagIcon}
+															style={{
+																fill: tagItem.web_inbox_color,
+															}}
+														/>
+													))}
 											</div>
 										</Tooltip>
 									</div>

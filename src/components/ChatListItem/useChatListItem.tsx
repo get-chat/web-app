@@ -12,7 +12,7 @@ const useChatListItem = ({ props }) => {
 	const [isSelected, setSelected] = useState(false);
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
 	const [timeLeft, setTimeLeft] = useState();
-	const [remainingSeconds, setRemainingSeconds] = useState();
+	const [remainingSeconds, setRemainingSeconds] = useState(0);
 	const [isCheckedMissingContact, setCheckedMissingContact] = useState(false);
 
 	const isDisabled = useMemo(() => {
