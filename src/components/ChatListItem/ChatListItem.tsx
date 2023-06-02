@@ -5,12 +5,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Moment from 'react-moment';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
-import {
-	CALENDAR_SHORT,
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
-} from '@src/Constants';
+import { CALENDAR_SHORT } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +29,8 @@ const ChatListItem = (props: any) => {
 		isExpired,
 		timeLeft,
 		remainingSeconds,
+		isUserAssignmentChipVisible,
+		isGroupAssignmentChipVisible,
 		isSelected,
 		handleClick,
 		handleDroppedFiles,
@@ -125,71 +122,56 @@ const ChatListItem = (props: any) => {
 								</Tooltip>
 							)}
 
-							{data.assignedToUser &&
-								(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
-									props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
-									<Tooltip
-										placement="top"
-										title={data.generateAssignmentInformation()}
-										PopperProps={{ style: { zIndex: 1 } }}
+							{isUserAssignmentChipVisible() && (
+								<Tooltip
+									placement="top"
+									title={data.generateAssignmentInformation()}
+									PopperProps={{ style: { zIndex: 1 } }}
+								>
+									<div
+										onClick={preventEvents}
+										onMouseDown={preventEvents}
+										onMouseUp={preventEvents}
+										onTouchStart={preventEvents}
 									>
-										<div
-											onClick={preventEvents}
-											onMouseDown={preventEvents}
-											onMouseUp={preventEvents}
-											onTouchStart={preventEvents}
-										>
-											<AssigneeChip
-												assigneeType={'user'}
-												name={data.assignedToUser?.username}
-												assignedUserId={data.assignedToUser?.id}
-												assignedGroupId={data.assignedGroup?.id}
-												isActionable={true}
-												onAction={(userId, groupId) => {
-													partialUpdateChatAssignment(
-														data.waId,
-														userId,
-														groupId
-													);
-												}}
-											/>
-										</div>
-									</Tooltip>
-								)}
+										<AssigneeChip
+											assigneeType={'user'}
+											name={data.assignedToUser?.username}
+											assignedUserId={data.assignedToUser?.id}
+											assignedGroupId={data.assignedGroup?.id}
+											isActionable={true}
+											onAction={(userId, groupId) => {
+												partialUpdateChatAssignment(data.waId, userId, groupId);
+											}}
+										/>
+									</div>
+								</Tooltip>
+							)}
 
-							{data.assignedGroup &&
-								((props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
-									!data.assignedToUser) ||
-									props.tabCase === CHAT_LIST_TAB_CASE_ME ||
-									(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
-										!data.assignedToUser)) && (
-									<Tooltip
-										placement="top"
-										title={data.generateAssignmentInformation()}
-										PopperProps={{ style: { zIndex: 1 } }}
+							{isGroupAssignmentChipVisible() && (
+								<Tooltip
+									placement="top"
+									title={data.generateAssignmentInformation()}
+									PopperProps={{ style: { zIndex: 1 } }}
+								>
+									<div
+										onClick={preventEvents}
+										onMouseDown={preventEvents}
+										onMouseUp={preventEvents}
 									>
-										<div
-											onClick={preventEvents}
-											onMouseDown={preventEvents}
-											onMouseUp={preventEvents}
-										>
-											<AssigneeChip
-												assigneeType={'group'}
-												name={data.assignedGroup?.name}
-												assignedUserId={data.assignedToUser?.id}
-												assignedGroupId={data.assignedGroup?.id}
-												isActionable={true}
-												onAction={(userId, groupId) => {
-													partialUpdateChatAssignment(
-														data.waId,
-														userId,
-														groupId
-													);
-												}}
-											/>
-										</div>
-									</Tooltip>
-								)}
+										<AssigneeChip
+											assigneeType={'group'}
+											name={data.assignedGroup?.name}
+											assignedUserId={data.assignedToUser?.id}
+											assignedGroupId={data.assignedGroup?.id}
+											isActionable={true}
+											onAction={(userId, groupId) => {
+												partialUpdateChatAssignment(data.waId, userId, groupId);
+											}}
+										/>
+									</div>
+								</Tooltip>
+							)}
 						</div>
 
 						<div className={styles.lastMessageWrapper}>

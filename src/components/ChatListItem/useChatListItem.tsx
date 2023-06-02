@@ -4,7 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment/moment';
 import { getDroppedFiles } from '@src/helpers/FileHelper';
 import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_DROPPED_FILES } from '@src/Constants';
+import {
+	CHAT_LIST_TAB_CASE_ALL,
+	CHAT_LIST_TAB_CASE_GROUP,
+	CHAT_LIST_TAB_CASE_ME,
+	EVENT_TOPIC_DROPPED_FILES,
+} from '@src/Constants';
 
 const useChatListItem = ({ props }) => {
 	const data = props.chatData;
@@ -26,6 +31,54 @@ const useChatListItem = ({ props }) => {
 	useEffect(() => {
 		setSelected(props.selectedChats.includes(data.waId));
 	}, [props.selectedChats]);
+
+	const isUserAssignmentChipVisible = () => {
+		if (props.tabCase === CHAT_LIST_TAB_CASE_ALL) {
+			if (data.assignedToUser) {
+				return true;
+			}
+
+			return !data.assignedGroup;
+		}
+
+		if (props.tabCase === CHAT_LIST_TAB_CASE_ME) {
+			if (!data.assignedGroup) {
+				return true;
+			}
+		}
+
+		if (props.tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+			if (data.assignedToUser) {
+				return true;
+			}
+		}
+
+		return false;
+	};
+
+	const isGroupAssignmentChipVisible = () => {
+		if (
+			props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
+			!data.assignedToUser &&
+			data.assignedGroup
+		) {
+			return true;
+		}
+
+		if (props.tabCase === CHAT_LIST_TAB_CASE_ME) {
+			if (data.assignedGroup) {
+				return true;
+			}
+		}
+
+		if (props.tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+			if (!data.assignedToUser) {
+				return true;
+			}
+		}
+
+		return false;
+	};
 
 	const generateTagNames = () => {
 		const generatedTagNames = [];
@@ -152,6 +205,8 @@ const useChatListItem = ({ props }) => {
 		isExpired,
 		timeLeft,
 		remainingSeconds,
+		isUserAssignmentChipVisible,
+		isGroupAssignmentChipVisible,
 		isSelected,
 		handleClick,
 		handleDroppedFiles,

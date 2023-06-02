@@ -94,7 +94,7 @@ const AssigneeChip: React.FC<Props> = ({
 						wider: isActionable && secondaryName,
 					})}
 				>
-					{name ?? t('Unassigned')}
+					{name ?? (secondaryName ? t('Unassigned') : '')}
 					{secondaryName && ', ' + secondaryName}
 				</span>
 
