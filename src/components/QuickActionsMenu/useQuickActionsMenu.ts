@@ -12,6 +12,7 @@ import {
 } from '@src/Constants';
 import { sortTemplateComponents } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
+import { useTranslation } from 'react-i18next';
 
 export type Props = {
 	input: string;
@@ -22,6 +23,8 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 	const templates = useAppSelector((state) => state.templates.value);
 	const users = useAppSelector((state) => state.users.value);
+
+	const { t } = useTranslation();
 
 	const generateCommandString = (item: QuickActionType) => {
 		let commandString = item.command;
@@ -49,7 +52,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 							isStatic: true,
 							parameterHint: '<id>',
 							description: [
-								'Send a saved response',
+								t('Send a saved response'),
 								'Alias: ' + COMMAND_SAVED_RESPONSE_ALIAS,
 							].join('\n'),
 						},
@@ -60,7 +63,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				isStatic: true,
 				parameterHint: '<name>',
 				description: [
-					'Send a template message',
+					t('Send a template message'),
 					'Alias: ' + COMMAND_TEMPLATE_ALIAS,
 				].join('\n'),
 			},
@@ -69,7 +72,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				isStatic: true,
 				parameterHint: '<name>',
 				description: [
-					'Assign this chat',
+					t('Assign this chat'),
 					'Alias: ' + COMMAND_ASSIGN_ALIAS,
 				].join('\n'),
 			},
@@ -78,7 +81,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				isStatic: true,
 				parameterHint: '<message>',
 				description: [
-					'Search for a message',
+					t('Search for a message'),
 					'Alias: ' + COMMAND_SEARCH_ALIAS,
 				].join('\n'),
 			},
@@ -147,7 +150,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 					command: COMMAND_SEARCH,
 					isStatic: true,
 					parameters: searchKeyword.split(' '),
-					description: 'Search for a message',
+					description: t('Search for a message'),
 					runCommand: true,
 				});
 			}
@@ -159,7 +162,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				command: '/' + template.name?.toLowerCase(),
 				isStatic: false,
 				parameters: [],
-				description: 'Send this template',
+				description: t('Send this template'),
 				runCommand: true,
 				customActionCommand: COMMAND_TEMPLATE + ' ' + template.name,
 			});
@@ -172,7 +175,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 					command: '/' + savedResponse.text.toLowerCase(),
 					isStatic: false,
 					parameters: [],
-					description: 'Send this quick response',
+					description: t('Send this saved response'),
 					runCommand: true,
 					customActionCommand: COMMAND_SAVED_RESPONSE + ' ' + savedResponse.id,
 				});

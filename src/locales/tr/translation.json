@@ -251,5 +251,10 @@
 	"Chat": "Sohbet",
 	"Developer Options": "Geliştirici Seçenekleri",
 	"Available tags": "Boştaki etiketler",
-	"Notification sounds": "Bildirim sesleri"
+	"Notification sounds": "Bildirim sesleri",
+	"Assign this chat": "Bu sohbeti ata",
+	"Search for a message": "Bir mesaj ara",
+	"Send this template": "Taslağı gönder",
+	"Send a saved response": "Bir kaydedilmiş yanıt gönder",
+	"Send this saved response": "Kaydedilmiş yanıtı gönder"
 }

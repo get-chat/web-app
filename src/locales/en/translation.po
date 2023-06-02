@@ -794,3 +794,18 @@ msgstr ""
 
 msgid "Notification sounds"
 msgstr ""
+
+msgid "Assign this chat"
+msgstr ""
+
+msgid "Search for a message"
+msgstr ""
+
+msgid "Send this template"
+msgstr ""
+
+msgid "Send a saved response"
+msgstr ""
+
+msgid "Send this saved response"
+msgstr ""

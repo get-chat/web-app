@@ -765,3 +765,18 @@ msgstr "Boştaki etiketler"
 
 msgid "Notification sounds"
 msgstr "Bildirim sesleri"
+
+msgid "Assign this chat"
+msgstr "Bu sohbeti ata"
+
+msgid "Search for a message"
+msgstr "Bir mesaj ara"
+
+msgid "Send this template"
+msgstr "Taslağı gönder"
+
+msgid "Send a saved response"
+msgstr "Bir kaydedilmiş yanıt gönder"
+
+msgid "Send this saved response"
+msgstr "Kaydedilmiş yanıtı gönder"
