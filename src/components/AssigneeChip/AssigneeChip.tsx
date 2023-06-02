@@ -7,6 +7,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import classNames from 'classnames/bind';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
+	ButtonBase,
 	Divider,
 	IconButton,
 	ListItemIcon,
@@ -60,7 +61,7 @@ const AssigneeChip: React.FC<Props> = ({
 
 	return (
 		<>
-			<div
+			<ButtonBase
 				className={cx({
 					assigneeChip: true,
 					container: true,
@@ -99,7 +100,7 @@ const AssigneeChip: React.FC<Props> = ({
 						<ExpandMoreIcon />
 					</IconButton>
 				)}
-			</div>
+			</ButtonBase>
 
 			{isActionable && (
 				<Menu

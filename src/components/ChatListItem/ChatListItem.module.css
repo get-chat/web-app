@@ -147,8 +147,8 @@
 
 .lastMessage :global(.MuiSvgIcon-root) {
 	color: rgba(0, 0, 45, 0.3) !important;
-	height: 0.85em;
-	width: 0.85em;
+	height: 0.8em;
+	width: 0.8em;
 	margin-left: -2px;
 	margin-right: 5px;
 }

@@ -1,11 +1,11 @@
 .container {
-	background-color: var(--gray-light);
-	border-radius: 10px;
+	background-color: var(--gray-light) !important;
+	border-radius: 10px !important;
 	font-size: 12px;
 	height: 19px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
-	align-items: center;
+	align-items: center !important;
 }
 
 .container.clickable {
