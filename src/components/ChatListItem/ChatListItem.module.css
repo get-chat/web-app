@@ -78,6 +78,16 @@
 	width: 14px !important;
 }
 
+.assigneeChipWrapper.empty {
+	opacity: 0.6;
+	transition: opacity ease-in 0.2s;
+}
+
+.wrapper:hover .assigneeChipWrapper.empty {
+	max-width: 55px !important;
+	opacity: 1;
+}
+
 .dateTagWrapper {
 	display: flex;
 	flex-direction: row;
