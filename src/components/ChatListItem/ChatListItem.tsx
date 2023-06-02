@@ -26,6 +26,7 @@ import useChatListItem from '@src/components/ChatListItem/useChatListItem';
 import styles from './ChatListItem.module.css';
 import classNames from 'classnames/bind';
 import AssigneeChip from '@src/components/AssigneeChip';
+import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 
 const cx = classNames.bind(styles);
 
@@ -46,7 +47,14 @@ const ChatListItem = (props) => {
 		hasFailedMessages,
 	} = useChatListItem({ props });
 
+	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
+
 	const newMessages = props.newMessages[data.waId]?.newMessages;
+
+	const preventEvents = (event: MouseEvent) => {
+		event.stopPropagation();
+		event.preventDefault();
+	};
 
 	return (
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
@@ -108,6 +116,20 @@ const ChatListItem = (props) => {
 								)}
 							</h2>
 
+							{!isExpired && (
+								<Tooltip
+									title={t('This chat will become inactive in %s', timeLeft)}
+									placement="top"
+								>
+									<div className={styles.timeLeft}>
+										<div className={styles.timeLeftIconWrapper}>
+											<HourglassBottomIcon />
+										</div>
+										<span>{timeLeft}</span>
+									</div>
+								</Tooltip>
+							)}
+
 							{data.assignedToUser &&
 								(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
 									props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
@@ -115,10 +137,24 @@ const ChatListItem = (props) => {
 										placement="top"
 										title={data.generateAssignmentInformation()}
 									>
-										<div>
+										<div
+											onClick={preventEvents}
+											onMouseDown={preventEvents}
+											onMouseUp={preventEvents}
+										>
 											<AssigneeChip
 												assigneeType={'user'}
 												name={data.assignedToUser?.username}
+												assignedUserId={data.assignedToUser?.id}
+												assignedGroupId={data.assignedGroup?.id}
+												isActionable={true}
+												onAction={(userId, groupId) => {
+													partialUpdateChatAssignment(
+														data.waId,
+														userId,
+														groupId
+													);
+												}}
 											/>
 										</div>
 									</Tooltip>
@@ -134,28 +170,28 @@ const ChatListItem = (props) => {
 										placement="top"
 										title={data.generateAssignmentInformation()}
 									>
-										<div>
+										<div
+											onClick={preventEvents}
+											onMouseDown={preventEvents}
+											onMouseUp={preventEvents}
+										>
 											<AssigneeChip
 												assigneeType={'group'}
 												name={data.assignedGroup?.name}
+												assignedUserId={data.assignedToUser?.id}
+												assignedGroupId={data.assignedGroup?.id}
+												isActionable={true}
+												onAction={(userId, groupId) => {
+													partialUpdateChatAssignment(
+														data.waId,
+														userId,
+														groupId
+													);
+												}}
 											/>
 										</div>
 									</Tooltip>
 								)}
-
-							{!isExpired && (
-								<Tooltip
-									title={t('This chat will become inactive in %s', timeLeft)}
-									placement="top"
-								>
-									<div className={styles.timeLeft}>
-										<div className={styles.timeLeftIconWrapper}>
-											<HourglassBottomIcon />
-										</div>
-										<span>{timeLeft}</span>
-									</div>
-								</Tooltip>
-							)}
 						</div>
 
 						<div className={styles.lastMessageWrapper}>

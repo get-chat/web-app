@@ -87,7 +87,7 @@ const AssigneeChip: React.FC<Props> = ({
 				<span
 					className={cx({
 						name: true,
-						wider: isActionable,
+						wider: isActionable && secondaryName,
 					})}
 				>
 					{name ?? t('Unassigned')}
