@@ -105,16 +105,17 @@
 }
 
 .wrapper:hover .waId {
-	display: inline-block;
-	position: absolute;
-	bottom: 1px;
-	right: 15px;
+	opacity: 1;
 }
 
 .waId {
-	display: none;
+	opacity: 0;
 	font-size: 10px;
 	color: rgba(0, 0, 45, 0.65);
+	transition: opacity ease 0.1s;
+	position: absolute;
+	bottom: 1px;
+	right: 15px;
 	margin-left: 5px;
 }
 
