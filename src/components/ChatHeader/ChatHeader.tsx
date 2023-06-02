@@ -158,7 +158,7 @@ const ChatHeader: React.FC<Props> = ({
 						</span>
 
 						{person?.isExpired && (
-							<span className={styles.expiredIndicator}>{t('Inactive')}</span>
+							<span className={styles.expiredIndicator}>{t('Expired')}</span>
 						)}
 					</div>
 				</div>

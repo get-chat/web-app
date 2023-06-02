@@ -110,7 +110,7 @@ const ChatListItem = (props: any) => {
 
 							{!isExpired && (
 								<Tooltip
-									title={t('This chat will become inactive in %s', timeLeft)}
+									title={t('This chat will expire in %s', timeLeft)}
 									placement="top"
 								>
 									<div className={styles.timeLeft}>

@@ -194,7 +194,7 @@ msgstr ""
 msgid "Choose a contact to start a conversation"
 msgstr ""
 
-msgid "Inactive"
+msgid "Expired"
 msgstr ""
 
 msgid "Failed to send some messages!"
@@ -708,7 +708,7 @@ msgstr ""
 msgid "Search quick actions"
 msgstr ""
 
-msgid "This chat will become inactive in %s"
+msgid "This chat will expire in %s"
 msgstr ""
 
 msgid "Templates"
