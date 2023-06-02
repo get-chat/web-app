@@ -129,6 +129,10 @@ const ChatListItem = (props: any) => {
 									PopperProps={{ style: { zIndex: 1 } }}
 								>
 									<div
+										className={cx({
+											assigneeChipWrapper: true,
+											empty: !data.assignedToUser,
+										})}
 										onClick={preventEvents}
 										onMouseDown={preventEvents}
 										onMouseUp={preventEvents}
@@ -139,7 +143,8 @@ const ChatListItem = (props: any) => {
 											name={data.assignedToUser?.username}
 											assignedUserId={data.assignedToUser?.id}
 											assignedGroupId={data.assignedGroup?.id}
-											isActionable={true}
+											dense
+											isActionable
 											onAction={(userId, groupId) => {
 												partialUpdateChatAssignment(data.waId, userId, groupId);
 											}}
@@ -155,6 +160,10 @@ const ChatListItem = (props: any) => {
 									PopperProps={{ style: { zIndex: 1 } }}
 								>
 									<div
+										className={cx({
+											assigneeChipWrapper: true,
+											empty: !data.assignedGroup,
+										})}
 										onClick={preventEvents}
 										onMouseDown={preventEvents}
 										onMouseUp={preventEvents}
@@ -164,7 +173,8 @@ const ChatListItem = (props: any) => {
 											name={data.assignedGroup?.name}
 											assignedUserId={data.assignedToUser?.id}
 											assignedGroupId={data.assignedGroup?.id}
-											isActionable={true}
+											dense
+											isActionable
 											onAction={(userId, groupId) => {
 												partialUpdateChatAssignment(data.waId, userId, groupId);
 											}}

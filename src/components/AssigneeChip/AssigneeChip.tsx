@@ -26,6 +26,7 @@ interface Props {
 	assigneeType: AssigneeType;
 	name?: string;
 	secondaryName?: string;
+	dense?: boolean;
 	assignedUserId?: Number;
 	assignedGroupId?: Number;
 	isActionable?: boolean;
@@ -38,6 +39,7 @@ const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
 	name,
 	secondaryName,
+	dense = false,
 	assignedUserId,
 	assignedGroupId,
 	isActionable = false,
@@ -88,15 +90,17 @@ const AssigneeChip: React.FC<Props> = ({
 					)}
 				</CustomAvatar>
 
-				<span
-					className={cx({
-						name: true,
-						wider: isActionable && secondaryName,
-					})}
-				>
-					{name ?? (secondaryName ? t('Unassigned') : '')}
-					{secondaryName && ', ' + secondaryName}
-				</span>
+				{(!dense || name) && (
+					<span
+						className={cx({
+							name: true,
+							wider: isActionable && secondaryName,
+						})}
+					>
+						{name ?? (!dense ? t('Unassigned') : '')}
+						{!dense && secondaryName && ', ' + secondaryName}
+					</span>
+				)}
 
 				{isActionable && (
 					<IconButton className={styles.actionIcon} size="small">
