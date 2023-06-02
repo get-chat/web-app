@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import UserModel from '@src/api/models/UserModel';
 
-const initialState = {
-	value: {},
+interface CurrentUserState {
+	value: UserModel | undefined;
+}
+
+const initialState: CurrentUserState = {
+	value: undefined,
 };
 
 const currentUserSlice = createSlice({

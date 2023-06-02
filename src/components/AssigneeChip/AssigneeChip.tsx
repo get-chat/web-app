@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import styles from './AssigneeChip.module.css';
@@ -17,6 +17,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 import CheckIcon from '@mui/icons-material/Check';
+import { sortUsers } from '@src/helpers/UsersHelper';
+import { sortGroups } from '@src/helpers/GroupsHelper';
 
 export type AssigneeType = 'user' | 'group';
 
@@ -133,7 +135,7 @@ const AssigneeChip: React.FC<Props> = ({
 						{t('Unassigned')}
 					</MenuItem>
 
-					{Object.values(users)?.map((user) => (
+					{sortUsers(users).map((user) => (
 						<MenuItem
 							className={cx({
 								menuItem: true,
@@ -174,7 +176,7 @@ const AssigneeChip: React.FC<Props> = ({
 						{t('Unassigned')}
 					</MenuItem>
 
-					{Object.values(groups)?.map((group) => (
+					{sortGroups(groups).map((group) => (
 						<MenuItem
 							className={cx({
 								menuItem: true,
