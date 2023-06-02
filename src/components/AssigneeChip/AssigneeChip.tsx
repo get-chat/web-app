@@ -62,6 +62,7 @@ const AssigneeChip: React.FC<Props> = ({
 	return (
 		<>
 			<ButtonBase
+				component="div"
 				className={cx({
 					assigneeChip: true,
 					container: true,
