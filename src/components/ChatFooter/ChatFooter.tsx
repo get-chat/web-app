@@ -50,8 +50,8 @@ const ChatFooter: React.FC = ({
 	sendMessage,
 	bulkSendMessage,
 	setSelectedFiles,
-	isTemplateMessagesVisible,
-	setTemplateMessagesVisible,
+	isTemplatesVisible,
+	setTemplatesVisible,
 	accept,
 	isSavedResponsesVisible,
 	setSavedResponsesVisible,
@@ -156,7 +156,7 @@ const ChatFooter: React.FC = ({
             willScroll = true;
         }*/
 
-		setTemplateMessagesVisible((prevState) => {
+		setTemplatesVisible((prevState) => {
 			if (!prevState) {
 				setAttachmentOptionsVisible(false);
 				setSavedResponsesVisible(false);
@@ -171,7 +171,7 @@ const ChatFooter: React.FC = ({
 		setSavedResponsesVisible((prevState) => {
 			if (!prevState) {
 				setAttachmentOptionsVisible(false);
-				setTemplateMessagesVisible(false);
+				setTemplatesVisible(false);
 				setEmojiPickerVisible(false);
 			}
 
@@ -183,7 +183,7 @@ const ChatFooter: React.FC = ({
 		setEmojiPickerVisible((prevState) => {
 			if (!prevState) {
 				setAttachmentOptionsVisible(false);
-				setTemplateMessagesVisible(false);
+				setTemplatesVisible(false);
 				setSavedResponsesVisible(false);
 			}
 
@@ -224,7 +224,7 @@ const ChatFooter: React.FC = ({
 	const displayQuickActionsMenu = () => {
 		if (!isQuickActionsMenuVisible) {
 			setQuickActionsMenuVisible(true);
-			setTemplateMessagesVisible(false);
+			setTemplatesVisible(false);
 			setSavedResponsesVisible(false);
 			setEmojiPickerVisible(false);
 		}
@@ -387,7 +387,7 @@ const ChatFooter: React.FC = ({
 							onClick={toggleTemplateMessages}
 							className={cx({
 								actionIcon: true,
-								active: isTemplateMessagesVisible,
+								active: isTemplatesVisible,
 							})}
 							size="small"
 						>
