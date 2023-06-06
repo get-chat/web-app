@@ -71,6 +71,7 @@ const AssigneeChip: React.FC<Props> = ({
 					assigneeChip: true,
 					container: true,
 					clickable: isActionable,
+					menuOpen: Boolean(menuAnchorEl),
 				})}
 				onClick={isActionable ? displayMenu : undefined}
 			>

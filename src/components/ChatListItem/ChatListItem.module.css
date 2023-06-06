@@ -78,12 +78,12 @@
 	width: 14px !important;
 }
 
-.assigneeChipWrapper.empty {
+.assigneeChipWrapper.empty > :global(.assigneeChip):not(:global(.menuOpen)) {
 	opacity: 0;
 	transition: opacity ease-in 0.1s;
 }
 
-.wrapper:hover .assigneeChipWrapper.empty {
+.wrapper:hover .assigneeChipWrapper.empty > :global(.assigneeChip) {
 	max-width: 55px !important;
 	opacity: 1;
 }
