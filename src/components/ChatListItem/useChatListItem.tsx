@@ -10,6 +10,7 @@ import {
 	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_DROPPED_FILES,
 } from '@src/Constants';
+import { useTranslation } from 'react-i18next';
 
 const useChatListItem = ({ props }) => {
 	const data = props.chatData;
@@ -27,6 +28,8 @@ const useChatListItem = ({ props }) => {
 	const { waId } = useParams();
 
 	const navigate = useNavigate();
+
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		setSelected(props.selectedChats.includes(data.waId));
@@ -109,20 +112,15 @@ const useChatListItem = ({ props }) => {
 
 			setRemainingSeconds(seconds);
 
-			let suffix;
-
 			if (hours > 0) {
-				suffix = 'h';
-				setTimeLeft(hours + suffix);
+				setTimeLeft(t('%dh', hours));
 			} else {
 				const minutes = momentDate.diff(curDate, 'minutes');
 				if (minutes > 1) {
-					suffix = 'm';
-					setTimeLeft(minutes + suffix);
+					setTimeLeft(t('%dm', minutes));
 				} else {
 					if (seconds > 1) {
-						suffix = 'm';
-						setTimeLeft(minutes + suffix);
+						setTimeLeft(t('%dm', minutes));
 					} else {
 						// Expired
 						setExpired(true);

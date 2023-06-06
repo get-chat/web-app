@@ -809,3 +809,15 @@ msgstr ""
 
 msgid "Send this saved response"
 msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "%dh"
+msgstr ""
+
+msgid "%dm"
+msgstr ""

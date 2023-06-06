@@ -780,3 +780,15 @@ msgstr "Bir kaydedilmiş yanıt gönder"
 
 msgid "Send this saved response"
 msgstr "Kaydedilmiş yanıtı gönder"
+
+msgid "Users"
+msgstr "Kullanıcılar"
+
+msgid "Groups"
+msgstr "Gruplar"
+
+msgid "%dh"
+msgstr "%ds"
+
+msgid "%dm"
+msgstr "%dd"

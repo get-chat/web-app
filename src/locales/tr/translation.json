@@ -256,5 +256,9 @@
 	"Search for a message": "Bir mesaj ara",
 	"Send this template": "Taslağı gönder",
 	"Send a saved response": "Bir kaydedilmiş yanıt gönder",
-	"Send this saved response": "Kaydedilmiş yanıtı gönder"
+	"Send this saved response": "Kaydedilmiş yanıtı gönder",
+	"Users": "Kullanıcılar",
+	"Groups": "Gruplar",
+	"%dh": "%ds",
+	"%dm": "%dd"
 }
