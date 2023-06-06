@@ -1,4 +1,4 @@
-import React, { MouseEvent, TouchEvent } from 'react';
+import React, { MouseEvent, TouchEvent, useMemo } from 'react';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -8,7 +8,7 @@ import { handleDragOver } from '@src/helpers/FileHelper';
 import { CALENDAR_SHORT } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
 import SellIcon from '@mui/icons-material/Sell';
@@ -47,6 +47,39 @@ const ChatListItem = (props: any) => {
 		event.stopPropagation();
 		event.preventDefault();
 	};
+
+	const tooltip = useMemo(() => {
+		if (!data.assignedToUser && !data.assignedGroup) return;
+
+		return (
+			<>
+				{data.assignedToUser && (
+					<div>
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [data.assignedToUser.username],
+							}}
+						>
+							Assigned to: <span className="bold">%s</span>
+						</Trans>
+					</div>
+				)}
+				{data.assignedGroup && (
+					<div>
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [data.assignedGroup.name],
+							}}
+						>
+							Assigned group: <span className="bold">%s</span>
+						</Trans>
+					</div>
+				)}
+			</>
+		);
+	}, [data.assignedToUser, data.assignedGroup]);
 
 	return (
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
@@ -122,7 +155,7 @@ const ChatListItem = (props: any) => {
 									<AssigneeChip
 										assigneeType={'user'}
 										name={data.assignedToUser?.username}
-										tooltip={data.generateAssignmentInformation()}
+										tooltip={tooltip}
 										assignedUserId={data.assignedToUser?.id}
 										assignedGroupId={data.assignedGroup?.id}
 										dense
@@ -147,7 +180,7 @@ const ChatListItem = (props: any) => {
 									<AssigneeChip
 										assigneeType={'group'}
 										name={data.assignedGroup?.name}
-										tooltip={data.generateAssignmentInformation()}
+										tooltip={tooltip}
 										assignedUserId={data.assignedToUser?.id}
 										assignedGroupId={data.assignedGroup?.id}
 										dense

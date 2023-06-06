@@ -27,7 +27,7 @@ interface Props {
 	assigneeType: AssigneeType;
 	name?: string;
 	secondaryName?: string;
-	tooltip?: string;
+	tooltip?: string | JSX.Element;
 	dense?: boolean;
 	assignedUserId?: Number;
 	assignedGroupId?: Number;
