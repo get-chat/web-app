@@ -108,20 +108,6 @@ const ChatListItem = (props: any) => {
 								)}
 							</h2>
 
-							{!isExpired && (
-								<Tooltip
-									title={t('This chat will expire in %s', timeLeft)}
-									placement="top"
-								>
-									<div className={styles.timeLeft}>
-										<div className={styles.timeLeftIconWrapper}>
-											<HourglassBottomIcon />
-										</div>
-										<span>{timeLeft}</span>
-									</div>
-								</Tooltip>
-							)}
-
 							{isUserAssignmentChipVisible() && (
 								<Tooltip
 									placement="top"
@@ -179,6 +165,20 @@ const ChatListItem = (props: any) => {
 												partialUpdateChatAssignment(data.waId, userId, groupId);
 											}}
 										/>
+									</div>
+								</Tooltip>
+							)}
+
+							{!isExpired && (
+								<Tooltip
+									title={t('This chat will expire in %s', timeLeft)}
+									placement="top"
+								>
+									<div className={styles.timeLeft}>
+										<div className={styles.timeLeftIconWrapper}>
+											<HourglassBottomIcon />
+										</div>
+										<span>{timeLeft}</span>
 									</div>
 								</Tooltip>
 							)}
