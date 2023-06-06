@@ -109,64 +109,54 @@ const ChatListItem = (props: any) => {
 							</h2>
 
 							{isUserAssignmentChipVisible() && (
-								<Tooltip
-									placement="top"
-									title={data.generateAssignmentInformation()}
-									PopperProps={{ style: { zIndex: 1 } }}
+								<div
+									className={cx({
+										assigneeChipWrapper: true,
+										empty: !data.assignedToUser,
+									})}
+									onClick={preventEvents}
+									onMouseDown={preventEvents}
+									onMouseUp={preventEvents}
+									onTouchStart={preventEvents}
 								>
-									<div
-										className={cx({
-											assigneeChipWrapper: true,
-											empty: !data.assignedToUser,
-										})}
-										onClick={preventEvents}
-										onMouseDown={preventEvents}
-										onMouseUp={preventEvents}
-										onTouchStart={preventEvents}
-									>
-										<AssigneeChip
-											assigneeType={'user'}
-											name={data.assignedToUser?.username}
-											assignedUserId={data.assignedToUser?.id}
-											assignedGroupId={data.assignedGroup?.id}
-											dense
-											isActionable
-											onAction={(userId, groupId) => {
-												partialUpdateChatAssignment(data.waId, userId, groupId);
-											}}
-										/>
-									</div>
-								</Tooltip>
+									<AssigneeChip
+										assigneeType={'user'}
+										name={data.assignedToUser?.username}
+										tooltip={data.generateAssignmentInformation()}
+										assignedUserId={data.assignedToUser?.id}
+										assignedGroupId={data.assignedGroup?.id}
+										dense
+										isActionable
+										onAction={(userId, groupId) => {
+											partialUpdateChatAssignment(data.waId, userId, groupId);
+										}}
+									/>
+								</div>
 							)}
 
 							{isGroupAssignmentChipVisible() && (
-								<Tooltip
-									placement="top"
-									title={data.generateAssignmentInformation()}
-									PopperProps={{ style: { zIndex: 1 } }}
+								<div
+									className={cx({
+										assigneeChipWrapper: true,
+										empty: !data.assignedGroup,
+									})}
+									onClick={preventEvents}
+									onMouseDown={preventEvents}
+									onMouseUp={preventEvents}
 								>
-									<div
-										className={cx({
-											assigneeChipWrapper: true,
-											empty: !data.assignedGroup,
-										})}
-										onClick={preventEvents}
-										onMouseDown={preventEvents}
-										onMouseUp={preventEvents}
-									>
-										<AssigneeChip
-											assigneeType={'group'}
-											name={data.assignedGroup?.name}
-											assignedUserId={data.assignedToUser?.id}
-											assignedGroupId={data.assignedGroup?.id}
-											dense
-											isActionable
-											onAction={(userId, groupId) => {
-												partialUpdateChatAssignment(data.waId, userId, groupId);
-											}}
-										/>
-									</div>
-								</Tooltip>
+									<AssigneeChip
+										assigneeType={'group'}
+										name={data.assignedGroup?.name}
+										tooltip={data.generateAssignmentInformation()}
+										assignedUserId={data.assignedToUser?.id}
+										assignedGroupId={data.assignedGroup?.id}
+										dense
+										isActionable
+										onAction={(userId, groupId) => {
+											partialUpdateChatAssignment(data.waId, userId, groupId);
+										}}
+									/>
+								</div>
 							)}
 
 							{!isExpired && (

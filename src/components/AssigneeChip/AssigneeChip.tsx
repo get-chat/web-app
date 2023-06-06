@@ -13,6 +13,7 @@ import {
 	ListItemIcon,
 	Menu,
 	MenuItem,
+	Tooltip,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
@@ -26,6 +27,7 @@ interface Props {
 	assigneeType: AssigneeType;
 	name?: string;
 	secondaryName?: string;
+	tooltip?: string;
 	dense?: boolean;
 	assignedUserId?: Number;
 	assignedGroupId?: Number;
@@ -39,6 +41,7 @@ const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
 	name,
 	secondaryName,
+	tooltip,
 	dense = false,
 	assignedUserId,
 	assignedGroupId,
@@ -65,50 +68,56 @@ const AssigneeChip: React.FC<Props> = ({
 
 	return (
 		<>
-			<ButtonBase
-				component="div"
-				className={cx({
-					assigneeChip: true,
-					container: true,
-					clickable: isActionable,
-					menuOpen: Boolean(menuAnchorEl),
-				})}
-				onClick={isActionable ? displayMenu : undefined}
+			<Tooltip
+				placement="top"
+				title={tooltip}
+				PopperProps={{ style: { zIndex: 1 } }}
 			>
-				<CustomAvatar
+				<ButtonBase
+					component="div"
 					className={cx({
-						avatar: true,
-						unassigned: !Boolean(name),
+						assigneeChip: true,
+						container: true,
+						clickable: isActionable,
+						menuOpen: Boolean(menuAnchorEl),
 					})}
-					generateBgColorBy={name}
+					onClick={isActionable ? displayMenu : undefined}
 				>
-					{assigneeType === 'group' ? (
-						<GroupIcon />
-					) : name ? (
-						generateInitialsHelper(name)
-					) : (
-						<PersonIcon />
-					)}
-				</CustomAvatar>
-
-				{(!dense || name) && (
-					<span
+					<CustomAvatar
 						className={cx({
-							name: true,
-							wider: isActionable && secondaryName,
+							avatar: true,
+							unassigned: !Boolean(name),
 						})}
+						generateBgColorBy={name}
 					>
-						{name ?? (!dense ? t('Unassigned') : '')}
-						{!dense && secondaryName && ', ' + secondaryName}
-					</span>
-				)}
+						{assigneeType === 'group' ? (
+							<GroupIcon />
+						) : name ? (
+							generateInitialsHelper(name)
+						) : (
+							<PersonIcon />
+						)}
+					</CustomAvatar>
 
-				{isActionable && (
-					<IconButton className={styles.actionIcon} size="small">
-						<ExpandMoreIcon />
-					</IconButton>
-				)}
-			</ButtonBase>
+					{(!dense || name) && (
+						<span
+							className={cx({
+								name: true,
+								wider: isActionable && secondaryName,
+							})}
+						>
+							{name ?? (!dense ? t('Unassigned') : '')}
+							{!dense && secondaryName && ', ' + secondaryName}
+						</span>
+					)}
+
+					{isActionable && (
+						<IconButton className={styles.actionIcon} size="small">
+							<ExpandMoreIcon />
+						</IconButton>
+					)}
+				</ButtonBase>
+			</Tooltip>
 
 			{isActionable && (
 				<Menu
