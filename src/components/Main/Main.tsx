@@ -468,10 +468,9 @@ function Main() {
 			};
 
 			ws.onmessage = function (event) {
-				console.log('New message:', event.data);
-
 				try {
 					const data = JSON.parse(event.data);
+					console.log(data);
 
 					if (data.type === 'waba_webhook') {
 						const wabaPayload = data.waba_payload;
@@ -627,6 +626,7 @@ function Main() {
 					}
 				} catch (error) {
 					console.error(error);
+					console.log(event.data);
 					// Do not force Sentry if exceptions can't be handled without a user feedback dialog
 					//Sentry.captureException(error);
 				}

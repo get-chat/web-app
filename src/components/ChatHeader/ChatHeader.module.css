@@ -29,7 +29,7 @@
 }
 
 .assigneeActions :global(.assigneeChip) {
-	background-color: rgba(0, 0, 45, 0.06);
+	background-color: rgba(0, 0, 45, 0.06) !important;
 }
 
 @media only screen and (max-width: 500px) {

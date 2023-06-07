@@ -4,6 +4,8 @@ import PermissionsModel from './PermissionsModel';
 class UserModel {
 	public id?: Number;
 	public username?: string;
+	public isAdmin: boolean;
+	public groups: any;
 
 	constructor(data) {
 		if (!data) return;

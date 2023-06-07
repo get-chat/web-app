@@ -161,7 +161,7 @@ const Sidebar: React.FC = ({
 		clearUserSession(undefined, undefined, navigate);
 
 		// TODO: Consider calling it in clearUserSession method
-		dispatch(setCurrentUser({}));
+		dispatch(setCurrentUser(undefined));
 		dispatch(setTemplates({}));
 
 		hideMenu();

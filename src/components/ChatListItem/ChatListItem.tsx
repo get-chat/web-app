@@ -1,24 +1,14 @@
-// @ts-nocheck
-import React from 'react';
+import React, { MouseEvent, TouchEvent, useMemo } from 'react';
 import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
-import GroupIcon from '@mui/icons-material/Group';
 import WarningIcon from '@mui/icons-material/Warning';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Moment from 'react-moment';
-import {
-	extractAvatarFromContactProviderData,
-	generateInitialsHelper,
-} from '@src/helpers/Helpers';
+import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
-import {
-	CALENDAR_SHORT,
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
-} from '@src/Constants';
+import { CALENDAR_SHORT } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
 import SellIcon from '@mui/icons-material/Sell';
@@ -26,10 +16,11 @@ import useChatListItem from '@src/components/ChatListItem/useChatListItem';
 import styles from './ChatListItem.module.css';
 import classNames from 'classnames/bind';
 import AssigneeChip from '@src/components/AssigneeChip';
+import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 
 const cx = classNames.bind(styles);
 
-const ChatListItem = (props) => {
+const ChatListItem = (props: any) => {
 	const { t } = useTranslation();
 
 	const {
@@ -38,6 +29,8 @@ const ChatListItem = (props) => {
 		isExpired,
 		timeLeft,
 		remainingSeconds,
+		isUserAssignmentChipVisible,
+		isGroupAssignmentChipVisible,
 		isSelected,
 		handleClick,
 		handleDroppedFiles,
@@ -46,7 +39,47 @@ const ChatListItem = (props) => {
 		hasFailedMessages,
 	} = useChatListItem({ props });
 
+	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
+
 	const newMessages = props.newMessages[data.waId]?.newMessages;
+
+	const preventEvents = (event: MouseEvent | TouchEvent) => {
+		event.stopPropagation();
+		event.preventDefault();
+	};
+
+	const tooltip = useMemo(() => {
+		if (!data.assignedToUser && !data.assignedGroup) return;
+
+		return (
+			<>
+				{data.assignedToUser && (
+					<div>
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [data.assignedToUser.username],
+							}}
+						>
+							Assigned to: <span className="bold">%s</span>
+						</Trans>
+					</div>
+				)}
+				{data.assignedGroup && (
+					<div>
+						<Trans
+							values={{
+								postProcess: 'sprintf',
+								sprintf: [data.assignedGroup.name],
+							}}
+						>
+							Assigned group: <span className="bold">%s</span>
+						</Trans>
+					</div>
+				)}
+			</>
+		);
+	}, [data.assignedToUser, data.assignedGroup]);
 
 	return (
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
@@ -108,44 +141,60 @@ const ChatListItem = (props) => {
 								)}
 							</h2>
 
-							{data.assignedToUser &&
-								(props.tabCase === CHAT_LIST_TAB_CASE_ALL ||
-									props.tabCase === CHAT_LIST_TAB_CASE_GROUP) && (
-									<Tooltip
-										placement="top"
-										title={data.generateAssignmentInformation()}
-									>
-										<div>
-											<AssigneeChip
-												assigneeType={'user'}
-												name={data.assignedToUser?.username}
-											/>
-										</div>
-									</Tooltip>
-								)}
+							{isUserAssignmentChipVisible() && (
+								<div
+									className={cx({
+										assigneeChipWrapper: true,
+										empty: !data.assignedToUser,
+									})}
+									onClick={preventEvents}
+									onMouseDown={preventEvents}
+									onMouseUp={preventEvents}
+									onTouchStart={preventEvents}
+								>
+									<AssigneeChip
+										assigneeType={'user'}
+										name={data.assignedToUser?.username}
+										tooltip={tooltip}
+										assignedUserId={data.assignedToUser?.id}
+										assignedGroupId={data.assignedGroup?.id}
+										dense
+										isActionable
+										onAction={(userId, groupId) => {
+											partialUpdateChatAssignment(data.waId, userId, groupId);
+										}}
+									/>
+								</div>
+							)}
 
-							{data.assignedGroup &&
-								((props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
-									!data.assignedToUser) ||
-									props.tabCase === CHAT_LIST_TAB_CASE_ME ||
-									(props.tabCase === CHAT_LIST_TAB_CASE_GROUP &&
-										!data.assignedToUser)) && (
-									<Tooltip
-										placement="top"
-										title={data.generateAssignmentInformation()}
-									>
-										<div>
-											<AssigneeChip
-												assigneeType={'group'}
-												name={data.assignedGroup?.name}
-											/>
-										</div>
-									</Tooltip>
-								)}
+							{isGroupAssignmentChipVisible() && (
+								<div
+									className={cx({
+										assigneeChipWrapper: true,
+										empty: !data.assignedGroup,
+									})}
+									onClick={preventEvents}
+									onMouseDown={preventEvents}
+									onMouseUp={preventEvents}
+								>
+									<AssigneeChip
+										assigneeType={'group'}
+										name={data.assignedGroup?.name}
+										tooltip={tooltip}
+										assignedUserId={data.assignedToUser?.id}
+										assignedGroupId={data.assignedGroup?.id}
+										dense
+										isActionable
+										onAction={(userId, groupId) => {
+											partialUpdateChatAssignment(data.waId, userId, groupId);
+										}}
+									/>
+								</div>
+							)}
 
 							{!isExpired && (
 								<Tooltip
-									title={t('This chat will become inactive in %s', timeLeft)}
+									title={t('This chat will expire in %s', timeLeft)}
 									placement="top"
 								>
 									<div className={styles.timeLeft}>
@@ -176,15 +225,17 @@ const ChatListItem = (props) => {
 									<div className={styles.tags}>
 										<Tooltip title={generateTagNames()}>
 											<div>
-												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
-													<SellIcon
-														key={tagIndex}
-														className={styles.tagIcon}
-														style={{
-															fill: tagItem.web_inbox_color,
-														}}
-													/>
-												))}
+												{data.tags
+													.slice(0, 3)
+													.map((tagItem: any, tagIndex: Number) => (
+														<SellIcon
+															key={tagIndex.toString()}
+															className={styles.tagIcon}
+															style={{
+																fill: tagItem.web_inbox_color,
+															}}
+														/>
+													))}
 											</div>
 										</Tooltip>
 									</div>

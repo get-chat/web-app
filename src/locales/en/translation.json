@@ -61,7 +61,7 @@
 	"Deleted response successfully!": "",
 	"Hey": "",
 	"Choose a contact to start a conversation": "",
-	"Inactive": "",
+	"Expired": "",
 	"Failed to send some messages!": "",
 	"Assign chat": "",
 	"Change tags": "",
@@ -231,7 +231,7 @@
 	"Send contacts": "",
 	"No results found.": "",
 	"Search quick actions": "",
-	"This chat will become inactive in %s": "",
+	"This chat will expire in %s": "",
 	"Templates": "",
 	"Filter chats by tag": "",
 	"Change inbox URL": "",
@@ -259,5 +259,14 @@
 	"Chat": "",
 	"Developer Options": "",
 	"Available tags": "",
-	"Notification sounds": ""
+	"Notification sounds": "",
+	"Assign this chat": "",
+	"Search for a message": "",
+	"Send this template": "",
+	"Send a saved response": "",
+	"Send this saved response": "",
+	"Users": "",
+	"Groups": "",
+	"%dh": "",
+	"%dm": ""
 }

@@ -1,11 +1,11 @@
 .container {
-	background-color: var(--gray-light);
-	border-radius: 10px;
+	background-color: var(--gray-light) !important;
+	border-radius: 10px !important;
 	font-size: 12px;
 	height: 19px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
-	align-items: center;
+	align-items: center !important;
 }
 
 .container.clickable {
@@ -17,6 +17,7 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
+	margin-left: -2px;
 	margin-right: 5px;
 }
 
@@ -35,7 +36,7 @@
 	height: 19px !important;
 	width: 19px !important;
 	font-size: 11px !important;
-	margin-right: 3px;
+	margin-right: 5px;
 	align-self: center;
 }
 

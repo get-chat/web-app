@@ -194,8 +194,8 @@ msgstr "Hey"
 msgid "Choose a contact to start a conversation"
 msgstr "Sohbet başlatmak için bir kontak seç"
 
-msgid "Inactive"
-msgstr "İnaktif"
+msgid "Expired"
+msgstr "Süresi dolmuş"
 
 msgid "Failed to send some messages!"
 msgstr "Bazı mesajlar gönderilemedi!"
@@ -679,8 +679,8 @@ msgstr "Sonuç bulunamadı."
 msgid "Search quick actions"
 msgstr "Hızlı eylemleri ara"
 
-msgid "This chat will become inactive in %s"
-msgstr "Bu sohbet %s içinde inaktif olacak"
+msgid "This chat will expire in %s"
+msgstr "Bu sohbetin süresi %s içinde dolacak"
 
 msgid "Templates"
 msgstr "Taslaklar"
@@ -765,3 +765,30 @@ msgstr "Boştaki etiketler"
 
 msgid "Notification sounds"
 msgstr "Bildirim sesleri"
+
+msgid "Assign this chat"
+msgstr "Bu sohbeti ata"
+
+msgid "Search for a message"
+msgstr "Bir mesaj ara"
+
+msgid "Send this template"
+msgstr "Taslağı gönder"
+
+msgid "Send a saved response"
+msgstr "Bir kaydedilmiş yanıt gönder"
+
+msgid "Send this saved response"
+msgstr "Kaydedilmiş yanıtı gönder"
+
+msgid "Users"
+msgstr "Kullanıcılar"
+
+msgid "Groups"
+msgstr "Gruplar"
+
+msgid "%dh"
+msgstr "%ds"
+
+msgid "%dm"
+msgstr "%dd"

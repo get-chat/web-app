@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useMemo, useState } from 'react';
 import {
 	Button,
@@ -12,13 +11,19 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
+	SelectChangeEvent,
 } from '@mui/material';
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { useAppSelector } from '@src/store/hooks';
+import { sortUsers } from '@src/helpers/UsersHelper';
+import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
+import { AxiosError, AxiosResponse } from 'axios';
+import { sortGroups } from '@src/helpers/GroupsHelper';
 
-function ChatAssignment(props) {
+function ChatAssignment(props: any) {
+	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const users = useAppSelector((state) => state.users.value);
@@ -28,7 +33,7 @@ function ChatAssignment(props) {
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
-	const [groups, setGroups] = useState([]);
+	const [groups, setGroups] = useState<GroupList>({});
 	const [assignedToUser, setAssignedToUser] = useState(null);
 	const [assignedGroup, setAssignedGroup] = useState(null);
 	const [tempAssignedToUser, setTempAssignedToUser] = useState('null');
@@ -45,7 +50,7 @@ function ChatAssignment(props) {
 	const retrieveChatAssignment = () => {
 		apiService.retrieveChatAssignmentCall(
 			props.waId,
-			(response) => {
+			(response: AxiosResponse) => {
 				// Data on server
 				setAssignedToUser(response.data.assigned_to_user);
 				setAssignedGroup(response.data.assigned_group);
@@ -56,7 +61,7 @@ function ChatAssignment(props) {
 
 				setLoading(false);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error?.response?.status === 403) {
 					setLoading(false);
 				} else {
@@ -71,11 +76,12 @@ function ChatAssignment(props) {
 			props.waId,
 			tempAssignedToUser === 'null' ? null : tempAssignedToUser,
 			tempAssignedGroup === 'null' ? null : tempAssignedGroup,
-			(response) => {
+			() => {
 				close();
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error?.response?.status === 403) {
+					// @ts-ignore
 					window.displayCustomError(
 						'This chat could not be assigned as its assignments have been changed by another user recently.'
 					);
@@ -87,15 +93,16 @@ function ChatAssignment(props) {
 	};
 
 	const listGroups = () => {
-		apiService.listGroupsCall(undefined, (response) => {
-			setGroups(response.data.results);
+		apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
+			const groupsResponse = new GroupsResponse(response.data);
+			setGroups(groupsResponse.groups);
 
 			// Next
 			retrieveChatAssignment();
 		});
 	};
 
-	const handleUserChange = (event) => {
+	const handleUserChange = (event: SelectChangeEvent) => {
 		const userId = event.target.value;
 		setTempAssignedToUser(userId);
 
@@ -106,14 +113,14 @@ function ChatAssignment(props) {
 		}
 	};
 
-	const handleGroupChange = (event) => {
+	const handleGroupChange = (event: SelectChangeEvent) => {
 		setTempAssignedGroup(event.target.value);
 	};
 
 	const canChangeUserAssigment = useMemo(
 		() =>
-			assignedToUser === currentUser.id || assignedToUser === null || isAdmin,
-		[assignedToUser, currentUser.id, isAdmin]
+			assignedToUser === currentUser?.id || assignedToUser === null || isAdmin,
+		[assignedToUser, currentUser?.id, isAdmin]
 	);
 
 	const canChangeGroupAssigment = useMemo(
@@ -165,11 +172,11 @@ function ChatAssignment(props) {
 						onChange={handleUserChange}
 					>
 						<MenuItem value="null">{t('Unassigned')}</MenuItem>
-						{Object.values(users)?.map((user) => (
+						{sortUsers(users).map((user) => (
 							<MenuItem
-								key={user.id}
-								value={user.id}
-								disabled={isAdmin ? false : user.id !== currentUser.id}
+								key={user.id?.toString()}
+								value={user.id?.toString()}
+								disabled={isAdmin ? false : user.id !== currentUser?.id}
 							>
 								{user.prepareUserLabel()}
 							</MenuItem>
@@ -207,8 +214,8 @@ function ChatAssignment(props) {
 						onChange={handleGroupChange}
 					>
 						<MenuItem value="null">{t('Unassigned')}</MenuItem>
-						{groups?.map((group) => (
-							<MenuItem key={group.id} value={group.id}>
+						{sortGroups(groups)?.map((group) => (
+							<MenuItem key={group.id.toString()} value={group.id.toString()}>
 								{group.name}
 							</MenuItem>
 						))}

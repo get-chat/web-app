@@ -194,7 +194,7 @@ msgstr ""
 msgid "Choose a contact to start a conversation"
 msgstr ""
 
-msgid "Inactive"
+msgid "Expired"
 msgstr ""
 
 msgid "Failed to send some messages!"
@@ -708,7 +708,7 @@ msgstr ""
 msgid "Search quick actions"
 msgstr ""
 
-msgid "This chat will become inactive in %s"
+msgid "This chat will expire in %s"
 msgstr ""
 
 msgid "Templates"
@@ -793,4 +793,31 @@ msgid "Available tags"
 msgstr ""
 
 msgid "Notification sounds"
+msgstr ""
+
+msgid "Assign this chat"
+msgstr ""
+
+msgid "Search for a message"
+msgstr ""
+
+msgid "Send this template"
+msgstr ""
+
+msgid "Send a saved response"
+msgstr ""
+
+msgid "Send this saved response"
+msgstr ""
+
+msgid "Users"
+msgstr ""
+
+msgid "Groups"
+msgstr ""
+
+msgid "%dh"
+msgstr ""
+
+msgid "%dm"
 msgstr ""
