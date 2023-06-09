@@ -191,7 +191,7 @@ function VoiceRecord({
 
 	return (
 		<div className="voiceRecord">
-			<Tooltip title={t('Cancel')} placement="top">
+			<Tooltip title={t('Cancel')} placement="top" disableInteractive>
 				<IconButton
 					onClick={stopVoiceRecord}
 					className="voiceRecord__cancelButton"
@@ -204,7 +204,7 @@ function VoiceRecord({
 			<FiberManualRecordIcon className="voiceRecord__recordIcon" />
 			<span className="voiceRecord__timer">{displaySeconds(timer)}</span>
 
-			<Tooltip title={t('Send')} placement="top">
+			<Tooltip title={t('Send')} placement="top" disableInteractive>
 				<IconButton
 					onClick={sendVoiceRecord}
 					className="voiceRecord__sendButton"

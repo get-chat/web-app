@@ -71,6 +71,7 @@ const AssigneeChip: React.FC<Props> = ({
 			<Tooltip
 				placement="top"
 				title={tooltip}
+				disableInteractive
 				PopperProps={{ style: { zIndex: 1 } }}
 			>
 				<ButtonBase

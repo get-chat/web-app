@@ -62,7 +62,7 @@ function PreviewMedia({ data }) {
 	return (
 		<div className="app__mediaPreview">
 			<div className="app__mediaPreview__header">
-				<Tooltip title={t('Close')}>
+				<Tooltip title={t('Close')} disableInteractive>
 					<IconButton
 						className="app__mediaPreview__close"
 						onClick={hideImageOrVideoPreview}
@@ -83,7 +83,7 @@ function PreviewMedia({ data }) {
 					</span>
 				</div>
 
-				<Tooltip title={t('Download')}>
+				<Tooltip title={t('Download')} disableInteractive>
 					<IconButton onClick={() => download(data)} size="large">
 						<GetApp />
 					</IconButton>

@@ -354,7 +354,11 @@ const ChatFooter: React.FC = ({
 						desktopOnly: isRecording,
 					})}
 				>
-					<Tooltip title={t('Quick Actions')} placement="top">
+					<Tooltip
+						title={t('Quick Actions')}
+						placement="top"
+						disableInteractive
+					>
 						<IconButton
 							className={cx({
 								actionIcon: true,
@@ -381,6 +385,7 @@ const ChatFooter: React.FC = ({
 						className={cx({
 							desktopOnly: isAttachmentOptionsVisible,
 						})}
+						disableInteractive
 					>
 						<IconButton
 							data-test-id="templates-button"
@@ -402,6 +407,7 @@ const ChatFooter: React.FC = ({
 							className={cx({
 								desktopOnly: isAttachmentOptionsVisible,
 							})}
+							disableInteractive
 						>
 							<IconButton
 								onClick={toggleSavedResponses}
@@ -425,6 +431,7 @@ const ChatFooter: React.FC = ({
 							className={cx({
 								desktopOnly: isAttachmentOptionsVisible,
 							})}
+							disableInteractive
 						>
 							<IconButton
 								className={cx({
@@ -446,7 +453,11 @@ const ChatFooter: React.FC = ({
 								open: isAttachmentOptionsVisible,
 							})}
 						>
-							<Tooltip title={t('Attachment')} placement="top">
+							<Tooltip
+								title={t('Attachment')}
+								placement="top"
+								disableInteractive
+							>
 								<IconButton
 									className={cx({
 										actionIcon: true,
@@ -467,7 +478,11 @@ const ChatFooter: React.FC = ({
 										attachmentOptions: true,
 									})}
 								>
-									<Tooltip title={t('Images & Videos')} placement="top">
+									<Tooltip
+										title={t('Images & Videos')}
+										placement="top"
+										disableInteractive
+									>
 										<IconButton
 											className={cx({
 												actionIcon: true,
@@ -482,7 +497,11 @@ const ChatFooter: React.FC = ({
 										</IconButton>
 									</Tooltip>
 
-									<Tooltip title={t('Documents')} placement="top">
+									<Tooltip
+										title={t('Documents')}
+										placement="top"
+										disableInteractive
+									>
 										<IconButton
 											className={cx({
 												actionIcon: true,
@@ -495,7 +514,11 @@ const ChatFooter: React.FC = ({
 										</IconButton>
 									</Tooltip>
 
-									<Tooltip title={t('Contacts')} placement="top">
+									<Tooltip
+										title={t('Contacts')}
+										placement="top"
+										disableInteractive
+									>
 										<IconButton
 											className={cx({
 												actionIcon: true,
@@ -526,7 +549,7 @@ const ChatFooter: React.FC = ({
 					</div>
 
 					{hasInput() && (
-						<Tooltip title={t('Bulk Send')} placement="top">
+						<Tooltip title={t('Bulk Send')} placement="top" disableInteractive>
 							<IconButton
 								className={styles.actionIcon}
 								onClick={() => bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
@@ -538,7 +561,7 @@ const ChatFooter: React.FC = ({
 					)}
 
 					{!isExpired && !hasInput() && !isRecording && (
-						<Tooltip title={t('Voice')} placement="top">
+						<Tooltip title={t('Voice')} placement="top" disableInteractive>
 							<IconButton
 								className={styles.actionIcon}
 								onClick={() =>
@@ -552,7 +575,7 @@ const ChatFooter: React.FC = ({
 					)}
 
 					{hasInput() && (
-						<Tooltip title={t('Send')} placement="top">
+						<Tooltip title={t('Send')} placement="top" disableInteractive>
 							<IconButton
 								className={styles.actionIcon}
 								onClick={(e) => sendMessage(true, e)}
