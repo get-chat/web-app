@@ -734,7 +734,7 @@ const Sidebar: React.FC = ({
 					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</CustomAvatar>
 				<div className="sidebar__headerRight">
-					<Tooltip title={t('New chat')}>
+					<Tooltip title={t('New chat')} disableInteractive>
 						<IconButton
 							onClick={displayContacts}
 							data-test-id="new-chat"
@@ -743,17 +743,17 @@ const Sidebar: React.FC = ({
 							<ChatIcon />
 						</IconButton>
 					</Tooltip>
-					<Tooltip title={t('Bulk send')}>
+					<Tooltip title={t('Bulk send')} disableInteractive>
 						<IconButton onClick={displayBulkMessageMenu} size="large">
 							<DynamicFeedIcon />
 						</IconButton>
 					</Tooltip>
-					<Tooltip title={t('Notifications')}>
+					<Tooltip title={t('Notifications')} disableInteractive>
 						<IconButton onClick={displayNotifications} size="large">
 							<NotificationsIcon />
 						</IconButton>
 					</Tooltip>
-					<Tooltip title={t('Options')}>
+					<Tooltip title={t('Options')} disableInteractive>
 						<IconButton
 							onClick={displayMenu}
 							data-test-id="options"
@@ -778,7 +778,7 @@ const Sidebar: React.FC = ({
 
 			<div className={styles.searchContainer}>
 				<SearchBar onChange={(_keyword) => search(_keyword)} />
-				<Tooltip title={t('Filter chats by tag')}>
+				<Tooltip title={t('Filter chats by tag')} disableInteractive>
 					<IconButton
 						onClick={showChatTagsList}
 						size="small"

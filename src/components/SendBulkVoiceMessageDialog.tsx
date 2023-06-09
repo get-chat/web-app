@@ -111,6 +111,7 @@ const SendBulkVoiceMessageDialog = ({
 						<Tooltip
 							title={t('Click to record your message')}
 							placement="bottom"
+							disableInteractive
 						>
 							<IconButton
 								onClick={() =>

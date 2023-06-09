@@ -182,7 +182,10 @@ const ChatHeader: React.FC<Props> = ({
 				)}
 
 				{isMobileOnly && hasFailedMessages && (
-					<Tooltip title={t('Failed to send some messages!')}>
+					<Tooltip
+						title={t('Failed to send some messages!')}
+						disableInteractive
+					>
 						<IconButton onClick={closeChat} size="large">
 							<WarningIcon className="error" />
 						</IconButton>

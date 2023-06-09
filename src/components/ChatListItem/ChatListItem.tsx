@@ -196,6 +196,7 @@ const ChatListItem = (props: any) => {
 								<Tooltip
 									title={t('This chat will expire in %s', timeLeft)}
 									placement="top"
+									disableInteractive
 								>
 									<div className={styles.timeLeft}>
 										<div className={styles.timeLeftIconWrapper}>
@@ -223,7 +224,7 @@ const ChatListItem = (props: any) => {
 							<div className={styles.dateTagWrapper}>
 								{data.tags?.length > 0 && (
 									<div className={styles.tags}>
-										<Tooltip title={generateTagNames()}>
+										<Tooltip title={generateTagNames()} disableInteractive>
 											<div>
 												{data.tags
 													.slice(0, 3)
@@ -258,7 +259,10 @@ const ChatListItem = (props: any) => {
 
 				{hasFailedMessages() && (
 					<div className={styles.failedMessagesIndicator}>
-						<Tooltip title={t('This chat has failed messages!')}>
+						<Tooltip
+							title={t('This chat has failed messages!')}
+							disableInteractive
+						>
 							<WarningIcon className="error" />
 						</Tooltip>
 					</div>
