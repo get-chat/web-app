@@ -6,6 +6,7 @@ import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import TRANSLATION_EN from './locales/en/translation.json';
+import TRANSLATION_ES from './locales/es/translation.json';
 import TRANSLATION_TR from './locales/tr/translation.json';
 import sprintf from 'i18next-sprintf-postprocessor';
 
@@ -38,6 +39,7 @@ i18n
 		// saveMissing: true,
 		resources: {
 			en: { translation: TRANSLATION_EN },
+			es: { translation: TRANSLATION_ES },
 			tr: { translation: TRANSLATION_TR },
 		},
 		interpolation: {
