@@ -83,6 +83,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SmsIcon from '@mui/icons-material/Sms';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
@@ -783,13 +784,13 @@ const Sidebar: React.FC = ({
 
 			<div className={styles.searchContainer}>
 				<SearchBar onChange={(_keyword) => search(_keyword)} />
-				<Tooltip title={t('Filter chats by tag')} disableInteractive>
+				<Tooltip title={t('Filter chats')} disableInteractive>
 					<IconButton
 						onClick={showChatTagsList}
 						size="small"
 						className={styles.tagFilterButton}
 					>
-						<SellIcon />
+						<FilterListIcon />
 					</IconButton>
 				</Tooltip>
 			</div>
@@ -822,48 +823,6 @@ const Sidebar: React.FC = ({
 					</Button>
 				</div>
 			)}
-
-			<div className="sidebar__tabs">
-				<Tabs
-					textColor="primary"
-					indicatorColor="primary"
-					variant={'fullWidth'}
-					value={tabCase}
-					scrollButtons="auto"
-					onChange={handleTabChange}
-				>
-					<Tab
-						label={
-							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_ALL ? (
-								<CircularProgress size={20} variant={'indeterminate'} />
-							) : (
-								t('All')
-							)
-						}
-						value={CHAT_LIST_TAB_CASE_ALL}
-					/>
-					<Tab
-						label={
-							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_ME ? (
-								<CircularProgress size={20} variant={'indeterminate'} />
-							) : (
-								t('Me')
-							)
-						}
-						value={CHAT_LIST_TAB_CASE_ME}
-					/>
-					<Tab
-						label={
-							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_GROUP ? (
-								<CircularProgress size={20} variant={'indeterminate'} />
-							) : (
-								t('Group')
-							)
-						}
-						value={CHAT_LIST_TAB_CASE_GROUP}
-					/>
-				</Tabs>
-			</div>
 
 			<div className="sidebar__results" ref={chatsContainer}>
 				{isSelectionModeEnabled && (

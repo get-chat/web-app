@@ -824,3 +824,6 @@ msgstr ""
 
 msgid "Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats and Tags, use <2>Bulk send a template</2> function."
 msgstr ""
+
+msgid "Filter chats"
+msgstr ""
