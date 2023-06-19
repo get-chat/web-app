@@ -195,7 +195,7 @@ msgid "Choose a contact to start a conversation"
 msgstr "Elige un contacto para iniciar una conversación"
 
 msgid "Expired"
-msgstr "Venció"
+msgstr "Vencido"
 
 msgid "Failed to send some messages!"
 msgstr "¡No se pudieron enviar algunos mensajes!"
