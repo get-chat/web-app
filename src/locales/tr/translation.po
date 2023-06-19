@@ -792,3 +792,6 @@ msgstr "%ds"
 
 msgid "%dm"
 msgstr "%dd"
+
+msgid "You can select tags only when bulk sending templates."
+msgstr "Etiketleri yalnızca taslakları toplu gönderirken seçebilirsin."

@@ -821,3 +821,6 @@ msgstr ""
 
 msgid "%dm"
 msgstr ""
+
+msgid "You can select tags only when bulk sending templates."
+msgstr ""

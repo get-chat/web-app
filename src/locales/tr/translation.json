@@ -260,5 +260,6 @@
 	"Users": "Kullanıcılar",
 	"Groups": "Gruplar",
 	"%dh": "%ds",
-	"%dm": "%dd"
+	"%dm": "%dd",
+	"You can select tags only when bulk sending templates.": "Etiketleri yalnızca taslakları toplu gönderirken seçebilirsin."
 }
