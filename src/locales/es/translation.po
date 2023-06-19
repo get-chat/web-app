@@ -716,7 +716,7 @@ msgid "Filter chats by tag"
 msgstr "Filtrar chats por etiqueta"
 
 msgid "Change inbox URL"
-msgstr "Cambiar URL del buzón"
+msgstr "Cambiar URL del inbox"
 
 msgid "Settings"
 msgstr "Configuración"
@@ -758,16 +758,16 @@ msgid "Back"
 msgstr "Volver"
 
 msgid "Change your inbox URL"
-msgstr "Cambiar la URL de tu buzón"
+msgstr "Cambiar la URL de tu inbox"
 
 msgid "Please enter your get.chat inbox link (URL)"
-msgstr "Por favor, introduce el enlace (URL) de tu buzón de get.chat"
+msgstr "Por favor, introduce el enlace (URL) de tu inbox de get.chat"
 
 msgid "Complete the link automatically"
 msgstr "Completar el enlace automáticamente"
 
 msgid "You don't have an inbox yet?"
-msgstr "¿Todavía no tienes un buzón?"
+msgstr "¿Todavía no tienes un inbox?"
 
 msgid "Continue"
 msgstr "Continuar"
@@ -776,10 +776,10 @@ msgid "Please enter a valid URL."
 msgstr "Por favor, introduce una URL válida."
 
 msgid "Please enter a valid inbox link"
-msgstr "Por favor, introduce un enlace de buzón válido"
+msgstr "Por favor, introduce un enlace al Inbox válido"
 
 msgid "Successful! Your inbox link works!"
-msgstr "¡Exitoso! ¡Tu enlace de buzón funciona!"
+msgstr "¡Éxito! ¡Tu enlace al Inbox funciona!"
 
 msgid "Chat"
 msgstr "Chat"
