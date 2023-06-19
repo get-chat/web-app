@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
+import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useTranslation } from 'react-i18next';
 import styles from './FilterChats.module.css';
@@ -35,6 +35,9 @@ const FilterChats: React.FC<Props> = ({ showChatTagsList }) => {
 				onClose={hideMenu}
 				elevation={3}
 			>
+				<MenuItem>{t('Assigned to me')}</MenuItem>
+				<MenuItem>{t('Assigned to group')}</MenuItem>
+				<Divider />
 				<MenuItem onClick={showTags}>{t('Filter chats by tag')}</MenuItem>
 			</Menu>
 		</>

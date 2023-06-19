@@ -23,9 +23,6 @@ import {
 } from '@src/helpers/Helpers';
 import {
 	CHAT_KEY_PREFIX,
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -151,7 +148,10 @@ const Sidebar: React.FC = ({
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
-	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
+
+	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
+	const [filterAssignedGroup, setFilterAssignedGroup] =
+		useState<boolean>(false);
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
@@ -233,7 +233,7 @@ const Sidebar: React.FC = ({
 
 			clearTimeout(timer.current);
 		};
-	}, [keyword, tabCase, filterTag]);
+	}, [keyword, filterAssignedToMe, filterAssignedGroup, filterTag]);
 
 	useEffect(() => {
 		// New chatMessages
@@ -488,17 +488,13 @@ const Sidebar: React.FC = ({
 			setLoadingChats(true);
 		}
 
-		const assignedToMe = tabCase === CHAT_LIST_TAB_CASE_ME ? true : undefined;
-		const assignedGroup =
-			tabCase === CHAT_LIST_TAB_CASE_GROUP ? true : undefined;
-
 		apiService.listChatsCall(
 			keyword,
 			filterTag?.id,
 			20,
 			offset,
-			assignedToMe,
-			assignedGroup,
+			filterAssignedToMe ? true : undefined,
+			filterAssignedGroup ? true : undefined,
 			cancelTokenSource.token,
 			(response) => {
 				const chatsResponse = new ChatsResponse(response.data);
@@ -609,7 +605,7 @@ const Sidebar: React.FC = ({
 				const preparedChat = new ChatModel(response.data);
 
 				// Don't display chat if tab case is "me" and chat is not assigned to user
-				if (tabCase === CHAT_LIST_TAB_CASE_ME) {
+				if (filterAssignedToMe) {
 					if (
 						!preparedChat.assignedToUser ||
 						preparedChat.assignedToUser.id !== currentUser?.id
@@ -619,7 +615,7 @@ const Sidebar: React.FC = ({
 						);
 						return;
 					}
-				} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+				} else if (filterAssignedGroup) {
 					if (
 						!preparedChat.assignedGroup ||
 						currentUser?.isInGroup(preparedChat.assignedGroup.id)
@@ -701,10 +697,6 @@ const Sidebar: React.FC = ({
 
 	const displayContacts = () => {
 		setContactsVisible(true);
-	};
-
-	const handleTabChange = (event, newValue) => {
-		setTabCase(newValue);
 	};
 
 	const clearFilter = () => {
@@ -872,7 +864,12 @@ const Sidebar: React.FC = ({
 					{Object.entries(chats)
 						.filter((chat) => {
 							// Filter by helper method
-							return filterChat(currentUser, tabCase, chat[1]);
+							return filterChat(
+								currentUser,
+								chat[1],
+								filterAssignedToMe,
+								filterAssignedGroup
+							);
 						})
 						.map((chat) => (
 							<ChatListItem
@@ -883,7 +880,8 @@ const Sidebar: React.FC = ({
 								keyword={searchedKeyword}
 								contactProvidersData={contactProvidersData}
 								retrieveContactData={retrieveContactData}
-								tabCase={tabCase}
+								filterAssignedToMe={filterAssignedToMe}
+								filterAssignedGroup={filterAssignedGroup}
 								bulkSendPayload={bulkSendPayload}
 								isSelectionModeEnabled={isSelectionModeEnabled}
 								selectedChats={selectedChats}

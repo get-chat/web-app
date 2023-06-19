@@ -36,7 +36,7 @@ const useChatListItem = ({ props }) => {
 	}, [props.selectedChats]);
 
 	const isUserAssignmentChipVisible = () => {
-		if (props.tabCase === CHAT_LIST_TAB_CASE_ALL) {
+		if (!props.filterAssignedToMe && !props.filterAssignedGroup) {
 			if (data.assignedToUser) {
 				return true;
 			}
@@ -44,13 +44,13 @@ const useChatListItem = ({ props }) => {
 			return !data.assignedGroup;
 		}
 
-		if (props.tabCase === CHAT_LIST_TAB_CASE_ME) {
+		if (props.filterAssignedToMe) {
 			if (!data.assignedGroup) {
 				return true;
 			}
 		}
 
-		if (props.tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+		if (props.assignedGroup) {
 			if (data.assignedToUser) {
 				return true;
 			}
@@ -61,20 +61,21 @@ const useChatListItem = ({ props }) => {
 
 	const isGroupAssignmentChipVisible = () => {
 		if (
-			props.tabCase === CHAT_LIST_TAB_CASE_ALL &&
+			!props.filterAssignedToMe &&
+			!props.filterAssignedGroup &&
 			!data.assignedToUser &&
 			data.assignedGroup
 		) {
 			return true;
 		}
 
-		if (props.tabCase === CHAT_LIST_TAB_CASE_ME) {
+		if (props.filterAssignedToMe) {
 			if (data.assignedGroup) {
 				return true;
 			}
 		}
 
-		if (props.tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+		if (props.filterAssignedGroup) {
 			if (!data.assignedToUser) {
 				return true;
 			}
