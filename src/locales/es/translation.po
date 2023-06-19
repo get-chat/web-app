@@ -255,10 +255,10 @@ msgid "This feature is not supported on your browser."
 msgstr "Esta función no es compatible con tu navegador."
 
 msgid "You must open the inbox in a new tab to access this feature."
-msgstr "Debes abrir la bandeja de entrada en una nueva pestaña para acceder a esta función."
+msgstr "Debes abrir el Inbox en una nueva pestaña para acceder a esta función."
 
 msgid "Go to inbox"
-msgstr "Ir a la bandeja de entrada"
+msgstr "Ir al Inbox"
 
 msgid "Forwarded"
 msgstr "Reenviado"
