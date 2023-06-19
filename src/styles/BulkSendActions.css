@@ -16,11 +16,6 @@
 	color: white;
 }
 
-.bulkSendActions__maxRecipientsInfo {
-	margin-top: 10px;
-	padding: 2px 10px !important;
-}
-
 .bulkSendActions__actions {
 	margin-top: 15px;
 	display: flex;

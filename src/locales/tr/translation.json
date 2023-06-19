@@ -261,5 +261,5 @@
 	"Groups": "Gruplar",
 	"%dh": "%ds",
 	"%dm": "%dd",
-	"You can select tags only when bulk sending templates.": "Etiketleri yalnızca taslakları toplu gönderirken seçebilirsin."
+	"Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats and Tags, use Bulk send a template function.": "Oturum mesajları yalnızca size son 24 saat içinde yazan alıcılara gönderilebilir. Süresi dolmuş sohbetlere ve etiketlere mesaj göndermek için toplu taslak gönderme işlevini kullanın."
 }

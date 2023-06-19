@@ -29,20 +29,6 @@ function BulkSendActions(props) {
 				</Trans>
 			</div>
 
-			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
-				{t(
-					'Please select up to %s direct recipients.',
-					getMaxDirectRecipients()
-				)}
-			</Alert>
-
-			<Alert severity="info" className="bulkSendActions__maxRecipientsInfo">
-				{t(
-					'Please select tags that target up to %s recipients in total.',
-					getMaxTagRecipients()
-				)}
-			</Alert>
-
 			<div className="bulkSendActions__actions">
 				<Button color="secondary" onClick={props.cancelSelection}>
 					{t('Cancel')}
