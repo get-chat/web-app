@@ -11,8 +11,6 @@ import {
 	ListItemIcon,
 	Menu,
 	MenuItem,
-	Tab,
-	Tabs,
 	Tooltip,
 	Zoom,
 } from '@mui/material';
@@ -83,12 +81,12 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SmsIcon from '@mui/icons-material/Sms';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,
 } from '@src/helpers/BulkSendHelper';
+import FilterChats from '@src/components/FilterChats';
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -784,15 +782,7 @@ const Sidebar: React.FC = ({
 
 			<div className={styles.searchContainer}>
 				<SearchBar onChange={(_keyword) => search(_keyword)} />
-				<Tooltip title={t('Filter chats')} disableInteractive>
-					<IconButton
-						onClick={showChatTagsList}
-						size="small"
-						className={styles.tagFilterButton}
-					>
-						<FilterListIcon />
-					</IconButton>
-				</Tooltip>
+				<FilterChats showChatTagsList={showChatTagsList} />
 			</div>
 
 			{filterTag && (

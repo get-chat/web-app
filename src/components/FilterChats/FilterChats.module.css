@@ -1,0 +1,10 @@
+.filterButton {
+	height: 35px;
+	width: 35px;
+	margin-left: -5px !important;
+}
+
+.filterButton :global(.MuiSvgIcon-root) {
+	height: 20px !important;
+	width: 20px !important;
+}

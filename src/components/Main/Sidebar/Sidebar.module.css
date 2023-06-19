@@ -10,17 +10,6 @@
 	flex: 1;
 }
 
-.tagFilterButton {
-	height: 35px;
-	width: 35px;
-	margin-left: -5px !important;
-}
-
-.tagFilterButton :global(.MuiSvgIcon-root) {
-	height: 20px !important;
-	width: 20px !important;
-}
-
 .bulkAlert {
 	padding: 2px 10px !important;
 	margin: 10px 10px 0;
