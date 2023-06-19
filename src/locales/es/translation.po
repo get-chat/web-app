@@ -815,7 +815,7 @@ msgid "Search for a message"
 msgstr "Buscar un mensaje"
 
 msgid "Send this template"
-msgstr "Enviar borrador"
+msgstr "Enviar plantilla"
 
 msgid "Send a saved response"
 msgstr "Enviar una respuesta guardada"
