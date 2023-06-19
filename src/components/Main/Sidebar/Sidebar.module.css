@@ -25,3 +25,9 @@
 	padding: 2px 10px !important;
 	margin: 10px 10px 0;
 }
+
+.bulkAlert a {
+	font-weight: 600;
+	color: var(--color-light-blue);
+	cursor: pointer;
+}

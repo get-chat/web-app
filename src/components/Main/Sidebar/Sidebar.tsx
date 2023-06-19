@@ -877,9 +877,15 @@ const Sidebar: React.FC = ({
 
 						{bulkSendPayload?.type !== ChatMessageModel.TYPE_TEMPLATE && (
 							<Alert severity="warning" className={styles.bulkAlert}>
-								{t(
-									'Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats and Tags, use Bulk send a template function.'
-								)}
+								<Trans>
+									Session messages can be sent only to recipients who wrote to
+									you within last 24 hours. To send messages to expired chats
+									and Tags, use{' '}
+									<a onClick={showBulkSendTemplateDialog}>
+										Bulk send a template
+									</a>{' '}
+									function.
+								</Trans>
 							</Alert>
 						)}
 
