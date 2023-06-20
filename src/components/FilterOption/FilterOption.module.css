@@ -7,14 +7,13 @@
 	flex-direction: row;
 	align-items: center !important;
 	vertical-align: top !important;
-	padding: 0 5px !important;
+	padding: 0 0 0 5px !important;
 	margin-right: 5px !important;
 }
 
-.container > :global(.MuiSvgIcon-root) {
+.container :global(.MuiSvgIcon-root) {
 	height: 12px !important;
 	width: 12px !important;
-	margin-right: 5px;
 }
 
 .container.active {
@@ -23,5 +22,19 @@
 }
 
 .container.active > :global(.MuiSvgIcon-root) {
+	color: white !important;
+}
+
+.label {
+	margin: 0 5px;
+}
+
+.actionIcon {
+	height: 19px !important;
+	width: 19px !important;
+	margin-left: -2px !important;
+}
+
+.actionIcon :global(.MuiSvgIcon-root) {
 	color: white !important;
 }

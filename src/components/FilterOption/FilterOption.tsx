@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './FilterOption.module.css';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, IconButton } from '@mui/material';
 import classNames from 'classnames/bind';
+import CloseIcon from '@mui/icons-material/Close';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,12 @@ const FilterOption: React.FC<Props> = ({
 			})}
 		>
 			{icon}
-			{label}
+			<div className={styles.label}>{label}</div>
+			{isActive && (
+				<IconButton className={styles.actionIcon} size="small">
+					<CloseIcon />
+				</IconButton>
+			)}
 		</ButtonBase>
 	);
 };
