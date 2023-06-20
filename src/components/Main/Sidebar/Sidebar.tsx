@@ -4,6 +4,7 @@ import '../../../styles/Sidebar.css';
 import {
 	Button,
 	CircularProgress,
+	ClickAwayListener,
 	Collapse,
 	Divider,
 	Fade,
@@ -726,8 +727,8 @@ const Sidebar: React.FC = ({
 		setNotificationsVisible(true);
 	};
 
-	const isForceDisplayFilters =
-		isFiltersVisible || filterAssignedToMe || filterAssignedGroup;
+	const isAnyActiveFilter = filterAssignedToMe || filterAssignedGroup;
+	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
 	return (
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
@@ -783,79 +784,80 @@ const Sidebar: React.FC = ({
 				/>
 			)}
 
-			<div
-				className={cx({
-					searchOrFilterGroup: true,
-					expanded: isForceDisplayFilters,
-				})}
-			>
-				<Collapse in={filterAssignedToMe || filterAssignedGroup}>
-					<div
-						className={cx({
-							filterGroup: true,
-							active: true,
-						})}
-					>
-						{filterAssignedToMe && (
-							<FilterOption
-								icon={<PersonIcon />}
-								label={t('Assigned to me')}
-								onClick={() => setFilterAssignedToMe(false)}
-								isActive
-							/>
-						)}
-						{filterAssignedGroup && (
-							<FilterOption
-								icon={<GroupIcon />}
-								label={t('Assigned group')}
-								onClick={() => setFilterAssignedGroup(false)}
-								isActive
-							/>
-						)}
-					</div>
-				</Collapse>
+			<ClickAwayListener onClickAway={() => setFiltersVisible(false)}>
+				<div
+					className={cx({
+						searchOrFilterGroup: true,
+						expanded: isForceDisplayFilters,
+					})}
+				>
+					<Collapse in={isAnyActiveFilter}>
+						<div
+							className={cx({
+								filterGroup: true,
+								active: true,
+							})}
+						>
+							{filterAssignedToMe && (
+								<FilterOption
+									icon={<PersonIcon />}
+									label={t('Assigned to me')}
+									onClick={() => setFilterAssignedToMe(false)}
+									isActive
+								/>
+							)}
+							{filterAssignedGroup && (
+								<FilterOption
+									icon={<GroupIcon />}
+									label={t('Assigned group')}
+									onClick={() => setFilterAssignedGroup(false)}
+									isActive
+								/>
+							)}
+						</div>
+					</Collapse>
 
-				<SearchBar
-					onChange={(_keyword) => search(_keyword)}
-					placeholder={t('Search, filter by tags, time, etc.')}
-					onFocus={() => setFiltersVisible(true)}
-					onBlur={() => setTimeout(() => setFiltersVisible(false), 250)}
-				/>
+					<SearchBar
+						onChange={(_keyword) => search(_keyword)}
+						placeholder={t('Search, filter by tags, time, etc.')}
+						onFocus={() => setFiltersVisible(true)}
+					/>
 
-				<Collapse in={isForceDisplayFilters}>
-					<div
-						className={cx({
-							filterGroup: true,
-							all: true,
-						})}
-					>
-						{!filterAssignedToMe && (
+					<Collapse in={isForceDisplayFilters}>
+						<div
+							className={cx({
+								filterGroup: true,
+								all: true,
+							})}
+						>
+							{!filterAssignedToMe && (
+								<FilterOption
+									icon={<PersonIcon />}
+									label={t('Assigned to me')}
+									onClick={() => setFilterAssignedToMe(true)}
+								/>
+							)}
+							{!filterAssignedGroup && (
+								<FilterOption
+									icon={<GroupIcon />}
+									label={t('Assigned group')}
+									onClick={() => setFilterAssignedGroup(true)}
+								/>
+							)}
 							<FilterOption
-								icon={<PersonIcon />}
-								label={t('Assigned to me')}
-								onClick={() => setFilterAssignedToMe(true)}
+								icon={<SellIcon />}
+								label={t('Tag')}
+								onClick={console.log}
 							/>
-						)}
-						{!filterAssignedGroup && (
 							<FilterOption
-								icon={<GroupIcon />}
-								label={t('Assigned group')}
-								onClick={() => setFilterAssignedGroup(true)}
+								icon={<SellIcon />}
+								label={t('Time')}
+								onClick={console.log}
 							/>
-						)}
-						<FilterOption
-							icon={<SellIcon />}
-							label={t('Tag')}
-							onClick={console.log}
-						/>
-						<FilterOption
-							icon={<SellIcon />}
-							label={t('Time')}
-							onClick={console.log}
-						/>
-					</div>
-				</Collapse>
-			</div>
+						</div>
+					</Collapse>
+				</div>
+			</ClickAwayListener>
 
 			{filterTag && (
 				<div className="sidebar__clearFilter">
