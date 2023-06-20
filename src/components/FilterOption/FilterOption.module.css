@@ -1,0 +1,11 @@
+.container {
+	background-color: var(--gray-light) !important;
+	border-radius: 10px !important;
+	font-size: 12px;
+	height: 19px;
+	display: inline-flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	padding: 0 5px;
+	margin-right: 5px;
+}

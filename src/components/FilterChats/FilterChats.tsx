@@ -1,9 +1,8 @@
 import React from 'react';
-import { Divider, IconButton, Menu, MenuItem, Tooltip } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { Chip, Divider, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import styles from './FilterChats.module.css';
 import useFilterChats from '@src/components/FilterChats/useFilterChats';
+import PersonIcon from '@mui/icons-material/Person';
 
 interface Props {
 	showChatTagsList: () => void;
@@ -18,16 +17,6 @@ const FilterChats: React.FC<Props> = ({ showChatTagsList }) => {
 
 	return (
 		<>
-			<Tooltip title={t('Filter chats')} disableInteractive>
-				<IconButton
-					onClick={displayMenu}
-					size="small"
-					className={styles.filterButton}
-				>
-					<FilterListIcon />
-				</IconButton>
-			</Tooltip>
-
 			<Menu
 				anchorEl={menuAnchorEl}
 				keepMounted

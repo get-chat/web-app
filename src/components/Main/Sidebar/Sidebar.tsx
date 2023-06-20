@@ -83,7 +83,7 @@ import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,
 } from '@src/helpers/BulkSendHelper';
-import FilterChats from '@src/components/FilterChats';
+import FilterOption from '@src/components/FilterOption';
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -551,7 +551,7 @@ const Sidebar: React.FC = ({
 						});
 
 						// When state is a JSON object, it is unable to understand whether it is different or same and renders again
-						// So we check if new state is actually different than previous state
+						// So we check if new state is actually different from previous state
 						if (
 							JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
 						) {
@@ -773,8 +773,17 @@ const Sidebar: React.FC = ({
 			)}
 
 			<div className={styles.searchContainer}>
-				<SearchBar onChange={(_keyword) => search(_keyword)} />
-				<FilterChats showChatTagsList={showChatTagsList} />
+				<SearchBar
+					onChange={(_keyword) => search(_keyword)}
+					placeholder={t('Search or filter by tags, time etc.')}
+				/>
+			</div>
+
+			<div className={styles.filterOptions}>
+				<FilterOption label={t('Assigned to me')} onClick={console.log} />
+				<FilterOption label={t('Assigned group')} onClick={console.log} />
+				<FilterOption label={t('Tag')} onClick={console.log} />
+				<FilterOption label={t('Time')} onClick={console.log} />
 			</div>
 
 			{filterTag && (
