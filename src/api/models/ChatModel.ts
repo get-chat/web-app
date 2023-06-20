@@ -5,9 +5,12 @@ import { parseIntSafely } from '@src/helpers/IntegerHelper';
 
 class ChatModel {
 	public waId: string;
+	public name?: string;
 	public tags: any[];
 	public assignedToUser: any;
 	public assignedGroup: any;
+	public lastMessageTimestamp: number;
+	public lastReceivedMessageTimestamp: number;
 
 	constructor(data: any) {
 		const contact = data.contact;

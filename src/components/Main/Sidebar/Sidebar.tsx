@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
@@ -87,10 +86,12 @@ import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import classNames from 'classnames/bind';
+import ChatList from '@src/interfaces/ChatList';
+import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 
 const cx = classNames.bind(styles);
 
-const Sidebar: React.FC = ({
+const Sidebar: React.FC<any> = ({
 	pendingMessages,
 	setPendingMessages,
 	isSendingPendingMessages,
@@ -124,17 +125,17 @@ const Sidebar: React.FC = ({
 }) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config: any = React.useContext(AppConfig);
 
 	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const filterTag = useAppSelector((state) => state.filterTag.value);
+	const filterTag: any = useAppSelector((state) => state.filterTag.value);
 
 	const { t } = useTranslation();
 
 	const { waId } = useParams();
-	const chatsContainer = useRef(null);
+	const chatsContainer = useRef<HTMLDivElement>(null);
 	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
 		null
 	);
@@ -364,7 +365,7 @@ const Sidebar: React.FC = ({
 
 			Object.entries(data).forEach((message) => {
 				//const msgId = message[0];
-				const assignmentData = message[1];
+				const assignmentData: any = message[1];
 				const assignmentEvent = assignmentData.assignmentEvent;
 
 				if (assignmentEvent) {
@@ -426,9 +427,9 @@ const Sidebar: React.FC = ({
 		const chatsContainerCopy = chatsContainer.current;
 
 		// To optimize scroll event
-		let debounceTimer;
+		let debounceTimer: NodeJS.Timeout;
 
-		function handleScroll(e) {
+		const handleScroll: EventListenerOrEventListenerObject = (e: Event) => {
 			if (debounceTimer) {
 				window.clearTimeout(debounceTimer);
 			}
@@ -442,7 +443,7 @@ const Sidebar: React.FC = ({
 				// const threshold = 0;
 				const el = e.target;
 
-				if (isScrollable(el)) {
+				if (el instanceof Element && isScrollable(el)) {
 					if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
 						listChats(
 							cancelTokenSourceRef.current,
@@ -453,17 +454,17 @@ const Sidebar: React.FC = ({
 					}
 				}
 			}, 100);
-		}
+		};
 
-		chatsContainerCopy.addEventListener('scroll', handleScroll);
+		chatsContainerCopy?.addEventListener('scroll', handleScroll);
 
 		return () => {
 			clearTimeout(debounceTimer);
-			chatsContainerCopy.removeEventListener('scroll', handleScroll);
+			chatsContainerCopy?.removeEventListener('scroll', handleScroll);
 		};
 	}, [chats, keyword, filterTag]);
 
-	const search = async (_keyword) => {
+	const search = async (_keyword: string) => {
 		setKeyword(_keyword);
 	};
 
@@ -473,7 +474,7 @@ const Sidebar: React.FC = ({
 		}
 	}, [isSelectionModeEnabled]);
 
-	const sortChats = (state) => {
+	const sortChats = (state: ChatList) => {
 		let sortedState = Object.entries(state).sort(
 			(a, b) =>
 				(b[1].lastReceivedMessageTimestamp ?? b[1].lastMessageTimestamp ?? 0) -
@@ -482,7 +483,12 @@ const Sidebar: React.FC = ({
 		return Object.fromEntries(sortedState);
 	};
 
-	const listChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
+	const listChats = (
+		cancelTokenSource?: CancelTokenSource,
+		isInitial: boolean = false,
+		offset?: number,
+		replaceAll: boolean = false
+	) => {
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
@@ -503,8 +509,8 @@ const Sidebar: React.FC = ({
 			offset,
 			filterAssignedToMe ? true : undefined,
 			filterAssignedGroup ? true : undefined,
-			cancelTokenSource.token,
-			(response) => {
+			cancelTokenSource?.token,
+			(response: AxiosResponse) => {
 				const chatsResponse = new ChatsResponse(response.data);
 
 				dispatch(setChatsCount(chatsResponse.count));
@@ -516,17 +522,14 @@ const Sidebar: React.FC = ({
 					dispatch(addChats(chatsResponse.chats));
 				}
 
-				// In case param is undefined
-				isInitial = isInitial === true;
-
 				if (isInitial) {
 					setProgress(100);
 				}
 
 				const willNotify = !isInitial;
 
-				const preparedNewMessages = {};
-				response.data.results.forEach((newMessage) => {
+				const preparedNewMessages: { [key: string]: NewMessageModel } = {};
+				response.data.results.forEach((newMessage: any) => {
 					const newWaId = newMessage.contact.waba_payload.wa_id;
 					const newAmount = newMessage.new_messages;
 					const prepared = new NewMessageModel(newWaId, newAmount);
@@ -535,9 +538,9 @@ const Sidebar: React.FC = ({
 
 				if (willNotify) {
 					let hasAnyNewMessages = false;
-					let chatMessageWaId;
+					let chatMessageWaId: string | undefined;
 
-					setNewMessages((prevState) => {
+					setNewMessages((prevState: any) => {
 						Object.entries(preparedNewMessages).forEach((newMsg) => {
 							const newMsgWaId = newMsg[0];
 							const number = newMsg[1].newMessages;
@@ -578,7 +581,7 @@ const Sidebar: React.FC = ({
 						);
 					}
 				} else {
-					setNewMessages((prevState) => {
+					setNewMessages((prevState: any) => {
 						return { ...prevState, ...preparedNewMessages };
 					});
 				}
@@ -586,7 +589,7 @@ const Sidebar: React.FC = ({
 				setLoadingMoreChats(false);
 				setLoadingChats(false);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.log(error);
 
 				setLoadingMoreChats(false);
@@ -600,7 +603,7 @@ const Sidebar: React.FC = ({
 		);
 	};
 
-	const retrieveChat = (chatWaId) => {
+	const retrieveChat = (chatWaId: string) => {
 		apiService.retrieveChatCall(
 			chatWaId,
 			undefined,
@@ -645,7 +648,7 @@ const Sidebar: React.FC = ({
 		);
 	};
 
-	const searchMessages = (cancelTokenSource) => {
+	const searchMessages = (cancelTokenSource?: CancelTokenSource) => {
 		apiService.listMessagesCall(
 			undefined,
 			keyword,
@@ -654,22 +657,17 @@ const Sidebar: React.FC = ({
 			undefined,
 			undefined,
 			undefined,
-			cancelTokenSource.source,
-			(response) => {
-				const preparedMessages = {};
-				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageModel(message);
-					preparedMessages[prepared.id] = prepared;
-				});
-
-				setChatMessages(preparedMessages);
+			cancelTokenSource?.token,
+			(response: AxiosResponse) => {
+				const messagesResponse = new ChatMessagesResponse(response.data);
+				setChatMessages(messagesResponse.messages);
 			},
 			undefined,
 			navigate
 		);
 	};
 
-	const goToMessage = (chatMessage) => {
+	const goToMessage = (chatMessage: ChatMessageModel) => {
 		if (waId !== chatMessage.waId) {
 			navigate(`/main/chat/${chatMessage.waId}`, {
 				state: {
@@ -688,7 +686,9 @@ const Sidebar: React.FC = ({
 
 	const goToSettings = () => {
 		setAnchorEl(null);
+		// @ts-ignore
 		if (window.AndroidWebInterface) {
+			// @ts-ignore
 			window.AndroidWebInterface.goToSettings();
 		}
 	};
@@ -829,6 +829,7 @@ const Sidebar: React.FC = ({
 					</Collapse>
 
 					<SearchBar
+						value={keyword}
 						onChange={(_keyword) => search(_keyword)}
 						placeholder={t('Search, filter by tags, time, etc.')}
 						onFocus={() => setFiltersVisible(true)}
@@ -859,7 +860,7 @@ const Sidebar: React.FC = ({
 								<FilterOption
 									icon={<SellIcon />}
 									label={t('Tag')}
-									onClick={(event) => {
+									onClick={(event: MouseEvent) => {
 										if (event.currentTarget instanceof Element) {
 											setTagsMenuAnchorEl(event.currentTarget);
 										}
@@ -1045,7 +1046,9 @@ const Sidebar: React.FC = ({
 										messageData={message[1]}
 										keyword={searchedKeyword}
 										displaySender={true}
-										onClick={(chatMessage) => goToMessage(chatMessage)}
+										onClick={(chatMessage: ChatMessageModel) =>
+											goToMessage(chatMessage)
+										}
 									/>
 								))}
 							</div>

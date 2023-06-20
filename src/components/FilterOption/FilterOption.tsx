@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import styles from './FilterOption.module.css';
 import { ButtonBase, IconButton } from '@mui/material';
 import classNames from 'classnames/bind';
@@ -9,7 +9,7 @@ const cx = classNames.bind(styles);
 interface Props {
 	icon?: JSX.Element;
 	label: string;
-	onClick: () => void;
+	onClick: (event: MouseEvent) => void;
 	isActive?: boolean;
 }
 

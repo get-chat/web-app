@@ -6,6 +6,7 @@ class UserModel {
 	public username?: string;
 	public isAdmin: boolean;
 	public groups: any;
+	public profile: any;
 
 	constructor(data) {
 		if (!data) return;
