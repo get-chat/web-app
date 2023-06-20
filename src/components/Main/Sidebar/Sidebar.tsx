@@ -726,6 +726,9 @@ const Sidebar: React.FC = ({
 		setNotificationsVisible(true);
 	};
 
+	const isForceDisplayFilters =
+		isFiltersVisible || filterAssignedToMe || filterAssignedGroup;
+
 	return (
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
@@ -780,7 +783,12 @@ const Sidebar: React.FC = ({
 				/>
 			)}
 
-			<div className={styles.searchOrFilterGroup}>
+			<div
+				className={cx({
+					searchOrFilterGroup: true,
+					expanded: isForceDisplayFilters,
+				})}
+			>
 				<Collapse in={filterAssignedToMe || filterAssignedGroup}>
 					<div
 						className={cx({
@@ -816,9 +824,7 @@ const Sidebar: React.FC = ({
 					/>
 				</div>
 
-				<Collapse
-					in={isFiltersVisible || filterAssignedToMe || filterAssignedGroup}
-				>
+				<Collapse in={isForceDisplayFilters}>
 					<div
 						className={cx({
 							filterGroup: true,
