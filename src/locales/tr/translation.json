@@ -266,5 +266,6 @@
 	"Assigned to me": "Bana atanmış",
 	"Assigned group": "Atanmış grup",
 	"Tag": "Etiket",
-	"Time": "Zaman"
+	"Time": "Zaman",
+	"Tag: %s": "Etiket: %s"
 }

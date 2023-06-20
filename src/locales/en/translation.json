@@ -274,5 +274,6 @@
 	"Assigned to me": "",
 	"Assigned group": "",
 	"Tag": "",
-	"Time": ""
+	"Time": "",
+	"Tag: %s": ""
 }

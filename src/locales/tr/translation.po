@@ -810,3 +810,6 @@ msgstr "Etiket"
 
 msgid "Time"
 msgstr "Zaman"
+
+msgid "Tag: %s"
+msgstr "Etiket: %s"
