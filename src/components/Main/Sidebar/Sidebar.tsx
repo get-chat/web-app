@@ -816,12 +816,21 @@ const Sidebar: React.FC = ({
 							)}
 						</Alert>
 
+						{tags && (
+							<Alert severity="info" className={styles.bulkAlert}>
+								{t(
+									'Please select tags that target up to %s recipients in total.',
+									getMaxTagRecipients()
+								)}
+							</Alert>
+						)}
+
 						{bulkSendPayload?.type !== ChatMessageModel.TYPE_TEMPLATE && (
 							<Alert severity="warning" className={styles.bulkAlert}>
 								<Trans>
 									Session messages can be sent only to recipients who wrote to
-									you within last 24 hours. To send messages to expired chats
-									and Tags, use{' '}
+									you within last 24 hours. To send messages to expired chats,
+									use{' '}
 									<a onClick={showBulkSendTemplateDialog}>
 										Bulk send a template
 									</a>{' '}
@@ -830,29 +839,21 @@ const Sidebar: React.FC = ({
 							</Alert>
 						)}
 
-						{tags &&
-							bulkSendPayload?.type === ChatMessageModel.TYPE_TEMPLATE && (
-								<>
-									<Alert severity="info" className={styles.bulkAlert}>
-										{t(
-											'Please select tags that target up to %s recipients in total.',
-											getMaxTagRecipients()
-										)}
-									</Alert>
-
-									<h3>{t('Tags')}</h3>
-									<div>
-										{Object.entries(tags).map((tag) => (
-											<SelectableChatTag
-												key={tag[0]}
-												data={tag[1]}
-												selectedTags={selectedTags}
-												setSelectedTags={setSelectedTags}
-											/>
-										))}
-									</div>
-								</>
-							)}
+						{tags && (
+							<>
+								<h3>{t('Tags')}</h3>
+								<div>
+									{Object.entries(tags).map((tag) => (
+										<SelectableChatTag
+											key={tag[0]}
+											data={tag[1]}
+											selectedTags={selectedTags}
+											setSelectedTags={setSelectedTags}
+										/>
+									))}
+								</div>
+							</>
+						)}
 					</>
 				)}
 
