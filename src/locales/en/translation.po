@@ -827,3 +827,15 @@ msgstr ""
 
 msgid "Search, filter by tags, time, etc."
 msgstr ""
+
+msgid "Assigned to me"
+msgstr ""
+
+msgid "Assigned group"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Time"
+msgstr ""

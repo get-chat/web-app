@@ -262,5 +262,9 @@
 	"%dh": "%ds",
 	"%dm": "%dd",
 	"Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function.": "Oturum mesajları yalnızca size son 24 saat içinde yazan alıcılara gönderilebilir. Süresi dolmuş sohbetlere mesaj göndermek için <2>Toplu taslak gönderme</2> işlevini kullanın.",
-	"Search, filter by tags, time, etc.": "Ara, filtrele: etiket, zaman vb."
+	"Search, filter by tags, time, etc.": "Ara, filtrele: etiket, zaman vb.",
+	"Assigned to me": "Bana atanmış",
+	"Assigned group": "Atanmış grup",
+	"Tag": "Etiket",
+	"Time": "Zaman"
 }

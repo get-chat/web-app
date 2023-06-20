@@ -798,3 +798,15 @@ msgstr "Oturum mesajları yalnızca size son 24 saat içinde yazan alıcılara g
 
 msgid "Search, filter by tags, time, etc."
 msgstr "Ara, filtrele: etiket, zaman vb."
+
+msgid "Assigned to me"
+msgstr "Bana atanmış"
+
+msgid "Assigned group"
+msgstr "Atanmış grup"
+
+msgid "Tag"
+msgstr "Etiket"
+
+msgid "Time"
+msgstr "Zaman"
