@@ -77,6 +77,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SmsIcon from '@mui/icons-material/Sms';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
@@ -880,24 +881,37 @@ const Sidebar: React.FC = ({
 						onClose={() => setTagsMenuAnchorEl(undefined)}
 						elevation={3}
 					>
-						{tags.map((tag: any) => (
-							<MenuItem
-								onClick={() => {
-									dispatch(setFilterTag(tag));
-									setTagsMenuAnchorEl(undefined);
-								}}
-								key={tag.id}
-							>
-								<ListItemIcon>
-									<SellIcon
-										style={{
-											fill: tag.web_inbox_color,
-										}}
-									/>
-								</ListItemIcon>
-								{tag.name}
-							</MenuItem>
-						))}
+						{tags &&
+							tags.slice(0, 10).map((tag: any) => (
+								<MenuItem
+									onClick={() => {
+										dispatch(setFilterTag(tag));
+										setTagsMenuAnchorEl(undefined);
+									}}
+									key={tag.id}
+								>
+									<ListItemIcon>
+										<SellIcon
+											style={{
+												fill: tag.web_inbox_color,
+											}}
+										/>
+									</ListItemIcon>
+									{tag.name}
+								</MenuItem>
+							))}
+						<Divider />
+						<MenuItem
+							onClick={() => {
+								showChatTagsList();
+								setTagsMenuAnchorEl(undefined);
+							}}
+						>
+							<ListItemIcon>
+								<UnfoldMoreIcon />
+							</ListItemIcon>
+							{t('More')}
+						</MenuItem>
 					</Menu>
 				</div>
 			</ClickAwayListener>
@@ -1085,13 +1099,6 @@ const Sidebar: React.FC = ({
 				onClose={hideMenu}
 				elevation={3}
 			>
-				<MenuItem onClick={showChatTagsList}>
-					<ListItemIcon>
-						<SellIcon />
-					</ListItemIcon>
-					{t('Tags')}
-				</MenuItem>
-				<Divider />
 				<MenuItem
 					className="sidebar__menu__refresh"
 					onClick={() => window.location.reload()}
