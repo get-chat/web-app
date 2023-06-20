@@ -784,7 +784,13 @@ const Sidebar: React.FC = ({
 				/>
 			)}
 
-			<ClickAwayListener onClickAway={() => setFiltersVisible(false)}>
+			<ClickAwayListener
+				onClickAway={() => {
+					if (!isAnyActiveFilter) {
+						setFiltersVisible(false);
+					}
+				}}
+			>
 				<div
 					className={cx({
 						searchOrFilterGroup: true,
