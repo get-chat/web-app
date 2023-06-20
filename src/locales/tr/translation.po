@@ -796,5 +796,5 @@ msgstr "%dd"
 msgid "Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function."
 msgstr "Oturum mesajları yalnızca size son 24 saat içinde yazan alıcılara gönderilebilir. Süresi dolmuş sohbetlere mesaj göndermek için <2>Toplu taslak gönderme</2> işlevini kullanın."
 
-msgid "Search or filter by tags, time etc."
-msgstr "Ara veya etiketlere, zamana vb. göre filtrele"
+msgid "Search, filter by tags, time, etc."
+msgstr "Ara, filtrele: etiket, zaman vb."

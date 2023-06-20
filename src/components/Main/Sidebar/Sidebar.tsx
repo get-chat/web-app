@@ -817,7 +817,7 @@ const Sidebar: React.FC = ({
 
 				<SearchBar
 					onChange={(_keyword) => search(_keyword)}
-					placeholder={t('Search or filter by tags, time etc.')}
+					placeholder={t('Search, filter by tags, time, etc.')}
 					onFocus={() => setFiltersVisible(true)}
 					onBlur={() => setTimeout(() => setFiltersVisible(false), 250)}
 				/>
