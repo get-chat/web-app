@@ -2,7 +2,6 @@
 import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
-	Button,
 	CircularProgress,
 	ClickAwayListener,
 	Collapse,
@@ -44,7 +43,6 @@ import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
-import CloseIcon from '@mui/icons-material/Close';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import BulkSendActions from './BulkSendActions';
@@ -65,7 +63,6 @@ import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
 import { setFilterTag } from '@src/store/reducers/filterTagReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
-import ChatTag from '../../ChatTag';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
@@ -132,7 +129,6 @@ const Sidebar: React.FC = ({
 	const tags = useAppSelector((state) => state.tags.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTag = useAppSelector((state) => state.filterTag.value);
-	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 
 	const { t } = useTranslation();
 
@@ -161,6 +157,8 @@ const Sidebar: React.FC = ({
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
 	const [filterAssignedGroup, setFilterAssignedGroup] =
 		useState<boolean>(false);
+
+	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
@@ -708,10 +706,6 @@ const Sidebar: React.FC = ({
 		setContactsVisible(true);
 	};
 
-	const clearFilter = () => {
-		dispatch(setFilterTag(undefined));
-	};
-
 	const cancelSelection = () => {
 		setSelectionModeEnabled(false);
 		setSelectedChats([]);
@@ -727,7 +721,9 @@ const Sidebar: React.FC = ({
 		setNotificationsVisible(true);
 	};
 
-	const isAnyActiveFilter = filterAssignedToMe || filterAssignedGroup;
+	const isAnyActiveFilter = Boolean(
+		filterAssignedToMe || filterAssignedGroup || filterTag
+	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
 	return (
@@ -820,6 +816,14 @@ const Sidebar: React.FC = ({
 									isActive
 								/>
 							)}
+							{filterTag && (
+								<FilterOption
+									icon={<SellIcon />}
+									label={t('Tag: %s', filterTag.name)}
+									onClick={() => dispatch(setFilterTag(undefined))}
+									isActive
+								/>
+							)}
 						</div>
 					</Collapse>
 
@@ -850,11 +854,17 @@ const Sidebar: React.FC = ({
 									onClick={() => setFilterAssignedGroup(true)}
 								/>
 							)}
-							<FilterOption
-								icon={<SellIcon />}
-								label={t('Tag')}
-								onClick={console.log}
-							/>
+							{tags?.length > 0 && (
+								<FilterOption
+									icon={<SellIcon />}
+									label={t('Tag')}
+									onClick={(event) => {
+										if (event.currentTarget instanceof Element) {
+											setTagsMenuAnchorEl(event.currentTarget);
+										}
+									}}
+								/>
+							)}
 							<FilterOption
 								icon={<SellIcon />}
 								label={t('Time')}
@@ -862,37 +872,35 @@ const Sidebar: React.FC = ({
 							/>
 						</div>
 					</Collapse>
+					<Menu
+						className={styles.filterMenu}
+						anchorEl={tagsMenuAnchorEl}
+						keepMounted
+						open={Boolean(tagsMenuAnchorEl)}
+						onClose={() => setTagsMenuAnchorEl(undefined)}
+						elevation={3}
+					>
+						{tags.map((tag: any) => (
+							<MenuItem
+								onClick={() => {
+									dispatch(setFilterTag(tag));
+									setTagsMenuAnchorEl(undefined);
+								}}
+								key={tag.id}
+							>
+								<ListItemIcon>
+									<SellIcon
+										style={{
+											fill: tag.web_inbox_color,
+										}}
+									/>
+								</ListItemIcon>
+								{tag.name}
+							</MenuItem>
+						))}
+					</Menu>
 				</div>
 			</ClickAwayListener>
-
-			{filterTag && (
-				<div className="sidebar__clearFilter">
-					<div className="sidebar__clearFilter__body mb-1">
-						<Trans
-							count={chatsCount ?? 0}
-							i18nKey="Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
-							values={{
-								postProcess: 'sprintf',
-								sprintf: {
-									tag: filterTag.name,
-									count: chatsCount ?? 0,
-								},
-							}}
-						>
-							Showing only: <ChatTag id={filterTag.id} />{' '}
-							<span className="bold">%(tag)s</span> (%(count)d chat)
-						</Trans>
-					</div>
-					<Button
-						className="sidebar__clearFilter__clear"
-						size="small"
-						startIcon={<CloseIcon />}
-						onClick={clearFilter}
-					>
-						{t('Click to clear filter')}
-					</Button>
-				</div>
-			)}
 
 			<div className="sidebar__results" ref={chatsContainer}>
 				{isSelectionModeEnabled && (
