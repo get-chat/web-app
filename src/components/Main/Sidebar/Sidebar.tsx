@@ -84,6 +84,8 @@ import {
 	getMaxTagRecipients,
 } from '@src/helpers/BulkSendHelper';
 import FilterOption from '@src/components/FilterOption';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -780,9 +782,21 @@ const Sidebar: React.FC = ({
 			</div>
 
 			<div className={styles.filterOptions}>
-				<FilterOption label={t('Assigned to me')} onClick={console.log} />
-				<FilterOption label={t('Assigned group')} onClick={console.log} />
-				<FilterOption label={t('Tag')} onClick={console.log} />
+				<FilterOption
+					icon={<PersonIcon />}
+					label={t('Assigned to me')}
+					onClick={() => setFilterAssignedToMe((prevState) => !prevState)}
+				/>
+				<FilterOption
+					icon={<GroupIcon />}
+					label={t('Assigned group')}
+					onClick={() => setFilterAssignedGroup((prevState) => !prevState)}
+				/>
+				<FilterOption
+					icon={<SellIcon />}
+					label={t('Tag')}
+					onClick={console.log}
+				/>
 				<FilterOption label={t('Time')} onClick={console.log} />
 			</div>
 

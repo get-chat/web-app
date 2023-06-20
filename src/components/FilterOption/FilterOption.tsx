@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './FilterOption.module.css';
+import { ButtonBase } from '@mui/material';
 
 interface Props {
 	icon?: JSX.Element;
@@ -9,10 +10,10 @@ interface Props {
 
 const FilterOption: React.FC<Props> = ({ icon, label, onClick }) => {
 	return (
-		<div onClick={onClick} className={styles.container}>
+		<ButtonBase component="div" onClick={onClick} className={styles.container}>
 			{icon}
 			{label}
-		</div>
+		</ButtonBase>
 	);
 };
 

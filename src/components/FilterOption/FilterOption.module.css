@@ -6,6 +6,13 @@
 	display: inline-flex !important;
 	flex-direction: row;
 	align-items: center !important;
-	padding: 0 5px;
+	vertical-align: top !important;
+	padding: 0 5px !important;
+	margin-right: 5px !important;
+}
+
+.container > :global(.MuiSvgIcon-root) {
+	height: 12px !important;
+	width: 12px !important;
 	margin-right: 5px;
 }
