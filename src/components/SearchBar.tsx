@@ -10,6 +10,8 @@ export type Props = {
 	onChange?: (text) => void;
 	isLoading: boolean;
 	placeholder?: string;
+	onFocus?: () => void;
+	onBlur?: () => void;
 };
 
 const SearchBar: React.FC<Props> = ({
@@ -17,6 +19,8 @@ const SearchBar: React.FC<Props> = ({
 	onChange,
 	isLoading,
 	placeholder,
+	onFocus,
+	onBlur,
 }) => {
 	const { t } = useTranslation();
 
@@ -38,6 +42,8 @@ const SearchBar: React.FC<Props> = ({
 					type="text"
 					value={value}
 					onChange={handleChange}
+					onFocus={onFocus}
+					onBlur={onBlur}
 				/>
 			</div>
 		</div>

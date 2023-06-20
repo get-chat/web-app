@@ -4,6 +4,7 @@ import '../../../styles/Sidebar.css';
 import {
 	Button,
 	CircularProgress,
+	Collapse,
 	Divider,
 	Fade,
 	IconButton,
@@ -86,6 +87,9 @@ import {
 import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 const Sidebar: React.FC = ({
 	pendingMessages,
@@ -150,6 +154,8 @@ const Sidebar: React.FC = ({
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
+
+	const [isFiltersVisible, setFiltersVisible] = useState(false);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
 	const [filterAssignedGroup, setFilterAssignedGroup] =
@@ -774,30 +780,77 @@ const Sidebar: React.FC = ({
 				/>
 			)}
 
-			<div className={styles.searchContainer}>
-				<SearchBar
-					onChange={(_keyword) => search(_keyword)}
-					placeholder={t('Search or filter by tags, time etc.')}
-				/>
-			</div>
+			<div className={styles.searchOrFilterGroup}>
+				<Collapse in={filterAssignedToMe || filterAssignedGroup}>
+					<div
+						className={cx({
+							filterGroup: true,
+							active: true,
+						})}
+					>
+						{filterAssignedToMe && (
+							<FilterOption
+								icon={<PersonIcon />}
+								label={t('Assigned to me')}
+								onClick={() => setFilterAssignedToMe(false)}
+								isActive
+							/>
+						)}
+						{filterAssignedGroup && (
+							<FilterOption
+								icon={<GroupIcon />}
+								label={t('Assigned group')}
+								onClick={() => setFilterAssignedGroup(false)}
+								isActive
+							/>
+						)}
+					</div>
+				</Collapse>
 
-			<div className={styles.filterOptions}>
-				<FilterOption
-					icon={<PersonIcon />}
-					label={t('Assigned to me')}
-					onClick={() => setFilterAssignedToMe((prevState) => !prevState)}
-				/>
-				<FilterOption
-					icon={<GroupIcon />}
-					label={t('Assigned group')}
-					onClick={() => setFilterAssignedGroup((prevState) => !prevState)}
-				/>
-				<FilterOption
-					icon={<SellIcon />}
-					label={t('Tag')}
-					onClick={console.log}
-				/>
-				<FilterOption label={t('Time')} onClick={console.log} />
+				<div className={styles.searchContainer}>
+					<SearchBar
+						onChange={(_keyword) => search(_keyword)}
+						placeholder={t('Search or filter by tags, time etc.')}
+						onFocus={() => setFiltersVisible(true)}
+						onBlur={() => setTimeout(() => setFiltersVisible(false), 250)}
+					/>
+				</div>
+
+				<Collapse
+					in={isFiltersVisible || filterAssignedToMe || filterAssignedGroup}
+				>
+					<div
+						className={cx({
+							filterGroup: true,
+							all: true,
+						})}
+					>
+						{!filterAssignedToMe && (
+							<FilterOption
+								icon={<PersonIcon />}
+								label={t('Assigned to me')}
+								onClick={() => setFilterAssignedToMe(true)}
+							/>
+						)}
+						{!filterAssignedGroup && (
+							<FilterOption
+								icon={<GroupIcon />}
+								label={t('Assigned group')}
+								onClick={() => setFilterAssignedGroup(true)}
+							/>
+						)}
+						<FilterOption
+							icon={<SellIcon />}
+							label={t('Tag')}
+							onClick={console.log}
+						/>
+						<FilterOption
+							icon={<SellIcon />}
+							label={t('Time')}
+							onClick={console.log}
+						/>
+					</div>
+				</Collapse>
 			</div>
 
 			{filterTag && (

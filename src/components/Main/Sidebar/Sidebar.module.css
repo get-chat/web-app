@@ -9,9 +9,25 @@
 	flex: 1;
 }
 
-.filterOptions {
+.searchOrFilterGroup {
 	background-color: white;
-	padding: 0 15px 10px;
+	padding: 10px 0;
+}
+
+.searchOrFilterGroup :global(.searchBar__search) {
+	padding: 0 15px !important;
+}
+
+.filterGroup {
+	padding: 0 15px;
+}
+
+.filterGroup.active {
+	margin-bottom: 2px;
+}
+
+.filterGroup.all {
+	margin-top: 7px;
 }
 
 .bulkAlert {

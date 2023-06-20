@@ -16,3 +16,12 @@
 	width: 12px !important;
 	margin-right: 5px;
 }
+
+.container.active {
+	background-color: var(--color-primary) !important;
+	color: white;
+}
+
+.container.active > :global(.MuiSvgIcon-root) {
+	color: white !important;
+}
