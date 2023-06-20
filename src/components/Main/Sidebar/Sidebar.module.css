@@ -1,13 +1,3 @@
-.searchContainer {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-
-.searchContainer :global(.searchBar__search) {
-	flex: 1;
-}
-
 .searchOrFilterGroup {
 	background-color: white;
 	padding: 10px 0;

@@ -815,14 +815,12 @@ const Sidebar: React.FC = ({
 					</div>
 				</Collapse>
 
-				<div className={styles.searchContainer}>
-					<SearchBar
-						onChange={(_keyword) => search(_keyword)}
-						placeholder={t('Search or filter by tags, time etc.')}
-						onFocus={() => setFiltersVisible(true)}
-						onBlur={() => setTimeout(() => setFiltersVisible(false), 250)}
-					/>
-				</div>
+				<SearchBar
+					onChange={(_keyword) => search(_keyword)}
+					placeholder={t('Search or filter by tags, time etc.')}
+					onFocus={() => setFiltersVisible(true)}
+					onBlur={() => setTimeout(() => setFiltersVisible(false), 250)}
+				/>
 
 				<Collapse in={isForceDisplayFilters}>
 					<div
