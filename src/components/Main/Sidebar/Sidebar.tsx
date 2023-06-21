@@ -89,6 +89,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import classNames from 'classnames/bind';
 import ChatList from '@src/interfaces/ChatList';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
+import DateRangeDialog from '@src/components/DateRangeDialog';
 
 const cx = classNames.bind(styles);
 
@@ -156,6 +157,7 @@ const Sidebar: React.FC<any> = ({
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 
 	const [isFiltersVisible, setFiltersVisible] = useState(false);
+	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
 	const [filterAssignedGroup, setFilterAssignedGroup] =
@@ -871,7 +873,7 @@ const Sidebar: React.FC<any> = ({
 							<FilterOption
 								icon={<DateRangeIcon />}
 								label={t('Time')}
-								onClick={console.log}
+								onClick={() => setDateRangeDialogVisible(true)}
 							/>
 						</div>
 					</Collapse>
@@ -915,6 +917,11 @@ const Sidebar: React.FC<any> = ({
 							{t('More')}
 						</MenuItem>
 					</Menu>
+
+					<DateRangeDialog
+						open={isDateRangeDialogVisible}
+						setOpen={setDateRangeDialogVisible}
+					/>
 				</div>
 			</ClickAwayListener>
 

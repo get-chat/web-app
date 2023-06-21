@@ -267,5 +267,6 @@
 	"Assigned group": "Atanmış grup",
 	"Tag": "Etiket",
 	"Time": "Zaman",
-	"Tag: %s": "Etiket: %s"
+	"Tag: %s": "Etiket: %s",
+	"Done": "Bitti"
 }
