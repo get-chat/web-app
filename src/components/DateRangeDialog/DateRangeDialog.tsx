@@ -5,6 +5,9 @@ import { DateRangePicker, RangeKeyDict } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { Button, DialogActions } from '@mui/material';
+// @ts-ignore
+import * as rdrLocales from 'react-date-range/dist/locale';
+import i18next from 'i18next';
 
 interface Props {
 	open: boolean;
@@ -74,13 +77,14 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 				onChange={handleChange}
 				minDate={minDate}
 				maxDate={maxDate}
+				locale={rdrLocales[i18next.language]}
 			/>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
 					{t('Close')}
 				</Button>
 				<Button onClick={apply} color="primary">
-					{t('Apply')}
+					{t('Done')}
 				</Button>
 			</DialogActions>
 		</Dialog>
