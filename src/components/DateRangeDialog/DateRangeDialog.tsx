@@ -25,7 +25,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 			const now = new Date();
 			setStartDate(now);
 			setEndDate(now);
-			setMinDate(new Date(2021, 1, 1));
+			setMinDate(new Date(2021, 0, 1));
 			setMaxDate(now);
 		}
 	}, [open]);
@@ -46,7 +46,23 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	};
 
 	const apply = () => {
-		onDone(startDate, endDate);
+		let finalStartDate = startDate;
+		// Check if start date is before min date
+		if (startDate) {
+			if (startDate.getTime() < (minDate?.getTime() ?? 0)) {
+				finalStartDate = minDate;
+			}
+		}
+
+		let finalEndDate = endDate;
+		// Check if end date is after max date
+		if (endDate) {
+			if (endDate.getTime() > (maxDate?.getTime() ?? 0)) {
+				finalEndDate = maxDate;
+			}
+		}
+
+		onDone(finalStartDate, finalEndDate);
 		close();
 	};
 
