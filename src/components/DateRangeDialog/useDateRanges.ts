@@ -57,7 +57,20 @@ const useDateRanges = () => {
 				endDate: defineds.endOfYesterday,
 			}),
 		},
-
+		{
+			label: t('Last Saturday'),
+			range: () => ({
+				startDate: defineds.previousSaturday,
+				endDate: defineds.previousSaturday,
+			}),
+		},
+		{
+			label: t('Last Sunday'),
+			range: () => ({
+				startDate: defineds.previousSunday,
+				endDate: defineds.previousSunday,
+			}),
+		},
 		{
 			label: t('This week'),
 			range: () => ({
@@ -84,20 +97,6 @@ const useDateRanges = () => {
 			range: () => ({
 				startDate: defineds.startOfLastMonth,
 				endDate: defineds.endOfLastMonth,
-			}),
-		},
-		{
-			label: t('Last Saturday'),
-			range: () => ({
-				startDate: defineds.previousSaturday,
-				endDate: defineds.previousSaturday,
-			}),
-		},
-		{
-			label: t('Last Sunday'),
-			range: () => ({
-				startDate: defineds.previousSunday,
-				endDate: defineds.previousSunday,
 			}),
 		},
 	]);
