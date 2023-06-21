@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 import {
 	addDays,
 	addMonths,
-	differenceInCalendarDays,
 	endOfDay,
 	endOfMonth,
 	endOfWeek,
-	isSameDay,
 	previousSaturday,
 	previousSunday,
 	startOfDay,
@@ -104,48 +102,8 @@ const useDateRanges = () => {
 		},
 	]);
 
-	const customInputRanges = [
-		{
-			label: 'days up to today',
-			range(value) {
-				return {
-					startDate: addDays(
-						defineds.startOfToday,
-						(Math.max(Number(value), 1) - 1) * -1
-					),
-					endDate: defineds.endOfToday,
-				};
-			},
-			getCurrentValue(range) {
-				if (!isSameDay(range.endDate, defineds.endOfToday)) return '-';
-				if (!range.startDate) return '∞';
-				return (
-					differenceInCalendarDays(defineds.endOfToday, range.startDate) + 1
-				);
-			},
-		},
-		{
-			label: 'days starting today',
-			range(value) {
-				const today = new Date();
-				return {
-					startDate: today,
-					endDate: addDays(today, Math.max(Number(value), 1) - 1),
-				};
-			},
-			getCurrentValue(range) {
-				if (!isSameDay(range.startDate, defineds.startOfToday)) return '-';
-				if (!range.endDate) return '∞';
-				return (
-					differenceInCalendarDays(range.endDate, defineds.startOfToday) + 1
-				);
-			},
-		},
-	];
-
 	return {
 		customStaticRanges,
-		customInputRanges,
 	};
 };
 
