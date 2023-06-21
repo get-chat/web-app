@@ -58,17 +58,17 @@ const useDateRanges = () => {
 			}),
 		},
 		{
-			label: t('Last Saturday'),
-			range: () => ({
-				startDate: defineds.previousSaturday,
-				endDate: defineds.previousSaturday,
-			}),
-		},
-		{
 			label: t('Last Sunday'),
 			range: () => ({
 				startDate: defineds.previousSunday,
 				endDate: defineds.previousSunday,
+			}),
+		},
+		{
+			label: t('Last Saturday'),
+			range: () => ({
+				startDate: defineds.previousSaturday,
+				endDate: defineds.previousSaturday,
 			}),
 		},
 		{
