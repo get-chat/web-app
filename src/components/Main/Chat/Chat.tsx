@@ -1078,6 +1078,8 @@ const Chat: React.FC = (props) => {
 			undefined,
 			MESSAGES_PER_PAGE,
 			offset ?? 0,
+			undefined,
+			undefined,
 			beforeTime,
 			sinceTime,
 			cancelTokenSourceRef.current.token,

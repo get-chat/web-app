@@ -533,8 +533,8 @@ const Sidebar: React.FC<any> = ({
 			offset,
 			filterAssignedToMe ? true : undefined,
 			filterAssignedGroup ? true : undefined,
-			messagesSinceTime,
 			messageBeforeTime,
+			messagesSinceTime,
 			cancelTokenSource?.token,
 			(response: AxiosResponse) => {
 				const chatsResponse = new ChatsResponse(response.data);
@@ -675,14 +675,24 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const searchMessages = (cancelTokenSource?: CancelTokenSource) => {
+		// Convert dates to Unix timestamps
+		const messagesSinceTime = filterStartDate
+			? convertDateToUnixTimestamp(filterStartDate)
+			: undefined;
+		const messageBeforeTime = filterEndDate
+			? convertDateToUnixTimestamp(filterEndDate)
+			: undefined;
+
 		apiService.listMessagesCall(
 			undefined,
 			keyword,
 			filterTag?.id,
 			30,
 			undefined,
-			undefined,
-			undefined,
+			filterAssignedToMe ? true : undefined,
+			filterAssignedGroup ? true : undefined,
+			messageBeforeTime,
+			messagesSinceTime,
 			cancelTokenSource?.token,
 			(response: AxiosResponse) => {
 				const messagesResponse = new ChatMessagesResponse(response.data);
