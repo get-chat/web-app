@@ -823,7 +823,7 @@ const Sidebar: React.FC<any> = ({
 							{filterTag && (
 								<FilterOption
 									icon={<SellIcon />}
-									label={t('Tag: %s', filterTag.name)}
+									label={filterTag.name}
 									onClick={() => dispatch(setFilterTag(undefined))}
 									isActive
 								/>

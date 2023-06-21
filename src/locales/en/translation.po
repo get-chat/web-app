@@ -840,8 +840,5 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-msgid "Tag: %s"
-msgstr ""
-
 msgid "Done"
 msgstr ""
