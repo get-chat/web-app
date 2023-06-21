@@ -77,6 +77,7 @@ import SmsIcon from '@mui/icons-material/Sms';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
@@ -868,7 +869,7 @@ const Sidebar: React.FC<any> = ({
 								/>
 							)}
 							<FilterOption
-								icon={<SellIcon />}
+								icon={<DateRangeIcon />}
 								label={t('Time')}
 								onClick={console.log}
 							/>
