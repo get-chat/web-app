@@ -813,3 +813,27 @@ msgstr "Zaman"
 
 msgid "Done"
 msgstr "Bitti"
+
+msgid "Today"
+msgstr "Bugün"
+
+msgid "Yesterday"
+msgstr "Dün"
+
+msgid "This week"
+msgstr "Bu hafta"
+
+msgid "Last week"
+msgstr "Geçen hafta"
+
+msgid "This month"
+msgstr "Bu ay"
+
+msgid "Last month"
+msgstr "Geçen ay"
+
+msgid "Last Saturday"
+msgstr "Geçen Cumartesi"
+
+msgid "Last Sunday"
+msgstr "Geçen Pazar"

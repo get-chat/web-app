@@ -267,5 +267,13 @@
 	"Assigned group": "Atanmış grup",
 	"Tag": "Etiket",
 	"Time": "Zaman",
-	"Done": "Bitti"
+	"Done": "Bitti",
+	"Today": "Bugün",
+	"Yesterday": "Dün",
+	"This week": "Bu hafta",
+	"Last week": "Geçen hafta",
+	"This month": "Bu ay",
+	"Last month": "Geçen ay",
+	"Last Saturday": "Geçen Cumartesi",
+	"Last Sunday": "Geçen Pazar"
 }

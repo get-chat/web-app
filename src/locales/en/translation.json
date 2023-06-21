@@ -275,5 +275,13 @@
 	"Assigned group": "",
 	"Tag": "",
 	"Time": "",
-	"Done": ""
+	"Done": "",
+	"Today": "",
+	"Yesterday": "",
+	"This week": "",
+	"Last week": "",
+	"This month": "",
+	"Last month": "",
+	"Last Saturday": "",
+	"Last Sunday": ""
 }

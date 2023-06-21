@@ -8,6 +8,7 @@ import { Button, DialogActions } from '@mui/material';
 // @ts-ignore
 import * as rdrLocales from 'react-date-range/dist/locale';
 import i18next from 'i18next';
+import useDateRanges from '@src/components/DateRangeDialog/useDateRanges';
 
 interface Props {
 	open: boolean;
@@ -22,6 +23,8 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	const [maxDate, setMaxDate] = useState<Date | undefined>();
 
 	const { t } = useTranslation();
+
+	const { customStaticRanges } = useDateRanges();
 
 	useEffect(() => {
 		if (open) {
@@ -83,6 +86,8 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 				minDate={minDate}
 				maxDate={maxDate}
 				locale={rdrLocales[i18next.language]}
+				staticRanges={customStaticRanges}
+				inputRanges={[]}
 			/>
 			<DialogActions>
 				<Button onClick={close} color="secondary">

@@ -59,6 +59,9 @@ dependencies:
   classnames:
     specifier: ^2.3.1
     version: 2.3.1
+  date-fns:
+    specifier: ^2.30.0
+    version: 2.30.0
   dompurify:
     specifier: ^2.3.8
     version: 2.3.8

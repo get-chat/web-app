@@ -842,3 +842,27 @@ msgstr ""
 
 msgid "Done"
 msgstr ""
+
+msgid "Today"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "This week"
+msgstr ""
+
+msgid "Last week"
+msgstr ""
+
+msgid "This month"
+msgstr ""
+
+msgid "Last month"
+msgstr ""
+
+msgid "Last Saturday"
+msgstr ""
+
+msgid "Last Sunday"
+msgstr ""
