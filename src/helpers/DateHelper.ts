@@ -34,4 +34,13 @@ const formatDateRangeFilters = (
 	return result;
 };
 
-export { getPastHoursByTimestamp, isSameDay, formatDateRangeFilters };
+const convertDateToUnixTimestamp = (date: Date) => {
+	return Math.floor(date.getTime() / 1000);
+};
+
+export {
+	getPastHoursByTimestamp,
+	isSameDay,
+	formatDateRangeFilters,
+	convertDateToUnixTimestamp,
+};

@@ -57,13 +57,18 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 			}
 		}
 
-		let finalEndDate = endDate;
+		// Copy date without reference
+		let finalEndDate: Date | undefined = new Date(endDate?.getTime() ?? 0);
 		// Check if end date is after max date
 		if (endDate) {
 			if (endDate.getTime() > (maxDate?.getTime() ?? 0)) {
 				finalEndDate = maxDate;
 			}
 		}
+
+		// Set time for start and end dates
+		finalStartDate?.setHours(0, 0, 0, 0);
+		finalEndDate?.setHours(23, 59, 59, 0);
 
 		onDone(finalStartDate, finalEndDate);
 		close();

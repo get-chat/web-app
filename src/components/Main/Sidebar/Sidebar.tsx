@@ -90,7 +90,10 @@ import classNames from 'classnames/bind';
 import ChatList from '@src/interfaces/ChatList';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 import DateRangeDialog from '@src/components/DateRangeDialog';
-import { formatDateRangeFilters } from '@src/helpers/DateHelper';
+import {
+	convertDateToUnixTimestamp,
+	formatDateRangeFilters,
+} from '@src/helpers/DateHelper';
 
 const cx = classNames.bind(styles);
 
@@ -248,7 +251,14 @@ const Sidebar: React.FC<any> = ({
 
 			clearTimeout(timer.current);
 		};
-	}, [keyword, filterAssignedToMe, filterAssignedGroup, filterTag]);
+	}, [
+		keyword,
+		filterAssignedToMe,
+		filterAssignedGroup,
+		filterTag,
+		filterStartDate,
+		filterEndDate,
+	]);
 
 	useEffect(() => {
 		// New chatMessages
@@ -508,6 +518,14 @@ const Sidebar: React.FC<any> = ({
 			setLoadingChats(true);
 		}
 
+		// Convert dates to Unix timestamps
+		const messagesSinceTime = filterStartDate
+			? convertDateToUnixTimestamp(filterStartDate)
+			: undefined;
+		const messageBeforeTime = filterEndDate
+			? convertDateToUnixTimestamp(filterEndDate)
+			: undefined;
+
 		apiService.listChatsCall(
 			keyword,
 			filterTag?.id,
@@ -515,6 +533,8 @@ const Sidebar: React.FC<any> = ({
 			offset,
 			filterAssignedToMe ? true : undefined,
 			filterAssignedGroup ? true : undefined,
+			messagesSinceTime,
+			messageBeforeTime,
 			cancelTokenSource?.token,
 			(response: AxiosResponse) => {
 				const chatsResponse = new ChatsResponse(response.data);
