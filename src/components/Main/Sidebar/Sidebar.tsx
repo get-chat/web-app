@@ -90,6 +90,7 @@ import classNames from 'classnames/bind';
 import ChatList from '@src/interfaces/ChatList';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 import DateRangeDialog from '@src/components/DateRangeDialog';
+import { formatDateRangeFilters } from '@src/helpers/DateHelper';
 
 const cx = classNames.bind(styles);
 
@@ -162,6 +163,8 @@ const Sidebar: React.FC<any> = ({
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
 	const [filterAssignedGroup, setFilterAssignedGroup] =
 		useState<boolean>(false);
+	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>();
+	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>();
 
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 
@@ -726,7 +729,7 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const isAnyActiveFilter = Boolean(
-		filterAssignedToMe || filterAssignedGroup || filterTag
+		filterAssignedToMe || filterAssignedGroup || filterTag || filterStartDate
 	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
@@ -828,6 +831,17 @@ const Sidebar: React.FC<any> = ({
 									isActive
 								/>
 							)}
+							{filterStartDate && (
+								<FilterOption
+									icon={<DateRangeIcon />}
+									label={formatDateRangeFilters(filterStartDate, filterEndDate)}
+									onClick={() => {
+										setFilterStartDate(undefined);
+										setFilterEndDate(undefined);
+									}}
+									isActive
+								/>
+							)}
 						</div>
 					</Collapse>
 
@@ -921,6 +935,10 @@ const Sidebar: React.FC<any> = ({
 					<DateRangeDialog
 						open={isDateRangeDialogVisible}
 						setOpen={setDateRangeDialogVisible}
+						onDone={(startDate, endDate) => {
+							setFilterStartDate(startDate);
+							setFilterEndDate(endDate);
+						}}
 					/>
 				</div>
 			</ClickAwayListener>

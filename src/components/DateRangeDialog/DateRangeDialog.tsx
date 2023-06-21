@@ -9,9 +9,10 @@ import { Button, DialogActions } from '@mui/material';
 interface Props {
 	open: boolean;
 	setOpen: (isOpen: boolean) => void;
+	onDone: (startDate: Date | undefined, endDate: Date | undefined) => void;
 }
 
-const DateRangeDialog: React.FC<Props> = ({ open, setOpen }) => {
+const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	const [startDate, setStartDate] = useState<Date | undefined>(new Date());
 	const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
@@ -32,6 +33,11 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen }) => {
 		setEndDate(rangesByKey.selection.endDate);
 	};
 
+	const apply = () => {
+		onDone(startDate, endDate);
+		close();
+	};
+
 	return (
 		<Dialog open={open} onClose={close}>
 			{/*<DialogTitle>{t('Date')}</DialogTitle>*/}
@@ -40,7 +46,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen }) => {
 				<Button onClick={close} color="secondary">
 					{t('Close')}
 				</Button>
-				<Button onClick={close} color="primary">
+				<Button onClick={apply} color="primary">
 					{t('Apply')}
 				</Button>
 			</DialogActions>
