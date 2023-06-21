@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { useTranslation } from 'react-i18next';
 import { DateRangePicker, RangeKeyDict } from 'react-date-range';
@@ -15,8 +15,20 @@ interface Props {
 const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	const [startDate, setStartDate] = useState<Date | undefined>(new Date());
 	const [endDate, setEndDate] = useState<Date | undefined>(new Date());
+	const [minDate, setMinDate] = useState<Date | undefined>();
+	const [maxDate, setMaxDate] = useState<Date | undefined>();
 
 	const { t } = useTranslation();
+
+	useEffect(() => {
+		if (open) {
+			const now = new Date();
+			setStartDate(now);
+			setEndDate(now);
+			setMinDate(new Date(2021, 1, 1));
+			setMaxDate(now);
+		}
+	}, [open]);
 
 	const close = () => {
 		setOpen(false);
@@ -41,7 +53,12 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	return (
 		<Dialog open={open} onClose={close}>
 			{/*<DialogTitle>{t('Date')}</DialogTitle>*/}
-			<DateRangePicker ranges={[dateRange]} onChange={handleChange} />
+			<DateRangePicker
+				ranges={[dateRange]}
+				onChange={handleChange}
+				minDate={minDate}
+				maxDate={maxDate}
+			/>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
 					{t('Close')}
