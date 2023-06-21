@@ -962,7 +962,7 @@ const Chat: React.FC = (props) => {
 						);
 
 						// Scroll to message if goToMessageId is defined
-						const goToMessage = location.goToMessage;
+						const goToMessage = location.state?.goToMessage;
 						if (goToMessage !== undefined) {
 							goToMessageId(goToMessage.id, goToMessage.timestamp);
 						}

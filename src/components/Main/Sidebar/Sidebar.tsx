@@ -707,7 +707,10 @@ const Sidebar: React.FC<any> = ({
 		if (waId !== chatMessage.waId) {
 			navigate(`/main/chat/${chatMessage.waId}`, {
 				state: {
-					goToMessage: chatMessage,
+					goToMessage: {
+						id: chatMessage.id,
+						timestamp: chatMessage.timestamp,
+					},
 				},
 			});
 		} else {
