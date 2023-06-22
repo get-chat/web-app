@@ -952,18 +952,22 @@ const Sidebar: React.FC<any> = ({
 									{tag.name}
 								</MenuItem>
 							))}
-						<Divider />
-						<MenuItem
-							onClick={() => {
-								showChatTagsList();
-								setTagsMenuAnchorEl(undefined);
-							}}
-						>
-							<ListItemIcon>
-								<UnfoldMoreIcon />
-							</ListItemIcon>
-							{t('More')}
-						</MenuItem>
+						{tags && tags.length > 10 && (
+							<>
+								<Divider />
+								<MenuItem
+									onClick={() => {
+										showChatTagsList();
+										setTagsMenuAnchorEl(undefined);
+									}}
+								>
+									<ListItemIcon>
+										<UnfoldMoreIcon />
+									</ListItemIcon>
+									{t('More')}
+								</MenuItem>
+							</>
+						)}
 					</Menu>
 
 					<DateRangeDialog
