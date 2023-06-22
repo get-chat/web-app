@@ -1,5 +1,7 @@
 import { LocalStorage } from '../storage/LocalStorage';
 import { MemoryStorage } from '../storage/MemoryStorage';
+import { UserPreference } from '@src/interfaces/UserPreference';
+import { UserPreferences } from '@src/interfaces/UserPreferences';
 
 export const STORAGE_TAG_TOKEN = 'token';
 const STORAGE_TAG_USER_PREFERENCES = 'user_preferences';
@@ -43,18 +45,6 @@ export const storeToken = (token: string) => {
 export const clearToken = () => {
 	getStorage().removeItem(STORAGE_TAG_TOKEN);
 };
-
-export interface UserPreference {
-	filters?: {
-		filterTagId?: number;
-		filterAssignedToMe?: boolean;
-		filterAssignedGroupId?: number;
-	};
-}
-
-interface UserPreferences {
-	[userId: string]: UserPreference;
-}
 
 export const getUserPreferences = (): UserPreferences => {
 	try {

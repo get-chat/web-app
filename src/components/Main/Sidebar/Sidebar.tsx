@@ -45,7 +45,6 @@ import {
 	clearContactProvidersData,
 	getUserPreferences,
 	setUserPreference,
-	UserPreference,
 } from '@src/helpers/StorageHelper';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
@@ -101,6 +100,7 @@ import {
 } from '@src/helpers/DateHelper';
 import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
+import { UserPreference } from '@src/interfaces/UserPreference';
 
 const cx = classNames.bind(styles);
 
@@ -172,12 +172,11 @@ const Sidebar: React.FC<any> = ({
 	const [isFiltersVisible, setFiltersVisible] = useState(true);
 	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
 
-	const userPreference: UserPreference = useMemo(() => {
+	const userPreference: UserPreference | undefined = useMemo(() => {
 		if (currentUser) {
 			return getUserPreferences()?.[currentUser.id?.toString() ?? ''];
 		}
-		return {};
-	}, [currentUser]);
+	}, [currentUser, tags]);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
 		userPreference?.filters?.filterAssignedToMe ?? false
@@ -185,8 +184,16 @@ const Sidebar: React.FC<any> = ({
 	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<
 		number | undefined
 	>(userPreference?.filters?.filterAssignedGroupId);
-	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>();
-	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>();
+	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
+		userPreference?.filters?.filterStartDate
+			? new Date(userPreference?.filters?.filterStartDate)
+			: undefined
+	);
+	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>(
+		userPreference?.filters?.filterEndDate
+			? new Date(userPreference?.filters?.filterEndDate)
+			: undefined
+	);
 
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
@@ -252,9 +259,11 @@ const Sidebar: React.FC<any> = ({
 		// Store filters
 		setUserPreference(currentUser?.id, {
 			filters: {
-				filterTagId: 0,
+				filterTagId: filterTag?.id,
 				filterAssignedToMe: filterAssignedToMe,
 				filterAssignedGroupId: filterAssignedGroupId,
+				filterStartDate: filterStartDate?.getTime(),
+				filterEndDate: filterEndDate?.getTime(),
 			},
 		});
 
