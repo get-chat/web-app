@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
 	CircularProgress,
@@ -41,11 +41,7 @@ import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
-import {
-	clearContactProvidersData,
-	getUserPreferences,
-	setUserPreference,
-} from '@src/helpers/StorageHelper';
+import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import BulkSendActions from './BulkSendActions';
@@ -100,7 +96,7 @@ import {
 } from '@src/helpers/DateHelper';
 import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
-import { UserPreference } from '@src/interfaces/UserPreference';
+import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 
 const cx = classNames.bind(styles);
 
@@ -141,13 +137,24 @@ const Sidebar: React.FC<any> = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config: any = React.useContext(AppConfig);
 
+	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const groups = useAppSelector((state) => state.groups.value);
-	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const filterTagId = useAppSelector((state) => state.filterTagId.value);
 
 	const { t } = useTranslation();
+
+	const {
+		filterTagId,
+		filterAssignedToMe,
+		setFilterAssignedToMe,
+		filterAssignedGroupId,
+		setFilterAssignedGroupId,
+		filterStartDate,
+		setFilterStartDate,
+		filterEndDate,
+		setFilterEndDate,
+	} = useChatFilters();
 
 	const { waId } = useParams();
 	const chatsContainer = useRef<HTMLDivElement>(null);
@@ -171,29 +178,6 @@ const Sidebar: React.FC<any> = ({
 
 	const [isFiltersVisible, setFiltersVisible] = useState(true);
 	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
-
-	const userPreference: UserPreference | undefined = useMemo(() => {
-		if (currentUser) {
-			return getUserPreferences()?.[currentUser.id?.toString() ?? ''];
-		}
-	}, [currentUser, tags]);
-
-	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
-		userPreference?.filters?.filterAssignedToMe ?? false
-	);
-	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<
-		number | undefined
-	>(userPreference?.filters?.filterAssignedGroupId);
-	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
-		userPreference?.filters?.filterStartDate
-			? new Date(userPreference?.filters?.filterStartDate)
-			: undefined
-	);
-	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>(
-		userPreference?.filters?.filterEndDate
-			? new Date(userPreference?.filters?.filterEndDate)
-			: undefined
-	);
 
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
@@ -256,17 +240,6 @@ const Sidebar: React.FC<any> = ({
 	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
 	useEffect(() => {
-		// Store filters
-		setUserPreference(currentUser?.id, {
-			filters: {
-				filterTagId: filterTagId,
-				filterAssignedToMe: filterAssignedToMe,
-				filterAssignedGroupId: filterAssignedGroupId,
-				filterStartDate: filterStartDate?.getTime(),
-				filterEndDate: filterEndDate?.getTime(),
-			},
-		});
-
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
