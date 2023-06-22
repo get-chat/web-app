@@ -1,43 +1,18 @@
-// @ts-nocheck
-import {
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
-} from '../Constants';
+import UserModel from '@src/api/models/UserModel';
+import ChatModel from '@src/api/models/ChatModel';
 
-const isChatAssignedToUser = (currentUser, chat) => {
-	return (
-		currentUser?.id !== undefined && chat.assignedToUser?.id === currentUser.id
-	);
-};
-
-const isChatInUsersGroup = (currentUser, chat) => {
-	if (chat.assignedGroup && currentUser?.groups) {
-		const assignedGroupId = chat.assignedGroup.id;
-		for (let i = 0; i < currentUser.groups.length; i++) {
-			const group = currentUser.groups[i];
-
-			if (group?.id === assignedGroupId) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-};
-
-const hasPermission = (currentUser, chat) => {
+const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
 	const canReadChats = currentUser?.permissions?.canReadChats;
 
 	switch (canReadChats) {
 		case 'all':
 			return true;
 		case 'user':
-			return isChatAssignedToUser(currentUser, chat);
+			return chat.isAssignedToUser(currentUser);
 		case 'group':
 			return (
-				isChatAssignedToUser(currentUser, chat) ||
-				isChatInUsersGroup(currentUser, chat)
+				chat.isAssignedToUser(currentUser) ||
+				chat.isAssignedToUserAnyGroup(currentUser)
 			);
 		default:
 			return false;
@@ -45,31 +20,20 @@ const hasPermission = (currentUser, chat) => {
 };
 
 export const filterChat = (
-	currentUser,
-	chat,
-	filterAssignedToMe,
-	filterAssignedGroup
+	currentUser: UserModel | undefined,
+	chat: ChatModel,
+	filterAssignedToMe: boolean,
+	filterAssignedGroupId?: number
 ) => {
-	// No filter
-	if (!filterAssignedToMe && !filterAssignedGroup) {
-		return true;
-	}
-
-	// Filtered by both
-	if (filterAssignedToMe && filterAssignedGroup) {
-		return (
-			isChatAssignedToUser(currentUser, chat) ||
-			isChatInUsersGroup(currentUser, chat)
-		);
-	}
+	if (!currentUser) return true;
 
 	if (filterAssignedToMe) {
-		return isChatAssignedToUser(currentUser, chat);
+		return chat.isAssignedToUser(currentUser);
 	}
 
-	if (filterAssignedGroup) {
-		return isChatInUsersGroup(currentUser, chat);
+	if (filterAssignedGroupId) {
+		return chat.isAssignedToGroup(filterAssignedGroupId);
 	}
 
-	return isChatInUsersGroup(currentUser, chat);
+	return true;
 };

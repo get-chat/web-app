@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import {
 	Button,
@@ -18,18 +17,23 @@ import { AppConfig } from '@src/contexts/AppConfig';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
 import { AxiosError, AxiosResponse } from 'axios';
+import TagsResponse from '@src/api/responses/TagsResponse';
+import TagModel from '@src/api/models/TagModel';
+import ChatResponse from '@src/api/responses/ChatResponse';
+import ChatModel from '@src/api/models/ChatModel';
 
-function ChatTags(props) {
+function ChatTags(props: any) {
+	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config: any = React.useContext(AppConfig);
 
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
-	const [chat, setChat] = useState();
-	const [chatTags, setChatTags] = useState([]);
-	const [unusedTags, setUnusedTags] = useState([]);
-	const [allTags, setAllTags] = useState([]);
+	const [chat, setChat] = useState<ChatModel>();
+	const [chatTags, setChatTags] = useState<TagModel[]>([]);
+	const [unusedTags, setUnusedTags] = useState<TagModel[]>([]);
+	const [allTags, setAllTags] = useState<TagModel[]>([]);
 
 	useEffect(() => {
 		retrieveChat();
@@ -61,17 +65,17 @@ function ChatTags(props) {
 		props.setOpen(false);
 	};
 
-	const onDeleteTag = (tag) => {
+	const onDeleteTag = (tag: TagModel) => {
 		deleteChatTagging(tag);
 	};
 
-	const onClickTag = (tag) => {
+	const onClickTag = (tag: TagModel) => {
 		createChatTagging(tag);
 	};
 
-	const makeUniqueTagsArray = (tagsArray) => {
-		const uniqueTagsArray = {};
-		tagsArray.forEach((tag) => {
+	const makeUniqueTagsArray = (tagsArray: TagModel[]) => {
+		const uniqueTagsArray: { [key: string]: TagModel } = {};
+		tagsArray.forEach((tag: TagModel) => {
 			if (!uniqueTagsArray.hasOwnProperty(tag.id)) {
 				uniqueTagsArray[tag.id] = tag;
 			}
@@ -85,8 +89,9 @@ function ChatTags(props) {
 			props.waId,
 			undefined,
 			(response: AxiosResponse) => {
-				setChat(response.data);
-				setChatTags(response.data.tags);
+				const chatResponse = new ChatResponse(response.data);
+				setChat(chatResponse.chat);
+				setChatTags(chatResponse.chat.tags);
 
 				// Next
 				listTags();
@@ -96,39 +101,47 @@ function ChatTags(props) {
 	};
 
 	const listTags = () => {
-		apiService.listTagsCall((response) => {
-			setAllTags(response.data.results);
+		apiService.listTagsCall((response: AxiosResponse) => {
+			const tagsResponse = new TagsResponse(response.data);
+			setAllTags(tagsResponse.tags);
 			setLoading(false);
 		});
 	};
 
-	const createChatTagging = (tag) => {
-		apiService.createChatTaggingCall(props.waId, tag.id, (response) => {
-			setChatTags((prevState) => {
-				let nextState = prevState.filter((curTag) => {
-					return curTag.id !== tag.id;
+	const createChatTagging = (tag: TagModel) => {
+		apiService.createChatTaggingCall(
+			props.waId,
+			tag.id,
+			(response: AxiosResponse) => {
+				setChatTags((prevState) => {
+					let nextState = prevState.filter((curTag) => {
+						return curTag.id !== tag.id;
+					});
+
+					tag.taggingId = response.data.id;
+
+					nextState.push(tag);
+					nextState = makeUniqueTagsArray(nextState);
+
+					return nextState;
 				});
-
-				tag.tagging_id = response.data.id;
-
-				nextState.push(tag);
-				nextState = makeUniqueTagsArray(nextState);
-
-				return nextState;
-			});
-		});
+			}
+		);
 	};
 
-	const deleteChatTagging = (tag) => {
-		apiService.deleteChatTaggingCall(tag.tagging_id, (response) => {
-			setChatTags((prevState) => {
-				let nextState = prevState.filter((curTag) => {
-					return curTag.id !== tag.id;
+	const deleteChatTagging = (tag: TagModel) => {
+		apiService.deleteChatTaggingCall(
+			tag.taggingId,
+			(response: AxiosResponse) => {
+				setChatTags((prevState) => {
+					let nextState = prevState.filter((curTag) => {
+						return curTag.id !== tag.id;
+					});
+					nextState = makeUniqueTagsArray(nextState);
+					return nextState;
 				});
-				nextState = makeUniqueTagsArray(nextState);
-				return nextState;
-			});
-		});
+			}
+		);
 	};
 
 	return (
@@ -152,7 +165,7 @@ function ChatTags(props) {
 										icon={
 											<SellIcon
 												style={{
-													fill: tag.web_inbox_color,
+													fill: tag.color,
 												}}
 											/>
 										}
@@ -179,7 +192,7 @@ function ChatTags(props) {
 										icon={
 											<SellIcon
 												style={{
-													fill: tag.web_inbox_color,
+													fill: tag.color,
 												}}
 											/>
 										}

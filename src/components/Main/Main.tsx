@@ -70,6 +70,9 @@ import {
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import GroupsResponse from '@src/api/responses/GroupsResponse';
+import { setGroups } from '@src/store/reducers/groupsReducer';
+import TagsResponse from '@src/api/responses/TagsResponse';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -759,10 +762,32 @@ function Main() {
 				// Store
 				dispatch(setUsers(usersResponse.users));
 
-				setProgress(20);
+				setProgress(15);
 			});
 		} catch (error) {
 			console.error('Error in listUsers', error);
+			setInitialResourceFailed(true);
+		} finally {
+			// Trigger next request
+			listGroups();
+		}
+	};
+
+	// ** 3 **
+	const listGroups = async () => {
+		setLoadingNow('Groups');
+
+		try {
+			await apiService.listGroupsCall(undefined, (response) => {
+				const groupsResponse = new GroupsResponse(response.data);
+
+				// Store
+				dispatch(setGroups(groupsResponse.groups));
+
+				setProgress(25);
+			});
+		} catch (error) {
+			console.error('Error in listGroups', error);
 			setInitialResourceFailed(true);
 		} finally {
 			// Trigger next request
@@ -797,7 +822,7 @@ function Main() {
 		}
 	};
 
-	// ** 5 **
+	// ** 6 **
 	const listTemplates = async (isRetry) => {
 		setLoadingNow('Templates');
 
@@ -853,7 +878,7 @@ function Main() {
 		);
 	};
 
-	// ** 4 **
+	// ** 5 **
 	const listSavedResponses = async () => {
 		try {
 			await apiService.listSavedResponsesCall((response) => {
@@ -916,7 +941,7 @@ function Main() {
 		);
 	};
 
-	// ** 3 **
+	// ** 4 **
 	const listContacts = async () => {
 		setLoadingNow('Contacts');
 
@@ -970,11 +995,12 @@ function Main() {
 		await makeRequest();
 	};
 
-	// ** 6 **
+	// ** 7 **
 	const listTags = async () => {
 		try {
 			await apiService.listTagsCall((response) => {
-				dispatch(setTags(response.data.results));
+				const tagsResponse = new TagsResponse(response.data);
+				dispatch(setTags(tagsResponse.tags));
 			});
 		} catch (error) {
 			console.error('Error in listTags', error);
@@ -982,7 +1008,9 @@ function Main() {
 	};
 
 	useEffect(() => {
-		listTags();
+		if (bulkSendPayload) {
+			listTags();
+		}
 	}, [bulkSendPayload]);
 
 	const addBulkSendRecipients = (newWaIds, newTags) => {

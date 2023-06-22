@@ -2,13 +2,16 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
+import UserModel from '@src/api/models/UserModel';
+import GroupModel from '@src/api/models/GroupModel';
+import TagModel from '@src/api/models/TagModel';
 
 class ChatModel {
 	public waId: string;
 	public name?: string;
-	public tags: any[];
-	public assignedToUser: any;
-	public assignedGroup: any;
+	public tags: TagModel[];
+	public assignedToUser?: UserModel;
+	public assignedGroup?: GroupModel;
 	public lastMessageTimestamp: number;
 	public lastReceivedMessageTimestamp: number;
 
@@ -35,9 +38,15 @@ class ChatModel {
 			? this.lastMessageTimestamp
 			: this.lastReceivedMessageTimestamp;
 
-		this.assignedGroup = data.assigned_group;
-		this.assignedToUser = data.assigned_to_user;
-		this.tags = data.tags;
+		if (data.assigned_group) {
+			this.assignedGroup = new GroupModel(data.assigned_group);
+		}
+
+		if (data.assigned_to_user) {
+			this.assignedToUser = new UserModel(data.assigned_to_user);
+		}
+
+		this.tags = data.tags?.map((item) => new TagModel(item));
 
 		// Not need to sanitize this, because it is already sanitized
 		// this.sanitize();
@@ -98,6 +107,24 @@ class ChatModel {
 
 	generateAssignedToInitials() {
 		return this.assignedToUser?.username?.[0]?.toUpperCase();
+	}
+
+	isAssignedToUser(user: UserModel) {
+		return this.assignedToUser && this.assignedToUser.id === user.id;
+	}
+
+	isAssignedToGroup(groupId: number) {
+		return this.assignedGroup && this.assignedGroup.id === groupId;
+	}
+
+	isAssignedToUserAnyGroup(user: UserModel) {
+		for (let i = 0; i < user.groups.length; i++) {
+			if (user.groups[i]?.id === this.assignedGroup?.id) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
 

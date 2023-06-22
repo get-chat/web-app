@@ -1,12 +1,14 @@
 // @ts-nocheck
 import PermissionsModel from './PermissionsModel';
+import GroupModel from '@src/api/models/GroupModel';
 
 class UserModel {
 	public id?: Number;
 	public username?: string;
 	public isAdmin: boolean;
-	public groups: any;
+	public groups: GroupModel[];
 	public profile: any;
+	public permissions: PermissionsModel;
 
 	constructor(data) {
 		if (!data) return;
@@ -15,7 +17,7 @@ class UserModel {
 		this.username = data.username;
 		this.firstName = data.first_name;
 		this.lastName = data.last_name;
-		this.groups = data.groups;
+		this.groups = data.groups?.map((rawGroup) => new GroupModel(rawGroup));
 		this.permissions = new PermissionsModel(data.permissions);
 		this.profile = data.profile;
 		this.role = data?.profile?.role;

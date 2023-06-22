@@ -165,8 +165,7 @@ const Sidebar: React.FC<any> = ({
 	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
-	const [filterAssignedGroup, setFilterAssignedGroup] =
-		useState<boolean>(false);
+	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<number>();
 	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>();
 	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>();
 
@@ -255,7 +254,7 @@ const Sidebar: React.FC<any> = ({
 	}, [
 		keyword,
 		filterAssignedToMe,
-		filterAssignedGroup,
+		filterAssignedGroupId,
 		filterTag,
 		filterStartDate,
 		filterEndDate,
@@ -533,7 +532,7 @@ const Sidebar: React.FC<any> = ({
 			20,
 			offset,
 			filterAssignedToMe ? true : undefined,
-			filterAssignedGroup ? true : undefined,
+			filterAssignedGroupId ? true : undefined,
 			messageBeforeTime,
 			messagesSinceTime,
 			cancelTokenSource?.token,
@@ -653,7 +652,7 @@ const Sidebar: React.FC<any> = ({
 						);
 						return;
 					}
-				} else if (filterAssignedGroup) {
+				} else if (filterAssignedGroupId) {
 					if (
 						!preparedChat.assignedGroup ||
 						currentUser?.isInGroup(preparedChat.assignedGroup.id)
@@ -691,7 +690,7 @@ const Sidebar: React.FC<any> = ({
 			30,
 			undefined,
 			filterAssignedToMe ? true : undefined,
-			filterAssignedGroup ? true : undefined,
+			filterAssignedGroupId ? true : undefined,
 			messageBeforeTime,
 			messagesSinceTime,
 			cancelTokenSource?.token,
@@ -763,7 +762,7 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const isAnyActiveFilter = Boolean(
-		filterAssignedToMe || filterAssignedGroup || filterTag || filterStartDate
+		filterAssignedToMe || filterAssignedGroupId || filterTag || filterStartDate
 	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
@@ -849,11 +848,11 @@ const Sidebar: React.FC<any> = ({
 									isActive
 								/>
 							)}
-							{filterAssignedGroup && (
+							{filterAssignedGroupId && (
 								<FilterOption
 									icon={<GroupIcon />}
 									label={t('Assigned group')}
-									onClick={() => setFilterAssignedGroup(false)}
+									onClick={() => setFilterAssignedGroupId(undefined)}
 									isActive
 								/>
 							)}
@@ -900,11 +899,11 @@ const Sidebar: React.FC<any> = ({
 									onClick={() => setFilterAssignedToMe(true)}
 								/>
 							)}
-							{!filterAssignedGroup && (
+							{!filterAssignedGroupId && (
 								<FilterOption
 									icon={<GroupIcon />}
 									label={t('Assigned group')}
-									onClick={() => setFilterAssignedGroup(true)}
+									onClick={() => setFilterAssignedGroupId(undefined)}
 								/>
 							)}
 							{tags?.length > 0 && (
@@ -945,7 +944,7 @@ const Sidebar: React.FC<any> = ({
 									<ListItemIcon>
 										<SellIcon
 											style={{
-												fill: tag.web_inbox_color,
+												fill: tag.color,
 											}}
 										/>
 									</ListItemIcon>
@@ -1044,7 +1043,7 @@ const Sidebar: React.FC<any> = ({
 								currentUser,
 								chat[1],
 								filterAssignedToMe,
-								filterAssignedGroup
+								filterAssignedGroupId
 							);
 						})
 						.map((chat) => (
@@ -1057,7 +1056,7 @@ const Sidebar: React.FC<any> = ({
 								contactProvidersData={contactProvidersData}
 								retrieveContactData={retrieveContactData}
 								filterAssignedToMe={filterAssignedToMe}
-								filterAssignedGroup={filterAssignedGroup}
+								filterAssignedGroup={filterAssignedGroupId}
 								bulkSendPayload={bulkSendPayload}
 								isSelectionModeEnabled={isSelectionModeEnabled}
 								selectedChats={selectedChats}

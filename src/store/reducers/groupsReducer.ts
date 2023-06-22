@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import GroupModel from '@src/api/models/GroupModel';
+import { GroupList } from '@src/api/responses/GroupsResponse';
 
 interface GroupsState {
-	value: GroupModel[];
+	value: GroupList;
 }
 
 const initialState: GroupsState = {
-	value: [],
+	value: {},
 };
 
 const groupsSlice = createSlice({
 	name: 'groups',
 	initialState,
 	reducers: {
-		setGroups: (state, action: PayloadAction<GroupModel[]>) => {
+		setGroups: (state, action: PayloadAction<GroupList>) => {
 			state.value = action.payload;
 		},
 	},

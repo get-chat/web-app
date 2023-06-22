@@ -233,7 +233,7 @@ const ChatListItem = (props: any) => {
 															key={tagIndex.toString()}
 															className={styles.tagIcon}
 															style={{
-																fill: tagItem.web_inbox_color,
+																fill: tagItem.color,
 															}}
 														/>
 													))}

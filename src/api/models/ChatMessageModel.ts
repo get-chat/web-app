@@ -5,6 +5,7 @@ import {
 	sanitize,
 } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
+import TagModel from '@src/api/models/TagModel';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -172,6 +173,9 @@ export class ChatMessageModel {
 			'taggingEvent_' + taggingEvent.timestamp + '_' + generateUniqueID();
 		message.waId = taggingEvent.chat;
 		message.taggingEvent = taggingEvent;
+		if (message.taggingEvent) {
+			message.taggingEvent.tag = new TagModel(message.taggingEvent.tag);
+		}
 		message.timestamp = taggingEvent.timestamp;
 		return message;
 	}

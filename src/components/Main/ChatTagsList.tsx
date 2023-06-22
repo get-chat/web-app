@@ -57,7 +57,7 @@ function ChatTagsList(props) {
 										<div className="chatTagsListWrapper__tag">
 											<SellIcon
 												style={{
-													fill: tag.web_inbox_color,
+													fill: tag.color,
 												}}
 											/>
 											{tag.name}

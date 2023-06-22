@@ -1,8 +1,9 @@
-// @ts-nocheck
 import UserModel from '../models/UserModel';
 
 class CurrentUserResponse {
-	constructor(data) {
+	public currentUser: UserModel;
+
+	constructor(data: any) {
 		this.currentUser = new UserModel(data);
 	}
 }

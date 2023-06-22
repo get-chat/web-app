@@ -1,6 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import TagModel from '@src/api/models/TagModel';
 
-const initialState = {
+interface FilterTagState {
+	value: TagModel | undefined;
+}
+
+const initialState: FilterTagState = {
 	value: undefined,
 };
 
@@ -8,8 +13,8 @@ const filterTagSlice = createSlice({
 	name: 'filterTag',
 	initialState,
 	reducers: {
-		setFilterTag: (state, filterTag) => {
-			state.value = filterTag.payload;
+		setFilterTag: (state, action: PayloadAction<TagModel | undefined>) => {
+			state.value = action.payload;
 		},
 	},
 });
