@@ -4,6 +4,7 @@ import templatesReducer from './templatesReducer';
 import savedResponsesReducer from './savedResponsesReducer';
 import usersReducer from './usersReducer';
 import currentUserReducer from './currentUserReducer';
+import groupsReducer from './groupsReducer';
 import filterTagReducer from './filterTagReducer';
 import chatsCountReducer from './chatsCountReducer';
 import tagsReducer from './tagsReducer';
@@ -18,6 +19,7 @@ const rootReducer = {
 	tags: tagsReducer,
 	users: usersReducer,
 	currentUser: currentUserReducer,
+	groups: groupsReducer,
 	filterTag: filterTagReducer,
 	chatsCount: chatsCountReducer,
 	previewMediaObject: previewMediaObjectReducer,
