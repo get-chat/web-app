@@ -19,7 +19,7 @@ export type Props = {
 const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	const { t } = useTranslation();
 
-	const [deleteId, setDeleteId] = useState<Number>();
+	const [deleteId, setDeleteId] = useState<number>();
 	const [open, setOpen] = React.useState(false);
 
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
@@ -34,7 +34,7 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 		sendCustomTextMessage(savedResponses[id.toString()].text);
 	};
 
-	const attemptToDelete = (id: Number) => {
+	const attemptToDelete = (id: number) => {
 		setDeleteId(id);
 		setOpen(true);
 	};

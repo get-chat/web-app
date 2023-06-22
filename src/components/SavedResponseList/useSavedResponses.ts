@@ -20,7 +20,7 @@ const useSavedResponses = () => {
 		});
 	};
 
-	const deleteSavedResponse = async (id: Number) => {
+	const deleteSavedResponse = async (id: number) => {
 		await apiService.deleteSavedResponseCall(id, (response: AxiosResponse) => {
 			console.log(response.data);
 

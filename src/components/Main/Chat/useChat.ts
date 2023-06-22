@@ -3,7 +3,7 @@ import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
-	MESSAGES_PER_PAGE: Number;
+	MESSAGES_PER_PAGE: number;
 }
 
 const useChat = ({ MESSAGES_PER_PAGE }: Props) => {

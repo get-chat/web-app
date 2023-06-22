@@ -21,8 +21,8 @@ const useChatAssignmentAPI = () => {
 
 	const partialUpdateChatAssignment = (
 		waId: string,
-		assignedToUser?: Number | null,
-		assignedGroup?: Number | null,
+		assignedToUser?: number | null,
+		assignedGroup?: number | null,
 		apiCallProps?: APICallProps
 	) => {
 		console.log('Partially updating chat assignment...');

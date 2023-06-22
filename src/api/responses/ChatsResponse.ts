@@ -5,7 +5,7 @@ import ChatList from '@src/interfaces/ChatList';
 import NewMessagesList from '@src/interfaces/NewMessagesList';
 
 class ChatsResponse {
-	public count: Number;
+	public count: number;
 	public chats: ChatList;
 	public newMessages: NewMessagesList;
 

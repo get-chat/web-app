@@ -3,7 +3,7 @@ import PermissionsModel from './PermissionsModel';
 import GroupModel from '@src/api/models/GroupModel';
 
 class UserModel {
-	public id?: Number;
+	public id?: number;
 	public username?: string;
 	public isAdmin: boolean;
 	public groups: GroupModel[];

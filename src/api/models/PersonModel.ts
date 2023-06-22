@@ -8,7 +8,7 @@ class PersonModel implements Recipient {
 	public waId?: string;
 	public name?: string;
 	public initials?: string;
-	public lastMessageTimestamp: Number = -1;
+	public lastMessageTimestamp: number = -1;
 	public isExpired = false;
 	public phoneNumbers: PhoneNumberWithDescription[] = [];
 	public provider = 'whatsapp';
