@@ -1,5 +1,5 @@
 class GroupModel {
-	public id: Number = 0;
+	public id: number = 0;
 	public name: string = '';
 
 	constructor(data: any) {

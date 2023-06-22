@@ -94,6 +94,8 @@ import {
 	convertDateToUnixTimestamp,
 	formatDateRangeFilters,
 } from '@src/helpers/DateHelper';
+import GroupModel from '@src/api/models/GroupModel';
+import TagModel from '@src/api/models/TagModel';
 
 const cx = classNames.bind(styles);
 
@@ -136,6 +138,7 @@ const Sidebar: React.FC<any> = ({
 
 	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
+	const groups = useAppSelector((state) => state.groups.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTag: any = useAppSelector((state) => state.filterTag.value);
 
@@ -170,6 +173,7 @@ const Sidebar: React.FC<any> = ({
 	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>();
 
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
+	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
@@ -851,7 +855,7 @@ const Sidebar: React.FC<any> = ({
 							{filterAssignedGroupId && (
 								<FilterOption
 									icon={<GroupIcon />}
-									label={t('Assigned group')}
+									label={groups[filterAssignedGroupId]?.name}
 									onClick={() => setFilterAssignedGroupId(undefined)}
 									isActive
 								/>
@@ -903,7 +907,11 @@ const Sidebar: React.FC<any> = ({
 								<FilterOption
 									icon={<GroupIcon />}
 									label={t('Assigned group')}
-									onClick={() => setFilterAssignedGroupId(undefined)}
+									onClick={(event: MouseEvent) => {
+										if (event.currentTarget instanceof Element) {
+											setGroupsMenuAnchorEl(event.currentTarget);
+										}
+									}}
 								/>
 							)}
 							{tags?.length > 0 && (
@@ -933,7 +941,7 @@ const Sidebar: React.FC<any> = ({
 						elevation={3}
 					>
 						{tags &&
-							tags.slice(0, 10).map((tag: any) => (
+							tags.slice(0, 10).map((tag: TagModel) => (
 								<MenuItem
 									onClick={() => {
 										dispatch(setFilterTag(tag));
@@ -967,6 +975,28 @@ const Sidebar: React.FC<any> = ({
 								</MenuItem>
 							</>
 						)}
+					</Menu>
+
+					<Menu
+						className={styles.filterMenu}
+						anchorEl={groupsMenuAnchorEl}
+						keepMounted
+						open={Boolean(groupsMenuAnchorEl)}
+						onClose={() => setGroupsMenuAnchorEl(undefined)}
+						elevation={3}
+					>
+						{groups &&
+							Object.values(groups).map((group: GroupModel) => (
+								<MenuItem
+									onClick={() => {
+										setFilterAssignedGroupId(group.id);
+										setGroupsMenuAnchorEl(undefined);
+									}}
+									key={group.id}
+								>
+									{group.name}
+								</MenuItem>
+							))}
 					</Menu>
 
 					<DateRangeDialog
