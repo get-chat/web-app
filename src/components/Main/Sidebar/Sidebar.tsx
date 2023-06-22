@@ -98,6 +98,7 @@ import {
 const cx = classNames.bind(styles);
 
 const Sidebar: React.FC<any> = ({
+	isLoaded,
 	pendingMessages,
 	setPendingMessages,
 	isSendingPendingMessages,
@@ -822,7 +823,7 @@ const Sidebar: React.FC<any> = ({
 
 			<ClickAwayListener
 				onClickAway={() => {
-					if (!isAnyActiveFilter) {
+					if (!isAnyActiveFilter && isLoaded) {
 						setFiltersVisible(false);
 					}
 				}}

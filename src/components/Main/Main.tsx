@@ -1013,6 +1013,7 @@ function Main() {
 			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
 				{templatesReady && (
 					<Sidebar
+						isLoaded={progress >= 100}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
