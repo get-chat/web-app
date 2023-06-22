@@ -10,10 +10,8 @@ const useChatFilters = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTagId = useAppSelector((state) => state.filterTagId.value);
 
-	const userPreference: UserPreference | undefined = useMemo(() => {
-		if (currentUser) {
-			return getUserPreferences()?.[currentUser.id?.toString() ?? ''];
-		}
+	const userPreference = useMemo(() => {
+		return currentUser?.getPreferences();
 	}, [currentUser]);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(

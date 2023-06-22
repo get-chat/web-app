@@ -814,10 +814,7 @@ function Main() {
 				}
 
 				// User preference
-				const preference =
-					getUserPreferences()?.[
-						currentUserResponse.currentUser.id?.toString() ?? ''
-					];
+				const preference = currentUserResponse.currentUser.getPreferences();
 				if (preference?.filters?.filterTagId) {
 					dispatch(setFilterTagId(preference.filters.filterTagId));
 				}
