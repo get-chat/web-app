@@ -996,17 +996,23 @@ const Sidebar: React.FC<any> = ({
 						elevation={3}
 					>
 						{groups &&
-							Object.values(groups).map((group: GroupModel) => (
-								<MenuItem
-									onClick={() => {
-										setFilterAssignedGroupId(group.id);
-										setGroupsMenuAnchorEl(undefined);
-									}}
-									key={group.id}
-								>
-									{group.name}
-								</MenuItem>
-							))}
+							Object.values(groups)
+								.filter((item) =>
+									currentUser?.groups?.some(
+										(userGroup) => userGroup.id === item.id
+									)
+								)
+								.map((group: GroupModel) => (
+									<MenuItem
+										onClick={() => {
+											setFilterAssignedGroupId(group.id);
+											setGroupsMenuAnchorEl(undefined);
+										}}
+										key={group.id}
+									>
+										{group.name}
+									</MenuItem>
+								))}
 					</Menu>
 
 					<DateRangeDialog
