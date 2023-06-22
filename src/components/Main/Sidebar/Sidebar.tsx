@@ -78,6 +78,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
@@ -969,22 +970,30 @@ const Sidebar: React.FC<any> = ({
 									{tag.name}
 								</MenuItem>
 							))}
+						<Divider />
 						{tags && tags.length > 10 && (
-							<>
-								<Divider />
-								<MenuItem
-									onClick={() => {
-										showChatTagsList();
-										setTagsMenuAnchorEl(undefined);
-									}}
-								>
-									<ListItemIcon>
-										<UnfoldMoreIcon />
-									</ListItemIcon>
-									{t('More')}
-								</MenuItem>
-							</>
+							<MenuItem
+								onClick={() => {
+									showChatTagsList();
+									setTagsMenuAnchorEl(undefined);
+								}}
+							>
+								<ListItemIcon>
+									<UnfoldMoreIcon />
+								</ListItemIcon>
+								{t('More')}
+							</MenuItem>
 						)}
+						<MenuItem
+							component={Link}
+							href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+							target="_blank"
+						>
+							<ListItemIcon>
+								<SettingsIcon />
+							</ListItemIcon>
+							{t('Manage tags')}
+						</MenuItem>
 					</Menu>
 
 					<Menu
