@@ -129,10 +129,10 @@ class ChatModel {
 		return false;
 	}
 
-	hasTag(tag: TagModel) {
+	hasTag(tagId: number) {
 		if (this.tags) {
 			for (let i = 0; i < this.tags.length; i++) {
-				if (this.tags[i]?.id === tag.id) {
+				if (this.tags[i]?.id === tagId) {
 					return true;
 				}
 			}

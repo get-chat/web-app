@@ -32,6 +32,7 @@ import PreviewMedia from './PreviewMedia';
 import {
 	getContactProvidersData,
 	getToken,
+	getUserPreferences,
 	storeContactProvidersData,
 } from '@src/helpers/StorageHelper';
 import ChatAssignment from './ChatAssignment';
@@ -73,6 +74,7 @@ import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
+import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -809,6 +811,15 @@ function Main() {
 				// Only admins and users can access
 				if (role !== 'admin' && role !== 'user') {
 					clearUserSession('incorrectRole', location, navigate);
+				}
+
+				// User preference
+				const preference =
+					getUserPreferences()?.[
+						currentUserResponse.currentUser.id?.toString() ?? ''
+					];
+				if (preference?.filters?.filterTagId) {
+					dispatch(setFilterTagId(preference.filters.filterTagId));
 				}
 
 				setProgress(10);

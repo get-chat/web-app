@@ -64,7 +64,7 @@ import { filterChat } from '@src/helpers/SidebarHelper';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
-import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -145,7 +145,7 @@ const Sidebar: React.FC<any> = ({
 	const tags = useAppSelector((state) => state.tags.value);
 	const groups = useAppSelector((state) => state.groups.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const filterTag = useAppSelector((state) => state.filterTag.value);
+	const filterTagId = useAppSelector((state) => state.filterTagId.value);
 
 	const { t } = useTranslation();
 
@@ -259,7 +259,7 @@ const Sidebar: React.FC<any> = ({
 		// Store filters
 		setUserPreference(currentUser?.id, {
 			filters: {
-				filterTagId: filterTag?.id,
+				filterTagId: filterTagId,
 				filterAssignedToMe: filterAssignedToMe,
 				filterAssignedGroupId: filterAssignedGroupId,
 				filterStartDate: filterStartDate?.getTime(),
@@ -293,7 +293,7 @@ const Sidebar: React.FC<any> = ({
 		keyword,
 		filterAssignedToMe,
 		filterAssignedGroupId,
-		filterTag,
+		filterTagId,
 		filterStartDate,
 		filterEndDate,
 	]);
@@ -516,7 +516,7 @@ const Sidebar: React.FC<any> = ({
 			clearTimeout(debounceTimer);
 			chatsContainerCopy?.removeEventListener('scroll', handleScroll);
 		};
-	}, [chats, keyword, filterTag]);
+	}, [chats, keyword, filterTagId]);
 
 	const search = async (_keyword: string) => {
 		setKeyword(_keyword);
@@ -566,7 +566,7 @@ const Sidebar: React.FC<any> = ({
 
 		apiService.listChatsCall(
 			keyword,
-			filterTag?.id,
+			filterTagId,
 			20,
 			offset,
 			filterAssignedToMe ? true : undefined,
@@ -724,11 +724,11 @@ const Sidebar: React.FC<any> = ({
 		apiService.listMessagesCall(
 			undefined,
 			keyword,
-			filterTag?.id,
+			filterTagId,
 			30,
 			undefined,
 			filterAssignedToMe ? true : undefined,
-			filterAssignedGroupId ? true : undefined,
+			filterAssignedGroupId,
 			messageBeforeTime,
 			messagesSinceTime,
 			cancelTokenSource?.token,
@@ -800,7 +800,10 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const isAnyActiveFilter = Boolean(
-		filterAssignedToMe || filterAssignedGroupId || filterTag || filterStartDate
+		filterAssignedToMe ||
+			filterAssignedGroupId ||
+			filterTagId ||
+			filterStartDate
 	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
@@ -894,11 +897,13 @@ const Sidebar: React.FC<any> = ({
 									isActive
 								/>
 							)}
-							{filterTag && (
+							{filterTagId && (
 								<FilterOption
 									icon={<SellIcon />}
-									label={filterTag.name}
-									onClick={() => dispatch(setFilterTag(undefined))}
+									label={
+										tags?.filter((item) => item.id === filterTagId)?.[0]?.name
+									}
+									onClick={() => dispatch(setFilterTagId(undefined))}
 									isActive
 								/>
 							)}
@@ -937,17 +942,15 @@ const Sidebar: React.FC<any> = ({
 									onClick={() => setFilterAssignedToMe(true)}
 								/>
 							)}
-							{!filterAssignedGroupId && (
-								<FilterOption
-									icon={<GroupIcon />}
-									label={t('Assigned group')}
-									onClick={(event: MouseEvent) => {
-										if (event.currentTarget instanceof Element) {
-											setGroupsMenuAnchorEl(event.currentTarget);
-										}
-									}}
-								/>
-							)}
+							<FilterOption
+								icon={<GroupIcon />}
+								label={t('Assigned group')}
+								onClick={(event: MouseEvent) => {
+									if (event.currentTarget instanceof Element) {
+										setGroupsMenuAnchorEl(event.currentTarget);
+									}
+								}}
+							/>
 							{tags?.length > 0 && (
 								<FilterOption
 									icon={<SellIcon />}
@@ -978,7 +981,7 @@ const Sidebar: React.FC<any> = ({
 							tags.slice(0, 10).map((tag: TagModel) => (
 								<MenuItem
 									onClick={() => {
-										dispatch(setFilterTag(tag));
+										dispatch(setFilterTagId(tag.id));
 										setTagsMenuAnchorEl(undefined);
 									}}
 									key={tag.id}
@@ -1106,7 +1109,7 @@ const Sidebar: React.FC<any> = ({
 							return filterChat(
 								currentUser,
 								chat[1],
-								filterTag,
+								filterTagId,
 								filterAssignedToMe,
 								filterAssignedGroupId
 							);

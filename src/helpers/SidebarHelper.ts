@@ -23,14 +23,14 @@ const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
 export const filterChat = (
 	currentUser: UserModel | undefined,
 	chat: ChatModel,
-	filterTag?: TagModel,
+	filterTagId?: number,
 	filterAssignedToMe?: boolean,
 	filterAssignedGroupId?: number
 ) => {
 	if (!currentUser) return true;
 
-	if (filterTag) {
-		return chat.hasTag(filterTag);
+	if (filterTagId) {
+		return chat.hasTag(filterTagId);
 	}
 
 	if (filterAssignedToMe) {

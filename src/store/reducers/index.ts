@@ -5,7 +5,7 @@ import savedResponsesReducer from './savedResponsesReducer';
 import usersReducer from './usersReducer';
 import currentUserReducer from './currentUserReducer';
 import groupsReducer from './groupsReducer';
-import filterTagReducer from './filterTagReducer';
+import filterTagIdReducer from './filterTagReducerId';
 import chatsCountReducer from './chatsCountReducer';
 import tagsReducer from './tagsReducer';
 import previewMediaObjectReducer from './previewMediaObjectReducer';
@@ -20,7 +20,7 @@ const rootReducer = {
 	users: usersReducer,
 	currentUser: currentUserReducer,
 	groups: groupsReducer,
-	filterTag: filterTagReducer,
+	filterTagId: filterTagIdReducer,
 	chatsCount: chatsCountReducer,
 	previewMediaObject: previewMediaObjectReducer,
 	isRefreshingTemplates: isRefreshingTemplatesReducer,

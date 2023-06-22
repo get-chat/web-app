@@ -14,7 +14,7 @@ import '../../styles/ChatTagsList.css';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfig } from '@src/contexts/AppConfig';
-import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
 
@@ -34,7 +34,7 @@ function ChatTagsList(props) {
 	};
 
 	const handleClick = (tag) => {
-		dispatch(setFilterTag(tag));
+		dispatch(setFilterTagId(tag?.id));
 		close();
 	};
 

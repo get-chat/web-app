@@ -18,7 +18,7 @@ import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
-import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
@@ -122,7 +122,7 @@ const ContactDetails: React.FC = ({
 									<div
 										className="contactDetails__body__tags__tag"
 										key={index}
-										onClick={() => dispatch(setFilterTag(tag))}
+										onClick={() => dispatch(setFilterTagId(tag.id))}
 									>
 										<SellIcon
 											style={{
