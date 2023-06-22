@@ -118,9 +118,23 @@ class ChatModel {
 	}
 
 	isAssignedToUserAnyGroup(user: UserModel) {
-		for (let i = 0; i < user.groups.length; i++) {
-			if (user.groups[i]?.id === this.assignedGroup?.id) {
-				return true;
+		if (user.groups) {
+			for (let i = 0; i < user.groups.length; i++) {
+				if (user.groups[i]?.id === this.assignedGroup?.id) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	hasTag(tag: TagModel) {
+		if (this.tags) {
+			for (let i = 0; i < this.tags.length; i++) {
+				if (this.tags[i]?.id === tag.id) {
+					return true;
+				}
 			}
 		}
 

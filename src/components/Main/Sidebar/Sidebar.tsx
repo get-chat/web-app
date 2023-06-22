@@ -1042,6 +1042,7 @@ const Sidebar: React.FC<any> = ({
 							return filterChat(
 								currentUser,
 								chat[1],
+								filterTag,
 								filterAssignedToMe,
 								filterAssignedGroupId
 							);
