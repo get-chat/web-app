@@ -2,6 +2,7 @@ import { LocalStorage } from '../storage/LocalStorage';
 import { MemoryStorage } from '../storage/MemoryStorage';
 import { UserPreference } from '@src/interfaces/UserPreference';
 import { UserPreferences } from '@src/interfaces/UserPreferences';
+import { getObjLength } from '@src/helpers/ObjectHelper';
 
 export const STORAGE_TAG_TOKEN = 'token';
 const STORAGE_TAG_USER_PREFERENCES = 'user_preferences';
@@ -63,6 +64,13 @@ export const setUserPreference = (
 	if (!userId) return false;
 
 	let userPreferences = getUserPreferences();
+
+	// Prevent overgrowing
+	if (getObjLength(userPreferences) > 20) {
+		userPreferences = {};
+	}
+
+	// Add current user preferences
 	userPreferences[userId] = userPreference;
 	return getStorage()?.setItem(
 		STORAGE_TAG_USER_PREFERENCES,
