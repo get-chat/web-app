@@ -160,7 +160,7 @@ const Sidebar: React.FC<any> = ({
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 
-	const [isFiltersVisible, setFiltersVisible] = useState(false);
+	const [isFiltersVisible, setFiltersVisible] = useState(true);
 	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(false);
