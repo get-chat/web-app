@@ -66,7 +66,12 @@ export const setUserPreference = (
 	let userPreferences = getUserPreferences();
 
 	// Prevent overgrowing
-	if (getObjLength(userPreferences) > 20) {
+	try {
+		if (getObjLength(userPreferences) > 20) {
+			delete userPreferences[Object.keys(userPreferences)[0]];
+		}
+	} catch (e) {
+		console.log(e);
 		userPreferences = {};
 	}
 
