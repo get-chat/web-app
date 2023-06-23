@@ -62,7 +62,7 @@ class ChatModel {
 		this.lastMessageCaption = sanitize(this.lastMessageCaption);
 	}
 
-	setName(name: string) {
+	setName(name: string | undefined) {
 		this.name = name;
 		this.initials = this.generateInitials();
 	}
@@ -118,21 +118,14 @@ class ChatModel {
 	}
 
 	isAssignedToUserAnyGroup(user: UserModel) {
-		if (user.groups) {
-			for (let i = 0; i < user.groups.length; i++) {
-				if (user.groups[i]?.id === this.assignedGroup?.id) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		const matchedGroup = user.groups.filter(
+			(group) => group.id === this.assignedGroup?.id
+		);
+		return Boolean(matchedGroup);
 	}
 
 	hasTag(tagId: number) {
-		const tag = this.tags.find((tag) => {
-			return tag.id === tagId;
-		});
+		const tag = this.tags.find((tag) => tag.id === tagId);
 		return Boolean(tag);
 	}
 }
