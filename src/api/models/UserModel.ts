@@ -18,7 +18,8 @@ class UserModel {
 		this.username = data.username;
 		this.firstName = data.first_name;
 		this.lastName = data.last_name;
-		this.groups = data.groups?.map((rawGroup: any) => new GroupModel(rawGroup));
+		this.groups =
+			data.groups?.map((rawGroup: any) => new GroupModel(rawGroup)) ?? [];
 		this.permissions = new PermissionsModel(data.permissions);
 		this.profile = data.profile;
 		this.role = data?.profile?.role;

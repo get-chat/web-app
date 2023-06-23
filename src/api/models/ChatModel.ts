@@ -46,7 +46,7 @@ class ChatModel {
 			this.assignedToUser = new UserModel(data.assigned_to_user);
 		}
 
-		this.tags = data.tags?.map((item) => new TagModel(item));
+		this.tags = data.tags?.map((item: any) => new TagModel(item)) ?? [];
 
 		// Not need to sanitize this, because it is already sanitized
 		// this.sanitize();
@@ -62,7 +62,7 @@ class ChatModel {
 		this.lastMessageCaption = sanitize(this.lastMessageCaption);
 	}
 
-	setName(name) {
+	setName(name: string) {
 		this.name = name;
 		this.initials = this.generateInitials();
 	}
@@ -71,7 +71,7 @@ class ChatModel {
 		return generateInitialsHelper(this.name);
 	};
 
-	setLastMessage(lastMessagePayload) {
+	setLastMessage(lastMessagePayload: any) {
 		this.lastMessage = lastMessagePayload;
 		this.lastMessageBody = this.lastMessage?.text?.body;
 		this.lastMessageButtonText = lastMessagePayload?.button?.text;
@@ -130,15 +130,10 @@ class ChatModel {
 	}
 
 	hasTag(tagId: number) {
-		if (this.tags) {
-			for (let i = 0; i < this.tags.length; i++) {
-				if (this.tags[i]?.id === tagId) {
-					return true;
-				}
-			}
-		}
-
-		return false;
+		const tag = this.tags.find((tag) => {
+			return tag.id === tagId;
+		});
+		return Boolean(tag);
 	}
 }
 
