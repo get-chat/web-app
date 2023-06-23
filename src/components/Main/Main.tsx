@@ -32,7 +32,6 @@ import PreviewMedia from './PreviewMedia';
 import {
 	getContactProvidersData,
 	getToken,
-	getUserPreferences,
 	storeContactProvidersData,
 } from '@src/helpers/StorageHelper';
 import ChatAssignment from './ChatAssignment';
@@ -814,9 +813,7 @@ function Main() {
 
 				// User preference
 				const preference = currentUserResponse.currentUser.getPreferences();
-				if (preference?.filters?.filterTagId) {
-					dispatch(setFilterTagId(preference.filters.filterTagId));
-				}
+				dispatch(setFilterTagId(preference?.filters?.filterTagId));
 
 				setProgress(10);
 			}, navigate);
