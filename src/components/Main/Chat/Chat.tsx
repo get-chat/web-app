@@ -157,7 +157,9 @@ const Chat: React.FC = (props) => {
 	const location = useLocation();
 
 	useEffect(() => {
-		props.retrieveContactData(waId);
+		if (waId) {
+			props.retrieveContactData(waId);
+		}
 
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
