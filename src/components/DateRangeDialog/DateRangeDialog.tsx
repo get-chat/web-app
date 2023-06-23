@@ -79,7 +79,6 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 
 	return (
 		<Dialog open={open} onClose={close}>
-			{/*<DialogTitle>{t('Date')}</DialogTitle>*/}
 			<DateRangePicker
 				ranges={[dateRange]}
 				onChange={handleChange}
