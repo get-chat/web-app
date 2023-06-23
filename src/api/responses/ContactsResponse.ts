@@ -2,7 +2,7 @@ import ContactModel from '../models/ContactModel';
 
 interface ResponseData {
 	results: [];
-	count: Number;
+	count: number;
 	next: string | null;
 }
 

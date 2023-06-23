@@ -2,12 +2,18 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
+import UserModel from '@src/api/models/UserModel';
+import GroupModel from '@src/api/models/GroupModel';
+import TagModel from '@src/api/models/TagModel';
 
 class ChatModel {
 	public waId: string;
-	public tags: any[];
-	public assignedToUser: any;
-	public assignedGroup: any;
+	public name?: string;
+	public tags: TagModel[];
+	public assignedToUser?: UserModel;
+	public assignedGroup?: GroupModel;
+	public lastMessageTimestamp: number;
+	public lastReceivedMessageTimestamp: number;
 
 	constructor(data: any) {
 		const contact = data.contact;
@@ -32,9 +38,15 @@ class ChatModel {
 			? this.lastMessageTimestamp
 			: this.lastReceivedMessageTimestamp;
 
-		this.assignedGroup = data.assigned_group;
-		this.assignedToUser = data.assigned_to_user;
-		this.tags = data.tags;
+		if (data.assigned_group) {
+			this.assignedGroup = new GroupModel(data.assigned_group);
+		}
+
+		if (data.assigned_to_user) {
+			this.assignedToUser = new UserModel(data.assigned_to_user);
+		}
+
+		this.tags = data.tags?.map((item: any) => new TagModel(item)) ?? [];
 
 		// Not need to sanitize this, because it is already sanitized
 		// this.sanitize();
@@ -50,7 +62,7 @@ class ChatModel {
 		this.lastMessageCaption = sanitize(this.lastMessageCaption);
 	}
 
-	setName(name) {
+	setName(name: string | undefined) {
 		this.name = name;
 		this.initials = this.generateInitials();
 	}
@@ -59,7 +71,7 @@ class ChatModel {
 		return generateInitialsHelper(this.name);
 	};
 
-	setLastMessage(lastMessagePayload) {
+	setLastMessage(lastMessagePayload: any) {
 		this.lastMessage = lastMessagePayload;
 		this.lastMessageBody = this.lastMessage?.text?.body;
 		this.lastMessageButtonText = lastMessagePayload?.button?.text;
@@ -95,6 +107,26 @@ class ChatModel {
 
 	generateAssignedToInitials() {
 		return this.assignedToUser?.username?.[0]?.toUpperCase();
+	}
+
+	isAssignedToUser(user: UserModel) {
+		return this.assignedToUser && this.assignedToUser.id === user.id;
+	}
+
+	isAssignedToGroup(groupId: number) {
+		return this.assignedGroup && this.assignedGroup.id === groupId;
+	}
+
+	isAssignedToUserAnyGroup(user: UserModel) {
+		const matchedGroup = user.groups.filter(
+			(group) => group.id === this.assignedGroup?.id
+		);
+		return Boolean(matchedGroup);
+	}
+
+	hasTag(tagId: number) {
+		const tag = this.tags.find((tag) => tag.id === tagId);
+		return Boolean(tag);
 	}
 }
 

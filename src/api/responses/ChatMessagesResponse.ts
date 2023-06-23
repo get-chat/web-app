@@ -3,7 +3,7 @@ import ChatMessageList from '@src/interfaces/ChatMessageList';
 
 interface ResponseData {
 	results: [];
-	count: Number;
+	count: number;
 	next: string | null;
 }
 

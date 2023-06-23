@@ -29,10 +29,10 @@ interface Props {
 	secondaryName?: string;
 	tooltip?: string | JSX.Element;
 	dense?: boolean;
-	assignedUserId?: Number;
-	assignedGroupId?: Number;
+	assignedUserId?: number;
+	assignedGroupId?: number;
 	isActionable?: boolean;
-	onAction?: (userId?: Number | null, groupId?: Number | null) => void;
+	onAction?: (userId?: number | null, groupId?: number | null) => void;
 }
 
 const cx = classNames.bind(styles);
@@ -56,12 +56,12 @@ const AssigneeChip: React.FC<Props> = ({
 			isActionable,
 		});
 
-	const selectUser = (userId?: Number | null) => {
+	const selectUser = (userId?: number | null) => {
 		onAction?.(userId);
 		hideMenu();
 	};
 
-	const selectGroup = (groupId?: Number | null) => {
+	const selectGroup = (groupId?: number | null) => {
 		onAction?.(undefined, groupId);
 		hideMenu();
 	};

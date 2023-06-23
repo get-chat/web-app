@@ -228,12 +228,12 @@ const ChatListItem = (props: any) => {
 											<div>
 												{data.tags
 													.slice(0, 3)
-													.map((tagItem: any, tagIndex: Number) => (
+													.map((tagItem: any, tagIndex: number) => (
 														<SellIcon
 															key={tagIndex.toString()}
 															className={styles.tagIcon}
 															style={{
-																fill: tagItem.web_inbox_color,
+																fill: tagItem.color,
 															}}
 														/>
 													))}

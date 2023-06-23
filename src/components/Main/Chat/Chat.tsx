@@ -157,7 +157,9 @@ const Chat: React.FC = (props) => {
 	const location = useLocation();
 
 	useEffect(() => {
-		props.retrieveContactData(waId);
+		if (waId) {
+			props.retrieveContactData(waId);
+		}
 
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
@@ -962,7 +964,7 @@ const Chat: React.FC = (props) => {
 						);
 
 						// Scroll to message if goToMessageId is defined
-						const goToMessage = location.goToMessage;
+						const goToMessage = location.state?.goToMessage;
 						if (goToMessage !== undefined) {
 							goToMessageId(goToMessage.id, goToMessage.timestamp);
 						}
@@ -1078,6 +1080,8 @@ const Chat: React.FC = (props) => {
 			undefined,
 			MESSAGES_PER_PAGE,
 			offset ?? 0,
+			undefined,
+			undefined,
 			beforeTime,
 			sinceTime,
 			cancelTokenSourceRef.current.token,

@@ -1,62 +1,45 @@
-// @ts-nocheck
-import {
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
-} from '../Constants';
+import UserModel from '@src/api/models/UserModel';
+import ChatModel from '@src/api/models/ChatModel';
+import TagModel from '@src/api/models/TagModel';
 
-const isChatAssignedToUser = (currentUser, chat) => {
-	return (
-		currentUser?.id !== undefined && chat.assignedToUser?.id === currentUser.id
-	);
-};
-
-const isChatInUsersGroup = (currentUser, chat) => {
-	if (chat.assignedGroup && currentUser?.groups) {
-		const assignedGroupId = chat.assignedGroup.id;
-		for (let i = 0; i < currentUser.groups.length; i++) {
-			const group = currentUser.groups[i];
-
-			if (group?.id === assignedGroupId) {
-				return true;
-			}
-		}
-	}
-
-	return false;
-};
-
-const hasPermission = (currentUser, chat) => {
+const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
 	const canReadChats = currentUser?.permissions?.canReadChats;
 
 	switch (canReadChats) {
 		case 'all':
 			return true;
 		case 'user':
-			return isChatAssignedToUser(currentUser, chat);
+			return chat.isAssignedToUser(currentUser);
 		case 'group':
 			return (
-				isChatAssignedToUser(currentUser, chat) ||
-				isChatInUsersGroup(currentUser, chat)
+				chat.isAssignedToUser(currentUser) ||
+				chat.isAssignedToUserAnyGroup(currentUser)
 			);
 		default:
 			return false;
 	}
 };
 
-export const filterChat = (currentUser, tabCase, chat) => {
-	// Filter by case
-	switch (tabCase) {
-		case CHAT_LIST_TAB_CASE_ALL: {
-			return currentUser?.isAdmin || hasPermission(currentUser, chat);
-		}
-		case CHAT_LIST_TAB_CASE_ME: {
-			return isChatAssignedToUser(currentUser, chat);
-		}
-		case CHAT_LIST_TAB_CASE_GROUP: {
-			return isChatInUsersGroup(currentUser, chat);
-		}
-		default:
-			return false;
+export const filterChat = (
+	currentUser: UserModel | undefined,
+	chat: ChatModel,
+	filterTagId?: number,
+	filterAssignedToMe?: boolean,
+	filterAssignedGroupId?: number
+) => {
+	if (!currentUser) return true;
+
+	if (filterTagId) {
+		return chat.hasTag(filterTagId);
 	}
+
+	if (filterAssignedToMe) {
+		return chat.isAssignedToUser(currentUser);
+	}
+
+	if (filterAssignedGroupId) {
+		return chat.isAssignedToGroup(filterAssignedGroupId);
+	}
+
+	return true;
 };

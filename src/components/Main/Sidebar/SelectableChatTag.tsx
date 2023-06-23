@@ -34,7 +34,7 @@ function SelectableChatTag(props) {
 					color="primary"
 				/>
 				<div className="sidebarTag__selection__tag">
-					<SellIcon style={{ fill: props.data.web_inbox_color }} />
+					<SellIcon style={{ fill: props.data.color }} />
 					{props.data.name}
 				</div>
 			</div>

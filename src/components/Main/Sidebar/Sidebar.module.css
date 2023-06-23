@@ -1,24 +1,31 @@
-.searchContainer {
-	display: flex;
-	flex-direction: row;
-	background-color: #fff;
-	padding-right: 15px;
-	align-items: center;
+.searchOrFilterGroup {
+	background-color: white;
+	padding: 10px 0;
+	transition: background-color ease-in 0.2s;
 }
 
-.searchContainer :global(.searchBar__search) {
-	flex: 1;
+.searchOrFilterGroup.expanded {
+	background-color: var(--gray-light);
 }
 
-.tagFilterButton {
-	height: 35px;
-	width: 35px;
-	margin-left: -5px !important;
+.searchOrFilterGroup :global(.searchBar__search) {
+	background-color: transparent;
 }
 
-.tagFilterButton :global(.MuiSvgIcon-root) {
-	height: 20px !important;
-	width: 20px !important;
+.searchOrFilterGroup :global(.searchBar__search) {
+	padding: 0 15px !important;
+}
+
+.filterGroup {
+	padding: 0 15px;
+}
+
+.filterGroup.active {
+	margin-bottom: 2px;
+}
+
+.filterGroup.all {
+	margin-top: 7px;
 }
 
 .bulkAlert {

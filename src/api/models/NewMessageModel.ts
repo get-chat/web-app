@@ -2,9 +2,9 @@ import NewMessagesList from '@src/interfaces/NewMessagesList';
 
 class NewMessageModel {
 	public waId: string;
-	public newMessages: NewMessagesList;
+	public newMessages: number;
 
-	constructor(waId: string, newMessages: NewMessagesList) {
+	constructor(waId: string, newMessages: number) {
 		this.waId = waId;
 		this.newMessages = newMessages;
 	}

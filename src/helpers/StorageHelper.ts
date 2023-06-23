@@ -1,8 +1,11 @@
-// @ts-nocheck
 import { LocalStorage } from '../storage/LocalStorage';
 import { MemoryStorage } from '../storage/MemoryStorage';
+import { UserPreference } from '@src/interfaces/UserPreference';
+import { UserPreferences } from '@src/interfaces/UserPreferences';
+import { getObjLength } from '@src/helpers/ObjectHelper';
 
 export const STORAGE_TAG_TOKEN = 'token';
+const STORAGE_TAG_USER_PREFERENCES = 'user_preferences';
 const STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY =
 	'display_assignment_and_tagging_history';
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA = 'contact_providers_data';
@@ -12,17 +15,19 @@ const getLocalStorage = () => {
 	try {
 		return window.localStorage;
 	} catch (e) {
-		console.warn(e.toString());
+		console.warn(e?.toString());
 	}
 };
 
 export const initStorageType = () => {
+	// @ts-ignore
 	window.activeStorage = getLocalStorage()
 		? new LocalStorage()
 		: new MemoryStorage();
 };
 
 const getActiveStorage = () => {
+	// @ts-ignore
 	return window.activeStorage;
 };
 
@@ -34,12 +39,56 @@ export const getToken = () => {
 	return getStorage()?.getItem(STORAGE_TAG_TOKEN);
 };
 
-export const storeToken = (token) => {
+export const storeToken = (token: string) => {
 	getStorage().setItem(STORAGE_TAG_TOKEN, token);
 };
 
 export const clearToken = () => {
 	getStorage().removeItem(STORAGE_TAG_TOKEN);
+};
+
+export const getUserPreferences = (): UserPreferences => {
+	try {
+		const data = getStorage()?.getItem(STORAGE_TAG_USER_PREFERENCES);
+		return data ? JSON.parse(data) : {};
+	} catch (e) {
+		console.warn(e);
+		return {};
+	}
+};
+
+export const setUserPreference = (
+	userId: number | undefined,
+	userPreference: UserPreference
+) => {
+	console.log('Storing user preferences...');
+
+	if (!userId) return false;
+
+	let userPreferences = getUserPreferences();
+
+	// Prevent overgrowing
+	try {
+		if (getObjLength(userPreferences) >= 20) {
+			const oldestKey = Object.entries(userPreferences).reduce((prev, next) =>
+				(prev[1].updatedAt ?? 0) > (next[1].updatedAt ?? 0) ? next : prev
+			)[0];
+			delete userPreferences[oldestKey];
+		}
+	} catch (e) {
+		console.warn(e);
+		userPreferences = {};
+	}
+
+	// Add update date
+	userPreference.updatedAt = new Date().getTime();
+
+	// Add current user preferences
+	userPreferences[userId] = userPreference;
+	return getStorage()?.setItem(
+		STORAGE_TAG_USER_PREFERENCES,
+		JSON.stringify(userPreferences)
+	);
 };
 
 export const getDisplayAssignmentAndTaggingHistory = () => {
@@ -49,7 +98,7 @@ export const getDisplayAssignmentAndTaggingHistory = () => {
 	return result ? result === 'true' : true;
 };
 
-export const setDisplayAssignmentAndTaggingHistory = (willDisplay) => {
+export const setDisplayAssignmentAndTaggingHistory = (willDisplay: boolean) => {
 	return getStorage().setItem(
 		STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY,
 		willDisplay
@@ -63,7 +112,7 @@ export const getContactProvidersData = () => {
 	return data ? JSON.parse(data) ?? {} : {};
 };
 
-export const storeContactProvidersData = (data) => {
+export const storeContactProvidersData = (data: any) => {
 	getStorage().setItem(
 		STORAGE_TAG_CONTACT_PROVIDERS_DATA,
 		JSON.stringify(data)
@@ -79,7 +128,7 @@ export const getContactProvidersDataTime = () => {
 	return data ? JSON.parse(data) : undefined;
 };
 
-export const storeContactProvidersDataTime = (time) => {
+export const storeContactProvidersDataTime = (time: any) => {
 	getStorage().setItem(STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME, time);
 };
 

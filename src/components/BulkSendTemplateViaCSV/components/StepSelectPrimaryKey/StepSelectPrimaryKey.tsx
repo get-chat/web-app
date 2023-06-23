@@ -43,7 +43,7 @@ const StepSelectPrimaryKey = ({
 						const tag = findTagByName(tags, tagName);
 						return (
 							<span key={itemIndex}>
-								<SellIcon style={{ fill: tag?.web_inbox_color }} />{' '}
+								<SellIcon style={{ fill: tag?.color }} />{' '}
 								{tagName ? tagName : t('(empty)')}
 							</span>
 						);

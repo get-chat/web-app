@@ -795,3 +795,45 @@ msgstr "%dd"
 
 msgid "Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function."
 msgstr "Oturum mesajları yalnızca size son 24 saat içinde yazan alıcılara gönderilebilir. Süresi dolmuş sohbetlere mesaj göndermek için <2>Toplu taslak gönderme</2> işlevini kullanın."
+
+msgid "Search, filter by tags, time, etc."
+msgstr "Ara, filtrele: etiket, zaman vb."
+
+msgid "Assigned to me"
+msgstr "Bana atanmış"
+
+msgid "Assigned group"
+msgstr "Atanmış grup"
+
+msgid "Tag"
+msgstr "Etiket"
+
+msgid "Time"
+msgstr "Zaman"
+
+msgid "Done"
+msgstr "Bitti"
+
+msgid "Today"
+msgstr "Bugün"
+
+msgid "Yesterday"
+msgstr "Dün"
+
+msgid "This week"
+msgstr "Bu hafta"
+
+msgid "Last week"
+msgstr "Geçen hafta"
+
+msgid "This month"
+msgstr "Bu ay"
+
+msgid "Last month"
+msgstr "Geçen ay"
+
+msgid "Last Saturday"
+msgstr "Geçen Cumartesi"
+
+msgid "Last Sunday"
+msgstr "Geçen Pazar"

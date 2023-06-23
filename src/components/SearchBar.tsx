@@ -8,15 +8,19 @@ import { useTranslation } from 'react-i18next';
 export type Props = {
 	value: string;
 	onChange?: (text) => void;
-	isLoading: boolean;
+	isLoading?: boolean;
 	placeholder?: string;
+	onFocus?: () => void;
+	onBlur?: () => void;
 };
 
 const SearchBar: React.FC<Props> = ({
 	value,
 	onChange,
-	isLoading,
+	isLoading = false,
 	placeholder,
+	onFocus,
+	onBlur,
 }) => {
 	const { t } = useTranslation();
 
@@ -38,6 +42,8 @@ const SearchBar: React.FC<Props> = ({
 					type="text"
 					value={value}
 					onChange={handleChange}
+					onFocus={onFocus}
+					onBlur={onBlur}
 				/>
 			</div>
 		</div>

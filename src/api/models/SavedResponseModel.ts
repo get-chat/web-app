@@ -1,7 +1,7 @@
 import { sanitize } from '@src/helpers/Helpers';
 
 class SavedResponseModel {
-	public id: Number;
+	public id: number;
 	public text: string;
 	public timestamp = -1;
 

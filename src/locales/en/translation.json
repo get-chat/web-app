@@ -269,5 +269,19 @@
 	"Groups": "",
 	"%dh": "",
 	"%dm": "",
-	"Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function.": ""
+	"Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function.": "",
+	"Search, filter by tags, time, etc.": "",
+	"Assigned to me": "",
+	"Assigned group": "",
+	"Tag": "",
+	"Time": "",
+	"Done": "",
+	"Today": "",
+	"Yesterday": "",
+	"This week": "",
+	"Last week": "",
+	"This month": "",
+	"Last month": "",
+	"Last Saturday": "",
+	"Last Sunday": ""
 }

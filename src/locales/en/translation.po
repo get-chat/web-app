@@ -824,3 +824,45 @@ msgstr ""
 
 msgid "Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function."
 msgstr ""
+
+msgid "Search, filter by tags, time, etc."
+msgstr ""
+
+msgid "Assigned to me"
+msgstr ""
+
+msgid "Assigned group"
+msgstr ""
+
+msgid "Tag"
+msgstr ""
+
+msgid "Time"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Today"
+msgstr ""
+
+msgid "Yesterday"
+msgstr ""
+
+msgid "This week"
+msgstr ""
+
+msgid "Last week"
+msgstr ""
+
+msgid "This month"
+msgstr ""
+
+msgid "Last month"
+msgstr ""
+
+msgid "Last Saturday"
+msgstr ""
+
+msgid "Last Sunday"
+msgstr ""

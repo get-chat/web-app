@@ -36,7 +36,7 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 									tag:{' '}
 									<SellIcon
 										style={{
-											fill: data.tag?.web_inbox_color,
+											fill: data.tag?.color,
 										}}
 									/>
 									<span className="bold">%(tag)s</span>.
@@ -53,7 +53,7 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 									A tag was {data.action}:{' '}
 									<SellIcon
 										style={{
-											fill: data.tag?.web_inbox_color,
+											fill: data.tag?.color,
 										}}
 									/>
 									<span className="bold">%(tag)s</span>.

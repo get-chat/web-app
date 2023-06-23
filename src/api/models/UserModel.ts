@@ -1,20 +1,25 @@
-// @ts-nocheck
 import PermissionsModel from './PermissionsModel';
+import GroupModel from '@src/api/models/GroupModel';
+import { getUserPreferences } from '@src/helpers/StorageHelper';
 
 class UserModel {
-	public id?: Number;
+	public id?: number;
 	public username?: string;
 	public isAdmin: boolean;
-	public groups: any;
+	public groups: GroupModel[];
+	public profile: any;
+	public permissions: PermissionsModel;
+	public firstName?: string;
+	public lastName?: string;
+	public role: string | null;
 
-	constructor(data) {
-		if (!data) return;
-
+	constructor(data: any) {
 		this.id = data.id;
 		this.username = data.username;
 		this.firstName = data.first_name;
 		this.lastName = data.last_name;
-		this.groups = data.groups;
+		this.groups =
+			data.groups?.map((rawGroup: any) => new GroupModel(rawGroup)) ?? [];
 		this.permissions = new PermissionsModel(data.permissions);
 		this.profile = data.profile;
 		this.role = data?.profile?.role;
@@ -38,13 +43,13 @@ class UserModel {
 		if (label) {
 			label += ` (${this.username})`;
 		} else {
-			label = this.username;
+			label = this.username ?? '';
 		}
 
 		return label;
 	};
 
-	isInGroup(groupId) {
+	isInGroup(groupId: number) {
 		let inGroup = false;
 
 		this.groups?.forEach((groupItem) => {
@@ -67,6 +72,10 @@ class UserModel {
 		}
 
 		return false;
+	}
+
+	getPreferences() {
+		return getUserPreferences()?.[this.id?.toString() ?? ''];
 	}
 }
 

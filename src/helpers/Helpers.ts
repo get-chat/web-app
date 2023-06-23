@@ -116,7 +116,7 @@ export const sortMessagesAsc = (messages) => {
 	return Object.fromEntries(sortedNextState);
 };
 
-export const isScrollable = (el) => {
+export const isScrollable = (el: Element) => {
 	const hasScrollableContent = el.scrollHeight > el.clientHeight;
 	const overflowYStyle = window.getComputedStyle(el).overflowY;
 	const isOverflowHidden = overflowYStyle.indexOf('hidden') !== -1;

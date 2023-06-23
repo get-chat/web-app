@@ -1,9 +1,9 @@
-// @ts-nocheck
 import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
-	Button,
 	CircularProgress,
+	ClickAwayListener,
+	Collapse,
 	Divider,
 	Fade,
 	IconButton,
@@ -11,8 +11,6 @@ import {
 	ListItemIcon,
 	Menu,
 	MenuItem,
-	Tab,
-	Tabs,
 	Tooltip,
 	Zoom,
 } from '@mui/material';
@@ -25,9 +23,6 @@ import {
 } from '@src/helpers/Helpers';
 import {
 	CHAT_KEY_PREFIX,
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -47,7 +42,6 @@ import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
-import CloseIcon from '@mui/icons-material/Close';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import BulkSendActions from './BulkSendActions';
@@ -66,9 +60,8 @@ import { filterChat } from '@src/helpers/SidebarHelper';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
-import { setFilterTag } from '@src/store/reducers/filterTagReducer';
+import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
-import ChatTag from '../../ChatTag';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
@@ -83,13 +76,33 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SmsIcon from '@mui/icons-material/Sms';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Alert from '@mui/material/Alert';
 import {
 	getMaxDirectRecipients,
 	getMaxTagRecipients,
 } from '@src/helpers/BulkSendHelper';
+import FilterOption from '@src/components/FilterOption';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
+import classNames from 'classnames/bind';
+import ChatList from '@src/interfaces/ChatList';
+import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
+import DateRangeDialog from '@src/components/DateRangeDialog';
+import {
+	convertDateToUnixTimestamp,
+	formatDateRangeFilters,
+} from '@src/helpers/DateHelper';
+import GroupModel from '@src/api/models/GroupModel';
+import TagModel from '@src/api/models/TagModel';
+import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 
-const Sidebar: React.FC = ({
+const cx = classNames.bind(styles);
+
+const Sidebar: React.FC<any> = ({
+	isLoaded,
 	pendingMessages,
 	setPendingMessages,
 	isSendingPendingMessages,
@@ -123,18 +136,29 @@ const Sidebar: React.FC = ({
 }) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config: any = React.useContext(AppConfig);
 
+	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const tags = useAppSelector((state) => state.tags.value);
-	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const filterTag = useAppSelector((state) => state.filterTag.value);
-	const chatsCount = useAppSelector((state) => state.chatsCount.value);
+	const groups = useAppSelector((state) => state.groups.value);
 
 	const { t } = useTranslation();
 
+	const {
+		filterTagId,
+		filterAssignedToMe,
+		setFilterAssignedToMe,
+		filterAssignedGroupId,
+		setFilterAssignedGroupId,
+		filterStartDate,
+		setFilterStartDate,
+		filterEndDate,
+		setFilterEndDate,
+	} = useChatFilters();
+
 	const { waId } = useParams();
-	const chatsContainer = useRef(null);
+	const chatsContainer = useRef<HTMLDivElement>(null);
 	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
 		null
 	);
@@ -152,7 +176,12 @@ const Sidebar: React.FC = ({
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
-	const [tabCase, setTabCase] = useState(CHAT_LIST_TAB_CASE_ALL);
+
+	const [isFiltersVisible, setFiltersVisible] = useState(true);
+	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
+
+	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
+	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
@@ -234,7 +263,14 @@ const Sidebar: React.FC = ({
 
 			clearTimeout(timer.current);
 		};
-	}, [keyword, tabCase, filterTag]);
+	}, [
+		keyword,
+		filterAssignedToMe,
+		filterAssignedGroupId,
+		filterTagId,
+		filterStartDate,
+		filterEndDate,
+	]);
 
 	useEffect(() => {
 		// New chatMessages
@@ -357,7 +393,7 @@ const Sidebar: React.FC = ({
 
 			Object.entries(data).forEach((message) => {
 				//const msgId = message[0];
-				const assignmentData = message[1];
+				const assignmentData: any = message[1];
 				const assignmentEvent = assignmentData.assignmentEvent;
 
 				if (assignmentEvent) {
@@ -419,9 +455,9 @@ const Sidebar: React.FC = ({
 		const chatsContainerCopy = chatsContainer.current;
 
 		// To optimize scroll event
-		let debounceTimer;
+		let debounceTimer: NodeJS.Timeout;
 
-		function handleScroll(e) {
+		const handleScroll: EventListenerOrEventListenerObject = (e: Event) => {
 			if (debounceTimer) {
 				window.clearTimeout(debounceTimer);
 			}
@@ -435,7 +471,7 @@ const Sidebar: React.FC = ({
 				// const threshold = 0;
 				const el = e.target;
 
-				if (isScrollable(el)) {
+				if (el instanceof Element && isScrollable(el)) {
 					if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
 						listChats(
 							cancelTokenSourceRef.current,
@@ -446,17 +482,17 @@ const Sidebar: React.FC = ({
 					}
 				}
 			}, 100);
-		}
+		};
 
-		chatsContainerCopy.addEventListener('scroll', handleScroll);
+		chatsContainerCopy?.addEventListener('scroll', handleScroll);
 
 		return () => {
 			clearTimeout(debounceTimer);
-			chatsContainerCopy.removeEventListener('scroll', handleScroll);
+			chatsContainerCopy?.removeEventListener('scroll', handleScroll);
 		};
-	}, [chats, keyword, filterTag]);
+	}, [chats, keyword, filterTagId]);
 
-	const search = async (_keyword) => {
+	const search = async (_keyword: string) => {
 		setKeyword(_keyword);
 	};
 
@@ -466,16 +502,21 @@ const Sidebar: React.FC = ({
 		}
 	}, [isSelectionModeEnabled]);
 
-	const sortChats = (state) => {
+	const sortChats = (state: ChatList) => {
 		let sortedState = Object.entries(state).sort(
 			(a, b) =>
-				(b[1].lastReceivedMessageTimestamp ?? b[1].lastMessageTimestamp) -
-				(a[1].lastReceivedMessageTimestamp ?? a[1].lastMessageTimestamp)
+				(b[1].lastReceivedMessageTimestamp ?? b[1].lastMessageTimestamp ?? 0) -
+				(a[1].lastReceivedMessageTimestamp ?? a[1].lastMessageTimestamp ?? 0)
 		);
 		return Object.fromEntries(sortedState);
 	};
 
-	const listChats = (cancelTokenSource, isInitial, offset, replaceAll) => {
+	const listChats = (
+		cancelTokenSource?: CancelTokenSource,
+		isInitial: boolean = false,
+		offset?: number,
+		replaceAll: boolean = false
+	) => {
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
@@ -489,19 +530,25 @@ const Sidebar: React.FC = ({
 			setLoadingChats(true);
 		}
 
-		const assignedToMe = tabCase === CHAT_LIST_TAB_CASE_ME ? true : undefined;
-		const assignedGroup =
-			tabCase === CHAT_LIST_TAB_CASE_GROUP ? true : undefined;
+		// Convert dates to Unix timestamps
+		const messagesSinceTime = filterStartDate
+			? convertDateToUnixTimestamp(filterStartDate)
+			: undefined;
+		const messageBeforeTime = filterEndDate
+			? convertDateToUnixTimestamp(filterEndDate)
+			: undefined;
 
 		apiService.listChatsCall(
 			keyword,
-			filterTag?.id,
+			filterTagId,
 			20,
 			offset,
-			assignedToMe,
-			assignedGroup,
-			cancelTokenSource.token,
-			(response) => {
+			filterAssignedToMe ? true : undefined,
+			filterAssignedGroupId ? true : undefined,
+			messageBeforeTime,
+			messagesSinceTime,
+			cancelTokenSource?.token,
+			(response: AxiosResponse) => {
 				const chatsResponse = new ChatsResponse(response.data);
 
 				dispatch(setChatsCount(chatsResponse.count));
@@ -513,17 +560,14 @@ const Sidebar: React.FC = ({
 					dispatch(addChats(chatsResponse.chats));
 				}
 
-				// In case param is undefined
-				isInitial = isInitial === true;
-
 				if (isInitial) {
 					setProgress(100);
 				}
 
 				const willNotify = !isInitial;
 
-				const preparedNewMessages = {};
-				response.data.results.forEach((newMessage) => {
+				const preparedNewMessages: { [key: string]: NewMessageModel } = {};
+				response.data.results.forEach((newMessage: any) => {
 					const newWaId = newMessage.contact.waba_payload.wa_id;
 					const newAmount = newMessage.new_messages;
 					const prepared = new NewMessageModel(newWaId, newAmount);
@@ -532,9 +576,9 @@ const Sidebar: React.FC = ({
 
 				if (willNotify) {
 					let hasAnyNewMessages = false;
-					let chatMessageWaId;
+					let chatMessageWaId: string | undefined;
 
-					setNewMessages((prevState) => {
+					setNewMessages((prevState: any) => {
 						Object.entries(preparedNewMessages).forEach((newMsg) => {
 							const newMsgWaId = newMsg[0];
 							const number = newMsg[1].newMessages;
@@ -556,7 +600,7 @@ const Sidebar: React.FC = ({
 						});
 
 						// When state is a JSON object, it is unable to understand whether it is different or same and renders again
-						// So we check if new state is actually different than previous state
+						// So we check if new state is actually different from previous state
 						if (
 							JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
 						) {
@@ -575,7 +619,7 @@ const Sidebar: React.FC = ({
 						);
 					}
 				} else {
-					setNewMessages((prevState) => {
+					setNewMessages((prevState: any) => {
 						return { ...prevState, ...preparedNewMessages };
 					});
 				}
@@ -583,7 +627,7 @@ const Sidebar: React.FC = ({
 				setLoadingMoreChats(false);
 				setLoadingChats(false);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.log(error);
 
 				setLoadingMoreChats(false);
@@ -597,7 +641,7 @@ const Sidebar: React.FC = ({
 		);
 	};
 
-	const retrieveChat = (chatWaId) => {
+	const retrieveChat = (chatWaId: string) => {
 		apiService.retrieveChatCall(
 			chatWaId,
 			undefined,
@@ -610,7 +654,7 @@ const Sidebar: React.FC = ({
 				const preparedChat = new ChatModel(response.data);
 
 				// Don't display chat if tab case is "me" and chat is not assigned to user
-				if (tabCase === CHAT_LIST_TAB_CASE_ME) {
+				if (filterAssignedToMe) {
 					if (
 						!preparedChat.assignedToUser ||
 						preparedChat.assignedToUser.id !== currentUser?.id
@@ -620,7 +664,7 @@ const Sidebar: React.FC = ({
 						);
 						return;
 					}
-				} else if (tabCase === CHAT_LIST_TAB_CASE_GROUP) {
+				} else if (filterAssignedGroupId) {
 					if (
 						!preparedChat.assignedGroup ||
 						currentUser?.isInGroup(preparedChat.assignedGroup.id)
@@ -642,35 +686,43 @@ const Sidebar: React.FC = ({
 		);
 	};
 
-	const searchMessages = (cancelTokenSource) => {
+	const searchMessages = (cancelTokenSource?: CancelTokenSource) => {
+		// Convert dates to Unix timestamps
+		const messagesSinceTime = filterStartDate
+			? convertDateToUnixTimestamp(filterStartDate)
+			: undefined;
+		const messageBeforeTime = filterEndDate
+			? convertDateToUnixTimestamp(filterEndDate)
+			: undefined;
+
 		apiService.listMessagesCall(
 			undefined,
 			keyword,
-			filterTag?.id,
+			filterTagId,
 			30,
 			undefined,
-			undefined,
-			undefined,
-			cancelTokenSource.source,
-			(response) => {
-				const preparedMessages = {};
-				response.data.results.forEach((message) => {
-					const prepared = new ChatMessageModel(message);
-					preparedMessages[prepared.id] = prepared;
-				});
-
-				setChatMessages(preparedMessages);
+			filterAssignedToMe ? true : undefined,
+			filterAssignedGroupId,
+			messageBeforeTime,
+			messagesSinceTime,
+			cancelTokenSource?.token,
+			(response: AxiosResponse) => {
+				const messagesResponse = new ChatMessagesResponse(response.data);
+				setChatMessages(messagesResponse.messages);
 			},
 			undefined,
 			navigate
 		);
 	};
 
-	const goToMessage = (chatMessage) => {
+	const goToMessage = (chatMessage: ChatMessageModel) => {
 		if (waId !== chatMessage.waId) {
 			navigate(`/main/chat/${chatMessage.waId}`, {
 				state: {
-					goToMessage: chatMessage,
+					goToMessage: {
+						id: chatMessage.id,
+						timestamp: chatMessage.timestamp,
+					},
 				},
 			});
 		} else {
@@ -685,7 +737,9 @@ const Sidebar: React.FC = ({
 
 	const goToSettings = () => {
 		setAnchorEl(null);
+		// @ts-ignore
 		if (window.AndroidWebInterface) {
+			// @ts-ignore
 			window.AndroidWebInterface.goToSettings();
 		}
 	};
@@ -704,14 +758,6 @@ const Sidebar: React.FC = ({
 		setContactsVisible(true);
 	};
 
-	const handleTabChange = (event, newValue) => {
-		setTabCase(newValue);
-	};
-
-	const clearFilter = () => {
-		dispatch(setFilterTag(undefined));
-	};
-
 	const cancelSelection = () => {
 		setSelectionModeEnabled(false);
 		setSelectedChats([]);
@@ -726,6 +772,14 @@ const Sidebar: React.FC = ({
 	const displayNotifications = () => {
 		setNotificationsVisible(true);
 	};
+
+	const isAnyActiveFilter = Boolean(
+		filterAssignedToMe ||
+			filterAssignedGroupId ||
+			filterTagId ||
+			filterStartDate
+	);
+	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
 	return (
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
@@ -781,89 +835,205 @@ const Sidebar: React.FC = ({
 				/>
 			)}
 
-			<div className={styles.searchContainer}>
-				<SearchBar onChange={(_keyword) => search(_keyword)} />
-				<Tooltip title={t('Filter chats by tag')} disableInteractive>
-					<IconButton
-						onClick={showChatTagsList}
-						size="small"
-						className={styles.tagFilterButton}
-					>
-						<SellIcon />
-					</IconButton>
-				</Tooltip>
-			</div>
-
-			{filterTag && (
-				<div className="sidebar__clearFilter">
-					<div className="sidebar__clearFilter__body mb-1">
-						<Trans
-							count={chatsCount ?? 0}
-							i18nKey="Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
-							values={{
-								postProcess: 'sprintf',
-								sprintf: {
-									tag: filterTag.name,
-									count: chatsCount ?? 0,
-								},
-							}}
-						>
-							Showing only: <ChatTag id={filterTag.id} />{' '}
-							<span className="bold">%(tag)s</span> (%(count)d chat)
-						</Trans>
-					</div>
-					<Button
-						className="sidebar__clearFilter__clear"
-						size="small"
-						startIcon={<CloseIcon />}
-						onClick={clearFilter}
-					>
-						{t('Click to clear filter')}
-					</Button>
-				</div>
-			)}
-
-			<div className="sidebar__tabs">
-				<Tabs
-					textColor="primary"
-					indicatorColor="primary"
-					variant={'fullWidth'}
-					value={tabCase}
-					scrollButtons="auto"
-					onChange={handleTabChange}
+			<ClickAwayListener
+				onClickAway={() => {
+					if (!isAnyActiveFilter && isLoaded) {
+						setFiltersVisible(false);
+					}
+				}}
+			>
+				<div
+					className={cx({
+						searchOrFilterGroup: true,
+						expanded: isForceDisplayFilters,
+					})}
 				>
-					<Tab
-						label={
-							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_ALL ? (
-								<CircularProgress size={20} variant={'indeterminate'} />
-							) : (
-								t('All')
-							)
-						}
-						value={CHAT_LIST_TAB_CASE_ALL}
+					<Collapse in={isAnyActiveFilter}>
+						<div
+							className={cx({
+								filterGroup: true,
+								active: true,
+							})}
+						>
+							{filterAssignedToMe && (
+								<FilterOption
+									icon={<PersonIcon />}
+									label={t('Assigned to me')}
+									onClick={() => setFilterAssignedToMe(false)}
+									isActive
+								/>
+							)}
+							{filterAssignedGroupId && (
+								<FilterOption
+									icon={<GroupIcon />}
+									label={groups[filterAssignedGroupId]?.name}
+									onClick={() => setFilterAssignedGroupId(undefined)}
+									isActive
+								/>
+							)}
+							{filterTagId && (
+								<FilterOption
+									icon={<SellIcon />}
+									label={
+										tags?.filter((item) => item.id === filterTagId)?.[0]?.name
+									}
+									onClick={() => dispatch(setFilterTagId(undefined))}
+									isActive
+								/>
+							)}
+							{filterStartDate && (
+								<FilterOption
+									icon={<DateRangeIcon />}
+									label={formatDateRangeFilters(filterStartDate, filterEndDate)}
+									onClick={() => {
+										setFilterStartDate(undefined);
+										setFilterEndDate(undefined);
+									}}
+									isActive
+								/>
+							)}
+						</div>
+					</Collapse>
+
+					<SearchBar
+						value={keyword}
+						onChange={(_keyword) => search(_keyword)}
+						placeholder={t('Search, filter by tags, time, etc.')}
+						onFocus={() => setFiltersVisible(true)}
 					/>
-					<Tab
-						label={
-							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_ME ? (
-								<CircularProgress size={20} variant={'indeterminate'} />
-							) : (
-								t('Me')
-							)
-						}
-						value={CHAT_LIST_TAB_CASE_ME}
+
+					<Collapse in={isForceDisplayFilters}>
+						<div
+							className={cx({
+								filterGroup: true,
+								all: true,
+							})}
+						>
+							{!filterAssignedToMe && (
+								<FilterOption
+									icon={<PersonIcon />}
+									label={t('Assigned to me')}
+									onClick={() => setFilterAssignedToMe(true)}
+								/>
+							)}
+							<FilterOption
+								icon={<GroupIcon />}
+								label={t('Assigned group')}
+								onClick={(event: MouseEvent) => {
+									if (event.currentTarget instanceof Element) {
+										setGroupsMenuAnchorEl(event.currentTarget);
+									}
+								}}
+							/>
+							{tags?.length > 0 && (
+								<FilterOption
+									icon={<SellIcon />}
+									label={t('Tag')}
+									onClick={(event: MouseEvent) => {
+										if (event.currentTarget instanceof Element) {
+											setTagsMenuAnchorEl(event.currentTarget);
+										}
+									}}
+								/>
+							)}
+							<FilterOption
+								icon={<DateRangeIcon />}
+								label={t('Time')}
+								onClick={() => setDateRangeDialogVisible(true)}
+							/>
+						</div>
+					</Collapse>
+					<Menu
+						className={styles.filterMenu}
+						anchorEl={tagsMenuAnchorEl}
+						keepMounted
+						open={Boolean(tagsMenuAnchorEl)}
+						onClose={() => setTagsMenuAnchorEl(undefined)}
+						elevation={3}
+					>
+						{tags &&
+							tags.slice(0, 10).map((tag: TagModel) => (
+								<MenuItem
+									onClick={() => {
+										dispatch(setFilterTagId(tag.id));
+										setTagsMenuAnchorEl(undefined);
+									}}
+									key={tag.id}
+								>
+									<ListItemIcon>
+										<SellIcon
+											style={{
+												fill: tag.color,
+											}}
+										/>
+									</ListItemIcon>
+									{tag.name}
+								</MenuItem>
+							))}
+						<Divider />
+						{tags && tags.length > 10 && (
+							<MenuItem
+								onClick={() => {
+									showChatTagsList();
+									setTagsMenuAnchorEl(undefined);
+								}}
+							>
+								<ListItemIcon>
+									<UnfoldMoreIcon />
+								</ListItemIcon>
+								{t('More')}
+							</MenuItem>
+						)}
+						<MenuItem
+							component={Link}
+							href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+							target="_blank"
+						>
+							<ListItemIcon>
+								<SettingsIcon />
+							</ListItemIcon>
+							{t('Manage tags')}
+						</MenuItem>
+					</Menu>
+
+					<Menu
+						className={styles.filterMenu}
+						anchorEl={groupsMenuAnchorEl}
+						keepMounted
+						open={Boolean(groupsMenuAnchorEl)}
+						onClose={() => setGroupsMenuAnchorEl(undefined)}
+						elevation={3}
+					>
+						{groups &&
+							Object.values(groups)
+								.filter((item) =>
+									currentUser?.groups?.some(
+										(userGroup) => userGroup.id === item.id
+									)
+								)
+								.map((group: GroupModel) => (
+									<MenuItem
+										onClick={() => {
+											setFilterAssignedGroupId(group.id);
+											setGroupsMenuAnchorEl(undefined);
+										}}
+										key={group.id}
+									>
+										{group.name}
+									</MenuItem>
+								))}
+					</Menu>
+
+					<DateRangeDialog
+						open={isDateRangeDialogVisible}
+						setOpen={setDateRangeDialogVisible}
+						onDone={(startDate, endDate) => {
+							setFilterStartDate(startDate);
+							setFilterEndDate(endDate);
+						}}
 					/>
-					<Tab
-						label={
-							isLoadingChats && tabCase === CHAT_LIST_TAB_CASE_GROUP ? (
-								<CircularProgress size={20} variant={'indeterminate'} />
-							) : (
-								t('Group')
-							)
-						}
-						value={CHAT_LIST_TAB_CASE_GROUP}
-					/>
-				</Tabs>
-			</div>
+				</div>
+			</ClickAwayListener>
 
 			<div className="sidebar__results" ref={chatsContainer}>
 				{isSelectionModeEnabled && (
@@ -924,7 +1094,13 @@ const Sidebar: React.FC = ({
 					{Object.entries(chats)
 						.filter((chat) => {
 							// Filter by helper method
-							return filterChat(currentUser, tabCase, chat[1]);
+							return filterChat(
+								currentUser,
+								chat[1],
+								filterTagId,
+								filterAssignedToMe,
+								filterAssignedGroupId
+							);
 						})
 						.map((chat) => (
 							<ChatListItem
@@ -935,7 +1111,8 @@ const Sidebar: React.FC = ({
 								keyword={searchedKeyword}
 								contactProvidersData={contactProvidersData}
 								retrieveContactData={retrieveContactData}
-								tabCase={tabCase}
+								filterAssignedToMe={filterAssignedToMe}
+								filterAssignedGroupId={filterAssignedGroupId}
 								bulkSendPayload={bulkSendPayload}
 								isSelectionModeEnabled={isSelectionModeEnabled}
 								selectedChats={selectedChats}
@@ -988,7 +1165,9 @@ const Sidebar: React.FC = ({
 										messageData={message[1]}
 										keyword={searchedKeyword}
 										displaySender={true}
-										onClick={(chatMessage) => goToMessage(chatMessage)}
+										onClick={(chatMessage: ChatMessageModel) =>
+											goToMessage(chatMessage)
+										}
 									/>
 								))}
 							</div>
@@ -1042,13 +1221,6 @@ const Sidebar: React.FC = ({
 				onClose={hideMenu}
 				elevation={3}
 			>
-				<MenuItem onClick={showChatTagsList}>
-					<ListItemIcon>
-						<SellIcon />
-					</ListItemIcon>
-					{t('Tags')}
-				</MenuItem>
-				<Divider />
 				<MenuItem
 					className="sidebar__menu__refresh"
 					onClick={() => window.location.reload()}

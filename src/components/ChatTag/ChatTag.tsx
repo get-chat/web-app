@@ -15,7 +15,7 @@ const ChatTag = ({ id }) => {
 	return (
 		<SellIcon
 			style={{
-				fill: tag?.web_inbox_color ?? 'white',
+				fill: tag?.color ?? 'white',
 			}}
 		/>
 	);
