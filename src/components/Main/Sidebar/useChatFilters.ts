@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { setUserPreference } from '@src/helpers/StorageHelper';
 import { useAppSelector } from '@src/store/hooks';
 
@@ -27,17 +27,23 @@ const useChatFilters = () => {
 			: undefined
 	);
 
+	const isMounted = useRef(false);
+
 	useEffect(() => {
-		// Store filters
-		setUserPreference(currentUser?.id, {
-			filters: {
-				filterTagId: filterTagId,
-				filterAssignedToMe: filterAssignedToMe,
-				filterAssignedGroupId: filterAssignedGroupId,
-				filterStartDate: filterStartDate?.getTime(),
-				filterEndDate: filterEndDate?.getTime(),
-			},
-		});
+		if (isMounted.current) {
+			// Store filters
+			setUserPreference(currentUser?.id, {
+				filters: {
+					filterTagId: filterTagId,
+					filterAssignedToMe: filterAssignedToMe,
+					filterAssignedGroupId: filterAssignedGroupId,
+					filterStartDate: filterStartDate?.getTime(),
+					filterEndDate: filterEndDate?.getTime(),
+				},
+			});
+		} else {
+			isMounted.current = true;
+		}
 	}, [
 		filterAssignedToMe,
 		filterAssignedGroupId,
