@@ -9,7 +9,7 @@ const initialState: FilterTagIdState = {
 	value: undefined,
 };
 
-const filterTagSlice = createSlice({
+const filterTagIdSlice = createSlice({
 	name: 'filterTagId',
 	initialState,
 	reducers: {
@@ -19,6 +19,6 @@ const filterTagSlice = createSlice({
 	},
 });
 
-export const { setFilterTagId } = filterTagSlice.actions;
+export const { setFilterTagId } = filterTagIdSlice.actions;
 
-export default filterTagSlice.reducer;
+export default filterTagIdSlice.reducer;

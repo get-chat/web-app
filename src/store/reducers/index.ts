@@ -5,7 +5,7 @@ import savedResponsesReducer from './savedResponsesReducer';
 import usersReducer from './usersReducer';
 import currentUserReducer from './currentUserReducer';
 import groupsReducer from './groupsReducer';
-import filterTagIdReducer from './filterTagReducerId';
+import filterTagIdReducer from './filterTagIdReducer';
 import chatsCountReducer from './chatsCountReducer';
 import tagsReducer from './tagsReducer';
 import previewMediaObjectReducer from './previewMediaObjectReducer';

@@ -18,7 +18,7 @@ import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
-import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
+import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';

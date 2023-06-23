@@ -60,7 +60,7 @@ import { filterChat } from '@src/helpers/SidebarHelper';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
-import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
+import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';

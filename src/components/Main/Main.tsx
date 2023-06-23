@@ -74,7 +74,7 @@ import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
-import { setFilterTagId } from '@src/store/reducers/filterTagReducerId';
+import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
