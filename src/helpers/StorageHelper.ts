@@ -61,19 +61,27 @@ export const setUserPreference = (
 	userId: number | undefined,
 	userPreference: UserPreference
 ) => {
+	console.log('Storing user preferences...');
+
 	if (!userId) return false;
 
 	let userPreferences = getUserPreferences();
 
 	// Prevent overgrowing
 	try {
-		if (getObjLength(userPreferences) > 20) {
-			delete userPreferences[Object.keys(userPreferences)[0]];
+		if (getObjLength(userPreferences) >= 20) {
+			const oldestKey = Object.entries(userPreferences).reduce((prev, next) =>
+				(prev[1].updatedAt ?? 0) > (next[1].updatedAt ?? 0) ? next : prev
+			)[0];
+			delete userPreferences[oldestKey];
 		}
 	} catch (e) {
-		console.log(e);
+		console.warn(e);
 		userPreferences = {};
 	}
+
+	// Add update date
+	userPreference.updatedAt = new Date().getTime();
 
 	// Add current user preferences
 	userPreferences[userId] = userPreference;

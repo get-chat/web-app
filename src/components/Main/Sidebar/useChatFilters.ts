@@ -1,9 +1,5 @@
-import { UserPreference } from '@src/interfaces/UserPreference';
 import { useEffect, useMemo, useState } from 'react';
-import {
-	getUserPreferences,
-	setUserPreference,
-} from '@src/helpers/StorageHelper';
+import { setUserPreference } from '@src/helpers/StorageHelper';
 import { useAppSelector } from '@src/store/hooks';
 
 const useChatFilters = () => {
@@ -32,8 +28,6 @@ const useChatFilters = () => {
 	);
 
 	useEffect(() => {
-		console.log('Storing user preferences...');
-
 		// Store filters
 		setUserPreference(currentUser?.id, {
 			filters: {

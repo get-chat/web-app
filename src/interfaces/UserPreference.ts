@@ -6,4 +6,5 @@ export interface UserPreference {
 		filterStartDate?: number;
 		filterEndDate?: number;
 	};
+	updatedAt?: number;
 }
