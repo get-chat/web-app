@@ -32,6 +32,8 @@ const useChatFilters = () => {
 	);
 
 	useEffect(() => {
+		console.log('Storing user preferences...');
+
 		// Store filters
 		setUserPreference(currentUser?.id, {
 			filters: {
