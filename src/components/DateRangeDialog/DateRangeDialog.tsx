@@ -84,7 +84,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 				onChange={handleChange}
 				minDate={minDate}
 				maxDate={maxDate}
-				locale={rdrLocales[i18next.language]}
+				locale={rdrLocales[i18next.resolvedLanguage]}
 				staticRanges={customStaticRanges}
 				inputRanges={[]}
 			/>

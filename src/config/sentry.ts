@@ -32,6 +32,6 @@ export const initializeSentry = (config: AppConfig) => {
 		}
 
 		Sentry.setTag('browser_locale', navigator.language);
-		Sentry.setTag('page_locale', i18next.language);
+		Sentry.setTag('page_locale', i18next.resolvedLanguage);
 	}
 };
