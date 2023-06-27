@@ -108,7 +108,7 @@ function ChatAssignment(props: any) {
 
 		// Set group automatically, if assigned group was blank
 		if (!assignedGroup) {
-			const firstGroupOfUser = users[userId]?.groups?.[0]?.id;
+			const firstGroupOfUser = users[userId]?.groups?.[0]?.id?.toString();
 			setTempAssignedGroup(firstGroupOfUser);
 		}
 	};
