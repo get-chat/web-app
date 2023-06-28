@@ -1,13 +1,17 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: get.chat 1.0\n"
-"Report-Msgid-Bugs-To: support@get.chat \n"
-"Last-Translator: Berkay AKIN <berkay@get.chat>\n"
+"Project-Id-Version: 2023-06-27\n"
+"Report-Msgid-Bugs-To: support@get.chat\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: get.chat Team <support@get.chat>\n"
+"Language-Team: get.chat Team\n"
 "Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
 
 msgid "<0>%s</0> has changed chat assignments."
 msgstr ""
@@ -101,13 +105,18 @@ msgstr ""
 msgid "Search For Messages"
 msgstr ""
 
-msgid "This chat could not be assigned as its assignments have been changed by another user recently."
+msgid ""
+"This chat could not be assigned as its assignments have been changed by "
+"another user recently."
 msgstr ""
 
 msgid "This contact has no phone number."
 msgstr ""
 
-msgid "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment."
+msgid ""
+"This chat is already assigned to another user. You can change the assignment "
+"of this chat only if the current person will unassign themselves or someone "
+"with admin access will clear the assignment."
 msgstr ""
 
 msgid "You can assign this chat to a user or a group."
@@ -176,7 +185,9 @@ msgstr ""
 msgid "Something went wrong, this will be fixed automatically"
 msgstr ""
 
-msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
+msgid ""
+"There are unsent messages in the chat. If you continue, they will be "
+"deleted. Are you sure you want to continue?"
 msgstr ""
 
 msgid "An error has occurred."
@@ -269,7 +280,9 @@ msgstr ""
 msgid "Save this response"
 msgstr ""
 
-msgid "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!"
+msgid ""
+"Your template was sent to the user successfully, however we couldn't load "
+"templates at this moment. Please check again in a while, sorry!"
 msgstr ""
 
 msgid "Missing template"
@@ -538,7 +551,9 @@ msgstr ""
 msgid "<0>Price</0>: %d %s"
 msgstr ""
 
-msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
+msgid ""
+"On WhatsApp, your business profile photo has bigger resolution than shown "
+"here."
 msgstr ""
 
 msgid "Copied!"
@@ -607,18 +622,20 @@ msgstr ""
 msgid "Message via post"
 msgstr ""
 
-msgid "The language pack for this template is not installed on the server yet, try sending this message later"
+msgid ""
+"The language pack for this template is not installed on the server yet, try "
+"sending this message later"
 msgstr ""
 
 msgid "You can assign this chat to yourself and unassign from yourself."
 msgstr ""
 
-
 msgid "You can assign this chat to a group."
 msgstr ""
 
-
-msgid "This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment."
+msgid ""
+"This chat is already assigned to a group. You can change the assignment of "
+"this chat only if someone with admin access will clear the assignment."
 msgstr ""
 
 msgid "Register templates"
@@ -645,13 +662,11 @@ msgstr ""
 msgid "Failed to load templates. Please try again in a while."
 msgstr ""
 
-msgid "Failed to issue a template refresh request. Please try again in a while."
+msgid ""
+"Failed to issue a template refresh request. Please try again in a while."
 msgstr ""
 
 msgid "Please enter a valid username and password!"
-msgstr ""
-
-msgid "Unsupported file type"
 msgstr ""
 
 msgid "Please choose a supported image type (png, jpg)"
@@ -696,7 +711,9 @@ msgstr ""
 msgid "Chats"
 msgstr ""
 
-msgid "To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our integrations page."
+msgid ""
+"To be able to share contacts, you need to use one of our Contact Providers. "
+"<1>Click here</1> to go to our integrations page."
 msgstr ""
 
 msgid "Send contacts"
@@ -822,7 +839,10 @@ msgstr ""
 msgid "%dm"
 msgstr ""
 
-msgid "Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function."
+msgid ""
+"Session messages can be sent only to recipients who wrote to you within last "
+"24 hours. To send messages to expired chats, use <2>Bulk send a template</2> "
+"function."
 msgstr ""
 
 msgid "Search, filter by tags, time, etc."
@@ -865,4 +885,10 @@ msgid "Last Saturday"
 msgstr ""
 
 msgid "Last Sunday"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Quick Actions"
 msgstr ""
