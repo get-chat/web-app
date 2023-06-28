@@ -1,5 +1,26 @@
-.weekStartDaySelector {
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--color-light-blue);
+.calendarContainer {
+	border-radius: 10px;
+	background-color: var(--gray-light);
+	box-shadow: 0 6px 6px -6px rgba(0, 0, 45, 0.2);
+}
+
+.calendarContainer :global(.rdrStaticRange) {
+	border-bottom: none;
+}
+
+.weekStartDaySelectorContainer {
+	display: flex;
+	margin: 15px 15px 5px;
+}
+
+.formControl {
+	min-width: 135px !important;
+}
+
+.formControl :global(.MuiFormLabel-root) {
+	background-color: #fff !important;
+}
+
+.formControl :global(.MuiSelect-select) {
+	padding: 8px 32px 8px 10px !important;
 }
