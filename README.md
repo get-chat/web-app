@@ -1,4 +1,4 @@
-[![](https://img.shields.io/gitlab/pipeline-status/get.chat/web-app.svg?branch=master)](https://gitlab.com/get.chat/web-app/-/pipelines/)
+	[![](https://img.shields.io/gitlab/pipeline-status/get.chat/web-app.svg?branch=master)](https://gitlab.com/get.chat/web-app/-/pipelines/)
 
 # get.chat Web App
 

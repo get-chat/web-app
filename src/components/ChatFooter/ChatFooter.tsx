@@ -380,7 +380,7 @@ const ChatFooter: React.FC = ({
 					/>
 
 					<Tooltip
-						title="Templates"
+						title={t('Templates')}
 						placement="top"
 						className={cx({
 							desktopOnly: isAttachmentOptionsVisible,
@@ -402,7 +402,7 @@ const ChatFooter: React.FC = ({
 
 					{!isExpired && (
 						<Tooltip
-							title="Saved Responses"
+							title={t('Saved Responses')}
 							placement="top"
 							className={cx({
 								desktopOnly: isAttachmentOptionsVisible,
