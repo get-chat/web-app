@@ -662,7 +662,7 @@ msgstr ""
 "temizlerse yeniden atayabilirsin."
 
 msgid "Register templates"
-msgstr "Taslak yarat"
+msgstr "Taslak oluştur"
 
 msgid "Click here to refresh"
 msgstr "Yenilemek için tıkla"
@@ -795,7 +795,7 @@ msgid "Toggle event history"
 msgstr "Olay geçmişini aç/kapa"
 
 msgid "Register Templates"
-msgstr "Taslak oluştur"
+msgstr "Taslak Oluştur"
 
 msgid "Saved Responses"
 msgstr "Kaydedilmiş Yanıtlar"
