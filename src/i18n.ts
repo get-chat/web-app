@@ -28,6 +28,16 @@ i18n
 		fallbackLng: 'en',
 		compatibilityJSON: 'v4',
 		debug: false,
+		detection: {
+			order: [
+				'querystring',
+				'navigator',
+				'localStorage',
+				'cookie',
+				'sessionStorage',
+			],
+			convertDetectedLanguage: (lng: string) => lng.substring(0, 2),
+		},
 		overloadTranslationOptionHandler: sprintf.overloadTranslationOptionHandler,
 		keySeparator: false,
 		nsSeparator: false,
