@@ -15,14 +15,18 @@ import {
 import { createStaticRanges } from 'react-date-range';
 import { useMemo } from 'react';
 
-const useDateRanges = () => {
+interface Props {
+	weekStartsOn?: number;
+}
+
+const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 	const { t } = useTranslation();
 
 	const options = useMemo(
 		() => ({
-			weekStartsOn: 1,
+			weekStartsOn: weekStartsOn,
 		}),
-		[]
+		[weekStartsOn]
 	);
 
 	const defineds = useMemo(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import { useTranslation } from 'react-i18next';
 import { DateRangePicker, RangeKeyDict } from 'react-date-range';
@@ -9,6 +9,7 @@ import { Button, DialogActions } from '@mui/material';
 import * as rdrLocales from 'react-date-range/dist/locale';
 import i18next from 'i18next';
 import useDateRanges from '@src/components/DateRangeDialog/useDateRanges';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	open: boolean;
@@ -24,7 +25,14 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 
 	const { t } = useTranslation();
 
-	const { customStaticRanges } = useDateRanges();
+	const currentUser = useAppSelector((state) => state.currentUser.value);
+
+	const weekStartsOn = useMemo(
+		() => currentUser?.getPreferences()?.weekStartsOn ?? 0,
+		[currentUser]
+	);
+
+	const { customStaticRanges } = useDateRanges({ weekStartsOn: weekStartsOn });
 
 	useEffect(() => {
 		if (open) {
