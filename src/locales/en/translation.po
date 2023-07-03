@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid "<0>%s</0> has changed chat assignments."
 msgstr ""
@@ -891,4 +891,16 @@ msgid "User"
 msgstr ""
 
 msgid "Quick Actions"
+msgstr ""
+
+msgid "Start week on"
+msgstr ""
+
+msgid "Saturday"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Monday"
 msgstr ""
