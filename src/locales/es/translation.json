@@ -15,6 +15,7 @@
 	"Persons": "Personas",
 	"Contacts": "Contactos",
 	"No persons or contacts found for <1>%s</1>": "No se encontraron personas o contactos para <1>%s</1>",
+	"Unsupported file type": "Tipo de archivo no admitido",
 	"Close": "Cerrar",
 	"Download": "Descargar",
 	"Only admins and users can access to our web app.": "Solo los administradores y usuarios pueden acceder a nuestra aplicación web.",
@@ -212,7 +213,6 @@
 	"Failed to load templates. Please try again in a while.": "No se pudieron cargar las plantillas. Por favor, inténtalo de nuevo más tarde.",
 	"Failed to issue a template refresh request. Please try again in a while.": "No se pudo enviar una solicitud de actualización de plantilla. Por favor, inténtalo de nuevo más tarde.",
 	"Please enter a valid username and password!": "¡Por favor, introduce un nombre de usuario y contraseña válidos!",
-	"Unsupported file type": "Tipo de archivo no admitido",
 	"Please choose a supported image type (png, jpg)": "Por favor, elige un tipo de imagen admitido (png, jpg)",
 	"Please choose a supported video type (mp4, 3gp)": "Por favor, elige un tipo de vídeo admitido (mp4, 3gp)",
 	"Please choose a supported file type (png, jpg, mp4, 3gp)": "Por favor, elige un tipo de archivo admitido (png, jpg, mp4, 3gp)",
@@ -285,5 +285,9 @@
 	"Last Saturday": "El sábado pasado",
 	"Last Sunday": "El domingo pasado",
 	"User": "Usuario",
-	"Quick Actions": "Acciones Rápidas"
+	"Quick Actions": "Acciones Rápidas",
+	"Start week on": "Empieza la semana el",
+	"Saturday": "Sábado",
+	"Sunday": "Domingo",
+	"Monday": "Lunes"
 }

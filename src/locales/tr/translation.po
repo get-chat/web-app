@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 msgid "<0>%s</0> has changed chat assignments."
 msgstr "<0>%s</0>, sohbet atamalarını değiştirdi."
@@ -358,55 +358,55 @@ msgid "Started at <1></1>"
 msgstr "Başladı <1></1>"
 
 msgid "Automotive"
-msgstr ""
+msgstr "Otomotiv"
 
 msgid "Beauty, Spa and Salon"
-msgstr ""
+msgstr "Güzellik, Spa ve Salon"
 
 msgid "Clothing and Apparel"
-msgstr ""
+msgstr "Giyim Kuşam"
 
 msgid "Education"
-msgstr ""
+msgstr "Eğitim"
 
 msgid "Entertainment"
-msgstr ""
+msgstr "Eğlence"
 
 msgid "Event Planning and Service"
-msgstr ""
+msgstr "Etkinlik Planlama ve Hizmet"
 
 msgid "Finance and Banking"
-msgstr ""
+msgstr "Finans ve Bankacılık"
 
 msgid "Food and Grocery"
-msgstr ""
+msgstr "Yemek ve Market"
 
 msgid "Public Service"
-msgstr ""
+msgstr "Kamu Hizmeti"
 
 msgid "Hotel and Lodging"
-msgstr ""
+msgstr "Otel ve Konaklama"
 
 msgid "Medical and Health"
-msgstr ""
+msgstr "Tıp ve Sağlık"
 
 msgid "Non-profit"
-msgstr ""
+msgstr "Kar Amacı Gütmeyen"
 
 msgid "Professional Services"
-msgstr ""
+msgstr "Profesyonel Hizmetler"
 
 msgid "Shopping and Retail"
-msgstr ""
+msgstr "Alışveriş ve Perakende"
 
 msgid "Travel and Transportation"
-msgstr ""
+msgstr "Seyahat ve Taşımacılık"
 
 msgid "Restaurant"
-msgstr ""
+msgstr "Restoran"
 
 msgid "Other"
-msgstr ""
+msgstr "Diğer"
 
 msgid "Personal Profile"
 msgstr "Kişisel Profil"
@@ -469,7 +469,7 @@ msgid "Click to retry."
 msgstr "Tekrar denemek için tıkla."
 
 msgid "Last attempt at: <1></1>"
-msgstr ""
+msgstr "Son deneme: <1></1>"
 
 msgid "New messages"
 msgstr "Yeni mesajlar"
@@ -525,7 +525,7 @@ msgid "Uploading a media file. Please wait..."
 msgstr "Bir medya dosyası yükleniyor. Lütfen bekle..."
 
 msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
-msgstr ""
+msgstr "Toplu mesaj (ID: %s) bir alıcıya gönderilemedi."
 
 msgid "Recipient: <1>%s</1>"
 msgstr "Alıcı: <1>%s</1>"
@@ -549,16 +549,16 @@ msgid "Location: <1>%s</1>"
 msgstr "Lokasyon: <1>%s</1>"
 
 msgid "<0>Product retailer ID<0>: %s"
-msgstr ""
+msgstr "<0>Ürün satıcı ID<0>: %s"
 
 msgid "<0>Catalog ID</0>: %s"
-msgstr ""
+msgstr "<0>Katalog ID</0>: %s"
 
 msgid "<0>Quantity</0>: %d"
-msgstr ""
+msgstr "<0>Adet</0>: %d"
 
 msgid "<0>Price</0>: %d %s"
-msgstr ""
+msgstr "<0>Fiyat</0>: %d %s"
 
 msgid ""
 "On WhatsApp, your business profile photo has bigger resolution than shown "
@@ -636,7 +636,9 @@ msgstr "Gönderi aracılığıyla mesaj"
 msgid ""
 "The language pack for this template is not installed on the server yet, try "
 "sending this message later"
-msgstr "Bu taslak için dil paketi henüz sunucuya yüklenmemiş, bu mesajı göndermeyi daha sonra tekrar dene"
+msgstr ""
+"Bu taslak için dil paketi henüz sunucuya yüklenmemiş, bu mesajı göndermeyi "
+"daha sonra tekrar dene"
 
 #, fuzzy
 #| msgid "You can assign this chat to a user or a group."
@@ -690,10 +692,8 @@ msgid ""
 msgstr ""
 "Taslak mesajı yenileme isteği oluşturulamadı. Lütfen daha sonra tekrar dene."
 
-#, fuzzy
-#| msgid "Please enter a valid inbox link"
 msgid "Please enter a valid username and password!"
-msgstr "Lütfen geçerli bir inbox URL'i girin"
+msgstr "Lütfen geçerli bir inbox URL'i girin!"
 
 msgid "Please choose a supported image type (png, jpg)"
 msgstr "Lütfen desteklenen bir resim türü seç (png, jpg)"
@@ -725,7 +725,7 @@ msgstr "Emoji"
 msgid "You can only send voice messages to users who wrote to you in last 24h."
 msgstr ""
 "Sesli mesajı yalnızca sana son 24 saat içerisinde mesaj göndermiş kişilere "
-"yollayabilirsin"
+"yollayabilirsin."
 
 msgid "You don't have any chats yet."
 msgstr "Henüz hiç sohbetin yok."
@@ -919,3 +919,21 @@ msgstr "Geçen Cumartesi"
 
 msgid "Last Sunday"
 msgstr "Geçen Pazar"
+
+msgid "User"
+msgstr "Kullanıcı"
+
+msgid "Quick Actions"
+msgstr "Hızlı Eylemler"
+
+msgid "Start week on"
+msgstr "Haftanın başlangıcı"
+
+msgid "Saturday"
+msgstr "Cumartesi"
+
+msgid "Sunday"
+msgstr "Pazar"
+
+msgid "Monday"
+msgstr "Pazartesi"

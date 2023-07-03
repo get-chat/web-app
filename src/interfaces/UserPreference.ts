@@ -6,5 +6,6 @@ export interface UserPreference {
 		filterStartDate?: number;
 		filterEndDate?: number;
 	};
+	weekStartsOn?: number;
 	updatedAt?: number;
 }

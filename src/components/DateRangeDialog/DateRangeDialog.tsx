@@ -4,11 +4,24 @@ import { useTranslation } from 'react-i18next';
 import { DateRangePicker, RangeKeyDict } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { Button, DialogActions } from '@mui/material';
+import {
+	Button,
+	DialogActions,
+	FormControl,
+	InputLabel,
+	Menu,
+	MenuItem,
+	Select,
+	SelectChangeEvent,
+} from '@mui/material';
 // @ts-ignore
 import * as rdrLocales from 'react-date-range/dist/locale';
 import i18next from 'i18next';
 import useDateRanges from '@src/components/DateRangeDialog/useDateRanges';
+import { useAppSelector } from '@src/store/hooks';
+import { setUserPreference } from '@src/helpers/StorageHelper';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import styles from './DateRangeDialog.module.css';
 
 interface Props {
 	open: boolean;
@@ -17,14 +30,23 @@ interface Props {
 }
 
 const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
+	const currentUser = useAppSelector((state) => state.currentUser.value);
+
 	const [startDate, setStartDate] = useState<Date | undefined>(new Date());
 	const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 	const [minDate, setMinDate] = useState<Date | undefined>();
 	const [maxDate, setMaxDate] = useState<Date | undefined>();
 
+	const getWeekStartsOnFromPreferences = () =>
+		currentUser?.getPreferences()?.weekStartsOn ?? 1;
+
+	const [weekStartsOn, setWeekStartsOn] = useState(
+		getWeekStartsOnFromPreferences()
+	);
+
 	const { t } = useTranslation();
 
-	const { customStaticRanges } = useDateRanges();
+	const { customStaticRanges } = useDateRanges({ weekStartsOn: weekStartsOn });
 
 	useEffect(() => {
 		if (open) {
@@ -74,20 +96,48 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 		finalEndDate?.setHours(23, 59, 59, 0);
 
 		onDone(finalStartDate, finalEndDate);
-		close();
+	};
+
+	const handleWeekStartDayChange = (event: SelectChangeEvent) => {
+		const day = parseInt(event.target.value ?? '1');
+		if (currentUser) {
+			const currentPreferences = currentUser.getPreferences();
+			currentPreferences.weekStartsOn = day;
+			setUserPreference(currentUser.id, currentPreferences);
+		}
+
+		setWeekStartsOn(day);
 	};
 
 	return (
 		<Dialog open={open} onClose={close}>
-			<DateRangePicker
-				ranges={[dateRange]}
-				onChange={handleChange}
-				minDate={minDate}
-				maxDate={maxDate}
-				locale={rdrLocales[i18next.resolvedLanguage]}
-				staticRanges={customStaticRanges}
-				inputRanges={[]}
-			/>
+			<div className={styles.calendarContainer}>
+				<DateRangePicker
+					ranges={[dateRange]}
+					onChange={handleChange}
+					minDate={minDate}
+					maxDate={maxDate}
+					locale={rdrLocales[i18next.resolvedLanguage]}
+					staticRanges={customStaticRanges}
+					inputRanges={[]}
+				/>
+			</div>
+
+			<div className={styles.weekStartDaySelectorContainer}>
+				<FormControl className={styles.formControl}>
+					<InputLabel id="select-label">{t('Start week on')}</InputLabel>
+					<Select
+						labelId="select-label"
+						value={weekStartsOn.toString()}
+						onChange={handleWeekStartDayChange}
+					>
+						<MenuItem value="6">{t('Saturday')}</MenuItem>
+						<MenuItem value="0">{t('Sunday')}</MenuItem>
+						<MenuItem value="1">{t('Monday')}</MenuItem>
+					</Select>
+				</FormControl>
+			</div>
+
 			<DialogActions>
 				<Button onClick={close} color="secondary">
 					{t('Close')}

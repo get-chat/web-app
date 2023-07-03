@@ -15,8 +15,19 @@ import {
 import { createStaticRanges } from 'react-date-range';
 import { useMemo } from 'react';
 
-const useDateRanges = () => {
+interface Props {
+	weekStartsOn?: number;
+}
+
+const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 	const { t } = useTranslation();
+
+	const options = useMemo(
+		() => ({
+			weekStartsOn: weekStartsOn,
+		}),
+		[weekStartsOn]
+	);
 
 	const defineds = useMemo(() => {
 		if (!open) {
@@ -25,13 +36,13 @@ const useDateRanges = () => {
 
 		const now = new Date();
 		return {
-			startOfWeek: startOfWeek(now),
-			endOfWeek: endOfWeek(now),
-			startOfLastWeek: startOfWeek(addDays(now, -7)),
-			endOfLastWeek: endOfWeek(addDays(now, -7)),
+			startOfWeek: startOfWeek(now, options),
+			endOfWeek: endOfWeek(now, options),
+			startOfLastWeek: startOfWeek(addDays(now, -7), options),
+			endOfLastWeek: endOfWeek(addDays(now, -7), options),
 			startOfToday: startOfDay(now),
 			endOfToday: endOfDay(now),
-			startOfYesterday: startOfDay(addDays(now, -1)),
+			startOfYesterday: startOfDay(addDays(now, -1), options),
 			endOfYesterday: endOfDay(addDays(now, -1)),
 			startOfMonth: startOfMonth(now),
 			endOfMonth: endOfMonth(now),
@@ -40,7 +51,7 @@ const useDateRanges = () => {
 			previousSaturday: previousSaturday(now),
 			previousSunday: previousSunday(now),
 		};
-	}, [open]);
+	}, [open, options]);
 
 	const customStaticRanges = createStaticRanges([
 		{
