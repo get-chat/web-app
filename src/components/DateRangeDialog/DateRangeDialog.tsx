@@ -96,6 +96,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 		finalEndDate?.setHours(23, 59, 59, 0);
 
 		onDone(finalStartDate, finalEndDate);
+		close();
 	};
 
 	const handleWeekStartDayChange = (event: SelectChangeEvent) => {
