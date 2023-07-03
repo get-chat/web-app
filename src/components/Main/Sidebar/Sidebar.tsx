@@ -949,9 +949,19 @@ const Sidebar: React.FC<any> = ({
 							{(keyword || isAnyActiveFilter) && (
 								<div className={styles.chatsCount}>
 									{isLoadingChats && <CircularProgress size={14} />}
-									{isLoadingChats
-										? t('Loading chats')
-										: t('%d chats found', chatsCount ?? 0)}
+									{isLoadingChats ? (
+										t('Loading chats')
+									) : (
+										<Trans
+											count={chatsCount ?? 0}
+											values={{
+												postProcess: 'sprintf',
+												sprintf: [chatsCount ?? 0],
+											}}
+										>
+											%d chat found
+										</Trans>
+									)}
 								</div>
 							)}
 						</>

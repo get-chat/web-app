@@ -106,7 +106,7 @@
 	"Bulk Send": "Toplu Gönder",
 	"Send a template message": "Bir taslak mesajı gönder",
 	"Cancel": "İptal",
-	"Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).": "",
+	"Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).": "%(contacts_count)d kontak ve %(tags_count)d etiket seçildi.",
 	"Started at <1></1>": "Başladı <1></1>",
 	"Automotive": "Otomotiv",
 	"Beauty, Spa and Salon": "Güzellik, Spa ve Salon",
@@ -289,5 +289,8 @@
 	"Start week on": "Haftanın başlangıcı",
 	"Saturday": "Cumartesi",
 	"Sunday": "Pazar",
-	"Monday": "Pazartesi"
+	"Monday": "Pazartesi",
+	"%d chat found_one": "%d sohbet bulundu",
+	"%d chat found_other": "%d sohbet bulundu",
+	"Loading chats": "Sohbetler yükleniyor"
 }
