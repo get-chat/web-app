@@ -140,6 +140,7 @@ const Sidebar: React.FC<any> = ({
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
+	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const groups = useAppSelector((state) => state.groups.value);
 
@@ -1034,6 +1035,12 @@ const Sidebar: React.FC<any> = ({
 					/>
 				</div>
 			</ClickAwayListener>
+
+			{isAnyActiveFilter && (
+				<div className={styles.chatsCount}>
+					{t('Chats: %d', chatsCount ?? 0)}
+				</div>
+			)}
 
 			<div className="sidebar__results" ref={chatsContainer}>
 				{isSelectionModeEnabled && (

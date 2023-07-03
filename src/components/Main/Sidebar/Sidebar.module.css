@@ -38,3 +38,11 @@
 	color: var(--color-light-blue);
 	cursor: pointer;
 }
+
+.chatsCount {
+	font-size: 12px;
+	font-weight: 600;
+	color: rgba(0, 0, 45, 0.5);
+	background-color: #fff;
+	padding: 5px 15px;
+}
