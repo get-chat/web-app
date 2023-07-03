@@ -43,6 +43,12 @@
 	font-size: 12px;
 	font-weight: 600;
 	color: rgba(0, 0, 45, 0.5);
-	background-color: #fff;
-	padding: 5px 15px;
+	padding: 15px 15px 0;
+	display: flex;
+	align-items: center;
+}
+
+.chatsCount > :global(.MuiCircularProgress-root) {
+	margin-top: -1px;
+	margin-right: 8px;
 }
