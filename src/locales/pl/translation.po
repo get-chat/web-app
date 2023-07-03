@@ -1,0 +1,898 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 2023-06-27\n"
+"Report-Msgid-Bugs-To: support@get.chat\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: get.chat Team <support@get.chat>\n"
+"Language-Team: get.chat Team\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+msgid "<0>%s</0> has changed chat assignments."
+msgstr "<0>%s</0> zmienił(a) przypisanie czatu."
+
+msgid "Chat assignments were changed."
+msgstr "Przypisanie czatu zostało zmienione."
+
+msgid "assigned to user: <1>%s</1>"
+msgstr "przypisano do użytkownika: <1>%s</1>"
+
+msgid "assigned to group: <1>%s</1>"
+msgstr "przypisano do grupy: <1>%s</1>"
+
+msgid "cleared assigned user"
+msgstr "wyczyszczono przypisanego użytkownika"
+
+msgid "cleared assigned group"
+msgstr "wyczyszczono przypisaną grupę"
+
+msgid "There is no phone number"
+msgstr "Nie ma numeru telefonu"
+
+msgid "%d more phone number"
+msgid_plural "%d more phone numbers"
+msgstr[0] "jeszcze jeden numer telefonu"
+msgstr[1] "jeszcze %d numery telefonu"
+msgstr[2] "jeszcze %d numerów telefonu"
+
+msgid "Choose a phone number"
+msgstr "Wybierz numer telefonu"
+
+msgid "New chat"
+msgstr "Nowy czat"
+
+msgid "Start a chat with a phone number"
+msgstr "Rozpocznij czat z numerem telefonu"
+
+msgid "Start"
+msgstr "Start"
+
+msgid "Persons"
+msgstr "Osoby"
+
+msgid "Contacts"
+msgstr "Kontakty"
+
+msgid "No persons or contacts found for <1>%s</1>"
+msgstr "Nie znaleziono osób ani kontaktów dla <1>%s</1>"
+
+msgid "Unsupported file type"
+msgstr "Nieobsługiwany typ pliku"
+
+msgid "Close"
+msgstr "Zamknij"
+
+msgid "Download"
+msgstr "Pobierz"
+
+msgid "Only admins and users can access to our web app."
+msgstr "Tylko administratorzy i użytkownicy mają dostęp do naszej aplikacji internetowej."
+
+msgid "You are not logged in."
+msgstr "Nie jesteś zalogowany."
+
+msgid "Invalid token."
+msgstr "Nieprawidłowy token."
+
+msgid "Incorrect username or password."
+msgstr "Nieprawidłowa nazwa użytkownika lub hasło."
+
+msgid "An error has occurred. Please try again later."
+msgstr "Wystąpił błąd. Spróbuj ponownie później."
+
+msgid "Username"
+msgstr "Nazwa użytkownika"
+
+msgid "Password"
+msgstr "Hasło"
+
+msgid "Log in"
+msgstr "Zaloguj się"
+
+msgid "Welcome"
+msgstr "Witaj"
+
+msgid "We are validating your session, please wait."
+msgstr "Weryfikujemy twoją sesję, proszę czekać."
+
+msgid "Please login to start"
+msgstr "Zaloguj się, aby rozpocząć"
+
+msgid "Search For Messages"
+msgstr "Wyszukaj wiadomości"
+
+msgid "This chat could not be assigned as its assignments have been changed by another user recently."
+msgstr ""
+"Nie można przypisać tego czatu, ponieważ jego przypisania zostały zmienione przed chwilą, przez innego użytkownika."
+
+msgid "This contact has no phone number."
+msgstr "Ten kontakt nie ma numeru telefonu."
+
+msgid ""
+"This chat is already assigned to another user. You can change the assignment of this chat only if the current person "
+"will unassign themselves or someone with admin access will clear the assignment."
+msgstr ""
+"Ten czat jest już przypisany do innego użytkownika. Możesz zmienić przypisanie tego czatu tylko wtedy, gdy bieżąca "
+"osoba cofnie przypisanie siebie lub ktoś z dostępem administratora usunie ustawienie."
+
+msgid "You can assign this chat to a user or a group."
+msgstr "Możesz przypisać ten czat do użytkownika lub grupy."
+
+msgid "Unassigned"
+msgstr "Nieprzypisany"
+
+msgid "Update"
+msgstr "Aktualizacja"
+
+msgid "Chat tags"
+msgstr "Tagi czatu"
+
+msgid "You can add or remove tags for this chat."
+msgstr "Możesz dodawać lub usuwać tagi dla tego czatu."
+
+msgid "Current tags"
+msgstr "Aktualne tagi"
+
+msgid "Empty"
+msgstr "Puste"
+
+msgid "Manage tags"
+msgstr "Zarządzaj tagami"
+
+msgid "Tags"
+msgstr "Tagi"
+
+msgid "You can filter chats by tags."
+msgstr "Możesz filtrować czaty według tagów."
+
+msgid "Contact Details"
+msgstr "Szczegóły kontaktu"
+
+msgid "Contact details"
+msgstr "Dane kontaktowe"
+
+msgid "Never"
+msgstr "Nigdy"
+
+msgid "WhatsApp Phone Number"
+msgstr "Numer telefonu WhatsApp"
+
+msgid "Assigned to: <1>%s</1>"
+msgstr "Przypisany do: <1>%s</1>"
+
+msgid "Assigned group: <1>%s</1>"
+msgstr "Przypisana grupa: <1>%s</1>"
+
+msgid "Phone number"
+msgstr "Numer telefonu"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Loading: %s"
+msgstr "Ładowanie: %s"
+
+msgid "Contact us"
+msgstr "Skontaktuj się z nami"
+
+msgid "Skip"
+msgstr "Pomiń"
+
+msgid "Something went wrong, this will be fixed automatically"
+msgstr "Coś poszło nie tak, zostanie to naprawione automatycznie"
+
+msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
+msgstr ""
+"Na czacie są niewysłane wiadomości. Jeśli będziesz kontynuować, zostaną one usunięte. Czy na pewno chcesz kontynuować?"
+
+msgid "An error has occurred."
+msgstr "Wystąpił błąd."
+
+msgid "Saved as response successfully!"
+msgstr "Zapisano pomyślnie jako odpowiedź!"
+
+msgid "Deleted response successfully!"
+msgstr "Usunięto odpowiedź pomyślnie!"
+
+msgid "Hey"
+msgstr "Hej"
+
+msgid "Choose a contact to start a conversation"
+msgstr "Wybierz kontakt, aby rozpocząć rozmowę"
+
+msgid "Expired"
+msgstr "Czas minął"
+
+msgid "Failed to send some messages!"
+msgstr "Nie udało się wysłać kilku wiadomości!"
+
+msgid "Assign chat"
+msgstr "Przypisz czat"
+
+msgid "Change tags"
+msgstr "Zmień tagi"
+
+msgid "Toggle assignment and tagging history"
+msgstr "Przełącz historię przypisań i tagów"
+
+msgid "Preview"
+msgstr "Podgląd"
+
+msgid "Add a caption..."
+msgstr "Dodaj podpis..."
+
+msgid "Add more"
+msgstr "Dodaj więcej"
+
+msgid "Drag and drop here"
+msgstr "Przeciągnij i upuść tutaj"
+
+msgid "No response message have been saved yet."
+msgstr "Nie zapisano jeszcze żadnej odpowiedzi."
+
+msgid "Send"
+msgstr "Wyślij"
+
+msgid "Oops!"
+msgstr "Ups!"
+
+msgid "Are you sure you want to delete this saved response?"
+msgstr "Czy na pewno chcesz usunąć tę zapisaną odpowiedź?"
+
+msgid "Yes"
+msgstr "Tak"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "This chat has expired. You need to answer with template messages."
+msgstr "Ten czat wygasł. Musisz odpowiedzieć szablonem wiadomości."
+
+msgid "Type a message"
+msgstr "Wpisz wiadomość"
+
+msgid "Send a message"
+msgstr "Wyślij wiadomość"
+
+msgid "You must grant microphone permission."
+msgstr "Musisz przyznać dostęp do mikrofonu."
+
+msgid "This feature is not supported on your browser."
+msgstr "Ta funkcja nie jest obsługiwana w twojej przeglądarce."
+
+msgid "You must open the inbox in a new tab to access this feature."
+msgstr "Aby uzyskać dostęp do tej funkcji, musisz otworzyć skrzynkę odbiorczą w nowej karcie."
+
+msgid "Go to inbox"
+msgstr "Idź do skrzynki odbiorczej"
+
+msgid "Forwarded"
+msgstr "Przekazano"
+
+msgid "Document"
+msgstr "Dokument"
+
+msgid "Save this response"
+msgstr "Zapisz tę odpowiedź"
+
+msgid ""
+"Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check "
+"again in a while, sorry!"
+msgstr ""
+"Twój szablon został pomyślnie wysłany do użytkownika, jednak nie mogliśmy załadować szablonu w tej chwili. Sprawdź "
+"ponownie później, przepraszamy!"
+
+msgid "Missing template"
+msgstr "Brakujący szablon"
+
+msgid "Template message"
+msgstr "Szablon wiadomości"
+
+msgid "Interactive message"
+msgstr "Wiadomość interaktywna"
+
+msgid "Image"
+msgstr "Obraz"
+
+msgid "Video"
+msgstr "Film"
+
+msgid "Voice"
+msgstr "Głos"
+
+msgid "Audio"
+msgstr "Dźwięk"
+
+msgid "Sticker"
+msgstr "Naklejka"
+
+msgid "Template"
+msgstr "Szablon"
+
+msgid "Interactive"
+msgstr "Interaktywny"
+
+msgid "<0>%(username)s</0> has added tag: <6></6><7>%(tag)s</7>."
+msgstr "<0>%(username)s</0> dodał(a) tag: <6></6><7>%(tag)s</7>."
+
+msgid "<0>%(username)s</0> has removed tag: <6></6><7>%(tag)s</7>."
+msgstr "<0>%(username)s</0> usunął(eła) tag: <6></6><7>%(tag)s</7>."
+
+msgid "A tag was added: <4></4><5>%(tag)s</5>."
+msgstr "Dodano tag: <4></4><5>%(tag)s</5>."
+
+msgid "A tag was removed: <4></4><5>%(tag)s</5>."
+msgstr "Tag został usunięty: <4></4><5>%(tag)s</5>."
+
+msgid "Delete"
+msgstr "Usuń"
+
+msgid "Bulk send"
+msgstr "Wyślij zbiorczo"
+
+msgid "Bulk Send"
+msgstr "Wyślij Zbiorczo"
+
+msgid "Send a template message"
+msgstr "Wyślij szablon wiadomości"
+
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
+msgstr "Wybrano %(contacts_count)d kontakt(ów) i %(tags_count)d znacznik(i)."
+
+msgid "Started at <1></1>"
+msgstr "Rozpoczęto o <1></1>"
+
+msgid "Automotive"
+msgstr "Usługi motoryzacyjne"
+
+msgid "Beauty, Spa and Salon"
+msgstr "Uroda, kosmetyka i higiena osobista"
+
+msgid "Clothing and Apparel"
+msgstr "Odzież"
+
+msgid "Education"
+msgstr "Edukacja"
+
+msgid "Entertainment"
+msgstr "Sztuka i rozrywka"
+
+msgid "Event Planning and Service"
+msgstr "Planowanie imprez"
+
+msgid "Finance and Banking"
+msgstr "Finanse"
+
+msgid "Food and Grocery"
+msgstr "Sklep spożywczy"
+
+msgid "Public Service"
+msgstr "Służby publiczne"
+
+msgid "Hotel and Lodging"
+msgstr "Hotel"
+
+msgid "Medical and Health"
+msgstr "Zdrowie i medycyna"
+
+msgid "Non-profit"
+msgstr "Organizacja non profit"
+
+msgid "Professional Services"
+msgstr "Usługi profesjonalne"
+
+msgid "Shopping and Retail"
+msgstr "Zakupy i sprzedaż detaliczna"
+
+msgid "Travel and Transportation"
+msgstr "Podróże i transport"
+
+msgid "Restaurant"
+msgstr "Restauracja"
+
+msgid "Other"
+msgstr "Inne"
+
+msgid "Personal Profile"
+msgstr "Profil osobisty"
+
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Change password"
+msgstr "Zmień hasło"
+
+msgid "Business Profile"
+msgstr "Profil firmy"
+
+msgid "Loading"
+msgstr "Ładowanie"
+
+msgid "About"
+msgstr "Informacje"
+
+msgid "Address"
+msgstr "Adres"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "None"
+msgstr "Brak"
+
+msgid "Vertical"
+msgstr "Branża"
+
+msgid "You must fill all fields!"
+msgstr "Musisz wypełnić wszystkie pola!"
+
+msgid "Passwords must match!"
+msgstr "Hasła muszą pasować!"
+
+msgid "Changed password successfully"
+msgstr "Pomyślnie zmieniono hasło"
+
+msgid "Current password"
+msgstr "Aktualne hasło"
+
+msgid "New password"
+msgstr "Nowe hasło"
+
+msgid "New password (repeat)"
+msgstr "Nowe hasło (powtórz)"
+
+msgid "Error"
+msgstr "Błąd"
+
+msgid "Success"
+msgstr "Sukces"
+
+msgid "Change"
+msgstr "Zmiana"
+
+msgid "Click to retry."
+msgstr "Kliknij, aby spróbować ponownie."
+
+msgid "Last attempt at: <1></1>"
+msgstr "Ostatnia próba o: <1></1>"
+
+msgid "New messages"
+msgstr "Nowe wiadomości"
+
+msgid "You have new messages!"
+msgstr "Masz nowe wiadomości!"
+
+msgid "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
+msgid_plural "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
+msgstr[0] "Wyświetlone tylko: <1></1> <3>%(tag)s</3> (%(count)d czat)"
+msgstr[1] "Wyświetlone tylko: <1></1> <3>%(tag)s</3> (%(count)d czaty)"
+msgstr[2] "Wyświetlone tylko: <1></1> <3>%(tag)s</3> (%(count)d czatów)"
+
+msgid "Click to clear filter"
+msgstr "Kliknij, aby wyczyścić filtr"
+
+msgid "All"
+msgstr "Wszystkie"
+
+msgid "Me"
+msgstr "Ja"
+
+msgid "Group"
+msgstr "Grupa"
+
+msgid "Messages"
+msgstr "Wiadomości"
+
+msgid "Refresh"
+msgstr "Odśwież"
+
+msgid "Refresh contacts"
+msgstr "Odśwież kontakty"
+
+msgid "Admin panel"
+msgstr "Panel administracyjny"
+
+msgid "Settings (App Only)"
+msgstr "Ustawienia (tylko aplikacja)"
+
+msgid "Logout"
+msgstr "Wyloguj"
+
+msgid "%d new messages"
+msgstr "%d nowych wiadomości"
+
+msgid "%s left"
+msgstr "Pozostało %s"
+
+msgid "Status"
+msgstr "Stan"
+
+msgid "Uploading a media file. Please wait..."
+msgstr "Przesyłanie pliku multimedialnego. Proszę czekać..."
+
+msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
+msgstr "Nie można wysłać wiadomości masowej (ID: %s) do odbiorcy."
+
+msgid "Recipient: <1>%s</1>"
+msgstr "Odbiorca: <1>%s</1>"
+
+msgid "Message: <1>%s</1>"
+msgstr "Wiadomość: <1>%s</1>"
+
+msgid "Notifications"
+msgstr "Powiadomienia"
+
+msgid "You have no notifications"
+msgstr "Nie masz powiadomień"
+
+msgid "Options"
+msgstr "Opcje"
+
+msgid "Location"
+msgstr "Lokalizacja"
+
+msgid "Location: <1>%s</1>"
+msgstr "Lokalizacja: <1>%s</1>"
+
+msgid "<0>Product retailer ID<0>: %s"
+msgstr "<0>Identyfikator sprzedawcy produktu <0>: %s"
+
+msgid "<0>Catalog ID</0>: %s"
+msgstr "<0>Identyfikator katalogu</ 0>: %s"
+
+msgid "<0>Quantity</0>: %d"
+msgstr "<0>Ilość</ 0>: %d"
+
+msgid "<0>Price</0>: %d %s"
+msgstr "<0>Cena</0>: %d %s"
+
+msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
+msgstr "W aplikacji WhatsApp zdjęcie profilowe twojej firmy ma większą rozdzielczość niż tutaj."
+
+msgid "Copied!"
+msgstr "Skopiowano!"
+
+msgid "Missing parameters"
+msgstr "Brakujące parametry"
+
+msgid "You need to fill the parameters!"
+msgstr "Musisz wypełnić parametry!"
+
+msgid "Enter a link to file"
+msgstr "Wprowadź link do pliku"
+
+msgid "Link to file"
+msgstr "Link do pliku"
+
+msgid "Upload a file"
+msgstr "Prześlij plik"
+
+msgid "Enter a link to file instead"
+msgstr "Zamiast tego wprowadź link do pliku"
+
+msgid "Upload a file instead"
+msgstr "Zamiast tego prześlij plik"
+
+msgid "Type: %s"
+msgstr "Typ: %s"
+
+msgid "Retry"
+msgstr "Ponów próbę"
+
+msgid "We are loading initial resources, please wait..."
+msgstr "Ładujemy początkowe zasoby, proszę czekać..."
+
+msgid "Upload CSV"
+msgstr "Prześlij plik CSV"
+
+msgid "Next"
+msgstr "Dalej"
+
+msgid "Bulk send a template"
+msgstr "Wiadomość masowa z szablonu"
+
+msgid "Bulk send a voice message"
+msgstr "Wiadomość masowa głosowa"
+
+msgid "Bulk send template with CSV"
+msgstr "Wiadomość masowa z szablonu i CSV"
+
+msgid "Please select up to %s direct recipients."
+msgstr "Proszę wybierz maksymalnie %s bezpośrednich odbiorców."
+
+msgid "Please select tags that target up to %s recipients in total."
+msgstr "Proszę wybierz tagi skierowane maksymalnie do %s odbiorców."
+
+msgid "Search"
+msgstr "Wyszukaj"
+
+msgid "Search for contacts"
+msgstr "Wyszukaj kontakty"
+
+msgid "Message via ad"
+msgstr "Wiadomość z reklamy"
+
+msgid "Message via post"
+msgstr "Wiadomość z posta"
+
+msgid "The language pack for this template is not installed on the server yet, try sending this message later"
+msgstr ""
+"Pakiet językowy dla tego szablonu nie jest jeszcze zainstalowany na serwerze, spróbuj wysłanie tej wiadomości później"
+
+msgid "You can assign this chat to yourself and unassign from yourself."
+msgstr "Możesz przypisać ten czat do siebie i cofnąć przypisanie do siebie."
+
+msgid "You can assign this chat to a group."
+msgstr "Możesz przypisać ten czat do grupy."
+
+msgid ""
+"This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin "
+"access will clear the assignment."
+msgstr ""
+"Ten czat jest już przypisany do grupy. Możesz zmienić przypisanie tego czatu tylko wtedy, gdy ktoś z uprawnieniami "
+"administratora usunie przypisanie."
+
+msgid "Register templates"
+msgstr "Zarejestruj szablony"
+
+msgid "Click here to refresh"
+msgstr "Kliknij tutaj, aby odświeżyć"
+
+msgid "Templates are refreshed successfully."
+msgstr "Szablony zostały odświeżone pomyślnie."
+
+msgid "Template messages couldn't be loaded."
+msgstr "Nie można załadować szablonów wiadomości."
+
+msgid "No templates have been registered yet."
+msgstr "Żaden szablon nie został jeszcze zarejestrowany."
+
+msgid "Refreshing..."
+msgstr "Odświeżanie..."
+
+msgid "Too many attempts to refresh templates! Please try again in a while."
+msgstr "Zbyt wiele prób odświeżenia szablonów! Spróbuj ponownie za chwilę."
+
+msgid "Failed to load templates. Please try again in a while."
+msgstr "Nie udało się załadować szablonów. Spróbuj ponownie za chwilę."
+
+msgid "Failed to issue a template refresh request. Please try again in a while."
+msgstr "Nie udało się uruchomić odświeżenia szablonu. Spróbuj ponownie za chwilę."
+
+msgid "Please enter a valid username and password!"
+msgstr "Proszę wprowadzić poprawną nazwę użytkownika i hasło!"
+
+msgid "Please choose a supported image type (png, jpg)"
+msgstr "Wybierz spośród wspieranych typ obrazu (png, jpg)"
+
+msgid "Please choose a supported video type (mp4, 3gp)"
+msgstr "Wybierz spośród wspieranych typów wideo (mp4, 3gp)"
+
+msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
+msgstr "Wybierz spośród wspieranych typów pliku (png, jpg, mp4, 3gp)"
+
+msgid "Send bulk voice message"
+msgstr "Wyślij masową wiadomość głosową"
+
+msgid "Click to record your message"
+msgstr "Kliknij, aby nagrać wiadomość"
+
+msgid "Documents"
+msgstr "Dokumenty"
+
+msgid "Attachment"
+msgstr "Załącznik"
+
+msgid "More"
+msgstr "Więcej"
+
+msgid "Emoji"
+msgstr "Emoji"
+
+msgid "You can only send voice messages to users who wrote to you in last 24h."
+msgstr "Możesz wysyłać wiadomości głosowe tylko do użytkowników, którzy napisali do Ciebie w ciągu ostatnich 24 godzin."
+
+msgid "You don't have any chats yet."
+msgstr "Nie masz jeszcze żadnych czatów."
+
+msgid "Images & Videos"
+msgstr "Obrazy i wideo"
+
+msgid "Not seeing your new templates?"
+msgstr "Nie widzisz swoich nowych szablonów?"
+
+msgid "Chats"
+msgstr "Czaty"
+
+msgid ""
+"To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our "
+"integrations page."
+msgstr ""
+"Aby móc udostępniać kontakty, musisz skorzystać z jednego z naszych dostawców kontaktów<1>Kliknij tutaj</1>, aby "
+"przejść do naszej strony integracji."
+
+msgid "Send contacts"
+msgstr "Wyślij kontakty"
+
+msgid "No results found."
+msgstr "Nie znaleziono wyników."
+
+msgid "Search quick actions"
+msgstr "Wyszukaj szybkie akcje"
+
+msgid "This chat will expire in %s"
+msgstr "Ten czat wygaśnie za %s"
+
+msgid "Templates"
+msgstr "Szablony"
+
+msgid "Filter chats by tag"
+msgstr "Filtruj czaty według tagu"
+
+msgid "Change inbox URL"
+msgstr "Zmień adres URL skrzynki odbiorczej"
+
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Delete profile photo"
+msgstr "Usuń zdjęcie profilowe"
+
+msgid "Start a chat"
+msgstr "Rozpocznij czat"
+
+msgid "Camera"
+msgstr "Aparat"
+
+msgid "Gallery"
+msgstr "Galeria"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Preparing"
+msgstr "Przygotowanie"
+
+msgid "Recording"
+msgstr "Nagrywanie"
+
+msgid "Toggle event history"
+msgstr "Przełącz historię zdarzeń"
+
+msgid "Register Templates"
+msgstr "Zarejestruj szablony"
+
+msgid "Saved Responses"
+msgstr "Zapisane odpowiedzi"
+
+msgid "Expired (commands only)"
+msgstr "Wygasł (tylko polecenia)"
+
+msgid "Back"
+msgstr "Wstecz"
+
+msgid "Change your inbox URL"
+msgstr "Zmień adres URL swojej skrzynki odbiorczej"
+
+msgid "Please enter your get.chat inbox link (URL)"
+msgstr "Wprowadź link do swojej skrzynki odbiorczej get.chat (URL)"
+
+msgid "Complete the link automatically"
+msgstr "Uzupełnij link automatycznie"
+
+msgid "You don't have an inbox yet?"
+msgstr "Nie masz jeszcze skrzynki odbiorczej?"
+
+msgid "Continue"
+msgstr "Kontynuuj"
+
+msgid "Please enter a valid URL."
+msgstr "Proszę wprowadzić poprawny adres URL."
+
+msgid "Please enter a valid inbox link"
+msgstr "Wprowadź poprawny link do skrzynki odbiorczej"
+
+msgid "Successful! Your inbox link works!"
+msgstr "Udało się! Link do skrzynki odbiorczej działa!"
+
+msgid "Chat"
+msgstr "Czat"
+
+msgid "Developer Options"
+msgstr "Opcje programisty"
+
+msgid "Available tags"
+msgstr "Dostępne tagi"
+
+msgid "Notification sounds"
+msgstr "Dźwięki powiadomień"
+
+msgid "Assign this chat"
+msgstr "Przypisz ten czat"
+
+msgid "Search for a message"
+msgstr "Wyszukaj wiadomość"
+
+msgid "Send this template"
+msgstr "Wyślij ten szablon"
+
+msgid "Send a saved response"
+msgstr "Wyślij zapisaną odpowiedź"
+
+msgid "Send this saved response"
+msgstr "Wyślij tę zapisaną odpowiedź"
+
+msgid "Users"
+msgstr "Użytkownicy"
+
+msgid "Groups"
+msgstr "Grupy"
+
+msgid "%dh"
+msgstr "%dh"
+
+msgid "%dm"
+msgstr "%dm"
+
+msgid ""
+"Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired "
+"chats, use <2>Bulk send a template</2> function."
+msgstr ""
+"Wiadomości sesyjne mogą być wysyłane tylko do odbiorców, którzy napisali do Ciebie w ciągu ostatnich 24 godzin. Aby "
+"wysyłać wiadomości do wygasłych czatów, użyj funkcji <2>Wiadomości masowej z szablonem</2>."
+
+msgid "Search, filter by tags, time, etc."
+msgstr "Szukaj, filtruj według tagów, czasu itp."
+
+msgid "Assigned to me"
+msgstr "Przypisany do mnie"
+
+msgid "Assigned group"
+msgstr "Przypisana grupa"
+
+msgid "Tag"
+msgstr "Tag"
+
+msgid "Time"
+msgstr "Czas"
+
+msgid "Done"
+msgstr "Gotowe"
+
+msgid "Today"
+msgstr "Dzisiaj"
+
+msgid "Yesterday"
+msgstr "Wczoraj"
+
+msgid "This week"
+msgstr "W tym tygodniu"
+
+msgid "Last week"
+msgstr "Poprzedni tydzień"
+
+msgid "This month"
+msgstr "W tym miesiącu"
+
+msgid "Last month"
+msgstr "Ostatni miesiąc"
+
+msgid "Last Saturday"
+msgstr "Ostatnia sobota"
+
+msgid "Last Sunday"
+msgstr "Ostatnia niedziela"
+
+msgid "User"
+msgstr "Użytkownik"
+
+msgid "Quick Actions"
+msgstr "Szybkie akcje"
