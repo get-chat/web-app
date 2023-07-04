@@ -100,6 +100,7 @@ import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 
+const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
 
 const Sidebar: React.FC<any> = ({
@@ -493,7 +494,10 @@ const Sidebar: React.FC<any> = ({
 				const el = e.target;
 
 				if (el instanceof Element && isScrollable(el)) {
-					if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+					if (
+						el.scrollHeight - el.scrollTop - el.clientHeight <
+						CHAT_LIST_SCROLL_OFFSET
+					) {
 						listChats(
 							cancelTokenSourceRef.current,
 							false,
