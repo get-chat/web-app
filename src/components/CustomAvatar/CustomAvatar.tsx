@@ -37,6 +37,7 @@ const CustomAvatar: React.FC<Props> = ({
 	return (
 		<Avatar
 			className={cx({
+				customAvatar: true,
 				[className ?? '']: true,
 				light: !Boolean(style?.backgroundColor ?? bgColor),
 			})}

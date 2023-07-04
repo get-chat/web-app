@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
 	CircularProgress,
@@ -98,6 +98,7 @@ import {
 import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
+import { ViewportList } from 'react-viewport-list';
 
 const cx = classNames.bind(styles);
 
@@ -166,6 +167,22 @@ const Sidebar: React.FC<any> = ({
 	const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState<
 		(EventTarget & Element) | null
 	>(null);
+
+	const filteredChats = useMemo(
+		() =>
+			Object.values(chats).filter((chat) => {
+				// Filter by helper method
+				return filterChat(
+					currentUser,
+					chat,
+					filterTagId,
+					filterAssignedToMe,
+					filterAssignedGroupId
+				);
+			}),
+		[chats, currentUser, filterTagId, filterAssignedToMe, filterAssignedGroupId]
+	);
+
 	const [keyword, setKeyword] = useState('');
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState({});
@@ -186,6 +203,7 @@ const Sidebar: React.FC<any> = ({
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
+	const chatListRef = useRef<HTMLDivElement | null>(null);
 	const timer = useRef<NodeJS.Timeout>();
 
 	const navigate = useNavigate();
@@ -1114,22 +1132,12 @@ const Sidebar: React.FC<any> = ({
 					<h3>{t('Chats')}</h3>
 				)}
 
-				<div className="sidebar__results__chats">
-					{Object.entries(chats)
-						.filter((chat) => {
-							// Filter by helper method
-							return filterChat(
-								currentUser,
-								chat[1],
-								filterTagId,
-								filterAssignedToMe,
-								filterAssignedGroupId
-							);
-						})
-						.map((chat) => (
+				<div className="sidebar__results__chats" ref={chatListRef}>
+					<ViewportList viewportRef={chatListRef} items={filteredChats}>
+						{(item) => (
 							<ChatListItem
-								key={chat[0]}
-								chatData={chat[1]}
+								key={item.waId}
+								chatData={item}
 								pendingMessages={pendingMessages}
 								newMessages={newMessages}
 								keyword={searchedKeyword}
@@ -1142,7 +1150,8 @@ const Sidebar: React.FC<any> = ({
 								selectedChats={selectedChats}
 								setSelectedChats={setSelectedChats}
 							/>
-						))}
+						)}
+					</ViewportList>
 
 					{Object.keys(chats).length === 0 && (
 						<span className="sidebar__results__chats__noResult">
