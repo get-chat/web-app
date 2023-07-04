@@ -140,6 +140,7 @@ const Sidebar: React.FC<any> = ({
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
+	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const groups = useAppSelector((state) => state.groups.value);
 
@@ -241,6 +242,9 @@ const Sidebar: React.FC<any> = ({
 	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
 	useEffect(() => {
+		// Trigger loading indicator
+		setLoadingChats(true);
+
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
@@ -524,11 +528,9 @@ const Sidebar: React.FC<any> = ({
 		}
 
 		// Reset chats count
-		dispatch(setChatsCount(undefined));
+		//dispatch(setChatsCount(undefined));
 
-		if (replaceAll) {
-			setLoadingChats(true);
-		}
+		setLoadingChats(true);
 
 		// Convert dates to Unix timestamps
 		const messagesSinceTime = filterStartDate
@@ -837,7 +839,7 @@ const Sidebar: React.FC<any> = ({
 
 			<ClickAwayListener
 				onClickAway={() => {
-					if (!isAnyActiveFilter && isLoaded) {
+					if (!keyword && !isAnyActiveFilter && isLoaded) {
 						setFiltersVisible(false);
 					}
 				}}
@@ -848,7 +850,7 @@ const Sidebar: React.FC<any> = ({
 						expanded: isForceDisplayFilters,
 					})}
 				>
-					<Collapse in={isAnyActiveFilter}>
+					<Collapse in={Boolean(isAnyActiveFilter || keyword)}>
 						<div
 							className={cx({
 								filterGroup: true,
@@ -903,46 +905,68 @@ const Sidebar: React.FC<any> = ({
 					/>
 
 					<Collapse in={isForceDisplayFilters}>
-						<div
-							className={cx({
-								filterGroup: true,
-								all: true,
-							})}
-						>
-							{!filterAssignedToMe && (
+						<>
+							<div
+								className={cx({
+									filterGroup: true,
+									all: true,
+								})}
+							>
+								{!filterAssignedToMe && (
+									<FilterOption
+										icon={<PersonIcon />}
+										label={t('Assigned to me')}
+										onClick={() => setFilterAssignedToMe(true)}
+									/>
+								)}
 								<FilterOption
-									icon={<PersonIcon />}
-									label={t('Assigned to me')}
-									onClick={() => setFilterAssignedToMe(true)}
-								/>
-							)}
-							<FilterOption
-								icon={<GroupIcon />}
-								label={t('Assigned group')}
-								onClick={(event: MouseEvent) => {
-									if (event.currentTarget instanceof Element) {
-										setGroupsMenuAnchorEl(event.currentTarget);
-									}
-								}}
-							/>
-							{tags?.length > 0 && (
-								<FilterOption
-									icon={<SellIcon />}
-									label={t('Tag')}
+									icon={<GroupIcon />}
+									label={t('Assigned group')}
 									onClick={(event: MouseEvent) => {
 										if (event.currentTarget instanceof Element) {
-											setTagsMenuAnchorEl(event.currentTarget);
+											setGroupsMenuAnchorEl(event.currentTarget);
 										}
 									}}
 								/>
+								{tags?.length > 0 && (
+									<FilterOption
+										icon={<SellIcon />}
+										label={t('Tag')}
+										onClick={(event: MouseEvent) => {
+											if (event.currentTarget instanceof Element) {
+												setTagsMenuAnchorEl(event.currentTarget);
+											}
+										}}
+									/>
+								)}
+								<FilterOption
+									icon={<DateRangeIcon />}
+									label={t('Time')}
+									onClick={() => setDateRangeDialogVisible(true)}
+								/>
+							</div>
+
+							{(keyword || isAnyActiveFilter) && (
+								<div className={styles.chatsCount}>
+									{isLoadingChats && <CircularProgress size={14} />}
+									{isLoadingChats ? (
+										t('Loading chats')
+									) : (
+										<Trans
+											count={chatsCount ?? 0}
+											values={{
+												postProcess: 'sprintf',
+												sprintf: [chatsCount ?? 0],
+											}}
+										>
+											%d chat found
+										</Trans>
+									)}
+								</div>
 							)}
-							<FilterOption
-								icon={<DateRangeIcon />}
-								label={t('Time')}
-								onClick={() => setDateRangeDialogVisible(true)}
-							/>
-						</div>
+						</>
 					</Collapse>
+
 					<Menu
 						className={styles.filterMenu}
 						anchorEl={tagsMenuAnchorEl}

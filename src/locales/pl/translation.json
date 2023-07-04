@@ -291,5 +291,9 @@
 	"Start week on": "Rozpocznij tydzień",
 	"Saturday": "Sobota",
 	"Sunday": "Niedziela",
-	"Monday": "Poniedziałek"
+	"Monday": "Poniedziałek",
+	"%d chat found_one": "%d chat found",
+	"%d chat found_few": "%d chats found",
+	"%d chat found_many": "",
+	"Loading chats": ""
 }

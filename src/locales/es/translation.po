@@ -935,3 +935,11 @@ msgstr "Domingo"
 
 msgid "Monday"
 msgstr "Lunes"
+
+msgid "%d chat found"
+msgid_plural "%d chats found"
+msgstr[0] "%d chat found"
+msgstr[1] "%d chats found"
+
+msgid "Loading chats"
+msgstr ""

@@ -352,7 +352,7 @@ msgid "Cancel"
 msgstr "İptal"
 
 msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
-msgstr ""
+msgstr "%(contacts_count)d kontak ve %(tags_count)d etiket seçildi."
 
 msgid "Started at <1></1>"
 msgstr "Başladı <1></1>"
@@ -937,3 +937,11 @@ msgstr "Pazar"
 
 msgid "Monday"
 msgstr "Pazartesi"
+
+msgid "%d chat found"
+msgid_plural "%d chats found"
+msgstr[0] "%d sohbet bulundu"
+msgstr[1] "%d sohbet bulundu"
+
+msgid "Loading chats"
+msgstr "Sohbetler yükleniyor"
