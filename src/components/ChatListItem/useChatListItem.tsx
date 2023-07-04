@@ -1,15 +1,10 @@
 // @ts-nocheck
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment/moment';
 import { getDroppedFiles } from '@src/helpers/FileHelper';
 import PubSub from 'pubsub-js';
-import {
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
-	EVENT_TOPIC_DROPPED_FILES,
-} from '@src/Constants';
+import { EVENT_TOPIC_DROPPED_FILES } from '@src/Constants';
 import { useTranslation } from 'react-i18next';
 
 const useChatListItem = ({ props }) => {
@@ -63,7 +58,7 @@ const useChatListItem = ({ props }) => {
 		return false;
 	};
 
-	const isGroupAssignmentChipVisible = () => {
+	const isGroupAssignmentChipVisible = useMemo(() => {
 		if (
 			!props.filterAssignedToMe &&
 			!props.filterAssignedGroupId &&
@@ -86,15 +81,20 @@ const useChatListItem = ({ props }) => {
 		}
 
 		return false;
-	};
+	}, [
+		props.filterAssignedToMe,
+		props.filterAssignedGroupId,
+		props.assignedToUser,
+		props.assignedGroup,
+	]);
 
-	const generateTagNames = () => {
+	const generateTagNames = useCallback(() => {
 		const generatedTagNames = [];
 		data.tags?.forEach((tag) => {
 			generatedTagNames.push(tag.name);
 		});
 		return generatedTagNames.join(', ');
-	};
+	}, [data.tags]);
 
 	useEffect(() => {
 		if (
@@ -189,7 +189,7 @@ const useChatListItem = ({ props }) => {
 		}
 	};
 
-	const hasFailedMessages = () => {
+	const hasFailedMessages = useMemo(() => {
 		let result = false;
 		props.pendingMessages.forEach((pendingMessage) => {
 			if (
@@ -200,7 +200,7 @@ const useChatListItem = ({ props }) => {
 		});
 
 		return result;
-	};
+	}, [data.waId, props.pendingMessages]);
 
 	return {
 		data,
