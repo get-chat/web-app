@@ -48,7 +48,6 @@ function ChatMessageOptionsMenu({
 			anchorEl={menuAnchorEl}
 			anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-			keepMounted
 			open={Boolean(menuAnchorEl)}
 			onClose={hideMenu}
 			elevation={3}

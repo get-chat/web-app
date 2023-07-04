@@ -1136,7 +1136,7 @@ const Sidebar: React.FC<any> = ({
 					<ViewportList
 						viewportRef={chatListRef}
 						items={filteredChats}
-						overscan={0}
+						overscan={5}
 					>
 						{(item) => (
 							<ChatListItem
