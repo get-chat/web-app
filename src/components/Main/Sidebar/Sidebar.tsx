@@ -474,7 +474,7 @@ const Sidebar: React.FC<any> = ({
 	}, [missingChats]);
 
 	useEffect(() => {
-		const chatsContainerCopy = chatsContainer.current;
+		const chatsContainerCopy = chatListRef.current;
 
 		// To optimize scroll event
 		let debounceTimer: NodeJS.Timeout;
@@ -1133,7 +1133,11 @@ const Sidebar: React.FC<any> = ({
 				)}
 
 				<div className="sidebar__results__chats" ref={chatListRef}>
-					<ViewportList viewportRef={chatListRef} items={filteredChats}>
+					<ViewportList
+						viewportRef={chatListRef}
+						items={filteredChats}
+						overscan={0}
+					>
 						{(item) => (
 							<ChatListItem
 								key={item.waId}
@@ -1152,24 +1156,24 @@ const Sidebar: React.FC<any> = ({
 							/>
 						)}
 					</ViewportList>
-
-					{Object.keys(chats).length === 0 && (
-						<span className="sidebar__results__chats__noResult">
-							{searchedKeyword.trim().length > 0 ? (
-								<span>
-									<Trans>
-										No chats found for:{' '}
-										<span className="searchOccurrence">{searchedKeyword}</span>
-									</Trans>
-								</span>
-							) : (
-								!isLoadingChats && (
-									<span>{t("You don't have any chats yet.")}</span>
-								)
-							)}
-						</span>
-					)}
 				</div>
+
+				{Object.keys(chats).length === 0 && (
+					<span className="sidebar__results__chats__noResult">
+						{searchedKeyword.trim().length > 0 ? (
+							<span>
+								<Trans>
+									No chats found for:{' '}
+									<span className="searchOccurrence">{searchedKeyword}</span>
+								</Trans>
+							</span>
+						) : (
+							!isLoadingChats && (
+								<span>{t("You don't have any chats yet.")}</span>
+							)
+						)}
+					</span>
+				)}
 
 				{searchedKeyword.trim().length > 0 &&
 					getObjLength(contactResults) > 0 && (

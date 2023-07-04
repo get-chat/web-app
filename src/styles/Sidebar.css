@@ -95,6 +95,8 @@
 
 .sidebar__results {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
 	background-color: white;
 	overflow-y: auto;
 }
@@ -106,7 +108,8 @@
 }
 
 .sidebar__results__chats {
-	margin-bottom: 20px;
+	overflow-y: auto;
+	flex: 1;
 }
 
 .sidebar__results__chats__noResult {
