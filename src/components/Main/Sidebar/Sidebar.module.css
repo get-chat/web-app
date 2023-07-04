@@ -54,3 +54,13 @@
 	word-wrap: normal;
 	word-break: break-all;
 }
+
+.chatList {
+	overflow-y: auto;
+	flex: 1;
+}
+
+.chatList.unpacked {
+	overflow-y: hidden;
+	flex: none;
+}

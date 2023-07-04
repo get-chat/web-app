@@ -107,11 +107,6 @@
 	color: var(--color-primary);
 }
 
-.sidebar__results__chats {
-	overflow-y: auto;
-	flex: 1;
-}
-
 .sidebar__results__chats__noResult {
 	display: block;
 	color: rgba(0, 0, 45, 0.6);

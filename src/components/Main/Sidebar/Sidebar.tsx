@@ -160,7 +160,6 @@ const Sidebar: React.FC<any> = ({
 	} = useChatFilters();
 
 	const { waId } = useParams();
-	const chatsContainer = useRef<HTMLDivElement>(null);
 	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
 		null
 	);
@@ -1077,7 +1076,7 @@ const Sidebar: React.FC<any> = ({
 				</div>
 			</ClickAwayListener>
 
-			<div className="sidebar__results" ref={chatsContainer}>
+			<div className="sidebar__results">
 				{isSelectionModeEnabled && (
 					<>
 						<Alert severity="info" className={styles.bulkAlert}>
@@ -1132,7 +1131,15 @@ const Sidebar: React.FC<any> = ({
 					<h3>{t('Chats')}</h3>
 				)}
 
-				<div className="sidebar__results__chats" ref={chatListRef}>
+				<div
+					className={cx({
+						sidebar__results__chats: true,
+						chatList: true,
+						unpacked:
+							searchedKeyword.trim().length > 0 || isSelectionModeEnabled,
+					})}
+					ref={chatListRef}
+				>
 					<ViewportList
 						viewportRef={chatListRef}
 						items={filteredChats}
