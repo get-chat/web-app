@@ -203,7 +203,6 @@ const ChatHeader: React.FC<Props> = ({
 				anchorEl={anchorEl}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				keepMounted
 				open={Boolean(anchorEl)}
 				onClose={hideMenu}
 				elevation={3}

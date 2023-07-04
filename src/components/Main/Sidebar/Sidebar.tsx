@@ -987,7 +987,6 @@ const Sidebar: React.FC<any> = ({
 					<Menu
 						className={styles.filterMenu}
 						anchorEl={tagsMenuAnchorEl}
-						keepMounted
 						open={Boolean(tagsMenuAnchorEl)}
 						onClose={() => setTagsMenuAnchorEl(undefined)}
 						elevation={3}
@@ -1040,7 +1039,6 @@ const Sidebar: React.FC<any> = ({
 					<Menu
 						className={styles.filterMenu}
 						anchorEl={groupsMenuAnchorEl}
-						keepMounted
 						open={Boolean(groupsMenuAnchorEl)}
 						onClose={() => setGroupsMenuAnchorEl(undefined)}
 						elevation={3}
@@ -1260,7 +1258,6 @@ const Sidebar: React.FC<any> = ({
 				anchorEl={anchorEl}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				keepMounted
 				open={Boolean(anchorEl)}
 				onClose={hideMenu}
 				elevation={3}
@@ -1312,7 +1309,6 @@ const Sidebar: React.FC<any> = ({
 				anchorEl={bulkMessageMenuAnchorEl}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				keepMounted
 				open={Boolean(bulkMessageMenuAnchorEl)}
 				onClose={hideBulkMessageMenu}
 				elevation={3}
