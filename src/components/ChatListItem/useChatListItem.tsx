@@ -58,7 +58,7 @@ const useChatListItem = ({ props }) => {
 		return false;
 	};
 
-	const isGroupAssignmentChipVisible = useMemo(() => {
+	const isGroupAssignmentChipVisible = useCallback(() => {
 		if (
 			!props.filterAssignedToMe &&
 			!props.filterAssignedGroupId &&
@@ -189,7 +189,7 @@ const useChatListItem = ({ props }) => {
 		}
 	};
 
-	const hasFailedMessages = useMemo(() => {
+	const hasFailedMessages = useCallback(() => {
 		let result = false;
 		props.pendingMessages.forEach((pendingMessage) => {
 			if (
