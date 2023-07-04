@@ -140,7 +140,7 @@ function Main() {
 	);
 
 	const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
-	const [selectedChats, setSelectedChats] = useState([]);
+	const [selectedChats, setSelectedChats] = useState<string[]>([]);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
