@@ -164,12 +164,12 @@ dependencies:
   react-use-navigate-list:
     specifier: github:get-chat/react-use-navigate-list
     version: github.com/get-chat/react-use-navigate-list/9678592605278b29cb9c9cbd28ed5cfa6cc2aa1f(react-dom@18.2.0)(react@18.2.0)
+  react-viewport-list:
+    specifier: ^7.1.1
+    version: 7.1.1(react@18.2.0)
   source-map-explorer:
     specifier: ^2.5.3
     version: 2.5.3
-  typescript:
-    specifier: ^4.9.5
-    version: 4.9.5
   url:
     specifier: ^0.11.0
     version: 0.11.0
@@ -268,6 +268,9 @@ devDependencies:
   ts-loader:
     specifier: ^9.4.2
     version: 9.4.2(typescript@4.9.5)(webpack@5.75.0)
+  typescript:
+    specifier: ^4.9.5
+    version: 4.9.5
   webpack:
     specifier: ^5.75.0
     version: 5.75.0(webpack-cli@4.10.0)
@@ -11432,6 +11435,14 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-viewport-list@7.1.1(react@18.2.0):
+    resolution: {integrity: sha512-O3gxykg3DgpcyYH+/X2kFwWFaZjckJ0FK3UBb4vFhZe+CsGLcX8OVJb0VSYI+IupEuQ9pl8dvJak8JRkIuvNjw==}
+    peerDependencies:
+      react: '>=17.0.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react@18.2.0:
