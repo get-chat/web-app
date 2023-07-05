@@ -1,11 +1,10 @@
 import { UserList } from '@src/api/responses/UsersResponse';
 import { useAppSelector } from '@src/store/hooks';
 import { MouseEvent, useEffect, useRef, useState } from 'react';
-import useGroupsAPI from '@src/hooks/api/useGroupsAPI';
 import { AssigneeType } from '@src/components/AssigneeChip/AssigneeChip';
 import { CancelTokenSource } from 'axios';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import { getObjLength } from '@src/helpers/ObjectHelper';
+import { GroupList } from '@src/api/responses/GroupsResponse';
 
 interface Props {
 	assigneeType: AssigneeType;
@@ -15,12 +14,12 @@ interface Props {
 const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
-	const { groups, initGroups } = useGroupsAPI();
-
 	let users: UserList = {};
+	let groups: GroupList = {};
 
 	if (isActionable) {
 		users = useAppSelector((state) => state.users.value);
+		groups = useAppSelector((state) => state.groups.value);
 	}
 
 	const [menuAnchorEl, setMenuAnchorEl] = useState<Element>();
@@ -36,10 +35,6 @@ const useAssigneeChip = ({ assigneeType, isActionable }: Props) => {
 	}, [isActionable]);
 
 	const displayMenu = (event: MouseEvent) => {
-		if (getObjLength(groups) === 0) {
-			initGroups(cancelTokenSourceRef.current?.token);
-		}
-
 		if (event.currentTarget instanceof Element) {
 			setMenuAnchorEl(event.currentTarget);
 		}

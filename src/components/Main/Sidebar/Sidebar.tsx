@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 import '../../../styles/Sidebar.css';
 import {
 	CircularProgress,
@@ -98,7 +98,9 @@ import {
 import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
+import { ViewportList } from 'react-viewport-list';
 
+const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
 
 const Sidebar: React.FC<any> = ({
@@ -159,13 +161,28 @@ const Sidebar: React.FC<any> = ({
 	} = useChatFilters();
 
 	const { waId } = useParams();
-	const chatsContainer = useRef<HTMLDivElement>(null);
 	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
 		null
 	);
 	const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState<
 		(EventTarget & Element) | null
 	>(null);
+
+	const filteredChats = useMemo(
+		() =>
+			Object.values(chats).filter((chat) => {
+				// Filter by helper method
+				return filterChat(
+					currentUser,
+					chat,
+					filterTagId,
+					filterAssignedToMe,
+					filterAssignedGroupId
+				);
+			}),
+		[chats, currentUser, filterTagId, filterAssignedToMe, filterAssignedGroupId]
+	);
+
 	const [keyword, setKeyword] = useState('');
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState({});
@@ -186,6 +203,7 @@ const Sidebar: React.FC<any> = ({
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
+	const chatListRef = useRef<HTMLDivElement | null>(null);
 	const timer = useRef<NodeJS.Timeout>();
 
 	const navigate = useNavigate();
@@ -456,7 +474,7 @@ const Sidebar: React.FC<any> = ({
 	}, [missingChats]);
 
 	useEffect(() => {
-		const chatsContainerCopy = chatsContainer.current;
+		const chatsContainerCopy = chatListRef.current;
 
 		// To optimize scroll event
 		let debounceTimer: NodeJS.Timeout;
@@ -476,7 +494,10 @@ const Sidebar: React.FC<any> = ({
 				const el = e.target;
 
 				if (el instanceof Element && isScrollable(el)) {
-					if (el.scrollHeight - el.scrollTop - el.clientHeight < 1) {
+					if (
+						el.scrollHeight - el.scrollTop - el.clientHeight <
+						CHAT_LIST_SCROLL_OFFSET
+					) {
 						listChats(
 							cancelTokenSourceRef.current,
 							false,
@@ -970,7 +991,6 @@ const Sidebar: React.FC<any> = ({
 					<Menu
 						className={styles.filterMenu}
 						anchorEl={tagsMenuAnchorEl}
-						keepMounted
 						open={Boolean(tagsMenuAnchorEl)}
 						onClose={() => setTagsMenuAnchorEl(undefined)}
 						elevation={3}
@@ -1023,7 +1043,6 @@ const Sidebar: React.FC<any> = ({
 					<Menu
 						className={styles.filterMenu}
 						anchorEl={groupsMenuAnchorEl}
-						keepMounted
 						open={Boolean(groupsMenuAnchorEl)}
 						onClose={() => setGroupsMenuAnchorEl(undefined)}
 						elevation={3}
@@ -1059,7 +1078,7 @@ const Sidebar: React.FC<any> = ({
 				</div>
 			</ClickAwayListener>
 
-			<div className="sidebar__results" ref={chatsContainer}>
+			<div className="sidebar__results">
 				{isSelectionModeEnabled && (
 					<>
 						<Alert severity="info" className={styles.bulkAlert}>
@@ -1114,22 +1133,24 @@ const Sidebar: React.FC<any> = ({
 					<h3>{t('Chats')}</h3>
 				)}
 
-				<div className="sidebar__results__chats">
-					{Object.entries(chats)
-						.filter((chat) => {
-							// Filter by helper method
-							return filterChat(
-								currentUser,
-								chat[1],
-								filterTagId,
-								filterAssignedToMe,
-								filterAssignedGroupId
-							);
-						})
-						.map((chat) => (
+				<div
+					className={cx({
+						sidebar__results__chats: true,
+						chatList: true,
+						unpacked:
+							searchedKeyword.trim().length > 0 || isSelectionModeEnabled,
+					})}
+					ref={chatListRef}
+				>
+					<ViewportList
+						viewportRef={chatListRef}
+						items={filteredChats}
+						overscan={5}
+					>
+						{(item) => (
 							<ChatListItem
-								key={chat[0]}
-								chatData={chat[1]}
+								key={item.waId}
+								chatData={item}
 								pendingMessages={pendingMessages}
 								newMessages={newMessages}
 								keyword={searchedKeyword}
@@ -1142,25 +1163,26 @@ const Sidebar: React.FC<any> = ({
 								selectedChats={selectedChats}
 								setSelectedChats={setSelectedChats}
 							/>
-						))}
-
-					{Object.keys(chats).length === 0 && (
-						<span className="sidebar__results__chats__noResult">
-							{searchedKeyword.trim().length > 0 ? (
-								<span>
-									<Trans>
-										No chats found for:{' '}
-										<span className="searchOccurrence">{searchedKeyword}</span>
-									</Trans>
-								</span>
-							) : (
-								!isLoadingChats && (
-									<span>{t("You don't have any chats yet.")}</span>
-								)
-							)}
-						</span>
-					)}
+						)}
+					</ViewportList>
 				</div>
+
+				{Object.keys(chats).length === 0 && (
+					<span className="sidebar__results__chats__noResult">
+						{searchedKeyword.trim().length > 0 ? (
+							<span>
+								<Trans>
+									No chats found for:{' '}
+									<span className="searchOccurrence">{searchedKeyword}</span>
+								</Trans>
+							</span>
+						) : (
+							!isLoadingChats && (
+								<span>{t("You don't have any chats yet.")}</span>
+							)
+						)}
+					</span>
+				)}
 
 				{searchedKeyword.trim().length > 0 &&
 					getObjLength(contactResults) > 0 && (
@@ -1240,7 +1262,6 @@ const Sidebar: React.FC<any> = ({
 				anchorEl={anchorEl}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				keepMounted
 				open={Boolean(anchorEl)}
 				onClose={hideMenu}
 				elevation={3}
@@ -1292,7 +1313,6 @@ const Sidebar: React.FC<any> = ({
 				anchorEl={bulkMessageMenuAnchorEl}
 				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				keepMounted
 				open={Boolean(bulkMessageMenuAnchorEl)}
 				onClose={hideBulkMessageMenu}
 				elevation={3}

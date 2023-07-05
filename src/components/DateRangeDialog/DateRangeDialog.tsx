@@ -9,7 +9,6 @@ import {
 	DialogActions,
 	FormControl,
 	InputLabel,
-	Menu,
 	MenuItem,
 	Select,
 	SelectChangeEvent,
@@ -20,7 +19,6 @@ import i18next from 'i18next';
 import useDateRanges from '@src/components/DateRangeDialog/useDateRanges';
 import { useAppSelector } from '@src/store/hooks';
 import { setUserPreference } from '@src/helpers/StorageHelper';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import styles from './DateRangeDialog.module.css';
 
 interface Props {

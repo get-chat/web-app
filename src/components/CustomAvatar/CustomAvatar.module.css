@@ -1,3 +1,10 @@
+.customAvatar {
+}
+
 .light {
 	color: #6e7383 !important;
+}
+
+.customAvatar:not(.light) :global(.MuiSvgIcon-root) {
+	color: #fff !important;
 }

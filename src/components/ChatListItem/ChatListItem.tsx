@@ -128,7 +128,7 @@ const ChatListItem = (props: any) => {
 							<h2>
 								{props.keyword && props.keyword.trim().length > 0 ? (
 									<PrintMessage
-										message={data.name}
+										message={data.name ?? ''}
 										highlightText={props.keyword}
 									/>
 								) : (
@@ -192,7 +192,7 @@ const ChatListItem = (props: any) => {
 								</div>
 							)}
 
-							{!isExpired && (
+							{!isExpired && timeLeft && (
 								<Tooltip
 									title={t('This chat will expire in %s', timeLeft)}
 									placement="top"

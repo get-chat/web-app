@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
@@ -9,11 +8,23 @@ import TagModel from '@src/api/models/TagModel';
 class ChatModel {
 	public waId: string;
 	public name?: string;
+	public initials?: string;
 	public tags: TagModel[];
 	public assignedToUser?: UserModel;
 	public assignedGroup?: GroupModel;
-	public lastMessageTimestamp: number;
+	public lastMessageTimestamp: number = 0;
 	public lastReceivedMessageTimestamp: number;
+	public isExpired: boolean = true;
+
+	public lastMessageType?: string;
+	public lastMessage?: any;
+	public lastMessageButtonText?: string;
+	public interactiveButtonText?: string;
+	public lastMessageBody?: string;
+	public lastMessageCaption?: string;
+	public isLastMessageFromUs: boolean = false;
+	public lastMessageInteractiveButtonText?: string;
+	public newMessages: number;
 
 	constructor(data: any) {
 		const contact = data.contact;
@@ -27,9 +38,8 @@ class ChatModel {
 
 		this.newMessages = data.new_messages;
 
-		this.lastReceivedMessageTimestamp = parseIntSafely(
-			contact.last_message_timestamp
-		);
+		this.lastReceivedMessageTimestamp =
+			parseIntSafely(contact.last_message_timestamp) ?? 0;
 
 		this.setLastMessage(lastMessagePayload);
 
@@ -83,7 +93,8 @@ class ChatModel {
 			lastMessagePayload?.audio?.caption ??
 			lastMessagePayload?.document?.caption;
 		this.lastMessageType = lastMessagePayload?.type;
-		this.lastMessageTimestamp = parseIntSafely(this.lastMessage?.timestamp);
+		this.lastMessageTimestamp =
+			parseIntSafely(this.lastMessage?.timestamp) ?? 0;
 		this.isLastMessageFromUs = lastMessagePayload?.hasOwnProperty('to');
 
 		if (this.lastMessage?.hasOwnProperty('from')) {

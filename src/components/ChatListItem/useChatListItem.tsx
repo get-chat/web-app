@@ -1,23 +1,18 @@
-// @ts-nocheck
-import { useEffect, useMemo, useState } from 'react';
+import { DragEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import moment from 'moment/moment';
 import { getDroppedFiles } from '@src/helpers/FileHelper';
 import PubSub from 'pubsub-js';
-import {
-	CHAT_LIST_TAB_CASE_ALL,
-	CHAT_LIST_TAB_CASE_GROUP,
-	CHAT_LIST_TAB_CASE_ME,
-	EVENT_TOPIC_DROPPED_FILES,
-} from '@src/Constants';
+import { EVENT_TOPIC_DROPPED_FILES } from '@src/Constants';
 import { useTranslation } from 'react-i18next';
+import ChatModel from '@src/api/models/ChatModel';
 
-const useChatListItem = ({ props }) => {
-	const data = props.chatData;
+const useChatListItem = ({ props }: { props: any }) => {
+	const data: ChatModel = props.chatData;
 
 	const [isSelected, setSelected] = useState(false);
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
-	const [timeLeft, setTimeLeft] = useState();
+	const [timeLeft, setTimeLeft] = useState<string>();
 	const [remainingSeconds, setRemainingSeconds] = useState(0);
 	const [isCheckedMissingContact, setCheckedMissingContact] = useState(false);
 
@@ -63,7 +58,7 @@ const useChatListItem = ({ props }) => {
 		return false;
 	};
 
-	const isGroupAssignmentChipVisible = () => {
+	const isGroupAssignmentChipVisible = useCallback(() => {
 		if (
 			!props.filterAssignedToMe &&
 			!props.filterAssignedGroupId &&
@@ -86,15 +81,20 @@ const useChatListItem = ({ props }) => {
 		}
 
 		return false;
-	};
+	}, [
+		props.filterAssignedToMe,
+		props.filterAssignedGroupId,
+		props.assignedToUser,
+		props.assignedGroup,
+	]);
 
-	const generateTagNames = () => {
-		const generatedTagNames = [];
+	const generateTagNames = useCallback(() => {
+		const generatedTagNames: string[] = [];
 		data.tags?.forEach((tag) => {
 			generatedTagNames.push(tag.name);
 		});
 		return generatedTagNames.join(', ');
-	};
+	}, [data.tags]);
 
 	useEffect(() => {
 		if (
@@ -108,7 +108,7 @@ const useChatListItem = ({ props }) => {
 	}, [isCheckedMissingContact, props.contactProvidersData]);
 
 	useEffect(() => {
-		function calculateRemaining() {
+		async function calculateRemaining() {
 			const momentDate = moment.unix(data.lastReceivedMessageTimestamp);
 			momentDate.add(1, 'day');
 			const curDate = moment(new Date());
@@ -139,7 +139,7 @@ const useChatListItem = ({ props }) => {
 		// Initial
 		calculateRemaining();
 
-		let intervalId;
+		let intervalId: NodeJS.Timer;
 		if (!isExpired) {
 			intervalId = setInterval(() => {
 				calculateRemaining();
@@ -151,7 +151,7 @@ const useChatListItem = ({ props }) => {
 		};
 	}, [isExpired, data.isExpired, data.lastMessageTimestamp]);
 
-	const handleDroppedFiles = (event) => {
+	const handleDroppedFiles = (event: DragEvent) => {
 		if (isExpired) {
 			event.preventDefault();
 			return;
@@ -173,7 +173,7 @@ const useChatListItem = ({ props }) => {
 
 			let newSelectedState = !isSelected;
 
-			props.setSelectedChats((prevState) => {
+			props.setSelectedChats((prevState: string[]) => {
 				if (newSelectedState) {
 					if (!prevState.includes(data.waId)) {
 						prevState.push(data.waId);
@@ -189,9 +189,9 @@ const useChatListItem = ({ props }) => {
 		}
 	};
 
-	const hasFailedMessages = () => {
+	const hasFailedMessages = useCallback(() => {
 		let result = false;
-		props.pendingMessages.forEach((pendingMessage) => {
+		props.pendingMessages.forEach((pendingMessage: any) => {
 			if (
 				pendingMessage.requestBody?.wa_id === data.waId &&
 				pendingMessage.isFailed === true
@@ -200,7 +200,7 @@ const useChatListItem = ({ props }) => {
 		});
 
 		return result;
-	};
+	}, [data.waId, props.pendingMessages]);
 
 	return {
 		data,

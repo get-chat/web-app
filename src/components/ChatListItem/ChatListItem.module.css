@@ -179,6 +179,7 @@
 	height: 19px;
 	background-color: var(--color-primary);
 	color: white;
+	transition: background-color ease-in 0.8s;
 }
 
 .timeLeftIconWrapper {

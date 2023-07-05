@@ -95,6 +95,8 @@
 
 .sidebar__results {
 	flex: 1;
+	display: flex;
+	flex-direction: column;
 	background-color: white;
 	overflow-y: auto;
 }
@@ -103,10 +105,6 @@
 	padding: 10px 15px;
 	font-weight: 400;
 	color: var(--color-primary);
-}
-
-.sidebar__results__chats {
-	margin-bottom: 20px;
 }
 
 .sidebar__results__chats__noResult {
