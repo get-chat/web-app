@@ -179,7 +179,7 @@ const ContactDetails: React.FC = ({
 						(providerData, index) => (
 							<div
 								className="contactDetails__body__section"
-								key={providerData.contact_provider.id}
+								key={index + '_' + providerData.contact_provider.id}
 							>
 								<div className="contactDetails__body__section__title mb-3">
 									<div className="contactDetails__body__section__providerTitle">
