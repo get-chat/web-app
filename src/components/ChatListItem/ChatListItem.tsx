@@ -242,7 +242,7 @@ const ChatListItem = (props: any) => {
 									</div>
 								)}
 
-								{data.lastMessageTimestamp && (
+								{Boolean(data.lastMessageTimestamp) && (
 									<Moment
 										className={styles.lastMessageDate}
 										date={data.lastMessageTimestamp}

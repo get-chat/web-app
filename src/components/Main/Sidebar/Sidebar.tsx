@@ -117,7 +117,6 @@ const Sidebar: React.FC<any> = ({
 	displayNotification,
 	isBlurred,
 	contactProvidersData,
-	retrieveContactData,
 	isChatOnly,
 	setChatTagsListVisible,
 	isSelectionModeEnabled,
@@ -181,6 +180,11 @@ const Sidebar: React.FC<any> = ({
 				);
 			}),
 		[chats, currentUser, filterTagId, filterAssignedToMe, filterAssignedGroupId]
+	);
+
+	const filteredChatsCount = useMemo(
+		() => getObjLength(filteredChats),
+		[filteredChats]
 	);
 
 	const [keyword, setKeyword] = useState('');
@@ -1133,55 +1137,48 @@ const Sidebar: React.FC<any> = ({
 					<h3>{t('Chats')}</h3>
 				)}
 
-				<div
-					className={cx({
-						sidebar__results__chats: true,
-						chatList: true,
-						unpacked:
-							searchedKeyword.trim().length > 0 || isSelectionModeEnabled,
-					})}
-					ref={chatListRef}
-				>
-					<ViewportList
-						viewportRef={chatListRef}
-						items={filteredChats}
-						overscan={5}
-					>
-						{(item) => (
-							<ChatListItem
-								key={item.waId}
-								chatData={item}
-								pendingMessages={pendingMessages}
-								newMessages={newMessages}
-								keyword={searchedKeyword}
-								contactProvidersData={contactProvidersData}
-								retrieveContactData={retrieveContactData}
-								filterAssignedToMe={filterAssignedToMe}
-								filterAssignedGroupId={filterAssignedGroupId}
-								bulkSendPayload={bulkSendPayload}
-								isSelectionModeEnabled={isSelectionModeEnabled}
-								selectedChats={selectedChats}
-								setSelectedChats={setSelectedChats}
-							/>
-						)}
-					</ViewportList>
-				</div>
+				{!isLoadingChats &&
+					searchedKeyword.trim().length === 0 &&
+					!isAnyActiveFilter &&
+					filteredChatsCount === 0 && (
+						<span className="sidebar__results__chats__noResult">
+							<span>{t("You don't have any chats yet.")}</span>
+						</span>
+					)}
 
-				{Object.keys(chats).length === 0 && (
-					<span className="sidebar__results__chats__noResult">
-						{searchedKeyword.trim().length > 0 ? (
-							<span>
-								<Trans>
-									No chats found for:{' '}
-									<span className="searchOccurrence">{searchedKeyword}</span>
-								</Trans>
-							</span>
-						) : (
-							!isLoadingChats && (
-								<span>{t("You don't have any chats yet.")}</span>
-							)
-						)}
-					</span>
+				{filteredChatsCount > 0 && (
+					<div
+						className={cx({
+							sidebar__results__chats: true,
+							chatList: true,
+							unpacked:
+								searchedKeyword.trim().length > 0 || isSelectionModeEnabled,
+						})}
+						ref={chatListRef}
+					>
+						<ViewportList
+							viewportRef={chatListRef}
+							items={filteredChats}
+							overscan={5}
+						>
+							{(item) => (
+								<ChatListItem
+									key={item.waId}
+									chatData={item}
+									pendingMessages={pendingMessages}
+									newMessages={newMessages}
+									keyword={searchedKeyword}
+									contactProvidersData={contactProvidersData}
+									filterAssignedToMe={filterAssignedToMe}
+									filterAssignedGroupId={filterAssignedGroupId}
+									bulkSendPayload={bulkSendPayload}
+									isSelectionModeEnabled={isSelectionModeEnabled}
+									selectedChats={selectedChats}
+									setSelectedChats={setSelectedChats}
+								/>
+							)}
+						</ViewportList>
+					</div>
 				)}
 
 				{searchedKeyword.trim().length > 0 &&
