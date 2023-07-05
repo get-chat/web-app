@@ -55,7 +55,11 @@ class VoiceRecorder {
 	}
 
 	stop() {
-		this.mediaRecorder.stop();
+		try {
+			this.mediaRecorder.stop();
+		} catch (e: Error) {
+			console.warn(e);
+		}
 	}
 
 	cancel() {
