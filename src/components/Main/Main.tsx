@@ -30,7 +30,6 @@ import {
 import ChatMessageModel from '../../api/models/ChatMessageModel';
 import PreviewMedia from './PreviewMedia';
 import {
-	getContactProvidersData,
 	getToken,
 	storeContactProvidersData,
 } from '@src/helpers/StorageHelper';
@@ -74,6 +73,7 @@ import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
+import useResolveContacts from '@src/hooks/useResolveContacts';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -135,10 +135,6 @@ function Main() {
 
 	const [chosenContact, setChosenContact] = useState();
 
-	const [contactProvidersData, setContactProvidersData] = useState(
-		getContactProvidersData()
-	);
-
 	const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
 	const [selectedChats, setSelectedChats] = useState<string[]>([]);
 	const [selectedTags, setSelectedTags] = useState([]);
@@ -165,6 +161,8 @@ function Main() {
 
 	const [notificationHistory, setNotificationHistory] = useState({});
 
+	const { resolveContact, contactProvidersData, setContactProvidersData } =
+		useResolveContacts();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const query = useQuery();
@@ -912,37 +910,6 @@ function Main() {
 			// Reload saved responses
 			listSavedResponses();
 		});
-	};
-
-	const resolveContact = (personWaId) => {
-		if (contactProvidersData?.[personWaId] !== undefined) {
-			// Already retrieved
-			return;
-		}
-
-		if (!personWaId) {
-			console.warn('Resolve contact: wa_id is undefined!');
-			return;
-		}
-
-		console.log('Resolving contact: ' + personWaId);
-
-		apiService.resolveContactCall(
-			personWaId,
-			(response) => {
-				setContactProvidersData((prevState) => {
-					prevState[personWaId] = response.data.contact_provider_results;
-					return { ...prevState };
-				});
-			},
-			(error) => {
-				if (error.response?.status === 404) {
-					console.log('Contact is not found.');
-				} else {
-					window.displayError(error);
-				}
-			}
-		);
 	};
 
 	// ** 4 **
