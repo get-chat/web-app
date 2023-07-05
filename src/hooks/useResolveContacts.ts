@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { AxiosError, AxiosResponse } from 'axios';
-import { getContactProvidersData } from '@src/helpers/StorageHelper';
+import {
+	getContactProvidersData,
+	storeContactProvidersData,
+} from '@src/helpers/StorageHelper';
 import { useAppSelector } from '@src/store/hooks';
 
 const useResolveContacts = () => {
@@ -16,6 +19,8 @@ const useResolveContacts = () => {
 	const [checkedWaIds, setCheckedWaIds] = useState<string[]>([]);
 	const [missingContactWaIds, setMissingContactWaIds] = useState<string[]>([]);
 
+	const isRequesting = useRef(false);
+
 	useEffect(() => {
 		for (let chat of Object.values(chats)) {
 			if (chat.waId && !contactProvidersData[chat.waId]) {
@@ -25,17 +30,37 @@ const useResolveContacts = () => {
 					checkedWaIds.push(chat.waId);
 				}
 
-				missingContactWaIds.push(chat.waId);
-				console.log('Missing: ' + chat.waId);
+				setMissingContactWaIds((prevState) => {
+					prevState.push(chat.waId);
+					return [...prevState];
+				});
 			}
 		}
 	}, [chats, contactProvidersData, checkedWaIds, missingContactWaIds]);
 
 	useEffect(() => {
-		// TODO: Handle resolving contacts
+		if (missingContactWaIds.length && !isRequesting.current) {
+			const targetWaId = missingContactWaIds[0];
+
+			isRequesting.current = true;
+			resolveContact(targetWaId, () => {
+				setMissingContactWaIds((prevState) => [
+					...prevState.filter((item) => item !== targetWaId),
+				]);
+				isRequesting.current = false;
+			});
+		}
 	}, [missingContactWaIds]);
 
-	const resolveContact = (personWaId: string) => {
+	// Store contact providers data in local storage
+	useEffect(() => {
+		// Limit to 250 rows
+		storeContactProvidersData(
+			Object.fromEntries(Object.entries(contactProvidersData).slice(0, 250))
+		);
+	}, [contactProvidersData]);
+
+	const resolveContact = (personWaId: string, onComplete?: () => void) => {
 		if (contactProvidersData?.[personWaId] !== undefined) {
 			// Already retrieved
 			return;
@@ -55,6 +80,8 @@ const useResolveContacts = () => {
 					prevState[personWaId] = response.data.contact_provider_results;
 					return { ...prevState };
 				});
+
+				onComplete?.();
 			},
 			(error: AxiosError) => {
 				if (error.response?.status === 404) {
@@ -62,6 +89,8 @@ const useResolveContacts = () => {
 				} else {
 					console.log(error.response);
 				}
+
+				onComplete?.();
 			}
 		);
 	};

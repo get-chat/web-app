@@ -29,10 +29,7 @@ import {
 } from '@src/Constants';
 import ChatMessageModel from '../../api/models/ChatMessageModel';
 import PreviewMedia from './PreviewMedia';
-import {
-	getToken,
-	storeContactProvidersData,
-} from '@src/helpers/StorageHelper';
+import { getToken } from '@src/helpers/StorageHelper';
 import ChatAssignment from './ChatAssignment';
 import ChatTags from './ChatTags';
 import ChatTagsList from './ChatTagsList';
@@ -736,10 +733,6 @@ function Main() {
 			PubSub.unsubscribe(markedAsReceivedEventToken);
 		};
 	}, [newMessages]);
-
-	useEffect(() => {
-		storeContactProvidersData(contactProvidersData);
-	}, [contactProvidersData]);
 
 	// Clear selected chats and tags when bulk send payload changes
 	useEffect(() => {
