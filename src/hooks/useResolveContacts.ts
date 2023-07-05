@@ -54,10 +54,7 @@ const useResolveContacts = () => {
 
 	// Store contact providers data in local storage
 	useEffect(() => {
-		// Limit the rows
-		storeContactProvidersData(
-			Object.fromEntries(Object.entries(contactProvidersData).slice(0, 250))
-		);
+		storeContactProvidersData(contactProvidersData);
 	}, [contactProvidersData]);
 
 	const resolveContact = (personWaId: string, onComplete?: () => void) => {

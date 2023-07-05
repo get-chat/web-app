@@ -35,6 +35,21 @@ export const getStorage = () => {
 	return getActiveStorage();
 };
 
+function isQuotaExceededError(err: unknown): boolean {
+	return (
+		err instanceof DOMException &&
+		// everything except Firefox
+		(err.code === 22 ||
+			// Firefox
+			err.code === 1014 ||
+			// test name field too, because code might not be present
+			// everything except Firefox
+			err.name === 'QuotaExceededError' ||
+			// Firefox
+			err.name === 'NS_ERROR_DOM_QUOTA_REACHED')
+	);
+}
+
 export const getToken = () => {
 	return getStorage()?.getItem(STORAGE_TAG_TOKEN);
 };
@@ -113,10 +128,16 @@ export const getContactProvidersData = () => {
 };
 
 export const storeContactProvidersData = (data: any) => {
-	getStorage().setItem(
-		STORAGE_TAG_CONTACT_PROVIDERS_DATA,
-		JSON.stringify(data)
-	);
+	try {
+		getStorage().setItem(
+			STORAGE_TAG_CONTACT_PROVIDERS_DATA,
+			JSON.stringify(data)
+		);
+	} catch (e) {
+		if (isQuotaExceededError(e)) {
+			clearContactProvidersData();
+		}
+	}
 };
 
 export const clearContactProvidersData = () => {
