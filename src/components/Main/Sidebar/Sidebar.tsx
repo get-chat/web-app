@@ -117,7 +117,6 @@ const Sidebar: React.FC<any> = ({
 	displayNotification,
 	isBlurred,
 	contactProvidersData,
-	retrieveContactData,
 	isChatOnly,
 	setChatTagsListVisible,
 	isSelectionModeEnabled,
@@ -1155,7 +1154,6 @@ const Sidebar: React.FC<any> = ({
 								newMessages={newMessages}
 								keyword={searchedKeyword}
 								contactProvidersData={contactProvidersData}
-								retrieveContactData={retrieveContactData}
 								filterAssignedToMe={filterAssignedToMe}
 								filterAssignedGroupId={filterAssignedGroupId}
 								bulkSendPayload={bulkSendPayload}

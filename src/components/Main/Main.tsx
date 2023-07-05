@@ -1018,7 +1018,6 @@ function Main() {
 						displayNotification={displayNotification}
 						isBlurred={isBlurred}
 						contactProvidersData={contactProvidersData}
-						retrieveContactData={resolveContact}
 						isChatOnly={isChatOnly}
 						setChatTagsListVisible={setChatTagsListVisible}
 						isSelectionModeEnabled={isSelectionModeEnabled}

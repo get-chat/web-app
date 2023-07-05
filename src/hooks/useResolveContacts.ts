@@ -54,7 +54,7 @@ const useResolveContacts = () => {
 
 	// Store contact providers data in local storage
 	useEffect(() => {
-		// Limit to 250 rows
+		// Limit the rows
 		storeContactProvidersData(
 			Object.fromEntries(Object.entries(contactProvidersData).slice(0, 250))
 		);
