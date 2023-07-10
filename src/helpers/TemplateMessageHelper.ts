@@ -69,6 +69,29 @@ export const sortTemplateComponents = (components) => {
 	return components;
 };
 
+const generateParamsForComponent = (
+	preparedParams: any,
+	paramValues: any,
+	key: string,
+	component: any,
+	propertyName: string
+) => {
+	const paramText = component[propertyName];
+	const templateParamsArray = getTemplateParams(paramText);
+
+	templateParamsArray.forEach((extractedParam, extractedParamIndex) => {
+		if (preparedParams[key] === undefined) {
+			preparedParams[key] = {};
+		}
+		preparedParams[key][templateParamToInteger(extractedParam)] = {
+			type: 'text',
+			text: paramValues
+				? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
+				: '',
+		};
+	});
+};
+
 export const generateTemplateParamsByValues = (template, paramValues) => {
 	const preparedParams = {};
 	const components = { ...template.components };
@@ -99,35 +122,19 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 			}
 		}
 
-		if (componentType === 'BUTTONS') {
-			component.buttons.forEach((button, buttonIndex) => {
-				if (button.type === 'URL') {
-					if (preparedParams[key] === undefined) {
-						preparedParams[key] = {};
-					}
-
-					preparedParams[key][buttonIndex] = {
-						type: 'text',
-						text: paramValues ? paramValues[1] : '',
-					};
-				}
-			});
-		}
-
-		const paramText = component.text;
-		const templateParamsArray = getTemplateParams(paramText);
-
-		templateParamsArray.map((extractedParam, extractedParamIndex) => {
-			if (preparedParams[key] === undefined) {
-				preparedParams[key] = {};
-			}
-			preparedParams[key][templateParamToInteger(extractedParam)] = {
-				type: 'text',
-				text: paramValues
-					? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
-					: '',
-			};
+		// Generate params for URL buttons
+		component.buttons?.forEach((it) => {
+			generateParamsForComponent(preparedParams, paramValues, key, it, 'url');
 		});
+
+		// Generate params for other components
+		generateParamsForComponent(
+			preparedParams,
+			paramValues,
+			key,
+			component,
+			'text'
+		);
 	});
 
 	return preparedParams;

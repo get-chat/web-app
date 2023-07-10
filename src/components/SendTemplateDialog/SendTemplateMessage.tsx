@@ -373,8 +373,10 @@ function SendTemplateMessage({
 										<Button color="primary" variant="outlined" disabled>
 											{button.text}
 										</Button>
-										{button.type === 'URL' && (
+
+										{getTemplateParams(button.url).map((param, paramIndex) => (
 											<TextField
+												key={paramIndex}
 												InputProps={{
 													startAdornment: (
 														<InputAdornment position="start">
@@ -388,7 +390,7 @@ function SendTemplateMessage({
 													params[compIndex] ? params[compIndex][idx].text : ''
 												}
 											/>
-										)}
+										))}
 									</div>
 								))}
 							</div>
