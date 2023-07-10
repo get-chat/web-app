@@ -12,6 +12,19 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import PrintMessage from '@src/components/PrintMessage';
+import LaunchIcon from '@mui/icons-material/Launch';
+import PhoneIcon from '@mui/icons-material/Phone';
+
+const getIconByType = (type: string) => {
+	switch (type) {
+		case 'URL':
+			return <LaunchIcon />;
+		case 'PHONE_NUMBER':
+			return <PhoneIcon />;
+		default:
+			return;
+	}
+};
 
 function ChatMessageTemplate(props) {
 	const { t } = useTranslation();
@@ -134,9 +147,10 @@ function ChatMessageTemplate(props) {
 
 												return (
 													<Button
-														href={href}
+														href={href ?? button.url}
 														target="_blank"
 														key={buttonIndex}
+														startIcon={getIconByType(button.type)}
 														color="primary"
 														fullWidth={true}
 													>

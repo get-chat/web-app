@@ -212,6 +212,11 @@ a.chat__document:hover {
 	vertical-align: middle;
 }
 
+.chat__template a,
+.chat__template button {
+	color: var(--color-light-blue);
+}
+
 .chat__templateHeader {
 	display: block;
 	font-size: x-small;
