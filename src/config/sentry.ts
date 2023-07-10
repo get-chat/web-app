@@ -15,7 +15,9 @@ export const initializeSentry = (config: AppConfig) => {
 			debug: true,
 			dsn: config.APP_SENTRY_DSN,
 			release: packageJson.version,
-			integrations: [new Integrations.BrowserTracing()],
+			integrations: [
+				new Integrations.BrowserTracing({ tracePropagationTargets: ['*'] }),
+			],
 			tracesSampleRate: 0.002,
 			ignoreErrors: ['ResizeObserver loop limit exceeded'],
 			beforeSend(event) {
