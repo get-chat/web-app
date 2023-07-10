@@ -122,10 +122,12 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 			}
 		}
 
+		// Generate params for URL buttons
 		component.buttons?.forEach((it) => {
 			generateParamsForComponent(preparedParams, paramValues, key, it, 'url');
 		});
 
+		// Generate params for other components
 		generateParamsForComponent(
 			preparedParams,
 			paramValues,
@@ -134,9 +136,6 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 			'text'
 		);
 	});
-
-	console.log(components);
-	console.log(preparedParams);
 
 	return preparedParams;
 };
