@@ -3,6 +3,17 @@ import { setUserPreference } from '@src/helpers/StorageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useSearchParams } from 'react-router-dom';
 
+enum FilterQueryParams {
+	LIMIT = 'filter_chats_by_limit',
+	OFFSET = 'filter_chats_by_offset',
+	SEARCH = 'filter_chats_by_search',
+	ASSIGNED_TO_ME = 'filter_chats_by_assigned_to_me',
+	ASSIGNED_GROUP = 'filter_chats_by_assigned_group',
+	CHAT_TAG_ID = 'filter_chats_by_chat_tag_id',
+	MESSAGES_SINCE_TIME = 'filter_chats_by_messages_since_time',
+	MESSAGES_BEFORE_TIME = 'filter_chats_by_messages_before_time',
+}
+
 const useChatFilters = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTagId = useAppSelector((state) => state.filterTagId.value);
@@ -13,15 +24,21 @@ const useChatFilters = () => {
 
 	const [searchParams] = useSearchParams();
 
+	const hasAnyFilterQueryParam = () => {
+		for (let queryParamKey of Object.values(FilterQueryParams)) {
+			if (searchParams.has(queryParamKey)) return true;
+		}
+	};
+
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
-		searchParams.get('filter_chats_by_assigned_to_me') === '1' ||
+		searchParams.get(FilterQueryParams.ASSIGNED_TO_ME) === '1' ||
 			userPreference?.filters?.filterAssignedToMe ||
 			false
 	);
 	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<
 		number | undefined
 	>(
-		parseInt(searchParams.get('filter_chats_by_assigned_group') ?? '') ||
+		parseInt(searchParams.get(FilterQueryParams.ASSIGNED_GROUP) ?? '') ||
 			userPreference?.filters?.filterAssignedGroupId
 	);
 	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
@@ -38,7 +55,7 @@ const useChatFilters = () => {
 	const isMounted = useRef(false);
 
 	useEffect(() => {
-		if (isMounted.current) {
+		if (isMounted.current || hasAnyFilterQueryParam()) {
 			// Store filters
 			setUserPreference(currentUser?.id, {
 				filters: {
