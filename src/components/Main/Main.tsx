@@ -169,7 +169,7 @@ function Main() {
 	);
 
 	const checkIsChatOnly = () => {
-		return query.get('chatonly') === '1';
+		return (query.get('chatonly') || query.get('chat_only')) === '1';
 	};
 
 	const [isChatOnly] = useState(checkIsChatOnly());
