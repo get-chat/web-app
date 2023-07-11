@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { setUserPreference } from '@src/helpers/StorageHelper';
 import { useAppSelector } from '@src/store/hooks';
+import { useSearchParams } from 'react-router-dom';
 
 const useChatFilters = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -10,12 +11,19 @@ const useChatFilters = () => {
 		return currentUser?.getPreferences();
 	}, [currentUser]);
 
+	const [searchParams] = useSearchParams();
+
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
-		userPreference?.filters?.filterAssignedToMe ?? false
+		searchParams.get('filter_chats_by_assigned_to_me') === '1' ||
+			userPreference?.filters?.filterAssignedToMe ||
+			false
 	);
 	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<
 		number | undefined
-	>(userPreference?.filters?.filterAssignedGroupId);
+	>(
+		parseInt(searchParams.get('filter_chats_by_assigned_group') ?? '') ||
+			userPreference?.filters?.filterAssignedGroupId
+	);
 	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
 		userPreference?.filters?.filterStartDate
 			? new Date(userPreference?.filters?.filterStartDate)

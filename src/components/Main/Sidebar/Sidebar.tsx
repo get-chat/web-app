@@ -893,7 +893,7 @@ const Sidebar: React.FC<any> = ({
 							{filterAssignedGroupId && (
 								<FilterOption
 									icon={<GroupIcon />}
-									label={groups[filterAssignedGroupId]?.name}
+									label={groups[filterAssignedGroupId]?.name ?? t('Unknown')}
 									onClick={() => setFilterAssignedGroupId(undefined)}
 									isActive
 								/>
