@@ -32,6 +32,10 @@ const useChatFilters = () => {
 		return undefined;
 	};
 
+	const [keyword, setKeyword] = useState(
+		searchParams.get(FilterQueryParams.SEARCH) ?? ''
+	);
+
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
 		searchParams.get(FilterQueryParams.ASSIGNED_TO_ME) === '1' ||
 			userPreference?.filters?.filterAssignedToMe ||
@@ -57,10 +61,6 @@ const useChatFilters = () => {
 	);
 
 	const isMounted = useRef(false);
-
-	useEffect(() => {
-		console.log(filterStartDate);
-	}, [filterStartDate]);
 
 	useEffect(() => {
 		if (currentUser) {
@@ -103,6 +103,8 @@ const useChatFilters = () => {
 
 	return {
 		userPreference,
+		keyword,
+		setKeyword,
 		filterTagId,
 		filterAssignedToMe,
 		setFilterAssignedToMe,

@@ -148,6 +148,8 @@ const Sidebar: React.FC<any> = ({
 	const { t } = useTranslation();
 
 	const {
+		keyword,
+		setKeyword,
 		filterTagId,
 		filterAssignedToMe,
 		setFilterAssignedToMe,
@@ -187,7 +189,6 @@ const Sidebar: React.FC<any> = ({
 		[filteredChats]
 	);
 
-	const [keyword, setKeyword] = useState('');
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState({});
 	const [contactResults, setContactResults] = useState({});
