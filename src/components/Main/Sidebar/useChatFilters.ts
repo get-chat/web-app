@@ -32,6 +32,14 @@ const useChatFilters = () => {
 		return undefined;
 	};
 
+	const [chatsLimit, setChatsLimit] = useState(
+		parseInt(searchParams.get(FilterQueryParams.LIMIT) ?? '') || 20
+	);
+
+	const [chatsOffset, setChatsOffset] = useState(
+		parseInt(searchParams.get(FilterQueryParams.OFFSET) ?? '') || undefined
+	);
+
 	const [keyword, setKeyword] = useState(
 		searchParams.get(FilterQueryParams.SEARCH) ?? ''
 	);
@@ -103,6 +111,9 @@ const useChatFilters = () => {
 
 	return {
 		userPreference,
+		chatsLimit,
+		chatsOffset,
+		setChatsLimit,
 		keyword,
 		setKeyword,
 		filterTagId,

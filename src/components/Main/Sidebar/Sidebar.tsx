@@ -149,6 +149,8 @@ const Sidebar: React.FC<any> = ({
 
 	const {
 		keyword,
+		chatsLimit,
+		chatsOffset,
 		setKeyword,
 		filterTagId,
 		filterAssignedToMe,
@@ -272,7 +274,7 @@ const Sidebar: React.FC<any> = ({
 		cancelTokenSourceRef.current = generateCancelToken();
 
 		timer.current = setTimeout(() => {
-			listChats(cancelTokenSourceRef.current, true, undefined, true);
+			listChats(cancelTokenSourceRef.current, true, chatsOffset, true);
 
 			if (keyword.trim().length > 0) {
 				searchMessages(cancelTokenSourceRef.current);
@@ -569,7 +571,7 @@ const Sidebar: React.FC<any> = ({
 		apiService.listChatsCall(
 			keyword,
 			filterTagId,
-			20,
+			chatsLimit,
 			offset,
 			filterAssignedToMe ? true : undefined,
 			filterAssignedGroupId ? true : undefined,
