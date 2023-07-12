@@ -23,6 +23,15 @@ const useChatFilters = () => {
 		}
 	};
 
+	const parseDateFilter = (filterQueryParam: FilterQueryParams) => {
+		const queryParam = searchParams.get(filterQueryParam);
+		if (queryParam && !isNaN(Date.parse(queryParam))) {
+			return new Date(queryParam);
+		}
+
+		return undefined;
+	};
+
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
 		searchParams.get(FilterQueryParams.ASSIGNED_TO_ME) === '1' ||
 			userPreference?.filters?.filterAssignedToMe ||
@@ -35,17 +44,23 @@ const useChatFilters = () => {
 			userPreference?.filters?.filterAssignedGroupId
 	);
 	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
-		userPreference?.filters?.filterStartDate
-			? new Date(userPreference?.filters?.filterStartDate)
-			: undefined
+		parseDateFilter(FilterQueryParams.MESSAGES_SINCE_TIME) ??
+			(userPreference?.filters?.filterStartDate
+				? new Date(userPreference?.filters?.filterStartDate)
+				: undefined)
 	);
 	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>(
-		userPreference?.filters?.filterEndDate
-			? new Date(userPreference?.filters?.filterEndDate)
-			: undefined
+		parseDateFilter(FilterQueryParams.MESSAGES_BEFORE_TIME) ??
+			(userPreference?.filters?.filterEndDate
+				? new Date(userPreference?.filters?.filterEndDate)
+				: undefined)
 	);
 
 	const isMounted = useRef(false);
+
+	useEffect(() => {
+		console.log(filterStartDate);
+	}, [filterStartDate]);
 
 	useEffect(() => {
 		if (currentUser) {
@@ -60,8 +75,6 @@ const useChatFilters = () => {
 					filterTagIdQueryParam ?? preference?.filters?.filterTagId
 				)
 			);
-
-			// TODO: Store query param in preference
 		}
 	}, [currentUser]);
 
