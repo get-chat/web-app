@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { setUserPreference } from '@src/helpers/StorageHelper';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { useSearchParams } from 'react-router-dom';
 import FilterQueryParams from '@src/enums/FilterQueryParams';
+import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 
 const useChatFilters = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -13,6 +14,8 @@ const useChatFilters = () => {
 	}, [currentUser]);
 
 	const [searchParams] = useSearchParams();
+
+	const dispatch = useAppDispatch();
 
 	const hasAnyFilterQueryParam = () => {
 		for (let queryParamKey of Object.values(FilterQueryParams)) {
@@ -43,6 +46,24 @@ const useChatFilters = () => {
 	);
 
 	const isMounted = useRef(false);
+
+	useEffect(() => {
+		if (currentUser) {
+			const filterTagIdQueryParam =
+				parseInt(searchParams.get(FilterQueryParams.CHAT_TAG_ID) ?? '') ||
+				undefined;
+
+			// User preference
+			const preference = currentUser.getPreferences();
+			dispatch(
+				setFilterTagId(
+					filterTagIdQueryParam ?? preference?.filters?.filterTagId
+				)
+			);
+
+			// TODO: Store query param in preference
+		}
+	}, [currentUser]);
 
 	useEffect(() => {
 		if (isMounted.current || hasAnyFilterQueryParam()) {

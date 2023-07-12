@@ -5,7 +5,12 @@ import Chat from './Chat/Chat';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios from 'axios';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import {
+	useLocation,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
@@ -71,6 +76,7 @@ import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
+import FilterQueryParams from '@src/enums/FilterQueryParams';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -90,6 +96,8 @@ function Main() {
 	const { t } = useTranslation();
 
 	const { waId } = useParams();
+
+	const [searchParams] = useSearchParams();
 
 	const [progress, _setProgress] = useState(0);
 	const [loadingNow, setLoadingNow] = useState('');
@@ -801,10 +809,6 @@ function Main() {
 				if (role !== 'admin' && role !== 'user') {
 					clearUserSession('incorrectRole', location, navigate);
 				}
-
-				// User preference
-				const preference = currentUserResponse.currentUser.getPreferences();
-				dispatch(setFilterTagId(preference?.filters?.filterTagId));
 
 				setProgress(10);
 			}, navigate);
