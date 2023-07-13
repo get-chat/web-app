@@ -88,7 +88,7 @@ const useChatFilters = () => {
 	}, [currentUser]);
 
 	useEffect(() => {
-		if (isMounted.current || hasAnyFilterQueryParam()) {
+		if (isMounted.current || hasAnyFilterQueryParam) {
 			// Store filters
 			setUserPreference(currentUser?.id, {
 				filters: {
