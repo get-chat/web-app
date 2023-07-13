@@ -149,7 +149,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 		const files = getDroppedFiles(event);
 
 		// Switching to related chat
-		navigate(`/main/chat/${data.waId}`);
+		navigate(`/main/chat/${data.waId}${location.search}`);
 
 		// Sending files via eventbus
 		PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
@@ -173,7 +173,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 				return [...prevState];
 			});
 		} else {
-			navigate(`/main/chat/${data.waId}`);
+			navigate(`/main/chat/${data.waId}${location.search}`);
 		}
 	};
 

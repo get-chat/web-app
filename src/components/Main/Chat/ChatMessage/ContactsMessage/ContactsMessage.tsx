@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ButtonBase } from '@mui/material';
 
@@ -12,11 +12,12 @@ import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 const ContactsMessage = ({ data }) => {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const { contacts } = data?.payload || data?.resendPayload;
 
 	const handleClick = (targetWaId) => {
 		const waId = prepareWaId(targetWaId);
-		navigate(`/main/chat/${waId}`);
+		navigate(`/main/chat/${waId}${location.search}`);
 	};
 
 	return (

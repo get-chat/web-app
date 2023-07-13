@@ -36,6 +36,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import CloseIcon from '@mui/icons-material/Close';
 
 const cx = classNames.bind(styles);
 
@@ -108,6 +109,11 @@ const ChatHeader: React.FC<Props> = ({
 
 		// Force refresh chat
 		PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
+	};
+
+	const closeChatAndHideMenu = () => {
+		closeChat();
+		hideMenu();
 	};
 
 	return (
@@ -232,6 +238,13 @@ const ChatHeader: React.FC<Props> = ({
 						<EventNoteIcon />
 					</ListItemIcon>
 					{t('Toggle event history')}
+				</MenuItem>
+				<Divider />
+				<MenuItem onClick={closeChatAndHideMenu}>
+					<ListItemIcon>
+						<CloseIcon />
+					</ListItemIcon>
+					{t('Close')}
 				</MenuItem>
 			</Menu>
 		</div>

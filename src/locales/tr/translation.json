@@ -292,5 +292,6 @@
 	"Monday": "Pazartesi",
 	"%d chat found_one": "%d sohbet bulundu",
 	"%d chat found_other": "%d sohbet bulundu",
-	"Loading chats": "Sohbetler yükleniyor"
+	"Loading chats": "Sohbetler yükleniyor",
+	"Unknown": "Bilinmeyen"
 }

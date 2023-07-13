@@ -92,7 +92,9 @@ const Login = () => {
 				}
 
 				// Redirect to main route
-				navigate((location.nextPath ?? '/main') + (location.search ?? ''));
+				navigate(
+					(location.state?.nextPath ?? '/main') + location.state?.search ?? ''
+				);
 			},
 			(error) => {
 				// Hide the loading animation

@@ -292,5 +292,6 @@
 	"Monday": "Lunes",
 	"%d chat found_one": "%d chat found",
 	"%d chat found_other": "%d chats found",
-	"Loading chats": ""
+	"Loading chats": "",
+	"Unknown": ""
 }

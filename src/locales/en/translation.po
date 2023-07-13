@@ -912,3 +912,6 @@ msgstr[1] "%d chats found"
 
 msgid "Loading chats"
 msgstr ""
+
+msgid "Unknown"
+msgstr ""

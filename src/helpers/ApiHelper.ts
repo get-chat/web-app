@@ -59,7 +59,7 @@ export const clearUserSession = (errorCase, nextLocation, navigate) => {
 		path = '/';
 	}
 
-	if (navigate !== undefined) {
+	if (navigate) {
 		navigate(path, {
 			state: {
 				nextPath: nextLocation?.pathname,

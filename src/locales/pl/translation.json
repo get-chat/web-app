@@ -295,5 +295,6 @@
 	"%d chat found_one": "%d chat found",
 	"%d chat found_few": "%d chats found",
 	"%d chat found_many": "",
-	"Loading chats": ""
+	"Loading chats": "",
+	"Unknown": ""
 }
