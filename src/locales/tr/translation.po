@@ -945,3 +945,6 @@ msgstr[1] "%d sohbet bulundu"
 
 msgid "Loading chats"
 msgstr "Sohbetler yükleniyor"
+
+msgid "Unknown"
+msgstr "Bilinmeyen"

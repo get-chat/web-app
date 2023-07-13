@@ -905,7 +905,8 @@ const Sidebar: React.FC<any> = ({
 								<FilterOption
 									icon={<SellIcon />}
 									label={
-										tags?.filter((item) => item.id === filterTagId)?.[0]?.name
+										tags?.filter((item) => item.id === filterTagId)?.[0]
+											?.name ?? t('Unknown')
 									}
 									onClick={() => dispatch(setFilterTagId(undefined))}
 									isActive

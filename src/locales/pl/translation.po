@@ -944,3 +944,6 @@ msgstr[2] ""
 
 msgid "Loading chats"
 msgstr ""
+
+msgid "Unknown"
+msgstr ""
