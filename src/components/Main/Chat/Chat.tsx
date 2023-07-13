@@ -1018,7 +1018,7 @@ const Chat: React.FC = (props) => {
 
 					if (returnedWaId !== prepareWaId(waId)) {
 						// verifyContact returned a different waId, redirecting to chat page with new waId
-						navigate(`/main/chat/${returnedWaId}`);
+						navigate(`/main/chat/${returnedWaId}${location.search}`);
 					} else {
 						createPersonAndStartChat(addPlus(waId), waId?.[0]);
 					}
@@ -1775,7 +1775,7 @@ const Chat: React.FC = (props) => {
 	};
 
 	const closeChat = () => {
-		navigate('/main');
+		navigate(`/main${location.search}`);
 	};
 
 	const processCommand = (text: string) => {

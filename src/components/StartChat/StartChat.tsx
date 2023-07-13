@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
@@ -35,6 +35,7 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 	let verifyPhoneNumberCancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	useEffect(() => {
 		const handleKey = (event: KeyboardEvent) => {
@@ -84,7 +85,7 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 				) {
 					const returnedWaId = response.data.contacts[0].wa_id;
 
-					navigate(`/main/chat/${returnedWaId}`, {
+					navigate(`/main/chat/${returnedWaId}${location.search}`, {
 						state: {
 							person: {
 								name: data?.name,

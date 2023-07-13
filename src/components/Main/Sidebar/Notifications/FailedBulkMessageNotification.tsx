@@ -2,7 +2,7 @@
 import React from 'react';
 import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '@src/Constants';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from '@mui/material';
 import { generateMessagePreview } from '@src/helpers/MessageHelper';
 import { Trans, useTranslation } from 'react-i18next';
@@ -11,9 +11,10 @@ function FailedBulkMessageNotification(props) {
 	const { t } = useTranslation();
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const handleClick = () => {
-		navigate(`/main/chat/${props.data.waId}`);
+		navigate(`/main/chat/${props.data.waId}${location.search}`);
 	};
 
 	const extractReasonFromResponsePayload = (responsePayload) => {

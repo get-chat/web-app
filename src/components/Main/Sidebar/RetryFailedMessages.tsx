@@ -7,7 +7,7 @@ import {
 } from '@src/helpers/PendingMessagesHelper';
 import '../../../styles/RetryFailedMessages.css';
 import Alert from '@mui/material/Alert';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ function RetryFailedMessages(props) {
 	const { t } = useTranslation();
 
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const dateFormat = 'H:mm';
 
@@ -29,7 +30,7 @@ function RetryFailedMessages(props) {
 		);
 		const waId = firstFailedMessage.requestBody?.wa_id;
 		if (waId) {
-			navigate(`/main/chat/${waId}`);
+			navigate(`/main/chat/${waId}${location.search}`);
 		}
 	};
 

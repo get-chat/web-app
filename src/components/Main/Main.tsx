@@ -267,7 +267,7 @@ function Main() {
 	};
 
 	const goToChatByWaId = (_waId) => {
-		navigate(`/main/chat/${_waId}`);
+		navigate(`/main/chat/${_waId}${location.search}`);
 	};
 
 	const displayNotification = (title, body, chatWaId) => {
@@ -386,10 +386,10 @@ function Main() {
 
 		if (!getToken()) {
 			clearUserSession('notLoggedIn', location, navigate);
+		} else {
+			// Retrieve current user, this will trigger other requests
+			retrieveCurrentUser();
 		}
-
-		// Retrieve current user, this will trigger other requests
-		retrieveCurrentUser();
 
 		const onUnsupportedFileEvent = function (msg, data) {
 			setUnsupportedFile(data);
