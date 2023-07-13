@@ -17,11 +17,12 @@ const useChatFilters = () => {
 
 	const dispatch = useAppDispatch();
 
-	const hasAnyFilterQueryParam = () => {
+	const hasAnyFilterQueryParam = useMemo(() => {
 		for (let queryParamKey of Object.values(FilterQueryParams)) {
 			if (searchParams.has(queryParamKey)) return true;
 		}
-	};
+		return false;
+	}, []);
 
 	const parseDateFilter = (filterQueryParam: FilterQueryParams) => {
 		const queryParam = searchParams.get(filterQueryParam);
