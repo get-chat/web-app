@@ -149,7 +149,7 @@ const useChatFilters = () => {
 					?.toISOString()
 					?.split('T')[0],
 				[FilterQueryParams.MESSAGES_BEFORE_TIME]: filterEndDate
-					?.toString()
+					?.toISOString()
 					?.split('T')[0],
 			};
 
