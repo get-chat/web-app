@@ -5,6 +5,8 @@ import { useSearchParams } from 'react-router-dom';
 import FilterQueryParams from '@src/enums/FilterQueryParams';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 
+const LIMIT_DEFAULT = 20;
+
 const useChatFilters = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTagId = useAppSelector((state) => state.filterTagId.value);
@@ -34,7 +36,7 @@ const useChatFilters = () => {
 	};
 
 	const [chatsLimit, setChatsLimit] = useState(
-		parseInt(searchParams.get(FilterQueryParams.LIMIT) ?? '') || 20
+		parseInt(searchParams.get(FilterQueryParams.LIMIT) ?? '') || LIMIT_DEFAULT
 	);
 
 	const [chatsOffset, setChatsOffset] = useState(
@@ -46,49 +48,64 @@ const useChatFilters = () => {
 	);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
-		searchParams.get(FilterQueryParams.ASSIGNED_TO_ME) === '1' ||
-			userPreference?.filters?.filterAssignedToMe ||
-			false
+		userPreference?.filters?.filterAssignedToMe || false
 	);
 	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<
 		number | undefined
-	>(
-		parseInt(searchParams.get(FilterQueryParams.ASSIGNED_GROUP) ?? '') ||
-			userPreference?.filters?.filterAssignedGroupId
-	);
+	>(userPreference?.filters?.filterAssignedGroupId);
 	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
-		parseDateFilter(FilterQueryParams.MESSAGES_SINCE_TIME) ??
-			(userPreference?.filters?.filterStartDate
-				? new Date(userPreference?.filters?.filterStartDate)
-				: undefined)
+		userPreference?.filters?.filterStartDate
+			? new Date(userPreference?.filters?.filterStartDate)
+			: undefined
 	);
 	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>(
-		parseDateFilter(FilterQueryParams.MESSAGES_BEFORE_TIME) ??
-			(userPreference?.filters?.filterEndDate
-				? new Date(userPreference?.filters?.filterEndDate)
-				: undefined)
+		userPreference?.filters?.filterEndDate
+			? new Date(userPreference?.filters?.filterEndDate)
+			: undefined
 	);
 
 	const isMounted = useRef(false);
 
 	useEffect(() => {
-		if (currentUser) {
-			const filterTagIdQueryParam =
-				parseInt(searchParams.get(FilterQueryParams.CHAT_TAG_ID) ?? '') ||
-				undefined;
-
+		// Here chat filter id in store will be filled if no filter query param is provided
+		if (currentUser && !hasAnyFilterQueryParam) {
 			// User preference
 			const preference = currentUser.getPreferences();
-			dispatch(
-				setFilterTagId(
-					filterTagIdQueryParam ?? preference?.filters?.filterTagId
-				)
-			);
+			dispatch(setFilterTagId(preference?.filters?.filterTagId));
 		}
-	}, [currentUser]);
+	}, [currentUser, hasAnyFilterQueryParam]);
 
 	useEffect(() => {
-		if (isMounted.current || hasAnyFilterQueryParam) {
+		if (hasAnyFilterQueryParam) {
+			// Overriding all filters if there is at least one filter query param
+			// Skipping limit and offset as they are not stored
+
+			setFilterAssignedToMe(
+				searchParams.get(FilterQueryParams.ASSIGNED_TO_ME) === '1'
+			);
+
+			setFilterAssignedGroupId(
+				parseInt(searchParams.get(FilterQueryParams.ASSIGNED_GROUP) ?? '') ||
+					undefined
+			);
+
+			dispatch(
+				setFilterTagId(
+					parseInt(searchParams.get(FilterQueryParams.CHAT_TAG_ID) ?? '') ||
+						undefined
+				)
+			);
+
+			setFilterStartDate(
+				parseDateFilter(FilterQueryParams.MESSAGES_SINCE_TIME)
+			);
+
+			setFilterEndDate(parseDateFilter(FilterQueryParams.MESSAGES_BEFORE_TIME));
+		}
+	}, [hasAnyFilterQueryParam]);
+
+	useEffect(() => {
+		if (isMounted.current) {
 			// Store filters
 			setUserPreference(currentUser?.id, {
 				filters: {
