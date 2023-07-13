@@ -17,7 +17,7 @@ const useChatFilters = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const filterTagId = useAppSelector((state) => state.filterTagId.value);
 
-	const userPreference = useMemo(() => {
+	const initialUserPreference = useMemo(() => {
 		return currentUser?.getPreferences();
 	}, [currentUser]);
 
@@ -54,19 +54,19 @@ const useChatFilters = () => {
 	);
 
 	const [filterAssignedToMe, setFilterAssignedToMe] = useState<boolean>(
-		userPreference?.filters?.filterAssignedToMe || false
+		initialUserPreference?.filters?.filterAssignedToMe || false
 	);
 	const [filterAssignedGroupId, setFilterAssignedGroupId] = useState<
 		number | undefined
-	>(userPreference?.filters?.filterAssignedGroupId);
+	>(initialUserPreference?.filters?.filterAssignedGroupId);
 	const [filterStartDate, setFilterStartDate] = useState<Date | undefined>(
-		userPreference?.filters?.filterStartDate
-			? new Date(userPreference?.filters?.filterStartDate)
+		initialUserPreference?.filters?.filterStartDate
+			? new Date(initialUserPreference?.filters?.filterStartDate)
 			: undefined
 	);
 	const [filterEndDate, setFilterEndDate] = useState<Date | undefined>(
-		userPreference?.filters?.filterEndDate
-			? new Date(userPreference?.filters?.filterEndDate)
+		initialUserPreference?.filters?.filterEndDate
+			? new Date(initialUserPreference?.filters?.filterEndDate)
 			: undefined
 	);
 
@@ -181,7 +181,6 @@ const useChatFilters = () => {
 	]);
 
 	return {
-		userPreference,
 		chatsLimit,
 		chatsOffset,
 		keyword,
