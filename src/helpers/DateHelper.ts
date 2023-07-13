@@ -14,6 +14,10 @@ const isSameDay = (d1: Date, d2: Date): boolean => {
 	);
 };
 
+const formatDate = (date?: Date) => {
+	return date ? moment(date).format('yyyy-MM-DD') : undefined;
+};
+
 const formatDateRangeFilters = (
 	filterStartDate?: Date,
 	filterEndDate?: Date
@@ -41,6 +45,7 @@ const convertDateToUnixTimestamp = (date: Date) => {
 export {
 	getPastHoursByTimestamp,
 	isSameDay,
+	formatDate,
 	formatDateRangeFilters,
 	convertDateToUnixTimestamp,
 };

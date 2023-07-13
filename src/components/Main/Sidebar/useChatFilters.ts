@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import FilterQueryParams from '@src/enums/FilterQueryParams';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
+import { formatDate } from '@src/helpers/DateHelper';
 
 const LIMIT_DEFAULT = 20;
 
@@ -145,12 +146,8 @@ const useChatFilters = () => {
 				[FilterQueryParams.ASSIGNED_TO_ME]: filterAssignedToMe ? 1 : null,
 				[FilterQueryParams.ASSIGNED_GROUP]: filterAssignedGroupId,
 				[FilterQueryParams.CHAT_TAG_ID]: filterTagId,
-				[FilterQueryParams.MESSAGES_SINCE_TIME]: filterStartDate
-					?.toISOString()
-					?.split('T')[0],
-				[FilterQueryParams.MESSAGES_BEFORE_TIME]: filterEndDate
-					?.toISOString()
-					?.split('T')[0],
+				[FilterQueryParams.MESSAGES_SINCE_TIME]: formatDate(filterStartDate),
+				[FilterQueryParams.MESSAGES_BEFORE_TIME]: formatDate(filterEndDate),
 			};
 
 			// Filter object
@@ -187,7 +184,6 @@ const useChatFilters = () => {
 		userPreference,
 		chatsLimit,
 		chatsOffset,
-		setChatsLimit,
 		keyword,
 		setKeyword,
 		filterTagId,
