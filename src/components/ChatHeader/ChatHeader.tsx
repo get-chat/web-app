@@ -111,6 +111,11 @@ const ChatHeader: React.FC<Props> = ({
 		PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
 	};
 
+	const closeChatAndHideMenu = () => {
+		closeChat();
+		hideMenu();
+	};
+
 	return (
 		<div className="chat__header" onDrop={(event) => event.preventDefault()}>
 			{!isChatOnly && (
@@ -235,7 +240,7 @@ const ChatHeader: React.FC<Props> = ({
 					{t('Toggle event history')}
 				</MenuItem>
 				<Divider />
-				<MenuItem onClick={closeChat}>
+				<MenuItem onClick={closeChatAndHideMenu}>
 					<ListItemIcon>
 						<CloseIcon />
 					</ListItemIcon>
