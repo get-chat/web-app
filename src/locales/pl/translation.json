@@ -296,5 +296,6 @@
 	"%d chat found_few": "%d chats found",
 	"%d chat found_many": "",
 	"Loading chats": "",
-	"Unknown": ""
+	"Unknown": "",
+	"Close view": ""
 }

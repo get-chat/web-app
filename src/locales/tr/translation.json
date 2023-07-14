@@ -293,5 +293,6 @@
 	"%d chat found_one": "%d sohbet bulundu",
 	"%d chat found_other": "%d sohbet bulundu",
 	"Loading chats": "Sohbetler yükleniyor",
-	"Unknown": "Bilinmeyen"
+	"Unknown": "Bilinmeyen",
+	"Close view": "Ekranı kapat"
 }
