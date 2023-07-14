@@ -244,7 +244,7 @@ const ChatHeader: React.FC<Props> = ({
 					<ListItemIcon>
 						<CloseIcon />
 					</ListItemIcon>
-					{t('Close')}
+					{t('Close view')}
 				</MenuItem>
 			</Menu>
 		</div>

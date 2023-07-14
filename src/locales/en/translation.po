@@ -915,3 +915,6 @@ msgstr ""
 
 msgid "Unknown"
 msgstr ""
+
+msgid "Close view"
+msgstr ""

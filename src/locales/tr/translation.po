@@ -948,3 +948,6 @@ msgstr "Sohbetler yükleniyor"
 
 msgid "Unknown"
 msgstr "Bilinmeyen"
+
+msgid "Close view"
+msgstr "Ekranı kapat"
