@@ -10,10 +10,16 @@ import {
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 
 export class ApiService {
+	apiBaseURL: string = '';
+
 	constructor(config) {
 		this.config = config;
 		this.apiBaseURL = config.API_BASE_URL;
 	}
+
+	setApiBaseURL = (url: string) => {
+		this.apiBaseURL = url;
+	};
 
 	handleRequest = (
 		promise,

@@ -20,6 +20,14 @@ const initializeApp = async () => {
 		const config = await loadAppConfig();
 		const apiService = new ApiService(config);
 
+		const urlParams = new URLSearchParams(window.location.search);
+		const integrationApiBaseURL = urlParams.get('integration_api_base_url');
+
+		if (integrationApiBaseURL) {
+			console.log(integrationApiBaseURL);
+			apiService.setApiBaseURL(integrationApiBaseURL);
+		}
+
 		// TODO: Refactor global config
 		window.config = config;
 
