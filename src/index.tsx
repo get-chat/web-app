@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from '@src/App';
 import {
 	getApiBaseURLs,
+	getCurrentApiBaseURL,
 	initStorageType,
 	storeApiBaseURLs,
 	storeCurrentApiBaseURL,
@@ -31,7 +32,6 @@ const initializeApp = async () => {
 			?.trim();
 
 		if (integrationApiBaseURL) {
-			console.log(integrationApiBaseURL);
 			apiService.setApiBaseURL(integrationApiBaseURL);
 			storeCurrentApiBaseURL(integrationApiBaseURL);
 
@@ -39,6 +39,11 @@ const initializeApp = async () => {
 			if (!apiBaseURLs.includes(integrationApiBaseURL)) {
 				apiBaseURLs.push(integrationApiBaseURL);
 				storeApiBaseURLs(apiBaseURLs);
+			}
+		} else {
+			const storedApiBaseURL = getCurrentApiBaseURL();
+			if (storedApiBaseURL) {
+				apiService.setApiBaseURL(storedApiBaseURL);
 			}
 		}
 
