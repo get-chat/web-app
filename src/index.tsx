@@ -2,7 +2,9 @@ import { createRoot } from 'react-dom/client';
 
 import App from '@src/App';
 import {
+	getApiBaseURLs,
 	initStorageType,
+	storeApiBaseURLs,
 	storeCurrentApiBaseURL,
 } from '@src/helpers/StorageHelper';
 import { ApiService } from '@src/api/ApiService';
@@ -24,12 +26,20 @@ const initializeApp = async () => {
 		const apiService = new ApiService(config);
 
 		const urlParams = new URLSearchParams(window.location.search);
-		const integrationApiBaseURL = urlParams.get('integration_api_base_url');
+		const integrationApiBaseURL = urlParams
+			.get('integration_api_base_url')
+			?.trim();
 
 		if (integrationApiBaseURL) {
 			console.log(integrationApiBaseURL);
 			apiService.setApiBaseURL(integrationApiBaseURL);
 			storeCurrentApiBaseURL(integrationApiBaseURL);
+
+			const apiBaseURLs = getApiBaseURLs();
+			if (!apiBaseURLs.includes(integrationApiBaseURL)) {
+				apiBaseURLs.push(integrationApiBaseURL);
+				storeApiBaseURLs(apiBaseURLs);
+			}
 		}
 
 		// TODO: Refactor global config
