@@ -64,6 +64,20 @@ export const clearToken = () => {
 	getStorage().removeItem(STORAGE_TAG_TOKEN);
 };
 
+export const getApiBaseURLs = (): string[] => {
+	try {
+		const data = getStorage()?.getItem(STORAGE_TAG_API_BASE_URLS);
+		return data ? JSON.parse(data) : [];
+	} catch (e) {
+		console.warn(e);
+		return [];
+	}
+};
+
+export const setApiBaseURLs = (urls: string[]) => {
+	return getStorage()?.setItem(STORAGE_TAG_API_BASE_URLS, JSON.stringify(urls));
+};
+
 export const getUserPreferences = (): UserPreferences => {
 	try {
 		const data = getStorage()?.getItem(STORAGE_TAG_USER_PREFERENCES);
