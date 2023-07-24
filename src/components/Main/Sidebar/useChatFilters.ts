@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { setUserPreference } from '@src/helpers/StorageHelper';
+import { storeUserPreference } from '@src/helpers/StorageHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import {
 	createSearchParams,
@@ -115,7 +115,7 @@ const useChatFilters = () => {
 	useEffect(() => {
 		if (isMounted.current) {
 			// Store filters
-			setUserPreference(currentUser?.id, {
+			storeUserPreference(currentUser?.id, {
 				filters: {
 					filterTagId: filterTagId,
 					filterAssignedToMe: filterAssignedToMe,

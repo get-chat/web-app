@@ -18,7 +18,7 @@ import * as rdrLocales from 'react-date-range/dist/locale';
 import i18next from 'i18next';
 import useDateRanges from '@src/components/DateRangeDialog/useDateRanges';
 import { useAppSelector } from '@src/store/hooks';
-import { setUserPreference } from '@src/helpers/StorageHelper';
+import { storeUserPreference } from '@src/helpers/StorageHelper';
 import styles from './DateRangeDialog.module.css';
 
 interface Props {
@@ -102,7 +102,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 		if (currentUser) {
 			const currentPreferences = currentUser.getPreferences();
 			currentPreferences.weekStartsOn = day;
-			setUserPreference(currentUser.id, currentPreferences);
+			storeUserPreference(currentUser.id, currentPreferences);
 		}
 
 		setWeekStartsOn(day);

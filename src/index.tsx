@@ -1,7 +1,10 @@
 import { createRoot } from 'react-dom/client';
 
 import App from '@src/App';
-import { initStorageType } from '@src/helpers/StorageHelper';
+import {
+	initStorageType,
+	storeCurrentApiBaseURL,
+} from '@src/helpers/StorageHelper';
 import { ApiService } from '@src/api/ApiService';
 import { loadAppConfig } from '@src/config/application';
 import { initializeSentry } from '@src/config/sentry';
@@ -26,6 +29,7 @@ const initializeApp = async () => {
 		if (integrationApiBaseURL) {
 			console.log(integrationApiBaseURL);
 			apiService.setApiBaseURL(integrationApiBaseURL);
+			storeCurrentApiBaseURL(integrationApiBaseURL);
 		}
 
 		// TODO: Refactor global config

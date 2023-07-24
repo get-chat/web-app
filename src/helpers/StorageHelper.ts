@@ -74,9 +74,14 @@ export const getApiBaseURLs = (): string[] => {
 	}
 };
 
-export const setApiBaseURLs = (urls: string[]) => {
-	return getStorage()?.setItem(STORAGE_TAG_API_BASE_URLS, JSON.stringify(urls));
-};
+export const storeApiBaseURLs = (urls: string[]) =>
+	getStorage()?.setItem(STORAGE_TAG_API_BASE_URLS, JSON.stringify(urls));
+
+export const getCurrentApiBaseURL = (): string | null | undefined =>
+	getStorage()?.getItem(STORAGE_TAG_CURRENT_API_BASE_URL);
+
+export const storeCurrentApiBaseURL = (url?: string) =>
+	getStorage()?.setItem(STORAGE_TAG_CURRENT_API_BASE_URL, url);
 
 export const getUserPreferences = (): UserPreferences => {
 	try {
@@ -88,7 +93,7 @@ export const getUserPreferences = (): UserPreferences => {
 	}
 };
 
-export const setUserPreference = (
+export const storeUserPreference = (
 	userId: number | undefined,
 	userPreference: UserPreference
 ) => {
