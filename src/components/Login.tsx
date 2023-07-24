@@ -9,7 +9,7 @@ import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
-import { getHubURL } from '@src/helpers/URLHelper';
+import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfig } from '@src/contexts/AppConfig';
 
 const Login = () => {
@@ -127,6 +127,10 @@ const Login = () => {
 							src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
 							alt="Logo"
 						/>
+					</div>
+
+					<div className="login__body__inboxUrl mt-3 mb-3">
+						{t('Inbox URL: %s', prepareURLForDisplay(apiService.apiBaseURL))}
 					</div>
 
 					<h2>{t('Welcome')}</h2>

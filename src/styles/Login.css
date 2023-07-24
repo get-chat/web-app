@@ -45,12 +45,19 @@
 	margin-bottom: 15px;
 }
 
+.login__body__inboxUrl {
+	font-size: 12px;
+	text-align: center;
+}
+
 .login__body h2 {
 	margin-bottom: 5px;
+	text-align: center;
 }
 
 .login__body p {
 	margin-bottom: 15px;
+	text-align: center;
 }
 
 .login__body > form > button {

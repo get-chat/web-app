@@ -10,7 +10,7 @@ import {
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 
 export class ApiService {
-	apiBaseURL: string = '';
+	public apiBaseURL: string = '';
 
 	constructor(config) {
 		this.config = config;

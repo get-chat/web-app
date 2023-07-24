@@ -434,7 +434,7 @@ function Main() {
 			console.log('Connecting to websocket server');
 
 			// WebSocket, consider a separate env variable for ws address
-			ws = new WebSocket(getWebSocketURL(config.API_BASE_URL));
+			ws = new WebSocket(getWebSocketURL(apiService.apiBaseURL));
 
 			ws.onopen = function (event) {
 				console.log('Connected to websocket server.');
