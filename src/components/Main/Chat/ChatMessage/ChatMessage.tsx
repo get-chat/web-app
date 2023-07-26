@@ -24,15 +24,12 @@ import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
-import Alert from '@mui/material/Alert';
-import { Button } from '@mui/material';
 import ChatMessageReferral from './ChatMessageReferral';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
-import AlertTitle from '@mui/material/AlertTitle';
-import Linkify from 'linkify-react';
+import ChatMessageErrors from '@src/components/ChatMessageErrors';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -231,80 +228,7 @@ function ChatMessage({
 							'\u00A0'
 						)}
 
-						{data.errors &&
-							data.errors.map((error: any, index: number) => {
-								// Could not find translation for the requested language and locale
-								if (error.code === 2003) {
-									return (
-										<Alert
-											key={index}
-											variant="filled"
-											severity="warning"
-											className="chat__errors"
-											action={
-												data.isFailed &&
-												data.canRetry() && (
-													<Button
-														color="inherit"
-														size="small"
-														onClick={() => retryMessage(data)}
-													>
-														{t('Retry')}
-													</Button>
-												)
-											}
-										>
-											{t(
-												'The language pack for this template is not installed on the server yet, try sending this message later'
-											)}
-										</Alert>
-									);
-								}
-
-								return (
-									<Alert
-										key={index}
-										variant="filled"
-										severity="error"
-										className="chat__errors"
-										action={
-											data.isFailed &&
-											data.canRetry() && (
-												<Button
-													color="inherit"
-													size="small"
-													onClick={() => retryMessage(data)}
-												>
-													{t('Retry')}
-												</Button>
-											)
-										}
-									>
-										{error.title && <AlertTitle>{t(error.title)}</AlertTitle>}
-										{error.details && t(error.details)}
-
-										{error.href && (
-											<div>
-												<a href={error.href}>
-													Click here for more information.
-												</a>
-											</div>
-										)}
-
-										{error.recommendation && (
-											<Alert
-												variant="filled"
-												severity="info"
-												className="chat__errors"
-											>
-												<Linkify options={{ target: '_blank' }}>
-													{t(error.recommendation)}
-												</Linkify>
-											</Alert>
-										)}
-									</Alert>
-								);
-							})}
+						<ChatMessageErrors data={data} retryMessage={retryMessage} />
 
 						<span className="chat__message__info">
 							<span className="chat__timestamp">

@@ -1,0 +1,95 @@
+import Alert from '@mui/material/Alert';
+import { Button } from '@mui/material';
+import AlertTitle from '@mui/material/AlertTitle';
+import Linkify from 'linkify-react';
+import React from 'react';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { useTranslation } from 'react-i18next';
+
+interface Props {
+	data: ChatMessageModel;
+	retryMessage: (message: ChatMessageModel) => void;
+}
+
+const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
+	const { t } = useTranslation();
+
+	return (
+		<>
+			{data.errors &&
+				data.errors.map((error: any, index: number) => {
+					// Could not find translation for the requested language and locale
+					if (error.code === 2003) {
+						return (
+							<Alert
+								key={index}
+								variant="filled"
+								severity="warning"
+								className="chat__errors"
+								action={
+									data.isFailed &&
+									data.canRetry() && (
+										<Button
+											color="inherit"
+											size="small"
+											onClick={() => retryMessage(data)}
+										>
+											{t('Retry')}
+										</Button>
+									)
+								}
+							>
+								{t(
+									'The language pack for this template is not installed on the server yet, try sending this message later'
+								)}
+							</Alert>
+						);
+					}
+
+					return (
+						<Alert
+							key={index}
+							variant="filled"
+							severity="error"
+							className="chat__errors"
+							action={
+								data.isFailed &&
+								data.canRetry() && (
+									<Button
+										color="inherit"
+										size="small"
+										onClick={() => retryMessage(data)}
+									>
+										{t('Retry')}
+									</Button>
+								)
+							}
+						>
+							{error.title && <AlertTitle>{t(error.title)}</AlertTitle>}
+							{error.details && t(error.details)}
+
+							{error.href && (
+								<div>
+									<a href={error.href}>Click here for more information.</a>
+								</div>
+							)}
+
+							{error.recommendation && (
+								<Alert
+									variant="filled"
+									severity="info"
+									className="chat__errors"
+								>
+									<Linkify options={{ target: '_blank' }}>
+										{t(error.recommendation)}
+									</Linkify>
+								</Alert>
+							)}
+						</Alert>
+					);
+				})}
+		</>
+	);
+};
+
+export default ChatMessageErrors;
