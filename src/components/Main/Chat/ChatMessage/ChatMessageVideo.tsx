@@ -1,8 +1,17 @@
-// @ts-nocheck
 import React from 'react';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
-function ChatMessageVideo({ source, onPreview, onOptionsClick }) {
+interface Props {
+	source: string;
+	onPreview?: () => void;
+	onOptionsClick?: (e: React.MouseEvent) => void;
+}
+
+const ChatMessageVideo: React.FC<Props> = ({
+	source,
+	onPreview,
+	onOptionsClick,
+}) => {
 	return (
 		<div
 			className="chat__videoWrapper"
@@ -21,6 +30,6 @@ function ChatMessageVideo({ source, onPreview, onOptionsClick }) {
 			</span>
 		</div>
 	);
-}
+};
 
 export default ChatMessageVideo;

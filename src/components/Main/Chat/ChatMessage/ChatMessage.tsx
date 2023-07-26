@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';
@@ -32,6 +31,8 @@ import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectRed
 import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
+import AlertTitle from '@mui/material/AlertTitle';
+import Linkify from 'linkify-react';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -48,12 +49,12 @@ function ChatMessage({
 	isTemplatesFailed,
 	retryMessage,
 	disableMediaPreview,
-}) {
+}: any) {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
 
-	const onPreview = (type, source) => {
+	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
 				data.senderName,
@@ -143,7 +144,9 @@ function ChatMessage({
 							<ChatMessageReferral
 								data={data}
 								onPreview={onPreview}
-								onOptionsClick={(e) => onOptionsClick(e, data)}
+								onOptionsClick={(e: React.MouseEvent) =>
+									onOptionsClick(e, data)
+								}
 							/>
 						)}
 
@@ -159,7 +162,6 @@ function ChatMessage({
 
 						{data.type === ChatMessageModel.TYPE_VIDEO && (
 							<ChatMessageVideo
-								data={data}
 								source={data.generateVideoLink()}
 								onPreview={() =>
 									onPreview(ATTACHMENT_TYPE_VIDEO, data.generateVideoLink())
@@ -193,7 +195,9 @@ function ChatMessage({
 								templateData={templateData}
 								isTemplatesFailed={isTemplatesFailed}
 								onPreview={onPreview}
-								onOptionsClick={(e) => onOptionsClick(e, data)}
+								onOptionsClick={(e: React.MouseEvent) =>
+									onOptionsClick(e, data)
+								}
 							/>
 						)}
 
@@ -228,7 +232,7 @@ function ChatMessage({
 						)}
 
 						{data.errors &&
-							data.errors.map((error, index) => {
+							data.errors.map((error: any, index: number) => {
 								// Could not find translation for the requested language and locale
 								if (error.code === 2003) {
 									return (
@@ -250,11 +254,9 @@ function ChatMessage({
 												)
 											}
 										>
-											<div>
-												{t(
-													'The language pack for this template is not installed on the server yet, try sending this message later'
-												)}
-											</div>
+											{t(
+												'The language pack for this template is not installed on the server yet, try sending this message later'
+											)}
 										</Alert>
 									);
 								}
@@ -278,7 +280,28 @@ function ChatMessage({
 											)
 										}
 									>
-										<div>{t(error.details ?? error.title)}</div>
+										{error.title && <AlertTitle>{t(error.title)}</AlertTitle>}
+										{error.details && t(error.details)}
+
+										{error.href && (
+											<div>
+												<a href={error.href}>
+													Click here for more information.
+												</a>
+											</div>
+										)}
+
+										{error.recommendation && (
+											<Alert
+												variant="filled"
+												severity="info"
+												className="chat__errors"
+											>
+												<Linkify options={{ target: '_blank' }}>
+													{t(error.recommendation)}
+												</Linkify>
+											</Alert>
+										)}
 									</Alert>
 								);
 							})}

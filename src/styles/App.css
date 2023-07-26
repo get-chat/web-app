@@ -172,6 +172,15 @@ a {
 	text-transform: none;
 }
 
+.MuiAlert-message a {
+	font-weight: 600;
+	text-decoration: underline;
+}
+
+.MuiAlert-filled a {
+	color: white;
+}
+
 .MuiListItem-root {
 	font-size: 14px !important;
 }

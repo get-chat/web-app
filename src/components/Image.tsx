@@ -1,12 +1,22 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { binaryToBase64 } from '../helpers/ImageHelper';
 import { isEmptyString } from '../helpers/Helpers';
 import { EMPTY_IMAGE_BASE64 } from '../Constants';
 import { generateCancelToken } from '../helpers/ApiHelper';
 
-const Image = ({
+interface Props {
+	src: string;
+	alt?: string;
+	className?: string;
+	style?: any;
+	height?: number;
+	width?: number;
+	onClick?: () => void;
+	_ref: any;
+}
+
+const Image: React.FC<Props> = ({
 	src,
 	alt,
 	className,
@@ -16,11 +26,11 @@ const Image = ({
 	onClick,
 	_ref,
 }) => {
-	const [data, setData] = useState('');
+	const [data, setData] = useState<string | undefined>('');
 	const [mime, setMime] = useState('');
 	const [fallbackSrc, setFallbackSrc] = useState<string | undefined>();
 
-	const cancelTokenSourceRef = useRef();
+	const cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
 	useEffect(() => {
 		// Generate a token
@@ -47,7 +57,7 @@ const Image = ({
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current.cancel();
+			cancelTokenSourceRef.current?.cancel();
 		};
 	}, [src]);
 
