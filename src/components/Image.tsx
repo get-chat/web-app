@@ -26,9 +26,9 @@ const Image: React.FC<Props> = ({
 	onClick,
 	_ref,
 }) => {
-	const [data, setData] = useState<string | undefined>('');
+	const [data, setData] = useState<string>();
 	const [mime, setMime] = useState('');
-	const [fallbackSrc, setFallbackSrc] = useState<string | undefined>();
+	const [fallbackSrc, setFallbackSrc] = useState<string>();
 
 	const cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
 
