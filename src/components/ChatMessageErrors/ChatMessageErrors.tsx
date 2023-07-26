@@ -5,6 +5,7 @@ import Linkify from 'linkify-react';
 import React from 'react';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
+import styles from './ChatMessageErrors.module.css';
 
 interface Props {
 	data: ChatMessageModel;
@@ -25,7 +26,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 								key={index}
 								variant="filled"
 								severity="warning"
-								className="chat__errors"
+								className={styles.error}
 								action={
 									data.isFailed &&
 									data.canRetry() && (
@@ -51,7 +52,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 							key={index}
 							variant="filled"
 							severity="error"
-							className="chat__errors"
+							className={styles.error}
 							action={
 								data.isFailed &&
 								data.canRetry() && (
@@ -65,12 +66,17 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 								)
 							}
 						>
-							{error.title && <AlertTitle>{t(error.title)}</AlertTitle>}
+							<AlertTitle>
+								{t(error.title ?? 'Error')}{' '}
+								<span className={styles.code}>
+									{error.code && t('(Code: %d)', error.code)}
+								</span>
+							</AlertTitle>
 							{error.details && t(error.details)}
 
 							{error.href && (
 								<div>
-									<a href={error.href}>
+									<a href={error.href} target="_blank">
 										{t('Click here for more information.')}
 									</a>
 								</div>
@@ -80,7 +86,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 								<Alert
 									variant="filled"
 									severity="info"
-									className="chat__errors"
+									className={styles.error}
 								>
 									<Linkify options={{ target: '_blank' }}>
 										{t(error.recommendation)}

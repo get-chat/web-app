@@ -295,5 +295,6 @@
 	"Loading chats": "Sohbetler yükleniyor",
 	"Unknown": "Bilinmeyen",
 	"Close view": "Ekranı kapat",
-	"Click here for more information.": "Daha fazla bilgi için tıkla."
+	"Click here for more information.": "Daha fazla bilgi için tıkla.",
+	"(Code: %d)": "(Kod: %d)"
 }
