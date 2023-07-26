@@ -70,7 +70,9 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 
 							{error.href && (
 								<div>
-									<a href={error.href}>Click here for more information.</a>
+									<a href={error.href}>
+										{t('Click here for more information.')}
+									</a>
 								</div>
 							)}
 

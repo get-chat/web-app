@@ -951,3 +951,6 @@ msgstr "Bilinmeyen"
 
 msgid "Close view"
 msgstr "Ekranı kapat"
+
+msgid "Click here for more information."
+msgstr "Daha fazla bilgi için tıkla."

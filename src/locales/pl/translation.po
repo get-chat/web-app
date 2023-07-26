@@ -950,3 +950,6 @@ msgstr ""
 
 msgid "Close view"
 msgstr ""
+
+msgid "Click here for more information."
+msgstr ""
