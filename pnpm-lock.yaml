@@ -98,6 +98,9 @@ dependencies:
   js-file-download:
     specifier: ^0.4.12
     version: 0.4.12
+  linkify-react:
+    specifier: ^4.1.1
+    version: 4.1.1(linkifyjs@4.1.1)(react@18.2.0)
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -140,9 +143,6 @@ dependencies:
   react-i18next:
     specifier: ^12.0.0
     version: 12.0.0(i18next@22.0.6)(react-dom@18.2.0)(react@18.2.0)
-  react-linkify:
-    specifier: 1.0.0-alpha
-    version: 1.0.0-alpha
   react-moment:
     specifier: ^1.1.2
     version: 1.1.2(moment@2.29.4)(prop-types@15.8.1)(react@18.2.0)
@@ -8941,10 +8941,18 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  /linkify-it@2.2.0:
-    resolution: {integrity: sha512-GnAl/knGn+i1U/wjBz3akz2stz+HrHLsxMwHQGofCDfPvlf+gDKN58UtfmUquTY4/MXeE2x7k19KQmeoZi94Iw==}
+  /linkify-react@4.1.1(linkifyjs@4.1.1)(react@18.2.0):
+    resolution: {integrity: sha512-2K9Y1cUdvq40dFWqCJ//X+WP19nlzIVITFGI93RjLnA0M7KbnxQ/ffC3AZIZaEIrLangF9Hjt3i0GQ9/anEG5A==}
+    peerDependencies:
+      linkifyjs: ^4.0.0
+      react: '>= 15.0.0'
     dependencies:
-      uc.micro: 1.0.6
+      linkifyjs: 4.1.1
+      react: 18.2.0
+    dev: false
+
+  /linkifyjs@4.1.1:
+    resolution: {integrity: sha512-zFN/CTVmbcVef+WaDXT63dNzzkfRBKT1j464NJQkV7iSgJU0sLBus9W0HBwnXK13/hf168pbrx/V/bjEHOXNHA==}
     dev: false
 
   /lint-staged@13.0.4:
@@ -11204,13 +11212,6 @@ packages:
   /react-is@18.2.0:
     resolution: {integrity: sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==}
 
-  /react-linkify@1.0.0-alpha:
-    resolution: {integrity: sha512-7gcIUvJkAXXttt1fmBK9cwn+1jTa4hbKLGCZ9J1U6EOkyb2/+LKL1Z28d9rtDLMnpvImlNlLPdTPooorl5cpmg==}
-    dependencies:
-      linkify-it: 2.2.0
-      tlds: 1.231.0
-    dev: false
-
   /react-list@0.8.17(react@18.2.0):
     resolution: {integrity: sha512-pgmzGi0G5uGrdHzMhgO7KR1wx5ZXVvI3SsJUmkblSAKtewIhMwbQiMuQiTE83ozo04BQJbe0r3WIWzSO0dR1xg==}
     peerDependencies:
@@ -12605,10 +12606,6 @@ packages:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
     dev: false
 
-  /tlds@1.231.0:
-    resolution: {integrity: sha512-L7UQwueHSkGxZHQBXHVmXW64oi+uqNtzFt2x6Ssk7NVnpIbw16CRs4eb/jmKOZ9t2JnqZ/b3Cfvo97lnXqKrhw==}
-    dev: false
-
   /tmp@0.2.1:
     resolution: {integrity: sha512-76SUhtfqR2Ijn+xllcI5P1oyannHNHByD80W1q447gU3mp9G9PSpGdWmjUOHRDPiHYacIk66W7ubDTuPF3BEtQ==}
     engines: {node: '>=8.17.0'}
@@ -12792,10 +12789,6 @@ packages:
 
   /ua-parser-js@1.0.2:
     resolution: {integrity: sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==}
-    dev: false
-
-  /uc.micro@1.0.6:
-    resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}
     dev: false
 
   /unbox-primitive@1.0.2:

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';
@@ -25,13 +24,12 @@ import InteractiveMessage from './InteractiveMessage';
 import OrderMessage from './OrderMessage';
 import ContactsMessage from './ContactsMessage';
 import PrintMessage from '../../../PrintMessage';
-import Alert from '@mui/material/Alert';
-import { Button } from '@mui/material';
 import ChatMessageReferral from './ChatMessageReferral';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
+import ChatMessageErrors from '@src/components/ChatMessageErrors';
 
 const iconStyles = {
 	fontSize: '15px',
@@ -48,12 +46,12 @@ function ChatMessage({
 	isTemplatesFailed,
 	retryMessage,
 	disableMediaPreview,
-}) {
+}: any) {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
 
-	const onPreview = (type, source) => {
+	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
 				data.senderName,
@@ -143,7 +141,9 @@ function ChatMessage({
 							<ChatMessageReferral
 								data={data}
 								onPreview={onPreview}
-								onOptionsClick={(e) => onOptionsClick(e, data)}
+								onOptionsClick={(e: React.MouseEvent) =>
+									onOptionsClick(e, data)
+								}
 							/>
 						)}
 
@@ -159,7 +159,6 @@ function ChatMessage({
 
 						{data.type === ChatMessageModel.TYPE_VIDEO && (
 							<ChatMessageVideo
-								data={data}
 								source={data.generateVideoLink()}
 								onPreview={() =>
 									onPreview(ATTACHMENT_TYPE_VIDEO, data.generateVideoLink())
@@ -193,7 +192,9 @@ function ChatMessage({
 								templateData={templateData}
 								isTemplatesFailed={isTemplatesFailed}
 								onPreview={onPreview}
-								onOptionsClick={(e) => onOptionsClick(e, data)}
+								onOptionsClick={(e: React.MouseEvent) =>
+									onOptionsClick(e, data)
+								}
 							/>
 						)}
 
@@ -227,61 +228,7 @@ function ChatMessage({
 							'\u00A0'
 						)}
 
-						{data.errors &&
-							data.errors.map((error, index) => {
-								// Could not find translation for the requested language and locale
-								if (error.code === 2003) {
-									return (
-										<Alert
-											key={index}
-											variant="filled"
-											severity="warning"
-											className="chat__errors"
-											action={
-												data.isFailed &&
-												data.canRetry() && (
-													<Button
-														color="inherit"
-														size="small"
-														onClick={() => retryMessage(data)}
-													>
-														{t('Retry')}
-													</Button>
-												)
-											}
-										>
-											<div>
-												{t(
-													'The language pack for this template is not installed on the server yet, try sending this message later'
-												)}
-											</div>
-										</Alert>
-									);
-								}
-
-								return (
-									<Alert
-										key={index}
-										variant="filled"
-										severity="error"
-										className="chat__errors"
-										action={
-											data.isFailed &&
-											data.canRetry() && (
-												<Button
-													color="inherit"
-													size="small"
-													onClick={() => retryMessage(data)}
-												>
-													{t('Retry')}
-												</Button>
-											)
-										}
-									>
-										<div>{t(error.details ?? error.title)}</div>
-									</Alert>
-								);
-							})}
+						<ChatMessageErrors data={data} retryMessage={retryMessage} />
 
 						<span className="chat__message__info">
 							<span className="chat__timestamp">

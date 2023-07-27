@@ -1,8 +1,19 @@
-// @ts-nocheck
 import React from 'react';
 import Image from '../../../Image';
 
-function ChatMessageImage({ className, source, data, onPreview }) {
+interface Props {
+	className?: string;
+	source: string;
+	data: any;
+	onPreview?: () => void;
+}
+
+const ChatMessageImage: React.FC<Props> = ({
+	className,
+	source,
+	data,
+	onPreview,
+}) => {
 	return (
 		<Image
 			className={'chat__media' + (className ? ' ' + className : '')}
@@ -11,6 +22,6 @@ function ChatMessageImage({ className, source, data, onPreview }) {
 			onClick={onPreview}
 		/>
 	);
-}
+};
 
 export default ChatMessageImage;

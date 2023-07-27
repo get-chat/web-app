@@ -37,6 +37,8 @@ export class ChatMessageModel {
 	public isFromUs = false;
 	public senderName: string | undefined;
 	public timestamp = -1;
+	public errors: any[] = [];
+	public isFailed = false;
 
 	constructor(data) {
 		if (!data) return;

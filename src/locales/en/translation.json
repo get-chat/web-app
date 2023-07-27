@@ -294,5 +294,7 @@
 	"%d chat found_other": "%d chats found",
 	"Loading chats": "",
 	"Unknown": "",
-	"Close view": ""
+	"Close view": "",
+	"Click here for more information.": "",
+	"(Code: %d)": ""
 }
