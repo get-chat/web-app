@@ -1869,7 +1869,7 @@ const Chat: React.FC = (props) => {
 					break;
 				}
 				default:
-					window.displayError('Command not recognized!');
+					window.displayCustomError('Command not recognized!');
 					break;
 			}
 		}

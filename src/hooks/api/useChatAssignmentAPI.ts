@@ -40,9 +40,7 @@ const useChatAssignmentAPI = () => {
 			(error: AxiosError) => {
 				if (error?.response?.status === 403) {
 					// @ts-ignore
-					window.displayError(
-						'This chat could not be assigned as its assignments have been changed by another user recently.'
-					);
+					window.displayCustomError(error?.response?.data?.detail);
 				}
 
 				apiCallProps?.onError?.(error);
