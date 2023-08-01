@@ -15,7 +15,7 @@ import { initializeSentry } from '@src/config/sentry';
 import '@src/i18n';
 import '@src/styles/index.css';
 import '@src/styles/App.css';
-import { prepareApiBaseURL } from '@src/helpers/URLHelper';
+import { getIntegrationApiBaseURL } from '@src/helpers/URLHelper';
 
 initStorageType();
 
@@ -27,10 +27,7 @@ const initializeApp = async () => {
 		const config = await loadAppConfig();
 		const apiService = new ApiService(config);
 
-		const urlParams = new URLSearchParams(window.location.search);
-		const integrationApiBaseURL = prepareApiBaseURL(
-			urlParams.get('integration_api_base_url')
-		);
+		const integrationApiBaseURL = getIntegrationApiBaseURL();
 
 		if (integrationApiBaseURL) {
 			apiService.setApiBaseURL(integrationApiBaseURL);
