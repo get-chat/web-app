@@ -957,3 +957,6 @@ msgstr "Daha fazla bilgi için tıkla."
 
 msgid "(Code: %d)"
 msgstr "(Kod: %d)"
+
+msgid "Waiting to be sent"
+msgstr "Gönderilmesi bekleniyor"

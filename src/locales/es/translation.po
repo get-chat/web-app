@@ -954,3 +954,6 @@ msgstr ""
 
 msgid "(Code: %d)"
 msgstr ""
+
+msgid "Waiting to be sent"
+msgstr ""

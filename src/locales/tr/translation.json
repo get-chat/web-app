@@ -296,5 +296,6 @@
 	"Unknown": "Bilinmeyen",
 	"Close view": "Ekranı kapat",
 	"Click here for more information.": "Daha fazla bilgi için tıkla.",
-	"(Code: %d)": "(Kod: %d)"
+	"(Code: %d)": "(Kod: %d)",
+	"Waiting to be sent": "Gönderilmesi bekleniyor"
 }
