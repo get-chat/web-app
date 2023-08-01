@@ -297,5 +297,7 @@
 	"%d chat found_many": "",
 	"Loading chats": "",
 	"Unknown": "",
-	"Close view": ""
+	"Close view": "",
+	"Click here for more information.": "",
+	"(Code: %d)": ""
 }

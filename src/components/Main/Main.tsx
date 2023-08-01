@@ -193,7 +193,11 @@ function Main() {
 
 	const displayError = (error) => {
 		if (!axios.isCancel(error)) {
-			setErrorMessage(error.response?.data?.reason ?? 'An error has occurred.');
+			setErrorMessage(
+				error.response?.data?.reason ??
+					error.response?.data?.detail ??
+					'An error has occurred.'
+			);
 			setErrorVisible(true);
 		}
 	};

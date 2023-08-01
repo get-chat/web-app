@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 // @ts-ignore
 import reactStringReplace from 'react-string-replace-recursively';
-// @ts-ignore
-import Linkify from 'react-linkify';
 import { PrintMessageComponentProps } from '@src/components/PrintMessage/components/PrintMessageComponentProps';
+import Linkify from 'linkify-react';
 
 const Text: React.FC<PrintMessageComponentProps> = ({
 	data: { text },
@@ -59,17 +58,7 @@ const Text: React.FC<PrintMessageComponentProps> = ({
 		};
 
 		return linkify ? (
-			<Linkify
-				componentDecorator={(
-					decoratedHref: string,
-					decoratedText: JSX.Element,
-					key: string
-				) => (
-					<a target="blank" href={decoratedHref} key={key}>
-						{decoratedText}
-					</a>
-				)}
-			>
+			<Linkify options={{ target: '_blank' }}>
 				{reactStringReplace(config)(text)}
 			</Linkify>
 		) : (

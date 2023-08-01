@@ -254,12 +254,6 @@ a.chat__document:hover {
 	color: rgba(0, 0, 45, 0.6);
 }
 
-.chat__errors {
-	padding: 5px 15px !important;
-	margin-top: 10px;
-	border-radius: 5px !important;
-}
-
 .chat__message__info {
 	float: right;
 }
