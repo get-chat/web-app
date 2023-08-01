@@ -35,6 +35,25 @@ const prepareWebsocketURL = (url: string) => {
 		.replace('api/v2/', '');
 };
 
+export const prepareApiBaseURL = (url: string | null) => {
+	if (!url) return;
+
+	if (url.startsWith('http:')) {
+		url = url.replace('http:', 'https:');
+	}
+
+	if (!url.startsWith('https://')) {
+		url = 'https://' + url;
+	}
+
+	try {
+		const result = new URL(url);
+		return result.origin + '/api/v1/';
+	} catch (e) {
+		console.error(e);
+	}
+};
+
 export const prepareURLForDisplay = (url: string) => {
 	return url
 		.replace('http://', '')
