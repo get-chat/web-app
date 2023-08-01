@@ -40,7 +40,7 @@ const useChatAssignmentAPI = () => {
 			(error: AxiosError) => {
 				if (error?.response?.status === 403) {
 					// @ts-ignore
-					window.displayCustomError(error?.response?.data?.detail);
+					window.displayError(error);
 				}
 
 				apiCallProps?.onError?.(error);
