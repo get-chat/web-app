@@ -3,7 +3,13 @@ import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import {
+	useNavigate,
+	useLocation,
+	useParams,
+	useSearchParams,
+	createSearchParams,
+} from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +42,23 @@ const Login = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const [searchParams] = useSearchParams();
+
 	useEffect(() => {
+		// Remove integration_api_base_url param if exists
+		const params = Object.fromEntries(searchParams.entries());
+		if ('integration_api_base_url' in params) {
+			delete params['integration_api_base_url'];
+
+			const options = {
+				pathname: location.pathname,
+				search: `?${createSearchParams(params)}`,
+			};
+
+			// Update query params
+			navigate(options, { replace: true });
+		}
+
 		if (errorCase) {
 			setLoginError(errorMessages[errorCase]);
 
