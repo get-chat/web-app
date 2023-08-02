@@ -962,3 +962,6 @@ msgstr ""
 
 msgid "Your current inbox"
 msgstr ""
+
+msgid "Select an inbox"
+msgstr ""

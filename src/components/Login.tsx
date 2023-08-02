@@ -17,6 +17,7 @@ import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfig } from '@src/contexts/AppConfig';
+import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -38,6 +39,8 @@ const Login = () => {
 	const [isLoggingIn, setLoggingIn] = useState(false);
 	const [isValidatingToken, setValidatingToken] = useState(false);
 	const [loginError, setLoginError] = useState('');
+
+	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -153,7 +156,16 @@ const Login = () => {
 
 					<div className="login__body__inboxUrl mt-3 mb-3">
 						<h3>{t('Your current inbox')}</h3>
-						{prepareURLForDisplay(apiService.apiBaseURL)}
+						<div>
+							{prepareURLForDisplay(apiService.apiBaseURL)}
+							<a
+								href="#"
+								className="ml-1"
+								onClick={() => setInboxSelectorVisible(true)}
+							>
+								{t('Change')}
+							</a>
+						</div>
 					</div>
 
 					<h2>{t('Welcome')}</h2>
@@ -219,6 +231,13 @@ const Login = () => {
 					</div>
 				</div>
 			</Fade>
+
+			{isInboxSelectorVisible && (
+				<InboxSelectorDialog
+					isVisible={isInboxSelectorVisible}
+					setVisible={setInboxSelectorVisible}
+				/>
+			)}
 
 			<Backdrop className="login__backdrop" open={isLoggingIn}>
 				<CircularProgress color="inherit" />

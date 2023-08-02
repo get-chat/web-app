@@ -963,3 +963,6 @@ msgstr "Gönderilmesi bekleniyor"
 
 msgid "Your current inbox"
 msgstr "Şu anki inbox'ın"
+
+msgid "Select an inbox"
+msgstr "Bir inbox seç"

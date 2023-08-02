@@ -50,6 +50,10 @@
 	text-align: center;
 }
 
+.login__body__inboxUrl a {
+	color: var(--color-secondary);
+}
+
 .login__body h2 {
 	margin-bottom: 5px;
 	text-align: center;
