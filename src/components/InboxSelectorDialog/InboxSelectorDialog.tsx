@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -14,7 +14,13 @@ interface Props {
 const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	const { t } = useTranslation();
 
-	const [urls, setUrls] = useState(getApiBaseURLs());
+	const [urls, setUrls] = useState<string[]>([]);
+
+	useEffect(() => {
+		if (isVisible && !urls.length) {
+			setUrls(getApiBaseURLs());
+		}
+	}, [isVisible]);
 
 	const close = () => {
 		setVisible(false);
@@ -24,8 +30,8 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 		<Dialog open={isVisible} onClose={close}>
 			<DialogTitle>{t('Select an inbox')}</DialogTitle>
 			<DialogContent>
-				{urls.map((item) => (
-					<div>{prepareURLForDisplay(item)}</div>
+				{urls.map((item, index) => (
+					<div key={index}>{prepareURLForDisplay(item)}</div>
 				))}
 			</DialogContent>
 		</Dialog>
