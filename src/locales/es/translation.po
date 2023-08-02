@@ -957,3 +957,6 @@ msgstr ""
 
 msgid "Waiting to be sent"
 msgstr ""
+
+msgid "Your current inbox"
+msgstr ""

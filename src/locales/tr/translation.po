@@ -960,3 +960,6 @@ msgstr "(Kod: %d)"
 
 msgid "Waiting to be sent"
 msgstr "Gönderilmesi bekleniyor"
+
+msgid "Your current inbox"
+msgstr "Şu anki inbox'ın"

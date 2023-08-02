@@ -152,7 +152,8 @@ const Login = () => {
 					</div>
 
 					<div className="login__body__inboxUrl mt-3 mb-3">
-						{t('Inbox URL: %s', prepareURLForDisplay(apiService.apiBaseURL))}
+						<h3>{t('Your current inbox')}</h3>
+						{prepareURLForDisplay(apiService.apiBaseURL)}
 					</div>
 
 					<h2>{t('Welcome')}</h2>
