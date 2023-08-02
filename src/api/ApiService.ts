@@ -65,6 +65,14 @@ export class ApiService {
 		);
 	};
 
+	listHealthStatus = (successCallback, errorCallback) => {
+		this.handleRequest(
+			axios.get(`${this.apiBaseURL}status/health/`, getRequestConfig()),
+			successCallback,
+			errorCallback
+		);
+	};
+
 	loginCall = (username, password, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}auth/token/`, {
