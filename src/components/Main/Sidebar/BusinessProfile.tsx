@@ -19,6 +19,8 @@ import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppSelector } from '@src/store/hooks';
+import { prepareURLForDisplay } from '@src/helpers/URLHelper';
+import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -37,6 +39,7 @@ function BusinessProfile(props) {
 	const [websites, setWebsites] = useState({});
 	const [about, setAbout] = useState('');
 	const [profilePhoto, setProfilePhoto] = useState();
+	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 
 	const fileInput = useRef();
 
@@ -259,6 +262,21 @@ function BusinessProfile(props) {
 
 				<div className="sidebarBusinessProfile__body__section">
 					<div className="sidebarBusinessProfile__body__section__header">
+						<h5>{t('Your current inbox')}</h5>
+					</div>
+
+					{prepareURLForDisplay(apiService.apiBaseURL)}
+					<a
+						href="#"
+						className="ml-1"
+						onClick={() => setInboxSelectorVisible(true)}
+					>
+						{t('Change')}
+					</a>
+				</div>
+
+				<div className="sidebarBusinessProfile__body__section">
+					<div className="sidebarBusinessProfile__body__section__header">
 						<h5>{t('Business Profile')}</h5>
 					</div>
 
@@ -394,6 +412,11 @@ function BusinessProfile(props) {
 					)}
 				</div>
 			</div>
+
+			<InboxSelectorDialog
+				isVisible={isInboxSelectorVisible}
+				setVisible={setInboxSelectorVisible}
+			/>
 		</div>
 	);
 }
