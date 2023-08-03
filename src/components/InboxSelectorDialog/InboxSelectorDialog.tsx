@@ -5,6 +5,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { useTranslation } from 'react-i18next';
 import {
 	getApiBaseURLs,
+	getCurrentApiBaseURL,
 	storeCurrentApiBaseURL,
 } from '@src/helpers/StorageHelper';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
@@ -19,10 +20,12 @@ interface Props {
 const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	const { t } = useTranslation();
 
+	const [current, setCurrent] = useState<string | null | undefined>();
 	const [urls, setUrls] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (isVisible && !urls.length) {
+			setCurrent(getCurrentApiBaseURL());
 			setUrls(getApiBaseURLs());
 		}
 	}, [isVisible]);
@@ -43,7 +46,11 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 				<div className={styles.listWrapper}>
 					<div className={styles.list}>
 						{urls.map((item, index) => (
-							<ListItemButton key={index} onClick={() => onSelect(item)}>
+							<ListItemButton
+								key={index}
+								onClick={() => onSelect(item)}
+								className={item === current ? styles.current : ''}
+							>
 								{prepareURLForDisplay(item)}
 							</ListItemButton>
 						))}

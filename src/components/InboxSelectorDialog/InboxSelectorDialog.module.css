@@ -9,3 +9,8 @@
 	max-height: 100%;
 	overflow-y: auto;
 }
+
+.current {
+	font-weight: 600;
+	color: var(--color-primary) !important;
+}
