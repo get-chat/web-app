@@ -6,11 +6,13 @@ import { useTranslation } from 'react-i18next';
 import {
 	getApiBaseURLs,
 	getCurrentApiBaseURL,
+	storeApiBaseURLs,
 	storeCurrentApiBaseURL,
 } from '@src/helpers/StorageHelper';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import styles from './InboxSelectorDialog.module.css';
 import { Button, DialogActions, ListItemButton } from '@mui/material';
+import { AppConfig } from '@src/contexts/AppConfig';
 
 interface Props {
 	isVisible: boolean;
@@ -20,13 +22,28 @@ interface Props {
 const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	const { t } = useTranslation();
 
+	const config = React.useContext(AppConfig);
+
 	const [current, setCurrent] = useState<string | null | undefined>();
 	const [urls, setUrls] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (isVisible && !urls.length) {
-			setCurrent(getCurrentApiBaseURL());
-			setUrls(getApiBaseURLs());
+			const storedCurrent = getCurrentApiBaseURL();
+			setCurrent(storedCurrent);
+
+			const storedURLs = getApiBaseURLs();
+			// @ts-ignore
+			if (config && !storedURLs.includes(config.API_BASE_URL)) {
+				// @ts-ignore
+				storedURLs.push(config.API_BASE_URL);
+			}
+			// Sort
+			storedURLs.sort((a, b) =>
+				a == storedCurrent ? -1 : b == storedCurrent ? 1 : 0
+			);
+
+			setUrls(storedURLs);
 		}
 	}, [isVisible]);
 
