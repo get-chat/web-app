@@ -46,12 +46,15 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 				<div className={styles.listWrapper}>
 					<div className={styles.list}>
 						{urls.map((item, index) => (
-							<ListItemButton
-								key={index}
-								onClick={() => onSelect(item)}
-								className={item === current ? styles.current : ''}
-							>
-								{prepareURLForDisplay(item)}
+							<ListItemButton key={index} onClick={() => onSelect(item)}>
+								<div>
+									<div>{prepareURLForDisplay(item)}</div>
+									{item === current && (
+										<div className={styles.current}>
+											{t('Your current inbox')}
+										</div>
+									)}
+								</div>
 							</ListItemButton>
 						))}
 					</div>
