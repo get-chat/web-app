@@ -268,7 +268,7 @@ function BusinessProfile(props) {
 					{prepareURLForDisplay(apiService.apiBaseURL)}
 					<a
 						href="#"
-						className="ml-1"
+						className="sidebarBusinessProfile__body__section__changeInbox ml-1"
 						onClick={() => setInboxSelectorVisible(true)}
 					>
 						{t('Change')}

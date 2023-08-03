@@ -124,3 +124,7 @@
 	display: flex;
 	justify-content: flex-end;
 }
+
+.sidebarBusinessProfile__body__section__changeInbox {
+	color: var(--color-secondary);
+}
