@@ -52,8 +52,12 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	};
 
 	const onSelect = (url: string) => {
-		storeCurrentApiBaseURL(url);
-		location.reload();
+		if (url !== current) {
+			storeCurrentApiBaseURL(url);
+			location.reload();
+		} else {
+			close();
+		}
 	};
 
 	return (
