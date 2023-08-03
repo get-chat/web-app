@@ -3,8 +3,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { useTranslation } from 'react-i18next';
-import { getApiBaseURLs } from '@src/helpers/StorageHelper';
+import {
+	getApiBaseURLs,
+	storeCurrentApiBaseURL,
+} from '@src/helpers/StorageHelper';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
+import styles from './InboxSelectorDialog.module.css';
+import { Button, DialogActions, ListItemButton } from '@mui/material';
 
 interface Props {
 	isVisible: boolean;
@@ -26,14 +31,30 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 		setVisible(false);
 	};
 
+	const onSelect = (url: string) => {
+		storeCurrentApiBaseURL(url);
+		location.reload();
+	};
+
 	return (
 		<Dialog open={isVisible} onClose={close}>
 			<DialogTitle>{t('Select an inbox')}</DialogTitle>
 			<DialogContent>
-				{urls.map((item, index) => (
-					<div key={index}>{prepareURLForDisplay(item)}</div>
-				))}
+				<div className={styles.listWrapper}>
+					<div className={styles.list}>
+						{urls.map((item, index) => (
+							<ListItemButton key={index} onClick={() => onSelect(item)}>
+								{prepareURLForDisplay(item)}
+							</ListItemButton>
+						))}
+					</div>
+				</div>
 			</DialogContent>
+			<DialogActions>
+				<Button onClick={close} color="secondary">
+					{t('Close')}
+				</Button>
+			</DialogActions>
 		</Dialog>
 	);
 };
