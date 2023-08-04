@@ -60,6 +60,10 @@ export const prepareApiBaseURL = (url: string | null) => {
 };
 
 export const prepareURLForDisplay = (url: string) => {
+	if (['/api/v1/', '/api/v2/'].includes(url)) {
+		return 'localhost';
+	}
+
 	return url
 		.replace('http://', '')
 		.replace('https://', '')

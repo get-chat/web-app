@@ -11,7 +11,12 @@ import {
 	useSearchParams,
 } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
-import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
+import {
+	clearToken,
+	getApiBaseURLsMergedWithConfig,
+	getToken,
+	storeToken,
+} from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
@@ -21,12 +26,11 @@ import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
+	const config = React.useContext(AppConfig);
 
 	const { t } = useTranslation();
 
 	const { errorCase } = useParams();
-
-	const config = React.useContext(AppConfig);
 
 	const errorMessages = {
 		incorrectRole: 'Only admins and users can access to our web app.',
@@ -41,6 +45,7 @@ const Login = () => {
 	const [loginError, setLoginError] = useState('');
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
+	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -154,19 +159,21 @@ const Login = () => {
 						/>
 					</div>
 
-					<div className="login__body__inboxUrl mt-3 mb-3">
-						<h3>{t('Your current inbox')}</h3>
-						<div>
-							{prepareURLForDisplay(apiService.apiBaseURL)}
-							<a
-								href="#"
-								className="ml-1"
-								onClick={() => setInboxSelectorVisible(true)}
-							>
-								{t('Change')}
-							</a>
+					{storedURLs.length > 1 && (
+						<div className="login__body__inboxUrl mt-3 mb-3">
+							<h3>{t('Your current inbox')}</h3>
+							<div>
+								{prepareURLForDisplay(apiService.apiBaseURL)}
+								<a
+									href="#"
+									className="ml-1"
+									onClick={() => setInboxSelectorVisible(true)}
+								>
+									{t('Change')}
+								</a>
+							</div>
 						</div>
-					</div>
+					)}
 
 					<h2>{t('Welcome')}</h2>
 					<p>{t('Please login to start')}</p>

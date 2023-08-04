@@ -4,9 +4,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { useTranslation } from 'react-i18next';
 import {
-	getApiBaseURLs,
+	getApiBaseURLsMergedWithConfig,
 	getCurrentApiBaseURL,
-	storeApiBaseURLs,
 	storeCurrentApiBaseURL,
 } from '@src/helpers/StorageHelper';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
@@ -29,15 +28,11 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 
 	useEffect(() => {
 		if (isVisible && !urls.length) {
-			const storedCurrent = getCurrentApiBaseURL();
+			// @ts-ignore
+			const storedCurrent = getCurrentApiBaseURL() ?? config.API_BASE_URL;
 			setCurrent(storedCurrent);
 
-			const storedURLs = getApiBaseURLs();
-			// @ts-ignore
-			if (config && !storedURLs.includes(config.API_BASE_URL)) {
-				// @ts-ignore
-				storedURLs.push(config.API_BASE_URL);
-			}
+			const storedURLs = getApiBaseURLsMergedWithConfig(config);
 			// Sort
 			storedURLs.sort((a, b) =>
 				a == storedCurrent ? -1 : b == storedCurrent ? 1 : 0
