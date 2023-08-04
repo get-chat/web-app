@@ -37,7 +37,7 @@ export class ChatMessageModel {
 	public isFromUs = false;
 	public senderName: string | undefined;
 	public timestamp = -1;
-	public errors: any[] = [];
+	public errors?: any[] = [];
 	public isFailed = false;
 
 	constructor(data) {
@@ -136,7 +136,7 @@ export class ChatMessageModel {
 
 		this.errors = payload.errors;
 		this.isStored = false;
-		this.isFailed = false;
+		this.isFailed = this.errors?.length > 0;
 		this.resendPayload = undefined;
 
 		// Not need to sanitize this, because it is already sanitized
