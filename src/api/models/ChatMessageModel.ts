@@ -136,7 +136,7 @@ export class ChatMessageModel {
 
 		this.errors = payload.errors;
 		this.isStored = false;
-		this.isFailed = false;
+		this.isFailed = this.errors && this.errors.length > 0;
 		this.resendPayload = undefined;
 
 		// Not need to sanitize this, because it is already sanitized
