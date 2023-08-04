@@ -3,14 +3,21 @@ import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import {
+	createSearchParams,
+	useLocation,
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import { clearToken, getToken, storeToken } from '../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
-import { getHubURL } from '@src/helpers/URLHelper';
+import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfig } from '@src/contexts/AppConfig';
+import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -33,10 +40,28 @@ const Login = () => {
 	const [isValidatingToken, setValidatingToken] = useState(false);
 	const [loginError, setLoginError] = useState('');
 
+	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
+
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const [searchParams] = useSearchParams();
+
 	useEffect(() => {
+		// Remove integration_api_base_url param if exists
+		const params = Object.fromEntries(searchParams.entries());
+		if ('integration_api_base_url' in params) {
+			delete params['integration_api_base_url'];
+
+			const options = {
+				pathname: location.pathname,
+				search: `?${createSearchParams(params)}`,
+			};
+
+			// Update query params
+			navigate(options, { replace: true });
+		}
+
 		if (errorCase) {
 			setLoginError(errorMessages[errorCase]);
 
@@ -129,6 +154,20 @@ const Login = () => {
 						/>
 					</div>
 
+					<div className="login__body__inboxUrl mt-3 mb-3">
+						<h3>{t('Your current inbox')}</h3>
+						<div>
+							{prepareURLForDisplay(apiService.apiBaseURL)}
+							<a
+								href="#"
+								className="ml-1"
+								onClick={() => setInboxSelectorVisible(true)}
+							>
+								{t('Change')}
+							</a>
+						</div>
+					</div>
+
 					<h2>{t('Welcome')}</h2>
 					<p>{t('Please login to start')}</p>
 
@@ -192,6 +231,11 @@ const Login = () => {
 					</div>
 				</div>
 			</Fade>
+
+			<InboxSelectorDialog
+				isVisible={isInboxSelectorVisible}
+				setVisible={setInboxSelectorVisible}
+			/>
 
 			<Backdrop className="login__backdrop" open={isLoggingIn}>
 				<CircularProgress color="inherit" />

@@ -957,3 +957,12 @@ msgstr "Daha fazla bilgi için tıkla."
 
 msgid "(Code: %d)"
 msgstr "(Kod: %d)"
+
+msgid "Waiting to be sent"
+msgstr "Gönderilmesi bekleniyor"
+
+msgid "Your current inbox"
+msgstr "Şu anki inbox'ın"
+
+msgid "Select an inbox"
+msgstr "Bir inbox seç"

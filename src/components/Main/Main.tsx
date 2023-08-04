@@ -74,9 +74,7 @@ import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
-import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
-import FilterQueryParams from '@src/enums/FilterQueryParams';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -440,7 +438,7 @@ function Main() {
 			console.log('Connecting to websocket server');
 
 			// WebSocket, consider a separate env variable for ws address
-			ws = new WebSocket(getWebSocketURL(config.API_BASE_URL));
+			ws = new WebSocket(getWebSocketURL(apiService.apiBaseURL));
 
 			ws.onopen = function (event) {
 				console.log('Connected to websocket server.');

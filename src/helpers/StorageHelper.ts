@@ -10,6 +10,8 @@ const STORAGE_TAG_DISPLAY_ASSIGNMENT_AND_TAGGING_HISTORY =
 	'display_assignment_and_tagging_history';
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA = 'contact_providers_data';
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME = 'contact_providers_data_time';
+const STORAGE_TAG_CURRENT_API_BASE_URL = 'current_api_base_url';
+const STORAGE_TAG_API_BASE_URLS = 'api_base_urls';
 
 const getLocalStorage = () => {
 	try {
@@ -62,6 +64,25 @@ export const clearToken = () => {
 	getStorage().removeItem(STORAGE_TAG_TOKEN);
 };
 
+export const getApiBaseURLs = (): string[] => {
+	try {
+		const data = getStorage()?.getItem(STORAGE_TAG_API_BASE_URLS);
+		return data ? JSON.parse(data) : [];
+	} catch (e) {
+		console.warn(e);
+		return [];
+	}
+};
+
+export const storeApiBaseURLs = (urls: string[]) =>
+	getStorage()?.setItem(STORAGE_TAG_API_BASE_URLS, JSON.stringify(urls));
+
+export const getCurrentApiBaseURL = (): string | null | undefined =>
+	getStorage()?.getItem(STORAGE_TAG_CURRENT_API_BASE_URL);
+
+export const storeCurrentApiBaseURL = (url?: string) =>
+	getStorage()?.setItem(STORAGE_TAG_CURRENT_API_BASE_URL, url);
+
 export const getUserPreferences = (): UserPreferences => {
 	try {
 		const data = getStorage()?.getItem(STORAGE_TAG_USER_PREFERENCES);
@@ -72,7 +93,7 @@ export const getUserPreferences = (): UserPreferences => {
 	}
 };
 
-export const setUserPreference = (
+export const storeUserPreference = (
 	userId: number | undefined,
 	userPreference: UserPreference
 ) => {

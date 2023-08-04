@@ -954,3 +954,12 @@ msgstr ""
 
 msgid "(Code: %d)"
 msgstr ""
+
+msgid "Waiting to be sent"
+msgstr ""
+
+msgid "Your current inbox"
+msgstr ""
+
+msgid "Select an inbox"
+msgstr ""

@@ -10,10 +10,16 @@ import {
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 
 export class ApiService {
+	public apiBaseURL: string = '';
+
 	constructor(config) {
 		this.config = config;
 		this.apiBaseURL = config.API_BASE_URL;
 	}
+
+	setApiBaseURL = (url: string) => {
+		this.apiBaseURL = url;
+	};
 
 	handleRequest = (
 		promise,
@@ -54,6 +60,14 @@ export class ApiService {
 	baseCall = (successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(this.apiBaseURL, getRequestConfig()),
+			successCallback,
+			errorCallback
+		);
+	};
+
+	listHealthStatus = (successCallback, errorCallback) => {
+		this.handleRequest(
+			axios.get(`${this.apiBaseURL}status/health/`, getRequestConfig()),
 			successCallback,
 			errorCallback
 		);
