@@ -28,7 +28,8 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 
 	useEffect(() => {
 		if (isVisible && !urls.length) {
-			const storedCurrent = getCurrentApiBaseURL();
+			// @ts-ignore
+			const storedCurrent = getCurrentApiBaseURL() ?? config.API_BASE_URL;
 			setCurrent(storedCurrent);
 
 			const storedURLs = getApiBaseURLsMergedWithConfig(config);

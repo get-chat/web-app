@@ -21,9 +21,12 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
+import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
+import { AppConfig } from '@src/contexts/AppConfig';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
+	const config = React.useContext(AppConfig);
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isAdmin = currentUser?.isAdmin ?? false;
@@ -39,7 +42,9 @@ function BusinessProfile(props) {
 	const [websites, setWebsites] = useState({});
 	const [about, setAbout] = useState('');
 	const [profilePhoto, setProfilePhoto] = useState();
+
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
+	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
 
 	const fileInput = useRef();
 
@@ -260,20 +265,22 @@ function BusinessProfile(props) {
 					)}
 				</div>
 
-				<div className="sidebarBusinessProfile__body__section">
-					<div className="sidebarBusinessProfile__body__section__header">
-						<h5>{t('Your current inbox')}</h5>
-					</div>
+				{storedURLs.length > 1 && (
+					<div className="sidebarBusinessProfile__body__section">
+						<div className="sidebarBusinessProfile__body__section__header">
+							<h5>{t('Your current inbox')}</h5>
+						</div>
 
-					{prepareURLForDisplay(apiService.apiBaseURL)}
-					<a
-						href="#"
-						className="sidebarBusinessProfile__body__section__changeInbox ml-1"
-						onClick={() => setInboxSelectorVisible(true)}
-					>
-						{t('Change')}
-					</a>
-				</div>
+						{prepareURLForDisplay(apiService.apiBaseURL)}
+						<a
+							href="#"
+							className="sidebarBusinessProfile__body__section__changeInbox ml-1"
+							onClick={() => setInboxSelectorVisible(true)}
+						>
+							{t('Change')}
+						</a>
+					</div>
+				)}
 
 				<div className="sidebarBusinessProfile__body__section">
 					<div className="sidebarBusinessProfile__body__section__header">
