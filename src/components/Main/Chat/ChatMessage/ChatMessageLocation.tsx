@@ -1,25 +1,34 @@
-// @ts-nocheck
 import React from 'react';
 import { Button } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
-function ChatMessageLocation(props) {
-	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${window.config.APP_GOOGLE_MAPS_API_KEY}&&q=${props.data.location?.latitude},${props.data.location?.longitude}&q=`;
-	const mapURL = `https://www.google.com/maps/place/${props.data.location?.latitude},${props.data.location?.longitude}`;
+interface Props {
+	data: ChatMessageModel;
+}
+
+const ChatMessageLocation: React.FC<Props> = ({ data }) => {
+	const config = React.useContext(AppConfigContext);
+
+	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${config?.APP_GOOGLE_MAPS_API_KEY}&&q=${data.location?.latitude},${data.location?.longitude}&q=`;
+	const mapURL = `https://www.google.com/maps/place/${data.location?.latitude},${data.location?.longitude}`;
 
 	const share = async () => {
 		if (navigator.share) {
 			try {
 				await navigator.share({ url: mapURL });
-			} catch (e) {
+			} catch (e: any) {
 				if (e.toString().includes('AbortError')) {
 					console.log('Ignored AbortError.');
 				} else {
+					// @ts-ignore
 					window.displayCustomError(e.toString());
 				}
 			}
 		} else if (navigator.clipboard) {
 			await navigator.clipboard.writeText(mapURL);
+			// @ts-ignore
 			window.displaySuccess('Copied!');
 		} else {
 			console.log('HTTPS is required for this feature!');
@@ -38,16 +47,16 @@ function ChatMessageLocation(props) {
 				src={mapEmbedURL}
 			/>
 
-			{props.data.location && (
+			{data.location && (
 				<>
-					{props.data.location.name && (
+					{data.location.name && (
 						<div className="chat__message__location__name">
-							{props.data.location.name}
+							{data.location.name}
 						</div>
 					)}
-					{props.data.location.address && (
+					{data.location.address && (
 						<div className="chat__message__location__address">
-							{props.data.location.address}
+							{data.location.address}
 						</div>
 					)}
 				</>
@@ -66,6 +75,6 @@ function ChatMessageLocation(props) {
 			</Button>
 		</div>
 	);
-}
+};
 
 export default ChatMessageLocation;

@@ -1,8 +1,12 @@
 import React from 'react';
 import { ApiService } from '@src/api/ApiService';
 
-const ApplicationContext = React.createContext<{
+interface Props {
 	apiService: ApiService;
-} | null>(null);
+}
+
+const ApplicationContext = React.createContext<Props>({
+	apiService: new ApiService({}),
+});
 
 export { ApplicationContext };

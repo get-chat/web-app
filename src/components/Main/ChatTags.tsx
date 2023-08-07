@@ -207,7 +207,7 @@ function ChatTags(props: any) {
 
 				<div className="mt-3">
 					<Link
-						href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+						href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 						target="_blank"
 						underline="hover"
 					>

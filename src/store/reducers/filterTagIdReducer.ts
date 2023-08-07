@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import TagModel from '@src/api/models/TagModel';
 
 interface FilterTagIdState {
 	value: number | undefined;
