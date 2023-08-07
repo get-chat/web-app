@@ -37,6 +37,8 @@ import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
+import { isReadOnly } from '@src/helpers/ConfigHelper';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 const cx = classNames.bind(styles);
 
@@ -63,6 +65,8 @@ const ChatHeader: React.FC<Props> = ({
 	hasFailedMessages,
 	waId,
 }) => {
+	const config = React.useContext(AppConfigContext);
+
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
 
@@ -219,19 +223,23 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
-				<Divider />
-				<MenuItem onClick={showChatAssignmentAndHideMenu}>
-					<ListItemIcon>
-						<AssignmentTurnedInIcon />
-					</ListItemIcon>
-					{t('Assign chat')}
-				</MenuItem>
-				<MenuItem onClick={showChatTagsAndHideMenu}>
-					<ListItemIcon>
-						<SellIcon />
-					</ListItemIcon>
-					{t('Change tags')}
-				</MenuItem>
+				{!isReadOnly(config) && (
+					<>
+						<Divider />
+						<MenuItem onClick={showChatAssignmentAndHideMenu}>
+							<ListItemIcon>
+								<AssignmentTurnedInIcon />
+							</ListItemIcon>
+							{t('Assign chat')}
+						</MenuItem>
+						<MenuItem onClick={showChatTagsAndHideMenu}>
+							<ListItemIcon>
+								<SellIcon />
+							</ListItemIcon>
+							{t('Change tags')}
+						</MenuItem>
+					</>
+				)}
 				<Divider />
 				<MenuItem onClick={toggleAssignmentAndTaggingHistory}>
 					<ListItemIcon>

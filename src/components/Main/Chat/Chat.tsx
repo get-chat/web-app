@@ -90,6 +90,8 @@ import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 import ChatModel from '@src/api/models/ChatModel';
+import { isReadOnly } from '@src/helpers/ConfigHelper';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -98,6 +100,7 @@ const MESSAGES_PER_PAGE = 30;
 
 const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
+	const config = React.useContext(AppConfigContext);
 
 	const { t } = useTranslation();
 
@@ -2023,26 +2026,28 @@ const Chat: React.FC = (props) => {
 				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
 
-			<ChatFooter
-				waId={waId}
-				currentNewMessages={currentNewMessages}
-				isExpired={isExpired}
-				input={input}
-				setInput={setInput}
-				sendMessage={sendMessage}
-				bulkSendMessage={bulkSendMessage}
-				setSelectedFiles={setSelectedFiles}
-				isTemplatesVisible={isTemplatesVisible}
-				setTemplatesVisible={setTemplatesVisible}
-				accept={accept}
-				isSavedResponsesVisible={isSavedResponsesVisible}
-				setSavedResponsesVisible={setSavedResponsesVisible}
-				sendHandledChosenFiles={sendHandledChosenFiles}
-				setAccept={setAccept}
-				isScrollButtonVisible={isScrollButtonVisible}
-				handleScrollButtonClick={handleScrollButtonClick}
-				processCommand={processCommand}
-			/>
+			{!isReadOnly(config) && (
+				<ChatFooter
+					waId={waId}
+					currentNewMessages={currentNewMessages}
+					isExpired={isExpired}
+					input={input}
+					setInput={setInput}
+					sendMessage={sendMessage}
+					bulkSendMessage={bulkSendMessage}
+					setSelectedFiles={setSelectedFiles}
+					isTemplatesVisible={isTemplatesVisible}
+					setTemplatesVisible={setTemplatesVisible}
+					accept={accept}
+					isSavedResponsesVisible={isSavedResponsesVisible}
+					setSavedResponsesVisible={setSavedResponsesVisible}
+					sendHandledChosenFiles={sendHandledChosenFiles}
+					setAccept={setAccept}
+					isScrollButtonVisible={isScrollButtonVisible}
+					handleScrollButtonClick={handleScrollButtonClick}
+					processCommand={processCommand}
+				/>
+			)}
 
 			{!waId && (
 				<div className="chat__default">
