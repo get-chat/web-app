@@ -99,7 +99,6 @@ import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
-import { isReadOnly } from '@src/helpers/ConfigHelper';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -140,6 +139,7 @@ const Sidebar: React.FC<any> = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
@@ -824,7 +824,7 @@ const Sidebar: React.FC<any> = ({
 					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</CustomAvatar>
 				<div className="sidebar__headerRight">
-					{!isReadOnly(config) && (
+					{!isReadOnly && (
 						<Tooltip title={t('New chat')} disableInteractive>
 							<IconButton
 								onClick={displayContacts}
@@ -835,7 +835,7 @@ const Sidebar: React.FC<any> = ({
 							</IconButton>
 						</Tooltip>
 					)}
-					{!isReadOnly(config) && (
+					{!isReadOnly && (
 						<Tooltip title={t('Bulk send')} disableInteractive>
 							<IconButton onClick={displayBulkMessageMenu} size="large">
 								<DynamicFeedIcon />
@@ -1278,7 +1278,7 @@ const Sidebar: React.FC<any> = ({
 				>
 					{t('Refresh')}
 				</MenuItem>
-				{!isReadOnly(config) && (
+				{!isReadOnly && (
 					<MenuItem onClick={showChangePassword}>
 						<ListItemIcon>
 							<PasswordIcon />

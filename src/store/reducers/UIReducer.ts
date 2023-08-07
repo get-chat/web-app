@@ -20,4 +20,6 @@ export const UISlice = createSlice({
 	},
 });
 
+export const { setReadOnly } = UISlice.actions;
+
 export default UISlice.reducer;

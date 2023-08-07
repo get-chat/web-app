@@ -17,13 +17,12 @@ import styles from './ChatListItem.module.css';
 import classNames from 'classnames/bind';
 import AssigneeChip from '@src/components/AssigneeChip';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import { isReadOnly } from '@src/helpers/ConfigHelper';
+import { useAppSelector } from '@src/store/hooks';
 
 const cx = classNames.bind(styles);
 
 const ChatListItem = (props: any) => {
-	const config = React.useContext(AppConfigContext);
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 
 	const { t } = useTranslation();
 
@@ -163,7 +162,7 @@ const ChatListItem = (props: any) => {
 										assignedUserId={data.assignedToUser?.id}
 										assignedGroupId={data.assignedGroup?.id}
 										dense
-										isActionable={!isReadOnly(config)}
+										isActionable={!isReadOnly}
 										onAction={(userId, groupId) => {
 											partialUpdateChatAssignment(data.waId, userId, groupId);
 										}}
@@ -188,7 +187,7 @@ const ChatListItem = (props: any) => {
 										assignedUserId={data.assignedToUser?.id}
 										assignedGroupId={data.assignedGroup?.id}
 										dense
-										isActionable={!isReadOnly(config)}
+										isActionable={!isReadOnly}
 										onAction={(userId, groupId) => {
 											partialUpdateChatAssignment(data.waId, userId, groupId);
 										}}

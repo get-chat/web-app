@@ -37,8 +37,8 @@ import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
-import { isReadOnly } from '@src/helpers/ConfigHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import { useAppSelector } from '@src/store/hooks';
 
 const cx = classNames.bind(styles);
 
@@ -66,6 +66,8 @@ const ChatHeader: React.FC<Props> = ({
 	waId,
 }) => {
 	const config = React.useContext(AppConfigContext);
+
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
@@ -183,7 +185,7 @@ const ChatHeader: React.FC<Props> = ({
 							secondaryName={chat.assignedGroup?.name}
 							assignedUserId={chat.assignedToUser?.id}
 							assignedGroupId={chat.assignedGroup?.id}
-							isActionable={!isReadOnly(config)}
+							isActionable={!isReadOnly}
 							onAction={(userId, groupId) => {
 								partialUpdateChatAssignment(waId, userId, groupId);
 							}}
@@ -223,7 +225,7 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
-				{!isReadOnly(config) && (
+				{!isReadOnly && (
 					<>
 						<Divider />
 						<MenuItem onClick={showChatAssignmentAndHideMenu}>

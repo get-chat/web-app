@@ -84,14 +84,12 @@ import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsR
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
-import { useAppDispatch } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 import ChatModel from '@src/api/models/ChatModel';
-import { isReadOnly } from '@src/helpers/ConfigHelper';
-import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -100,7 +98,8 @@ const MESSAGES_PER_PAGE = 30;
 
 const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfigContext);
+
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 
 	const { t } = useTranslation();
 
@@ -2026,7 +2025,7 @@ const Chat: React.FC = (props) => {
 				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
 
-			{!isReadOnly(config) && (
+			{!isReadOnly && (
 				<ChatFooter
 					waId={waId}
 					currentNewMessages={currentNewMessages}

@@ -23,13 +23,14 @@ import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import { isReadOnly } from '@src/helpers/ConfigHelper';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+
 	const isAdmin = currentUser?.isAdmin ?? false;
 
 	const { t } = useTranslation();
@@ -218,7 +219,7 @@ function BusinessProfile(props) {
 	];
 
 	const handleBusinessProfileAvatarClick = () => {
-		if (isAdmin && !isReadOnly(config)) fileInput.current.click();
+		if (isAdmin && !isReadOnly) fileInput.current.click();
 	};
 
 	return (
@@ -254,7 +255,7 @@ function BusinessProfile(props) {
 							<h3>{currentUser.username}</h3>
 							<span>{currentUser.firstName + ' ' + currentUser.lastName}</span>
 
-							{!isReadOnly(config) && (
+							{!isReadOnly && (
 								<div className="sidebarBusinessProfile__body__changePasswordContainer">
 									<Button
 										onClick={() => props.setChangePasswordDialogVisible(true)}
@@ -327,7 +328,7 @@ function BusinessProfile(props) {
 									</div>
 								)}
 
-								{profilePhoto && isAdmin && !isReadOnly(config) && (
+								{profilePhoto && isAdmin && !isReadOnly && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>
@@ -345,7 +346,7 @@ function BusinessProfile(props) {
 										multiline={true}
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin || isReadOnly(config),
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 									<TextField
@@ -356,7 +357,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin || isReadOnly(config),
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 									<TextField
@@ -367,7 +368,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin || isReadOnly(config),
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 									<TextField
@@ -378,14 +379,14 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin || isReadOnly(config),
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 
 									<FormControl
 										variant="standard"
 										fullWidth={true}
-										disabled={!isAdmin || isReadOnly(config)}
+										disabled={!isAdmin || isReadOnly}
 									>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
@@ -405,7 +406,7 @@ function BusinessProfile(props) {
 									</FormControl>
 								</div>
 
-								{isAdmin && !isReadOnly(config) && (
+								{isAdmin && !isReadOnly && (
 									<div className="sidebarBusinessProfile__body__section__subSection__action">
 										<Button
 											type="submit"
