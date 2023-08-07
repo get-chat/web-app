@@ -16,6 +16,7 @@ const root = createRoot(domNode as Element);
 const initializeApp = async () => {
 	try {
 		const config = await loadAppConfig();
+		window.config = config;
 
 		initializeSentry(config);
 

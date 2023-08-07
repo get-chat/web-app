@@ -25,11 +25,7 @@ const useAppInit = () => {
 	};
 
 	const initApiService = async () => {
-		const config = await loadAppConfig();
-
-		// TODO: Refactor global config
-		window.config = config;
-
+		const config = window.config;
 		configRef.current = config;
 		apiServiceRef.current = new ApiService(config);
 	};
