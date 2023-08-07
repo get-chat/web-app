@@ -14,9 +14,11 @@ const AppBody: React.FC = () => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		// Update UI state initially
-		dispatch(setReadOnly(isReadOnlyConfig(config)));
-	}, []);
+		if (config) {
+			// Update UI state initially
+			dispatch(setReadOnly(isReadOnlyConfig(config)));
+		}
+	}, [config]);
 
 	return (
 		<div className={'app' + (isIPad13 ? ' absoluteFullscreen' : '')}>
