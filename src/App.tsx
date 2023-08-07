@@ -16,9 +16,10 @@ import { AppConfigContext } from './contexts/AppConfigContext';
 import { store } from './store';
 import { ThemeProvider } from '@mui/material';
 import { ApiService } from '@src/api/ApiService';
+import { AppConfig } from '@src/config/application';
 
 interface Props {
-	config: AppConfigContext;
+	config: AppConfig;
 	apiService: ApiService;
 }
 
