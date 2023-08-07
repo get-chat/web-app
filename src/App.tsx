@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
@@ -13,19 +12,25 @@ import Main from './components/Main/Main';
 import AppTheme from './AppTheme';
 import { isIPad13 } from 'react-device-detect';
 import { ApplicationContext } from './contexts/ApplicationContext';
-import { AppConfig } from './contexts/AppConfig';
+import { AppConfigContext } from './contexts/AppConfigContext';
 import { store } from './store';
 import { ThemeProvider } from '@mui/material';
+import { ApiService } from '@src/api/ApiService';
 
-const App = ({ config, apiService }) => {
-	const renderPaths = (paths, Element) =>
+interface Props {
+	config: AppConfigContext;
+	apiService: ApiService;
+}
+
+const App = ({ config, apiService }: Props) => {
+	const renderPaths = (paths: string[], Element: JSX.Element) =>
 		paths.map((path) => <Route key={path} path={path} element={Element} />);
 
 	return (
 		<Provider store={store}>
 			<ThemeProvider theme={AppTheme}>
 				<div className={'app' + (isIPad13 ? ' absoluteFullscreen' : '')}>
-					<AppConfig.Provider value={config}>
+					<AppConfigContext.Provider value={config}>
 						<ApplicationContext.Provider
 							value={{
 								apiService,
@@ -56,7 +61,7 @@ const App = ({ config, apiService }) => {
 								</Routes>
 							</Router>
 						</ApplicationContext.Provider>
-					</AppConfig.Provider>
+					</AppConfigContext.Provider>
 				</div>
 			</ThemeProvider>
 		</Provider>

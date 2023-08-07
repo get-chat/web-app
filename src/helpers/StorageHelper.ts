@@ -3,6 +3,7 @@ import { MemoryStorage } from '../storage/MemoryStorage';
 import { UserPreference } from '@src/interfaces/UserPreference';
 import { UserPreferences } from '@src/interfaces/UserPreferences';
 import { getObjLength } from '@src/helpers/ObjectHelper';
+import { AppConfig } from '@src/config/application';
 
 export const STORAGE_TAG_TOKEN = 'token';
 const STORAGE_TAG_USER_PREFERENCES = 'user_preferences';
@@ -74,7 +75,7 @@ export const getApiBaseURLs = (): string[] => {
 	}
 };
 
-export const getApiBaseURLsMergedWithConfig = (config: any) => {
+export const getApiBaseURLsMergedWithConfig = (config: AppConfig) => {
 	const urls = getApiBaseURLs();
 	if (config && !urls.includes(config.API_BASE_URL)) {
 		urls.push(config.API_BASE_URL);

@@ -22,11 +22,11 @@ import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isAdmin = currentUser?.isAdmin ?? false;

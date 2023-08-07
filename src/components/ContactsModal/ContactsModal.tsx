@@ -10,7 +10,7 @@ import ChatMessageModel from '../../api/models/ChatMessageModel';
 import styles from './ContactsModal.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import Contacts from '@src/components/Contacts';
 import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse } from 'axios';
@@ -47,7 +47,7 @@ const ContactsModal: React.FC<Props> = ({
 	sendMessage,
 	recipientWaId,
 }) => {
-	const config: any = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const [selectedContacts, setSelectedContacts] = useState<Recipient[]>([]);
 
@@ -111,8 +111,8 @@ const ContactsModal: React.FC<Props> = ({
 							<Trans>
 								To be able to share contacts, you need to use one of our Contact
 								Providers.{' '}
-								<a href={getHubURL(config.API_BASE_URL)}>Click here</a> to go to
-								our integrations page.
+								<a href={getHubURL(config?.API_BASE_URL ?? '')}>Click here</a>{' '}
+								to go to our integrations page.
 							</Trans>
 						</div>
 					}

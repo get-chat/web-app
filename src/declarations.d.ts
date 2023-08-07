@@ -1,8 +1,10 @@
+import { AppConfig } from '@src/config/application';
+
 export {};
 
 declare global {
 	interface Window {
-		config: any;
+		config: AppConfig;
 	}
 }
 

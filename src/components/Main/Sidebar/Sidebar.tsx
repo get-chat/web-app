@@ -53,7 +53,7 @@ import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
 import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { filterChat } from '@src/helpers/SidebarHelper';
@@ -137,7 +137,7 @@ const Sidebar: React.FC<any> = ({
 }) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
-	const config: any = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
@@ -1038,7 +1038,7 @@ const Sidebar: React.FC<any> = ({
 						)}
 						<MenuItem
 							component={Link}
-							href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+							href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 							target="_blank"
 						>
 							<ListItemIcon>
@@ -1289,7 +1289,7 @@ const Sidebar: React.FC<any> = ({
 				{currentUser?.isAdmin && (
 					<MenuItem
 						component={Link}
-						href={getHubURL(config.API_BASE_URL)}
+						href={getHubURL(config?.API_BASE_URL ?? '')}
 						target="_blank"
 					>
 						<ListItemIcon>

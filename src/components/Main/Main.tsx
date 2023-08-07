@@ -47,7 +47,7 @@ import { getWebSocketURL } from '@src/helpers/URLHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
 import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
@@ -82,7 +82,7 @@ function useQuery() {
 
 function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(

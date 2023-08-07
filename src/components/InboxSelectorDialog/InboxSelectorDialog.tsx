@@ -11,7 +11,7 @@ import {
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import styles from './InboxSelectorDialog.module.css';
 import { Button, DialogActions, ListItemButton } from '@mui/material';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 interface Props {
 	isVisible: boolean;
@@ -21,7 +21,7 @@ interface Props {
 const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	const { t } = useTranslation();
 
-	const config = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const [current, setCurrent] = useState<string | null | undefined>();
 	const [urls, setUrls] = useState<string[]>([]);
