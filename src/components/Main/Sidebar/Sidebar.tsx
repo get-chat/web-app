@@ -99,6 +99,7 @@ import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
+import { isReadOnly } from '@src/helpers/ConfigHelper';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -823,20 +824,24 @@ const Sidebar: React.FC<any> = ({
 					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</CustomAvatar>
 				<div className="sidebar__headerRight">
-					<Tooltip title={t('New chat')} disableInteractive>
-						<IconButton
-							onClick={displayContacts}
-							data-test-id="new-chat"
-							size="large"
-						>
-							<ChatIcon />
-						</IconButton>
-					</Tooltip>
-					<Tooltip title={t('Bulk send')} disableInteractive>
-						<IconButton onClick={displayBulkMessageMenu} size="large">
-							<DynamicFeedIcon />
-						</IconButton>
-					</Tooltip>
+					{!isReadOnly(config) && (
+						<Tooltip title={t('New chat')} disableInteractive>
+							<IconButton
+								onClick={displayContacts}
+								data-test-id="new-chat"
+								size="large"
+							>
+								<ChatIcon />
+							</IconButton>
+						</Tooltip>
+					)}
+					{!isReadOnly(config) && (
+						<Tooltip title={t('Bulk send')} disableInteractive>
+							<IconButton onClick={displayBulkMessageMenu} size="large">
+								<DynamicFeedIcon />
+							</IconButton>
+						</Tooltip>
+					)}
 					<Tooltip title={t('Notifications')} disableInteractive>
 						<IconButton onClick={displayNotifications} size="large">
 							<NotificationsIcon />
