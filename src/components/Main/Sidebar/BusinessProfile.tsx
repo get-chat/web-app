@@ -23,6 +23,7 @@ import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import { isReadOnly } from '@src/helpers/ConfigHelper';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -253,14 +254,16 @@ function BusinessProfile(props) {
 							<h3>{currentUser.username}</h3>
 							<span>{currentUser.firstName + ' ' + currentUser.lastName}</span>
 
-							<div className="sidebarBusinessProfile__body__changePasswordContainer">
-								<Button
-									onClick={() => props.setChangePasswordDialogVisible(true)}
-									color="secondary"
-								>
-									{t('Change password')}
-								</Button>
-							</div>
+							{!isReadOnly(config) && (
+								<div className="sidebarBusinessProfile__body__changePasswordContainer">
+									<Button
+										onClick={() => props.setChangePasswordDialogVisible(true)}
+										color="secondary"
+									>
+										{t('Change password')}
+									</Button>
+								</div>
+							)}
 						</div>
 					)}
 				</div>
@@ -324,7 +327,7 @@ function BusinessProfile(props) {
 									</div>
 								)}
 
-								{profilePhoto && isAdmin && (
+								{profilePhoto && isAdmin && !isReadOnly(config) && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>

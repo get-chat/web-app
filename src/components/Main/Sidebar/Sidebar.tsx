@@ -1278,12 +1278,14 @@ const Sidebar: React.FC<any> = ({
 				>
 					{t('Refresh')}
 				</MenuItem>
-				<MenuItem onClick={showChangePassword}>
-					<ListItemIcon>
-						<PasswordIcon />
-					</ListItemIcon>
-					{t('Change password')}
-				</MenuItem>
+				{!isReadOnly(config) && (
+					<MenuItem onClick={showChangePassword}>
+						<ListItemIcon>
+							<PasswordIcon />
+						</ListItemIcon>
+						{t('Change password')}
+					</MenuItem>
+				)}
 				<MenuItem onClick={forceClearContactProvidersData}>
 					<ListItemIcon>
 						<CloudSyncIcon />
