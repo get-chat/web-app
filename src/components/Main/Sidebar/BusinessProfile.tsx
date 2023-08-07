@@ -218,7 +218,7 @@ function BusinessProfile(props) {
 	];
 
 	const handleBusinessProfileAvatarClick = () => {
-		if (isAdmin) fileInput.current.click();
+		if (isAdmin && !isReadOnly(config)) fileInput.current.click();
 	};
 
 	return (
@@ -345,7 +345,7 @@ function BusinessProfile(props) {
 										multiline={true}
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly(config),
 										}}
 									/>
 									<TextField
@@ -356,7 +356,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly(config),
 										}}
 									/>
 									<TextField
@@ -367,7 +367,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly(config),
 										}}
 									/>
 									<TextField
@@ -378,14 +378,14 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly(config),
 										}}
 									/>
 
 									<FormControl
 										variant="standard"
 										fullWidth={true}
-										disabled={!isAdmin}
+										disabled={!isAdmin || isReadOnly(config)}
 									>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
@@ -405,7 +405,7 @@ function BusinessProfile(props) {
 									</FormControl>
 								</div>
 
-								{isAdmin && (
+								{isAdmin && !isReadOnly(config) && (
 									<div className="sidebarBusinessProfile__body__section__subSection__action">
 										<Button
 											type="submit"
