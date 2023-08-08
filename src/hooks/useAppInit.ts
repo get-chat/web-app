@@ -55,7 +55,7 @@ const useAppInit = () => {
 					);
 				} else {
 					// Finish loading
-					setLoading(true);
+					setLoading(false);
 				}
 			};
 
