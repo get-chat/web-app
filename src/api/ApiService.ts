@@ -84,13 +84,19 @@ export class ApiService {
 		);
 	};
 
-	convertIdTokenCall = (idToken, successCallback, errorCallback) => {
+	convertIdTokenCall = (
+		idToken,
+		successCallback,
+		errorCallback,
+		completeCallback
+	) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}auth/convert_id_token/`, {
 				id_token: idToken,
 			}),
 			successCallback,
-			errorCallback
+			errorCallback,
+			completeCallback
 		);
 	};
 
