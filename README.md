@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-[Node.js](https://nodejs.org/) (LTS recomended)
+[Node.js](https://nodejs.org/) (LTS recommended)
 
 Use the [PNPM](https://pnpm.io/) instead of ~~NPM~~
 
@@ -14,11 +14,15 @@ Before you run it, you must create the `config.json` file in `public` folder if 
 
 ```json
 {
-    "API_BASE_URL": "${APP_API_BASE_URL}",
-    "APP_SENTRY_DSN": "${APP_SENTRY_DSN}",
-    "APP_ENV_NAME": "${APP_ENV_NAME}",
-    "APP_NOTIFICATIONS_LIMIT_PER_MINUTE": "${APP_NOTIFICATIONS_LIMIT_PER_MINUTE}",
-    "APP_GOOGLE_MAPS_API_KEY": "${APP_GOOGLE_MAPS_API_KEY}"
+	"API_BASE_URL": "${APP_API_BASE_URL}",
+	"APP_SENTRY_DSN": "${APP_SENTRY_DSN}",
+	"APP_ENV_NAME": "${APP_ENV_NAME}",
+	"APP_SENTRY_TAG_CLIENT": "${APP_SENTRY_TAG_CLIENT}",
+	"APP_NOTIFICATIONS_LIMIT_PER_MINUTE": "${APP_NOTIFICATIONS_LIMIT_PER_MINUTE}",
+	"APP_GOOGLE_MAPS_API_KEY": "${APP_GOOGLE_MAPS_API_KEY}",
+	"APP_MAX_BULK_DIRECT_RECIPIENTS": "${APP_MAX_BULK_DIRECT_RECIPIENTS}",
+	"APP_MAX_BULK_TAG_RECIPIENTS": "${APP_MAX_BULK_TAG_RECIPIENTS}",
+	"APP_IS_READ_ONLY": "${APP_IS_READ_ONLY}"
 }
 
 ```
@@ -39,7 +43,7 @@ In order to do this, please go to `public/config.json` file and replace the valu
 
 #### Disable Sentry
 
-In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `src/index.js`.
+In order to disable Sentry integration, you can either remove or comment out `Sentry.init` method inside `src/config/sentry.ts`.
 
 ```diff
 // ***IMPORTS***
