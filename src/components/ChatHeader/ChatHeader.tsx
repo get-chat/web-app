@@ -37,6 +37,7 @@ import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAppSelector } from '@src/store/hooks';
 
 const cx = classNames.bind(styles);
 
@@ -63,6 +64,8 @@ const ChatHeader: React.FC<Props> = ({
 	hasFailedMessages,
 	waId,
 }) => {
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
 
@@ -179,7 +182,7 @@ const ChatHeader: React.FC<Props> = ({
 							secondaryName={chat.assignedGroup?.name}
 							assignedUserId={chat.assignedToUser?.id}
 							assignedGroupId={chat.assignedGroup?.id}
-							isActionable
+							isActionable={!isReadOnly}
 							onAction={(userId, groupId) => {
 								partialUpdateChatAssignment(waId, userId, groupId);
 							}}
@@ -219,19 +222,23 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
-				<Divider />
-				<MenuItem onClick={showChatAssignmentAndHideMenu}>
-					<ListItemIcon>
-						<AssignmentTurnedInIcon />
-					</ListItemIcon>
-					{t('Assign chat')}
-				</MenuItem>
-				<MenuItem onClick={showChatTagsAndHideMenu}>
-					<ListItemIcon>
-						<SellIcon />
-					</ListItemIcon>
-					{t('Change tags')}
-				</MenuItem>
+				{!isReadOnly && <Divider />}
+				{!isReadOnly && (
+					<MenuItem onClick={showChatAssignmentAndHideMenu}>
+						<ListItemIcon>
+							<AssignmentTurnedInIcon />
+						</ListItemIcon>
+						{t('Assign chat')}
+					</MenuItem>
+				)}
+				{!isReadOnly && (
+					<MenuItem onClick={showChatTagsAndHideMenu}>
+						<ListItemIcon>
+							<SellIcon />
+						</ListItemIcon>
+						{t('Change tags')}
+					</MenuItem>
+				)}
 				<Divider />
 				<MenuItem onClick={toggleAssignmentAndTaggingHistory}>
 					<ListItemIcon>

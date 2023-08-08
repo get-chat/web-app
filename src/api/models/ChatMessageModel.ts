@@ -39,6 +39,7 @@ export class ChatMessageModel {
 	public timestamp = -1;
 	public errors?: any[] = [];
 	public isFailed = false;
+	public location: any;
 
 	constructor(data) {
 		if (!data) return;

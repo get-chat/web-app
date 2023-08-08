@@ -1,6 +1,5 @@
 import UserModel from '@src/api/models/UserModel';
 import ChatModel from '@src/api/models/ChatModel';
-import TagModel from '@src/api/models/TagModel';
 
 const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
 	const canReadChats = currentUser?.permissions?.canReadChats;

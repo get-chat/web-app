@@ -22,13 +22,15 @@ import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 function BusinessProfile(props) {
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+
 	const isAdmin = currentUser?.isAdmin ?? false;
 
 	const { t } = useTranslation();
@@ -217,7 +219,7 @@ function BusinessProfile(props) {
 	];
 
 	const handleBusinessProfileAvatarClick = () => {
-		if (isAdmin) fileInput.current.click();
+		if (isAdmin && !isReadOnly) fileInput.current.click();
 	};
 
 	return (
@@ -253,14 +255,16 @@ function BusinessProfile(props) {
 							<h3>{currentUser.username}</h3>
 							<span>{currentUser.firstName + ' ' + currentUser.lastName}</span>
 
-							<div className="sidebarBusinessProfile__body__changePasswordContainer">
-								<Button
-									onClick={() => props.setChangePasswordDialogVisible(true)}
-									color="secondary"
-								>
-									{t('Change password')}
-								</Button>
-							</div>
+							{!isReadOnly && (
+								<div className="sidebarBusinessProfile__body__changePasswordContainer">
+									<Button
+										onClick={() => props.setChangePasswordDialogVisible(true)}
+										color="secondary"
+									>
+										{t('Change password')}
+									</Button>
+								</div>
+							)}
 						</div>
 					)}
 				</div>
@@ -324,7 +328,7 @@ function BusinessProfile(props) {
 									</div>
 								)}
 
-								{profilePhoto && isAdmin && (
+								{profilePhoto && isAdmin && !isReadOnly && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>
@@ -342,7 +346,7 @@ function BusinessProfile(props) {
 										multiline={true}
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 									<TextField
@@ -353,7 +357,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 									<TextField
@@ -364,7 +368,7 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 									<TextField
@@ -375,14 +379,14 @@ function BusinessProfile(props) {
 										size="medium"
 										fullWidth={true}
 										InputProps={{
-											readOnly: !isAdmin,
+											readOnly: !isAdmin || isReadOnly,
 										}}
 									/>
 
 									<FormControl
 										variant="standard"
 										fullWidth={true}
-										disabled={!isAdmin}
+										disabled={!isAdmin || isReadOnly}
 									>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
@@ -402,7 +406,7 @@ function BusinessProfile(props) {
 									</FormControl>
 								</div>
 
-								{isAdmin && (
+								{isAdmin && !isReadOnly && (
 									<div className="sidebarBusinessProfile__body__section__subSection__action">
 										<Button
 											type="submit"

@@ -13,7 +13,7 @@ import {
 import '../../styles/ChatTags.css';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -25,7 +25,7 @@ import ChatModel from '@src/api/models/ChatModel';
 function ChatTags(props: any) {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
-	const config: any = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const { t } = useTranslation();
 
@@ -207,7 +207,7 @@ function ChatTags(props: any) {
 
 				<div className="mt-3">
 					<Link
-						href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+						href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 						target="_blank"
 						underline="hover"
 					>

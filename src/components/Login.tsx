@@ -21,12 +21,12 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import packageJson from '../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
-	const config = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
 	const { t } = useTranslation();
 

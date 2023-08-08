@@ -1,11 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {};
+interface UIState {
+	value: { isReadOnly: boolean };
+}
+
+const initialState: UIState = {
+	value: {
+		isReadOnly: false,
+	},
+};
 
 export const UISlice = createSlice({
 	name: 'UI',
 	initialState,
-	reducers: {},
+	reducers: {
+		setReadOnly: (state, action: PayloadAction<boolean>) => {
+			state.value.isReadOnly = action.payload;
+		},
+	},
 });
+
+export const { setReadOnly } = UISlice.actions;
 
 export default UISlice.reducer;

@@ -1,5 +1,3 @@
-import NewMessagesList from '@src/interfaces/NewMessagesList';
-
 class NewMessageModel {
 	public waId: string;
 	public newMessages: number;

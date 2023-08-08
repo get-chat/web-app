@@ -84,7 +84,7 @@ import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsR
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
-import { useAppDispatch } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
@@ -98,6 +98,8 @@ const MESSAGES_PER_PAGE = 30;
 
 const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
+
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 
 	const { t } = useTranslation();
 
@@ -2023,26 +2025,28 @@ const Chat: React.FC = (props) => {
 				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
 			)}
 
-			<ChatFooter
-				waId={waId}
-				currentNewMessages={currentNewMessages}
-				isExpired={isExpired}
-				input={input}
-				setInput={setInput}
-				sendMessage={sendMessage}
-				bulkSendMessage={bulkSendMessage}
-				setSelectedFiles={setSelectedFiles}
-				isTemplatesVisible={isTemplatesVisible}
-				setTemplatesVisible={setTemplatesVisible}
-				accept={accept}
-				isSavedResponsesVisible={isSavedResponsesVisible}
-				setSavedResponsesVisible={setSavedResponsesVisible}
-				sendHandledChosenFiles={sendHandledChosenFiles}
-				setAccept={setAccept}
-				isScrollButtonVisible={isScrollButtonVisible}
-				handleScrollButtonClick={handleScrollButtonClick}
-				processCommand={processCommand}
-			/>
+			{!isReadOnly && (
+				<ChatFooter
+					waId={waId}
+					currentNewMessages={currentNewMessages}
+					isExpired={isExpired}
+					input={input}
+					setInput={setInput}
+					sendMessage={sendMessage}
+					bulkSendMessage={bulkSendMessage}
+					setSelectedFiles={setSelectedFiles}
+					isTemplatesVisible={isTemplatesVisible}
+					setTemplatesVisible={setTemplatesVisible}
+					accept={accept}
+					isSavedResponsesVisible={isSavedResponsesVisible}
+					setSavedResponsesVisible={setSavedResponsesVisible}
+					sendHandledChosenFiles={sendHandledChosenFiles}
+					setAccept={setAccept}
+					isScrollButtonVisible={isScrollButtonVisible}
+					handleScrollButtonClick={handleScrollButtonClick}
+					processCommand={processCommand}
+				/>
+			)}
 
 			{!waId && (
 				<div className="chat__default">

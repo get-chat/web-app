@@ -53,7 +53,7 @@ import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
 import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
-import { AppConfig } from '@src/contexts/AppConfig';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import { filterChat } from '@src/helpers/SidebarHelper';
@@ -137,8 +137,9 @@ const Sidebar: React.FC<any> = ({
 }) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
-	const config: any = React.useContext(AppConfig);
+	const config = React.useContext(AppConfigContext);
 
+	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
@@ -823,20 +824,24 @@ const Sidebar: React.FC<any> = ({
 					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
 				</CustomAvatar>
 				<div className="sidebar__headerRight">
-					<Tooltip title={t('New chat')} disableInteractive>
-						<IconButton
-							onClick={displayContacts}
-							data-test-id="new-chat"
-							size="large"
-						>
-							<ChatIcon />
-						</IconButton>
-					</Tooltip>
-					<Tooltip title={t('Bulk send')} disableInteractive>
-						<IconButton onClick={displayBulkMessageMenu} size="large">
-							<DynamicFeedIcon />
-						</IconButton>
-					</Tooltip>
+					{!isReadOnly && (
+						<Tooltip title={t('New chat')} disableInteractive>
+							<IconButton
+								onClick={displayContacts}
+								data-test-id="new-chat"
+								size="large"
+							>
+								<ChatIcon />
+							</IconButton>
+						</Tooltip>
+					)}
+					{!isReadOnly && (
+						<Tooltip title={t('Bulk send')} disableInteractive>
+							<IconButton onClick={displayBulkMessageMenu} size="large">
+								<DynamicFeedIcon />
+							</IconButton>
+						</Tooltip>
+					)}
 					<Tooltip title={t('Notifications')} disableInteractive>
 						<IconButton onClick={displayNotifications} size="large">
 							<NotificationsIcon />
@@ -1038,7 +1043,7 @@ const Sidebar: React.FC<any> = ({
 						)}
 						<MenuItem
 							component={Link}
-							href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+							href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 							target="_blank"
 						>
 							<ListItemIcon>
@@ -1273,12 +1278,14 @@ const Sidebar: React.FC<any> = ({
 				>
 					{t('Refresh')}
 				</MenuItem>
-				<MenuItem onClick={showChangePassword}>
-					<ListItemIcon>
-						<PasswordIcon />
-					</ListItemIcon>
-					{t('Change password')}
-				</MenuItem>
+				{!isReadOnly && (
+					<MenuItem onClick={showChangePassword}>
+						<ListItemIcon>
+							<PasswordIcon />
+						</ListItemIcon>
+						{t('Change password')}
+					</MenuItem>
+				)}
 				<MenuItem onClick={forceClearContactProvidersData}>
 					<ListItemIcon>
 						<CloudSyncIcon />
@@ -1289,7 +1296,7 @@ const Sidebar: React.FC<any> = ({
 				{currentUser?.isAdmin && (
 					<MenuItem
 						component={Link}
-						href={getHubURL(config.API_BASE_URL)}
+						href={getHubURL(config?.API_BASE_URL ?? '')}
 						target="_blank"
 					>
 						<ListItemIcon>
