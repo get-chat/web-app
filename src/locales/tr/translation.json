@@ -299,5 +299,7 @@
 	"(Code: %d)": "(Kod: %d)",
 	"Waiting to be sent": "Gönderilmesi bekleniyor",
 	"Your current inbox": "Şu anki inbox'ın",
-	"Select an inbox": "Bir inbox seç"
+	"Select an inbox": "Bir inbox seç",
+	"Failed to log in": "Giriş başarısız",
+	"Log in with password instead": "Bunun yerine şifre ile giriş yap"
 }

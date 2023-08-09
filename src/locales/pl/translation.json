@@ -302,5 +302,7 @@
 	"(Code: %d)": "",
 	"Waiting to be sent": "",
 	"Your current inbox": "",
-	"Select an inbox": ""
+	"Select an inbox": "",
+	"Failed to log in": "",
+	"Log in with password instead": ""
 }

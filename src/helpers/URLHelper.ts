@@ -35,10 +35,10 @@ const prepareWebsocketURL = (url: string) => {
 		.replace('api/v2/', '');
 };
 
-export const getIntegrationApiBaseURL = () => {
-	const urlParams = new URLSearchParams(window.location.search);
-	return prepareApiBaseURL(urlParams.get('integration_api_base_url'));
-};
+export const getURLParams = () => new URLSearchParams(window.location.search);
+
+export const getIntegrationApiBaseURL = () =>
+	prepareApiBaseURL(getURLParams().get('integration_api_base_url'));
 
 export const prepareApiBaseURL = (url: string | null) => {
 	if (!url) return;

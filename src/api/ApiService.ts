@@ -84,6 +84,22 @@ export class ApiService {
 		);
 	};
 
+	convertIdTokenCall = (
+		idToken,
+		successCallback,
+		errorCallback,
+		completeCallback
+	) => {
+		this.handleRequest(
+			axios.post(`${this.apiBaseURL}auth/convert_id_token/`, {
+				id_token: idToken,
+			}),
+			successCallback,
+			errorCallback,
+			completeCallback
+		);
+	};
+
 	logoutCall = (successCallback) => {
 		this.handleRequest(
 			axios.get(`${this.apiBaseURL}auth/logout/`, getRequestConfig()),
