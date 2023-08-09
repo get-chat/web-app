@@ -8,6 +8,7 @@ import {
 
 import Login from './components/Login';
 import Main from './components/Main/Main';
+import IdTokenErrorPage from '@src/components/IdTokenErrorPage';
 
 const AppRoutes: React.FC = () => {
 	const renderPaths = (paths: string[], Element: JSX.Element) =>
@@ -31,6 +32,7 @@ const AppRoutes: React.FC = () => {
 					],
 					<Login />
 				)}
+				<Route path="/id_token_error" element={<IdTokenErrorPage />} />
 				<Route path="*" element={<Navigate to="/main" />} />
 			</Routes>
 		</Router>

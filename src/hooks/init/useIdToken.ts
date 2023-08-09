@@ -1,7 +1,7 @@
 import { ApiService } from '@src/api/ApiService';
 import { getURLParams } from '@src/helpers/URLHelper';
 import { clearUserSession } from '@src/helpers/ApiHelper';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { storeToken } from '@src/helpers/StorageHelper';
 
 const useIdToken = () => {
@@ -18,7 +18,14 @@ const useIdToken = () => {
 					// Store token in local storage
 					storeToken(response.data.token);
 				},
-				undefined,
+				(error: AxiosError) => {
+					const reason = error.response?.data?.reason ?? '';
+					window.history.pushState(
+						undefined,
+						'',
+						'/id_token_error?reason=' + reason
+					);
+				},
 				() => {
 					onComplete?.();
 				}
