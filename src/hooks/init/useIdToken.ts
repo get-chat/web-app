@@ -4,7 +4,7 @@ import { clearUserSession } from '@src/helpers/ApiHelper';
 import { AxiosResponse } from 'axios';
 import { storeToken } from '@src/helpers/StorageHelper';
 
-const useOneTimeToken = () => {
+const useIdToken = () => {
 	const handle = (apiService: ApiService, onComplete?: () => void) => {
 		const idToken = getURLParams().get('idt');
 		if (idToken) {
@@ -33,4 +33,4 @@ const useOneTimeToken = () => {
 	};
 };
 
-export default useOneTimeToken;
+export default useIdToken;

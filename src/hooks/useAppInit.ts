@@ -11,14 +11,14 @@ import {
 import { getIntegrationApiBaseURL, getURLParams } from '@src/helpers/URLHelper';
 import { AxiosError, AxiosResponse } from 'axios';
 import { clearUserSession } from '@src/helpers/ApiHelper';
-import useOneTimeToken from '@src/hooks/init/useOneTimeToken';
+import useIdToken from '@src/hooks/init/useIdToken';
 
 const useAppInit = () => {
 	const [isLoading, setLoading] = useState(true);
 	const configRef = useRef<AppConfig | null>(null);
 	const apiServiceRef = useRef<ApiService | null>(null);
 
-	const { handle: handleOneTimeToken } = useOneTimeToken();
+	const { handle: handleIdToken } = useIdToken();
 
 	useEffect(() => {
 		initApp();
@@ -38,7 +38,7 @@ const useAppInit = () => {
 	const initRest = async () => {
 		try {
 			const completeInit = () => {
-				handleOneTimeToken(apiServiceRef.current!!, () => {
+				handleIdToken(apiServiceRef.current!!, () => {
 					// Finish loading
 					setLoading(false);
 				});
