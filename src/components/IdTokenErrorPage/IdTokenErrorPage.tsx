@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './IdTokenErrorPage.module.css';
@@ -12,16 +12,27 @@ const IdTokenErrorPage: React.FC = () => {
 
 	const [searchParams] = useSearchParams();
 
+	const [reason] = useState(() => {
+		const encoded = searchParams.get('reason');
+		try {
+			return atob(encoded ?? '');
+		} catch (e: any) {
+			console.warn(e);
+		}
+
+		return '';
+	});
+
 	return (
 		<div className={styles.container}>
 			<Alert severity="error" className={styles.error}>
 				<AlertTitle>{t('Failed to log in')}</AlertTitle>
-				{t(searchParams.get('reason') ?? '')}
+				{t(reason)}
 			</Alert>
 
 			<div className="mt-3">
 				<Button variant="text" onClick={() => navigate('/login')}>
-					{t('Go to login')}
+					{t('Log in with password instead')}
 				</Button>
 			</div>
 		</div>

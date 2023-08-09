@@ -19,9 +19,11 @@ const useIdToken = () => {
 					storeToken(response.data.token);
 				},
 				(error: AxiosError) => {
-					const reason = error.response?.data?.reason ?? '';
+					const reason = btoa(error.response?.data?.reason ?? '');
+
+					// Redirect it this way as routes are not initialized yet
 					window.history.pushState(
-						undefined,
+						null,
 						'',
 						'/id_token_error?reason=' + reason
 					);

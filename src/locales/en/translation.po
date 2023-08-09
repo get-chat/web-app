@@ -933,3 +933,9 @@ msgstr ""
 
 msgid "Select an inbox"
 msgstr ""
+
+msgid "Failed to log in"
+msgstr ""
+
+msgid "Log in with password instead"
+msgstr ""
