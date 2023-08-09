@@ -1,16 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-import { AppConfig, loadAppConfig } from '@src/config/application';
+import { AppConfig } from '@src/config/application';
 import { ApiService } from '@src/api/ApiService';
 import {
 	getApiBaseURLs,
 	getCurrentApiBaseURL,
 	storeApiBaseURLs,
 	storeCurrentApiBaseURL,
-	storeToken,
 } from '@src/helpers/StorageHelper';
-import { getIntegrationApiBaseURL, getURLParams } from '@src/helpers/URLHelper';
-import { AxiosError, AxiosResponse } from 'axios';
-import { clearUserSession } from '@src/helpers/ApiHelper';
+import { getIntegrationApiBaseURL } from '@src/helpers/URLHelper';
+import { AxiosError } from 'axios';
 import useIdToken from '@src/hooks/init/useIdToken';
 
 const useAppInit = () => {
