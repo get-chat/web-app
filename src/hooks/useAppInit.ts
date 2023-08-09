@@ -11,11 +11,14 @@ import {
 import { getIntegrationApiBaseURL, getURLParams } from '@src/helpers/URLHelper';
 import { AxiosError, AxiosResponse } from 'axios';
 import { clearUserSession } from '@src/helpers/ApiHelper';
+import useOneTimeToken from '@src/hooks/init/useOneTimeToken';
 
 const useAppInit = () => {
 	const [isLoading, setLoading] = useState(true);
 	const configRef = useRef<AppConfig | null>(null);
 	const apiServiceRef = useRef<ApiService | null>(null);
+
+	const { handle: handleOneTimeToken } = useOneTimeToken();
 
 	useEffect(() => {
 		initApp();
@@ -35,28 +38,10 @@ const useAppInit = () => {
 	const initRest = async () => {
 		try {
 			const completeInit = () => {
-				const idToken = getURLParams().get('idt');
-				if (idToken) {
-					// Clear existing user session
-					clearUserSession(undefined, undefined, undefined);
-
-					// Converting id token
-					apiServiceRef.current!!.convertIdTokenCall(
-						idToken,
-						(response: AxiosResponse) => {
-							// Store token in local storage
-							storeToken(response.data.token);
-						},
-						undefined,
-						() => {
-							// Finish loading
-							setLoading(false);
-						}
-					);
-				} else {
+				handleOneTimeToken(apiServiceRef.current!!, () => {
 					// Finish loading
 					setLoading(false);
-				}
+				});
 			};
 
 			// Previously stored api base url
