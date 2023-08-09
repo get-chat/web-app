@@ -385,9 +385,18 @@ function SendTemplateMessage({
 													),
 												}}
 												variant="standard"
-												onChange={(event) => updateParam(event, compIndex, idx)}
+												onChange={(event) =>
+													updateParam(
+														event,
+														compIndex,
+														templateParamToInteger(param)
+													)
+												}
 												value={
-													params[compIndex] ? params[compIndex][idx].text : ''
+													params[compIndex]
+														? params[compIndex][templateParamToInteger(param)]
+																.text
+														: ''
 												}
 											/>
 										))}
