@@ -971,4 +971,4 @@ msgid "Failed to log in"
 msgstr "Giriş başarısız"
 
 msgid "Log in with password instead"
-msgstr ""
+msgstr "Bunun yerine şifre ile giriş yap"
