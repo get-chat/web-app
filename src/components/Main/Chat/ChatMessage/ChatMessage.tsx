@@ -257,8 +257,10 @@ const ChatMessage: React.FC<Props> = ({
 						<span
 							className="chat__message__info"
 							onClick={() => {
-								setMessageWithStatuses?.(clone(data));
-								dispatch(setMessageStatusesVisible(true));
+								if (data.isFromUs) {
+									setMessageWithStatuses?.(clone(data));
+									dispatch(setMessageStatusesVisible(true));
+								}
 							}}
 						>
 							<span className="chat__timestamp">

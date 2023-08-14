@@ -256,6 +256,9 @@ a.chat__document:hover {
 
 .chat__message__info {
 	float: right;
+}
+
+.chat__outgoing .chat__message__info {
 	cursor: pointer;
 }
 
