@@ -33,7 +33,7 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 					<CloseIcon />
 				</IconButton>
 
-				<h3>{t('Message Statuses')}</h3>
+				<h3>{t('Message Information')}</h3>
 			</div>
 			<div className={styles.body}>
 				{message && (
