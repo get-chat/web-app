@@ -33,13 +33,27 @@ export class ChatMessageModel {
 
 	public id: string;
 	public waId: string;
+	public type?: string | null;
 	public payload: any;
 	public isFromUs = false;
-	public senderName: string | undefined;
+	public senderName?: string;
+	public initials?: string;
 	public timestamp = -1;
 	public errors?: any[] = [];
 	public isFailed = false;
 	public location: any;
+	public assignmentEvent: any;
+	public taggingEvent: any;
+	public text?: string | null;
+	public caption?: string | null;
+	public buttonText?: string | null;
+	public interactiveButtonText?: string | null;
+	public isForwarded: boolean;
+	public contextMessage?: ChatMessageModel;
+	public referral: any;
+	public documentLink?: string;
+	public documentFileName?: string;
+	public documentCaption?: string;
 
 	constructor(data) {
 		if (!data) return;
@@ -239,21 +253,19 @@ export class ChatMessageModel {
 		return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
 	}
 
-	generateImageLink(includeTemplateHeader) {
+	generateImageLink(includeTemplateHeader = false) {
 		return (
 			this.imageLink ??
 			this.generateMediaLink(this.imageId) ??
-			(includeTemplateHeader === true
-				? this.getHeaderFileLink('image')
-				: undefined)
+			(includeTemplateHeader ? this.getHeaderFileLink('image') : undefined)
 		);
 	}
 
-	generateVideoLink(includeTemplateHeaderOrReferral) {
+	generateVideoLink(includeTemplateHeaderOrReferral = false) {
 		return (
 			this.videoLink ??
 			this.generateMediaLink(this.videoId) ??
-			(includeTemplateHeaderOrReferral === true
+			(includeTemplateHeaderOrReferral
 				? this.getHeaderFileLink('video') ?? this.generateReferralVideoLink()
 				: undefined)
 		);

@@ -75,6 +75,7 @@ import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
+import MessageStatuses from '@src/components/MessageStatuses';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -140,6 +141,9 @@ function Main() {
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
 	const [chosenContact, setChosenContact] = useState();
+
+	const [messageWithStatuses, setMessageWithStatuses] =
+		useState<ChatMessageModel>();
 
 	const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
 	const [selectedChats, setSelectedChats] = useState<string[]>([]);
@@ -1077,6 +1081,7 @@ function Main() {
 						setSelectionModeEnabled={setSelectionModeEnabled}
 						setBulkSendPayload={setBulkSendPayload}
 						searchMessagesByKeyword={searchMessagesByKeyword}
+						setMessageWithStatuses={setMessageWithStatuses}
 					/>
 				)}
 
@@ -1093,6 +1098,10 @@ function Main() {
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 					/>
+				)}
+
+				{isMessageStatusesVisible && (
+					<MessageStatuses message={messageWithStatuses} />
 				)}
 
 				{isChatAssignmentVisible && (

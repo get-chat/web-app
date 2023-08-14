@@ -30,12 +30,27 @@ import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
+import TemplateModel from '@src/api/models/TemplateModel';
+
+interface Props {
+	data: ChatMessageModel;
+	templateData: TemplateModel;
+	displaySender: boolean;
+	displayDate: boolean;
+	contactProvidersData: { [key: string]: any };
+	onOptionsClick: (e: React.MouseEvent, data: ChatMessageModel) => void;
+	goToMessageId: (msgId: string, timestamp: number) => void;
+	isTemplatesFailed: boolean;
+	retryMessage: (message: ChatMessageModel) => void;
+	disableMediaPreview: boolean;
+	setMessageWithStatuses: (message?: ChatMessageModel) => void;
+}
 
 const iconStyles = {
 	fontSize: '15px',
 };
 
-function ChatMessage({
+const ChatMessage: React.FC<Props> = ({
 	data,
 	templateData,
 	displaySender,
@@ -46,7 +61,8 @@ function ChatMessage({
 	isTemplatesFailed,
 	retryMessage,
 	disableMediaPreview,
-}: any) {
+	setMessageWithStatuses,
+}) => {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
@@ -70,9 +86,7 @@ function ChatMessage({
 	return (
 		<div
 			id={'message_' + data.id}
-			className={
-				'chat__message__outer' + (data.isFromUs === true ? ' outgoing' : '')
-			}
+			className={'chat__message__outer' + (data.isFromUs ? ' outgoing' : '')}
 		>
 			{displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
 
@@ -88,7 +102,7 @@ function ChatMessage({
 						<PrintMessage
 							className="chat__name"
 							message={
-								data.isFromUs === true
+								data.isFromUs
 									? data.senderName
 									: contactProvidersData[data.waId]?.[0]?.name ??
 									  data.senderName
@@ -100,7 +114,7 @@ function ChatMessage({
 						<img
 							className="chat__media chat__sticker"
 							src={data.generateStickerLink()}
-							alt={data.caption}
+							alt={data.caption ?? ''}
 						/>
 					)}
 
@@ -108,7 +122,7 @@ function ChatMessage({
 						className={
 							'chat__message' +
 							(data.hasMediaToPreview() ? ' hasMedia' : '') +
-							(data.isFromUs === true
+							(data.isFromUs
 								? (data.isRead() ? ' chat__received' : '') + ' chat__outgoing'
 								: '') +
 							(!displaySender && !displayDate ? ' hiddenSender' : '') +
@@ -220,7 +234,8 @@ function ChatMessage({
 									data.text ??
 									data.caption ??
 									data.buttonText ??
-									data.interactiveButtonText
+									data.interactiveButtonText ??
+									''
 								}
 								linkify={true}
 							/>
@@ -230,12 +245,15 @@ function ChatMessage({
 
 						<ChatMessageErrors data={data} retryMessage={retryMessage} />
 
-						<span className="chat__message__info">
+						<span
+							className="chat__message__info"
+							onClick={() => setMessageWithStatuses(data)}
+						>
 							<span className="chat__timestamp">
 								<Moment date={data.timestamp} format={dateFormat} unix />
 							</span>
 
-							{!data.isFailed && data.isFromUs === true && (
+							{!data.isFailed && data.isFromUs && (
 								<>
 									{data.isPending() && (
 										<AccessTimeIcon
@@ -278,6 +296,6 @@ function ChatMessage({
 			)}
 		</div>
 	);
-}
+};
 
 export default ChatMessage;

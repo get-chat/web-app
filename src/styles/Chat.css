@@ -256,6 +256,7 @@ a.chat__document:hover {
 
 .chat__message__info {
 	float: right;
+	cursor: pointer;
 }
 
 .chat__message__info .MuiSvgIcon-root:not(.chat__received .chat__iconDoneAll) {

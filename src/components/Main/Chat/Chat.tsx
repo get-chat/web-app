@@ -1686,7 +1686,7 @@ const Chat: React.FC = (props) => {
 		props.setLastSendAttemptAt(new Date());
 	};
 
-	const retryMessage = (message) => {
+	const retryMessage = (message: ChatMessageModel) => {
 		if (!message.resendPayload) {
 			console.warn('Property is undefined: resendPayload', message);
 			return;
@@ -1991,7 +1991,7 @@ const Chat: React.FC = (props) => {
 									displayOptionsMenu(event, chatMessage)
 								}
 								contactProvidersData={props.contactProvidersData}
-								retrieveContactData={props.retrieveContactData}
+								setMessageWithStatuses={props.setMessageWithStatuses}
 							/>
 						</ErrorBoundary>
 					);
