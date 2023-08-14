@@ -300,7 +300,7 @@ a.chat__document:hover {
 	align-items: center;
 }
 
-.chat__message__outer.outgoing.messageType__text:hover .chat__message__more /*.chat__message:hover .chat__message__more*/ {
+.chat__message__outer.outgoing.messageType__text:hover .chat__message__more {
 	opacity: 1;
 }
 
