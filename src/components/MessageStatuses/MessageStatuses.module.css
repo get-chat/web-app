@@ -21,7 +21,7 @@
 }
 
 .body {
-	background-color: #fff;
+	background-color: var(--gray-light);
 	flex: 1 1;
 	position: relative;
 	display: flex;
@@ -41,13 +41,12 @@
 
 .section {
 	padding: 20px;
-	margin-bottom: 10px;
 	background-color: white;
 	box-shadow: 0 1px 3px var(--shadow-light);
-}
-
-.subSection {
-	padding: 10px 0;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .subSectionTitle {
