@@ -9,7 +9,7 @@ import styles from './ChatMessageErrors.module.css';
 
 interface Props {
 	data: ChatMessageModel;
-	retryMessage: (message: ChatMessageModel) => void;
+	retryMessage?: (message: ChatMessageModel) => void;
 }
 
 const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
@@ -33,7 +33,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 										<Button
 											color="inherit"
 											size="small"
-											onClick={() => retryMessage(data)}
+											onClick={() => retryMessage?.(data)}
 										>
 											{t('Retry')}
 										</Button>
@@ -59,7 +59,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 									<Button
 										color="inherit"
 										size="small"
-										onClick={() => retryMessage(data)}
+										onClick={() => retryMessage?.(data)}
 									>
 										{t('Retry')}
 									</Button>

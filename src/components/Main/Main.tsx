@@ -76,6 +76,7 @@ import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
+import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -364,6 +365,7 @@ function Main() {
 		// Hide other sections
 		if (data === true) {
 			setContactDetailsVisible(false);
+			dispatch(setMessageStatusesVisible(false));
 		}
 	};
 
@@ -373,6 +375,7 @@ function Main() {
 		// Hide other sections
 		if (data === true) {
 			setSearchMessagesVisible(false);
+			dispatch(setMessageStatusesVisible(false));
 		}
 	};
 
@@ -718,11 +721,14 @@ function Main() {
 		setChecked(true);
 
 		return () => {
-			// Hide search messages container
+			// Hide search messages
 			setSearchMessagesVisible(false);
 
 			// Hide contact details
 			setContactDetailsVisible(false);
+
+			// Hide message statuses
+			dispatch(setMessageStatusesVisible(false));
 
 			// Hide chat assignment
 			setChatAssignmentVisible(false);

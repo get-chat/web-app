@@ -31,19 +31,20 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import TemplateModel from '@src/api/models/TemplateModel';
+import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	data: ChatMessageModel;
-	templateData: TemplateModel;
+	templateData?: TemplateModel;
 	displaySender: boolean;
 	displayDate: boolean;
 	contactProvidersData: { [key: string]: any };
-	onOptionsClick: (e: React.MouseEvent, data: ChatMessageModel) => void;
-	goToMessageId: (msgId: string, timestamp: number) => void;
+	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
+	goToMessageId?: (msgId: string, timestamp: number) => void;
 	isTemplatesFailed: boolean;
-	retryMessage: (message: ChatMessageModel) => void;
+	retryMessage?: (message: ChatMessageModel) => void;
 	disableMediaPreview: boolean;
-	setMessageWithStatuses: (message?: ChatMessageModel) => void;
+	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
 }
 
 const iconStyles = {
@@ -132,7 +133,7 @@ const ChatMessage: React.FC<Props> = ({
 					>
 						<div
 							className="chat__message__more"
-							onClick={(event) => onOptionsClick(event, data)}
+							onClick={(event) => onOptionsClick?.(event, data)}
 						>
 							<ExpandMoreIcon />
 						</div>
@@ -156,7 +157,7 @@ const ChatMessage: React.FC<Props> = ({
 								data={data}
 								onPreview={onPreview}
 								onOptionsClick={(e: React.MouseEvent) =>
-									onOptionsClick(e, data)
+									onOptionsClick?.(e, data)
 								}
 							/>
 						)}
@@ -177,7 +178,7 @@ const ChatMessage: React.FC<Props> = ({
 								onPreview={() =>
 									onPreview(ATTACHMENT_TYPE_VIDEO, data.generateVideoLink())
 								}
-								onOptionsClick={(e) => onOptionsClick(e, data)}
+								onOptionsClick={(e) => onOptionsClick?.(e, data)}
 							/>
 						)}
 
@@ -207,7 +208,7 @@ const ChatMessage: React.FC<Props> = ({
 								isTemplatesFailed={isTemplatesFailed}
 								onPreview={onPreview}
 								onOptionsClick={(e: React.MouseEvent) =>
-									onOptionsClick(e, data)
+									onOptionsClick?.(e, data)
 								}
 							/>
 						)}
@@ -247,7 +248,10 @@ const ChatMessage: React.FC<Props> = ({
 
 						<span
 							className="chat__message__info"
-							onClick={() => setMessageWithStatuses(data)}
+							onClick={() => {
+								setMessageWithStatuses?.(data);
+								dispatch(setMessageStatusesVisible(true));
+							}}
 						>
 							<span className="chat__timestamp">
 								<Moment date={data.timestamp} format={dateFormat} unix />

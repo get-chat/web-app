@@ -44,6 +44,7 @@ export class ChatMessageModel {
 	public location: any;
 	public assignmentEvent: any;
 	public taggingEvent: any;
+	public templateName?: string | null;
 	public text?: string | null;
 	public caption?: string | null;
 	public buttonText?: string | null;
