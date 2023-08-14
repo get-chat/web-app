@@ -969,3 +969,18 @@ msgstr ""
 
 msgid "Log in with password instead"
 msgstr ""
+
+msgid "Message Information"
+msgstr ""
+
+
+msgid "Sent at"
+msgstr ""
+
+
+msgid "Delivered at"
+msgstr ""
+
+
+msgid "Read at"
+msgstr ""

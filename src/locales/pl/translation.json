@@ -304,5 +304,9 @@
 	"Your current inbox": "",
 	"Select an inbox": "",
 	"Failed to log in": "",
-	"Log in with password instead": ""
+	"Log in with password instead": "",
+	"Message Information": "",
+	"Sent at": "",
+	"Delivered at": "",
+	"Read at": ""
 }
