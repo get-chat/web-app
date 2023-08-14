@@ -33,18 +33,20 @@ import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import TemplateModel from '@src/api/models/TemplateModel';
 import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import { clone } from '@src/helpers/ObjectHelper';
+import classNames from 'classnames/bind';
+import styles from './ChatMessage.module.css';
 
 interface Props {
 	data: ChatMessageModel;
 	templateData?: TemplateModel;
-	displaySender: boolean;
-	displayDate: boolean;
-	contactProvidersData: { [key: string]: any };
+	displaySender?: boolean;
+	displayDate?: boolean;
+	contactProvidersData?: { [key: string]: any };
 	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
-	isTemplatesFailed: boolean;
+	isTemplatesFailed?: boolean;
 	retryMessage?: (message: ChatMessageModel) => void;
-	disableMediaPreview: boolean;
+	disableMediaPreview?: boolean;
 	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
 }
 
@@ -85,10 +87,15 @@ const ChatMessage: React.FC<Props> = ({
 
 	const dateFormat = 'H:mm';
 
+	const cx = classNames.bind(styles);
+
 	return (
 		<div
 			id={'message_' + data.id}
-			className={'chat__message__outer' + (data.isFromUs ? ' outgoing' : '')}
+			className={cx({
+				chat__message__outer: true,
+				outgoing: data.isFromUs,
+			})}
 		>
 			{displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
 
@@ -106,7 +113,7 @@ const ChatMessage: React.FC<Props> = ({
 							message={
 								data.isFromUs
 									? data.senderName
-									: contactProvidersData[data.waId]?.[0]?.name ??
+									: contactProvidersData?.[data.waId]?.[0]?.name ??
 									  data.senderName
 							}
 						/>
@@ -121,16 +128,15 @@ const ChatMessage: React.FC<Props> = ({
 					)}
 
 					<div
-						className={
-							'chat__message' +
-							(data.hasMediaToPreview() ? ' hasMedia' : '') +
-							(data.isFromUs
-								? (data.isRead() ? ' chat__received' : '') + ' chat__outgoing'
-								: '') +
-							(!displaySender && !displayDate ? ' hiddenSender' : '') +
-							(' messageType__' + data.type) +
-							(data.isFailed ? ' chat__failed' : '')
-						}
+						className={cx({
+							chat__message: true,
+							hasMedia: data.hasMediaToPreview(),
+							chat__outgoing: data.isFromUs,
+							chat__received: data.isFromUs && data.isRead(),
+							hiddenSender: !displaySender && !displayDate,
+							['messageType__' + data.type]: true,
+							chat__failed: data.isFailed,
+						})}
 					>
 						<div
 							className="chat__message__more"

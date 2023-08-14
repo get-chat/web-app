@@ -46,11 +46,6 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 										? templates[message.templateName]
 										: undefined
 								}
-								displaySender={false}
-								displayDate={false}
-								contactProvidersData={{}}
-								isTemplatesFailed={false}
-								disableMediaPreview={false}
 							/>
 						</div>
 
