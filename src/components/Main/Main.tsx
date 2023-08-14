@@ -84,6 +84,9 @@ function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
+	const { isMessageStatusesVisible } = useAppSelector(
+		(state) => state.UI.value
+	);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
