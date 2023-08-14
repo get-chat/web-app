@@ -1,16 +1,19 @@
 import React from 'react';
 import styles from './MessageStatuses.module.css';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { IconButton } from '@mui/material';
+import { Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
+import Moment from 'react-moment';
 
 interface Props {
 	message?: ChatMessageModel;
 }
+
+const dateFormat = 'H:mm, DD.MM.YYYY';
 
 const MessageStatuses: React.FC<Props> = ({ message }) => {
 	const { t } = useTranslation();
@@ -47,6 +50,45 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 								isTemplatesFailed={false}
 								disableMediaPreview={false}
 							/>
+						</div>
+
+						<div className={styles.section}>
+							{message.sentTimestamp && (
+								<>
+									<div className={styles.subSection}>
+										<h6>{t('Sent at')}</h6>
+										<Moment
+											date={message.sentTimestamp}
+											format={dateFormat}
+											unix
+										/>
+									</div>
+									<Divider />
+								</>
+							)}
+							{message.deliveredTimestamp && (
+								<>
+									<div className={styles.subSection}>
+										<h6>{t('Delivered at')}</h6>
+										<Moment
+											date={message.deliveredTimestamp}
+											format={dateFormat}
+											unix
+										/>
+									</div>
+									<Divider />
+								</>
+							)}
+							{message.readTimestamp && (
+								<div className={styles.subSection}>
+									<h6>{t('Read at')}</h6>
+									<Moment
+										date={message.readTimestamp}
+										format={dateFormat}
+										unix
+									/>
+								</div>
+							)}
 						</div>
 					</>
 				)}

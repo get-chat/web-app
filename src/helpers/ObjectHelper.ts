@@ -1,4 +1,5 @@
 // @ts-nocheck
+
 export const getObjLength = (obj) => {
 	return obj ? Object.keys(obj).length : 0;
 };
@@ -16,4 +17,10 @@ export const getObjectByIndex = (jsonObject, index) => {
 export const getLastKey = (jsonObject) => {
 	const keys = Object.keys(jsonObject);
 	return keys[keys.length - 1];
+};
+
+export const clone = (instance) => {
+	const clone = Object.assign({}, instance);
+	Object.setPrototypeOf(clone, Object.getPrototypeOf(instance));
+	return clone;
 };

@@ -32,6 +32,7 @@ import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import TemplateModel from '@src/api/models/TemplateModel';
 import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
+import { clone } from '@src/helpers/ObjectHelper';
 
 interface Props {
 	data: ChatMessageModel;
@@ -249,7 +250,7 @@ const ChatMessage: React.FC<Props> = ({
 						<span
 							className="chat__message__info"
 							onClick={() => {
-								setMessageWithStatuses?.(data);
+								setMessageWithStatuses?.(clone(data));
 								dispatch(setMessageStatusesVisible(true));
 							}}
 						>

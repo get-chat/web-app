@@ -55,6 +55,9 @@ export class ChatMessageModel {
 	public documentLink?: string;
 	public documentFileName?: string;
 	public documentCaption?: string;
+	public readTimestamp?: number;
+	public deliveredTimestamp?: number;
+	public sentTimestamp?: number;
 
 	constructor(data) {
 		if (!data) return;
