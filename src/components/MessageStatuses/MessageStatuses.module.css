@@ -50,6 +50,26 @@
 	padding: 10px 0;
 }
 
+.subSectionTitle {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.subSectionTitle :global(.MuiSvgIcon-root) {
+	margin-right: 5px;
+	height: 0.7em !important;
+	width: 0.7em !important;
+}
+
+.blueIcon {
+	fill: var(--color-light-blue) !important;
+}
+
+.subSectionText {
+	color: rgba(0, 0, 45, 0.6);
+}
+
 @media only screen and (max-width: 750px) {
 	.container {
 		position: absolute;

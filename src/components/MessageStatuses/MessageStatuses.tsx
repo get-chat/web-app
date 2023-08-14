@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import Moment from 'react-moment';
+import DoneIcon from '@mui/icons-material/Done';
+import DoneAll from '@mui/icons-material/DoneAll';
 
 interface Props {
 	message?: ChatMessageModel;
@@ -56,11 +58,15 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 							{message.sentTimestamp && (
 								<>
 									<div className={styles.subSection}>
-										<h6>{t('Sent at')}</h6>
+										<div className={styles.subSectionTitle}>
+											<DoneIcon color="inherit" />
+											<h5>{t('Sent at')}</h5>
+										</div>
 										<Moment
 											date={message.sentTimestamp}
 											format={dateFormat}
 											unix
+											className={styles.subSectionText}
 										/>
 									</div>
 									<Divider />
@@ -69,11 +75,15 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 							{message.deliveredTimestamp && (
 								<>
 									<div className={styles.subSection}>
-										<h6>{t('Delivered at')}</h6>
+										<div className={styles.subSectionTitle}>
+											<DoneAll color="inherit" />
+											<h5>{t('Delivered at')}</h5>
+										</div>
 										<Moment
 											date={message.deliveredTimestamp}
 											format={dateFormat}
 											unix
+											className={styles.subSectionText}
 										/>
 									</div>
 									<Divider />
@@ -81,11 +91,15 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 							)}
 							{message.readTimestamp && (
 								<div className={styles.subSection}>
-									<h6>{t('Read at')}</h6>
+									<div className={styles.subSectionTitle}>
+										<DoneAll color="inherit" className={styles.blueIcon} />
+										<h5>{t('Read at')}</h5>
+									</div>
 									<Moment
 										date={message.readTimestamp}
 										format={dateFormat}
 										unix
+										className={styles.subSectionText}
 									/>
 								</div>
 							)}
