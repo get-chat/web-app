@@ -95,6 +95,7 @@ const ChatMessage: React.FC<Props> = ({
 			className={cx({
 				chat__message__outer: true,
 				outgoing: data.isFromUs,
+				['messageType__' + data.type]: true,
 			})}
 		>
 			{displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
@@ -130,11 +131,11 @@ const ChatMessage: React.FC<Props> = ({
 					<div
 						className={cx({
 							chat__message: true,
+							['messageType__' + data.type]: true,
 							hasMedia: data.hasMediaToPreview(),
 							chat__outgoing: data.isFromUs,
 							chat__received: data.isFromUs && data.isRead(),
 							hiddenSender: !displaySender && !displayDate,
-							['messageType__' + data.type]: true,
 							chat__failed: data.isFailed,
 						})}
 					>
