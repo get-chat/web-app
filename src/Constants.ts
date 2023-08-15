@@ -10,16 +10,14 @@ export const CHAT_LIST_TAB_CASE_GROUP = 'group';
 export const EVENT_TOPIC_FORCE_LOGOUT = 'force_logout';
 export const EVENT_TOPIC_CHAT_MESSAGE = 'chat_message';
 export const EVENT_TOPIC_GO_TO_MSG_ID = 'go_to_msg_id';
-export const EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY =
-	'search_messages_visibility';
-export const EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY =
-	'contact_details_visibility';
 export const EVENT_TOPIC_EMOJI_PICKER_VISIBILITY = 'emoji_picker_visibility';
 export const EVENT_TOPIC_DROPPED_FILES = 'dropped_files';
 export const EVENT_TOPIC_RELOAD_PREVIEW = 'reload_preview';
 export const EVENT_TOPIC_NEW_CHAT_MESSAGES = 'new_chat_messages';
 export const EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE =
 	'chat_message_status_change';
+export const EVENT_TOPIC_POST_CHAT_MESSAGE_STATUS_CHANGE =
+	'post_chat_message_status_change';
 export const EVENT_TOPIC_MARKED_AS_RECEIVED = 'marked_as_received';
 export const EVENT_TOPIC_REQUEST_MIC_PERMISSION = 'request_mic_permission';
 export const EVENT_TOPIC_DISPLAY_ERROR = 'display_error';

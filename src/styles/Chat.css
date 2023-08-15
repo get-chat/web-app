@@ -258,6 +258,10 @@ a.chat__document:hover {
 	float: right;
 }
 
+.chat__outgoing .chat__message__info {
+	cursor: pointer;
+}
+
 .chat__message__info .MuiSvgIcon-root:not(.chat__received .chat__iconDoneAll) {
 	color: #8990b4 !important;
 }
@@ -286,36 +290,21 @@ a.chat__document:hover {
 }
 
 .chat__message__more {
-	display: none;
+	opacity: 0;
 	position: absolute;
-	top: 0;
-	right: 0;
-	height: 31px;
-	width: 36px;
+	top: 4px;
+	left: -30px;
 	cursor: pointer;
 	z-index: 3;
-	background: rgb(215, 219, 215);
-	background: linear-gradient(
-		90deg,
-		rgba(215, 219, 215, 0) 0%,
-		rgba(255, 255, 255, 1) 35%
-	);
-	border-radius: 0 10px 10px 0;
-	transition: all 1s;
+	background-color: rgba(0, 0, 45, 0.07);
+	border-radius: 35px;
+	transition: all 0.5s;
 	justify-content: center;
 	align-items: center;
 }
 
-.chat__message.chat__outgoing .chat__message__more {
-	background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #dcf8c6 35%);
-}
-
-.chat__message.messageType__template .chat__message__more {
-	background: linear-gradient(90deg, rgba(215, 219, 215, 0) 0%, #f4f0d7 35%);
-}
-
-.chat__message.chat__outgoing.messageType__text:hover .chat__message__more /*.chat__message:hover .chat__message__more*/ {
-	display: flex;
+.chat__message__outer.outgoing.messageType__text:hover .chat__message__more {
+	opacity: 1;
 }
 
 .chat__forwarded {

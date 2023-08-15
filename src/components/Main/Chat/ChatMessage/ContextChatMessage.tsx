@@ -9,7 +9,7 @@ function ContextChatMessage(props) {
 		<div
 			className="chat__message__context"
 			onClick={() =>
-				props.goToMessageId(
+				props.goToMessageId?.(
 					props.contextMessage.id,
 					props.contextMessage.timestamp
 				)

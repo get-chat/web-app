@@ -3,10 +3,7 @@ import '../styles/SearchMessage.css';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
-import {
-	EVENT_TOPIC_GO_TO_MSG_ID,
-	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-} from '../Constants';
+import { EVENT_TOPIC_GO_TO_MSG_ID } from '../Constants';
 import SearchBar from './SearchBar';
 import { useParams } from 'react-router-dom';
 import ChatMessageModel from '../api/models/ChatMessageModel';
@@ -17,6 +14,8 @@ import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
 import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
+import { useAppDispatch } from '@src/store/hooks';
+import { setSearchMessagesVisible } from '@src/store/reducers/UIReducer';
 
 export type Props = {
 	initialKeyword: string;
@@ -27,6 +26,8 @@ const SearchMessage: React.FC<Props> = ({
 	initialKeyword,
 	setInitialKeyword,
 }) => {
+	const dispatch = useAppDispatch();
+
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
@@ -80,7 +81,7 @@ const SearchMessage: React.FC<Props> = ({
 	}, [initialKeyword]);
 
 	const close = () => {
-		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, false);
+		dispatch(setSearchMessagesVisible(false));
 	};
 
 	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();

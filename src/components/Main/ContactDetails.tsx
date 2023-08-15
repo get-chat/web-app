@@ -4,12 +4,7 @@ import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
-import PubSub from 'pubsub-js';
-import {
-	CALENDAR_NORMAL,
-	CHAT_KEY_PREFIX,
-	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-} from '@src/Constants';
+import { CALENDAR_NORMAL, CHAT_KEY_PREFIX } from '@src/Constants';
 import '../../styles/ContactDetails.css';
 import Moment from 'react-moment';
 import googleLogo from '../../assets/images/ic-google.png';
@@ -22,6 +17,7 @@ import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
+import { setContactDetailsVisible } from '@src/store/reducers/UIReducer';
 
 const ContactDetails: React.FC = ({
 	contactData,
@@ -37,7 +33,7 @@ const ContactDetails: React.FC = ({
 	const dispatch = useAppDispatch();
 
 	const hideContactDetails = () => {
-		PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, false);
+		dispatch(setContactDetailsVisible(false));
 	};
 
 	useEffect(() => {

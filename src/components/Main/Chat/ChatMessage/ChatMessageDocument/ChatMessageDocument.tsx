@@ -3,14 +3,10 @@ import { useTranslation } from 'react-i18next';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 import styles from './ChatMessageDocument.pcss';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 interface ChatMessageDocumentProps {
-	data: {
-		documentFileName: string;
-		documentCaption: string;
-		documentLink: string;
-		getHeaderFileLink: (type: string) => string;
-	};
+	data: ChatMessageModel;
 }
 
 const ChatMessageDocument: FC<ChatMessageDocumentProps> = ({ data }) => {

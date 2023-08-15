@@ -972,3 +972,24 @@ msgstr "Giriş başarısız"
 
 msgid "Log in with password instead"
 msgstr "Bunun yerine şifre ile giriş yap"
+
+msgid "Message Information"
+msgstr "Mesaj Bilgisi"
+
+
+msgid "Sent at"
+msgstr "Gönderildi"
+
+
+msgid "Delivered at"
+msgstr "Teslim edildi"
+
+
+msgid "Read at"
+msgstr "Okundu"
+
+msgid "There are some problems sending your message:"
+msgstr "Mesajın gönderilirken bazı sorunlar oluştu:"
+
+msgid "There were some problems sending your message:"
+msgstr "Mesajın gönderilirken bazı sorunlar oluşmuştu:"
