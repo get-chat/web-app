@@ -64,11 +64,11 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 											className={styles.subSectionText}
 										/>
 									</div>
-									<Divider />
 								</>
 							)}
 							{message.deliveredTimestamp && (
 								<>
+									<Divider />
 									<div className={styles.subSection}>
 										<div className={styles.subSectionTitle}>
 											<DoneAll color="inherit" />
@@ -81,22 +81,24 @@ const MessageStatuses: React.FC<Props> = ({ message }) => {
 											className={styles.subSectionText}
 										/>
 									</div>
-									<Divider />
 								</>
 							)}
 							{message.readTimestamp && (
-								<div className={styles.subSection}>
-									<div className={styles.subSectionTitle}>
-										<DoneAll color="inherit" className={styles.blueIcon} />
-										<h5>{t('Read at')}</h5>
+								<>
+									<Divider />
+									<div className={styles.subSection}>
+										<div className={styles.subSectionTitle}>
+											<DoneAll color="inherit" className={styles.blueIcon} />
+											<h5>{t('Read at')}</h5>
+										</div>
+										<Moment
+											date={message.readTimestamp}
+											format={dateFormat}
+											unix
+											className={styles.subSectionText}
+										/>
 									</div>
-									<Moment
-										date={message.readTimestamp}
-										format={dateFormat}
-										unix
-										className={styles.subSectionText}
-									/>
-								</div>
+								</>
 							)}
 						</div>
 					</>
