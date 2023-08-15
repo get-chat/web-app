@@ -24,6 +24,7 @@ import {
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
+	EVENT_TOPIC_POST_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
@@ -605,6 +606,12 @@ const Chat: React.FC = (props) => {
 										newState[wabaIdOrGetchatId].errors = statusObj.errors;
 									}
 								}
+
+								// Notify MessageStatuses component
+								PubSub.publish(
+									EVENT_TOPIC_POST_CHAT_MESSAGE_STATUS_CHANGE,
+									newState[wabaIdOrGetchatId]
+								);
 							}
 						});
 

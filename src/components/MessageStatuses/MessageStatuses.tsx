@@ -4,12 +4,11 @@ import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import Moment from 'react-moment';
 import DoneIcon from '@mui/icons-material/Done';
 import DoneAll from '@mui/icons-material/DoneAll';
+import useMessageStatuses from '@src/components/MessageStatuses/useMessageStatuses';
 
 interface Props {
 	message?: ChatMessageModel;
@@ -17,14 +16,10 @@ interface Props {
 
 const dateFormat = 'H:mm, DD.MM.YYYY';
 
-const MessageStatuses: React.FC<Props> = ({ message }) => {
+const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 	const { t } = useTranslation();
 
-	const dispatch = useAppDispatch();
-
-	const templates = useAppSelector((state) => state.templates.value);
-
-	const close = () => dispatch(setMessageStatusesVisible(false));
+	const { message, templates, close } = useMessageStatuses({ initialMessage });
 
 	return (
 		<div className={styles.container}>

@@ -20,6 +20,8 @@ export const EVENT_TOPIC_RELOAD_PREVIEW = 'reload_preview';
 export const EVENT_TOPIC_NEW_CHAT_MESSAGES = 'new_chat_messages';
 export const EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE =
 	'chat_message_status_change';
+export const EVENT_TOPIC_POST_CHAT_MESSAGE_STATUS_CHANGE =
+	'post_chat_message_status_change';
 export const EVENT_TOPIC_MARKED_AS_RECEIVED = 'marked_as_received';
 export const EVENT_TOPIC_REQUEST_MIC_PERMISSION = 'request_mic_permission';
 export const EVENT_TOPIC_DISPLAY_ERROR = 'display_error';
