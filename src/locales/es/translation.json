@@ -305,5 +305,7 @@
 	"Message Information": "",
 	"Sent at": "",
 	"Delivered at": "",
-	"Read at": ""
+	"Read at": "",
+	"There are some problems sending your message:": "",
+	"There were some problems sending your message:": ""
 }

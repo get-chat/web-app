@@ -305,5 +305,7 @@
 	"Message Information": "Mesaj Bilgisi",
 	"Sent at": "Gönderildi",
 	"Delivered at": "Teslim edildi",
-	"Read at": "Okundu"
+	"Read at": "Okundu",
+	"There are some problems sending your message:": "Mesajın gönderilirken bazı sorunlar oluştu:",
+	"There were some problems sending your message:": "Mesajın gönderilirken bazı sorunlar oluşmuştu:"
 }

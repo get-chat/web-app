@@ -986,3 +986,9 @@ msgstr ""
 
 msgid "Read at"
 msgstr ""
+
+msgid "There are some problems sending your message:"
+msgstr ""
+
+msgid "There were some problems sending your message:"
+msgstr ""

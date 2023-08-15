@@ -987,3 +987,9 @@ msgstr "Teslim edildi"
 
 msgid "Read at"
 msgstr "Okundu"
+
+msgid "There are some problems sending your message:"
+msgstr "Mesajın gönderilirken bazı sorunlar oluştu:"
+
+msgid "There were some problems sending your message:"
+msgstr "Mesajın gönderilirken bazı sorunlar oluşmuştu:"
