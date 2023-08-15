@@ -25,11 +25,9 @@ import {
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
 	EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
-	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
 	EVENT_TOPIC_DISPLAY_ERROR,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
-	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 } from '@src/Constants';
 import ChatMessageModel from '../../api/models/ChatMessageModel';
@@ -76,7 +74,11 @@ import { setGroups } from '@src/store/reducers/groupsReducer';
 import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
-import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
+import {
+	setContactDetailsVisible,
+	setMessageStatusesVisible,
+	setSearchMessagesVisible,
+} from '@src/store/reducers/UIReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -86,9 +88,11 @@ function Main() {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isMessageStatusesVisible } = useAppSelector(
-		(state) => state.UI.value
-	);
+	const {
+		isMessageStatusesVisible,
+		isContactDetailsVisible,
+		isSearchMessagesVisible,
+	} = useAppSelector((state) => state.UI.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
@@ -128,8 +132,6 @@ function Main() {
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const [isSearchMessagesVisible, setSearchMessagesVisible] = useState(false);
-	const [isContactDetailsVisible, setContactDetailsVisible] = useState(false);
 	const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
@@ -359,26 +361,6 @@ function Main() {
 		}
 	};
 
-	const onSearchMessagesVisibilityEvent = function (msg, data) {
-		setSearchMessagesVisible(data);
-
-		// Hide other sections
-		if (data === true) {
-			setContactDetailsVisible(false);
-			dispatch(setMessageStatusesVisible(false));
-		}
-	};
-
-	const onContactDetailsVisibilityEvent = function (msg, data) {
-		setContactDetailsVisible(data);
-
-		// Hide other sections
-		if (data === true) {
-			setSearchMessagesVisible(false);
-			dispatch(setMessageStatusesVisible(false));
-		}
-	};
-
 	const onDisplayError = function (msg, data) {
 		displayCustomError(data);
 	};
@@ -409,14 +391,6 @@ function Main() {
 		};
 
 		// EventBus
-		const searchMessagesVisibilityEventToken = PubSub.subscribe(
-			EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-			onSearchMessagesVisibilityEvent
-		);
-		const contactDetailsVisibilityEventToken = PubSub.subscribe(
-			EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-			onContactDetailsVisibilityEvent
-		);
 		const displayErrorEventToken = PubSub.subscribe(
 			EVENT_TOPIC_DISPLAY_ERROR,
 			onDisplayError
@@ -427,8 +401,6 @@ function Main() {
 		);
 
 		return () => {
-			PubSub.unsubscribe(searchMessagesVisibilityEventToken);
-			PubSub.unsubscribe(contactDetailsVisibilityEventToken);
 			PubSub.unsubscribe(displayErrorEventToken);
 			PubSub.unsubscribe(unsupportedFileEventToken);
 		};
@@ -722,10 +694,10 @@ function Main() {
 
 		return () => {
 			// Hide search messages
-			setSearchMessagesVisible(false);
+			dispatch(setSearchMessagesVisible(false));
 
 			// Hide contact details
-			setContactDetailsVisible(false);
+			dispatch(setContactDetailsVisible(false));
 
 			// Hide message statuses
 			dispatch(setMessageStatusesVisible(false));

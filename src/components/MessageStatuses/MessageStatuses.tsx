@@ -10,7 +10,6 @@ import DoneIcon from '@mui/icons-material/Done';
 import DoneAll from '@mui/icons-material/DoneAll';
 import useMessageStatuses from '@src/components/MessageStatuses/useMessageStatuses';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
-import data from 'emoji-mart/data/facebook.json';
 
 interface Props {
 	message?: ChatMessageModel;

@@ -9,11 +9,7 @@ import {
 	Tooltip,
 } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
-import {
-	EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY,
-	EVENT_TOPIC_FORCE_REFRESH_CHAT,
-	EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY,
-} from '@src/Constants';
+import { EVENT_TOPIC_FORCE_REFRESH_CHAT } from '@src/Constants';
 import PubSub from 'pubsub-js';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
@@ -37,7 +33,11 @@ import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import {
+	setContactDetailsVisible,
+	setSearchMessagesVisible,
+} from '@src/store/reducers/UIReducer';
 
 const cx = classNames.bind(styles);
 
@@ -64,6 +64,8 @@ const ChatHeader: React.FC<Props> = ({
 	hasFailedMessages,
 	waId,
 }) => {
+	const dispatch = useAppDispatch();
+
 	const { isReadOnly } = useAppSelector((state) => state.UI.value);
 
 	const { t } = useTranslation();
@@ -82,11 +84,11 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	const showSearchMessages = () => {
-		PubSub.publish(EVENT_TOPIC_SEARCH_MESSAGES_VISIBILITY, true);
+		dispatch(setSearchMessagesVisible(true));
 	};
 
 	const showContactDetails = () => {
-		PubSub.publish(EVENT_TOPIC_CONTACT_DETAILS_VISIBILITY, true);
+		dispatch(setContactDetailsVisible(true));
 	};
 
 	const showContactDetailsAndHideMenu = () => {
