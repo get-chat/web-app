@@ -9,6 +9,8 @@ import Moment from 'react-moment';
 import DoneIcon from '@mui/icons-material/Done';
 import DoneAll from '@mui/icons-material/DoneAll';
 import useMessageStatuses from '@src/components/MessageStatuses/useMessageStatuses';
+import ChatMessageErrors from '@src/components/ChatMessageErrors';
+import data from 'emoji-mart/data/facebook.json';
 
 interface Props {
 	message?: ChatMessageModel;
@@ -96,6 +98,19 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 								</>
 							)}
 						</div>
+
+						{message.hasErrors() && (
+							<div className={styles.section}>
+								<h5>
+									{t(
+										message.hasAnyStatus()
+											? 'There were some problems sending your message:'
+											: 'There are some problems sending your message:'
+									)}
+								</h5>
+								<ChatMessageErrors data={message} />
+							</div>
+						)}
 					</>
 				)}
 			</div>

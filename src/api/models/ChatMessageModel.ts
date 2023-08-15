@@ -59,7 +59,7 @@ export class ChatMessageModel {
 	public deliveredTimestamp?: number;
 	public sentTimestamp?: number;
 
-	constructor(data) {
+	constructor(data: any) {
 		if (!data) return;
 
 		const payload = data.waba_payload;
@@ -398,6 +398,18 @@ export class ChatMessageModel {
 		}
 
 		return result;
+	}
+
+	hasAnyStatus() {
+		return (
+			(this.sentTimestamp ?? 0) > 0 ||
+			(this.deliveredTimestamp ?? 0) > 0 ||
+			(this.readTimestamp ?? 0) > 0
+		);
+	}
+
+	hasErrors() {
+		return (this.errors ?? []).length > 0;
 	}
 }
 

@@ -252,7 +252,9 @@ const ChatMessage: React.FC<Props> = ({
 							'\u00A0'
 						)}
 
-						<ChatMessageErrors data={data} retryMessage={retryMessage} />
+						{!data.hasAnyStatus() && (
+							<ChatMessageErrors data={data} retryMessage={retryMessage} />
+						)}
 
 						<span
 							className="chat__message__info"
@@ -267,7 +269,7 @@ const ChatMessage: React.FC<Props> = ({
 								<Moment date={data.timestamp} format={dateFormat} unix />
 							</span>
 
-							{!data.isFailed && data.isFromUs && (
+							{(!data.isFailed || data.hasAnyStatus()) && data.isFromUs && (
 								<>
 									{data.isPending() && (
 										<AccessTimeIcon
@@ -295,7 +297,7 @@ const ChatMessage: React.FC<Props> = ({
 								</>
 							)}
 
-							{data.isFailed && (
+							{data.isFailed && !data.hasAnyStatus() && (
 								<ErrorIcon
 									className="chat__iconError"
 									color="inherit"
