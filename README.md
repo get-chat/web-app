@@ -198,7 +198,7 @@ APP_IS_READ_ONLY=
 To start application and expose it on `localhost:8080`, run:
 
 ```bash
-docker run --rm --env-file=docker.env -p 127.0.0.1:8080:80 registry.gitlab.com/get.chat/wab-app:latest
+docker run --rm --env-file=docker.env -p 127.0.0.1:8080:80 registry.gitlab.com/get.chat/wab-app:<app-version>
 ```
 
 ### Building docker image
