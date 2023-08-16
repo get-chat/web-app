@@ -29,7 +29,8 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 								className={styles.error}
 								action={
 									data.isFailed &&
-									data.canRetry() && (
+									data.canRetry() &&
+									retryMessage && (
 										<Button
 											color="inherit"
 											size="small"
@@ -55,7 +56,8 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 							className={styles.error}
 							action={
 								data.isFailed &&
-								data.canRetry() && (
+								data.canRetry() &&
+								retryMessage && (
 									<Button
 										color="inherit"
 										size="small"
