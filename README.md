@@ -175,3 +175,39 @@ Check all files and auto fix all of them
 ## Testing
 
 To run tests run the command `pnpm test`
+
+## Using docker image
+
+You can find ready to use docker images in [GitLab Container Registry](https://gitlab.com/get.chat/web-app/container_registry).
+
+To run the app from provided image you will need some environment variables. For simplicity we will use dedicated env
+file. Create your env file from this template and save it as `docker.env`:
+
+```
+APP_API_BASE_URL=<path-to-inbox-api>
+APP_SENTRY_DSN=<sentry-dsn>
+APP_ENV_NAME=
+APP_SENTRY_TAG_CLIENT=get.chat Inbox Frontend
+APP_NOTIFICATIONS_LIMIT_PER_MINUTE=8
+APP_GOOGLE_MAPS_API_KEY=<google-maps-key>
+APP_MAX_BULK_DIRECT_RECIPIENTS=1000
+APP_MAX_BULK_TAG_RECIPIENTS=10000
+APP_IS_READ_ONLY=
+```
+
+To start application and expose it on `localhost:8080`, run:
+
+```bash
+docker run --rm --env-file=docker.env -p 127.0.0.1:8080:80 registry.gitlab.com/get.chat/wab-app:latest
+```
+
+### Building docker image
+
+Building JS application is not yet dockerized. Before you proceed, be sure that you ran `pnpm build` and application's
+files are in `build` directory.
+
+To build docker image from pre-build application, run following command:
+
+```bash
+docker build -t inbox-frontend:local -f docker/Dockerfile.prebuild .
+```
