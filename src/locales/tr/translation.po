@@ -991,5 +991,5 @@ msgstr "Okundu"
 msgid "There are some problems sending your message:"
 msgstr "Mesajın gönderilirken bazı sorunlar oluştu:"
 
-msgid "There were some problems sending your message:"
-msgstr "Mesajın gönderilirken bazı sorunlar oluşmuştu:"
+msgid "There were some problems sending your message, but your message was sent successfully after problems have resolved."
+msgstr "Mesajın gönderilirken bazı sorunlar oluşmuştu fakat bu sorunlar giderildikten sonra başarıyla gönderildi."

@@ -103,7 +103,7 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 								<h5>
 									{t(
 										message.hasAnyStatus()
-											? 'There were some problems sending your message:'
+											? 'There were some problems sending your message, but your message was sent successfully after problems have resolved.'
 											: 'There are some problems sending your message:'
 									)}
 								</h5>

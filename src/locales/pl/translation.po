@@ -990,5 +990,5 @@ msgstr ""
 msgid "There are some problems sending your message:"
 msgstr ""
 
-msgid "There were some problems sending your message:"
+msgid "There were some problems sending your message, but your message was sent successfully after problems have resolved."
 msgstr ""
