@@ -205,7 +205,7 @@ Publish docker image:
     DOCKER_REGISTRY_PASS: "${G_DOCKER_REGISTRY_PASS}"
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
-    - docker login -u "${DOCKER_REGISTRY_USER}" -p "${DOCKER_REGISTRY_PASS}" "${DOCKER_REGISTRY_URL}"
+    - echo "${DOCKER_REGISTRY_PASS}" | docker login -u "${DOCKER_REGISTRY_USER}" --password-stdin "${DOCKER_REGISTRY_URL}"
   script:
     - docker build -f docker/Dockerfile.prebuild -t "${DOCKER_IMAGE_TAG}" .
     - docker push "${DOCKER_IMAGE_TAG}"
