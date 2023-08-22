@@ -3,6 +3,7 @@ stages:
   - build
   - test
   - package
+  - deploy
   - release
 
 
@@ -15,6 +16,13 @@ variables:
   PACKAGE_VERSION: $CI_COMMIT_REF_NAME
   PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
+
+
+include:
+  - project: wabbitproject/platform/apps-deployment/clients-apps/inbox-frontend
+    file: upstream/jobs.yaml
+    rules:
+      - if: $G_TRIGGER_DEPLOY == "true"
 
 
 .cache_config: &cache_config
@@ -193,7 +201,7 @@ Publish docker image:
   image: docker:20.10
   only:
     - tags
-  needs:
+  dependencies:
     - Build
   services:
     - docker:20.10-dind
