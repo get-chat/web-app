@@ -3,8 +3,8 @@ stages:
   - build
   - test
   - package
-  - deploy
   - release
+  - deploy
 
 
 variables:
