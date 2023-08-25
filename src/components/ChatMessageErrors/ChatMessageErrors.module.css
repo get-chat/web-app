@@ -1,9 +1,22 @@
-.error {
+.errorLegacy {
 	padding: 5px 15px !important;
 	margin-top: 10px;
 	border-radius: 5px !important;
+	border: 1px solid var(--red-dark) !important;
+	background-color: #ffeeee !important;
 }
 
 .code {
 	font-weight: 300 !important;
+}
+
+.container {
+	border: 1px solid var(--red-dark);
+	background-color: #ffeeee;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.recommendation {
+	color: var(--red-dark);
 }
