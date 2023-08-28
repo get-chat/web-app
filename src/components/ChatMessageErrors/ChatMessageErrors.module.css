@@ -1,11 +1,3 @@
-.errorLegacy {
-	padding: 5px 15px !important;
-	margin-top: 10px;
-	border-radius: 5px !important;
-	border: 1px solid var(--red-dark) !important;
-	background-color: #ffeeee !important;
-}
-
 .code {
 	font-weight: 300 !important;
 }
@@ -33,4 +25,14 @@
 
 .error a {
 	color: inherit;
+}
+
+.error h5,
+.errorTitle {
+	font-size: 13px;
+}
+
+.errorDetails,
+.errorLink {
+	font-size: 12px;
 }
