@@ -13,18 +13,6 @@ interface Props {
 const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 	const { t } = useTranslation();
 
-	data.errors = [
-		{
-			code: 401,
-			title: 'Some error',
-			details:
-				'Some details, this text can be pretty long. And this one must have even smaller font...',
-			href: 'location for error detail',
-			recommendation:
-				'Do it and get it fixed... I have no idea how long this text can be.',
-		},
-	];
-
 	return (
 		<>
 			{data.errors &&
