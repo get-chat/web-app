@@ -1,6 +1,4 @@
-import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 import Linkify from 'linkify-react';
 import React from 'react';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
@@ -18,86 +16,53 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 	return (
 		<>
 			{data.errors &&
-				data.errors.map((error: any, index: number) => {
-					// Could not find translation for the requested language and locale
-					if (error.code === 2003) {
-						return (
-							<Alert
-								key={index}
-								variant="filled"
-								severity="warning"
-								className={styles.error}
-								action={
-									data.isFailed &&
-									data.canRetry() &&
-									retryMessage && (
-										<Button
-											color="inherit"
-											size="small"
-											onClick={() => retryMessage?.(data)}
-										>
-											{t('Retry')}
-										</Button>
-									)
-								}
-							>
-								{t(
-									'The language pack for this template is not installed on the server yet, try sending this message later'
-								)}
-							</Alert>
-						);
-					}
+				data.errors.map((error: any, index: number) => (
+					<div className={styles.container} key={index}>
+						<div className={styles.recommendation}>
+							{error.recommendation && (
+								<Linkify options={{ target: '_blank' }}>
+									{t(error.recommendation)}
+								</Linkify>
+							)}
+						</div>
 
-					return (
-						<Alert
-							key={index}
-							variant="filled"
-							severity="error"
-							className={styles.error}
-							action={
-								data.isFailed &&
-								data.canRetry() &&
-								retryMessage && (
-									<Button
-										color="inherit"
-										size="small"
-										onClick={() => retryMessage?.(data)}
-									>
-										{t('Retry')}
-									</Button>
-								)
-							}
-						>
-							<AlertTitle>
+						<div className={styles.error}>
+							<h5>{t('Details')}</h5>
+							<div className={styles.errorTitle}>
 								{t(error.title ?? 'Error')}{' '}
 								<span className={styles.code}>
 									{error.code && t('(Code: %d)', error.code)}
 								</span>
-							</AlertTitle>
-							{error.details && t(error.details)}
-
+							</div>
+							<div className={styles.errorDetails}>
+								{error.details && t(error.details)}
+							</div>
 							{error.href && (
-								<div>
+								<div className={styles.errorLink}>
 									<a href={error.href} target="_blank">
 										{t('Click here for more information.')}
 									</a>
 								</div>
 							)}
+						</div>
 
-							{error.recommendation && (
-								<Alert
-									variant="filled"
-									severity="info"
-									className={styles.error}
+						{data.isFromUs &&
+							data.isFailed &&
+							data.canRetry() &&
+							retryMessage && (
+								<Button
+									color="inherit"
+									fullWidth
+									size="small"
+									variant="outlined"
+									className={styles.retry}
+									onClick={() => retryMessage?.(data)}
 								>
-									<Linkify options={{ target: '_blank' }}>
-										{t(error.recommendation)}
-									</Linkify>
-								</Alert>
+									{t('Retry')}
+								</Button>
 							)}
-						</Alert>
-					);
-				})}
+					</div>
+				))}
 		</>
 	);
 };

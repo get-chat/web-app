@@ -1,9 +1,42 @@
-.error {
-	padding: 5px 15px !important;
-	margin-top: 10px;
-	border-radius: 5px !important;
-}
-
 .code {
 	font-weight: 300 !important;
+}
+
+.container {
+	border: 1px solid var(--red-dark);
+	background-color: #ffeeee;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.container a {
+	text-decoration: underline;
+	font-weight: 600;
+}
+
+.recommendation {
+	color: var(--red-dark);
+	margin-bottom: 6px;
+}
+
+.recommendation a {
+	color: var(--red-dark);
+}
+
+.error a {
+	color: inherit;
+}
+
+.error h5,
+.errorTitle,
+.errorLink {
+	font-size: 13px;
+}
+
+.errorDetails {
+	font-size: 12px;
+}
+
+.retry {
+	margin-top: 10px !important;
 }
