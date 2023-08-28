@@ -3,6 +3,7 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 
 import styles from './ProductMessage.module.css';
+import PrintMessage from '@src/components/PrintMessage';
 
 const ProductMessage = ({ header, body, footer, action }) => {
 	if (!action) {
@@ -61,9 +62,21 @@ const ProductMessage = ({ header, body, footer, action }) => {
 					</>
 				)}
 			</div>
-			{header && <div className={styles.header}>{header.text}</div>}
-			{body && <div className={styles.body}>{body.text}</div>}
-			{footer && <div className={styles.footer}>{footer.text}</div>}
+			{header && (
+				<div className={styles.header}>
+					<PrintMessage linkify message={header.text} />
+				</div>
+			)}
+			{body && (
+				<div className={styles.body}>
+					<PrintMessage linkify message={body.text} />
+				</div>
+			)}
+			{footer && (
+				<div className={styles.footer}>
+					<PrintMessage linkify message={footer.text} />
+				</div>
+			)}
 		</>
 	);
 };

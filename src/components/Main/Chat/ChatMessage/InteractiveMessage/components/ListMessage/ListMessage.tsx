@@ -2,15 +2,28 @@
 import React from 'react';
 
 import styles from './ListMessage.module.css';
+import PrintMessage from '@src/components/PrintMessage';
 
 const ListMessage = ({ header, body, footer, action }) => {
 	const { sections } = action;
 
 	return (
 		<div className={styles.message}>
-			{header && <div className={styles.header}>{header.text}</div>}
-			{body && <div className={styles.body}>{body.text}</div>}
-			{footer && <div className={styles.footer}>{footer.text}</div>}
+			{header && (
+				<div className={styles.header}>
+					<PrintMessage linkify message={header.text} />
+				</div>
+			)}
+			{body && (
+				<div className={styles.body}>
+					<PrintMessage linkify message={body.text} />
+				</div>
+			)}
+			{footer && (
+				<div className={styles.footer}>
+					<PrintMessage linkify message={footer.text} />
+				</div>
+			)}
 
 			{sections && Array.isArray(sections) && (
 				<div className={styles.actions}>
