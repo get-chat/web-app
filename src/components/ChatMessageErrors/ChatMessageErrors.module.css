@@ -17,7 +17,20 @@
 	padding: 10px;
 }
 
+.container a {
+	text-decoration: underline;
+	font-weight: 600;
+}
+
 .recommendation {
 	color: var(--red-dark);
 	margin-bottom: 8px;
+}
+
+.recommendation a {
+	color: var(--red-dark);
+}
+
+.error a {
+	color: inherit;
 }
