@@ -1,6 +1,4 @@
-import Alert from '@mui/material/Alert';
 import { Button } from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 import Linkify from 'linkify-react';
 import React from 'react';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
