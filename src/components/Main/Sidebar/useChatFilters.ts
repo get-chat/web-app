@@ -10,6 +10,7 @@ import {
 import FilterQueryParams from '@src/enums/FilterQueryParams';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { formatDate } from '@src/helpers/DateHelper';
+import { CHAT_FILTER_PREFIX } from '@src/Constants';
 
 const LIMIT_DEFAULT = 20;
 
@@ -26,8 +27,8 @@ const useChatFilters = () => {
 	const dispatch = useAppDispatch();
 
 	const hasAnyFilterQueryParam = useMemo(() => {
-		for (let queryParamKey of Object.values(FilterQueryParams)) {
-			if (searchParams.has(queryParamKey)) return true;
+		for (let searchParam in Object.fromEntries(searchParams.entries())) {
+			if (searchParam.startsWith(CHAT_FILTER_PREFIX)) return true;
 		}
 		return false;
 	}, []);

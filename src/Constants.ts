@@ -3,9 +3,7 @@ export const InvalidTemplateParamException = {};
 
 export const CHAT_KEY_PREFIX = 'chat_';
 
-export const CHAT_LIST_TAB_CASE_ALL = 'all';
-export const CHAT_LIST_TAB_CASE_ME = 'me';
-export const CHAT_LIST_TAB_CASE_GROUP = 'group';
+export const CHAT_FILTER_PREFIX = 'cf_';
 
 export const EVENT_TOPIC_FORCE_LOGOUT = 'force_logout';
 export const EVENT_TOPIC_CHAT_MESSAGE = 'chat_message';
