@@ -16,7 +16,7 @@
 
 .recommendation {
 	color: var(--red-dark);
-	margin-bottom: 8px;
+	margin-bottom: 6px;
 }
 
 .recommendation a {
@@ -28,11 +28,11 @@
 }
 
 .error h5,
-.errorTitle {
+.errorTitle,
+.errorLink {
 	font-size: 13px;
 }
 
-.errorDetails,
-.errorLink {
+.errorDetails {
 	font-size: 12px;
 }
