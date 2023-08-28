@@ -36,3 +36,7 @@
 .errorDetails {
 	font-size: 12px;
 }
+
+.retry {
+	margin-top: 10px !important;
+}

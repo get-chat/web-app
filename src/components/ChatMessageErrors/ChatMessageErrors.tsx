@@ -31,7 +31,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 		<>
 			{data.errors &&
 				data.errors.map((error: any, index: number) => (
-					<div className={styles.container}>
+					<div className={styles.container} key={index}>
 						<div className={styles.recommendation}>
 							{error.recommendation && (
 								<Linkify options={{ target: '_blank' }}>
@@ -60,15 +60,21 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 							)}
 						</div>
 
-						{data.isFailed && data.canRetry() && retryMessage && (
-							<Button
-								color="inherit"
-								size="small"
-								onClick={() => retryMessage?.(data)}
-							>
-								{t('Retry')}
-							</Button>
-						)}
+						{data.isFromUs &&
+							data.isFailed &&
+							data.canRetry() &&
+							retryMessage && (
+								<Button
+									color="inherit"
+									fullWidth
+									size="small"
+									variant="outlined"
+									className={styles.retry}
+									onClick={() => retryMessage?.(data)}
+								>
+									{t('Retry')}
+								</Button>
+							)}
 					</div>
 				))}
 		</>
