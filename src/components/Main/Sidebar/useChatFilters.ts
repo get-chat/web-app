@@ -27,8 +27,8 @@ const useChatFilters = () => {
 	const dispatch = useAppDispatch();
 
 	const hasAnyFilterQueryParam = useMemo(() => {
-		for (let searchParam in Object.fromEntries(searchParams.entries())) {
-			if (searchParam.startsWith(CHAT_FILTER_PREFIX)) return true;
+		for (let searchParamKey in Object.fromEntries(searchParams.entries())) {
+			if (searchParamKey.startsWith(CHAT_FILTER_PREFIX)) return true;
 		}
 		return false;
 	}, []);
@@ -150,6 +150,16 @@ const useChatFilters = () => {
 				[FilterQueryParams.MESSAGES_SINCE_TIME]: formatDate(filterStartDate),
 				[FilterQueryParams.MESSAGES_BEFORE_TIME]: formatDate(filterEndDate),
 			};
+
+			for (let searchParamKey in Object.fromEntries(searchParams.entries())) {
+				// If query parameter starts with chat filter prefix and it is not predefined
+				if (
+					searchParamKey.startsWith(CHAT_FILTER_PREFIX) &&
+					!(searchParamKey in params)
+				) {
+					params[searchParamKey] = searchParams.get(searchParamKey);
+				}
+			}
 
 			// Filter object
 			for (let key in params) {

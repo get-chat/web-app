@@ -6,6 +6,7 @@ export interface UserPreference {
 		filterStartDate?: number;
 		filterEndDate?: number;
 	};
+	dynamicFilters?: { [key: string]: any };
 	weekStartsOn?: number;
 	updatedAt?: number;
 }
