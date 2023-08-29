@@ -149,6 +149,7 @@ const Sidebar: React.FC<any> = ({
 	const { t } = useTranslation();
 
 	const {
+		dynamicFilters,
 		keyword,
 		chatsLimit,
 		chatsOffset,
@@ -928,6 +929,7 @@ const Sidebar: React.FC<any> = ({
 									isActive
 								/>
 							)}
+							{JSON.stringify(dynamicFilters)}
 						</div>
 					</Collapse>
 
