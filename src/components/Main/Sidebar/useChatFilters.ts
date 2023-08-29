@@ -115,6 +115,19 @@ const useChatFilters = () => {
 
 	useEffect(() => {
 		if (isMounted.current) {
+			const dynamicFilters = Object.fromEntries(searchParams.entries());
+			const preparedDynamicFilters = { ...dynamicFilters };
+			for (let dynamicFilterKey in dynamicFilters) {
+				if (
+					!dynamicFilterKey.startsWith(CHAT_FILTER_PREFIX) ||
+					dynamicFilterKey === CHAT_FILTER_PREFIX ||
+					// @ts-ignore
+					Object.values(FilterQueryParams).includes(dynamicFilterKey)
+				) {
+					delete preparedDynamicFilters[dynamicFilterKey];
+				}
+			}
+
 			// Store filters
 			storeUserPreference(currentUser?.id, {
 				filters: {
@@ -124,6 +137,7 @@ const useChatFilters = () => {
 					filterStartDate: filterStartDate?.getTime(),
 					filterEndDate: filterEndDate?.getTime(),
 				},
+				dynamicFilters: preparedDynamicFilters,
 			});
 		} else {
 			isMounted.current = true;
