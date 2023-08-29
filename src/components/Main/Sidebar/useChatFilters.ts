@@ -42,23 +42,6 @@ const useChatFilters = () => {
 		return undefined;
 	};
 
-	const getDynamicFilters = () => {
-		const dynamicFilters = Object.fromEntries(searchParams.entries());
-		const preparedDynamicFilters = { ...dynamicFilters };
-		for (let dynamicFilterKey in dynamicFilters) {
-			if (
-				!dynamicFilterKey.startsWith(CHAT_FILTER_PREFIX) ||
-				dynamicFilterKey === CHAT_FILTER_PREFIX ||
-				// @ts-ignore
-				Object.values(FilterQueryParams).includes(dynamicFilterKey)
-			) {
-				delete preparedDynamicFilters[dynamicFilterKey];
-			}
-		}
-
-		return preparedDynamicFilters;
-	};
-
 	const [dynamicFilters, setDynamicFilters] = useState<{ [key: string]: any }>(
 		{}
 	);
@@ -95,6 +78,23 @@ const useChatFilters = () => {
 	const isMounted = useRef(false);
 
 	const navigate = useNavigate();
+
+	const getDynamicFilters = () => {
+		const dynamicFilters = Object.fromEntries(searchParams.entries());
+		const preparedDynamicFilters = { ...dynamicFilters };
+		for (let dynamicFilterKey in dynamicFilters) {
+			if (
+				!dynamicFilterKey.startsWith(CHAT_FILTER_PREFIX) ||
+				dynamicFilterKey === CHAT_FILTER_PREFIX ||
+				// @ts-ignore
+				Object.values(FilterQueryParams).includes(dynamicFilterKey)
+			) {
+				delete preparedDynamicFilters[dynamicFilterKey];
+			}
+		}
+
+		return preparedDynamicFilters;
+	};
 
 	useEffect(() => {
 		// Here chat filter id in store will be filled if no filter query param is provided
@@ -166,8 +166,6 @@ const useChatFilters = () => {
 
 	useEffect(() => {
 		if (isMounted.current) {
-			console.log(dynamicFilters);
-
 			let params: { [key: string]: any } = {
 				[FilterQueryParams.LIMIT]: chatsLimit,
 				[FilterQueryParams.OFFSET]: chatsOffset,
@@ -181,16 +179,6 @@ const useChatFilters = () => {
 
 			// Combine with dynamic filters to update URL
 			params = { ...params, ...dynamicFilters };
-
-			for (let searchParamKey in Object.fromEntries(searchParams.entries())) {
-				// If query parameter starts with chat filter prefix and it is not predefined
-				if (
-					searchParamKey.startsWith(CHAT_FILTER_PREFIX) &&
-					!(searchParamKey in params)
-				) {
-					params[searchParamKey] = searchParams.get(searchParamKey);
-				}
-			}
 
 			// Filter object
 			for (let key in params) {
@@ -223,8 +211,16 @@ const useChatFilters = () => {
 		filterEndDate,
 	]);
 
+	const removeDynamicFilter = (key: string) => {
+		setDynamicFilters((prevState) => {
+			delete prevState[key];
+			return { ...prevState };
+		});
+	};
+
 	return {
 		dynamicFilters,
+		removeDynamicFilter,
 		chatsLimit,
 		chatsOffset,
 		keyword,

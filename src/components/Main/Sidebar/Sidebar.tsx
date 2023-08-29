@@ -152,6 +152,7 @@ const Sidebar: React.FC<any> = ({
 
 	const {
 		dynamicFilters,
+		removeDynamicFilter,
 		keyword,
 		chatsLimit,
 		chatsOffset,
@@ -938,9 +939,7 @@ const Sidebar: React.FC<any> = ({
 									label={`${item[0].slice(CHAT_FILTER_PREFIX.length)}: ${
 										item[1]
 									}`}
-									onClick={() => {
-										console.log(item[0]);
-									}}
+									onClick={() => removeDynamicFilter(item[0])}
 									isActive
 								/>
 							))}
