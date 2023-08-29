@@ -62,7 +62,7 @@ function ChatMessageOptionsMenu({
 						<ListItemIcon>
 							<MarkChatReadIcon />
 						</ListItemIcon>
-						{t('Save this response')}
+						{t('Save as quick reply')}
 					</MenuItem>
 				)}
 			{hasVideo && (

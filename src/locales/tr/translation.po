@@ -976,14 +976,11 @@ msgstr "Bunun yerine şifre ile giriş yap"
 msgid "Message Information"
 msgstr "Mesaj Bilgisi"
 
-
 msgid "Sent at"
 msgstr "Gönderildi"
 
-
 msgid "Delivered at"
 msgstr "Teslim edildi"
-
 
 msgid "Read at"
 msgstr "Okundu"
@@ -993,3 +990,6 @@ msgstr "Mesajın gönderilirken bazı sorunlar oluştu:"
 
 msgid "There were some problems sending your message, but your message was sent successfully after problems have resolved."
 msgstr "Mesajın gönderilirken bazı sorunlar oluşmuştu fakat bu sorunlar giderildikten sonra başarıyla gönderildi."
+
+msgid "Save as quick reply"
+msgstr "Hızlı yanıt olarak kaydet"

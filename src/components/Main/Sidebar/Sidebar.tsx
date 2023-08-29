@@ -22,6 +22,7 @@ import {
 	isScrollable,
 } from '@src/helpers/Helpers';
 import {
+	CHAT_FILTER_PREFIX,
 	CHAT_KEY_PREFIX,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
@@ -87,6 +88,7 @@ import {
 import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import classNames from 'classnames/bind';
 import ChatList from '@src/interfaces/ChatList';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
@@ -149,6 +151,8 @@ const Sidebar: React.FC<any> = ({
 	const { t } = useTranslation();
 
 	const {
+		dynamicFilters,
+		removeDynamicFilter,
 		keyword,
 		chatsLimit,
 		chatsOffset,
@@ -294,6 +298,7 @@ const Sidebar: React.FC<any> = ({
 			clearTimeout(timer.current);
 		};
 	}, [
+		dynamicFilters,
 		keyword,
 		filterAssignedToMe,
 		filterAssignedGroupId,
@@ -570,12 +575,13 @@ const Sidebar: React.FC<any> = ({
 			: undefined;
 
 		apiService.listChatsCall(
+			dynamicFilters,
 			keyword,
 			filterTagId,
 			chatsLimit,
 			offset,
 			filterAssignedToMe ? true : undefined,
-			filterAssignedGroupId ? true : undefined,
+			filterAssignedGroupId,
 			messageBeforeTime,
 			messagesSinceTime,
 			cancelTokenSource?.token,
@@ -805,7 +811,8 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const isAnyActiveFilter = Boolean(
-		filterAssignedToMe ||
+		dynamicFilters ||
+			filterAssignedToMe ||
 			filterAssignedGroupId ||
 			filterTagId ||
 			filterStartDate
@@ -928,6 +935,17 @@ const Sidebar: React.FC<any> = ({
 									isActive
 								/>
 							)}
+							{Object.entries(dynamicFilters).map((item) => (
+								<FilterOption
+									key={item[0]}
+									icon={<FilterListIcon />}
+									label={`${item[0].slice(CHAT_FILTER_PREFIX.length)}: ${
+										item[1]
+									}`}
+									onClick={() => removeDynamicFilter(item[0])}
+									isActive
+								/>
+							))}
 						</div>
 					</Collapse>
 

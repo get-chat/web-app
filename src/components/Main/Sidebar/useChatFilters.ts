@@ -10,6 +10,7 @@ import {
 import FilterQueryParams from '@src/enums/FilterQueryParams';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { formatDate } from '@src/helpers/DateHelper';
+import { CHAT_FILTER_PREFIX } from '@src/Constants';
 
 const LIMIT_DEFAULT = 20;
 
@@ -26,8 +27,8 @@ const useChatFilters = () => {
 	const dispatch = useAppDispatch();
 
 	const hasAnyFilterQueryParam = useMemo(() => {
-		for (let queryParamKey of Object.values(FilterQueryParams)) {
-			if (searchParams.has(queryParamKey)) return true;
+		for (let searchParamKey in Object.fromEntries(searchParams.entries())) {
+			if (searchParamKey.startsWith(CHAT_FILTER_PREFIX)) return true;
 		}
 		return false;
 	}, []);
@@ -40,6 +41,10 @@ const useChatFilters = () => {
 
 		return undefined;
 	};
+
+	const [dynamicFilters, setDynamicFilters] = useState<{ [key: string]: any }>(
+		{}
+	);
 
 	const [chatsLimit, setChatsLimit] = useState(
 		parseInt(searchParams.get(FilterQueryParams.LIMIT) ?? '') || LIMIT_DEFAULT
@@ -74,11 +79,30 @@ const useChatFilters = () => {
 
 	const navigate = useNavigate();
 
+	const getDynamicFilters = () => {
+		const dynamicFilters = Object.fromEntries(searchParams.entries());
+		const preparedDynamicFilters = { ...dynamicFilters };
+		for (let dynamicFilterKey in dynamicFilters) {
+			if (
+				!dynamicFilterKey.startsWith(CHAT_FILTER_PREFIX) ||
+				dynamicFilterKey === CHAT_FILTER_PREFIX ||
+				!dynamicFilters[dynamicFilterKey] ||
+				// @ts-ignore
+				Object.values(FilterQueryParams).includes(dynamicFilterKey)
+			) {
+				delete preparedDynamicFilters[dynamicFilterKey];
+			}
+		}
+
+		return preparedDynamicFilters;
+	};
+
 	useEffect(() => {
 		// Here chat filter id in store will be filled if no filter query param is provided
 		if (currentUser && !hasAnyFilterQueryParam) {
 			// User preference
 			const preference = currentUser.getPreferences();
+			setDynamicFilters(preference?.dynamicFilters ?? {});
 			dispatch(setFilterTagId(preference?.filters?.filterTagId));
 		}
 	}, [currentUser, hasAnyFilterQueryParam]);
@@ -87,6 +111,8 @@ const useChatFilters = () => {
 		if (hasAnyFilterQueryParam) {
 			// Overriding all filters if there is at least one filter query param
 			// Skipping limit and offset as they are not stored
+
+			setDynamicFilters(getDynamicFilters());
 
 			setFilterAssignedToMe(
 				searchParams.get(FilterQueryParams.ASSIGNED_TO_ME) === '1'
@@ -123,11 +149,13 @@ const useChatFilters = () => {
 					filterStartDate: filterStartDate?.getTime(),
 					filterEndDate: filterEndDate?.getTime(),
 				},
+				dynamicFilters: dynamicFilters,
 			});
 		} else {
 			isMounted.current = true;
 		}
 	}, [
+		dynamicFilters,
 		filterAssignedToMe,
 		filterAssignedGroupId,
 		filterTagId,
@@ -139,7 +167,7 @@ const useChatFilters = () => {
 
 	useEffect(() => {
 		if (isMounted.current) {
-			const params: { [key: string]: any } = {
+			let params: { [key: string]: any } = {
 				[FilterQueryParams.LIMIT]: chatsLimit,
 				[FilterQueryParams.OFFSET]: chatsOffset,
 				[FilterQueryParams.SEARCH]: keyword,
@@ -149,6 +177,9 @@ const useChatFilters = () => {
 				[FilterQueryParams.MESSAGES_SINCE_TIME]: formatDate(filterStartDate),
 				[FilterQueryParams.MESSAGES_BEFORE_TIME]: formatDate(filterEndDate),
 			};
+
+			// Combine with dynamic filters to update URL
+			params = { ...params, ...dynamicFilters };
 
 			// Filter object
 			for (let key in params) {
@@ -170,6 +201,7 @@ const useChatFilters = () => {
 			navigate(options, { replace: true });
 		}
 	}, [
+		dynamicFilters,
 		chatsLimit,
 		chatsOffset,
 		keyword,
@@ -180,7 +212,16 @@ const useChatFilters = () => {
 		filterEndDate,
 	]);
 
+	const removeDynamicFilter = (key: string) => {
+		setDynamicFilters((prevState) => {
+			delete prevState[key];
+			return { ...prevState };
+		});
+	};
+
 	return {
+		dynamicFilters,
+		removeDynamicFilter,
 		chatsLimit,
 		chatsOffset,
 		keyword,
