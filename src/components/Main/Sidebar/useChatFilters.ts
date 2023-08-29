@@ -59,7 +59,9 @@ const useChatFilters = () => {
 		return preparedDynamicFilters;
 	};
 
-	const [dynamicFilters, setDynamicFilters] = useState<{}>();
+	const [dynamicFilters, setDynamicFilters] = useState<{ [key: string]: any }>(
+		{}
+	);
 
 	const [chatsLimit, setChatsLimit] = useState(
 		parseInt(searchParams.get(FilterQueryParams.LIMIT) ?? '') || LIMIT_DEFAULT
@@ -99,7 +101,7 @@ const useChatFilters = () => {
 		if (currentUser && !hasAnyFilterQueryParam) {
 			// User preference
 			const preference = currentUser.getPreferences();
-			setDynamicFilters(preference?.dynamicFilters);
+			setDynamicFilters(preference?.dynamicFilters ?? {});
 			dispatch(setFilterTagId(preference?.filters?.filterTagId));
 		}
 	}, [currentUser, hasAnyFilterQueryParam]);

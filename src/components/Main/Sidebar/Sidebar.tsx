@@ -22,6 +22,7 @@ import {
 	isScrollable,
 } from '@src/helpers/Helpers';
 import {
+	CHAT_FILTER_PREFIX,
 	CHAT_KEY_PREFIX,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_GO_TO_MSG_ID,
@@ -87,6 +88,7 @@ import {
 import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import classNames from 'classnames/bind';
 import ChatList from '@src/interfaces/ChatList';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
@@ -929,7 +931,19 @@ const Sidebar: React.FC<any> = ({
 									isActive
 								/>
 							)}
-							{JSON.stringify(dynamicFilters)}
+							{Object.entries(dynamicFilters).map((item) => (
+								<FilterOption
+									key={item[0]}
+									icon={<FilterListIcon />}
+									label={`${item[0].slice(CHAT_FILTER_PREFIX.length)}: ${
+										item[1]
+									}`}
+									onClick={() => {
+										console.log(item[0]);
+									}}
+									isActive
+								/>
+							))}
 						</div>
 					</Collapse>
 
