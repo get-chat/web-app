@@ -298,6 +298,7 @@ const Sidebar: React.FC<any> = ({
 			clearTimeout(timer.current);
 		};
 	}, [
+		dynamicFilters,
 		keyword,
 		filterAssignedToMe,
 		filterAssignedGroupId,
@@ -574,12 +575,13 @@ const Sidebar: React.FC<any> = ({
 			: undefined;
 
 		apiService.listChatsCall(
+			dynamicFilters,
 			keyword,
 			filterTagId,
 			chatsLimit,
 			offset,
 			filterAssignedToMe ? true : undefined,
-			filterAssignedGroupId ? true : undefined,
+			filterAssignedGroupId,
 			messageBeforeTime,
 			messagesSinceTime,
 			cancelTokenSource?.token,
@@ -809,7 +811,8 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const isAnyActiveFilter = Boolean(
-		filterAssignedToMe ||
+		dynamicFilters ||
+			filterAssignedToMe ||
 			filterAssignedGroupId ||
 			filterTagId ||
 			filterStartDate

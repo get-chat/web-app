@@ -86,6 +86,7 @@ const useChatFilters = () => {
 			if (
 				!dynamicFilterKey.startsWith(CHAT_FILTER_PREFIX) ||
 				dynamicFilterKey === CHAT_FILTER_PREFIX ||
+				!dynamicFilters[dynamicFilterKey] ||
 				// @ts-ignore
 				Object.values(FilterQueryParams).includes(dynamicFilterKey)
 			) {

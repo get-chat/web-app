@@ -131,6 +131,7 @@ export class ApiService {
 	};
 
 	listChatsCall = (
+		dynamicFilters,
 		keyword,
 		chatTagId,
 		limit,
@@ -149,6 +150,7 @@ export class ApiService {
 				`${this.apiBaseURL}chats/`,
 				getRequestConfig(
 					{
+						...dynamicFilters,
 						search: keyword,
 						chat_tag_id: chatTagId,
 						limit: limit,
