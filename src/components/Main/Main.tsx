@@ -988,7 +988,7 @@ function Main() {
 
 	const searchMessagesByKeyword = (_keyword: string) => {
 		setSearchMessagesInitialKeyword(_keyword);
-		setSearchMessagesVisible(true);
+		dispatch(setSearchMessagesVisible(true));
 	};
 
 	return (
