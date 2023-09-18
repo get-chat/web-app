@@ -15,7 +15,6 @@ import FileInput from '../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
@@ -49,12 +48,12 @@ function BusinessProfile(props: any) {
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
 
-	const fileInput = useRef();
+	const fileInput = useRef<HTMLElement>();
 
 	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	useEffect(() => {
-		const handleKey = (event: React.KeyboardEvent) => {
+		const handleKey = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				// Escape
 				props.onHide();
@@ -98,7 +97,9 @@ function BusinessProfile(props: any) {
 		);
 	};
 
-	const updateBusinessProfile = async (event) => {
+	const updateBusinessProfile = async (
+		event: React.FormEvent<HTMLFormElement>
+	) => {
 		event.preventDefault();
 
 		setUpdating(true);
@@ -132,7 +133,9 @@ function BusinessProfile(props: any) {
 		);
 	};
 
-	const updateProfileAbout = async (event) => {
+	const updateProfileAbout = async (
+		event: React.FormEvent<HTMLFormElement>
+	) => {
 		event.preventDefault();
 
 		apiService.updateProfileAboutCall(
@@ -147,14 +150,14 @@ function BusinessProfile(props: any) {
 		);
 	};
 
-	const updateProfilePhoto = async (file) => {
+	const updateProfilePhoto = async (file: FileList) => {
 		const formData = new FormData();
 		formData.append('file_encoded', file[0]);
 
 		apiService.updateProfilePhotoCall(
 			formData,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			() => {
 				setUpdating(false);
 
 				// Display new photo
@@ -168,7 +171,7 @@ function BusinessProfile(props: any) {
 
 	const deleteProfilePhoto = () => {
 		apiService.deleteProfilePhotoCall(
-			cancelTokenSourceRef.current.token,
+			cancelTokenSourceRef.current?.token,
 			() => {
 				setProfilePhoto(undefined);
 			}
@@ -196,7 +199,7 @@ function BusinessProfile(props: any) {
 	];
 
 	const handleBusinessProfileAvatarClick = () => {
-		if (isAdmin && !isReadOnly) fileInput.current.click();
+		if (isAdmin && !isReadOnly) fileInput.current?.click();
 	};
 
 	return (
@@ -280,7 +283,9 @@ function BusinessProfile(props: any) {
 							>
 								<FileInput
 									innerRef={fileInput}
-									handleSelectedFiles={(file) => updateProfilePhoto(file)}
+									handleSelectedFiles={(file: FileList) =>
+										updateProfilePhoto(file)
+									}
 									accept="image/jpeg, image/png"
 									multiple={false}
 								/>
