@@ -822,14 +822,17 @@ const Sidebar: React.FC<any> = ({
 	return (
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
-				<CustomAvatar
-					src={currentUser?.profile?.avatar}
-					onClick={() => setProfileVisible(true)}
-					className="cursorPointer"
-					generateBgColorBy={currentUser?.username}
-				>
-					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
-				</CustomAvatar>
+				<div className={styles.userContainer}>
+					<CustomAvatar
+						src={currentUser?.profile?.avatar}
+						onClick={() => setProfileVisible(true)}
+						className="cursorPointer"
+						generateBgColorBy={currentUser?.username}
+					>
+						{currentUser ? generateInitialsHelper(currentUser.username) : ''}
+					</CustomAvatar>
+				</div>
+
 				<div className="sidebar__headerRight">
 					{!isReadOnly && (
 						<Tooltip title={t('New chat')} disableInteractive>

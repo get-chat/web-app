@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/BusinessProfile.css';
 import {
@@ -23,8 +22,10 @@ import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
+import { AxiosResponse, CancelTokenSource } from 'axios';
 
-function BusinessProfile(props) {
+function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
@@ -50,10 +51,10 @@ function BusinessProfile(props) {
 
 	const fileInput = useRef();
 
-	const cancelTokenSourceRef = useRef();
+	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	useEffect(() => {
-		const handleKey = (event) => {
+		const handleKey = (event: React.KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				// Escape
 				props.onHide();
@@ -69,14 +70,14 @@ function BusinessProfile(props) {
 
 		return () => {
 			document.removeEventListener('keydown', handleKey);
-			cancelTokenSourceRef.current.cancel();
+			cancelTokenSourceRef.current?.cancel();
 		};
 	}, []);
 
 	const retrieveBusinessProfile = () => {
 		apiService.retrieveBusinessProfileCall(
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				const data = response.data;
 
 				setAddress(data.address);
@@ -108,11 +109,11 @@ function BusinessProfile(props) {
 			email,
 			vertical,
 			Object.values(websites),
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			() => {
 				updateProfileAbout(event);
 			},
-			(error) => {
+			() => {
 				setUpdating(false);
 			}
 		);
@@ -120,11 +121,13 @@ function BusinessProfile(props) {
 
 	const retrieveProfileAbout = () => {
 		apiService.retrieveProfileAboutCall(
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				const profile = response.data.settings?.profile;
 				setAbout(profile?.about?.text);
-				retrieveProfilePhoto();
+				//retrieveProfilePhoto();
+
+				setLoaded(true);
 			}
 		);
 	};
@@ -134,38 +137,12 @@ function BusinessProfile(props) {
 
 		apiService.updateProfileAboutCall(
 			about,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			() => {
 				setUpdating(false);
 			},
-			(error) => {
+			() => {
 				setUpdating(false);
-			}
-		);
-	};
-
-	const retrieveProfilePhoto = () => {
-		apiService.retrieveProfilePhotoCall(
-			cancelTokenSourceRef.current.token,
-			(response) => {
-				const base64 = binaryToBase64(response.data);
-				setProfilePhoto(base64);
-
-				// Finish
-				setLoaded(true);
-			},
-			(error) => {
-				// No photo
-				if (error?.response?.status === 404) {
-					// Finish
-					setLoaded(true);
-				} else if (error?.response?.status === 503) {
-					window.displayCustomError(
-						error.response.data?.reason ?? 'An error has occurred.'
-					);
-				} else {
-					window.displayError(error);
-				}
 			}
 		);
 	};
@@ -181,9 +158,9 @@ function BusinessProfile(props) {
 				setUpdating(false);
 
 				// Display new photo
-				retrieveProfilePhoto();
+				//retrieveProfilePhoto();
 			},
-			(error) => {
+			() => {
 				setUpdating(false);
 			}
 		);
@@ -192,7 +169,7 @@ function BusinessProfile(props) {
 	const deleteProfilePhoto = () => {
 		apiService.deleteProfilePhotoCall(
 			cancelTokenSourceRef.current.token,
-			(response) => {
+			() => {
 				setProfilePhoto(undefined);
 			}
 		);
@@ -307,12 +284,7 @@ function BusinessProfile(props) {
 									accept="image/jpeg, image/png"
 									multiple={false}
 								/>
-								<CustomAvatar
-									src={
-										profilePhoto
-											? 'data:image/png;base64,' + profilePhoto
-											: undefined
-									}
+								<BusinessProfileAvatar
 									onClick={handleBusinessProfileAvatarClick}
 								/>
 
