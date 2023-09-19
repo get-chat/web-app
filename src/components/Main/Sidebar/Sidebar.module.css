@@ -11,7 +11,6 @@
 .userAvatar {
 	cursor: pointer;
 	margin-left: -12px;
-	z-index: 1;
 	outline: 1px solid var(--gray-light);
 }
 

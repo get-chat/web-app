@@ -10,12 +10,10 @@ import {
 	TextField,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import { generateInitialsHelper } from '@src/helpers/Helpers';
 import FileInput from '../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
@@ -25,6 +23,7 @@ import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { AxiosResponse, CancelTokenSource } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
+import { binaryToBase64 } from '@src/helpers/ImageHelper';
 
 function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -45,7 +44,7 @@ function BusinessProfile(props: any) {
 	const [vertical, setVertical] = useState('');
 	const [websites, setWebsites] = useState({});
 	const [about, setAbout] = useState('');
-	const [profilePhoto, setProfilePhoto] = useState();
+	const [profilePhoto, setProfilePhoto] = useState<string>();
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
@@ -122,13 +121,24 @@ function BusinessProfile(props: any) {
 		);
 	};
 
+	const retrieveProfilePhoto = () => {
+		apiService.retrieveProfilePhotoCall(
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
+				const base64 = binaryToBase64(response.data);
+				setProfilePhoto(base64);
+			},
+			undefined
+		);
+	};
+
 	const retrieveProfileAbout = () => {
 		apiService.retrieveProfileAboutCall(
 			cancelTokenSourceRef.current?.token,
 			(response: AxiosResponse) => {
 				const profile = response.data.settings?.profile;
 				setAbout(profile?.about?.text);
-				//retrieveProfilePhoto();
+				retrieveProfilePhoto();
 
 				setLoaded(true);
 			}
@@ -163,7 +173,7 @@ function BusinessProfile(props: any) {
 				setUpdating(false);
 
 				// Display new photo
-				//retrieveProfilePhoto();
+				retrieveProfilePhoto();
 
 				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
 			},
@@ -214,46 +224,10 @@ function BusinessProfile(props: any) {
 					<ArrowBack />
 				</IconButton>
 
-				<h3>{t('Profile')}</h3>
+				<h3>{t('Business Profile')}</h3>
 			</div>
 
 			<div className="sidebarBusinessProfile__body">
-				<div className="sidebarBusinessProfile__body__section">
-					{currentUser && (
-						<div>
-							<div className="sidebarBusinessProfile__body__section__header">
-								<h5>{t('Personal Profile')}</h5>
-							</div>
-
-							<div className="sidebarBusinessProfile__body__avatarContainer">
-								<CustomAvatar
-									src={
-										currentUser?.profile?.large_avatar ??
-										currentUser?.profile?.avatar
-									}
-									generateBgColorBy={currentUser.username}
-								>
-									{generateInitialsHelper(currentUser.username)}
-								</CustomAvatar>
-							</div>
-
-							<h3>{currentUser.username}</h3>
-							<span>{currentUser.firstName + ' ' + currentUser.lastName}</span>
-
-							{!isReadOnly && (
-								<div className="sidebarBusinessProfile__body__changePasswordContainer">
-									<Button
-										onClick={() => props.setChangePasswordDialogVisible(true)}
-										color="secondary"
-									>
-										{t('Change password')}
-									</Button>
-								</div>
-							)}
-						</div>
-					)}
-				</div>
-
 				{storedURLs.length > 1 && (
 					<div className="sidebarBusinessProfile__body__section">
 						<div className="sidebarBusinessProfile__body__section__header">
@@ -310,7 +284,7 @@ function BusinessProfile(props: any) {
 									</div>
 								)}
 
-								{isAdmin && !isReadOnly && (
+								{profilePhoto && isAdmin && !isReadOnly && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>
