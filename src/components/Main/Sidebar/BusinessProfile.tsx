@@ -23,6 +23,8 @@ import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { AxiosResponse, CancelTokenSource } from 'axios';
+import PubSub from 'pubsub-js';
+import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 
 function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -162,6 +164,8 @@ function BusinessProfile(props: any) {
 
 				// Display new photo
 				//retrieveProfilePhoto();
+
+				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
 			},
 			() => {
 				setUpdating(false);
@@ -173,7 +177,8 @@ function BusinessProfile(props: any) {
 		apiService.deleteProfilePhotoCall(
 			cancelTokenSourceRef.current?.token,
 			() => {
-				setProfilePhoto(undefined);
+				//setProfilePhoto(undefined);
+				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
 			}
 		);
 	};
@@ -305,7 +310,7 @@ function BusinessProfile(props: any) {
 									</div>
 								)}
 
-								{profilePhoto && isAdmin && !isReadOnly && (
+								{isAdmin && !isReadOnly && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>

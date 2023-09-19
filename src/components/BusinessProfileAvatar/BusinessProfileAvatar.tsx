@@ -3,6 +3,11 @@ import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import CustomAvatar from '@src/components/CustomAvatar';
+import PubSub from 'pubsub-js';
+import {
+	EVENT_TOPIC_BULK_MESSAGE_TASK,
+	EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO,
+} from '@src/Constants';
 
 interface Props {
 	onClick?: () => void;
@@ -31,6 +36,8 @@ const BusinessProfileAvatar: React.FC<Props> = ({ onClick }) => {
 
 				// No photo
 				if (error?.response?.status === 404) {
+					setProfilePhoto(undefined);
+
 					// Finish
 					setLoaded(true);
 				} else if (error?.response?.status === 503) {
@@ -48,6 +55,15 @@ const BusinessProfileAvatar: React.FC<Props> = ({ onClick }) => {
 
 	useEffect(() => {
 		retrieveProfilePhoto();
+
+		const reloadBusinessProfilePhotoEventToken = PubSub.subscribe(
+			EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO,
+			() => retrieveProfilePhoto()
+		);
+
+		return () => {
+			PubSub.unsubscribe(reloadBusinessProfilePhotoEventToken);
+		};
 	}, []);
 
 	return (
