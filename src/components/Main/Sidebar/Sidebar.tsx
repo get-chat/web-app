@@ -823,16 +823,16 @@ const Sidebar: React.FC<any> = ({
 	return (
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
-				<div className={styles.userContainer}>
-					<BusinessProfileAvatar />
-
-					<CustomAvatar
-						src={currentUser?.profile?.avatar}
+				<div className={styles.sessionContainer}>
+					<BusinessProfileAvatar
+						className={styles.businessAvatar}
 						onClick={() => setProfileVisible(true)}
-						className={styles.userAvatar}
+					/>
+					<CustomAvatar
 						generateBgColorBy={currentUser?.username}
+						className={styles.userAvatar}
 					>
-						{currentUser ? generateInitialsHelper(currentUser.username) : ''}
+						{currentUser ? generateInitialsHelper(currentUser?.username) : ''}
 					</CustomAvatar>
 				</div>
 

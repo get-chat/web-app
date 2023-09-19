@@ -10,10 +10,11 @@ import {
 } from '@src/Constants';
 
 interface Props {
+	className?: string;
 	onClick?: () => void;
 }
 
-const BusinessProfileAvatar: React.FC<Props> = ({ onClick }) => {
+const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const [isLoaded, setLoaded] = useState(false);
@@ -68,6 +69,7 @@ const BusinessProfileAvatar: React.FC<Props> = ({ onClick }) => {
 
 	return (
 		<CustomAvatar
+			className={className}
 			src={profilePhoto ? 'data:image/png;base64,' + profilePhoto : undefined}
 			onClick={onClick}
 		/>

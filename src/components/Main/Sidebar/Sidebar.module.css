@@ -1,18 +1,34 @@
-.userContainer {
+.sessionContainer {
 	position: relative;
 	display: flex;
 	flex-direction: row;
-	gap: 10px;
+}
+
+.businessAvatar {
+	cursor: pointer;
 }
 
 .userAvatar {
-	position: absolute !important;
-	bottom: 0;
-	right: -6px;
 	cursor: pointer;
-	height: 20px !important;
-	width: 20px !important;
-	font-size: 13px !important;
+	margin-left: -12px;
+	z-index: 5;
+	outline: 1px solid var(--gray-light);
+}
+
+.currentUser {
+	position: absolute !important;
+	bottom: -5px;
+	left: 0;
+	cursor: pointer;
+	font-size: 11px !important;
+	font-weight: 600;
+	border-radius: 10px;
+	background-color: #fff;
+	padding: 0 4px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 65px;
 }
 
 .searchOrFilterGroup {
