@@ -824,16 +824,26 @@ const Sidebar: React.FC<any> = ({
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
 				<div className={styles.sessionContainer}>
-					<BusinessProfileAvatar
-						className={styles.businessAvatar}
-						onClick={() => setProfileVisible(true)}
-					/>
-					<CustomAvatar
-						generateBgColorBy={currentUser?.username}
-						className={styles.userAvatar}
-					>
-						{currentUser ? generateInitialsHelper(currentUser?.username) : ''}
-					</CustomAvatar>
+					<Tooltip title={t('Business Profile')}>
+						<div>
+							<BusinessProfileAvatar
+								className={styles.businessAvatar}
+								onClick={() => setProfileVisible(true)}
+							/>
+						</div>
+					</Tooltip>
+					<Tooltip title={currentUser?.username}>
+						<div>
+							<CustomAvatar
+								generateBgColorBy={currentUser?.username}
+								className={styles.userAvatar}
+							>
+								{currentUser
+									? generateInitialsHelper(currentUser?.username)
+									: ''}
+							</CustomAvatar>
+						</div>
+					</Tooltip>
 				</div>
 
 				<div className="sidebar__headerRight">
