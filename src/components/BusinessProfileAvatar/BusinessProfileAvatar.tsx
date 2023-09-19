@@ -5,7 +5,7 @@ import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import CustomAvatar from '@src/components/CustomAvatar';
 
 interface Props {
-	onClick: () => void;
+	onClick?: () => void;
 }
 
 const BusinessProfileAvatar: React.FC<Props> = ({ onClick }) => {

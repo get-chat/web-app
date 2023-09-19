@@ -101,6 +101,7 @@ import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
+import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -823,10 +824,12 @@ const Sidebar: React.FC<any> = ({
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
 				<div className={styles.userContainer}>
+					<BusinessProfileAvatar />
+
 					<CustomAvatar
 						src={currentUser?.profile?.avatar}
 						onClick={() => setProfileVisible(true)}
-						className="cursorPointer"
+						className={styles.userAvatar}
 						generateBgColorBy={currentUser?.username}
 					>
 						{currentUser ? generateInitialsHelper(currentUser.username) : ''}

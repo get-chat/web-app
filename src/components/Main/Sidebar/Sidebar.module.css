@@ -1,12 +1,18 @@
 .userContainer {
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	gap: 10px;
 }
 
-.logo {
-	height: 40px;
-	width: 40px;
+.userAvatar {
+	position: absolute !important;
+	bottom: 0;
+	right: -6px;
+	cursor: pointer;
+	height: 20px !important;
+	width: 20px !important;
+	font-size: 13px !important;
 }
 
 .searchOrFilterGroup {
