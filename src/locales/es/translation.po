@@ -652,9 +652,6 @@ msgstr ""
 "Este chat ya está asignado a un grupo. Solo puedes cambiar la asignación de "
 "este chat si alguien con acceso de administrador la elimina."
 
-msgid "Register templates"
-msgstr "Registrar plantillas"
-
 msgid "Click here to refresh"
 msgstr "Haz clic aquí para actualizar"
 
@@ -790,9 +787,6 @@ msgstr "Grabando"
 
 msgid "Toggle event history"
 msgstr "Alternar historial de eventos"
-
-msgid "Register Templates"
-msgstr "Registrar Plantillas"
 
 msgid "Saved Responses"
 msgstr "Respuestas Guardadas"
