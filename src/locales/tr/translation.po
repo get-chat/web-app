@@ -993,3 +993,6 @@ msgstr "Mesajın gönderilirken bazı sorunlar oluşmuştu fakat bu sorunlar gid
 
 msgid "Save as quick reply"
 msgstr "Hızlı yanıt olarak kaydet"
+
+msgid "Register new template"
+msgstr "Yeni taslak kaydet"

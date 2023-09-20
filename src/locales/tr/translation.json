@@ -307,5 +307,7 @@
 	"Delivered at": "Teslim edildi",
 	"Read at": "Okundu",
 	"There are some problems sending your message:": "Mesajın gönderilirken bazı sorunlar oluştu:",
-	"There were some problems sending your message, but your message was sent successfully after problems have resolved.": "Mesajın gönderilirken bazı sorunlar oluşmuştu fakat bu sorunlar giderildikten sonra başarıyla gönderildi."
+	"There were some problems sending your message, but your message was sent successfully after problems have resolved.": "Mesajın gönderilirken bazı sorunlar oluşmuştu fakat bu sorunlar giderildikten sonra başarıyla gönderildi.",
+	"Save as quick reply": "Hızlı yanıt olarak kaydet",
+	"Register new template": "Yeni taslak kaydet"
 }

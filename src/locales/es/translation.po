@@ -993,3 +993,7 @@ msgstr ""
 
 msgid "Save as quick reply"
 msgstr ""
+
+
+msgid "Register new template"
+msgstr ""
