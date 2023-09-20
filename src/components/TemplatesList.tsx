@@ -39,7 +39,7 @@ const TemplatesList = ({
 								target="_blank"
 								size="small"
 							>
-								{t('Register templates')}
+								{t('Register new template')}
 							</Button>
 						)}
 					</div>

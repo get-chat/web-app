@@ -101,6 +101,8 @@ import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
+import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
+import UserProfile from '@src/components/UserProfile';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -199,7 +201,8 @@ const Sidebar: React.FC<any> = ({
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState({});
 	const [contactResults, setContactResults] = useState({});
-	const [isProfileVisible, setProfileVisible] = useState(false);
+	const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
+	const [isUserProfileVisible, setUserProfileVisible] = useState(false);
 	const [isContactsVisible, setContactsVisible] = useState(false);
 	const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] =
 		useState(false);
@@ -769,7 +772,7 @@ const Sidebar: React.FC<any> = ({
 
 	const displayEditBusinessProfile = () => {
 		setAnchorEl(null);
-		setProfileVisible(true);
+		setBusinessProfileVisible(true);
 	};
 
 	const goToSettings = () => {
@@ -822,14 +825,30 @@ const Sidebar: React.FC<any> = ({
 	return (
 		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
 			<div className="sidebar__header">
-				<CustomAvatar
-					src={currentUser?.profile?.avatar}
-					onClick={() => setProfileVisible(true)}
-					className="cursorPointer"
-					generateBgColorBy={currentUser?.username}
-				>
-					{currentUser ? generateInitialsHelper(currentUser.username) : ''}
-				</CustomAvatar>
+				<div className={styles.sessionContainer}>
+					<Tooltip title={t('Business Profile')} disableInteractive>
+						<div>
+							<BusinessProfileAvatar
+								className={styles.businessAvatar}
+								onClick={() => setBusinessProfileVisible(true)}
+							/>
+						</div>
+					</Tooltip>
+					<Tooltip title={currentUser?.username} disableInteractive>
+						<div>
+							<CustomAvatar
+								generateBgColorBy={currentUser?.username}
+								className={styles.userAvatar}
+								onClick={() => setUserProfileVisible(true)}
+							>
+								{currentUser
+									? generateInitialsHelper(currentUser?.username)
+									: ''}
+							</CustomAvatar>
+						</div>
+					</Tooltip>
+				</div>
+
 				<div className="sidebar__headerRight">
 					{!isReadOnly && (
 						<Tooltip title={t('New chat')} disableInteractive>
@@ -1259,11 +1278,17 @@ const Sidebar: React.FC<any> = ({
 				<StartChat onHide={() => setContactsVisible(false)} />
 			)}
 
-			{isProfileVisible && (
-				<BusinessProfile
-					onHide={() => setProfileVisible(false)}
-					displayEditBusinessProfile={displayEditBusinessProfile}
+			{isUserProfileVisible && (
+				<UserProfile
+					onHide={() => setUserProfileVisible(false)}
 					setChangePasswordDialogVisible={setChangePasswordDialogVisible}
+				/>
+			)}
+
+			{isBusinessProfileVisible && (
+				<BusinessProfile
+					onHide={() => setBusinessProfileVisible(false)}
+					displayEditBusinessProfile={displayEditBusinessProfile}
 				/>
 			)}
 

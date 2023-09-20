@@ -660,9 +660,6 @@ msgstr ""
 "Ten czat jest już przypisany do grupy. Możesz zmienić przypisanie tego czatu "
 "tylko wtedy, gdy ktoś z uprawnieniami administratora usunie przypisanie."
 
-msgid "Register templates"
-msgstr "Zarejestruj szablony"
-
 msgid "Click here to refresh"
 msgstr "Kliknij tutaj, aby odświeżyć"
 
@@ -791,9 +788,6 @@ msgstr "Nagrywanie"
 
 msgid "Toggle event history"
 msgstr "Przełącz historię zdarzeń"
-
-msgid "Register Templates"
-msgstr "Zarejestruj szablony"
 
 msgid "Saved Responses"
 msgstr "Zapisane odpowiedzi"
@@ -994,4 +988,7 @@ msgid "There were some problems sending your message, but your message was sent 
 msgstr ""
 
 msgid "Save as quick reply"
+msgstr ""
+
+msgid "Register new template"
 msgstr ""

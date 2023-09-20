@@ -45,6 +45,7 @@
 
 .sidebarBusinessProfile__body__section h3 {
 	font-weight: 400;
+	text-align: center;
 }
 
 .sidebarBusinessProfile__body__section span:not(.MuiButton-label),

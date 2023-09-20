@@ -1,3 +1,19 @@
+.sessionContainer {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+}
+
+.businessAvatar {
+	cursor: pointer;
+}
+
+.userAvatar {
+	cursor: pointer;
+	margin-left: -12px;
+	outline: 1px solid var(--gray-light);
+}
+
 .searchOrFilterGroup {
 	background-color: white;
 	padding: 10px 0;

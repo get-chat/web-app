@@ -75,7 +75,7 @@ export const getApiBaseURLs = (): string[] => {
 	}
 };
 
-export const getApiBaseURLsMergedWithConfig = (config: AppConfig) => {
+export const getApiBaseURLsMergedWithConfig = (config: AppConfig | null) => {
 	const urls = getApiBaseURLs();
 	if (config && !urls.includes(config.API_BASE_URL)) {
 		urls.push(config.API_BASE_URL);

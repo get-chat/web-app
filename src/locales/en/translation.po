@@ -638,9 +638,6 @@ msgid ""
 "this chat only if someone with admin access will clear the assignment."
 msgstr ""
 
-msgid "Register templates"
-msgstr ""
-
 msgid "Click here to refresh"
 msgstr ""
 
@@ -762,9 +759,6 @@ msgid "Recording"
 msgstr ""
 
 msgid "Toggle event history"
-msgstr ""
-
-msgid "Register Templates"
 msgstr ""
 
 msgid "Saved Responses"
@@ -962,4 +956,7 @@ msgid "There were some problems sending your message, but your message was sent 
 msgstr ""
 
 msgid "Save as quick reply"
+msgstr ""
+
+msgid "Register new template"
 msgstr ""

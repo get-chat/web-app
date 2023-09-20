@@ -202,7 +202,6 @@
 	"You can assign this chat to yourself and unassign from yourself.": "Puedes asignarte o desasignarte este chat a ti mismo.",
 	"You can assign this chat to a group.": "Puedes asignar este chat a un grupo.",
 	"This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.": "Este chat ya está asignado a un grupo. Solo puedes cambiar la asignación de este chat si alguien con acceso de administrador la elimina.",
-	"Register templates": "Registrar plantillas",
 	"Click here to refresh": "Haz clic aquí para actualizar",
 	"Templates are refreshed successfully.": "Las plantillas se han actualizado correctamente.",
 	"Template messages couldn't be loaded.": "No se pudieron cargar los mensajes de plantilla.",
@@ -244,7 +243,6 @@
 	"Preparing": "Preparando",
 	"Recording": "Grabando",
 	"Toggle event history": "Alternar historial de eventos",
-	"Register Templates": "Registrar Plantillas",
 	"Saved Responses": "Respuestas Guardadas",
 	"Expired (commands only)": "Caducado (solo comandos)",
 	"Back": "Volver",
@@ -308,5 +306,6 @@
 	"Read at": "",
 	"There are some problems sending your message:": "",
 	"There were some problems sending your message, but your message was sent successfully after problems have resolved.": "",
-	"Save as quick reply": ""
+	"Save as quick reply": "",
+	"Register new template": ""
 }
