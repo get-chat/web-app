@@ -91,6 +91,7 @@ function ChangePasswordDialog(props) {
 						onChange={(event) => setCurrentPassword(event.target.value)}
 						label={t('Current password')}
 						type="password"
+						autoComplete="current-password"
 						autoFocus
 						fullWidth
 					/>
@@ -101,6 +102,7 @@ function ChangePasswordDialog(props) {
 						onChange={(event) => setNewPassword(event.target.value)}
 						label={t('New password')}
 						type="password"
+						autoComplete="new-password"
 						fullWidth
 					/>
 
@@ -110,6 +112,7 @@ function ChangePasswordDialog(props) {
 						onChange={(event) => setNewPasswordRepeat(event.target.value)}
 						label={t('New password (repeat)')}
 						type="password"
+						autoComplete="new-password"
 						fullWidth
 					/>
 				</div>

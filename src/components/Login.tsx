@@ -185,6 +185,7 @@ const Login = () => {
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
 							label={t('Username')}
+							autoComplete="username"
 							size="medium"
 							fullWidth={true}
 						/>
@@ -195,6 +196,7 @@ const Login = () => {
 							onChange={(e) => setPassword(e.target.value)}
 							type="password"
 							label={t('Password')}
+							autoComplete="current-password"
 							size="medium"
 							fullWidth={true}
 						/>
