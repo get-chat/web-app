@@ -814,7 +814,7 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const isAnyActiveFilter = Boolean(
-		dynamicFilters ||
+		getObjLength(dynamicFilters) > 0 ||
 			filterAssignedToMe ||
 			filterAssignedGroupId ||
 			filterTagId ||
