@@ -21,6 +21,11 @@ export const insertTemplateComponentParameters = (component, params) => {
 	const format = component.format ? component.format.toLowerCase() : 'text';
 	let text = component[format];
 
+	if (!text) {
+		console.warn('Variable text is empty!', format, component, params);
+		return text;
+	}
+
 	if (!params) return text;
 
 	for (let i = 0; i < params.length; i++) {
