@@ -73,6 +73,7 @@
 		"react-use-navigate-list": "github:get-chat/react-use-navigate-list",
 		"react-viewport-list": "^7.1.1",
 		"source-map-explorer": "^2.5.3",
+		"unescape": "^1.0.1",
 		"url": "^0.11.0",
 		"url-search-params-polyfill": "^8.1.1"
 	},

@@ -97,6 +97,8 @@ const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
+const decode = require('unescape');
+
 const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
@@ -1410,7 +1412,7 @@ const Chat: React.FC = (props) => {
 		let requestBody;
 
 		if (e) {
-			const preparedInput = translateHTMLInputToText(input).trim();
+			const preparedInput = decode(translateHTMLInputToText(input).trim());
 
 			if (preparedInput === '') {
 				return false;
