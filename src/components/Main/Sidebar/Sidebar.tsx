@@ -428,6 +428,7 @@ const Sidebar: React.FC<any> = ({
 		const onChatAssignment = function (msg: string, data: any) {
 			let newMissingChats: string[] = [];
 			const nextState = { ...chats };
+			let isChatsChanged = false;
 
 			Object.entries(data).forEach((message) => {
 				//const msgId = message[0];
@@ -457,7 +458,8 @@ const Sidebar: React.FC<any> = ({
 											group.id !== assignmentEvent.assigned_group_set.id
 									)
 								) {
-									delete nextState[assignmentData.waId];
+									delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+									isChatsChanged = true;
 								}
 							}
 
@@ -466,7 +468,8 @@ const Sidebar: React.FC<any> = ({
 								assignmentEvent.assigned_group_was_cleared &&
 								currentUser.permissions.canReadChats === 'group'
 							) {
-								delete nextState[assignmentData.waId];
+								delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+								isChatsChanged = true;
 							}
 
 							// If chat is assigned to a user and current user can see chats only assigned to them
@@ -477,7 +480,8 @@ const Sidebar: React.FC<any> = ({
 								if (
 									assignmentEvent.assigned_to_user_set.id !== currentUser.id
 								) {
-									delete nextState[assignmentData.waId];
+									delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+									isChatsChanged = true;
 								}
 							}
 
@@ -486,7 +490,8 @@ const Sidebar: React.FC<any> = ({
 								assignmentEvent.assigned_to_user_was_cleared &&
 								currentUser.permissions.canReadChats === 'user'
 							) {
-								delete nextState[assignmentData.waId];
+								delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+								isChatsChanged = true;
 							}
 						}
 					} else {
@@ -513,6 +518,14 @@ const Sidebar: React.FC<any> = ({
 					}*/
 				}
 			});
+
+			// If anything has changed, sort chats
+			if (isChatsChanged) {
+				// Sorting
+				const sortedNextState = sortChats(nextState);
+				console.log(sortedNextState);
+				dispatch(setChats({ ...sortedNextState }));
+			}
 
 			if (newMissingChats.length > 0) {
 				setMissingChats((prevState) => {
