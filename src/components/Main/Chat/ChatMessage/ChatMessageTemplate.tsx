@@ -84,7 +84,7 @@ function ChatMessageTemplate(props) {
 													)}
 													as="div"
 													linkify={true}
-													className="bold wordBreakAll"
+													className="bold wordBreakWord"
 												/>
 											)}
 										</div>
@@ -98,7 +98,7 @@ function ChatMessageTemplate(props) {
 											)}
 											as="div"
 											linkify={true}
-											className="chat__templateContent__body wordBreakAll"
+											className="chat__templateContent__body wordBreakWord"
 										/>
 									)}
 
@@ -110,7 +110,7 @@ function ChatMessageTemplate(props) {
 											)}
 											as="div"
 											linkify={true}
-											className="chat__templateContent__footer wordBreakAll mt-1"
+											className="chat__templateContent__footer wordBreakWord mt-1"
 										/>
 									)}
 

@@ -437,7 +437,46 @@ const Sidebar: React.FC<any> = ({
 				if (assignmentEvent) {
 					const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
 
-					if (
+					if (!currentUser) {
+						console.warn('Current user is empty!', currentUser);
+						return;
+					}
+
+					// Check if chat exists and is loaded
+					if (nextState.hasOwnProperty(chatKey)) {
+						// If user can not read all chats, check perms after change
+						if (currentUser.permissions.canReadChats !== 'all') {
+							if (assignmentEvent.assigned_group_set) {
+								if (
+									currentUser.groups.find(
+										(group) =>
+											group.id !== assignmentEvent.assigned_group_set.id
+									)
+								) {
+									delete nextState[assignmentData.waId];
+								}
+							}
+
+							if (assignmentEvent.assigned_group_was_cleared) {
+							}
+
+							if (assignmentEvent.assigned_to_user_set) {
+							}
+
+							if (assignmentEvent.assigned_to_user_was_cleared) {
+							}
+						}
+					} else {
+						// If user can read all chats, just load missing chat
+						if (currentUser.permissions.canReadChats === 'all') {
+							if (!newMissingChats.includes(assignmentData.waId)) {
+								newMissingChats.push(assignmentData.waId);
+							}
+						} else {
+						}
+					}
+
+					/*if (
 						assignmentEvent.assigned_group_set ||
 						assignmentEvent.assigned_to_user_set
 					) {
@@ -445,10 +484,10 @@ const Sidebar: React.FC<any> = ({
 						if (!nextState.hasOwnProperty(chatKey)) {
 							// Collect waId list to retrieve chats
 							if (!newMissingChats.includes(assignmentData.waId)) {
-								newMissingChats.push(assignmentData.waId);
+								//newMissingChats.push(assignmentData.waId);
 							}
 						}
-					}
+					}*/
 				}
 			});
 
