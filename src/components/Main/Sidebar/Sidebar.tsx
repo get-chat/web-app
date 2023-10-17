@@ -501,6 +501,22 @@ const Sidebar: React.FC<any> = ({
 								newMissingChats.push(assignmentData.waId);
 							}
 						} else {
+							// If group has changed and user can see chats only in their groups
+							if (
+								assignmentEvent.assigned_group_set &&
+								currentUser.permissions.canReadChats === 'group'
+							) {
+								if (
+									currentUser.groups.find(
+										(group) =>
+											group.id === assignmentEvent.assigned_group_set.id
+									)
+								) {
+									if (!newMissingChats.includes(assignmentData.waId)) {
+										newMissingChats.push(assignmentData.waId);
+									}
+								}
+							}
 						}
 					}
 
