@@ -446,7 +446,11 @@ const Sidebar: React.FC<any> = ({
 					if (nextState.hasOwnProperty(chatKey)) {
 						// If user can not read all chats, check perms after change
 						if (currentUser.permissions.canReadChats !== 'all') {
-							if (assignmentEvent.assigned_group_set) {
+							// If group has changed and user can see only chats in their groups
+							if (
+								assignmentEvent.assigned_group_set &&
+								currentUser.permissions.canReadChats === 'group'
+							) {
 								if (
 									currentUser.groups.find(
 										(group) =>
@@ -457,13 +461,29 @@ const Sidebar: React.FC<any> = ({
 								}
 							}
 
-							if (assignmentEvent.assigned_group_was_cleared) {
+							if (
+								assignmentEvent.assigned_group_was_cleared &&
+								currentUser.permissions.canReadChats === 'group'
+							) {
+								delete nextState[assignmentData.waId];
 							}
 
-							if (assignmentEvent.assigned_to_user_set) {
+							if (
+								assignmentEvent.assigned_to_user_set &&
+								currentUser.permissions.canReadChats === 'user'
+							) {
+								if (
+									assignmentEvent.assigned_to_user_set.id !== currentUser.id
+								) {
+									delete nextState[assignmentData.waId];
+								}
 							}
 
-							if (assignmentEvent.assigned_to_user_was_cleared) {
+							if (
+								assignmentEvent.assigned_to_user_was_cleared &&
+								currentUser.permissions.canReadChats === 'user'
+							) {
+								delete nextState[assignmentData.waId];
 							}
 						}
 					} else {
