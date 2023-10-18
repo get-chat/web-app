@@ -57,7 +57,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
-import { filterChat } from '@src/helpers/SidebarHelper';
+import {
+	filterChat,
+	handleChatAssignmentEvent,
+} from '@src/helpers/SidebarHelper';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
@@ -426,110 +429,12 @@ const Sidebar: React.FC<any> = ({
 
 	useEffect(() => {
 		const onChatAssignment = function (msg: string, data: any) {
-			if (!currentUser) {
-				console.warn('Current user is empty!', currentUser);
-				return;
-			}
+			// Handle event inside helper method
+			const result = handleChatAssignmentEvent(currentUser, { ...chats }, data);
 
-			let newMissingChats: string[] = [];
-			const chatsCurrentState = { ...chats };
-			let isChatsChanged = false;
-
-			const canReadChatsAll = currentUser.permissions.canReadChats === 'all';
-			const canReadChatsGroup =
-				currentUser.permissions.canReadChats === 'group';
-			const canReadChatsUser = currentUser.permissions.canReadChats === 'user';
-
-			const checkIsUserInGroup = (groupId: number) =>
-				Boolean(currentUser?.groups.find((group) => group.id === groupId));
-
-			Object.entries(data).forEach((message) => {
-				//const msgId = message[0];
-				const assignmentData: any = message[1];
-				const assignmentEvent = assignmentData.assignmentEvent;
-
-				// If user is already able to read all chats
-				if (canReadChatsAll) {
-					return;
-				}
-
-				if (!assignmentEvent) {
-					console.warn('Assignment event is missing!', assignmentData);
-					return;
-				}
-
-				const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
-				const isChatLoaded = chatsCurrentState.hasOwnProperty(chatKey);
-				const assignedGroup = chatsCurrentState[chatKey]?.assignedGroup;
-				const isAlreadyAssignedToCurrentUser =
-					chatsCurrentState[chatKey]?.assignedToUser?.id === currentUser.id;
-
-				const queueMissingChat = () =>
-					newMissingChats.push(assignmentData.waId);
-
-				const deleteChat = () => {
-					delete chatsCurrentState[chatKey];
-					isChatsChanged = true;
-				};
-
-				// Group has changed
-				if (assignmentEvent.assigned_group_set) {
-					if (canReadChatsGroup) {
-						const isGroupMatch = checkIsUserInGroup(
-							assignmentEvent.assigned_group_set.id
-						);
-
-						if (isChatLoaded) {
-							if (!isGroupMatch && !isAlreadyAssignedToCurrentUser)
-								deleteChat();
-						} else {
-							if (isGroupMatch) {
-								queueMissingChat();
-							}
-						}
-					}
-				}
-
-				// Group was cleared
-				if (assignmentEvent.assigned_group_was_cleared) {
-					if (
-						isChatLoaded &&
-						canReadChatsGroup &&
-						!isAlreadyAssignedToCurrentUser
-					)
-						deleteChat();
-				}
-
-				// User has changed
-				if (assignmentEvent.assigned_to_user_set) {
-					const isAssignedToCurrentUser =
-						assignmentEvent.assigned_to_user_set.id === currentUser.id;
-					if (isChatLoaded) {
-						if (canReadChatsGroup) {
-							if (!assignedGroup || !checkIsUserInGroup(assignedGroup.id)) {
-								deleteChat();
-							}
-						} else if (canReadChatsUser && !isAssignedToCurrentUser) {
-							deleteChat();
-						}
-					} else {
-						if (isAssignedToCurrentUser) queueMissingChat();
-					}
-				}
-
-				// User was cleared
-				if (assignmentEvent.assigned_to_user_was_cleared) {
-					if (isChatLoaded) {
-						if (canReadChatsGroup) {
-							if (!assignedGroup || !checkIsUserInGroup(assignedGroup.id)) {
-								deleteChat();
-							}
-						} else if (canReadChatsUser) {
-							deleteChat();
-						}
-					}
-				}
-			});
+			const isChatsChanged = result?.isChatsChanged ?? false;
+			const chatsCurrentState = result?.chats ?? {};
+			const newMissingChats = result?.newMissingChats ?? [];
 
 			// If anything has changed, sort chats
 			if (isChatsChanged) {
