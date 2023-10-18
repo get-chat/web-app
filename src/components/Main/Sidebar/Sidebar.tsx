@@ -426,125 +426,106 @@ const Sidebar: React.FC<any> = ({
 
 	useEffect(() => {
 		const onChatAssignment = function (msg: string, data: any) {
+			if (!currentUser) {
+				console.warn('Current user is empty!', currentUser);
+				return;
+			}
+
 			let newMissingChats: string[] = [];
 			const chatsCurrentState = { ...chats };
 			let isChatsChanged = false;
+
+			const canReadChatsAll = currentUser.permissions.canReadChats === 'all';
+			const canReadChatsGroup =
+				currentUser.permissions.canReadChats === 'group';
+			const canReadChatsUser = currentUser.permissions.canReadChats === 'user';
+
+			const checkIsUserInGroup = (groupId: number) =>
+				Boolean(currentUser?.groups.find((group) => group.id === groupId));
 
 			Object.entries(data).forEach((message) => {
 				//const msgId = message[0];
 				const assignmentData: any = message[1];
 				const assignmentEvent = assignmentData.assignmentEvent;
 
-				if (assignmentEvent) {
-					const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
+				// If user is already able to read all chats
+				if (canReadChatsAll) {
+					return;
+				}
 
-					if (!currentUser) {
-						console.warn('Current user is empty!', currentUser);
-						return;
-					}
+				if (!assignmentEvent) {
+					console.warn('Assignment event is missing!', assignmentData);
+					return;
+				}
 
-					// Check if chat exists and is loaded
-					if (chatsCurrentState.hasOwnProperty(chatKey)) {
-						// If user can not read all chats, check perms after change
-						if (currentUser.permissions.canReadChats !== 'all') {
-							// If group has changed and user can see chats only in their groups
-							if (
-								assignmentEvent.assigned_group_set &&
-								currentUser.permissions.canReadChats === 'group'
-							) {
-								if (
-									!currentUser.groups.find(
-										(group) =>
-											group.id === assignmentEvent.assigned_group_set.id
-									)
-								) {
-									delete chatsCurrentState[chatKey];
-									isChatsChanged = true;
-								}
-							}
+				const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
+				const isChatLoaded = chatsCurrentState.hasOwnProperty(chatKey);
+				const assignedGroup = chatsCurrentState[chatKey]?.assignedGroup;
+				const isAlreadyAssignedToCurrentUser =
+					chatsCurrentState[chatKey]?.assignedToUser?.id === currentUser.id;
 
-							// If group assignment was cleared and user can see chats only in their group
-							if (
-								assignmentEvent.assigned_group_was_cleared &&
-								currentUser.permissions.canReadChats === 'group'
-							) {
-								delete chatsCurrentState[chatKey];
-								isChatsChanged = true;
-							}
+				const queueMissingChat = () =>
+					newMissingChats.push(assignmentData.waId);
 
-							// If chat is assigned to a user and current user can see chats only assigned to them
-							if (assignmentEvent.assigned_to_user_set) {
-								if (currentUser.permissions.canReadChats === 'group') {
-									// Check group of chat
-									const assignedGroup =
-										chatsCurrentState[chatKey].assignedGroup;
-									if (
-										!assignedGroup ||
-										!currentUser.groups.find(
-											(group) => group.id === assignedGroup.id
-										)
-									) {
-										delete chatsCurrentState[chatKey];
-										isChatsChanged = true;
-									}
-								} else if (
-									currentUser.permissions.canReadChats === 'user' &&
-									assignmentEvent.assigned_to_user_set.id !== currentUser.id
-								) {
-									delete chatsCurrentState[chatKey];
-									isChatsChanged = true;
-								}
-							}
+				const deleteChat = () => {
+					delete chatsCurrentState[chatKey];
+					isChatsChanged = true;
+				};
 
-							// If user assignment was cleared and user can see chats only assigned to them
-							if (assignmentEvent.assigned_to_user_was_cleared) {
-								if (currentUser.permissions.canReadChats === 'group') {
-									// Check group of chat
-									const assignedGroup =
-										chatsCurrentState[chatKey].assignedGroup;
-									if (
-										!assignedGroup ||
-										!currentUser.groups.find(
-											(group) => group.id === assignedGroup.id
-										)
-									) {
-										delete chatsCurrentState[chatKey];
-										isChatsChanged = true;
-									}
-								} else if (currentUser.permissions.canReadChats === 'user') {
-									delete chatsCurrentState[chatKey];
-									isChatsChanged = true;
-								}
+				// Group has changed
+				if (assignmentEvent.assigned_group_set) {
+					if (canReadChatsGroup) {
+						const isGroupMatch = checkIsUserInGroup(
+							assignmentEvent.assigned_group_set.id
+						);
+
+						if (isChatLoaded) {
+							if (!isGroupMatch && !isAlreadyAssignedToCurrentUser)
+								deleteChat();
+						} else {
+							if (isGroupMatch) {
+								queueMissingChat();
 							}
 						}
-					} else {
-						// If user can read all chats, just load missing chat
-						if (currentUser.permissions.canReadChats === 'all') {
-							newMissingChats.push(assignmentData.waId);
-						} else {
-							// If group has changed and user can see chats only in their groups
-							if (
-								assignmentEvent.assigned_group_set &&
-								currentUser.permissions.canReadChats === 'group'
-							) {
-								if (
-									currentUser.groups.find(
-										(group) =>
-											group.id === assignmentEvent.assigned_group_set.id
-									)
-								) {
-									newMissingChats.push(assignmentData.waId);
-								}
-							}
+					}
+				}
 
-							// If chat is assigned to a user and current user can see chats only assigned to them
-							if (assignmentEvent.assigned_to_user_set) {
-								if (
-									assignmentEvent.assigned_to_user_set.id === currentUser.id
-								) {
-									newMissingChats.push(assignmentData.waId);
-								}
+				// Group was cleared
+				if (assignmentEvent.assigned_group_was_cleared) {
+					if (
+						isChatLoaded &&
+						canReadChatsGroup &&
+						!isAlreadyAssignedToCurrentUser
+					)
+						deleteChat();
+				}
+
+				// User has changed
+				if (assignmentEvent.assigned_to_user_set) {
+					const isAssignedToCurrentUser =
+						assignmentEvent.assigned_to_user_set.id === currentUser.id;
+					if (isChatLoaded) {
+						if (canReadChatsGroup) {
+							if (!assignedGroup || !checkIsUserInGroup(assignedGroup.id)) {
+								deleteChat();
 							}
+						} else if (canReadChatsUser && !isAssignedToCurrentUser) {
+							deleteChat();
+						}
+					} else {
+						if (isAssignedToCurrentUser) queueMissingChat();
+					}
+				}
+
+				// User was cleared
+				if (assignmentEvent.assigned_to_user_was_cleared) {
+					if (isChatLoaded) {
+						if (canReadChatsGroup) {
+							if (!assignedGroup || !checkIsUserInGroup(assignedGroup.id)) {
+								deleteChat();
+							}
+						} else if (canReadChatsUser) {
+							deleteChat();
 						}
 					}
 				}
