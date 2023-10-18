@@ -57,7 +57,10 @@ import { Trans, useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
-import { filterChat } from '@src/helpers/SidebarHelper';
+import {
+	filterChat,
+	handleChatAssignmentEvent,
+} from '@src/helpers/SidebarHelper';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import ChatsResponse from '../../../api/responses/ChatsResponse';
@@ -426,31 +429,19 @@ const Sidebar: React.FC<any> = ({
 
 	useEffect(() => {
 		const onChatAssignment = function (msg: string, data: any) {
-			let newMissingChats: string[] = [];
-			const nextState = { ...chats };
+			// Handle event inside helper method
+			const result = handleChatAssignmentEvent(currentUser, { ...chats }, data);
 
-			Object.entries(data).forEach((message) => {
-				//const msgId = message[0];
-				const assignmentData: any = message[1];
-				const assignmentEvent = assignmentData.assignmentEvent;
+			const isChatsChanged = result?.isChatsChanged ?? false;
+			const chatsCurrentState = result?.chats ?? {};
+			const newMissingChats = result?.newMissingChats ?? [];
 
-				if (assignmentEvent) {
-					const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
-
-					if (
-						assignmentEvent.assigned_group_set ||
-						assignmentEvent.assigned_to_user_set
-					) {
-						// Check if chat exists and is loaded
-						if (!nextState.hasOwnProperty(chatKey)) {
-							// Collect waId list to retrieve chats
-							if (!newMissingChats.includes(assignmentData.waId)) {
-								newMissingChats.push(assignmentData.waId);
-							}
-						}
-					}
-				}
-			});
+			// If anything has changed, sort chats
+			if (isChatsChanged) {
+				// Sorting
+				const sortedNextState = sortChats(chatsCurrentState);
+				dispatch(setChats({ ...sortedNextState }));
+			}
 
 			if (newMissingChats.length > 0) {
 				setMissingChats((prevState) => {
