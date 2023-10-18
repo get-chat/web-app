@@ -497,12 +497,24 @@ const Sidebar: React.FC<any> = ({
 							}
 
 							// If user assignment was cleared and user can see chats only assigned to them
-							if (
-								assignmentEvent.assigned_to_user_was_cleared &&
-								currentUser.permissions.canReadChats === 'user'
-							) {
-								delete chatsCurrentState[chatKey];
-								isChatsChanged = true;
+							if (assignmentEvent.assigned_to_user_was_cleared) {
+								if (currentUser.permissions.canReadChats === 'group') {
+									// Check group of chat
+									const assignedGroup =
+										chatsCurrentState[chatKey].assignedGroup;
+									if (
+										!assignedGroup ||
+										!currentUser.groups.find(
+											(group) => group.id === assignedGroup.id
+										)
+									) {
+										delete chatsCurrentState[chatKey];
+										isChatsChanged = true;
+									}
+								} else if (currentUser.permissions.canReadChats === 'user') {
+									delete chatsCurrentState[chatKey];
+									isChatsChanged = true;
+								}
 							}
 						}
 					} else {
