@@ -518,12 +518,13 @@ const Sidebar: React.FC<any> = ({
 								}
 							}
 
-							// If group was cleared and user can see chats only in their groups
-							if (
-								assignmentEvent.assigned_group_was_cleared &&
-								currentUser.permissions.canReadChats === 'group'
-							) {
-								newMissingChats.push(assignmentData.waId);
+							// If chat is assigned to a user and current user can see chats only assigned to them
+							if (assignmentEvent.assigned_to_user_set) {
+								if (
+									assignmentEvent.assigned_to_user_set.id === currentUser.id
+								) {
+									newMissingChats.push(assignmentData.waId);
+								}
 							}
 						}
 					}
@@ -534,7 +535,6 @@ const Sidebar: React.FC<any> = ({
 			if (isChatsChanged) {
 				// Sorting
 				const sortedNextState = sortChats(chatsCurrentState);
-				console.log(sortedNextState);
 				dispatch(setChats({ ...sortedNextState }));
 			}
 
