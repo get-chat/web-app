@@ -427,7 +427,7 @@ const Sidebar: React.FC<any> = ({
 	useEffect(() => {
 		const onChatAssignment = function (msg: string, data: any) {
 			let newMissingChats: string[] = [];
-			const nextState = { ...chats };
+			const chatsCurrentState = { ...chats };
 			let isChatsChanged = false;
 
 			Object.entries(data).forEach((message) => {
@@ -444,7 +444,7 @@ const Sidebar: React.FC<any> = ({
 					}
 
 					// Check if chat exists and is loaded
-					if (nextState.hasOwnProperty(chatKey)) {
+					if (chatsCurrentState.hasOwnProperty(chatKey)) {
 						// If user can not read all chats, check perms after change
 						if (currentUser.permissions.canReadChats !== 'all') {
 							// If group has changed and user can see chats only in their groups
@@ -458,7 +458,9 @@ const Sidebar: React.FC<any> = ({
 											group.id !== assignmentEvent.assigned_group_set.id
 									)
 								) {
-									delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+									delete chatsCurrentState[
+										CHAT_KEY_PREFIX + assignmentData.waId
+									];
 									isChatsChanged = true;
 								}
 							}
@@ -468,7 +470,7 @@ const Sidebar: React.FC<any> = ({
 								assignmentEvent.assigned_group_was_cleared &&
 								currentUser.permissions.canReadChats === 'group'
 							) {
-								delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+								delete chatsCurrentState[CHAT_KEY_PREFIX + assignmentData.waId];
 								isChatsChanged = true;
 							}
 
@@ -480,7 +482,9 @@ const Sidebar: React.FC<any> = ({
 								if (
 									assignmentEvent.assigned_to_user_set.id !== currentUser.id
 								) {
-									delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+									delete chatsCurrentState[
+										CHAT_KEY_PREFIX + assignmentData.waId
+									];
 									isChatsChanged = true;
 								}
 							}
@@ -490,16 +494,14 @@ const Sidebar: React.FC<any> = ({
 								assignmentEvent.assigned_to_user_was_cleared &&
 								currentUser.permissions.canReadChats === 'user'
 							) {
-								delete nextState[CHAT_KEY_PREFIX + assignmentData.waId];
+								delete chatsCurrentState[CHAT_KEY_PREFIX + assignmentData.waId];
 								isChatsChanged = true;
 							}
 						}
 					} else {
 						// If user can read all chats, just load missing chat
 						if (currentUser.permissions.canReadChats === 'all') {
-							if (!newMissingChats.includes(assignmentData.waId)) {
-								newMissingChats.push(assignmentData.waId);
-							}
+							newMissingChats.push(assignmentData.waId);
 						} else {
 							// If group has changed and user can see chats only in their groups
 							if (
@@ -512,42 +514,26 @@ const Sidebar: React.FC<any> = ({
 											group.id === assignmentEvent.assigned_group_set.id
 									)
 								) {
-									if (!newMissingChats.includes(assignmentData.waId)) {
-										newMissingChats.push(assignmentData.waId);
-									}
+									newMissingChats.push(assignmentData.waId);
 								}
 							}
 
+							// If group was cleared and user can see chats only in their groups
 							if (
 								assignmentEvent.assigned_group_was_cleared &&
 								currentUser.permissions.canReadChats === 'group'
 							) {
-								if (!newMissingChats.includes(assignmentData.waId)) {
-									newMissingChats.push(assignmentData.waId);
-								}
+								newMissingChats.push(assignmentData.waId);
 							}
 						}
 					}
-
-					/*if (
-						assignmentEvent.assigned_group_set ||
-						assignmentEvent.assigned_to_user_set
-					) {
-						// Check if chat exists and is loaded
-						if (!nextState.hasOwnProperty(chatKey)) {
-							// Collect waId list to retrieve chats
-							if (!newMissingChats.includes(assignmentData.waId)) {
-								//newMissingChats.push(assignmentData.waId);
-							}
-						}
-					}*/
 				}
 			});
 
 			// If anything has changed, sort chats
 			if (isChatsChanged) {
 				// Sorting
-				const sortedNextState = sortChats(nextState);
+				const sortedNextState = sortChats(chatsCurrentState);
 				console.log(sortedNextState);
 				dispatch(setChats({ ...sortedNextState }));
 			}
