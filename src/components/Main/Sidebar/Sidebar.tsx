@@ -517,6 +517,15 @@ const Sidebar: React.FC<any> = ({
 									}
 								}
 							}
+
+							if (
+								assignmentEvent.assigned_group_was_cleared &&
+								currentUser.permissions.canReadChats === 'group'
+							) {
+								if (!newMissingChats.includes(assignmentData.waId)) {
+									newMissingChats.push(assignmentData.waId);
+								}
+							}
 						}
 					}
 
