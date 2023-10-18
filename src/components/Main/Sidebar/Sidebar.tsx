@@ -453,14 +453,12 @@ const Sidebar: React.FC<any> = ({
 								currentUser.permissions.canReadChats === 'group'
 							) {
 								if (
-									currentUser.groups.find(
+									!currentUser.groups.find(
 										(group) =>
-											group.id !== assignmentEvent.assigned_group_set.id
+											group.id === assignmentEvent.assigned_group_set.id
 									)
 								) {
-									delete chatsCurrentState[
-										CHAT_KEY_PREFIX + assignmentData.waId
-									];
+									delete chatsCurrentState[chatKey];
 									isChatsChanged = true;
 								}
 							}
@@ -470,21 +468,30 @@ const Sidebar: React.FC<any> = ({
 								assignmentEvent.assigned_group_was_cleared &&
 								currentUser.permissions.canReadChats === 'group'
 							) {
-								delete chatsCurrentState[CHAT_KEY_PREFIX + assignmentData.waId];
+								delete chatsCurrentState[chatKey];
 								isChatsChanged = true;
 							}
 
 							// If chat is assigned to a user and current user can see chats only assigned to them
-							if (
-								assignmentEvent.assigned_to_user_set &&
-								currentUser.permissions.canReadChats === 'user'
-							) {
-								if (
+							if (assignmentEvent.assigned_to_user_set) {
+								if (currentUser.permissions.canReadChats === 'group') {
+									// Check group of chat
+									const assignedGroup =
+										chatsCurrentState[chatKey].assignedGroup;
+									if (
+										!assignedGroup ||
+										!currentUser.groups.find(
+											(group) => group.id === assignedGroup.id
+										)
+									) {
+										delete chatsCurrentState[chatKey];
+										isChatsChanged = true;
+									}
+								} else if (
+									currentUser.permissions.canReadChats === 'user' &&
 									assignmentEvent.assigned_to_user_set.id !== currentUser.id
 								) {
-									delete chatsCurrentState[
-										CHAT_KEY_PREFIX + assignmentData.waId
-									];
+									delete chatsCurrentState[chatKey];
 									isChatsChanged = true;
 								}
 							}
@@ -494,7 +501,7 @@ const Sidebar: React.FC<any> = ({
 								assignmentEvent.assigned_to_user_was_cleared &&
 								currentUser.permissions.canReadChats === 'user'
 							) {
-								delete chatsCurrentState[CHAT_KEY_PREFIX + assignmentData.waId];
+								delete chatsCurrentState[chatKey];
 								isChatsChanged = true;
 							}
 						}
