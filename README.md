@@ -131,6 +131,18 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - Open `/src/i18n.js` and add the new language to `resources` object in `init` options by importing the JSON translation output.
 
+## Query Parameters
+
+- `lng`: Changes the language of the page. The value used must be Alpha-2 code. Please see the following directory for currently supported languages: https://github.com/get-chat/web-app/tree/master/src/locales
+
+- `chat_only` or `chatonly`: Hides the sidebar. It is only used to view a single chat. Expected values are `1` and `0`.
+
+- `idt`: Converts the given ID Token to Auth Token. See for more information: https://docs.get.chat/wa-integration-api/#tag/Authorization/operation/convertIdToken
+
+- `integration_api_base_url`: Changes the API base URL for the inbox.
+
+- `cf_<any_chat_filter>`: Filters the chats initially. Any chat filter documented here can be used with `cf_` prefix: https://docs.get.chat/wa-integration-api/#tag/Chats/operation/listChats
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -180,7 +192,7 @@ To run tests run the command `pnpm test`
 
 You can find ready to use docker images in [GitLab Container Registry](https://gitlab.com/get.chat/web-app/container_registry).
 
-To run the app from provided image you will need some environment variables. For simplicity we will use dedicated env
+To run the app from provided image you will need some environment variables. For simplicity, we will use dedicated env
 file. Create your env file from this template and save it as `docker.env`:
 
 ```
