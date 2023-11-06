@@ -135,12 +135,10 @@ const ChatListItem = (props: any) => {
 										highlightText={props.keyword}
 									/>
 								) : (
-									<PrintMessage
-										message={
-											props.contactProvidersData[data.waId]?.[0]?.name ??
-											data.name
-										}
-									/>
+									<span>
+										{props.contactProvidersData[data.waId]?.[0]?.name ??
+											data.name}
+									</span>
 								)}
 							</h2>
 

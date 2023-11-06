@@ -109,15 +109,12 @@ const ChatMessage: React.FC<Props> = ({
 			{!data.assignmentEvent && !data.taggingEvent && (
 				<div>
 					{(displaySender || displayDate) && (
-						<PrintMessage
-							className="chat__name"
-							message={
-								data.isFromUs
-									? data.senderName
-									: contactProvidersData?.[data.waId]?.[0]?.name ??
-									  data.senderName
-							}
-						/>
+						<div className="chat__name">
+							{data.isFromUs
+								? data.senderName
+								: contactProvidersData?.[data.waId]?.[0]?.name ??
+								  data.senderName}
+						</div>
 					)}
 
 					{data.type === ChatMessageModel.TYPE_STICKER && (
