@@ -143,6 +143,8 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - `cf_<any_chat_filter>`: Filters the chats initially. Any chat filter documented here can be used with `cf_` prefix: https://docs.get.chat/wa-integration-api/#tag/Chats/operation/listChats
 
+- `hide_logo`: Hides get.chat logo during the loading screen
+
 ## Available Scripts
 
 In the project directory, you can run:
