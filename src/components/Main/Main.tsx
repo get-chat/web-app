@@ -189,6 +189,7 @@ function Main() {
 	};
 
 	const [isChatOnly] = useState(checkIsChatOnly());
+	const [isHideLogo] = useState(query.get('hide_logo') === '1');
 
 	const setProgress = (value) => {
 		_setProgress((prevState) => {
@@ -1123,6 +1124,7 @@ function Main() {
 							setProgress={setProgress}
 							loadingNow={loadingNow}
 							isInitialResourceFailed={isInitialResourceFailed}
+							isHideLogo={isHideLogo}
 						/>
 					</div>
 				</Fade>
