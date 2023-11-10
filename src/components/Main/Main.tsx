@@ -104,8 +104,6 @@ function Main() {
 
 	const { waId } = useParams();
 
-	const [searchParams] = useSearchParams();
-
 	const [progress, _setProgress] = useState(0);
 	const [loadingNow, setLoadingNow] = useState('');
 	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
@@ -189,6 +187,8 @@ function Main() {
 	};
 
 	const [isChatOnly] = useState(checkIsChatOnly());
+	const [isHideLogo] = useState(query.get('hide_logo') === '1');
+	const [isMaximized] = useState(query.get('maximized') === '1');
 
 	const setProgress = (value) => {
 		_setProgress((prevState) => {
@@ -993,7 +993,13 @@ function Main() {
 
 	return (
 		<Fade in={checked}>
-			<div className={'app__body' + (isIPad13 ? ' absoluteFullscreen' : '')}>
+			<div
+				className={
+					'app__body' +
+					(isIPad13 ? ' absoluteFullscreen' : '') +
+					(isMaximized ? ' maximized' : '')
+				}
+			>
 				{templatesReady && (
 					<Sidebar
 						isLoaded={progress >= 100}
@@ -1123,6 +1129,7 @@ function Main() {
 							setProgress={setProgress}
 							loadingNow={loadingNow}
 							isInitialResourceFailed={isInitialResourceFailed}
+							isHideLogo={isHideLogo}
 						/>
 					</div>
 				</Fade>
