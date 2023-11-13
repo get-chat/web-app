@@ -188,7 +188,7 @@ function Main() {
 
 	const [isChatOnly] = useState(checkIsChatOnly());
 	const [isHideLogo] = useState(query.get('hide_logo') === '1');
-	const [isMaximized] = useState(query.get('maximize') === '1');
+	const [isMaximize] = useState(query.get('maximize') === '1');
 
 	const setProgress = (value) => {
 		_setProgress((prevState) => {
@@ -997,7 +997,7 @@ function Main() {
 				className={
 					'app__body' +
 					(isIPad13 ? ' absoluteFullscreen' : '') +
-					(isMaximized ? ' maximized' : '')
+					(isMaximize ? ' maximized' : '')
 				}
 			>
 				{templatesReady && (
