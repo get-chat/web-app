@@ -188,7 +188,7 @@ function Main() {
 
 	const [isChatOnly] = useState(checkIsChatOnly());
 	const [isHideLogo] = useState(query.get('hide_logo') === '1');
-	const [isMaximized] = useState(query.get('maximized') === '1');
+	const [isMaximized] = useState(query.get('maximize') === '1');
 
 	const setProgress = (value) => {
 		_setProgress((prevState) => {
