@@ -86,7 +86,7 @@ export class ApiService {
 
 	convertRefreshTokenCall = (
 		refreshToken,
-		keepRefreshToken,
+		keepRefreshToken: boolean,
 		successCallback,
 		errorCallback,
 		completeCallback
