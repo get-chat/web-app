@@ -12,8 +12,9 @@ const useIdToken = () => {
 			clearUserSession(undefined, undefined, undefined);
 
 			// Converting id token
-			apiService.convertIdTokenCall(
+			apiService.convertRefreshTokenCall(
 				idToken,
+				false,
 				(response: AxiosResponse) => {
 					// Store token in local storage
 					storeToken(response.data.token);
