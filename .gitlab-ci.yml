@@ -6,24 +6,13 @@ stages:
   - release
   - deploy
 
-
 variables:
   NODE_IMAGE: node:16-alpine
-
   PNPM_STORE_DIR: .pnpm-store
-
   PACKAGE_NAME: frontend
   PACKAGE_VERSION: $CI_COMMIT_REF_NAME
   PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
-
-
-#include:
-#  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
-#    file: upstream/jobs.yaml
-#    rules:
-#      - if: $G_TRIGGER_DEPLOY == "true"
-
 
 .cache_config: &cache_config
   key:
@@ -35,42 +24,33 @@ variables:
     # runs, to optimize execution time
     - $PNPM_STORE_DIR
 
-
 .install_pnpm: &install_pnpm
   before_script:
     - npm install --location=global --no-fund pnpm
     - pnpm config set store-dir $PNPM_STORE_DIR
 
-
 Update project version on git tag:
   stage: update_version
   image: $NODE_IMAGE
-
   only:
     - tags
-
   <<: *install_pnpm
   script:
     - pnpm version --no-git-tag-version ${PACKAGE_VERSION}
-
   artifacts:
     name: version
     paths:
       - package.json
 
-
 Build:
   stage: build
   image: $NODE_IMAGE
-
   only:
     - master
     - merge_requests
     - tags
-
   cache:
     <<: *cache_config
-
   <<: *install_pnpm
   script:
     - apk add --no-cache --upgrade bash
@@ -92,11 +72,9 @@ Build:
     paths:
       - build/
 
-
 Lint:
   stage: test
   image: $NODE_IMAGE
-
   cache:
     <<: *cache_config
 
@@ -109,20 +87,16 @@ Lint:
     - master
     - merge_requests
     - tags
-
   dependencies:
     - Update project version on git tag
-
   <<: *install_pnpm
   script:
     - pnpm install --prefer-offline
     - pnpm lint:prettier
 
-
 Test:
   stage: test
   image: $NODE_IMAGE
-
   cache:
     <<: *cache_config
 
@@ -135,18 +109,12 @@ Test:
     - master
     - merge_requests
     - tags
-
   dependencies:
     - Update project version on git tag
-
   <<: *install_pnpm
   script:
     - pnpm install --prefer-offline
-    - pnpm test --
-      --passWithNoTests
-      --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
-
-  # track our test coverage in GitLab's MR widget/ui
+    - pnpm test -- --passWithNoTests --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
   coverage: '/All files.*\|\s+(\d+(?:\.\d+)?)/'
 
   # track our test coverage in GitLab's CI pipeline test reports
@@ -179,13 +147,10 @@ Test:
 
 Publish package on git tag:
   stage: package
-
   only:
     - tags
-
   dependencies:
     - Build
-
   script:
     - tar -czvf ${PACKAGE_FILE} -C build .
     - >
@@ -194,7 +159,6 @@ Publish package on git tag:
       --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
       --upload-file ${PACKAGE_FILE}
       ${PACKAGE_REGISTRY_URL}
-
 
 Publish docker image:
   stage: package
@@ -220,14 +184,11 @@ Publish docker image:
   after_script:
     - docker logout
 
-
 Create release on git tag:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli
-
   only:
     - tags
-
   dependencies: []
 
   # HACK: All release jobs, except trigger jobs, must include the `script` keyword.
@@ -236,7 +197,6 @@ Create release on git tag:
   # https://docs.gitlab.com/ee/ci/yaml/#release
   script:
     - echo "Running the release job..."
-
   release:
     tag_name: $PACKAGE_VERSION
     description: Release automatically created by ${CI_PIPELINE_URL}
