@@ -6,15 +6,15 @@ import { storeToken } from '@src/helpers/StorageHelper';
 
 const useIdToken = () => {
 	const handle = (apiService: ApiService, onComplete?: () => void) => {
-		const idToken = getURLParams().get('idt');
+		const refreshToken = getURLParams().get('refresh_token');
 		const keepRefreshToken = getURLParams().get('keep_refresh_token') === '1';
-		if (idToken) {
+		if (refreshToken) {
 			// Clear existing user session
 			clearUserSession(undefined, undefined, undefined);
 
-			// Converting id token
+			// Converting refresh token
 			apiService.convertRefreshTokenCall(
-				idToken,
+				refreshToken,
 				keepRefreshToken,
 				(response: AxiosResponse) => {
 					// Store token in local storage
