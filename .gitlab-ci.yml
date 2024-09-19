@@ -8,7 +8,7 @@ stages:
 
 
 variables:
-  NODE_IMAGE: node:16-alpine
+  NODE_IMAGE: node:18-alpine
 
   PNPM_STORE_DIR: .pnpm-store
 
@@ -38,7 +38,7 @@ variables:
 
 .install_pnpm: &install_pnpm
   before_script:
-    - npm install --location=global --no-fund pnpm@^8.15.7
+    - npm install --location=global --no-fund pnpm
     - pnpm config set store-dir $PNPM_STORE_DIR
 
 
