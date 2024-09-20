@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {
 	containsLetters,
 	generateInitialsHelper,
@@ -1325,6 +1326,13 @@ const Sidebar: React.FC<any> = ({
 						<CloudSyncIcon />
 					</ListItemIcon>
 					{t('Refresh contacts')}
+				</MenuItem>
+				<Divider />
+				<MenuItem onClick={undefined}>
+					<ListItemIcon>
+						<FileDownloadIcon />
+					</ListItemIcon>
+					{t('Export chats')}
 				</MenuItem>
 				{currentUser?.isAdmin && <Divider />}
 				{currentUser?.isAdmin && (
