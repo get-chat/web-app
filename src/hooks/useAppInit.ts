@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AppConfig } from '@src/config/application';
 import { ApiService } from '@src/api/ApiService';
-import useIdToken from '@src/hooks/init/useIdToken';
+import useRefreshToken from '@src/hooks/init/useRefreshToken';
 import useIntegrationApiBaseURL from '@src/hooks/init/useIntegrationApiBaseURL';
 
 const useAppInit = () => {
@@ -10,7 +10,7 @@ const useAppInit = () => {
 	const apiServiceRef = useRef<ApiService | null>(null);
 
 	const { handle: handleIntegrationApiBaseURL } = useIntegrationApiBaseURL();
-	const { handle: handleIdToken } = useIdToken();
+	const { handle: handleRefreshToken } = useRefreshToken();
 
 	useEffect(() => {
 		initApp();
@@ -35,7 +35,7 @@ const useAppInit = () => {
 				configRef.current!!,
 				() => {
 					// Task 2
-					handleIdToken(apiServiceRef.current!!, () => {
+					handleRefreshToken(apiServiceRef.current!!, () => {
 						// Finish loading
 						setLoading(false);
 					});

@@ -4,7 +4,7 @@ import { clearUserSession } from '@src/helpers/ApiHelper';
 import { AxiosError, AxiosResponse } from 'axios';
 import { storeToken } from '@src/helpers/StorageHelper';
 
-const useIdToken = () => {
+const useRefreshToken = () => {
 	const handle = (apiService: ApiService, onComplete?: () => void) => {
 		const refreshToken = getURLParams().get('refresh_token');
 		const keepRefreshToken = getURLParams().get('keep_refresh_token') === '1';
@@ -44,4 +44,4 @@ const useIdToken = () => {
 	};
 };
 
-export default useIdToken;
+export default useRefreshToken;
