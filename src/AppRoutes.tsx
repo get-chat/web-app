@@ -8,7 +8,7 @@ import {
 
 import Login from './components/Login';
 import Main from './components/Main/Main';
-import RefreshTokenErrorPage from 'src/components/RefreshTokenErrorPage';
+import RefreshTokenErrorPage from '@src/components/RefreshTokenErrorPage';
 
 const AppRoutes: React.FC = () => {
 	const renderPaths = (paths: string[], Element: JSX.Element) =>
