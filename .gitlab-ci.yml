@@ -6,6 +6,7 @@ stages:
   - release
   - deploy
   - pages
+  - cleanup
 
 
 variables:
