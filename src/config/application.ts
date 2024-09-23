@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export interface AppConfig {
+	API_BASE_NAME: string;
 	API_BASE_URL: string;
 	APP_SENTRY_DSN: string;
 	APP_ENV_NAME: string;

@@ -256,6 +256,7 @@ Pages:
     - sed -i 's|/static/|./static/|g' public/index.html
     - |
       echo '{
+        "API_BASE_NAME": "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/",
         "API_BASE_URL": "https://staging.inbox.platform.get.chat/api/v1/",
         "APP_ENV_NAME": "development",
         "APP_NOTIFICATIONS_LIMIT_PER_MINUTE": "8",
