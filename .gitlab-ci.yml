@@ -271,6 +271,6 @@ stop_review:
   script:
     - echo "Cleaning up the review environment..."
   environment:
-    name: review/$CI_COMMIT_REF_NAME
+    name: review-$CI_COMMIT_REF_NAME
     action: stop
   when: manual
