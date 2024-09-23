@@ -5,6 +5,7 @@ stages:
   - package
   - release
   - deploy
+  - pages
 
 
 variables:
@@ -245,3 +246,19 @@ Create release on git tag:
         - name: $PACKAGE_FILE
           url: $PACKAGE_REGISTRY_URL
           link_type: package
+
+Pages:
+  stage: pages
+  image: $NODE_IMAGE
+
+  script:
+    - mkdir .public
+    - cp -r build/* .public/
+
+  artifacts:
+    paths:
+      - .public
+    expire_in: 14 days
+
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
