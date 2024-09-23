@@ -252,7 +252,7 @@ Pages:
   stage: pages
   image: $NODE_IMAGE
   script:
-    - mkdir public
+    # - mkdir public
     - cp -r build/* public/
   artifacts:
     paths:
