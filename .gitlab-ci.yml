@@ -251,22 +251,19 @@ Create release on git tag:
 Pages:
   stage: pages
   image: $NODE_IMAGE
-
   script:
     - mkdir .public
     - cp -r build/* .public/
-
   artifacts:
     paths:
       - .public
-    expire_in: 30 days
-
-  rules:
-    - if: $CI_MERGE_REQUEST_ID
-
+    expire_in: 14 days
+  only:
+    # This makes sure there are no duplicated pipelines from feature branches
+    - merge_requests
   environment:
-    name: review/$CI_COMMIT_REF_NAME
-    url: http://$CI_PROJECT_PATH_SLUG-$CI_COMMIT_REF_SLUG.$CI_PAGES_DOMAIN
+    name: review-$CI_COMMIT_REF_NAME
+    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     on_stop: stop_review
 
 stop_review:
