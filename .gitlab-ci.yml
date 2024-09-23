@@ -272,7 +272,8 @@ Pages:
     - merge_requests
   environment:
     name: review-$CI_COMMIT_REF_NAME
-    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+    url: "https://$CI_JOB_ID.$CI_PROJECT_NAME.$CI_PROJECT_NAMESPACE.gitlab.io/index.html"
+    # url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     on_stop: stop_review
 
 stop_review:
