@@ -258,7 +258,21 @@ Pages:
   artifacts:
     paths:
       - .public
-    expire_in: 14 days
+    expire_in: 30 days
 
   rules:
     - if: $CI_MERGE_REQUEST_ID
+
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_PROJECT_PATH_SLUG-$CI_COMMIT_REF_SLUG.$CI_PAGES_DOMAIN
+    on_stop: stop_review
+
+stop_review:
+  stage: cleanup
+  script:
+    - echo "Cleaning up the review environment..."
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+    when: manual
