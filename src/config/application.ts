@@ -13,7 +13,7 @@ export interface AppConfig {
 }
 
 export const loadAppConfig = async (): Promise<AppConfig> => {
-	const response = await axios.get('./config.json');
+	const response = await axios.get('/config.json');
 
 	return response.data;
 };

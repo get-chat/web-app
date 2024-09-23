@@ -19,9 +19,6 @@ variables:
   PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
-  REACT_APP_PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
-  PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
-
 
 #include:
 #  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
@@ -88,7 +85,7 @@ Build:
     #
     # For details, please see:
     # https://gitlab.com/wabbitproject/web-app/-/issues/156
-    - CI=false REACT_APP_PUBLIC_URL="/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public" PUBLIC_URL=./public pnpm build
+    - CI=false PUBLIC_URL=./public pnpm build
 
   # track our built frontend files in GitLab's MR widget/ui
   artifacts:
@@ -262,16 +259,16 @@ Pages:
     - cp -r build/* public/
     - sed -i 's|/static/|./static/|g' public/index.html
     - envsubst < public/config.json.tmpl > public/config.json
+    # Move build files to a unique directory based on $CI_JOB_ID
+    - mkdir -p public/$CI_JOB_ID
+    - mv public/* public/$CI_JOB_ID/
   artifacts:
     paths:
       - public
     expire_in: 14 days
-  only:
-    # This makes sure there are no duplicated pipelines from feature branches
-    - merge_requests
   environment:
     name: review-$CI_COMMIT_REF_NAME
-    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+    url: "https://$CI_JOB_ID.$CI_PROJECT_NAMESPACE.gitlab.io/"
     on_stop: stop_review
 
 stop_review:

@@ -14,10 +14,8 @@ const AppRoutes: React.FC = () => {
 	const renderPaths = (paths: string[], Element: JSX.Element) =>
 		paths.map((path) => <Route key={path} path={path} element={Element} />);
 
-	console.log(process.env.REACT_APP_PUBLIC_URL);
-
 	return (
-		<Router basename={process.env.REACT_APP_PUBLIC_URL}>
+		<Router>
 			<Routes>
 				<Route path="/app" element={<Navigate to="/main" />} />
 				{renderPaths(
