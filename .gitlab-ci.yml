@@ -275,4 +275,4 @@ stop_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-    when: manual
+  when: manual
