@@ -33,7 +33,7 @@ function LoadingScreen(props) {
 			{!props.isHideLogo && (
 				<div className="loadingScreen__logoContainer">
 					<img
-						src={process.env.REACT_APP_LOGO_BLACK_URL ?? './logoblack.svg'}
+						src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'}
 						alt="Logo"
 					/>
 				</div>
