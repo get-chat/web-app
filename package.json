@@ -2,7 +2,6 @@
 	"name": "getchat-frontend",
 	"version": "local",
 	"private": true,
-	"homepage": "./",
 	"scripts": {
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
 		"start": "webpack serve --config webpack/webpack.dev.js",

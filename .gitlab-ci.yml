@@ -253,6 +253,7 @@ Pages:
   image: $NODE_IMAGE
   script:
     - cp -r build/* public/
+    - sed -i 's|/static/|./static/|g' public/index.html
   artifacts:
     paths:
       - public
