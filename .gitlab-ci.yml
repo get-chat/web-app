@@ -259,16 +259,16 @@ Pages:
     - cp -r build/* public/
     - sed -i 's|/static/|./static/|g' public/index.html
     - envsubst < public/config.json.tmpl > public/config.json
-    # Move build files to a unique directory based on $CI_JOB_ID
-    - mkdir -p public/$CI_JOB_ID
-    - mv public/* public/$CI_JOB_ID/
   artifacts:
     paths:
       - public
     expire_in: 14 days
+  only:
+    # This makes sure there are no duplicated pipelines from feature branches
+    - merge_requests
   environment:
     name: review-$CI_COMMIT_REF_NAME
-    url: "https://$CI_JOB_ID.$CI_PROJECT_NAMESPACE.gitlab.io/"
+    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     on_stop: stop_review
 
 stop_review:
