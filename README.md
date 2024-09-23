@@ -137,7 +137,9 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - `chat_only` or `chatonly`: Hides the sidebar. It is only used to view a single chat. Expected values are `1` and `0`.
 
-- `idt`: Converts the given ID Token to Auth Token. See for more information: https://docs.get.chat/wa-integration-api/#tag/Authorization/operation/convertIdToken
+- `refresh_token`: Converts the given Refresh Token to Auth Token. See for more information: https://docs.get.chat/wa-integration-api/#tag/Authorization/operation/convertRefreshToken
+
+- `keep_refresh_token`: Option to keep refresh token after use. See for more information: https://docs.get.chat/wa-integration-api/#tag/Authorization/operation/convertRefreshToken
 
 - `integration_api_base_url`: Changes the API base URL for the inbox.
 

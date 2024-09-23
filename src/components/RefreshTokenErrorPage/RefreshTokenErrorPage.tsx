@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import styles from './IdTokenErrorPage.module.css';
+import styles from './RefreshTokenErrorPage.module.css';
 import { Button } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
-const IdTokenErrorPage: React.FC = () => {
+const RefreshTokenErrorPage: React.FC = () => {
 	const navigate = useNavigate();
 	const { t } = useTranslation();
 
@@ -39,4 +39,4 @@ const IdTokenErrorPage: React.FC = () => {
 	);
 };
 
-export default IdTokenErrorPage;
+export default RefreshTokenErrorPage;
