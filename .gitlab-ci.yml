@@ -254,6 +254,15 @@ Pages:
   script:
     - cp -r build/* public/
     - sed -i 's|/static/|./static/|g' public/index.html
+    - |
+      echo '{
+        "API_BASE_URL": "https://staging.inbox.platform.get.chat/api/v1/",
+        "APP_ENV_NAME": "development",
+        "APP_NOTIFICATIONS_LIMIT_PER_MINUTE": "8",
+        "APP_MAX_BULK_DIRECT_RECIPIENTS": "1000",
+        "APP_MAX_BULK_TAG_RECIPIENTS": "10000",
+        "APP_IS_READ_ONLY": "false"
+      }' > public/config.json
   artifacts:
     paths:
       - public
