@@ -253,7 +253,7 @@ Pages:
   image: $NODE_IMAGE
   variables:
     PUBLIC_URL: ./public
-    API_BASE_URL: "https://staging.inbox.platform.get.chat/api/v1/"
+    APP_API_BASE_URL: "https://staging.inbox.platform.get.chat/api/v1/"
     APP_ENV_NAME: "development"
   script:
     - apk add --no-cache gettext # Adds envsubst
