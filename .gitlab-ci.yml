@@ -252,11 +252,11 @@ Pages:
   stage: pages
   image: $NODE_IMAGE
   script:
-    - mkdir .public
-    - cp -r build/* .public/
+    - mkdir public
+    - cp -r build/* public/
   artifacts:
     paths:
-      - .public
+      - public
     expire_in: 14 days
   only:
     # This makes sure there are no duplicated pipelines from feature branches
