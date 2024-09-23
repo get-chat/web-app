@@ -19,6 +19,8 @@ variables:
   PACKAGE_FILE: ${PACKAGE_NAME}.tar.gz
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
+  PUBLIC_URL: "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public"
+
 
 #include:
 #  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
@@ -252,7 +254,6 @@ Pages:
   stage: pages
   image: $NODE_IMAGE
   variables:
-    PUBLIC_URL: ./public
     APP_API_BASE_URL: "https://staging.inbox.platform.get.chat/api/v1/"
     APP_ENV_NAME: "development"
   script:
