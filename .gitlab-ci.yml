@@ -85,7 +85,7 @@ Build:
     #
     # For details, please see:
     # https://gitlab.com/wabbitproject/web-app/-/issues/156
-    - CI=false pnpm build
+    - CI=false PUBLIC_URL=./public pnpm build
 
   # track our built frontend files in GitLab's MR widget/ui
   artifacts:
@@ -251,19 +251,14 @@ Create release on git tag:
 Pages:
   stage: pages
   image: $NODE_IMAGE
+  variables:
+    PUBLIC_URL: ./public
+    API_BASE_URL: "https://staging.inbox.platform.get.chat/api/v1/"
+    APP_ENV_NAME: "development"
   script:
     - cp -r build/* public/
     - sed -i 's|/static/|./static/|g' public/index.html
-    - |
-      echo '{
-        "API_BASE_NAME": "/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/",
-        "API_BASE_URL": "https://staging.inbox.platform.get.chat/api/v1/",
-        "APP_ENV_NAME": "development",
-        "APP_NOTIFICATIONS_LIMIT_PER_MINUTE": "8",
-        "APP_MAX_BULK_DIRECT_RECIPIENTS": "1000",
-        "APP_MAX_BULK_TAG_RECIPIENTS": "10000",
-        "APP_IS_READ_ONLY": "false"
-      }' > public/config.json
+    - envsubst < public/config.json.tmpl > public/config.json
   artifacts:
     paths:
       - public
@@ -273,7 +268,7 @@ Pages:
     - merge_requests
   environment:
     name: review-$CI_COMMIT_REF_NAME
-    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/"
+    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
     on_stop: stop_review
 
 stop_review:

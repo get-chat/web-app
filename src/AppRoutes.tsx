@@ -15,7 +15,7 @@ const AppRoutes: React.FC = () => {
 		paths.map((path) => <Route key={path} path={path} element={Element} />);
 
 	return (
-		<Router basename={window.config.API_BASE_NAME}>
+		<Router>
 			<Routes>
 				<Route path="/app" element={<Navigate to="/main" />} />
 				{renderPaths(

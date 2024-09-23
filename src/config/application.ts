@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export interface AppConfig {
-	API_BASE_NAME: string;
 	API_BASE_URL: string;
 	APP_SENTRY_DSN: string;
 	APP_ENV_NAME: string;
@@ -14,7 +13,7 @@ export interface AppConfig {
 }
 
 export const loadAppConfig = async (): Promise<AppConfig> => {
-	const response = await axios.get('./config.json');
+	const response = await axios.get('/config.json');
 
 	return response.data;
 };
