@@ -8,7 +8,7 @@ stages:
 
 
 variables:
-  NODE_IMAGE: node:16-alpine
+  NODE_IMAGE: node:18-alpine
 
   PNPM_STORE_DIR: .pnpm-store
 
@@ -18,11 +18,11 @@ variables:
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
-include:
-  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
-    file: upstream/jobs.yaml
-    rules:
-      - if: $G_TRIGGER_DEPLOY == "true"
+#include:
+#  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
+#    file: upstream/jobs.yaml
+#    rules:
+#      - if: $G_TRIGGER_DEPLOY == "true"
 
 
 .cache_config: &cache_config

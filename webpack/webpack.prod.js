@@ -25,7 +25,7 @@ module.exports = merge(commonWebpackConfig, {
 				},
 			],
 		}),
-		new SentryWebpackPlugin({
+		/*new SentryWebpackPlugin({
 			org: "getchat",
 			project: "inbox-frontend",
 
@@ -38,6 +38,6 @@ module.exports = merge(commonWebpackConfig, {
 
 			// Optionally uncomment the line below to override automatic release name detection
 			release: packageJson.version,
-		}),
+		}),*/
 	],
 });

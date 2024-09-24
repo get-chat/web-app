@@ -4,16 +4,18 @@ import { clearUserSession } from '@src/helpers/ApiHelper';
 import { AxiosError, AxiosResponse } from 'axios';
 import { storeToken } from '@src/helpers/StorageHelper';
 
-const useIdToken = () => {
+const useRefreshToken = () => {
 	const handle = (apiService: ApiService, onComplete?: () => void) => {
-		const idToken = getURLParams().get('idt');
-		if (idToken) {
+		const refreshToken = getURLParams().get('refresh_token');
+		const keepRefreshToken = getURLParams().get('keep_refresh_token') === '1';
+		if (refreshToken) {
 			// Clear existing user session
 			clearUserSession(undefined, undefined, undefined);
 
-			// Converting id token
-			apiService.convertIdTokenCall(
-				idToken,
+			// Converting refresh token
+			apiService.convertRefreshTokenCall(
+				refreshToken,
+				keepRefreshToken,
 				(response: AxiosResponse) => {
 					// Store token in local storage
 					storeToken(response.data.token);
@@ -42,4 +44,4 @@ const useIdToken = () => {
 	};
 };
 
-export default useIdToken;
+export default useRefreshToken;
