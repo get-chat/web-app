@@ -85,7 +85,7 @@ Build:
     #
     # For details, please see:
     # https://gitlab.com/wabbitproject/web-app/-/issues/156
-    - CI=false PUBLIC_URL=./public pnpm build
+    - CI=false pnpm build
 
   # track our built frontend files in GitLab's MR widget/ui
   artifacts:
