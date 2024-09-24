@@ -46,7 +46,7 @@ import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
-import BulkSendActions from './BulkSendActions';
+import BulkSendActions from './BulkSendActions/BulkSendActions';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
@@ -111,6 +111,7 @@ import {
 	setExportChat,
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
+import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -897,7 +898,14 @@ const Sidebar: React.FC<any> = ({
 				/>
 			)}
 
-			{isSelectionModeEnabled && isExportChat && <div>Export Chats</div>}
+			{isSelectionModeEnabled && isExportChat && (
+				<ExportChatActions
+					selectedChats={selectedChats}
+					setSelectedChats={setSelectedChats}
+					selectedTags={selectedTags}
+					cancelSelection={cancelSelection}
+				/>
+			)}
 
 			<ClickAwayListener
 				onClickAway={() => {

@@ -1,32 +1,32 @@
-.bulkSendActions {
-	background-color: var(--color-primary);
+.container {
+	background-color: var(--color-light-blue);
 	padding: 10px 15px;
 	display: flex;
 	flex-direction: column;
 }
 
-.bulkSendActions > h3 {
+.container > h3 {
 	font-weight: 400;
 	font-size: 18px;
 	color: white;
 }
 
-.bulkSendActions__recipients {
+.recipients {
 	font-size: 14px;
 	color: white;
 }
 
-.bulkSendActions__actions {
+.actions {
 	margin-top: 15px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
 }
 
-.bulkSendActions__actions .MuiButton-text {
+.actions :global(.MuiButton-text) {
 	color: white;
 }
 
-.bulkSendActions__actions .MuiButton-root:first-of-type .MuiButton-label {
+.actions :global(.MuiButton-root:first-of-type) :global(.MuiButton-label) {
 	opacity: 0.75;
 }

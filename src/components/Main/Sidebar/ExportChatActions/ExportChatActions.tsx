@@ -1,16 +1,16 @@
 // @ts-nocheck
 import React from 'react';
 import { Button } from '@mui/material';
-import '../../../styles/BulkSendActions.css';
+import styles from './ExportChatActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 
-function BulkSendActions(props) {
+function ExportChatActions(props) {
 	const { t } = useTranslation();
 	return (
-		<div className="bulkSendActions">
-			<h3>{t('Bulk Send')}</h3>
+		<div className={styles.container}>
+			<h3>{t('Export Chat')}</h3>
 
-			<div className="bulkSendActions__recipients">
+			<div className={styles.recipients}>
 				<Trans
 					values={{
 						postProcess: 'sprintf',
@@ -24,24 +24,17 @@ function BulkSendActions(props) {
 				</Trans>
 			</div>
 
-			<div className="bulkSendActions__actions">
+			<div className={styles.actions}>
 				<Button color="secondary" onClick={props.cancelSelection}>
 					{t('Cancel')}
 				</Button>
 
-				<Button
-					color="secondary"
-					onClick={() => props.setUploadRecipientsCSVVisible(true)}
-				>
-					{t('Upload CSV')}
-				</Button>
-
 				<Button color="primary" onClick={props.finishBulkSendMessage}>
-					{t('Send')}
+					{t('Export')}
 				</Button>
 			</div>
 		</div>
 	);
 }
 
-export default BulkSendActions;
+export default ExportChatActions;
