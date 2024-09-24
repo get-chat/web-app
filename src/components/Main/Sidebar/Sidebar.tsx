@@ -107,7 +107,10 @@ import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import UserProfile from '@src/components/UserProfile';
-import { setSelectionModeEnabled } from '@src/store/reducers/UIReducer';
+import {
+	setExportChat,
+	setSelectionModeEnabled,
+} from '@src/store/reducers/UIReducer';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -146,9 +149,8 @@ const Sidebar: React.FC<any> = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
-		(state) => state.UI.value
-	);
+	const { isReadOnly, isSelectionModeEnabled, isBulkSend, isExportChat } =
+		useAppSelector((state) => state.UI.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
@@ -243,6 +245,12 @@ const Sidebar: React.FC<any> = ({
 	const forceClearContactProvidersData = () => {
 		clearContactProvidersData();
 		window.location.reload();
+	};
+
+	const exportChats = () => {
+		setAnchorEl(null);
+		dispatch(setSelectionModeEnabled(true));
+		dispatch(setExportChat(true));
 	};
 
 	const displayMenu = (event: MouseEvent) => {
@@ -878,7 +886,7 @@ const Sidebar: React.FC<any> = ({
 				</div>
 			</div>
 
-			{isSelectionModeEnabled && (
+			{isSelectionModeEnabled && isBulkSend && (
 				<BulkSendActions
 					selectedChats={selectedChats}
 					setSelectedChats={setSelectedChats}
@@ -888,6 +896,8 @@ const Sidebar: React.FC<any> = ({
 					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 				/>
 			)}
+
+			{isSelectionModeEnabled && isExportChat && <div>Export Chats</div>}
 
 			<ClickAwayListener
 				onClickAway={() => {
@@ -1122,7 +1132,7 @@ const Sidebar: React.FC<any> = ({
 			</ClickAwayListener>
 
 			<div className="sidebar__results">
-				{isSelectionModeEnabled && (
+				{isSelectionModeEnabled && isBulkSend && (
 					<>
 						<Alert severity="info" className={styles.bulkAlert}>
 							{t(
@@ -1153,7 +1163,11 @@ const Sidebar: React.FC<any> = ({
 								</Trans>
 							</Alert>
 						)}
+					</>
+				)}
 
+				{isSelectionModeEnabled && (
+					<>
 						{tags && (
 							<>
 								<h3>{t('Tags')}</h3>
@@ -1328,7 +1342,7 @@ const Sidebar: React.FC<any> = ({
 					{t('Refresh contacts')}
 				</MenuItem>
 				<Divider />
-				<MenuItem onClick={undefined}>
+				<MenuItem onClick={exportChats}>
 					<ListItemIcon>
 						<FileDownloadIcon />
 					</ListItemIcon>

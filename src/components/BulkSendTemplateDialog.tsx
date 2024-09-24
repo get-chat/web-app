@@ -10,7 +10,10 @@ import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
 import { useAppDispatch } from '@src/store/hooks';
-import { setSelectionModeEnabled } from '@src/store/reducers/UIReducer';
+import {
+	setBulkSend,
+	setSelectionModeEnabled,
+} from '@src/store/reducers/UIReducer';
 
 const BulkSendTemplateDialog = ({
 	open,
@@ -33,6 +36,7 @@ const BulkSendTemplateDialog = ({
 
 	const bulkSendMessage = (type, payload) => {
 		dispatch(setSelectionModeEnabled(true));
+		dispatch(setBulkSend(true));
 		setBulkSendPayload(payload);
 
 		sendCallback?.();

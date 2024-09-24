@@ -14,7 +14,10 @@ import { prepareSendFilePayload } from '../helpers/ChatHelper';
 import Alert from '@mui/material/Alert';
 import { AxiosError, AxiosResponse } from 'axios';
 import { useAppDispatch } from '@src/store/hooks';
-import { setSelectionModeEnabled } from '@src/store/reducers/UIReducer';
+import {
+	setBulkSend,
+	setSelectionModeEnabled,
+} from '@src/store/reducers/UIReducer';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
@@ -92,6 +95,7 @@ const SendBulkVoiceMessageDialog = ({
 		setBulkSendPayload(requestBody);
 
 		dispatch(setSelectionModeEnabled(true));
+		dispatch(setBulkSend(true));
 
 		// Hide the dialog
 		setOpen(false);

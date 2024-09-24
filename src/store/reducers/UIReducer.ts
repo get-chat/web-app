@@ -7,6 +7,8 @@ interface UIState {
 		isContactDetailsVisible: boolean;
 		isSearchMessagesVisible: boolean;
 		isSelectionModeEnabled: boolean;
+		isBulkSend: boolean;
+		isExportChat: boolean;
 	};
 }
 
@@ -17,6 +19,8 @@ const initialState: UIState = {
 		isContactDetailsVisible: false,
 		isSearchMessagesVisible: false,
 		isSelectionModeEnabled: false,
+		isBulkSend: false,
+		isExportChat: false,
 	},
 };
 
@@ -47,6 +51,17 @@ export const UISlice = createSlice({
 		},
 		setSelectionModeEnabled: (state, action: PayloadAction<boolean>) => {
 			state.value.isSelectionModeEnabled = action.payload;
+
+			if (!action.payload) {
+				state.value.isBulkSend = false;
+				state.value.isExportChat = false;
+			}
+		},
+		setBulkSend: (state, action: PayloadAction<boolean>) => {
+			state.value.isBulkSend = action.payload;
+		},
+		setExportChat: (state, action: PayloadAction<boolean>) => {
+			state.value.isExportChat = action.payload;
 		},
 	},
 });
@@ -57,6 +72,8 @@ export const {
 	setContactDetailsVisible,
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
+	setBulkSend,
+	setExportChat,
 } = UISlice.actions;
 
 export default UISlice.reducer;
