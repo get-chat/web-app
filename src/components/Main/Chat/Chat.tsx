@@ -92,6 +92,7 @@ import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 import ChatModel from '@src/api/models/ChatModel';
 import decode from 'unescape';
+import { setSelectionModeEnabled } from '@src/store/reducers/UIReducer';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1366,7 +1367,7 @@ const Chat: React.FC = (props) => {
 	};
 
 	const bulkSendMessage = (type, payload) => {
-		props.setSelectionModeEnabled(true);
+		dispatch(setSelectionModeEnabled(true));
 
 		if (type === ChatMessageModel.TYPE_TEXT) {
 			const preparedInput = translateHTMLInputToText(input).trim();

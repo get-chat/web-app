@@ -6,6 +6,7 @@ interface UIState {
 		isMessageStatusesVisible: boolean;
 		isContactDetailsVisible: boolean;
 		isSearchMessagesVisible: boolean;
+		isSelectionModeEnabled: boolean;
 	};
 }
 
@@ -15,6 +16,7 @@ const initialState: UIState = {
 		isMessageStatusesVisible: false,
 		isContactDetailsVisible: false,
 		isSearchMessagesVisible: false,
+		isSelectionModeEnabled: false,
 	},
 };
 
@@ -43,6 +45,9 @@ export const UISlice = createSlice({
 			closeSections(state);
 			state.value.isSearchMessagesVisible = action.payload;
 		},
+		setSelectionModeEnabled: (state, action: PayloadAction<boolean>) => {
+			state.value.isSelectionModeEnabled = action.payload;
+		},
 	},
 });
 
@@ -51,6 +56,7 @@ export const {
 	setMessageStatusesVisible,
 	setContactDetailsVisible,
 	setSearchMessagesVisible,
+	setSelectionModeEnabled,
 } = UISlice.actions;
 
 export default UISlice.reducer;

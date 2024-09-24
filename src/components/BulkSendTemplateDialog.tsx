@@ -9,17 +9,19 @@ import '../styles/SendBulkVoiceMessageDialog.css';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import TemplateModel from '@src/api/models/TemplateModel';
+import { useAppDispatch } from '@src/store/hooks';
+import { setSelectionModeEnabled } from '@src/store/reducers/UIReducer';
 
 const BulkSendTemplateDialog = ({
 	open,
 	setOpen,
 	setBulkSendPayload,
-	setSelectionModeEnabled,
 	isTemplatesFailed,
 	isLoadingTemplates,
 	sendCallback,
 }) => {
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
 
 	const [chosenTemplate, setChosenTemplate] = useState();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
@@ -30,7 +32,7 @@ const BulkSendTemplateDialog = ({
 	};
 
 	const bulkSendMessage = (type, payload) => {
-		setSelectionModeEnabled(true);
+		dispatch(setSelectionModeEnabled(true));
 		setBulkSendPayload(payload);
 
 		sendCallback?.();

@@ -107,6 +107,7 @@ import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import UserProfile from '@src/components/UserProfile';
+import { setSelectionModeEnabled } from '@src/store/reducers/UIReducer';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -127,8 +128,6 @@ const Sidebar: React.FC<any> = ({
 	contactProvidersData,
 	isChatOnly,
 	setChatTagsListVisible,
-	isSelectionModeEnabled,
-	setSelectionModeEnabled,
 	bulkSendPayload,
 	selectedChats,
 	setSelectedChats,
@@ -147,7 +146,9 @@ const Sidebar: React.FC<any> = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
+		(state) => state.UI.value
+	);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
@@ -791,13 +792,13 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const cancelSelection = () => {
-		setSelectionModeEnabled(false);
+		dispatch(setSelectionModeEnabled(false));
 		setSelectedChats([]);
 		setSelectedTags([]);
 	};
 
 	const handleFinishBulkSendMessage = () => {
-		setSelectionModeEnabled(false);
+		dispatch(setSelectionModeEnabled(false));
 		finishBulkSendMessage();
 	};
 
@@ -1210,7 +1211,6 @@ const Sidebar: React.FC<any> = ({
 									filterAssignedToMe={filterAssignedToMe}
 									filterAssignedGroupId={filterAssignedGroupId}
 									bulkSendPayload={bulkSendPayload}
-									isSelectionModeEnabled={isSelectionModeEnabled}
 									selectedChats={selectedChats}
 									setSelectedChats={setSelectedChats}
 								/>
