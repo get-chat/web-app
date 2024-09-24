@@ -22,7 +22,7 @@ import { useAppSelector } from '@src/store/hooks';
 const cx = classNames.bind(styles);
 
 const ChatListItem = (props: any) => {
-	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
+	const { isReadOnly, isSelectionModeEnabled, isBulkSend } = useAppSelector(
 		(state) => state.UI.value
 	);
 
@@ -106,7 +106,7 @@ const ChatListItem = (props: any) => {
 							className={styles.selection}
 							checked={isSelected}
 							color="primary"
-							disabled={isDisabled}
+							disabled={isDisabled && isBulkSend}
 						/>
 					)}
 

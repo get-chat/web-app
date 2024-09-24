@@ -8,7 +8,7 @@ function ExportChatActions(props) {
 	const { t } = useTranslation();
 	return (
 		<div className={styles.container}>
-			<h3>{t('Export Chat')}</h3>
+			<h3>{t('Export Chats')}</h3>
 
 			<div className={styles.recipients}>
 				<Trans
@@ -29,7 +29,7 @@ function ExportChatActions(props) {
 					{t('Cancel')}
 				</Button>
 
-				<Button color="primary" onClick={props.finishBulkSendMessage}>
+				<Button color="primary" onClick={undefined}>
 					{t('Export')}
 				</Button>
 			</div>

@@ -11,7 +11,9 @@ import { useAppSelector } from '@src/store/hooks';
 const useChatListItem = ({ props }: { props: any }) => {
 	const data: ChatModel = props.chatData;
 
-	const { isSelectionModeEnabled } = useAppSelector((state) => state.UI.value);
+	const { isSelectionModeEnabled, isBulkSend } = useAppSelector(
+		(state) => state.UI.value
+	);
 
 	const [isSelected, setSelected] = useState(false);
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
@@ -160,7 +162,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 	const handleClick = () => {
 		if (isSelectionModeEnabled) {
-			if (isDisabled) return;
+			if (isDisabled && isBulkSend) return;
 
 			let newSelectedState = !isSelected;
 
