@@ -30,6 +30,10 @@ function ExportChatActions(props) {
 				</Button>
 
 				<Button color="primary" onClick={undefined}>
+					{t('Select by date')}
+				</Button>
+
+				<Button color="primary" onClick={undefined}>
 					{t('Export')}
 				</Button>
 			</div>
