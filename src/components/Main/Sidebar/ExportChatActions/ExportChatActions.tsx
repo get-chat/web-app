@@ -27,9 +27,9 @@ const ExportChatActions: React.FC<Props> = ({
 			<h3>{t('Export Chats')}</h3>
 
 			<div className={styles.recipients}>
-				{startDate ? (
-					formattedDateRange
-				) : (
+				{startDate && <div>{formattedDateRange}</div>}
+
+				{(selectedChats.length || selectedTags.length || !startDate) && (
 					<Trans
 						values={{
 							postProcess: 'sprintf',
