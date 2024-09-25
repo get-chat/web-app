@@ -6,12 +6,18 @@ import { Trans, useTranslation } from 'react-i18next';
 interface Props {
 	selectedChats: string[];
 	selectedTags: any[];
+	onShowDateRange: () => void;
+	startDate: Date | undefined;
+	endDate: Date | undefined;
 	onCancel: () => void;
 }
 
 const ExportChatActions: React.FC<Props> = ({
 	selectedChats,
 	selectedTags,
+	onShowDateRange,
+	startDate,
+	endDate,
 	onCancel,
 }) => {
 	const { t } = useTranslation();
@@ -38,7 +44,7 @@ const ExportChatActions: React.FC<Props> = ({
 					{t('Cancel')}
 				</Button>
 
-				<Button color="primary" onClick={undefined}>
+				<Button color="primary" onClick={onShowDateRange}>
 					{t('Select by date')}
 				</Button>
 

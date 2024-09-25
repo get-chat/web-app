@@ -221,6 +221,9 @@ const Sidebar: React.FC<any> = ({
 	const [isFiltersVisible, setFiltersVisible] = useState(true);
 	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
 
+	const [exportStartDate, setExportStartDate] = useState<Date | undefined>();
+	const [exportEndDate, setExportEndDate] = useState<Date | undefined>();
+
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
 
@@ -902,6 +905,9 @@ const Sidebar: React.FC<any> = ({
 				<ExportChatActions
 					selectedChats={selectedChats}
 					selectedTags={selectedTags}
+					onShowDateRange={() => setDateRangeDialogVisible(true)}
+					startDate={exportStartDate}
+					endDate={exportEndDate}
 					onCancel={cancelSelection}
 				/>
 			)}
@@ -1127,12 +1133,18 @@ const Sidebar: React.FC<any> = ({
 								))}
 					</Menu>
 
+					{/* Filter or export by date range */}
 					<DateRangeDialog
 						open={isDateRangeDialogVisible}
 						setOpen={setDateRangeDialogVisible}
 						onDone={(startDate, endDate) => {
-							setFilterStartDate(startDate);
-							setFilterEndDate(endDate);
+							if (isExportChat) {
+								setExportStartDate(startDate);
+								setExportEndDate(endDate);
+							} else {
+								setFilterStartDate(startDate);
+								setFilterEndDate(endDate);
+							}
 						}}
 					/>
 				</div>
