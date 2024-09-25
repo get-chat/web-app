@@ -9,6 +9,7 @@ interface Props {
 	onShowDateRange: () => void;
 	startDate: Date | undefined;
 	endDate: Date | undefined;
+	formattedDateRange?: string;
 	onCancel: () => void;
 }
 
@@ -17,7 +18,7 @@ const ExportChatActions: React.FC<Props> = ({
 	selectedTags,
 	onShowDateRange,
 	startDate,
-	endDate,
+	formattedDateRange,
 	onCancel,
 }) => {
 	const { t } = useTranslation();
@@ -26,17 +27,21 @@ const ExportChatActions: React.FC<Props> = ({
 			<h3>{t('Export Chats')}</h3>
 
 			<div className={styles.recipients}>
-				<Trans
-					values={{
-						postProcess: 'sprintf',
-						sprintf: {
-							contacts_count: selectedChats.length,
-							tags_count: selectedTags.length,
-						},
-					}}
-				>
-					Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
-				</Trans>
+				{startDate ? (
+					formattedDateRange
+				) : (
+					<Trans
+						values={{
+							postProcess: 'sprintf',
+							sprintf: {
+								contacts_count: selectedChats.length,
+								tags_count: selectedTags.length,
+							},
+						}}
+					>
+						Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
+					</Trans>
+				)}
 			</div>
 
 			<div className={styles.actions}>

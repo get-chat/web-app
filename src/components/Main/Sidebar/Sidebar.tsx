@@ -908,7 +908,18 @@ const Sidebar: React.FC<any> = ({
 					onShowDateRange={() => setDateRangeDialogVisible(true)}
 					startDate={exportStartDate}
 					endDate={exportEndDate}
-					onCancel={cancelSelection}
+					formattedDateRange={
+						exportEndDate
+							? formatDateRangeFilters(exportStartDate, exportEndDate)
+							: undefined
+					}
+					onCancel={() => {
+						cancelSelection();
+
+						// Additionally clear dates
+						setExportStartDate(undefined);
+						setExportEndDate(undefined);
+					}}
 				/>
 			)}
 
