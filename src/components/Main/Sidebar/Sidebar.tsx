@@ -901,9 +901,8 @@ const Sidebar: React.FC<any> = ({
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
 					selectedChats={selectedChats}
-					setSelectedChats={setSelectedChats}
 					selectedTags={selectedTags}
-					cancelSelection={cancelSelection}
+					onCancel={cancelSelection}
 				/>
 			)}
 

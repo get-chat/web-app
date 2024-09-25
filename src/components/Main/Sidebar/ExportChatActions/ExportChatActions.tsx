@@ -1,10 +1,19 @@
-// @ts-nocheck
 import React from 'react';
 import { Button } from '@mui/material';
 import styles from './ExportChatActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 
-function ExportChatActions(props) {
+interface Props {
+	selectedChats: string[];
+	selectedTags: any[];
+	onCancel: () => void;
+}
+
+const ExportChatActions: React.FC<Props> = ({
+	selectedChats,
+	selectedTags,
+	onCancel,
+}) => {
 	const { t } = useTranslation();
 	return (
 		<div className={styles.container}>
@@ -15,8 +24,8 @@ function ExportChatActions(props) {
 					values={{
 						postProcess: 'sprintf',
 						sprintf: {
-							contacts_count: props.selectedChats.length,
-							tags_count: props.selectedTags.length,
+							contacts_count: selectedChats.length,
+							tags_count: selectedTags.length,
 						},
 					}}
 				>
@@ -25,7 +34,7 @@ function ExportChatActions(props) {
 			</div>
 
 			<div className={styles.actions}>
-				<Button color="secondary" onClick={props.cancelSelection}>
+				<Button color="secondary" onClick={onCancel}>
 					{t('Cancel')}
 				</Button>
 
@@ -39,6 +48,6 @@ function ExportChatActions(props) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default ExportChatActions;
