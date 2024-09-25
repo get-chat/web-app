@@ -7,9 +7,6 @@ interface Props {
 	selectedChats: string[];
 	selectedTags: any[];
 	onShowDateRange: () => void;
-	startDate: Date | undefined;
-	endDate: Date | undefined;
-	formattedDateRange?: string;
 	onCancel: () => void;
 }
 
@@ -17,8 +14,6 @@ const ExportChatActions: React.FC<Props> = ({
 	selectedChats,
 	selectedTags,
 	onShowDateRange,
-	startDate,
-	formattedDateRange,
 	onCancel,
 }) => {
 	const { t } = useTranslation();
@@ -27,21 +22,17 @@ const ExportChatActions: React.FC<Props> = ({
 			<h3>{t('Export Chats')}</h3>
 
 			<div className={styles.recipients}>
-				{startDate && <div>{formattedDateRange}</div>}
-
-				{(selectedChats.length || selectedTags.length || !startDate) && (
-					<Trans
-						values={{
-							postProcess: 'sprintf',
-							sprintf: {
-								contacts_count: selectedChats.length,
-								tags_count: selectedTags.length,
-							},
-						}}
-					>
-						Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
-					</Trans>
-				)}
+				<Trans
+					values={{
+						postProcess: 'sprintf',
+						sprintf: {
+							contacts_count: selectedChats.length,
+							tags_count: selectedTags.length,
+						},
+					}}
+				>
+					Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
+				</Trans>
 			</div>
 
 			<div className={styles.actions}>
@@ -50,10 +41,14 @@ const ExportChatActions: React.FC<Props> = ({
 				</Button>
 
 				<Button color="primary" onClick={onShowDateRange}>
-					{t('Select by date')}
+					{t('Export by date')}
 				</Button>
 
-				<Button color="primary" onClick={undefined}>
+				<Button
+					color="primary"
+					onClick={undefined}
+					disabled={selectedChats.length === 0 && selectedTags.length === 0}
+				>
 					{t('Export')}
 				</Button>
 			</div>

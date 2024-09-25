@@ -906,20 +906,7 @@ const Sidebar: React.FC<any> = ({
 					selectedChats={selectedChats}
 					selectedTags={selectedTags}
 					onShowDateRange={() => setDateRangeDialogVisible(true)}
-					startDate={exportStartDate}
-					endDate={exportEndDate}
-					formattedDateRange={
-						exportEndDate
-							? formatDateRangeFilters(exportStartDate, exportEndDate)
-							: undefined
-					}
-					onCancel={() => {
-						cancelSelection();
-
-						// Additionally clear dates
-						setExportStartDate(undefined);
-						setExportEndDate(undefined);
-					}}
+					onCancel={cancelSelection}
 				/>
 			)}
 
@@ -1152,6 +1139,8 @@ const Sidebar: React.FC<any> = ({
 							if (isExportChat) {
 								setExportStartDate(startDate);
 								setExportEndDate(endDate);
+
+								// TODO: Export chats by date
 							} else {
 								setFilterStartDate(startDate);
 								setFilterEndDate(endDate);
