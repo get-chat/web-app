@@ -7,6 +7,7 @@ interface Props {
 	selectedChats: string[];
 	selectedTags: any[];
 	onShowDateRange: () => void;
+	onExport: () => void;
 	onCancel: () => void;
 }
 
@@ -14,6 +15,7 @@ const ExportChatActions: React.FC<Props> = ({
 	selectedChats,
 	selectedTags,
 	onShowDateRange,
+	onExport,
 	onCancel,
 }) => {
 	const { t } = useTranslation();
@@ -46,7 +48,7 @@ const ExportChatActions: React.FC<Props> = ({
 
 				<Button
 					color="primary"
-					onClick={undefined}
+					onClick={onExport}
 					disabled={selectedChats.length === 0 && selectedTags.length === 0}
 				>
 					{t('Export')}
