@@ -84,15 +84,17 @@ export class ApiService {
 		);
 	};
 
-	convertIdTokenCall = (
-		idToken,
+	convertRefreshTokenCall = (
+		refreshToken,
+		keepRefreshToken: boolean,
 		successCallback,
 		errorCallback,
 		completeCallback
 	) => {
 		this.handleRequest(
-			axios.post(`${this.apiBaseURL}auth/convert_id_token/`, {
-				id_token: idToken,
+			axios.post(`${this.apiBaseURL}auth/convert_refresh_token/`, {
+				refresh_token: refreshToken,
+				keep_refresh_token: keepRefreshToken,
 			}),
 			successCallback,
 			errorCallback,

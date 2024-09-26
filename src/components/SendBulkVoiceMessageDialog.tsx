@@ -13,6 +13,11 @@ import '../styles/SendBulkVoiceMessageDialog.css';
 import { prepareSendFilePayload } from '../helpers/ChatHelper';
 import Alert from '@mui/material/Alert';
 import { AxiosError, AxiosResponse } from 'axios';
+import { useAppDispatch } from '@src/store/hooks';
+import {
+	setBulkSend,
+	setSelectionModeEnabled,
+} from '@src/store/reducers/UIReducer';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
@@ -20,12 +25,12 @@ const SendBulkVoiceMessageDialog = ({
 	setOpen,
 	setUploadingMedia,
 	setBulkSendPayload,
-	setSelectionModeEnabled,
 }) => {
 	// TODO: Handle isRecording globally to avoid conflicts
 	const [isRecording, setRecording] = useState(false);
 
 	const { t } = useTranslation();
+	const dispatch = useAppDispatch();
 
 	const close = () => {
 		setOpen(false);
@@ -89,7 +94,8 @@ const SendBulkVoiceMessageDialog = ({
 		const requestBody = prepareSendFilePayload(chosenFile, fileURL);
 		setBulkSendPayload(requestBody);
 
-		setSelectionModeEnabled(true);
+		dispatch(setSelectionModeEnabled(true));
+		dispatch(setBulkSend(true));
 
 		// Hide the dialog
 		setOpen(false);

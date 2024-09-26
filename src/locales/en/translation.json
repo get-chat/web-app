@@ -307,5 +307,9 @@
 	"There are some problems sending your message:": "",
 	"There were some problems sending your message, but your message was sent successfully after problems have resolved.": "",
 	"Save as quick reply": "",
-	"Register new template": ""
+	"Register new template": "",
+	"Export Chats": "",
+	"Export chats": "",
+	"Export by date": "",
+	"Export": ""
 }

@@ -5,10 +5,12 @@ stages:
   - package
   - release
   - deploy
+  - pages
+  - cleanup
 
 
 variables:
-  NODE_IMAGE: node:16-alpine
+  NODE_IMAGE: node:18-alpine
 
   PNPM_STORE_DIR: .pnpm-store
 
@@ -18,11 +20,11 @@ variables:
   PACKAGE_REGISTRY_URL: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_FILE}
 
 
-include:
-  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
-    file: upstream/jobs.yaml
-    rules:
-      - if: $G_TRIGGER_DEPLOY == "true"
+#include:
+#  - project: wabbitproject/platform/apps-deployment/mngt-apps/inbox-frontend
+#    file: upstream/jobs.yaml
+#    rules:
+#      - if: $G_TRIGGER_DEPLOY == "true"
 
 
 .cache_config: &cache_config
@@ -245,3 +247,35 @@ Create release on git tag:
         - name: $PACKAGE_FILE
           url: $PACKAGE_REGISTRY_URL
           link_type: package
+
+Pages:
+  stage: pages
+  image: $NODE_IMAGE
+  variables:
+    APP_API_BASE_URL: "https://staging.inbox.platform.get.chat/api/v1/"
+    APP_ENV_NAME: "development"
+  script:
+    - apk add --no-cache gettext # Adds envsubst
+    - cp -r build/* public/
+    - sed -i 's|/static/|./static/|g' public/index.html
+    - envsubst < public/config.json.tmpl > public/config.json
+  artifacts:
+    paths:
+      - public
+    expire_in: 14 days
+  only:
+    # This makes sure there are no duplicated pipelines from feature branches
+    - merge_requests
+  environment:
+    name: review-$CI_COMMIT_REF_NAME
+    url: "https://$CI_PROJECT_NAMESPACE.gitlab.io/-/$CI_PROJECT_NAME/-/jobs/$CI_JOB_ID/artifacts/public/index.html"
+    on_stop: stop_review
+
+stop_review:
+  stage: cleanup
+  script:
+    - echo "Cleaning up the review environment..."
+  environment:
+    name: review-$CI_COMMIT_REF_NAME
+    action: stop
+  when: manual

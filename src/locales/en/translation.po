@@ -960,3 +960,15 @@ msgstr ""
 
 msgid "Register new template"
 msgstr ""
+
+msgid "Export Chats"
+msgstr ""
+
+msgid "Export chats"
+msgstr ""
+
+msgid "Export by date"
+msgstr ""
+
+msgid "Export"
+msgstr ""
