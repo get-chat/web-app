@@ -5,12 +5,7 @@ import Chat from './Chat/Chat';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios from 'axios';
-import {
-	useLocation,
-	useNavigate,
-	useParams,
-	useSearchParams,
-} from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
@@ -78,6 +73,7 @@ import {
 	setContactDetailsVisible,
 	setMessageStatusesVisible,
 	setSearchMessagesVisible,
+	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 
 function useQuery() {
@@ -146,7 +142,6 @@ function Main() {
 	const [messageWithStatuses, setMessageWithStatuses] =
 		useState<ChatMessageModel>();
 
-	const [isSelectionModeEnabled, setSelectionModeEnabled] = useState(false);
 	const [selectedChats, setSelectedChats] = useState<string[]>([]);
 	const [selectedTags, setSelectedTags] = useState([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
@@ -259,7 +254,7 @@ function Main() {
 
 		apiService.bulkSendCall(requestPayload, (response) => {
 			// Disable selection mode
-			setSelectionModeEnabled(false);
+			dispatch(setSelectionModeEnabled(false));
 
 			// Clear selections
 			setSelectedChats([]);
@@ -1017,8 +1012,6 @@ function Main() {
 						contactProvidersData={contactProvidersData}
 						isChatOnly={isChatOnly}
 						setChatTagsListVisible={setChatTagsListVisible}
-						isSelectionModeEnabled={isSelectionModeEnabled}
-						setSelectionModeEnabled={setSelectionModeEnabled}
 						bulkSendPayload={bulkSendPayload}
 						selectedChats={selectedChats}
 						setSelectedChats={setSelectedChats}
@@ -1062,7 +1055,6 @@ function Main() {
 						isChatOnly={isChatOnly}
 						setChatAssignmentVisible={setChatAssignmentVisible}
 						setChatTagsVisible={setChatTagsVisible}
-						setSelectionModeEnabled={setSelectionModeEnabled}
 						setBulkSendPayload={setBulkSendPayload}
 						searchMessagesByKeyword={searchMessagesByKeyword}
 						setMessageWithStatuses={setMessageWithStatuses}
@@ -1162,14 +1154,12 @@ function Main() {
 					open={isBulkSendTemplateDialogVisible}
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					setSelectionModeEnabled={setSelectionModeEnabled}
 				/>
 
 				<BulkSendTemplateDialog
 					open={isBulkSendTemplateWithCallbackDialogVisible}
 					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					setSelectionModeEnabled={setSelectionModeEnabled}
 					sendCallback={() => {
 						setUploadRecipientsCSVVisible(true);
 					}}
@@ -1194,7 +1184,6 @@ function Main() {
 					setOpen={setSendBulkVoiceMessageDialogVisible}
 					setUploadingMedia={setUploadingMedia}
 					setBulkSendPayload={setBulkSendPayload}
-					setSelectionModeEnabled={setSelectionModeEnabled}
 				/>
 			</div>
 		</Fade>

@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {
 	containsLetters,
 	generateInitialsHelper,
@@ -45,7 +46,7 @@ import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
-import BulkSendActions from './BulkSendActions';
+import BulkSendActions from './BulkSendActions/BulkSendActions';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
@@ -106,6 +107,11 @@ import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import UserProfile from '@src/components/UserProfile';
+import {
+	setExportChat,
+	setSelectionModeEnabled,
+} from '@src/store/reducers/UIReducer';
+import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -126,8 +132,6 @@ const Sidebar: React.FC<any> = ({
 	contactProvidersData,
 	isChatOnly,
 	setChatTagsListVisible,
-	isSelectionModeEnabled,
-	setSelectionModeEnabled,
 	bulkSendPayload,
 	selectedChats,
 	setSelectedChats,
@@ -146,7 +150,8 @@ const Sidebar: React.FC<any> = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly, isSelectionModeEnabled, isBulkSend, isExportChat } =
+		useAppSelector((state) => state.UI.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
@@ -216,6 +221,9 @@ const Sidebar: React.FC<any> = ({
 	const [isFiltersVisible, setFiltersVisible] = useState(true);
 	const [isDateRangeDialogVisible, setDateRangeDialogVisible] = useState(false);
 
+	const [exportStartDate, setExportStartDate] = useState<Date | undefined>();
+	const [exportEndDate, setExportEndDate] = useState<Date | undefined>();
+
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
 
@@ -241,6 +249,12 @@ const Sidebar: React.FC<any> = ({
 	const forceClearContactProvidersData = () => {
 		clearContactProvidersData();
 		window.location.reload();
+	};
+
+	const exportChats = () => {
+		setAnchorEl(null);
+		dispatch(setSelectionModeEnabled(true));
+		dispatch(setExportChat(true));
 	};
 
 	const displayMenu = (event: MouseEvent) => {
@@ -790,13 +804,13 @@ const Sidebar: React.FC<any> = ({
 	};
 
 	const cancelSelection = () => {
-		setSelectionModeEnabled(false);
+		dispatch(setSelectionModeEnabled(false));
 		setSelectedChats([]);
 		setSelectedTags([]);
 	};
 
 	const handleFinishBulkSendMessage = () => {
-		setSelectionModeEnabled(false);
+		dispatch(setSelectionModeEnabled(false));
 		finishBulkSendMessage();
 	};
 
@@ -876,7 +890,7 @@ const Sidebar: React.FC<any> = ({
 				</div>
 			</div>
 
-			{isSelectionModeEnabled && (
+			{isSelectionModeEnabled && isBulkSend && (
 				<BulkSendActions
 					selectedChats={selectedChats}
 					setSelectedChats={setSelectedChats}
@@ -884,6 +898,31 @@ const Sidebar: React.FC<any> = ({
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={handleFinishBulkSendMessage}
 					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
+				/>
+			)}
+
+			{isSelectionModeEnabled && isExportChat && (
+				<ExportChatActions
+					selectedChats={selectedChats}
+					selectedTags={selectedTags}
+					onShowDateRange={() => setDateRangeDialogVisible(true)}
+					onExport={() => {
+						// TODO: Export chats
+						setTimeout(
+							() =>
+								alert(
+									'TODO: Export chats for: ' +
+										JSON.stringify(selectedChats) +
+										' ' +
+										JSON.stringify(selectedTags)
+								),
+							1
+						);
+
+						cancelSelection();
+						dispatch(setExportChat(false));
+					}}
+					onCancel={cancelSelection}
 				/>
 			)}
 
@@ -1108,19 +1147,39 @@ const Sidebar: React.FC<any> = ({
 								))}
 					</Menu>
 
+					{/* Filter or export by date range */}
 					<DateRangeDialog
 						open={isDateRangeDialogVisible}
 						setOpen={setDateRangeDialogVisible}
 						onDone={(startDate, endDate) => {
-							setFilterStartDate(startDate);
-							setFilterEndDate(endDate);
+							if (isExportChat) {
+								setExportStartDate(startDate);
+								setExportEndDate(endDate);
+
+								// Close export chat UI
+								cancelSelection();
+								dispatch(setExportChat(false));
+
+								// TODO: Export chats by date
+								setTimeout(
+									() =>
+										alert(
+											'TODO: Export chats for: ' +
+												formatDateRangeFilters(startDate, endDate)
+										),
+									1
+								);
+							} else {
+								setFilterStartDate(startDate);
+								setFilterEndDate(endDate);
+							}
 						}}
 					/>
 				</div>
 			</ClickAwayListener>
 
 			<div className="sidebar__results">
-				{isSelectionModeEnabled && (
+				{isSelectionModeEnabled && isBulkSend && (
 					<>
 						<Alert severity="info" className={styles.bulkAlert}>
 							{t(
@@ -1151,7 +1210,11 @@ const Sidebar: React.FC<any> = ({
 								</Trans>
 							</Alert>
 						)}
+					</>
+				)}
 
+				{isSelectionModeEnabled && (
+					<>
 						{tags && (
 							<>
 								<h3>{t('Tags')}</h3>
@@ -1209,7 +1272,6 @@ const Sidebar: React.FC<any> = ({
 									filterAssignedToMe={filterAssignedToMe}
 									filterAssignedGroupId={filterAssignedGroupId}
 									bulkSendPayload={bulkSendPayload}
-									isSelectionModeEnabled={isSelectionModeEnabled}
 									selectedChats={selectedChats}
 									setSelectedChats={setSelectedChats}
 								/>
@@ -1326,6 +1388,13 @@ const Sidebar: React.FC<any> = ({
 					</ListItemIcon>
 					{t('Refresh contacts')}
 				</MenuItem>
+				{/*<Divider />
+				<MenuItem onClick={exportChats}>
+					<ListItemIcon>
+						<FileDownloadIcon />
+					</ListItemIcon>
+					{t('Export chats')}
+				</MenuItem>*/}
 				{currentUser?.isAdmin && <Divider />}
 				{currentUser?.isAdmin && (
 					<MenuItem

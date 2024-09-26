@@ -990,3 +990,15 @@ msgstr "Hızlı yanıt olarak kaydet"
 
 msgid "Register new template"
 msgstr "Yeni taslak kaydet"
+
+msgid "Export Chats"
+msgstr "Sohbetleri Dışa Aktar"
+
+msgid "Export chats"
+msgstr "Sohbetleri dışa aktar"
+
+msgid "Export by date"
+msgstr "Tarihe göre dışa aktar"
+
+msgid "Export"
+msgstr "Dışa aktar"

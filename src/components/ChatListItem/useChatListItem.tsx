@@ -6,9 +6,14 @@ import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_DROPPED_FILES } from '@src/Constants';
 import { useTranslation } from 'react-i18next';
 import ChatModel from '@src/api/models/ChatModel';
+import { useAppSelector } from '@src/store/hooks';
 
 const useChatListItem = ({ props }: { props: any }) => {
 	const data: ChatModel = props.chatData;
+
+	const { isSelectionModeEnabled, isBulkSend } = useAppSelector(
+		(state) => state.UI.value
+	);
 
 	const [isSelected, setSelected] = useState(false);
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
@@ -156,8 +161,8 @@ const useChatListItem = ({ props }: { props: any }) => {
 	};
 
 	const handleClick = () => {
-		if (props.isSelectionModeEnabled) {
-			if (isDisabled) return;
+		if (isSelectionModeEnabled) {
+			if (isDisabled && isBulkSend) return;
 
 			let newSelectedState = !isSelected;
 

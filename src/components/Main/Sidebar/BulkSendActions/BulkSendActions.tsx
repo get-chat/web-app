@@ -1,16 +1,16 @@
 // @ts-nocheck
 import React from 'react';
 import { Button } from '@mui/material';
-import '../../../styles/BulkSendActions.css';
+import styles from './BulkSendActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 
 function BulkSendActions(props) {
 	const { t } = useTranslation();
 	return (
-		<div className="bulkSendActions">
+		<div className={styles.container}>
 			<h3>{t('Bulk Send')}</h3>
 
-			<div className="bulkSendActions__recipients">
+			<div className={styles.recipients}>
 				<Trans
 					values={{
 						postProcess: 'sprintf',
@@ -24,7 +24,7 @@ function BulkSendActions(props) {
 				</Trans>
 			</div>
 
-			<div className="bulkSendActions__actions">
+			<div className={styles.actions}>
 				<Button color="secondary" onClick={props.cancelSelection}>
 					{t('Cancel')}
 				</Button>

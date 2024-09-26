@@ -22,7 +22,9 @@ import { useAppSelector } from '@src/store/hooks';
 const cx = classNames.bind(styles);
 
 const ChatListItem = (props: any) => {
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly, isSelectionModeEnabled, isBulkSend } = useAppSelector(
+		(state) => state.UI.value
+	);
 
 	const { t } = useTranslation();
 
@@ -93,18 +95,18 @@ const ChatListItem = (props: any) => {
 					active: waId === data.waId,
 					expired: isExpired,
 					almostExpired: remainingSeconds < 8 * 60 * 60,
-					selected: props.isSelectionModeEnabled && isSelected,
+					selected: isSelectionModeEnabled && isSelected,
 				})}
 				onDrop={handleDroppedFiles}
 				onDragOver={handleDragOver}
 			>
 				<div className={styles.item}>
-					{props.isSelectionModeEnabled && (
+					{isSelectionModeEnabled && (
 						<Checkbox
 							className={styles.selection}
 							checked={isSelected}
 							color="primary"
-							disabled={isDisabled}
+							disabled={isDisabled && isBulkSend}
 						/>
 					)}
 
