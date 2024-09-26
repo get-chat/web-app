@@ -1388,13 +1388,13 @@ const Sidebar: React.FC<any> = ({
 					</ListItemIcon>
 					{t('Refresh contacts')}
 				</MenuItem>
-				<Divider />
+				{/*<Divider />
 				<MenuItem onClick={exportChats}>
 					<ListItemIcon>
 						<FileDownloadIcon />
 					</ListItemIcon>
 					{t('Export chats')}
-				</MenuItem>
+				</MenuItem>*/}
 				{currentUser?.isAdmin && <Divider />}
 				{currentUser?.isAdmin && (
 					<MenuItem
