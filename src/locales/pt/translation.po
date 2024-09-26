@@ -1,0 +1,938 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 2023-06-27\n"
+"Report-Msgid-Bugs-To: support@get.chat\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: get.chat Team <support@get.chat>\n"
+"Language-Team: get.chat Team\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.4.2\n"
+
+msgid "<0>%s</0> has changed chat assignments."
+msgstr "<0>%s</0> mudou as atribuições do chat."
+
+msgid "Chat assignments were changed."
+msgstr "As atribuições do bate-papo foram alteradas."
+
+msgid "assigned to user: <1>%s</1>"
+msgstr "atribuído ao usuário: <1>%s</1>"
+
+msgid "assigned to group: <1>%s</1>"
+msgstr "atribuído ao grupo: <1>%s</1>"
+
+msgid "cleared assigned user"
+msgstr "usuário atribuído limpo"
+
+msgid "cleared assigned group"
+msgstr "grupo atribuído limpo"
+
+msgid "There is no phone number"
+msgstr "Não há número de telefone"
+
+msgid "%d more phone number"
+msgid_plural "%d more phone numbers"
+msgstr[0] "%d more phone number"
+msgstr[1] "%d more phone numbers"
+
+msgid "Choose a phone number"
+msgstr "Escolha um número de telefone"
+
+msgid "New chat"
+msgstr "Novo chat"
+
+msgid "Start a chat with a phone number"
+msgstr "Inicie um bate-papo com um número de telefone"
+
+msgid "Start"
+msgstr "Começar"
+
+msgid "Persons"
+msgstr "Pessoas"
+
+msgid "Contacts"
+msgstr "Contatos"
+
+msgid "No persons or contacts found for <1>%s</1>"
+msgstr "Nenhuma pessoa ou contato encontrado para <1>%s</1>"
+
+msgid "Unsupported file type"
+msgstr "Tipo de arquivo não suportado"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Only admins and users can access to our web app."
+msgstr "Somente administradores e usuários podem acessar nosso aplicativo web."
+
+msgid "You are not logged in."
+msgstr "Você não está logado."
+
+msgid "Invalid token."
+msgstr "Token inválido."
+
+msgid "Incorrect username or password."
+msgstr "Usuário ou senha incorretos."
+
+msgid "An error has occurred. Please try again later."
+msgstr "Ocorreu um erro. Por favor, tente novamente mais tarde."
+
+msgid "Username"
+msgstr "Nome de usuário"
+
+msgid "Password"
+msgstr "Senha"
+
+msgid "Log in"
+msgstr "Conecte-se"
+
+msgid "Welcome"
+msgstr "Bem-vindo"
+
+msgid "We are validating your session, please wait."
+msgstr "Estamos validando sua sessão, aguarde."
+
+msgid "Please login to start"
+msgstr "Faça login para começar"
+
+msgid "Search For Messages"
+msgstr "Pesquisar mensagens"
+
+msgid "This chat could not be assigned as its assignments have been changed by another user recently."
+msgstr "Não foi possível atribuir este chat porque suas atribuições foram alteradas recentemente por outro usuário."
+
+msgid "This contact has no phone number."
+msgstr "Este contato não possui número de telefone."
+
+msgid "This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment."
+msgstr "Este chat já está atribuído a outro usuário. Você só poderá alterar a atribuição deste bate-papo se a pessoa atual cancelar a atribuição ou se alguém com acesso de administrador cancelar a atribuição."
+
+msgid "You can assign this chat to a user or a group."
+msgstr "Você pode atribuir este chat a um usuário ou grupo."
+
+msgid "Unassigned"
+msgstr "Não atribuído"
+
+msgid "Update"
+msgstr "Atualizar"
+
+msgid "Chat tags"
+msgstr "Etiquetas de bate-papo"
+
+msgid "You can add or remove tags for this chat."
+msgstr "Você pode adicionar ou remover tags deste chat."
+
+msgid "Current tags"
+msgstr "Tags atuais"
+
+msgid "Empty"
+msgstr "Vazio"
+
+msgid "Manage tags"
+msgstr "Gerenciar tags"
+
+msgid "Tags"
+msgstr "Tag"
+
+msgid "You can filter chats by tags."
+msgstr "Você pode filtrar bate-papos por tags."
+
+msgid "Contact Details"
+msgstr "Detalhes do contato"
+
+msgid "Contact details"
+msgstr "Detalhes do contato"
+
+msgid "Never"
+msgstr "Nunca"
+
+msgid "WhatsApp Phone Number"
+msgstr "Número de telefone do WhatsApp"
+
+msgid "Assigned to: <1>%s</1>"
+msgstr "Atribuído a: <1>%s</1>"
+
+msgid "Assigned group: <1>%s</1>"
+msgstr "Grupo atribuído: <1>%s</1>"
+
+msgid "Phone number"
+msgstr "Número de telefone"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Loading: %s"
+msgstr "Carregando: %s"
+
+msgid "Contact us"
+msgstr "Contate-nos"
+
+msgid "Skip"
+msgstr "Pular"
+
+msgid "Something went wrong, this will be fixed automatically"
+msgstr "Algo deu errado, isso será corrigido automaticamente"
+
+msgid "There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?"
+msgstr "Existem mensagens não enviadas no chat. Se você continuar, eles serão excluídos. Você tem certeza que quer continuar?"
+
+msgid "An error has occurred."
+msgstr "Ocorreu um erro."
+
+msgid "Saved as response successfully!"
+msgstr "Salvo como resposta com sucesso!"
+
+msgid "Deleted response successfully!"
+msgstr "Resposta excluída com sucesso!"
+
+msgid "Hey"
+msgstr "Ei"
+
+msgid "Choose a contact to start a conversation"
+msgstr "Escolha um contato para iniciar uma conversa"
+
+msgid "Expired"
+msgstr "Expirado"
+
+msgid "Failed to send some messages!"
+msgstr "Falha ao enviar algumas mensagens!"
+
+msgid "Assign chat"
+msgstr "Atribuir bate-papo"
+
+msgid "Change tags"
+msgstr "Alterar tags"
+
+msgid "Toggle assignment and tagging history"
+msgstr "Alternar histórico de atribuições e marcações"
+
+msgid "Preview"
+msgstr "Visualização"
+
+msgid "Add a caption..."
+msgstr "Adicione uma legenda..."
+
+msgid "Add more"
+msgstr "Adicione mais"
+
+msgid "Drag and drop here"
+msgstr "Arraste e solte aqui"
+
+msgid "No response message have been saved yet."
+msgstr "Nenhuma mensagem de resposta foi salva ainda."
+
+msgid "Send"
+msgstr "Enviar"
+
+msgid "Oops!"
+msgstr "Ops!"
+
+msgid "Are you sure you want to delete this saved response?"
+msgstr "Tem certeza de que deseja excluir esta resposta salva?"
+
+msgid "Yes"
+msgstr "Sim"
+
+msgid "No"
+msgstr "Não"
+
+msgid "This chat has expired. You need to answer with template messages."
+msgstr "Este bate-papo expirou. Você precisa responder com mensagens modelo."
+
+msgid "Type a message"
+msgstr "Digite uma mensagem"
+
+msgid "Send a message"
+msgstr "Envie uma mensagem"
+
+msgid "You must grant microphone permission."
+msgstr "Você deve conceder permissão ao microfone."
+
+msgid "This feature is not supported on your browser."
+msgstr "Este recurso não é compatível com seu navegador."
+
+msgid "You must open the inbox in a new tab to access this feature."
+msgstr "Você deve abrir a caixa de entrada em uma nova guia para acessar este recurso."
+
+msgid "Go to inbox"
+msgstr "Ir para a caixa de entrada"
+
+msgid "Forwarded"
+msgstr "Encaminhado"
+
+msgid "Document"
+msgstr "Documento"
+
+msgid "Save this response"
+msgstr "Salve esta resposta"
+
+msgid "Your template was sent to the user successfully, however we couldn't load templates at this moment. Please check again in a while, sorry!"
+msgstr "Seu modelo foi enviado ao usuário com sucesso, porém não foi possível carregar os modelos no momento. Verifique novamente daqui a pouco, desculpe!"
+
+msgid "Missing template"
+msgstr "Modelo ausente"
+
+msgid "Template message"
+msgstr "Mensagem de modelo"
+
+msgid "Interactive message"
+msgstr "Mensagem interativa"
+
+msgid "Image"
+msgstr "Imagem"
+
+msgid "Video"
+msgstr "Vídeo"
+
+msgid "Voice"
+msgstr "Voz"
+
+msgid "Audio"
+msgstr "Áudio"
+
+msgid "Sticker"
+msgstr "Adesivo"
+
+msgid "Template"
+msgstr "Modelo"
+
+msgid "Interactive"
+msgstr "Interativo"
+
+msgid "<0>%(username)s</0> has added tag: <6></6><7>%(tag)s</7>."
+msgstr "<0>%(nome de usuário)s</0> adicionou tag: <6></6> <7>%(tag)s</7> ."
+
+msgid "<0>%(username)s</0> has removed tag: <6></6><7>%(tag)s</7>."
+msgstr "<0>%(nome de usuário)s</0> removeu a tag: <6></6> <7>%(tag)s</7> ."
+
+msgid "A tag was added: <4></4><5>%(tag)s</5>."
+msgstr "Uma tag foi adicionada: <4></4> <5>%(tag)s</5> ."
+
+msgid "A tag was removed: <4></4><5>%(tag)s</5>."
+msgstr "Uma tag foi removida: <4></4> <5>%(tag)s</5> ."
+
+msgid "Delete"
+msgstr "Excluir"
+
+msgid "Bulk send"
+msgstr "Envio em massa"
+
+msgid "Bulk Send"
+msgstr "Envio em massa"
+
+msgid "Send a template message"
+msgstr "Envie uma mensagem modelo"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s)."
+msgstr "%(contacts_count)d contato(s) e %(tags_count)d tag(s) selecionados."
+
+msgid "Started at <1></1>"
+msgstr "Começou em <1></1>"
+
+msgid "Automotive"
+msgstr "Automotivo"
+
+msgid "Beauty, Spa and Salon"
+msgstr "Beleza, Spa e Salão"
+
+msgid "Clothing and Apparel"
+msgstr "Vestuário e Vestuário"
+
+msgid "Education"
+msgstr "Educação"
+
+msgid "Entertainment"
+msgstr "Entretenimento"
+
+msgid "Event Planning and Service"
+msgstr "Planejamento e serviço de eventos"
+
+msgid "Finance and Banking"
+msgstr "Finanças e bancos"
+
+msgid "Food and Grocery"
+msgstr "Alimentos e mercearia"
+
+msgid "Public Service"
+msgstr "Serviço público"
+
+msgid "Hotel and Lodging"
+msgstr "Hotelaria e Hospedagem"
+
+msgid "Medical and Health"
+msgstr "Medicina e Saúde"
+
+msgid "Non-profit"
+msgstr "Sem fins lucrativos"
+
+msgid "Professional Services"
+msgstr "Serviços profissionais"
+
+msgid "Shopping and Retail"
+msgstr "Compras e Varejo"
+
+msgid "Travel and Transportation"
+msgstr "Viagens e Transporte"
+
+msgid "Restaurant"
+msgstr "Restaurante"
+
+msgid "Other"
+msgstr "Outro"
+
+msgid "Personal Profile"
+msgstr "Perfil pessoal"
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Change password"
+msgstr "Alterar a senha"
+
+msgid "Business Profile"
+msgstr "Perfil de negócios"
+
+msgid "Loading"
+msgstr "Carregando"
+
+msgid "About"
+msgstr "Sobre"
+
+msgid "Address"
+msgstr "Endereço"
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Vertical"
+msgstr "Vertical"
+
+msgid "You must fill all fields!"
+msgstr "Você deve preencher todos os campos!"
+
+msgid "Passwords must match!"
+msgstr "As senhas devem corresponder!"
+
+msgid "Changed password successfully"
+msgstr "Senha alterada com sucesso"
+
+msgid "Current password"
+msgstr "Senha atual"
+
+msgid "New password"
+msgstr "Nova Senha"
+
+msgid "New password (repeat)"
+msgstr "Nova senha (repetir)"
+
+msgid "Error"
+msgstr "Erro"
+
+msgid "Success"
+msgstr "Sucesso"
+
+msgid "Change"
+msgstr "Mudar"
+
+msgid "Click to retry."
+msgstr "Clique para tentar novamente."
+
+msgid "Last attempt at: <1></1>"
+msgstr "Última tentativa em: <1></1>"
+
+msgid "New messages"
+msgstr "Novas mensagens"
+
+msgid "You have new messages!"
+msgstr "Você tem novas mensagens!"
+
+msgid "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
+msgid_plural "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
+msgstr[0] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chat)"
+msgstr[1] "Showing only: <1></1> <3>%(tag)s</3> (%(count)d chats)"
+
+msgid "Click to clear filter"
+msgstr "Clique para limpar o filtro"
+
+msgid "All"
+msgstr "Todos"
+
+msgid "Me"
+msgstr "Meu"
+
+msgid "Group"
+msgstr "Grupo"
+
+msgid "Messages"
+msgstr "Mensagens"
+
+msgid "Refresh"
+msgstr "Atualizar"
+
+msgid "Refresh contacts"
+msgstr "Atualizar contatos"
+
+msgid "Admin panel"
+msgstr "Painel de administração"
+
+msgid "Settings (App Only)"
+msgstr "Configurações (somente aplicativo)"
+
+msgid "Logout"
+msgstr "Sair"
+
+msgid "%d new messages"
+msgstr "%d novas mensagens"
+
+msgid "%s left"
+msgstr "%s restantes"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Uploading a media file. Please wait..."
+msgstr "Carregando um arquivo de mídia. Por favor, aguarde..."
+
+msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
+msgstr "A mensagem em massa (ID: %s) não pôde ser enviada a um destinatário."
+
+msgid "Recipient: <1>%s</1>"
+msgstr "Destinatário: <1>%s</1>"
+
+msgid "Message: <1>%s</1>"
+msgstr "Mensagem: <1>%s</1>"
+
+msgid "Notifications"
+msgstr "Notificações"
+
+msgid "You have no notifications"
+msgstr "Você não tem notificações"
+
+msgid "Options"
+msgstr "Opções"
+
+msgid "Location"
+msgstr "Localização"
+
+msgid "Location: <1>%s</1>"
+msgstr "Localização: <1>%s</1>"
+
+msgid "<0>Product retailer ID<0>: %s"
+msgstr "<0>ID do varejista do produto<0>: %s"
+
+msgid "<0>Catalog ID</0>: %s"
+msgstr "<0>ID do catálogo</0> : %s"
+
+msgid "<0>Quantity</0>: %d"
+msgstr "<0>Quantidade</0> : %d"
+
+msgid "<0>Price</0>: %d %s"
+msgstr "<0>Preço</0> : %d %s"
+
+msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
+msgstr "No WhatsApp, a foto do perfil da sua empresa tem resolução maior do que a mostrada aqui."
+
+msgid "Copied!"
+msgstr "Copiado!"
+
+msgid "Missing parameters"
+msgstr "Parâmetros ausentes"
+
+msgid "You need to fill the parameters!"
+msgstr "Você precisa preencher os parâmetros!"
+
+msgid "Enter a link to file"
+msgstr "Insira um link para o arquivo"
+
+msgid "Link to file"
+msgstr "Link para arquivo"
+
+msgid "Upload a file"
+msgstr "Enviar um arquivo"
+
+msgid "Enter a link to file instead"
+msgstr "Insira um link para o arquivo"
+
+msgid "Upload a file instead"
+msgstr "Em vez disso, carregue um arquivo"
+
+msgid "Type: %s"
+msgstr "Tipo: %s"
+
+msgid "Retry"
+msgstr "Tentar novamente"
+
+msgid "We are loading initial resources, please wait..."
+msgstr "Estamos carregando os recursos iniciais, aguarde..."
+
+msgid "Upload CSV"
+msgstr "Carregar CSV"
+
+msgid "Next"
+msgstr "Próximo"
+
+msgid "Bulk send a template"
+msgstr "Enviar um modelo em massa"
+
+msgid "Bulk send a voice message"
+msgstr "Enviar uma mensagem de voz em massa"
+
+msgid "Bulk send template with CSV"
+msgstr "Modelo de envio em massa com CSV"
+
+msgid "Please select up to %s direct recipients."
+msgstr "Selecione até %s destinatários diretos."
+
+msgid "Please select tags that target up to %s recipients in total."
+msgstr "Selecione tags que tenham como alvo até %s destinatários no total."
+
+msgid "Search"
+msgstr "Procurar"
+
+msgid "Search for contacts"
+msgstr "Pesquisar contatos"
+
+msgid "Message via ad"
+msgstr "Mensagem via anúncio"
+
+msgid "Message via post"
+msgstr "Mensagem por postagem"
+
+msgid "The language pack for this template is not installed on the server yet, try sending this message later"
+msgstr "O pacote de idiomas deste modelo ainda não está instalado no servidor, tente enviar esta mensagem mais tarde"
+
+msgid "You can assign this chat to yourself and unassign from yourself."
+msgstr "Você pode atribuir este bate-papo a si mesmo e cancelar a atribuição de você mesmo."
+
+msgid "You can assign this chat to a group."
+msgstr "Você pode atribuir este chat a um grupo."
+
+msgid "This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment."
+msgstr "Este chat já está atribuído a um grupo. Você só poderá alterar a atribuição deste chat se alguém com acesso de administrador cancelar a atribuição."
+
+msgid "Click here to refresh"
+msgstr "Clique aqui para atualizar"
+
+msgid "Templates are refreshed successfully."
+msgstr "Os modelos foram atualizados com sucesso."
+
+msgid "Template messages couldn't be loaded."
+msgstr "Não foi possível carregar as mensagens de modelo."
+
+msgid "No templates have been registered yet."
+msgstr "Nenhum modelo foi cadastrado ainda."
+
+msgid "Refreshing..."
+msgstr "Refrescante..."
+
+msgid "Too many attempts to refresh templates! Please try again in a while."
+msgstr "Muitas tentativas de atualizar modelos! Por favor, tente novamente daqui a pouco."
+
+msgid "Failed to load templates. Please try again in a while."
+msgstr "Falha ao carregar modelos. Por favor, tente novamente daqui a pouco."
+
+msgid "Failed to issue a template refresh request. Please try again in a while."
+msgstr "Falha ao emitir uma solicitação de atualização de modelo. Por favor, tente novamente daqui a pouco."
+
+msgid "Please enter a valid username and password!"
+msgstr "Por favor insira um nome de usuário e senha válidos!"
+
+msgid "Please choose a supported image type (png, jpg)"
+msgstr "Escolha um tipo de imagem compatível (png, jpg)"
+
+msgid "Please choose a supported video type (mp4, 3gp)"
+msgstr "Escolha um tipo de vídeo compatível (mp4, 3gp)"
+
+msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
+msgstr "Escolha um tipo de arquivo compatível (png, jpg, mp4, 3gp)"
+
+msgid "Send bulk voice message"
+msgstr "Enviar mensagem de voz em massa"
+
+msgid "Click to record your message"
+msgstr "Clique para gravar sua mensagem"
+
+msgid "Documents"
+msgstr "Documentos"
+
+msgid "Attachment"
+msgstr "Anexo"
+
+msgid "More"
+msgstr "Mais"
+
+msgid "Emoji"
+msgstr "Emoji"
+
+msgid "You can only send voice messages to users who wrote to you in last 24h."
+msgstr "Você só pode enviar mensagens de voz para usuários que escreveram para você nas últimas 24h."
+
+msgid "You don't have any chats yet."
+msgstr "Você ainda não tem nenhum bate-papo."
+
+msgid "Images & Videos"
+msgstr "Imagens e vídeos"
+
+msgid "Not seeing your new templates?"
+msgstr "Não está vendo seus novos modelos?"
+
+msgid "Chats"
+msgstr "Bate-papos"
+
+msgid "To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our integrations page."
+msgstr "Para poder compartilhar contatos, você precisa usar um de nossos Provedores de Contatos. <1>Clique aqui</1> para ir para nossa página de integrações."
+
+msgid "Send contacts"
+msgstr "Enviar contatos"
+
+msgid "No results found."
+msgstr "Nenhum resultado encontrado."
+
+msgid "Search quick actions"
+msgstr "Pesquise ações rápidas"
+
+msgid "This chat will expire in %s"
+msgstr "Este bate-papo irá expirar em %s"
+
+msgid "Templates"
+msgstr "Modelos"
+
+msgid "Filter chats by tag"
+msgstr "Filtrar bate-papos por tag"
+
+msgid "Change inbox URL"
+msgstr "Alterar URL da caixa de entrada"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Delete profile photo"
+msgstr "Excluir foto do perfil"
+
+msgid "Start a chat"
+msgstr "Iniciar um bate-papo"
+
+msgid "Camera"
+msgstr "Câmera"
+
+msgid "Gallery"
+msgstr "Galeria"
+
+msgid "Contact"
+msgstr "Contato"
+
+msgid "Preparing"
+msgstr "Preparando"
+
+msgid "Recording"
+msgstr "Gravação"
+
+msgid "Toggle event history"
+msgstr "Alternar histórico de eventos"
+
+msgid "Saved Responses"
+msgstr "Respostas salvas"
+
+msgid "Expired (commands only)"
+msgstr "Expirado (somente comandos)"
+
+msgid "Back"
+msgstr "Voltar"
+
+msgid "Change your inbox URL"
+msgstr "Altere o URL da sua caixa de entrada"
+
+msgid "Please enter your get.chat inbox link (URL)"
+msgstr "Por favor, insira o link da sua caixa de entrada get.chat (URL)"
+
+msgid "Complete the link automatically"
+msgstr "Preencha o link automaticamente"
+
+msgid "You don't have an inbox yet?"
+msgstr "Você ainda não tem uma caixa de entrada?"
+
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "Please enter a valid URL."
+msgstr "Por favor, insira um URL válido."
+
+msgid "Please enter a valid inbox link"
+msgstr "Insira um link de caixa de entrada válido"
+
+msgid "Successful! Your inbox link works!"
+msgstr "Bem-sucedido! O link da sua caixa de entrada funciona!"
+
+msgid "Chat"
+msgstr "Bater papo"
+
+msgid "Developer Options"
+msgstr "Opções de desenvolvedor"
+
+msgid "Available tags"
+msgstr "Etiquetas disponíveis"
+
+msgid "Notification sounds"
+msgstr "Sons de notificação"
+
+msgid "Assign this chat"
+msgstr "Atribuir este chat"
+
+msgid "Search for a message"
+msgstr "Procure uma mensagem"
+
+msgid "Send this template"
+msgstr "Envie este modelo"
+
+msgid "Send a saved response"
+msgstr "Envie uma resposta salva"
+
+msgid "Send this saved response"
+msgstr "Envie esta resposta salva"
+
+msgid "Users"
+msgstr "Usuários"
+
+msgid "Groups"
+msgstr "Grupos"
+
+msgid "%dh"
+msgstr "%dh"
+
+msgid "%dm"
+msgstr "%dm"
+
+msgid "Session messages can be sent only to recipients who wrote to you within last 24 hours. To send messages to expired chats, use <2>Bulk send a template</2> function."
+msgstr "As mensagens da sessão só podem ser enviadas para destinatários que escreveram para você nas últimas 24 horas. Para enviar mensagens para bate-papos expirados, use <2>Envio em massa de um modelo</2> função."
+
+msgid "Search, filter by tags, time, etc."
+msgstr "Pesquise, filtre por tags, horário, etc."
+
+msgid "Assigned to me"
+msgstr "Atribuído a mim"
+
+msgid "Assigned group"
+msgstr "Grupo atribuído"
+
+msgid "Tag"
+msgstr "Marcação"
+
+msgid "Time"
+msgstr "Tempo"
+
+msgid "Done"
+msgstr "Feito"
+
+msgid "Today"
+msgstr "Hoje"
+
+msgid "Yesterday"
+msgstr "Ontem"
+
+msgid "This week"
+msgstr "Essa semana"
+
+msgid "Last week"
+msgstr "Semana passada"
+
+msgid "This month"
+msgstr "Este mês"
+
+msgid "Last month"
+msgstr "Mês passado"
+
+msgid "Last Saturday"
+msgstr "Último sábado"
+
+msgid "Last Sunday"
+msgstr "Último domingo"
+
+msgid "User"
+msgstr "Do utilizador"
+
+msgid "Quick Actions"
+msgstr "Ações rápidas"
+
+msgid "Start week on"
+msgstr "Começar a semana em"
+
+msgid "Saturday"
+msgstr "Sábado"
+
+msgid "Sunday"
+msgstr "Domingo"
+
+msgid "Monday"
+msgstr "Segunda-feira"
+
+msgid "%d chat found"
+msgid_plural "%d chats found"
+msgstr[0] "%d chat found"
+msgstr[1] "%d chats found"
+
+msgid "Loading chats"
+msgstr "Carregando bate-papos"
+
+msgid "Unknown"
+msgstr "Desconhecido"
+
+msgid "Close view"
+msgstr "Fechar visualização"
+
+msgid "Click here for more information."
+msgstr "Clique aqui para obter mais informações."
+
+msgid "(Code: %d)"
+msgstr "(Código: %d)"
+
+msgid "Waiting to be sent"
+msgstr "Aguardando ser enviado"
+
+msgid "Your current inbox"
+msgstr "Sua caixa de entrada atual"
+
+msgid "Select an inbox"
+msgstr "Selecione uma caixa de entrada"
+
+msgid "Failed to log in"
+msgstr "Falha ao fazer login"
+
+msgid "Log in with password instead"
+msgstr "Faça login com senha"
+
+msgid "Message Information"
+msgstr "Informações da mensagem"
+
+msgid "Sent at"
+msgstr "Enviado em"
+
+msgid "Delivered at"
+msgstr "Entregue em"
+
+msgid "Read at"
+msgstr "Leia em"
+
+msgid "There are some problems sending your message:"
+msgstr "Existem alguns problemas ao enviar sua mensagem:"
+
+msgid "There were some problems sending your message, but your message was sent successfully after problems have resolved."
+msgstr "Houve alguns problemas no envio da sua mensagem, mas ela foi enviada com sucesso após a resolução dos problemas."
+
+msgid "Save as quick reply"
+msgstr "Salvar como resposta rápida"
+
+msgid "Register new template"
+msgstr "Registrar novo modelo"
