@@ -101,6 +101,7 @@ const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
+
 const Chat: React.FC = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
@@ -163,15 +164,6 @@ const Chat: React.FC = (props) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const handleChatMessageInserted = () => {
-		const target = messagesContainer.current;
-		if (target && canSeeLastMessage(target)) {
-			target.scroll({
-				top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET,
-			});
-		}
-	};
-
 	useEffect(() => {
 		if (waId) {
 			props.retrieveContactData(waId);
@@ -182,7 +174,7 @@ const Chat: React.FC = (props) => {
 
 		if (messagesContainer) {
 			// Scroll to bottom automatically on message
-			const observer = new MutationObserver(handleChatMessageInserted);
+			const observer = new MutationObserver(persistScrollStateOnNewMessage);
 			observer.observe(messagesContainer.current, {
 				childList: true,
 			});
@@ -806,15 +798,11 @@ const Chat: React.FC = (props) => {
 	};
 
 	const isLastMessageVisible = () => {
-		const el = messagesContainer.current;
+		const element = messagesContainer.current;
 		return (
-			el.scrollHeight - el.scrollTop - el.clientHeight <
+			element.scrollHeight - element.scrollTop - element.clientHeight <
 			SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET
 		);
-	};
-
-	const displayScrollButton = () => {
-		setScrollButtonVisible(true);
 	};
 
 	const canSeeLastMessage = (element) => {
@@ -822,6 +810,10 @@ const Chat: React.FC = (props) => {
 			element.scrollHeight - element.scrollTop - element.clientHeight >
 			SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET
 		);
+	};
+
+	const displayScrollButton = () => {
+		setScrollButtonVisible(true);
 	};
 
 	const handleScrollButtonClick = () => {
@@ -844,6 +836,15 @@ const Chat: React.FC = (props) => {
 		}
 
 		//setScrollButtonVisible(false);
+	};
+
+	const persistScrollStateOnNewMessage = () => {
+		const target = messagesContainer.current;
+		if (target && canSeeLastMessage(target)) {
+			target.scroll({
+				top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET,
+			});
+		}
 	};
 
 	const persistScrollStateFromBottom = (
