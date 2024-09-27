@@ -153,7 +153,7 @@ const Chat: React.FC = (props) => {
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 
-	const messagesContainer = useRef(null);
+	const messagesContainer = useRef<HTMLElement>(null);
 	const cancelTokenSourceRef = useRef();
 
 	const { waId } = useParams();
@@ -165,7 +165,7 @@ const Chat: React.FC = (props) => {
 
 	const handleChatMessageInserted = () => {
 		const target = messagesContainer.current;
-		if (target) {
+		if (target && canSeeLastMessage(target)) {
 			target.scroll({
 				top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET,
 			});
