@@ -163,6 +163,15 @@ const Chat: React.FC = (props) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const handleChatMessageInserted = () => {
+		const target = messagesContainer.current;
+		if (target) {
+			target.scroll({
+				top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET,
+			});
+		}
+	};
+
 	useEffect(() => {
 		if (waId) {
 			props.retrieveContactData(waId);
@@ -172,13 +181,10 @@ const Chat: React.FC = (props) => {
 		cancelTokenSourceRef.current = generateCancelToken();
 
 		if (messagesContainer) {
-			messagesContainer.current.addEventListener('DOMNodeInserted', (event) => {
-				if (event.target.parentNode.id === 'chat__body') {
-					const { currentTarget: target } = event;
-					target.scroll({
-						top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET,
-					});
-				}
+			// Scroll to bottom automatically on message
+			const observer = new MutationObserver(handleChatMessageInserted);
+			observer.observe(messagesContainer.current, {
+				childList: true,
 			});
 		}
 
