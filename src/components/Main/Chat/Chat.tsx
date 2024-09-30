@@ -96,6 +96,7 @@ import {
 	setBulkSend,
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -172,7 +173,7 @@ const Chat: React.FC = (props) => {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
 
-		if (messagesContainer) {
+		if (messagesContainer.current) {
 			// Scroll to bottom automatically on message
 			const observer = new MutationObserver(persistScrollStateOnNewMessage);
 			observer.observe(messagesContainer.current, {
@@ -181,7 +182,7 @@ const Chat: React.FC = (props) => {
 		}
 
 		// Handle files dragged and dropped to sidebar chat
-		const handleFilesDropped = function (msg, data) {
+		const handleFilesDropped = function (msg: string, data: any) {
 			setSelectedFiles(data);
 		};
 
@@ -192,7 +193,7 @@ const Chat: React.FC = (props) => {
 		);
 
 		// Clear input on event
-		const clearInputOnEvent = function (msg, data) {
+		const clearInputOnEvent = function (msg: string, data: any) {
 			clearInput();
 		};
 
@@ -462,7 +463,7 @@ const Chat: React.FC = (props) => {
 
 	useEffect(() => {
 		// New messages
-		const onNewMessages = function (msg, data) {
+		const onNewMessages = function (msg: string, data: any) {
 			if (data && isLoaded) {
 				flushSync(() => {
 					let hasAnyIncomingMsg = false;
@@ -548,7 +549,7 @@ const Chat: React.FC = (props) => {
 		);
 
 		// Status changes
-		const onMessageStatusChange = function (msg, data) {
+		const onMessageStatusChange = function (msg: string, data: any) {
 			if (data && isLoaded) {
 				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
 
@@ -635,30 +636,34 @@ const Chat: React.FC = (props) => {
 			onMessageStatusChange
 		);
 
+		const addMessagesData = (data: ChatMessageList) => {
+			if (isAtBottom) {
+				const prevScrollTop = messagesContainer.current?.scrollTop;
+				const prevScrollHeight = messagesContainer.current?.scrollHeight;
+				const isCurrentlyLastMessageVisible = isLastMessageVisible();
+
+				// Display as a new message
+				flushSync(() => {
+					setMessages((prevState) => {
+						return { ...prevState, ...data };
+					});
+				});
+
+				if (!isCurrentlyLastMessageVisible) {
+					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+					displayScrollButton();
+				}
+			} else {
+				displayScrollButton();
+			}
+		};
+
 		// Chat assignment
-		const onChatAssignment = function (msg, data) {
+		const onChatAssignment = function (msg: string, data: any) {
 			// This event always has a single message
 			const prepared = getFirstObject(data);
 			if (waId === prepared.waId) {
-				if (isAtBottom) {
-					const prevScrollTop = messagesContainer.current.scrollTop;
-					const prevScrollHeight = messagesContainer.current.scrollHeight;
-					const isCurrentlyLastMessageVisible = isLastMessageVisible();
-
-					// Display as a new message
-					flushSync(() => {
-						setMessages((prevState) => {
-							return { ...prevState, ...data };
-						});
-					});
-
-					if (!isCurrentlyLastMessageVisible) {
-						persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
-						displayScrollButton();
-					}
-				} else {
-					displayScrollButton();
-				}
+				addMessagesData(data);
 
 				// Reload chat to update assignee information
 				retrieveChat();
@@ -671,29 +676,11 @@ const Chat: React.FC = (props) => {
 		);
 
 		// Chat tagging
-		const onChatAssignmentOrChatTagging = function (msg, data) {
+		const onChatAssignmentOrChatTagging = function (msg: string, data: any) {
 			// This event always has a single message
 			const prepared = getFirstObject(data);
 			if (waId === prepared.waId) {
-				if (isAtBottom) {
-					const prevScrollTop = messagesContainer.current.scrollTop;
-					const prevScrollHeight = messagesContainer.current.scrollHeight;
-					const isCurrentlyLastMessageVisible = isLastMessageVisible();
-
-					// Display as a new message
-					flushSync(() => {
-						setMessages((prevState) => {
-							return { ...prevState, ...data };
-						});
-					});
-
-					if (!isCurrentlyLastMessageVisible) {
-						persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
-						displayScrollButton();
-					}
-				} else {
-					displayScrollButton();
-				}
+				addMessagesData(data);
 			}
 		};
 
@@ -703,7 +690,7 @@ const Chat: React.FC = (props) => {
 		);
 
 		// Refresh chat/messages when displaying assignment and tagging history is toggled
-		const onForceRefreshChat = function (msg, data) {
+		const onForceRefreshChat = function (msg: string, data: any) {
 			if (waId) {
 				// Clear existing messages
 				flushSync(() => {
@@ -744,7 +731,7 @@ const Chat: React.FC = (props) => {
 	}, [messages, lastMessageId]);
 
 	useEffect(() => {
-		const onUpdatePersonName = function (msg, data) {
+		const onUpdatePersonName = function (msg: string, data: any) {
 			const name = data;
 			setPerson((prevState) => {
 				if (prevState && prevState instanceof PersonModel) {
@@ -905,7 +892,7 @@ const Chat: React.FC = (props) => {
 	};
 
 	useEffect(() => {
-		const onGoToMessageId = function (msg, data) {
+		const onGoToMessageId = function (msg: string, data: any) {
 			const msgId = data.id;
 			const timestamp = data.timestamp;
 
