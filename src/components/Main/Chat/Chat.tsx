@@ -768,14 +768,6 @@ const Chat: React.FC = (props) => {
 		};
 	}, [person]);
 
-	/*useEffect(() => {
-        // Scrolling to bottom on initial templates load
-        if (!isLoadingTemplates) {
-            const target = messagesContainer.current;
-            target.scroll({top: target.scrollHeight - SCROLL_OFFSET});
-        }
-    }, [isLoadingTemplates]);*/
-
 	const prepareFixedDateIndicator = (dateIndicators, el) => {
 		const curScrollTop = el.scrollTop;
 		let indicatorToShow;
