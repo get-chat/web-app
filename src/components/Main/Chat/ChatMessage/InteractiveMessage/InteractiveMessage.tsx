@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 
 import TouchAppIcon from '@mui/icons-material/TouchApp';
@@ -9,8 +8,13 @@ import ListMessage from './components/ListMessage';
 import ProductMessage from './components/ProductMessage';
 
 import styles from './InteractiveMessage.module.css';
+import { Button } from '@mui/material';
 
-const InteractiveMessage = ({ data }) => {
+interface Props {
+	data: any;
+}
+
+const InteractiveMessage: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
 	const { header, body, footer, action, type } = data.payload.interactive;
 
@@ -60,6 +64,11 @@ const InteractiveMessage = ({ data }) => {
 			{type === 'location_request_message' && (
 				<>
 					<div>{body?.text}</div>
+					{action?.name === 'send_location' && (
+						<Button variant="text" disabled>
+							Send location
+						</Button>
+					)}
 				</>
 			)}
 		</>
