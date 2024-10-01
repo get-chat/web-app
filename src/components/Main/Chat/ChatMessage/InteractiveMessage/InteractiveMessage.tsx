@@ -9,6 +9,7 @@ import ProductMessage from './components/ProductMessage';
 
 import styles from './InteractiveMessage.module.css';
 import { Button } from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -74,7 +75,12 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				<>
 					<div>{body?.text}</div>
 					{action?.name === 'send_location' && (
-						<Button variant="text" disabled>
+						<Button
+							variant="text"
+							fullWidth
+							startIcon={<LocationOnIcon />}
+							disabled
+						>
 							Send location
 						</Button>
 					)}
