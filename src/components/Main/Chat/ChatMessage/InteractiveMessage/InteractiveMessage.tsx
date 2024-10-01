@@ -56,6 +56,12 @@ const InteractiveMessage = ({ data }) => {
 					action={action}
 				/>
 			)}
+
+			{type === 'location_request_message' && (
+				<>
+					<div>{body?.text}</div>
+				</>
+			)}
 		</>
 	);
 };
