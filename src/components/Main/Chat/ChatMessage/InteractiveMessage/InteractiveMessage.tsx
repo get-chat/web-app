@@ -10,6 +10,15 @@ import ProductMessage from './components/ProductMessage';
 import styles from './InteractiveMessage.module.css';
 import { Button } from '@mui/material';
 
+export enum InteractiveMessageTypes {
+	list_reply = 'list_reply',
+	button = 'button',
+	list = 'list',
+	product = 'product',
+	product_list = 'product_list',
+	location_request_message = 'location_request_message',
+}
+
 interface Props {
 	data: any;
 }
@@ -24,8 +33,7 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				<TouchAppIcon /> {t('Interactive message')}
 			</div>
 
-			{/* TODO: FIXME: i don't know where right place in current architecture, but it works */}
-			{data.payload.interactive.type === 'list_reply' && (
+			{type === InteractiveMessageTypes.list_reply && (
 				<div>
 					<div>{data.payload.interactive.list_reply.title}</div>
 					<div style={{ opacity: 0.5, fontSize: '0.8em' }}>
@@ -34,7 +42,7 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				</div>
 			)}
 
-			{type === 'button' && (
+			{type === InteractiveMessageTypes.button && (
 				<ButtonsMessage
 					header={header}
 					body={body}
@@ -43,7 +51,7 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				/>
 			)}
 
-			{type === 'list' && (
+			{type === InteractiveMessageTypes.list && (
 				<ListMessage
 					header={header}
 					body={body}
@@ -52,7 +60,8 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				/>
 			)}
 
-			{(type === 'product' || type === 'product_list') && (
+			{(type === InteractiveMessageTypes.product ||
+				type === InteractiveMessageTypes.product_list) && (
 				<ProductMessage
 					header={header}
 					body={body}
@@ -61,7 +70,7 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				/>
 			)}
 
-			{type === 'location_request_message' && (
+			{type === InteractiveMessageTypes.location_request_message && (
 				<>
 					<div>{body?.text}</div>
 					{action?.name === 'send_location' && (
