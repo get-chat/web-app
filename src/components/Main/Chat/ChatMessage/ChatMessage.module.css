@@ -1,16 +1,25 @@
 .messageWithReaction {
-	margin-bottom: 41px;
+	margin-bottom: 38px;
 }
 
 .reaction {
 	background-color: white;
 	position: absolute;
 	right: 5px;
-	padding: 1px 5px;
+	padding: 2px 5px;
 	border-radius: 10px;
-	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 5px 3px -6px rgba(0, 0, 45, 0.4);
 	border: 1px solid #e8e1dd;
-	font-size: 12px;
+	font-size: 15px;
+}
+
+.reaction :global(.emoji-mart-emoji) {
+	height: 15px !important;
+	width: 15px !important;
+}
+
+.reaction :global(.printMessage > span) {
+	display: flex;
 }
 
 .more {

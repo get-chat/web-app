@@ -19,7 +19,7 @@
 	background-color: #ffffff;
 	/*margin-top: 15px;*/
 	margin-bottom: 25px;
-	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 5px 3px -6px rgba(0, 0, 45, 0.4);
 	max-width: 70%;
 	transition: opacity 1s ease;
 }

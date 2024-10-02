@@ -128,7 +128,8 @@ const ChatMessage: React.FC<Props> = ({
 					<div
 						className={cx({
 							chat__message: true,
-							[styles.messageWithReaction]: !!data.reaction,
+							[styles.messageWithReaction]:
+								!!data.reaction && !!data.reaction.emoji,
 							['messageType__' + data.type]: true,
 							hasMedia: data.hasMediaToPreview(),
 							chat__outgoing: data.isFromUs,
@@ -304,8 +305,10 @@ const ChatMessage: React.FC<Props> = ({
 							)}
 						</span>
 
-						{data.reaction && (
-							<div className={styles.reaction}>{data.reaction.emoji}</div>
+						{data.reaction && !!data.reaction.emoji && (
+							<div className={styles.reaction}>
+								<PrintMessage message={data.reaction.emoji} />
+							</div>
 						)}
 
 						<div style={{ clear: 'both' }} />
