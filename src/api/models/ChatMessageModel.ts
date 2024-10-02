@@ -6,6 +6,7 @@ import {
 } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import TagModel from '@src/api/models/TagModel';
+import ReactionModel from '@src/api/models/ReactionModel';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -47,6 +48,7 @@ export class ChatMessageModel {
 	public templateName?: string | null;
 	public text?: string | null;
 	public caption?: string | null;
+	public reaction?: ReactionModel | null;
 	public buttonText?: string | null;
 	public interactiveButtonText?: string | null;
 	public isForwarded: boolean;
@@ -125,6 +127,8 @@ export class ChatMessageModel {
 			payload.video?.caption ??
 			payload.audio?.caption ??
 			payload.document?.caption;
+
+		this.reaction = payload.reaction;
 
 		this.mimeType =
 			payload.image?.mime_type ??

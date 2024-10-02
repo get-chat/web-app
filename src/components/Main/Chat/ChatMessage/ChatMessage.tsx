@@ -303,6 +303,10 @@ const ChatMessage: React.FC<Props> = ({
 							)}
 						</span>
 
+						{data.reaction && (
+							<div className={styles.reaction}>{data.reaction.emoji}</div>
+						)}
+
 						<div style={{ clear: 'both' }} />
 					</div>
 				</div>
