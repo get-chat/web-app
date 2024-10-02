@@ -138,14 +138,14 @@ const ChatMessage: React.FC<Props> = ({
 						})}
 					>
 						<div
-							className="chat__message__more"
+							className={styles.more}
 							onClick={(event) => onOptionsClick?.(event, data)}
 						>
 							<ExpandMoreIcon />
 						</div>
 
 						{data.isForwarded && (
-							<div className="chat__forwarded">
+							<div className={styles.forwarded}>
 								<ReplyIcon />
 								<span>{t('Forwarded')}</span>
 							</div>
