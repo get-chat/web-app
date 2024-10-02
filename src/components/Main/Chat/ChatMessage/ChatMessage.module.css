@@ -1,3 +1,7 @@
+.messageWithReaction {
+	margin-bottom: 41px;
+}
+
 .reaction {
 	background-color: white;
 	position: absolute;

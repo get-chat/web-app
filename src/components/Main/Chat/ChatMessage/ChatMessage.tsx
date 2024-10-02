@@ -128,6 +128,7 @@ const ChatMessage: React.FC<Props> = ({
 					<div
 						className={cx({
 							chat__message: true,
+							[styles.messageWithReaction]: !!data.reaction,
 							['messageType__' + data.type]: true,
 							hasMedia: data.hasMediaToPreview(),
 							chat__outgoing: data.isFromUs,
