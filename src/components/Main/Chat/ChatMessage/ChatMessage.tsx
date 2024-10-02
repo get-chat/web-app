@@ -35,6 +35,7 @@ import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
+import { InsertEmoticon } from '@mui/icons-material';
 
 interface Props {
 	data: ChatMessageModel;
@@ -139,10 +140,23 @@ const ChatMessage: React.FC<Props> = ({
 						})}
 					>
 						<div
-							className={styles.more}
-							onClick={(event) => onOptionsClick?.(event, data)}
+							className={cx({
+								[styles.actions]: true,
+								[styles.right]: !data.isFromUs,
+							})}
 						>
-							<ExpandMoreIcon />
+							<div className={styles.action}>
+								<InsertEmoticon />
+							</div>
+
+							{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
+								<div
+									className={styles.action}
+									onClick={(event) => onOptionsClick?.(event, data)}
+								>
+									<ExpandMoreIcon />
+								</div>
+							)}
 						</div>
 
 						{data.isForwarded && (
