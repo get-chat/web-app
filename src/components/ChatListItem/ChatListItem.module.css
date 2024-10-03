@@ -164,6 +164,11 @@
 	margin-right: 5px;
 }
 
+.lastMessage :global(.emoji-mart-emoji) {
+	height: 18px !important;
+	width: 18px !important;
+}
+
 .lastMessage .chatMessageTypeLabel {
 	font-weight: 600;
 }

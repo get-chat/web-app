@@ -22,6 +22,7 @@ export class ChatMessageModel {
 	static TYPE_INTERACTIVE = 'interactive';
 	static TYPE_ORDER = 'order';
 	static TYPE_CONTACTS = 'contacts';
+	static TYPE_REACTION = 'reaction';
 	static STATUS_PENDING = 'pending';
 	static STATUS_SENT = 'sent';
 	static STATUS_DELIVERED = 'delivered';

@@ -7,9 +7,11 @@ import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import PrintMessage from '../../../PrintMessage';
 import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
+import { useTranslation } from 'react-i18next';
 
 function ChatMessageShortContent(props) {
 	const templates = useAppSelector((state) => state.templates.value);
+	const { t } = useTranslation();
 
 	const print = () => {
 		if (props.type === ChatMessageModel.TYPE_TEMPLATE && props.template) {
@@ -32,6 +34,9 @@ function ChatMessageShortContent(props) {
 		) {
 			const text =
 				props.text ?? props.buttonText ?? props.interactiveButtonText;
+			return <PrintMessage message={text} smallEmoji={true} />;
+		} else if (props.type === ChatMessageModel.TYPE_REACTION) {
+			const text = t('Reacted to a message: ' + props.reaction?.emoji);
 			return <PrintMessage message={text} smallEmoji={true} />;
 		}
 
