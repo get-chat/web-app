@@ -36,6 +36,7 @@ import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
+import ReactionModel from '@src/api/models/ReactionModel';
 
 interface Props {
 	data: ChatMessageModel;
@@ -129,8 +130,7 @@ const ChatMessage: React.FC<Props> = ({
 					<div
 						className={cx({
 							chat__message: true,
-							[styles.messageWithReaction]:
-								!!data.reaction && !!data.reaction.emoji,
+							[styles.messageWithReaction]: (data.reactions?.length ?? 0) > 0,
 							['messageType__' + data.type]: true,
 							hasMedia: data.hasMediaToPreview(),
 							chat__outgoing: data.isFromUs,
@@ -319,9 +319,11 @@ const ChatMessage: React.FC<Props> = ({
 							)}
 						</span>
 
-						{data.reaction && !!data.reaction.emoji && (
+						{data.reactions && data.reactions.length > 0 && (
 							<div className={styles.reaction}>
-								<PrintMessage message={data.reaction.emoji} />
+								{data.reactions.map((item: ReactionModel) => (
+									<PrintMessage message={item.emoji} />
+								))}
 							</div>
 						)}
 
