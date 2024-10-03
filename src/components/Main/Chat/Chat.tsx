@@ -1955,6 +1955,9 @@ const Chat: React.FC = (props) => {
 				<div className="chat__empty" />
 
 				{Object.entries(messages).map((message, index) => {
+					// Ignoring reaction messages
+					if (message[1].type === ChatMessageModel.TYPE_REACTION) return;
+
 					// Message date is created here and passed to ChatMessage for a better performance
 					const curMsgDate = moment.unix(message[1].timestamp);
 
