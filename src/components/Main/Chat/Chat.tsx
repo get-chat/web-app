@@ -2000,7 +2000,7 @@ const Chat: React.FC = (props) => {
 						<ErrorBoundary key={message[0]}>
 							<ChatMessage
 								data={message[1]}
-								reactions={reactions[message[0]] ?? []}
+								reactionsHistory={reactions[message[0]] ?? []}
 								templateData={templates[message[1].templateName]}
 								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}

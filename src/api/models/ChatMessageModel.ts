@@ -50,7 +50,7 @@ export class ChatMessageModel {
 	public text?: string | null;
 	public caption?: string | null;
 	public reaction?: ReactionModel;
-	public reactions: [ChatMessageModel];
+	public reactions: ChatMessageModel[];
 	public buttonText?: string | null;
 	public interactiveButtonText?: string | null;
 	public isForwarded: boolean;

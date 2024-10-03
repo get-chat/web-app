@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useMemo } from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -36,11 +36,10 @@ import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
-import ReactionModel from '@src/api/models/ReactionModel';
 
 interface Props {
 	data: ChatMessageModel;
-	reactions: [ChatMessageModel];
+	reactionsHistory: ChatMessageModel[];
 	templateData?: TemplateModel;
 	displaySender?: boolean;
 	displayDate?: boolean;
@@ -59,7 +58,7 @@ const iconStyles = {
 
 const ChatMessage: React.FC<Props> = ({
 	data,
-	reactions,
+	reactionsHistory,
 	templateData,
 	displaySender,
 	displayDate,
@@ -74,6 +73,28 @@ const ChatMessage: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
+
+	const getLatestReactions = (): ChatMessageModel[] => {
+		const latestReactionsMap: Map<string, ChatMessageModel> = new Map();
+
+		reactionsHistory.forEach((reaction) => {
+			const sender = reaction.payload.from;
+			const existingReaction = latestReactionsMap.get(sender);
+
+			// Update the map if no entry exists or if this reaction has a later timestamp
+			if (
+				!existingReaction ||
+				reaction.timestamp > existingReaction.timestamp
+			) {
+				latestReactionsMap.set(sender, reaction);
+			}
+		});
+
+		// Convert the map back to an array
+		return Array.from(latestReactionsMap.values());
+	};
+
+	const reactions = useMemo(() => getLatestReactions(), [reactionsHistory]);
 
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
@@ -321,17 +342,18 @@ const ChatMessage: React.FC<Props> = ({
 							)}
 						</span>
 
-						{reactions && reactions.length > 0 && (
-							<div className={styles.reaction}>
-								{reactions.map((item) => (
-									<Fragment key={item.id}>
-										{!!item.reaction?.emoji && (
-											<PrintMessage message={item.reaction?.emoji} />
-										)}
-									</Fragment>
-								))}
-							</div>
-						)}
+						{reactions &&
+							reactions.filter((item) => !!item.reaction?.emoji).length > 0 && (
+								<div className={styles.reaction}>
+									{reactions.map((item) => (
+										<Fragment key={item.id}>
+											{!!item.reaction?.emoji && (
+												<PrintMessage message={item.reaction?.emoji} />
+											)}
+										</Fragment>
+									))}
+								</div>
+							)}
 
 						<div style={{ clear: 'both' }} />
 					</div>
