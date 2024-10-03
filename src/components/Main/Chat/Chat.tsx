@@ -97,6 +97,7 @@ import {
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import ReactionList from '@src/interfaces/ReactionList';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -119,6 +120,8 @@ const Chat: React.FC = (props) => {
 		savedResponses,
 		messages,
 		setMessages,
+		reactions,
+		setReactions,
 		isTimestampsSame,
 	} = useChat({
 		MESSAGES_PER_PAGE,
@@ -1180,6 +1183,20 @@ const Chat: React.FC = (props) => {
 			const prevScrollTop = messagesContainer.current.scrollTop;
 			const prevScrollHeight = messagesContainer.current.scrollHeight;
 
+			// Preparing reactions
+			let preparedReactions: ReactionList = {};
+			Object.entries(preparedMessages)
+				.filter((item) => item[1].type === ChatMessageModel.TYPE_REACTION)
+				.forEach((item) => {
+					const parentMessageId = item[1].reaction?.message_id;
+					if (parentMessageId) {
+						if (!preparedReactions[parentMessageId]) {
+							preparedReactions[parentMessageId] = [];
+						}
+						preparedReactions[parentMessageId].push(item[1]);
+					}
+				});
+
 			flushSync(() => {
 				setMessages((prevState) => {
 					let nextState;
@@ -1196,6 +1213,9 @@ const Chat: React.FC = (props) => {
 					// Sort final object
 					return sortMessagesAsc(nextState);
 				});
+
+				// Reactions
+				setReactions(preparedReactions);
 			});
 
 			if (!sinceTime || replaceAll) {
@@ -1981,6 +2001,7 @@ const Chat: React.FC = (props) => {
 						<ErrorBoundary key={message[0]}>
 							<ChatMessage
 								data={message[1]}
+								reactions={reactions[message[0]] ?? []}
 								templateData={templates[message[1].templateName]}
 								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}

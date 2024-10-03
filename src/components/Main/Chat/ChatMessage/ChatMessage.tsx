@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -40,6 +40,7 @@ import ReactionModel from '@src/api/models/ReactionModel';
 
 interface Props {
 	data: ChatMessageModel;
+	reactions: [ChatMessageModel];
 	templateData?: TemplateModel;
 	displaySender?: boolean;
 	displayDate?: boolean;
@@ -58,6 +59,7 @@ const iconStyles = {
 
 const ChatMessage: React.FC<Props> = ({
 	data,
+	reactions,
 	templateData,
 	displaySender,
 	displayDate,
@@ -130,7 +132,7 @@ const ChatMessage: React.FC<Props> = ({
 					<div
 						className={cx({
 							chat__message: true,
-							[styles.messageWithReaction]: (data.reactions?.length ?? 0) > 0,
+							[styles.messageWithReaction]: reactions.length > 0,
 							['messageType__' + data.type]: true,
 							hasMedia: data.hasMediaToPreview(),
 							chat__outgoing: data.isFromUs,
@@ -319,10 +321,14 @@ const ChatMessage: React.FC<Props> = ({
 							)}
 						</span>
 
-						{data.reactions && data.reactions.length > 0 && (
+						{reactions && reactions.length > 0 && (
 							<div className={styles.reaction}>
-								{data.reactions.map((item: ReactionModel) => (
-									<PrintMessage message={item.emoji} />
+								{reactions.map((item) => (
+									<Fragment key={item.id}>
+										{!!item.reaction?.emoji && (
+											<PrintMessage message={item.reaction?.emoji} />
+										)}
+									</Fragment>
 								))}
 							</div>
 						)}

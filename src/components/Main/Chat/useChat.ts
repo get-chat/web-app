@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { useAppSelector } from '@src/store/hooks';
+import ReactionList from '@src/interfaces/ReactionList';
 
 interface Props {
 	MESSAGES_PER_PAGE: number;
@@ -13,6 +14,7 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
 	const [messages, setMessages] = useState<ChatMessageList>({});
+	const [reactions, setReactions] = useState<ReactionList>({});
 
 	const isTimestampsSame = (checkInReverse: boolean = false): boolean => {
 		const messagesArray = Object.values(messages);
@@ -48,6 +50,8 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		savedResponses,
 		messages,
 		setMessages,
+		reactions,
+		setReactions,
 		isTimestampsSame,
 	};
 };

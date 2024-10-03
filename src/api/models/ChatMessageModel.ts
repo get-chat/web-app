@@ -49,7 +49,8 @@ export class ChatMessageModel {
 	public templateName?: string | null;
 	public text?: string | null;
 	public caption?: string | null;
-	public reactions?: [ReactionModel];
+	public reaction?: ReactionModel;
+	public reactions: [ChatMessageModel];
 	public buttonText?: string | null;
 	public interactiveButtonText?: string | null;
 	public isForwarded: boolean;
@@ -129,6 +130,7 @@ export class ChatMessageModel {
 			payload.audio?.caption ??
 			payload.document?.caption;
 
+		this.reaction = payload.reaction;
 		this.reactions = payload.reactions ?? [];
 
 		this.mimeType =
