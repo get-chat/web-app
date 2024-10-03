@@ -36,7 +36,14 @@ function ChatMessageShortContent(props) {
 				props.text ?? props.buttonText ?? props.interactiveButtonText;
 			return <PrintMessage message={text} smallEmoji={true} />;
 		} else if (props.type === ChatMessageModel.TYPE_REACTION) {
-			const text = t('Reacted to a message: ' + props.reaction?.emoji);
+			let rawText = '';
+			if (props.isLastMessageFromUs) {
+				rawText = `You reacted with: ${props.reaction?.emoji}`;
+			} else {
+				rawText = `Reacted with: ${props.reaction?.emoji}`;
+			}
+
+			const text = t(rawText);
 			return <PrintMessage message={text} smallEmoji={true} />;
 		}
 
