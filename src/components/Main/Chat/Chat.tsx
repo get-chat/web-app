@@ -97,7 +97,6 @@ import {
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import ReactionList from '@src/interfaces/ReactionList';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1112,6 +1111,7 @@ const Chat: React.FC = (props) => {
 				}
 
 				const preparedMessages = chatMessagesResponse.messages;
+				const preparedReactions = chatMessagesResponse.reactions;
 
 				const lastMessage = getLastObject(preparedMessages);
 
@@ -1136,6 +1136,7 @@ const Chat: React.FC = (props) => {
 					// List assignment events
 					listChatAssignmentEvents(
 						preparedMessages,
+						preparedReactions,
 						isInitial,
 						callback,
 						replaceAll,
@@ -1147,6 +1148,7 @@ const Chat: React.FC = (props) => {
 				} else {
 					finishLoadingMessages(
 						preparedMessages,
+						preparedReactions,
 						isInitial,
 						callback,
 						replaceAll,
@@ -1169,6 +1171,7 @@ const Chat: React.FC = (props) => {
 	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
 	const finishLoadingMessages = (
 		preparedMessages,
+		preparedReactions,
 		isInitial,
 		callback,
 		replaceAll,
@@ -1182,20 +1185,6 @@ const Chat: React.FC = (props) => {
 			// To persist scroll position, we store current scroll information
 			const prevScrollTop = messagesContainer.current.scrollTop;
 			const prevScrollHeight = messagesContainer.current.scrollHeight;
-
-			// Preparing reactions
-			let preparedReactions: ReactionList = {};
-			Object.entries(preparedMessages)
-				.filter((item) => item[1].type === ChatMessageModel.TYPE_REACTION)
-				.forEach((item) => {
-					const parentMessageId = item[1].reaction?.message_id;
-					if (parentMessageId) {
-						if (!preparedReactions[parentMessageId]) {
-							preparedReactions[parentMessageId] = [];
-						}
-						preparedReactions[parentMessageId].push(item[1]);
-					}
-				});
 
 			flushSync(() => {
 				setMessages((prevState) => {
@@ -1264,6 +1253,7 @@ const Chat: React.FC = (props) => {
 
 	const listChatAssignmentEvents = (
 		preparedMessages,
+		preparedReactions,
 		isInitial,
 		callback,
 		replaceAll,
@@ -1291,6 +1281,7 @@ const Chat: React.FC = (props) => {
 				// List chat tagging events
 				listChatTaggingEvents(
 					preparedMessages,
+					preparedReactions,
 					isInitial,
 					callback,
 					replaceAll,
@@ -1305,6 +1296,7 @@ const Chat: React.FC = (props) => {
 
 	const listChatTaggingEvents = (
 		preparedMessages,
+		preparedReactions,
 		isInitial,
 		callback,
 		replaceAll,
@@ -1332,6 +1324,7 @@ const Chat: React.FC = (props) => {
 				// Finish loading
 				finishLoadingMessages(
 					preparedMessages,
+					preparedReactions,
 					isInitial,
 					callback,
 					replaceAll,
