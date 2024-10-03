@@ -1215,7 +1215,13 @@ const Chat: React.FC = (props) => {
 				});
 
 				// Reactions
-				setReactions(preparedReactions);
+				setReactions((prevState) => {
+					if (replaceAll) {
+						return preparedReactions;
+					} else {
+						return { ...prevState, ...preparedReactions };
+					}
+				});
 			});
 
 			if (!sinceTime || replaceAll) {
