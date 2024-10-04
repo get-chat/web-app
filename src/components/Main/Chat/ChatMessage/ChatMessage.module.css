@@ -23,7 +23,7 @@
 	align-items: center;
 	gap: 5px;
 	font-size: 12px;
-	font-weight: 700;
+	font-weight: 500;
 }
 
 .reaction :global(.emoji-mart-emoji) {
