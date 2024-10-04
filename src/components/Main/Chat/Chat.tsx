@@ -2054,6 +2054,7 @@ const Chat: React.FC = (props) => {
 				message={optionsChatMessage}
 				anchorElement={reactionAnchorEl}
 				setAnchorElement={setReactionAnchorEl}
+				onReaction={console.log}
 			/>
 
 			{isTemplatesVisible && (
