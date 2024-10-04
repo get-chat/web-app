@@ -68,7 +68,7 @@
 	align-items: center;
 	height: 25px;
 	width: 25px;
-	transition: all ease-in 0.2s;
+	transition: all ease-out 0.2s;
 }
 
 .action:hover {
