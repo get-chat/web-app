@@ -168,10 +168,6 @@ const ChatMessage: React.FC<Props> = ({
 								[styles.right]: !data.isFromUs,
 							})}
 						>
-							<div className={styles.action}>
-								<InsertEmoticon />
-							</div>
-
 							{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
 								<div
 									className={styles.action}
@@ -180,6 +176,10 @@ const ChatMessage: React.FC<Props> = ({
 									<ExpandMoreIcon />
 								</div>
 							)}
+
+							<div className={styles.action}>
+								<InsertEmoticon />
+							</div>
 						</div>
 
 						{data.isForwarded && (
