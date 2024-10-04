@@ -171,6 +171,13 @@ const ChatMessage: React.FC<Props> = ({
 								[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
 							})}
 						>
+							<div
+								className={styles.action}
+								onClick={(event) => onQuickReactionsClick?.(event, data)}
+							>
+								<InsertEmoticon />
+							</div>
+
 							{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
 								<div
 									className={styles.action}
@@ -179,13 +186,6 @@ const ChatMessage: React.FC<Props> = ({
 									<ExpandMoreIcon />
 								</div>
 							)}
-
-							<div
-								className={styles.action}
-								onClick={(event) => onQuickReactionsClick?.(event, data)}
-							>
-								<InsertEmoticon />
-							</div>
 						</div>
 
 						{data.isForwarded && (

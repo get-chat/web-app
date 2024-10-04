@@ -937,12 +937,12 @@ const Chat: React.FC = (props) => {
 
 	const displayOptionsMenu = (event, chatMessage) => {
 		// We need to use parent because menu view gets hidden
-		setMenuAnchorEl(event.currentTarget.parentElement);
+		setMenuAnchorEl(event.currentTarget);
 		setOptionsChatMessage(chatMessage);
 	};
 
 	const displayQuickReactions = (event, chatMessage) => {
-		setReactionAnchorEl(event.currentTarget.parentElement);
+		setReactionAnchorEl(event.currentTarget);
 		setOptionsChatMessage(chatMessage);
 	};
 
