@@ -97,6 +97,7 @@ import {
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -932,10 +933,16 @@ const Chat: React.FC = (props) => {
 
 	const [optionsChatMessage, setOptionsChatMessage] = useState();
 	const [menuAnchorEl, setMenuAnchorEl] = useState();
+	const [reactionAnchorEl, setReactionAnchorEl] = useState();
 
 	const displayOptionsMenu = (event, chatMessage) => {
 		// We need to use parent because menu view gets hidden
 		setMenuAnchorEl(event.currentTarget.parentElement);
+		setOptionsChatMessage(chatMessage);
+	};
+
+	const displayQuickReactions = (event, chatMessage) => {
+		setReactionAnchorEl(event.currentTarget.parentElement);
 		setOptionsChatMessage(chatMessage);
 	};
 
@@ -2013,9 +2020,8 @@ const Chat: React.FC = (props) => {
 								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}
-								onOptionsClick={(event, chatMessage) =>
-									displayOptionsMenu(event, chatMessage)
-								}
+								onOptionsClick={displayOptionsMenu}
+								onQuickReactionsClick={displayQuickReactions}
 								contactProvidersData={props.contactProvidersData}
 								setMessageWithStatuses={props.setMessageWithStatuses}
 							/>
@@ -2025,6 +2031,12 @@ const Chat: React.FC = (props) => {
 
 				<div className="chat__body__empty" />
 			</div>
+
+			<QuickReactionsMenu
+				message={optionsChatMessage}
+				anchorElement={reactionAnchorEl}
+				setAnchorElement={setReactionAnchorEl}
+			/>
 
 			{isTemplatesVisible && (
 				<TemplateListWithControls

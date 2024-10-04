@@ -9,7 +9,7 @@
 	padding: 0 5px;
 	border-radius: 12px;
 	box-shadow: 0 3px 5px -6px rgba(0, 0, 45, 0.4);
-	border: 1px solid #e8e1dd;
+	border: 1px solid var(--chat-bg);
 	font-size: 15px;
 	height: 23px;
 	display: flex;

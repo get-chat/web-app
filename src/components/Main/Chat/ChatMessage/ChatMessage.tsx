@@ -45,6 +45,7 @@ interface Props {
 	displayDate?: boolean;
 	contactProvidersData?: { [key: string]: any };
 	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
+	onQuickReactionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
 	isTemplatesFailed?: boolean;
 	retryMessage?: (message: ChatMessageModel) => void;
@@ -64,6 +65,7 @@ const ChatMessage: React.FC<Props> = ({
 	displayDate,
 	contactProvidersData,
 	onOptionsClick,
+	onQuickReactionsClick,
 	goToMessageId,
 	isTemplatesFailed,
 	retryMessage,
@@ -178,7 +180,10 @@ const ChatMessage: React.FC<Props> = ({
 								</div>
 							)}
 
-							<div className={styles.action}>
+							<div
+								className={styles.action}
+								onClick={(event) => onQuickReactionsClick?.(event, data)}
+							>
 								<InsertEmoticon />
 							</div>
 						</div>
