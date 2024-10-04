@@ -1253,6 +1253,24 @@ const Chat: React.FC = (props) => {
 
 			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
+
+			// Workaround to fix pagination with too many reactions in response
+			// Check number of non-reaction messages loaded initially
+			// if less than MESSAGES_PER_PAGE - 10
+			// then load more messages
+			if (
+				Object.entries(preparedMessages).filter(
+					(item) => item[1].type !== ChatMessageModel.TYPE_REACTION
+				).length <
+				MESSAGES_PER_PAGE - 10
+			) {
+				setLoadingMoreMessages(true);
+				listMessages(
+					false,
+					undefined,
+					getFirstObject(preparedMessages)?.timestamp
+				);
+			}
 		}
 
 		// Promise
