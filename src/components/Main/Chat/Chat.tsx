@@ -317,6 +317,7 @@ const Chat: React.FC = (props) => {
 		setPerson(undefined);
 		setChat(undefined);
 		setMessages([]);
+		setReactions([]);
 		setHasOlderMessagesToLoad(true);
 		setTemplatesVisible(false);
 		setSavedResponsesVisible(false);
