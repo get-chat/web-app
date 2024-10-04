@@ -61,14 +61,24 @@
 .action {
 	cursor: pointer;
 	z-index: 3;
-	background-color: rgba(0, 0, 45, 0.25);
+	background-color: rgba(100, 86, 82, 0.4);
 	border-radius: 35px;
+	display: flex;
 	justify-content: center;
 	align-items: center;
+	height: 25px;
+	width: 25px;
+	transition: all ease-in 0.2s;
+}
+
+.action:hover {
+	background-color: rgba(100, 86, 82, 0.65);
 }
 
 .action :global(.MuiSvgIcon-root) {
 	color: white !important;
+	height: 18px !important;
+	width: 18px !important;
 }
 
 :global(.chat__message__outer):hover .actions {
