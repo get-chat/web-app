@@ -123,6 +123,7 @@ const Chat: React.FC = (props) => {
 		reactions,
 		setReactions,
 		isTimestampsSame,
+		mergeReactionLists,
 	} = useChat({
 		MESSAGES_PER_PAGE,
 	});
@@ -546,7 +547,9 @@ const Chat: React.FC = (props) => {
 
 					// Reactions
 					const preparedReactions = ChatMessagesResponse.prepareReactions(data);
-					setReactions((prevState) => ({ ...prevState, ...preparedReactions }));
+					setReactions((prevState) =>
+						mergeReactionLists(prevState, preparedReactions)
+					);
 				});
 			}
 		};
@@ -1220,7 +1223,7 @@ const Chat: React.FC = (props) => {
 					if (replaceAll) {
 						return preparedReactions;
 					} else {
-						return { ...prevState, ...preparedReactions };
+						return mergeReactionLists(prevState, preparedReactions);
 					}
 				});
 			});

@@ -43,6 +43,30 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		return isSame;
 	};
 
+	function mergeReactionLists(
+		prevState: ReactionList,
+		preparedReactions: ReactionList
+	): ReactionList {
+		const mergedReactions: ReactionList = { ...prevState };
+
+		for (const key in preparedReactions) {
+			if (preparedReactions.hasOwnProperty(key)) {
+				if (mergedReactions[key]) {
+					// Merge arrays for the same key
+					mergedReactions[key] = [
+						...mergedReactions[key],
+						...preparedReactions[key],
+					];
+				} else {
+					// Add the new key-value pair if it doesn't exist
+					mergedReactions[key] = preparedReactions[key];
+				}
+			}
+		}
+
+		return mergedReactions;
+	}
+
 	return {
 		currentUser,
 		users,
@@ -53,6 +77,7 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		reactions,
 		setReactions,
 		isTimestampsSame,
+		mergeReactionLists,
 	};
 };
 
