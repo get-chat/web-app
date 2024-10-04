@@ -36,6 +36,7 @@ import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
+import useChatMessage from '@src/components/Main/Chat/ChatMessage/useChatMessage';
 
 interface Props {
 	data: ChatMessageModel;
@@ -76,27 +77,9 @@ const ChatMessage: React.FC<Props> = ({
 
 	const dispatch = useAppDispatch();
 
-	const getLatestReactions = (): ChatMessageModel[] => {
-		const latestReactionsMap: Map<string, ChatMessageModel> = new Map();
-
-		reactionsHistory.forEach((reaction) => {
-			const sender = reaction.payload.from;
-			const existingReaction = latestReactionsMap.get(sender);
-
-			// Update the map if no entry exists or if this reaction has a later timestamp
-			if (
-				!existingReaction ||
-				reaction.timestamp > existingReaction.timestamp
-			) {
-				latestReactionsMap.set(sender, reaction);
-			}
-		});
-
-		// Convert the map back to an array
-		return Array.from(latestReactionsMap.values());
-	};
-
-	const reactions = useMemo(() => getLatestReactions(), [reactionsHistory]);
+	const { reactions, reactionsWithCount } = useChatMessage({
+		reactionsHistory,
+	});
 
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
@@ -348,18 +331,20 @@ const ChatMessage: React.FC<Props> = ({
 							)}
 						</span>
 
-						{reactions &&
-							reactions.filter((item) => !!item.reaction?.emoji).length > 0 && (
-								<div className={styles.reaction}>
-									{reactions.map((item) => (
-										<Fragment key={item.id}>
-											{!!item.reaction?.emoji && (
-												<PrintMessage message={item.reaction?.emoji} />
-											)}
-										</Fragment>
-									))}
-								</div>
-							)}
+						{reactionsWithCount && reactionsWithCount.length > 0 && (
+							<div className={styles.reactions}>
+								{reactionsWithCount.map((item) => (
+									<div key={item.emoji} className={styles.reaction}>
+										<PrintMessage message={item.emoji} />
+									</div>
+								))}
+								{reactionsWithCount.length > 1 && (
+									<div className={styles.reactionCount}>
+										{reactionsWithCount.length}
+									</div>
+								)}
+							</div>
+						)}
 
 						<div style={{ clear: 'both' }} />
 					</div>
