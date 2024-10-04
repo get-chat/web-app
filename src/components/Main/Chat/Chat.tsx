@@ -1432,6 +1432,34 @@ const Chat: React.FC = (props) => {
 		return sanitizedRequestBody;
 	};
 
+	const sendReaction = (messageId: string, emoji: string | null) => {
+		const requestBody = {
+			wa_id: waId,
+			type: ChatMessageModel.TYPE_REACTION,
+			reaction: {
+				message_id: messageId,
+				emoji: emoji,
+			},
+		};
+
+		apiService.sendMessageCall(
+			sanitizeRequestBody(requestBody),
+			(response) => {
+				// Done
+			},
+			(error) => {
+				if (error.response) {
+					const status = error.response.status;
+					if (status === 453) {
+						setExpired(true);
+					}
+
+					handleIfUnauthorized(error);
+				}
+			}
+		);
+	};
+
 	const sendMessage = (
 		willQueue,
 		e,
@@ -2054,7 +2082,7 @@ const Chat: React.FC = (props) => {
 				message={optionsChatMessage}
 				anchorElement={reactionAnchorEl}
 				setAnchorElement={setReactionAnchorEl}
-				onReaction={console.log}
+				onReaction={sendReaction}
 			/>
 
 			{isTemplatesVisible && (

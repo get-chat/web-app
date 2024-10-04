@@ -8,10 +8,10 @@ interface Props {
 	message: ChatMessageModel | null;
 	anchorElement: HTMLElement | null;
 	setAnchorElement: (anchorElement: HTMLElement | null) => void;
-	onReaction: (emoji: string | null) => void;
+	onReaction: (messageId: string, emoji: string | null) => void;
 }
 
-const emojis = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
+const EMOJIS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 
 const QuickReactionsMenu: React.FC<Props> = ({
 	message,
@@ -35,11 +35,13 @@ const QuickReactionsMenu: React.FC<Props> = ({
 			className={styles.menu}
 		>
 			<div className={styles.reactions}>
-				{emojis.map((emoji) => (
+				{EMOJIS.map((emoji) => (
 					<div
 						key={emoji}
 						onClick={() => {
-							onReaction(emoji);
+							if (message?.id) {
+								onReaction(message.id, emoji);
+							}
 							hide();
 						}}
 					>
