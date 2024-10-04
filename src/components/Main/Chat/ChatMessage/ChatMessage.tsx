@@ -166,6 +166,7 @@ const ChatMessage: React.FC<Props> = ({
 							className={cx({
 								[styles.actions]: true,
 								[styles.right]: !data.isFromUs,
+								[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
 							})}
 						>
 							{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (

@@ -35,6 +35,10 @@
 	transition: all 0.5s;
 }
 
+.actions:not(.right).nonText {
+	left: -32px;
+}
+
 .actions.right {
 	left: unset;
 	right: -32px;
@@ -43,10 +47,14 @@
 .action {
 	cursor: pointer;
 	z-index: 3;
-	background-color: rgba(0, 0, 45, 0.07);
+	background-color: rgba(0, 0, 45, 0.25);
 	border-radius: 35px;
 	justify-content: center;
 	align-items: center;
+}
+
+.action :global(.MuiSvgIcon-root) {
+	color: white !important;
 }
 
 :global(.chat__message__outer):hover .actions {
