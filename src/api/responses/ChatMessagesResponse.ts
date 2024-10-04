@@ -23,6 +23,7 @@ class ChatMessagesResponse {
 			data.results.reverse();
 		}
 
+		// Messages
 		const messages: ChatMessageList = {};
 		data.results.forEach((message) => {
 			const prepared = new ChatMessageModel(message);
@@ -37,7 +38,14 @@ class ChatMessagesResponse {
 		});
 		this.messages = messages;
 
-		// Preparing reactions
+		// Reactions
+		this.reactions = ChatMessagesResponse.prepareReactions(messages);
+
+		this.count = data.count;
+		this.next = data.next;
+	}
+
+	static prepareReactions(messages: ChatMessageList) {
 		let reactions: ReactionList = {};
 		Object.entries(messages)
 			.filter((item) => item[1].type === ChatMessageModel.TYPE_REACTION)
@@ -52,10 +60,8 @@ class ChatMessagesResponse {
 					}
 				}
 			});
-		this.reactions = reactions;
 
-		this.count = data.count;
-		this.next = data.next;
+		return reactions;
 	}
 }
 

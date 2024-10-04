@@ -542,6 +542,10 @@ const Chat: React.FC = (props) => {
 
 						return newState ?? prevState;
 					});
+
+					// Reactions
+					const preparedReactions = ChatMessagesResponse.prepareReactions(data);
+					setReactions((prevState) => ({ ...prevState, ...preparedReactions }));
 				});
 			}
 		};
