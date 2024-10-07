@@ -2063,9 +2063,9 @@ const Chat: React.FC = (props) => {
 								data={message[1]}
 								reactionsHistory={reactions[message[0]] ?? []}
 								templateData={templates[message[1].templateName]}
-								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}
-								date={curMsgDate}
+								displayDate={willDisplayDate}
+								isExpired={isExpired}
 								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}

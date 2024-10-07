@@ -44,6 +44,7 @@ interface Props {
 	templateData?: TemplateModel;
 	displaySender?: boolean;
 	displayDate?: boolean;
+	isExpired?: boolean;
 	contactProvidersData?: { [key: string]: any };
 	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
 	onQuickReactionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
@@ -64,6 +65,7 @@ const ChatMessage: React.FC<Props> = ({
 	templateData,
 	displaySender,
 	displayDate,
+	isExpired,
 	contactProvidersData,
 	onOptionsClick,
 	onQuickReactionsClick,
@@ -154,12 +156,14 @@ const ChatMessage: React.FC<Props> = ({
 								[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
 							})}
 						>
-							<div
-								className={styles.action}
-								onClick={(event) => onQuickReactionsClick?.(event, data)}
-							>
-								<InsertEmoticon />
-							</div>
+							{!isExpired && (
+								<div
+									className={styles.action}
+									onClick={(event) => onQuickReactionsClick?.(event, data)}
+								>
+									<InsertEmoticon />
+								</div>
+							)}
 
 							{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
 								<div
