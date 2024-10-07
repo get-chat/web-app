@@ -154,6 +154,7 @@ const ChatMessage: React.FC<Props> = ({
 								[styles.actions]: true,
 								[styles.right]: !data.isFromUs,
 								[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
+								[styles.isExpired]: !!isExpired,
 							})}
 						>
 							{!isExpired && (
