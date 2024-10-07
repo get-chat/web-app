@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo } from 'react';
+import React from 'react';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';
 import ErrorIcon from '@mui/icons-material/Error';
@@ -40,7 +40,7 @@ import useChatMessage from '@src/components/Main/Chat/ChatMessage/useChatMessage
 
 interface Props {
 	data: ChatMessageModel;
-	reactionsHistory: ChatMessageModel[];
+	reactionsHistory?: ChatMessageModel[];
 	templateData?: TemplateModel;
 	displaySender?: boolean;
 	displayDate?: boolean;

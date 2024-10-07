@@ -2,14 +2,14 @@ import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useMemo } from 'react';
 
 interface Props {
-	reactionsHistory: ChatMessageModel[];
+	reactionsHistory?: ChatMessageModel[];
 }
 
 const useChatMessage = ({ reactionsHistory }: Props) => {
 	const getLatestReactions = (): ChatMessageModel[] => {
 		const latestReactionsMap: Map<string, ChatMessageModel> = new Map();
 
-		reactionsHistory.forEach((reaction) => {
+		reactionsHistory?.forEach((reaction) => {
 			const sender = reaction.payload.from;
 			const existingReaction = latestReactionsMap.get(sender);
 
