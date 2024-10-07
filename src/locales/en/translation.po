@@ -972,3 +972,10 @@ msgstr ""
 
 msgid "Export"
 msgstr ""
+
+msgid "You reacted with: %s"
+msgstr ""
+
+
+msgid "Reacted with: %s"
+msgstr ""

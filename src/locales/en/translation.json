@@ -311,5 +311,7 @@
 	"Export Chats": "",
 	"Export chats": "",
 	"Export by date": "",
-	"Export": ""
+	"Export": "",
+	"You reacted with: %s": "",
+	"Reacted with: %s": ""
 }
