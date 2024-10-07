@@ -979,3 +979,10 @@ msgstr ""
 
 msgid "Reacted with: %s"
 msgstr ""
+
+msgid "You deleted a reaction."
+msgstr ""
+
+
+msgid "Deleted a reaction."
+msgstr ""

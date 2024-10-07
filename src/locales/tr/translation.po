@@ -1009,3 +1009,10 @@ msgstr "Şu şekilde tepki verdin: %s"
 
 msgid "Reacted with: %s"
 msgstr "Şu şekilde tepki verdi: %s"
+
+
+msgid "You deleted a reaction."
+msgstr "Bir tepkiyi kaldırdın."
+
+msgid "Deleted a reaction."
+msgstr "Bir tepkiyi kaldırdı."

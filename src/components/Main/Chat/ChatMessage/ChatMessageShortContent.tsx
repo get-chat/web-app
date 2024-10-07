@@ -38,9 +38,13 @@ function ChatMessageShortContent(props) {
 		} else if (props.type === ChatMessageModel.TYPE_REACTION) {
 			let rawText = '';
 			if (props.isLastMessageFromUs) {
-				rawText = t('You reacted with: %s', props.reaction?.emoji);
+				rawText = props.reaction?.emoji
+					? t('You reacted with: %s', props.reaction.emoji)
+					: t('You deleted a reaction.');
 			} else {
-				rawText = t('Reacted with: %s', props.reaction?.emoji);
+				rawText = props.reaction?.emoji
+					? t('Reacted with: %s', props.reaction.emoji)
+					: t('Deleted a reaction.');
 			}
 
 			const text = t(rawText);
