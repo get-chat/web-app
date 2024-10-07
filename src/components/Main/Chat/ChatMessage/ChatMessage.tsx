@@ -53,6 +53,7 @@ interface Props {
 	retryMessage?: (message: ChatMessageModel) => void;
 	disableMediaPreview?: boolean;
 	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
+	isActionsEnabled?: boolean;
 }
 
 const iconStyles = {
@@ -74,6 +75,7 @@ const ChatMessage: React.FC<Props> = ({
 	retryMessage,
 	disableMediaPreview,
 	setMessageWithStatuses,
+	isActionsEnabled = false,
 }) => {
 	const { t } = useTranslation();
 
@@ -149,32 +151,34 @@ const ChatMessage: React.FC<Props> = ({
 							chat__failed: data.isFailed,
 						})}
 					>
-						<div
-							className={cx({
-								[styles.actions]: true,
-								[styles.right]: !data.isFromUs,
-								[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
-								[styles.isExpired]: !!isExpired,
-							})}
-						>
-							{!isExpired && (
-								<div
-									className={styles.action}
-									onClick={(event) => onQuickReactionsClick?.(event, data)}
-								>
-									<InsertEmoticon />
-								</div>
-							)}
+						{isActionsEnabled && (
+							<div
+								className={cx({
+									[styles.actions]: true,
+									[styles.right]: !data.isFromUs,
+									[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
+									[styles.isExpired]: !!isExpired,
+								})}
+							>
+								{!isExpired && (
+									<div
+										className={styles.action}
+										onClick={(event) => onQuickReactionsClick?.(event, data)}
+									>
+										<InsertEmoticon />
+									</div>
+								)}
 
-							{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
-								<div
-									className={styles.action}
-									onClick={(event) => onOptionsClick?.(event, data)}
-								>
-									<ExpandMoreIcon />
-								</div>
-							)}
-						</div>
+								{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
+									<div
+										className={styles.action}
+										onClick={(event) => onOptionsClick?.(event, data)}
+									>
+										<ExpandMoreIcon />
+									</div>
+								)}
+							</div>
+						)}
 
 						{data.isForwarded && (
 							<div className={styles.forwarded}>

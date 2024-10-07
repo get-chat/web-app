@@ -2073,6 +2073,7 @@ const Chat: React.FC = (props) => {
 								onQuickReactionsClick={displayQuickReactions}
 								contactProvidersData={props.contactProvidersData}
 								setMessageWithStatuses={props.setMessageWithStatuses}
+								isActionsEnabled={true}
 							/>
 						</ErrorBoundary>
 					);
