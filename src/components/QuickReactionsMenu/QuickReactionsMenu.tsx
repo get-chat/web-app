@@ -3,11 +3,13 @@ import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import PrintMessage from '@src/components/PrintMessage';
 import { Menu } from '@mui/material';
 import styles from './QuickReactionsMenu.module.css';
+import AddIcon from '@mui/icons-material/Add';
 
 interface Props {
 	message: ChatMessageModel | null;
 	anchorElement: HTMLElement | null;
 	setAnchorElement: (anchorElement: HTMLElement | null) => void;
+	setEmojiPickerAnchorElement: (anchorElement: HTMLElement | null) => void;
 	onReaction: (messageId: string, emoji: string | null) => void;
 }
 
@@ -17,6 +19,7 @@ const QuickReactionsMenu: React.FC<Props> = ({
 	message,
 	anchorElement,
 	setAnchorElement,
+	setEmojiPickerAnchorElement,
 	onReaction,
 }) => {
 	const hide = () => {
@@ -48,6 +51,14 @@ const QuickReactionsMenu: React.FC<Props> = ({
 						<PrintMessage message={emoji} smallEmoji />
 					</div>
 				))}
+				<div
+					onClick={() => {
+						setEmojiPickerAnchorElement(anchorElement);
+						hide();
+					}}
+				>
+					<AddIcon />
+				</div>
 			</div>
 		</Menu>
 	);

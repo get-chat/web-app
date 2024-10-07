@@ -98,6 +98,7 @@ import {
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
+import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -936,7 +937,9 @@ const Chat: React.FC = (props) => {
 
 	const [optionsChatMessage, setOptionsChatMessage] = useState();
 	const [menuAnchorEl, setMenuAnchorEl] = useState();
-	const [reactionAnchorEl, setReactionAnchorEl] = useState();
+	const [quickReactionAnchorEl, setQuickReactionAnchorEl] = useState();
+	const [reactionsEmojiPickerAnchorEl, setReactionsEmojiPickerAnchorEl] =
+		useState();
 
 	const displayOptionsMenu = (event, chatMessage) => {
 		// We need to use parent because menu view gets hidden
@@ -945,7 +948,7 @@ const Chat: React.FC = (props) => {
 	};
 
 	const displayQuickReactions = (event, chatMessage) => {
-		setReactionAnchorEl(event.currentTarget);
+		setQuickReactionAnchorEl(event.currentTarget);
 		setOptionsChatMessage(chatMessage);
 	};
 
@@ -2084,8 +2087,16 @@ const Chat: React.FC = (props) => {
 
 			<QuickReactionsMenu
 				message={optionsChatMessage}
-				anchorElement={reactionAnchorEl}
-				setAnchorElement={setReactionAnchorEl}
+				anchorElement={quickReactionAnchorEl}
+				setAnchorElement={setQuickReactionAnchorEl}
+				setEmojiPickerAnchorElement={setReactionsEmojiPickerAnchorEl}
+				onReaction={sendReaction}
+			/>
+
+			<ReactionsEmojiPicker
+				message={optionsChatMessage}
+				anchorElement={reactionsEmojiPickerAnchorEl}
+				setAnchorElement={setReactionsEmojiPickerAnchorEl}
 				onReaction={sendReaction}
 			/>
 
