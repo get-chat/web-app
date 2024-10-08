@@ -5,7 +5,7 @@ interface Props {
 	reactionsHistory?: ChatMessageModel[];
 }
 
-const useChatMessage = ({ reactionsHistory }: Props) => {
+const useReactions = ({ reactionsHistory }: Props) => {
 	const getLatestReactions = (): ChatMessageModel[] => {
 		const latestReactionsMap: Map<string, ChatMessageModel> = new Map();
 
@@ -46,4 +46,4 @@ const useChatMessage = ({ reactionsHistory }: Props) => {
 	};
 };
 
-export default useChatMessage;
+export default useReactions;

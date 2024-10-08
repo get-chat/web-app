@@ -1,9 +1,16 @@
 .menu > :global(.MuiPaper-root) {
 	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
 	border-radius: 10px !important;
+	padding: 0 10px;
 }
 
 .reactions {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.reaction .sender {
+	font-size: 12px;
+	font-weight: 700;
 }

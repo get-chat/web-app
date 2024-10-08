@@ -36,7 +36,7 @@ import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
-import useChatMessage from '@src/components/Main/Chat/ChatMessage/useChatMessage';
+import useReactions from '@src/hooks/useReactions';
 
 interface Props {
 	data: ChatMessageModel;
@@ -86,7 +86,7 @@ const ChatMessage: React.FC<Props> = ({
 
 	const dispatch = useAppDispatch();
 
-	const { reactions, reactionsWithCount } = useChatMessage({
+	const { reactions, reactionsWithCount } = useReactions({
 		reactionsHistory,
 	});
 

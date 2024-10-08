@@ -1,21 +1,26 @@
 import React from 'react';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import styles from '@src/components/QuickReactionsMenu/QuickReactionsMenu.module.css';
+import styles from './ReactionDetails.module.css';
 import { Menu } from '@mui/material';
+import useReactions from '@src/hooks/useReactions';
 
 export type Props = {
 	message: ChatMessageModel | null;
-	reactions: ChatMessageModel[];
+	reactionsHistory: ChatMessageModel[];
 	anchorElement: HTMLElement | null;
 	setAnchorElement: (anchorElement: HTMLElement | null) => void;
 };
 
 const ReactionDetails: React.FC<Props> = ({
 	message,
-	reactions,
+	reactionsHistory,
 	anchorElement,
 	setAnchorElement,
 }) => {
+	const { reactions, reactionsWithCount } = useReactions({
+		reactionsHistory,
+	});
+
 	return (
 		<Menu
 			anchorEl={anchorElement}
