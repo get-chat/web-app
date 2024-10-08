@@ -3,6 +3,9 @@ import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import styles from './ReactionDetails.module.css';
 import { Menu } from '@mui/material';
 import useReactions from '@src/hooks/useReactions';
+import PrintMessage from '@src/components/PrintMessage';
+import Moment from 'react-moment';
+import { CALENDAR_SHORT } from '@src/Constants';
 
 export type Props = {
 	message: ChatMessageModel | null;
@@ -33,12 +36,24 @@ const ReactionDetails: React.FC<Props> = ({
 			className={styles.menu}
 		>
 			<div className={styles.reactions}>
-				{reactions?.map((reaction) => (
-					<div className={styles.reaction}>
-						<div className={styles.sender}>{reaction.senderName}</div>
-						<div>{reaction.reaction?.emoji}</div>
-					</div>
-				))}
+				{reactions
+					?.filter((item) => !!item.reaction?.emoji)
+					.map((reaction) => (
+						<div className={styles.reaction}>
+							<div className={styles.sender}>{reaction.senderName}</div>
+							<span className={styles.timestamp}>
+								<Moment
+									date={reaction.timestamp}
+									calendar={CALENDAR_SHORT}
+									unix
+								/>
+							</span>
+							<PrintMessage
+								message={reaction.reaction?.emoji ?? ''}
+								smallEmoji
+							/>
+						</div>
+					))}
 			</div>
 		</Menu>
 	);
