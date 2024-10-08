@@ -299,7 +299,10 @@ const ChatMessage: React.FC<Props> = ({
 							className="chat__message__info"
 							onClick={() => {
 								if (data.isFromUs) {
-									setMessageWithStatuses?.(clone(data));
+									const clonedMessage = clone(data);
+									// Injecting reactions
+									clonedMessage.reactions = reactions;
+									setMessageWithStatuses?.(clonedMessage);
 									dispatch(setMessageStatusesVisible(true));
 								}
 							}}

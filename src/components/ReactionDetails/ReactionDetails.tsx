@@ -41,13 +41,13 @@ const ReactionDetails: React.FC<Props> = ({
 					.map((reaction) => (
 						<div className={styles.reaction}>
 							<div className={styles.sender}>{reaction.senderName}</div>
-							<span className={styles.timestamp}>
+							<div className={styles.timestamp}>
 								<Moment
 									date={reaction.timestamp}
 									calendar={CALENDAR_SHORT}
 									unix
 								/>
-							</span>
+							</div>
 							<PrintMessage
 								message={reaction.reaction?.emoji ?? ''}
 								smallEmoji
