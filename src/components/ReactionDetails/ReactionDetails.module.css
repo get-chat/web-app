@@ -9,6 +9,7 @@
 	flex-direction: column;
 	gap: 10px;
 	max-width: 100%;
+	min-width: 150px;
 }
 
 .reaction {
