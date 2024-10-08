@@ -99,6 +99,7 @@ import {
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
+import ReactionDetails from '@src/components/ReactionDetails';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -940,6 +941,7 @@ const Chat: React.FC = (props) => {
 	const [quickReactionAnchorEl, setQuickReactionAnchorEl] = useState();
 	const [reactionsEmojiPickerAnchorEl, setReactionsEmojiPickerAnchorEl] =
 		useState();
+	const [reactionDetailsAnchorEl, setReactionDetailsAnchorEl] = useState();
 
 	const displayOptionsMenu = (event, chatMessage) => {
 		// We need to use parent because menu view gets hidden
@@ -949,6 +951,11 @@ const Chat: React.FC = (props) => {
 
 	const displayQuickReactions = (event, chatMessage) => {
 		setQuickReactionAnchorEl(event.currentTarget);
+		setOptionsChatMessage(chatMessage);
+	};
+
+	const displayReactionDetails = (event, chatMessage) => {
+		setReactionDetailsAnchorEl(event.currentTarget);
 		setOptionsChatMessage(chatMessage);
 	};
 
@@ -2074,6 +2081,7 @@ const Chat: React.FC = (props) => {
 								retryMessage={retryMessage}
 								onOptionsClick={displayOptionsMenu}
 								onQuickReactionsClick={displayQuickReactions}
+								onReactionDetailsClick={displayReactionDetails}
 								contactProvidersData={props.contactProvidersData}
 								setMessageWithStatuses={props.setMessageWithStatuses}
 								isActionsEnabled={true}
@@ -2097,6 +2105,13 @@ const Chat: React.FC = (props) => {
 				message={optionsChatMessage}
 				anchorElement={reactionsEmojiPickerAnchorEl}
 				setAnchorElement={setReactionsEmojiPickerAnchorEl}
+				onReaction={sendReaction}
+			/>
+
+			<ReactionDetails
+				message={optionsChatMessage}
+				anchorElement={reactionDetailsAnchorEl}
+				setAnchorElement={setReactionDetailsAnchorEl}
 				onReaction={sendReaction}
 			/>
 

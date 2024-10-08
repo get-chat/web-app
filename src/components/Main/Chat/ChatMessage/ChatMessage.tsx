@@ -48,6 +48,10 @@ interface Props {
 	contactProvidersData?: { [key: string]: any };
 	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
 	onQuickReactionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
+	onReactionDetailsClick?: (
+		e: React.MouseEvent,
+		data: ChatMessageModel
+	) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
 	isTemplatesFailed?: boolean;
 	retryMessage?: (message: ChatMessageModel) => void;
@@ -70,6 +74,7 @@ const ChatMessage: React.FC<Props> = ({
 	contactProvidersData,
 	onOptionsClick,
 	onQuickReactionsClick,
+	onReactionDetailsClick,
 	goToMessageId,
 	isTemplatesFailed,
 	retryMessage,
@@ -341,7 +346,10 @@ const ChatMessage: React.FC<Props> = ({
 						</span>
 
 						{reactionsWithCount && reactionsWithCount.length > 0 && (
-							<div className={styles.reactions}>
+							<div
+								className={styles.reactions}
+								onClick={(event) => onReactionDetailsClick?.(event, data)}
+							>
 								{reactionsWithCount.map((item) => (
 									<div key={item.emoji} className={styles.reaction}>
 										<PrintMessage message={item.emoji} />
