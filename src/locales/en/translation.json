@@ -315,5 +315,6 @@
 	"You reacted with: %s": "",
 	"Reacted with: %s": "",
 	"You deleted a reaction.": "",
-	"Deleted a reaction.": ""
+	"Deleted a reaction.": "",
+	"Reactions": ""
 }

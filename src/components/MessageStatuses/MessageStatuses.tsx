@@ -53,6 +53,7 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 
 						{reactions.length > 0 && (
 							<div className={styles.section}>
+								<h5>{t('Reactions')}</h5>
 								{reactions
 									.filter((item) => !!item.reaction?.emoji)
 									.map((reaction) => (

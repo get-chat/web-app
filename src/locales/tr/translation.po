@@ -1014,3 +1014,6 @@ msgstr "Bir tepkiyi kaldırdın."
 
 msgid "Deleted a reaction."
 msgstr "Bir tepkiyi kaldırdı."
+
+msgid "Reactions"
+msgstr "Tepkiler"
