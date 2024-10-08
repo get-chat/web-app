@@ -2110,6 +2110,9 @@ const Chat: React.FC = (props) => {
 
 			<ReactionDetails
 				message={optionsChatMessage}
+				reactions={
+					optionsChatMessage ? reactions[optionsChatMessage.id] ?? [] : []
+				}
 				anchorElement={reactionDetailsAnchorEl}
 				setAnchorElement={setReactionDetailsAnchorEl}
 				onReaction={sendReaction}

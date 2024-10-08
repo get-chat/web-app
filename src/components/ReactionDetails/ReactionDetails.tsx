@@ -5,12 +5,14 @@ import { Menu } from '@mui/material';
 
 export type Props = {
 	message: ChatMessageModel | null;
+	reactions: ChatMessageModel[];
 	anchorElement: HTMLElement | null;
 	setAnchorElement: (anchorElement: HTMLElement | null) => void;
 };
 
 const ReactionDetails: React.FC<Props> = ({
 	message,
+	reactions,
 	anchorElement,
 	setAnchorElement,
 }) => {
@@ -25,10 +27,10 @@ const ReactionDetails: React.FC<Props> = ({
 			disableAutoFocusItem={true}
 			className={styles.menu}
 		>
-			<div>
-				{message?.reactions?.map((reaction) => (
-					<div>
-						<div>{reaction.senderName}</div>
+			<div className={styles.reactions}>
+				{reactions?.map((reaction) => (
+					<div className={styles.reaction}>
+						<div className={styles.sender}>{reaction.senderName}</div>
 						<div>{reaction.reaction?.emoji}</div>
 					</div>
 				))}
