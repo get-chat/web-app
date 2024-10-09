@@ -53,6 +53,8 @@ const ChatFooter: React.FC = ({
 	setSelectedFiles,
 	isTemplatesVisible,
 	setTemplatesVisible,
+	isInteractiveMessagesVisible,
+	setInteractiveMessagesVisible,
 	accept,
 	isSavedResponsesVisible,
 	setSavedResponsesVisible,
@@ -159,6 +161,20 @@ const ChatFooter: React.FC = ({
 
 		setTemplatesVisible((prevState) => {
 			if (!prevState) {
+				setInteractiveMessagesVisible(false);
+				setAttachmentOptionsVisible(false);
+				setSavedResponsesVisible(false);
+				setEmojiPickerVisible(false);
+			}
+
+			return !prevState;
+		});
+	};
+
+	const toggleInteractiveMessages = () => {
+		setInteractiveMessagesVisible((prevState) => {
+			if (!prevState) {
+				setTemplatesVisible(false);
 				setAttachmentOptionsVisible(false);
 				setSavedResponsesVisible(false);
 				setEmojiPickerVisible(false);
@@ -171,6 +187,7 @@ const ChatFooter: React.FC = ({
 	const toggleSavedResponses = () => {
 		setSavedResponsesVisible((prevState) => {
 			if (!prevState) {
+				setInteractiveMessagesVisible(false);
 				setAttachmentOptionsVisible(false);
 				setTemplatesVisible(false);
 				setEmojiPickerVisible(false);
@@ -183,6 +200,7 @@ const ChatFooter: React.FC = ({
 	const toggleEmojiPicker = () => {
 		setEmojiPickerVisible((prevState) => {
 			if (!prevState) {
+				setTemplatesVisible(false);
 				setAttachmentOptionsVisible(false);
 				setTemplatesVisible(false);
 				setSavedResponsesVisible(false);
@@ -402,7 +420,7 @@ const ChatFooter: React.FC = ({
 					</Tooltip>
 
 					<Tooltip
-						title={t('Interactive')}
+						title={t('Interactive Messages')}
 						placement="top"
 						className={cx({
 							desktopOnly: isAttachmentOptionsVisible,
@@ -410,10 +428,10 @@ const ChatFooter: React.FC = ({
 						disableInteractive
 					>
 						<IconButton
-							onClick={toggleTemplateMessages}
+							onClick={toggleInteractiveMessages}
 							className={cx({
 								actionIcon: true,
-								active: isTemplatesVisible,
+								active: isInteractiveMessagesVisible,
 							})}
 							size="small"
 						>

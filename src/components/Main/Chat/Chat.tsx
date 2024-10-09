@@ -129,6 +129,8 @@ const Chat: React.FC = (props) => {
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
 	const [isTemplatesVisible, setTemplatesVisible] = useState(false);
+	const [isInteractiveMessagesVisible, setInteractiveMessagesVisible] =
+		useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 
 	const [person, setPerson] = useState();
@@ -2035,6 +2037,8 @@ const Chat: React.FC = (props) => {
 					setSelectedFiles={setSelectedFiles}
 					isTemplatesVisible={isTemplatesVisible}
 					setTemplatesVisible={setTemplatesVisible}
+					isInteractiveMessagesVisible={isInteractiveMessagesVisible}
+					setInteractiveMessagesVisible={setInteractiveMessagesVisible}
 					accept={accept}
 					isSavedResponsesVisible={isSavedResponsesVisible}
 					setSavedResponsesVisible={setSavedResponsesVisible}
