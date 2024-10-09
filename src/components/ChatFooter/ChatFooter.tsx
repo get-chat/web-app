@@ -8,6 +8,7 @@ import {
 	Send,
 } from '@mui/icons-material';
 import SmsIcon from '@mui/icons-material/Sms';
+import TryIcon from '@mui/icons-material/Try';
 import ImageIcon from '@mui/icons-material/Image';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ContactsIcon from '@mui/icons-material/Contacts';
@@ -397,6 +398,26 @@ const ChatFooter: React.FC = ({
 							size="small"
 						>
 							<SmsIcon />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip
+						title={t('Interactive')}
+						placement="top"
+						className={cx({
+							desktopOnly: isAttachmentOptionsVisible,
+						})}
+						disableInteractive
+					>
+						<IconButton
+							onClick={toggleTemplateMessages}
+							className={cx({
+								actionIcon: true,
+								active: isTemplatesVisible,
+							})}
+							size="small"
+						>
+							<TryIcon />
 						</IconButton>
 					</Tooltip>
 
