@@ -483,12 +483,13 @@ const Chat: React.FC = (props) => {
 							const chatMessage = message[1];
 
 							if (waId === chatMessage.waId) {
-								// Check if any message is displayed with internal id
-								// Fix duplicated messages in this way
+								// Replace message displayed with internal id
 								const internalIdString = chatMessage.generateInternalIdString();
-								if (!(internalIdString in prevState)) {
-									preparedMessages[msgId] = chatMessage;
+								if (internalIdString in prevState) {
+									delete prevState[internalIdString];
 								}
+
+								preparedMessages[msgId] = chatMessage;
 
 								if (!chatMessage.isFromUs) {
 									hasAnyIncomingMsg = true;
