@@ -97,6 +97,7 @@ import {
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import InteractiveMessageList from '@src/components/InteractiveMessageList';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -2010,6 +2011,8 @@ const Chat: React.FC = (props) => {
 					}}
 				/>
 			)}
+
+			{isInteractiveMessagesVisible && <InteractiveMessageList />}
 
 			<SendTemplateDialog
 				isVisible={isSendTemplateDialogVisible}
