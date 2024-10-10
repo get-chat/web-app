@@ -98,6 +98,9 @@ import {
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import InteractiveMessageList from '@src/components/InteractiveMessageList';
+import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
+import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
+import ReactionDetails from '@src/components/ReactionDetails';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -120,7 +123,10 @@ const Chat: React.FC = (props) => {
 		savedResponses,
 		messages,
 		setMessages,
+		reactions,
+		setReactions,
 		isTimestampsSame,
+		mergeReactionLists,
 	} = useChat({
 		MESSAGES_PER_PAGE,
 	});
@@ -318,6 +324,7 @@ const Chat: React.FC = (props) => {
 		setPerson(undefined);
 		setChat(undefined);
 		setMessages([]);
+		setReactions([]);
 		setHasOlderMessagesToLoad(true);
 		setTemplatesVisible(false);
 		setSavedResponsesVisible(false);
@@ -479,12 +486,13 @@ const Chat: React.FC = (props) => {
 							const chatMessage = message[1];
 
 							if (waId === chatMessage.waId) {
-								// Check if any message is displayed with internal id
-								// Fix duplicated messages in this way
+								// Replace message displayed with internal id
 								const internalIdString = chatMessage.generateInternalIdString();
-								if (!(internalIdString in prevState)) {
-									preparedMessages[msgId] = chatMessage;
+								if (internalIdString in prevState) {
+									delete prevState[internalIdString];
 								}
+
+								preparedMessages[msgId] = chatMessage;
 
 								if (!chatMessage.isFromUs) {
 									hasAnyIncomingMsg = true;
@@ -542,6 +550,12 @@ const Chat: React.FC = (props) => {
 
 						return newState ?? prevState;
 					});
+
+					// Reactions
+					const preparedReactions = ChatMessagesResponse.prepareReactions(data);
+					setReactions((prevState) =>
+						mergeReactionLists(prevState, preparedReactions)
+					);
 				});
 			}
 		};
@@ -928,10 +942,24 @@ const Chat: React.FC = (props) => {
 
 	const [optionsChatMessage, setOptionsChatMessage] = useState();
 	const [menuAnchorEl, setMenuAnchorEl] = useState();
+	const [quickReactionAnchorEl, setQuickReactionAnchorEl] = useState();
+	const [reactionsEmojiPickerAnchorEl, setReactionsEmojiPickerAnchorEl] =
+		useState();
+	const [reactionDetailsAnchorEl, setReactionDetailsAnchorEl] = useState();
 
 	const displayOptionsMenu = (event, chatMessage) => {
 		// We need to use parent because menu view gets hidden
-		setMenuAnchorEl(event.currentTarget.parentElement);
+		setMenuAnchorEl(event.currentTarget);
+		setOptionsChatMessage(chatMessage);
+	};
+
+	const displayQuickReactions = (event, chatMessage) => {
+		setQuickReactionAnchorEl(event.currentTarget);
+		setOptionsChatMessage(chatMessage);
+	};
+
+	const displayReactionDetails = (event, chatMessage) => {
+		setReactionDetailsAnchorEl(event.currentTarget);
 		setOptionsChatMessage(chatMessage);
 	};
 
@@ -1112,6 +1140,7 @@ const Chat: React.FC = (props) => {
 				}
 
 				const preparedMessages = chatMessagesResponse.messages;
+				const preparedReactions = chatMessagesResponse.reactions;
 
 				const lastMessage = getLastObject(preparedMessages);
 
@@ -1136,6 +1165,7 @@ const Chat: React.FC = (props) => {
 					// List assignment events
 					listChatAssignmentEvents(
 						preparedMessages,
+						preparedReactions,
 						isInitial,
 						callback,
 						replaceAll,
@@ -1147,6 +1177,7 @@ const Chat: React.FC = (props) => {
 				} else {
 					finishLoadingMessages(
 						preparedMessages,
+						preparedReactions,
 						isInitial,
 						callback,
 						replaceAll,
@@ -1169,6 +1200,7 @@ const Chat: React.FC = (props) => {
 	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
 	const finishLoadingMessages = (
 		preparedMessages,
+		preparedReactions,
 		isInitial,
 		callback,
 		replaceAll,
@@ -1198,6 +1230,15 @@ const Chat: React.FC = (props) => {
 
 					// Sort final object
 					return sortMessagesAsc(nextState);
+				});
+
+				// Reactions
+				setReactions((prevState) => {
+					if (replaceAll) {
+						return preparedReactions;
+					} else {
+						return mergeReactionLists(prevState, preparedReactions);
+					}
 				});
 			});
 
@@ -1229,6 +1270,24 @@ const Chat: React.FC = (props) => {
 
 			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
+
+			// Workaround to fix pagination with too many reactions in response
+			// Check number of non-reaction messages loaded initially
+			// if less than MESSAGES_PER_PAGE - 10
+			// then load more messages
+			if (
+				Object.entries(preparedMessages).filter(
+					(item) => item[1].type !== ChatMessageModel.TYPE_REACTION
+				).length <
+				MESSAGES_PER_PAGE - 10
+			) {
+				setLoadingMoreMessages(true);
+				listMessages(
+					false,
+					undefined,
+					getFirstObject(preparedMessages)?.timestamp
+				);
+			}
 		}
 
 		// Promise
@@ -1241,6 +1300,7 @@ const Chat: React.FC = (props) => {
 
 	const listChatAssignmentEvents = (
 		preparedMessages,
+		preparedReactions,
 		isInitial,
 		callback,
 		replaceAll,
@@ -1268,6 +1328,7 @@ const Chat: React.FC = (props) => {
 				// List chat tagging events
 				listChatTaggingEvents(
 					preparedMessages,
+					preparedReactions,
 					isInitial,
 					callback,
 					replaceAll,
@@ -1282,6 +1343,7 @@ const Chat: React.FC = (props) => {
 
 	const listChatTaggingEvents = (
 		preparedMessages,
+		preparedReactions,
 		isInitial,
 		callback,
 		replaceAll,
@@ -1309,6 +1371,7 @@ const Chat: React.FC = (props) => {
 				// Finish loading
 				finishLoadingMessages(
 					preparedMessages,
+					preparedReactions,
 					isInitial,
 					callback,
 					replaceAll,
@@ -1384,6 +1447,34 @@ const Chat: React.FC = (props) => {
 		const sanitizedRequestBody = { ...requestBody };
 		delete sanitizedRequestBody['pendingMessageUniqueId'];
 		return sanitizedRequestBody;
+	};
+
+	const sendReaction = (messageId: string, emoji: string | null) => {
+		const requestBody = {
+			wa_id: waId,
+			type: ChatMessageModel.TYPE_REACTION,
+			reaction: {
+				message_id: messageId,
+				emoji: emoji,
+			},
+		};
+
+		apiService.sendMessageCall(
+			sanitizeRequestBody(requestBody),
+			(response) => {
+				// Done
+			},
+			(error) => {
+				if (error.response) {
+					const status = error.response.status;
+					if (status === 453) {
+						setExpired(true);
+					}
+
+					handleIfUnauthorized(error);
+				}
+			}
+		);
 	};
 
 	const sendMessage = (
@@ -1944,6 +2035,9 @@ const Chat: React.FC = (props) => {
 				<div className="chat__empty" />
 
 				{Object.entries(messages).map((message, index) => {
+					// Ignoring reaction messages
+					if (message[1].type === ChatMessageModel.TYPE_REACTION) return;
+
 					// Message date is created here and passed to ChatMessage for a better performance
 					const curMsgDate = moment.unix(message[1].timestamp);
 
@@ -1981,18 +2075,20 @@ const Chat: React.FC = (props) => {
 						<ErrorBoundary key={message[0]}>
 							<ChatMessage
 								data={message[1]}
+								reactionsHistory={reactions[message[0]] ?? []}
 								templateData={templates[message[1].templateName]}
-								displayDate={willDisplayDate}
 								displaySender={willDisplaySender}
-								date={curMsgDate}
+								displayDate={willDisplayDate}
+								isExpired={isExpired}
 								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}
-								onOptionsClick={(event, chatMessage) =>
-									displayOptionsMenu(event, chatMessage)
-								}
+								onOptionsClick={displayOptionsMenu}
+								onQuickReactionsClick={displayQuickReactions}
+								onReactionDetailsClick={displayReactionDetails}
 								contactProvidersData={props.contactProvidersData}
 								setMessageWithStatuses={props.setMessageWithStatuses}
+								isActionsEnabled={true}
 							/>
 						</ErrorBoundary>
 					);
@@ -2000,6 +2096,31 @@ const Chat: React.FC = (props) => {
 
 				<div className="chat__body__empty" />
 			</div>
+
+			<QuickReactionsMenu
+				message={optionsChatMessage}
+				anchorElement={quickReactionAnchorEl}
+				setAnchorElement={setQuickReactionAnchorEl}
+				setEmojiPickerAnchorElement={setReactionsEmojiPickerAnchorEl}
+				onReaction={sendReaction}
+			/>
+
+			<ReactionsEmojiPicker
+				message={optionsChatMessage}
+				anchorElement={reactionsEmojiPickerAnchorEl}
+				setAnchorElement={setReactionsEmojiPickerAnchorEl}
+				onReaction={sendReaction}
+			/>
+
+			<ReactionDetails
+				message={optionsChatMessage}
+				reactionsHistory={
+					optionsChatMessage ? reactions[optionsChatMessage.id] ?? [] : []
+				}
+				anchorElement={reactionDetailsAnchorEl}
+				setAnchorElement={setReactionDetailsAnchorEl}
+				onReaction={sendReaction}
+			/>
 
 			{isTemplatesVisible && (
 				<TemplateListWithControls

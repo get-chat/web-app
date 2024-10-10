@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { useAppSelector } from '@src/store/hooks';
+import ReactionList from '@src/interfaces/ReactionList';
 
 interface Props {
 	MESSAGES_PER_PAGE: number;
@@ -13,6 +14,7 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
 	const [messages, setMessages] = useState<ChatMessageList>({});
+	const [reactions, setReactions] = useState<ReactionList>({});
 
 	const isTimestampsSame = (checkInReverse: boolean = false): boolean => {
 		const messagesArray = Object.values(messages);
@@ -41,6 +43,30 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		return isSame;
 	};
 
+	function mergeReactionLists(
+		prevState: ReactionList,
+		preparedReactions: ReactionList
+	): ReactionList {
+		const mergedReactions: ReactionList = { ...prevState };
+
+		for (const key in preparedReactions) {
+			if (preparedReactions.hasOwnProperty(key)) {
+				if (mergedReactions[key]) {
+					// Merge arrays for the same key
+					mergedReactions[key] = [
+						...mergedReactions[key],
+						...preparedReactions[key],
+					];
+				} else {
+					// Add the new key-value pair if it doesn't exist
+					mergedReactions[key] = preparedReactions[key];
+				}
+			}
+		}
+
+		return mergedReactions;
+	}
+
 	return {
 		currentUser,
 		users,
@@ -48,7 +74,10 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		savedResponses,
 		messages,
 		setMessages,
+		reactions,
+		setReactions,
 		isTimestampsSame,
+		mergeReactionLists,
 	};
 };
 

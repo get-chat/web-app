@@ -1,5 +1,6 @@
 import ChatMessageModel from '../models/ChatMessageModel';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import ReactionList from '@src/interfaces/ReactionList';
 
 interface ResponseData {
 	results: [];
@@ -9,6 +10,7 @@ interface ResponseData {
 
 class ChatMessagesResponse {
 	public messages;
+	public reactions;
 	public count;
 	public next;
 
@@ -21,6 +23,7 @@ class ChatMessagesResponse {
 			data.results.reverse();
 		}
 
+		// Messages
 		const messages: ChatMessageList = {};
 		data.results.forEach((message) => {
 			const prepared = new ChatMessageModel(message);
@@ -35,8 +38,30 @@ class ChatMessagesResponse {
 		});
 		this.messages = messages;
 
+		// Reactions
+		this.reactions = ChatMessagesResponse.prepareReactions(messages);
+
 		this.count = data.count;
 		this.next = data.next;
+	}
+
+	static prepareReactions(messages: ChatMessageList) {
+		let reactions: ReactionList = {};
+		Object.entries(messages)
+			.filter((item) => item[1].type === ChatMessageModel.TYPE_REACTION)
+			.forEach((item) => {
+				const message = item[1];
+				const parentMessageId = message.reaction?.message_id;
+				if (parentMessageId) {
+					if (!reactions[parentMessageId]) {
+						reactions[parentMessageId] = [message];
+					} else {
+						reactions[parentMessageId].push(message);
+					}
+				}
+			});
+
+		return reactions;
 	}
 }
 

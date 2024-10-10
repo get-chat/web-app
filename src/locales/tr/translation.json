@@ -311,5 +311,10 @@
 	"Export Chats": "Sohbetleri Dışa Aktar",
 	"Export chats": "Sohbetleri dışa aktar",
 	"Export by date": "Tarihe göre dışa aktar",
-	"Export": "Dışa aktar"
+	"Export": "Dışa aktar",
+	"You reacted with: %s": "Şu şekilde tepki verdin: %s",
+	"Reacted with: %s": "Şu şekilde tepki verdi: %s",
+	"You deleted a reaction.": "Bir tepkiyi kaldırdın.",
+	"Deleted a reaction.": "Bir tepkiyi kaldırdı.",
+	"Reactions": "Tepkiler"
 }

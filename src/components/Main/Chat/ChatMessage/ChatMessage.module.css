@@ -1,0 +1,104 @@
+.messageWithReaction {
+	margin-bottom: 42px;
+}
+
+.reactions {
+	background-color: white;
+	position: absolute;
+	left: 5px;
+	padding: 0 5px;
+	border-radius: 12px;
+	box-shadow: 0 3px 5px -6px rgba(0, 0, 45, 0.4);
+	border: 1px solid var(--chat-bg);
+	font-size: 15px;
+	height: 23px;
+	display: flex;
+	gap: 5px;
+	align-items: center;
+	cursor: pointer;
+}
+
+.reactions > * {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.reaction :global(.emoji-mart-emoji) {
+	height: 15px !important;
+	width: 15px !important;
+}
+
+.reaction :global(.printMessage > span) {
+	display: flex;
+}
+
+.reactionCount {
+	opacity: 0.5;
+}
+
+.actions {
+	position: absolute;
+	top: 4px;
+	left: -60px;
+	opacity: 0;
+	display: flex;
+	gap: 5px;
+	transition: all 0.5s;
+}
+
+.actions:not(.right).nonText,
+.actions:not(.right).isExpired {
+	left: -32px;
+}
+
+.actions.right {
+	left: unset;
+	right: -32px;
+}
+
+.action {
+	cursor: pointer;
+	z-index: 3;
+	background-color: rgba(100, 86, 82, 0.4);
+	border-radius: 35px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 25px;
+	width: 25px;
+	transition: all ease-out 0.2s;
+}
+
+.action:hover {
+	background-color: rgba(100, 86, 82, 0.65);
+}
+
+.action :global(.MuiSvgIcon-root) {
+	color: white !important;
+	height: 18px !important;
+	width: 18px !important;
+}
+
+:global(.chat__message__outer):hover .actions {
+	opacity: 1;
+}
+
+.forwarded {
+	font-size: 12px;
+	color: rgba(0, 0, 45, 0.5);
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-bottom: 5px;
+}
+
+.forwarded :global(.MuiSvgIcon-root) {
+	color: rgba(0, 0, 45, 0.3) !important;
+	transform: scale(-1, 1);
+	height: 0.7em;
+	width: 0.7em;
+	margin-right: 5px;
+}

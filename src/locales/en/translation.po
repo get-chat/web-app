@@ -972,3 +972,18 @@ msgstr ""
 
 msgid "Export"
 msgstr ""
+
+msgid "You reacted with: %s"
+msgstr ""
+
+msgid "Reacted with: %s"
+msgstr ""
+
+msgid "You deleted a reaction."
+msgstr ""
+
+msgid "Deleted a reaction."
+msgstr ""
+
+msgid "Reactions"
+msgstr ""

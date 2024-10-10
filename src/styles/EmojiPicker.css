@@ -52,6 +52,11 @@
 
 button.emoji-mart-emoji {
 	outline: none;
+	transition: all ease-out 0.2s;
+}
+
+button.emoji-mart-emoji:hover {
+	transform: scale(1.2);
 }
 
 .emoji-mart-category .emoji-mart-emoji span:hover {
