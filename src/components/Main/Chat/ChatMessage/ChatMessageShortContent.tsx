@@ -7,9 +7,11 @@ import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import PrintMessage from '../../../PrintMessage';
 import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
+import { useTranslation } from 'react-i18next';
 
 function ChatMessageShortContent(props) {
 	const templates = useAppSelector((state) => state.templates.value);
+	const { t } = useTranslation();
 
 	const print = () => {
 		if (props.type === ChatMessageModel.TYPE_TEMPLATE && props.template) {
@@ -32,6 +34,20 @@ function ChatMessageShortContent(props) {
 		) {
 			const text =
 				props.text ?? props.buttonText ?? props.interactiveButtonText;
+			return <PrintMessage message={text} smallEmoji={true} />;
+		} else if (props.type === ChatMessageModel.TYPE_REACTION) {
+			let rawText = '';
+			if (props.isLastMessageFromUs) {
+				rawText = props.reaction?.emoji
+					? t('You reacted with: %s', props.reaction.emoji)
+					: t('You deleted a reaction.');
+			} else {
+				rawText = props.reaction?.emoji
+					? t('Reacted with: %s', props.reaction.emoji)
+					: t('Deleted a reaction.');
+			}
+
+			const text = t(rawText);
 			return <PrintMessage message={text} smallEmoji={true} />;
 		}
 

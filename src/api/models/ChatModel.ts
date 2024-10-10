@@ -4,6 +4,7 @@ import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import UserModel from '@src/api/models/UserModel';
 import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 class ChatModel {
 	public waId: string;
@@ -17,7 +18,7 @@ class ChatModel {
 	public isExpired: boolean = true;
 
 	public lastMessageType?: string;
-	public lastMessage?: any;
+	public lastMessage?: ChatMessageModel | any;
 	public lastMessageButtonText?: string;
 	public interactiveButtonText?: string;
 	public lastMessageBody?: string;

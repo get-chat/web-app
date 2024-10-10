@@ -221,6 +221,7 @@ const ChatListItem = (props: any) => {
 									text={data.lastMessageBody}
 									caption={data.lastMessageCaption}
 									isLastMessageFromUs={data.isLastMessageFromUs}
+									reaction={data.lastMessage?.reaction}
 								/>
 							</div>
 

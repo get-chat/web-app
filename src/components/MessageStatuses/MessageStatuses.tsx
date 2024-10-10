@@ -10,6 +10,9 @@ import DoneIcon from '@mui/icons-material/Done';
 import DoneAll from '@mui/icons-material/DoneAll';
 import useMessageStatuses from '@src/components/MessageStatuses/useMessageStatuses';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
+import useReactions from '@src/hooks/useReactions';
+import { CALENDAR_SHORT } from '@src/Constants';
+import PrintMessage from '@src/components/PrintMessage';
 
 interface Props {
 	message?: ChatMessageModel;
@@ -21,6 +24,9 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 	const { t } = useTranslation();
 
 	const { message, templates, close } = useMessageStatuses({ initialMessage });
+	const { reactions } = useReactions({
+		reactionsHistory: message?.reactions,
+	});
 
 	return (
 		<div className={styles.container}>
@@ -44,6 +50,30 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 								}
 							/>
 						</div>
+
+						{reactions.length > 0 && (
+							<div className={styles.section}>
+								<h5>{t('Reactions')}</h5>
+								{reactions
+									.filter((item) => !!item.reaction?.emoji)
+									.map((reaction) => (
+										<div className={styles.reaction}>
+											<div className={styles.sender}>{reaction.senderName}</div>
+											<div className={styles.timestamp}>
+												<Moment
+													date={reaction.timestamp}
+													calendar={CALENDAR_SHORT}
+													unix
+												/>
+											</div>
+											<PrintMessage
+												message={reaction.reaction?.emoji ?? ''}
+												smallEmoji
+											/>
+										</div>
+									))}
+							</div>
+						)}
 
 						<div className={styles.section}>
 							{message.sentTimestamp && (

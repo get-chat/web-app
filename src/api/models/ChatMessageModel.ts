@@ -6,6 +6,7 @@ import {
 } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import TagModel from '@src/api/models/TagModel';
+import ReactionModel from '@src/api/models/ReactionModel';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -21,6 +22,7 @@ export class ChatMessageModel {
 	static TYPE_INTERACTIVE = 'interactive';
 	static TYPE_ORDER = 'order';
 	static TYPE_CONTACTS = 'contacts';
+	static TYPE_REACTION = 'reaction';
 	static STATUS_PENDING = 'pending';
 	static STATUS_SENT = 'sent';
 	static STATUS_DELIVERED = 'delivered';
@@ -47,6 +49,8 @@ export class ChatMessageModel {
 	public templateName?: string | null;
 	public text?: string | null;
 	public caption?: string | null;
+	public reaction?: ReactionModel;
+	public reactions: ChatMessageModel[];
 	public buttonText?: string | null;
 	public interactiveButtonText?: string | null;
 	public isForwarded: boolean;
@@ -125,6 +129,9 @@ export class ChatMessageModel {
 			payload.video?.caption ??
 			payload.audio?.caption ??
 			payload.document?.caption;
+
+		this.reaction = payload.reaction;
+		this.reactions = payload.reactions ?? [];
 
 		this.mimeType =
 			payload.image?.mime_type ??

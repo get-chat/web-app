@@ -1002,3 +1002,18 @@ msgstr "Tarihe göre dışa aktar"
 
 msgid "Export"
 msgstr "Dışa aktar"
+
+msgid "You reacted with: %s"
+msgstr "Şu şekilde tepki verdin: %s"
+
+msgid "Reacted with: %s"
+msgstr "Şu şekilde tepki verdi: %s"
+
+msgid "You deleted a reaction."
+msgstr "Bir tepkiyi kaldırdın."
+
+msgid "Deleted a reaction."
+msgstr "Bir tepkiyi kaldırdı."
+
+msgid "Reactions"
+msgstr "Tepkiler"

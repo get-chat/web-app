@@ -1,0 +1,19 @@
+.menu > :global(.MuiPaper-root) {
+	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
+	border-radius: 40px !important;
+	padding: 2px 12px;
+}
+
+.reactions {
+	display: flex;
+	gap: 10px;
+}
+
+.reactions > * {
+	cursor: pointer;
+	transition: all ease-out 0.2s;
+}
+
+.reactions > *:hover {
+	transform: scale(1.2);
+}

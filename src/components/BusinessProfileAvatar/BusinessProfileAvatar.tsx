@@ -22,6 +22,22 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 
 	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
+	const handleProfilePhotoError = (error: AxiosError) => {
+		try {
+			// Convert ArrayBuffer to string
+			const textDecoder = new TextDecoder();
+			const responseText = textDecoder.decode(error.response?.data);
+
+			// Attempt to parse the string as JSON
+			const parsedError = JSON.parse(responseText);
+
+			// @ts-ignore
+			window.displayCustomError(parsedError.reason ?? 'An error has occurred.');
+		} catch (e) {
+			console.error('Error parsing response:', e);
+		}
+	};
+
 	const retrieveProfilePhoto = () => {
 		apiService.retrieveProfilePhotoCall(
 			cancelTokenSourceRef.current?.token,
@@ -42,10 +58,7 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 					// Finish
 					setLoaded(true);
 				} else if (error?.response?.status === 503) {
-					// @ts-ignore
-					window.displayCustomError(
-						error.response.data?.reason ?? 'An error has occurred.'
-					);
+					handleProfilePhotoError(error);
 				} else {
 					// @ts-ignore
 					window.displayError(error);

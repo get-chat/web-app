@@ -35,19 +35,29 @@ import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
+import { InsertEmoticon } from '@mui/icons-material';
+import useReactions from '@src/hooks/useReactions';
 
 interface Props {
 	data: ChatMessageModel;
+	reactionsHistory?: ChatMessageModel[];
 	templateData?: TemplateModel;
 	displaySender?: boolean;
 	displayDate?: boolean;
+	isExpired?: boolean;
 	contactProvidersData?: { [key: string]: any };
 	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
+	onQuickReactionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
+	onReactionDetailsClick?: (
+		e: React.MouseEvent,
+		data: ChatMessageModel
+	) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
 	isTemplatesFailed?: boolean;
 	retryMessage?: (message: ChatMessageModel) => void;
 	disableMediaPreview?: boolean;
 	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
+	isActionsEnabled?: boolean;
 }
 
 const iconStyles = {
@@ -56,20 +66,29 @@ const iconStyles = {
 
 const ChatMessage: React.FC<Props> = ({
 	data,
+	reactionsHistory,
 	templateData,
 	displaySender,
 	displayDate,
+	isExpired,
 	contactProvidersData,
 	onOptionsClick,
+	onQuickReactionsClick,
+	onReactionDetailsClick,
 	goToMessageId,
 	isTemplatesFailed,
 	retryMessage,
 	disableMediaPreview,
 	setMessageWithStatuses,
+	isActionsEnabled = false,
 }) => {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
+
+	const { reactions, reactionsWithCount } = useReactions({
+		reactionsHistory,
+	});
 
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
@@ -128,6 +147,7 @@ const ChatMessage: React.FC<Props> = ({
 					<div
 						className={cx({
 							chat__message: true,
+							[styles.messageWithReaction]: reactions.length > 0,
 							['messageType__' + data.type]: true,
 							hasMedia: data.hasMediaToPreview(),
 							chat__outgoing: data.isFromUs,
@@ -136,15 +156,37 @@ const ChatMessage: React.FC<Props> = ({
 							chat__failed: data.isFailed,
 						})}
 					>
-						<div
-							className="chat__message__more"
-							onClick={(event) => onOptionsClick?.(event, data)}
-						>
-							<ExpandMoreIcon />
-						</div>
+						{isActionsEnabled && (
+							<div
+								className={cx({
+									[styles.actions]: true,
+									[styles.right]: !data.isFromUs,
+									[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
+									[styles.isExpired]: !!isExpired,
+								})}
+							>
+								{!isExpired && (
+									<div
+										className={styles.action}
+										onClick={(event) => onQuickReactionsClick?.(event, data)}
+									>
+										<InsertEmoticon />
+									</div>
+								)}
+
+								{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
+									<div
+										className={styles.action}
+										onClick={(event) => onOptionsClick?.(event, data)}
+									>
+										<ExpandMoreIcon />
+									</div>
+								)}
+							</div>
+						)}
 
 						{data.isForwarded && (
-							<div className="chat__forwarded">
+							<div className={styles.forwarded}>
 								<ReplyIcon />
 								<span>{t('Forwarded')}</span>
 							</div>
@@ -257,7 +299,10 @@ const ChatMessage: React.FC<Props> = ({
 							className="chat__message__info"
 							onClick={() => {
 								if (data.isFromUs) {
-									setMessageWithStatuses?.(clone(data));
+									const clonedMessage = clone(data);
+									// Injecting reactions
+									clonedMessage.reactions = reactions;
+									setMessageWithStatuses?.(clonedMessage);
 									dispatch(setMessageStatusesVisible(true));
 								}
 							}}
@@ -302,6 +347,24 @@ const ChatMessage: React.FC<Props> = ({
 								/>
 							)}
 						</span>
+
+						{reactionsWithCount && reactionsWithCount.length > 0 && (
+							<div
+								className={styles.reactions}
+								onClick={(event) => onReactionDetailsClick?.(event, data)}
+							>
+								{reactionsWithCount.map((item) => (
+									<div key={item.emoji} className={styles.reaction}>
+										<PrintMessage message={item.emoji} />
+									</div>
+								))}
+								{reactionsWithCount.length > 1 && (
+									<div className={styles.reactionCount}>
+										{reactionsWithCount.length}
+									</div>
+								)}
+							</div>
+						)}
 
 						<div style={{ clear: 'both' }} />
 					</div>
