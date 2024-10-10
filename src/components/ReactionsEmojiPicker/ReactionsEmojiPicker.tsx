@@ -34,6 +34,7 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 
 	return (
 		<Menu
+			transitionDuration={0}
 			anchorEl={anchorElement}
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
 			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
