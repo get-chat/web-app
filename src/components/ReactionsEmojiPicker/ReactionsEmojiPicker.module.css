@@ -9,3 +9,7 @@
 .menu :global(.MuiList-root) {
 	padding: 0;
 }
+
+.emojiPicker {
+	position: relative;
+}
