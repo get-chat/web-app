@@ -226,6 +226,7 @@ Create release on git tag:
 
   only:
     - tags
+    - merge_requests
 
   dependencies: []
 
