@@ -2,8 +2,8 @@ import styles from './InteractiveMessageList.module.css';
 
 const InteractiveMessageList = () => {
 	return (
-		<div className={styles.outer}>
-			<div className={styles.wrapper}></div>
+		<div className="interactiveMessagesOuter">
+			<div className="interactiveMessagesWrapper">List</div>
 		</div>
 	);
 };
