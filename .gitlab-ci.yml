@@ -203,7 +203,6 @@ Publish docker image:
   image: docker:20.10
   only:
     - tags
-    - merge_requests
   dependencies:
     - Build
   services:
