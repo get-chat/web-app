@@ -292,6 +292,14 @@ const Chat: React.FC = (props) => {
 					successCallback,
 					completeCallback
 				);
+			} else if (requestBody.type === ChatMessageModel.TYPE_INTERACTIVE) {
+				sendInteractiveMessage(
+					false,
+					undefined,
+					requestBody,
+					successCallback,
+					completeCallback
+				);
 			} else if (pendingMessageToSend.chosenFile) {
 				uploadMedia(
 					pendingMessageToSend.chosenFile,
@@ -1621,6 +1629,65 @@ const Chat: React.FC = (props) => {
 		);
 	};
 
+	const sendInteractiveMessage = (
+		willQueue,
+		interactiveMessage,
+		customPayload,
+		successCallback,
+		completeCallback
+	) => {
+		let requestBody;
+
+		if (customPayload) {
+			requestBody = customPayload;
+		} else {
+			requestBody = {
+				wa_id: waId,
+				type: ChatMessageModel.TYPE_INTERACTIVE,
+				interactive: interactiveMessage,
+			};
+		}
+
+		if (willQueue) {
+			if (!isLoaded) {
+				console.warn('Cancelled sending.');
+				return;
+			}
+
+			queueMessage(requestBody, successCallback, undefined, completeCallback);
+
+			return;
+		}
+
+		apiService.sendMessageCall(
+			sanitizeRequestBody(requestBody),
+			(response) => {
+				// Message is stored and will be sent later
+				if (response.status === 202) {
+					displayMessageInChatManually(requestBody, response);
+				}
+
+				successCallback?.();
+				completeCallback?.();
+			},
+			(error) => {
+				if (error.response) {
+					const status = error.response.status;
+
+					if (status === 453) {
+						setExpired(true);
+					} else if (status >= 500) {
+						handleFailedMessage(requestBody);
+					}
+
+					handleIfUnauthorized(error);
+				}
+
+				completeCallback?.();
+			}
+		);
+	};
+
 	const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
 		// To display a progress
 		props.setUploadingMedia(true);
@@ -1792,6 +1859,9 @@ const Chat: React.FC = (props) => {
 				break;
 			case ChatMessageModel.TYPE_TEMPLATE:
 				sendTemplateMessage(true, undefined, message.resendPayload);
+				break;
+			case ChatMessageModel.TYPE_INTERACTIVE:
+				sendInteractiveMessage(true, undefined, message.resendPayload);
 				break;
 			default:
 				if (
