@@ -203,6 +203,7 @@ Publish docker image:
   image: docker:20.10
   only:
     - tags
+    - merge_requests
   dependencies:
     - Build
   services:
@@ -226,7 +227,6 @@ Create release on git tag:
 
   only:
     - tags
-    - merge_requests
 
   dependencies: []
 
