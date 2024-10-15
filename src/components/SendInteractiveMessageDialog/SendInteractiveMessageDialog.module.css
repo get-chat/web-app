@@ -1,0 +1,15 @@
+.section {
+	padding: 15px;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 45, 0.03);
+	margin-top: 10px;
+}
+
+.sectionTitle {
+	color: rgba(0, 0, 45, 0.5);
+	margin-bottom: 5px;
+}
+
+.textFieldWrapper {
+	margin-top: 15px;
+}

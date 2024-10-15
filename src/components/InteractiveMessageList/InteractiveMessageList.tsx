@@ -22,13 +22,11 @@ interface Props {
 
 const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 	const { t } = useTranslation();
-	const [text, setText] = useState('');
 	const [selectedInteractiveMessage, setSelectedInteractiveMessage] =
 		useState<any>(null);
 	const [isDialogVisible, setDialogVisible] = useState(false);
 
 	const send = (payload: any) => {
-		payload.body.text = text;
 		onSend(payload);
 	};
 
@@ -37,18 +35,6 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
 					<div className="interactiveMessages">
-						{/*<div className={styles.textFieldWrapper}>
-						<TextField
-							variant="filled"
-							value={text}
-							onChange={(e) => setText(e.target.value)}
-							label={t('Enter your message here')}
-							size="medium"
-							multiline={true}
-							fullWidth={true}
-						/>
-					</div>*/}
-
 						{INTERACTIVE_MESSAGES.map((item) => (
 							<div className={styles.item}>
 								<div className="chat__message chat__outgoing messageType__interactive">

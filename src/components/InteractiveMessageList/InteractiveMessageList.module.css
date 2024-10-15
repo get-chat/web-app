@@ -1,7 +1,3 @@
-.textFieldWrapper {
-	background-color: white;
-}
-
 .item {
 	display: flex;
 	flex-direction: row;
