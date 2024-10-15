@@ -45,7 +45,9 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 
 				{INTERACTIVE_MESSAGES.map((item) => (
 					<div className={styles.item}>
-						<div>{item.type}</div>
+						<div className="chat__message chat__outgoing messageType__interactive">
+							<h4>{item.type}</h4>
+						</div>
 						<Button
 							onClick={() => send(item)}
 							// @ts-ignore
