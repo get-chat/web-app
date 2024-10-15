@@ -1,7 +1,8 @@
 import styles from './InteractiveMessageList.module.css';
-import { Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
 
 const INTERACTIVE_MESSAGES = [
 	{
@@ -22,6 +23,9 @@ interface Props {
 const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 	const { t } = useTranslation();
 	const [text, setText] = useState('');
+	const [selectedInteractiveMessage, setSelectedInteractiveMessage] =
+		useState<any>(null);
+	const [isDialogVisible, setDialogVisible] = useState(false);
 
 	const send = (payload: any) => {
 		payload.body.text = text;
@@ -29,10 +33,11 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 	};
 
 	return (
-		<div className="interactiveMessagesOuter">
-			<div className="interactiveMessagesWrapper">
-				<div className="interactiveMessages">
-					{/*<div className={styles.textFieldWrapper}>
+		<>
+			<div className="interactiveMessagesOuter">
+				<div className="interactiveMessagesWrapper">
+					<div className="interactiveMessages">
+						{/*<div className={styles.textFieldWrapper}>
 						<TextField
 							variant="filled"
 							value={text}
@@ -44,33 +49,44 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 						/>
 					</div>*/}
 
-					{INTERACTIVE_MESSAGES.map((item) => (
-						<div className={styles.item}>
-							<div className="chat__message chat__outgoing messageType__interactive">
-								<h4>{item.type}</h4>
-								{Object.entries(item)
-									.filter((entry) => entry[0] !== 'type')
-									.map((entry) => (
-										<div>
-											<span className="templateType bold lowercase">
-												{entry[0]}:
-											</span>{' '}
-											{JSON.stringify(entry[1])}
-										</div>
-									))}
+						{INTERACTIVE_MESSAGES.map((item) => (
+							<div className={styles.item}>
+								<div className="chat__message chat__outgoing messageType__interactive">
+									<h4>{item.type}</h4>
+									{Object.entries(item)
+										.filter((entry) => entry[0] !== 'type')
+										.map((entry) => (
+											<div>
+												<span className="templateType bold lowercase">
+													{entry[0]}:
+												</span>{' '}
+												{JSON.stringify(entry[1])}
+											</div>
+										))}
+								</div>
+								<Button
+									onClick={() => {
+										setSelectedInteractiveMessage(item);
+										setDialogVisible(true);
+									}}
+									// @ts-ignore
+									color="black"
+								>
+									{t('Send')}
+								</Button>
 							</div>
-							<Button
-								onClick={() => send(item)}
-								// @ts-ignore
-								color="black"
-							>
-								{t('Send')}
-							</Button>
-						</div>
-					))}
+						))}
+					</div>
 				</div>
 			</div>
-		</div>
+
+			<SendInteractiveMessageDialog
+				isVisible={isDialogVisible}
+				setVisible={setDialogVisible}
+				interactiveMessage={selectedInteractiveMessage}
+				onSend={(interactiveMessage) => send(interactiveMessage)}
+			/>
+		</>
 	);
 };
 
