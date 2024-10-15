@@ -3,7 +3,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import { Button, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
 import { isEmptyString } from '@src/helpers/Helpers';
@@ -24,6 +24,12 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	const [text, setText] = useState('');
 
 	const { t } = useTranslation();
+
+	useEffect(() => {
+		if (isVisible) {
+			setText('');
+		}
+	}, [isVisible]);
 
 	const close = () => {
 		setVisible(false);
