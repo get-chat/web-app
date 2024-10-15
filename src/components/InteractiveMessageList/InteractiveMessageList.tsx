@@ -32,7 +32,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 		<div className="interactiveMessagesOuter">
 			<div className="interactiveMessagesWrapper">
 				<div className="interactiveMessages">
-					<div className={styles.textFieldWrapper}>
+					{/*<div className={styles.textFieldWrapper}>
 						<TextField
 							variant="filled"
 							value={text}
@@ -42,17 +42,22 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 							multiline={true}
 							fullWidth={true}
 						/>
-					</div>
+					</div>*/}
 
 					{INTERACTIVE_MESSAGES.map((item) => (
 						<div className={styles.item}>
 							<div className="chat__message chat__outgoing messageType__interactive">
 								<h4>{item.type}</h4>
-								{Object.entries(item).map((entry) => (
-									<div>
-										{entry[0]}: {JSON.stringify(entry[1])}
-									</div>
-								))}
+								{Object.entries(item)
+									.filter((entry) => entry[0] !== 'type')
+									.map((entry) => (
+										<div>
+											<span className="templateType bold lowercase">
+												{entry[0]}:
+											</span>{' '}
+											{JSON.stringify(entry[1])}
+										</div>
+									))}
 							</div>
 							<Button
 								onClick={() => send(item)}
