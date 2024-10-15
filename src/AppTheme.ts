@@ -41,6 +41,13 @@ const AppTheme = createTheme({
 				dense: true,
 			},
 		},
+		MuiButton: {
+			styleOverrides: {
+				root: {
+					borderRadius: 10,
+				},
+			},
+		},
 	},
 });
 
