@@ -1017,3 +1017,6 @@ msgstr "Bir tepkiyi kaldırdı."
 
 msgid "Reactions"
 msgstr "Tepkiler"
+
+msgid "Send an interactive message"
+msgstr "Bir interaktif mesaj gönder"

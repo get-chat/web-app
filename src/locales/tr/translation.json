@@ -316,5 +316,6 @@
 	"Reacted with: %s": "Şu şekilde tepki verdi: %s",
 	"You deleted a reaction.": "Bir tepkiyi kaldırdın.",
 	"Deleted a reaction.": "Bir tepkiyi kaldırdı.",
-	"Reactions": "Tepkiler"
+	"Reactions": "Tepkiler",
+	"Send an interactive message": "Bir interaktif mesaj gönder"
 }

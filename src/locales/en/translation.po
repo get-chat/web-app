@@ -987,3 +987,6 @@ msgstr ""
 
 msgid "Reactions"
 msgstr ""
+
+msgid "Send an interactive message"
+msgstr ""

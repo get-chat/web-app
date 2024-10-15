@@ -316,5 +316,6 @@
 	"Reacted with: %s": "",
 	"You deleted a reaction.": "",
 	"Deleted a reaction.": "",
-	"Reactions": ""
+	"Reactions": "",
+	"Send an interactive message": ""
 }

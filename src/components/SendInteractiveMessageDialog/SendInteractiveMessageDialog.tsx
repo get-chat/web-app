@@ -27,8 +27,15 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	return (
 		<Dialog open={isVisible} onClose={close}>
-			<DialogTitle>{t('Send a interactive message')}</DialogTitle>
-			<DialogContent>{JSON.stringify(interactiveMessage)}</DialogContent>
+			<DialogTitle>{t('Send an interactive message')}</DialogTitle>
+			<DialogContent>
+				{interactiveMessage && (
+					<>
+						<h4>{interactiveMessage.type}</h4>
+						<div>{JSON.stringify(interactiveMessage)}</div>
+					</>
+				)}
+			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
 					{t('Close')}
