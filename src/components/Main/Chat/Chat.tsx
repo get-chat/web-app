@@ -2203,7 +2203,13 @@ const Chat: React.FC = (props) => {
 				/>
 			)}
 
-			{isInteractiveMessagesVisible && <InteractiveMessageList />}
+			{isInteractiveMessagesVisible && (
+				<InteractiveMessageList
+					onSend={(interactiveMessage) =>
+						sendInteractiveMessage(true, interactiveMessage)
+					}
+				/>
+			)}
 
 			<SendTemplateDialog
 				isVisible={isSendTemplateDialogVisible}

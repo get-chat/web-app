@@ -15,13 +15,17 @@ const INTERACTIVE_MESSAGES = [
 	},
 ];
 
-const InteractiveMessageList = () => {
+interface Props {
+	onSend: (interactiveMessage: any) => void;
+}
+
+const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 	const { t } = useTranslation();
 	const [text, setText] = useState('');
 
 	const send = (payload: any) => {
 		payload.body.text = text;
-		console.log(payload);
+		onSend(payload);
 	};
 
 	return (
