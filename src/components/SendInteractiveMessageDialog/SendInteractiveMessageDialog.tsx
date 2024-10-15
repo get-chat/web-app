@@ -6,6 +6,7 @@ import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
+import { isEmptyString } from '@src/helpers/Helpers';
 
 export type Props = {
 	isVisible: boolean;
@@ -26,6 +27,16 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	const close = () => {
 		setVisible(false);
+	};
+
+	const updateTextAndSend = () => {
+		if (interactiveMessage) {
+			const clone = { ...interactiveMessage };
+			clone.body.text = text;
+			onSend(clone);
+		}
+
+		close();
 	};
 
 	return (
@@ -66,9 +77,10 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 					{t('Close')}
 				</Button>
 				<Button
-					onClick={() => onSend(interactiveMessage)}
+					onClick={updateTextAndSend}
 					color="primary"
 					autoFocus
+					disabled={isEmptyString(text)}
 				>
 					{t('Send')}
 				</Button>

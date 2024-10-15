@@ -419,25 +419,27 @@ const ChatFooter: React.FC = ({
 						</IconButton>
 					</Tooltip>
 
-					<Tooltip
-						title={t('Interactive Messages')}
-						placement="top"
-						className={cx({
-							desktopOnly: isAttachmentOptionsVisible,
-						})}
-						disableInteractive
-					>
-						<IconButton
-							onClick={toggleInteractiveMessages}
+					{!isExpired && (
+						<Tooltip
+							title={t('Interactive Messages')}
+							placement="top"
 							className={cx({
-								actionIcon: true,
-								active: isInteractiveMessagesVisible,
+								desktopOnly: isAttachmentOptionsVisible,
 							})}
-							size="small"
+							disableInteractive
 						>
-							<TryIcon />
-						</IconButton>
-					</Tooltip>
+							<IconButton
+								onClick={toggleInteractiveMessages}
+								className={cx({
+									actionIcon: true,
+									active: isInteractiveMessagesVisible,
+								})}
+								size="small"
+							>
+								<TryIcon />
+							</IconButton>
+						</Tooltip>
+					)}
 
 					{!isExpired && (
 						<Tooltip
