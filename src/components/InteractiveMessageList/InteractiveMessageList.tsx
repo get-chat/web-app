@@ -40,8 +40,8 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
 					<div className="interactiveMessages">
-						{INTERACTIVE_MESSAGES.map((item) => (
-							<div className={styles.item}>
+						{INTERACTIVE_MESSAGES.map((item, index) => (
+							<div className={styles.item} key={index}>
 								<Button
 									onClick={() => {
 										setSelectedInteractiveMessage(item.payload);

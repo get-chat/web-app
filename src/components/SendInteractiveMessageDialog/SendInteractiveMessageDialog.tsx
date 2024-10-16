@@ -7,6 +7,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
 import { isEmptyString } from '@src/helpers/Helpers';
+import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 export type Props = {
 	isVisible: boolean;
@@ -22,6 +24,16 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	onSend,
 }) => {
 	const [text, setText] = useState('');
+	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
+
+	useEffect(() => {
+		if (interactiveMessage) {
+			const clone = { ...interactiveMessage };
+			clone.body.text = text;
+
+			setMessageData(ChatMessageModel.fromInteractive(clone));
+		}
+	}, [text, interactiveMessage]);
 
 	const { t } = useTranslation();
 
@@ -50,32 +62,25 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			<DialogTitle>{t('Send an interactive message')}</DialogTitle>
 			<DialogContent>
 				{interactiveMessage && (
-					<>
-						<h4>{interactiveMessage.type}</h4>
-
-						{Object.entries(interactiveMessage)
-							.filter((entry) => entry[0] !== 'type')
-							.map((entry) => (
-								<div className={styles.section}>
-									<h6 className={styles.sectionTitle}>
-										{entry[0]?.toUpperCase()}
-									</h6>
-									<div>{JSON.stringify(entry[1])}</div>
-								</div>
-							))}
-
-						<div className={styles.textFieldWrapper}>
-							<TextField
-								variant="standard"
-								value={text}
-								onChange={(e) => setText(e.target.value)}
-								label={t('Enter your message here')}
-								size="medium"
-								multiline={true}
-								fullWidth={true}
-							/>
+					<div className={styles.container}>
+						<div>
+							<div className={styles.textFieldWrapper}>
+								<TextField
+									variant="standard"
+									value={text}
+									onChange={(e) => setText(e.target.value)}
+									label={t('Enter your message here')}
+									size="medium"
+									multiline={true}
+									fullWidth={true}
+								/>
+							</div>
 						</div>
-					</>
+
+						<div className={styles.previewContainer}>
+							{messageData && <ChatMessage data={messageData} />}
+						</div>
+					</div>
 				)}
 			</DialogContent>
 			<DialogActions>
