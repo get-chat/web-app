@@ -58,6 +58,7 @@ interface Props {
 	disableMediaPreview?: boolean;
 	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
 	isActionsEnabled?: boolean;
+	isInfoClickable?: boolean;
 }
 
 const iconStyles = {
@@ -81,6 +82,7 @@ const ChatMessage: React.FC<Props> = ({
 	disableMediaPreview,
 	setMessageWithStatuses,
 	isActionsEnabled = false,
+	isInfoClickable = true,
 }) => {
 	const { t } = useTranslation();
 
@@ -298,7 +300,7 @@ const ChatMessage: React.FC<Props> = ({
 						<span
 							className="chat__message__info"
 							onClick={() => {
-								if (data.isFromUs) {
+								if (data.isFromUs && isInfoClickable) {
 									const clonedMessage = clone(data);
 									// Injecting reactions
 									clonedMessage.reactions = reactions;

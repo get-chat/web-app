@@ -87,7 +87,13 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 						</div>
 
 						<div className={styles.previewContainer}>
-							{messageData && <ChatMessage data={messageData} />}
+							{messageData && (
+								<ChatMessage
+									data={messageData}
+									disableMediaPreview
+									isInfoClickable={false}
+								/>
+							)}
 						</div>
 					</div>
 				)}
