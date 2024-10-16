@@ -6,12 +6,17 @@ import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessage
 
 const INTERACTIVE_MESSAGES = [
 	{
-		type: 'location_request_message',
-		body: {
-			text: '',
-		},
-		action: {
-			name: 'send_location',
+		title: 'Send location request message',
+		description:
+			'Location request message is a free-form message displaying only a body text and a send location button. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen.',
+		payload: {
+			type: 'location_request_message',
+			body: {
+				text: '',
+			},
+			action: {
+				name: 'send_location',
+			},
 		},
 	},
 ];
@@ -37,22 +42,13 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 					<div className="interactiveMessages">
 						{INTERACTIVE_MESSAGES.map((item) => (
 							<div className={styles.item}>
-								<div className="chat__message chat__outgoing messageType__interactive">
-									<h4>{item.type}</h4>
-									{Object.entries(item)
-										.filter((entry) => entry[0] !== 'type')
-										.map((entry) => (
-											<div>
-												<span className="templateType bold lowercase">
-													{entry[0]}:
-												</span>{' '}
-												{JSON.stringify(entry[1])}
-											</div>
-										))}
+								<div>
+									<h4>{item.title}</h4>
+									<div>{item.description}</div>
 								</div>
 								<Button
 									onClick={() => {
-										setSelectedInteractiveMessage(item);
+										setSelectedInteractiveMessage(item.payload);
 										setDialogVisible(true);
 									}}
 									// @ts-ignore
