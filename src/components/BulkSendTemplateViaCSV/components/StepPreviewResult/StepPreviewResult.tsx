@@ -75,6 +75,7 @@ const StepPreviewResult = ({ template, params, csvData }) => {
 							data={messageData}
 							templateData={templates[messageData.templateName]}
 							disableMediaPreview
+							isInfoClickable={false}
 						/>
 					</ErrorBoundary>
 				)}

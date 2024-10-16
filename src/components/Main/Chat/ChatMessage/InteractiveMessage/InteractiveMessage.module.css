@@ -3,6 +3,7 @@
 	align-items: center;
 	font-size: x-small;
 	margin-bottom: 5px;
+	gap: 5px;
 }
 
 .caption :global(.MuiSvgIcon-root) {

@@ -355,7 +355,8 @@ a.chat__document:hover {
 }
 
 .chat .templateMessagesOuter,
-.savedResponsesOuter {
+.savedResponsesOuter,
+.interactiveMessagesOuter {
 	padding: 0 10px 10px 10px;
 	border-left: 1px solid lightgray;
 }
@@ -373,7 +374,8 @@ a.chat__document:hover {
 }
 
 .templateMessagesWrapper,
-.savedResponsesWrapper {
+.savedResponsesWrapper,
+.interactiveMessagesWrapper {
 	overflow: hidden;
 	background-color: rgba(0, 0, 0, 0.05);
 	border-radius: 10px; /*0 0 10px 10px;*/
@@ -381,7 +383,8 @@ a.chat__document:hover {
 }
 
 .templateMessages,
-.savedResponses {
+.savedResponses,
+.interactiveMessages {
 	flex: 1 1;
 	max-height: 290px;
 	overflow-y: auto;

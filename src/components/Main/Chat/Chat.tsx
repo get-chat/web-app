@@ -97,6 +97,7 @@ import {
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import InteractiveMessageList from '@src/components/InteractiveMessageList';
 import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 import ReactionDetails from '@src/components/ReactionDetails';
@@ -135,6 +136,8 @@ const Chat: React.FC = (props) => {
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
 	const [isTemplatesVisible, setTemplatesVisible] = useState(false);
+	const [isInteractiveMessagesVisible, setInteractiveMessagesVisible] =
+		useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 
 	const [person, setPerson] = useState();
@@ -283,6 +286,14 @@ const Chat: React.FC = (props) => {
 				);
 			} else if (requestBody.type === ChatMessageModel.TYPE_TEMPLATE) {
 				sendTemplateMessage(
+					false,
+					undefined,
+					requestBody,
+					successCallback,
+					completeCallback
+				);
+			} else if (requestBody.type === ChatMessageModel.TYPE_INTERACTIVE) {
+				sendInteractiveMessage(
 					false,
 					undefined,
 					requestBody,
@@ -1618,6 +1629,65 @@ const Chat: React.FC = (props) => {
 		);
 	};
 
+	const sendInteractiveMessage = (
+		willQueue,
+		interactiveMessage,
+		customPayload,
+		successCallback,
+		completeCallback
+	) => {
+		let requestBody;
+
+		if (customPayload) {
+			requestBody = customPayload;
+		} else {
+			requestBody = {
+				wa_id: waId,
+				type: ChatMessageModel.TYPE_INTERACTIVE,
+				interactive: interactiveMessage,
+			};
+		}
+
+		if (willQueue) {
+			if (!isLoaded) {
+				console.warn('Cancelled sending.');
+				return;
+			}
+
+			queueMessage(requestBody, successCallback, undefined, completeCallback);
+
+			return;
+		}
+
+		apiService.sendMessageCall(
+			sanitizeRequestBody(requestBody),
+			(response) => {
+				// Message is stored and will be sent later
+				if (response.status === 202) {
+					displayMessageInChatManually(requestBody, response);
+				}
+
+				successCallback?.();
+				completeCallback?.();
+			},
+			(error) => {
+				if (error.response) {
+					const status = error.response.status;
+
+					if (status === 453) {
+						setExpired(true);
+					} else if (status >= 500) {
+						handleFailedMessage(requestBody);
+					}
+
+					handleIfUnauthorized(error);
+				}
+
+				completeCallback?.();
+			}
+		);
+	};
+
 	const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
 		// To display a progress
 		props.setUploadingMedia(true);
@@ -1789,6 +1859,9 @@ const Chat: React.FC = (props) => {
 				break;
 			case ChatMessageModel.TYPE_TEMPLATE:
 				sendTemplateMessage(true, undefined, message.resendPayload);
+				break;
+			case ChatMessageModel.TYPE_INTERACTIVE:
+				sendInteractiveMessage(true, undefined, message.resendPayload);
 				break;
 			default:
 				if (
@@ -2130,6 +2203,14 @@ const Chat: React.FC = (props) => {
 				/>
 			)}
 
+			{isInteractiveMessagesVisible && (
+				<InteractiveMessageList
+					onSend={(interactiveMessage) =>
+						sendInteractiveMessage(true, interactiveMessage)
+					}
+				/>
+			)}
+
 			<SendTemplateDialog
 				isVisible={isSendTemplateDialogVisible}
 				setVisible={setSendTemplateDialogVisible}
@@ -2156,6 +2237,8 @@ const Chat: React.FC = (props) => {
 					setSelectedFiles={setSelectedFiles}
 					isTemplatesVisible={isTemplatesVisible}
 					setTemplatesVisible={setTemplatesVisible}
+					isInteractiveMessagesVisible={isInteractiveMessagesVisible}
+					setInteractiveMessagesVisible={setInteractiveMessagesVisible}
 					accept={accept}
 					isSavedResponsesVisible={isSavedResponsesVisible}
 					setSavedResponsesVisible={setSavedResponsesVisible}

@@ -185,6 +185,17 @@ export class ChatMessageModel {
 		});
 	}
 
+	static fromInteractive(interactive) {
+		return new ChatMessageModel({
+			from_us: true,
+			waba_payload: {
+				type: ChatMessageModel.TYPE_INTERACTIVE,
+				interactive: interactive,
+				timestamp: new Date().getTime(),
+			},
+		});
+	}
+
 	static fromAssignmentEvent(assignmentEvent) {
 		const message = new ChatMessageModel();
 		message.id =

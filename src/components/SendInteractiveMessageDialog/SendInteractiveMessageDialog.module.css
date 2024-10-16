@@ -1,0 +1,51 @@
+.container {
+	display: flex;
+	flex-direction: row;
+	gap: 30px;
+}
+
+.section {
+	padding: 15px;
+	border-radius: 10px;
+	background-color: rgba(0, 0, 45, 0.03);
+	margin-top: 10px;
+}
+
+.sectionTitle {
+	color: rgba(0, 0, 45, 0.5);
+	margin-bottom: 5px;
+}
+
+.description {
+	font-size: 14px;
+}
+
+.textFieldWrapper {
+	margin-top: 15px;
+}
+
+.previewContainer {
+	background-color: var(--chat-bg);
+	padding: 10px;
+	border-radius: 10px;
+	overflow-y: auto;
+	min-width: 300px;
+}
+
+.previewContainer :global(.chat__message) {
+	margin-top: 0;
+}
+
+@media only screen and (max-width: 750px) {
+	.container {
+		flex-direction: column;
+	}
+
+	.description {
+		font-size: 12px;
+	}
+
+	.previewContainer {
+		min-width: auto;
+	}
+}

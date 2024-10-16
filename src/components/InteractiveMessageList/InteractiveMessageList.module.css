@@ -1,0 +1,17 @@
+.item {
+	display: flex;
+	flex-direction: row;
+	font-size: 14px;
+}
+
+.item :global(.chat__message) {
+	margin-bottom: 0;
+}
+
+.item :global(.MuiButton-text) {
+	text-align: left;
+}
+
+.description {
+	font-size: 12px;
+}
