@@ -990,3 +990,9 @@ msgstr ""
 
 msgid "Send an interactive message"
 msgstr ""
+
+msgid "Send location request message"
+msgstr ""
+
+msgid "Location request message is a free-form message displaying only a <strong>body text</strong> and a <strong>send location button</strong>. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen."
+msgstr ""

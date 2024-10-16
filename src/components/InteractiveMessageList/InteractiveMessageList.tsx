@@ -8,7 +8,7 @@ const INTERACTIVE_MESSAGES = [
 	{
 		title: 'Send location request message',
 		description:
-			'Location request message is a free-form message displaying only a body text and a send location button. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen.',
+			'Location request message is a free-form message displaying only a <strong>body text</strong> and a <strong>send location button</strong>. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen.',
 		payload: {
 			type: 'location_request_message',
 			body: {
@@ -51,8 +51,11 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 									color="black"
 								>
 									<div>
-										<h4>{item.title}</h4>
-										<div className={styles.description}>{item.description}</div>
+										<h4>{t(item.title)}</h4>
+										<div
+											className={styles.description}
+											dangerouslySetInnerHTML={{ __html: t(item.description) }}
+										/>
 									</div>
 								</Button>
 							</div>

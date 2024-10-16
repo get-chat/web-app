@@ -317,5 +317,7 @@
 	"You deleted a reaction.": "",
 	"Deleted a reaction.": "",
 	"Reactions": "",
-	"Send an interactive message": ""
+	"Send an interactive message": "",
+	"Send location request message": "",
+	"Location request message is a free-form message displaying only a <strong>body text</strong> and a <strong>send location button</strong>. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen.": ""
 }
