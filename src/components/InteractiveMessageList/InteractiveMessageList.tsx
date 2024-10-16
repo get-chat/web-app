@@ -42,10 +42,6 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 					<div className="interactiveMessages">
 						{INTERACTIVE_MESSAGES.map((item) => (
 							<div className={styles.item}>
-								<div>
-									<h4>{item.title}</h4>
-									<div>{item.description}</div>
-								</div>
 								<Button
 									onClick={() => {
 										setSelectedInteractiveMessage(item.payload);
@@ -54,7 +50,10 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 									// @ts-ignore
 									color="black"
 								>
-									{t('Send')}
+									<div>
+										<h4>{item.title}</h4>
+										<div className={styles.description}>{item.description}</div>
+									</div>
 								</Button>
 							</div>
 						))}
