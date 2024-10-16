@@ -35,3 +35,17 @@
 .previewContainer :global(.chat__message) {
 	margin-top: 0;
 }
+
+@media only screen and (max-width: 750px) {
+	.container {
+		flex-direction: column;
+	}
+
+	.description {
+		font-size: 12px;
+	}
+
+	.previewContainer {
+		min-width: auto;
+	}
+}
