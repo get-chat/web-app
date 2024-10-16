@@ -319,5 +319,6 @@
 	"Reactions": "Tepkiler",
 	"Send an interactive message": "Bir interaktif mesaj gönder",
 	"Send location request message": "Konum isteği mesajı gönder",
-	"Location request message is a free-form message displaying only a <strong>body text</strong> and a <strong>send location button</strong>. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen.": "Konum isteği mesajı, yalnızca bir <strong>gövde metni</strong> ve bir <strong>konum gönder</strong> düğmesi görüntüleyen serbest biçimli bir mesajdır. Bir WhatsApp kullanıcısı düğmeye dokunduğunda, bir konum paylaşım ekranı görüntülenir. Kullanıcı, paylaşım ekranından konumunu paylaşabilir."
+	"Location request message is a free-form message displaying only a <strong>body text</strong> and a <strong>send location button</strong>. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen.": "Konum isteği mesajı, yalnızca bir <strong>gövde metni</strong> ve bir <strong>konum gönder</strong> düğmesi görüntüleyen serbest biçimli bir mesajdır. Bir WhatsApp kullanıcısı düğmeye dokunduğunda, bir konum paylaşım ekranı görüntülenir. Kullanıcı, paylaşım ekranından konumunu paylaşabilir.",
+	"Enter your message here": ""
 }
