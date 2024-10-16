@@ -4,7 +4,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
 
-const INTERACTIVE_MESSAGES = [
+export interface DescribedInteractive {
+	title: string;
+	description: string;
+	payload: any;
+}
+
+const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 	{
 		title: 'Send location request message',
 		description:
@@ -27,7 +33,7 @@ interface Props {
 
 const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 	const { t } = useTranslation();
-	const [selectedInteractiveMessage, setSelectedInteractiveMessage] =
+	const [selectedDescribedInteractive, setSelectedDescribedInteractive] =
 		useState<any>(null);
 	const [isDialogVisible, setDialogVisible] = useState(false);
 
@@ -44,7 +50,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 							<div className={styles.item} key={index}>
 								<Button
 									onClick={() => {
-										setSelectedInteractiveMessage(item.payload);
+										setSelectedDescribedInteractive(item);
 										setDialogVisible(true);
 									}}
 									// @ts-ignore
@@ -67,7 +73,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 			<SendInteractiveMessageDialog
 				isVisible={isDialogVisible}
 				setVisible={setDialogVisible}
-				interactiveMessage={selectedInteractiveMessage}
+				describedInteractive={selectedDescribedInteractive}
 				onSend={(interactiveMessage) => send(interactiveMessage)}
 			/>
 		</>

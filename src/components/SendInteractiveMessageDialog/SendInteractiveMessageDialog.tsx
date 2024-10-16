@@ -9,31 +9,32 @@ import styles from './SendInteractiveMessageDialog.module.css';
 import { isEmptyString } from '@src/helpers/Helpers';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
 
 export type Props = {
 	isVisible: boolean;
 	setVisible: (visible: boolean) => void;
-	interactiveMessage?: any;
+	describedInteractive?: DescribedInteractive;
 	onSend: (interactiveMessage: any) => void;
 };
 
 const SendInteractiveMessageDialog: React.FC<Props> = ({
 	isVisible,
 	setVisible,
-	interactiveMessage,
+	describedInteractive,
 	onSend,
 }) => {
 	const [text, setText] = useState('');
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
 
 	useEffect(() => {
-		if (interactiveMessage) {
-			const clone = { ...interactiveMessage };
+		if (describedInteractive) {
+			const clone = { ...describedInteractive.payload };
 			clone.body.text = text;
 
 			setMessageData(ChatMessageModel.fromInteractive(clone));
 		}
-	}, [text, interactiveMessage]);
+	}, [text, describedInteractive]);
 
 	const { t } = useTranslation();
 
@@ -48,8 +49,8 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	const updateTextAndSend = () => {
-		if (interactiveMessage) {
-			const clone = { ...interactiveMessage };
+		if (describedInteractive) {
+			const clone = { ...describedInteractive.payload };
 			clone.body.text = text;
 			onSend(clone);
 		}
@@ -59,11 +60,19 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	return (
 		<Dialog open={isVisible} onClose={close}>
-			<DialogTitle>{t('Send an interactive message')}</DialogTitle>
+			<DialogTitle>
+				{t(describedInteractive?.title ?? 'Send an interactive message')}
+			</DialogTitle>
 			<DialogContent>
-				{interactiveMessage && (
+				{describedInteractive && (
 					<div className={styles.container}>
 						<div>
+							<div
+								className={styles.description}
+								dangerouslySetInnerHTML={{
+									__html: t(describedInteractive.description),
+								}}
+							/>
 							<div className={styles.textFieldWrapper}>
 								<TextField
 									variant="standard"
