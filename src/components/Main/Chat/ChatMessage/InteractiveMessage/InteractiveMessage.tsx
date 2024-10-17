@@ -11,6 +11,7 @@ import styles from './InteractiveMessage.module.css';
 import { Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
+import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -66,6 +67,15 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 			{(type === InteractiveMessageTypes.product ||
 				type === InteractiveMessageTypes.product_list) && (
 				<ProductMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
+			{type == InteractiveMessageTypes.cta_url && (
+				<CtaUrlMessage
 					header={header}
 					body={body}
 					footer={footer}
