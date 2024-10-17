@@ -10,6 +10,7 @@ import ProductMessage from './components/ProductMessage';
 import styles from './InteractiveMessage.module.css';
 import { Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PrintMessage from '@src/components/PrintMessage';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -73,7 +74,11 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 			{type === InteractiveMessageTypes.location_request_message && (
 				<>
-					<div>{body?.text}</div>
+					{body && (
+						<div className={styles.body}>
+							<PrintMessage linkify message={body.text} />
+						</div>
+					)}
 					{action?.name === 'send_location' && (
 						<Button
 							variant="text"
