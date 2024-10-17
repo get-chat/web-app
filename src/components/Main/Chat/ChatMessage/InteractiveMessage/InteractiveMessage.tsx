@@ -74,7 +74,7 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				/>
 			)}
 
-			{type == InteractiveMessageTypes.cta_url && (
+			{type === InteractiveMessageTypes.cta_url && (
 				<CtaUrlMessage
 					header={header}
 					body={body}
