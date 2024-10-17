@@ -25,6 +25,24 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 	},
+	{
+		title: 'Send call-to-action URL button message',
+		description:
+			'Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message.',
+		payload: {
+			type: 'cta_url',
+			body: {
+				text: '',
+			},
+			action: {
+				name: 'cta_url',
+				parameters: {
+					url: '',
+					display_text: '',
+				},
+			},
+		},
+	},
 ];
 
 interface Props {
