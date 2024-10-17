@@ -19,6 +19,7 @@ export enum InteractiveMessageTypes {
 	product = 'product',
 	product_list = 'product_list',
 	location_request_message = 'location_request_message',
+	cta_url = 'cta_url',
 }
 
 interface Props {
