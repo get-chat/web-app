@@ -171,12 +171,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				<Button onClick={close} color="secondary">
 					{t('Close')}
 				</Button>
-				<Button
-					onClick={checkAndSend}
-					color="primary"
-					autoFocus
-					//disabled={isEmptyString(text)}
-				>
+				<Button onClick={checkAndSend} color="primary" autoFocus>
 					{t('Send')}
 				</Button>
 			</DialogActions>
