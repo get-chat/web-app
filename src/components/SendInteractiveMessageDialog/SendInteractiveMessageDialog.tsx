@@ -24,40 +24,29 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	describedInteractive,
 	onSend,
 }) => {
-	const [text, setText] = useState('');
 	const [payload, setPayload] = useState({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
 
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		setPayload(describedInteractive?.payload ?? {});
+		setPayload(
+			describedInteractive?.payload ? { ...describedInteractive.payload } : {}
+		);
 	}, [describedInteractive]);
 
 	useEffect(() => {
-		if (describedInteractive) {
-			const clone = { ...payload };
-			setMessageData(ChatMessageModel.fromInteractive(clone));
+		if (payload) {
+			setMessageData(ChatMessageModel.fromInteractive({ ...payload }));
 		}
-	}, [payload, describedInteractive]);
-
-	useEffect(() => {
-		if (isVisible) {
-			setText('');
-		}
-	}, [isVisible]);
+	}, [payload]);
 
 	const close = () => {
 		setVisible(false);
 	};
 
 	const updateTextAndSend = () => {
-		if (describedInteractive) {
-			const clone = { ...describedInteractive.payload };
-			clone.body.text = text;
-			onSend(clone);
-		}
-
+		onSend(payload);
 		close();
 	};
 
@@ -69,14 +58,16 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		const keys = path.split('.');
 		const lastKey = keys.pop(); // Get the last key (e.g., 'display_text')
 
+		const cloneObj = { ...obj };
+
 		// Traverse the object to the second-to-last key
-		const nestedObj = keys.reduce((acc, key) => acc && acc[key], obj);
+		const nestedObj = keys.reduce((acc, key) => acc && acc[key], cloneObj);
 
 		if (nestedObj && lastKey) {
 			nestedObj[lastKey] = value; // Set the new value
 		}
 
-		return { ...obj };
+		return cloneObj;
 	}
 
 	return (
@@ -94,6 +85,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									__html: t(describedInteractive.description),
 								}}
 							/>
+							{JSON.stringify(describedInteractive?.payload)}
 							<div>
 								{payload &&
 									describedInteractive.parameters.map((key) => (
@@ -136,7 +128,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 					onClick={updateTextAndSend}
 					color="primary"
 					autoFocus
-					disabled={isEmptyString(text)}
+					//disabled={isEmptyString(text)}
 				>
 					{t('Send')}
 				</Button>

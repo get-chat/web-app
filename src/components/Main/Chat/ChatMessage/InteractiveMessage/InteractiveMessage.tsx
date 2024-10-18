@@ -29,7 +29,8 @@ interface Props {
 
 const InteractiveMessage: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
-	const { header, body, footer, action, type } = data.payload.interactive;
+	const { header, body, footer, action, type } =
+		data?.payload?.interactive ?? {};
 
 	return (
 		<>
