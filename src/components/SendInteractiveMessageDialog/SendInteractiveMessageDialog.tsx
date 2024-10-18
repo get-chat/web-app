@@ -9,6 +9,7 @@ import styles from './SendInteractiveMessageDialog.module.css';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
+import { isEmptyString } from '@src/helpers/Helpers';
 
 export type Props = {
 	isVisible: boolean;
@@ -25,6 +26,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 }) => {
 	const [payload, setPayload] = useState({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
+	const [isShowErrors, setIsShowErrors] = useState(false);
 
 	const { t } = useTranslation();
 
@@ -33,6 +35,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			setPayload(
 				describedInteractive?.payload ? { ...describedInteractive.payload } : {}
 			);
+			setIsShowErrors(false);
 		}
 	}, [isVisible, describedInteractive]);
 
@@ -46,7 +49,12 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		setVisible(false);
 	};
 
-	const updateTextAndSend = () => {
+	const checkAndSend = () => {
+		if (!isFormValid()) {
+			setIsShowErrors(true);
+			return;
+		}
+
 		onSend(payload);
 		close();
 	};
@@ -79,6 +87,21 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 		return cloneObj;
 	}
+
+	const isFormValid = () => {
+		let isValid = true;
+
+		describedInteractive?.parameters.forEach((parameter) => {
+			if (
+				parameter.required &&
+				isEmptyString(getNestedValue(payload, parameter.key))
+			) {
+				isValid = false;
+			}
+		});
+
+		return isValid;
+	};
 
 	return (
 		<Dialog open={isVisible} onClose={close}>
@@ -119,6 +142,13 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 												multiline={true}
 												fullWidth={true}
 												required={parameter.required}
+												error={
+													isShowErrors && parameter.required
+														? isEmptyString(
+																getNestedValue(payload, parameter.key) ?? ''
+														  )
+														: false
+												}
 											/>
 										</div>
 									))}
@@ -142,7 +172,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 					{t('Close')}
 				</Button>
 				<Button
-					onClick={updateTextAndSend}
+					onClick={checkAndSend}
 					color="primary"
 					autoFocus
 					//disabled={isEmptyString(text)}
