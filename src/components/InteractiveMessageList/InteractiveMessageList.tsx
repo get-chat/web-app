@@ -8,6 +8,7 @@ export interface DescribedInteractive {
 	title: string;
 	description: string;
 	payload: any;
+	parameters: string[];
 }
 
 const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
@@ -24,6 +25,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
+		parameters: ['body.text'],
 	},
 	{
 		title: 'Send call-to-action URL button message',
@@ -42,6 +44,11 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				},
 			},
 		},
+		parameters: [
+			'body.text',
+			'action.parameters.url',
+			'action.parameters.display_text',
+		],
 	},
 ];
 
