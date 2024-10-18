@@ -25,18 +25,21 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	onSend,
 }) => {
 	const [text, setText] = useState('');
+	const [payload, setPayload] = useState({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
+
+	const { t } = useTranslation();
+
+	useEffect(() => {
+		setPayload(describedInteractive?.payload ?? {});
+	}, [describedInteractive]);
 
 	useEffect(() => {
 		if (describedInteractive) {
-			const clone = { ...describedInteractive.payload };
-			clone.body.text = text;
-
+			const clone = { ...payload };
 			setMessageData(ChatMessageModel.fromInteractive(clone));
 		}
-	}, [text, describedInteractive]);
-
-	const { t } = useTranslation();
+	}, [payload, describedInteractive]);
 
 	useEffect(() => {
 		if (isVisible) {
@@ -58,6 +61,24 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		close();
 	};
 
+	function getNestedValue(obj: any, path: string) {
+		return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+	}
+
+	function setNestedValue(obj: any, path: string, value: any) {
+		const keys = path.split('.');
+		const lastKey = keys.pop(); // Get the last key (e.g., 'display_text')
+
+		// Traverse the object to the second-to-last key
+		const nestedObj = keys.reduce((acc, key) => acc && acc[key], obj);
+
+		if (nestedObj && lastKey) {
+			nestedObj[lastKey] = value; // Set the new value
+		}
+
+		return { ...obj };
+	}
+
 	return (
 		<Dialog open={isVisible} onClose={close}>
 			<DialogTitle>
@@ -73,16 +94,25 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									__html: t(describedInteractive.description),
 								}}
 							/>
-							<div className={styles.textFieldWrapper}>
-								<TextField
-									variant="standard"
-									value={text}
-									onChange={(e) => setText(e.target.value)}
-									label={t('Enter your message here')}
-									size="medium"
-									multiline={true}
-									fullWidth={true}
-								/>
+							<div>
+								{payload &&
+									describedInteractive.parameters.map((key) => (
+										<div className={styles.textFieldWrapper} key={key}>
+											<TextField
+												variant="standard"
+												value={getNestedValue(payload, key)}
+												onChange={(e) =>
+													setPayload((prevState) =>
+														setNestedValue(prevState, key, e.target.value)
+													)
+												}
+												label={t(key)}
+												size="medium"
+												multiline={true}
+												fullWidth={true}
+											/>
+										</div>
+									))}
 							</div>
 						</div>
 

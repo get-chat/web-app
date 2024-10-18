@@ -19,7 +19,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		payload: {
 			type: 'location_request_message',
 			body: {
-				text: '{{1}}',
+				text: '',
 			},
 			action: {
 				name: 'send_location',
@@ -34,13 +34,13 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		payload: {
 			type: 'cta_url',
 			body: {
-				text: '{{1}}',
+				text: '',
 			},
 			action: {
 				name: 'cta_url',
 				parameters: {
-					url: '{{2}}',
-					display_text: '{{3}}',
+					url: '',
+					display_text: '',
 				},
 			},
 		},
