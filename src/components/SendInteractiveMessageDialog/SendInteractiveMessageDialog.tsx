@@ -30,10 +30,12 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	useEffect(() => {
-		setPayload(
-			describedInteractive?.payload ? { ...describedInteractive.payload } : {}
-		);
-	}, [describedInteractive]);
+		if (isVisible) {
+			setPayload(
+				describedInteractive?.payload ? { ...describedInteractive.payload } : {}
+			);
+		}
+	}, [isVisible, describedInteractive]);
 
 	useEffect(() => {
 		if (payload) {
@@ -50,6 +52,15 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		close();
 	};
 
+	function keyToLabel(str?: string | null): string {
+		if (!str) {
+			return '';
+		}
+
+		const replacedStr = str.replace(/[._]/g, ' '); // Replace dots and underscores with spaces
+		return replacedStr.charAt(0).toUpperCase() + replacedStr.slice(1);
+	}
+
 	function getNestedValue(obj: any, path: string) {
 		return path.split('.').reduce((acc, key) => acc && acc[key], obj);
 	}
@@ -58,7 +69,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		const keys = path.split('.');
 		const lastKey = keys.pop(); // Get the last key (e.g., 'display_text')
 
-		const cloneObj = { ...obj };
+		const cloneObj = JSON.parse(JSON.stringify(obj));
 
 		// Traverse the object to the second-to-last key
 		const nestedObj = keys.reduce((acc, key) => acc && acc[key], cloneObj);
@@ -85,7 +96,6 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									__html: t(describedInteractive.description),
 								}}
 							/>
-							{JSON.stringify(describedInteractive?.payload)}
 							<div>
 								{payload &&
 									describedInteractive.parameters.map((key) => (
@@ -98,7 +108,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 														setNestedValue(prevState, key, e.target.value)
 													)
 												}
-												label={t(key)}
+												label={t(keyToLabel(key))}
 												size="medium"
 												multiline={true}
 												fullWidth={true}
