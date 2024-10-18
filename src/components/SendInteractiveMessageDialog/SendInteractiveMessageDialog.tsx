@@ -6,7 +6,6 @@ import Dialog from '@mui/material/Dialog';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
-import { isEmptyString } from '@src/helpers/Helpers';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
@@ -98,20 +97,28 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 							/>
 							<div>
 								{payload &&
-									describedInteractive.parameters.map((key) => (
-										<div className={styles.textFieldWrapper} key={key}>
+									describedInteractive.parameters.map((parameter) => (
+										<div
+											className={styles.textFieldWrapper}
+											key={parameter.key}
+										>
 											<TextField
 												variant="standard"
-												value={getNestedValue(payload, key)}
+												value={getNestedValue(payload, parameter.key)}
 												onChange={(e) =>
 													setPayload((prevState) =>
-														setNestedValue(prevState, key, e.target.value)
+														setNestedValue(
+															prevState,
+															parameter.key,
+															e.target.value
+														)
 													)
 												}
-												label={t(keyToLabel(key))}
+												label={t(keyToLabel(parameter.key))}
 												size="medium"
 												multiline={true}
 												fullWidth={true}
+												required={parameter.required}
 											/>
 										</div>
 									))}
