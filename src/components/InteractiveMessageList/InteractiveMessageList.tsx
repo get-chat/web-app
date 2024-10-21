@@ -31,7 +31,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
-		parameters: [{ key: 'body.text', required: true }],
+		parameters: [{ key: 'body.text', required: true, description: 'Body' }],
 	},
 	{
 		title: 'Send call-to-action URL button message',
@@ -58,11 +58,19 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text' },
-			{ key: 'body.text' },
-			{ key: 'footer.text' },
-			{ key: 'action.parameters.url', required: true },
-			{ key: 'action.parameters.display_text', required: true },
+			{ key: 'header.text', description: 'Header' },
+			{ key: 'body.text', description: 'Body' },
+			{ key: 'footer.text', description: 'Footer' },
+			{
+				key: 'action.parameters.url',
+				required: true,
+				description: 'Action URL',
+			},
+			{
+				key: 'action.parameters.display_text',
+				required: true,
+				description: 'Action Display Text',
+			},
 		],
 	},
 	{
@@ -89,9 +97,9 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text' },
-			{ key: 'body.text' },
-			{ key: 'footer.text' },
+			{ key: 'header.text', description: 'Header' },
+			{ key: 'body.text', description: 'Body' },
+			{ key: 'footer.text', description: 'Footer' },
 			{
 				key: 'action.parameters.country',
 				required: true,
