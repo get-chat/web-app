@@ -64,6 +64,24 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			{ key: 'action.parameters.display_text', required: true },
 		],
 	},
+	{
+		title: 'Address messages',
+		description:
+			'Address messages are interactive messages that contain the 4 main parts: header, body, footer, and action. Inside the action component business specifies the name “address_message” and relevant parameters.',
+		payload: {
+			type: 'address_message',
+			body: {
+				text: '',
+			},
+			action: {
+				name: 'address_message',
+				parameters: {
+					country: 'COUNTRY_ISO_CODE',
+				},
+			},
+		},
+		parameters: [],
+	},
 ];
 
 interface Props {
