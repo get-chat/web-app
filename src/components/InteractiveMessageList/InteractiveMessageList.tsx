@@ -4,10 +4,16 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
 
+export interface InteractiveParameter {
+	key: string;
+	required?: boolean;
+}
+
 export interface DescribedInteractive {
 	title: string;
 	description: string;
 	payload: any;
+	parameters: InteractiveParameter[];
 }
 
 const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
@@ -24,6 +30,39 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
+		parameters: [{ key: 'body.text', required: true }],
+	},
+	{
+		title: 'Send call-to-action URL button message',
+		description:
+			'Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message.',
+		payload: {
+			type: 'cta_url',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				name: 'cta_url',
+				parameters: {
+					url: '',
+					display_text: '',
+				},
+			},
+		},
+		parameters: [
+			{ key: 'header.text' },
+			{ key: 'body.text' },
+			{ key: 'footer.text' },
+			{ key: 'action.parameters.url', required: true },
+			{ key: 'action.parameters.display_text', required: true },
+		],
 	},
 ];
 

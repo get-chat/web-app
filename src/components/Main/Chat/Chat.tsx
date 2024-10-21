@@ -1805,6 +1805,14 @@ const Chat: React.FC = (props) => {
 				storedMessage.templateLanguage = requestBody.template?.language?.code;
 				storedMessage.templateParameters = requestBody.template?.components;
 
+				if (!storedMessage.payload) {
+					storedMessage.payload = {};
+				}
+
+				if (requestBody.interactive) {
+					storedMessage.payload.interactive = requestBody.interactive;
+				}
+
 				storedMessage.imageLink = requestBody.image?.link;
 				storedMessage.videoLink = requestBody.video?.link;
 				storedMessage.audioLink = requestBody.audio?.link;

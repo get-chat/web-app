@@ -6,10 +6,10 @@ import Dialog from '@mui/material/Dialog';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
-import { isEmptyString } from '@src/helpers/Helpers';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
+import { isEmptyString } from '@src/helpers/Helpers';
 
 export type Props = {
 	isVisible: boolean;
@@ -24,38 +24,83 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	describedInteractive,
 	onSend,
 }) => {
-	const [text, setText] = useState('');
+	const [payload, setPayload] = useState({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
-
-	useEffect(() => {
-		if (describedInteractive) {
-			const clone = { ...describedInteractive.payload };
-			clone.body.text = text;
-
-			setMessageData(ChatMessageModel.fromInteractive(clone));
-		}
-	}, [text, describedInteractive]);
+	const [isShowErrors, setIsShowErrors] = useState(false);
 
 	const { t } = useTranslation();
 
 	useEffect(() => {
 		if (isVisible) {
-			setText('');
+			setPayload(
+				describedInteractive?.payload ? { ...describedInteractive.payload } : {}
+			);
+			setIsShowErrors(false);
 		}
-	}, [isVisible]);
+	}, [isVisible, describedInteractive]);
+
+	useEffect(() => {
+		if (payload) {
+			setMessageData(ChatMessageModel.fromInteractive({ ...payload }));
+		}
+	}, [payload]);
 
 	const close = () => {
 		setVisible(false);
 	};
 
-	const updateTextAndSend = () => {
-		if (describedInteractive) {
-			const clone = { ...describedInteractive.payload };
-			clone.body.text = text;
-			onSend(clone);
+	const checkAndSend = () => {
+		if (!isFormValid()) {
+			setIsShowErrors(true);
+			return;
 		}
 
+		onSend(payload);
 		close();
+	};
+
+	function keyToLabel(str?: string | null): string {
+		if (!str) {
+			return '';
+		}
+
+		const replacedStr = str.replace(/[._]/g, ' '); // Replace dots and underscores with spaces
+		return replacedStr.charAt(0).toUpperCase() + replacedStr.slice(1);
+	}
+
+	function getNestedValue(obj: any, path: string) {
+		return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+	}
+
+	function setNestedValue(obj: any, path: string, value: any) {
+		const keys = path.split('.');
+		const lastKey = keys.pop(); // Get the last key (e.g., 'display_text')
+
+		const cloneObj = JSON.parse(JSON.stringify(obj));
+
+		// Traverse the object to the second-to-last key
+		const nestedObj = keys.reduce((acc, key) => acc && acc[key], cloneObj);
+
+		if (nestedObj && lastKey) {
+			nestedObj[lastKey] = value; // Set the new value
+		}
+
+		return cloneObj;
+	}
+
+	const isFormValid = () => {
+		let isValid = true;
+
+		describedInteractive?.parameters.forEach((parameter) => {
+			if (
+				parameter.required &&
+				isEmptyString(getNestedValue(payload, parameter.key))
+			) {
+				isValid = false;
+			}
+		});
+
+		return isValid;
 	};
 
 	return (
@@ -73,16 +118,40 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									__html: t(describedInteractive.description),
 								}}
 							/>
-							<div className={styles.textFieldWrapper}>
-								<TextField
-									variant="standard"
-									value={text}
-									onChange={(e) => setText(e.target.value)}
-									label={t('Enter your message here')}
-									size="medium"
-									multiline={true}
-									fullWidth={true}
-								/>
+							<div>
+								{payload &&
+									describedInteractive.parameters.map((parameter) => (
+										<div
+											className={styles.textFieldWrapper}
+											key={parameter.key}
+										>
+											<TextField
+												variant="standard"
+												value={getNestedValue(payload, parameter.key)}
+												onChange={(e) =>
+													setPayload((prevState) =>
+														setNestedValue(
+															prevState,
+															parameter.key,
+															e.target.value
+														)
+													)
+												}
+												label={t(keyToLabel(parameter.key))}
+												size="medium"
+												multiline={true}
+												fullWidth={true}
+												required={parameter.required}
+												error={
+													isShowErrors && parameter.required
+														? isEmptyString(
+																getNestedValue(payload, parameter.key) ?? ''
+														  )
+														: false
+												}
+											/>
+										</div>
+									))}
 							</div>
 						</div>
 
@@ -102,12 +171,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				<Button onClick={close} color="secondary">
 					{t('Close')}
 				</Button>
-				<Button
-					onClick={updateTextAndSend}
-					color="primary"
-					autoFocus
-					disabled={isEmptyString(text)}
-				>
+				<Button onClick={checkAndSend} color="primary" autoFocus>
 					{t('Send')}
 				</Button>
 			</DialogActions>

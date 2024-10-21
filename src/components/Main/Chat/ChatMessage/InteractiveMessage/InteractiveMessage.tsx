@@ -10,6 +10,8 @@ import ProductMessage from './components/ProductMessage';
 import styles from './InteractiveMessage.module.css';
 import { Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PrintMessage from '@src/components/PrintMessage';
+import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -18,6 +20,7 @@ export enum InteractiveMessageTypes {
 	product = 'product',
 	product_list = 'product_list',
 	location_request_message = 'location_request_message',
+	cta_url = 'cta_url',
 }
 
 interface Props {
@@ -26,7 +29,8 @@ interface Props {
 
 const InteractiveMessage: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
-	const { header, body, footer, action, type } = data.payload.interactive;
+	const { header, body, footer, action, type } =
+		data?.payload?.interactive ?? {};
 
 	return (
 		<>
@@ -71,9 +75,22 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				/>
 			)}
 
+			{type === InteractiveMessageTypes.cta_url && (
+				<CtaUrlMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
 			{type === InteractiveMessageTypes.location_request_message && (
 				<>
-					<div>{body?.text}</div>
+					{body && (
+						<div className={styles.body}>
+							<PrintMessage linkify message={body.text} />
+						</div>
+					)}
 					{action?.name === 'send_location' && (
 						<Button
 							variant="text"
