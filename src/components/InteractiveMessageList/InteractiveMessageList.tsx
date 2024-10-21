@@ -67,7 +67,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 	{
 		title: 'Address message',
 		description:
-			'Address messages are interactive messages that contain the 4 main parts: header, body, footer, and action. Inside the action component business specifies the name “address_message” and relevant parameters.',
+			'Address messages give your users a simpler way to share the shipping address with your business.',
 		payload: {
 			type: 'address_message',
 			header: {
