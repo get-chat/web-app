@@ -137,7 +137,9 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 														)
 													)
 												}
-												label={t(keyToLabel(parameter.key))}
+												label={t(
+													parameter.description || keyToLabel(parameter.key)
+												)}
 												size="medium"
 												multiline={true}
 												fullWidth={true}

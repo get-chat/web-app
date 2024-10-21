@@ -7,6 +7,7 @@ import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessage
 export interface InteractiveParameter {
 	key: string;
 	required?: boolean;
+	description?: string;
 }
 
 export interface DescribedInteractive {
@@ -91,7 +92,11 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			{ key: 'header.text' },
 			{ key: 'body.text' },
 			{ key: 'footer.text' },
-			{ key: 'action.parameters.country', required: true },
+			{
+				key: 'action.parameters.country',
+				required: true,
+				description: 'Country ISO Code',
+			},
 		],
 	},
 ];
