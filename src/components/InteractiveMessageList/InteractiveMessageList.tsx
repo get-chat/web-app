@@ -65,7 +65,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		],
 	},
 	{
-		title: 'Address message',
+		title: 'Send address message',
 		description:
 			'Address messages give your users a simpler way to share the shipping address with your business.',
 		payload: {
