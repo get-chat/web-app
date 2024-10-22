@@ -13,6 +13,7 @@ export interface InteractiveParameter {
 export interface DescribedInteractive {
 	title: string;
 	description: string;
+	warning?: string;
 	payload: any;
 	parameters: InteractiveParameter[];
 }
@@ -77,6 +78,8 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		title: 'Send address message',
 		description:
 			'Address messages give your users a simpler way to share the shipping address with your business.',
+		warning:
+			'Currently, address messages are supported in the following two countries: India and Singapore. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages">Click here</a> to read more information.',
 		payload: {
 			type: 'address_message',
 			header: {
@@ -140,6 +143,12 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 								>
 									<div>
 										<h4>{t(item.title)}</h4>
+										{item.warning && (
+											<div
+												className={styles.warning}
+												dangerouslySetInnerHTML={{ __html: t(item.warning) }}
+											/>
+										)}
 										<div
 											className={styles.description}
 											dangerouslySetInnerHTML={{ __html: t(item.description) }}

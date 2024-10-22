@@ -12,6 +12,14 @@
 	text-align: left;
 }
 
+.warning {
+	font-size: 12px;
+}
+
+.warning a {
+	font-weight: 600;
+}
+
 .description {
 	font-size: 12px;
 }
