@@ -130,7 +130,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 		<>
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
-					<div className="interactiveMessages">
+					<div className={'interactiveMessages ' + styles.list}>
 						{INTERACTIVE_MESSAGES.map((item, index) => (
 							<div className={styles.item} key={index}>
 								<Button
@@ -143,12 +143,6 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 								>
 									<div>
 										<h4>{t(item.title)}</h4>
-										{item.warning && (
-											<div
-												className={styles.warning}
-												dangerouslySetInnerHTML={{ __html: t(item.warning) }}
-											/>
-										)}
 										<div
 											className={styles.description}
 											dangerouslySetInnerHTML={{ __html: t(item.description) }}
