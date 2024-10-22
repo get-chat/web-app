@@ -12,6 +12,7 @@ import { Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
 import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
+import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/AddressMessage';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -21,6 +22,7 @@ export enum InteractiveMessageTypes {
 	product_list = 'product_list',
 	location_request_message = 'location_request_message',
 	cta_url = 'cta_url',
+	address_message = 'address_message',
 }
 
 interface Props {
@@ -77,6 +79,15 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 			{type === InteractiveMessageTypes.cta_url && (
 				<CtaUrlMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
+			{type === InteractiveMessageTypes.address_message && (
+				<AddressMessage
 					header={header}
 					body={body}
 					footer={footer}
