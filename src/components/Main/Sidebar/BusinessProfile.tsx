@@ -272,18 +272,6 @@ function BusinessProfile(props: any) {
 									onClick={handleBusinessProfileAvatarClick}
 								/>
 
-								{profilePhoto && (
-									<div
-										className={
-											'sidebarBusinessProfile__body__avatarContainer__info'
-										}
-									>
-										{t(
-											'On WhatsApp, your business profile photo has bigger resolution than shown here.'
-										)}
-									</div>
-								)}
-
 								{profilePhoto && isAdmin && !isReadOnly && (
 									<Button onClick={deleteProfilePhoto} color="secondary">
 										Delete profile photo
