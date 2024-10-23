@@ -150,7 +150,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 												label={t(
 													parameter.description || keyToLabel(parameter.key)
 												)}
-												size="medium"
+												size="small"
 												multiline={true}
 												fullWidth={true}
 												required={parameter.required}

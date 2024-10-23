@@ -21,8 +21,9 @@
 }
 
 .warning {
-	font-size: 12px;
+	font-size: 12px !important;
 	margin-top: 15px;
+	padding: 4px 10px !important;
 }
 
 .warning a {
@@ -30,7 +31,7 @@
 }
 
 .textFieldWrapper {
-	margin-top: 15px;
+	margin-top: 10px;
 }
 
 .previewContainer {
