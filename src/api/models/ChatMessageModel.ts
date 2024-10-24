@@ -293,6 +293,10 @@ export class ChatMessageModel {
 		);
 	}
 
+	generateAudioLink() {
+		return this.audioLink ?? this.generateMediaLink(this.audioId);
+	}
+
 	generateDocumentLink() {
 		return this.documentLink ?? this.generateMediaLink(this.documentId);
 	}

@@ -42,21 +42,22 @@
 .actions {
 	position: absolute;
 	top: 4px;
-	left: -60px;
+	left: 0;
 	opacity: 0;
 	display: flex;
 	gap: 5px;
 	transition: all 0.5s;
+	margin: 0 -10px;
 }
 
-.actions:not(.right).nonText,
-.actions:not(.right).isExpired {
-	left: -32px;
+.actions:not(.right) {
+	transform: translate(-100%, 0);
 }
 
 .actions.right {
 	left: unset;
-	right: -32px;
+	right: 0;
+	transform: translate(100%, 0);
 }
 
 .action {

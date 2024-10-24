@@ -41,7 +41,7 @@
 		"dompurify": "^2.3.8",
 		"dotenv": "^16.0.3",
 		"emoji-mart": "^3.0.0",
-		"emoji-regex": "^9.2.2",
+		"emoji-regex": "10.4.0",
 		"emoji-tree": "^1.1.2",
 		"html-to-formatted-text": "^2.7.0",
 		"i18next": "^22.0.6",

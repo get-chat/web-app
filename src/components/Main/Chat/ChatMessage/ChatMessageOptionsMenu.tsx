@@ -19,6 +19,10 @@ function ChatMessageOptionsMenu({
 		return Boolean(optionsChatMessage?.generateVideoLink(true));
 	}, [optionsChatMessage]);
 
+	const hasAudio = useMemo(() => {
+		return Boolean(optionsChatMessage?.generateAudioLink());
+	}, [optionsChatMessage]);
+
 	const handleCreateSavedResponse = () => {
 		if (optionsChatMessage) {
 			createSavedResponse(optionsChatMessage.text);
@@ -30,6 +34,18 @@ function ChatMessageOptionsMenu({
 	const downloadVideo = () => {
 		const data = {
 			source: optionsChatMessage?.generateVideoLink(true),
+		};
+		if (!data.source) {
+			hideMenu();
+			return;
+		}
+		download(data);
+		hideMenu();
+	};
+
+	const downloadAudio = () => {
+		const data = {
+			source: optionsChatMessage?.generateAudioLink(true),
 		};
 		if (!data.source) {
 			hideMenu();
@@ -67,6 +83,14 @@ function ChatMessageOptionsMenu({
 				)}
 			{hasVideo && (
 				<MenuItem onClick={downloadVideo}>
+					<ListItemIcon>
+						<DownloadIcon />
+					</ListItemIcon>
+					{t('Download')}
+				</MenuItem>
+			)}
+			{hasAudio && (
+				<MenuItem onClick={downloadAudio}>
 					<ListItemIcon>
 						<DownloadIcon />
 					</ListItemIcon>

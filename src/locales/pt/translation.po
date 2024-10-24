@@ -542,9 +542,6 @@ msgstr "<0>Quantidade</0> : %d"
 msgid "<0>Price</0>: %d %s"
 msgstr "<0>Preço</0> : %d %s"
 
-msgid "On WhatsApp, your business profile photo has bigger resolution than shown here."
-msgstr "No WhatsApp, a foto do perfil da sua empresa tem resolução maior do que a mostrada aqui."
-
 msgid "Copied!"
 msgstr "Copiado!"
 

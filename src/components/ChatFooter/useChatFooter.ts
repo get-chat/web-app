@@ -22,8 +22,8 @@ const useChatFooter = ({ setInput }: Props) => {
 
 		//html = html.replace('<span', '<span contentEditable="false"');
 		html = html
-			.replace('<span', '<img src="' + EMPTY_IMAGE_BASE64 + '"')
-			.replace('</span>', '');
+			.replace(/<span/g, '<img src="' + EMPTY_IMAGE_BASE64 + '"')
+			.replace(/<\/span>/g, '');
 		el.focus();
 
 		let selection = window.getSelection();

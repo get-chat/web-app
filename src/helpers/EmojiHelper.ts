@@ -2,8 +2,7 @@
 import { Emoji, getEmojiDataFromNative } from 'emoji-mart';
 import { EMOJI_SET, EMOJI_SHEET_SIZE } from '../Constants';
 import data from '../EmojiData.json';
-
-const emojiRegex = require('emoji-regex/RGI_Emoji.js');
+import emojiRegex from 'emoji-regex';
 
 function containsOnlyEmojis(text) {
 	const onlyEmojis = text.replace(new RegExp('[\u0000-\u1eeff]', 'g'), '');
