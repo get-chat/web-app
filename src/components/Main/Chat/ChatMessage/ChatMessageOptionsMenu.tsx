@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import { ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +6,19 @@ import { download } from '@src/helpers/DownloadHelper';
 import DownloadIcon from '@mui/icons-material/Download';
 import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
 
-function ChatMessageOptionsMenu({
+interface Props {
+	optionsChatMessage?: ChatMessageModel | null;
+	menuAnchorEl?: Element | null;
+	setMenuAnchorEl: (anchorEl: Element | null) => void;
+	createSavedResponse: (text: string) => void;
+}
+
+const ChatMessageOptionsMenu: React.FC<Props> = ({
 	optionsChatMessage,
 	menuAnchorEl,
 	setMenuAnchorEl,
 	createSavedResponse,
-}) {
+}) => {
 	const { t } = useTranslation();
 
 	const hasVideo = useMemo(() => {
@@ -24,7 +30,7 @@ function ChatMessageOptionsMenu({
 	}, [optionsChatMessage]);
 
 	const handleCreateSavedResponse = () => {
-		if (optionsChatMessage) {
+		if (optionsChatMessage?.text) {
 			createSavedResponse(optionsChatMessage.text);
 		}
 
@@ -45,7 +51,7 @@ function ChatMessageOptionsMenu({
 
 	const downloadAudio = () => {
 		const data = {
-			source: optionsChatMessage?.generateAudioLink(true),
+			source: optionsChatMessage?.generateAudioLink(),
 		};
 		if (!data.source) {
 			hideMenu();
@@ -99,6 +105,6 @@ function ChatMessageOptionsMenu({
 			)}
 		</Menu>
 	);
-}
+};
 
 export default ChatMessageOptionsMenu;
