@@ -206,7 +206,7 @@ export const mimeDB = {
 	'audio/mp3': ['mp3'],
 	'audio/mp4': ['m4a', 'mp4a'],
 	'audio/mpeg': ['mpga', 'mp2', 'mp2a', 'mp3', 'm2a', 'm3a'],
-	'audio/ogg': ['oga', 'ogg', 'spx', 'opus'],
+	'audio/ogg': ['ogg', 'oga', 'spx', 'opus'],
 	'audio/s3m': ['s3m'],
 	'audio/silk': ['sil'],
 	'audio/wav': ['wav'],
