@@ -10,6 +10,7 @@ import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
+import Alert from '@mui/material/Alert';
 
 export type Props = {
 	isVisible: boolean;
@@ -118,6 +119,15 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									__html: t(describedInteractive.description),
 								}}
 							/>
+							{describedInteractive.warning && (
+								<Alert className={styles.warning} severity="warning">
+									<div
+										dangerouslySetInnerHTML={{
+											__html: t(describedInteractive.warning),
+										}}
+									/>
+								</Alert>
+							)}
 							<div>
 								{payload &&
 									describedInteractive.parameters.map((parameter) => (
@@ -137,8 +147,10 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 														)
 													)
 												}
-												label={t(keyToLabel(parameter.key))}
-												size="medium"
+												label={t(
+													parameter.description || keyToLabel(parameter.key)
+												)}
+												size="small"
 												multiline={true}
 												fullWidth={true}
 												required={parameter.required}

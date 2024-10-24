@@ -1022,3 +1022,15 @@ msgstr "Konum isteği mesajı, yalnızca bir <strong>gövde metni</strong> ve bi
 
 msgid "Enter your message here"
 msgstr ""
+
+msgid "Send address message"
+msgstr "Adres mesajı gönder"
+
+msgid "Address messages give your users a simpler way to share the shipping address with your business."
+msgstr "Adres mesajları, kullanıcılarınıza teslimat adresini işletmenizle paylaşmanın daha basit bir yolunu sunar."
+
+msgid "Send call-to-action URL button message"
+msgstr "Eylem çağrısı URL buton mesajı gönder"
+
+msgid "Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message."
+msgstr "Müşterileriniz, metin mesajlarında uzun veya belirsiz dizeler içeren ham URL'lere tıklama konusunda tereddüt edebilir. Bu durumlarda, etkileşimli bir eylem çağrısı (CTA) URL butonu mesajı göndermek isteyebilirsiniz."

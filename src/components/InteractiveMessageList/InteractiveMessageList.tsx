@@ -7,11 +7,13 @@ import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessage
 export interface InteractiveParameter {
 	key: string;
 	required?: boolean;
+	description?: string;
 }
 
 export interface DescribedInteractive {
 	title: string;
 	description: string;
+	warning?: string;
 	payload: any;
 	parameters: InteractiveParameter[];
 }
@@ -30,7 +32,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
-		parameters: [{ key: 'body.text', required: true }],
+		parameters: [{ key: 'body.text', required: true, description: 'Body' }],
 	},
 	{
 		title: 'Send call-to-action URL button message',
@@ -57,11 +59,55 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text' },
-			{ key: 'body.text' },
-			{ key: 'footer.text' },
-			{ key: 'action.parameters.url', required: true },
-			{ key: 'action.parameters.display_text', required: true },
+			{ key: 'header.text', description: 'Header' },
+			{ key: 'body.text', description: 'Body' },
+			{ key: 'footer.text', description: 'Footer' },
+			{
+				key: 'action.parameters.url',
+				required: true,
+				description: 'Action URL',
+			},
+			{
+				key: 'action.parameters.display_text',
+				required: true,
+				description: 'Action Display Text',
+			},
+		],
+	},
+	{
+		title: 'Send address message',
+		description:
+			'Address messages give your users a simpler way to share the shipping address with your business.',
+		warning:
+			'Currently, address messages are supported in the following two countries: India and Singapore. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages">Click here</a> to read more information.',
+		payload: {
+			type: 'address_message',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				name: 'address_message',
+				parameters: {
+					country: '',
+				},
+			},
+		},
+		parameters: [
+			{ key: 'header.text', description: 'Header' },
+			{ key: 'body.text', description: 'Body' },
+			{ key: 'footer.text', description: 'Footer' },
+			{
+				key: 'action.parameters.country',
+				required: true,
+				description: 'Country ISO Code',
+			},
 		],
 	},
 ];
@@ -84,7 +130,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 		<>
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
-					<div className="interactiveMessages">
+					<div className={'interactiveMessages ' + styles.list}>
 						{INTERACTIVE_MESSAGES.map((item, index) => (
 							<div className={styles.item} key={index}>
 								<Button
