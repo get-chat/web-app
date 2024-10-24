@@ -176,15 +176,15 @@ const ChatMessage: React.FC<Props> = ({
 									</div>
 								)}
 
-								{(data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT) ||
-									(data.type === ChatMessageModel.TYPE_AUDIO && (
-										<div
-											className={styles.action}
-											onClick={(event) => onOptionsClick?.(event, data)}
-										>
-											<ExpandMoreIcon />
-										</div>
-									))}
+								{((data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT) ||
+									data.type === ChatMessageModel.TYPE_AUDIO) && (
+									<div
+										className={styles.action}
+										onClick={(event) => onOptionsClick?.(event, data)}
+									>
+										<ExpandMoreIcon />
+									</div>
+								)}
 							</div>
 						)}
 
