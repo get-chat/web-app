@@ -20,5 +20,3 @@ export const mimeToExtension = (mime) => {
 	if (!mimeDB.hasOwnProperty(mime)) return '';
 	return mimeDB[mime][0];
 };
-
-console.log(mimeToExtension('audio/mpeg'));
