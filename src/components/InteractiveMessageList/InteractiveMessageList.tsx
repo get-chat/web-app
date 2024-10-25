@@ -144,7 +144,19 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				},
 			},
 		},
-		parameters: [],
+		parameters: [
+			{ key: 'header.text', description: 'Header' },
+			{ key: 'body.text', description: 'Body' },
+			{ key: 'footer.text', description: 'Footer' },
+			{ key: 'action.parameters.flow_token', description: 'Flow Token' },
+			{ key: 'action.parameters.flow_id', description: 'Flow ID' },
+			{ key: 'action.parameters.flow_cta', description: 'Flow CTA' },
+			{ key: 'action.parameters.flow_action', description: 'Flow Action' },
+			{
+				key: 'action.parameters.flow_action_payload.screen',
+				description: 'Flow Action Screen',
+			},
+		],
 	},
 ];
 
