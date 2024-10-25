@@ -112,7 +112,8 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 	},
 	{
 		title: 'Send flow message',
-		description: '',
+		description:
+			'You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers.',
 		payload: {
 			type: 'flow',
 			header: {
