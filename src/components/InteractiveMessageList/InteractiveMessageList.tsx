@@ -110,54 +110,6 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		],
 	},
-	{
-		title: 'Send flow message',
-		description: '',
-		payload: {
-			type: 'flow',
-			header: {
-				type: 'text',
-				text: '',
-			},
-			body: {
-				text: '',
-			},
-			footer: {
-				text: '',
-			},
-			action: {
-				name: 'flow',
-				parameters: {
-					flow_message_version: '3',
-					flow_token: '',
-					flow_id: '',
-					flow_cta: '',
-					flow_action: 'navigate',
-					flow_action_payload: {
-						screen: '<SCREEN_NAME>',
-						/*data: {
-							product_name: '',
-							product_description: '',
-							product_price: 100,
-						},*/
-					},
-				},
-			},
-		},
-		parameters: [
-			{ key: 'header.text', description: 'Header' },
-			{ key: 'body.text', description: 'Body' },
-			{ key: 'footer.text', description: 'Footer' },
-			{ key: 'action.parameters.flow_token', description: 'Flow Token' },
-			{ key: 'action.parameters.flow_id', description: 'Flow ID' },
-			{ key: 'action.parameters.flow_cta', description: 'Flow CTA' },
-			{ key: 'action.parameters.flow_action', description: 'Flow Action' },
-			{
-				key: 'action.parameters.flow_action_payload.screen',
-				description: 'Flow Action Screen',
-			},
-		],
-	},
 ];
 
 interface Props {
