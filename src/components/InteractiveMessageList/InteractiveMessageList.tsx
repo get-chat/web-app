@@ -135,7 +135,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 					flow_cta: '',
 					flow_action: 'navigate',
 					flow_action_payload: {
-						screen: '<SCREEN_NAME>',
+						screen: '',
 						/*data: {
 							product_name: '',
 							product_description: '',
