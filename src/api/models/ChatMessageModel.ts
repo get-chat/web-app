@@ -7,6 +7,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import TagModel from '@src/api/models/TagModel';
 import ReactionModel from '@src/api/models/ReactionModel';
+import { getUnixTimestamp } from '@src/helpers/DateHelper';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -180,7 +181,7 @@ export class ChatMessageModel {
 			waba_payload: {
 				type: ChatMessageModel.TYPE_TEMPLATE,
 				template: template,
-				timestamp: new Date().getTime(),
+				timestamp: getUnixTimestamp(),
 			},
 		});
 	}
@@ -191,7 +192,7 @@ export class ChatMessageModel {
 			waba_payload: {
 				type: ChatMessageModel.TYPE_INTERACTIVE,
 				interactive: interactive,
-				timestamp: new Date().getTime(),
+				timestamp: getUnixTimestamp(),
 			},
 		});
 	}
