@@ -120,7 +120,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 								}}
 							/>
 							{describedInteractive.warning && (
-								<Alert className={styles.warning} severity="warning">
+								<Alert className={styles.alert} severity="warning">
 									<div
 										dangerouslySetInnerHTML={{
 											__html: t(describedInteractive.warning),
@@ -166,6 +166,16 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									))}
 							</div>
 						</div>
+
+						{describedInteractive.info && (
+							<Alert className={styles.alert} severity="warning">
+								<div
+									dangerouslySetInnerHTML={{
+										__html: t(describedInteractive.info),
+									}}
+								/>
+							</Alert>
+						)}
 
 						<div className={styles.previewContainer}>
 							{messageData && (

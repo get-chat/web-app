@@ -14,6 +14,7 @@ export interface DescribedInteractive {
 	title: string;
 	description: string;
 	warning?: string;
+	info?: string;
 	payload: any;
 	parameters: InteractiveParameter[];
 }
@@ -114,6 +115,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		title: 'Send flow message',
 		description:
 			'You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers.',
+		info: 'To send WhatsApp Flows with additional parameters, please use the API.',
 		payload: {
 			type: 'flow',
 			header: {

@@ -18,11 +18,11 @@
 	text-align: left;
 }
 
-.warning {
+.alert {
 	font-size: 12px;
 }
 
-.warning a {
+.alert a {
 	font-weight: 600;
 }
 
