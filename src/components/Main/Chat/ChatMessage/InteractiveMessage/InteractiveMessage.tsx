@@ -13,6 +13,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
 import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
 import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/AddressMessage';
+import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/FlowMessage';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -23,6 +24,7 @@ export enum InteractiveMessageTypes {
 	location_request_message = 'location_request_message',
 	cta_url = 'cta_url',
 	address_message = 'address_message',
+	flow = 'flow',
 }
 
 interface Props {
@@ -88,6 +90,24 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 			{type === InteractiveMessageTypes.address_message && (
 				<AddressMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
+			{type === InteractiveMessageTypes.address_message && (
+				<AddressMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
+			{type === InteractiveMessageTypes.flow && (
+				<FlowMessage
 					header={header}
 					body={body}
 					footer={footer}
