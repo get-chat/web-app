@@ -8,7 +8,10 @@ import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
+import {
+	DescribedInteractive,
+	InteractiveParameter,
+} from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
 import Alert from '@mui/material/Alert';
 
@@ -28,6 +31,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	const [payload, setPayload] = useState({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
 	const [isShowErrors, setIsShowErrors] = useState(false);
+	const [isShowingAdvanced, setIsShowingAdvanced] = useState(false);
 
 	const { t } = useTranslation();
 
@@ -37,6 +41,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				describedInteractive?.payload ? { ...describedInteractive.payload } : {}
 			);
 			setIsShowErrors(false);
+			setIsShowingAdvanced(false);
 		}
 	}, [isVisible, describedInteractive]);
 
@@ -104,6 +109,30 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		return isValid;
 	};
 
+	const renderInput = (parameter: InteractiveParameter) => (
+		<div className={styles.textFieldWrapper} key={parameter.key}>
+			<TextField
+				variant="standard"
+				value={getNestedValue(payload, parameter.key)}
+				onChange={(e) =>
+					setPayload((prevState) =>
+						setNestedValue(prevState, parameter.key, e.target.value)
+					)
+				}
+				label={t(parameter.description || keyToLabel(parameter.key))}
+				size="small"
+				multiline={true}
+				fullWidth={true}
+				required={parameter.required}
+				error={
+					isShowErrors && parameter.required
+						? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
+						: false
+				}
+			/>
+		</div>
+	);
+
 	return (
 		<Dialog open={isVisible} onClose={close}>
 			<DialogTitle>
@@ -130,40 +159,22 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 							)}
 							<div>
 								{payload &&
-									describedInteractive.parameters.map((parameter) => (
-										<div
-											className={styles.textFieldWrapper}
-											key={parameter.key}
-										>
-											<TextField
-												variant="standard"
-												value={getNestedValue(payload, parameter.key)}
-												onChange={(e) =>
-													setPayload((prevState) =>
-														setNestedValue(
-															prevState,
-															parameter.key,
-															e.target.value
-														)
-													)
-												}
-												label={t(
-													parameter.description || keyToLabel(parameter.key)
-												)}
-												size="small"
-												multiline={true}
-												fullWidth={true}
-												required={parameter.required}
-												error={
-													isShowErrors && parameter.required
-														? isEmptyString(
-																getNestedValue(payload, parameter.key) ?? ''
-														  )
-														: false
-												}
-											/>
-										</div>
-									))}
+									describedInteractive.parameters
+										.filter((parameter) => !parameter.advanced)
+										.map((parameter) => renderInput(parameter))}
+							</div>
+
+							<div
+								className={styles.advancedToggle}
+								onClick={() => setIsShowingAdvanced((prevState) => !prevState)}
+							>
+								Advanced settings
+							</div>
+							<div className={styles.advanced}>
+								{payload &&
+									describedInteractive.parameters
+										.filter((parameter) => parameter.advanced)
+										.map((parameter) => renderInput(parameter))}
 							</div>
 
 							{describedInteractive.info && (

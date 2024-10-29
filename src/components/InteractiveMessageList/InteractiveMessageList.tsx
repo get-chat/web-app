@@ -7,6 +7,7 @@ import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessage
 export interface InteractiveParameter {
 	key: string;
 	required?: boolean;
+	advanced?: boolean;
 	description?: string;
 }
 
@@ -155,6 +156,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				key: 'action.parameters.flow_token',
 				description: 'Flow Token',
 				required: true,
+				advanced: true,
 			},
 			{
 				key: 'action.parameters.flow_id',
@@ -170,6 +172,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				key: 'action.parameters.flow_action',
 				description: 'Flow Action',
 				required: true,
+				advanced: true,
 			},
 			{
 				key: 'action.parameters.flow_action_payload.screen',
