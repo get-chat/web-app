@@ -121,7 +121,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 						setNestedValue(prevState, parameter.key, e.target.value)
 					)
 				}
-				label={t(parameter.description || keyToLabel(parameter.key))}
+				label={t(parameter.placeholder || keyToLabel(parameter.key))}
 				size="small"
 				multiline={true}
 				fullWidth={true}
@@ -132,6 +132,14 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 						: false
 				}
 			/>
+			{parameter.description && (
+				<div
+					className={styles.helperText}
+					dangerouslySetInnerHTML={{
+						__html: t(parameter.description),
+					}}
+				/>
+			)}
 		</div>
 	);
 

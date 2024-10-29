@@ -8,6 +8,7 @@ export interface InteractiveParameter {
 	key: string;
 	required?: boolean;
 	advanced?: boolean;
+	placeholder?: string;
 	description?: string;
 }
 
@@ -34,7 +35,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
-		parameters: [{ key: 'body.text', required: true, description: 'Body' }],
+		parameters: [{ key: 'body.text', required: true, placeholder: 'Body' }],
 	},
 	{
 		title: 'Send call-to-action URL button message',
@@ -61,18 +62,18 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', description: 'Header' },
-			{ key: 'body.text', description: 'Body' },
-			{ key: 'footer.text', description: 'Footer' },
+			{ key: 'header.text', placeholder: 'Header' },
+			{ key: 'body.text', placeholder: 'Body' },
+			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.url',
 				required: true,
-				description: 'Action URL',
+				placeholder: 'Action URL',
 			},
 			{
 				key: 'action.parameters.display_text',
 				required: true,
-				description: 'Action Display Text',
+				placeholder: 'Action Display Text',
 			},
 		],
 	},
@@ -102,13 +103,13 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', description: 'Header' },
-			{ key: 'body.text', description: 'Body' },
-			{ key: 'footer.text', description: 'Footer' },
+			{ key: 'header.text', placeholder: 'Header' },
+			{ key: 'body.text', placeholder: 'Body' },
+			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.country',
 				required: true,
-				description: 'Country ISO Code',
+				placeholder: 'Country ISO Code',
 			},
 		],
 	},
@@ -149,34 +150,39 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', description: 'Header', required: true },
-			{ key: 'body.text', description: 'Body', required: true },
-			{ key: 'footer.text', description: 'Footer', required: true },
+			{ key: 'header.text', placeholder: 'Header', required: true },
+			{ key: 'body.text', placeholder: 'Body', required: true },
+			{ key: 'footer.text', placeholder: 'Footer', required: true },
 			{
 				key: 'action.parameters.flow_token',
-				description: 'Flow Token',
+				placeholder: 'Flow Token',
 				required: true,
 				advanced: true,
 			},
 			{
 				key: 'action.parameters.flow_id',
-				description: 'Flow ID',
+				placeholder: 'Flow ID',
+				description:
+					'<a href="https://business.facebook.com/latest/whatsapp_manager" target="_blank">Go to WhatsApp Manager</a> > Flows section to copy your Flow ID',
 				required: true,
 			},
 			{
 				key: 'action.parameters.flow_cta',
-				description: 'Flow CTA',
+				placeholder: 'Flow CTA',
+				description: 'Call-to-action button text',
 				required: true,
 			},
 			{
 				key: 'action.parameters.flow_action',
-				description: 'Flow Action',
+				placeholder: 'Flow Action',
 				required: true,
 				advanced: true,
 			},
 			{
 				key: 'action.parameters.flow_action_payload.screen',
-				description: 'Flow Action Screen',
+				placeholder: 'Flow Action Screen',
+				description:
+					'<a href="https://business.facebook.com/latest/whatsapp_manager" target="_blank">Go to WhatsApp Manager</a> > Flows section and open your Flow details page to list all screens available',
 				required: true,
 			},
 		],
