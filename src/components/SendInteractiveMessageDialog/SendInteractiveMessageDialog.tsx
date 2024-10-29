@@ -14,6 +14,8 @@ import {
 } from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
 import Alert from '@mui/material/Alert';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 export type Props = {
 	isVisible: boolean;
@@ -168,9 +170,21 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 								className={styles.advancedToggle}
 								onClick={() => setIsShowingAdvanced((prevState) => !prevState)}
 							>
-								Advanced settings
+								{isShowingAdvanced ? (
+									<KeyboardArrowUpIcon />
+								) : (
+									<KeyboardArrowDownIcon />
+								)}
+								{t(
+									isShowingAdvanced
+										? 'Hide advanced settings'
+										: 'Show advanced settings'
+								)}
 							</div>
-							<div className={styles.advanced}>
+							<div
+								className={styles.advanced}
+								style={{ display: isShowingAdvanced ? 'block' : 'none' }}
+							>
 								{payload &&
 									describedInteractive.parameters
 										.filter((parameter) => parameter.advanced)

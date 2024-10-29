@@ -35,11 +35,11 @@
 }
 
 .advancedToggle {
-	margin-top: 20px;
+	margin-top: 30px;
 	font-size: 14px;
 	font-weight: 600;
-	color: var(--color-primary);
 	cursor: pointer;
+	color: #6f7385;
 }
 
 .advanced {
