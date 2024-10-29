@@ -148,9 +148,9 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', description: 'Header' },
-			{ key: 'body.text', description: 'Body' },
-			{ key: 'footer.text', description: 'Footer' },
+			{ key: 'header.text', description: 'Header', required: true },
+			{ key: 'body.text', description: 'Body', required: true },
+			{ key: 'footer.text', description: 'Footer', required: true },
 			{
 				key: 'action.parameters.flow_token',
 				description: 'Flow Token',
