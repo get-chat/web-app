@@ -132,7 +132,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'flow',
 				parameters: {
 					flow_message_version: '3',
-					flow_token: '',
+					flow_token: 'unused',
 					flow_id: '',
 					flow_cta: '',
 					flow_action: 'navigate',
