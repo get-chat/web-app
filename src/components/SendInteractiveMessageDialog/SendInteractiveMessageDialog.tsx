@@ -174,21 +174,28 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 										.map((parameter) => renderInput(parameter))}
 							</div>
 
-							<div
-								className={styles.advancedToggle}
-								onClick={() => setIsShowingAdvanced((prevState) => !prevState)}
-							>
-								{isShowingAdvanced ? (
-									<KeyboardArrowUpIcon />
-								) : (
-									<KeyboardArrowDownIcon />
+							{payload &&
+								describedInteractive.parameters.filter(
+									(parameter) => parameter.advanced
+								).length > 0 && (
+									<div
+										className={styles.advancedToggle}
+										onClick={() =>
+											setIsShowingAdvanced((prevState) => !prevState)
+										}
+									>
+										{isShowingAdvanced ? (
+											<KeyboardArrowUpIcon />
+										) : (
+											<KeyboardArrowDownIcon />
+										)}
+										{t(
+											isShowingAdvanced
+												? 'Hide advanced settings'
+												: 'Show advanced settings'
+										)}
+									</div>
 								)}
-								{t(
-									isShowingAdvanced
-										? 'Hide advanced settings'
-										: 'Show advanced settings'
-								)}
-							</div>
 							<div
 								className={styles.advanced}
 								style={{ display: isShowingAdvanced ? 'block' : 'none' }}
