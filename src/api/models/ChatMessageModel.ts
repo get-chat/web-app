@@ -324,6 +324,8 @@ export class ChatMessageModel {
 				this.referral.image.link ??
 				this.generateMediaLink(this.referral.image.id)
 			);
+		} else if (this.referral?.image_url) {
+			return this.referral.image_url;
 		}
 	}
 
@@ -333,6 +335,8 @@ export class ChatMessageModel {
 				this.referral.video.link ??
 				this.generateMediaLink(this.referral.video.id)
 			);
+		} else if (this.referral?.video_url) {
+			return this.referral.video_url;
 		}
 	}
 
