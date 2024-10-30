@@ -35,7 +35,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
-		parameters: [{ key: 'body.text', required: true, placeholder: 'Body' }],
+		parameters: [{ key: 'body.text', placeholder: 'Body', required: true }],
 	},
 	{
 		title: 'Send call-to-action URL button message',
@@ -63,7 +63,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		},
 		parameters: [
 			{ key: 'header.text', placeholder: 'Header' },
-			{ key: 'body.text', placeholder: 'Body' },
+			{ key: 'body.text', placeholder: 'Body', required: true },
 			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.url',
@@ -104,7 +104,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		},
 		parameters: [
 			{ key: 'header.text', placeholder: 'Header' },
-			{ key: 'body.text', placeholder: 'Body' },
+			{ key: 'body.text', placeholder: 'Body', required: true },
 			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.country',
@@ -150,9 +150,9 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', placeholder: 'Header', required: true },
+			{ key: 'header.text', placeholder: 'Header' },
 			{ key: 'body.text', placeholder: 'Body', required: true },
-			{ key: 'footer.text', placeholder: 'Footer', required: true },
+			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.flow_token',
 				placeholder: 'Flow Token',

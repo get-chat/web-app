@@ -30,7 +30,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	describedInteractive,
 	onSend,
 }) => {
-	const [payload, setPayload] = useState({});
+	const [payload, setPayload] = useState<any>({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
 	const [isShowErrors, setIsShowErrors] = useState(false);
 	const [isShowingAdvanced, setIsShowingAdvanced] = useState(false);
@@ -58,12 +58,24 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	const checkAndSend = () => {
+		const cloneObj = JSON.parse(JSON.stringify(payload));
+
 		if (!isFormValid()) {
 			setIsShowErrors(true);
 			return;
 		}
 
-		onSend(payload);
+		// Removing header if text is empty
+		if (cloneObj.header && isEmptyString(cloneObj.header.text)) {
+			delete cloneObj.header;
+		}
+
+		// Removing footer if text is empty
+		if (cloneObj.footer && isEmptyString(cloneObj.footer.text)) {
+			delete cloneObj.footer;
+		}
+
+		onSend(cloneObj);
 		close();
 	};
 
@@ -117,7 +129,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				variant="standard"
 				value={getNestedValue(payload, parameter.key)}
 				onChange={(e) =>
-					setPayload((prevState) =>
+					setPayload((prevState: any) =>
 						setNestedValue(prevState, parameter.key, e.target.value)
 					)
 				}
