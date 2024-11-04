@@ -1040,3 +1040,6 @@ msgstr "Akış mesajı gönder"
 
 msgid "You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers."
 msgstr "Müşterileriniz için yapılandırılmış iletişimin daha doğal veya rahat olduğu her türlü amaç için akışları kullanarak potansiyel müşteriler oluşturabilir, ürünler önerebilir, yeni satış fırsatları elde edebilirsiniz."
+
+msgid "Message via referral"
+msgstr "Yönlendirme aracılığıyla mesaj"

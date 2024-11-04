@@ -22,7 +22,7 @@ const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
 		<div>
 			<div className={styles.header} onClick={goToSourceURL}>
 				<ReviewsIcon className={styles.headerIcon} />
-				{t('Message via ' + (referral.source_type ?? 'ad'))}
+				{t('Message via ' + (referral.source_type ?? 'referral'))}
 				<br />
 			</div>
 
