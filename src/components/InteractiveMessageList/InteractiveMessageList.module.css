@@ -10,6 +10,11 @@
 	font-size: 14px;
 }
 
+.item > :global(.MuiButton-root) {
+	width: 100%;
+	justify-content: flex-start;
+}
+
 .item :global(.chat__message) {
 	margin-bottom: 0;
 }

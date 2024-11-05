@@ -82,7 +82,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		description:
 			'Address messages give your users a simpler way to share the shipping address with your business.',
 		warning:
-			'Currently, address messages are supported in the following two countries: India and Singapore. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages">Click here</a> to read more information.',
+			'Currently, address messages are supported in the following two countries: India and Singapore. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages" target="_blank">Click here</a> to read more information.',
 		payload: {
 			type: 'address_message',
 			header: {
