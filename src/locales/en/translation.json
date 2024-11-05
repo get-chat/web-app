@@ -326,5 +326,7 @@
 	"Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message.": "",
 	"Send flow message": "",
 	"You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers.": "",
-	"Message via referral": ""
+	"Message via referral": "",
+	"Send catalog message": "",
+	"Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp.": ""
 }

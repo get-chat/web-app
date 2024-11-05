@@ -1015,3 +1015,9 @@ msgstr ""
 
 msgid "Message via referral"
 msgstr ""
+
+msgid "Send catalog message"
+msgstr ""
+
+msgid "Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp."
+msgstr ""
