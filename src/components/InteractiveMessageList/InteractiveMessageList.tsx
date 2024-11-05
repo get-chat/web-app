@@ -187,6 +187,34 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		],
 	},
+	{
+		title: 'Send catalog message',
+		description:
+			'Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp.',
+		payload: {
+			type: 'catalog_message',
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				name: 'catalog_message',
+				parameters: {
+					thumbnail_product_retailer_id: '',
+				},
+			},
+		},
+		parameters: [
+			{ key: 'body.text', placeholder: 'Body', required: true },
+			{ key: 'footer.text', placeholder: 'Footer' },
+			{
+				key: 'parameters.thumbnail_product_retailer_id',
+				placeholder: 'Thumbnail Product Retailer ID',
+			},
+		],
+	},
 ];
 
 interface Props {
