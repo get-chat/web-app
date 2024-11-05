@@ -1021,3 +1021,6 @@ msgstr ""
 
 msgid "Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp."
 msgstr ""
+
+msgid "View catalog"
+msgstr ""
