@@ -7,6 +7,8 @@ import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessage
 export interface InteractiveParameter {
 	key: string;
 	required?: boolean;
+	advanced?: boolean;
+	placeholder?: string;
 	description?: string;
 }
 
@@ -14,6 +16,7 @@ export interface DescribedInteractive {
 	title: string;
 	description: string;
 	warning?: string;
+	info?: string;
 	payload: any;
 	parameters: InteractiveParameter[];
 }
@@ -32,7 +35,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				name: 'send_location',
 			},
 		},
-		parameters: [{ key: 'body.text', required: true, description: 'Body' }],
+		parameters: [{ key: 'body.text', placeholder: 'Body', required: true }],
 	},
 	{
 		title: 'Send call-to-action URL button message',
@@ -59,18 +62,18 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', description: 'Header' },
-			{ key: 'body.text', description: 'Body' },
-			{ key: 'footer.text', description: 'Footer' },
+			{ key: 'header.text', placeholder: 'Header' },
+			{ key: 'body.text', placeholder: 'Body', required: true },
+			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.url',
 				required: true,
-				description: 'Action URL',
+				placeholder: 'Action URL',
 			},
 			{
 				key: 'action.parameters.display_text',
 				required: true,
-				description: 'Action Display Text',
+				placeholder: 'Action Display Text',
 			},
 		],
 	},
@@ -100,13 +103,87 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			},
 		},
 		parameters: [
-			{ key: 'header.text', description: 'Header' },
-			{ key: 'body.text', description: 'Body' },
-			{ key: 'footer.text', description: 'Footer' },
+			{ key: 'header.text', placeholder: 'Header' },
+			{ key: 'body.text', placeholder: 'Body', required: true },
+			{ key: 'footer.text', placeholder: 'Footer' },
 			{
 				key: 'action.parameters.country',
 				required: true,
-				description: 'Country ISO Code',
+				placeholder: 'Country ISO Code',
+			},
+		],
+	},
+	{
+		title: 'Send flow message',
+		description:
+			'You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers.',
+		info: 'To send WhatsApp Flows with additional parameters, please use the API.',
+		payload: {
+			type: 'flow',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				name: 'flow',
+				parameters: {
+					flow_message_version: '3',
+					flow_token: 'unused',
+					flow_id: '',
+					flow_cta: '',
+					flow_action: 'navigate',
+					flow_action_payload: {
+						screen: '',
+						/*data: {
+							product_name: '',
+							product_description: '',
+							product_price: 100,
+						},*/
+					},
+				},
+			},
+		},
+		parameters: [
+			{ key: 'header.text', placeholder: 'Header' },
+			{ key: 'body.text', placeholder: 'Body', required: true },
+			{ key: 'footer.text', placeholder: 'Footer' },
+			{
+				key: 'action.parameters.flow_token',
+				placeholder: 'Flow Token',
+				required: true,
+				advanced: true,
+			},
+			{
+				key: 'action.parameters.flow_id',
+				placeholder: 'Flow ID',
+				description:
+					'<a href="https://business.facebook.com/latest/whatsapp_manager" target="_blank">Go to WhatsApp Manager</a> > Flows section to copy your Flow ID',
+				required: true,
+			},
+			{
+				key: 'action.parameters.flow_cta',
+				placeholder: 'Flow CTA',
+				description: 'Call-to-action button text',
+				required: true,
+			},
+			{
+				key: 'action.parameters.flow_action',
+				placeholder: 'Flow Action',
+				required: true,
+				advanced: true,
+			},
+			{
+				key: 'action.parameters.flow_action_payload.screen',
+				placeholder: 'Flow Action Screen',
+				description:
+					'<a href="https://business.facebook.com/latest/whatsapp_manager" target="_blank">Go to WhatsApp Manager</a> > Flows section and open your Flow details page to list all screens available',
+				required: true,
 			},
 		],
 	},

@@ -13,6 +13,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
 import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
 import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/AddressMessage';
+import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/FlowMessage';
+import NfmReply from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/NfmReply';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -23,6 +25,8 @@ export enum InteractiveMessageTypes {
 	location_request_message = 'location_request_message',
 	cta_url = 'cta_url',
 	address_message = 'address_message',
+	flow = 'flow',
+	nfm_reply = 'nfm_reply',
 }
 
 interface Props {
@@ -31,7 +35,7 @@ interface Props {
 
 const InteractiveMessage: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
-	const { header, body, footer, action, type } =
+	const { header, body, footer, action, type, nfm_reply } =
 		data?.payload?.interactive ?? {};
 
 	return (
@@ -95,6 +99,24 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 				/>
 			)}
 
+			{type === InteractiveMessageTypes.address_message && (
+				<AddressMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
+			{type === InteractiveMessageTypes.flow && (
+				<FlowMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
 			{type === InteractiveMessageTypes.location_request_message && (
 				<>
 					{body && (
@@ -113,6 +135,10 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 						</Button>
 					)}
 				</>
+			)}
+
+			{type === InteractiveMessageTypes.nfm_reply && (
+				<NfmReply data={nfm_reply} />
 			)}
 		</>
 	);

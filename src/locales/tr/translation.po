@@ -1034,3 +1034,12 @@ msgstr "Eylem çağrısı URL buton mesajı gönder"
 
 msgid "Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message."
 msgstr "Müşterileriniz, metin mesajlarında uzun veya belirsiz dizeler içeren ham URL'lere tıklama konusunda tereddüt edebilir. Bu durumlarda, etkileşimli bir eylem çağrısı (CTA) URL butonu mesajı göndermek isteyebilirsiniz."
+
+msgid "Send flow message"
+msgstr "Akış mesajı gönder"
+
+msgid "You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers."
+msgstr "Müşterileriniz için yapılandırılmış iletişimin daha doğal veya rahat olduğu her türlü amaç için akışları kullanarak potansiyel müşteriler oluşturabilir, ürünler önerebilir, yeni satış fırsatları elde edebilirsiniz."
+
+msgid "Message via referral"
+msgstr "Yönlendirme aracılığıyla mesaj"

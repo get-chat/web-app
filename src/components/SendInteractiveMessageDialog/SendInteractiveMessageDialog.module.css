@@ -20,18 +20,39 @@
 	font-size: 14px;
 }
 
-.warning {
+.alert {
 	font-size: 12px !important;
 	margin-top: 15px;
 	padding: 4px 10px !important;
 }
 
-.warning a {
+.alert a {
 	font-weight: 600;
 }
 
 .textFieldWrapper {
 	margin-top: 10px;
+}
+
+.helperText {
+	font-size: 12px;
+	color: #6f7385;
+	margin-top: 5px;
+}
+
+.helperText a {
+	color: var(--color-primary);
+}
+
+.advancedToggle {
+	margin-top: 30px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	color: #6f7385;
+}
+
+.advanced {
 }
 
 .previewContainer {

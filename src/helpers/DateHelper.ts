@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+const getUnixTimestamp = () => {
+	return new Date().getTime() / 1000;
+};
+
 const getPastHoursByTimestamp = (timestamp: number) => {
 	const momentDate = moment.unix(timestamp);
 	const curDate = moment(new Date());
@@ -43,6 +47,7 @@ const convertDateToUnixTimestamp = (date: Date) => {
 };
 
 export {
+	getUnixTimestamp,
 	getPastHoursByTimestamp,
 	isSameDay,
 	formatDate,

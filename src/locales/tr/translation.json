@@ -323,5 +323,8 @@
 	"Send address message": "Adres mesajı gönder",
 	"Address messages give your users a simpler way to share the shipping address with your business.": "Adres mesajları, kullanıcılarınıza teslimat adresini işletmenizle paylaşmanın daha basit bir yolunu sunar.",
 	"Send call-to-action URL button message": "Eylem çağrısı URL buton mesajı gönder",
-	"Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message.": "Müşterileriniz, metin mesajlarında uzun veya belirsiz dizeler içeren ham URL'lere tıklama konusunda tereddüt edebilir. Bu durumlarda, etkileşimli bir eylem çağrısı (CTA) URL butonu mesajı göndermek isteyebilirsiniz."
+	"Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message.": "Müşterileriniz, metin mesajlarında uzun veya belirsiz dizeler içeren ham URL'lere tıklama konusunda tereddüt edebilir. Bu durumlarda, etkileşimli bir eylem çağrısı (CTA) URL butonu mesajı göndermek isteyebilirsiniz.",
+	"Send flow message": "Akış mesajı gönder",
+	"You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers.": "Müşterileriniz için yapılandırılmış iletişimin daha doğal veya rahat olduğu her türlü amaç için akışları kullanarak potansiyel müşteriler oluşturabilir, ürünler önerebilir, yeni satış fırsatları elde edebilirsiniz.",
+	"Message via referral": "Yönlendirme aracılığıyla mesaj"
 }

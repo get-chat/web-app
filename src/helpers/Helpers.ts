@@ -7,8 +7,8 @@ export const isString = (anyVar) => {
 	return typeof anyVar === 'string';
 };
 
-export const isEmptyString = (str) => {
-	return !str || str.length === 0;
+export const isEmptyString = (str: string | null | undefined): boolean => {
+	return !str || str.trim().length === 0;
 };
 
 export const translateHTMLInputToText = (html) => {

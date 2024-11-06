@@ -8,9 +8,14 @@ import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { DescribedInteractive } from '@src/components/InteractiveMessageList/InteractiveMessageList';
+import {
+	DescribedInteractive,
+	InteractiveParameter,
+} from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
 import Alert from '@mui/material/Alert';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 export type Props = {
 	isVisible: boolean;
@@ -25,9 +30,10 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	describedInteractive,
 	onSend,
 }) => {
-	const [payload, setPayload] = useState({});
+	const [payload, setPayload] = useState<any>({});
 	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
 	const [isShowErrors, setIsShowErrors] = useState(false);
+	const [isShowingAdvanced, setIsShowingAdvanced] = useState(false);
 
 	const { t } = useTranslation();
 
@@ -37,6 +43,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				describedInteractive?.payload ? { ...describedInteractive.payload } : {}
 			);
 			setIsShowErrors(false);
+			setIsShowingAdvanced(false);
 		}
 	}, [isVisible, describedInteractive]);
 
@@ -51,12 +58,24 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	const checkAndSend = () => {
+		const cloneObj = JSON.parse(JSON.stringify(payload));
+
 		if (!isFormValid()) {
 			setIsShowErrors(true);
 			return;
 		}
 
-		onSend(payload);
+		// Removing header if text is empty
+		if (cloneObj.header && isEmptyString(cloneObj.header.text)) {
+			delete cloneObj.header;
+		}
+
+		// Removing footer if text is empty
+		if (cloneObj.footer && isEmptyString(cloneObj.footer.text)) {
+			delete cloneObj.footer;
+		}
+
+		onSend(cloneObj);
 		close();
 	};
 
@@ -104,6 +123,38 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		return isValid;
 	};
 
+	const renderInput = (parameter: InteractiveParameter) => (
+		<div className={styles.textFieldWrapper} key={parameter.key}>
+			<TextField
+				variant="standard"
+				value={getNestedValue(payload, parameter.key)}
+				onChange={(e) =>
+					setPayload((prevState: any) =>
+						setNestedValue(prevState, parameter.key, e.target.value)
+					)
+				}
+				label={t(parameter.placeholder || keyToLabel(parameter.key))}
+				size="small"
+				multiline={true}
+				fullWidth={true}
+				required={parameter.required}
+				error={
+					isShowErrors && parameter.required
+						? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
+						: false
+				}
+			/>
+			{parameter.description && (
+				<div
+					className={styles.helperText}
+					dangerouslySetInnerHTML={{
+						__html: t(parameter.description),
+					}}
+				/>
+			)}
+		</div>
+	);
+
 	return (
 		<Dialog open={isVisible} onClose={close}>
 			<DialogTitle>
@@ -120,7 +171,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 								}}
 							/>
 							{describedInteractive.warning && (
-								<Alert className={styles.warning} severity="warning">
+								<Alert className={styles.alert} severity="warning">
 									<div
 										dangerouslySetInnerHTML={{
 											__html: t(describedInteractive.warning),
@@ -130,41 +181,52 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 							)}
 							<div>
 								{payload &&
-									describedInteractive.parameters.map((parameter) => (
-										<div
-											className={styles.textFieldWrapper}
-											key={parameter.key}
-										>
-											<TextField
-												variant="standard"
-												value={getNestedValue(payload, parameter.key)}
-												onChange={(e) =>
-													setPayload((prevState) =>
-														setNestedValue(
-															prevState,
-															parameter.key,
-															e.target.value
-														)
-													)
-												}
-												label={t(
-													parameter.description || keyToLabel(parameter.key)
-												)}
-												size="small"
-												multiline={true}
-												fullWidth={true}
-												required={parameter.required}
-												error={
-													isShowErrors && parameter.required
-														? isEmptyString(
-																getNestedValue(payload, parameter.key) ?? ''
-														  )
-														: false
-												}
-											/>
-										</div>
-									))}
+									describedInteractive.parameters
+										.filter((parameter) => !parameter.advanced)
+										.map((parameter) => renderInput(parameter))}
 							</div>
+
+							{payload &&
+								describedInteractive.parameters.filter(
+									(parameter) => parameter.advanced
+								).length > 0 && (
+									<div
+										className={styles.advancedToggle}
+										onClick={() =>
+											setIsShowingAdvanced((prevState) => !prevState)
+										}
+									>
+										{isShowingAdvanced ? (
+											<KeyboardArrowUpIcon />
+										) : (
+											<KeyboardArrowDownIcon />
+										)}
+										{t(
+											isShowingAdvanced
+												? 'Hide advanced settings'
+												: 'Show advanced settings'
+										)}
+									</div>
+								)}
+							<div
+								className={styles.advanced}
+								style={{ display: isShowingAdvanced ? 'block' : 'none' }}
+							>
+								{payload &&
+									describedInteractive.parameters
+										.filter((parameter) => parameter.advanced)
+										.map((parameter) => renderInput(parameter))}
+							</div>
+
+							{describedInteractive.info && (
+								<Alert className={styles.alert} severity="info">
+									<div
+										dangerouslySetInnerHTML={{
+											__html: t(describedInteractive.info),
+										}}
+									/>
+								</Alert>
+							)}
 						</div>
 
 						<div className={styles.previewContainer}>

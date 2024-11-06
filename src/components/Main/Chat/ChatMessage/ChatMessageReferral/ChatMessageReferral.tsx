@@ -22,13 +22,13 @@ const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
 		<div>
 			<div className={styles.header} onClick={goToSourceURL}>
 				<ReviewsIcon className={styles.headerIcon} />
-				{t('Message via ' + referral.source_type)}
+				{t('Message via ' + (referral.source_type ?? 'referral'))}
 				<br />
 			</div>
 
 			<div className={styles.referralContainer}>
 				<div>
-					{referral.image && (
+					{(referral.image || referral.image_url) && (
 						<ChatMessageImage
 							className={styles.referralMedia}
 							data={referral}
@@ -42,7 +42,7 @@ const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
 						/>
 					)}
 
-					{referral.video && (
+					{(referral.video || referral.video_url) && (
 						<ChatMessageVideo
 							data={data}
 							source={data.generateReferralVideoLink()}
