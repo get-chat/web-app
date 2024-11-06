@@ -210,7 +210,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 			{ key: 'body.text', placeholder: 'Body', required: true },
 			{ key: 'footer.text', placeholder: 'Footer' },
 			{
-				key: 'parameters.thumbnail_product_retailer_id',
+				key: 'action.parameters.thumbnail_product_retailer_id',
 				placeholder: 'Thumbnail Product Retailer ID',
 			},
 		],
