@@ -15,6 +15,7 @@ import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMess
 import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/AddressMessage';
 import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/FlowMessage';
 import NfmReply from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/NfmReply';
+import CatalogMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CatalogMessage';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -27,6 +28,7 @@ export enum InteractiveMessageTypes {
 	address_message = 'address_message',
 	flow = 'flow',
 	nfm_reply = 'nfm_reply',
+	catalog_message = 'catalog_message',
 }
 
 interface Props {
@@ -110,6 +112,15 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 			{type === InteractiveMessageTypes.flow && (
 				<FlowMessage
+					header={header}
+					body={body}
+					footer={footer}
+					action={action}
+				/>
+			)}
+
+			{type === InteractiveMessageTypes.catalog_message && (
+				<CatalogMessage
 					header={header}
 					body={body}
 					footer={footer}

@@ -1043,3 +1043,12 @@ msgstr "Müşterileriniz için yapılandırılmış iletişimin daha doğal veya
 
 msgid "Message via referral"
 msgstr "Yönlendirme aracılığıyla mesaj"
+
+msgid "Send catalog message"
+msgstr "Katalog mesajı gönder"
+
+msgid "Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp."
+msgstr "Katalog mesajları, ürün kataloğunuzu tamamen WhatsApp üzerinden sergilemenize olanak tanıyan mesajlardır."
+
+msgid "View catalog"
+msgstr "Kataloğu görüntüle"
