@@ -74,11 +74,13 @@ Build:
     <<: *cache_config
 
   <<: *install_pnpm
-  script:
-    - apk add --no-cache --upgrade bash
+  before_script:
+    - apk add --no-cache --upgrade bash git
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
+  script:
     - pnpm install --prefer-offline
+    - CI=false pnpm build
 
     # HACK: Using `CI=false` as a temporary workaround to ignore compilation
     # warnings, as they're breaking our GitLab CI/CD pipeline
@@ -142,6 +144,8 @@ Test:
     - Update project version on git tag
 
   <<: *install_pnpm
+  before_script:
+    - apk add --no-cache git
   script:
     - pnpm install --prefer-offline
     - pnpm test --
