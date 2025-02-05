@@ -73,11 +73,11 @@ Build:
   cache:
     <<: *cache_config
 
+  <<: *install_pnpm
   before_script:
     - apk add --no-cache --upgrade bash git
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
-  <<: *install_pnpm
   script:
     - pnpm install --prefer-offline
     - CI=false pnpm build
@@ -143,9 +143,9 @@ Test:
   dependencies:
     - Update project version on git tag
 
+  <<: *install_pnpm
   before_script:
     - apk add --no-cache git
-  <<: *install_pnpm
   script:
     - pnpm install --prefer-offline
     - pnpm test --
