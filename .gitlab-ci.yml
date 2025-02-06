@@ -145,9 +145,7 @@ Test:
   <<: *install_pnpm
   script:
     - pnpm install --prefer-offline
-    - pnpm test --
-      --passWithNoTests
-      --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
+    - pnpm test --passWithNoTests --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
 
   # track our test coverage in GitLab's MR widget/ui
   coverage: '/All files.*\|\s+(\d+(?:\.\d+)?)/'
