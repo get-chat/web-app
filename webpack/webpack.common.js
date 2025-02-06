@@ -19,7 +19,7 @@ module.exports = {
 			'@src': path.resolve(__dirname, '../src'),
 		},
 		fallback: {
-			process: require.resolve('process/browser'),
+			process: require.resolve('process/browser.js'),
 			url: require.resolve('url/'),
 		},
 	},
