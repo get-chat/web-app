@@ -17,10 +17,11 @@ module.exports = {
 		extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.json'],
 		alias: {
 			'@src': path.resolve(__dirname, '../src'),
+			process: 'process/browser',
 		},
 		fallback: {
-			process: require.resolve('process/browser.js'),
-			url: require.resolve('url/'),
+			'process/browser': require.resolve('process/browser'),
+			url: require.resolve('url/')
 		},
 	},
 	optimization: {
