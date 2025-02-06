@@ -40,6 +40,7 @@ variables:
 
 .install_pnpm: &install_pnpm
   before_script:
+    - apk add --no-cache --upgrade bash git
     - npm install --location=global --no-fund pnpm
     - pnpm config set store-dir $PNPM_STORE_DIR
 
@@ -75,7 +76,6 @@ Build:
 
   <<: *install_pnpm
   script:
-    - apk add --no-cache --upgrade bash git
     - chmod +x ./setup_env.sh
     - ./setup_env.sh
     - pnpm install --prefer-offline
@@ -144,7 +144,6 @@ Test:
 
   <<: *install_pnpm
   script:
-    - apk add --no-cache git
     - pnpm install --prefer-offline
     - pnpm test --
       --passWithNoTests
