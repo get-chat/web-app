@@ -19,7 +19,10 @@ module.exports = {
 			'@src': path.resolve(__dirname, '../src'),
 			process: 'process/browser',
 		},
-		fallback: { url: require.resolve('url/') },
+		fallback: {
+			'process/browser': require.resolve('process/browser'),
+			url: require.resolve('url/')
+		},
 	},
 	optimization: {
 		runtimeChunk: 'single',
