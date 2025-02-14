@@ -9,7 +9,7 @@ import type { AppConfig } from './application';
 import i18next from 'i18next';
 
 export const initializeSentry = (config: AppConfig) => {
-	if (!isLocalHost()) {
+	if (process.env.NODE_ENV === 'production') {
 		Sentry.init({
 			debug: true,
 			dsn: config.APP_SENTRY_DSN,
