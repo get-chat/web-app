@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/react';
 
-import { isLocalHost } from '@src/helpers/URLHelper';
 import { isEmptyString } from '@src/helpers/Helpers';
 // @ts-ignore next-line
 import packageJson from '../../package.json';
