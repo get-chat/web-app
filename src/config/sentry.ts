@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/react';
 
-import { isLocalHost } from '@src/helpers/URLHelper';
 import { isEmptyString } from '@src/helpers/Helpers';
 // @ts-ignore next-line
 import packageJson from '../../package.json';
@@ -9,7 +8,7 @@ import type { AppConfig } from './application';
 import i18next from 'i18next';
 
 export const initializeSentry = (config: AppConfig) => {
-	if (!isLocalHost()) {
+	if (process.env.NODE_ENV === 'production') {
 		Sentry.init({
 			debug: true,
 			dsn: config.APP_SENTRY_DSN,
