@@ -19,7 +19,7 @@ export const initializeSentry = (config: AppConfig) => {
 			],
 
 			// Tracing
-			tracesSampleRate: 0.002,
+			tracesSampleRate: 0.5,
 			// Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
 			tracePropagationTargets: ['*'],
 			// Session Replay
