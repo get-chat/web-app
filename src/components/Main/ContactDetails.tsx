@@ -18,9 +18,9 @@ import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
-import { setContactDetailsVisible } from '@src/store/reducers/UIReducer';
 import PersonModel from '@src/api/models/PersonModel';
 import ChatModel from '@src/api/models/ChatModel';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	contactData: PersonModel | undefined;
@@ -42,7 +42,7 @@ const ContactDetails: React.FC<Props> = ({
 	const dispatch = useAppDispatch();
 
 	const hideContactDetails = () => {
-		dispatch(setContactDetailsVisible(false));
+		dispatch(setState({ key: 'isContactDetailsVisible', value: false }));
 	};
 
 	useEffect(() => {

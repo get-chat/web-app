@@ -33,14 +33,6 @@ export const UISlice = createSlice({
 		setReadOnly: (state, action: PayloadAction<boolean>) => {
 			state.isReadOnly = action.payload;
 		},
-		setMessageStatusesVisible: (state, action: PayloadAction<boolean>) => {
-			closeSections(state);
-			state.isMessageStatusesVisible = action.payload;
-		},
-		setContactDetailsVisible: (state, action: PayloadAction<boolean>) => {
-			closeSections(state);
-			state.isContactDetailsVisible = action.payload;
-		},
 		setSearchMessagesVisible: (state, action: PayloadAction<boolean>) => {
 			closeSections(state);
 			state.isSearchMessagesVisible = action.payload;
@@ -61,25 +53,28 @@ export const UISlice = createSlice({
 		},
 
 		toggleState: (state, action: PayloadAction<keyof UIState>) => {
-			state[action.payload] = !state[action.payload];
+			if (typeof state[action.payload] === 'boolean') {
+				return { ...state, [action.payload]: !state[action.payload] };
+			}
+			return state;
 		},
-		setState: (
-			state,
-			action: PayloadAction<{ key: keyof UIState; value: boolean }>
+		setState: <K extends keyof UIState>(
+			state: UIState,
+			action: PayloadAction<{ key: K; value: UIState[K] }>
 		) => {
-			state[action.payload.key] = action.payload.value;
+			return { ...state, [action.payload.key]: action.payload.value };
 		},
 	},
 });
 
 export const {
 	setReadOnly,
-	setMessageStatusesVisible,
-	setContactDetailsVisible,
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
 	setBulkSend,
 	setExportChat,
+	toggleState,
+	setState,
 } = UISlice.actions;
 
 export default UISlice.reducer;

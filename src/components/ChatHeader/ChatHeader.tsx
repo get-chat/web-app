@@ -34,10 +34,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import {
-	setContactDetailsVisible,
-	setSearchMessagesVisible,
-} from '@src/store/reducers/UIReducer';
+import { setState } from '@src/store/reducers/UIReducer';
 
 const cx = classNames.bind(styles);
 
@@ -84,11 +81,11 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	const showSearchMessages = () => {
-		dispatch(setSearchMessagesVisible(true));
+		dispatch(setState({ key: 'isSearchMessagesVisible', value: true }));
 	};
 
 	const showContactDetails = () => {
-		dispatch(setContactDetailsVisible(true));
+		dispatch(setState({ key: 'isContactDetailsVisible', value: true }));
 	};
 
 	const showContactDetailsAndHideMenu = () => {

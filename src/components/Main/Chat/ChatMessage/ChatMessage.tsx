@@ -31,12 +31,12 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import TemplateModel from '@src/api/models/TemplateModel';
-import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
 import useReactions from '@src/hooks/useReactions';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	data: ChatMessageModel;
@@ -306,7 +306,9 @@ const ChatMessage: React.FC<Props> = ({
 									// Injecting reactions
 									clonedMessage.reactions = reactions;
 									setMessageWithStatuses?.(clonedMessage);
-									dispatch(setMessageStatusesVisible(true));
+									dispatch(
+										setState({ key: 'isMessageStatusesVisible', value: true })
+									);
 								}
 							}}
 						>

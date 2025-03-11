@@ -69,10 +69,9 @@ import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
-	setContactDetailsVisible,
-	setMessageStatusesVisible,
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
@@ -717,13 +716,13 @@ function Main() {
 
 		return () => {
 			// Hide search messages
-			dispatch(setSearchMessagesVisible(false));
+			dispatch(setState({ key: 'isSearchMessagesVisible', value: false }));
 
 			// Hide contact details
-			dispatch(setContactDetailsVisible(false));
+			dispatch(setState({ key: 'isContactDetailsVisible', value: false }));
 
 			// Hide message statuses
-			dispatch(setMessageStatusesVisible(false));
+			dispatch(setState({ key: 'isMessageStatusesVisible', value: false }));
 
 			// Hide chat assignment
 			setChatAssignmentVisible(false);
