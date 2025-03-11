@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import { useTranslation } from 'react-i18next';
@@ -8,14 +7,25 @@ import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
 import { Tooltip } from '@mui/material';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
-const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
+interface Props {
+	data: ChatMessageModel;
+	onPreview: (type: string, source: string) => void;
+	onOptionsClick: (e: React.MouseEvent) => void;
+}
+
+const ChatMessageReferral: React.FC<Props> = ({
+	data,
+	onPreview,
+	onOptionsClick,
+}) => {
 	const { t } = useTranslation();
 
 	const { referral } = data;
 
 	const goToSourceURL = () => {
-		window.open(referral.source_url, '_blank').focus();
+		window.open(referral.source_url, '_blank')?.focus();
 	};
 
 	return (
@@ -44,7 +54,6 @@ const ChatMessageReferral = ({ data, onPreview, onOptionsClick }) => {
 
 					{(referral.video || referral.video_url) && (
 						<ChatMessageVideo
-							data={data}
 							source={data.generateReferralVideoLink()}
 							onPreview={() =>
 								onPreview(

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
 import { Button } from '@mui/material';
@@ -6,8 +5,16 @@ import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
 import { useAppSelector } from '@src/store/hooks';
+import TemplateModel from '@src/api/models/TemplateModel';
 
-const TemplatesList = ({
+interface Props {
+	onClick: (template: TemplateModel) => void;
+	customSelectButtonTitle?: string;
+	displayRegisterTemplate?: boolean;
+	isTemplatesFailed?: boolean;
+}
+
+const TemplatesList: React.FC<Props> = ({
 	onClick,
 	customSelectButtonTitle,
 	displayRegisterTemplate,
@@ -34,6 +41,7 @@ const TemplatesList = ({
 					<div className="templateMessages__create">
 						{displayRegisterTemplate && (
 							<Button
+								// @ts-ignore
 								color="black"
 								href="https://hub.360dialog.com/dashboard/home"
 								target="_blank"
@@ -75,7 +83,7 @@ const TemplatesList = ({
 							<div className="templateMessage__message">
 								<h4>{template[1].name}</h4>
 								{sortTemplateComponents(template[1].components).map(
-									(comp, index) => (
+									(comp: any, index: number) => (
 										<div key={index}>
 											<span className="templateType bold lowercase">
 												{comp.type}:
@@ -92,6 +100,7 @@ const TemplatesList = ({
 									console.log('Selected template', template[1]);
 									onClick?.(template[1]);
 								}}
+								// @ts-ignore
 								color="black"
 							>
 								{customSelectButtonTitle ?? t('Send')}

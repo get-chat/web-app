@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { createTheme } from '@mui/material';
 
 const AppTheme = createTheme({
@@ -9,6 +8,7 @@ const AppTheme = createTheme({
 		secondary: {
 			main: '#E33E7F',
 		},
+		// @ts-ignore
 		black: {
 			main: '#212329',
 			contrastText: '#fff',

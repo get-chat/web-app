@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/ChangePasswordDialog.css';
 import { Button, Dialog, TextField } from '@mui/material';
@@ -9,8 +8,14 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { AxiosError } from 'axios';
 
-function ChangePasswordDialog(props) {
+interface Props {
+	open: boolean;
+	setOpen: (value: boolean) => void;
+}
+
+const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
@@ -18,11 +23,11 @@ function ChangePasswordDialog(props) {
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
-	const [error, setError] = useState();
+	const [error, setError] = useState<string>();
 	const [isRequesting, setRequesting] = useState(false);
 	const [isSuccess, setSuccess] = useState(false);
 
-	const timeoutRef = useRef(0);
+	const timeoutRef = useRef<NodeJS.Timeout>();
 
 	useEffect(() => {
 		return () => {
@@ -34,7 +39,7 @@ function ChangePasswordDialog(props) {
 
 	const close = () => {
 		// Close dialog
-		props.setOpen(false);
+		setOpen(false);
 
 		timeoutRef.current = setTimeout(function () {
 			// Reset states
@@ -69,11 +74,11 @@ function ChangePasswordDialog(props) {
 		apiService.changePasswordCall(
 			currentPassword,
 			newPassword,
-			(response) => {
+			() => {
 				setRequesting(false);
 				setSuccess(true);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				setRequesting(false);
 				setError(error.response?.data?.reason ?? 'An error has occurred.');
 			}
@@ -81,7 +86,7 @@ function ChangePasswordDialog(props) {
 	};
 
 	return (
-		<Dialog open={props.open} onClose={close} className="changePasswordDialog">
+		<Dialog open={open} onClose={close} className="changePasswordDialog">
 			<DialogTitle>Change password</DialogTitle>
 			<DialogContent>
 				<div className="changePasswordDialog__fields">
@@ -143,6 +148,6 @@ function ChangePasswordDialog(props) {
 			</DialogActions>
 		</Dialog>
 	);
-}
+};
 
 export default ChangePasswordDialog;

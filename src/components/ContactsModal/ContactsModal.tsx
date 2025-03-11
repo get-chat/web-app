@@ -35,10 +35,10 @@ interface Props {
 	onClose: () => void;
 	sendMessage: (
 		payload: any,
-		onSuccess: (response: AxiosResponse) => void,
+		onSuccess: () => void,
 		onError: (error: AxiosResponse) => void
 	) => void;
-	recipientWaId: string;
+	recipientWaId: string | undefined;
 }
 
 const ContactsModal: React.FC<Props> = ({
@@ -72,16 +72,10 @@ const ContactsModal: React.FC<Props> = ({
 			})),
 		};
 
-		sendMessage(
-			payload,
-			() => {
-				handleClose();
-			},
-			(error: AxiosResponse) => {
-				console.log('error', error);
-				handleClose();
-			}
-		);
+		sendMessage(payload, handleClose, (error: AxiosResponse) => {
+			console.log('error', error);
+			handleClose();
+		});
 	};
 
 	const handleSelect = (recipient: Recipient) => {

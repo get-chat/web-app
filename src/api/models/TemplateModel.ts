@@ -6,6 +6,7 @@ class TemplateModel {
 	public text: string = '';
 	public language: string;
 	public status: string;
+	public params: any;
 
 	constructor(data: any) {
 		this.namespace = data.namespace;

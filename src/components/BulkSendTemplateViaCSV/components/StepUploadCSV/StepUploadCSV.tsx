@@ -1,10 +1,13 @@
-// @ts-nocheck
 import React from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
 
-const StepUploadCSV = ({ csvError }) => {
+interface Props {
+	csvError?: string;
+}
+
+const StepUploadCSV: React.FC<Props> = ({ csvError }) => {
 	const { t } = useTranslation();
 
 	return (

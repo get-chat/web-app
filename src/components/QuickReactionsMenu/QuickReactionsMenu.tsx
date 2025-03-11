@@ -6,10 +6,10 @@ import styles from './QuickReactionsMenu.module.css';
 import AddIcon from '@mui/icons-material/Add';
 
 interface Props {
-	message: ChatMessageModel | null;
-	anchorElement: HTMLElement | null;
-	setAnchorElement: (anchorElement: HTMLElement | null) => void;
-	setEmojiPickerAnchorElement: (anchorElement: HTMLElement | null) => void;
+	message: ChatMessageModel | undefined;
+	anchorElement: HTMLElement | undefined;
+	setAnchorElement: (anchorElement: HTMLElement | undefined) => void;
+	setEmojiPickerAnchorElement: (anchorElement: HTMLElement | undefined) => void;
 	onReaction: (messageId: string, emoji: string | null) => void;
 }
 
@@ -23,7 +23,7 @@ const QuickReactionsMenu: React.FC<Props> = ({
 	onReaction,
 }) => {
 	const hide = () => {
-		setAnchorElement(null);
+		setAnchorElement(undefined);
 	};
 
 	return (
@@ -32,7 +32,7 @@ const QuickReactionsMenu: React.FC<Props> = ({
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
 			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
 			open={Boolean(anchorElement)}
-			onClose={() => setAnchorElement(null)}
+			onClose={() => setAnchorElement(undefined)}
 			elevation={0}
 			disableAutoFocusItem={true}
 			className={styles.menu}

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import {
 	Button,
@@ -9,6 +8,7 @@ import {
 	TextField,
 } from '@mui/material';
 import '../styles/CreateTemplate.css';
+import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 
 function CreateTemplate() {
 	const [language, setLanguage] = useState('en_US');
@@ -16,11 +16,11 @@ function CreateTemplate() {
 
 	const createTemplate = () => {};
 
-	const handleLanguageChange = (event) => {
+	const handleLanguageChange = (event: SelectChangeEvent) => {
 		setLanguage(event.target.value);
 	};
 
-	const handleCategoryChange = (event) => {
+	const handleCategoryChange = (event: SelectChangeEvent) => {
 		setCategory(event.target.value);
 	};
 

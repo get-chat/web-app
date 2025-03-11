@@ -16,6 +16,9 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 	const [messages, setMessages] = useState<ChatMessageList>({});
 	const [reactions, setReactions] = useState<ReactionList>({});
 
+	const [fixedDateIndicatorText, setFixedDateIndicatorText] =
+		useState<string>();
+
 	const isTimestampsSame = (checkInReverse: boolean = false): boolean => {
 		const messagesArray = Object.values(messages);
 		if (checkInReverse) messagesArray.reverse();
@@ -67,6 +70,32 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		return mergedReactions;
 	}
 
+	const prepareFixedDateIndicator = (
+		dateIndicators: NodeListOf<Element> | undefined,
+		el: HTMLElement | null
+	) => {
+		if (!dateIndicators || !el) return;
+
+		const curScrollTop = el.scrollTop;
+		let indicatorToShow;
+
+		for (let i = 0; i < dateIndicators.length; i++) {
+			const indicator = dateIndicators[i] as HTMLElement;
+			if (
+				indicatorToShow === undefined ||
+				indicator.offsetTop <= curScrollTop
+			) {
+				indicatorToShow = indicator;
+			} else {
+				break;
+			}
+		}
+
+		if (indicatorToShow) {
+			setFixedDateIndicatorText(indicatorToShow.innerHTML);
+		}
+	};
+
 	return {
 		currentUser,
 		users,
@@ -78,6 +107,8 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 		setReactions,
 		isTimestampsSame,
 		mergeReactionLists,
+		fixedDateIndicatorText,
+		prepareFixedDateIndicator,
 	};
 };
 

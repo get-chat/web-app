@@ -20,7 +20,7 @@ const useChatAssignmentAPI = () => {
 	};
 
 	const partialUpdateChatAssignment = (
-		waId: string,
+		waId?: string | null,
 		assignedToUser?: number | null,
 		assignedGroup?: number | null,
 		apiCallProps?: APICallProps

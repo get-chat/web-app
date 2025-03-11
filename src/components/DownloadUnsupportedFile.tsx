@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
 	Button,
@@ -9,21 +8,28 @@ import {
 	DialogTitle,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import UnsupportedFileClass from '@src/UnsupportedFileClass';
 
-function DownloadUnsupportedFile(props) {
+interface Props {
+	data: UnsupportedFileClass | undefined | null;
+	open: boolean;
+	setOpen: (value: boolean) => void;
+}
+
+const DownloadUnsupportedFile: React.FC<Props> = ({ data, open, setOpen }) => {
 	const { t } = useTranslation();
 
 	const close = () => {
-		props.setOpen(false);
+		setOpen(false);
 	};
 
 	const download = () => {
-		window.open(props.data.link, '_blank').focus();
+		window.open(data?.link, '_blank')?.focus();
 		close();
 	};
 
 	return (
-		<Dialog open={props.open} onClose={close}>
+		<Dialog open={open} onClose={close}>
 			<DialogTitle>{t('Unsupported file type')}</DialogTitle>
 
 			<DialogContent>
@@ -44,6 +50,6 @@ function DownloadUnsupportedFile(props) {
 			</DialogActions>
 		</Dialog>
 	);
-}
+};
 
 export default DownloadUnsupportedFile;

@@ -49,7 +49,7 @@ function BusinessProfile(props: any) {
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
 
-	const fileInput = useRef<HTMLElement>();
+	const fileInput = useRef<HTMLInputElement>();
 
 	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 

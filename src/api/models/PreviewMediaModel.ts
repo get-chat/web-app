@@ -1,6 +1,17 @@
-// @ts-nocheck
 class PreviewMediaModel {
-	constructor(senderName, initials, type, source, timestamp) {
+	public senderName: string | undefined;
+	public initials: string | undefined;
+	public type: string | undefined;
+	public source: string | undefined;
+	public timestamp: number;
+
+	constructor(
+		senderName: string | undefined,
+		initials: string | undefined,
+		type: string | undefined,
+		source: string | undefined,
+		timestamp: number
+	) {
 		this.senderName = senderName;
 		this.initials = initials;
 		this.type = type;

@@ -49,10 +49,6 @@ class PersonModel implements Recipient {
 	generateInitials = () => {
 		return generateInitialsHelper(this.name);
 	};
-
-	static newInstance() {
-		return new PersonModel({});
-	}
 }
 
 export default PersonModel;

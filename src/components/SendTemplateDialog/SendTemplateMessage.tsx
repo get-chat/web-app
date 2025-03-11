@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Button, ButtonBase, TextField, InputAdornment } from '@mui/material';
 import '../../styles/SendTemplateMessage.css';
 import FileInput from '../FileInput';
@@ -27,8 +26,20 @@ import {
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import TemplateModel from '@src/api/models/TemplateModel';
+import { AxiosResponse } from 'axios';
 
-function SendTemplateMessage({
+interface Props {
+	data: TemplateModel;
+	setSending: (value: boolean) => void;
+	setErrors: (value: string[]) => void;
+	bulkSend: (data: TemplateModel) => void;
+	send: (data: TemplateModel) => void;
+	sendButtonInnerRef: React.Ref<HTMLButtonElement>;
+	bulkSendButtonInnerRef: React.Ref<HTMLButtonElement>;
+}
+
+const SendTemplateMessage: React.FC<Props> = ({
 	data,
 	setSending,
 	setErrors,
@@ -36,22 +47,26 @@ function SendTemplateMessage({
 	send,
 	sendButtonInnerRef,
 	bulkSendButtonInnerRef,
-}) {
+}) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
 
 	const template = data;
 
-	const [params, setParams] = useState({});
+	const [params, setParams] = useState<{
+		[key: string | number]: { [key: string | number]: any };
+	}>({});
 	const [headerFileURL, setHeaderFileURL] = useState('');
 	const [isUploading, setUploading] = useState(false);
-	const [provideFileBy, setProvideFileBy] = useState();
+	const [provideFileBy, setProvideFileBy] = useState<
+		'upload' | 'file_url' | undefined
+	>();
 
 	const FILE_PROVIDE_TYPE_UPLOAD = 'upload';
 	const FILE_PROVIDE_TYPE_FILE_URL = 'file_url';
 
-	const headerFileInput = useRef();
+	const headerFileInput = useRef<HTMLInputElement>();
 
 	useEffect(() => {
 		setParams(generateTemplateParamsByValues(template, undefined));
@@ -72,17 +87,21 @@ function SendTemplateMessage({
 		});
 	}, [headerFileURL, params]);
 
-	const updateParam = (event, index, paramKey) => {
+	const updateParam = (
+		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		index: number,
+		paramKey: string | null
+	) => {
 		setParams((prevState) => {
 			const nextState = prevState;
 
-			nextState[index][paramKey].text = event.target.value;
+			nextState[index][paramKey ?? 0].text = event.target.value;
 
 			return { ...nextState };
 		});
 	};
 
-	const sendAfterCheck = (isBulk) => {
+	const sendAfterCheck = (isBulk: boolean = false) => {
 		let hasError = false;
 		const preparedParams = generateFinalTemplateParams(
 			template,
@@ -120,7 +139,7 @@ function SendTemplateMessage({
 		const finalData = template;
 		finalData.params = Object.values(preparedParams);
 
-		if (isBulk === true) {
+		if (isBulk) {
 			bulkSend(finalData);
 		} else {
 			send(finalData);
@@ -131,7 +150,7 @@ function SendTemplateMessage({
 		});*/
 	};
 
-	const handleChosenMedia = (file, format) => {
+	const handleChosenMedia = (file: FileList | undefined, format: string) => {
 		if (!file) return;
 
 		// Image
@@ -173,19 +192,19 @@ function SendTemplateMessage({
 
 		apiService.uploadMediaCall(
 			formData,
-			(response) => {
+			(response: AxiosResponse) => {
 				const fileURL = response.data.file;
 				setHeaderFileURL(fileURL);
 
 				setUploading(false);
 			},
-			(error) => {
+			() => {
 				setUploading(false);
 			}
 		);
 	};
 
-	const getMimetypeByFormat = (format) => {
+	const getMimetypeByFormat = (format: string) => {
 		if (format === 'IMAGE') return 'image/jpeg, image/png';
 		if (format === 'VIDEO') return 'video/mp4, video/3gpp';
 		if (format === 'DOCUMENT') return '*/*';
@@ -195,7 +214,7 @@ function SendTemplateMessage({
 		<div className="sendTemplateMessage">
 			<h4 className="sendTemplateMessage__title">{template.name}</h4>
 
-			{template.components.map((comp, compIndex) => (
+			{template.components?.map((comp, compIndex) => (
 				<div key={compIndex} className="sendTemplateMessage__component">
 					<div className="sendTemplateMessage__section">
 						<h6>{comp.type}</h6>
@@ -276,7 +295,7 @@ function SendTemplateMessage({
 												<Button
 													variant="contained"
 													color="primary"
-													onClick={() => headerFileInput.current.click()}
+													onClick={() => headerFileInput.current?.click()}
 													disabled={isUploading}
 													startIcon={<PublishIcon />}
 												>
@@ -347,7 +366,8 @@ function SendTemplateMessage({
 										multiline
 										value={
 											params[compIndex]
-												? params[compIndex][templateParamToInteger(param)].text
+												? params[compIndex][templateParamToInteger(param) ?? 0]
+														.text
 												: ''
 										}
 										onChange={(event) =>
@@ -368,7 +388,7 @@ function SendTemplateMessage({
 
 						{comp.type === 'BUTTONS' && (
 							<div className="templateMessage__buttons">
-								{comp.buttons.map((button, idx) => (
+								{comp.buttons.map((button: any, idx: number) => (
 									<div className="templateMessage__buttons--button" key={idx}>
 										<Button color="primary" variant="outlined" disabled>
 											{button.text}
@@ -394,8 +414,9 @@ function SendTemplateMessage({
 												}
 												value={
 													params[compIndex]
-														? params[compIndex][templateParamToInteger(param)]
-																.text
+														? params[compIndex][
+																templateParamToInteger(param) ?? 0
+														  ].text
 														: ''
 												}
 											/>
@@ -409,7 +430,7 @@ function SendTemplateMessage({
 			))}
 			<Button
 				ref={sendButtonInnerRef}
-				onClick={sendAfterCheck}
+				onClick={() => sendAfterCheck(false)}
 				className="hidden"
 			>
 				{t('Send')}
@@ -423,6 +444,6 @@ function SendTemplateMessage({
 			</Button>
 		</div>
 	);
-}
+};
 
 export default SendTemplateMessage;

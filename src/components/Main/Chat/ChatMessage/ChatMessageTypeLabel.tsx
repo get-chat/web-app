@@ -1,9 +1,12 @@
-// @ts-nocheck
 import React from 'react';
 import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
 
-function ChatMessageTypeLabel({ type }) {
+interface Props {
+	type: string;
+}
+
+const ChatMessageTypeLabel: React.FC<Props> = ({ type }) => {
 	const { t } = useTranslation();
 
 	return (
@@ -31,6 +34,6 @@ function ChatMessageTypeLabel({ type }) {
 			{type === ChatMessageModel.TYPE_CONTACTS && <span>{t('Contacts')}</span>}
 		</span>
 	);
-}
+};
 
 export default ChatMessageTypeLabel;

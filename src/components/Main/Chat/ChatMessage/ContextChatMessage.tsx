@@ -1,48 +1,53 @@
-// @ts-nocheck
 import React from 'react';
 import { ATTACHMENT_TYPE_IMAGE } from '@src/Constants';
 import '../../../../styles/ContextChatMessage.css';
 import ChatMessageShortContent from './ChatMessageShortContent';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
-function ContextChatMessage(props) {
+interface Props {
+	contextMessage: ChatMessageModel;
+	goToMessageId?: (id: string, timestamp: number) => void;
+}
+
+const ContextChatMessage: React.FC<Props> = ({
+	contextMessage,
+	goToMessageId,
+}) => {
 	return (
 		<div
 			className="chat__message__context"
 			onClick={() =>
-				props.goToMessageId?.(
-					props.contextMessage.id,
-					props.contextMessage.timestamp
-				)
+				goToMessageId?.(contextMessage.id, contextMessage.timestamp)
 			}
 		>
 			<div className="chat__message__context__info">
 				<span className="chat__message__context__info__sender">
-					{props.contextMessage.senderName}
+					{contextMessage.senderName}
 				</span>
 
 				<span className="chat__message__context__info__message">
 					<ChatMessageShortContent
-						type={props.contextMessage.type}
-						template={props.contextMessage.template}
-						buttonText={props.contextMessage.buttonText}
-						interactiveButtonText={props.contextMessage.interactiveButtonText}
-						text={props.contextMessage.text}
-						caption={props.contextMessage.caption}
-						isLastMessageFromUs={props.contextMessage?.isFromUs}
+						type={contextMessage.type ?? ''}
+						template={contextMessage.template}
+						buttonText={contextMessage.buttonText}
+						interactiveButtonText={contextMessage.interactiveButtonText}
+						text={contextMessage.text}
+						caption={contextMessage.caption}
+						isLastMessageFromUs={contextMessage.isFromUs}
 					/>
 				</span>
 			</div>
 
-			{props.contextMessage.type === ATTACHMENT_TYPE_IMAGE && (
+			{contextMessage.type === ATTACHMENT_TYPE_IMAGE && (
 				<div className="chat__message__context__preview">
 					<img
-						src={props.contextMessage.generateImageLink()}
-						alt={props.contextMessage.caption}
+						src={contextMessage.generateImageLink()}
+						alt={contextMessage.caption ?? undefined}
 					/>
 				</div>
 			)}
 		</div>
 	);
-}
+};
 
 export default ContextChatMessage;

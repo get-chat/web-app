@@ -1,9 +1,12 @@
-// @ts-nocheck
 import React from 'react';
 import { Step, StepLabel, Stepper } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-const BulkSendStepper = ({ activeStep }) => {
+interface Props {
+	activeStep: number;
+}
+
+const BulkSendStepper: React.FC<Props> = ({ activeStep }) => {
 	const { t } = useTranslation();
 
 	const steps = [

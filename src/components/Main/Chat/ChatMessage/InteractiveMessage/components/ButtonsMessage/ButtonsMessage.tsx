@@ -1,11 +1,16 @@
-// @ts-nocheck
 import React from 'react';
 import { Button } from '@mui/material';
 
 import styles from './ButtonsMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
+import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const ButtonsMessage = ({ header, body, footer, action }) => {
+const ButtonsMessage: React.FC<InteractiveMessageProps> = ({
+	header,
+	body,
+	footer,
+	action,
+}) => {
 	return (
 		<>
 			{header && (
@@ -25,7 +30,7 @@ const ButtonsMessage = ({ header, body, footer, action }) => {
 			)}
 			{action?.buttons && Array.isArray(action?.buttons) && (
 				<div className={styles.actions}>
-					{action?.buttons.map(({ reply }, index) => (
+					{action?.buttons.map(({ reply }, index: number) => (
 						<Button key={reply?.id ?? index} color="primary" fullWidth disabled>
 							{reply?.title}
 						</Button>

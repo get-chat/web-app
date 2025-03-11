@@ -16,6 +16,7 @@ import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 import { useAppDispatch } from '@src/store/hooks';
 import { setSearchMessagesVisible } from '@src/store/reducers/UIReducer';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
 
 export type Props = {
 	initialKeyword: string;
@@ -33,7 +34,7 @@ const SearchMessage: React.FC<Props> = ({
 
 	const { t } = useTranslation();
 
-	const [results, setResults] = useState({});
+	const [results, setResults] = useState<ChatMessageList>({});
 	const [keyword, setKeyword] = useState('');
 	const [isLoading, setLoading] = useState(false);
 
@@ -145,10 +146,10 @@ const SearchMessage: React.FC<Props> = ({
 				{Object.entries(results).map((message) => (
 					<SearchMessageResult
 						key={message[0]}
-						waId={waId}
 						messageData={message[1]}
 						keyword={keyword}
 						onClick={goToMessage}
+						displaySender={false}
 					/>
 				))}
 			</div>

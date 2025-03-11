@@ -11,9 +11,9 @@ import { ClickAwayListener } from '@mui/material';
 
 export type Props = {
 	input: string;
-	setInput: (text?: string) => void;
+	setInput: (text: string) => void;
 	setVisible: (isVisible: boolean) => void;
-	onProcessCommand: (text?: string) => void;
+	onProcessCommand: (text: string) => void;
 	isExpired: boolean;
 };
 

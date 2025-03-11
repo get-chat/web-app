@@ -1,14 +1,13 @@
-// @ts-nocheck
 export class BaseStorage {
-	getItem(itemKey) {
+	getItem(itemKey: string) {
 		throw new Error('Not implemented.');
 	}
 
-	setItem(itemKey, itemValue) {
+	setItem(itemKey: string, itemValue: string) {
 		throw new Error('Not implemented.');
 	}
 
-	removeItem(itemKey) {
+	removeItem(itemKey: string) {
 		throw new Error('Not implemented.');
 	}
 }

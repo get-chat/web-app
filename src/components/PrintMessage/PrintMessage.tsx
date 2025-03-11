@@ -1,15 +1,16 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import cn from 'classnames';
 
+// @ts-ignore
 import emojiTree from 'emoji-tree';
+// @ts-ignore
 import isEmoji from 'emoji-tree/lib/isEmoji';
 
 import Text from './components/Text';
 import HighlightText from './components/HighlightText';
 import Emoji from './components/Emoji';
 
-const getTextNodeType = (node) => {
+const getTextNodeType = (node: string) => {
 	if (isEmoji(node)) {
 		return {
 			type: 'emoji',
@@ -31,7 +32,7 @@ const getTextNodeType = (node) => {
 	};
 };
 
-const decomposeMessage = (message, highlightText) => {
+const decomposeMessage = (message: string, highlightText?: string) => {
 	if (!message) return [];
 
 	let section = '';
@@ -49,7 +50,7 @@ const decomposeMessage = (message, highlightText) => {
 			.replace(/\n/g, '<br />');
 	}
 
-	let splitWithEmoji = emojiTree(message).reduce((acc, item) => {
+	let splitWithEmoji = emojiTree(message).reduce((acc: any, item: any) => {
 		if (item.type === 'emoji') {
 			if (section) {
 				acc.push(section);
@@ -67,9 +68,9 @@ const decomposeMessage = (message, highlightText) => {
 	splitWithEmoji.push(section);
 	section = '';
 
-	const splitWithHighlight = [];
+	const splitWithHighlight: any = [];
 
-	splitWithEmoji.forEach((item) => {
+	splitWithEmoji.forEach((item: string) => {
 		splitWithHighlight.push(
 			item.split(/(<mark class="highlight">.*.<\/mark>)/gi)
 		);
@@ -90,7 +91,7 @@ interface PrintMessageProps {
 	as?: string;
 	linkify?: boolean;
 	smallEmoji?: boolean;
-	highlightText?: boolean;
+	highlightText?: string;
 	className?: string;
 }
 
@@ -99,7 +100,7 @@ const PrintMessage: React.FC<PrintMessageProps> = ({
 	as: Tag = 'span',
 	linkify = false,
 	smallEmoji = false,
-	highlightText = false,
+	highlightText,
 	className,
 }) => {
 	const splitMessage = useMemo(
@@ -114,10 +115,12 @@ const PrintMessage: React.FC<PrintMessageProps> = ({
 	}
 
 	return (
+		// @ts-ignore
 		<Tag className={classNames}>
 			{splitMessage.map((item) => {
 				const Component = item.component;
 
+				// @ts-ignore
 				return <Component data={item} key={item.index} linkify={linkify} />;
 			})}
 		</Tag>

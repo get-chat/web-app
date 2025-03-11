@@ -1,11 +1,10 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import SpeedDialIcon from '@mui/lab/SpeedDialIcon';
 import CloseIcon from '@mui/icons-material/Close';
 import SpeedDial from '@mui/lab/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 
-export function AttachmentTypesMenu() {
+const AttachmentTypesMenu: React.FC = () => {
 	const [open, setOpen] = useState(false);
 	const [hidden, setHidden] = useState(false);
 
@@ -30,8 +29,9 @@ export function AttachmentTypesMenu() {
 			open={open}
 		>
 			<SpeedDialAction key="document" title="Document" icon="Like" />
-
 			<SpeedDialAction key="image" title="Image" icon="Camera" />
 		</SpeedDial>
 	);
-}
+};
+
+export default AttachmentTypesMenu;

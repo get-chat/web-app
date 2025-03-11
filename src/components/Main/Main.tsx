@@ -1,10 +1,9 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import Chat from './Chat/Chat';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
@@ -75,6 +74,11 @@ import {
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
+import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
+import NewMessageModel from '@src/api/models/NewMessageModel';
+import PersonModel from '@src/api/models/PersonModel';
+import PendingMessage from '@src/interfaces/PendingMessage';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -108,13 +112,15 @@ function Main() {
 	const [isBlurred, setBlurred] = useState(false);
 
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
-	const [pendingMessages, setPendingMessages] = useState([]);
+	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
 	const [hasFailedMessages, setHasFailedMessages] = useState(false);
-	const [lastSendAttemptAt, setLastSendAttemptAt] = useState();
+	const [lastSendAttemptAt, setLastSendAttemptAt] = useState<Date>();
 
 	const [isUploadingMedia, setUploadingMedia] = useState(false);
 
-	const [newMessages, setNewMessages] = useState({});
+	const [newMessages, setNewMessages] = useState<{
+		[key: string]: NewMessageModel;
+	}>({});
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
@@ -137,13 +143,13 @@ function Main() {
 
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
-	const [chosenContact, setChosenContact] = useState();
+	const [chosenContact, setChosenContact] = useState<PersonModel>();
 
 	const [messageWithStatuses, setMessageWithStatuses] =
 		useState<ChatMessageModel>();
 
 	const [selectedChats, setSelectedChats] = useState<string[]>([]);
-	const [selectedTags, setSelectedTags] = useState([]);
+	const [selectedTags, setSelectedTags] = useState<number[]>([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
@@ -165,7 +171,9 @@ function Main() {
 		setSendBulkVoiceMessageDialogVisible,
 	] = useState(false);
 
-	const [notificationHistory, setNotificationHistory] = useState({});
+	const [notificationHistory, setNotificationHistory] = useState<{
+		[key: string]: string[];
+	}>({});
 
 	const { resolveContact, contactProvidersData, setContactProvidersData } =
 		useResolveContacts();
@@ -185,18 +193,18 @@ function Main() {
 	const [isHideLogo] = useState(query.get('hide_logo') === '1');
 	const [isMaximize] = useState(query.get('maximize') === '1');
 
-	const setProgress = (value) => {
+	const setProgress = (value: number) => {
 		_setProgress((prevState) => {
 			return value > prevState ? value : prevState;
 		});
 	};
 
-	const displaySuccess = (message) => {
+	const displaySuccess = (message: string) => {
 		setSuccessMessage(message);
 		setSuccessVisible(true);
 	};
 
-	const displayError = (error) => {
+	const displayError = (error: AxiosError) => {
 		if (!axios.isCancel(error)) {
 			setErrorMessage(
 				error.response?.data?.reason ??
@@ -207,12 +215,15 @@ function Main() {
 		}
 	};
 
-	const displayCustomError = (errorMessage) => {
-		setErrorMessage(errorMessage);
+	const displayCustomError = (error: string) => {
+		setErrorMessage(error);
 		setErrorVisible(true);
 	};
 
-	const handleSuccessClose = (event, reason) => {
+	const handleSuccessClose = (
+		event: React.SyntheticEvent<any> | Event,
+		reason?: string
+	) => {
 		if (reason === 'clickaway') {
 			return;
 		}
@@ -220,7 +231,10 @@ function Main() {
 		setSuccessVisible(false);
 	};
 
-	const handleErrorClose = (event, reason) => {
+	const handleErrorClose = (
+		event: any,
+		reason?: string | SnackbarCloseReason
+	) => {
 		if (reason === 'clickaway') {
 			return;
 		}
@@ -228,18 +242,18 @@ function Main() {
 		setErrorVisible(false);
 	};
 
-	const finishBulkSendMessage = (payload) => {
-		const requestPayload = {};
+	const finishBulkSendMessage = (payload: BulkMessageTaskModel) => {
+		const requestPayload: any = {};
 		const messagePayload = { ...bulkSendPayload };
 		const recipients = selectedChats;
 		const tags = selectedTags;
 
-		const preparedRecipients = [];
+		const preparedRecipients: { recipient: string }[] = [];
 		recipients.forEach((recipient) => {
 			preparedRecipients.push({ recipient: recipient });
 		});
 
-		const preparedTags = [];
+		const preparedTags: { tag_id: number }[] = [];
 		tags.forEach((tag) => {
 			preparedTags.push({ tag_id: tag });
 		});
@@ -252,7 +266,7 @@ function Main() {
 			? { template: payload.template, type: payload.type }
 			: messagePayload;
 
-		apiService.bulkSendCall(requestPayload, (response) => {
+		apiService.bulkSendCall(requestPayload, (response: AxiosResponse) => {
 			// Disable selection mode
 			dispatch(setSelectionModeEnabled(false));
 
@@ -273,11 +287,15 @@ function Main() {
 		});
 	};
 
-	const goToChatByWaId = (_waId) => {
+	const goToChatByWaId = (_waId: string) => {
 		navigate(`/main/chat/${_waId}${location.search}`);
 	};
 
-	const displayNotification = (title, body, chatWaId) => {
+	const displayNotification = (
+		title: string,
+		body: string,
+		chatWaId: string
+	) => {
 		if (isChatOnly) return;
 
 		// Android web app interface
@@ -292,7 +310,9 @@ function Main() {
 				// Notification limit per minute
 				if (
 					(prevState[timeString]?.length ?? 0) >=
-					(config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE ?? 8)
+					(config?.APP_NOTIFICATIONS_LIMIT_PER_MINUTE
+						? parseInt(config.APP_NOTIFICATIONS_LIMIT_PER_MINUTE)
+						: null ?? 8)
 				) {
 					console.info('Cancelled a notification.');
 					return prevState;
@@ -307,7 +327,7 @@ function Main() {
 						tag: chatWaId + timeString,
 					});
 
-					notification.onclick = function (event) {
+					notification.onclick = function () {
 						window.focus();
 
 						if (waId) {
@@ -325,7 +345,7 @@ function Main() {
 				prevState[timeString].push(chatWaId);
 
 				// Clear older elements to prevent growing
-				const nextState = {};
+				const nextState: { [key: string]: string[] } = {};
 				nextState[timeString] = prevState[timeString];
 
 				return { ...nextState };
@@ -356,7 +376,7 @@ function Main() {
 		}
 	};
 
-	const onDisplayError = function (msg, data) {
+	const onDisplayError = function (msg: string, data: any) {
 		displayCustomError(data);
 	};
 
@@ -380,7 +400,7 @@ function Main() {
 			retrieveCurrentUser();
 		}
 
-		const onUnsupportedFileEvent = function (msg, data) {
+		const onUnsupportedFileEvent = function (msg: string, data: any) {
 			setUnsupportedFile(data);
 			setDownloadUnsupportedFileVisible(true);
 		};
@@ -403,9 +423,9 @@ function Main() {
 
 	useEffect(() => {
 		const CODE_NORMAL = 1000;
-		let ws;
+		let ws: WebSocket;
 
-		let socketClosedAt;
+		let socketClosedAt: Date | undefined;
 
 		const connect = () => {
 			if (progress < 100) {
@@ -417,7 +437,7 @@ function Main() {
 			// WebSocket, consider a separate env variable for ws address
 			ws = new WebSocket(getWebSocketURL(apiService.apiBaseURL));
 
-			ws.onopen = function (event) {
+			ws.onopen = function () {
 				console.log('Connected to websocket server.');
 
 				ws.send(JSON.stringify({ token: getToken() }));
@@ -448,7 +468,7 @@ function Main() {
 				}
 			};
 
-			ws.onerror = function (event) {
+			ws.onerror = function () {
 				ws.close();
 			};
 
@@ -464,9 +484,9 @@ function Main() {
 						const incomingMessages = wabaPayload?.incoming_messages;
 
 						if (incomingMessages) {
-							const preparedMessages = {};
+							const preparedMessages: ChatMessageList = {};
 
-							incomingMessages.forEach((message) => {
+							incomingMessages.forEach((message: any) => {
 								const messageObj = new ChatMessageModel(message);
 								preparedMessages[messageObj.id] = messageObj;
 							});
@@ -478,9 +498,9 @@ function Main() {
 						const outgoingMessages = wabaPayload?.outgoing_messages;
 
 						if (outgoingMessages) {
-							const preparedMessages = {};
+							const preparedMessages: ChatMessageList = {};
 
-							outgoingMessages.forEach((message) => {
+							outgoingMessages.forEach((message: any) => {
 								const messageObj = new ChatMessageModel(message);
 								preparedMessages[messageObj.id] = messageObj;
 							});
@@ -492,8 +512,8 @@ function Main() {
 						const statuses = wabaPayload?.statuses;
 
 						if (statuses) {
-							const preparedStatuses = {};
-							statuses.forEach((statusObj) => {
+							const preparedStatuses: { [key: string]: any } = {};
+							statuses.forEach((statusObj: any) => {
 								if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
 									preparedStatuses[statusObj.id] = {};
 								}
@@ -532,7 +552,7 @@ function Main() {
 						const chatAssignment = wabaPayload?.chat_assignment;
 
 						if (chatAssignment) {
-							const preparedMessages = {};
+							const preparedMessages: ChatMessageList = {};
 							const prepared =
 								ChatMessageModel.fromAssignmentEvent(chatAssignment);
 							preparedMessages[prepared.id] = prepared;
@@ -554,7 +574,7 @@ function Main() {
 						const chatTagging = wabaPayload?.chat_tagging;
 
 						if (chatTagging) {
-							const preparedMessages = {};
+							const preparedMessages: ChatMessageList = {};
 							const prepared = ChatMessageModel.fromTaggingEvent(chatTagging);
 							preparedMessages[prepared.id] = prepared;
 
@@ -577,9 +597,11 @@ function Main() {
 						if (bulkMessageTasks) {
 							console.log(bulkMessageTasks);
 
-							const preparedBulkMessageTasks = {};
+							const preparedBulkMessageTasks: {
+								[key: string]: BulkMessageTaskModel;
+							} = {};
 
-							bulkMessageTasks.forEach((task) => {
+							bulkMessageTasks.forEach((task: any) => {
 								const prepared = new BulkMessageTaskModel(task);
 								preparedBulkMessageTasks[prepared.id] = prepared;
 							});
@@ -596,9 +618,11 @@ function Main() {
 						if (bulkMessageTaskElements) {
 							console.log(bulkMessageTaskElements);
 
-							const preparedBulkMessageTaskElements = {};
+							const preparedBulkMessageTaskElements: {
+								[key: string]: BulkMessageTaskElementModel;
+							} = {};
 
-							bulkMessageTaskElements.forEach((element) => {
+							bulkMessageTaskElements.forEach((element: any) => {
 								const prepared = new BulkMessageTaskElementModel(element);
 								preparedBulkMessageTaskElements[prepared.id] = prepared;
 							});
@@ -633,7 +657,7 @@ function Main() {
 		};
 	}, [hasFailedMessages]);
 
-	const alertUser = (e) => {
+	const alertUser = (e: BeforeUnloadEvent) => {
 		if (hasFailedMessages) {
 			if (!window.confirm(confirmationMessage)) {
 				e.preventDefault();
@@ -643,7 +667,11 @@ function Main() {
 	};
 
 	useEffect(() => {
-		let tryLoadingTemplatesTimeoutId;
+		let tryLoadingTemplatesTimeoutId:
+			| string
+			| number
+			| NodeJS.Timeout
+			| undefined;
 		if (isTemplatesFailed) {
 			let timeout = 10000;
 			const delay = () => {
@@ -667,11 +695,11 @@ function Main() {
 	}, [isTemplatesFailed]);
 
 	useEffect(() => {
-		function onBlur(event) {
+		function onBlur() {
 			setBlurred(true);
 		}
 
-		function onFocus(event) {
+		function onFocus() {
 			setBlurred(false);
 		}
 
@@ -703,7 +731,7 @@ function Main() {
 	}, [waId]);
 
 	useEffect(() => {
-		const onMarkedAsReceived = function (msg, data) {
+		const onMarkedAsReceived = function (msg: string, data: any) {
 			const relatedWaId = data;
 
 			setNewMessages((prevState) => {
@@ -737,7 +765,7 @@ function Main() {
 		setLoadingNow('Users');
 
 		try {
-			await apiService.listUsersCall(5000, (response) => {
+			apiService.listUsersCall(5000, (response: AxiosResponse) => {
 				const usersResponse = new UsersResponse(response.data);
 
 				// Store
@@ -759,7 +787,7 @@ function Main() {
 		setLoadingNow('Groups');
 
 		try {
-			await apiService.listGroupsCall(undefined, (response) => {
+			apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
 				const groupsResponse = new GroupsResponse(response.data);
 
 				// Store
@@ -781,7 +809,7 @@ function Main() {
 		setLoadingNow('Current User');
 
 		try {
-			await apiService.retrieveCurrentUserCall((response) => {
+			apiService.retrieveCurrentUserCall((response: AxiosResponse) => {
 				const currentUserResponse = new CurrentUserResponse(response.data);
 				dispatch(setCurrentUser(currentUserResponse.currentUser));
 
@@ -804,7 +832,7 @@ function Main() {
 	};
 
 	// ** 6 **
-	const listTemplates = async (isRetry) => {
+	const listTemplates = async (isRetry: boolean) => {
 		setLoadingNow('Templates');
 
 		const completeCallback = () => {
@@ -817,9 +845,9 @@ function Main() {
 			listTags();
 		};
 
-		await apiService.listTemplatesCall(
+		apiService.listTemplatesCall(
 			undefined,
-			(response) => {
+			(response: AxiosResponse) => {
 				const templatesResponse = new TemplatesResponse(response.data);
 
 				dispatch(setTemplates(templatesResponse.templates));
@@ -830,7 +858,7 @@ function Main() {
 
 				setTemplatesFailed(false);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (!isRetry) {
 					if (error.response) {
 						const status = error.response.status;
@@ -862,7 +890,7 @@ function Main() {
 	// ** 5 **
 	const listSavedResponses = async () => {
 		try {
-			await apiService.listSavedResponsesCall((response) => {
+			apiService.listSavedResponsesCall((response: AxiosResponse) => {
 				const savedResponsesResponse = new SavedResponsesResponse(
 					response.data
 				);
@@ -881,8 +909,8 @@ function Main() {
 		}
 	};
 
-	const createSavedResponse = (text) => {
-		apiService.createSavedResponseCall(text, (response) => {
+	const createSavedResponse = (text: string) => {
+		apiService.createSavedResponseCall(text, () => {
 			// Display a success message
 			displaySuccess('Saved as response successfully!');
 
@@ -903,7 +931,7 @@ function Main() {
 			return;
 		}
 
-		let mergedResults = [];
+		let mergedResults: any[] = [];
 		const completeCallback = () => {
 			const preparedData = prepareContactProvidersData(mergedResults);
 			setContactProvidersData(preparedData);
@@ -915,13 +943,13 @@ function Main() {
 			listSavedResponses();
 		};
 
-		const makeRequest = async (pages) => {
-			await apiService.listContactsCall(
+		const makeRequest = async (pages?: string | undefined | null) => {
+			apiService.listContactsCall(
 				undefined,
 				CONTACTS_TEMP_LIMIT,
 				pages,
 				undefined,
-				(response) => {
+				(response: AxiosResponse) => {
 					const contactsResponse = new ContactsResponse(response.data);
 					mergedResults = mergedResults.concat(contactsResponse.results);
 					if (
@@ -935,7 +963,7 @@ function Main() {
 						completeCallback();
 					}
 				},
-				(error) => {
+				(error: AxiosError) => {
 					console.error('Error in listContacts', error);
 					setInitialResourceFailed(true);
 				}
@@ -948,7 +976,7 @@ function Main() {
 	// ** 7 **
 	const listTags = async () => {
 		try {
-			await apiService.listTagsCall((response) => {
+			apiService.listTagsCall((response: AxiosResponse) => {
 				const tagsResponse = new TagsResponse(response.data);
 				dispatch(setTags(tagsResponse.tags));
 			});
@@ -963,14 +991,14 @@ function Main() {
 		}
 	}, [bulkSendPayload]);
 
-	const addBulkSendRecipients = (newWaIds, newTags) => {
+	const addBulkSendRecipients = (newWaIds: string[], newTags: string[]) => {
 		// Combine with selected chats
 		if (newWaIds.length > 0) {
 			setSelectedChats([...new Set([...newWaIds, ...selectedChats])]);
 		}
 
 		if (newTags.length > 0) {
-			const preparedNewTags = [];
+			const preparedNewTags: number[] = [];
 			newTags.forEach((tagName) => {
 				const curTag = findTagByName(tags, tagName);
 				if (curTag) {
@@ -1098,7 +1126,6 @@ function Main() {
 
 				{isChatTagsListVisible && (
 					<ChatTagsList
-						waId={waId}
 						open={isChatTagsListVisible}
 						setOpen={setChatTagsListVisible}
 					/>
@@ -1132,7 +1159,11 @@ function Main() {
 					autoHideDuration={6000}
 					onClose={handleSuccessClose}
 				>
-					<Alert onClose={handleSuccessClose} severity="success" elevation={4}>
+					<Alert
+						onClose={(event) => handleSuccessClose(event)}
+						severity="success"
+						elevation={4}
+					>
 						{t(successMessage)}
 					</Alert>
 				</Snackbar>
@@ -1154,12 +1185,16 @@ function Main() {
 					open={isBulkSendTemplateDialogVisible}
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
+					isLoadingTemplates={isLoadingTemplates}
+					isTemplatesFailed={isTemplatesFailed}
 				/>
 
 				<BulkSendTemplateDialog
 					open={isBulkSendTemplateWithCallbackDialogVisible}
 					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
+					isLoadingTemplates={isLoadingTemplates}
+					isTemplatesFailed={isTemplatesFailed}
 					sendCallback={() => {
 						setUploadRecipientsCSVVisible(true);
 					}}

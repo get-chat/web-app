@@ -1,20 +1,19 @@
-// @ts-nocheck
 import { BaseStorage } from './BaseStorage';
 
 export class MemoryStorage extends BaseStorage {
-	getItem(itemKey) {
+	getItem(itemKey: string) {
 		return window.customStorage?.[itemKey];
 	}
 
-	setItem(itemKey, itemValue) {
+	setItem(itemKey: string, itemValue: string) {
 		if (window.customStorage === undefined) {
-			window.customStorage = [];
+			window.customStorage = {};
 		}
 
 		window.customStorage[itemKey] = itemValue;
 	}
 
-	removeItem(itemKey) {
+	removeItem(itemKey: string) {
 		delete window.customStorage?.[itemKey];
 	}
 }

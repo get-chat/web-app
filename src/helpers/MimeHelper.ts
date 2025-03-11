@@ -1,7 +1,7 @@
 /* Original content: https://github.com/fabiospampinato/mime-standard/blob/master/src/index.ts */
 /* Directly using fabiospampinato/mime-standard fails with the tests */
 
-export const mimeDB = {
+export const mimeDB: { [key: string]: string[] } = {
 	'application/andrew-inset': ['ez'],
 	'application/applixware': ['aw'],
 	'application/atom+xml': ['atom'],

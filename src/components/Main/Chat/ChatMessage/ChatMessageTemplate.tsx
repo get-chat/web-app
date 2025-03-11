@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageVideo from './ChatMessageVideo';
@@ -14,6 +13,8 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import PrintMessage from '@src/components/PrintMessage';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PhoneIcon from '@mui/icons-material/Phone';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import TemplateModel from '@src/api/models/TemplateModel';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -26,11 +27,22 @@ const getIconByType = (type: string) => {
 	}
 };
 
-function ChatMessageTemplate(props) {
-	const { t } = useTranslation();
+interface Props {
+	data: ChatMessageModel;
+	templateData: TemplateModel | undefined;
+	onPreview: (type: string, source: string) => void;
+	onOptionsClick: (e: React.MouseEvent) => void;
+	isTemplatesFailed?: boolean;
+}
 
-	const data = props.data;
-	const templateData = props.templateData;
+const ChatMessageTemplate: React.FC<Props> = ({
+	data,
+	templateData,
+	onPreview,
+	onOptionsClick,
+	isTemplatesFailed,
+}) => {
+	const { t } = useTranslation();
 
 	return (
 		<div className="chat__template">
@@ -44,7 +56,7 @@ function ChatMessageTemplate(props) {
 				{templateData !== undefined ? (
 					<div>
 						{sortTemplateComponents(templateData.components).map(
-							(component, index) => (
+							(component: any, index: number) => (
 								<div key={index}>
 									{component.type === 'HEADER' && (
 										<div className="chat__templateContent__header">
@@ -53,7 +65,7 @@ function ChatMessageTemplate(props) {
 													data={data}
 													source={data.getHeaderFileLink('image')}
 													onPreview={() =>
-														props.onPreview(
+														onPreview(
 															ATTACHMENT_TYPE_IMAGE,
 															data.getHeaderFileLink('image')
 														)
@@ -62,15 +74,14 @@ function ChatMessageTemplate(props) {
 											)}
 											{component.format === 'VIDEO' && (
 												<ChatMessageVideo
-													data={data}
 													source={data.getHeaderFileLink('video')}
 													onPreview={() =>
-														props.onPreview(
+														onPreview(
 															ATTACHMENT_TYPE_VIDEO,
 															data.getHeaderFileLink('video')
 														)
 													}
-													onOptionsClick={props.onOptionsClick}
+													onOptionsClick={onOptionsClick}
 												/>
 											)}
 											{component.format === 'DOCUMENT' && (
@@ -116,48 +127,50 @@ function ChatMessageTemplate(props) {
 
 									{component.type === 'BUTTONS' && (
 										<div className="chat__templateContent__buttons">
-											{component.buttons.map((button, buttonIndex) => {
-												let href: string;
+											{component.buttons.map(
+												(button: any, buttonIndex: number) => {
+													let href: string;
 
-												const targetParams = data.templateParameters?.find(
-													(item) => {
-														return (
-															item.type === 'button' &&
-															item.index === buttonIndex
-														);
-													}
-												);
-
-												switch (button.type) {
-													case 'URL':
-														href =
-															targetParams &&
-															button.url.replace(
-																/\{\{[\d]+\}\}/g,
-																targetParams.parameters[0].text
+													const targetParams = data.templateParameters?.find(
+														(item) => {
+															return (
+																item.type === 'button' &&
+																item.index === buttonIndex
 															);
-														break;
-													case 'PHONE_NUMBER':
-														href = `tel:${button.phone_number}`;
-														break;
-													default:
-														href = '';
-														break;
-												}
+														}
+													);
 
-												return (
-													<Button
-														href={href ?? button.url}
-														target="_blank"
-														key={buttonIndex}
-														startIcon={getIconByType(button.type)}
-														color="primary"
-														fullWidth={true}
-													>
-														{button.text}
-													</Button>
-												);
-											})}
+													switch (button.type) {
+														case 'URL':
+															href =
+																targetParams &&
+																button.url.replace(
+																	/\{\{[\d]+\}\}/g,
+																	targetParams.parameters[0].text
+																);
+															break;
+														case 'PHONE_NUMBER':
+															href = `tel:${button.phone_number}`;
+															break;
+														default:
+															href = '';
+															break;
+													}
+
+													return (
+														<Button
+															href={href ?? button.url}
+															target="_blank"
+															key={buttonIndex}
+															startIcon={getIconByType(button.type)}
+															color="primary"
+															fullWidth={true}
+														>
+															{button.text}
+														</Button>
+													);
+												}
+											)}
 										</div>
 									)}
 								</div>
@@ -166,7 +179,7 @@ function ChatMessageTemplate(props) {
 					</div>
 				) : (
 					<div>
-						{props.isTemplatesFailed ? (
+						{isTemplatesFailed ? (
 							<span>
 								[
 								{t(
@@ -182,6 +195,6 @@ function ChatMessageTemplate(props) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default ChatMessageTemplate;

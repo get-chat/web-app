@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -7,7 +6,9 @@ import GroupIcon from '@mui/icons-material/Group';
 import { CALENDAR_NORMAL, CHAT_KEY_PREFIX } from '@src/Constants';
 import '../../styles/ContactDetails.css';
 import Moment from 'react-moment';
+// @ts-ignore
 import googleLogo from '../../assets/images/ic-google.png';
+// @ts-ignore
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
@@ -18,8 +19,16 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
 import { setContactDetailsVisible } from '@src/store/reducers/UIReducer';
+import PersonModel from '@src/api/models/PersonModel';
+import ChatModel from '@src/api/models/ChatModel';
 
-const ContactDetails: React.FC = ({
+interface Props {
+	contactData: PersonModel | undefined;
+	contactProvidersData: { [key: string]: any };
+	retrieveContactData: (personWaId: string, onComplete?: () => void) => void;
+}
+
+const ContactDetails: React.FC<Props> = ({
 	contactData,
 	contactProvidersData,
 	retrieveContactData,
@@ -28,7 +37,7 @@ const ContactDetails: React.FC = ({
 
 	const chats = useAppSelector((state) => state.chats.value);
 
-	const [chat, setChat] = useState({});
+	const [chat, setChat] = useState<ChatModel>();
 
 	const dispatch = useAppDispatch();
 
@@ -37,7 +46,9 @@ const ContactDetails: React.FC = ({
 	};
 
 	useEffect(() => {
-		retrieveContactData(contactData?.waId);
+		if (contactData?.waId) {
+			retrieveContactData(contactData.waId);
+		}
 		setChat(findChatByWaId());
 	}, []);
 
@@ -63,7 +74,7 @@ const ContactDetails: React.FC = ({
 						<div className="contactDetails__body__avatarContainer">
 							<CustomAvatar
 								src={extractAvatarFromContactProviderData(
-									contactProvidersData[contactData.waId],
+									contactProvidersData[contactData.waId ?? ''],
 									true
 								)}
 								className="contactDetails__body__avatar"
@@ -76,25 +87,25 @@ const ContactDetails: React.FC = ({
 						<PrintMessage
 							as="h3"
 							message={
-								contactProvidersData[contactData.waId]?.[0]?.name ??
+								contactProvidersData[contactData.waId ?? '']?.[0]?.name ??
 								contactData.name
 							}
 						/>
 
-						{contactProvidersData[contactData.waId]?.[0]?.companies?.[0] !==
-							undefined && (
+						{contactProvidersData[contactData.waId ?? '']?.[0]
+							?.companies?.[0] !== undefined && (
 							<div className="contactDetails__body__job">
 								<span>
 									{
-										contactProvidersData[contactData.waId]?.[0]?.companies?.[0]
-											?.job_title
+										contactProvidersData[contactData.waId ?? '']?.[0]
+											?.companies?.[0]?.job_title
 									}
 								</span>{' '}
 								at{' '}
 								<span>
 									{
-										contactProvidersData[contactData.waId]?.[0]?.companies?.[0]
-											?.company_name
+										contactProvidersData[contactData.waId ?? '']?.[0]
+											?.companies?.[0]?.company_name
 									}
 								</span>
 							</div>
@@ -112,7 +123,7 @@ const ContactDetails: React.FC = ({
 							)}
 						</div>
 
-						{chat?.tags?.length > 0 && (
+						{chat?.tags && chat.tags.length > 0 && (
 							<div className="contactDetails__body__tags mt-3">
 								{chat?.tags.map((tag, index) => (
 									<div
@@ -171,8 +182,8 @@ const ContactDetails: React.FC = ({
 						<a href={'tel:+' + contactData.waId}>{addPlus(contactData.waId)}</a>
 					</div>
 
-					{contactProvidersData[contactData.waId]?.map(
-						(providerData, index) => (
+					{contactProvidersData[contactData.waId ?? '']?.map(
+						(providerData: any, index: number) => (
 							<div
 								className="contactDetails__body__section"
 								key={index + '_' + providerData.contact_provider.id}
@@ -203,7 +214,7 @@ const ContactDetails: React.FC = ({
 									</div>
 									<div className="contactDetails__body__section__content__sub">
 										{providerData.phone_numbers?.map(
-											(phoneNumber, phoneNumberIndex) => (
+											(phoneNumber: any, phoneNumberIndex: number) => (
 												<div key={phoneNumberIndex}>
 													<a href={'tel:' + addPlus(phoneNumber.phone_number)}>
 														<span>{addPlus(phoneNumber.phone_number)}</span>
@@ -225,7 +236,7 @@ const ContactDetails: React.FC = ({
 									</div>
 									<div className="contactDetails__body__section__content__sub">
 										{providerData.email_addresses?.map(
-											(emailAddress, emailAddressIndex) => (
+											(emailAddress: any, emailAddressIndex: number) => (
 												<div key={emailAddressIndex}>
 													<a href={'mailto:' + emailAddress.email_address}>
 														{emailAddress.email_address}

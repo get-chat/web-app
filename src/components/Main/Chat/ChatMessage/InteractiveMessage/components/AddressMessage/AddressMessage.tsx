@@ -3,15 +3,14 @@ import PrintMessage from '@src/components/PrintMessage';
 import { Button } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-interface Props {
-	header?: any;
-	body?: any;
-	footer?: any;
-	action?: any;
-}
-
-const AddressMessage: React.FC<Props> = ({ header, body, footer, action }) => {
+const AddressMessage: React.FC<InteractiveMessageProps> = ({
+	header,
+	body,
+	footer,
+	action,
+}) => {
 	const { t } = useTranslation();
 
 	return (

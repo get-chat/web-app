@@ -44,7 +44,7 @@ const cx = classNames.bind(styles);
 interface Props {
 	chat?: ChatModel;
 	person?: PersonModel;
-	contactProvidersData: any;
+	contactProvidersData: { [key: string]: any };
 	isChatOnly: boolean | Number;
 	setChatAssignmentVisible: (isVisible: boolean) => void;
 	setChatTagsVisible: (isVisible: boolean) => void;

@@ -2,15 +2,14 @@ import styles from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/com
 import PrintMessage from '@src/components/PrintMessage';
 import { Button } from '@mui/material';
 import React from 'react';
+import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-interface Props {
-	header?: any;
-	body?: any;
-	footer?: any;
-	action?: any;
-}
-
-const FlowMessage: React.FC<Props> = ({ header, body, footer, action }) => {
+const FlowMessage: React.FC<InteractiveMessageProps> = ({
+	header,
+	body,
+	footer,
+	action,
+}) => {
 	return (
 		<>
 			{header && (

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
 import '../../styles/LoadingScreen.css';
@@ -7,7 +6,20 @@ import Alert from '@mui/material/Alert';
 import packageJson from '../../../package.json';
 import { CircularProgress } from '@mui/material';
 
-function LoadingScreen(props) {
+interface Props {
+	progress: number;
+	setProgress: (progress: number) => void;
+	loadingNow?: string | undefined | null;
+	isHideLogo: boolean;
+	isInitialResourceFailed: boolean;
+}
+
+const LoadingScreen: React.FC<Props> = ({
+	progress,
+	loadingNow,
+	isHideLogo,
+	isInitialResourceFailed,
+}) => {
 	const { t } = useTranslation();
 
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
@@ -22,7 +34,7 @@ function LoadingScreen(props) {
 			clearInterval(intervalId);
 			setLongTransactionInfoVisible(false);
 		};
-	}, [props.loadingNow]);
+	}, [loadingNow]);
 
 	// const skip = () => {
 	//     props.setProgress(100);
@@ -30,7 +42,7 @@ function LoadingScreen(props) {
 
 	return (
 		<div className="loadingScreen">
-			{!props.isHideLogo && (
+			{!isHideLogo && (
 				<div className="loadingScreen__logoContainer">
 					<img
 						src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'}
@@ -40,14 +52,14 @@ function LoadingScreen(props) {
 			)}
 
 			<div className="loadingScreen__progressContainer">
-				{!props.isInitialResourceFailed && (
-					<LinearProgress variant="determinate" value={props.progress} />
+				{!isInitialResourceFailed && (
+					<LinearProgress variant="determinate" value={progress} />
 				)}
 			</div>
 
 			<div className="loadingScreen__details">
 				<CircularProgress size={20} />
-				{t(props.loadingNow)}
+				{t(loadingNow ?? '')}
 			</div>
 
 			{isLongTransactionInfoVisible && (
@@ -56,7 +68,7 @@ function LoadingScreen(props) {
 				</div>
 			)}
 
-			{props.isInitialResourceFailed && (
+			{isInitialResourceFailed && (
 				<>
 					<Alert severity="warning" variant="filled">
 						{t('Something went wrong, this will be fixed automatically')}
@@ -78,6 +90,6 @@ function LoadingScreen(props) {
 			</span>
 		</div>
 	);
-}
+};
 
 export default LoadingScreen;

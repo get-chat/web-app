@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -8,7 +7,11 @@ import {
 	getMaxTagRecipients,
 } from '@src/helpers/BulkSendHelper';
 
-const StepUploadCSV = ({ csvError }) => {
+interface Props {
+	csvError?: string;
+}
+
+const StepUploadCSV: React.FC<Props> = ({ csvError }) => {
 	const { t } = useTranslation();
 
 	return (

@@ -1,10 +1,23 @@
-// @ts-nocheck
 import React from 'react';
 import { Button } from '@mui/material';
 import styles from './BulkSendActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 
-function BulkSendActions(props) {
+interface Props {
+	selectedChats: string[];
+	selectedTags: number[];
+	finishBulkSendMessage: () => void;
+	cancelSelection: () => void;
+	setUploadRecipientsCSVVisible: (value: boolean) => void;
+}
+
+const BulkSendActions: React.FC<Props> = ({
+	selectedChats,
+	selectedTags,
+	finishBulkSendMessage,
+	cancelSelection,
+	setUploadRecipientsCSVVisible,
+}) => {
 	const { t } = useTranslation();
 	return (
 		<div className={styles.container}>
@@ -15,8 +28,8 @@ function BulkSendActions(props) {
 					values={{
 						postProcess: 'sprintf',
 						sprintf: {
-							contacts_count: props.selectedChats.length,
-							tags_count: props.selectedTags.length,
+							contacts_count: selectedChats.length,
+							tags_count: selectedTags.length,
 						},
 					}}
 				>
@@ -25,23 +38,23 @@ function BulkSendActions(props) {
 			</div>
 
 			<div className={styles.actions}>
-				<Button color="secondary" onClick={props.cancelSelection}>
+				<Button color="secondary" onClick={cancelSelection}>
 					{t('Cancel')}
 				</Button>
 
 				<Button
 					color="secondary"
-					onClick={() => props.setUploadRecipientsCSVVisible(true)}
+					onClick={() => setUploadRecipientsCSVVisible(true)}
 				>
 					{t('Upload CSV')}
 				</Button>
 
-				<Button color="primary" onClick={props.finishBulkSendMessage}>
+				<Button color="primary" onClick={finishBulkSendMessage}>
 					{t('Send')}
 				</Button>
 			</div>
 		</div>
 	);
-}
+};
 
 export default BulkSendActions;

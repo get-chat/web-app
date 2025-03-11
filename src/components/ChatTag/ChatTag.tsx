@@ -1,9 +1,12 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import { useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
 
-const ChatTag = ({ id }) => {
+interface Props {
+	id?: number;
+}
+
+const ChatTag: React.FC<Props> = ({ id }) => {
 	const tags = useAppSelector((state) => state.tags.value);
 
 	const tag = useMemo(() => {

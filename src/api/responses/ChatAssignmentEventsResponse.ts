@@ -1,14 +1,16 @@
-// @ts-nocheck
 import ChatMessageModel from '../models/ChatMessageModel';
+import ChatMessageList from '@src/interfaces/ChatMessageList';
 
 class ChatAssignmentEventsResponse {
-	constructor(data, reverse) {
+	public messages: ChatMessageList;
+
+	constructor(data: any, reverse: boolean) {
 		if (reverse) {
 			data.results.reverse();
 		}
 
-		const messages = {};
-		data.results.forEach((assignmentEvent) => {
+		const messages: ChatMessageList = {};
+		data.results.forEach((assignmentEvent: any) => {
 			const prepared = ChatMessageModel.fromAssignmentEvent(assignmentEvent);
 			messages[prepared.id] = prepared;
 		});

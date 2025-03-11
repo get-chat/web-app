@@ -1,15 +1,22 @@
-// @ts-nocheck
 import ChosenFileClass from './ChosenFileClass';
 import { ATTACHMENT_TYPE_AUDIO } from './Constants';
 import { Mp3MediaRecorder } from 'mp3-mediarecorder';
 
 class VoiceRecorder {
+	public mediaRecorder: Mp3MediaRecorder | undefined;
+	public lastAudioChosenFile: ChosenFileClass | undefined;
+
 	constructor() {
 		this.mediaRecorder = undefined;
 		this.lastAudioChosenFile = undefined;
 	}
 
-	start(stream, startCallback, stopCallback, dataAvailableCallback) {
+	start(
+		stream: MediaStream,
+		startCallback?: () => void,
+		stopCallback?: () => void,
+		dataAvailableCallback?: (audioFile: any) => void
+	) {
 		// Clear previous audio url if exists
 		this.lastAudioChosenFile = undefined;
 
@@ -30,7 +37,7 @@ class VoiceRecorder {
 			const blob = event.data;
 
 			const file = new File([blob], 'voice', { type: blob.type });
-			const chosenFile = new ChosenFileClass(0, file);
+			const chosenFile = new ChosenFileClass('0', file);
 
 			// Override type without async codec check
 			chosenFile.attachmentType = ATTACHMENT_TYPE_AUDIO;
@@ -38,7 +45,7 @@ class VoiceRecorder {
 			_this.lastAudioChosenFile = chosenFile;
 
 			if (dataAvailableCallback) {
-				dataAvailableCallback();
+				dataAvailableCallback(chosenFile);
 			}
 		};
 
@@ -56,17 +63,17 @@ class VoiceRecorder {
 
 	stop() {
 		try {
-			this.mediaRecorder.stop();
-		} catch (e: Error) {
+			this.mediaRecorder?.stop();
+		} catch (e: Error | any) {
 			console.warn(e);
 		}
 	}
 
 	cancel() {
 		if (this.mediaRecorder) {
-			this.mediaRecorder.onstart = undefined;
-			this.mediaRecorder.ondataavailable = undefined;
-			this.mediaRecorder.onstop = undefined;
+			this.mediaRecorder.onstart = null;
+			this.mediaRecorder.ondataavailable = null;
+			this.mediaRecorder.onstop = null;
 
 			if (this.isRecording()) {
 				const stream = this.mediaRecorder.stream;

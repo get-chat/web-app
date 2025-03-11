@@ -1,6 +1,5 @@
-// @ts-nocheck
-let cachedColors = {};
-export const generateAvatarColor = function (name) {
+let cachedColors: { [key: string]: string } = {};
+export const generateAvatarColor = function (name: string) {
 	if (!name) return;
 	if (cachedColors[name]) return cachedColors[name];
 

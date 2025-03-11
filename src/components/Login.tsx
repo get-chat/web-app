@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
@@ -23,6 +22,7 @@ import packageJson from '../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
+import { AxiosError, AxiosResponse } from 'axios';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -68,7 +68,10 @@ const Login = () => {
 		}
 
 		if (errorCase) {
-			setLoginError(errorMessages[errorCase]);
+			setLoginError(
+				// @ts-ignore
+				errorMessages[errorCase]
+			);
 
 			if (errorCase === 'invalidToken') {
 				logoutToClearSession();
@@ -94,8 +97,8 @@ const Login = () => {
 		}
 	}, []);
 
-	const doLogin = async (e) => {
-		e.preventDefault();
+	const doLogin = async (event: React.FormEvent) => {
+		event.preventDefault();
 
 		// Check if username or password is empty
 		if (username.trim() === '' || password.trim() === '') {
@@ -110,12 +113,14 @@ const Login = () => {
 		apiService.loginCall(
 			username,
 			password,
-			(response) => {
+			(response: AxiosResponse) => {
 				// Store token in local storage
 				storeToken(response.data.token);
 
 				// Android web interface
+				// @ts-ignore
 				if (window.AndroidWebInterface) {
+					// @ts-ignore
 					window.AndroidWebInterface.registerUserToken(
 						response.data.token ?? ''
 					);
@@ -126,7 +131,7 @@ const Login = () => {
 					(location.state?.nextPath ?? '/main') + location.state?.search ?? ''
 				);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				// Hide the loading animation
 				setLoggingIn(false);
 				setLoginError('');
@@ -144,7 +149,7 @@ const Login = () => {
 	};
 
 	const logoutToClearSession = () => {
-		apiService.logoutCall();
+		apiService.logoutCall(undefined);
 	};
 
 	return (
@@ -214,8 +219,9 @@ const Login = () => {
 
 						<Button
 							className="login__body__adminPanel"
+							// @ts-ignore
 							color="black"
-							href={getHubURL(config.API_BASE_URL)}
+							href={getHubURL(config?.API_BASE_URL ?? '')}
 							target="_blank"
 							fullWidth
 							variant="text"

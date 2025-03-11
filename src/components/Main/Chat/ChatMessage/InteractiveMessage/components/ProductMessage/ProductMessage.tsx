@@ -1,11 +1,16 @@
-// @ts-nocheck
 import React from 'react';
 import { Trans } from 'react-i18next';
 
 import styles from './ProductMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
+import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const ProductMessage = ({ header, body, footer, action }) => {
+const ProductMessage: React.FC<InteractiveMessageProps> = ({
+	header,
+	body,
+	footer,
+	action,
+}) => {
 	if (!action) {
 		return null;
 	}
@@ -20,18 +25,24 @@ const ProductMessage = ({ header, body, footer, action }) => {
 								<div>{section.title}</div>
 								{section.product_items && (
 									<ul className={styles.list}>
-										{section.product_items.map(({ product_retailer_id }) => (
-											<li key={product_retailer_id}>
-												<Trans
-													values={{
-														postProcess: 'sprintf',
-														sprintf: [product_retailer_id],
-													}}
-												>
-													<b>Product retailer ID</b>: %s
-												</Trans>
-											</li>
-										))}
+										{section.product_items.map(
+											({
+												product_retailer_id,
+											}: {
+												product_retailer_id: string;
+											}) => (
+												<li key={product_retailer_id}>
+													<Trans
+														values={{
+															postProcess: 'sprintf',
+															sprintf: [product_retailer_id],
+														}}
+													>
+														<b>Product retailer ID</b>: %s
+													</Trans>
+												</li>
+											)
+										)}
 									</ul>
 								)}
 							</li>
