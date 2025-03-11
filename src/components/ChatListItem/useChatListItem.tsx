@@ -12,7 +12,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 	const data: ChatModel = props.chatData;
 
 	const { isSelectionModeEnabled, isBulkSend } = useAppSelector(
-		(state) => state.UI.value
+		(state) => state.UI
 	);
 
 	const [isSelected, setSelected] = useState(false);

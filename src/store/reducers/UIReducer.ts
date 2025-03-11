@@ -1,33 +1,29 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 
 interface UIState {
-	value: {
-		isReadOnly: boolean;
-		isMessageStatusesVisible: boolean;
-		isContactDetailsVisible: boolean;
-		isSearchMessagesVisible: boolean;
-		isSelectionModeEnabled: boolean;
-		isBulkSend: boolean;
-		isExportChat: boolean;
-	};
+	isReadOnly: boolean;
+	isMessageStatusesVisible: boolean;
+	isContactDetailsVisible: boolean;
+	isSearchMessagesVisible: boolean;
+	isSelectionModeEnabled: boolean;
+	isBulkSend: boolean;
+	isExportChat: boolean;
 }
 
 const initialState: UIState = {
-	value: {
-		isReadOnly: false,
-		isMessageStatusesVisible: false,
-		isContactDetailsVisible: false,
-		isSearchMessagesVisible: false,
-		isSelectionModeEnabled: false,
-		isBulkSend: false,
-		isExportChat: false,
-	},
+	isReadOnly: false,
+	isMessageStatusesVisible: false,
+	isContactDetailsVisible: false,
+	isSearchMessagesVisible: false,
+	isSelectionModeEnabled: false,
+	isBulkSend: false,
+	isExportChat: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {
-	state.value.isMessageStatusesVisible = false;
-	state.value.isContactDetailsVisible = false;
-	state.value.isSearchMessagesVisible = false;
+	state.isMessageStatusesVisible = false;
+	state.isContactDetailsVisible = false;
+	state.isSearchMessagesVisible = false;
 };
 
 export const UISlice = createSlice({
@@ -35,33 +31,43 @@ export const UISlice = createSlice({
 	initialState,
 	reducers: {
 		setReadOnly: (state, action: PayloadAction<boolean>) => {
-			state.value.isReadOnly = action.payload;
+			state.isReadOnly = action.payload;
 		},
 		setMessageStatusesVisible: (state, action: PayloadAction<boolean>) => {
 			closeSections(state);
-			state.value.isMessageStatusesVisible = action.payload;
+			state.isMessageStatusesVisible = action.payload;
 		},
 		setContactDetailsVisible: (state, action: PayloadAction<boolean>) => {
 			closeSections(state);
-			state.value.isContactDetailsVisible = action.payload;
+			state.isContactDetailsVisible = action.payload;
 		},
 		setSearchMessagesVisible: (state, action: PayloadAction<boolean>) => {
 			closeSections(state);
-			state.value.isSearchMessagesVisible = action.payload;
+			state.isSearchMessagesVisible = action.payload;
 		},
 		setSelectionModeEnabled: (state, action: PayloadAction<boolean>) => {
-			state.value.isSelectionModeEnabled = action.payload;
+			state.isSelectionModeEnabled = action.payload;
 
 			if (!action.payload) {
-				state.value.isBulkSend = false;
-				state.value.isExportChat = false;
+				state.isBulkSend = false;
+				state.isExportChat = false;
 			}
 		},
 		setBulkSend: (state, action: PayloadAction<boolean>) => {
-			state.value.isBulkSend = action.payload;
+			state.isBulkSend = action.payload;
 		},
 		setExportChat: (state, action: PayloadAction<boolean>) => {
-			state.value.isExportChat = action.payload;
+			state.isExportChat = action.payload;
+		},
+
+		toggleState: (state, action: PayloadAction<keyof UIState>) => {
+			state[action.payload] = !state[action.payload];
+		},
+		setState: (
+			state,
+			action: PayloadAction<{ key: keyof UIState; value: boolean }>
+		) => {
+			state[action.payload.key] = action.payload.value;
 		},
 	},
 });

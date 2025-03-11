@@ -145,7 +145,7 @@ interface Props {
 const Chat: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly } = useAppSelector((state) => state.UI);
 
 	const { t } = useTranslation();
 

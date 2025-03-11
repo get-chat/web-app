@@ -92,7 +92,7 @@ function Main() {
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
-	} = useAppSelector((state) => state.UI.value);
+	} = useAppSelector((state) => state.UI);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value

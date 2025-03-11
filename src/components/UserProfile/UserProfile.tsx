@@ -16,7 +16,7 @@ const UserProfile: React.FC<Props> = ({
 	setChangePasswordDialogVisible,
 }) => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly } = useAppSelector((state) => state.UI);
 
 	const { t } = useTranslation();
 

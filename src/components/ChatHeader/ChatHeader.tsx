@@ -66,7 +66,7 @@ const ChatHeader: React.FC<Props> = ({
 }) => {
 	const dispatch = useAppDispatch();
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly } = useAppSelector((state) => state.UI);
 
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();

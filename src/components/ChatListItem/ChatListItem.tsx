@@ -23,7 +23,7 @@ const cx = classNames.bind(styles);
 
 const ChatListItem = (props: any) => {
 	const { isReadOnly, isSelectionModeEnabled, isBulkSend } = useAppSelector(
-		(state) => state.UI.value
+		(state) => state.UI
 	);
 
 	const { t } = useTranslation();

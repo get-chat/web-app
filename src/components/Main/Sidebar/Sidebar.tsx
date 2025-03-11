@@ -112,6 +112,7 @@ import {
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
+import PersonModel from '@src/api/models/PersonModel';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -151,7 +152,7 @@ const Sidebar: React.FC<any> = ({
 	const config = React.useContext(AppConfigContext);
 
 	const { isReadOnly, isSelectionModeEnabled, isBulkSend, isExportChat } =
-		useAppSelector((state) => state.UI.value);
+		useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
@@ -208,7 +209,9 @@ const Sidebar: React.FC<any> = ({
 
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState<ChatMessageList>({});
-	const [contactResults, setContactResults] = useState({});
+	const [contactResults, setContactResults] = useState<{
+		[key: string]: PersonModel;
+	}>({});
 	const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
 	const [isUserProfileVisible, setUserProfileVisible] = useState(false);
 	const [isContactsVisible, setContactsVisible] = useState(false);
@@ -347,7 +350,7 @@ const Sidebar: React.FC<any> = ({
 					// Check if chat with waId already exists
 					if (!nextState.hasOwnProperty(chatKey)) {
 						// Collect waId list to retrieve chats
-						if (!newMissingChats.includes(chatMessageWaId)) {
+						if (chatMessageWaId && !newMissingChats.includes(chatMessageWaId)) {
 							newMissingChats.push(chatMessageWaId);
 						}
 					}
@@ -389,7 +392,7 @@ const Sidebar: React.FC<any> = ({
 							isBlurred)
 					) {
 						const preparedNewMessages = newMessages;
-						if (newMessages[chatMessageWaId] === undefined) {
+						if (chatMessageWaId && newMessages[chatMessageWaId] === undefined) {
 							preparedNewMessages[chatMessageWaId] = new NewMessageModel(
 								chatMessageWaId,
 								0
@@ -397,7 +400,9 @@ const Sidebar: React.FC<any> = ({
 						}
 
 						// Increase number of new chatMessages
-						preparedNewMessages[chatMessageWaId].newMessages++;
+						if (chatMessageWaId) {
+							preparedNewMessages[chatMessageWaId].newMessages++;
+						}
 
 						setNewMessages({ ...preparedNewMessages });
 
@@ -1287,7 +1292,8 @@ const Sidebar: React.FC<any> = ({
 								{Object.entries(contactResults).map((contactResult) => (
 									<SidebarContactResult
 										key={contactResult[0]}
-										chatData={contactResult[1]}
+										contactData={contactResult[1]}
+										chatData={chats[contactResult[0]]}
 									/>
 								))}
 							</div>
