@@ -1,12 +1,15 @@
-// @ts-nocheck
 import ChatMessageModel from '../api/models/ChatMessageModel';
 import {
 	ATTACHMENT_TYPE_DOCUMENT,
 	ATTACHMENT_TYPE_IMAGE,
 	ATTACHMENT_TYPE_VIDEO,
 } from '../Constants';
+import TemplateModel from '@src/api/models/TemplateModel';
+import ChosenFileClass from '@src/ChosenFileClass';
 
-export const generateTemplateMessagePayload = (templateMessage) => {
+export const generateTemplateMessagePayload = (
+	templateMessage: TemplateModel
+): any => {
 	return {
 		type: ChatMessageModel.TYPE_TEMPLATE,
 		template: {
@@ -21,12 +24,15 @@ export const generateTemplateMessagePayload = (templateMessage) => {
 	};
 };
 
-export const prepareSendFilePayload = (chosenFile, fileURL) => {
+export const prepareSendFilePayload = (
+	chosenFile: ChosenFileClass,
+	fileURL: string | undefined | null
+) => {
 	const { caption, attachmentType, file } = chosenFile;
 	const filename = file.name;
 	const mimeType = file.type;
 
-	let requestBody = {
+	let requestBody: { [key: string]: any } = {
 		type: attachmentType,
 	};
 

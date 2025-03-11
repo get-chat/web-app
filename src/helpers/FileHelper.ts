@@ -1,4 +1,3 @@
-// @ts-nocheck
 import ChosenFileClass from '../ChosenFileClass';
 import {
 	ATTACHMENT_TYPE_AUDIO,
@@ -11,9 +10,10 @@ import * as musicMetadata from 'music-metadata-browser';
 import { isSafari } from 'react-device-detect';
 import { Buffer } from 'buffer';
 import * as process from 'process';
+import { DragEvent } from 'react';
 
-export const prepareSelectedFiles = (selectedFiles) => {
-	const preparedFiles = {};
+export const prepareSelectedFiles = (selectedFiles: File[]) => {
+	const preparedFiles: { [key: string]: ChosenFileClass } = {};
 	Object.entries(selectedFiles).forEach((file) => {
 		preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1], true);
 	});
@@ -21,7 +21,7 @@ export const prepareSelectedFiles = (selectedFiles) => {
 	return preparedFiles;
 };
 
-export const getDroppedFiles = (event) => {
+export const getDroppedFiles = (event: DragEvent) => {
 	event.preventDefault();
 
 	/*let i;
@@ -41,10 +41,13 @@ export const getDroppedFiles = (event) => {
         }
     }*/
 
-	return { ...event.dataTransfer.files };
+	return { ...event.dataTransfer?.files };
 };
 
-export const getAttachmentTypeByFile = (file, callback) => {
+export const getAttachmentTypeByFile = (
+	file: File,
+	callback?: (type: string) => void
+) => {
 	const mimeType = file.type;
 	if (mimeType.includes('image')) {
 		const supportedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
@@ -99,7 +102,7 @@ export const getAttachmentTypeByFile = (file, callback) => {
 	return ATTACHMENT_TYPE_DOCUMENT;
 };
 
-export const isAudioMimeTypeSupported = (mimeType) => {
+export const isAudioMimeTypeSupported = (mimeType: string) => {
 	if (mimeType === 'audio/amr') {
 		return false;
 	}
@@ -143,7 +146,7 @@ export const isAudioMimeTypeSupported = (mimeType) => {
     return new Blob(byteArrays, {type: contentType});
 }*/
 
-export const handleDragOver = (event) => {
+export const handleDragOver = (event: DragEvent) => {
 	event.preventDefault();
 };
 

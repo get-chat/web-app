@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../../styles/Notifications.css';
 import PubSub from 'pubsub-js';
@@ -11,21 +10,28 @@ import { getObjLength } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
+import { CancelTokenSource } from 'axios';
 
-function Notifications(props) {
+interface Props {
+	onHide: () => void;
+}
+
+const Notifications: React.FC<Props> = ({ onHide }) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
 
-	const [bulkMessageTaskElements, setBulkMessageTaskElements] = useState({});
+	const [bulkMessageTaskElements, setBulkMessageTaskElements] = useState<{
+		[key: string]: BulkMessageTaskElementModel;
+	}>({});
 	const [isLoaded, setLoaded] = useState(false);
-	let cancelTokenSourceRef = useRef();
+	let cancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	useEffect(() => {
-		const handleKey = (event) => {
+		const handleKey = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				// Escape
-				props.onHide();
+				onHide();
 			}
 		};
 
@@ -35,7 +41,7 @@ function Notifications(props) {
 		cancelTokenSourceRef.current = generateCancelToken();
 		retrieveBulkMessageTaskElements();
 
-		const onBulkMessageTaskElement = function (msg, data) {
+		const onBulkMessageTaskElement = function (msg: string, data: any) {
 			if (data.status) {
 				// Means a bulk message task element has failed, so we refresh the data
 				retrieveBulkMessageTaskElements();
@@ -49,22 +55,24 @@ function Notifications(props) {
 
 		return () => {
 			document.removeEventListener('keydown', handleKey);
-			cancelTokenSourceRef.current.cancel();
+			cancelTokenSourceRef.current?.cancel();
 			PubSub.unsubscribe(bulkMessageTaskElementEventToken);
 		};
 	}, []);
 
 	const retrieveBulkMessageTaskElements = () => {
 		apiService.retrieveBulkMessageTaskElementsCall(
-			cancelTokenSourceRef.current.token,
-			(response) => {
-				const preparedBulkMessageTaskElements = {};
-				response.data.results.forEach((taskElement) => {
+			cancelTokenSourceRef.current?.token,
+			(response: any) => {
+				const preparedBulkMessageTaskElements: {
+					[key: string]: BulkMessageTaskElementModel;
+				} = {};
+				response.data.results.forEach((taskElement: any) => {
 					const prepared = new BulkMessageTaskElementModel(taskElement);
 
 					// TODO: Results should be ordered DESC in the backend
 					// Check if failed
-					if (prepared.statusCode >= 400) {
+					if (prepared.statusCode != undefined && prepared.statusCode >= 400) {
 						preparedBulkMessageTaskElements[prepared.id] = prepared;
 					}
 				});
@@ -72,12 +80,12 @@ function Notifications(props) {
 				setBulkMessageTaskElements(preparedBulkMessageTaskElements);
 				setLoaded(true);
 			},
-			(error) => {}
+			undefined
 		);
 	};
 
 	const hideNotifications = () => {
-		props.onHide();
+		onHide();
 	};
 
 	return (
@@ -108,6 +116,6 @@ function Notifications(props) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Notifications;

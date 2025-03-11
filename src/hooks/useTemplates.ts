@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef } from 'react';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import TemplatesResponse from '@src/api/responses/TemplatesResponse';
@@ -7,6 +6,7 @@ import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
 import { AXIOS_ERROR_CODE_TIMEOUT } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
+import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 
 const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
@@ -19,28 +19,28 @@ const useTemplates = () => {
 
 	const retryCount = useRef(0);
 
-	const cancelTokenSourceRef = useRef();
+	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	useEffect(() => {
 		cancelTokenSourceRef.current = generateCancelToken();
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current.cancel();
+			cancelTokenSourceRef.current?.cancel();
 		};
 	}, []);
 
 	const issueTemplateRefreshRequest = async () => {
 		dispatch(setIsRefreshingTemplates(true));
 
-		await apiService.issueTemplateRefreshRequestCall(
-			cancelTokenSourceRef.current.token,
+		apiService.issueTemplateRefreshRequestCall(
+			cancelTokenSourceRef.current?.token,
 			() => {
 				checkTemplateRefreshStatus();
 
 				console.log('Issued a template refresh request.');
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.log(error);
 
 				console.log('Failed to issue a template refresh request.');
@@ -77,9 +77,9 @@ const useTemplates = () => {
 			}
 		};
 
-		await apiService.checkTemplateRefreshStatusCall(
-			cancelTokenSourceRef.current.token,
-			(response) => {
+		apiService.checkTemplateRefreshStatusCall(
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				// noinspection JSUnresolvedVariable
 				if (response.data?.currently_refreshing) {
 					console.log('Templates are still being refreshed.');
@@ -91,7 +91,7 @@ const useTemplates = () => {
 					listTemplates(true);
 				}
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.log(error);
 
 				if (
@@ -106,10 +106,10 @@ const useTemplates = () => {
 		);
 	};
 
-	const listTemplates = async (displaySuccessOnUI) => {
-		await apiService.listTemplatesCall(
-			cancelTokenSourceRef.current.token,
-			(response) => {
+	const listTemplates = async (displaySuccessOnUI: boolean) => {
+		apiService.listTemplatesCall(
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				console.log('Loaded templates successfully!');
 
 				const templatesResponse = new TemplatesResponse(response.data);
@@ -120,7 +120,7 @@ const useTemplates = () => {
 					window.displaySuccess('Templates are refreshed successfully.');
 				}
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.log(error);
 				console.log('Failed to load templates.');
 				dispatch(setIsRefreshingTemplates(false));

@@ -113,6 +113,7 @@
 		"@types/jest": "^29.4.0",
 		"@types/pubsub-js": "^1.8.3",
 		"@types/react-date-range": "^1.4.4",
+		"@types/webpack-env": "^1.18.8",
 		"babel-jest": "^29.3.1",
 		"babel-loader": "^9.1.0",
 		"babel-plugin-transform-import-meta": "^2.2.0",

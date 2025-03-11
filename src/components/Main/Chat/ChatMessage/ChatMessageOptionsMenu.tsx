@@ -7,9 +7,9 @@ import DownloadIcon from '@mui/icons-material/Download';
 import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
 
 interface Props {
-	optionsChatMessage?: ChatMessageModel | null;
-	menuAnchorEl?: Element | null;
-	setMenuAnchorEl: (anchorEl: Element | null) => void;
+	optionsChatMessage?: ChatMessageModel | undefined;
+	menuAnchorEl?: Element | undefined;
+	setMenuAnchorEl: (anchorEl: HTMLElement | undefined) => void;
 	createSavedResponse: (text: string) => void;
 }
 
@@ -62,7 +62,7 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 	};
 
 	const hideMenu = () => {
-		setMenuAnchorEl(null);
+		setMenuAnchorEl(undefined);
 	};
 
 	return (

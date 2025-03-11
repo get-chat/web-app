@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { IconButton, Tooltip, Zoom as ZoomTransition } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -18,8 +17,13 @@ import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectRed
 import CustomAvatar from '@src/components/CustomAvatar';
 import { download } from '@src/helpers/DownloadHelper';
 import { useAppDispatch } from '@src/store/hooks';
+import PreviewMediaModel from '@src/api/models/PreviewMediaModel';
 
-function PreviewMedia({ data }) {
+interface Props {
+	data: PreviewMediaModel;
+}
+
+const PreviewMedia: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
@@ -31,7 +35,7 @@ function PreviewMedia({ data }) {
 	}, []);
 
 	useEffect(() => {
-		const handleKey = (event) => {
+		const handleKey = (event: KeyboardEvent) => {
 			// Escape
 			if (event.key === 'Escape') {
 				if (isZoomEnabled) {
@@ -53,8 +57,12 @@ function PreviewMedia({ data }) {
 		dispatch(setPreviewMediaObject(undefined));
 	};
 
-	const handleClick = (event) => {
-		if (event.target.className?.includes('app__mediaPreview__container')) {
+	const handleClick = (event: React.MouseEvent) => {
+		if (
+			(event.target as Element).className?.includes(
+				'app__mediaPreview__container'
+			)
+		) {
 			hideImageOrVideoPreview();
 		}
 	};
@@ -84,7 +92,10 @@ function PreviewMedia({ data }) {
 				</div>
 
 				<Tooltip title={t('Download')} disableInteractive>
-					<IconButton onClick={() => download(data)} size="large">
+					<IconButton
+						onClick={() => download({ source: data.source })}
+						size="large"
+					>
 						<GetApp />
 					</IconButton>
 				</Tooltip>
@@ -119,6 +130,6 @@ function PreviewMedia({ data }) {
 			)}
 		</div>
 	);
-}
+};
 
 export default PreviewMedia;

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
 	generateInitialsHelper,
 	generateUniqueID,
@@ -8,6 +7,7 @@ import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import TagModel from '@src/api/models/TagModel';
 import ReactionModel from '@src/api/models/ReactionModel';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
+import TemplateModel from '@src/api/models/TemplateModel';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -34,37 +34,63 @@ export class ChatMessageModel {
 		1018, 1023, 1024, 1026, 1031,
 	];
 
-	public id: string;
-	public waId: string;
+	public id: string = generateUniqueID();
+	public getchatId?: string;
+	public waId?: string;
+	public senderWaId?: string;
+	public senderObject?: any;
+	public to?: string;
 	public type?: string | null;
 	public payload: any;
+	public resendPayload: any;
+	public contact?: any;
+	public username?: string | null;
 	public isFromUs = false;
 	public senderName?: string;
 	public initials?: string;
 	public timestamp = -1;
 	public errors?: any[] = [];
 	public isFailed = false;
+	public isStored = false;
 	public location: any;
 	public assignmentEvent: any;
 	public taggingEvent: any;
+	public template?: any;
 	public templateName?: string | null;
+	public templateNamespace?: string | null;
+	public templateLanguage?: string | null;
+	public templateParameters?: any[] | null;
 	public text?: string | null;
 	public caption?: string | null;
 	public reaction?: ReactionModel;
-	public reactions: ChatMessageModel[];
+	public reactions: ChatMessageModel[] = [];
 	public buttonText?: string | null;
 	public interactiveButtonText?: string | null;
-	public isForwarded: boolean;
+	public isForwarded: boolean = false;
 	public contextMessage?: ChatMessageModel;
+	public contextFrom?: string;
+	public contextId?: string;
 	public referral: any;
+	public documentId?: string;
 	public documentLink?: string;
 	public documentFileName?: string;
 	public documentCaption?: string;
 	public readTimestamp?: number;
 	public deliveredTimestamp?: number;
 	public sentTimestamp?: number;
+	public mimeType?: string;
+	public voiceId?: string;
+	public voiceLink?: string;
+	public audioId?: string;
+	public audioLink?: string;
+	public imageId?: string;
+	public imageLink?: string;
+	public videoId?: string;
+	public videoLink?: string;
+	public stickerId?: string;
+	public stickerLink?: string;
 
-	constructor(data: any) {
+	constructor(data?: any) {
 		if (!data) return;
 
 		const payload = data.waba_payload;
@@ -163,7 +189,7 @@ export class ChatMessageModel {
 
 		this.errors = payload.errors;
 		this.isStored = false;
-		this.isFailed = this.errors?.length > 0;
+		this.isFailed = (this.errors?.length ?? 0) > 0;
 		this.resendPayload = undefined;
 
 		// Not need to sanitize this, because it is already sanitized
@@ -175,7 +201,7 @@ export class ChatMessageModel {
 		this.caption = sanitize(this.caption);
 	}
 
-	static fromTemplate(template) {
+	static fromTemplate(template: TemplateModel) {
 		return new ChatMessageModel({
 			from_us: true,
 			waba_payload: {
@@ -186,7 +212,7 @@ export class ChatMessageModel {
 		});
 	}
 
-	static fromInteractive(interactive) {
+	static fromInteractive(interactive: any) {
 		return new ChatMessageModel({
 			from_us: true,
 			waba_payload: {
@@ -197,7 +223,7 @@ export class ChatMessageModel {
 		});
 	}
 
-	static fromAssignmentEvent(assignmentEvent) {
+	static fromAssignmentEvent(assignmentEvent: any) {
 		const message = new ChatMessageModel();
 		message.id =
 			'assignmentEvent_' + assignmentEvent.timestamp + '_' + generateUniqueID();
@@ -207,7 +233,7 @@ export class ChatMessageModel {
 		return message;
 	}
 
-	static fromTaggingEvent(taggingEvent) {
+	static fromTaggingEvent(taggingEvent: any) {
 		const message = new ChatMessageModel();
 		message.id =
 			'taggingEvent_' + taggingEvent.timestamp + '_' + generateUniqueID();
@@ -220,12 +246,14 @@ export class ChatMessageModel {
 		return message;
 	}
 
-	static generateInternalIdStringStatic(getchatId) {
+	static generateInternalIdStringStatic(getchatId: string) {
 		return 'getchatId_' + getchatId;
 	}
 
 	generateInternalIdString() {
-		return ChatMessageModel.generateInternalIdStringStatic(this.getchatId);
+		return ChatMessageModel.generateInternalIdStringStatic(
+			this.getchatId ?? ''
+		);
 	}
 
 	getUniqueSender() {
@@ -272,7 +300,7 @@ export class ChatMessageModel {
 		);
 	}
 
-	generateMediaLink(id) {
+	generateMediaLink(id: string | number | undefined) {
 		return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
 	}
 
@@ -304,10 +332,6 @@ export class ChatMessageModel {
 
 	generateVoiceLink() {
 		return this.voiceLink ?? this.generateMediaLink(this.voiceId);
-	}
-
-	generateAudioLink() {
-		return this.audioLink ?? this.generateMediaLink(this.audioId);
 	}
 
 	generateStickerLink() {
@@ -380,7 +404,7 @@ export class ChatMessageModel {
 		);
 	}
 
-	getHeaderFileLink(type) {
+	getHeaderFileLink(type: string) {
 		try {
 			if (this.type === ChatMessageModel.TYPE_TEMPLATE) {
 				if (this.templateParameters) {

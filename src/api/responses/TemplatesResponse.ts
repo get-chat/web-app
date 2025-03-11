@@ -1,4 +1,3 @@
-// @ts-nocheck
 import TemplateModel from '../models/TemplateModel';
 
 export type TemplateList = {
@@ -8,7 +7,7 @@ export type TemplateList = {
 class TemplatesResponse {
 	public templates: TemplateList = {};
 
-	constructor(data) {
+	constructor(data: { results: [] }) {
 		const templates: TemplateList = {};
 		data.results.forEach((templateData) => {
 			const prepared = new TemplateModel(templateData);

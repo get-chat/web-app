@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react';
 import {
 	Button,
@@ -17,8 +16,14 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
+import TagModel from '@src/api/models/TagModel';
 
-function ChatTagsList(props) {
+interface Props {
+	open: boolean;
+	setOpen: (value: boolean) => void;
+}
+
+const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 	const config = React.useContext(AppConfigContext);
 
 	const tags = useAppSelector((state) => state.tags.value);
@@ -30,16 +35,16 @@ function ChatTagsList(props) {
 	const dispatch = useAppDispatch();
 
 	const close = () => {
-		props.setOpen(false);
+		setOpen(false);
 	};
 
-	const handleClick = (tag) => {
+	const handleClick = (tag: TagModel | undefined) => {
 		dispatch(setFilterTagId(tag?.id));
 		close();
 	};
 
 	return (
-		<Dialog open={props.open} onClose={close} className="chatTagsListWrapper">
+		<Dialog open={open} onClose={close} className="chatTagsListWrapper">
 			<DialogTitle>{t('Tags')}</DialogTitle>
 			<DialogContent className="chatTagsListWrapper">
 				<div className="mb-3">{t('You can filter chats by tags.')}</div>
@@ -73,7 +78,7 @@ function ChatTagsList(props) {
 
 				<div className="mt-3">
 					<Link
-						href={getHubURL(config.API_BASE_URL) + 'main/tag/'}
+						href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 						target="_blank"
 						underline="hover"
 					>
@@ -94,6 +99,6 @@ function ChatTagsList(props) {
 			)}
 		</Dialog>
 	);
-}
+};
 
 export default ChatTagsList;

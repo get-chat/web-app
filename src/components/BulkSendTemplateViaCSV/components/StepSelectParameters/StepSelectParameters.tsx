@@ -11,8 +11,26 @@ import '../../../../styles/StepSelectParameters.css';
 import { useTranslation } from 'react-i18next';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import TemplateModel from '@src/api/models/TemplateModel';
 
-const StepSelectParameters = ({
+interface Props {
+	csvHeader?: string[];
+	template?: TemplateModel;
+	params?: any;
+	paramsError?: string;
+	updateHeaderMediaParam: (
+		value: string | undefined | null,
+		index: number,
+		format: string
+	) => void;
+	updateParam: (
+		value: any[] | string | undefined | null,
+		index: number,
+		paramKey: string
+	) => void;
+}
+
+const StepSelectParameters: React.FC<Props> = ({
 	csvHeader,
 	template,
 	params,
@@ -24,8 +42,12 @@ const StepSelectParameters = ({
 
 	const IS_SEPARATOR_ENABLED = false;
 
-	const [rawValues, setRawValues] = useState({});
-	const [separators, setSeparators] = useState({});
+	const [rawValues, setRawValues] = useState<{
+		[key: string]: { [key: string | number]: any };
+	}>({});
+	const [separators, setSeparators] = useState<{
+		[key: string]: { [key: string | number]: any };
+	}>({});
 
 	useEffect(() => {
 		// Reset state when template changes
@@ -33,7 +55,11 @@ const StepSelectParameters = ({
 		setSeparators({});
 	}, [template]);
 
-	const updateRawValue = (valuesArray, compIndex, param) => {
+	const updateRawValue = (
+		valuesArray: any[],
+		compIndex: number,
+		param: string
+	) => {
 		const paramInt = templateParamToInteger(param);
 
 		setRawValues((prevState) => {
@@ -45,7 +71,11 @@ const StepSelectParameters = ({
 		updateFinalParams(valuesArray, compIndex, param);
 	};
 
-	const updateSeparator = (event, compIndex, param) => {
+	const updateSeparator = (
+		event: React.ChangeEvent<HTMLInputElement>,
+		compIndex: number,
+		param: string
+	) => {
 		const paramInt = templateParamToInteger(param);
 
 		setSeparators((prevState) => {

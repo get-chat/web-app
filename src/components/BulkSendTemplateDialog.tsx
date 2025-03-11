@@ -14,8 +14,18 @@ import {
 	setBulkSend,
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 
-const BulkSendTemplateDialog = ({
+interface Props {
+	open: boolean;
+	setOpen: (value: boolean) => void;
+	setBulkSendPayload: (value: BulkSendPayload) => void;
+	isTemplatesFailed: boolean;
+	isLoadingTemplates: boolean;
+	sendCallback?: () => void;
+}
+
+const BulkSendTemplateDialog: React.FC<Props> = ({
 	open,
 	setOpen,
 	setBulkSendPayload,
@@ -26,7 +36,7 @@ const BulkSendTemplateDialog = ({
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 
-	const [chosenTemplate, setChosenTemplate] = useState();
+	const [chosenTemplate, setChosenTemplate] = useState<TemplateModel>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 
@@ -34,7 +44,7 @@ const BulkSendTemplateDialog = ({
 		setOpen(false);
 	};
 
-	const bulkSendMessage = (type, payload) => {
+	const bulkSendMessage = (type: string, payload: BulkSendPayload) => {
 		dispatch(setSelectionModeEnabled(true));
 		dispatch(setBulkSend(true));
 		setBulkSendPayload(payload);

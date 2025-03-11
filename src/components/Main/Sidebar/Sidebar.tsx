@@ -207,7 +207,7 @@ const Sidebar: React.FC<any> = ({
 	);
 
 	const [searchedKeyword, setSearchedKeyword] = useState('');
-	const [chatMessages, setChatMessages] = useState({});
+	const [chatMessages, setChatMessages] = useState<ChatMessageList>({});
 	const [contactResults, setContactResults] = useState({});
 	const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
 	const [isUserProfileVisible, setUserProfileVisible] = useState(false);
@@ -893,7 +893,6 @@ const Sidebar: React.FC<any> = ({
 			{isSelectionModeEnabled && isBulkSend && (
 				<BulkSendActions
 					selectedChats={selectedChats}
-					setSelectedChats={setSelectedChats}
 					selectedTags={selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={handleFinishBulkSendMessage}
@@ -1303,7 +1302,6 @@ const Sidebar: React.FC<any> = ({
 								{Object.entries(chatMessages).map((message) => (
 									<SearchMessageResult
 										key={message[0]}
-										waId={waId}
 										messageData={message[1]}
 										keyword={searchedKeyword}
 										displaySender={true}

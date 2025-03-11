@@ -1,5 +1,4 @@
-// @ts-nocheck
-import React, { useEffect, useRef, useState } from 'react';
+import React, { SetStateAction, useEffect, useRef, useState } from 'react';
 import { Badge, Fab, Grow, IconButton, Tooltip, Zoom } from '@mui/material';
 import {
 	ArrowDownward,
@@ -14,6 +13,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ContactsIcon from '@mui/icons-material/Contacts';
 import NotesIcon from '@mui/icons-material/Notes';
 import MicIcon from '@mui/icons-material/Mic';
+// @ts-ignore
 import { Emoji, NimblePicker } from 'emoji-mart';
 import styles from './ChatFooter.module.css';
 import 'emoji-mart/css/emoji-mart.css';
@@ -39,10 +39,41 @@ import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 import classNames from 'classnames/bind';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import ChosenFileList from '@src/interfaces/ChosenFileList';
 
 const cx = classNames.bind(styles);
 
-const ChatFooter: React.FC = ({
+interface Props {
+	waId: string | undefined;
+	currentNewMessages: number;
+	isExpired: boolean;
+	input: string;
+	setInput: (value: string) => void;
+	sendMessage: (
+		willQueue: boolean,
+		e?: Event | React.KeyboardEvent | React.MouseEvent,
+		customPayload?: object,
+		successCallback?: () => void,
+		completeCallback?: () => void
+	) => void;
+	bulkSendMessage: (type: string, payload?: BulkSendPayload) => void;
+	setSelectedFiles: (value: any) => void;
+	isTemplatesVisible: boolean;
+	setTemplatesVisible: React.Dispatch<SetStateAction<boolean>>;
+	isInteractiveMessagesVisible: boolean;
+	setInteractiveMessagesVisible: React.Dispatch<SetStateAction<boolean>>;
+	accept: string;
+	setAccept: (value: string) => void;
+	isSavedResponsesVisible: boolean;
+	setSavedResponsesVisible: React.Dispatch<SetStateAction<boolean>>;
+	sendHandledChosenFiles: (files: ChosenFileList) => void;
+	isScrollButtonVisible: boolean;
+	handleScrollButtonClick: () => void;
+	processCommand: (text: string) => void;
+}
+
+const ChatFooter: React.FC<Props> = ({
 	waId,
 	currentNewMessages,
 	isExpired,
@@ -56,18 +87,18 @@ const ChatFooter: React.FC = ({
 	isInteractiveMessagesVisible,
 	setInteractiveMessagesVisible,
 	accept,
+	setAccept,
 	isSavedResponsesVisible,
 	setSavedResponsesVisible,
 	sendHandledChosenFiles,
-	setAccept,
 	isScrollButtonVisible,
 	handleScrollButtonClick,
 	processCommand,
 }) => {
 	const { t } = useTranslation();
 
-	const fileInput = useRef(null);
-	const editable = useRef(null);
+	const fileInput = useRef<HTMLInputElement>(null);
+	const editable = useRef<HTMLDivElement>(null);
 
 	const [isAttachmentOptionsVisible, setAttachmentOptionsVisible] =
 		useState(false);
@@ -80,29 +111,29 @@ const ChatFooter: React.FC = ({
 
 	const { insertAtCursor, handleCopy } = useChatFooter({ setInput });
 
-	const handleAttachmentClick = (acceptValue) => {
+	const handleAttachmentClick = (acceptValue: string) => {
 		setAccept(acceptValue);
 
-		fileInput.current.setAttribute('accept', acceptValue);
-		fileInput.current.click();
+		fileInput.current?.setAttribute('accept', acceptValue);
+		fileInput.current?.click();
 
 		if (window.AndroidWebInterface) {
 			window.AndroidWebInterface.requestPermissions();
 		}
 	};
 
-	const handleEmojiPickerVisibility = function (msg, data) {
+	const handleEmojiPickerVisibility = function (msg: string, data: any) {
 		setEmojiPickerVisible(data);
 	};
 
-	let timeout = useRef();
-	const handleEditableChange = (event) => {
+	let timeout = useRef<NodeJS.Timeout>();
+	const handleEditableChange = (event: React.FormEvent<HTMLDivElement>) => {
 		if (timeout.current) {
 			clearTimeout(timeout.current);
 		}
 
 		timeout.current = setTimeout(function () {
-			setInput(event.target.innerHTML);
+			setInput((event.target as HTMLDivElement).innerHTML);
 		}, 5);
 	};
 
@@ -144,7 +175,7 @@ const ChatFooter: React.FC = ({
 
 	useEffect(() => {
 		// Clear editable div when message is sent
-		if (input === '') {
+		if (input === '' && editable.current) {
 			editable.current.innerHTML = '';
 		}
 	}, [editable, input]);
@@ -210,7 +241,7 @@ const ChatFooter: React.FC = ({
 		});
 	};
 
-	const handleEmojiSelect = (emoji) => {
+	const handleEmojiSelect = (emoji: any) => {
 		if (isRecording) {
 			return;
 		}
@@ -229,14 +260,10 @@ const ChatFooter: React.FC = ({
 		}
 	};
 
-	const handlePaste = (event) => {
-		let text = (event.originalEvent || event).clipboardData.getData(
-			'text/plain'
-		);
+	const handlePaste = (event: React.ClipboardEvent<HTMLElement>) => {
+		let text: string | undefined = event.clipboardData.getData('text/plain');
 		text = replaceEmojis(text, true);
-
 		insertAtCursor(editable.current, text);
-
 		event.preventDefault();
 	};
 
@@ -249,13 +276,13 @@ const ChatFooter: React.FC = ({
 		}
 	};
 
-	const handleFocus = (event) => {
+	const handleFocus = (event: React.FocusEvent<HTMLDivElement>) => {
 		if (isRecording) {
 			event.target.blur();
 		}
 	};
 
-	const handleMouseUp = (event) => {
+	const handleMouseUp = () => {
 		if (isExpired) {
 			displayQuickActionsMenu();
 		}
@@ -311,8 +338,8 @@ const ChatFooter: React.FC = ({
 			<ContactsModal
 				open={contactsModalVisible}
 				onClose={closeContactsModal}
-				sendMessage={(payload, onSuccess, onError) =>
-					sendMessage(false, undefined, payload, onSuccess, onError)
+				sendMessage={(payload, onSuccess) =>
+					sendMessage(false, undefined, payload, onSuccess)
 				}
 				recipientWaId={waId}
 			/>
@@ -350,12 +377,15 @@ const ChatFooter: React.FC = ({
 							onDrop={(event) => event.preventDefault()}
 							spellCheck="true"
 							onInput={(event) => handleEditableChange(event)}
-							onKeyDown={(e) => {
+							onKeyDown={(e: React.KeyboardEvent) => {
 								if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
 							}}
 						/>
 					</div>
-					<button onClick={(e) => sendMessage(true, e)} type="submit">
+					<button
+						onClick={(e: React.MouseEvent) => sendMessage(true, e)}
+						type="submit"
+					>
 						{t('Send a message')}
 					</button>
 				</form>

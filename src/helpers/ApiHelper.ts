@@ -1,24 +1,30 @@
-// @ts-nocheck
 import {
 	clearContactProvidersData,
 	clearToken,
 	getStorage,
 	STORAGE_TAG_TOKEN,
 } from './StorageHelper';
-import axios, { CancelTokenSource } from 'axios';
+import axios, {
+	AxiosError,
+	AxiosRequestConfig,
+	CancelToken,
+	CancelTokenSource,
+} from 'axios';
 import { generateUniqueID } from '@src/helpers/Helpers';
+import { ResponseType } from 'axios';
+import { NavigateFunction, Location } from 'react-router-dom';
 
 export const generateCancelToken = (): CancelTokenSource => {
 	return axios.CancelToken.source();
 };
 
 export const getRequestConfig = (
-	params,
-	cancelToken,
-	responseType,
-	timeout
+	params?: any,
+	cancelToken?: CancelToken,
+	responseType?: ResponseType,
+	timeout?: number
 ) => {
-	const requestConfig = {
+	const requestConfig: AxiosRequestConfig = {
 		withCredentials: false,
 		params,
 		headers: {
@@ -41,13 +47,20 @@ export const getRequestConfig = (
 	return requestConfig;
 };
 
-export const handleIfUnauthorized = (error, navigate) => {
+export const handleIfUnauthorized = (
+	error: AxiosError | undefined,
+	navigate: NavigateFunction | undefined
+) => {
 	if (error?.response?.status === 401) {
 		clearUserSession('invalidToken', undefined, navigate);
 	}
 };
 
-export const clearUserSession = (errorCase, nextLocation, navigate) => {
+export const clearUserSession = (
+	errorCase: string | undefined,
+	nextLocation: Location | undefined,
+	navigate: NavigateFunction | undefined
+) => {
 	clearToken();
 	clearContactProvidersData();
 

@@ -8,10 +8,10 @@ import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '@src/Constants';
 
 export type Props = {
-	message: ChatMessageModel | null;
+	message: ChatMessageModel | undefined;
 	reactionsHistory: ChatMessageModel[];
-	anchorElement: HTMLElement | null;
-	setAnchorElement: (anchorElement: HTMLElement | null) => void;
+	anchorElement: HTMLElement | undefined;
+	setAnchorElement: (anchorElement: HTMLElement | undefined) => void;
 };
 
 const ReactionDetails: React.FC<Props> = ({
@@ -30,7 +30,7 @@ const ReactionDetails: React.FC<Props> = ({
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
 			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
 			open={Boolean(anchorElement)}
-			onClose={() => setAnchorElement(null)}
+			onClose={() => setAnchorElement(undefined)}
 			elevation={0}
 			disableAutoFocusItem={true}
 			className={styles.menu}

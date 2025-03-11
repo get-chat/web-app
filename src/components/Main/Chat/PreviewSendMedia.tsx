@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/PreviewSendMedia.css';
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,6 +21,7 @@ import {
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
 
+// @ts-ignore
 import { Document, Page, pdfjs } from 'react-pdf';
 import PubSub from 'pubsub-js';
 import { useForceUpdate } from '@src/hooks/useForceUpdate';
@@ -31,48 +31,64 @@ import {
 	getObjLength,
 } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
+import ChosenFileClass from '@src/ChosenFileClass';
+import ChosenFileList from '@src/interfaces/ChosenFileList';
 
-function PreviewSendMedia(props) {
+interface Props {
+	data: ChosenFileList | undefined;
+	setData: (data: ChosenFileList) => void;
+	sendHandledChosenFiles: (data: ChosenFileList) => void;
+	setPreviewSendMediaVisible: (value: boolean) => void;
+}
+
+const PreviewSendMedia: React.FC<Props> = ({
+	data,
+	setData,
+	sendHandledChosenFiles,
+	setPreviewSendMediaVisible,
+}) => {
 	const { t } = useTranslation();
 
-	const fileInput = useRef(null);
+	const fileInput = useRef<HTMLInputElement>(null);
 
-	const [data, setData] = useState({});
-	const [chosenFile, setChosenFile] = useState();
-	const [captions, setCaptions] = useState({});
+	const [currentData, setCurrentData] = useState<ChosenFileList>({});
+	const [chosenFile, setChosenFile] = useState<ChosenFileClass>();
+	const [captions, setCaptions] = useState<{
+		[key: string]: string | undefined | null;
+	}>({});
 	const [currentCaption, setCurrentCaption] = useState('');
 	const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
 
 	const forceUpdate = useForceUpdate();
 
 	const hidePreview = () => {
-		props.setPreviewSendMediaVisible(false);
+		setPreviewSendMediaVisible(false);
 	};
 
-	const changePreview = (index) => {
-		if (index >= 0 && data[index] !== undefined) {
-			setChosenFile(data[index]);
+	const changePreview = (index: number) => {
+		if (index >= 0 && currentData[index] !== undefined) {
+			setChosenFile(currentData[index]);
 		}
 	};
 
-	const deleteByIndex = (index) => {
-		const dataSize = getObjLength(data);
-		if (index >= 0 && data[index] !== undefined) {
+	const deleteByIndex = (index: number) => {
+		const dataSize = getObjLength(currentData);
+		if (index >= 0 && currentData[index] !== undefined) {
 			if (dataSize === 1) {
-				props.setPreviewSendMediaVisible(false);
+				setPreviewSendMediaVisible(false);
 			} else {
 				let nextState = {};
-				setData((prevState) => {
+				setCurrentData((prevState) => {
 					delete prevState[index];
 					nextState = { ...prevState };
 					return nextState;
 				});
 
-				if (chosenFile && chosenFile.key === index) {
+				if (chosenFile && chosenFile.key === index.toString()) {
 					changePreview(getFirstObject(nextState).key);
 				}
 
-				setCaptions((prevState) => {
+				setCaptions((prevState: { [key: string]: any }) => {
 					delete prevState[index];
 					return prevState;
 				});
@@ -81,10 +97,10 @@ function PreviewSendMedia(props) {
 	};
 
 	const send = () => {
-		const finalData = data;
+		const finalData = currentData;
 
 		// Inject captions
-		const finalPreparedData = {};
+		const finalPreparedData: { [key: string]: any } = {};
 		Object.entries(finalData).forEach((curChosenFile) => {
 			const copyCurChosenFile = curChosenFile[1];
 			copyCurChosenFile.caption = captions[copyCurChosenFile.key] ?? '';
@@ -92,24 +108,24 @@ function PreviewSendMedia(props) {
 		});
 
 		// Send
-		props.sendHandledChosenFiles(finalData);
+		sendHandledChosenFiles(finalData);
 
 		// Hide
-		props.setPreviewSendMediaVisible(false);
+		setPreviewSendMediaVisible(false);
 	};
 
-	const handleSelectedFiles = (selectedFiles) => {
+	const handleSelectedFiles = (selectedFiles: object) => {
 		console.log(selectedFiles);
 
 		if (getObjLength(selectedFiles) > 0) {
 			const preparedFiles = prepareSelectedFiles(selectedFiles);
 
 			// Updating data with new files
-			setData((prevState) => {
+			setCurrentData((prevState) => {
 				const newState = prevState;
 				let nextIndex = parseInt(getLastObject(newState).key) + 1;
 				Object.entries(preparedFiles).forEach((curPreparedFile) => {
-					const preparedFile = curPreparedFile[1];
+					const preparedFile: any = curPreparedFile[1];
 					preparedFile.key = nextIndex.toString();
 					newState[nextIndex] = preparedFile;
 					nextIndex++;
@@ -124,10 +140,10 @@ function PreviewSendMedia(props) {
 		// For PDF previews
 		pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-		setData(props.data);
+		setCurrentData(data ?? {});
 		setCaptions({});
 
-		const reloadPreview = (msg, data) => {
+		const reloadPreview = () => {
 			// Just to rerender
 			forceUpdate();
 		};
@@ -137,15 +153,15 @@ function PreviewSendMedia(props) {
 
 		return () => {
 			// Clear data
-			props.setData({});
+			setData({});
 
 			PubSub.unsubscribe(token);
 		};
 	}, []);
 
 	useEffect(() => {
-		if (chosenFile && data) {
-			const handleKey = (event) => {
+		if (chosenFile && currentData) {
+			const handleKey = (event: KeyboardEvent) => {
 				// If any element is focused, ignore key
 				if (document.activeElement?.tagName === 'INPUT') {
 					return false;
@@ -169,12 +185,12 @@ function PreviewSendMedia(props) {
 				document.removeEventListener('keydown', handleKey);
 			};
 		}
-	}, [chosenFile, data]);
+	}, [chosenFile, currentData]);
 
 	useEffect(() => {
 		if (chosenFile) {
 			setCaptions((prevState) => {
-				const newState = {};
+				const newState: { [key: string]: string | undefined | null } = {};
 				newState[chosenFile.key] = currentCaption;
 
 				return { ...prevState, ...newState };
@@ -184,10 +200,10 @@ function PreviewSendMedia(props) {
 
 	useEffect(() => {
 		// Preview first one
-		if (!chosenFile && getObjLength(data) > 0) {
+		if (!chosenFile && getObjLength(currentData) > 0) {
 			changePreview(0);
 		}
-	}, [data]);
+	}, [currentData]);
 
 	useEffect(() => {
 		if (chosenFile) {
@@ -263,7 +279,7 @@ function PreviewSendMedia(props) {
 
 			<div className="previewSendMedia__footer">
 				<div className="previewSendMedia__footer__inner">
-					{Object.entries(data).map((file) => {
+					{Object.entries(currentData).map((file: any) => {
 						return (
 							<span
 								key={file[0]}
@@ -355,6 +371,6 @@ function PreviewSendMedia(props) {
 			)}
 		</div>
 	);
-}
+};
 
 export default PreviewSendMedia;

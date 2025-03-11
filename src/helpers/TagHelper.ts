@@ -1,4 +1,5 @@
-// @ts-nocheck
-export const findTagByName = (tags, name) => {
+import TagModel from '@src/api/models/TagModel';
+
+export const findTagByName = (tags: TagModel[], name: string) => {
 	return tags?.filter((tagItem) => tagItem.name === name)?.[0];
 };

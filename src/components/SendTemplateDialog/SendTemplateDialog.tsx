@@ -16,6 +16,7 @@ import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 } from '@src/Constants';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 
 export type Props = {
 	isVisible: boolean;
@@ -23,7 +24,7 @@ export type Props = {
 	chosenTemplate?: TemplateModel;
 	onSend: (template: TemplateModel) => void;
 	sendCallback?: () => void;
-	onBulkSend: (type: string, payload: {}) => void;
+	onBulkSend: (type: string, payload: BulkSendPayload) => void;
 	isBulkOnly: boolean;
 	selectTemplateCallback?: () => void;
 };

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import '../styles/SearchMessageResult.css';
 import Moment from 'react-moment';
@@ -10,40 +9,51 @@ import ChatMessageTypeIcon from './Main/Chat/ChatMessage/ChatMessageTypeIcon';
 import { ListItem } from '@mui/material';
 import PrintMessage from './PrintMessage';
 
-function SearchMessageResult(props) {
-	const data = props.messageData;
+interface Props {
+	displaySender: boolean;
+	messageData: ChatMessageModel;
+	onClick: (chatMessage: ChatMessageModel) => void;
+	keyword: string;
+}
+
+const SearchMessageResult: React.FC<Props> = ({
+	displaySender,
+	messageData,
+	onClick,
+	keyword,
+}) => {
+	const data = messageData;
 
 	return (
-		<ListItem button onClick={() => props.onClick(data)}>
+		<ListItem button onClick={() => onClick(data)}>
 			<div className="searchResult__message">
 				<div className="searchResult__message__header">
 					<Moment unix calendar={CALENDAR_NORMAL} date={data.timestamp} />
 
-					{props.displaySender === true && <h3>{data.senderName}</h3>}
+					{displaySender && <h3>{data.senderName}</h3>}
 				</div>
 				<div className="searchResult__message__body">
 					<span className="searchResult__message__body__type">
-						{data.isFromUs === true &&
-							data.type === ChatMessageModel.TYPE_TEXT && (
-								<span className={data.isRead() ? 'chat__received' : ''}>
-									{data.isDeliveredOrRead() ? (
-										<DoneAll className="chat__iconDoneAll" />
-									) : (
-										<DoneIcon />
-									)}
-								</span>
-							)}
+						{data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT && (
+							<span className={data.isRead() ? 'chat__received' : ''}>
+								{data.isDeliveredOrRead() ? (
+									<DoneAll className="chat__iconDoneAll" />
+								) : (
+									<DoneIcon />
+								)}
+							</span>
+						)}
 
-						<ChatMessageTypeIcon type={data.type} />
+						<ChatMessageTypeIcon type={data.type ?? ''} />
 					</span>
 					<PrintMessage
-						message={data.text ?? data.caption}
-						highlightText={props.keyword}
+						message={data.text ?? data.caption ?? ''}
+						highlightText={keyword}
 					/>
 				</div>
 			</div>
 		</ListItem>
 	);
-}
+};
 
 export default SearchMessageResult;

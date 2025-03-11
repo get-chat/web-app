@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import {
 	Dialog,
@@ -24,17 +23,24 @@ import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
+import ChosenFileList from '@src/interfaces/ChosenFileList';
 
-let timerIntervalId;
+interface Props {
+	voiceRecordCase: 'chat' | 'bulk';
+	setRecording: (value: boolean) => void;
+	sendHandledChosenFiles: (data: ChosenFileList) => void;
+}
 
-function VoiceRecord({
+let timerIntervalId: NodeJS.Timer;
+
+const VoiceRecord: React.FC<Props> = ({
 	voiceRecordCase,
 	setRecording,
 	sendHandledChosenFiles,
-}) {
+}) => {
 	const { t } = useTranslation();
 
-	const voiceRecorder = useRef(new VoiceRecorder());
+	const voiceRecorder = useRef<VoiceRecorder>(new VoiceRecorder());
 	const [timer, setTimer] = useState(0);
 
 	const { waId } = useParams();
@@ -46,7 +52,7 @@ function VoiceRecord({
 	};
 
 	useEffect(() => {
-		const onRequestMicPermission = function (msg, data) {
+		const onRequestMicPermission = function (msg: string, data: any) {
 			if (data === voiceRecordCase) {
 				PubSub.publish(EVENT_TOPIC_VOICE_RECORD_STARTING, voiceRecordCase);
 				requestMicrophonePermission();
@@ -58,7 +64,7 @@ function VoiceRecord({
 			onRequestMicPermission
 		);
 
-		const onVoiceRecordStarting = function (msg, data) {
+		const onVoiceRecordStarting = function (msg: string, data: any) {
 			if (data !== voiceRecordCase) {
 				cancelVoiceRecord();
 			}
@@ -139,7 +145,7 @@ function VoiceRecord({
 		}
 	};
 
-	const startVoiceRecord = (stream) => {
+	const startVoiceRecord = (stream: MediaStream) => {
 		// If it is already recording, return
 		if (voiceRecorder.current?.isRecording()) return;
 
@@ -157,7 +163,7 @@ function VoiceRecord({
 			function () {
 				onVoiceRecordStop();
 			},
-			function (audioFile) {
+			function (audioFile: any) {
 				//console.log(audioFile);
 			}
 		);
@@ -176,7 +182,7 @@ function VoiceRecord({
 			// Send
 			if (chosenFile) {
 				sendHandledChosenFiles({
-					0: voiceRecorder.current.lastAudioChosenFile,
+					0: chosenFile,
 				});
 			} else {
 				console.log('Audio file is missing');
@@ -232,6 +238,6 @@ function VoiceRecord({
 			</Dialog>
 		</div>
 	);
-}
+};
 
 export default VoiceRecord;

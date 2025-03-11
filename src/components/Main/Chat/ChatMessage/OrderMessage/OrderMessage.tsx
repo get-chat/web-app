@@ -1,10 +1,14 @@
-// @ts-nocheck
 import React from 'react';
 import { Trans } from 'react-i18next';
 
 import styles from './OrderMessage.module.css';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
-const OrderMessage = ({ data }) => {
+interface Props {
+	data: ChatMessageModel;
+}
+
+const OrderMessage: React.FC<Props> = ({ data }) => {
 	const { catalog_id, text, product_items } = data.payload.order;
 
 	return (
@@ -22,6 +26,7 @@ const OrderMessage = ({ data }) => {
 
 			<ul className={styles.list}>
 				{product_items.map(
+					// @ts-ignore
 					({ product_retailer_id, item_price, quantity, currency }) => (
 						<li key={product_retailer_id} className={styles.item}>
 							<div>

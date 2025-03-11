@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
 	Table,
@@ -13,7 +12,17 @@ import styles from './StepPreviewCSVData.module.css';
 import Alert from '@mui/material/Alert';
 import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
 
-const StepPreviewCSVData = ({ csvHeader, csvData, isExceededLimits }) => {
+interface Props {
+	csvHeader?: string[];
+	csvData: string[][];
+	isExceededLimits: boolean;
+}
+
+const StepPreviewCSVData: React.FC<Props> = ({
+	csvHeader,
+	csvData,
+	isExceededLimits,
+}) => {
 	const { t } = useTranslation();
 
 	const PREVIEW_LIMIT = 5;

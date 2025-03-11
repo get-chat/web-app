@@ -1,10 +1,17 @@
-// @ts-nocheck
 import { getAttachmentTypeByFile } from './helpers/FileHelper';
 import { EVENT_TOPIC_RELOAD_PREVIEW } from './Constants';
 import PubSub from 'pubsub-js';
 
 class ChosenFileClass {
-	constructor(key, data, checkAudioCodec) {
+	public key: string;
+	public fileURL: string;
+	public file: any;
+	public attachmentType: string;
+	public type: string;
+	public caption: string;
+	public isPDF: boolean;
+
+	constructor(key: string, data: File, checkAudioCodec?: boolean) {
 		const thisObject = this;
 
 		this.key = key;
@@ -13,8 +20,8 @@ class ChosenFileClass {
 
 		let callback;
 
-		if (checkAudioCodec === true) {
-			callback = function (type) {
+		if (checkAudioCodec) {
+			callback = function (type: string) {
 				thisObject.attachmentType = type;
 
 				// An event is published to force preview to render again

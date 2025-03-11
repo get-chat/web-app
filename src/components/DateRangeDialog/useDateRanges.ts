@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useTranslation } from 'react-i18next';
 import {
 	addDays,
@@ -16,7 +15,7 @@ import { createStaticRanges } from 'react-date-range';
 import { useMemo } from 'react';
 
 interface Props {
-	weekStartsOn?: number;
+	weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }
 
 const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
@@ -42,7 +41,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 			endOfLastWeek: endOfWeek(addDays(now, -7), options),
 			startOfToday: startOfDay(now),
 			endOfToday: endOfDay(now),
-			startOfYesterday: startOfDay(addDays(now, -1), options),
+			startOfYesterday: startOfDay(addDays(now, -1)),
 			endOfYesterday: endOfDay(addDays(now, -1)),
 			startOfMonth: startOfMonth(now),
 			endOfMonth: endOfMonth(now),
@@ -60,6 +59,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.startOfToday,
 				endDate: defineds.endOfToday,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('Yesterday'),
@@ -67,6 +67,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.startOfYesterday,
 				endDate: defineds.endOfYesterday,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('Last Sunday'),
@@ -74,6 +75,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.previousSunday,
 				endDate: defineds.previousSunday,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('Last Saturday'),
@@ -81,6 +83,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.previousSaturday,
 				endDate: defineds.previousSaturday,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('This week'),
@@ -88,6 +91,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.startOfWeek,
 				endDate: defineds.endOfWeek,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('Last week'),
@@ -95,6 +99,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.startOfLastWeek,
 				endDate: defineds.endOfLastWeek,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('This month'),
@@ -102,6 +107,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.startOfMonth,
 				endDate: defineds.endOfMonth,
 			}),
+			isSelected: () => false,
 		},
 		{
 			label: t('Last month'),
@@ -109,6 +115,7 @@ const useDateRanges = ({ weekStartsOn = 0 }: Props) => {
 				startDate: defineds.startOfLastMonth,
 				endDate: defineds.endOfLastMonth,
 			}),
+			isSelected: () => false,
 		},
 	]);
 

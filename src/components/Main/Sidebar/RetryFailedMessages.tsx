@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import {
 	extractFailedWaIds,
@@ -11,8 +10,26 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
+import PendingMessage from '@src/interfaces/PendingMessage';
+import ChatList from '@src/interfaces/ChatList';
 
-function RetryFailedMessages(props) {
+interface Props {
+	pendingMessages: PendingMessage[];
+	setPendingMessages: (value: PendingMessage[]) => void;
+	contactProvidersData: { [key: string]: any };
+	chats: ChatList;
+	isSendingPendingMessages: boolean;
+	lastSendAttemptAt: Date | string | number;
+}
+
+const RetryFailedMessages: React.FC<Props> = ({
+	pendingMessages,
+	setPendingMessages,
+	contactProvidersData,
+	chats,
+	isSendingPendingMessages,
+	lastSendAttemptAt,
+}) => {
 	const { t } = useTranslation();
 
 	const navigate = useNavigate();
@@ -22,12 +39,10 @@ function RetryFailedMessages(props) {
 
 	const resendMessage = () => {
 		// Set all failed pending message as willRetry so queue will retry automatically
-		props.setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
+		setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
 
 		// Switch to chat of first failed message
-		const firstFailedMessage = getFirstFailedPendingMessage(
-			props.pendingMessages
-		);
+		const firstFailedMessage = getFirstFailedPendingMessage(pendingMessages);
 		const waId = firstFailedMessage.requestBody?.wa_id;
 		if (waId) {
 			navigate(`/main/chat/${waId}${location.search}`);
@@ -35,12 +50,12 @@ function RetryFailedMessages(props) {
 	};
 
 	const generateFailedReceiversString = () => {
-		const failedWaIds = extractFailedWaIds(props.pendingMessages);
-		let namesArray = [];
+		const failedWaIds = extractFailedWaIds(pendingMessages);
+		let namesArray: string[] = [];
 		failedWaIds.forEach((waId) => {
 			const name =
-				props.contactProvidersData[waId]?.[0]?.name ??
-				props.chats[CHAT_KEY_PREFIX + waId]?.name;
+				contactProvidersData[waId]?.[0]?.name ??
+				chats[CHAT_KEY_PREFIX + waId]?.name;
 			namesArray.push(name ?? waId);
 		});
 
@@ -51,8 +66,7 @@ function RetryFailedMessages(props) {
 		<div className="retryFailedMessagesWrapper">
 			<Alert
 				className={
-					'retryFailedMessages' +
-					(props.isSendingPendingMessages ? ' sending' : '')
+					'retryFailedMessages' + (isSendingPendingMessages ? ' sending' : '')
 				}
 				severity="error"
 				elevation={0}
@@ -63,17 +77,17 @@ function RetryFailedMessages(props) {
 					{t('Click to retry.')}
 				</a>
 				<br />
-				{props.lastSendAttemptAt && (
+				{lastSendAttemptAt && (
 					<div className="retryFailedMessages__lastSendAttemptAt">
 						<Trans>
 							Last attempt at:{' '}
-							<Moment date={props.lastSendAttemptAt} format={dateFormat} />
+							<Moment date={lastSendAttemptAt} format={dateFormat} />
 						</Trans>
 					</div>
 				)}
 			</Alert>
 		</div>
 	);
-}
+};
 
 export default RetryFailedMessages;

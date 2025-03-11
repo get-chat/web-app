@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,20 +8,25 @@ import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ChatIcon from '@mui/icons-material/Chat';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
-const ContactsMessage = ({ data }) => {
+interface Props {
+	data: ChatMessageModel;
+}
+
+const ContactsMessage: React.FC<Props> = ({ data }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const { contacts } = data?.payload || data?.resendPayload;
 
-	const handleClick = (targetWaId) => {
+	const handleClick = (targetWaId: string) => {
 		const waId = prepareWaId(targetWaId);
 		navigate(`/main/chat/${waId}${location.search}`);
 	};
 
 	return (
 		<div className={styles.root}>
-			{contacts?.map((contact, contactIndex) => (
+			{contacts?.map((contact: any, contactIndex: number) => (
 				<div key={contactIndex} className={styles.item}>
 					<div className={styles.header}>
 						<>
@@ -38,7 +42,7 @@ const ContactsMessage = ({ data }) => {
 						</>
 					</div>
 					<div className={styles.footer}>
-						{contact.phones?.map((phoneObj, phoneObjIndex) => (
+						{contact.phones?.map((phoneObj: any, phoneObjIndex: number) => (
 							<ButtonBase
 								key={phoneObjIndex}
 								className={styles.messageButton}

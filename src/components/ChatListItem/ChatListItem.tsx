@@ -214,7 +214,7 @@ const ChatListItem = (props: any) => {
 						<div className={styles.lastMessageWrapper}>
 							<div className={styles.lastMessage}>
 								<ChatMessageShortContent
-									type={data.lastMessageType}
+									type={data.lastMessageType ?? ''}
 									template={data.lastMessage?.template}
 									buttonText={data.lastMessageButtonText}
 									interactiveButtonText={data.interactiveButtonText}

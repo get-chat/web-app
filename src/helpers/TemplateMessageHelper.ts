@@ -1,24 +1,29 @@
-// @ts-nocheck
-// noinspection JSDeprecatedSymbols
-
 import { isEmptyString } from './Helpers';
 import {
 	FORM_VALIDATION_ERROR,
 	InvalidTemplateParamException,
 } from '../Constants';
+import TemplateModel from '@src/api/models/TemplateModel';
+import TemplateComponent from '@src/interfaces/TemplateComponent';
+import TemplateParameter from '@src/interfaces/TemplateParameter';
 
-export const getTemplateParams = (text) => {
+export const getTemplateParams = (text: string | undefined) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
 	return matches ? matches : [];
 };
-export const templateParamToInteger = (templateParam) => {
-	return templateParam.match(/\d+/);
+export const templateParamToInteger = (templateParam: string) => {
+	const match = templateParam.match(/\d+/);
+	return match ? match[0] : null;
 };
-export const insertTemplateComponentParameters = (component, params) => {
+export const insertTemplateComponentParameters = (
+	component: TemplateComponent,
+	params: any[]
+) => {
 	if (!component) return;
 
 	const type = component.type.toLowerCase();
 	const format = component.format ? component.format.toLowerCase() : 'text';
+	// @ts-ignore
 	let text = component[format];
 
 	if (!text) {
@@ -33,13 +38,16 @@ export const insertTemplateComponentParameters = (component, params) => {
 
 		if (component.type === type) {
 			if (component.parameters) {
-				component.parameters.forEach((param, index) => {
-					const paramType = param.type;
+				component.parameters.forEach(
+					(param: TemplateParameter, index: number) => {
+						const paramType = param.type;
 
-					const paramValue =
-						param[paramType]?.fallback_value ?? param[paramType];
-					text = text.replace(`{{${index + 1}}}`, paramValue);
-				});
+						const paramValue =
+							// @ts-ignore
+							param[paramType]?.fallback_value ?? param[paramType];
+						text = text.replace(`{{${index + 1}}}`, paramValue);
+					}
+				);
 			}
 
 			break;
@@ -49,10 +57,10 @@ export const insertTemplateComponentParameters = (component, params) => {
 	return text;
 };
 
-export const sortTemplateComponents = (components) => {
+export const sortTemplateComponents = (components: TemplateComponent[]) => {
 	if (!components) return [];
 
-	const getComponentOrderByType = (componentType) => {
+	const getComponentOrderByType = (componentType: string) => {
 		switch (componentType) {
 			case 'HEADER':
 				return 4;
@@ -75,6 +83,7 @@ export const sortTemplateComponents = (components) => {
 };
 
 const generateParamsForComponent = (
+	hasHeader: boolean,
 	preparedParams: any,
 	paramValues: any,
 	key: string,
@@ -88,24 +97,30 @@ const generateParamsForComponent = (
 		if (preparedParams[key] === undefined) {
 			preparedParams[key] = {};
 		}
-		preparedParams[key][templateParamToInteger(extractedParam)] = {
-			type: 'text',
-			text: paramValues
-				? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
-				: '',
-		};
+		const paramInt = templateParamToInteger(extractedParam);
+		if (paramInt) {
+			preparedParams[key][paramInt] = {
+				type: 'text',
+				text: paramValues
+					? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
+					: '',
+			};
+		}
 	});
 };
 
-export const generateTemplateParamsByValues = (template, paramValues) => {
-	const preparedParams = {};
+export const generateTemplateParamsByValues = (
+	template: TemplateModel,
+	paramValues: any
+) => {
+	const preparedParams: { [key: string]: any } = {};
 	const components = { ...template.components };
 
 	let hasHeader = false;
 
-	Object.entries(components).forEach((paramEntry, paramIndex) => {
+	Object.entries(components).forEach((paramEntry) => {
 		const key = paramEntry[0];
-		const component = paramEntry[1];
+		const component = paramEntry[1] as TemplateComponent;
 		const componentType = component.type;
 
 		if (componentType === 'HEADER') {
@@ -129,11 +144,19 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 
 		// Generate params for URL buttons
 		component.buttons?.forEach((it) => {
-			generateParamsForComponent(preparedParams, paramValues, key, it, 'url');
+			generateParamsForComponent(
+				hasHeader,
+				preparedParams,
+				paramValues,
+				key,
+				it,
+				'url'
+			);
 		});
 
 		// Generate params for other components
 		generateParamsForComponent(
+			hasHeader,
 			preparedParams,
 			paramValues,
 			key,
@@ -146,12 +169,12 @@ export const generateTemplateParamsByValues = (template, paramValues) => {
 };
 
 export const generateFinalTemplateParams = (
-	template,
-	params,
-	checkInvalidParams,
-	onError
+	template: TemplateModel,
+	params: any,
+	checkInvalidParams: boolean,
+	onError?: (error: Error | any) => void
 ) => {
-	const preparedParams = {};
+	const preparedParams: { [key: string]: any } = {};
 	const components = { ...template.components };
 
 	try {
@@ -171,7 +194,9 @@ export const generateFinalTemplateParams = (
 					if (param.text) {
 						// Trim spaces in every line and replace new lines with spaces
 						const textParamArray = param.text?.split(/\r?\n/);
-						param.text = textParamArray?.map((s) => s.trim())?.join(' ');
+						param.text = textParamArray
+							?.map((s: string) => s.trim())
+							?.join(' ');
 					} else if (param.image?.link) {
 						param.image.link = param.image.link.trim();
 					} else if (param.video?.link) {
@@ -221,22 +246,25 @@ export const generateFinalTemplateParams = (
 
 				const buttonsComponents = component['buttons'];
 
-				buttonsComponents?.forEach((buttonComponent, buttonComponentIndex) => {
-					if (buttonComponent.type?.toLowerCase() === 'url') {
-						preparedParams[component.type]['sub_type'] = 'url';
-						preparedParams[component.type]['index'] = buttonComponentIndex;
+				buttonsComponents?.forEach(
+					(buttonComponent: any, buttonComponentIndex: number) => {
+						if (buttonComponent.type?.toLowerCase() === 'url') {
+							preparedParams[component.type]['sub_type'] = 'url';
+							preparedParams[component.type]['index'] = buttonComponentIndex;
+						}
 					}
-				});
+				);
 			}
 		});
-	} catch (error) {
+	} catch (error: Error | any) {
 		onError?.(error);
 	}
 
 	return preparedParams;
 };
 
-export const componentHasMediaFormat = (comp) =>
-	comp.format === 'IMAGE' ||
-	comp.format === 'VIDEO' ||
-	comp.format === 'DOCUMENT';
+export const componentHasMediaFormat = (comp: TemplateComponent) =>
+	comp &&
+	(comp.format === 'IMAGE' ||
+		comp.format === 'VIDEO' ||
+		comp.format === 'DOCUMENT');

@@ -1,9 +1,10 @@
-// @ts-nocheck
+import PendingMessage from '@src/interfaces/PendingMessage';
+
 const getPendingMessages = () => {
 	return window.pendingMessages;
 };
 
-export const findPendingMessageIndex = (id) => {
+export const findPendingMessageIndex = (id: string) => {
 	const pendingMessages = getPendingMessages();
 	for (let i = 0; i < pendingMessages.length; i++) {
 		const currentPendingMessage = pendingMessages[i];
@@ -11,14 +12,15 @@ export const findPendingMessageIndex = (id) => {
 	}
 };
 
-export const findPendingMessage = (id) => {
-	return getPendingMessages()[findPendingMessageIndex(id)];
+export const findPendingMessage = (id: string) => {
+	const index = findPendingMessageIndex(id);
+	return index ? getPendingMessages()[index] : undefined;
 };
 
-export const setPendingMessageFailed = (id) => {
+export const setPendingMessageFailed = (id: string) => {
 	const pendingMessages = getPendingMessages();
 	const pendingMessageIndex = findPendingMessageIndex(id);
-	if (pendingMessages[pendingMessageIndex]) {
+	if (pendingMessageIndex && pendingMessages[pendingMessageIndex]) {
 		pendingMessages[pendingMessageIndex].isFailed = true;
 		pendingMessages[pendingMessageIndex].willRetry = false;
 	}
@@ -36,7 +38,7 @@ export const setAllFailedPendingMessagesWillRetry = () => {
 	return pendingMessages;
 };
 
-export const hasFailedPendingMessages = (pendingMessages) => {
+export const hasFailedPendingMessages = (pendingMessages: PendingMessage[]) => {
 	for (let i = 0; i < pendingMessages.length; i++) {
 		// Consider willRetry additionally
 		if (pendingMessages[i].isFailed) return true;
@@ -45,7 +47,9 @@ export const hasFailedPendingMessages = (pendingMessages) => {
 	return false;
 };
 
-export const getFirstPendingMessageToSend = (pendingMessages) => {
+export const getFirstPendingMessageToSend = (
+	pendingMessages: PendingMessage[]
+) => {
 	for (let i = 0; i < pendingMessages.length; i++) {
 		const curPendingMessage = pendingMessages[i];
 		if (!curPendingMessage.isFailed || curPendingMessage.willRetry) {
@@ -54,7 +58,9 @@ export const getFirstPendingMessageToSend = (pendingMessages) => {
 	}
 };
 
-export const getFirstFailedPendingMessage = (pendingMessages) => {
+export const getFirstFailedPendingMessage = (
+	pendingMessages: PendingMessage[]
+) => {
 	for (let i = 0; i < pendingMessages.length; i++) {
 		const curPendingMessage = pendingMessages[i];
 		if (curPendingMessage.isFailed) {
@@ -63,8 +69,8 @@ export const getFirstFailedPendingMessage = (pendingMessages) => {
 	}
 };
 
-export const extractFailedWaIds = (pendingMessages) => {
-	const result = [];
+export const extractFailedWaIds = (pendingMessages: PendingMessage[]) => {
+	const result: string[] = [];
 	for (let i = 0; i < pendingMessages.length; i++) {
 		const currentPendingMessage = pendingMessages[i];
 		const waId = currentPendingMessage.requestBody?.wa_id;

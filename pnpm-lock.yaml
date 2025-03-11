@@ -220,6 +220,9 @@ devDependencies:
   '@types/react-date-range':
     specifier: ^1.4.4
     version: 1.4.4
+  '@types/webpack-env':
+    specifier: ^1.18.8
+    version: registry.npmjs.org/@types/webpack-env@1.18.8
   babel-jest:
     specifier: ^29.3.1
     version: 29.3.1(@babel/core@7.20.5)
@@ -13438,6 +13441,12 @@ packages:
     version: 3.16.0
     dependencies:
       source-map: registry.npmjs.org/source-map@0.6.1
+    dev: true
+
+  registry.npmjs.org/@types/webpack-env@1.18.8:
+    resolution: {integrity: sha512-G9eAoJRMLjcvN4I08wB5I7YofOb/kaJNd5uoCMX+LbKXTPCF+ZIHuqTnFaK9Jz1rgs035f9JUPUhNFtqgucy/A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/webpack-env/-/webpack-env-1.18.8.tgz}
+    name: '@types/webpack-env'
+    version: 1.18.8
     dev: true
 
   registry.npmjs.org/@types/webpack-sources@3.2.0:

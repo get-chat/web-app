@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import { IconButton } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -12,18 +11,21 @@ import {
 import { isAudioMimeTypeSupported } from '@src/helpers/FileHelper';
 import UnsupportedFileClass from '../../../../UnsupportedFileClass';
 import CustomAvatar from '@src/components/CustomAvatar';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
-function ChatMessageVoice(props) {
-	const data = props.data;
+interface Props {
+	data: ChatMessageModel;
+}
 
+const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 	const [isPlaying, setPlaying] = useState(false);
 	const duration = useRef(null);
 	const [progress, setProgress] = useState(0);
 	const [currentDuration, setCurrentDuration] = useState('0:00');
-	const audio = useRef(null);
+	const audio = useRef<HTMLAudioElement>(null);
 	const range = useRef(null);
 
-	const onChatMessageEvent = function (msg, data) {
+	const onChatMessageEvent = function (msg: string, data: any) {
 		if (data === 'pause') {
 			pauseVoice();
 		}
@@ -62,8 +64,6 @@ function ChatMessageVoice(props) {
 				// Pause others
 				PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
-				console.log(data.mimeType);
-
 				if (isAudioMimeTypeSupported(data.mimeType)) {
 					audio.current.play().catch((error) => {
 						console.error(error);
@@ -71,8 +71,8 @@ function ChatMessageVoice(props) {
 					setPlaying(true);
 				} else {
 					const unsupportedFile = new UnsupportedFileClass({
-						name: props.data.filename,
-						link: props.data.audioLink,
+						name: data.id,
+						link: data.audioLink,
 						mimeType: data.mimeType,
 					});
 					PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
@@ -110,17 +110,17 @@ function ChatMessageVoice(props) {
 		}
 	};
 
-	const formatDuration = (s) => {
+	const formatDuration = (s: number) => {
 		s = Math.floor(s);
 		return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + s;
 	};
 
-	const changeDuration = (value) => {
+	const changeDuration = (value: number) => {
 		if (audio.current && range.current && audio.current.duration !== Infinity) {
 			setProgress(value);
 			const nextCurrentTime = audio.current.duration / value;
 			if (nextCurrentTime !== Infinity && !isNaN(nextCurrentTime)) {
-				audio.current.currentTime = parseFloat(nextCurrentTime);
+				audio.current.currentTime = nextCurrentTime;
 			}
 		}
 	};
@@ -143,7 +143,7 @@ function ChatMessageVoice(props) {
 					min="0"
 					max="100"
 					value={progress}
-					onChange={(e) => changeDuration(e.target.value)}
+					onChange={(e) => changeDuration(parseFloat(e.target.value))}
 				/>
 				<audio
 					ref={audio}
@@ -151,7 +151,7 @@ function ChatMessageVoice(props) {
 						data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()
 					}
 					preload="none"
-					onLoadedMetadata={(event) => console.log(event.target.duration)}
+					//onLoadedMetadata={(event) => console.log(event.target.duration)}
 				/>
 
 				<CustomAvatar
@@ -177,6 +177,6 @@ function ChatMessageVoice(props) {
 			</span>
 		</div>
 	);
-}
+};
 
 export default ChatMessageVoice;

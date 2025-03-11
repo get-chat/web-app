@@ -6,14 +6,14 @@ import { EMPTY_IMAGE_BASE64 } from '../Constants';
 import { generateCancelToken } from '../helpers/ApiHelper';
 
 interface Props {
-	src: string;
+	src?: string | undefined;
 	alt?: string;
 	className?: string;
 	style?: any;
 	height?: number;
 	width?: number;
 	onClick?: () => void;
-	_ref: any;
+	_ref?: any;
 }
 
 const Image: React.FC<Props> = ({
@@ -35,6 +35,8 @@ const Image: React.FC<Props> = ({
 	useEffect(() => {
 		// Generate a token
 		cancelTokenSourceRef.current = generateCancelToken();
+
+		if (!src) return;
 
 		axios
 			.get(src, {

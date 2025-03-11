@@ -133,7 +133,7 @@ const ChatMessage: React.FC<Props> = ({
 						<div className="chat__name">
 							{data.isFromUs
 								? data.senderName
-								: contactProvidersData?.[data.waId]?.[0]?.name ??
+								: contactProvidersData?.[data.waId ?? '']?.[0]?.name ??
 								  data.senderName}
 						</div>
 					)}
@@ -302,7 +302,7 @@ const ChatMessage: React.FC<Props> = ({
 							className="chat__message__info"
 							onClick={() => {
 								if (data.isFromUs && isInfoClickable) {
-									const clonedMessage = clone(data);
+									const clonedMessage = clone(data) as ChatMessageModel;
 									// Injecting reactions
 									clonedMessage.reactions = reactions;
 									setMessageWithStatuses?.(clonedMessage);

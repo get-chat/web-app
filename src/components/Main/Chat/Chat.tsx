@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
@@ -82,7 +81,7 @@ import { ErrorBoundary } from '@sentry/react';
 import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -91,6 +90,7 @@ import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 import ChatModel from '@src/api/models/ChatModel';
+// @ts-ignore
 import decode from 'unescape';
 import {
 	setBulkSend,
@@ -101,13 +101,48 @@ import InteractiveMessageList from '@src/components/InteractiveMessageList';
 import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 import ReactionDetails from '@src/components/ReactionDetails';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import NewMessageModel from '@src/api/models/NewMessageModel';
+import ChosenFileClass from '@src/ChosenFileClass';
+import ReactionList from '@src/interfaces/ReactionList';
+import PendingMessage from '@src/interfaces/PendingMessage';
+import ChosenFileList from '@src/interfaces/ChosenFileList';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
-const Chat: React.FC = (props) => {
+interface Props {
+	pendingMessages: PendingMessage[];
+	setPendingMessages: (value: PendingMessage[]) => void;
+	isSendingPendingMessages: boolean;
+	setSendingPendingMessages: (value: boolean) => void;
+	hasFailedMessages: boolean;
+	setHasFailedMessages: (value: boolean) => void;
+	lastSendAttemptAt?: Date | undefined;
+	setLastSendAttemptAt: (value: Date | undefined) => void;
+	isUploadingMedia: boolean;
+	setUploadingMedia: (value: boolean) => void;
+	newMessages: { [key: string]: NewMessageModel };
+	setChosenContact: (value: PersonModel | undefined) => void;
+	isTemplatesFailed: boolean;
+	isLoadingTemplates: boolean;
+	createSavedResponse: (value: string) => void;
+	contactProvidersData: {
+		[key: string]: any;
+	};
+	retrieveContactData: (personWaId: string, onComplete?: () => void) => void;
+	displayNotification: (title: string, body: string, chatWaId: string) => void;
+	isChatOnly: boolean;
+	setChatAssignmentVisible: (value: boolean) => void;
+	setChatTagsVisible: (value: boolean) => void;
+	setBulkSendPayload: (value: BulkSendPayload) => void;
+	searchMessagesByKeyword: (keyword: string) => void;
+	setMessageWithStatuses: (value?: ChatMessageModel) => void;
+}
+
+const Chat: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { isReadOnly } = useAppSelector((state) => state.UI.value);
@@ -127,11 +162,12 @@ const Chat: React.FC = (props) => {
 		setReactions,
 		isTimestampsSame,
 		mergeReactionLists,
+		fixedDateIndicatorText,
+		prepareFixedDateIndicator,
 	} = useChat({
 		MESSAGES_PER_PAGE,
 	});
 
-	const [fixedDateIndicatorText, setFixedDateIndicatorText] = useState();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
@@ -140,7 +176,7 @@ const Chat: React.FC = (props) => {
 		useState(false);
 	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 
-	const [person, setPerson] = useState();
+	const [person, setPerson] = useState<PersonModel>();
 	const [chat, setChat] = useState<ChatModel>();
 
 	const [input, setInput] = useState('');
@@ -152,7 +188,8 @@ const Chat: React.FC = (props) => {
 
 	const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] =
 		useState(false);
-	const [previewSendMediaData, setPreviewSendMediaData] = useState();
+	const [previewSendMediaData, setPreviewSendMediaData] =
+		useState<ChosenFileList>();
 
 	const [currentNewMessages, setCurrentNewMessages] = useState(0);
 
@@ -160,12 +197,12 @@ const Chat: React.FC = (props) => {
 
 	const [lastMessageId, setLastMessageId] = useState();
 
-	const [chosenTemplate, setChosenTemplate] = useState();
+	const [chosenTemplate, setChosenTemplate] = useState<TemplateModel>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 
-	const messagesContainer = useRef<HTMLElement>(null);
-	const cancelTokenSourceRef = useRef();
+	const messagesContainer = useRef<HTMLDivElement>(null);
+	const cancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	const { waId } = useParams();
 
@@ -218,10 +255,10 @@ const Chat: React.FC = (props) => {
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current.cancel();
+			cancelTokenSourceRef.current?.cancel();
 
 			// Cancel verifying phone number
-			verifyPhoneNumberCancelTokenSourceRef.current.cancel();
+			verifyPhoneNumberCancelTokenSourceRef.current?.cancel();
 
 			// Unsubscribe
 			PubSub.unsubscribe(handleFilesDroppedEventToken);
@@ -331,8 +368,8 @@ const Chat: React.FC = (props) => {
 		// Clear values for next route
 		setPerson(undefined);
 		setChat(undefined);
-		setMessages([]);
-		setReactions([]);
+		setMessages({});
+		setReactions({});
 		setHasOlderMessagesToLoad(true);
 		setTemplatesVisible(false);
 		setSavedResponsesVisible(false);
@@ -361,7 +398,7 @@ const Chat: React.FC = (props) => {
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current.cancel();
+			cancelTokenSourceRef.current?.cancel();
 
 			// Generate a new token, because component is not destroyed
 			cancelTokenSourceRef.current = generateCancelToken();
@@ -373,7 +410,7 @@ const Chat: React.FC = (props) => {
 	}, [person]);
 
 	const getNewMessagesCount = () => {
-		return props.newMessages[waId]?.newMessages ?? 0;
+		return waId ? props.newMessages[waId]?.newMessages ?? 0 : 0;
 	};
 
 	useEffect(() => {
@@ -385,22 +422,22 @@ const Chat: React.FC = (props) => {
 
 	useEffect(() => {
 		const messagesContainerCopy = messagesContainer.current;
-		const dateIndicators = messagesContainerCopy.querySelectorAll(
+		const dateIndicators = messagesContainerCopy?.querySelectorAll(
 			'.chat__message__outer > .chat__message__dateContainer > .chat__message__dateContainer__indicator'
 		);
 
 		// To optimize scroll event
-		let debounceTimer;
+		let debounceTimer: NodeJS.Timeout;
 
 		// Consider replacing this with IntersectionObserver
 		// Browser support should be considered: https://caniuse.com/intersectionobserver
-		function handleScroll(e) {
+		function handleScroll(e: Event | React.UIEvent<HTMLElement>) {
 			if (debounceTimer) {
 				window.clearTimeout(debounceTimer);
 			}
 
 			debounceTimer = setTimeout(function () {
-				const el = e.target;
+				const el = e.target as HTMLElement;
 
 				if (isScrollable(el)) {
 					if (!canSeeLastMessage(el)) {
@@ -460,7 +497,7 @@ const Chat: React.FC = (props) => {
 		}
 
 		if (messagesContainer && isLoaded) {
-			messagesContainerCopy.addEventListener('scroll', handleScroll);
+			messagesContainerCopy?.addEventListener('scroll', handleScroll);
 
 			// Display fixed date indicator
 			prepareFixedDateIndicator(dateIndicators, messagesContainerCopy);
@@ -468,7 +505,7 @@ const Chat: React.FC = (props) => {
 
 		return () => {
 			clearTimeout(debounceTimer);
-			messagesContainerCopy.removeEventListener('scroll', handleScroll);
+			messagesContainerCopy?.removeEventListener('scroll', handleScroll);
 		};
 	}, [
 		messages,
@@ -481,19 +518,19 @@ const Chat: React.FC = (props) => {
 
 	useEffect(() => {
 		// New messages
-		const onNewMessages = function (msg: string, data: any) {
+		const onNewMessages = function (msg: string, data: ChatMessageList) {
 			if (data && isLoaded) {
 				flushSync(() => {
 					let hasAnyIncomingMsg = false;
 
 					setMessages((prevState) => {
 						let newState;
-						const preparedMessages = {};
+						const preparedMessages: ChatMessageList = {};
 						Object.entries(data).forEach((message) => {
 							const msgId = message[0];
 							const chatMessage = message[1];
 
-							if (waId === chatMessage.waId) {
+							if (waId === chatMessage?.waId) {
 								// Replace message displayed with internal id
 								const internalIdString = chatMessage.generateInternalIdString();
 								if (internalIdString in prevState) {
@@ -512,8 +549,9 @@ const Chat: React.FC = (props) => {
 							const lastMessage = getLastObject(preparedMessages);
 
 							if (isAtBottom) {
-								const prevScrollTop = messagesContainer.current.scrollTop;
-								const prevScrollHeight = messagesContainer.current.scrollHeight;
+								const prevScrollTop = messagesContainer.current?.scrollTop;
+								const prevScrollHeight =
+									messagesContainer.current?.scrollHeight;
 								const isCurrentlyLastMessageVisible = isLastMessageVisible();
 
 								newState = { ...prevState, ...preparedMessages };
@@ -539,11 +577,14 @@ const Chat: React.FC = (props) => {
 									}
 
 									// Update contact
-									setPerson((prevState) => ({
-										...prevState,
-										lastMessageTimestamp: lastMessageTimestamp,
-										isExpired: false,
-									}));
+									setPerson(
+										(prevState) =>
+											({
+												...prevState,
+												lastMessageTimestamp: lastMessageTimestamp,
+												isExpired: false,
+											} as PersonModel)
+									);
 
 									// Chat is not expired anymore
 									setExpired(false);
@@ -579,8 +620,8 @@ const Chat: React.FC = (props) => {
 				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
 
 				let receivedNewErrors = false;
-				const prevScrollTop = messagesContainer.current.scrollTop;
-				const prevScrollHeight = messagesContainer.current.scrollHeight;
+				const prevScrollTop = messagesContainer.current?.scrollTop;
+				const prevScrollHeight = messagesContainer.current?.scrollHeight;
 
 				flushSync(() => {
 					setMessages((prevState) => {
@@ -590,13 +631,13 @@ const Chat: React.FC = (props) => {
 						Object.entries(data).forEach((status) => {
 							let wabaIdOrGetchatId = status[0];
 
-							const statusObj = status[1];
+							const statusObj: any = status[1];
 
 							// Check if any message is displayed with internal id
 							// Fix duplicated messages in this way
 							const internalIdString =
 								ChatMessageModel.generateInternalIdStringStatic(
-									statusObj.getchatId
+									statusObj?.getchatId
 								);
 
 							if (internalIdString in newState) {
@@ -628,7 +669,9 @@ const Chat: React.FC = (props) => {
 									newState[wabaIdOrGetchatId].isFailed = true;
 									// Merge with existing errors if exist
 									if (newState[wabaIdOrGetchatId].errors) {
-										newState[wabaIdOrGetchatId].errors.concat(statusObj.errors);
+										newState[wabaIdOrGetchatId].errors?.concat(
+											statusObj.errors
+										);
 									} else {
 										newState[wabaIdOrGetchatId].errors = statusObj.errors;
 									}
@@ -759,11 +802,11 @@ const Chat: React.FC = (props) => {
 		const onUpdatePersonName = function (msg: string, data: any) {
 			const name = data;
 			setPerson((prevState) => {
-				if (prevState && prevState instanceof PersonModel) {
+				if (prevState) {
 					return {
 						...prevState,
 						name: name,
-					};
+					} as PersonModel;
 				} else {
 					return prevState;
 				}
@@ -780,36 +823,17 @@ const Chat: React.FC = (props) => {
 		};
 	}, [person]);
 
-	const prepareFixedDateIndicator = (dateIndicators, el) => {
-		const curScrollTop = el.scrollTop;
-		let indicatorToShow;
-
-		for (let i = 0; i < dateIndicators.length; i++) {
-			const indicator = dateIndicators[i];
-			if (
-				indicatorToShow === undefined ||
-				indicator.offsetTop <= curScrollTop
-			) {
-				indicatorToShow = indicator;
-			} else {
-				break;
-			}
-		}
-
-		if (indicatorToShow) {
-			setFixedDateIndicatorText(indicatorToShow.innerHTML);
-		}
-	};
-
 	const isLastMessageVisible = () => {
 		const element = messagesContainer.current;
+		if (!element) return false;
 		return (
 			element.scrollHeight - element.scrollTop - element.clientHeight <
 			SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET
 		);
 	};
 
-	const canSeeLastMessage = (element) => {
+	const canSeeLastMessage = (element: HTMLElement | undefined | null) => {
+		if (!element) return false;
 		return !(
 			element.scrollHeight - element.scrollTop - element.clientHeight >
 			SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET
@@ -823,7 +847,7 @@ const Chat: React.FC = (props) => {
 	const handleScrollButtonClick = () => {
 		if (isAtBottom) {
 			const el = messagesContainer.current;
-			el.scroll({
+			el?.scroll({
 				top: el.scrollHeight - el.offsetHeight - SCROLL_OFFSET,
 				behavior: 'smooth',
 			});
@@ -852,25 +876,29 @@ const Chat: React.FC = (props) => {
 	};
 
 	const persistScrollStateFromBottom = (
-		prevScrollHeight,
-		prevScrollTop,
-		offset
+		prevScrollHeight: number | undefined,
+		prevScrollTop: number | undefined,
+		offset: number | undefined
 	) => {
-		const nextScrollHeight = messagesContainer.current.scrollHeight;
-		messagesContainer.current.scrollTop =
-			nextScrollHeight - prevScrollHeight + prevScrollTop - offset;
+		if (messagesContainer.current) {
+			const nextScrollHeight = messagesContainer.current.scrollHeight;
+			messagesContainer.current.scrollTop =
+				nextScrollHeight -
+				(prevScrollHeight ?? 0) +
+				(prevScrollTop ?? 0) -
+				(offset ?? 0);
+		}
 	};
 
-	const scrollToChild = (msgId) => {
+	const scrollToChild = (msgId: string) => {
 		setTimeout(function () {
-			const child = messagesContainer.current.querySelector(
-				'#message_' + msgId
-			);
+			const child: HTMLElement | undefined | null =
+				messagesContainer.current?.querySelector('#message_' + msgId);
 			let _offset = 25;
 			if (child) {
 				let targetOffsetTop = child.offsetTop - _offset;
 				if (targetOffsetTop < SCROLL_OFFSET) targetOffsetTop = SCROLL_OFFSET;
-				messagesContainer.current.scroll({
+				messagesContainer.current?.scroll({
 					top: targetOffsetTop,
 					behavior: 'smooth',
 				});
@@ -886,7 +914,10 @@ const Chat: React.FC = (props) => {
 		}, 100);
 	};
 
-	const goToMessageId = (msgId, timestamp) => {
+	const goToMessageId = (
+		msgId: string | undefined | null,
+		timestamp: number
+	) => {
 		if (messagesContainer.current) {
 			if (msgId) {
 				if (messages[msgId]) {
@@ -948,33 +979,45 @@ const Chat: React.FC = (props) => {
 		}
 	}, [selectedFiles]);
 
-	const [optionsChatMessage, setOptionsChatMessage] = useState();
-	const [menuAnchorEl, setMenuAnchorEl] = useState();
-	const [quickReactionAnchorEl, setQuickReactionAnchorEl] = useState();
+	const [optionsChatMessage, setOptionsChatMessage] =
+		useState<ChatMessageModel>();
+	const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement>();
+	const [quickReactionAnchorEl, setQuickReactionAnchorEl] =
+		useState<HTMLElement>();
 	const [reactionsEmojiPickerAnchorEl, setReactionsEmojiPickerAnchorEl] =
-		useState();
-	const [reactionDetailsAnchorEl, setReactionDetailsAnchorEl] = useState();
+		useState<HTMLElement>();
+	const [reactionDetailsAnchorEl, setReactionDetailsAnchorEl] =
+		useState<HTMLElement>();
 
-	const displayOptionsMenu = (event, chatMessage) => {
+	const displayOptionsMenu = (
+		event: React.MouseEvent<Element | MouseEvent>,
+		chatMessage: ChatMessageModel
+	) => {
 		// We need to use parent because menu view gets hidden
-		setMenuAnchorEl(event.currentTarget);
+		setMenuAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
 	};
 
-	const displayQuickReactions = (event, chatMessage) => {
-		setQuickReactionAnchorEl(event.currentTarget);
+	const displayQuickReactions = (
+		event: React.MouseEvent<Element | MouseEvent>,
+		chatMessage: ChatMessageModel
+	) => {
+		setQuickReactionAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
 	};
 
-	const displayReactionDetails = (event, chatMessage) => {
-		setReactionDetailsAnchorEl(event.currentTarget);
+	const displayReactionDetails = (
+		event: React.MouseEvent<Element | MouseEvent>,
+		chatMessage: ChatMessageModel
+	) => {
+		setReactionDetailsAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
 	};
 
 	const retrieveChat = () => {
 		apiService.retrieveChatCall(
 			waId,
-			cancelTokenSourceRef.current.token,
+			cancelTokenSourceRef.current?.token,
 			(response: AxiosResponse) => {
 				const preparedChat = new ChatModel(response.data);
 				setChat(preparedChat);
@@ -983,18 +1026,18 @@ const Chat: React.FC = (props) => {
 		);
 	};
 
-	const retrievePerson = (loadMessages) => {
+	const retrievePerson = (loadMessages: boolean) => {
 		apiService.retrievePersonCall(
 			waId,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				const preparedPerson = new PersonModel(response.data);
 				setPerson(preparedPerson);
 				setExpired(preparedPerson.isExpired);
 
 				// Person information is loaded, now load messages
-				if (loadMessages !== undefined && loadMessages === true) {
-					listMessages(true, function (preparedMessages) {
+				if (loadMessages) {
+					listMessages(true, function (preparedMessages: ChatMessageList) {
 						const lastPreparedMessage = getLastObject(preparedMessages);
 						setLastMessageId(
 							lastPreparedMessage?.id ??
@@ -1009,12 +1052,12 @@ const Chat: React.FC = (props) => {
 					});
 				}
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response?.status === 404) {
-					if (location.person) {
+					if (location.state.person) {
 						createPersonAndStartChat(
-							location.person.name,
-							location.person.initials
+							location.state.person.name,
+							location.state.person.initials
 						);
 					} else {
 						// To prevent missing data on refresh
@@ -1029,7 +1072,7 @@ const Chat: React.FC = (props) => {
 		);
 	};
 
-	let verifyPhoneNumberCancelTokenSourceRef = useRef();
+	let verifyPhoneNumberCancelTokenSourceRef = useRef<CancelTokenSource>();
 
 	const verifyContact = () => {
 		const onError = () => {
@@ -1044,8 +1087,8 @@ const Chat: React.FC = (props) => {
 
 		apiService.verifyContactsCall(
 			[phoneNumber],
-			verifyPhoneNumberCancelTokenSourceRef.current.token,
-			(response) => {
+			verifyPhoneNumberCancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				if (
 					response.data.contacts &&
 					response.data.contacts.length > 0 &&
@@ -1064,14 +1107,14 @@ const Chat: React.FC = (props) => {
 					onError();
 				}
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.error(error);
 				onError();
 			}
 		);
 	};
 
-	const createPersonAndStartChat = (name, initials) => {
+	const createPersonAndStartChat = (name: string, initials?: string) => {
 		const preparedPerson = new PersonModel({});
 		preparedPerson.name = name;
 		preparedPerson.initials = initials;
@@ -1086,13 +1129,13 @@ const Chat: React.FC = (props) => {
 	};
 
 	const listMessages = (
-		isInitial,
-		callback,
-		beforeTime,
-		offset,
-		sinceTime,
-		isInitialWithSinceTime,
-		replaceAll
+		isInitial: boolean,
+		callback?: (preparedMessages: ChatMessageList) => void,
+		beforeTime?: number,
+		offset?: number,
+		sinceTime?: number,
+		isInitialWithSinceTime?: boolean,
+		replaceAll?: boolean
 	) => {
 		console.log('Loading messages...');
 
@@ -1122,8 +1165,8 @@ const Chat: React.FC = (props) => {
 			undefined,
 			beforeTime,
 			sinceTime,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				const chatMessagesResponse = new ChatMessagesResponse(
 					response.data,
 					messages,
@@ -1194,7 +1237,7 @@ const Chat: React.FC = (props) => {
 					);
 				}
 			},
-			(error) => {
+			(error: AxiosError) => {
 				setLoadingMoreMessages(false);
 
 				if (isInitial && !axios.isCancel(error)) {
@@ -1207,21 +1250,21 @@ const Chat: React.FC = (props) => {
 
 	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
 	const finishLoadingMessages = (
-		preparedMessages,
-		preparedReactions,
-		isInitial,
-		callback,
-		replaceAll,
-		beforeTime,
-		sinceTime
+		preparedMessages: ChatMessageList,
+		preparedReactions: ReactionList,
+		isInitial: boolean,
+		callback?: (messages: ChatMessageList) => void,
+		replaceAll?: boolean,
+		beforeTime?: number,
+		sinceTime?: number
 	) => {
 		// Sort prepared messages
 		preparedMessages = sortMessagesAsc(preparedMessages);
 
 		if (getObjLength(preparedMessages) > 0) {
 			// To persist scroll position, we store current scroll information
-			const prevScrollTop = messagesContainer.current.scrollTop;
-			const prevScrollHeight = messagesContainer.current.scrollHeight;
+			const prevScrollTop = messagesContainer.current?.scrollTop;
+			const prevScrollHeight = messagesContainer.current?.scrollHeight;
 
 			flushSync(() => {
 				setMessages((prevState) => {
@@ -1257,7 +1300,9 @@ const Chat: React.FC = (props) => {
 					SCROLL_OFFSET
 				);
 			} else if (sinceTime) {
-				messagesContainer.current.scrollTop = prevScrollTop;
+				if (messagesContainer.current) {
+					messagesContainer.current.scrollTop = prevScrollTop ?? 0;
+				}
 			}
 		} else {
 			if (beforeTime) {
@@ -1307,22 +1352,22 @@ const Chat: React.FC = (props) => {
 	};
 
 	const listChatAssignmentEvents = (
-		preparedMessages,
-		preparedReactions,
-		isInitial,
-		callback,
-		replaceAll,
-		beforeTime,
-		sinceTime,
-		beforeTimeForEvents,
-		sinceTimeForEvents
+		preparedMessages: ChatMessageList,
+		preparedReactions: ReactionList,
+		isInitial: boolean,
+		callback?: (messages: ChatMessageList) => void,
+		replaceAll?: boolean,
+		beforeTime?: number,
+		sinceTime?: number,
+		beforeTimeForEvents?: number,
+		sinceTimeForEvents?: number
 	) => {
 		apiService.listChatAssignmentEventsCall(
 			waId,
 			beforeTimeForEvents,
 			sinceTimeForEvents,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				const chatAssignmentEventsResponse = new ChatAssignmentEventsResponse(
 					response.data,
 					true
@@ -1350,22 +1395,22 @@ const Chat: React.FC = (props) => {
 	};
 
 	const listChatTaggingEvents = (
-		preparedMessages,
-		preparedReactions,
-		isInitial,
-		callback,
-		replaceAll,
-		beforeTime,
-		sinceTime,
-		beforeTimeForEvents,
-		sinceTimeForEvents
+		preparedMessages: ChatMessageList,
+		preparedReactions: ReactionList,
+		isInitial: boolean,
+		callback?: (messages: ChatMessageList) => void,
+		replaceAll?: boolean,
+		beforeTime?: number,
+		sinceTime?: number,
+		beforeTimeForEvents?: number,
+		sinceTimeForEvents?: number
 	) => {
 		apiService.listChatTaggingEventsCall(
 			waId,
 			beforeTimeForEvents,
 			sinceTimeForEvents,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			(response: AxiosResponse) => {
 				const chatTaggingEventsResponse = new ChatTaggingEventsResponse(
 					response.data,
 					true
@@ -1391,12 +1436,12 @@ const Chat: React.FC = (props) => {
 	};
 
 	const queueMessage = (
-		requestBody,
-		successCallback,
-		errorCallback,
-		completeCallback,
-		formData,
-		chosenFile
+		requestBody: any,
+		successCallback?: () => void,
+		errorCallback?: () => void,
+		completeCallback?: () => void,
+		formData?: any,
+		chosenFile?: ChosenFileClass
 	) => {
 		const uniqueID = generateUniqueID();
 
@@ -1419,7 +1464,7 @@ const Chat: React.FC = (props) => {
 		props.setPendingMessages([...updatedState]);
 	};
 
-	const sendCustomTextMessage = (text) => {
+	const sendCustomTextMessage = (text: string) => {
 		sendMessage(true, undefined, {
 			wa_id: waId,
 			type: ChatMessageModel.TYPE_TEXT,
@@ -1429,7 +1474,7 @@ const Chat: React.FC = (props) => {
 		});
 	};
 
-	const bulkSendMessage = (type, payload) => {
+	const bulkSendMessage = (type: string, payload?: BulkSendPayload) => {
 		dispatch(setSelectionModeEnabled(true));
 		dispatch(setBulkSend(true));
 
@@ -1443,7 +1488,9 @@ const Chat: React.FC = (props) => {
 			};
 		}
 
-		props.setBulkSendPayload(payload);
+		if (payload) {
+			props.setBulkSendPayload(payload);
+		}
 
 		// Close chat on mobile
 		if (isMobileOnly) {
@@ -1451,7 +1498,7 @@ const Chat: React.FC = (props) => {
 		}
 	};
 
-	const sanitizeRequestBody = (requestBody) => {
+	const sanitizeRequestBody = (requestBody: any) => {
 		const sanitizedRequestBody = { ...requestBody };
 		delete sanitizedRequestBody['pendingMessageUniqueId'];
 		return sanitizedRequestBody;
@@ -1469,10 +1516,10 @@ const Chat: React.FC = (props) => {
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
-			(response) => {
+			() => {
 				// Done
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response) {
 					const status = error.response.status;
 					if (status === 453) {
@@ -1486,11 +1533,11 @@ const Chat: React.FC = (props) => {
 	};
 
 	const sendMessage = (
-		willQueue,
-		e,
-		customPayload,
-		successCallback,
-		completeCallback
+		willQueue: boolean,
+		e?: Event | React.KeyboardEvent | React.MouseEvent,
+		customPayload?: object,
+		successCallback?: () => void,
+		completeCallback?: () => void
 	) => {
 		e?.preventDefault();
 
@@ -1500,7 +1547,7 @@ const Chat: React.FC = (props) => {
 			return false;
 		}
 
-		let requestBody;
+		let requestBody: object = {};
 
 		if (e) {
 			const preparedInput = decode(translateHTMLInputToText(input).trim());
@@ -1537,7 +1584,7 @@ const Chat: React.FC = (props) => {
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
-			(response) => {
+			(response: AxiosResponse) => {
 				// Message is stored and will be sent later
 				if (response.status === 202) {
 					displayMessageInChatManually(requestBody, response);
@@ -1546,7 +1593,7 @@ const Chat: React.FC = (props) => {
 				successCallback?.();
 				completeCallback?.();
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response) {
 					const status = error.response.status;
 					// Switch to expired mode if status code is 453
@@ -1568,17 +1615,17 @@ const Chat: React.FC = (props) => {
 	};
 
 	const sendTemplateMessage = (
-		willQueue,
-		templateMessage,
-		customPayload,
-		successCallback,
-		completeCallback
+		willQueue: boolean,
+		templateMessage?: TemplateModel,
+		customPayload?: object,
+		successCallback?: () => void,
+		completeCallback?: () => void
 	) => {
-		let requestBody;
+		let requestBody: any = {};
 
 		if (customPayload) {
 			requestBody = customPayload;
-		} else {
+		} else if (templateMessage) {
 			requestBody = generateTemplateMessagePayload(templateMessage);
 			requestBody.wa_id = waId;
 		}
@@ -1596,7 +1643,7 @@ const Chat: React.FC = (props) => {
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
-			(response) => {
+			(response: AxiosResponse) => {
 				// Message is stored and will be sent later
 				if (response.status === 202) {
 					displayMessageInChatManually(requestBody, response);
@@ -1608,7 +1655,7 @@ const Chat: React.FC = (props) => {
 				// Hide dialog by this event
 				PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response) {
 					const errors = error.response.data?.waba_response?.errors;
 					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
@@ -1630,13 +1677,13 @@ const Chat: React.FC = (props) => {
 	};
 
 	const sendInteractiveMessage = (
-		willQueue,
-		interactiveMessage,
-		customPayload,
-		successCallback,
-		completeCallback
+		willQueue: boolean,
+		interactiveMessage?: object,
+		customPayload?: object,
+		successCallback?: () => void,
+		completeCallback?: () => void
 	) => {
-		let requestBody;
+		let requestBody: object;
 
 		if (customPayload) {
 			requestBody = customPayload;
@@ -1661,7 +1708,7 @@ const Chat: React.FC = (props) => {
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
-			(response) => {
+			(response: AxiosResponse) => {
 				// Message is stored and will be sent later
 				if (response.status === 202) {
 					displayMessageInChatManually(requestBody, response);
@@ -1670,7 +1717,7 @@ const Chat: React.FC = (props) => {
 				successCallback?.();
 				completeCallback?.();
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response) {
 					const status = error.response.status;
 
@@ -1688,13 +1735,18 @@ const Chat: React.FC = (props) => {
 		);
 	};
 
-	const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
+	const uploadMedia = (
+		chosenFile: ChosenFileClass,
+		payload: any,
+		formData: any,
+		completeCallback: () => void
+	) => {
 		// To display a progress
 		props.setUploadingMedia(true);
 
 		apiService.uploadMediaCall(
 			formData,
-			(response) => {
+			(response: AxiosResponse) => {
 				// Convert parameters to a ChosenFile object
 				sendFile(
 					payload?.wa_id,
@@ -1707,7 +1759,7 @@ const Chat: React.FC = (props) => {
 					}
 				);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response) {
 					if (error.response) {
 						handleIfUnauthorized(error);
@@ -1722,17 +1774,17 @@ const Chat: React.FC = (props) => {
 	};
 
 	const sendFile = (
-		receiverWaId,
-		fileURL,
-		chosenFile,
-		customPayload,
-		completeCallback
+		receiverWaId: string | undefined,
+		fileURL: string | undefined,
+		chosenFile: ChosenFileClass | undefined,
+		customPayload: object | undefined,
+		completeCallback?: () => void
 	) => {
-		let requestBody;
+		let requestBody: object = {};
 
 		if (customPayload) {
 			requestBody = customPayload;
-		} else {
+		} else if (chosenFile) {
 			requestBody = prepareSendFilePayload(chosenFile, fileURL);
 			requestBody = {
 				...requestBody,
@@ -1744,16 +1796,16 @@ const Chat: React.FC = (props) => {
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
-			(response) => {
+			(response: AxiosResponse) => {
 				// Message is stored and will be sent later
 				if (response.status === 202) {
 					displayMessageInChatManually(requestBody, response);
 				}
 
 				// Send next request (or resend callback)
-				completeCallback();
+				completeCallback?.();
 			},
-			(error) => {
+			(error: AxiosError) => {
 				if (error.response) {
 					const status = error.response.status;
 
@@ -1769,13 +1821,16 @@ const Chat: React.FC = (props) => {
 				// Send next when it fails, a retry can be considered
 				// If custom payload is empty, it means it is resending, so it is just a success callback
 				if (!customPayload) {
-					completeCallback();
+					completeCallback?.();
 				}
 			}
 		);
 	};
 
-	const displayMessageInChatManually = (requestBody, response) => {
+	const displayMessageInChatManually = (
+		requestBody: any,
+		response: AxiosResponse
+	) => {
 		flushSync(() => {
 			setMessages((prevState) => {
 				let text;
@@ -1796,7 +1851,7 @@ const Chat: React.FC = (props) => {
 				const storedMessage = new ChatMessageModel();
 				storedMessage.getchatId = getchatId;
 				storedMessage.id = storedMessage.generateInternalIdString();
-				storedMessage.waId = waId;
+				storedMessage.waId = waId ?? '';
 				storedMessage.type = requestBody.type;
 				storedMessage.text = text;
 
@@ -1837,7 +1892,7 @@ const Chat: React.FC = (props) => {
 		});
 	};
 
-	const handleFailedMessage = (requestBody) => {
+	const handleFailedMessage = (requestBody: any) => {
 		//displayMessageInChatManually(requestBody, false);
 
 		// Mark message in queue as failed
@@ -1873,6 +1928,7 @@ const Chat: React.FC = (props) => {
 				break;
 			default:
 				if (
+					message.type &&
 					[
 						ChatMessageModel.TYPE_AUDIO,
 						ChatMessageModel.TYPE_VIDEO,
@@ -1890,7 +1946,7 @@ const Chat: React.FC = (props) => {
 		setInput('');
 	};
 
-	const sendHandledChosenFiles = (preparedFiles) => {
+	const sendHandledChosenFiles = (preparedFiles: ChosenFileList) => {
 		if (isLoaded && preparedFiles) {
 			// Prepare and queue uploading and sending processes
 			Object.entries(preparedFiles).forEach((curFile) => {
@@ -1916,7 +1972,7 @@ const Chat: React.FC = (props) => {
 		}
 	};
 
-	const handleDrop = (event) => {
+	const handleDrop = (event: React.DragEvent<HTMLElement>) => {
 		if (waId) {
 			setSelectedFiles(getDroppedFiles(event));
 		} else {
@@ -1924,24 +1980,24 @@ const Chat: React.FC = (props) => {
 		}
 	};
 
-	const markAsReceived = (timestamp) => {
+	const markAsReceived = (timestamp: number) => {
 		apiService.markAsReceivedCall(
 			waId,
 			timestamp,
-			cancelTokenSourceRef.current.token,
-			(response) => {
+			cancelTokenSourceRef.current?.token,
+			() => {
 				PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
 				setCurrentNewMessages(0);
 			},
-			(error) => {
+			(error: AxiosError) => {
 				console.log(error);
 			},
 			navigate
 		);
 	};
 
-	const handleIfUnauthorized = (error) => {
-		if (error.response.status === 401) {
+	const handleIfUnauthorized = (error: AxiosError) => {
+		if (error.response?.status === 401) {
 			clearUserSession('invalidToken', undefined, navigate);
 		}
 	};
@@ -1972,13 +2028,14 @@ const Chat: React.FC = (props) => {
 		};
 
 		const handleSavedResponseCommand = () => {
-			const savedResponseId = commandArray[1] ?? '';
-			if (savedResponseId > 0) {
+			const savedResponseId = commandArray[1]
+				? parseInt(commandArray[1])
+				: null;
+			if (savedResponseId && savedResponseId > 0) {
 				console.log('Send saved response: ' + savedResponseId);
 
 				const savedResponse = Object.values(savedResponses).filter(
-					(curSavedResponse) =>
-						curSavedResponse.id?.toString() === savedResponseId
+					(curSavedResponse) => curSavedResponse.id === savedResponseId
 				)[0];
 
 				if (savedResponse) {
@@ -2047,8 +2104,8 @@ const Chat: React.FC = (props) => {
 		}
 	};
 
-	let lastPrintedDate;
-	let lastSenderWaId;
+	let lastPrintedDate: moment.Moment | undefined;
+	let lastSenderWaId: string | undefined;
 
 	return (
 		<div
@@ -2072,7 +2129,7 @@ const Chat: React.FC = (props) => {
 				setChatTagsVisible={props.setChatTagsVisible}
 				closeChat={closeChat}
 				hasFailedMessages={props.hasFailedMessages}
-				waId={waId}
+				waId={waId ?? ''}
 			/>
 
 			{/* FOR TESTING QUEUE */}
@@ -2154,7 +2211,7 @@ const Chat: React.FC = (props) => {
 							<ChatMessage
 								data={message[1]}
 								reactionsHistory={reactions[message[0]] ?? []}
-								templateData={templates[message[1].templateName]}
+								templateData={templates[message[1]?.templateName ?? '']}
 								displaySender={willDisplaySender}
 								displayDate={willDisplayDate}
 								isExpired={isExpired}
@@ -2197,7 +2254,6 @@ const Chat: React.FC = (props) => {
 				}
 				anchorElement={reactionDetailsAnchorEl}
 				setAnchorElement={setReactionDetailsAnchorEl}
-				onReaction={sendReaction}
 			/>
 
 			{isTemplatesVisible && (
@@ -2278,7 +2334,6 @@ const Chat: React.FC = (props) => {
 					setData={setPreviewSendMediaData}
 					setPreviewSendMediaVisible={setPreviewSendMediaVisible}
 					sendHandledChosenFiles={sendHandledChosenFiles}
-					accept={accept}
 				/>
 			)}
 		</div>

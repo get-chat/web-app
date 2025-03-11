@@ -1,24 +1,32 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import { Checkbox, ListItem } from '@mui/material';
 import '../../../styles/SelectableChatTag.css';
 import SellIcon from '@mui/icons-material/Sell';
+import TagModel from '@src/api/models/TagModel';
 
-function SelectableChatTag(props) {
+interface Props {
+	data: TagModel;
+	selectedTags: number[];
+	setSelectedTags: (data: any) => void;
+}
+
+const SelectableChatTag: React.FC<Props> = ({
+	data,
+	selectedTags,
+	setSelectedTags,
+}) => {
 	const [isSelected, setSelected] = useState(false);
 
 	useEffect(() => {
-		setSelected(props.selectedTags.includes(props.data.id));
-	}, [props.selectedTags]);
+		setSelected(selectedTags.includes(data.id));
+	}, [selectedTags]);
 
 	const handleClick = () => {
-		props.setSelectedTags((prevState) => {
-			if (prevState.includes(props.data.id)) {
-				prevState = prevState.filter(
-					(arrayItem) => arrayItem !== props.data.id
-				);
+		setSelectedTags((prevState: number[]) => {
+			if (prevState.includes(data.id)) {
+				prevState = prevState.filter((arrayItem) => arrayItem !== data.id);
 			} else {
-				prevState.push(props.data.id);
+				prevState.push(data.id);
 			}
 
 			return [...prevState];
@@ -34,12 +42,12 @@ function SelectableChatTag(props) {
 					color="primary"
 				/>
 				<div className="sidebarTag__selection__tag">
-					<SellIcon style={{ fill: props.data.color }} />
-					{props.data.name}
+					<SellIcon style={{ fill: data.color }} />
+					{data.name}
 				</div>
 			</div>
 		</ListItem>
 	);
-}
+};
 
 export default SelectableChatTag;

@@ -131,7 +131,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, finishBulkSendMessage }) => {
 		setActiveStep(STEP_PREVIEW_RESULT);
 	};
 
-	const updateHeaderMediaParam = (value, index, format) => {
+	const updateHeaderMediaParam = (
+		value: string | undefined | null,
+		index: number,
+		format: string
+	) => {
 		setParams((prevState) => {
 			const nextState = prevState;
 			nextState[index][0][format.toLowerCase()].link = value;
@@ -139,7 +143,11 @@ const BulkSendTemplateViaCSV = ({ open, setOpen, finishBulkSendMessage }) => {
 		});
 	};
 
-	const updateParam = (value, index, paramKey) => {
+	const updateParam = (
+		value: string[] | string | undefined | null,
+		index: number,
+		paramKey: string
+	) => {
 		setParams((prevState) => {
 			const nextState = prevState;
 			// Parameter value is an array for multiple choices

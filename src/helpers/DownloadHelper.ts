@@ -4,7 +4,7 @@ import { mimeToExtension } from '@src/helpers/ImageHelper';
 import { generateUniqueID } from '@src/helpers/Helpers';
 
 interface DownloadData {
-	source: string;
+	source?: string;
 }
 
 /**

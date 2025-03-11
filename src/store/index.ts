@@ -1,9 +1,8 @@
-// @ts-nocheck
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 
 import rootReducer from './reducers';
 
-function configureAppStore(preloadedState) {
+function configureAppStore(preloadedState: PreloadedState<any>) {
 	const store = configureStore({
 		reducer: rootReducer,
 		preloadedState,
@@ -14,6 +13,7 @@ function configureAppStore(preloadedState) {
 	});
 
 	if (process.env.NODE_ENV !== 'production' && module.hot) {
+		// @ts-ignore
 		module.hot.accept('./reducers', () => store.replaceReducer(rootReducer));
 	}
 

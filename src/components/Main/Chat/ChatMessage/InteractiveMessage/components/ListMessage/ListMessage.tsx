@@ -1,11 +1,16 @@
-// @ts-nocheck
 import React from 'react';
 
 import styles from './ListMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
+import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const ListMessage = ({ header, body, footer, action }) => {
-	const { sections } = action;
+const ListMessage: React.FC<InteractiveMessageProps> = ({
+	header,
+	body,
+	footer,
+	action,
+}) => {
+	const sections = action?.sections;
 
 	return (
 		<div className={styles.message}>
@@ -32,12 +37,22 @@ const ListMessage = ({ header, body, footer, action }) => {
 							<li key={title}>
 								<h3 className={styles.title}>{title}</h3>
 								<ul className={styles.list}>
-									{rows.map(({ id, title, description }) => (
-										<li key={id}>
-											<p>{title}</p>
-											<p className={styles.description}>{description}</p>
-										</li>
-									))}
+									{rows.map(
+										({
+											id,
+											title,
+											description,
+										}: {
+											id: string;
+											title: string;
+											description: string;
+										}) => (
+											<li key={id}>
+												<p>{title}</p>
+												<p className={styles.description}>{description}</p>
+											</li>
+										)
+									)}
 								</ul>
 							</li>
 						))}

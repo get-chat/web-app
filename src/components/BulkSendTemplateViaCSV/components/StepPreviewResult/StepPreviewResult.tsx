@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
 import ChatMessage from '../../../Main/Chat/ChatMessage/ChatMessage';
 import { ErrorBoundary } from '@sentry/react';
@@ -6,13 +5,20 @@ import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateFinalTemplateParams } from '@src/helpers/TemplateMessageHelper';
 import styles from './StepPreviewResult.module.css';
 import { useAppSelector } from '@src/store/hooks';
+import TemplateModel from '@src/api/models/TemplateModel';
 
-const StepPreviewResult = ({ template, params, csvData }) => {
-	const [messageData, setMessageData] = useState();
+interface Props {
+	template: TemplateModel;
+	params: any;
+	csvData: any;
+}
+
+const StepPreviewResult: React.FC<Props> = ({ template, params, csvData }) => {
+	const [messageData, setMessageData] = useState<ChatMessageModel>();
 
 	const templates = useAppSelector((state) => state.templates.value);
 
-	const replaceGetChatParamWithRealData = (string) => {
+	const replaceGetChatParamWithRealData = (string: string) => {
 		return string.replace(/\{{(.*?)\}}/g, function (match) {
 			const column = match
 				.replace('{{ GET_CHAT_CUSTOM.', '')
@@ -73,7 +79,7 @@ const StepPreviewResult = ({ template, params, csvData }) => {
 					<ErrorBoundary>
 						<ChatMessage
 							data={messageData}
-							templateData={templates[messageData.templateName]}
+							templateData={templates[messageData.templateName ?? '']}
 							disableMediaPreview
 							isInfoClickable={false}
 						/>

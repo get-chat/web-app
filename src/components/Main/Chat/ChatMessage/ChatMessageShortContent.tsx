@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
@@ -8,14 +7,36 @@ import PrintMessage from '../../../PrintMessage';
 import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
+import ReactionModel from '@src/api/models/ReactionModel';
+import TemplateModel from '@src/api/models/TemplateModel';
 
-function ChatMessageShortContent(props) {
+interface Props {
+	type: string;
+	text?: string | undefined | null;
+	caption?: string | undefined | null;
+	buttonText?: string | undefined | null;
+	interactiveButtonText?: string | undefined | null;
+	isLastMessageFromUs: boolean;
+	template?: TemplateModel | undefined;
+	reaction?: ReactionModel | undefined;
+}
+
+const ChatMessageShortContent: React.FC<Props> = ({
+	type,
+	text,
+	caption,
+	buttonText,
+	interactiveButtonText,
+	isLastMessageFromUs,
+	template,
+	reaction,
+}) => {
 	const templates = useAppSelector((state) => state.templates.value);
 	const { t } = useTranslation();
 
 	const print = () => {
-		if (props.type === ChatMessageModel.TYPE_TEMPLATE && props.template) {
-			const templateData = templates[props.template.name];
+		if (type === ChatMessageModel.TYPE_TEMPLATE && template) {
+			const templateData = templates[template.name];
 			if (templateData) {
 				const component = templateData.components?.filter(
 					(comp) => comp.type === 'BODY'
@@ -23,27 +44,24 @@ function ChatMessageShortContent(props) {
 				if (component) {
 					return insertTemplateComponentParameters(
 						component,
-						props.template.components
+						template.components
 					);
 				}
 			}
 		} else if (
-			[ChatMessageModel.TYPE_TEXT, ChatMessageModel.TYPE_BUTTON].includes(
-				props.type
-			)
+			[ChatMessageModel.TYPE_TEXT, ChatMessageModel.TYPE_BUTTON].includes(type)
 		) {
-			const text =
-				props.text ?? props.buttonText ?? props.interactiveButtonText;
-			return <PrintMessage message={text} smallEmoji={true} />;
-		} else if (props.type === ChatMessageModel.TYPE_REACTION) {
+			const finalText = text ?? buttonText ?? interactiveButtonText ?? '';
+			return <PrintMessage message={finalText} smallEmoji={true} />;
+		} else if (type === ChatMessageModel.TYPE_REACTION) {
 			let rawText = '';
-			if (props.isLastMessageFromUs) {
-				rawText = props.reaction?.emoji
-					? t('You reacted with: %s', props.reaction.emoji)
+			if (isLastMessageFromUs) {
+				rawText = reaction?.emoji
+					? t('You reacted with: %s', reaction.emoji)
 					: t('You deleted a reaction.');
 			} else {
-				rawText = props.reaction?.emoji
-					? t('Reacted with: %s', props.reaction.emoji)
+				rawText = reaction?.emoji
+					? t('Reacted with: %s', reaction.emoji)
 					: t('Deleted a reaction.');
 			}
 
@@ -53,10 +71,10 @@ function ChatMessageShortContent(props) {
 
 		return (
 			<span>
-				{props.caption && props.caption.length > 0 ? (
-					<PrintMessage message={props.caption} smallEmoji={true} />
+				{caption && caption.length > 0 ? (
+					<PrintMessage message={caption} smallEmoji={true} />
 				) : (
-					<ChatMessageTypeLabel type={props.type} />
+					<ChatMessageTypeLabel type={type} />
 				)}
 			</span>
 		);
@@ -64,11 +82,11 @@ function ChatMessageShortContent(props) {
 
 	return (
 		<div>
-			{props.isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
-			<ChatMessageTypeIcon type={props.type} />
+			{isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
+			<ChatMessageTypeIcon type={type} />
 			{print()}
 		</div>
 	);
-}
+};
 
 export default ChatMessageShortContent;

@@ -8,11 +8,13 @@ import {
 	handleIfUnauthorized,
 } from '../helpers/ApiHelper';
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
+import { AppConfig } from '@src/config/application';
 
 export class ApiService {
 	public apiBaseURL: string = '';
+	public config: AppConfig;
 
-	constructor(config) {
+	constructor(config: AppConfig) {
 		this.config = config;
 		this.apiBaseURL = config.API_BASE_URL;
 	}

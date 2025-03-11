@@ -1,8 +1,7 @@
-// @ts-nocheck
 import * as Sentry from '@sentry/browser';
 import { mimeDB } from './MimeHelper';
 
-export const binaryToBase64 = (data) => {
+export const binaryToBase64 = (data: ArrayBuffer) => {
 	try {
 		return btoa(
 			new Uint8Array(data).reduce(
@@ -15,7 +14,7 @@ export const binaryToBase64 = (data) => {
 	}
 };
 
-export const mimeToExtension = (mime) => {
+export const mimeToExtension = (mime: string) => {
 	mime = mime.trim().toLowerCase();
 	if (!mimeDB.hasOwnProperty(mime)) return '';
 	return mimeDB[mime][0];

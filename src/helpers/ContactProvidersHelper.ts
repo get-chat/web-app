@@ -1,12 +1,11 @@
-// @ts-nocheck
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 
-export const prepareContactProvidersData = (rawData) => {
-	let contactProvidersData = {};
+export const prepareContactProvidersData = (rawData: any[]) => {
+	let contactProvidersData: { [key: string]: any } = {};
 	rawData.forEach((contact) => {
-		const contactPhoneNumbers = contact.phone_numbers;
+		const contactPhoneNumbers: any[] = contact.phone_numbers;
 
-		const processedPhoneNumbers = [];
+		const processedPhoneNumbers: any[] = [];
 		contactPhoneNumbers.forEach((contactPhoneNumber) => {
 			const waId = prepareWaId(contactPhoneNumber.phone_number);
 
@@ -15,13 +14,14 @@ export const prepareContactProvidersData = (rawData) => {
 				return;
 			}
 
-			if (!(waId in contactProvidersData)) {
-				contactProvidersData[waId] = [];
+			if (waId) {
+				if (!(waId in contactProvidersData)) {
+					contactProvidersData[waId] = [];
+				}
+
+				contactProvidersData[waId].push(contact);
+				processedPhoneNumbers.push(waId);
 			}
-
-			contactProvidersData[waId].push(contact);
-
-			processedPhoneNumbers.push(waId);
 		});
 	});
 

@@ -1,8 +1,11 @@
-// @ts-nocheck
 import { sanitize } from './helpers/Helpers';
 
 class SavedResponseClass {
-	constructor(data) {
+	public id: string;
+	public text: string | undefined | null;
+	public timestamp: number;
+
+	constructor(data: any) {
 		this.id = data.id;
 		this.text = data.text;
 		this.timestamp = data.timestamp;

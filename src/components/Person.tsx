@@ -1,17 +1,29 @@
-// @ts-nocheck
 import React from 'react';
 import '../styles/Contact.css';
 import { ListItem } from '@mui/material';
 import ContactProviderHeader from './ContactProviderHeader';
 import CustomAvatar from '@src/components/CustomAvatar';
+import PersonModel from '@src/api/models/PersonModel';
 
-function Person(props) {
+interface Props {
+	data: PersonModel;
+	verifyPhoneNumber: (data: PersonModel, waId: string) => void;
+	contactProvidersData: { [key: string]: any };
+}
+
+const Person: React.FC<Props> = ({
+	data,
+	verifyPhoneNumber,
+	contactProvidersData,
+}) => {
 	const handleClick = () => {
-		goToChat(props.data.waId);
+		if (data.waId) {
+			goToChat(data.waId);
+		}
 	};
 
-	const goToChat = (waId) => {
-		props.verifyPhoneNumber(props.data, waId);
+	const goToChat = (waId: string) => {
+		verifyPhoneNumber(data, waId);
 	};
 
 	return (
@@ -20,25 +32,24 @@ function Person(props) {
 				<div className="contact" onClick={handleClick}>
 					<div className="contact__avatarWrapper">
 						<CustomAvatar
-							src={props.contactProvidersData[props.data.waId]?.[0]?.avatar}
-							generateBgColorBy={props.data.name}
+							src={contactProvidersData[data.waId ?? '']?.[0]?.avatar}
+							generateBgColorBy={data.name}
 						>
-							{props.data.initials}
+							{data.initials}
 						</CustomAvatar>
 						<ContactProviderHeader type="whatsapp" />
 					</div>
 					<div className="contact__info">
 						<h2>
-							{props.contactProvidersData[props.data.waId]?.[0]?.name ??
-								props.data.name}
+							{contactProvidersData[data.waId ?? '']?.[0]?.name ?? data.name}
 						</h2>
 
-						<div className="contact__info__phoneNumber">{props.data.waId}</div>
+						<div className="contact__info__phoneNumber">{data.waId}</div>
 					</div>
 				</div>
 			</ListItem>
 		</div>
 	);
-}
+};
 
 export default Person;

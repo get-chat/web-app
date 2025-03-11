@@ -1,11 +1,10 @@
-// @ts-nocheck
 import {
 	MAX_BULK_DIRECT_RECIPIENTS_DEFAULT,
 	MAX_BULK_TAG_RECIPIENTS_DEFAULT,
 } from '../Constants';
 import { isString } from './Helpers';
 
-export const prepareValue = (configValue, defaultValue) => {
+export const prepareValue = (configValue: any, defaultValue: any) => {
 	if (configValue) {
 		if (isString(configValue)) {
 			const parsed = parseInt(configValue);
