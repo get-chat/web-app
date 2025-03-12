@@ -12,7 +12,7 @@ import { Buffer } from 'buffer';
 import * as process from 'process';
 import { DragEvent } from 'react';
 
-export const prepareSelectedFiles = (selectedFiles: File[]) => {
+export const prepareSelectedFiles = (selectedFiles: FileList) => {
 	const preparedFiles: { [key: string]: ChosenFileClass } = {};
 	Object.entries(selectedFiles).forEach((file) => {
 		preparedFiles[file[0]] = new ChosenFileClass(file[0], file[1], true);

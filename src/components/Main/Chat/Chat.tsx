@@ -182,7 +182,7 @@ const Chat: React.FC<Props> = (props) => {
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
 
-	const [selectedFiles, setSelectedFiles] = useState<File[]>();
+	const [selectedFiles, setSelectedFiles] = useState<FileList>();
 	const [accept, setAccept] = useState('');
 
 	const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] =
@@ -964,8 +964,8 @@ const Chat: React.FC<Props> = (props) => {
 	}, [messages, isAtBottom]);
 
 	const handleChosenFiles = () => {
-		if (getObjLength(selectedFiles) > 0) {
-			const preparedFiles = prepareSelectedFiles(selectedFiles ?? []);
+		if (selectedFiles && getObjLength(selectedFiles) > 0) {
+			const preparedFiles = prepareSelectedFiles(selectedFiles);
 
 			setPreviewSendMediaData(preparedFiles);
 			setPreviewSendMediaVisible(true);
