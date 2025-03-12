@@ -138,7 +138,6 @@ const Sidebar: React.FC<any> = ({
 	selectedTags,
 	setSelectedTags,
 	finishBulkSendMessage,
-	setLoadingNow,
 	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
 	setBulkSendTemplateViaCSVVisible,
@@ -570,7 +569,7 @@ const Sidebar: React.FC<any> = ({
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
-			setLoadingNow('Chats');
+			dispatch(setState({ key: 'loadingComponent', value: 'Chats' }));
 		}
 
 		// Reset chats count

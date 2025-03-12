@@ -8,19 +8,19 @@ import { CircularProgress } from '@mui/material';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
-	loadingNow?: string | undefined | null;
 	isHideLogo: boolean;
 	isInitialResourceFailed: boolean;
 }
 
 const LoadingScreen: React.FC<Props> = ({
-	loadingNow,
 	isHideLogo,
 	isInitialResourceFailed,
 }) => {
 	const { t } = useTranslation();
 
-	const { loadingProgress } = useAppSelector((state) => state.UI);
+	const { loadingProgress, loadingComponent } = useAppSelector(
+		(state) => state.UI
+	);
 
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
 		useState(false);
@@ -34,7 +34,7 @@ const LoadingScreen: React.FC<Props> = ({
 			clearInterval(intervalId);
 			setLongTransactionInfoVisible(false);
 		};
-	}, [loadingNow]);
+	}, [loadingComponent]);
 
 	// const skip = () => {
 	//     props.setProgress(100);
@@ -59,7 +59,7 @@ const LoadingScreen: React.FC<Props> = ({
 
 			<div className="loadingScreen__details">
 				<CircularProgress size={20} />
-				{t(loadingNow ?? '')}
+				{t(loadingComponent ?? '')}
 			</div>
 
 			{isLongTransactionInfoVisible && (

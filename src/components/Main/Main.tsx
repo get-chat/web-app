@@ -89,6 +89,7 @@ function Main() {
 
 	const {
 		loadingProgress,
+		loadingComponent,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -104,7 +105,6 @@ function Main() {
 
 	const { waId } = useParams();
 
-	const [loadingNow, setLoadingNow] = useState('');
 	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
 
 	const [checked, setChecked] = useState(false);
@@ -196,6 +196,10 @@ function Main() {
 		if (value > loadingProgress) {
 			dispatch(setState({ key: 'loadingProgress', value }));
 		}
+	};
+
+	const setLoadingComponent = (value: string) => {
+		dispatch(setState({ key: 'loadingComponent', value }));
 	};
 
 	const displaySuccess = (message: string) => {
@@ -761,7 +765,7 @@ function Main() {
 
 	// ** 2 **
 	const listUsers = async () => {
-		setLoadingNow('Users');
+		setLoadingComponent('Users');
 
 		try {
 			apiService.listUsersCall(5000, (response: AxiosResponse) => {
@@ -783,7 +787,7 @@ function Main() {
 
 	// ** 3 **
 	const listGroups = async () => {
-		setLoadingNow('Groups');
+		setLoadingComponent('Groups');
 
 		try {
 			apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
@@ -805,7 +809,7 @@ function Main() {
 
 	// ** 1 **
 	const retrieveCurrentUser = async () => {
-		setLoadingNow('Current User');
+		setLoadingComponent('Current User');
 
 		try {
 			apiService.retrieveCurrentUserCall((response: AxiosResponse) => {
@@ -832,7 +836,7 @@ function Main() {
 
 	// ** 6 **
 	const listTemplates = async (isRetry: boolean) => {
-		setLoadingNow('Templates');
+		setLoadingComponent('Templates');
 
 		const completeCallback = () => {
 			setLoadingTemplates(false);
@@ -920,12 +924,12 @@ function Main() {
 
 	// ** 4 **
 	const listContacts = async () => {
-		setLoadingNow('Contacts');
+		setLoadingComponent('Contacts');
 
 		// Check if it needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
-			setLoadingNow('Saved Responses');
+			setLoadingComponent('Saved Responses');
 			listSavedResponses();
 			return;
 		}
@@ -936,7 +940,7 @@ function Main() {
 			setContactProvidersData(preparedData);
 
 			setProgress(35);
-			setLoadingNow('Saved Responses');
+			setLoadingComponent('Saved Responses');
 
 			// Trigger next request
 			listSavedResponses();
@@ -1045,7 +1049,6 @@ function Main() {
 						selectedTags={selectedTags}
 						setSelectedTags={setSelectedTags}
 						finishBulkSendMessage={finishBulkSendMessage}
-						setLoadingNow={setLoadingNow}
 						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
 						setBulkSendTemplateWithCallbackDialogVisible={
@@ -1143,7 +1146,6 @@ function Main() {
 				<Fade in={loadingProgress < 100} timeout={{ exit: 1000 }} unmountOnExit>
 					<div className="loadingScreenOuter">
 						<LoadingScreen
-							loadingNow={loadingNow}
 							isInitialResourceFailed={isInitialResourceFailed}
 							isHideLogo={isHideLogo}
 						/>
