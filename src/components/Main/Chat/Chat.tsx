@@ -118,7 +118,6 @@ interface Props {
 	pendingMessages: PendingMessage[];
 	setPendingMessages: (value: PendingMessage[]) => void;
 	newMessages: { [key: string]: NewMessageModel };
-	setChosenContact: (value: PersonModel | undefined) => void;
 	createSavedResponse: (value: string) => void;
 	contactProvidersData: {
 		[key: string]: any;
@@ -398,7 +397,7 @@ const Chat: React.FC<Props> = (props) => {
 	}, [waId]);
 
 	useEffect(() => {
-		props.setChosenContact(person);
+		dispatch(setState({ chosenContact: person }));
 	}, [person]);
 
 	const getNewMessagesCount = () => {

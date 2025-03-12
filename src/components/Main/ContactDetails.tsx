@@ -18,24 +18,22 @@ import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
-import PersonModel from '@src/api/models/PersonModel';
 import ChatModel from '@src/api/models/ChatModel';
 import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
-	contactData: PersonModel | undefined;
 	contactProvidersData: { [key: string]: any };
 	retrieveContactData: (personWaId: string, onComplete?: () => void) => void;
 }
 
 const ContactDetails: React.FC<Props> = ({
-	contactData,
 	contactProvidersData,
 	retrieveContactData,
 }) => {
 	const { t } = useTranslation();
 
 	const chats = useAppSelector((state) => state.chats.value);
+	const { chosenContact: contactData } = useAppSelector((state) => state.UI);
 
 	const [chat, setChat] = useState<ChatModel>();
 

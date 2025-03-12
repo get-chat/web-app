@@ -1,4 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import PersonModel from '@src/api/models/PersonModel';
 
 interface UIState {
 	isReadOnly: boolean;
@@ -19,6 +20,7 @@ interface UIState {
 	lastSendAttemptAt: Date | undefined;
 	selectedTags: number[];
 	selectedChats: string[];
+	chosenContact: PersonModel | undefined;
 }
 
 const initialState: UIState = {
@@ -40,6 +42,7 @@ const initialState: UIState = {
 	lastSendAttemptAt: undefined,
 	selectedTags: [],
 	selectedChats: [],
+	chosenContact: undefined,
 };
 
 const closeSections = (state: Draft<UIState>) => {

@@ -76,7 +76,6 @@ import {
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import NewMessageModel from '@src/api/models/NewMessageModel';
-import PersonModel from '@src/api/models/PersonModel';
 import PendingMessage from '@src/interfaces/PendingMessage';
 
 function useQuery() {
@@ -120,7 +119,7 @@ function Main() {
 		[key: string]: NewMessageModel;
 	}>({});
 
-	const [templatesReady, setTemplatesReady] = useState(false);
+	const [isTemplatesReady, setTemplatesReady] = useState(false);
 
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
 	const [successMessage, setSuccessMessage] = useState('');
@@ -137,8 +136,6 @@ function Main() {
 		useState('');
 
 	const [unsupportedFile, setUnsupportedFile] = useState();
-
-	const [chosenContact, setChosenContact] = useState<PersonModel>();
 
 	const [messageWithStatuses, setMessageWithStatuses] =
 		useState<ChatMessageModel>();
@@ -1026,7 +1023,7 @@ function Main() {
 					(isMaximize ? ' maximized' : '')
 				}
 			>
-				{templatesReady && (
+				{isTemplatesReady && (
 					<Sidebar
 						isLoaded={loadingProgress >= 100}
 						pendingMessages={pendingMessages}
@@ -1053,12 +1050,11 @@ function Main() {
 					/>
 				)}
 
-				{templatesReady && (
+				{isTemplatesReady && (
 					<Chat
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						newMessages={newMessages}
-						setChosenContact={setChosenContact}
 						createSavedResponse={createSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
@@ -1081,7 +1077,6 @@ function Main() {
 
 				{isContactDetailsVisible && (
 					<ContactDetails
-						contactData={chosenContact}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 					/>
