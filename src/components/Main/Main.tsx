@@ -82,7 +82,7 @@ function useQuery() {
 	return new URLSearchParams(useLocation().search);
 }
 
-function Main() {
+const Main: React.FC = () => {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
@@ -94,6 +94,7 @@ function Main() {
 		isTemplatesFailed,
 		selectedTags,
 		selectedChats,
+		isChatAssignmentVisible,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -126,7 +127,6 @@ function Main() {
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
@@ -709,17 +709,15 @@ function Main() {
 		setChecked(true);
 
 		return () => {
-			// Hide search messages
-			dispatch(setState({ isSearchMessagesVisible: false }));
-
-			// Hide contact details
-			dispatch(setState({ isContactDetailsVisible: false }));
-
-			// Hide message statuses
-			dispatch(setState({ isMessageStatusesVisible: false }));
-
-			// Hide chat assignment
-			setChatAssignmentVisible(false);
+			// Hide search messages, contact details, message statuses and chat assignment
+			dispatch(
+				setState({
+					isSearchMessagesVisible: false,
+					isContactDetailsVisible: false,
+					isMessageStatusesVisible: false,
+					isChatAssignmentVisible: false,
+				})
+			);
 		};
 	}, [waId]);
 
@@ -1060,7 +1058,6 @@ function Main() {
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}
 						isChatOnly={isChatOnly}
-						setChatAssignmentVisible={setChatAssignmentVisible}
 						setChatTagsVisible={setChatTagsVisible}
 						setBulkSendPayload={setBulkSendPayload}
 						searchMessagesByKeyword={searchMessagesByKeyword}
@@ -1090,7 +1087,9 @@ function Main() {
 					<ChatAssignment
 						waId={waId}
 						open={isChatAssignmentVisible}
-						setOpen={setChatAssignmentVisible}
+						setOpen={(value: boolean) =>
+							dispatch(setState({ isChatAssignmentVisible: value }))
+						}
 					/>
 				)}
 
@@ -1193,6 +1192,6 @@ function Main() {
 			</div>
 		</Fade>
 	);
-}
+};
 
 export default Main;

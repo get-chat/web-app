@@ -21,6 +21,7 @@ interface UIState {
 	selectedTags: number[];
 	selectedChats: string[];
 	chosenContact: PersonModel | undefined;
+	isChatAssignmentVisible: boolean;
 }
 
 const initialState: UIState = {
@@ -43,6 +44,7 @@ const initialState: UIState = {
 	selectedTags: [],
 	selectedChats: [],
 	chosenContact: undefined,
+	isChatAssignmentVisible: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

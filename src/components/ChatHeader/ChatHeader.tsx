@@ -43,7 +43,6 @@ interface Props {
 	person?: PersonModel;
 	contactProvidersData: { [key: string]: any };
 	isChatOnly: boolean | Number;
-	setChatAssignmentVisible: (isVisible: boolean) => void;
 	setChatTagsVisible: (isVisible: boolean) => void;
 	closeChat: () => void;
 	waId: string;
@@ -54,7 +53,6 @@ const ChatHeader: React.FC<Props> = ({
 	person,
 	contactProvidersData,
 	isChatOnly,
-	setChatAssignmentVisible,
 	setChatTagsVisible,
 	closeChat,
 	waId,
@@ -92,7 +90,7 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	const showChatAssignmentAndHideMenu = () => {
-		setChatAssignmentVisible(true);
+		dispatch(setState({ isChatAssignmentVisible: true }));
 		hideMenu();
 	};
 

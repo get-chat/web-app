@@ -125,7 +125,6 @@ interface Props {
 	retrieveContactData: (personWaId: string, onComplete?: () => void) => void;
 	displayNotification: (title: string, body: string, chatWaId: string) => void;
 	isChatOnly: boolean;
-	setChatAssignmentVisible: (value: boolean) => void;
 	setChatTagsVisible: (value: boolean) => void;
 	setBulkSendPayload: (value: BulkSendPayload) => void;
 	searchMessagesByKeyword: (keyword: string) => void;
@@ -2116,7 +2115,6 @@ const Chat: React.FC<Props> = (props) => {
 				person={person}
 				contactProvidersData={props.contactProvidersData}
 				isChatOnly={props.isChatOnly}
-				setChatAssignmentVisible={props.setChatAssignmentVisible}
 				setChatTagsVisible={props.setChatTagsVisible}
 				closeChat={closeChat}
 				waId={waId ?? ''}
