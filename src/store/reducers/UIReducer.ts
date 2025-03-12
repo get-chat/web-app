@@ -13,6 +13,7 @@ interface UIState {
 	hasFailedMessages: boolean;
 	isBlurred: boolean;
 	isSendingPendingMessages: boolean;
+	isLoadingTemplates: boolean;
 }
 
 const initialState: UIState = {
@@ -28,6 +29,7 @@ const initialState: UIState = {
 	hasFailedMessages: false,
 	isBlurred: false,
 	isSendingPendingMessages: false,
+	isLoadingTemplates: true,
 };
 
 const closeSections = (state: Draft<UIState>) => {

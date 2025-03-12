@@ -124,7 +124,6 @@ interface Props {
 	newMessages: { [key: string]: NewMessageModel };
 	setChosenContact: (value: PersonModel | undefined) => void;
 	isTemplatesFailed: boolean;
-	isLoadingTemplates: boolean;
 	createSavedResponse: (value: string) => void;
 	contactProvidersData: {
 		[key: string]: any;
@@ -2256,7 +2255,6 @@ const Chat: React.FC<Props> = (props) => {
 			{isTemplatesVisible && (
 				<TemplateListWithControls
 					isTemplatesFailed={props.isTemplatesFailed}
-					isLoadingTemplates={props.isLoadingTemplates}
 					onSelect={(template: TemplateModel) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);

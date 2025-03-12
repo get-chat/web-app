@@ -3,19 +3,19 @@ import Alert from '@mui/material/Alert';
 import TemplatesList from '../TemplatesList';
 import { useTranslation } from 'react-i18next';
 import TemplateModel from '@src/api/models/TemplateModel';
+import { useAppSelector } from '@src/store/hooks';
 
 export type Props = {
-	isLoadingTemplates: boolean;
 	isTemplatesFailed: boolean;
 	onSelect: (template: TemplateModel) => void;
 };
 
 const TemplateListWithControls: React.FC<Props> = ({
-	isLoadingTemplates,
 	isTemplatesFailed,
 	onSelect,
 }) => {
 	const { t } = useTranslation();
+	const { isLoadingTemplates } = useAppSelector((state) => state.UI);
 
 	return (
 		<div className="templateMessagesOuter">

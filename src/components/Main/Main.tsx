@@ -121,7 +121,6 @@ function Main() {
 
 	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
-	const [isLoadingTemplates, setLoadingTemplates] = useState(true);
 	const [templatesReady, setTemplatesReady] = useState(false);
 
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
@@ -837,7 +836,7 @@ function Main() {
 		setLoadingComponent('Templates');
 
 		const completeCallback = () => {
-			setLoadingTemplates(false);
+			dispatch(setState({ isLoadingTemplates: false }));
 			setTemplatesReady(true);
 
 			setProgress(70);
@@ -1068,7 +1067,6 @@ function Main() {
 						newMessages={newMessages}
 						setChosenContact={setChosenContact}
 						isTemplatesFailed={isTemplatesFailed}
-						isLoadingTemplates={isLoadingTemplates}
 						createSavedResponse={createSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
@@ -1175,7 +1173,6 @@ function Main() {
 					open={isBulkSendTemplateDialogVisible}
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					isLoadingTemplates={isLoadingTemplates}
 					isTemplatesFailed={isTemplatesFailed}
 				/>
 
@@ -1183,7 +1180,6 @@ function Main() {
 					open={isBulkSendTemplateWithCallbackDialogVisible}
 					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					isLoadingTemplates={isLoadingTemplates}
 					isTemplatesFailed={isTemplatesFailed}
 					sendCallback={() => {
 						setUploadRecipientsCSVVisible(true);
