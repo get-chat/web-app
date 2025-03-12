@@ -2,10 +2,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 import styles from './ExportChatActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	selectedChats: string[];
-	selectedTags: any[];
 	onShowDateRange: () => void;
 	onExport: () => void;
 	onCancel: () => void;
@@ -13,12 +13,13 @@ interface Props {
 
 const ExportChatActions: React.FC<Props> = ({
 	selectedChats,
-	selectedTags,
 	onShowDateRange,
 	onExport,
 	onCancel,
 }) => {
 	const { t } = useTranslation();
+	const { selectedTags } = useAppSelector((state) => state.UI);
+
 	return (
 		<div className={styles.container}>
 			<h3>{t('Export Chats')}</h3>

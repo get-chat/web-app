@@ -2,10 +2,10 @@ import React from 'react';
 import { Button } from '@mui/material';
 import styles from './BulkSendActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	selectedChats: string[];
-	selectedTags: number[];
 	finishBulkSendMessage: () => void;
 	cancelSelection: () => void;
 	setUploadRecipientsCSVVisible: (value: boolean) => void;
@@ -13,12 +13,13 @@ interface Props {
 
 const BulkSendActions: React.FC<Props> = ({
 	selectedChats,
-	selectedTags,
 	finishBulkSendMessage,
 	cancelSelection,
 	setUploadRecipientsCSVVisible,
 }) => {
 	const { t } = useTranslation();
+	const { selectedTags } = useAppSelector((state) => state.UI);
+
 	return (
 		<div className={styles.container}>
 			<h3>{t('Bulk Send')}</h3>

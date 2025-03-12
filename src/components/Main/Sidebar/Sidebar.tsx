@@ -130,8 +130,6 @@ const Sidebar: React.FC<any> = ({
 	bulkSendPayload,
 	selectedChats,
 	setSelectedChats,
-	selectedTags,
-	setSelectedTags,
 	finishBulkSendMessage,
 	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
@@ -150,6 +148,7 @@ const Sidebar: React.FC<any> = ({
 		isSendingPendingMessages,
 		isUploadingMedia,
 		isReadOnly,
+		selectedTags,
 		isSelectionModeEnabled,
 		isBulkSend,
 		isExportChat,
@@ -812,7 +811,7 @@ const Sidebar: React.FC<any> = ({
 	const cancelSelection = () => {
 		dispatch(setSelectionModeEnabled(false));
 		setSelectedChats([]);
-		setSelectedTags([]);
+		dispatch(setState({ selectedTags: [] }));
 	};
 
 	const handleFinishBulkSendMessage = () => {
@@ -899,7 +898,6 @@ const Sidebar: React.FC<any> = ({
 			{isSelectionModeEnabled && isBulkSend && (
 				<BulkSendActions
 					selectedChats={selectedChats}
-					selectedTags={selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={handleFinishBulkSendMessage}
 					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
@@ -909,7 +907,6 @@ const Sidebar: React.FC<any> = ({
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
 					selectedChats={selectedChats}
-					selectedTags={selectedTags}
 					onShowDateRange={() => setDateRangeDialogVisible(true)}
 					onExport={() => {
 						// TODO: Export chats
@@ -1225,12 +1222,7 @@ const Sidebar: React.FC<any> = ({
 								<h3>{t('Tags')}</h3>
 								<div>
 									{Object.entries(tags).map((tag) => (
-										<SelectableChatTag
-											key={tag[0]}
-											data={tag[1]}
-											selectedTags={selectedTags}
-											setSelectedTags={setSelectedTags}
-										/>
+										<SelectableChatTag key={tag[0]} data={tag[1]} />
 									))}
 								</div>
 							</>

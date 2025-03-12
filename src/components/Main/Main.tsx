@@ -93,6 +93,7 @@ function Main() {
 		isBlurred,
 		isUploadingMedia,
 		isTemplatesFailed,
+		selectedTags,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -142,7 +143,6 @@ function Main() {
 		useState<ChatMessageModel>();
 
 	const [selectedChats, setSelectedChats] = useState<string[]>([]);
-	const [selectedTags, setSelectedTags] = useState<number[]>([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
@@ -269,7 +269,7 @@ function Main() {
 
 			// Clear selections
 			setSelectedChats([]);
-			setSelectedTags([]);
+			dispatch(setState({ selectedTags: [] }));
 
 			// Clear input if text message
 			if (messagePayload.type === 'text') {
@@ -753,7 +753,7 @@ function Main() {
 	useEffect(() => {
 		if (bulkSendPayload) {
 			setSelectedChats([]);
-			setSelectedTags([]);
+			dispatch(setState({ selectedTags: [] }));
 		}
 	}, [bulkSendPayload]);
 
@@ -1002,7 +1002,11 @@ function Main() {
 					preparedNewTags.push(curTag.id);
 				}
 			});
-			setSelectedTags([...new Set([...preparedNewTags, ...selectedTags])]);
+			dispatch(
+				setState({
+					selectedTags: [...new Set([...preparedNewTags, ...selectedTags])],
+				})
+			);
 		}
 	};
 
@@ -1035,8 +1039,6 @@ function Main() {
 						bulkSendPayload={bulkSendPayload}
 						selectedChats={selectedChats}
 						setSelectedChats={setSelectedChats}
-						selectedTags={selectedTags}
-						setSelectedTags={setSelectedTags}
 						finishBulkSendMessage={finishBulkSendMessage}
 						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}

@@ -17,6 +17,7 @@ interface UIState {
 	isUploadingMedia: boolean;
 	isTemplatesFailed: boolean;
 	lastSendAttemptAt: Date | undefined;
+	selectedTags: number[];
 }
 
 const initialState: UIState = {
@@ -36,6 +37,7 @@ const initialState: UIState = {
 	isUploadingMedia: false,
 	isTemplatesFailed: false,
 	lastSendAttemptAt: undefined,
+	selectedTags: [],
 };
 
 const closeSections = (state: Draft<UIState>) => {
