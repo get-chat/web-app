@@ -127,7 +127,6 @@ const Sidebar: React.FC<any> = ({
 	newMessages,
 	setNewMessages,
 	displayNotification,
-	isBlurred,
 	contactProvidersData,
 	isChatOnly,
 	setChatTagsListVisible,
@@ -150,6 +149,7 @@ const Sidebar: React.FC<any> = ({
 
 	const {
 		hasFailedMessages,
+		isBlurred,
 		isReadOnly,
 		isSelectionModeEnabled,
 		isBulkSend,

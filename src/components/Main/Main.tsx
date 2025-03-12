@@ -90,6 +90,7 @@ function Main() {
 	const {
 		loadingProgress,
 		hasFailedMessages,
+		isBlurred,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -108,7 +109,6 @@ function Main() {
 	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
 
 	const [checked, setChecked] = useState(false);
-	const [isBlurred, setBlurred] = useState(false);
 
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
@@ -698,11 +698,11 @@ function Main() {
 
 	useEffect(() => {
 		function onBlur() {
-			setBlurred(true);
+			dispatch(setState({ key: 'isBlurred', value: true }));
 		}
 
 		function onFocus() {
-			setBlurred(false);
+			dispatch(setState({ key: 'isBlurred', value: false }));
 		}
 
 		window.addEventListener('blur', onBlur);
@@ -1037,7 +1037,6 @@ function Main() {
 						setNewMessages={setNewMessages}
 						setProgress={setProgress}
 						displayNotification={displayNotification}
-						isBlurred={isBlurred}
 						contactProvidersData={contactProvidersData}
 						isChatOnly={isChatOnly}
 						setChatTagsListVisible={setChatTagsListVisible}
