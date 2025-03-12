@@ -91,6 +91,7 @@ function Main() {
 		loadingProgress,
 		hasFailedMessages,
 		isBlurred,
+		isUploadingMedia,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -112,8 +113,6 @@ function Main() {
 
 	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
 	const [lastSendAttemptAt, setLastSendAttemptAt] = useState<Date>();
-
-	const [isUploadingMedia, setUploadingMedia] = useState(false);
 
 	const [newMessages, setNewMessages] = useState<{
 		[key: string]: NewMessageModel;
@@ -1029,7 +1028,6 @@ function Main() {
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
-						isUploadingMedia={isUploadingMedia}
 						newMessages={newMessages}
 						setNewMessages={setNewMessages}
 						setProgress={setProgress}
@@ -1062,8 +1060,6 @@ function Main() {
 						setPendingMessages={setPendingMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
 						setLastSendAttemptAt={setLastSendAttemptAt}
-						isUploadingMedia={isUploadingMedia}
-						setUploadingMedia={setUploadingMedia}
 						newMessages={newMessages}
 						setChosenContact={setChosenContact}
 						isTemplatesFailed={isTemplatesFailed}
@@ -1203,7 +1199,6 @@ function Main() {
 					apiService={apiService}
 					open={isSendBulkVoiceMessageDialogVisible}
 					setOpen={setSendBulkVoiceMessageDialogVisible}
-					setUploadingMedia={setUploadingMedia}
 					setBulkSendPayload={setBulkSendPayload}
 				/>
 			</div>

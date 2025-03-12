@@ -119,8 +119,6 @@ interface Props {
 	setPendingMessages: (value: PendingMessage[]) => void;
 	lastSendAttemptAt?: Date | undefined;
 	setLastSendAttemptAt: (value: Date | undefined) => void;
-	isUploadingMedia: boolean;
-	setUploadingMedia: (value: boolean) => void;
 	newMessages: { [key: string]: NewMessageModel };
 	setChosenContact: (value: PersonModel | undefined) => void;
 	isTemplatesFailed: boolean;
@@ -1739,7 +1737,7 @@ const Chat: React.FC<Props> = (props) => {
 		completeCallback: () => void
 	) => {
 		// To display a progress
-		props.setUploadingMedia(true);
+		dispatch(setState({ isUploadingMedia: true }));
 
 		apiService.uploadMediaCall(
 			formData,
@@ -1752,7 +1750,7 @@ const Chat: React.FC<Props> = (props) => {
 					undefined,
 					function () {
 						completeCallback();
-						props.setUploadingMedia(false);
+						dispatch(setState({ isUploadingMedia: false }));
 					}
 				);
 			},
@@ -1765,7 +1763,7 @@ const Chat: React.FC<Props> = (props) => {
 
 				// A retry can be considered
 				completeCallback();
-				props.setUploadingMedia(false);
+				dispatch(setState({ isUploadingMedia: false }));
 			}
 		);
 	};
