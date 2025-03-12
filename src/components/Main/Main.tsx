@@ -89,7 +89,7 @@ function Main() {
 
 	const {
 		loadingProgress,
-		loadingComponent,
+		hasFailedMessages,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -112,7 +112,6 @@ function Main() {
 
 	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
-	const [hasFailedMessages, setHasFailedMessages] = useState(false);
 	const [lastSendAttemptAt, setLastSendAttemptAt] = useState<Date>();
 
 	const [isUploadingMedia, setUploadingMedia] = useState(false);
@@ -1032,7 +1031,6 @@ function Main() {
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
-						hasFailedMessages={hasFailedMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
 						isUploadingMedia={isUploadingMedia}
 						newMessages={newMessages}
@@ -1068,8 +1066,6 @@ function Main() {
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
 						setSendingPendingMessages={setSendingPendingMessages}
-						hasFailedMessages={hasFailedMessages}
-						setHasFailedMessages={setHasFailedMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
 						setLastSendAttemptAt={setLastSendAttemptAt}
 						isUploadingMedia={isUploadingMedia}

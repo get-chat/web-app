@@ -122,7 +122,6 @@ const Sidebar: React.FC<any> = ({
 	pendingMessages,
 	setPendingMessages,
 	isSendingPendingMessages,
-	hasFailedMessages,
 	lastSendAttemptAt,
 	isUploadingMedia,
 	newMessages,
@@ -149,8 +148,13 @@ const Sidebar: React.FC<any> = ({
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isReadOnly, isSelectionModeEnabled, isBulkSend, isExportChat } =
-		useAppSelector((state) => state.UI);
+	const {
+		hasFailedMessages,
+		isReadOnly,
+		isSelectionModeEnabled,
+		isBulkSend,
+		isExportChat,
+	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);

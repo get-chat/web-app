@@ -95,6 +95,7 @@ import decode from 'unescape';
 import {
 	setBulkSend,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import InteractiveMessageList from '@src/components/InteractiveMessageList';
@@ -118,8 +119,6 @@ interface Props {
 	setPendingMessages: (value: PendingMessage[]) => void;
 	isSendingPendingMessages: boolean;
 	setSendingPendingMessages: (value: boolean) => void;
-	hasFailedMessages: boolean;
-	setHasFailedMessages: (value: boolean) => void;
 	lastSendAttemptAt?: Date | undefined;
 	setLastSendAttemptAt: (value: Date | undefined) => void;
 	isUploadingMedia: boolean;
@@ -145,7 +144,7 @@ interface Props {
 const Chat: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { isReadOnly } = useAppSelector((state) => state.UI);
+	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
 
 	const { t } = useTranslation();
 
@@ -183,7 +182,7 @@ const Chat: React.FC<Props> = (props) => {
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
 
-	const [selectedFiles, setSelectedFiles] = useState();
+	const [selectedFiles, setSelectedFiles] = useState<File[]>();
 	const [accept, setAccept] = useState('');
 
 	const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] =
@@ -351,7 +350,7 @@ const Chat: React.FC<Props> = (props) => {
 		// If there is no failed message, update state
 		// This state is used for prompting user before leaving page
 		if (!hasFailedPendingMessages(props.pendingMessages)) {
-			props.setHasFailedMessages(false);
+			dispatch(setState({ key: 'hasFailedMessages', value: false }));
 		}
 
 		// If it is not sending currently and there are pending messages
@@ -966,7 +965,7 @@ const Chat: React.FC<Props> = (props) => {
 
 	const handleChosenFiles = () => {
 		if (getObjLength(selectedFiles) > 0) {
-			const preparedFiles = prepareSelectedFiles(selectedFiles);
+			const preparedFiles = prepareSelectedFiles(selectedFiles ?? []);
 
 			setPreviewSendMediaData(preparedFiles);
 			setPreviewSendMediaVisible(true);
@@ -1902,7 +1901,7 @@ const Chat: React.FC<Props> = (props) => {
 		props.setSendingPendingMessages(false);
 
 		// This will be used to display a warning before refreshing
-		props.setHasFailedMessages(true);
+		dispatch(setState({ key: 'hasFailedMessages', value: true }));
 
 		// Last attempt at
 		props.setLastSendAttemptAt(new Date());
@@ -2128,7 +2127,6 @@ const Chat: React.FC<Props> = (props) => {
 				setChatAssignmentVisible={props.setChatAssignmentVisible}
 				setChatTagsVisible={props.setChatTagsVisible}
 				closeChat={closeChat}
-				hasFailedMessages={props.hasFailedMessages}
 				waId={waId ?? ''}
 			/>
 

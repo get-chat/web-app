@@ -10,6 +10,7 @@ interface UIState {
 	isExportChat: boolean;
 	loadingProgress: number;
 	loadingComponent: string;
+	hasFailedMessages: boolean;
 }
 
 const initialState: UIState = {
@@ -22,6 +23,7 @@ const initialState: UIState = {
 	isExportChat: false,
 	loadingProgress: 0,
 	loadingComponent: '',
+	hasFailedMessages: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

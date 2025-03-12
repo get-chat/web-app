@@ -46,7 +46,6 @@ interface Props {
 	setChatAssignmentVisible: (isVisible: boolean) => void;
 	setChatTagsVisible: (isVisible: boolean) => void;
 	closeChat: () => void;
-	hasFailedMessages: boolean;
 	waId: string;
 }
 
@@ -58,12 +57,11 @@ const ChatHeader: React.FC<Props> = ({
 	setChatAssignmentVisible,
 	setChatTagsVisible,
 	closeChat,
-	hasFailedMessages,
 	waId,
 }) => {
 	const dispatch = useAppDispatch();
 
-	const { isReadOnly } = useAppSelector((state) => state.UI);
+	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
 
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
