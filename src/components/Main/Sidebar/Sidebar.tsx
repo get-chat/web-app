@@ -121,7 +121,6 @@ const Sidebar: React.FC<any> = ({
 	isLoaded,
 	pendingMessages,
 	setPendingMessages,
-	lastSendAttemptAt,
 	newMessages,
 	setNewMessages,
 	displayNotification,
@@ -1358,7 +1357,6 @@ const Sidebar: React.FC<any> = ({
 					pendingMessages={pendingMessages}
 					setPendingMessages={setPendingMessages}
 					isSendingPendingMessages={isSendingPendingMessages}
-					lastSendAttemptAt={lastSendAttemptAt}
 					contactProvidersData={contactProvidersData}
 					chats={chats}
 				/>

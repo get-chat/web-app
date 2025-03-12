@@ -16,6 +16,7 @@ interface UIState {
 	isLoadingTemplates: boolean;
 	isUploadingMedia: boolean;
 	isTemplatesFailed: boolean;
+	lastSendAttemptAt: Date | undefined;
 }
 
 const initialState: UIState = {
@@ -34,6 +35,7 @@ const initialState: UIState = {
 	isLoadingTemplates: true,
 	isUploadingMedia: false,
 	isTemplatesFailed: false,
+	lastSendAttemptAt: undefined,
 };
 
 const closeSections = (state: Draft<UIState>) => {

@@ -117,8 +117,6 @@ const MESSAGES_PER_PAGE = 30;
 interface Props {
 	pendingMessages: PendingMessage[];
 	setPendingMessages: (value: PendingMessage[]) => void;
-	lastSendAttemptAt?: Date | undefined;
-	setLastSendAttemptAt: (value: Date | undefined) => void;
 	newMessages: { [key: string]: NewMessageModel };
 	setChosenContact: (value: PersonModel | undefined) => void;
 	createSavedResponse: (value: string) => void;
@@ -1899,7 +1897,7 @@ const Chat: React.FC<Props> = (props) => {
 		dispatch(setState({ hasFailedMessages: true }));
 
 		// Last attempt at
-		props.setLastSendAttemptAt(new Date());
+		dispatch(setState({ lastSendAttemptAt: new Date() }));
 	};
 
 	const retryMessage = (message: ChatMessageModel) => {

@@ -113,7 +113,6 @@ function Main() {
 	const [checked, setChecked] = useState(false);
 
 	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
-	const [lastSendAttemptAt, setLastSendAttemptAt] = useState<Date>();
 
 	const [newMessages, setNewMessages] = useState<{
 		[key: string]: NewMessageModel;
@@ -1026,7 +1025,6 @@ function Main() {
 						isLoaded={loadingProgress >= 100}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
-						lastSendAttemptAt={lastSendAttemptAt}
 						newMessages={newMessages}
 						setNewMessages={setNewMessages}
 						setProgress={setProgress}
@@ -1057,8 +1055,6 @@ function Main() {
 					<Chat
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
-						lastSendAttemptAt={lastSendAttemptAt}
-						setLastSendAttemptAt={setLastSendAttemptAt}
 						newMessages={newMessages}
 						setChosenContact={setChosenContact}
 						createSavedResponse={createSavedResponse}

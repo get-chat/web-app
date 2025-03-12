@@ -12,6 +12,7 @@ import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
 import PendingMessage from '@src/interfaces/PendingMessage';
 import ChatList from '@src/interfaces/ChatList';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	pendingMessages: PendingMessage[];
@@ -19,7 +20,6 @@ interface Props {
 	contactProvidersData: { [key: string]: any };
 	chats: ChatList;
 	isSendingPendingMessages: boolean;
-	lastSendAttemptAt: Date | string | number;
 }
 
 const RetryFailedMessages: React.FC<Props> = ({
@@ -28,9 +28,10 @@ const RetryFailedMessages: React.FC<Props> = ({
 	contactProvidersData,
 	chats,
 	isSendingPendingMessages,
-	lastSendAttemptAt,
 }) => {
 	const { t } = useTranslation();
+
+	const { lastSendAttemptAt } = useAppSelector((state) => state.UI);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -43,7 +44,7 @@ const RetryFailedMessages: React.FC<Props> = ({
 
 		// Switch to chat of first failed message
 		const firstFailedMessage = getFirstFailedPendingMessage(pendingMessages);
-		const waId = firstFailedMessage.requestBody?.wa_id;
+		const waId = firstFailedMessage?.requestBody?.wa_id;
 		if (waId) {
 			navigate(`/main/chat/${waId}${location.search}`);
 		}
