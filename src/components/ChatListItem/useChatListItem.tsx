@@ -6,12 +6,13 @@ import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_DROPPED_FILES } from '@src/Constants';
 import { useTranslation } from 'react-i18next';
 import ChatModel from '@src/api/models/ChatModel';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setState } from '@src/store/reducers/UIReducer';
 
 const useChatListItem = ({ props }: { props: any }) => {
 	const data: ChatModel = props.chatData;
 
-	const { isSelectionModeEnabled, isBulkSend } = useAppSelector(
+	const { isSelectionModeEnabled, isBulkSend, selectedChats } = useAppSelector(
 		(state) => state.UI
 	);
 
@@ -30,9 +31,11 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 	const { t } = useTranslation();
 
+	const dispatch = useAppDispatch();
+
 	useEffect(() => {
-		setSelected(props.selectedChats.includes(data.waId));
-	}, [props.selectedChats]);
+		setSelected(selectedChats.includes(data.waId));
+	}, [selectedChats]);
 
 	const isUserAssignmentChipVisible = () => {
 		if (!props.filterAssignedToMe && !props.filterAssignedGroupId) {
@@ -165,6 +168,23 @@ const useChatListItem = ({ props }: { props: any }) => {
 			if (isDisabled && isBulkSend) return;
 
 			let newSelectedState = !isSelected;
+
+			let selectedChatsNextState = [...selectedChats];
+			if (newSelectedState) {
+				if (!selectedChatsNextState.includes(data.waId)) {
+					selectedChatsNextState.push(data.waId);
+				}
+			} else {
+				selectedChatsNextState = selectedChatsNextState.filter(
+					(arrayItem) => arrayItem !== data.waId
+				);
+			}
+
+			dispatch(
+				setState({
+					selectedChats: selectedChatsNextState,
+				})
+			);
 
 			props.setSelectedChats((prevState: string[]) => {
 				if (newSelectedState) {

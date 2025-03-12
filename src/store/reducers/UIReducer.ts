@@ -18,6 +18,7 @@ interface UIState {
 	isTemplatesFailed: boolean;
 	lastSendAttemptAt: Date | undefined;
 	selectedTags: number[];
+	selectedChats: string[];
 }
 
 const initialState: UIState = {
@@ -38,6 +39,7 @@ const initialState: UIState = {
 	isTemplatesFailed: false,
 	lastSendAttemptAt: undefined,
 	selectedTags: [],
+	selectedChats: [],
 };
 
 const closeSections = (state: Draft<UIState>) => {

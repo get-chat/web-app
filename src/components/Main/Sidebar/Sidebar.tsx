@@ -128,8 +128,6 @@ const Sidebar: React.FC<any> = ({
 	isChatOnly,
 	setChatTagsListVisible,
 	bulkSendPayload,
-	selectedChats,
-	setSelectedChats,
 	finishBulkSendMessage,
 	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
@@ -149,6 +147,7 @@ const Sidebar: React.FC<any> = ({
 		isUploadingMedia,
 		isReadOnly,
 		selectedTags,
+		selectedChats,
 		isSelectionModeEnabled,
 		isBulkSend,
 		isExportChat,
@@ -810,8 +809,7 @@ const Sidebar: React.FC<any> = ({
 
 	const cancelSelection = () => {
 		dispatch(setSelectionModeEnabled(false));
-		setSelectedChats([]);
-		dispatch(setState({ selectedTags: [] }));
+		dispatch(setState({ selectedTags: [], selectedChats: [] }));
 	};
 
 	const handleFinishBulkSendMessage = () => {
@@ -897,7 +895,6 @@ const Sidebar: React.FC<any> = ({
 
 			{isSelectionModeEnabled && isBulkSend && (
 				<BulkSendActions
-					selectedChats={selectedChats}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={handleFinishBulkSendMessage}
 					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
@@ -906,7 +903,6 @@ const Sidebar: React.FC<any> = ({
 
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
-					selectedChats={selectedChats}
 					onShowDateRange={() => setDateRangeDialogVisible(true)}
 					onExport={() => {
 						// TODO: Export chats
@@ -1269,8 +1265,6 @@ const Sidebar: React.FC<any> = ({
 									filterAssignedToMe={filterAssignedToMe}
 									filterAssignedGroupId={filterAssignedGroupId}
 									bulkSendPayload={bulkSendPayload}
-									selectedChats={selectedChats}
-									setSelectedChats={setSelectedChats}
 								/>
 							)}
 						</ViewportList>

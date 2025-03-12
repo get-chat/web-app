@@ -94,6 +94,7 @@ function Main() {
 		isUploadingMedia,
 		isTemplatesFailed,
 		selectedTags,
+		selectedChats,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -142,7 +143,6 @@ function Main() {
 	const [messageWithStatuses, setMessageWithStatuses] =
 		useState<ChatMessageModel>();
 
-	const [selectedChats, setSelectedChats] = useState<string[]>([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
@@ -268,8 +268,7 @@ function Main() {
 			dispatch(setSelectionModeEnabled(false));
 
 			// Clear selections
-			setSelectedChats([]);
-			dispatch(setState({ selectedTags: [] }));
+			dispatch(setState({ selectedTags: [], selectedChats: [] }));
 
 			// Clear input if text message
 			if (messagePayload.type === 'text') {
@@ -752,8 +751,7 @@ function Main() {
 	// Clear selected chats and tags when bulk send payload changes
 	useEffect(() => {
 		if (bulkSendPayload) {
-			setSelectedChats([]);
-			dispatch(setState({ selectedTags: [] }));
+			dispatch(setState({ selectedTags: [], selectedChats: [] }));
 		}
 	}, [bulkSendPayload]);
 
@@ -991,7 +989,11 @@ function Main() {
 	const addBulkSendRecipients = (newWaIds: string[], newTags: string[]) => {
 		// Combine with selected chats
 		if (newWaIds.length > 0) {
-			setSelectedChats([...new Set([...newWaIds, ...selectedChats])]);
+			dispatch(
+				setState({
+					selectedChats: [...new Set([...newWaIds, ...selectedChats])],
+				})
+			);
 		}
 
 		if (newTags.length > 0) {
@@ -1037,8 +1039,6 @@ function Main() {
 						isChatOnly={isChatOnly}
 						setChatTagsListVisible={setChatTagsListVisible}
 						bulkSendPayload={bulkSendPayload}
-						selectedChats={selectedChats}
-						setSelectedChats={setSelectedChats}
 						finishBulkSendMessage={finishBulkSendMessage}
 						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}

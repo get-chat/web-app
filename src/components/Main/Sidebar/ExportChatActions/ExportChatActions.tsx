@@ -5,20 +5,18 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
-	selectedChats: string[];
 	onShowDateRange: () => void;
 	onExport: () => void;
 	onCancel: () => void;
 }
 
 const ExportChatActions: React.FC<Props> = ({
-	selectedChats,
 	onShowDateRange,
 	onExport,
 	onCancel,
 }) => {
 	const { t } = useTranslation();
-	const { selectedTags } = useAppSelector((state) => state.UI);
+	const { selectedTags, selectedChats } = useAppSelector((state) => state.UI);
 
 	return (
 		<div className={styles.container}>

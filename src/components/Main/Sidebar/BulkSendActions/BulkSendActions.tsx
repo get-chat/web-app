@@ -5,20 +5,18 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
-	selectedChats: string[];
 	finishBulkSendMessage: () => void;
 	cancelSelection: () => void;
 	setUploadRecipientsCSVVisible: (value: boolean) => void;
 }
 
 const BulkSendActions: React.FC<Props> = ({
-	selectedChats,
 	finishBulkSendMessage,
 	cancelSelection,
 	setUploadRecipientsCSVVisible,
 }) => {
 	const { t } = useTranslation();
-	const { selectedTags } = useAppSelector((state) => state.UI);
+	const { selectedTags, selectedChats } = useAppSelector((state) => state.UI);
 
 	return (
 		<div className={styles.container}>
