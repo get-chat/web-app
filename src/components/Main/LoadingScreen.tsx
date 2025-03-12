@@ -5,22 +5,22 @@ import { useTranslation } from 'react-i18next';
 import Alert from '@mui/material/Alert';
 import packageJson from '../../../package.json';
 import { CircularProgress } from '@mui/material';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
-	progress: number;
-	setProgress: (progress: number) => void;
 	loadingNow?: string | undefined | null;
 	isHideLogo: boolean;
 	isInitialResourceFailed: boolean;
 }
 
 const LoadingScreen: React.FC<Props> = ({
-	progress,
 	loadingNow,
 	isHideLogo,
 	isInitialResourceFailed,
 }) => {
 	const { t } = useTranslation();
+
+	const { loadingProgress } = useAppSelector((state) => state.UI);
 
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
 		useState(false);
@@ -53,7 +53,7 @@ const LoadingScreen: React.FC<Props> = ({
 
 			<div className="loadingScreen__progressContainer">
 				{!isInitialResourceFailed && (
-					<LinearProgress variant="determinate" value={progress} />
+					<LinearProgress variant="determinate" value={loadingProgress} />
 				)}
 			</div>
 

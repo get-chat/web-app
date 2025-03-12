@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {
 	containsLetters,
 	generateInitialsHelper,
@@ -110,6 +109,7 @@ import UserProfile from '@src/components/UserProfile';
 import {
 	setExportChat,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
 import PersonModel from '@src/api/models/PersonModel';
@@ -127,7 +127,6 @@ const Sidebar: React.FC<any> = ({
 	isUploadingMedia,
 	newMessages,
 	setNewMessages,
-	setProgress,
 	displayNotification,
 	isBlurred,
 	contactProvidersData,
@@ -611,7 +610,7 @@ const Sidebar: React.FC<any> = ({
 				}
 
 				if (isInitial) {
-					setProgress(100);
+					dispatch(setState({ key: 'loadingProgress', value: 100 }));
 				}
 
 				const willNotify = !isInitial;

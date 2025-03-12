@@ -88,6 +88,7 @@ function Main() {
 	const config = React.useContext(AppConfigContext);
 
 	const {
+		loadingProgress,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -103,7 +104,6 @@ function Main() {
 
 	const { waId } = useParams();
 
-	const [progress, _setProgress] = useState(0);
 	const [loadingNow, setLoadingNow] = useState('');
 	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
 
@@ -193,9 +193,9 @@ function Main() {
 	const [isMaximize] = useState(query.get('maximize') === '1');
 
 	const setProgress = (value: number) => {
-		_setProgress((prevState) => {
-			return value > prevState ? value : prevState;
-		});
+		if (value > loadingProgress) {
+			dispatch(setState({ key: 'loadingProgress', value }));
+		}
 	};
 
 	const displaySuccess = (message: string) => {
@@ -427,7 +427,7 @@ function Main() {
 		let socketClosedAt: Date | undefined;
 
 		const connect = () => {
-			if (progress < 100) {
+			if (loadingProgress < 100) {
 				return;
 			}
 
@@ -646,7 +646,7 @@ function Main() {
 		return () => {
 			ws?.close(CODE_NORMAL);
 		};
-	}, [progress]);
+	}, [loadingProgress]);
 
 	useEffect(() => {
 		// Window close event
@@ -1024,7 +1024,7 @@ function Main() {
 			>
 				{templatesReady && (
 					<Sidebar
-						isLoaded={progress >= 100}
+						isLoaded={loadingProgress >= 100}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
 						isSendingPendingMessages={isSendingPendingMessages}
@@ -1140,11 +1140,9 @@ function Main() {
 					/>
 				)}
 
-				<Fade in={progress < 100} timeout={{ exit: 1000 }} unmountOnExit>
+				<Fade in={loadingProgress < 100} timeout={{ exit: 1000 }} unmountOnExit>
 					<div className="loadingScreenOuter">
 						<LoadingScreen
-							progress={progress}
-							setProgress={setProgress}
 							loadingNow={loadingNow}
 							isInitialResourceFailed={isInitialResourceFailed}
 							isHideLogo={isHideLogo}
