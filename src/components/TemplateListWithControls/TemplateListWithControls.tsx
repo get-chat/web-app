@@ -6,14 +6,10 @@ import TemplateModel from '@src/api/models/TemplateModel';
 import { useAppSelector } from '@src/store/hooks';
 
 export type Props = {
-	isTemplatesFailed: boolean;
 	onSelect: (template: TemplateModel) => void;
 };
 
-const TemplateListWithControls: React.FC<Props> = ({
-	isTemplatesFailed,
-	onSelect,
-}) => {
+const TemplateListWithControls: React.FC<Props> = ({ onSelect }) => {
 	const { t } = useTranslation();
 	const { isLoadingTemplates } = useAppSelector((state) => state.UI);
 
@@ -27,7 +23,6 @@ const TemplateListWithControls: React.FC<Props> = ({
 				<TemplatesList
 					onClick={onSelect}
 					displayRegisterTemplate={true}
-					isTemplatesFailed={isTemplatesFailed}
 					customSelectButtonTitle={undefined}
 				/>
 			)}

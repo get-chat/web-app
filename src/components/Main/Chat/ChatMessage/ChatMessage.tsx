@@ -53,7 +53,6 @@ interface Props {
 		data: ChatMessageModel
 	) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
-	isTemplatesFailed?: boolean;
 	retryMessage?: (message: ChatMessageModel) => void;
 	disableMediaPreview?: boolean;
 	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
@@ -77,7 +76,6 @@ const ChatMessage: React.FC<Props> = ({
 	onQuickReactionsClick,
 	onReactionDetailsClick,
 	goToMessageId,
-	isTemplatesFailed,
 	retryMessage,
 	disableMediaPreview,
 	setMessageWithStatuses,
@@ -255,7 +253,6 @@ const ChatMessage: React.FC<Props> = ({
 							<ChatMessageTemplate
 								data={data}
 								templateData={templateData}
-								isTemplatesFailed={isTemplatesFailed}
 								onPreview={onPreview}
 								onOptionsClick={(e: React.MouseEvent) =>
 									onOptionsClick?.(e, data)

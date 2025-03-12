@@ -11,17 +11,16 @@ interface Props {
 	onClick: (template: TemplateModel) => void;
 	customSelectButtonTitle?: string;
 	displayRegisterTemplate?: boolean;
-	isTemplatesFailed?: boolean;
 }
 
 const TemplatesList: React.FC<Props> = ({
 	onClick,
 	customSelectButtonTitle,
 	displayRegisterTemplate,
-	isTemplatesFailed,
 }) => {
 	const { t } = useTranslation();
 
+	const { isTemplatesFailed } = useAppSelector((state) => state.UI);
 	const templates = useAppSelector((state) => state.templates.value);
 
 	const { issueTemplateRefreshRequest } = useTemplates();

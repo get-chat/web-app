@@ -15,6 +15,7 @@ interface UIState {
 	isSendingPendingMessages: boolean;
 	isLoadingTemplates: boolean;
 	isUploadingMedia: boolean;
+	isTemplatesFailed: boolean;
 }
 
 const initialState: UIState = {
@@ -32,6 +33,7 @@ const initialState: UIState = {
 	isSendingPendingMessages: false,
 	isLoadingTemplates: true,
 	isUploadingMedia: false,
+	isTemplatesFailed: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

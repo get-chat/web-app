@@ -92,6 +92,7 @@ function Main() {
 		hasFailedMessages,
 		isBlurred,
 		isUploadingMedia,
+		isTemplatesFailed,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
@@ -117,8 +118,6 @@ function Main() {
 	const [newMessages, setNewMessages] = useState<{
 		[key: string]: NewMessageModel;
 	}>({});
-
-	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
 
 	const [templatesReady, setTemplatesReady] = useState(false);
 
@@ -855,7 +854,7 @@ function Main() {
 					completeCallback();
 				}
 
-				setTemplatesFailed(false);
+				dispatch(setState({ isTemplatesFailed: false }));
 			},
 			(error: AxiosError) => {
 				if (!isRetry) {
@@ -868,7 +867,7 @@ function Main() {
 							completeCallback();
 
 							// To trigger retrying periodically
-							setTemplatesFailed(true);
+							dispatch(setState({ isTemplatesFailed: true }));
 						} else {
 							window.displayError(error);
 						}
@@ -1062,7 +1061,6 @@ function Main() {
 						setLastSendAttemptAt={setLastSendAttemptAt}
 						newMessages={newMessages}
 						setChosenContact={setChosenContact}
-						isTemplatesFailed={isTemplatesFailed}
 						createSavedResponse={createSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
@@ -1169,14 +1167,12 @@ function Main() {
 					open={isBulkSendTemplateDialogVisible}
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					isTemplatesFailed={isTemplatesFailed}
 				/>
 
 				<BulkSendTemplateDialog
 					open={isBulkSendTemplateWithCallbackDialogVisible}
 					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					isTemplatesFailed={isTemplatesFailed}
 					sendCallback={() => {
 						setUploadRecipientsCSVVisible(true);
 					}}

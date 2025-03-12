@@ -14,7 +14,6 @@ const StepSelectTemplate: React.FC<Props> = ({ selectTemplate }) => {
 		<TemplatesList
 			onClick={(template) => selectTemplate(template)}
 			customSelectButtonTitle={t('Select')}
-			isTemplatesFailed={false}
 		/>
 	);
 };

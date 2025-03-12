@@ -121,7 +121,6 @@ interface Props {
 	setLastSendAttemptAt: (value: Date | undefined) => void;
 	newMessages: { [key: string]: NewMessageModel };
 	setChosenContact: (value: PersonModel | undefined) => void;
-	isTemplatesFailed: boolean;
 	createSavedResponse: (value: string) => void;
 	contactProvidersData: {
 		[key: string]: any;
@@ -2209,7 +2208,6 @@ const Chat: React.FC<Props> = (props) => {
 								displaySender={willDisplaySender}
 								displayDate={willDisplayDate}
 								isExpired={isExpired}
-								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}
 								onOptionsClick={displayOptionsMenu}
@@ -2252,7 +2250,6 @@ const Chat: React.FC<Props> = (props) => {
 
 			{isTemplatesVisible && (
 				<TemplateListWithControls
-					isTemplatesFailed={props.isTemplatesFailed}
 					onSelect={(template: TemplateModel) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);
