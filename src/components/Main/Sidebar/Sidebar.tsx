@@ -150,6 +150,7 @@ const Sidebar: React.FC<any> = ({
 	const {
 		hasFailedMessages,
 		isBlurred,
+		isSendingPendingMessages,
 		isReadOnly,
 		isSelectionModeEnabled,
 		isBulkSend,

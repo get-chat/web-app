@@ -110,7 +110,6 @@ function Main() {
 
 	const [checked, setChecked] = useState(false);
 
-	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
 	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
 	const [lastSendAttemptAt, setLastSendAttemptAt] = useState<Date>();
 
@@ -1030,7 +1029,6 @@ function Main() {
 						isLoaded={loadingProgress >= 100}
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
-						isSendingPendingMessages={isSendingPendingMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
 						isUploadingMedia={isUploadingMedia}
 						newMessages={newMessages}
@@ -1063,8 +1061,6 @@ function Main() {
 					<Chat
 						pendingMessages={pendingMessages}
 						setPendingMessages={setPendingMessages}
-						isSendingPendingMessages={isSendingPendingMessages}
-						setSendingPendingMessages={setSendingPendingMessages}
 						lastSendAttemptAt={lastSendAttemptAt}
 						setLastSendAttemptAt={setLastSendAttemptAt}
 						isUploadingMedia={isUploadingMedia}

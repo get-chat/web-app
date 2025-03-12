@@ -12,6 +12,7 @@ interface UIState {
 	loadingComponent: string;
 	hasFailedMessages: boolean;
 	isBlurred: boolean;
+	isSendingPendingMessages: boolean;
 }
 
 const initialState: UIState = {
@@ -26,6 +27,7 @@ const initialState: UIState = {
 	loadingComponent: '',
 	hasFailedMessages: false,
 	isBlurred: false,
+	isSendingPendingMessages: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

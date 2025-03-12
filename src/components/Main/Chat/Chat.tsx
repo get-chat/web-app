@@ -117,8 +117,6 @@ const MESSAGES_PER_PAGE = 30;
 interface Props {
 	pendingMessages: PendingMessage[];
 	setPendingMessages: (value: PendingMessage[]) => void;
-	isSendingPendingMessages: boolean;
-	setSendingPendingMessages: (value: boolean) => void;
 	lastSendAttemptAt?: Date | undefined;
 	setLastSendAttemptAt: (value: Date | undefined) => void;
 	isUploadingMedia: boolean;
@@ -144,7 +142,9 @@ interface Props {
 const Chat: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
+	const { isReadOnly, isSendingPendingMessages } = useAppSelector(
+		(state) => state.UI
+	);
 
 	const { t } = useTranslation();
 
@@ -267,7 +267,6 @@ const Chat: React.FC<Props> = (props) => {
 
 	useEffect(() => {
 		const pendingMessages = props.pendingMessages;
-		const isSendingPendingMessages = props.isSendingPendingMessages;
 
 		// Keep state in window as a variable to have actual state in callbacks
 		window.pendingMessages = pendingMessages;
@@ -288,7 +287,7 @@ const Chat: React.FC<Props> = (props) => {
 			}
 
 			// If first message exists and not failed, start sending
-			props.setSendingPendingMessages(true);
+			dispatch(setState({ key: 'isSendingPendingMessages', value: true }));
 
 			const requestBody = pendingMessageToSend.requestBody;
 			const successCallback = pendingMessageToSend.successCallback;
@@ -308,7 +307,7 @@ const Chat: React.FC<Props> = (props) => {
 
 				// Update state after deleting sent one
 				props.setPendingMessages(updatedState);
-				props.setSendingPendingMessages(false);
+				dispatch(setState({ key: 'isSendingPendingMessages', value: false }));
 			};
 
 			// Use proper method to send message depends on its type
@@ -357,9 +356,9 @@ const Chat: React.FC<Props> = (props) => {
 		if (!isSendingPendingMessages && pendingMessages.length > 0) {
 			sendNextPending();
 		} else if (pendingMessages.length === 0) {
-			props.setSendingPendingMessages(false);
+			dispatch(setState({ key: 'isSendingPendingMessages', value: false }));
 		}
-	}, [props.isSendingPendingMessages, props.pendingMessages]);
+	}, [isSendingPendingMessages, props.pendingMessages]);
 
 	useEffect(() => {
 		setLoaded(false);
@@ -1898,7 +1897,7 @@ const Chat: React.FC<Props> = (props) => {
 		props.setPendingMessages([
 			...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
 		]);
-		props.setSendingPendingMessages(false);
+		dispatch(setState({ key: 'isSendingPendingMessages', value: false }));
 
 		// This will be used to display a warning before refreshing
 		dispatch(setState({ key: 'hasFailedMessages', value: true }));
@@ -2133,7 +2132,7 @@ const Chat: React.FC<Props> = (props) => {
 			{/* FOR TESTING QUEUE */}
 			{isLocalHost() && props.pendingMessages.length > 0 && (
 				<div className="pendingMessagesIndicator">
-					<div>{props.isSendingPendingMessages.toString()}</div>
+					<div>{isSendingPendingMessages.toString()}</div>
 					<div>{props.pendingMessages.length}</div>
 				</div>
 			)}
