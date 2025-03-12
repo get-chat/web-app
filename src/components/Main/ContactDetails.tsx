@@ -42,7 +42,7 @@ const ContactDetails: React.FC<Props> = ({
 	const dispatch = useAppDispatch();
 
 	const hideContactDetails = () => {
-		dispatch(setState({ key: 'isContactDetailsVisible', value: false }));
+		dispatch(setState({ isContactDetailsVisible: false }));
 	};
 
 	useEffect(() => {

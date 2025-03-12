@@ -79,11 +79,11 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	const showSearchMessages = () => {
-		dispatch(setState({ key: 'isSearchMessagesVisible', value: true }));
+		dispatch(setState({ isSearchMessagesVisible: true }));
 	};
 
 	const showContactDetails = () => {
-		dispatch(setState({ key: 'isContactDetailsVisible', value: true }));
+		dispatch(setState({ isContactDetailsVisible: true }));
 	};
 
 	const showContactDetailsAndHideMenu = () => {

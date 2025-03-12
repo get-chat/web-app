@@ -68,11 +68,8 @@ export const UISlice = createSlice({
 			}
 			return state;
 		},
-		setState: <K extends keyof UIState>(
-			state: UIState,
-			action: PayloadAction<{ key: K; value: UIState[K] }>
-		) => {
-			return { ...state, [action.payload.key]: action.payload.value };
+		setState: (state, action: PayloadAction<Partial<UIState>>) => {
+			return { ...state, ...action.payload };
 		},
 	},
 });

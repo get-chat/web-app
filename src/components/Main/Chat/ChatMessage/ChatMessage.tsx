@@ -306,9 +306,7 @@ const ChatMessage: React.FC<Props> = ({
 									// Injecting reactions
 									clonedMessage.reactions = reactions;
 									setMessageWithStatuses?.(clonedMessage);
-									dispatch(
-										setState({ key: 'isMessageStatusesVisible', value: true })
-									);
+									dispatch(setState({ isMessageStatusesVisible: true }));
 								}
 							}}
 						>

@@ -287,7 +287,7 @@ const Chat: React.FC<Props> = (props) => {
 			}
 
 			// If first message exists and not failed, start sending
-			dispatch(setState({ key: 'isSendingPendingMessages', value: true }));
+			dispatch(setState({ isSendingPendingMessages: true }));
 
 			const requestBody = pendingMessageToSend.requestBody;
 			const successCallback = pendingMessageToSend.successCallback;
@@ -307,7 +307,7 @@ const Chat: React.FC<Props> = (props) => {
 
 				// Update state after deleting sent one
 				props.setPendingMessages(updatedState);
-				dispatch(setState({ key: 'isSendingPendingMessages', value: false }));
+				dispatch(setState({ isSendingPendingMessages: false }));
 			};
 
 			// Use proper method to send message depends on its type
@@ -349,14 +349,14 @@ const Chat: React.FC<Props> = (props) => {
 		// If there is no failed message, update state
 		// This state is used for prompting user before leaving page
 		if (!hasFailedPendingMessages(props.pendingMessages)) {
-			dispatch(setState({ key: 'hasFailedMessages', value: false }));
+			dispatch(setState({ hasFailedMessages: false }));
 		}
 
 		// If it is not sending currently and there are pending messages
 		if (!isSendingPendingMessages && pendingMessages.length > 0) {
 			sendNextPending();
 		} else if (pendingMessages.length === 0) {
-			dispatch(setState({ key: 'isSendingPendingMessages', value: false }));
+			dispatch(setState({ isSendingPendingMessages: false }));
 		}
 	}, [isSendingPendingMessages, props.pendingMessages]);
 
@@ -1897,10 +1897,10 @@ const Chat: React.FC<Props> = (props) => {
 		props.setPendingMessages([
 			...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
 		]);
-		dispatch(setState({ key: 'isSendingPendingMessages', value: false }));
+		dispatch(setState({ isSendingPendingMessages: false }));
 
 		// This will be used to display a warning before refreshing
-		dispatch(setState({ key: 'hasFailedMessages', value: true }));
+		dispatch(setState({ hasFailedMessages: true }));
 
 		// Last attempt at
 		props.setLastSendAttemptAt(new Date());

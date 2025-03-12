@@ -16,8 +16,7 @@ const useMessageStatuses = ({ initialMessage }: Props) => {
 	const templates = useAppSelector((state) => state.templates.value);
 
 	const dispatch = useAppDispatch();
-	const close = () =>
-		dispatch(setState({ key: 'isMessageStatusesVisible', value: false }));
+	const close = () => dispatch(setState({ isMessageStatusesVisible: false }));
 
 	useEffect(() => {
 		setMessage(initialMessage);

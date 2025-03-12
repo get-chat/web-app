@@ -192,12 +192,12 @@ function Main() {
 
 	const setProgress = (value: number) => {
 		if (value > loadingProgress) {
-			dispatch(setState({ key: 'loadingProgress', value }));
+			dispatch(setState({ loadingProgress: value }));
 		}
 	};
 
 	const setLoadingComponent = (value: string) => {
-		dispatch(setState({ key: 'loadingComponent', value }));
+		dispatch(setState({ loadingComponent: value }));
 	};
 
 	const displaySuccess = (message: string) => {
@@ -697,11 +697,11 @@ function Main() {
 
 	useEffect(() => {
 		function onBlur() {
-			dispatch(setState({ key: 'isBlurred', value: true }));
+			dispatch(setState({ isBlurred: true }));
 		}
 
 		function onFocus() {
-			dispatch(setState({ key: 'isBlurred', value: false }));
+			dispatch(setState({ isBlurred: false }));
 		}
 
 		window.addEventListener('blur', onBlur);
@@ -718,13 +718,13 @@ function Main() {
 
 		return () => {
 			// Hide search messages
-			dispatch(setState({ key: 'isSearchMessagesVisible', value: false }));
+			dispatch(setState({ isSearchMessagesVisible: false }));
 
 			// Hide contact details
-			dispatch(setState({ key: 'isContactDetailsVisible', value: false }));
+			dispatch(setState({ isContactDetailsVisible: false }));
 
 			// Hide message statuses
-			dispatch(setState({ key: 'isMessageStatusesVisible', value: false }));
+			dispatch(setState({ isMessageStatusesVisible: false }));
 
 			// Hide chat assignment
 			setChatAssignmentVisible(false);

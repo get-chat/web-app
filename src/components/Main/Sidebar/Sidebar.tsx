@@ -121,7 +121,6 @@ const Sidebar: React.FC<any> = ({
 	isLoaded,
 	pendingMessages,
 	setPendingMessages,
-	isSendingPendingMessages,
 	lastSendAttemptAt,
 	isUploadingMedia,
 	newMessages,
@@ -574,7 +573,7 @@ const Sidebar: React.FC<any> = ({
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
-			dispatch(setState({ key: 'loadingComponent', value: 'Chats' }));
+			dispatch(setState({ loadingComponent: 'Chats' }));
 		}
 
 		// Reset chats count
@@ -614,7 +613,7 @@ const Sidebar: React.FC<any> = ({
 				}
 
 				if (isInitial) {
-					dispatch(setState({ key: 'loadingProgress', value: 100 }));
+					dispatch(setState({ loadingProgress: 100 }));
 				}
 
 				const willNotify = !isInitial;
