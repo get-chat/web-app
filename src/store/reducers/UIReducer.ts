@@ -8,6 +8,7 @@ interface UIState {
 	isSelectionModeEnabled: boolean;
 	isBulkSend: boolean;
 	isExportChat: boolean;
+	loadingProgress: number;
 }
 
 const initialState: UIState = {
@@ -18,6 +19,7 @@ const initialState: UIState = {
 	isSelectionModeEnabled: false,
 	isBulkSend: false,
 	isExportChat: false,
+	loadingProgress: 0,
 };
 
 const closeSections = (state: Draft<UIState>) => {
