@@ -130,7 +130,6 @@ interface Props {
 	setChatTagsListVisible: (value: boolean) => void;
 	bulkSendPayload?: BulkSendPayload;
 	finishBulkSendMessage: (payload?: BulkMessageTaskModel) => void;
-	setUploadRecipientsCSVVisible: (value: boolean) => void;
 	setBulkSendTemplateDialogVisible: (value: boolean) => void;
 	setBulkSendTemplateWithCallbackDialogVisible: (value: boolean) => void;
 	setSendBulkVoiceMessageDialogVisible: (value: boolean) => void;
@@ -144,7 +143,6 @@ const Sidebar: React.FC<Props> = ({
 	setChatTagsListVisible,
 	bulkSendPayload,
 	finishBulkSendMessage,
-	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
 	setBulkSendTemplateWithCallbackDialogVisible,
 	setSendBulkVoiceMessageDialogVisible,
@@ -910,7 +908,6 @@ const Sidebar: React.FC<Props> = ({
 				<BulkSendActions
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={handleFinishBulkSendMessage}
-					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 				/>
 			)}
 

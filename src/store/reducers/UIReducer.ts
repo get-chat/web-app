@@ -23,6 +23,7 @@ interface UIState {
 	chosenContact: PersonModel | undefined;
 	isChatAssignmentVisible: boolean;
 	isInitialResourceFailed: boolean;
+	isUploadRecipientsCSVVisible: boolean;
 }
 
 const initialState: UIState = {
@@ -47,6 +48,7 @@ const initialState: UIState = {
 	chosenContact: undefined,
 	isChatAssignmentVisible: false,
 	isInitialResourceFailed: false,
+	isUploadRecipientsCSVVisible: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

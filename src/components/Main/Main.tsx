@@ -97,6 +97,7 @@ const Main: React.FC = () => {
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
+		isUploadRecipientsCSVVisible,
 	} = useAppSelector((state) => state.UI);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
@@ -141,9 +142,6 @@ const Main: React.FC = () => {
 		isBulkSendTemplateWithCallbackDialogVisible,
 		setBulkSendTemplateWithCallbackDialogVisible,
 	] = useState(false);
-
-	const [isUploadRecipientsCSVVisible, setUploadRecipientsCSVVisible] =
-		useState(false);
 
 	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
 		useState(false);
@@ -1020,7 +1018,6 @@ const Main: React.FC = () => {
 						setChatTagsListVisible={setChatTagsListVisible}
 						bulkSendPayload={bulkSendPayload}
 						finishBulkSendMessage={finishBulkSendMessage}
-						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
 						setBulkSendTemplateWithCallbackDialogVisible={
 							setBulkSendTemplateWithCallbackDialogVisible
@@ -1143,13 +1140,15 @@ const Main: React.FC = () => {
 					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
 					sendCallback={() => {
-						setUploadRecipientsCSVVisible(true);
+						dispatch(setState({ isUploadRecipientsCSVVisible: true }));
 					}}
 				/>
 
 				<UploadRecipientsCSV
 					open={isUploadRecipientsCSVVisible}
-					setOpen={setUploadRecipientsCSVVisible}
+					setOpen={(isOpen) =>
+						dispatch(setState({ isUploadRecipientsCSVVisible: isOpen }))
+					}
 					addBulkSendRecipients={addBulkSendRecipients}
 					bulkSendPayload={bulkSendPayload}
 				/>
