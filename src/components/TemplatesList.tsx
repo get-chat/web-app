@@ -81,7 +81,7 @@ const TemplatesList: React.FC<Props> = ({
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
 							<div className="templateMessage__message">
 								<h4>{template[1].name}</h4>
-								{sortTemplateComponents(template[1].components).map(
+								{sortTemplateComponents(template[1].components ?? []).map(
 									(comp: any, index: number) => (
 										<div key={index}>
 											<span className="templateType bold lowercase">

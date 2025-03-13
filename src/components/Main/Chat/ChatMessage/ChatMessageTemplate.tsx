@@ -56,7 +56,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 			<div className="chat__templateContent">
 				{templateData !== undefined ? (
 					<div>
-						{sortTemplateComponents(templateData.components).map(
+						{sortTemplateComponents(templateData.components ?? []).map(
 							(component: any, index: number) => (
 								<div key={index}>
 									{component.type === 'HEADER' && (
@@ -92,7 +92,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 												<PrintMessage
 													message={insertTemplateComponentParameters(
 														component,
-														data.templateParameters
+														data.templateParameters ?? []
 													)}
 													as="div"
 													linkify={true}
@@ -106,7 +106,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 										<PrintMessage
 											message={insertTemplateComponentParameters(
 												component,
-												data.templateParameters
+												data.templateParameters ?? []
 											)}
 											as="div"
 											linkify={true}
@@ -118,7 +118,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 										<PrintMessage
 											message={insertTemplateComponentParameters(
 												component,
-												data.templateParameters
+												data.templateParameters ?? []
 											)}
 											as="div"
 											linkify={true}
