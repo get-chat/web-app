@@ -130,8 +130,13 @@ interface Props {
 const Chat: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { isReadOnly, isSendingPendingMessages, isTemplatesVisible } =
-		useAppSelector((state) => state.UI);
+	const {
+		isReadOnly,
+		isSendingPendingMessages,
+		isTemplatesVisible,
+		isSavedResponsesVisible,
+		isInteractiveMessagesVisible,
+	} = useAppSelector((state) => state.UI);
 
 	const pendingMessages = useAppSelector(
 		(state) => state.pendingMessages.value
@@ -163,9 +168,6 @@ const Chat: React.FC<Props> = (props) => {
 	const [isLoaded, setLoaded] = useState(false);
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
-	const [isInteractiveMessagesVisible, setInteractiveMessagesVisible] =
-		useState(false);
-	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 
 	const [person, setPerson] = useState<PersonModel>();
 	const [chat, setChat] = useState<ChatModel>();
@@ -359,8 +361,9 @@ const Chat: React.FC<Props> = (props) => {
 		setMessages({});
 		setReactions({});
 		setHasOlderMessagesToLoad(true);
-		dispatch(setState({ isTemplatesVisible: false }));
-		setSavedResponsesVisible(false);
+		dispatch(
+			setState({ isTemplatesVisible: false, isSavedResponsesVisible: false })
+		);
 		setAtBottom(false);
 		setInput('');
 		setScrollButtonVisible(false);
@@ -2284,11 +2287,7 @@ const Chat: React.FC<Props> = (props) => {
 					sendMessage={sendMessage}
 					bulkSendMessage={bulkSendMessage}
 					setSelectedFiles={setSelectedFiles}
-					isInteractiveMessagesVisible={isInteractiveMessagesVisible}
-					setInteractiveMessagesVisible={setInteractiveMessagesVisible}
 					accept={accept}
-					isSavedResponsesVisible={isSavedResponsesVisible}
-					setSavedResponsesVisible={setSavedResponsesVisible}
 					sendHandledChosenFiles={sendHandledChosenFiles}
 					setAccept={setAccept}
 					isScrollButtonVisible={isScrollButtonVisible}

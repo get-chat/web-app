@@ -25,6 +25,8 @@ interface UIState {
 	isInitialResourceFailed: boolean;
 	isUploadRecipientsCSVVisible: boolean;
 	isTemplatesVisible: boolean;
+	isSavedResponsesVisible: boolean;
+	isInteractiveMessagesVisible: boolean;
 }
 
 const initialState: UIState = {
@@ -51,6 +53,8 @@ const initialState: UIState = {
 	isInitialResourceFailed: false,
 	isUploadRecipientsCSVVisible: false,
 	isTemplatesVisible: false,
+	isSavedResponsesVisible: false,
+	isInteractiveMessagesVisible: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

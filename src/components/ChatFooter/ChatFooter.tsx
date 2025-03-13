@@ -1,4 +1,4 @@
-import React, { SetStateAction, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Badge, Fab, Grow, IconButton, Tooltip, Zoom } from '@mui/material';
 import {
 	ArrowDownward,
@@ -61,12 +61,8 @@ interface Props {
 	) => void;
 	bulkSendMessage: (type: string, payload?: BulkSendPayload) => void;
 	setSelectedFiles: (value: any) => void;
-	isInteractiveMessagesVisible: boolean;
-	setInteractiveMessagesVisible: React.Dispatch<SetStateAction<boolean>>;
 	accept: string;
 	setAccept: (value: string) => void;
-	isSavedResponsesVisible: boolean;
-	setSavedResponsesVisible: React.Dispatch<SetStateAction<boolean>>;
 	sendHandledChosenFiles: (files: ChosenFileList) => void;
 	isScrollButtonVisible: boolean;
 	handleScrollButtonClick: () => void;
@@ -82,12 +78,8 @@ const ChatFooter: React.FC<Props> = ({
 	sendMessage,
 	bulkSendMessage,
 	setSelectedFiles,
-	isInteractiveMessagesVisible,
-	setInteractiveMessagesVisible,
 	accept,
 	setAccept,
-	isSavedResponsesVisible,
-	setSavedResponsesVisible,
 	sendHandledChosenFiles,
 	isScrollButtonVisible,
 	handleScrollButtonClick,
@@ -97,7 +89,11 @@ const ChatFooter: React.FC<Props> = ({
 
 	const dispatch = useAppDispatch();
 
-	const { isTemplatesVisible } = useAppSelector((state) => state.UI);
+	const {
+		isTemplatesVisible,
+		isSavedResponsesVisible,
+		isInteractiveMessagesVisible,
+	} = useAppSelector((state) => state.UI);
 
 	const fileInput = useRef<HTMLInputElement>(null);
 	const editable = useRef<HTMLDivElement>(null);
@@ -193,9 +189,13 @@ const ChatFooter: React.FC<Props> = ({
         }*/
 
 		if (!isTemplatesVisible) {
-			setInteractiveMessagesVisible(false);
 			setAttachmentOptionsVisible(false);
-			setSavedResponsesVisible(false);
+			dispatch(
+				setState({
+					isSavedResponsesVisible: false,
+					isInteractiveMessagesVisible: false,
+				})
+			);
 			setEmojiPickerVisible(false);
 		}
 
@@ -203,37 +203,42 @@ const ChatFooter: React.FC<Props> = ({
 	};
 
 	const toggleInteractiveMessages = () => {
-		setInteractiveMessagesVisible((prevState) => {
-			if (!prevState) {
-				dispatch(setState({ isTemplatesVisible: false }));
-				setAttachmentOptionsVisible(false);
-				setSavedResponsesVisible(false);
-				setEmojiPickerVisible(false);
-			}
+		if (!isInteractiveMessagesVisible) {
+			dispatch(
+				setState({ isTemplatesVisible: false, isSavedResponsesVisible: false })
+			);
+			setAttachmentOptionsVisible(false);
+			setEmojiPickerVisible(false);
+		}
 
-			return !prevState;
-		});
+		dispatch(toggleState('isInteractiveMessagesVisible'));
 	};
 
 	const toggleSavedResponses = () => {
-		setSavedResponsesVisible((prevState) => {
-			if (!prevState) {
-				setInteractiveMessagesVisible(false);
-				setAttachmentOptionsVisible(false);
-				dispatch(setState({ isTemplatesVisible: false }));
-				setEmojiPickerVisible(false);
-			}
+		if (!isSavedResponsesVisible) {
+			setAttachmentOptionsVisible(false);
+			dispatch(
+				setState({
+					isTemplatesVisible: false,
+					isInteractiveMessagesVisible: false,
+				})
+			);
+			setEmojiPickerVisible(false);
+		}
 
-			return !prevState;
-		});
+		dispatch(toggleState('isSavedResponsesVisible'));
 	};
 
 	const toggleEmojiPicker = () => {
 		setEmojiPickerVisible((prevState) => {
 			if (!prevState) {
-				dispatch(setState({ isTemplatesVisible: false }));
+				dispatch(
+					setState({
+						isTemplatesVisible: false,
+						isSavedResponsesVisible: false,
+					})
+				);
 				setAttachmentOptionsVisible(false);
-				setSavedResponsesVisible(false);
 			}
 
 			return !prevState;
@@ -269,8 +274,9 @@ const ChatFooter: React.FC<Props> = ({
 	const displayQuickActionsMenu = () => {
 		if (!isQuickActionsMenuVisible) {
 			setQuickActionsMenuVisible(true);
-			dispatch(setState({ isTemplatesVisible: false }));
-			setSavedResponsesVisible(false);
+			dispatch(
+				setState({ isTemplatesVisible: false, isSavedResponsesVisible: false })
+			);
 			setEmojiPickerVisible(false);
 		}
 	};
