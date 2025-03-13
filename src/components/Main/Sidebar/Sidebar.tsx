@@ -1254,7 +1254,6 @@ const Sidebar: React.FC<any> = ({
 								<ChatListItem
 									key={item.waId}
 									chatData={item}
-									newMessages={newMessages}
 									keyword={searchedKeyword}
 									contactProvidersData={contactProvidersData}
 									filterAssignedToMe={filterAssignedToMe}

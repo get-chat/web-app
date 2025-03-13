@@ -26,6 +26,8 @@ const ChatListItem = (props: any) => {
 		(state) => state.UI
 	);
 
+	const newMessages = useAppSelector((state) => state.newMessages.value);
+
 	const { t } = useTranslation();
 
 	const {
@@ -46,7 +48,7 @@ const ChatListItem = (props: any) => {
 
 	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
-	const newMessages = props.newMessages[data.waId]?.newMessages;
+	const newMessagesForChat = newMessages[data.waId]?.newMessages;
 
 	const preventEvents = (event: MouseEvent | TouchEvent) => {
 		event.stopPropagation();
@@ -121,9 +123,9 @@ const ChatListItem = (props: any) => {
 							{data.initials}
 						</CustomAvatar>
 
-						{newMessages > 0 && (
+						{newMessagesForChat > 0 && (
 							<div className={styles.newMessagesBadge}>
-								{newMessages > 99 ? '99+' : newMessages}
+								{newMessagesForChat > 99 ? '99+' : newMessagesForChat}
 							</div>
 						)}
 					</div>
