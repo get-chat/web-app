@@ -10,11 +10,13 @@ import chatsCountReducer from './chatsCountReducer';
 import tagsReducer from './tagsReducer';
 import previewMediaObjectReducer from './previewMediaObjectReducer';
 import isRefreshingTemplatesReducer from './isRefreshingTemplatesReducer';
+import pendingMessagesReducer from './pendingMessagesReducer';
 
 const rootReducer = {
 	UI: UIReducer,
 	chats: chatsReducer,
 	templates: templatesReducer,
+	pendingMessages: pendingMessagesReducer,
 	savedResponses: savedResponsesReducer,
 	tags: tagsReducer,
 	users: usersReducer,
