@@ -119,8 +119,6 @@ const cx = classNames.bind(styles);
 
 const Sidebar: React.FC<any> = ({
 	isLoaded,
-	pendingMessages,
-	setPendingMessages,
 	newMessages,
 	setNewMessages,
 	displayNotification,
@@ -1258,7 +1256,6 @@ const Sidebar: React.FC<any> = ({
 								<ChatListItem
 									key={item.waId}
 									chatData={item}
-									pendingMessages={pendingMessages}
 									newMessages={newMessages}
 									keyword={searchedKeyword}
 									contactProvidersData={contactProvidersData}
@@ -1340,8 +1337,6 @@ const Sidebar: React.FC<any> = ({
 
 			{hasFailedMessages && (
 				<RetryFailedMessages
-					pendingMessages={pendingMessages}
-					setPendingMessages={setPendingMessages}
 					isSendingPendingMessages={isSendingPendingMessages}
 					contactProvidersData={contactProvidersData}
 					chats={chats}

@@ -16,6 +16,10 @@ const useChatListItem = ({ props }: { props: any }) => {
 		(state) => state.UI
 	);
 
+	const pendingMessages = useAppSelector(
+		(state) => state.pendingMessages.value
+	);
+
 	const [isSelected, setSelected] = useState(false);
 	const [isExpired, setExpired] = useState(props.chatData.isExpired);
 	const [timeLeft, setTimeLeft] = useState<string>();
@@ -204,7 +208,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 	const hasFailedMessages = useCallback(() => {
 		let result = false;
-		props.pendingMessages.forEach((pendingMessage: any) => {
+		pendingMessages.forEach((pendingMessage: any) => {
 			if (
 				pendingMessage.requestBody?.wa_id === data.waId &&
 				pendingMessage.isFailed === true
@@ -213,7 +217,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 		});
 
 		return result;
-	}, [data.waId, props.pendingMessages]);
+	}, [data.waId, pendingMessages]);
 
 	return {
 		data,

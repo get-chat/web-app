@@ -106,8 +106,8 @@ import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import NewMessageModel from '@src/api/models/NewMessageModel';
 import ChosenFileClass from '@src/ChosenFileClass';
 import ReactionList from '@src/interfaces/ReactionList';
-import PendingMessage from '@src/interfaces/PendingMessage';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
+import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -115,8 +115,6 @@ const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
 interface Props {
-	pendingMessages: PendingMessage[];
-	setPendingMessages: (value: PendingMessage[]) => void;
 	newMessages: { [key: string]: NewMessageModel };
 	createSavedResponse: (value: string) => void;
 	contactProvidersData: {
@@ -136,6 +134,10 @@ const Chat: React.FC<Props> = (props) => {
 
 	const { isReadOnly, isSendingPendingMessages } = useAppSelector(
 		(state) => state.UI
+	);
+
+	const pendingMessages = useAppSelector(
+		(state) => state.pendingMessages.value
 	);
 
 	const { t } = useTranslation();
@@ -258,8 +260,6 @@ const Chat: React.FC<Props> = (props) => {
 	}, []);
 
 	useEffect(() => {
-		const pendingMessages = props.pendingMessages;
-
 		// Keep state in window as a variable to have actual state in callbacks
 		window.pendingMessages = pendingMessages;
 
@@ -298,7 +298,7 @@ const Chat: React.FC<Props> = (props) => {
 				});
 
 				// Update state after deleting sent one
-				props.setPendingMessages(updatedState);
+				dispatch(setPendingMessages(updatedState));
 				dispatch(setState({ isSendingPendingMessages: false }));
 			};
 
@@ -340,7 +340,7 @@ const Chat: React.FC<Props> = (props) => {
 		// Make sure this is the best place for it
 		// If there is no failed message, update state
 		// This state is used for prompting user before leaving page
-		if (!hasFailedPendingMessages(props.pendingMessages)) {
+		if (!hasFailedPendingMessages(pendingMessages)) {
 			dispatch(setState({ hasFailedMessages: false }));
 		}
 
@@ -350,7 +350,7 @@ const Chat: React.FC<Props> = (props) => {
 		} else if (pendingMessages.length === 0) {
 			dispatch(setState({ isSendingPendingMessages: false }));
 		}
-	}, [isSendingPendingMessages, props.pendingMessages]);
+	}, [isSendingPendingMessages, pendingMessages]);
 
 	useEffect(() => {
 		setLoaded(false);
@@ -1451,7 +1451,7 @@ const Chat: React.FC<Props> = (props) => {
 			willRetry: false,
 		});
 
-		props.setPendingMessages([...updatedState]);
+		dispatch(setPendingMessages([...updatedState]));
 	};
 
 	const sendCustomTextMessage = (text: string) => {
@@ -1886,9 +1886,11 @@ const Chat: React.FC<Props> = (props) => {
 		//displayMessageInChatManually(requestBody, false);
 
 		// Mark message in queue as failed
-		props.setPendingMessages([
-			...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
-		]);
+		dispatch(
+			setPendingMessages([
+				...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
+			])
+		);
 		dispatch(setState({ isSendingPendingMessages: false }));
 
 		// This will be used to display a warning before refreshing
@@ -2121,10 +2123,10 @@ const Chat: React.FC<Props> = (props) => {
 			/>
 
 			{/* FOR TESTING QUEUE */}
-			{isLocalHost() && props.pendingMessages.length > 0 && (
+			{isLocalHost() && pendingMessages.length > 0 && (
 				<div className="pendingMessagesIndicator">
 					<div>{isSendingPendingMessages.toString()}</div>
-					<div>{props.pendingMessages.length}</div>
+					<div>{pendingMessages.length}</div>
 				</div>
 			)}
 

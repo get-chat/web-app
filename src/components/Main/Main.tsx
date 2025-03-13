@@ -76,7 +76,6 @@ import {
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import NewMessageModel from '@src/api/models/NewMessageModel';
-import PendingMessage from '@src/interfaces/PendingMessage';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -113,8 +112,6 @@ const Main: React.FC = () => {
 	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
 
 	const [checked, setChecked] = useState(false);
-
-	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
 
 	const [newMessages, setNewMessages] = useState<{
 		[key: string]: NewMessageModel;
@@ -1024,8 +1021,6 @@ const Main: React.FC = () => {
 				{isTemplatesReady && (
 					<Sidebar
 						isLoaded={loadingProgress >= 100}
-						pendingMessages={pendingMessages}
-						setPendingMessages={setPendingMessages}
 						newMessages={newMessages}
 						setNewMessages={setNewMessages}
 						setProgress={setProgress}
@@ -1050,8 +1045,6 @@ const Main: React.FC = () => {
 
 				{isTemplatesReady && (
 					<Chat
-						pendingMessages={pendingMessages}
-						setPendingMessages={setPendingMessages}
 						newMessages={newMessages}
 						createSavedResponse={createSavedResponse}
 						contactProvidersData={contactProvidersData}
