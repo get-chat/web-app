@@ -114,11 +114,29 @@ import {
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
 import PersonModel from '@src/api/models/PersonModel';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
 
-const Sidebar: React.FC<any> = ({
+interface Props {
+	isLoaded: boolean;
+	displayNotification: (title: string, body: string, chatWaId: string) => void;
+	contactProvidersData: {
+		[key: string]: any;
+	};
+	isChatOnly: boolean;
+	setChatTagsListVisible: (value: boolean) => void;
+	bulkSendPayload?: BulkSendPayload;
+	finishBulkSendMessage: (payload?: BulkMessageTaskModel) => void;
+	setUploadRecipientsCSVVisible: (value: boolean) => void;
+	setBulkSendTemplateDialogVisible: (value: boolean) => void;
+	setBulkSendTemplateWithCallbackDialogVisible: (value: boolean) => void;
+	setSendBulkVoiceMessageDialogVisible: (value: boolean) => void;
+}
+
+const Sidebar: React.FC<Props> = ({
 	isLoaded,
 	displayNotification,
 	contactProvidersData,
@@ -128,7 +146,6 @@ const Sidebar: React.FC<any> = ({
 	finishBulkSendMessage,
 	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
-	setBulkSendTemplateViaCSVVisible,
 	setBulkSendTemplateWithCallbackDialogVisible,
 	setSendBulkVoiceMessageDialogVisible,
 }) => {
@@ -403,7 +420,7 @@ const Sidebar: React.FC<any> = ({
 						dispatch(setNewMessages({ ...preparedNewMessages }));
 
 						// Display a notification
-						if (!chatMessage.isFromUs) {
+						if (chatMessageWaId && !chatMessage.isFromUs) {
 							displayNotification(
 								t('New messages'),
 								t('You have new messages!'),
@@ -658,7 +675,7 @@ const Sidebar: React.FC<any> = ({
 					}
 
 					// Display a notification
-					if (hasAnyNewMessages) {
+					if (chatMessageWaId && hasAnyNewMessages) {
 						displayNotification(
 							t('New messages'),
 							t('You have new messages!'),

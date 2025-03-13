@@ -228,7 +228,7 @@ const Main: React.FC = () => {
 		setErrorVisible(false);
 	};
 
-	const finishBulkSendMessage = (payload: BulkMessageTaskModel) => {
+	const finishBulkSendMessage = (payload?: BulkMessageTaskModel) => {
 		const requestPayload: any = {};
 		const messagePayload = { ...bulkSendPayload };
 		const recipients = selectedChats;
@@ -1014,7 +1014,6 @@ const Main: React.FC = () => {
 				{isTemplatesReady && (
 					<Sidebar
 						isLoaded={loadingProgress >= 100}
-						setProgress={setProgress}
 						displayNotification={displayNotification}
 						contactProvidersData={contactProvidersData}
 						isChatOnly={isChatOnly}
@@ -1026,7 +1025,6 @@ const Main: React.FC = () => {
 						setBulkSendTemplateWithCallbackDialogVisible={
 							setBulkSendTemplateWithCallbackDialogVisible
 						}
-						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
