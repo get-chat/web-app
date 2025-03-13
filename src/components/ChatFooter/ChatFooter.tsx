@@ -41,6 +41,8 @@ import classNames from 'classnames/bind';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setState, toggleState } from '@src/store/reducers/UIReducer';
 
 const cx = classNames.bind(styles);
 
@@ -59,8 +61,6 @@ interface Props {
 	) => void;
 	bulkSendMessage: (type: string, payload?: BulkSendPayload) => void;
 	setSelectedFiles: (value: any) => void;
-	isTemplatesVisible: boolean;
-	setTemplatesVisible: React.Dispatch<SetStateAction<boolean>>;
 	isInteractiveMessagesVisible: boolean;
 	setInteractiveMessagesVisible: React.Dispatch<SetStateAction<boolean>>;
 	accept: string;
@@ -82,8 +82,6 @@ const ChatFooter: React.FC<Props> = ({
 	sendMessage,
 	bulkSendMessage,
 	setSelectedFiles,
-	isTemplatesVisible,
-	setTemplatesVisible,
 	isInteractiveMessagesVisible,
 	setInteractiveMessagesVisible,
 	accept,
@@ -96,6 +94,10 @@ const ChatFooter: React.FC<Props> = ({
 	processCommand,
 }) => {
 	const { t } = useTranslation();
+
+	const dispatch = useAppDispatch();
+
+	const { isTemplatesVisible } = useAppSelector((state) => state.UI);
 
 	const fileInput = useRef<HTMLInputElement>(null);
 	const editable = useRef<HTMLDivElement>(null);
@@ -190,22 +192,20 @@ const ChatFooter: React.FC<Props> = ({
             willScroll = true;
         }*/
 
-		setTemplatesVisible((prevState) => {
-			if (!prevState) {
-				setInteractiveMessagesVisible(false);
-				setAttachmentOptionsVisible(false);
-				setSavedResponsesVisible(false);
-				setEmojiPickerVisible(false);
-			}
+		if (!isTemplatesVisible) {
+			setInteractiveMessagesVisible(false);
+			setAttachmentOptionsVisible(false);
+			setSavedResponsesVisible(false);
+			setEmojiPickerVisible(false);
+		}
 
-			return !prevState;
-		});
+		dispatch(toggleState('isTemplatesVisible'));
 	};
 
 	const toggleInteractiveMessages = () => {
 		setInteractiveMessagesVisible((prevState) => {
 			if (!prevState) {
-				setTemplatesVisible(false);
+				dispatch(setState({ isTemplatesVisible: false }));
 				setAttachmentOptionsVisible(false);
 				setSavedResponsesVisible(false);
 				setEmojiPickerVisible(false);
@@ -220,7 +220,7 @@ const ChatFooter: React.FC<Props> = ({
 			if (!prevState) {
 				setInteractiveMessagesVisible(false);
 				setAttachmentOptionsVisible(false);
-				setTemplatesVisible(false);
+				dispatch(setState({ isTemplatesVisible: false }));
 				setEmojiPickerVisible(false);
 			}
 
@@ -231,9 +231,8 @@ const ChatFooter: React.FC<Props> = ({
 	const toggleEmojiPicker = () => {
 		setEmojiPickerVisible((prevState) => {
 			if (!prevState) {
-				setTemplatesVisible(false);
+				dispatch(setState({ isTemplatesVisible: false }));
 				setAttachmentOptionsVisible(false);
-				setTemplatesVisible(false);
 				setSavedResponsesVisible(false);
 			}
 
@@ -270,7 +269,7 @@ const ChatFooter: React.FC<Props> = ({
 	const displayQuickActionsMenu = () => {
 		if (!isQuickActionsMenuVisible) {
 			setQuickActionsMenuVisible(true);
-			setTemplatesVisible(false);
+			dispatch(setState({ isTemplatesVisible: false }));
 			setSavedResponsesVisible(false);
 			setEmojiPickerVisible(false);
 		}

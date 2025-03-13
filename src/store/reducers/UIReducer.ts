@@ -24,6 +24,7 @@ interface UIState {
 	isChatAssignmentVisible: boolean;
 	isInitialResourceFailed: boolean;
 	isUploadRecipientsCSVVisible: boolean;
+	isTemplatesVisible: boolean;
 }
 
 const initialState: UIState = {
@@ -49,6 +50,7 @@ const initialState: UIState = {
 	isChatAssignmentVisible: false,
 	isInitialResourceFailed: false,
 	isUploadRecipientsCSVVisible: false,
+	isTemplatesVisible: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {
