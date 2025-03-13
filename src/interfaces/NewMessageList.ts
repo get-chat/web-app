@@ -1,7 +1,7 @@
 import NewMessageModel from '@src/api/models/NewMessageModel';
 
-interface NewMessagesList {
+interface NewMessageList {
 	[key: string]: NewMessageModel;
 }
 
-export default NewMessagesList;
+export default NewMessageList;

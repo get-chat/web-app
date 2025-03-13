@@ -75,7 +75,7 @@ import {
 } from '@src/store/reducers/UIReducer';
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import NewMessageModel from '@src/api/models/NewMessageModel';
+import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -102,6 +102,7 @@ const Main: React.FC = () => {
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
 	);
+	const newMessages = useAppSelector((state) => state.newMessages.value);
 
 	const dispatch = useAppDispatch();
 
@@ -112,10 +113,6 @@ const Main: React.FC = () => {
 	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
 
 	const [checked, setChecked] = useState(false);
-
-	const [newMessages, setNewMessages] = useState<{
-		[key: string]: NewMessageModel;
-	}>({});
 
 	const [isTemplatesReady, setTemplatesReady] = useState(false);
 
@@ -722,12 +719,10 @@ const Main: React.FC = () => {
 		const onMarkedAsReceived = function (msg: string, data: any) {
 			const relatedWaId = data;
 
-			setNewMessages((prevState) => {
-				const nextState = prevState;
-				delete nextState[relatedWaId];
+			const newMessagesNextState = { ...newMessages };
+			delete newMessagesNextState[relatedWaId];
 
-				return { ...nextState };
-			});
+			dispatch(setNewMessages(newMessagesNextState));
 		};
 
 		const markedAsReceivedEventToken = PubSub.subscribe(
@@ -1021,8 +1016,6 @@ const Main: React.FC = () => {
 				{isTemplatesReady && (
 					<Sidebar
 						isLoaded={loadingProgress >= 100}
-						newMessages={newMessages}
-						setNewMessages={setNewMessages}
 						setProgress={setProgress}
 						displayNotification={displayNotification}
 						contactProvidersData={contactProvidersData}
@@ -1045,7 +1038,6 @@ const Main: React.FC = () => {
 
 				{isTemplatesReady && (
 					<Chat
-						newMessages={newMessages}
 						createSavedResponse={createSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}

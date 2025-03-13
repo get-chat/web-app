@@ -113,14 +113,13 @@ import {
 } from '@src/store/reducers/UIReducer';
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
 import PersonModel from '@src/api/models/PersonModel';
+import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
 
 const Sidebar: React.FC<any> = ({
 	isLoaded,
-	newMessages,
-	setNewMessages,
 	displayNotification,
 	contactProvidersData,
 	isChatOnly,
@@ -155,6 +154,7 @@ const Sidebar: React.FC<any> = ({
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const groups = useAppSelector((state) => state.groups.value);
+	const newMessages = useAppSelector((state) => state.newMessages.value);
 
 	const { t } = useTranslation();
 
@@ -388,7 +388,7 @@ const Sidebar: React.FC<any> = ({
 							document.visibilityState === 'hidden' ||
 							isBlurred)
 					) {
-						const preparedNewMessages = newMessages;
+						const preparedNewMessages = { ...newMessages };
 						if (chatMessageWaId && newMessages[chatMessageWaId] === undefined) {
 							preparedNewMessages[chatMessageWaId] = new NewMessageModel(
 								chatMessageWaId,
@@ -401,7 +401,7 @@ const Sidebar: React.FC<any> = ({
 							preparedNewMessages[chatMessageWaId].newMessages++;
 						}
 
-						setNewMessages({ ...preparedNewMessages });
+						dispatch(setNewMessages({ ...preparedNewMessages }));
 
 						// Display a notification
 						if (!chatMessage.isFromUs) {
@@ -625,37 +625,38 @@ const Sidebar: React.FC<any> = ({
 					let hasAnyNewMessages = false;
 					let chatMessageWaId: string | undefined;
 
-					setNewMessages((prevState: any) => {
-						Object.entries(preparedNewMessages).forEach((newMsg) => {
-							const newMsgWaId = newMsg[0];
-							const number = newMsg[1].newMessages;
-							if (newMsgWaId !== waId) {
-								// TODO: Consider a new contact (last part of the condition)
-								if (
-									prevState[newMsgWaId] &&
-									number >
-										prevState[newMsgWaId]
-											.newMessages /*|| (!prevState[newMsgWaId] && number > 0)*/
-								) {
-									hasAnyNewMessages = true;
+					const prevState = { ...newMessages };
 
-									// There can be multiple new chats, we take first one
-									if (chatMessageWaId === newMsgWaId)
-										chatMessageWaId = newMsgWaId;
-								}
+					// Update new messages
+					Object.entries(preparedNewMessages).forEach((newMsg) => {
+						const newMsgWaId = newMsg[0];
+						const number = newMsg[1].newMessages;
+						if (newMsgWaId !== waId) {
+							// TODO: Consider a new contact (last part of the condition)
+							if (
+								prevState[newMsgWaId] &&
+								number >
+									prevState[newMsgWaId]
+										.newMessages /*|| (!prevState[newMsgWaId] && number > 0)*/
+							) {
+								hasAnyNewMessages = true;
+
+								// There can be multiple new chats, we take first one
+								if (chatMessageWaId === newMsgWaId)
+									chatMessageWaId = newMsgWaId;
 							}
-						});
-
-						// When state is a JSON object, it is unable to understand whether it is different or same and renders again
-						// So we check if new state is actually different from previous state
-						if (
-							JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
-						) {
-							return { ...prevState, ...preparedNewMessages };
-						} else {
-							return prevState;
 						}
 					});
+
+					// When state is a JSON object, it is unable to understand whether it is different or same and renders again
+					// So we check if new state is actually different from previous state
+					if (
+						JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
+					) {
+						dispatch(setNewMessages({ ...prevState, ...preparedNewMessages }));
+					} else {
+						dispatch(setNewMessages(prevState));
+					}
 
 					// Display a notification
 					if (hasAnyNewMessages) {
@@ -666,9 +667,7 @@ const Sidebar: React.FC<any> = ({
 						);
 					}
 				} else {
-					setNewMessages((prevState: any) => {
-						return { ...prevState, ...preparedNewMessages };
-					});
+					dispatch(setNewMessages({ ...newMessages, ...preparedNewMessages }));
 				}
 
 				setLoadingMoreChats(false);

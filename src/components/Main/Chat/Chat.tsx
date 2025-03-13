@@ -103,7 +103,6 @@ import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 import ReactionDetails from '@src/components/ReactionDetails';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
-import NewMessageModel from '@src/api/models/NewMessageModel';
 import ChosenFileClass from '@src/ChosenFileClass';
 import ReactionList from '@src/interfaces/ReactionList';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
@@ -115,7 +114,6 @@ const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
 interface Props {
-	newMessages: { [key: string]: NewMessageModel };
 	createSavedResponse: (value: string) => void;
 	contactProvidersData: {
 		[key: string]: any;
@@ -139,6 +137,8 @@ const Chat: React.FC<Props> = (props) => {
 	const pendingMessages = useAppSelector(
 		(state) => state.pendingMessages.value
 	);
+
+	const newMessages = useAppSelector((state) => state.newMessages.value);
 
 	const { t } = useTranslation();
 
@@ -400,7 +400,7 @@ const Chat: React.FC<Props> = (props) => {
 	}, [person]);
 
 	const getNewMessagesCount = () => {
-		return waId ? props.newMessages[waId]?.newMessages ?? 0 : 0;
+		return waId ? newMessages[waId]?.newMessages ?? 0 : 0;
 	};
 
 	useEffect(() => {
@@ -408,7 +408,7 @@ const Chat: React.FC<Props> = (props) => {
 		if (newMessagesCount > currentNewMessages) {
 			setCurrentNewMessages(newMessagesCount);
 		}
-	}, [waId, props.newMessages]);
+	}, [waId, newMessages]);
 
 	useEffect(() => {
 		const messagesContainerCopy = messagesContainer.current;
