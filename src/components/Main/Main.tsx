@@ -110,8 +110,6 @@ const Main: React.FC = () => {
 
 	const { waId } = useParams();
 
-	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
-
 	const [checked, setChecked] = useState(false);
 
 	const [isTemplatesReady, setTemplatesReady] = useState(false);
@@ -155,7 +153,7 @@ const Main: React.FC = () => {
 		setSendBulkVoiceMessageDialogVisible,
 	] = useState(false);
 
-	const [notificationHistory, setNotificationHistory] = useState<{
+	const [, setNotificationHistory] = useState<{
 		[key: string]: string[];
 	}>({});
 
@@ -757,7 +755,7 @@ const Main: React.FC = () => {
 			});
 		} catch (error) {
 			console.error('Error in listUsers', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listGroups();
@@ -779,7 +777,7 @@ const Main: React.FC = () => {
 			});
 		} catch (error) {
 			console.error('Error in listGroups', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listContacts();
@@ -806,7 +804,7 @@ const Main: React.FC = () => {
 			}, navigate);
 		} catch (error) {
 			console.error('Error retrieving current user', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listUsers();
@@ -861,7 +859,7 @@ const Main: React.FC = () => {
 						window.displayError(error);
 					}
 
-					setInitialResourceFailed(true);
+					dispatch(setState({ isInitialResourceFailed: true }));
 				} else {
 					console.error(error);
 				}
@@ -884,7 +882,7 @@ const Main: React.FC = () => {
 			});
 		} catch (error) {
 			console.error('Error in listSavedResponses', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listTemplates(false);
@@ -947,7 +945,7 @@ const Main: React.FC = () => {
 				},
 				(error: AxiosError) => {
 					console.error('Error in listContacts', error);
-					setInitialResourceFailed(true);
+					dispatch(setState({ isInitialResourceFailed: true }));
 				}
 			);
 		};
@@ -1029,7 +1027,6 @@ const Main: React.FC = () => {
 							setBulkSendTemplateWithCallbackDialogVisible
 						}
 						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
-						setInitialResourceFailed={setInitialResourceFailed}
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
@@ -1105,10 +1102,7 @@ const Main: React.FC = () => {
 
 				<Fade in={loadingProgress < 100} timeout={{ exit: 1000 }} unmountOnExit>
 					<div className="loadingScreenOuter">
-						<LoadingScreen
-							isInitialResourceFailed={isInitialResourceFailed}
-							isHideLogo={isHideLogo}
-						/>
+						<LoadingScreen isHideLogo={isHideLogo} />
 					</div>
 				</Fade>
 

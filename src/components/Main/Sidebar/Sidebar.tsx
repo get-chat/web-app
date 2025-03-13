@@ -130,7 +130,6 @@ const Sidebar: React.FC<any> = ({
 	setBulkSendTemplateDialogVisible,
 	setBulkSendTemplateViaCSVVisible,
 	setBulkSendTemplateWithCallbackDialogVisible,
-	setInitialResourceFailed,
 	setSendBulkVoiceMessageDialogVisible,
 }) => {
 	// @ts-ignore
@@ -680,7 +679,7 @@ const Sidebar: React.FC<any> = ({
 				setLoadingChats(false);
 
 				if (isInitial) {
-					setInitialResourceFailed(true);
+					dispatch(setState({ isInitialResourceFailed: true }));
 				}
 			},
 			navigate

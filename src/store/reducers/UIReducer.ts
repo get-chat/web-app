@@ -22,6 +22,7 @@ interface UIState {
 	selectedChats: string[];
 	chosenContact: PersonModel | undefined;
 	isChatAssignmentVisible: boolean;
+	isInitialResourceFailed: boolean;
 }
 
 const initialState: UIState = {
@@ -45,6 +46,7 @@ const initialState: UIState = {
 	selectedChats: [],
 	chosenContact: undefined,
 	isChatAssignmentVisible: false,
+	isInitialResourceFailed: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

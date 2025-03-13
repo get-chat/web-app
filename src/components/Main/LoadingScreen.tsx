@@ -9,18 +9,13 @@ import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	isHideLogo: boolean;
-	isInitialResourceFailed: boolean;
 }
 
-const LoadingScreen: React.FC<Props> = ({
-	isHideLogo,
-	isInitialResourceFailed,
-}) => {
+const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 	const { t } = useTranslation();
 
-	const { loadingProgress, loadingComponent } = useAppSelector(
-		(state) => state.UI
-	);
+	const { loadingProgress, loadingComponent, isInitialResourceFailed } =
+		useAppSelector((state) => state.UI);
 
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
 		useState(false);
