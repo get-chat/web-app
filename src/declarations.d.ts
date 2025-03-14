@@ -13,7 +13,6 @@ declare global {
 		displayCustomError: (error: string) => void;
 		displaySuccess: (message: string) => void;
 		goToChatByWaId: (waId: string) => void;
-		pendingMessages: PendingMessage[];
 		customStorage: { [key: string]: string };
 	}
 }

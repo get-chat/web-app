@@ -260,9 +260,6 @@ const Chat: React.FC<Props> = (props) => {
 	}, []);
 
 	useEffect(() => {
-		// Keep state in window as a variable to have actual state in callbacks
-		window.pendingMessages = pendingMessages;
-
 		// Log state changes
 		console.log({
 			isSendingPendingMessages: isSendingPendingMessages,
@@ -291,9 +288,7 @@ const Chat: React.FC<Props> = (props) => {
 				pendingMessageToSend.completeCallback?.();
 
 				// Delete sent message from state
-				const updatedState = window.pendingMessages.filter(function (
-					pendingMessage
-				) {
+				const updatedState = pendingMessages.filter(function (pendingMessage) {
 					return pendingMessage.id !== pendingMessageToSend.id;
 				});
 
@@ -1439,7 +1434,7 @@ const Chat: React.FC<Props> = (props) => {
 		// Inject id into requestBody
 		requestBody.pendingMessageUniqueId = uniqueID;
 
-		const updatedState = window.pendingMessages;
+		const updatedState = [...pendingMessages];
 		updatedState.push({
 			id: uniqueID,
 			requestBody: requestBody,
@@ -1889,7 +1884,10 @@ const Chat: React.FC<Props> = (props) => {
 		// Mark message in queue as failed
 		dispatch(
 			setPendingMessages([
-				...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
+				...setPendingMessageFailed(
+					pendingMessages,
+					requestBody.pendingMessageUniqueId
+				),
 			])
 		);
 		dispatch(setState({ isSendingPendingMessages: false }));

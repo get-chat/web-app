@@ -41,7 +41,9 @@ const RetryFailedMessages: React.FC<Props> = ({
 
 	const resendMessage = () => {
 		// Set all failed pending message as willRetry so queue will retry automatically
-		dispatch(setPendingMessages([...setAllFailedPendingMessagesWillRetry()]));
+		dispatch(
+			setPendingMessages(setAllFailedPendingMessagesWillRetry(pendingMessages))
+		);
 
 		// Switch to chat of first failed message
 		const firstFailedMessage = getFirstFailedPendingMessage(pendingMessages);

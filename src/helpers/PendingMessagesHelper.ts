@@ -1,25 +1,29 @@
 import PendingMessage from '@src/interfaces/PendingMessage';
 
-const getPendingMessages = () => {
-	return window.pendingMessages;
-};
-
-export const findPendingMessageIndex = (id: string) => {
-	const pendingMessages = getPendingMessages();
+export const findPendingMessageIndex = (
+	pendingMessages: PendingMessage[],
+	id: string
+) => {
 	for (let i = 0; i < pendingMessages.length; i++) {
 		const currentPendingMessage = pendingMessages[i];
 		if (currentPendingMessage.id === id) return i;
 	}
 };
 
-export const findPendingMessage = (id: string) => {
-	const index = findPendingMessageIndex(id);
-	return index ? getPendingMessages()[index] : undefined;
+export const findPendingMessage = (
+	pendingMessages: PendingMessage[],
+	id: string
+) => {
+	const index = findPendingMessageIndex(pendingMessages, id);
+	return index ? pendingMessages[index] : undefined;
 };
 
-export const setPendingMessageFailed = (id: string) => {
-	const pendingMessages = getPendingMessages();
-	const pendingMessageIndex = findPendingMessageIndex(id);
+export const setPendingMessageFailed = (
+	pendingMessages: PendingMessage[],
+	id: string
+) => {
+	pendingMessages = [...pendingMessages];
+	const pendingMessageIndex = findPendingMessageIndex(pendingMessages, id);
 	if (pendingMessageIndex && pendingMessages[pendingMessageIndex]) {
 		pendingMessages[pendingMessageIndex].isFailed = true;
 		pendingMessages[pendingMessageIndex].willRetry = false;
@@ -27,8 +31,10 @@ export const setPendingMessageFailed = (id: string) => {
 	return pendingMessages;
 };
 
-export const setAllFailedPendingMessagesWillRetry = () => {
-	const pendingMessages = getPendingMessages();
+export const setAllFailedPendingMessagesWillRetry = (
+	pendingMessages: PendingMessage[]
+) => {
+	pendingMessages = [...pendingMessages];
 	for (let i = 0; i < pendingMessages.length; i++) {
 		if (pendingMessages[i].isFailed) {
 			pendingMessages[i].willRetry = true;

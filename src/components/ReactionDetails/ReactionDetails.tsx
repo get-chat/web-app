@@ -39,7 +39,7 @@ const ReactionDetails: React.FC<Props> = ({
 				{reactions
 					?.filter((item) => !!item.reaction?.emoji)
 					.map((reaction) => (
-						<div className={styles.reaction}>
+						<div className={styles.reaction} key={reaction.id}>
 							<div className={styles.sender}>{reaction.senderName}</div>
 							<div className={styles.timestamp}>
 								<Moment
