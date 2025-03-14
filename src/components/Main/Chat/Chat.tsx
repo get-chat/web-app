@@ -1439,7 +1439,7 @@ const Chat: React.FC<Props> = (props) => {
 		// Inject id into requestBody
 		requestBody.pendingMessageUniqueId = uniqueID;
 
-		const updatedState = window.pendingMessages;
+		const updatedState = [...window.pendingMessages];
 		updatedState.push({
 			id: uniqueID,
 			requestBody: requestBody,
