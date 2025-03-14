@@ -17,13 +17,13 @@ import { useAppDispatch } from '@src/store/hooks';
 import {
 	setBulkSend,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 
 const SendBulkVoiceMessageDialog = ({
 	apiService,
 	open,
 	setOpen,
-	setUploadingMedia,
 	setBulkSendPayload,
 }) => {
 	// TODO: Handle isRecording globally to avoid conflicts
@@ -55,7 +55,7 @@ const SendBulkVoiceMessageDialog = ({
 
 	const uploadMedia = (chosenFile, payload, formData, completeCallback) => {
 		// To display a progress
-		setUploadingMedia(true);
+		dispatch(setState({ isUploadingMedia: true }));
 
 		apiService.uploadMediaCall(
 			formData,
@@ -68,7 +68,7 @@ const SendBulkVoiceMessageDialog = ({
 					undefined,
 					function () {
 						completeCallback?.();
-						setUploadingMedia(false);
+						dispatch(setState({ isUploadingMedia: false }));
 					}
 				);
 			},
@@ -77,7 +77,7 @@ const SendBulkVoiceMessageDialog = ({
 
 				// A retry can be considered
 				completeCallback?.();
-				setUploadingMedia(false);
+				dispatch(setState({ isUploadingMedia: false }));
 			}
 		);
 	};

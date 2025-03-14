@@ -1,33 +1,66 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import PersonModel from '@src/api/models/PersonModel';
 
 interface UIState {
-	value: {
-		isReadOnly: boolean;
-		isMessageStatusesVisible: boolean;
-		isContactDetailsVisible: boolean;
-		isSearchMessagesVisible: boolean;
-		isSelectionModeEnabled: boolean;
-		isBulkSend: boolean;
-		isExportChat: boolean;
-	};
+	isReadOnly: boolean;
+	isMessageStatusesVisible: boolean;
+	isContactDetailsVisible: boolean;
+	isSearchMessagesVisible: boolean;
+	isSelectionModeEnabled: boolean;
+	isBulkSend: boolean;
+	isExportChat: boolean;
+	loadingProgress: number;
+	loadingComponent: string;
+	hasFailedMessages: boolean;
+	isBlurred: boolean;
+	isSendingPendingMessages: boolean;
+	isLoadingTemplates: boolean;
+	isUploadingMedia: boolean;
+	isTemplatesFailed: boolean;
+	lastSendAttemptAt: Date | undefined;
+	selectedTags: number[];
+	selectedChats: string[];
+	chosenContact: PersonModel | undefined;
+	isChatAssignmentVisible: boolean;
+	isInitialResourceFailed: boolean;
+	isUploadRecipientsCSVVisible: boolean;
+	isTemplatesVisible: boolean;
+	isSavedResponsesVisible: boolean;
+	isInteractiveMessagesVisible: boolean;
 }
 
 const initialState: UIState = {
-	value: {
-		isReadOnly: false,
-		isMessageStatusesVisible: false,
-		isContactDetailsVisible: false,
-		isSearchMessagesVisible: false,
-		isSelectionModeEnabled: false,
-		isBulkSend: false,
-		isExportChat: false,
-	},
+	isReadOnly: false,
+	isMessageStatusesVisible: false,
+	isContactDetailsVisible: false,
+	isSearchMessagesVisible: false,
+	isSelectionModeEnabled: false,
+	isBulkSend: false,
+	isExportChat: false,
+	loadingProgress: 0,
+	loadingComponent: '',
+	hasFailedMessages: false,
+	isBlurred: false,
+	isSendingPendingMessages: false,
+	isLoadingTemplates: true,
+	isUploadingMedia: false,
+	isTemplatesFailed: false,
+	lastSendAttemptAt: undefined,
+	selectedTags: [],
+	selectedChats: [],
+	chosenContact: undefined,
+	isChatAssignmentVisible: false,
+	isInitialResourceFailed: false,
+	isUploadRecipientsCSVVisible: false,
+	isTemplatesVisible: false,
+	isSavedResponsesVisible: false,
+	isInteractiveMessagesVisible: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {
-	state.value.isMessageStatusesVisible = false;
-	state.value.isContactDetailsVisible = false;
-	state.value.isSearchMessagesVisible = false;
+	state.isMessageStatusesVisible = false;
+	state.isContactDetailsVisible = false;
+	state.isSearchMessagesVisible = false;
 };
 
 export const UISlice = createSlice({
@@ -35,45 +68,47 @@ export const UISlice = createSlice({
 	initialState,
 	reducers: {
 		setReadOnly: (state, action: PayloadAction<boolean>) => {
-			state.value.isReadOnly = action.payload;
-		},
-		setMessageStatusesVisible: (state, action: PayloadAction<boolean>) => {
-			closeSections(state);
-			state.value.isMessageStatusesVisible = action.payload;
-		},
-		setContactDetailsVisible: (state, action: PayloadAction<boolean>) => {
-			closeSections(state);
-			state.value.isContactDetailsVisible = action.payload;
+			state.isReadOnly = action.payload;
 		},
 		setSearchMessagesVisible: (state, action: PayloadAction<boolean>) => {
 			closeSections(state);
-			state.value.isSearchMessagesVisible = action.payload;
+			state.isSearchMessagesVisible = action.payload;
 		},
 		setSelectionModeEnabled: (state, action: PayloadAction<boolean>) => {
-			state.value.isSelectionModeEnabled = action.payload;
+			state.isSelectionModeEnabled = action.payload;
 
 			if (!action.payload) {
-				state.value.isBulkSend = false;
-				state.value.isExportChat = false;
+				state.isBulkSend = false;
+				state.isExportChat = false;
 			}
 		},
 		setBulkSend: (state, action: PayloadAction<boolean>) => {
-			state.value.isBulkSend = action.payload;
+			state.isBulkSend = action.payload;
 		},
 		setExportChat: (state, action: PayloadAction<boolean>) => {
-			state.value.isExportChat = action.payload;
+			state.isExportChat = action.payload;
+		},
+
+		toggleState: (state, action: PayloadAction<keyof UIState>) => {
+			if (typeof state[action.payload] === 'boolean') {
+				return { ...state, [action.payload]: !state[action.payload] };
+			}
+			return state;
+		},
+		setState: (state, action: PayloadAction<Partial<UIState>>) => {
+			return { ...state, ...action.payload };
 		},
 	},
 });
 
 export const {
 	setReadOnly,
-	setMessageStatusesVisible,
-	setContactDetailsVisible,
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
 	setBulkSend,
 	setExportChat,
+	toggleState,
+	setState,
 } = UISlice.actions;
 
 export default UISlice.reducer;

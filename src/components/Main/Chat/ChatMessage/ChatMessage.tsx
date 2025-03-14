@@ -31,12 +31,12 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import TemplateModel from '@src/api/models/TemplateModel';
-import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
 import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
 import useReactions from '@src/hooks/useReactions';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	data: ChatMessageModel;
@@ -53,7 +53,6 @@ interface Props {
 		data: ChatMessageModel
 	) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
-	isTemplatesFailed?: boolean;
 	retryMessage?: (message: ChatMessageModel) => void;
 	disableMediaPreview?: boolean;
 	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
@@ -77,7 +76,6 @@ const ChatMessage: React.FC<Props> = ({
 	onQuickReactionsClick,
 	onReactionDetailsClick,
 	goToMessageId,
-	isTemplatesFailed,
 	retryMessage,
 	disableMediaPreview,
 	setMessageWithStatuses,
@@ -255,7 +253,6 @@ const ChatMessage: React.FC<Props> = ({
 							<ChatMessageTemplate
 								data={data}
 								templateData={templateData}
-								isTemplatesFailed={isTemplatesFailed}
 								onPreview={onPreview}
 								onOptionsClick={(e: React.MouseEvent) =>
 									onOptionsClick?.(e, data)
@@ -306,7 +303,7 @@ const ChatMessage: React.FC<Props> = ({
 									// Injecting reactions
 									clonedMessage.reactions = reactions;
 									setMessageWithStatuses?.(clonedMessage);
-									dispatch(setMessageStatusesVisible(true));
+									dispatch(setState({ isMessageStatusesVisible: true }));
 								}
 							}}
 						>

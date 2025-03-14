@@ -69,34 +69,41 @@ import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
-	setContactDetailsVisible,
-	setMessageStatusesVisible,
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import NewMessageModel from '@src/api/models/NewMessageModel';
-import PersonModel from '@src/api/models/PersonModel';
-import PendingMessage from '@src/interfaces/PendingMessage';
+import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
 }
 
-function Main() {
+const Main: React.FC = () => {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const {
+		loadingProgress,
+		hasFailedMessages,
+		isBlurred,
+		isUploadingMedia,
+		isTemplatesFailed,
+		selectedTags,
+		selectedChats,
+		isChatAssignmentVisible,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
-	} = useAppSelector((state) => state.UI.value);
+		isUploadRecipientsCSVVisible,
+	} = useAppSelector((state) => state.UI);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
 	);
+	const newMessages = useAppSelector((state) => state.newMessages.value);
 
 	const dispatch = useAppDispatch();
 
@@ -104,35 +111,15 @@ function Main() {
 
 	const { waId } = useParams();
 
-	const [progress, _setProgress] = useState(0);
-	const [loadingNow, setLoadingNow] = useState('');
-	const [isInitialResourceFailed, setInitialResourceFailed] = useState(false);
-
 	const [checked, setChecked] = useState(false);
-	const [isBlurred, setBlurred] = useState(false);
 
-	const [isSendingPendingMessages, setSendingPendingMessages] = useState(false);
-	const [pendingMessages, setPendingMessages] = useState<PendingMessage[]>([]);
-	const [hasFailedMessages, setHasFailedMessages] = useState(false);
-	const [lastSendAttemptAt, setLastSendAttemptAt] = useState<Date>();
-
-	const [isUploadingMedia, setUploadingMedia] = useState(false);
-
-	const [newMessages, setNewMessages] = useState<{
-		[key: string]: NewMessageModel;
-	}>({});
-
-	const [isTemplatesFailed, setTemplatesFailed] = useState(false);
-
-	const [isLoadingTemplates, setLoadingTemplates] = useState(true);
-	const [templatesReady, setTemplatesReady] = useState(false);
+	const [isTemplatesReady, setTemplatesReady] = useState(false);
 
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
 	const [successMessage, setSuccessMessage] = useState('');
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 
-	const [isChatAssignmentVisible, setChatAssignmentVisible] = useState(false);
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
@@ -143,13 +130,9 @@ function Main() {
 
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
-	const [chosenContact, setChosenContact] = useState<PersonModel>();
-
 	const [messageWithStatuses, setMessageWithStatuses] =
 		useState<ChatMessageModel>();
 
-	const [selectedChats, setSelectedChats] = useState<string[]>([]);
-	const [selectedTags, setSelectedTags] = useState<number[]>([]);
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
 	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
@@ -160,9 +143,6 @@ function Main() {
 		setBulkSendTemplateWithCallbackDialogVisible,
 	] = useState(false);
 
-	const [isUploadRecipientsCSVVisible, setUploadRecipientsCSVVisible] =
-		useState(false);
-
 	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
 		useState(false);
 
@@ -171,7 +151,7 @@ function Main() {
 		setSendBulkVoiceMessageDialogVisible,
 	] = useState(false);
 
-	const [notificationHistory, setNotificationHistory] = useState<{
+	const [, setNotificationHistory] = useState<{
 		[key: string]: string[];
 	}>({});
 
@@ -194,9 +174,13 @@ function Main() {
 	const [isMaximize] = useState(query.get('maximize') === '1');
 
 	const setProgress = (value: number) => {
-		_setProgress((prevState) => {
-			return value > prevState ? value : prevState;
-		});
+		if (value > loadingProgress) {
+			dispatch(setState({ loadingProgress: value }));
+		}
+	};
+
+	const setLoadingComponent = (value: string) => {
+		dispatch(setState({ loadingComponent: value }));
 	};
 
 	const displaySuccess = (message: string) => {
@@ -242,7 +226,7 @@ function Main() {
 		setErrorVisible(false);
 	};
 
-	const finishBulkSendMessage = (payload: BulkMessageTaskModel) => {
+	const finishBulkSendMessage = (payload?: BulkMessageTaskModel) => {
 		const requestPayload: any = {};
 		const messagePayload = { ...bulkSendPayload };
 		const recipients = selectedChats;
@@ -271,8 +255,7 @@ function Main() {
 			dispatch(setSelectionModeEnabled(false));
 
 			// Clear selections
-			setSelectedChats([]);
-			setSelectedTags([]);
+			dispatch(setState({ selectedTags: [], selectedChats: [] }));
 
 			// Clear input if text message
 			if (messagePayload.type === 'text') {
@@ -428,7 +411,7 @@ function Main() {
 		let socketClosedAt: Date | undefined;
 
 		const connect = () => {
-			if (progress < 100) {
+			if (loadingProgress < 100) {
 				return;
 			}
 
@@ -647,7 +630,7 @@ function Main() {
 		return () => {
 			ws?.close(CODE_NORMAL);
 		};
-	}, [progress]);
+	}, [loadingProgress]);
 
 	useEffect(() => {
 		// Window close event
@@ -696,11 +679,11 @@ function Main() {
 
 	useEffect(() => {
 		function onBlur() {
-			setBlurred(true);
+			dispatch(setState({ isBlurred: true }));
 		}
 
 		function onFocus() {
-			setBlurred(false);
+			dispatch(setState({ isBlurred: false }));
 		}
 
 		window.addEventListener('blur', onBlur);
@@ -716,17 +699,15 @@ function Main() {
 		setChecked(true);
 
 		return () => {
-			// Hide search messages
-			dispatch(setSearchMessagesVisible(false));
-
-			// Hide contact details
-			dispatch(setContactDetailsVisible(false));
-
-			// Hide message statuses
-			dispatch(setMessageStatusesVisible(false));
-
-			// Hide chat assignment
-			setChatAssignmentVisible(false);
+			// Hide search messages, contact details, message statuses and chat assignment
+			dispatch(
+				setState({
+					isSearchMessagesVisible: false,
+					isContactDetailsVisible: false,
+					isMessageStatusesVisible: false,
+					isChatAssignmentVisible: false,
+				})
+			);
 		};
 	}, [waId]);
 
@@ -734,12 +715,10 @@ function Main() {
 		const onMarkedAsReceived = function (msg: string, data: any) {
 			const relatedWaId = data;
 
-			setNewMessages((prevState) => {
-				const nextState = prevState;
-				delete nextState[relatedWaId];
+			const newMessagesNextState = { ...newMessages };
+			delete newMessagesNextState[relatedWaId];
 
-				return { ...nextState };
-			});
+			dispatch(setNewMessages(newMessagesNextState));
 		};
 
 		const markedAsReceivedEventToken = PubSub.subscribe(
@@ -755,14 +734,13 @@ function Main() {
 	// Clear selected chats and tags when bulk send payload changes
 	useEffect(() => {
 		if (bulkSendPayload) {
-			setSelectedChats([]);
-			setSelectedTags([]);
+			dispatch(setState({ selectedTags: [], selectedChats: [] }));
 		}
 	}, [bulkSendPayload]);
 
 	// ** 2 **
 	const listUsers = async () => {
-		setLoadingNow('Users');
+		setLoadingComponent('Users');
 
 		try {
 			apiService.listUsersCall(5000, (response: AxiosResponse) => {
@@ -775,7 +753,7 @@ function Main() {
 			});
 		} catch (error) {
 			console.error('Error in listUsers', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listGroups();
@@ -784,7 +762,7 @@ function Main() {
 
 	// ** 3 **
 	const listGroups = async () => {
-		setLoadingNow('Groups');
+		setLoadingComponent('Groups');
 
 		try {
 			apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
@@ -797,7 +775,7 @@ function Main() {
 			});
 		} catch (error) {
 			console.error('Error in listGroups', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listContacts();
@@ -806,7 +784,7 @@ function Main() {
 
 	// ** 1 **
 	const retrieveCurrentUser = async () => {
-		setLoadingNow('Current User');
+		setLoadingComponent('Current User');
 
 		try {
 			apiService.retrieveCurrentUserCall((response: AxiosResponse) => {
@@ -824,7 +802,7 @@ function Main() {
 			}, navigate);
 		} catch (error) {
 			console.error('Error retrieving current user', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listUsers();
@@ -833,10 +811,10 @@ function Main() {
 
 	// ** 6 **
 	const listTemplates = async (isRetry: boolean) => {
-		setLoadingNow('Templates');
+		setLoadingComponent('Templates');
 
 		const completeCallback = () => {
-			setLoadingTemplates(false);
+			dispatch(setState({ isLoadingTemplates: false }));
 			setTemplatesReady(true);
 
 			setProgress(70);
@@ -856,7 +834,7 @@ function Main() {
 					completeCallback();
 				}
 
-				setTemplatesFailed(false);
+				dispatch(setState({ isTemplatesFailed: false }));
 			},
 			(error: AxiosError) => {
 				if (!isRetry) {
@@ -869,7 +847,7 @@ function Main() {
 							completeCallback();
 
 							// To trigger retrying periodically
-							setTemplatesFailed(true);
+							dispatch(setState({ isTemplatesFailed: true }));
 						} else {
 							window.displayError(error);
 						}
@@ -879,7 +857,7 @@ function Main() {
 						window.displayError(error);
 					}
 
-					setInitialResourceFailed(true);
+					dispatch(setState({ isInitialResourceFailed: true }));
 				} else {
 					console.error(error);
 				}
@@ -902,7 +880,7 @@ function Main() {
 			});
 		} catch (error) {
 			console.error('Error in listSavedResponses', error);
-			setInitialResourceFailed(true);
+			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
 			// Trigger next request
 			listTemplates(false);
@@ -921,12 +899,12 @@ function Main() {
 
 	// ** 4 **
 	const listContacts = async () => {
-		setLoadingNow('Contacts');
+		setLoadingComponent('Contacts');
 
 		// Check if it needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
-			setLoadingNow('Saved Responses');
+			setLoadingComponent('Saved Responses');
 			listSavedResponses();
 			return;
 		}
@@ -937,7 +915,7 @@ function Main() {
 			setContactProvidersData(preparedData);
 
 			setProgress(35);
-			setLoadingNow('Saved Responses');
+			setLoadingComponent('Saved Responses');
 
 			// Trigger next request
 			listSavedResponses();
@@ -965,7 +943,7 @@ function Main() {
 				},
 				(error: AxiosError) => {
 					console.error('Error in listContacts', error);
-					setInitialResourceFailed(true);
+					dispatch(setState({ isInitialResourceFailed: true }));
 				}
 			);
 		};
@@ -994,7 +972,11 @@ function Main() {
 	const addBulkSendRecipients = (newWaIds: string[], newTags: string[]) => {
 		// Combine with selected chats
 		if (newWaIds.length > 0) {
-			setSelectedChats([...new Set([...newWaIds, ...selectedChats])]);
+			dispatch(
+				setState({
+					selectedChats: [...new Set([...newWaIds, ...selectedChats])],
+				})
+			);
 		}
 
 		if (newTags.length > 0) {
@@ -1005,7 +987,11 @@ function Main() {
 					preparedNewTags.push(curTag.id);
 				}
 			});
-			setSelectedTags([...new Set([...preparedNewTags, ...selectedTags])]);
+			dispatch(
+				setState({
+					selectedTags: [...new Set([...preparedNewTags, ...selectedTags])],
+				})
+			);
 		}
 	};
 
@@ -1023,65 +1009,32 @@ function Main() {
 					(isMaximize ? ' maximized' : '')
 				}
 			>
-				{templatesReady && (
+				{isTemplatesReady && (
 					<Sidebar
-						isLoaded={progress >= 100}
-						pendingMessages={pendingMessages}
-						setPendingMessages={setPendingMessages}
-						isSendingPendingMessages={isSendingPendingMessages}
-						hasFailedMessages={hasFailedMessages}
-						lastSendAttemptAt={lastSendAttemptAt}
-						isUploadingMedia={isUploadingMedia}
-						newMessages={newMessages}
-						setNewMessages={setNewMessages}
-						setProgress={setProgress}
+						isLoaded={loadingProgress >= 100}
 						displayNotification={displayNotification}
-						isBlurred={isBlurred}
 						contactProvidersData={contactProvidersData}
 						isChatOnly={isChatOnly}
 						setChatTagsListVisible={setChatTagsListVisible}
 						bulkSendPayload={bulkSendPayload}
-						selectedChats={selectedChats}
-						setSelectedChats={setSelectedChats}
-						selectedTags={selectedTags}
-						setSelectedTags={setSelectedTags}
 						finishBulkSendMessage={finishBulkSendMessage}
-						setLoadingNow={setLoadingNow}
-						setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
 						setBulkSendTemplateWithCallbackDialogVisible={
 							setBulkSendTemplateWithCallbackDialogVisible
 						}
-						setBulkSendTemplateViaCSVVisible={setBulkSendTemplateViaCSVVisible}
-						setInitialResourceFailed={setInitialResourceFailed}
 						setSendBulkVoiceMessageDialogVisible={
 							setSendBulkVoiceMessageDialogVisible
 						}
 					/>
 				)}
 
-				{templatesReady && (
+				{isTemplatesReady && (
 					<Chat
-						pendingMessages={pendingMessages}
-						setPendingMessages={setPendingMessages}
-						isSendingPendingMessages={isSendingPendingMessages}
-						setSendingPendingMessages={setSendingPendingMessages}
-						hasFailedMessages={hasFailedMessages}
-						setHasFailedMessages={setHasFailedMessages}
-						lastSendAttemptAt={lastSendAttemptAt}
-						setLastSendAttemptAt={setLastSendAttemptAt}
-						isUploadingMedia={isUploadingMedia}
-						setUploadingMedia={setUploadingMedia}
-						newMessages={newMessages}
-						setChosenContact={setChosenContact}
-						isTemplatesFailed={isTemplatesFailed}
-						isLoadingTemplates={isLoadingTemplates}
 						createSavedResponse={createSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}
 						isChatOnly={isChatOnly}
-						setChatAssignmentVisible={setChatAssignmentVisible}
 						setChatTagsVisible={setChatTagsVisible}
 						setBulkSendPayload={setBulkSendPayload}
 						searchMessagesByKeyword={searchMessagesByKeyword}
@@ -1098,7 +1051,6 @@ function Main() {
 
 				{isContactDetailsVisible && (
 					<ContactDetails
-						contactData={chosenContact}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 					/>
@@ -1112,7 +1064,9 @@ function Main() {
 					<ChatAssignment
 						waId={waId}
 						open={isChatAssignmentVisible}
-						setOpen={setChatAssignmentVisible}
+						setOpen={(value: boolean) =>
+							dispatch(setState({ isChatAssignmentVisible: value }))
+						}
 					/>
 				)}
 
@@ -1141,15 +1095,9 @@ function Main() {
 					/>
 				)}
 
-				<Fade in={progress < 100} timeout={{ exit: 1000 }} unmountOnExit>
+				<Fade in={loadingProgress < 100} timeout={{ exit: 1000 }} unmountOnExit>
 					<div className="loadingScreenOuter">
-						<LoadingScreen
-							progress={progress}
-							setProgress={setProgress}
-							loadingNow={loadingNow}
-							isInitialResourceFailed={isInitialResourceFailed}
-							isHideLogo={isHideLogo}
-						/>
+						<LoadingScreen isHideLogo={isHideLogo} />
 					</div>
 				</Fade>
 
@@ -1185,24 +1133,22 @@ function Main() {
 					open={isBulkSendTemplateDialogVisible}
 					setOpen={setBulkSendTemplateDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					isLoadingTemplates={isLoadingTemplates}
-					isTemplatesFailed={isTemplatesFailed}
 				/>
 
 				<BulkSendTemplateDialog
 					open={isBulkSendTemplateWithCallbackDialogVisible}
 					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
 					setBulkSendPayload={setBulkSendPayload}
-					isLoadingTemplates={isLoadingTemplates}
-					isTemplatesFailed={isTemplatesFailed}
 					sendCallback={() => {
-						setUploadRecipientsCSVVisible(true);
+						dispatch(setState({ isUploadRecipientsCSVVisible: true }));
 					}}
 				/>
 
 				<UploadRecipientsCSV
 					open={isUploadRecipientsCSVVisible}
-					setOpen={setUploadRecipientsCSVVisible}
+					setOpen={(isOpen) =>
+						dispatch(setState({ isUploadRecipientsCSVVisible: isOpen }))
+					}
 					addBulkSendRecipients={addBulkSendRecipients}
 					bulkSendPayload={bulkSendPayload}
 				/>
@@ -1217,12 +1163,11 @@ function Main() {
 					apiService={apiService}
 					open={isSendBulkVoiceMessageDialogVisible}
 					setOpen={setSendBulkVoiceMessageDialogVisible}
-					setUploadingMedia={setUploadingMedia}
 					setBulkSendPayload={setBulkSendPayload}
 				/>
 			</div>
 		</Fade>
 	);
-}
+};
 
 export default Main;

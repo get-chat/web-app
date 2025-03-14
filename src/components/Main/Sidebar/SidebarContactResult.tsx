@@ -8,7 +8,7 @@ import ChatModel from '@src/api/models/ChatModel';
 
 interface Props {
 	contactData: PersonModel | undefined;
-	chatData: ChatModel;
+	chatData?: ChatModel;
 }
 
 const SidebarContactResult: React.FC<Props> = ({ contactData, chatData }) => {
@@ -17,11 +17,11 @@ const SidebarContactResult: React.FC<Props> = ({ contactData, chatData }) => {
 	return (
 		<Link to={''}>
 			<div id={contactData?.waId}>
-				<CustomAvatar generateBgColorBy={chatData.name}>
-					{chatData.initials}
+				<CustomAvatar generateBgColorBy={chatData?.name}>
+					{chatData?.initials}
 				</CustomAvatar>
 				<div className="sidebarContactResult__info">
-					<h2>{chatData.name}</h2>
+					<h2>{chatData?.name}</h2>
 					<p className="sidebarContactResult__info__status">{t('Status')}</p>
 				</div>
 			</div>

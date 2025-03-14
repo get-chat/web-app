@@ -2,16 +2,16 @@ import ChatModel from '../models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import NewMessageModel from '../models/NewMessageModel';
 import ChatList from '@src/interfaces/ChatList';
-import NewMessagesList from '@src/interfaces/NewMessagesList';
+import NewMessageList from '@src/interfaces/NewMessageList';
 
 class ChatsResponse {
 	public count: number;
 	public chats: ChatList;
-	public newMessages: NewMessagesList;
+	public newMessages: NewMessageList;
 
 	constructor(data: any) {
 		let chats: ChatList = {};
-		let newMessages: NewMessagesList = {};
+		let newMessages: NewMessageList = {};
 		data.results.forEach((chatData: any) => {
 			// Chat
 			const chat = new ChatModel(chatData);

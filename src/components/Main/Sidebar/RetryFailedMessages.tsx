@@ -10,27 +10,29 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
-import PendingMessage from '@src/interfaces/PendingMessage';
 import ChatList from '@src/interfaces/ChatList';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 
 interface Props {
-	pendingMessages: PendingMessage[];
-	setPendingMessages: (value: PendingMessage[]) => void;
 	contactProvidersData: { [key: string]: any };
 	chats: ChatList;
 	isSendingPendingMessages: boolean;
-	lastSendAttemptAt: Date | string | number;
 }
 
 const RetryFailedMessages: React.FC<Props> = ({
-	pendingMessages,
-	setPendingMessages,
 	contactProvidersData,
 	chats,
 	isSendingPendingMessages,
-	lastSendAttemptAt,
 }) => {
 	const { t } = useTranslation();
+
+	const dispatch = useAppDispatch();
+
+	const { lastSendAttemptAt } = useAppSelector((state) => state.UI);
+	const pendingMessages = useAppSelector(
+		(state) => state.pendingMessages.value
+	);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -39,11 +41,11 @@ const RetryFailedMessages: React.FC<Props> = ({
 
 	const resendMessage = () => {
 		// Set all failed pending message as willRetry so queue will retry automatically
-		setPendingMessages([...setAllFailedPendingMessagesWillRetry()]);
+		dispatch(setPendingMessages([...setAllFailedPendingMessagesWillRetry()]));
 
 		// Switch to chat of first failed message
 		const firstFailedMessage = getFirstFailedPendingMessage(pendingMessages);
-		const waId = firstFailedMessage.requestBody?.wa_id;
+		const waId = firstFailedMessage?.requestBody?.wa_id;
 		if (waId) {
 			navigate(`/main/chat/${waId}${location.search}`);
 		}

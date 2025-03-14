@@ -2,23 +2,22 @@ import React from 'react';
 import { Button } from '@mui/material';
 import styles from './BulkSendActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
-	selectedChats: string[];
-	selectedTags: number[];
 	finishBulkSendMessage: () => void;
 	cancelSelection: () => void;
-	setUploadRecipientsCSVVisible: (value: boolean) => void;
 }
 
 const BulkSendActions: React.FC<Props> = ({
-	selectedChats,
-	selectedTags,
 	finishBulkSendMessage,
 	cancelSelection,
-	setUploadRecipientsCSVVisible,
 }) => {
 	const { t } = useTranslation();
+	const { selectedTags, selectedChats } = useAppSelector((state) => state.UI);
+	const dispatch = useAppDispatch();
+
 	return (
 		<div className={styles.container}>
 			<h3>{t('Bulk Send')}</h3>
@@ -44,7 +43,9 @@ const BulkSendActions: React.FC<Props> = ({
 
 				<Button
 					color="secondary"
-					onClick={() => setUploadRecipientsCSVVisible(true)}
+					onClick={() =>
+						dispatch(setState({ isUploadRecipientsCSVVisible: true }))
+					}
 				>
 					{t('Upload CSV')}
 				</Button>

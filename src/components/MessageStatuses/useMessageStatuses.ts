@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { clone } from '@src/helpers/ObjectHelper';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_POST_CHAT_MESSAGE_STATUS_CHANGE } from '@src/Constants';
-import { setMessageStatusesVisible } from '@src/store/reducers/UIReducer';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	initialMessage: ChatMessageModel | undefined;
@@ -16,7 +16,7 @@ const useMessageStatuses = ({ initialMessage }: Props) => {
 	const templates = useAppSelector((state) => state.templates.value);
 
 	const dispatch = useAppDispatch();
-	const close = () => dispatch(setMessageStatusesVisible(false));
+	const close = () => dispatch(setState({ isMessageStatusesVisible: false }));
 
 	useEffect(() => {
 		setMessage(initialMessage);
@@ -28,7 +28,7 @@ const useMessageStatuses = ({ initialMessage }: Props) => {
 			data: ChatMessageModel
 		) {
 			if (data && message?.id === data.id) {
-				setMessage(clone(data));
+				setMessage(clone(data) as ChatMessageModel);
 			}
 		};
 

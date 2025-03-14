@@ -3,34 +3,35 @@ import { Checkbox, ListItem } from '@mui/material';
 import '../../../styles/SelectableChatTag.css';
 import SellIcon from '@mui/icons-material/Sell';
 import TagModel from '@src/api/models/TagModel';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	data: TagModel;
-	selectedTags: number[];
-	setSelectedTags: (data: any) => void;
 }
 
-const SelectableChatTag: React.FC<Props> = ({
-	data,
-	selectedTags,
-	setSelectedTags,
-}) => {
+const SelectableChatTag: React.FC<Props> = ({ data }) => {
 	const [isSelected, setSelected] = useState(false);
+	const { selectedTags } = useAppSelector((state) => state.UI);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		setSelected(selectedTags.includes(data.id));
 	}, [selectedTags]);
 
 	const handleClick = () => {
-		setSelectedTags((prevState: number[]) => {
-			if (prevState.includes(data.id)) {
-				prevState = prevState.filter((arrayItem) => arrayItem !== data.id);
-			} else {
-				prevState.push(data.id);
-			}
+		let prevState = [...selectedTags];
+		if (prevState.includes(data.id)) {
+			prevState = prevState.filter((arrayItem) => arrayItem !== data.id);
+		} else {
+			prevState.push(data.id);
+		}
 
-			return [...prevState];
-		});
+		dispatch(
+			setState({
+				selectedTags: prevState,
+			})
+		);
 	};
 
 	return (

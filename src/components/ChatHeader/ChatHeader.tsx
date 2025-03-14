@@ -34,10 +34,7 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import {
-	setContactDetailsVisible,
-	setSearchMessagesVisible,
-} from '@src/store/reducers/UIReducer';
+import { setState } from '@src/store/reducers/UIReducer';
 
 const cx = classNames.bind(styles);
 
@@ -46,10 +43,8 @@ interface Props {
 	person?: PersonModel;
 	contactProvidersData: { [key: string]: any };
 	isChatOnly: boolean | Number;
-	setChatAssignmentVisible: (isVisible: boolean) => void;
 	setChatTagsVisible: (isVisible: boolean) => void;
 	closeChat: () => void;
-	hasFailedMessages: boolean;
 	waId: string;
 }
 
@@ -58,15 +53,13 @@ const ChatHeader: React.FC<Props> = ({
 	person,
 	contactProvidersData,
 	isChatOnly,
-	setChatAssignmentVisible,
 	setChatTagsVisible,
 	closeChat,
-	hasFailedMessages,
 	waId,
 }) => {
 	const dispatch = useAppDispatch();
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
 
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
@@ -84,11 +77,11 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	const showSearchMessages = () => {
-		dispatch(setSearchMessagesVisible(true));
+		dispatch(setState({ isSearchMessagesVisible: true }));
 	};
 
 	const showContactDetails = () => {
-		dispatch(setContactDetailsVisible(true));
+		dispatch(setState({ isContactDetailsVisible: true }));
 	};
 
 	const showContactDetailsAndHideMenu = () => {
@@ -97,7 +90,7 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	const showChatAssignmentAndHideMenu = () => {
-		setChatAssignmentVisible(true);
+		dispatch(setState({ isChatAssignmentVisible: true }));
 		hideMenu();
 	};
 

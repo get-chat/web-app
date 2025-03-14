@@ -20,8 +20,6 @@ interface Props {
 	open: boolean;
 	setOpen: (value: boolean) => void;
 	setBulkSendPayload: (value: BulkSendPayload) => void;
-	isTemplatesFailed: boolean;
-	isLoadingTemplates: boolean;
 	sendCallback?: () => void;
 }
 
@@ -29,8 +27,6 @@ const BulkSendTemplateDialog: React.FC<Props> = ({
 	open,
 	setOpen,
 	setBulkSendPayload,
-	isTemplatesFailed,
-	isLoadingTemplates,
 	sendCallback,
 }) => {
 	const { t } = useTranslation();
@@ -57,8 +53,6 @@ const BulkSendTemplateDialog: React.FC<Props> = ({
 			<DialogTitle>{t('Bulk send a template')}</DialogTitle>
 			<DialogContent className="sendBulkTemplateDialogContent">
 				<TemplateListWithControls
-					isTemplatesFailed={isTemplatesFailed}
-					isLoadingTemplates={isLoadingTemplates}
 					onSelect={(template: TemplateModel) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);

@@ -1,8 +1,10 @@
+import TemplateComponent from '@src/interfaces/TemplateComponent';
+
 class TemplateModel {
 	public namespace: string;
 	public name: string;
 	public category: string;
-	public components: any[] | null;
+	public components: TemplateComponent[] | null;
 	public text: string = '';
 	public language: string;
 	public status: string;

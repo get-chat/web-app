@@ -5,22 +5,17 @@ import { useTranslation } from 'react-i18next';
 import Alert from '@mui/material/Alert';
 import packageJson from '../../../package.json';
 import { CircularProgress } from '@mui/material';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
-	progress: number;
-	setProgress: (progress: number) => void;
-	loadingNow?: string | undefined | null;
 	isHideLogo: boolean;
-	isInitialResourceFailed: boolean;
 }
 
-const LoadingScreen: React.FC<Props> = ({
-	progress,
-	loadingNow,
-	isHideLogo,
-	isInitialResourceFailed,
-}) => {
+const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 	const { t } = useTranslation();
+
+	const { loadingProgress, loadingComponent, isInitialResourceFailed } =
+		useAppSelector((state) => state.UI);
 
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
 		useState(false);
@@ -34,7 +29,7 @@ const LoadingScreen: React.FC<Props> = ({
 			clearInterval(intervalId);
 			setLongTransactionInfoVisible(false);
 		};
-	}, [loadingNow]);
+	}, [loadingComponent]);
 
 	// const skip = () => {
 	//     props.setProgress(100);
@@ -53,13 +48,13 @@ const LoadingScreen: React.FC<Props> = ({
 
 			<div className="loadingScreen__progressContainer">
 				{!isInitialResourceFailed && (
-					<LinearProgress variant="determinate" value={progress} />
+					<LinearProgress variant="determinate" value={loadingProgress} />
 				)}
 			</div>
 
 			<div className="loadingScreen__details">
 				<CircularProgress size={20} />
-				{t(loadingNow ?? '')}
+				{t(loadingComponent ?? '')}
 			</div>
 
 			{isLongTransactionInfoVisible && (

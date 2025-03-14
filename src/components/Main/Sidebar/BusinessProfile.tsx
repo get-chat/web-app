@@ -29,7 +29,7 @@ function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const { isReadOnly } = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 
 	const isAdmin = currentUser?.isAdmin ?? false;

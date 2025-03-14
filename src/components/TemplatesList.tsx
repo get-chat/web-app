@@ -11,17 +11,16 @@ interface Props {
 	onClick: (template: TemplateModel) => void;
 	customSelectButtonTitle?: string;
 	displayRegisterTemplate?: boolean;
-	isTemplatesFailed?: boolean;
 }
 
 const TemplatesList: React.FC<Props> = ({
 	onClick,
 	customSelectButtonTitle,
 	displayRegisterTemplate,
-	isTemplatesFailed,
 }) => {
 	const { t } = useTranslation();
 
+	const { isTemplatesFailed } = useAppSelector((state) => state.UI);
 	const templates = useAppSelector((state) => state.templates.value);
 
 	const { issueTemplateRefreshRequest } = useTemplates();
@@ -82,7 +81,7 @@ const TemplatesList: React.FC<Props> = ({
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
 							<div className="templateMessage__message">
 								<h4>{template[1].name}</h4>
-								{sortTemplateComponents(template[1].components).map(
+								{sortTemplateComponents(template[1].components ?? []).map(
 									(comp: any, index: number) => (
 										<div key={index}>
 											<span className="templateType bold lowercase">

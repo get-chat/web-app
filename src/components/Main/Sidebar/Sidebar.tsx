@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import {
 	containsLetters,
 	generateInitialsHelper,
@@ -110,53 +109,66 @@ import UserProfile from '@src/components/UserProfile';
 import {
 	setExportChat,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
+import PersonModel from '@src/api/models/PersonModel';
+import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
+import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
 
-const Sidebar: React.FC<any> = ({
+interface Props {
+	isLoaded: boolean;
+	displayNotification: (title: string, body: string, chatWaId: string) => void;
+	contactProvidersData: {
+		[key: string]: any;
+	};
+	isChatOnly: boolean;
+	setChatTagsListVisible: (value: boolean) => void;
+	bulkSendPayload?: BulkSendPayload;
+	finishBulkSendMessage: (payload?: BulkMessageTaskModel) => void;
+	setBulkSendTemplateDialogVisible: (value: boolean) => void;
+	setBulkSendTemplateWithCallbackDialogVisible: (value: boolean) => void;
+	setSendBulkVoiceMessageDialogVisible: (value: boolean) => void;
+}
+
+const Sidebar: React.FC<Props> = ({
 	isLoaded,
-	pendingMessages,
-	setPendingMessages,
-	isSendingPendingMessages,
-	hasFailedMessages,
-	lastSendAttemptAt,
-	isUploadingMedia,
-	newMessages,
-	setNewMessages,
-	setProgress,
 	displayNotification,
-	isBlurred,
 	contactProvidersData,
 	isChatOnly,
 	setChatTagsListVisible,
 	bulkSendPayload,
-	selectedChats,
-	setSelectedChats,
-	selectedTags,
-	setSelectedTags,
 	finishBulkSendMessage,
-	setLoadingNow,
-	setUploadRecipientsCSVVisible,
 	setBulkSendTemplateDialogVisible,
-	setBulkSendTemplateViaCSVVisible,
 	setBulkSendTemplateWithCallbackDialogVisible,
-	setInitialResourceFailed,
 	setSendBulkVoiceMessageDialogVisible,
 }) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
-	const { isReadOnly, isSelectionModeEnabled, isBulkSend, isExportChat } =
-		useAppSelector((state) => state.UI.value);
+	const {
+		hasFailedMessages,
+		isBlurred,
+		isSendingPendingMessages,
+		isUploadingMedia,
+		isReadOnly,
+		selectedTags,
+		selectedChats,
+		isSelectionModeEnabled,
+		isBulkSend,
+		isExportChat,
+	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 	const tags = useAppSelector((state) => state.tags.value);
 	const groups = useAppSelector((state) => state.groups.value);
+	const newMessages = useAppSelector((state) => state.newMessages.value);
 
 	const { t } = useTranslation();
 
@@ -208,7 +220,9 @@ const Sidebar: React.FC<any> = ({
 
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState<ChatMessageList>({});
-	const [contactResults, setContactResults] = useState({});
+	const [contactResults, setContactResults] = useState<{
+		[key: string]: PersonModel;
+	}>({});
 	const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
 	const [isUserProfileVisible, setUserProfileVisible] = useState(false);
 	const [isContactsVisible, setContactsVisible] = useState(false);
@@ -347,7 +361,7 @@ const Sidebar: React.FC<any> = ({
 					// Check if chat with waId already exists
 					if (!nextState.hasOwnProperty(chatKey)) {
 						// Collect waId list to retrieve chats
-						if (!newMissingChats.includes(chatMessageWaId)) {
+						if (chatMessageWaId && !newMissingChats.includes(chatMessageWaId)) {
 							newMissingChats.push(chatMessageWaId);
 						}
 					}
@@ -388,8 +402,8 @@ const Sidebar: React.FC<any> = ({
 							document.visibilityState === 'hidden' ||
 							isBlurred)
 					) {
-						const preparedNewMessages = newMessages;
-						if (newMessages[chatMessageWaId] === undefined) {
+						const preparedNewMessages = { ...newMessages };
+						if (chatMessageWaId && newMessages[chatMessageWaId] === undefined) {
 							preparedNewMessages[chatMessageWaId] = new NewMessageModel(
 								chatMessageWaId,
 								0
@@ -397,12 +411,14 @@ const Sidebar: React.FC<any> = ({
 						}
 
 						// Increase number of new chatMessages
-						preparedNewMessages[chatMessageWaId].newMessages++;
+						if (chatMessageWaId) {
+							preparedNewMessages[chatMessageWaId].newMessages++;
+						}
 
-						setNewMessages({ ...preparedNewMessages });
+						dispatch(setNewMessages({ ...preparedNewMessages }));
 
 						// Display a notification
-						if (!chatMessage.isFromUs) {
+						if (chatMessageWaId && !chatMessage.isFromUs) {
 							displayNotification(
 								t('New messages'),
 								t('You have new messages!'),
@@ -566,7 +582,7 @@ const Sidebar: React.FC<any> = ({
 		if (!isInitial) {
 			setLoadingMoreChats(true);
 		} else {
-			setLoadingNow('Chats');
+			dispatch(setState({ loadingComponent: 'Chats' }));
 		}
 
 		// Reset chats count
@@ -606,7 +622,7 @@ const Sidebar: React.FC<any> = ({
 				}
 
 				if (isInitial) {
-					setProgress(100);
+					dispatch(setState({ loadingProgress: 100 }));
 				}
 
 				const willNotify = !isInitial;
@@ -623,40 +639,41 @@ const Sidebar: React.FC<any> = ({
 					let hasAnyNewMessages = false;
 					let chatMessageWaId: string | undefined;
 
-					setNewMessages((prevState: any) => {
-						Object.entries(preparedNewMessages).forEach((newMsg) => {
-							const newMsgWaId = newMsg[0];
-							const number = newMsg[1].newMessages;
-							if (newMsgWaId !== waId) {
-								// TODO: Consider a new contact (last part of the condition)
-								if (
-									prevState[newMsgWaId] &&
-									number >
-										prevState[newMsgWaId]
-											.newMessages /*|| (!prevState[newMsgWaId] && number > 0)*/
-								) {
-									hasAnyNewMessages = true;
+					const prevState = { ...newMessages };
 
-									// There can be multiple new chats, we take first one
-									if (chatMessageWaId === newMsgWaId)
-										chatMessageWaId = newMsgWaId;
-								}
+					// Update new messages
+					Object.entries(preparedNewMessages).forEach((newMsg) => {
+						const newMsgWaId = newMsg[0];
+						const number = newMsg[1].newMessages;
+						if (newMsgWaId !== waId) {
+							// TODO: Consider a new contact (last part of the condition)
+							if (
+								prevState[newMsgWaId] &&
+								number >
+									prevState[newMsgWaId]
+										.newMessages /*|| (!prevState[newMsgWaId] && number > 0)*/
+							) {
+								hasAnyNewMessages = true;
+
+								// There can be multiple new chats, we take first one
+								if (chatMessageWaId === newMsgWaId)
+									chatMessageWaId = newMsgWaId;
 							}
-						});
-
-						// When state is a JSON object, it is unable to understand whether it is different or same and renders again
-						// So we check if new state is actually different from previous state
-						if (
-							JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
-						) {
-							return { ...prevState, ...preparedNewMessages };
-						} else {
-							return prevState;
 						}
 					});
 
+					// When state is a JSON object, it is unable to understand whether it is different or same and renders again
+					// So we check if new state is actually different from previous state
+					if (
+						JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
+					) {
+						dispatch(setNewMessages({ ...prevState, ...preparedNewMessages }));
+					} else {
+						dispatch(setNewMessages(prevState));
+					}
+
 					// Display a notification
-					if (hasAnyNewMessages) {
+					if (chatMessageWaId && hasAnyNewMessages) {
 						displayNotification(
 							t('New messages'),
 							t('You have new messages!'),
@@ -664,9 +681,7 @@ const Sidebar: React.FC<any> = ({
 						);
 					}
 				} else {
-					setNewMessages((prevState: any) => {
-						return { ...prevState, ...preparedNewMessages };
-					});
+					dispatch(setNewMessages({ ...newMessages, ...preparedNewMessages }));
 				}
 
 				setLoadingMoreChats(false);
@@ -679,7 +694,7 @@ const Sidebar: React.FC<any> = ({
 				setLoadingChats(false);
 
 				if (isInitial) {
-					setInitialResourceFailed(true);
+					dispatch(setState({ isInitialResourceFailed: true }));
 				}
 			},
 			navigate
@@ -805,8 +820,7 @@ const Sidebar: React.FC<any> = ({
 
 	const cancelSelection = () => {
 		dispatch(setSelectionModeEnabled(false));
-		setSelectedChats([]);
-		setSelectedTags([]);
+		dispatch(setState({ selectedTags: [], selectedChats: [] }));
 	};
 
 	const handleFinishBulkSendMessage = () => {
@@ -892,18 +906,13 @@ const Sidebar: React.FC<any> = ({
 
 			{isSelectionModeEnabled && isBulkSend && (
 				<BulkSendActions
-					selectedChats={selectedChats}
-					selectedTags={selectedTags}
 					cancelSelection={cancelSelection}
 					finishBulkSendMessage={handleFinishBulkSendMessage}
-					setUploadRecipientsCSVVisible={setUploadRecipientsCSVVisible}
 				/>
 			)}
 
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
-					selectedChats={selectedChats}
-					selectedTags={selectedTags}
 					onShowDateRange={() => setDateRangeDialogVisible(true)}
 					onExport={() => {
 						// TODO: Export chats
@@ -1219,12 +1228,7 @@ const Sidebar: React.FC<any> = ({
 								<h3>{t('Tags')}</h3>
 								<div>
 									{Object.entries(tags).map((tag) => (
-										<SelectableChatTag
-											key={tag[0]}
-											data={tag[1]}
-											selectedTags={selectedTags}
-											setSelectedTags={setSelectedTags}
-										/>
+										<SelectableChatTag key={tag[0]} data={tag[1]} />
 									))}
 								</div>
 							</>
@@ -1264,15 +1268,11 @@ const Sidebar: React.FC<any> = ({
 								<ChatListItem
 									key={item.waId}
 									chatData={item}
-									pendingMessages={pendingMessages}
-									newMessages={newMessages}
 									keyword={searchedKeyword}
 									contactProvidersData={contactProvidersData}
 									filterAssignedToMe={filterAssignedToMe}
 									filterAssignedGroupId={filterAssignedGroupId}
 									bulkSendPayload={bulkSendPayload}
-									selectedChats={selectedChats}
-									setSelectedChats={setSelectedChats}
 								/>
 							)}
 						</ViewportList>
@@ -1287,7 +1287,8 @@ const Sidebar: React.FC<any> = ({
 								{Object.entries(contactResults).map((contactResult) => (
 									<SidebarContactResult
 										key={contactResult[0]}
-										chatData={contactResult[1]}
+										contactData={contactResult[1]}
+										chatData={chats[contactResult[0]]}
 									/>
 								))}
 							</div>
@@ -1347,10 +1348,7 @@ const Sidebar: React.FC<any> = ({
 
 			{hasFailedMessages && (
 				<RetryFailedMessages
-					pendingMessages={pendingMessages}
-					setPendingMessages={setPendingMessages}
 					isSendingPendingMessages={isSendingPendingMessages}
-					lastSendAttemptAt={lastSendAttemptAt}
 					contactProvidersData={contactProvidersData}
 					chats={chats}
 				/>

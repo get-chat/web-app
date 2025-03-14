@@ -15,6 +15,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import PhoneIcon from '@mui/icons-material/Phone';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import TemplateModel from '@src/api/models/TemplateModel';
+import { useAppSelector } from '@src/store/hooks';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -32,7 +33,6 @@ interface Props {
 	templateData: TemplateModel | undefined;
 	onPreview: (type: string, source: string) => void;
 	onOptionsClick: (e: React.MouseEvent) => void;
-	isTemplatesFailed?: boolean;
 }
 
 const ChatMessageTemplate: React.FC<Props> = ({
@@ -40,9 +40,10 @@ const ChatMessageTemplate: React.FC<Props> = ({
 	templateData,
 	onPreview,
 	onOptionsClick,
-	isTemplatesFailed,
 }) => {
 	const { t } = useTranslation();
+
+	const { isTemplatesFailed } = useAppSelector((state) => state.UI);
 
 	return (
 		<div className="chat__template">
@@ -55,7 +56,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 			<div className="chat__templateContent">
 				{templateData !== undefined ? (
 					<div>
-						{sortTemplateComponents(templateData.components).map(
+						{sortTemplateComponents(templateData.components ?? []).map(
 							(component: any, index: number) => (
 								<div key={index}>
 									{component.type === 'HEADER' && (
@@ -91,7 +92,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 												<PrintMessage
 													message={insertTemplateComponentParameters(
 														component,
-														data.templateParameters
+														data.templateParameters ?? []
 													)}
 													as="div"
 													linkify={true}
@@ -105,7 +106,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 										<PrintMessage
 											message={insertTemplateComponentParameters(
 												component,
-												data.templateParameters
+												data.templateParameters ?? []
 											)}
 											as="div"
 											linkify={true}
@@ -117,7 +118,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 										<PrintMessage
 											message={insertTemplateComponentParameters(
 												component,
-												data.templateParameters
+												data.templateParameters ?? []
 											)}
 											as="div"
 											linkify={true}

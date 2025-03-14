@@ -95,6 +95,7 @@ import decode from 'unescape';
 import {
 	setBulkSend,
 	setSelectionModeEnabled,
+	setState,
 } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import InteractiveMessageList from '@src/components/InteractiveMessageList';
@@ -102,11 +103,10 @@ import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 import ReactionDetails from '@src/components/ReactionDetails';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
-import NewMessageModel from '@src/api/models/NewMessageModel';
 import ChosenFileClass from '@src/ChosenFileClass';
 import ReactionList from '@src/interfaces/ReactionList';
-import PendingMessage from '@src/interfaces/PendingMessage';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
+import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -114,20 +114,6 @@ const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
 
 interface Props {
-	pendingMessages: PendingMessage[];
-	setPendingMessages: (value: PendingMessage[]) => void;
-	isSendingPendingMessages: boolean;
-	setSendingPendingMessages: (value: boolean) => void;
-	hasFailedMessages: boolean;
-	setHasFailedMessages: (value: boolean) => void;
-	lastSendAttemptAt?: Date | undefined;
-	setLastSendAttemptAt: (value: Date | undefined) => void;
-	isUploadingMedia: boolean;
-	setUploadingMedia: (value: boolean) => void;
-	newMessages: { [key: string]: NewMessageModel };
-	setChosenContact: (value: PersonModel | undefined) => void;
-	isTemplatesFailed: boolean;
-	isLoadingTemplates: boolean;
 	createSavedResponse: (value: string) => void;
 	contactProvidersData: {
 		[key: string]: any;
@@ -135,7 +121,6 @@ interface Props {
 	retrieveContactData: (personWaId: string, onComplete?: () => void) => void;
 	displayNotification: (title: string, body: string, chatWaId: string) => void;
 	isChatOnly: boolean;
-	setChatAssignmentVisible: (value: boolean) => void;
 	setChatTagsVisible: (value: boolean) => void;
 	setBulkSendPayload: (value: BulkSendPayload) => void;
 	searchMessagesByKeyword: (keyword: string) => void;
@@ -145,7 +130,19 @@ interface Props {
 const Chat: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
-	const { isReadOnly } = useAppSelector((state) => state.UI.value);
+	const {
+		isReadOnly,
+		isSendingPendingMessages,
+		isTemplatesVisible,
+		isSavedResponsesVisible,
+		isInteractiveMessagesVisible,
+	} = useAppSelector((state) => state.UI);
+
+	const pendingMessages = useAppSelector(
+		(state) => state.pendingMessages.value
+	);
+
+	const newMessages = useAppSelector((state) => state.newMessages.value);
 
 	const { t } = useTranslation();
 
@@ -171,10 +168,6 @@ const Chat: React.FC<Props> = (props) => {
 	const [isLoaded, setLoaded] = useState(false);
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
-	const [isTemplatesVisible, setTemplatesVisible] = useState(false);
-	const [isInteractiveMessagesVisible, setInteractiveMessagesVisible] =
-		useState(false);
-	const [isSavedResponsesVisible, setSavedResponsesVisible] = useState(false);
 
 	const [person, setPerson] = useState<PersonModel>();
 	const [chat, setChat] = useState<ChatModel>();
@@ -183,7 +176,7 @@ const Chat: React.FC<Props> = (props) => {
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
 
-	const [selectedFiles, setSelectedFiles] = useState();
+	const [selectedFiles, setSelectedFiles] = useState<FileList>();
 	const [accept, setAccept] = useState('');
 
 	const [isPreviewSendMediaVisible, setPreviewSendMediaVisible] =
@@ -267,9 +260,6 @@ const Chat: React.FC<Props> = (props) => {
 	}, []);
 
 	useEffect(() => {
-		const pendingMessages = props.pendingMessages;
-		const isSendingPendingMessages = props.isSendingPendingMessages;
-
 		// Keep state in window as a variable to have actual state in callbacks
 		window.pendingMessages = pendingMessages;
 
@@ -289,7 +279,7 @@ const Chat: React.FC<Props> = (props) => {
 			}
 
 			// If first message exists and not failed, start sending
-			props.setSendingPendingMessages(true);
+			dispatch(setState({ isSendingPendingMessages: true }));
 
 			const requestBody = pendingMessageToSend.requestBody;
 			const successCallback = pendingMessageToSend.successCallback;
@@ -308,8 +298,8 @@ const Chat: React.FC<Props> = (props) => {
 				});
 
 				// Update state after deleting sent one
-				props.setPendingMessages(updatedState);
-				props.setSendingPendingMessages(false);
+				dispatch(setPendingMessages(updatedState));
+				dispatch(setState({ isSendingPendingMessages: false }));
 			};
 
 			// Use proper method to send message depends on its type
@@ -350,17 +340,17 @@ const Chat: React.FC<Props> = (props) => {
 		// Make sure this is the best place for it
 		// If there is no failed message, update state
 		// This state is used for prompting user before leaving page
-		if (!hasFailedPendingMessages(props.pendingMessages)) {
-			props.setHasFailedMessages(false);
+		if (!hasFailedPendingMessages(pendingMessages)) {
+			dispatch(setState({ hasFailedMessages: false }));
 		}
 
 		// If it is not sending currently and there are pending messages
 		if (!isSendingPendingMessages && pendingMessages.length > 0) {
 			sendNextPending();
 		} else if (pendingMessages.length === 0) {
-			props.setSendingPendingMessages(false);
+			dispatch(setState({ isSendingPendingMessages: false }));
 		}
-	}, [props.isSendingPendingMessages, props.pendingMessages]);
+	}, [isSendingPendingMessages, pendingMessages]);
 
 	useEffect(() => {
 		setLoaded(false);
@@ -371,8 +361,9 @@ const Chat: React.FC<Props> = (props) => {
 		setMessages({});
 		setReactions({});
 		setHasOlderMessagesToLoad(true);
-		setTemplatesVisible(false);
-		setSavedResponsesVisible(false);
+		dispatch(
+			setState({ isTemplatesVisible: false, isSavedResponsesVisible: false })
+		);
 		setAtBottom(false);
 		setInput('');
 		setScrollButtonVisible(false);
@@ -406,11 +397,11 @@ const Chat: React.FC<Props> = (props) => {
 	}, [waId]);
 
 	useEffect(() => {
-		props.setChosenContact(person);
+		dispatch(setState({ chosenContact: person }));
 	}, [person]);
 
 	const getNewMessagesCount = () => {
-		return waId ? props.newMessages[waId]?.newMessages ?? 0 : 0;
+		return waId ? newMessages[waId]?.newMessages ?? 0 : 0;
 	};
 
 	useEffect(() => {
@@ -418,7 +409,7 @@ const Chat: React.FC<Props> = (props) => {
 		if (newMessagesCount > currentNewMessages) {
 			setCurrentNewMessages(newMessagesCount);
 		}
-	}, [waId, props.newMessages]);
+	}, [waId, newMessages]);
 
 	useEffect(() => {
 		const messagesContainerCopy = messagesContainer.current;
@@ -965,7 +956,7 @@ const Chat: React.FC<Props> = (props) => {
 	}, [messages, isAtBottom]);
 
 	const handleChosenFiles = () => {
-		if (getObjLength(selectedFiles) > 0) {
+		if (selectedFiles && getObjLength(selectedFiles) > 0) {
 			const preparedFiles = prepareSelectedFiles(selectedFiles);
 
 			setPreviewSendMediaData(preparedFiles);
@@ -1461,7 +1452,7 @@ const Chat: React.FC<Props> = (props) => {
 			willRetry: false,
 		});
 
-		props.setPendingMessages([...updatedState]);
+		dispatch(setPendingMessages([...updatedState]));
 	};
 
 	const sendCustomTextMessage = (text: string) => {
@@ -1742,7 +1733,7 @@ const Chat: React.FC<Props> = (props) => {
 		completeCallback: () => void
 	) => {
 		// To display a progress
-		props.setUploadingMedia(true);
+		dispatch(setState({ isUploadingMedia: true }));
 
 		apiService.uploadMediaCall(
 			formData,
@@ -1755,7 +1746,7 @@ const Chat: React.FC<Props> = (props) => {
 					undefined,
 					function () {
 						completeCallback();
-						props.setUploadingMedia(false);
+						dispatch(setState({ isUploadingMedia: false }));
 					}
 				);
 			},
@@ -1768,7 +1759,7 @@ const Chat: React.FC<Props> = (props) => {
 
 				// A retry can be considered
 				completeCallback();
-				props.setUploadingMedia(false);
+				dispatch(setState({ isUploadingMedia: false }));
 			}
 		);
 	};
@@ -1896,16 +1887,18 @@ const Chat: React.FC<Props> = (props) => {
 		//displayMessageInChatManually(requestBody, false);
 
 		// Mark message in queue as failed
-		props.setPendingMessages([
-			...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
-		]);
-		props.setSendingPendingMessages(false);
+		dispatch(
+			setPendingMessages([
+				...setPendingMessageFailed(requestBody.pendingMessageUniqueId),
+			])
+		);
+		dispatch(setState({ isSendingPendingMessages: false }));
 
 		// This will be used to display a warning before refreshing
-		props.setHasFailedMessages(true);
+		dispatch(setState({ hasFailedMessages: true }));
 
 		// Last attempt at
-		props.setLastSendAttemptAt(new Date());
+		dispatch(setState({ lastSendAttemptAt: new Date() }));
 	};
 
 	const retryMessage = (message: ChatMessageModel) => {
@@ -2125,18 +2118,16 @@ const Chat: React.FC<Props> = (props) => {
 				person={person}
 				contactProvidersData={props.contactProvidersData}
 				isChatOnly={props.isChatOnly}
-				setChatAssignmentVisible={props.setChatAssignmentVisible}
 				setChatTagsVisible={props.setChatTagsVisible}
 				closeChat={closeChat}
-				hasFailedMessages={props.hasFailedMessages}
 				waId={waId ?? ''}
 			/>
 
 			{/* FOR TESTING QUEUE */}
-			{isLocalHost() && props.pendingMessages.length > 0 && (
+			{isLocalHost() && pendingMessages.length > 0 && (
 				<div className="pendingMessagesIndicator">
-					<div>{props.isSendingPendingMessages.toString()}</div>
-					<div>{props.pendingMessages.length}</div>
+					<div>{isSendingPendingMessages.toString()}</div>
+					<div>{pendingMessages.length}</div>
 				</div>
 			)}
 
@@ -2215,7 +2206,6 @@ const Chat: React.FC<Props> = (props) => {
 								displaySender={willDisplaySender}
 								displayDate={willDisplayDate}
 								isExpired={isExpired}
-								isTemplatesFailed={props.isTemplatesFailed}
 								goToMessageId={goToMessageId}
 								retryMessage={retryMessage}
 								onOptionsClick={displayOptionsMenu}
@@ -2258,8 +2248,6 @@ const Chat: React.FC<Props> = (props) => {
 
 			{isTemplatesVisible && (
 				<TemplateListWithControls
-					isTemplatesFailed={props.isTemplatesFailed}
-					isLoadingTemplates={props.isLoadingTemplates}
 					onSelect={(template: TemplateModel) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);
@@ -2280,7 +2268,7 @@ const Chat: React.FC<Props> = (props) => {
 				setVisible={setSendTemplateDialogVisible}
 				chosenTemplate={chosenTemplate}
 				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
-				sendCallback={() => setTemplatesVisible(false)}
+				sendCallback={() => dispatch(setState({ isTemplatesVisible: false }))}
 				onBulkSend={bulkSendMessage}
 				isBulkOnly={false}
 			/>
@@ -2299,13 +2287,7 @@ const Chat: React.FC<Props> = (props) => {
 					sendMessage={sendMessage}
 					bulkSendMessage={bulkSendMessage}
 					setSelectedFiles={setSelectedFiles}
-					isTemplatesVisible={isTemplatesVisible}
-					setTemplatesVisible={setTemplatesVisible}
-					isInteractiveMessagesVisible={isInteractiveMessagesVisible}
-					setInteractiveMessagesVisible={setInteractiveMessagesVisible}
 					accept={accept}
-					isSavedResponsesVisible={isSavedResponsesVisible}
-					setSavedResponsesVisible={setSavedResponsesVisible}
 					sendHandledChosenFiles={sendHandledChosenFiles}
 					setAccept={setAccept}
 					isScrollButtonVisible={isScrollButtonVisible}
