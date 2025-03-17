@@ -2,11 +2,7 @@
 import axios from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_FORCE_LOGOUT } from '../Constants';
-import {
-	clearUserSession,
-	getRequestConfig,
-	handleIfUnauthorized,
-} from '../helpers/ApiHelper';
+import { getRequestConfig, handleIfUnauthorized } from '../helpers/ApiHelper';
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 import { AppConfig } from '@src/config/application';
 
@@ -176,23 +172,6 @@ export class ApiService {
 			successCallback,
 			(error) => {
 				window.displayError(error);
-			}
-		);
-	};
-
-	retrieveCurrentUserCall = (successCallback, history) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}users/current/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-
-				// Exceptional handling for invalid token
-				if (error?.response?.status === 403) {
-					clearUserSession('invalidToken', undefined, history);
-				} else {
-					handleIfUnauthorized(error, history);
-				}
 			}
 		);
 	};

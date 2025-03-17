@@ -32,7 +32,7 @@ import ChatTags from './ChatTags';
 import ChatTagsList from './ChatTagsList';
 import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
 import moment from 'moment';
-import { clearUserSession } from '@src/helpers/ApiHelper';
+import { clearUserSession, handleIfUnauthorized } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
@@ -797,9 +797,16 @@ const Main: React.FC = () => {
 			if (role !== 'admin' && role !== 'user') {
 				clearUserSession('incorrectRole', location, navigate);
 			}
-		} catch (error) {
+		} catch (error: any | AxiosError) {
 			console.error('Error retrieving current user', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
+
+			// Exceptional handling for invalid token
+			if (error?.response?.status === 403) {
+				clearUserSession('invalidToken', undefined, navigate);
+			} else {
+				handleIfUnauthorized(error, navigate);
+			}
 		} finally {
 			setProgress(10);
 
