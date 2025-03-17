@@ -1,17 +1,17 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
-import UserModel from '@src/api/models/UserModel';
 import GroupModel from '@src/api/models/GroupModel';
 import TagModel from '@src/api/models/TagModel';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { User } from '@src/types/user';
 
 class ChatModel {
 	public waId: string;
 	public name?: string;
 	public initials?: string;
 	public tags: TagModel[];
-	public assignedToUser?: UserModel;
+	public assignedToUser?: User;
 	public assignedGroup?: GroupModel;
 	public lastMessageTimestamp: number = 0;
 	public lastReceivedMessageTimestamp: number;
@@ -54,7 +54,7 @@ class ChatModel {
 		}
 
 		if (data.assigned_to_user) {
-			this.assignedToUser = new UserModel(data.assigned_to_user);
+			this.assignedToUser = data.assigned_to_user;
 		}
 
 		this.tags = data.tags?.map((item: any) => new TagModel(item)) ?? [];
@@ -121,7 +121,7 @@ class ChatModel {
 		return this.assignedToUser?.username?.[0]?.toUpperCase();
 	}
 
-	isAssignedToUser(user: UserModel) {
+	isAssignedToUser(user: User) {
 		return this.assignedToUser && this.assignedToUser.id === user.id;
 	}
 
@@ -129,7 +129,7 @@ class ChatModel {
 		return this.assignedGroup && this.assignedGroup.id === groupId;
 	}
 
-	isAssignedToUserAnyGroup(user: UserModel) {
+	isAssignedToUserAnyGroup(user: User) {
 		const matchedGroup = user.groups.filter(
 			(group) => group.id === this.assignedGroup?.id
 		);

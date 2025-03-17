@@ -116,6 +116,7 @@ import PersonModel from '@src/api/models/PersonModel';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
+import { isUserInGroup } from '@src/helpers/UserHelper';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -727,7 +728,7 @@ const Sidebar: React.FC<Props> = ({
 				} else if (filterAssignedGroupId) {
 					if (
 						!preparedChat.assignedGroup ||
-						currentUser?.isInGroup(preparedChat.assignedGroup.id)
+						isUserInGroup(currentUser, preparedChat.assignedGroup.id)
 					) {
 						console.log(
 							'Chat will not be displayed as it does not belong to current tab.'
@@ -1391,8 +1392,8 @@ const Sidebar: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Export chats')}
 				</MenuItem>*/}
-				{currentUser?.isAdmin && <Divider />}
-				{currentUser?.isAdmin && (
+				{currentUser?.profile?.role === 'admin' && <Divider />}
+				{currentUser?.profile?.role === 'admin' && (
 					<MenuItem
 						component={Link}
 						href={getHubURL(config?.API_BASE_URL ?? '')}

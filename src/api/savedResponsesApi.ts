@@ -1,15 +1,19 @@
 import api from './axiosInstance';
 import {
-	SavedResponsesResponse,
 	CreateSavedResponseRequest,
 	CreateSavedResponseResponse,
+	SavedResponse,
 } from '../types/savedResponses';
+import { PaginatedResponse } from '@src/types/common';
 
-export const fetchSavedResponses =
-	async (): Promise<SavedResponsesResponse> => {
-		const response = await api.get<SavedResponsesResponse>('/saved_responses/');
-		return response.data;
-	};
+export const fetchSavedResponses = async (): Promise<
+	PaginatedResponse<SavedResponse>
+> => {
+	const response = await api.get<PaginatedResponse<SavedResponse>>(
+		'/saved_responses/'
+	);
+	return response.data;
+};
 
 export const createSavedResponse = async (
 	data: CreateSavedResponseRequest

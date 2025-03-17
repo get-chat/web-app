@@ -5,13 +5,6 @@ export interface SavedResponse {
 	timestamp: number;
 }
 
-export interface SavedResponsesResponse {
-	count: number;
-	next: string | null;
-	previous: string | null;
-	results: SavedResponse[];
-}
-
 export interface CreateSavedResponseRequest {
 	text: string;
 }

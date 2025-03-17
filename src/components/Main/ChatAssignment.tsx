@@ -17,7 +17,7 @@ import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { useAppSelector } from '@src/store/hooks';
-import { sortUsers } from '@src/helpers/UsersHelper';
+import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
 import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
 import { AxiosError, AxiosResponse } from 'axios';
 import { sortGroups } from '@src/helpers/GroupsHelper';
@@ -178,7 +178,7 @@ function ChatAssignment(props: any) {
 								value={user.id?.toString()}
 								disabled={isAdmin ? false : user.id !== currentUser?.id}
 							>
-								{user.prepareUserLabel()}
+								{prepareUserLabel(user)}
 							</MenuItem>
 						))}
 					</Select>

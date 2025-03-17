@@ -1,10 +1,10 @@
-import UserModel from '@src/api/models/UserModel';
 import ChatModel from '@src/api/models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import ChatList from '@src/interfaces/ChatList';
+import { User } from '@src/types/user';
 
-const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
-	const canReadChats = currentUser?.permissions?.canReadChats;
+const hasPermission = (currentUser: User, chat: ChatModel) => {
+	const canReadChats = currentUser?.permissions?.can_read_chats;
 
 	switch (canReadChats) {
 		case 'all':
@@ -22,7 +22,7 @@ const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
 };
 
 export const filterChat = (
-	currentUser: UserModel | undefined,
+	currentUser: User | undefined,
 	chat: ChatModel,
 	filterTagId?: number,
 	filterAssignedToMe?: boolean,
@@ -46,7 +46,7 @@ export const filterChat = (
 };
 
 export const handleChatAssignmentEvent = (
-	currentUser: UserModel | undefined,
+	currentUser: User | undefined,
 	chats: ChatList,
 	data: any
 ) => {
@@ -58,9 +58,9 @@ export const handleChatAssignmentEvent = (
 	let newMissingChats: string[] = [];
 	let isChatsChanged = false;
 
-	const canReadChatsAll = currentUser.permissions.canReadChats === 'all';
-	const canReadChatsGroup = currentUser.permissions.canReadChats === 'group';
-	const canReadChatsUser = currentUser.permissions.canReadChats === 'user';
+	const canReadChatsAll = currentUser.permissions.can_read_chats === 'all';
+	const canReadChatsGroup = currentUser.permissions.can_read_chats === 'group';
+	const canReadChatsUser = currentUser.permissions.can_read_chats === 'user';
 
 	const checkIsUserInGroup = (groupId: number) =>
 		Boolean(currentUser?.groups.find((group) => group.id === groupId));

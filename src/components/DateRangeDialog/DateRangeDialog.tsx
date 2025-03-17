@@ -18,7 +18,10 @@ import * as rdrLocales from 'react-date-range/dist/locale';
 import i18next from 'i18next';
 import useDateRanges from '@src/components/DateRangeDialog/useDateRanges';
 import { useAppSelector } from '@src/store/hooks';
-import { storeUserPreference } from '@src/helpers/StorageHelper';
+import {
+	getUserPreferences,
+	storeUserPreference,
+} from '@src/helpers/StorageHelper';
 import styles from './DateRangeDialog.module.css';
 
 interface Props {
@@ -36,7 +39,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	const [maxDate, setMaxDate] = useState<Date | undefined>();
 
 	const getWeekStartsOnFromPreferences = () =>
-		currentUser?.getPreferences()?.weekStartsOn ?? 1;
+		getUserPreferences()?.[currentUser?.id ?? 0]?.weekStartsOn ?? 1;
 
 	const [weekStartsOn, setWeekStartsOn] = useState(
 		getWeekStartsOnFromPreferences()
@@ -44,6 +47,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 
 	const { t } = useTranslation();
 
+	// @ts-ignore
 	const { customStaticRanges } = useDateRanges({ weekStartsOn: weekStartsOn });
 
 	useEffect(() => {
@@ -100,7 +104,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	const handleWeekStartDayChange = (event: SelectChangeEvent) => {
 		const day = parseInt(event.target.value ?? '1');
 		if (currentUser) {
-			const currentPreferences = currentUser.getPreferences();
+			const currentPreferences = getUserPreferences()?.[currentUser.id];
 			currentPreferences.weekStartsOn = day;
 			storeUserPreference(currentUser.id, currentPreferences);
 		}

@@ -46,7 +46,6 @@ import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateVi
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
-import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
 import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '@src/helpers/TagHelper';
@@ -54,7 +53,6 @@ import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import UsersResponse from '@src/api/responses/UsersResponse';
 import { setUsers } from '@src/store/reducers/usersReducer';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
 import {
@@ -79,6 +77,8 @@ import {
 	createSavedResponse,
 	fetchSavedResponses,
 } from '@src/api/savedResponsesApi';
+import { fetchCurrentUser, fetchUsers } from '@src/api/usersApi';
+import { User, UserList } from '@src/types/user';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -746,20 +746,18 @@ const Main: React.FC = () => {
 		setLoadingComponent('Users');
 
 		try {
-			apiService.listUsersCall(5000, (response: AxiosResponse) => {
-				const usersResponse = new UsersResponse(response.data);
-
-				// Store
-				dispatch(setUsers(usersResponse.users));
-
-				setProgress(15);
+			const data = await fetchUsers(5000);
+			const userList: UserList = {};
+			data.results.forEach((user: User) => {
+				userList[user.id] = user;
 			});
+			dispatch(setUsers(userList));
 		} catch (error) {
 			console.error('Error in listUsers', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
-			// Trigger next request
-			listGroups();
+			setProgress(15);
+			await listGroups();
 		}
 	};
 
@@ -790,25 +788,23 @@ const Main: React.FC = () => {
 		setLoadingComponent('Current User');
 
 		try {
-			apiService.retrieveCurrentUserCall((response: AxiosResponse) => {
-				const currentUserResponse = new CurrentUserResponse(response.data);
-				dispatch(setCurrentUser(currentUserResponse.currentUser));
+			const data = await fetchCurrentUser();
+			dispatch(setCurrentUser(data));
 
-				const role = currentUserResponse.currentUser.role;
+			const role = data.profile?.role;
 
-				// Only admins and users can access
-				if (role !== 'admin' && role !== 'user') {
-					clearUserSession('incorrectRole', location, navigate);
-				}
-
-				setProgress(10);
-			}, navigate);
+			// Only admins and users can access
+			if (role !== 'admin' && role !== 'user') {
+				clearUserSession('incorrectRole', location, navigate);
+			}
 		} catch (error) {
 			console.error('Error retrieving current user', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
+			setProgress(10);
+
 			// Trigger next request
-			listUsers();
+			await listUsers();
 		}
 	};
 

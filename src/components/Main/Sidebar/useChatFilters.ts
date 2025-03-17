@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { storeUserPreference } from '@src/helpers/StorageHelper';
+import {
+	getUserPreferences,
+	storeUserPreference,
+} from '@src/helpers/StorageHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import {
 	createSearchParams,
@@ -19,7 +22,7 @@ const useChatFilters = () => {
 	const filterTagId = useAppSelector((state) => state.filterTagId.value);
 
 	const initialUserPreference = useMemo(() => {
-		return currentUser?.getPreferences();
+		return getUserPreferences()?.[currentUser?.id ?? 0];
 	}, [currentUser]);
 
 	const [searchParams] = useSearchParams();
@@ -101,7 +104,7 @@ const useChatFilters = () => {
 		// Here chat filter id in store will be filled if no filter query param is provided
 		if (currentUser && !hasAnyFilterQueryParam) {
 			// User preference
-			const preference = currentUser.getPreferences();
+			const preference = getUserPreferences()?.[currentUser.id];
 			setDynamicFilters(preference?.dynamicFilters ?? {});
 			dispatch(setFilterTagId(preference?.filters?.filterTagId));
 		}

@@ -67,14 +67,6 @@ export class ApiService {
 		);
 	};
 
-	listHealthStatus = (successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}status/health/`, getRequestConfig()),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	loginCall = (username, password, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}auth/token/`, {
@@ -181,21 +173,6 @@ export class ApiService {
 	bulkSendCall = (body, successCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	listUsersCall = (limit, successCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}users/`,
-				getRequestConfig({
-					limit: limit,
-				})
-			),
 			successCallback,
 			(error) => {
 				window.displayError(error);

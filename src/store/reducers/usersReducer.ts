@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { UserList } from '@src/api/responses/UsersResponse';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserList } from '@src/types/user';
 
 interface UsersState {
 	value: UserList;
@@ -13,7 +13,7 @@ export const usersSlice = createSlice({
 	name: 'users',
 	initialState,
 	reducers: {
-		setUsers: (state, users) => {
+		setUsers: (state, users: PayloadAction<UserList>) => {
 			state.value = users.payload;
 		},
 	},

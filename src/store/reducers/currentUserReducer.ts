@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
-import UserModel from '@src/api/models/UserModel';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '@src/types/user';
 
 interface CurrentUserState {
-	value: UserModel | undefined;
+	value: User | undefined;
 }
 
 const initialState: CurrentUserState = {
@@ -13,7 +13,7 @@ const currentUserSlice = createSlice({
 	name: 'currentUser',
 	initialState,
 	reducers: {
-		setCurrentUser: (state, currentUser) => {
+		setCurrentUser: (state, currentUser: PayloadAction<User | undefined>) => {
 			state.value = currentUser.payload;
 		},
 	},
