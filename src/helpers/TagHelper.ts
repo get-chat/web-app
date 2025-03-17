@@ -1,5 +1,5 @@
-import TagModel from '@src/api/models/TagModel';
+import { Tag } from '@src/types/tags';
 
-export const findTagByName = (tags: TagModel[], name: string) => {
+export const findTagByName = (tags: Tag[], name: string) => {
 	return tags?.filter((tagItem) => tagItem.name === name)?.[0];
 };

@@ -254,16 +254,6 @@ export class ApiService {
 		);
 	};
 
-	listTagsCall = (successCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}tags/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	retrievePersonCall = (waId, cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(

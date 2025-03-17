@@ -62,7 +62,6 @@ import {
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
-import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
@@ -78,7 +77,8 @@ import {
 	fetchSavedResponses,
 } from '@src/api/savedResponsesApi';
 import { fetchCurrentUser, fetchUsers } from '@src/api/usersApi';
-import { User, UserList } from '@src/types/user';
+import { User, UserList } from '@src/types/users';
+import { fetchTags } from '@src/api/tagsApi';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -956,10 +956,8 @@ const Main: React.FC = () => {
 	// ** 7 **
 	const listTags = async () => {
 		try {
-			apiService.listTagsCall((response: AxiosResponse) => {
-				const tagsResponse = new TagsResponse(response.data);
-				dispatch(setTags(tagsResponse.tags));
-			});
+			const data = await fetchTags();
+			dispatch(setTags(data.results));
 		} catch (error) {
 			console.error('Error in listTags', error);
 		}

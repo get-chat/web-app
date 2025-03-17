@@ -1,7 +1,7 @@
 import ChatModel from '@src/api/models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import ChatList from '@src/interfaces/ChatList';
-import { User } from '@src/types/user';
+import { User } from '@src/types/users';
 
 const hasPermission = (currentUser: User, chat: ChatModel) => {
 	const canReadChats = currentUser?.permissions?.can_read_chats;

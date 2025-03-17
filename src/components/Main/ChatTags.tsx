@@ -17,10 +17,10 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
 import { AxiosError, AxiosResponse } from 'axios';
-import TagsResponse from '@src/api/responses/TagsResponse';
-import TagModel from '@src/api/models/TagModel';
 import ChatResponse from '@src/api/responses/ChatResponse';
 import ChatModel from '@src/api/models/ChatModel';
+import { Tag } from '@src/types/tags';
+import { fetchTags } from '@src/api/tagsApi';
 
 function ChatTags(props: any) {
 	// @ts-ignore
@@ -31,9 +31,9 @@ function ChatTags(props: any) {
 
 	const [isLoading, setLoading] = useState(true);
 	const [chat, setChat] = useState<ChatModel>();
-	const [chatTags, setChatTags] = useState<TagModel[]>([]);
-	const [unusedTags, setUnusedTags] = useState<TagModel[]>([]);
-	const [allTags, setAllTags] = useState<TagModel[]>([]);
+	const [chatTags, setChatTags] = useState<Tag[]>([]);
+	const [unusedTags, setUnusedTags] = useState<Tag[]>([]);
+	const [allTags, setAllTags] = useState<Tag[]>([]);
 
 	useEffect(() => {
 		retrieveChat();
@@ -65,17 +65,17 @@ function ChatTags(props: any) {
 		props.setOpen(false);
 	};
 
-	const onDeleteTag = (tag: TagModel) => {
+	const onDeleteTag = (tag: Tag) => {
 		deleteChatTagging(tag);
 	};
 
-	const onClickTag = (tag: TagModel) => {
+	const onClickTag = (tag: Tag) => {
 		createChatTagging(tag);
 	};
 
-	const makeUniqueTagsArray = (tagsArray: TagModel[]) => {
-		const uniqueTagsArray: { [key: string]: TagModel } = {};
-		tagsArray.forEach((tag: TagModel) => {
+	const makeUniqueTagsArray = (tagsArray: Tag[]) => {
+		const uniqueTagsArray: { [key: string]: Tag } = {};
+		tagsArray.forEach((tag: Tag) => {
 			if (!uniqueTagsArray.hasOwnProperty(tag.id)) {
 				uniqueTagsArray[tag.id] = tag;
 			}
@@ -100,15 +100,17 @@ function ChatTags(props: any) {
 		);
 	};
 
-	const listTags = () => {
-		apiService.listTagsCall((response: AxiosResponse) => {
-			const tagsResponse = new TagsResponse(response.data);
-			setAllTags(tagsResponse.tags);
+	const listTags = async () => {
+		try {
+			const data = await fetchTags();
+			setAllTags(data.results);
 			setLoading(false);
-		});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
-	const createChatTagging = (tag: TagModel) => {
+	const createChatTagging = (tag: Tag) => {
 		apiService.createChatTaggingCall(
 			props.waId,
 			tag.id,
@@ -118,7 +120,7 @@ function ChatTags(props: any) {
 						return curTag.id !== tag.id;
 					});
 
-					tag.taggingId = response.data.id;
+					tag.tagging_id = response.data.id;
 
 					nextState.push(tag);
 					nextState = makeUniqueTagsArray(nextState);
@@ -129,9 +131,9 @@ function ChatTags(props: any) {
 		);
 	};
 
-	const deleteChatTagging = (tag: TagModel) => {
+	const deleteChatTagging = (tag: Tag) => {
 		apiService.deleteChatTaggingCall(
-			tag.taggingId,
+			tag.tagging_id,
 			(response: AxiosResponse) => {
 				setChatTags((prevState) => {
 					let nextState = prevState.filter((curTag) => {
@@ -165,7 +167,7 @@ function ChatTags(props: any) {
 										icon={
 											<SellIcon
 												style={{
-													fill: tag.color,
+													fill: tag.web_inbox_color,
 												}}
 											/>
 										}
@@ -192,7 +194,7 @@ function ChatTags(props: any) {
 										icon={
 											<SellIcon
 												style={{
-													fill: tag.color,
+													fill: tag.web_inbox_color,
 												}}
 											/>
 										}

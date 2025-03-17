@@ -101,7 +101,6 @@ import {
 	formatDateRangeFilters,
 } from '@src/helpers/DateHelper';
 import GroupModel from '@src/api/models/GroupModel';
-import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
@@ -117,6 +116,7 @@ import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
 import { isUserInGroup } from '@src/helpers/UserHelper';
+import { Tag } from '@src/types/tags';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -1085,7 +1085,7 @@ const Sidebar: React.FC<Props> = ({
 						elevation={3}
 					>
 						{tags &&
-							tags.slice(0, 10).map((tag: TagModel) => (
+							tags.slice(0, 10).map((tag: Tag) => (
 								<MenuItem
 									onClick={() => {
 										dispatch(setFilterTagId(tag.id));
@@ -1096,7 +1096,7 @@ const Sidebar: React.FC<Props> = ({
 									<ListItemIcon>
 										<SellIcon
 											style={{
-												fill: tag.color,
+												fill: tag.web_inbox_color,
 											}}
 										/>
 									</ListItemIcon>
@@ -1228,8 +1228,8 @@ const Sidebar: React.FC<Props> = ({
 							<>
 								<h3>{t('Tags')}</h3>
 								<div>
-									{Object.entries(tags).map((tag) => (
-										<SelectableChatTag key={tag[0]} data={tag[1]} />
+									{tags.map((tag) => (
+										<SelectableChatTag key={tag.id} data={tag} />
 									))}
 								</div>
 							</>

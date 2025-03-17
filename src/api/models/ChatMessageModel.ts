@@ -4,7 +4,6 @@ import {
 	sanitize,
 } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
-import TagModel from '@src/api/models/TagModel';
 import ReactionModel from '@src/api/models/ReactionModel';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import TemplateModel from '@src/api/models/TemplateModel';
@@ -239,9 +238,6 @@ export class ChatMessageModel {
 			'taggingEvent_' + taggingEvent.timestamp + '_' + generateUniqueID();
 		message.waId = taggingEvent.chat;
 		message.taggingEvent = taggingEvent;
-		if (message.taggingEvent) {
-			message.taggingEvent.tag = new TagModel(message.taggingEvent.tag);
-		}
 		message.timestamp = taggingEvent.timestamp;
 		return message;
 	}

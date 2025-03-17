@@ -131,7 +131,7 @@ const ContactDetails: React.FC<Props> = ({
 									>
 										<SellIcon
 											style={{
-												fill: tag.color,
+												fill: tag.web_inbox_color,
 											}}
 										/>
 										<span className="bold">{tag.name}</span>

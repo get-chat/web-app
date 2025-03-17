@@ -1,6 +1,6 @@
 import axios from './axiosInstance';
 import { PaginatedResponse } from '@src/types/common';
-import { User } from '@src/types/user';
+import { User } from '@src/types/users';
 
 export const fetchUsers = async (limit?: number) => {
 	const response = await axios.get<PaginatedResponse<User>>('/users/', {

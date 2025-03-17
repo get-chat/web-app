@@ -1,4 +1,4 @@
-import { User, UserList } from '@src/types/user';
+import { User, UserList } from '@src/types/users';
 
 export const sortUsers = (users: UserList): User[] => {
 	return Object.values(users)?.sort(function (a: User, b: User) {

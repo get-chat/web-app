@@ -2,15 +2,15 @@ import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import GroupModel from '@src/api/models/GroupModel';
-import TagModel from '@src/api/models/TagModel';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { User } from '@src/types/user';
+import { User } from '@src/types/users';
+import { Tag } from '@src/types/tags';
 
 class ChatModel {
 	public waId: string;
 	public name?: string;
 	public initials?: string;
-	public tags: TagModel[];
+	public tags: Tag[];
 	public assignedToUser?: User;
 	public assignedGroup?: GroupModel;
 	public lastMessageTimestamp: number = 0;
@@ -57,7 +57,7 @@ class ChatModel {
 			this.assignedToUser = data.assigned_to_user;
 		}
 
-		this.tags = data.tags?.map((item: any) => new TagModel(item)) ?? [];
+		this.tags = data.tags;
 
 		// Not need to sanitize this, because it is already sanitized
 		// this.sanitize();

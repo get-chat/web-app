@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '@src/types/user';
+import { User } from '@src/types/users';
 
 interface CurrentUserState {
 	value: User | undefined;
