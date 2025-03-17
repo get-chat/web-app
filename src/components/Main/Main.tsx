@@ -76,7 +76,10 @@ import {
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
-import { fetchSavedResponses } from '@src/api/savedResponsesApi';
+import {
+	createSavedResponse,
+	fetchSavedResponses,
+} from '@src/api/savedResponsesApi';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -867,7 +870,7 @@ const Main: React.FC = () => {
 	};
 
 	// ** 5 **
-	const listSavedResponses = async () => {
+	const handleFetchSavedResponses = async () => {
 		try {
 			const data = await fetchSavedResponses();
 			dispatch(setSavedResponses(data.results));
@@ -880,14 +883,18 @@ const Main: React.FC = () => {
 		}
 	};
 
-	const createSavedResponse = (text: string) => {
-		apiService.createSavedResponseCall(text, () => {
+	const handleCreateSavedResponse = async (text: string) => {
+		try {
+			await createSavedResponse({ text });
+
 			// Display a success message
 			displaySuccess('Saved as response successfully!');
 
 			// Reload saved responses
-			listSavedResponses();
-		});
+			await handleFetchSavedResponses();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	// ** 4 **
@@ -898,7 +905,7 @@ const Main: React.FC = () => {
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
 			setLoadingComponent('Saved Responses');
-			listSavedResponses();
+			handleFetchSavedResponses();
 			return;
 		}
 
@@ -911,7 +918,7 @@ const Main: React.FC = () => {
 			setLoadingComponent('Saved Responses');
 
 			// Trigger next request
-			listSavedResponses();
+			handleFetchSavedResponses();
 		};
 
 		const makeRequest = async (pages?: string | undefined | null) => {
@@ -1023,7 +1030,7 @@ const Main: React.FC = () => {
 
 				{isTemplatesReady && (
 					<Chat
-						createSavedResponse={createSavedResponse}
+						createSavedResponse={handleCreateSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}
