@@ -30,13 +30,6 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 		setOpen(false);
 	};
 
-	const sendSavedResponse = (id: number) => {
-		const savedResponse = savedResponses.find((item) => item.id === id);
-		if (savedResponse) {
-			sendCustomTextMessage(savedResponse.text);
-		}
-	};
-
 	const attemptToDelete = (id: number) => {
 		setDeleteId(id);
 		setOpen(true);
@@ -69,7 +62,7 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 							</div>
 
 							<Button
-								onClick={() => sendSavedResponse(savedResponse.id)}
+								onClick={() => sendCustomTextMessage(savedResponse.text)}
 								// @ts-ignore
 								color="black"
 							>
