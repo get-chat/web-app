@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GroupList } from '@src/api/responses/GroupsResponse';
+import { GroupList } from '@src/types/groups';
 
 interface GroupsState {
 	value: GroupList;

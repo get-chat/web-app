@@ -60,7 +60,6 @@ import {
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
-import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
@@ -79,6 +78,8 @@ import {
 import { fetchCurrentUser, fetchUsers } from '@src/api/usersApi';
 import { User, UserList } from '@src/types/users';
 import { fetchTags } from '@src/api/tagsApi';
+import { fetchGroups } from '@src/api/groupsApi';
+import { GroupList } from '@src/types/groups';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -766,18 +767,16 @@ const Main: React.FC = () => {
 		setLoadingComponent('Groups');
 
 		try {
-			apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
-				const groupsResponse = new GroupsResponse(response.data);
-
-				// Store
-				dispatch(setGroups(groupsResponse.groups));
-
-				setProgress(25);
-			});
+			const data = await fetchGroups();
+			const preparedGroups: GroupList = {};
+			data.results.forEach((item) => (preparedGroups[item.id] = item));
+			dispatch(setGroups(preparedGroups));
 		} catch (error) {
 			console.error('Error in listGroups', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
+			setProgress(25);
+
 			// Trigger next request
 			listContacts();
 		}

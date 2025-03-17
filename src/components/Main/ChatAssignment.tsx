@@ -18,9 +18,10 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
-import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
 import { AxiosError, AxiosResponse } from 'axios';
 import { sortGroups } from '@src/helpers/GroupsHelper';
+import { GroupList } from '@src/types/groups';
+import { fetchGroups } from '@src/api/groupsApi';
 
 function ChatAssignment(props: any) {
 	// @ts-ignore
@@ -28,7 +29,7 @@ function ChatAssignment(props: any) {
 
 	const users = useAppSelector((state) => state.users.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const isAdmin = currentUser?.isAdmin ?? false;
+	const isAdmin = currentUser?.profile?.role === 'admin';
 
 	const { t } = useTranslation();
 
@@ -92,14 +93,17 @@ function ChatAssignment(props: any) {
 		);
 	};
 
-	const listGroups = () => {
-		apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
-			const groupsResponse = new GroupsResponse(response.data);
-			setGroups(groupsResponse.groups);
-
-			// Next
+	const listGroups = async () => {
+		try {
+			const data = await fetchGroups();
+			const preparedGroups: GroupList = {};
+			data.results.forEach((item) => (preparedGroups[item.id] = item));
+			setGroups(preparedGroups);
+		} catch (error) {
+			console.error(error);
+		} finally {
 			retrieveChatAssignment();
-		});
+		}
 	};
 
 	const handleUserChange = (event: SelectChangeEvent) => {

@@ -3,8 +3,8 @@ import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { AssigneeType } from '@src/components/AssigneeChip/AssigneeChip';
 import { CancelTokenSource } from 'axios';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import { GroupList } from '@src/api/responses/GroupsResponse';
 import { UserList } from '@src/types/users';
+import { GroupList } from '@src/types/groups';
 
 interface Props {
 	assigneeType: AssigneeType;

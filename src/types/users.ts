@@ -1,12 +1,9 @@
+import { Group } from '@src/types/groups';
+
 export interface UserProfile {
 	role: string;
 	large_avatar: string;
 	avatar: string;
-}
-
-export interface UserGroup {
-	id: number;
-	name: string;
 }
 
 export interface UserPermissions {
@@ -23,7 +20,7 @@ export interface User {
 	last_name: string;
 	email: string;
 	profile: UserProfile;
-	groups: UserGroup[];
+	groups: Group[];
 	permissions: UserPermissions;
 }
 

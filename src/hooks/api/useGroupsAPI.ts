@@ -1,29 +1,31 @@
 import APICallProps from '@src/api/APICallProps';
-import { useContext, useState } from 'react';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { CancelToken } from 'axios';
-import GroupsResponse, { GroupList } from '@src/api/responses/GroupsResponse';
+import { useState } from 'react';
+import { AxiosError, CancelToken } from 'axios';
+import { Group, GroupList } from '@src/types/groups';
+import { fetchGroups } from '@src/api/groupsApi';
+import { PaginatedResponse } from '@src/types/common';
 
 const useGroupsAPI = () => {
-	// @ts-ignore
-	const { apiService } = useContext(ApplicationContext);
-
 	const [groups, setGroups] = useState<GroupList>({});
 
 	const listGroups = async (apiCallProps: APICallProps) => {
-		apiService.listGroupsCall(
-			apiCallProps.cancelToken,
-			apiCallProps.onSuccess,
-			apiCallProps.onError
-		);
+		try {
+			const data = await fetchGroups();
+			apiCallProps.onSuccess?.(data);
+		} catch (error: any | AxiosError) {
+			apiCallProps.onError?.(error);
+		}
 	};
 
 	const initGroups = async (cancelToken?: CancelToken) => {
 		await listGroups({
 			cancelToken: cancelToken,
-			onSuccess: (response) => {
-				const groupsResponse = new GroupsResponse(response.data);
-				setGroups(groupsResponse.groups);
+			onSuccess: (response: any) => {
+				const preparedGroups: GroupList = {};
+				(response as PaginatedResponse<Group>).results.forEach(
+					(item) => (preparedGroups[item.id] = item)
+				);
+				setGroups(preparedGroups);
 			},
 		});
 	};

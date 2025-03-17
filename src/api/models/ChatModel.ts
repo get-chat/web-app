@@ -1,10 +1,10 @@
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { generateInitialsHelper, sanitize } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
-import GroupModel from '@src/api/models/GroupModel';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { User } from '@src/types/users';
 import { Tag } from '@src/types/tags';
+import { Group } from '@src/types/groups';
 
 class ChatModel {
 	public waId: string;
@@ -12,7 +12,7 @@ class ChatModel {
 	public initials?: string;
 	public tags: Tag[];
 	public assignedToUser?: User;
-	public assignedGroup?: GroupModel;
+	public assignedGroup?: Group;
 	public lastMessageTimestamp: number = 0;
 	public lastReceivedMessageTimestamp: number;
 	public isExpired: boolean = true;
@@ -50,7 +50,7 @@ class ChatModel {
 			: this.lastReceivedMessageTimestamp;
 
 		if (data.assigned_group) {
-			this.assignedGroup = new GroupModel(data.assigned_group);
+			this.assignedGroup = data.assigned_group;
 		}
 
 		if (data.assigned_to_user) {

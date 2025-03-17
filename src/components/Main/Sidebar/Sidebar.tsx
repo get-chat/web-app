@@ -100,7 +100,6 @@ import {
 	convertDateToUnixTimestamp,
 	formatDateRangeFilters,
 } from '@src/helpers/DateHelper';
-import GroupModel from '@src/api/models/GroupModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
@@ -117,6 +116,7 @@ import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';
+import { Group } from '@src/types/groups';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -1143,7 +1143,7 @@ const Sidebar: React.FC<Props> = ({
 										(userGroup) => userGroup.id === item.id
 									)
 								)
-								.map((group: GroupModel) => (
+								.map((group: Group) => (
 									<MenuItem
 										onClick={() => {
 											setFilterAssignedGroupId(group.id);

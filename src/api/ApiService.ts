@@ -570,17 +570,6 @@ export class ApiService {
 		);
 	};
 
-	listGroupsCall = (cancelToken?, successCallback?, errorCallback?) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}groups/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	verifyContactsCall = (
 		contacts,
 		cancelToken,
