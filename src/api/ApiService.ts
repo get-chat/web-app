@@ -262,45 +262,6 @@ export class ApiService {
 		);
 	};
 
-	listSavedResponsesCall = (successCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}saved_responses/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	createSavedResponseCall = (text, successCallback) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}saved_responses/`,
-				{
-					text: text,
-				},
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	deleteSavedResponseCall = (id, successCallback) => {
-		this.handleRequest(
-			axios.delete(
-				`${this.apiBaseURL}saved_responses/${id}/`,
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	resolveContactCall = (personWaId, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getRequestConfig()),
