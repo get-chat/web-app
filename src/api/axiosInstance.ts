@@ -9,17 +9,14 @@ const api = axios.create({
 		Accept: 'application/json',
 		'X-Request-ID': generateUniqueID(),
 	},
-	withCredentials: true,
 });
 
 // Add request interceptor for auth token
 api.interceptors.request.use(
 	(config) => {
-		const token = localStorage.getItem('authToken');
+		const token = getStorage().getItem(STORAGE_TAG_TOKEN);
 		if (token) {
-			config.headers.Authorization = `Token ${getStorage().getItem(
-				STORAGE_TAG_TOKEN
-			)}`;
+			config.headers.Authorization = `Token ${token}`;
 		}
 		return config;
 	},

@@ -76,6 +76,7 @@ import {
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
+import { fetchSavedResponses } from '@src/api/savedResponsesApi';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -868,22 +869,14 @@ const Main: React.FC = () => {
 	// ** 5 **
 	const listSavedResponses = async () => {
 		try {
-			apiService.listSavedResponsesCall((response: AxiosResponse) => {
-				const savedResponsesResponse = new SavedResponsesResponse(
-					response.data
-				);
-
-				// Store
-				dispatch(setSavedResponses(savedResponsesResponse.savedResponses));
-
-				setProgress(50);
-			});
+			const data = await fetchSavedResponses();
+			dispatch(setSavedResponses(data.results));
 		} catch (error) {
-			console.error('Error in listSavedResponses', error);
+			console.error('Failed to fetch responses:', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
-			// Trigger next request
-			listTemplates(false);
+			setProgress(50);
+			await listTemplates(false);
 		}
 	};
 
