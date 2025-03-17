@@ -30,8 +30,11 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 		setOpen(false);
 	};
 
-	const sendSavedResponse = (id: string) => {
-		sendCustomTextMessage(savedResponses[id.toString()].text);
+	const sendSavedResponse = (id: number) => {
+		const savedResponse = savedResponses.find((item) => item.id === id);
+		if (savedResponse) {
+			sendCustomTextMessage(savedResponse.text);
+		}
 	};
 
 	const attemptToDelete = (id: number) => {
@@ -56,24 +59,24 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 						</div>
 					)}
 
-					{Object.entries(savedResponses).map((savedResponse) => (
-						<div key={savedResponse[0]} className="savedResponseWrapper">
+					{savedResponses.map((savedResponse) => (
+						<div key={savedResponse.id} className="savedResponseWrapper">
 							<div className="chat__savedResponse chat__message chat__outgoing">
 								{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
 								<div className="savedResponse__message">
-									{savedResponse[1].text}
+									{savedResponse.text}
 								</div>
 							</div>
 
 							<Button
-								onClick={() => sendSavedResponse(savedResponse[0])}
+								onClick={() => sendSavedResponse(savedResponse.id)}
 								// @ts-ignore
 								color="black"
 							>
 								{t('Send')}
 							</Button>
 							<Button
-								onClick={() => attemptToDelete(savedResponse[1].id)}
+								onClick={() => attemptToDelete(savedResponse.id)}
 								color="secondary"
 							>
 								{t('Delete')}

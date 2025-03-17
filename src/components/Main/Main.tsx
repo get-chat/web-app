@@ -57,7 +57,6 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import UsersResponse from '@src/api/responses/UsersResponse';
 import { setUsers } from '@src/store/reducers/usersReducer';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
-import SavedResponsesResponse from '@src/api/responses/SavedResponsesResponse';
 import {
 	setChatAssignment,
 	setChatTagging,

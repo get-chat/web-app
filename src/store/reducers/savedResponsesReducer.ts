@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SavedResponseList } from '@src/api/responses/SavedResponsesResponse';
 import { SavedResponse } from '@src/types/savedResponses';
 
 interface SavedResponsesState {
