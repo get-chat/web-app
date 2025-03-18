@@ -135,37 +135,6 @@ export class ApiService {
 		);
 	};
 
-	issueTemplateRefreshRequestCall = (
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}templates/refresh/issue/`,
-				{},
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	checkTemplateRefreshStatusCall = (
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}templates/refresh/status/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	resolveContactCall = (personWaId, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getRequestConfig()),

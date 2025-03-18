@@ -35,6 +35,10 @@ export interface TemplateParameter {
 	document?: { link: string };
 }
 
+export interface CheckTemplateRefreshStatusResponse {
+	currently_refreshing: boolean;
+}
+
 export type TemplateList = {
 	[key: string]: Template;
 };
