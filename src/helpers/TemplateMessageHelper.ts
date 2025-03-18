@@ -4,8 +4,7 @@ import {
 	InvalidTemplateParamException,
 } from '../Constants';
 import TemplateModel from '@src/api/models/TemplateModel';
-import TemplateComponent from '@src/interfaces/TemplateComponent';
-import TemplateParameter from '@src/interfaces/TemplateParameter';
+import { TemplateComponent, TemplateParameter } from '@src/types/templates';
 
 export const getTemplateParams = (text: string | undefined) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);

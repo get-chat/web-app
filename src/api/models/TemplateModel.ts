@@ -1,4 +1,4 @@
-import TemplateComponent from '@src/interfaces/TemplateComponent';
+import TemplateComponent from '@src/types/templates';
 
 class TemplateModel {
 	public namespace: string;
