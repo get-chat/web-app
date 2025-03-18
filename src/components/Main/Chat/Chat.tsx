@@ -86,7 +86,6 @@ import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectRed
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
-import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 import ChatModel from '@src/api/models/ChatModel';
@@ -107,6 +106,7 @@ import ChosenFileClass from '@src/ChosenFileClass';
 import ReactionList from '@src/interfaces/ReactionList';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
+import { Template } from '@src/types/templates';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -190,7 +190,7 @@ const Chat: React.FC<Props> = (props) => {
 
 	const [lastMessageId, setLastMessageId] = useState();
 
-	const [chosenTemplate, setChosenTemplate] = useState<TemplateModel>();
+	const [chosenTemplate, setChosenTemplate] = useState<Template>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 
@@ -1602,7 +1602,7 @@ const Chat: React.FC<Props> = (props) => {
 
 	const sendTemplateMessage = (
 		willQueue: boolean,
-		templateMessage?: TemplateModel,
+		templateMessage?: Template,
 		customPayload?: object,
 		successCallback?: () => void,
 		completeCallback?: () => void
@@ -2246,7 +2246,7 @@ const Chat: React.FC<Props> = (props) => {
 
 			{isTemplatesVisible && (
 				<TemplateListWithControls
-					onSelect={(template: TemplateModel) => {
+					onSelect={(template: Template) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);
 					}}

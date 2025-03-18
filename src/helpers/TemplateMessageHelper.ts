@@ -3,8 +3,11 @@ import {
 	FORM_VALIDATION_ERROR,
 	InvalidTemplateParamException,
 } from '../Constants';
-import TemplateModel from '@src/api/models/TemplateModel';
-import { TemplateComponent, TemplateParameter } from '@src/types/templates';
+import {
+	Template,
+	TemplateComponent,
+	TemplateParameter,
+} from '@src/types/templates';
 
 export const getTemplateParams = (text: string | undefined) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
@@ -109,7 +112,7 @@ const generateParamsForComponent = (
 };
 
 export const generateTemplateParamsByValues = (
-	template: TemplateModel,
+	template: Template,
 	paramValues: any
 ) => {
 	const preparedParams: { [key: string]: any } = {};
@@ -168,13 +171,15 @@ export const generateTemplateParamsByValues = (
 };
 
 export const generateFinalTemplateParams = (
-	template: TemplateModel,
+	template: Template,
 	params: any,
 	checkInvalidParams: boolean,
 	onError?: (error: Error | any) => void
 ) => {
 	const preparedParams: { [key: string]: any } = {};
-	const components = { ...template.components };
+	const components: { [key: number]: TemplateComponent } = {
+		...template.components,
+	};
 
 	try {
 		// noinspection DuplicatedCode

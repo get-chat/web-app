@@ -26,15 +26,15 @@ import {
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import TemplateModel from '@src/api/models/TemplateModel';
 import { AxiosResponse } from 'axios';
+import { Template } from '@src/types/templates';
 
 interface Props {
-	data: TemplateModel;
+	data: Template;
 	setSending: (value: boolean) => void;
 	setErrors: (value: string[]) => void;
-	bulkSend: (data: TemplateModel) => void;
-	send: (data: TemplateModel) => void;
+	bulkSend: (data: Template) => void;
+	send: (data: Template) => void;
 	sendButtonInnerRef: React.Ref<HTMLButtonElement>;
 	bulkSendButtonInnerRef: React.Ref<HTMLButtonElement>;
 }
@@ -222,7 +222,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 							{componentHasMediaFormat(comp) && (
 								<div>
 									<div className="sendTemplateMessage__section__fileType">
-										{t('Type: %s', comp.format.toLowerCase())}
+										{t('Type: %s', comp.format?.toLowerCase())}
 									</div>
 
 									{headerFileURL && (
@@ -285,9 +285,9 @@ const SendTemplateMessage: React.FC<Props> = ({
 											<FileInput
 												innerRef={headerFileInput}
 												multiple={false}
-												accept={getMimetypeByFormat(comp.format)}
+												accept={getMimetypeByFormat(comp.format ?? '')}
 												handleSelectedFiles={(file) =>
-													handleChosenMedia(file, comp.format)
+													handleChosenMedia(file, comp.format ?? '')
 												}
 											/>
 
@@ -301,7 +301,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 												>
 													<Trans>
 														Upload {headerFileURL ? 'another ' : ''}
-														{comp.format.toLowerCase()}
+														{comp.format?.toLowerCase()}
 													</Trans>
 												</Button>
 
@@ -388,7 +388,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 						{comp.type === 'BUTTONS' && (
 							<div className="templateMessage__buttons">
-								{comp.buttons.map((button: any, idx: number) => (
+								{comp.buttons?.map((button: any, idx: number) => (
 									<div className="templateMessage__buttons--button" key={idx}>
 										<Button color="primary" variant="outlined" disabled>
 											{button.text}

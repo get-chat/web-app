@@ -6,7 +6,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionModel from '@src/api/models/ReactionModel';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -200,7 +200,7 @@ export class ChatMessageModel {
 		this.caption = sanitize(this.caption);
 	}
 
-	static fromTemplate(template: TemplateModel) {
+	static fromTemplate(template: Template) {
 		return new ChatMessageModel({
 			from_us: true,
 			waba_payload: {

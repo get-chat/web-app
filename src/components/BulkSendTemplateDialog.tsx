@@ -8,13 +8,13 @@ import { useTranslation } from 'react-i18next';
 import '../styles/SendBulkVoiceMessageDialog.css';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
-import TemplateModel from '@src/api/models/TemplateModel';
 import { useAppDispatch } from '@src/store/hooks';
 import {
 	setBulkSend,
 	setSelectionModeEnabled,
 } from '@src/store/reducers/UIReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import { Template } from '@src/types/templates';
 
 interface Props {
 	open: boolean;
@@ -32,7 +32,7 @@ const BulkSendTemplateDialog: React.FC<Props> = ({
 	const { t } = useTranslation();
 	const dispatch = useAppDispatch();
 
-	const [chosenTemplate, setChosenTemplate] = useState<TemplateModel>();
+	const [chosenTemplate, setChosenTemplate] = useState<Template>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 

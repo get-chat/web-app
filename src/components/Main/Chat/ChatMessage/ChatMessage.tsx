@@ -30,18 +30,18 @@ import PreviewMediaModel from '../../../../api/models/PreviewMediaModel';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
-import TemplateModel from '@src/api/models/TemplateModel';
 import { clone } from '@src/helpers/ObjectHelper';
 import classNames from 'classnames/bind';
 import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
 import useReactions from '@src/hooks/useReactions';
 import { setState } from '@src/store/reducers/UIReducer';
+import { Template } from '@src/types/templates';
 
 interface Props {
 	data: ChatMessageModel;
 	reactionsHistory?: ChatMessageModel[];
-	templateData?: TemplateModel;
+	templateData?: Template;
 	displaySender?: boolean;
 	displayDate?: boolean;
 	isExpired?: boolean;

@@ -4,11 +4,11 @@ import {
 	ATTACHMENT_TYPE_IMAGE,
 	ATTACHMENT_TYPE_VIDEO,
 } from '../Constants';
-import TemplateModel from '@src/api/models/TemplateModel';
 import ChosenFileClass from '@src/ChosenFileClass';
+import { Template } from '@src/types/templates';
 
 export const generateTemplateMessagePayload = (
-	templateMessage: TemplateModel
+	templateMessage: Template
 ): any => {
 	return {
 		type: ChatMessageModel.TYPE_TEMPLATE,

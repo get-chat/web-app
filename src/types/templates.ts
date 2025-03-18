@@ -6,12 +6,13 @@ export interface Template {
 	namespace: string;
 	rejected_reason: string;
 	status: string;
+	params: any;
 }
 
 export interface TemplateComponent {
-	type: 'HEADER' | 'BODY' | 'FOOTER' | 'BUTTON';
+	type: 'HEADER' | 'BODY' | 'FOOTER' | 'BUTTON' | 'BUTTONS';
 	format?: 'TEXT' | 'IMAGE' | 'VIDEO' | 'DOCUMENT';
-	text?: object;
+	text?: string;
 	image?: object;
 	video?: object;
 	document?: object;

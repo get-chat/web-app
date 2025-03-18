@@ -14,8 +14,8 @@ import PrintMessage from '@src/components/PrintMessage';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PhoneIcon from '@mui/icons-material/Phone';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import TemplateModel from '@src/api/models/TemplateModel';
 import { useAppSelector } from '@src/store/hooks';
+import { Template } from '@src/types/templates';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -30,7 +30,7 @@ const getIconByType = (type: string) => {
 
 interface Props {
 	data: ChatMessageModel;
-	templateData: TemplateModel | undefined;
+	templateData: Template | undefined;
 	onPreview: (type: string, source: string) => void;
 	onOptionsClick: (e: React.MouseEvent) => void;
 }

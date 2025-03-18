@@ -1,10 +1,10 @@
 import React from 'react';
 import TemplatesList from '../../../TemplatesList';
 import { useTranslation } from 'react-i18next';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 interface Props {
-	selectTemplate: (template: TemplateModel) => void;
+	selectTemplate: (template: Template) => void;
 }
 
 const StepSelectTemplate: React.FC<Props> = ({ selectTemplate }) => {

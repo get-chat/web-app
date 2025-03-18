@@ -2,11 +2,11 @@ import React from 'react';
 import Alert from '@mui/material/Alert';
 import TemplatesList from '../TemplatesList';
 import { useTranslation } from 'react-i18next';
-import TemplateModel from '@src/api/models/TemplateModel';
 import { useAppSelector } from '@src/store/hooks';
+import { Template } from '@src/types/templates';
 
 export type Props = {
-	onSelect: (template: TemplateModel) => void;
+	onSelect: (template: Template) => void;
 };
 
 const TemplateListWithControls: React.FC<Props> = ({ onSelect }) => {

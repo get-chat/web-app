@@ -5,10 +5,10 @@ import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateFinalTemplateParams } from '@src/helpers/TemplateMessageHelper';
 import styles from './StepPreviewResult.module.css';
 import { useAppSelector } from '@src/store/hooks';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 interface Props {
-	template: TemplateModel;
+	template: Template;
 	params: any;
 	csvData: any;
 }

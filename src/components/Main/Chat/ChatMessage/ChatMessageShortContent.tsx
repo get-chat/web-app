@@ -8,7 +8,7 @@ import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageH
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
 import ReactionModel from '@src/api/models/ReactionModel';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 interface Props {
 	type: string;
@@ -17,7 +17,7 @@ interface Props {
 	buttonText?: string | undefined | null;
 	interactiveButtonText?: string | undefined | null;
 	isLastMessageFromUs: boolean;
-	template?: TemplateModel | undefined;
+	template?: Template | undefined;
 	reaction?: ReactionModel | undefined;
 }
 
@@ -44,7 +44,7 @@ const ChatMessageShortContent: React.FC<Props> = ({
 				if (component) {
 					return insertTemplateComponentParameters(
 						component,
-						template.components
+						template.components ?? []
 					);
 				}
 			}

@@ -1,11 +1,11 @@
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 class BulkMessageTaskModel {
 	public id: string;
 	public recipients: string[];
 	public tags: string[];
 	public type: string;
-	public template?: TemplateModel;
+	public template?: Template;
 	public payload: any;
 	public sender: any;
 	public total: number;

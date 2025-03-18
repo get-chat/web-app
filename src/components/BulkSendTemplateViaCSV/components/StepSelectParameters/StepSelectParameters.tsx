@@ -11,11 +11,11 @@ import '../../../../styles/StepSelectParameters.css';
 import { useTranslation } from 'react-i18next';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 interface Props {
 	csvHeader?: string[];
-	template?: TemplateModel;
+	template?: Template;
 	params?: any;
 	paramsError?: string;
 	updateHeaderMediaParam: (
