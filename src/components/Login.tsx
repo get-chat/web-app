@@ -23,7 +23,7 @@ import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
-import { login } from '@src/api/authApi';
+import { login, logout } from '@src/api/authApi';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -141,8 +141,8 @@ const Login = () => {
 		}
 	};
 
-	const logoutToClearSession = () => {
-		apiService.logoutCall(undefined);
+	const logoutToClearSession = async () => {
+		await logout();
 	};
 
 	return (

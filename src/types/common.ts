@@ -4,3 +4,5 @@ export interface PaginatedResponse<T> {
 	previous: string | null;
 	results: T[];
 }
+
+export interface EmptyResponse {}

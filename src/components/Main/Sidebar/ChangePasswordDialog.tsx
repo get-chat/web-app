@@ -9,6 +9,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { AxiosError } from 'axios';
+import { changePassword } from '@src/api/authApi';
 
 interface Props {
 	open: boolean;
@@ -52,7 +53,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 		}, 300);
 	};
 
-	const changePassword = async () => {
+	const handleChangePassword = async () => {
 		if (
 			currentPassword.length === 0 ||
 			newPassword.length === 0 ||
@@ -71,18 +72,17 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 		setError(undefined);
 		setRequesting(true);
 
-		apiService.changePasswordCall(
-			currentPassword,
-			newPassword,
-			() => {
-				setRequesting(false);
-				setSuccess(true);
-			},
-			(error: AxiosError) => {
-				setRequesting(false);
-				setError(error.response?.data?.reason ?? 'An error has occurred.');
-			}
-		);
+		try {
+			await changePassword({
+				current_password: currentPassword,
+				new_password: newPassword,
+			});
+			setRequesting(false);
+			setSuccess(true);
+		} catch (error: any | AxiosError) {
+			setRequesting(false);
+			setError(error.response?.data?.reason ?? 'An error has occurred.');
+		}
 	};
 
 	return (
@@ -139,7 +139,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 					{t('Close')}
 				</Button>
 				<Button
-					onClick={changePassword}
+					onClick={handleChangePassword}
 					color="primary"
 					disabled={isRequesting || isSuccess}
 				>

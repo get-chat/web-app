@@ -6,3 +6,8 @@ export interface LoginRequest {
 export interface LoginResponse {
 	token: string;
 }
+
+export interface ChangePasswordRequest {
+	current_password: string;
+	new_password: string;
+}

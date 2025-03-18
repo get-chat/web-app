@@ -81,36 +81,6 @@ export class ApiService {
 		);
 	};
 
-	logoutCall = (successCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}auth/logout/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	changePasswordCall = (
-		currentPassword,
-		newPassword,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.put(
-				`${this.apiBaseURL}users/password/change/`,
-				{
-					current_password: currentPassword,
-					new_password: newPassword,
-				},
-				getRequestConfig()
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	listChatsCall = (
 		dynamicFilters,
 		keyword,
