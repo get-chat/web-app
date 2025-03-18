@@ -166,17 +166,6 @@ export class ApiService {
 		);
 	};
 
-	listTemplatesCall = (cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}templates/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	resolveContactCall = (personWaId, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getRequestConfig()),

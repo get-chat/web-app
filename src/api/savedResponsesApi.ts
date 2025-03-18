@@ -6,18 +6,14 @@ import {
 } from '../types/savedResponses';
 import { PaginatedResponse } from '@src/types/common';
 
-export const fetchSavedResponses = async (): Promise<
-	PaginatedResponse<SavedResponse>
-> => {
+export const fetchSavedResponses = async () => {
 	const response = await api.get<PaginatedResponse<SavedResponse>>(
 		'/saved_responses/'
 	);
 	return response.data;
 };
 
-export const createSavedResponse = async (
-	data: CreateSavedResponseRequest
-): Promise<CreateSavedResponseResponse> => {
+export const createSavedResponse = async (data: CreateSavedResponseRequest) => {
 	const response = await api.post<CreateSavedResponseResponse>(
 		'/saved_responses/',
 		data

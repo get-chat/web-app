@@ -46,7 +46,6 @@ import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateVi
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
-import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
@@ -80,6 +79,8 @@ import { User, UserList } from '@src/types/users';
 import { fetchTags } from '@src/api/tagsApi';
 import { fetchGroups } from '@src/api/groupsApi';
 import { GroupList } from '@src/types/groups';
+import { fetchTemplates } from '@src/api/templatesApi';
+import { TemplateList } from '@src/types/templates';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -828,46 +829,45 @@ const Main: React.FC = () => {
 			listTags();
 		};
 
-		apiService.listTemplatesCall(
-			undefined,
-			(response: AxiosResponse) => {
-				const templatesResponse = new TemplatesResponse(response.data);
+		try {
+			const data = await fetchTemplates();
+			const templateList: TemplateList = {};
+			data.results
+				.filter((item) => item.status === 'approved')
+				.forEach((item) => (templateList[item.name] = item));
+			dispatch(setTemplates(templateList));
 
-				dispatch(setTemplates(templatesResponse.templates));
+			if (!isRetry) {
+				completeCallback();
+			}
 
-				if (!isRetry) {
-					completeCallback();
-				}
-
-				dispatch(setState({ isTemplatesFailed: false }));
-			},
-			(error: AxiosError) => {
-				if (!isRetry) {
-					if (error.response) {
-						const status = error.response.status;
-						// Status code >= 500 means template management is not available
-						if (status >= 500) {
-							const reason = error.response.data?.reason;
-							displayCustomError(reason);
-							completeCallback();
-
-							// To trigger retrying periodically
-							dispatch(setState({ isTemplatesFailed: true }));
-						} else {
-							window.displayError(error);
-						}
-					} else {
-						// auto skip if no response
+			dispatch(setState({ isTemplatesFailed: false }));
+		} catch (error: any | AxiosError) {
+			if (!isRetry) {
+				if (error.response) {
+					const status = error.response.status;
+					// Status code >= 500 means template management is not available
+					if (status >= 500) {
+						const reason = error.response.data?.reason;
+						displayCustomError(reason);
 						completeCallback();
+
+						// To trigger retrying periodically
+						dispatch(setState({ isTemplatesFailed: true }));
+					} else {
 						window.displayError(error);
 					}
-
-					dispatch(setState({ isInitialResourceFailed: true }));
 				} else {
-					console.error(error);
+					// auto skip if no response
+					completeCallback();
+					window.displayError(error);
 				}
+
+				dispatch(setState({ isInitialResourceFailed: true }));
+			} else {
+				console.error(error);
 			}
-		);
+		}
 	};
 
 	// ** 5 **

@@ -2,7 +2,7 @@ export interface Template {
 	name: string;
 	category: string;
 	language: string;
-	components: TemplateComponent[];
+	components: TemplateComponent[] | null;
 	namespace: string;
 	rejected_reason: string;
 	status: string;
@@ -33,3 +33,7 @@ export interface TemplateParameter {
 	video?: { link: string };
 	document?: { link: string };
 }
+
+export type TemplateList = {
+	[key: string]: Template;
+};

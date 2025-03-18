@@ -1,6 +1,6 @@
-import TemplateComponent from '@src/types/templates';
+import { Template, TemplateComponent } from '@src/types/templates';
 
-class TemplateModel {
+class TemplateModel implements Template {
 	public namespace: string;
 	public name: string;
 	public category: string;
@@ -8,6 +8,7 @@ class TemplateModel {
 	public text: string = '';
 	public language: string;
 	public status: string;
+	public rejected_reason: string;
 	public params: any;
 
 	constructor(data: any) {
@@ -20,6 +21,7 @@ class TemplateModel {
 			this.text = data.components[0].text;
 		}
 
+		this.rejected_reason = data.rejected_reason;
 		this.language = data.language;
 		this.status = data.status;
 	}
