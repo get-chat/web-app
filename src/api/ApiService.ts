@@ -63,17 +63,6 @@ export class ApiService {
 		);
 	};
 
-	loginCall = (username, password, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}auth/token/`, {
-				username: username,
-				password: password,
-			}),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	convertRefreshTokenCall = (
 		refreshToken,
 		keepRefreshToken: boolean,

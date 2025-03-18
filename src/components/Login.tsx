@@ -22,7 +22,8 @@ import packageJson from '../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
+import { login } from '@src/api/authApi';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -110,42 +111,34 @@ const Login = () => {
 		// Display the loading animation
 		setLoggingIn(true);
 
-		apiService.loginCall(
-			username,
-			password,
-			(response: AxiosResponse) => {
-				// Store token in local storage
-				storeToken(response.data.token);
+		try {
+			const data = await login({ username, password });
+			// Store token in local storage
+			storeToken(data.token);
 
-				// Android web interface
-				// @ts-ignore
-				if (window.AndroidWebInterface) {
-					// @ts-ignore
-					window.AndroidWebInterface.registerUserToken(
-						response.data.token ?? ''
-					);
-				}
+			// Android web interface
+			if (window.AndroidWebInterface) {
+				window.AndroidWebInterface.registerUserToken(data.token ?? '');
+			}
 
-				// Redirect to main route
-				navigate(
-					(location.state?.nextPath ?? '/main') + location.state?.search ?? ''
-				);
-			},
-			(error: AxiosError) => {
-				// Hide the loading animation
-				setLoggingIn(false);
-				setLoginError('');
+			// Redirect to main route
+			navigate(
+				(location.state?.nextPath ?? '/main') + location.state?.search ?? ''
+			);
+		} catch (error: any | AxiosError) {
+			// Hide the loading animation
+			setLoggingIn(false);
+			setLoginError('');
 
-				if (error.response) {
-					// Current status code for incorrect credentials must be changed to 401 or 403
-					if ([400, 401, 403].includes(error.response.status)) {
-						setLoginError('Incorrect username or password.');
-					} else {
-						setLoginError('An error has occurred. Please try again later.');
-					}
+			if (error.response) {
+				// Current status code for incorrect credentials must be changed to 401 or 403
+				if ([400, 401, 403].includes(error.response.status)) {
+					setLoginError('Incorrect username or password.');
+				} else {
+					setLoginError('An error has occurred. Please try again later.');
 				}
 			}
-		);
+		}
 	};
 
 	const logoutToClearSession = () => {
