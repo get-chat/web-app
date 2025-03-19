@@ -16,11 +16,11 @@ import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosError, AxiosResponse } from 'axios';
-import ChatResponse from '@src/api/responses/ChatResponse';
-import ChatModel from '@src/api/models/ChatModel';
+import { AxiosResponse } from 'axios';
 import { Tag } from '@src/types/tags';
 import { fetchTags } from '@src/api/tagsApi';
+import { fetchChat } from '@src/api/chatsApi';
+import { Chat } from '@src/types/chats';
 
 function ChatTags(props: any) {
 	// @ts-ignore
@@ -30,7 +30,7 @@ function ChatTags(props: any) {
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
-	const [chat, setChat] = useState<ChatModel>();
+	const [chat, setChat] = useState<Chat>();
 	const [chatTags, setChatTags] = useState<Tag[]>([]);
 	const [unusedTags, setUnusedTags] = useState<Tag[]>([]);
 	const [allTags, setAllTags] = useState<Tag[]>([]);
@@ -84,20 +84,18 @@ function ChatTags(props: any) {
 		return Object.values(uniqueTagsArray);
 	};
 
-	const retrieveChat = () => {
-		apiService.retrieveChatCall(
-			props.waId,
-			undefined,
-			(response: AxiosResponse) => {
-				const chatResponse = new ChatResponse(response.data);
-				setChat(chatResponse.chat);
-				setChatTags(chatResponse.chat.tags);
+	const retrieveChat = async () => {
+		if (!props.waId) return;
+		try {
+			const data = await fetchChat(props.waId);
+			setChat(data);
+			setChatTags(data.tags);
 
-				// Next
-				listTags();
-			},
-			(error: AxiosError) => console.log(error)
-		);
+			// Next
+			await listTags();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const listTags = async () => {

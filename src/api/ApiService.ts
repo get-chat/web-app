@@ -353,17 +353,6 @@ export class ApiService {
 		);
 	};
 
-	retrieveChatCall = (waId, cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}chats/${waId}/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	createChatTaggingCall = (waId, chatTaggingId, successCallback) => {
 		this.handleRequest(
 			axios.post(

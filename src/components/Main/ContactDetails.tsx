@@ -18,8 +18,8 @@ import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
-import ChatModel from '@src/api/models/ChatModel';
 import { setState } from '@src/store/reducers/UIReducer';
+import { Chat } from '@src/types/chats';
 
 interface Props {
 	contactProvidersData: { [key: string]: any };
@@ -35,7 +35,7 @@ const ContactDetails: React.FC<Props> = ({
 	const chats = useAppSelector((state) => state.chats.value);
 	const { chosenContact: contactData } = useAppSelector((state) => state.UI);
 
-	const [chat, setChat] = useState<ChatModel>();
+	const [chat, setChat] = useState<Chat>();
 
 	const dispatch = useAppDispatch();
 
@@ -140,15 +140,15 @@ const ContactDetails: React.FC<Props> = ({
 							</div>
 						)}
 
-						{(chat?.assignedToUser || chat?.assignedGroup) && (
+						{(chat?.assigned_to_user || chat?.assigned_group) && (
 							<div className="contactDetails__body__assignees mt-3">
-								{chat?.assignedToUser && (
+								{chat?.assigned_to_user && (
 									<div>
 										<PersonIcon />
 										<Trans
 											values={{
 												postProcess: 'sprintf',
-												sprintf: [chat?.assignedToUser.username],
+												sprintf: [chat?.assigned_to_user.username],
 											}}
 										>
 											Assigned to: <span className="bold">%s</span>
@@ -156,13 +156,13 @@ const ContactDetails: React.FC<Props> = ({
 									</div>
 								)}
 
-								{chat?.assignedGroup && (
+								{chat?.assigned_group && (
 									<div>
 										<GroupIcon />
 										<Trans
 											values={{
 												postProcess: 'sprintf',
-												sprintf: [chat?.assignedGroup.name],
+												sprintf: [chat?.assigned_group.name],
 											}}
 										>
 											Assigned group: <span className="bold">%s</span>

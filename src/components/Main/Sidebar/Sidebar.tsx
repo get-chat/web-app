@@ -114,7 +114,7 @@ import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
-import { fetchChats } from '@src/api/chatsApi';
+import { fetchChat, fetchChats } from '@src/api/chatsApi';
 import { PaginatedResponse } from '@src/types/common';
 import { Chat, ChatList } from '@src/types/chats';
 import {
@@ -657,8 +657,6 @@ const Sidebar: React.FC<Props> = ({
 			dispatch(addChats(chatList));
 		}
 
-		console.log(chatList);
-
 		if (isInitial) {
 			dispatch(setState({ loadingProgress: 100 }));
 		}
@@ -723,49 +721,45 @@ const Sidebar: React.FC<Props> = ({
 		setLoadingChats(false);
 	};
 
-	const retrieveChat = (chatWaId: string) => {
-		apiService.retrieveChatCall(
-			chatWaId,
-			undefined,
-			(response: AxiosResponse) => {
-				// Remove this chat from missing chats list
-				setMissingChats((prevState) =>
-					prevState.filter((item) => item !== chatWaId)
-				);
+	const retrieveChat = async (chatWaId: string) => {
+		try {
+			const data = await fetchChat(chatWaId);
+			// Remove this chat from missing chats list
+			setMissingChats((prevState) =>
+				prevState.filter((item) => item !== chatWaId)
+			);
 
-				const preparedChat = response.data as Chat;
-
-				// Don't display chat if tab case is "me" and chat is not assigned to user
-				if (filterAssignedToMe) {
-					if (
-						!preparedChat.assigned_to_user ||
-						preparedChat.assigned_to_user.id !== currentUser?.id
-					) {
-						console.log(
-							'Chat will not be displayed as it does not belong to current tab.'
-						);
-						return;
-					}
-				} else if (filterAssignedGroupId) {
-					if (
-						!preparedChat.assigned_group ||
-						isUserInGroup(currentUser, preparedChat.assigned_group.id)
-					) {
-						console.log(
-							'Chat will not be displayed as it does not belong to current tab.'
-						);
-						return;
-					}
+			// Don't display chat if tab case is "me" and chat is not assigned to user
+			if (filterAssignedToMe) {
+				if (
+					!data.assigned_to_user ||
+					data.assigned_to_user.id !== currentUser?.id
+				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
+					return;
 				}
+			} else if (filterAssignedGroupId) {
+				if (
+					!data.assigned_group ||
+					isUserInGroup(currentUser, data.assigned_group.id)
+				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
+					return;
+				}
+			}
 
-				const prevState: ChatList = { ...chats };
-				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
-				const sortedNextState = sortChats(prevState);
+			const prevState: ChatList = { ...chats };
+			prevState[CHAT_KEY_PREFIX + chatWaId] = data;
+			const sortedNextState = sortChats(prevState);
 
-				dispatch(setChats({ ...sortedNextState }));
-			},
-			(error: AxiosError) => console.log(error)
-		);
+			dispatch(setChats({ ...sortedNextState }));
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const searchMessages = (cancelTokenSource?: CancelTokenSource) => {

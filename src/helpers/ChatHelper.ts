@@ -39,6 +39,16 @@ export const isLastMessageOutgoing = (chat: Chat | undefined) =>
 export const isChatAssignedToUser = (chat: Chat | undefined, user: User) =>
 	chat?.assigned_to_user?.id == user.id;
 
+export const isChatAssignedToUserAnyGroup = (
+	chat: Chat | undefined,
+	user: User
+) => {
+	const matchedGroup = user.groups.filter(
+		(group) => group.id === chat?.assigned_group?.id
+	);
+	return Boolean(matchedGroup);
+};
+
 export const isChatAssignedToGroupId = (
 	chat: Chat | undefined,
 	groupId: number

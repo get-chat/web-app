@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
-import Chat from './Chat/Chat';
+import ChatView from './Chat/ChatView';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -1028,7 +1028,7 @@ const Main: React.FC = () => {
 				)}
 
 				{isTemplatesReady && (
-					<Chat
+					<ChatView
 						createSavedResponse={handleCreateSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}

@@ -1,25 +1,25 @@
-import ChatModel from '@src/api/models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { User } from '@src/types/users';
 import { Chat, ChatList } from '@src/types/chats';
 import {
 	isChatAssignedToGroupId,
 	isChatAssignedToUser,
+	isChatAssignedToUserAnyGroup,
 	isChatIncludingTagId,
 } from '@src/helpers/ChatHelper';
 
-const hasPermission = (currentUser: User, chat: ChatModel) => {
+const hasPermission = (currentUser: User, chat: Chat) => {
 	const canReadChats = currentUser?.permissions?.can_read_chats;
 
 	switch (canReadChats) {
 		case 'all':
 			return true;
 		case 'user':
-			return chat.isAssignedToUser(currentUser);
+			return isChatAssignedToUser(chat, currentUser);
 		case 'group':
 			return (
-				chat.isAssignedToUser(currentUser) ||
-				chat.isAssignedToUserAnyGroup(currentUser)
+				isChatAssignedToUser(chat, currentUser) ||
+				isChatAssignedToUserAnyGroup(chat, currentUser)
 			);
 		default:
 			return false;

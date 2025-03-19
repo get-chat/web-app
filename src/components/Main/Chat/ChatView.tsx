@@ -88,7 +88,6 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
-import ChatModel from '@src/api/models/ChatModel';
 // @ts-ignore
 import decode from 'unescape';
 import {
@@ -107,6 +106,8 @@ import ReactionList from '@src/interfaces/ReactionList';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { Template } from '@src/types/templates';
+import { fetchChat } from '@src/api/chatsApi';
+import { Chat } from '@src/types/chats';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -127,7 +128,7 @@ interface Props {
 	setMessageWithStatuses: (value?: ChatMessageModel) => void;
 }
 
-const Chat: React.FC<Props> = (props) => {
+const ChatView: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const {
@@ -170,7 +171,7 @@ const Chat: React.FC<Props> = (props) => {
 	const [isExpired, setExpired] = useState(false);
 
 	const [person, setPerson] = useState<PersonModel>();
-	const [chat, setChat] = useState<ChatModel>();
+	const [chat, setChat] = useState<Chat>();
 
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
@@ -1000,16 +1001,14 @@ const Chat: React.FC<Props> = (props) => {
 		setOptionsChatMessage(chatMessage);
 	};
 
-	const retrieveChat = () => {
-		apiService.retrieveChatCall(
-			waId,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const preparedChat = new ChatModel(response.data);
-				setChat(preparedChat);
-			},
-			(error: AxiosError) => console.log(error)
-		);
+	const retrieveChat = async () => {
+		if (!waId) return;
+		try {
+			const data = await fetchChat(waId);
+			setChat(data);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const retrievePerson = (loadMessages: boolean) => {
@@ -2320,4 +2319,4 @@ const Chat: React.FC<Props> = (props) => {
 	);
 };
 
-export default Chat;
+export default ChatView;
