@@ -81,50 +81,6 @@ export class ApiService {
 		);
 	};
 
-	listChatsCall = (
-		dynamicFilters,
-		keyword,
-		chatTagId,
-		limit,
-		offset,
-		assignedToMe,
-		assignedGroup,
-		messagesBeforeTime,
-		messagesSinceTime,
-		cancelToken,
-		successCallback,
-		errorCallback,
-		history
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}chats/`,
-				getRequestConfig(
-					{
-						...dynamicFilters,
-						search: keyword,
-						chat_tag_id: chatTagId,
-						limit: limit,
-						offset: offset,
-						assigned_to_me: assignedToMe,
-						assigned_group: assignedGroup,
-						messages_before_time: messagesBeforeTime,
-						messages_since_time: messagesSinceTime,
-					},
-					cancelToken,
-					undefined,
-					0
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				handleIfUnauthorized(error, history);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	bulkSendCall = (body, successCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getRequestConfig()),
