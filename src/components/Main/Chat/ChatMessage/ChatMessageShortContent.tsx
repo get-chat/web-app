@@ -7,8 +7,8 @@ import PrintMessage from '../../../PrintMessage';
 import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
-import ReactionModel from '@src/api/models/ReactionModel';
 import { Template } from '@src/types/templates';
+import { Reaction } from '@src/types/messages';
 
 interface Props {
 	type: string;
@@ -18,7 +18,7 @@ interface Props {
 	interactiveButtonText?: string | undefined | null;
 	isLastMessageFromUs: boolean;
 	template?: Template | undefined;
-	reaction?: ReactionModel | undefined;
+	reaction?: Reaction | undefined;
 }
 
 const ChatMessageShortContent: React.FC<Props> = ({

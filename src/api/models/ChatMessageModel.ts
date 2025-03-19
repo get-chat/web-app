@@ -4,9 +4,9 @@ import {
 	sanitize,
 } from '@src/helpers/Helpers';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
-import ReactionModel from '@src/api/models/ReactionModel';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
+import { Reaction } from '@src/types/messages';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -61,7 +61,7 @@ export class ChatMessageModel {
 	public templateParameters?: any[] | null;
 	public text?: string | null;
 	public caption?: string | null;
-	public reaction?: ReactionModel;
+	public reaction?: Reaction;
 	public reactions: ChatMessageModel[] = [];
 	public buttonText?: string | null;
 	public interactiveButtonText?: string | null;
