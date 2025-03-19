@@ -1,4 +1,4 @@
-import { AxiosError, AxiosResponse, CancelToken } from 'axios';
+import { AxiosError, CancelToken } from 'axios';
 
 interface APICallProps {
 	cancelToken?: CancelToken;

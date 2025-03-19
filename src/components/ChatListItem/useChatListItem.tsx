@@ -5,12 +5,13 @@ import { getDroppedFiles } from '@src/helpers/FileHelper';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_DROPPED_FILES } from '@src/Constants';
 import { useTranslation } from 'react-i18next';
-import ChatModel from '@src/api/models/ChatModel';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
+import { Chat } from '@src/types/chats';
+import { isChatExpired } from '@src/helpers/ChatHelper';
 
 const useChatListItem = ({ props }: { props: any }) => {
-	const data: ChatModel = props.chatData;
+	const data: Chat = props.chatData;
 
 	const { isSelectionModeEnabled, isBulkSend, selectedChats } = useAppSelector(
 		(state) => state.UI
@@ -38,30 +39,30 @@ const useChatListItem = ({ props }: { props: any }) => {
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		setSelected(selectedChats.includes(data.waId));
+		setSelected(selectedChats.includes(data.wa_id));
 	}, [selectedChats]);
 
 	const isUserAssignmentChipVisible = () => {
 		if (!props.filterAssignedToMe && !props.filterAssignedGroupId) {
-			if (data.assignedToUser) {
+			if (data.assigned_to_user) {
 				return true;
 			}
 
-			return !data.assignedGroup;
+			return !data.assigned_group;
 		}
 
 		if (props.filterAssignedToMe) {
-			if (!data.assignedGroup) {
+			if (!data.assigned_group) {
 				return true;
 			}
 		}
 
-		if (props.filterAssignedGroupId && data.assignedToUser) {
+		if (props.filterAssignedGroupId && data.assigned_to_user) {
 			return true;
 		}
 
 		if (props.assignedGroup) {
-			if (data.assignedToUser) {
+			if (data.assigned_to_user) {
 				return true;
 			}
 		}
@@ -73,20 +74,20 @@ const useChatListItem = ({ props }: { props: any }) => {
 		if (
 			!props.filterAssignedToMe &&
 			!props.filterAssignedGroupId &&
-			!data.assignedToUser &&
-			data.assignedGroup
+			!data.assigned_to_user &&
+			data.assigned_group
 		) {
 			return true;
 		}
 
 		if (props.filterAssignedToMe) {
-			if (data.assignedGroup) {
+			if (data.assigned_group) {
 				return true;
 			}
 		}
 
 		if (props.filterAssignedGroupId) {
-			if (!data.assignedToUser) {
+			if (!data.assigned_to_user) {
 				return true;
 			}
 		}
@@ -109,7 +110,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 	useEffect(() => {
 		async function calculateRemaining() {
-			const momentDate = moment.unix(data.lastReceivedMessageTimestamp);
+			const momentDate = moment.unix(data.contact.last_message_timestamp);
 			momentDate.add(1, 'day');
 			const curDate = moment(new Date());
 			const hours = momentDate.diff(curDate, 'hours');
@@ -134,7 +135,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 			}
 		}
 
-		setExpired(data.isExpired);
+		setExpired(isChatExpired(data));
 
 		// Initial
 		calculateRemaining();
@@ -149,7 +150,11 @@ const useChatListItem = ({ props }: { props: any }) => {
 		return () => {
 			clearInterval(intervalId);
 		};
-	}, [isExpired, data.isExpired, data.lastMessageTimestamp]);
+	}, [
+		isExpired,
+		isChatExpired(data),
+		data.last_message?.waba_payload.timestamp,
+	]);
 
 	const handleDroppedFiles = (event: DragEvent) => {
 		if (isExpired) {
@@ -161,7 +166,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 		const files = getDroppedFiles(event);
 
 		// Switching to related chat
-		navigate(`/main/chat/${data.waId}${location.search}`);
+		navigate(`/main/chat/${data.wa_id}${location.search}`);
 
 		// Sending files via eventbus
 		PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
@@ -175,12 +180,12 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 			let selectedChatsNextState = [...selectedChats];
 			if (newSelectedState) {
-				if (!selectedChatsNextState.includes(data.waId)) {
-					selectedChatsNextState.push(data.waId);
+				if (!selectedChatsNextState.includes(data.wa_id)) {
+					selectedChatsNextState.push(data.wa_id);
 				}
 			} else {
 				selectedChatsNextState = selectedChatsNextState.filter(
-					(arrayItem) => arrayItem !== data.waId
+					(arrayItem) => arrayItem !== data.wa_id
 				);
 			}
 
@@ -192,17 +197,17 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 			props.setSelectedChats((prevState: string[]) => {
 				if (newSelectedState) {
-					if (!prevState.includes(data.waId)) {
-						prevState.push(data.waId);
+					if (!prevState.includes(data.wa_id)) {
+						prevState.push(data.wa_id);
 					}
 				} else {
-					prevState = prevState.filter((arrayItem) => arrayItem !== data.waId);
+					prevState = prevState.filter((arrayItem) => arrayItem !== data.wa_id);
 				}
 
 				return [...prevState];
 			});
 		} else {
-			navigate(`/main/chat/${data.waId}${location.search}`);
+			navigate(`/main/chat/${data.wa_id}${location.search}`);
 		}
 	};
 
@@ -210,14 +215,14 @@ const useChatListItem = ({ props }: { props: any }) => {
 		let result = false;
 		pendingMessages.forEach((pendingMessage: any) => {
 			if (
-				pendingMessage.requestBody?.wa_id === data.waId &&
+				pendingMessage.requestBody?.wa_id === data.wa_id &&
 				pendingMessage.isFailed === true
 			)
 				result = true;
 		});
 
 		return result;
-	}, [data.waId, pendingMessages]);
+	}, [data.wa_id, pendingMessages]);
 
 	return {
 		data,

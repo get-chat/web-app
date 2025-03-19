@@ -4,6 +4,18 @@ import { getLastObject } from './ObjectHelper';
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
+
+export const getMessageCaption = (message: Message | undefined) => {
+	if (message) {
+		const caption =
+			message.waba_payload.image?.caption ??
+			message.waba_payload.video?.caption ??
+			message.waba_payload.audio?.caption ??
+			message.waba_payload.document?.caption;
+		return caption ? sanitize(caption) : undefined;
+	}
+};
 
 export const formatMessage = (message: string | undefined) => {
 	if (!message) return;

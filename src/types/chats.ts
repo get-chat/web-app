@@ -7,14 +7,13 @@ export interface Chat {
 	contact: Contact;
 	new_messages: number;
 	wa_id: string;
-	last_message: Message;
+	last_message?: Message;
 	assigned_to_user?: User;
 	assigned_group: any;
 	tags: Tag[];
 }
 
 export interface FetchChatsParams {
-	dynamic_filters?: { [key: string]: any };
 	limit?: number;
 	offset?: number;
 	chat_tag_id?: number;
@@ -32,4 +31,8 @@ export interface FetchChatsParams {
 	message_referral_headline?: string;
 	message_referral_body?: string;
 	message_referral_media_type?: 'image' | 'video';
+}
+
+export interface ChatList {
+	[key: string]: Chat;
 }

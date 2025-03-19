@@ -1,6 +1,7 @@
 import { Contact } from '@src/types/contacts';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
+import { Template } from '@src/types/templates';
 
 export interface Message {
 	id: string;
@@ -19,26 +20,55 @@ export interface Message {
 export interface WabaPayload {
 	id: string;
 	from?: string;
-	text?: Text;
 	type: string;
 	timestamp: string;
 	to?: string;
 	wa_id?: string;
 	recipient_type?: string;
 	verify_contact?: boolean;
+	text?: Text;
+	template?: Template;
+	button?: Button;
+	video?: Video;
+	image?: Image;
+	audio?: Audio;
+	document?: Document;
 	messaging_product?: string;
 	interactive?: Interactive;
 	sticker?: Sticker;
+	reaction?: Reaction;
 }
 
 export interface Text {
 	body: string;
 }
 
+export interface Video {
+	caption?: string;
+}
+
+export interface Image {
+	caption?: string;
+}
+
+export interface Audio {
+	caption?: string;
+}
+
+export interface Document {
+	caption?: string;
+}
+
 export interface Interactive {
 	body: Body;
 	type: string;
 	action: Action;
+	button_reply: ButtonReply;
+}
+
+export interface Reaction {
+	emoji: string;
+	message_id: string;
 }
 
 export interface Body {
@@ -51,7 +81,12 @@ export interface Action {
 
 export interface Button {
 	type: string;
+	text?: string;
 	reply: Reply;
+}
+
+export interface ButtonReply {
+	title: string;
 }
 
 export interface Reply {

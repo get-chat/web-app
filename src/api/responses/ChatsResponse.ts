@@ -1,8 +1,7 @@
-import ChatModel from '../models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import NewMessageModel from '../models/NewMessageModel';
-import ChatList from '@src/interfaces/ChatList';
 import NewMessageList from '@src/interfaces/NewMessageList';
+import { ChatList } from '@src/types/chats';
 
 class ChatsResponse {
 	public count: number;
@@ -14,8 +13,8 @@ class ChatsResponse {
 		let newMessages: NewMessageList = {};
 		data.results.forEach((chatData: any) => {
 			// Chat
-			const chat = new ChatModel(chatData);
-			chats[CHAT_KEY_PREFIX + chat.waId] = chat;
+			//const chat = new ChatModel(chatData);
+			chats[CHAT_KEY_PREFIX + chatData.waId] = chatData;
 
 			// New messages
 			const newWaId = chatData.contact.waba_payload.wa_id;

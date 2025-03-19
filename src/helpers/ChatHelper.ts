@@ -6,6 +6,48 @@ import {
 } from '../Constants';
 import ChosenFileClass from '@src/ChosenFileClass';
 import { Template } from '@src/types/templates';
+import { Chat } from '@src/types/chats';
+import { parseIntSafely } from '@src/helpers/IntegerHelper';
+import { User } from '@src/types/users';
+import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
+
+export const isChatExpired = (chat: Chat | undefined) =>
+	getPastHoursByTimestamp(chat?.contact.last_message_timestamp ?? 0) >= 24;
+
+export const getChatContactName = (chat: Chat | undefined) =>
+	chat?.contact.waba_payload.profile.name;
+
+export const setChatContactName = (
+	chat: Chat | undefined,
+	name: string | undefined
+) => {
+	if (chat && !!name) {
+		chat.contact.waba_payload.profile.name = name;
+	}
+};
+
+export const getLastMessageTimestamp = (chat: Chat | undefined) =>
+	parseIntSafely(chat?.last_message?.waba_payload.timestamp) ??
+	chat?.contact.last_message_timestamp;
+
+export const getLastIncomingMessageTimestamp = (chat: Chat | undefined) =>
+	chat?.contact.last_message_timestamp;
+
+export const isLastMessageOutgoing = (chat: Chat | undefined) =>
+	chat?.last_message?.waba_payload?.hasOwnProperty('to') ?? false;
+
+export const isChatAssignedToUser = (chat: Chat | undefined, user: User) =>
+	chat?.assigned_to_user?.id == user.id;
+
+export const isChatAssignedToGroupId = (
+	chat: Chat | undefined,
+	groupId: number
+) => chat?.assigned_to_user?.id == groupId;
+
+export const isChatIncludingTagId = (chat: Chat | undefined, tagId: number) => {
+	const result = chat?.tags.find((item) => item.id === tagId);
+	return Boolean(result);
+};
 
 export const generateTemplateMessagePayload = (
 	templateMessage: Template

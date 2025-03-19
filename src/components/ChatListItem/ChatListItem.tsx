@@ -3,7 +3,10 @@ import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Moment from 'react-moment';
-import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
+import {
+	extractAvatarFromContactProviderData,
+	generateInitialsHelper,
+} from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
 import { CALENDAR_SHORT } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
@@ -18,6 +21,12 @@ import classNames from 'classnames/bind';
 import AssigneeChip from '@src/components/AssigneeChip';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import { useAppSelector } from '@src/store/hooks';
+import {
+	getChatContactName,
+	getLastMessageTimestamp,
+	isLastMessageOutgoing,
+} from '@src/helpers/ChatHelper';
+import { getMessageCaption } from '@src/helpers/MessageHelper';
 
 const cx = classNames.bind(styles);
 
@@ -48,7 +57,7 @@ const ChatListItem = (props: any) => {
 
 	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
-	const newMessagesForChat = newMessages[data.waId]?.newMessages;
+	const newMessagesForChat = newMessages[data.wa_id]?.newMessages;
 
 	const preventEvents = (event: MouseEvent | TouchEvent) => {
 		event.stopPropagation();
@@ -56,28 +65,28 @@ const ChatListItem = (props: any) => {
 	};
 
 	const tooltip = useMemo(() => {
-		if (!data.assignedToUser && !data.assignedGroup) return;
+		if (!data.assigned_to_user && !data.assigned_group) return;
 
 		return (
 			<>
-				{data.assignedToUser && (
+				{data.assigned_to_user && (
 					<div>
 						<Trans
 							values={{
 								postProcess: 'sprintf',
-								sprintf: [data.assignedToUser.username],
+								sprintf: [data.assigned_to_user.username],
 							}}
 						>
 							Assigned to: <span className="bold">%s</span>
 						</Trans>
 					</div>
 				)}
-				{data.assignedGroup && (
+				{data.assigned_group && (
 					<div>
 						<Trans
 							values={{
 								postProcess: 'sprintf',
-								sprintf: [data.assignedGroup.name],
+								sprintf: [data.assigned_group.name],
 							}}
 						>
 							Assigned group: <span className="bold">%s</span>
@@ -86,15 +95,15 @@ const ChatListItem = (props: any) => {
 				)}
 			</>
 		);
-	}, [data.assignedToUser, data.assignedGroup]);
+	}, [data.assigned_to_user, data.assigned_group]);
 
 	return (
 		<ListItemButton onClick={handleClick} className={styles.listItem}>
 			<div
-				id={data.waId}
+				id={data.wa_id}
 				className={cx({
 					wrapper: true,
-					active: waId === data.waId,
+					active: waId === data.wa_id,
 					expired: isExpired,
 					almostExpired: remainingSeconds < 8 * 60 * 60,
 					selected: isSelectionModeEnabled && isSelected,
@@ -116,11 +125,13 @@ const ChatListItem = (props: any) => {
 						<CustomAvatar
 							className={styles.mainAvatar}
 							src={extractAvatarFromContactProviderData(
-								props.contactProvidersData[data.waId]
+								props.contactProvidersData[data.wa_id]
 							)}
-							generateBgColorBy={!isExpired ? data.name : undefined}
+							generateBgColorBy={
+								!isExpired ? getChatContactName(data) : undefined
+							}
 						>
-							{data.initials}
+							{generateInitialsHelper(getChatContactName(data))}
 						</CustomAvatar>
 
 						{newMessagesForChat > 0 && (
@@ -135,13 +146,13 @@ const ChatListItem = (props: any) => {
 							<h2>
 								{props.keyword && props.keyword.trim().length > 0 ? (
 									<PrintMessage
-										message={data.name ?? ''}
+										message={getChatContactName(data) ?? ''}
 										highlightText={props.keyword}
 									/>
 								) : (
 									<span>
-										{props.contactProvidersData[data.waId]?.[0]?.name ??
-											data.name}
+										{props.contactProvidersData[data.wa_id]?.[0]?.name ??
+											getChatContactName(data)}
 									</span>
 								)}
 							</h2>
@@ -150,7 +161,7 @@ const ChatListItem = (props: any) => {
 								<div
 									className={cx({
 										assigneeChipWrapper: true,
-										empty: !data.assignedToUser,
+										empty: !data.assigned_to_user,
 									})}
 									onClick={preventEvents}
 									onMouseDown={preventEvents}
@@ -159,14 +170,14 @@ const ChatListItem = (props: any) => {
 								>
 									<AssigneeChip
 										assigneeType={'user'}
-										name={data.assignedToUser?.username}
+										name={data.assigned_to_user?.username}
 										tooltip={tooltip}
-										assignedUserId={data.assignedToUser?.id}
-										assignedGroupId={data.assignedGroup?.id}
+										assignedUserId={data.assigned_to_user?.id}
+										assignedGroupId={data.assigned_group?.id}
 										dense
 										isActionable={!isReadOnly}
 										onAction={(userId, groupId) => {
-											partialUpdateChatAssignment(data.waId, userId, groupId);
+											partialUpdateChatAssignment(data.wa_id, userId, groupId);
 										}}
 									/>
 								</div>
@@ -176,7 +187,7 @@ const ChatListItem = (props: any) => {
 								<div
 									className={cx({
 										assigneeChipWrapper: true,
-										empty: !data.assignedGroup,
+										empty: !data.assigned_group,
 									})}
 									onClick={preventEvents}
 									onMouseDown={preventEvents}
@@ -184,14 +195,14 @@ const ChatListItem = (props: any) => {
 								>
 									<AssigneeChip
 										assigneeType={'group'}
-										name={data.assignedGroup?.name}
+										name={data.assigned_group?.name}
 										tooltip={tooltip}
-										assignedUserId={data.assignedToUser?.id}
-										assignedGroupId={data.assignedGroup?.id}
+										assignedUserId={data.assigned_to_user?.id}
+										assignedGroupId={data.assigned_group?.id}
 										dense
 										isActionable={!isReadOnly}
 										onAction={(userId, groupId) => {
-											partialUpdateChatAssignment(data.waId, userId, groupId);
+											partialUpdateChatAssignment(data.wa_id, userId, groupId);
 										}}
 									/>
 								</div>
@@ -216,14 +227,17 @@ const ChatListItem = (props: any) => {
 						<div className={styles.lastMessageWrapper}>
 							<div className={styles.lastMessage}>
 								<ChatMessageShortContent
-									type={data.lastMessageType ?? ''}
-									template={data.lastMessage?.template}
-									buttonText={data.lastMessageButtonText}
-									interactiveButtonText={data.interactiveButtonText}
-									text={data.lastMessageBody}
-									caption={data.lastMessageCaption}
-									isLastMessageFromUs={data.isLastMessageFromUs}
-									reaction={data.lastMessage?.reaction}
+									type={data.last_message?.waba_payload.type ?? ''}
+									template={data.last_message?.waba_payload.template}
+									buttonText={data.last_message?.waba_payload.button?.text}
+									interactiveButtonText={
+										data.last_message?.waba_payload?.interactive?.button_reply
+											?.title
+									}
+									text={data.last_message?.waba_payload.text?.body}
+									caption={getMessageCaption(data.last_message)}
+									isLastMessageFromUs={isLastMessageOutgoing(data)}
+									reaction={data.last_message?.waba_payload.reaction}
 								/>
 							</div>
 
@@ -248,10 +262,10 @@ const ChatListItem = (props: any) => {
 									</div>
 								)}
 
-								{Boolean(data.lastMessageTimestamp) && (
+								{Boolean(getLastMessageTimestamp(data)) && (
 									<Moment
 										className={styles.lastMessageDate}
-										date={data.lastMessageTimestamp}
+										date={getLastMessageTimestamp(data)}
 										calendar={CALENDAR_SHORT}
 										unix
 									/>
@@ -261,7 +275,7 @@ const ChatListItem = (props: any) => {
 					</div>
 				</div>
 
-				<span className={styles.waId}>{addPlus(data.waId)}</span>
+				<span className={styles.waId}>{addPlus(data.wa_id)}</span>
 
 				{hasFailedMessages() && (
 					<div className={styles.failedMessagesIndicator}>

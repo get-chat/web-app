@@ -1,4 +1,4 @@
-import { Profile } from '@src/types/chats';
+import { Profile } from '@src/types/messages';
 
 export interface Contact {
 	wa_id: string;
