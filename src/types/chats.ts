@@ -13,6 +13,23 @@ export interface Chat {
 	tags: Tag[];
 }
 
-export interface Profile {
-	name: string;
+export interface FetchChatsParams {
+	dynamic_filters?: { [key: string]: any };
+	limit?: number;
+	offset?: number;
+	chat_tag_id?: number;
+	search?: string;
+	assigned_to_me?: boolean;
+	assigned_group?: number;
+	messages_since_time?: number;
+	messages_before_time?: number;
+	blocked?: boolean;
+	reported?: boolean;
+	message_has_referral?: boolean;
+	message_referral_source_url?: string;
+	message_referral_source_id?: string;
+	message_referral_source_type?: 'ad' | 'post';
+	message_referral_headline?: string;
+	message_referral_body?: string;
+	message_referral_media_type?: 'image' | 'video';
 }

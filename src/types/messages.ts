@@ -1,7 +1,6 @@
 import { Contact } from '@src/types/contacts';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
-import { Profile } from '@src/types/chats';
 
 export interface Message {
 	id: string;
@@ -83,6 +82,10 @@ export interface Sender {
 	profile: Profile;
 	groups: Group[];
 	permissions: Permissions;
+}
+
+export interface Profile {
+	name: string;
 }
 
 export interface Permissions {
