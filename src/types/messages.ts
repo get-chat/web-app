@@ -45,6 +45,7 @@ export interface Message {
 	chat_tags: Tag[];
 	is_failed: boolean;
 	resend_payload?: CreateMessageRequest;
+	reactions?: Message[];
 }
 
 export interface WabaPayload {
@@ -180,4 +181,11 @@ export interface Permissions {
 	can_use_tags: boolean;
 	can_read_chats: string;
 	can_write_to_chats: string;
+}
+
+export enum MessageStatus {
+	pending = 'pending',
+	sent = 'sent',
+	delivered = 'delivered',
+	read = 'read',
 }

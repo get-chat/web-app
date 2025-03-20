@@ -81,6 +81,7 @@ import { fetchGroups } from '@src/api/groupsApi';
 import { GroupList } from '@src/types/groups';
 import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
+import { Message, MessageStatus } from '@src/types/messages';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -135,8 +136,7 @@ const Main: React.FC = () => {
 
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
-	const [messageWithStatuses, setMessageWithStatuses] =
-		useState<ChatMessageModel>();
+	const [messageWithStatuses, setMessageWithStatuses] = useState<Message>();
 
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
@@ -474,9 +474,8 @@ const Main: React.FC = () => {
 						if (incomingMessages) {
 							const preparedMessages: ChatMessageList = {};
 
-							incomingMessages.forEach((message: any) => {
-								const messageObj = new ChatMessageModel(message);
-								preparedMessages[messageObj.id] = messageObj;
+							incomingMessages.forEach((message: Message) => {
+								preparedMessages[message.id] = message;
 							});
 
 							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -488,9 +487,8 @@ const Main: React.FC = () => {
 						if (outgoingMessages) {
 							const preparedMessages: ChatMessageList = {};
 
-							outgoingMessages.forEach((message: any) => {
-								const messageObj = new ChatMessageModel(message);
-								preparedMessages[messageObj.id] = messageObj;
+							outgoingMessages.forEach((message: Message) => {
+								preparedMessages[message.id] = message;
 							});
 
 							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -509,17 +507,17 @@ const Main: React.FC = () => {
 								// Inject getchat id to avoid duplicated messages
 								preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
 
-								if (statusObj.status === ChatMessageModel.STATUS_SENT) {
+								if (statusObj.status === MessageStatus.sent) {
 									preparedStatuses[statusObj.id].sentTimestamp =
 										statusObj.timestamp;
 								}
 
-								if (statusObj.status === ChatMessageModel.STATUS_DELIVERED) {
+								if (statusObj.status === MessageStatus.delivered) {
 									preparedStatuses[statusObj.id].deliveredTimestamp =
 										statusObj.timestamp;
 								}
 
-								if (statusObj.status === ChatMessageModel.STATUS_READ) {
+								if (statusObj.status === MessageStatus.read) {
 									preparedStatuses[statusObj.id].readTimestamp =
 										statusObj.timestamp;
 								}

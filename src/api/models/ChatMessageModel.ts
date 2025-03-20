@@ -6,7 +6,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
-import { Reaction } from '@src/types/messages';
+import { MessageStatus, Reaction } from '@src/types/messages';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -23,10 +23,6 @@ export class ChatMessageModel {
 	static TYPE_ORDER = 'order';
 	static TYPE_CONTACTS = 'contacts';
 	static TYPE_REACTION = 'reaction';
-	static STATUS_PENDING = 'pending';
-	static STATUS_SENT = 'sent';
-	static STATUS_DELIVERED = 'delivered';
-	static STATUS_READ = 'read';
 
 	static ERR_CODES_FOR_RETRY = [
 		400, 410, 429, 430, 432, 433, 470, 471, 500, 1000, 1005, 1011, 1015, 1016,
@@ -362,42 +358,39 @@ export class ChatMessageModel {
 
 	getStatus() {
 		if (this.readTimestamp) {
-			return ChatMessageModel.STATUS_READ;
+			return MessageStatus.read;
 		}
 
 		if (this.deliveredTimestamp) {
-			return ChatMessageModel.STATUS_DELIVERED;
+			return MessageStatus.delivered;
 		}
 
 		if (this.sentTimestamp) {
-			return ChatMessageModel.STATUS_SENT;
+			return MessageStatus.sent;
 		}
 
-		return ChatMessageModel.STATUS_PENDING;
+		return MessageStatus.pending;
 	}
 
 	isPending() {
-		return this.getStatus() === ChatMessageModel.STATUS_PENDING;
+		return this.getStatus() === MessageStatus.pending;
 	}
 
 	isJustSent() {
-		return this.getStatus() === ChatMessageModel.STATUS_SENT;
+		return this.getStatus() === MessageStatus.sent;
 	}
 
 	isJustDelivered() {
-		return this.getStatus() === ChatMessageModel.STATUS_DELIVERED;
+		return this.getStatus() === MessageStatus.delivered;
 	}
 
 	isRead() {
-		return this.getStatus() === ChatMessageModel.STATUS_READ;
+		return this.getStatus() === MessageStatus.read;
 	}
 
 	isDeliveredOrRead() {
 		const status = this.getStatus();
-		return (
-			status === ChatMessageModel.STATUS_DELIVERED ||
-			status === ChatMessageModel.STATUS_READ
-		);
+		return status === MessageStatus.delivered || status === MessageStatus.read;
 	}
 
 	getHeaderFileLink(type: string) {

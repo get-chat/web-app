@@ -41,10 +41,15 @@ import {
 	generateImageLink,
 	generateStickerLink,
 	generateVideoLink,
+	getMessageCaption,
 	getMessageTimestamp,
 	getSenderName,
 	hasAnyStatus,
 	hasMediaToPreview,
+	isDeliveredOrRead,
+	isJustSent,
+	isPending,
+	isRead,
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
@@ -140,9 +145,9 @@ const ChatMessage: React.FC<Props> = ({
 					{(displaySender || displayDate) && (
 						<div className="chat__name">
 							{data.from_us
-								? data.senderName
-								: contactProvidersData?.[data.waId ?? '']?.[0]?.name ??
-								  data.senderName}
+								? getSenderName(data)
+								: contactProvidersData?.[data.waba_payload?.wa_id ?? '']?.[0]
+										?.name ?? getSenderName(data)}
 						</div>
 					)}
 
@@ -150,7 +155,7 @@ const ChatMessage: React.FC<Props> = ({
 						<img
 							className="chat__media chat__sticker"
 							src={generateStickerLink(data)}
-							alt={data.caption ?? ''}
+							alt={getMessageCaption(data) ?? ''}
 						/>
 					)}
 
@@ -161,9 +166,9 @@ const ChatMessage: React.FC<Props> = ({
 							['messageType__' + data.waba_payload?.type]: true,
 							hasMedia: hasMediaToPreview(data),
 							chat__outgoing: data.from_us,
-							chat__received: data.from_us && data.isRead(),
+							chat__received: data.from_us && isRead(data),
 							hiddenSender: !displaySender && !displayDate,
-							chat__failed: data.isFailed,
+							chat__failed: data.is_failed,
 						})}
 					>
 						{isActionsEnabled && (
@@ -284,15 +289,15 @@ const ChatMessage: React.FC<Props> = ({
 							<ContactsMessage data={data} />
 						)}
 
-						{data.text ??
-						data.caption ??
+						{data.waba_payload?.text?.body ??
+						getMessageCaption(data) ??
 						data.buttonText ??
 						data.interactiveButtonText ? (
 							<PrintMessage
 								className="wordBreakWord"
 								message={
-									data.text ??
-									data.caption ??
+									data.waba_payload?.text?.body ??
+									getMessageCaption(data) ??
 									data.buttonText ??
 									data.interactiveButtonText ??
 									''
@@ -329,7 +334,7 @@ const ChatMessage: React.FC<Props> = ({
 
 							{(!data.is_failed || hasAnyStatus(data)) && data.from_us && (
 								<>
-									{data.isPending() && (
+									{isPending(data) && (
 										<AccessTimeIcon
 											className="chat__iconPending"
 											color="inherit"
@@ -337,7 +342,7 @@ const ChatMessage: React.FC<Props> = ({
 										/>
 									)}
 
-									{data.isJustSent() && (
+									{isJustSent(data) && (
 										<DoneIcon
 											className="chat__iconDone"
 											color="inherit"
@@ -345,7 +350,7 @@ const ChatMessage: React.FC<Props> = ({
 										/>
 									)}
 
-									{data.isDeliveredOrRead() && (
+									{isDeliveredOrRead(data) && (
 										<DoneAll
 											className="chat__iconDoneAll"
 											color="inherit"
@@ -355,7 +360,7 @@ const ChatMessage: React.FC<Props> = ({
 								</>
 							)}
 
-							{data.isFailed && !data.hasAnyStatus() && (
+							{data.is_failed && !hasAnyStatus(data) && (
 								<ErrorIcon
 									className="chat__iconError"
 									color="inherit"

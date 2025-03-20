@@ -4,7 +4,7 @@ import { getLastObject } from './ObjectHelper';
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { Message } from '@src/types/messages';
+import { Message, MessageStatus } from '@src/types/messages';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
 
@@ -82,6 +82,36 @@ export const hasAnyStatus = (message: Message) => {
 		(message.waba_statuses?.delivered ?? 0) > 0 ||
 		(message.waba_statuses?.read ?? 0) > 0
 	);
+};
+
+export const getStatus = (message: Message) => {
+	if (message.waba_statuses?.read) {
+		return MessageStatus.read;
+	}
+
+	if (message.waba_statuses?.delivered) {
+		return MessageStatus.delivered;
+	}
+
+	if (message?.waba_statuses?.sent) {
+		return MessageStatus.sent;
+	}
+
+	return MessageStatus.pending;
+};
+
+export const isRead = (message: Message) =>
+	getStatus(message) === MessageStatus.read;
+
+export const isPending = (message: Message) =>
+	getStatus(message) === MessageStatus.pending;
+
+export const isJustSent = (message: Message) =>
+	getStatus(message) === MessageStatus.sent;
+
+export const isDeliveredOrRead = (message: Message) => {
+	const status = getStatus(message);
+	return status === MessageStatus.delivered || status === MessageStatus.read;
 };
 
 export const getMessageCaption = (message: Message | undefined) => {
