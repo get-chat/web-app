@@ -65,6 +65,9 @@ import {
 } from '@src/helpers/ObjectHelper';
 import {
 	extractTimestampFromMessage,
+	generateMessageInternalId,
+	getMessageTimestamp,
+	getUniqueSender,
 	messageHelper,
 	prepareMessageList,
 	prepareReactions,
@@ -111,6 +114,7 @@ import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
 import { fetchMessages } from '@src/api/messagesApi';
+import { Message } from '@src/types/messages';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -520,16 +524,16 @@ const ChatView: React.FC<Props> = (props) => {
 							const msgId = message[0];
 							const chatMessage = message[1];
 
-							if (waId === chatMessage?.waId) {
+							if (waId === chatMessage?.customer_wa_id) {
 								// Replace message displayed with internal id
-								const internalIdString = chatMessage.generateInternalIdString();
+								const internalIdString = generateMessageInternalId(message[0]);
 								if (internalIdString in prevState) {
 									delete prevState[internalIdString];
 								}
 
 								preparedMessages[msgId] = chatMessage;
 
-								if (!chatMessage.isFromUs) {
+								if (!chatMessage.from_us) {
 									hasAnyIncomingMsg = true;
 								}
 							}
@@ -635,35 +639,42 @@ const ChatView: React.FC<Props> = (props) => {
 							}
 
 							if (wabaIdOrGetchatId in newState) {
+								if (!newState[wabaIdOrGetchatId].waba_statuses) {
+									newState[wabaIdOrGetchatId].waba_statuses = {};
+								}
+
 								if (statusObj.sentTimestamp) {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].sentTimestamp =
+									newState[wabaIdOrGetchatId].waba_statuses!.sent =
 										statusObj.sentTimestamp;
 								}
 
 								if (statusObj.deliveredTimestamp) {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].deliveredTimestamp =
+									newState[wabaIdOrGetchatId].waba_statuses!.delivered =
 										statusObj.deliveredTimestamp;
 								}
 
 								if (statusObj.readTimestamp) {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].readTimestamp =
+									newState[wabaIdOrGetchatId].waba_statuses!.read =
 										statusObj.readTimestamp;
 								}
 
 								if (statusObj.errors) {
 									receivedNewErrors = true;
 									changedAny = true;
-									newState[wabaIdOrGetchatId].isFailed = true;
+									newState[wabaIdOrGetchatId].is_failed = true;
 									// Merge with existing errors if exist
-									if (newState[wabaIdOrGetchatId].errors) {
-										newState[wabaIdOrGetchatId].errors?.concat(
+									if (newState[wabaIdOrGetchatId].waba_payload?.errors) {
+										newState[wabaIdOrGetchatId].waba_payload?.errors?.concat(
 											statusObj.errors
 										);
 									} else {
-										newState[wabaIdOrGetchatId].errors = statusObj.errors;
+										if (newState[wabaIdOrGetchatId].waba_payload) {
+											newState[wabaIdOrGetchatId].waba_payload!.errors =
+												statusObj.errors;
+										}
 									}
 								}
 
@@ -969,8 +980,7 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	}, [selectedFiles]);
 
-	const [optionsChatMessage, setOptionsChatMessage] =
-		useState<ChatMessageModel>();
+	const [optionsChatMessage, setOptionsChatMessage] = useState<Message>();
 	const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement>();
 	const [quickReactionAnchorEl, setQuickReactionAnchorEl] =
 		useState<HTMLElement>();
@@ -981,7 +991,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const displayOptionsMenu = (
 		event: React.MouseEvent<Element | MouseEvent>,
-		chatMessage: ChatMessageModel
+		chatMessage: Message
 	) => {
 		// We need to use parent because menu view gets hidden
 		setMenuAnchorEl(event.currentTarget as HTMLElement);
@@ -990,7 +1000,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const displayQuickReactions = (
 		event: React.MouseEvent<Element | MouseEvent>,
-		chatMessage: ChatMessageModel
+		chatMessage: Message
 	) => {
 		setQuickReactionAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
@@ -998,7 +1008,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const displayReactionDetails = (
 		event: React.MouseEvent<Element | MouseEvent>,
-		chatMessage: ChatMessageModel
+		chatMessage: Message
 	) => {
 		setReactionDetailsAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
@@ -1194,7 +1204,7 @@ const ChatView: React.FC<Props> = (props) => {
 			// List assignment and tagging history depends on user choice
 			if (getDisplayAssignmentAndTaggingHistory()) {
 				// List assignment events
-				listChatAssignmentEvents(
+				await listChatAssignmentEvents(
 					preparedMessages,
 					preparedReactions,
 					isInitial,
@@ -1206,7 +1216,7 @@ const ChatView: React.FC<Props> = (props) => {
 					sinceTimeForEvents
 				);
 			} else {
-				finishLoadingMessages(
+				await finishLoadingMessages(
 					preparedMessages,
 					preparedReactions,
 					isInitial,
@@ -1226,7 +1236,7 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
-	const finishLoadingMessages = (
+	const finishLoadingMessages = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
 		isInitial: boolean,
@@ -1307,12 +1317,13 @@ const ChatView: React.FC<Props> = (props) => {
 			// then load more messages
 			if (
 				Object.entries(preparedMessages).filter(
-					(item) => item[1].type !== ChatMessageModel.TYPE_REACTION
+					(item) =>
+						item[1].waba_payload?.type !== ChatMessageModel.TYPE_REACTION
 				).length <
 				MESSAGES_PER_PAGE - 10
 			) {
 				setLoadingMoreMessages(true);
-				listMessages(
+				await listMessages(
 					false,
 					undefined,
 					getFirstObject(preparedMessages)?.timestamp
@@ -1328,7 +1339,7 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const listChatAssignmentEvents = (
+	const listChatAssignmentEvents = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
 		isInitial: boolean,
@@ -1371,7 +1382,7 @@ const ChatView: React.FC<Props> = (props) => {
 		);
 	};
 
-	const listChatTaggingEvents = (
+	const listChatTaggingEvents = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
 		isInitial: boolean,
@@ -2151,11 +2162,11 @@ const ChatView: React.FC<Props> = (props) => {
 
 				{Object.entries(messages).map((message, index) => {
 					// Ignoring reaction messages
-					if (message[1].waba_payload.type === ChatMessageModel.TYPE_REACTION)
+					if (message[1].waba_payload?.type === ChatMessageModel.TYPE_REACTION)
 						return;
 
 					// Message date is created here and passed to ChatMessage for a better performance
-					const curMsgDate = moment.unix(message[1].waba_payload.timestamp);
+					const curMsgDate = moment.unix(getMessageTimestamp(message[1]));
 
 					if (index === 0) {
 						lastPrintedDate = undefined;
@@ -2165,7 +2176,7 @@ const ChatView: React.FC<Props> = (props) => {
 					let willDisplayDate = false;
 					if (lastPrintedDate === undefined) {
 						willDisplayDate = true;
-						lastPrintedDate = moment.unix(message[1].waba_payload.timestamp);
+						lastPrintedDate = moment.unix(getMessageTimestamp(message[1]));
 					} else {
 						if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
 							willDisplayDate = true;
@@ -2175,16 +2186,16 @@ const ChatView: React.FC<Props> = (props) => {
 					}
 
 					let willDisplaySender = false;
-					const curSenderWaId = message[1].getUniqueSender();
+					const curSenderWaId = getUniqueSender(message[1]);
 					if (lastSenderWaId === undefined) {
 						willDisplaySender = true;
-						lastSenderWaId = message[1].getUniqueSender();
+						lastSenderWaId = getUniqueSender(message[1]);
 					} else {
 						if (lastSenderWaId !== curSenderWaId) {
 							willDisplaySender = true;
 						}
 
-						lastSenderWaId = message[1].getUniqueSender();
+						lastSenderWaId = getUniqueSender(message[1]);
 					}
 
 					return (

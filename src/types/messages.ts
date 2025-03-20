@@ -19,8 +19,8 @@ export interface FetchMessagesRequest {
 
 export interface Message {
 	id: string;
-	waba_payload: WabaPayload;
-	waba_statuses: WabaStatuses;
+	waba_payload?: WabaPayload;
+	waba_statuses?: WabaStatuses;
 	contact: Contact;
 	from_us: boolean;
 	received: boolean;
@@ -29,6 +29,7 @@ export interface Message {
 	customer_wa_id: string;
 	tags: any[];
 	chat_tags: Tag[];
+	is_failed: boolean;
 }
 
 export interface WabaPayload {
@@ -46,11 +47,14 @@ export interface WabaPayload {
 	video?: Video;
 	image?: Image;
 	audio?: Audio;
+	voice?: Voice;
 	document?: Document;
 	messaging_product?: string;
 	interactive?: Interactive;
 	sticker?: Sticker;
 	reaction?: Reaction;
+	errors?: any[];
+	referral: any;
 }
 
 export interface Text {
@@ -58,18 +62,32 @@ export interface Text {
 }
 
 export interface Video {
+	id: string;
+	link?: string;
 	caption?: string;
 }
 
 export interface Image {
+	id: string;
+	link?: string;
 	caption?: string;
 }
 
 export interface Audio {
+	id: string;
+	link?: string;
+	caption?: string;
+}
+
+export interface Voice {
+	id: string;
+	link?: string;
 	caption?: string;
 }
 
 export interface Document {
+	id: string;
+	link?: string;
 	caption?: string;
 }
 
@@ -110,6 +128,7 @@ export interface Reply {
 
 export interface Sticker {
 	id: string;
+	link?: string;
 	sha256: string;
 	animated: boolean;
 	mime_type: string;

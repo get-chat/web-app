@@ -17,12 +17,12 @@ export const prepareMessageList = (
 		// Ignore messages without timestamp
 		// Ignore messages that are already loaded
 		if (
-			(parseIntSafely(message.waba_payload.timestamp) ?? -1) > 0 &&
-			!(message.waba_payload.id in existingMessages)
+			(parseIntSafely(message.waba_payload?.timestamp) ?? -1) > 0 &&
+			!(message.waba_payload && message.waba_payload.id in existingMessages)
 		) {
 			// Consider switching to getchat id only
 			const messageKey =
-				message.waba_payload.id ?? generateMessageInternalId(message.id);
+				message.waba_payload?.id ?? generateMessageInternalId(message.id);
 			result[messageKey] = message;
 		}
 	});
@@ -33,10 +33,12 @@ export const prepareMessageList = (
 export const prepareReactions = (messages: ChatMessageList) => {
 	let reactions: ReactionList = {};
 	Object.values(messages)
-		.filter((item) => item.waba_payload.type === ChatMessageModel.TYPE_REACTION)
+		.filter(
+			(item) => item.waba_payload?.type === ChatMessageModel.TYPE_REACTION
+		)
 		.forEach((item) => {
 			const message = item;
-			const parentMessageId = message.waba_payload.reaction?.message_id;
+			const parentMessageId = message.waba_payload?.reaction?.message_id;
 			if (parentMessageId) {
 				if (!reactions[parentMessageId]) {
 					reactions[parentMessageId] = [message];
@@ -50,7 +52,7 @@ export const prepareReactions = (messages: ChatMessageList) => {
 };
 
 export const getMessageTimestamp = (message: Message) =>
-	parseIntSafely(message.waba_payload.timestamp) ?? -1;
+	parseIntSafely(message.waba_payload?.timestamp) ?? -1;
 
 export const getSenderName = (message: Message) => {
 	if (message.sender) {
@@ -67,6 +69,9 @@ export const getSenderName = (message: Message) => {
 	return !message.from_us ? message.contact?.waba_payload?.profile?.name : 'Us';
 };
 
+export const getUniqueSender = (message: Message) =>
+	message.sender?.username ?? message.waba_payload?.from;
+
 export const generateMessageInternalId = (getChatId: string) => {
 	return +'getchatId_' + getChatId;
 };
@@ -74,12 +79,123 @@ export const generateMessageInternalId = (getChatId: string) => {
 export const getMessageCaption = (message: Message | undefined) => {
 	if (message) {
 		const caption =
-			message.waba_payload.image?.caption ??
-			message.waba_payload.video?.caption ??
-			message.waba_payload.audio?.caption ??
-			message.waba_payload.document?.caption;
+			message.waba_payload?.image?.caption ??
+			message.waba_payload?.video?.caption ??
+			message.waba_payload?.audio?.caption ??
+			message.waba_payload?.document?.caption;
 		return caption ? sanitize(caption) : undefined;
 	}
+};
+
+export const hasMediaToPreview = (message: Message) => {
+	return (
+		message.waba_payload?.image !== undefined ||
+		message.waba_payload?.video !== undefined ||
+		getHeaderFileLink(message, 'image') ||
+		getHeaderFileLink(message, 'video')
+	);
+};
+
+const getHeaderFileLink = (message: Message, type: string) => {
+	try {
+		if (message.waba_payload?.type === ChatMessageModel.TYPE_TEMPLATE) {
+			if (message.waba_payload?.template?.components) {
+				for (
+					let i = 0;
+					i < message.waba_payload.template.components.length;
+					i++
+				) {
+					const component = message.waba_payload.template.components[i];
+
+					if (
+						component &&
+						component.type.toLowerCase() === 'header' &&
+						component.parameters.length
+					) {
+						for (let j = 0; j < component.parameters.length; j++) {
+							const param = component.parameters[j];
+
+							if (param.type === type) {
+								return param[type]?.link;
+							}
+						}
+					}
+				}
+			}
+		}
+	} catch (error) {
+		console.error(error);
+	}
+
+	return undefined;
+};
+
+const generateReferralVideoLink = (message: Message) => {
+	if (message.waba_payload?.referral?.video) {
+		return (
+			message.waba_payload.referral.video.link ??
+			generateMediaLink(message.waba_payload.referral?.video?.id)
+		);
+	} else if (message.waba_payload?.referral?.video_url) {
+		return message.waba_payload.referral.video_url;
+	}
+};
+
+const generateMediaLink = (id: string | number | undefined) => {
+	return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
+};
+
+export const generateImageLink = (
+	message: Message,
+	includeTemplateHeader = false
+) => {
+	return (
+		message.waba_payload?.image?.link ??
+		generateMediaLink(message.waba_payload?.image?.id) ??
+		(includeTemplateHeader ? getHeaderFileLink(message, 'image') : undefined)
+	);
+};
+
+export const generateVideoLink = (
+	message: Message,
+	includeTemplateHeaderOrReferral = false
+) => {
+	return (
+		message.waba_payload?.video?.link ??
+		generateMediaLink(message.waba_payload?.video?.id) ??
+		(includeTemplateHeaderOrReferral
+			? getHeaderFileLink(message, 'video') ??
+			  generateReferralVideoLink(message)
+			: undefined)
+	);
+};
+
+export const generateAudioLink = (message: Message) => {
+	return (
+		message.waba_payload?.audio?.link ??
+		generateMediaLink(message.waba_payload?.audio?.id)
+	);
+};
+
+export const generateDocumentLink = (message: Message) => {
+	return (
+		message.waba_payload?.document?.link ??
+		generateMediaLink(message.waba_payload?.document?.id)
+	);
+};
+
+export const generateVoiceLink = (message: Message) => {
+	return (
+		message.waba_payload?.voice?.link ??
+		generateMediaLink(message.waba_payload?.voice?.id)
+	);
+};
+
+export const generateStickerLink = (message: Message) => {
+	return (
+		message.waba_payload?.sticker?.link ??
+		generateMediaLink(message.waba_payload?.sticker?.id)
+	);
 };
 
 export const formatMessage = (message: string | undefined) => {

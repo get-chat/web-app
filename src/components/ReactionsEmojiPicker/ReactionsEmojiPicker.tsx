@@ -1,4 +1,3 @@
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import React from 'react';
 import styles from './ReactionsEmojiPicker.module.css';
 import { Menu } from '@mui/material';
@@ -6,9 +5,10 @@ import { Menu } from '@mui/material';
 import { Emoji, NimblePicker } from 'emoji-mart';
 import { EMOJI_SET, EMOJI_SHEET_SIZE } from '@src/Constants';
 import data from 'emoji-mart/data/facebook.json';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	message: ChatMessageModel | undefined;
+	message: Message | undefined;
 	anchorElement: HTMLElement | undefined;
 	setAnchorElement: (anchorElement: HTMLElement | undefined) => void;
 	onReaction: (messageId: string, emoji: string | null) => void;

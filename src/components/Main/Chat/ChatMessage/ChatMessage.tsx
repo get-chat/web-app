@@ -37,25 +37,28 @@ import { InsertEmoticon } from '@mui/icons-material';
 import useReactions from '@src/hooks/useReactions';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Template } from '@src/types/templates';
+import {
+	generateImageLink,
+	generateVideoLink,
+	hasMediaToPreview,
+} from '@src/helpers/MessageHelper';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	data: ChatMessageModel;
-	reactionsHistory?: ChatMessageModel[];
+	data: Message;
+	reactionsHistory?: Message[];
 	templateData?: Template;
 	displaySender?: boolean;
 	displayDate?: boolean;
 	isExpired?: boolean;
 	contactProvidersData?: { [key: string]: any };
-	onOptionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
-	onQuickReactionsClick?: (e: React.MouseEvent, data: ChatMessageModel) => void;
-	onReactionDetailsClick?: (
-		e: React.MouseEvent,
-		data: ChatMessageModel
-	) => void;
+	onOptionsClick?: (e: React.MouseEvent, data: Message) => void;
+	onQuickReactionsClick?: (e: React.MouseEvent, data: Message) => void;
+	onReactionDetailsClick?: (e: React.MouseEvent, data: Message) => void;
 	goToMessageId?: (msgId: string, timestamp: number) => void;
-	retryMessage?: (message: ChatMessageModel) => void;
+	retryMessage?: (message: Message) => void;
 	disableMediaPreview?: boolean;
-	setMessageWithStatuses?: (message?: ChatMessageModel) => void;
+	setMessageWithStatuses?: (message?: Message) => void;
 	isActionsEnabled?: boolean;
 	isInfoClickable?: boolean;
 }
@@ -113,8 +116,8 @@ const ChatMessage: React.FC<Props> = ({
 			id={'message_' + data.id}
 			className={cx({
 				chat__message__outer: true,
-				outgoing: data.isFromUs,
-				['messageType__' + data.type]: true,
+				outgoing: data.from_us,
+				['messageType__' + data.waba_payload?.type]: true,
 			})}
 		>
 			{displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
@@ -149,7 +152,7 @@ const ChatMessage: React.FC<Props> = ({
 							chat__message: true,
 							[styles.messageWithReaction]: reactions.length > 0,
 							['messageType__' + data.type]: true,
-							hasMedia: data.hasMediaToPreview(),
+							hasMedia: hasMediaToPreview(data),
 							chat__outgoing: data.isFromUs,
 							chat__received: data.isFromUs && data.isRead(),
 							hiddenSender: !displaySender && !displayDate,
@@ -210,46 +213,46 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{data.type === ChatMessageModel.TYPE_IMAGE && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_IMAGE && (
 							<ChatMessageImage
 								data={data}
-								source={data.generateImageLink()}
+								source={generateImageLink(data)}
 								onPreview={() =>
-									onPreview(ATTACHMENT_TYPE_IMAGE, data.generateImageLink())
+									onPreview(ATTACHMENT_TYPE_IMAGE, generateImageLink(data))
 								}
 							/>
 						)}
 
-						{data.type === ChatMessageModel.TYPE_VIDEO && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_VIDEO && (
 							<ChatMessageVideo
-								source={data.generateVideoLink()}
+								source={generateVideoLink(data)}
 								onPreview={() =>
-									onPreview(ATTACHMENT_TYPE_VIDEO, data.generateVideoLink())
+									onPreview(ATTACHMENT_TYPE_VIDEO, generateVideoLink(data))
 								}
 								onOptionsClick={(e) => onOptionsClick?.(e, data)}
 							/>
 						)}
 
-						{(data.type === ChatMessageModel.TYPE_VOICE ||
-							data.type === ChatMessageModel.TYPE_AUDIO) && (
+						{(data.waba_payload?.type === ChatMessageModel.TYPE_VOICE ||
+							data.waba_payload?.type === ChatMessageModel.TYPE_AUDIO) && (
 							<ChatMessageVoice data={data} />
 						)}
 
-						{data.type === ChatMessageModel.TYPE_DOCUMENT && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_DOCUMENT && (
 							<ChatMessageDocument data={data} />
 						)}
 
-						{data.type === ChatMessageModel.TYPE_STICKER && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_STICKER && (
 							<span>
 								<NoteIcon fontSize="small" />
 							</span>
 						)}
 
-						{data.type === ChatMessageModel.TYPE_LOCATION && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_LOCATION && (
 							<ChatMessageLocation data={data} />
 						)}
 
-						{data.type === ChatMessageModel.TYPE_TEMPLATE && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_TEMPLATE && (
 							<ChatMessageTemplate
 								data={data}
 								templateData={templateData}
@@ -260,15 +263,15 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{data.type === ChatMessageModel.TYPE_INTERACTIVE && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_INTERACTIVE && (
 							<InteractiveMessage data={data} />
 						)}
 
-						{data.type === ChatMessageModel.TYPE_ORDER && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_ORDER && (
 							<OrderMessage data={data} />
 						)}
 
-						{data.type === ChatMessageModel.TYPE_CONTACTS && (
+						{data.waba_payload?.type === ChatMessageModel.TYPE_CONTACTS && (
 							<ContactsMessage data={data} />
 						)}
 
@@ -298,7 +301,7 @@ const ChatMessage: React.FC<Props> = ({
 						<span
 							className="chat__message__info"
 							onClick={() => {
-								if (data.isFromUs && isInfoClickable) {
+								if (data.from_us && isInfoClickable) {
 									const clonedMessage = clone(data) as ChatMessageModel;
 									// Injecting reactions
 									clonedMessage.reactions = reactions;
@@ -311,7 +314,7 @@ const ChatMessage: React.FC<Props> = ({
 								<Moment date={data.timestamp} format={dateFormat} unix />
 							</span>
 
-							{(!data.isFailed || data.hasAnyStatus()) && data.isFromUs && (
+							{(!data.isFailed || data.hasAnyStatus()) && data.from_us && (
 								<>
 									{data.isPending() && (
 										<AccessTimeIcon

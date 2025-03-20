@@ -27,7 +27,7 @@ export const setChatContactName = (
 };
 
 export const getLastMessageTimestamp = (chat: Chat | undefined) =>
-	parseIntSafely(chat?.last_message?.waba_payload.timestamp) ??
+	parseIntSafely(chat?.last_message?.waba_payload?.timestamp) ??
 	chat?.contact.last_message_timestamp;
 
 export const getLastIncomingMessageTimestamp = (chat: Chat | undefined) =>

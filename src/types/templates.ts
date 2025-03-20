@@ -17,6 +17,7 @@ export interface TemplateComponent {
 	video?: object;
 	document?: object;
 	buttons?: any[];
+	parameters: any[];
 }
 
 export interface TemplateParameter {

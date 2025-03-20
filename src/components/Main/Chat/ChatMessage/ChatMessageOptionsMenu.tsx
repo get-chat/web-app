@@ -5,9 +5,14 @@ import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { download } from '@src/helpers/DownloadHelper';
 import DownloadIcon from '@mui/icons-material/Download';
 import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
+import { Message } from '@src/types/messages';
+import {
+	generateAudioLink,
+	generateVideoLink,
+} from '@src/helpers/MessageHelper';
 
 interface Props {
-	optionsChatMessage?: ChatMessageModel | undefined;
+	optionsChatMessage?: Message | undefined;
 	menuAnchorEl?: Element | undefined;
 	setMenuAnchorEl: (anchorEl: HTMLElement | undefined) => void;
 	createSavedResponse: (text: string) => void;
@@ -22,16 +27,18 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	const hasVideo = useMemo(() => {
-		return Boolean(optionsChatMessage?.generateVideoLink(true));
+		if (!optionsChatMessage) return false;
+		return Boolean(generateVideoLink(optionsChatMessage, true));
 	}, [optionsChatMessage]);
 
 	const hasAudio = useMemo(() => {
-		return Boolean(optionsChatMessage?.generateAudioLink());
+		if (!optionsChatMessage) return false;
+		return Boolean(generateAudioLink(optionsChatMessage));
 	}, [optionsChatMessage]);
 
 	const handleCreateSavedResponse = () => {
-		if (optionsChatMessage?.text) {
-			createSavedResponse(optionsChatMessage.text);
+		if (optionsChatMessage?.waba_payload?.text?.body) {
+			createSavedResponse(optionsChatMessage?.waba_payload.text.body);
 		}
 
 		hideMenu();
@@ -39,7 +46,9 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 
 	const downloadVideo = () => {
 		const data = {
-			source: optionsChatMessage?.generateVideoLink(true),
+			source: optionsChatMessage
+				? generateVideoLink(optionsChatMessage, true)
+				: undefined,
 		};
 		if (!data.source) {
 			hideMenu();
@@ -51,7 +60,9 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 
 	const downloadAudio = () => {
 		const data = {
-			source: optionsChatMessage?.generateAudioLink(),
+			source: optionsChatMessage
+				? generateAudioLink(optionsChatMessage)
+				: undefined,
 		};
 		if (!data.source) {
 			hideMenu();
@@ -78,8 +89,8 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 			{/*<MenuItem>Delete</MenuItem>*/}
 
 			{optionsChatMessage &&
-				optionsChatMessage.type === ChatMessageModel.TYPE_TEXT &&
-				optionsChatMessage.isFromUs && (
+				optionsChatMessage.waba_payload?.type === ChatMessageModel.TYPE_TEXT &&
+				optionsChatMessage.from_us && (
 					<MenuItem onClick={handleCreateSavedResponse}>
 						<ListItemIcon>
 							<MarkChatReadIcon />
