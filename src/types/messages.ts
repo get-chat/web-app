@@ -17,6 +17,20 @@ export interface FetchMessagesRequest {
 	from_us?: boolean;
 }
 
+export interface CreateMessageRequest {
+	wa_id?: string;
+	type?: string;
+	text?: Text;
+	template?: Template;
+	interactive?: Interactive;
+	video?: Video;
+	image?: Image;
+	audio?: Audio;
+	voice?: Voice;
+	document?: Document;
+	pending_message_unique_id?: string;
+}
+
 export interface Message {
 	id: string;
 	waba_payload?: WabaPayload;
@@ -30,6 +44,7 @@ export interface Message {
 	tags: any[];
 	chat_tags: Tag[];
 	is_failed: boolean;
+	resend_payload?: CreateMessageRequest;
 }
 
 export interface WabaPayload {

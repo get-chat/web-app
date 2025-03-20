@@ -1,12 +1,16 @@
 export interface Template {
 	name: string;
 	category: string;
-	language: string;
+	language: TemplateLanguage;
 	components: TemplateComponent[] | null;
 	namespace: string;
 	rejected_reason: string;
 	status: string;
 	params: any;
+}
+
+export interface TemplateLanguage {
+	code: string;
 }
 
 export interface TemplateComponent {

@@ -114,7 +114,7 @@ import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
 import { fetchMessages } from '@src/api/messagesApi';
-import { Message } from '@src/types/messages';
+import { CreateMessageRequest, Message } from '@src/types/messages';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -132,7 +132,7 @@ interface Props {
 	setChatTagsVisible: (value: boolean) => void;
 	setBulkSendPayload: (value: BulkSendPayload) => void;
 	searchMessagesByKeyword: (keyword: string) => void;
-	setMessageWithStatuses: (value?: ChatMessageModel) => void;
+	setMessageWithStatuses: (value?: Message) => void;
 }
 
 const ChatView: React.FC<Props> = (props) => {
@@ -1424,7 +1424,7 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	const queueMessage = (
-		requestBody: any,
+		requestBody: CreateMessageRequest,
 		successCallback?: () => void,
 		errorCallback?: () => void,
 		completeCallback?: () => void,
@@ -1434,7 +1434,7 @@ const ChatView: React.FC<Props> = (props) => {
 		const uniqueID = generateUniqueID();
 
 		// Inject id into requestBody
-		requestBody.pendingMessageUniqueId = uniqueID;
+		requestBody.pending_message_unique_id = uniqueID;
 
 		const updatedState = [...pendingMessages];
 		updatedState.push({
@@ -1452,14 +1452,18 @@ const ChatView: React.FC<Props> = (props) => {
 		dispatch(setPendingMessages([...updatedState]));
 	};
 
-	const sendCustomTextMessage = (text: string) => {
-		sendMessage(true, undefined, {
-			wa_id: waId,
-			type: ChatMessageModel.TYPE_TEXT,
-			text: {
-				body: text.trim(),
-			},
-		});
+	const sendCustomTextMessage = async (text: string) => {
+		if (waId) {
+			await sendMessage(true, undefined, {
+				wa_id: waId,
+				type: ChatMessageModel.TYPE_TEXT,
+				text: {
+					body: text.trim(),
+				},
+			});
+		} else {
+			console.warn('Empty wa_id!');
+		}
 	};
 
 	const bulkSendMessage = (type: string, payload?: BulkSendPayload) => {
@@ -1488,7 +1492,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const sanitizeRequestBody = (requestBody: any) => {
 		const sanitizedRequestBody = { ...requestBody };
-		delete sanitizedRequestBody['pendingMessageUniqueId'];
+		delete sanitizedRequestBody['pending_message_unique_id'];
 		return sanitizedRequestBody;
 	};
 
@@ -1520,10 +1524,10 @@ const ChatView: React.FC<Props> = (props) => {
 		);
 	};
 
-	const sendMessage = (
+	const sendMessage = async (
 		willQueue: boolean,
 		e?: Event | React.KeyboardEvent | React.MouseEvent,
-		customPayload?: object,
+		customPayload?: CreateMessageRequest,
 		successCallback?: () => void,
 		completeCallback?: () => void
 	) => {
@@ -1535,7 +1539,9 @@ const ChatView: React.FC<Props> = (props) => {
 			return false;
 		}
 
-		let requestBody: object = {};
+		if (!waId) return false;
+
+		let requestBody: CreateMessageRequest = {};
 
 		if (e) {
 			const preparedInput = decode(translateHTMLInputToText(input).trim());
@@ -1569,6 +1575,12 @@ const ChatView: React.FC<Props> = (props) => {
 			clearInput();
 			return;
 		}
+
+		/*try {
+			const data = await createMessage(requestBody);
+		} catch (error: any | AxiosError) {
+
+		}*/
 
 		apiService.sendMessageCall(
 			sanitizeRequestBody(requestBody),
@@ -1816,7 +1828,7 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	const displayMessageInChatManually = (
-		requestBody: any,
+		requestBody: CreateMessageRequest,
 		response: AxiosResponse
 	) => {
 		flushSync(() => {
@@ -1827,7 +1839,7 @@ const ChatView: React.FC<Props> = (props) => {
 					requestBody.type === ChatMessageModel.TYPE_TEXT ||
 					requestBody.text
 				) {
-					text = requestBody.text.body;
+					text = requestBody.text?.body;
 				}
 
 				let getchatId;
@@ -1880,7 +1892,7 @@ const ChatView: React.FC<Props> = (props) => {
 		});
 	};
 
-	const handleFailedMessage = (requestBody: any) => {
+	const handleFailedMessage = (requestBody: CreateMessageRequest) => {
 		//displayMessageInChatManually(requestBody, false);
 
 		// Mark message in queue as failed
@@ -1888,7 +1900,7 @@ const ChatView: React.FC<Props> = (props) => {
 			setPendingMessages([
 				...setPendingMessageFailed(
 					pendingMessages,
-					requestBody.pendingMessageUniqueId
+					requestBody.pending_message_unique_id ?? ''
 				),
 			])
 		);
@@ -1901,35 +1913,35 @@ const ChatView: React.FC<Props> = (props) => {
 		dispatch(setState({ lastSendAttemptAt: new Date() }));
 	};
 
-	const retryMessage = (message: ChatMessageModel) => {
-		if (!message.resendPayload) {
+	const retryMessage = (message: Message) => {
+		if (!message.resend_payload) {
 			console.warn('Property is undefined: resendPayload', message);
 			return;
 		}
 
-		message.resendPayload.wa_id = message.waId;
+		message.resend_payload.wa_id = message.waba_payload?.wa_id;
 
-		switch (message.type) {
+		switch (message.waba_payload?.type) {
 			case ChatMessageModel.TYPE_TEXT:
-				sendMessage(true, undefined, message.resendPayload);
+				sendMessage(true, undefined, message.resend_payload);
 				break;
 			case ChatMessageModel.TYPE_TEMPLATE:
-				sendTemplateMessage(true, undefined, message.resendPayload);
+				sendTemplateMessage(true, undefined, message.resend_payload);
 				break;
 			case ChatMessageModel.TYPE_INTERACTIVE:
-				sendInteractiveMessage(true, undefined, message.resendPayload);
+				sendInteractiveMessage(true, undefined, message.resend_payload);
 				break;
 			default:
 				if (
-					message.type &&
+					message.waba_payload?.wa_id &&
 					[
 						ChatMessageModel.TYPE_AUDIO,
 						ChatMessageModel.TYPE_VIDEO,
 						ChatMessageModel.TYPE_IMAGE,
 						ChatMessageModel.TYPE_VOICE,
-					].includes(message.type)
+					].includes(message.waba_payload.type)
 				) {
-					sendFile(undefined, undefined, undefined, message.resendPayload);
+					sendFile(undefined, undefined, undefined, message.resend_payload);
 				}
 				break;
 		}
@@ -2203,7 +2215,9 @@ const ChatView: React.FC<Props> = (props) => {
 							<ChatMessage
 								data={message[1]}
 								reactionsHistory={reactions[message[0]] ?? []}
-								templateData={templates[message[1]?.templateName ?? '']}
+								templateData={
+									templates[message[1]?.waba_payload?.template?.name ?? '']
+								}
 								displaySender={willDisplaySender}
 								displayDate={willDisplayDate}
 								isExpired={isExpired}

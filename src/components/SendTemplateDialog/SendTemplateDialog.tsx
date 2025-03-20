@@ -17,6 +17,7 @@ import {
 } from '@src/Constants';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import { Template } from '@src/types/templates';
+import { CreateMessageRequest } from '@src/types/messages';
 
 export type Props = {
 	isVisible: boolean;
@@ -72,10 +73,13 @@ const SendTemplateDialog: React.FC<Props> = ({
 			onSendTemplateMessageError
 		);
 
-		const onSentTemplateMessage = function (msg: any, data: any) {
+		const onSentTemplateMessage = function (
+			msg: any,
+			data: CreateMessageRequest
+		) {
 			// Remove injected fields
 			delete data.wa_id;
-			delete data.pendingMessageUniqueId;
+			delete data.pending_message_unique_id;
 
 			// Check if sent message is equal to current pending one
 			if (
