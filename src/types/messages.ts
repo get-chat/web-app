@@ -35,7 +35,7 @@ export interface Message {
 	id: string;
 	waba_payload?: WabaPayload;
 	waba_statuses?: WabaStatuses;
-	contact: Contact;
+	contact?: Contact;
 	from_us: boolean;
 	received: boolean;
 	sender?: Sender;
@@ -78,30 +78,35 @@ export interface Text {
 
 export interface Video {
 	id: string;
+	mime_type?: string;
 	link?: string;
 	caption?: string;
 }
 
 export interface Image {
 	id: string;
+	mime_type?: string;
 	link?: string;
 	caption?: string;
 }
 
 export interface Audio {
 	id: string;
+	mime_type?: string;
 	link?: string;
 	caption?: string;
 }
 
 export interface Voice {
 	id: string;
+	mime_type?: string;
 	link?: string;
 	caption?: string;
 }
 
 export interface Document {
 	id: string;
+	mime_type?: string;
 	link?: string;
 	caption?: string;
 }

@@ -102,7 +102,7 @@ export const getAttachmentTypeByFile = (
 	return ATTACHMENT_TYPE_DOCUMENT;
 };
 
-export const isAudioMimeTypeSupported = (mimeType: string) => {
+export const isAudioMimeTypeSupported = (mimeType: string | undefined) => {
 	if (mimeType === 'audio/amr') {
 		return false;
 	}

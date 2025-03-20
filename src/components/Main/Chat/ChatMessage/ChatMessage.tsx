@@ -42,10 +42,12 @@ import {
 	generateStickerLink,
 	generateVideoLink,
 	getMessageTimestamp,
+	getSenderName,
 	hasAnyStatus,
 	hasMediaToPreview,
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 interface Props {
 	data: Message;
@@ -99,8 +101,8 @@ const ChatMessage: React.FC<Props> = ({
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
-				data.senderName,
-				data.initials,
+				getSenderName(data),
+				generateInitialsHelper(getSenderName(data)),
 				type,
 				source,
 				getMessageTimestamp(data)
@@ -156,7 +158,7 @@ const ChatMessage: React.FC<Props> = ({
 						className={cx({
 							chat__message: true,
 							[styles.messageWithReaction]: reactions.length > 0,
-							['messageType__' + data.type]: true,
+							['messageType__' + data.waba_payload?.type]: true,
 							hasMedia: hasMediaToPreview(data),
 							chat__outgoing: data.from_us,
 							chat__received: data.from_us && data.isRead(),
@@ -169,7 +171,8 @@ const ChatMessage: React.FC<Props> = ({
 								className={cx({
 									[styles.actions]: true,
 									[styles.right]: !data.from_us,
-									[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
+									[styles.nonText]:
+										data.waba_payload?.type !== ChatMessageModel.TYPE_TEXT,
 									[styles.isExpired]: !!isExpired,
 								})}
 							>

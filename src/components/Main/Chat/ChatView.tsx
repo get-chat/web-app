@@ -39,7 +39,6 @@ import PubSub from 'pubsub-js';
 import MessageDateIndicator from './MessageDateIndicator';
 import {
 	generateUniqueID,
-	generateUnixTimestamp,
 	hasInternetConnection,
 	isScrollable,
 	sortMessagesAsc,
@@ -1833,7 +1832,21 @@ const ChatView: React.FC<Props> = (props) => {
 	) => {
 		flushSync(() => {
 			setMessages((prevState) => {
-				let text;
+				const message: Message = {
+					id: response.data.id,
+					from_us: true,
+					received: false,
+					context: {},
+					customer_wa_id: requestBody.wa_id ?? '',
+					tags: [],
+					chat_tags: [],
+					is_failed: false,
+					...requestBody,
+				};
+				prevState[generateMessageInternalId(message.id)] = message;
+				return { ...prevState };
+
+				/*let text;
 
 				if (
 					requestBody.type === ChatMessageModel.TYPE_TEXT ||
@@ -1887,7 +1900,7 @@ const ChatView: React.FC<Props> = (props) => {
 				storedMessage.resendPayload = requestBody;
 
 				prevState[storedMessage.id] = storedMessage;
-				return { ...prevState };
+				return { ...prevState };*/
 			});
 		});
 	};

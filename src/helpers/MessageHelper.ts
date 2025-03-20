@@ -95,6 +95,26 @@ export const getMessageCaption = (message: Message | undefined) => {
 	}
 };
 
+export const getMessageMimeType = (message: Message) => {
+	const payload = message.waba_payload;
+	if (payload) {
+		return (
+			payload.image?.mime_type ??
+			payload.video?.mime_type ??
+			payload.audio?.mime_type ??
+			payload.voice?.mime_type ??
+			payload.document?.mime_type
+		);
+	}
+};
+
+export const hasAnyAudio = (message: Message) => {
+	return (
+		message.waba_payload?.voice?.id !== undefined ||
+		message.waba_payload?.audio?.id !== undefined
+	);
+};
+
 export const hasMediaToPreview = (message: Message) => {
 	return (
 		message.waba_payload?.image !== undefined ||
