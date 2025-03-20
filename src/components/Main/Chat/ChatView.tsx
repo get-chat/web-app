@@ -66,6 +66,8 @@ import {
 import {
 	extractTimestampFromMessage,
 	messageHelper,
+	prepareMessageList,
+	prepareReactions,
 } from '@src/helpers/MessageHelper';
 import { isLocalHost } from '@src/helpers/URLHelper';
 import {
@@ -108,6 +110,7 @@ import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
+import { fetchMessages } from '@src/api/messagesApi';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1113,7 +1116,7 @@ const ChatView: React.FC<Props> = (props) => {
 		setAtBottom(true);
 	};
 
-	const listMessages = (
+	const listMessages = async (
 		isInitial: boolean,
 		callback?: (preparedMessages: ChatMessageList) => void,
 		beforeTime?: number,
@@ -1140,97 +1143,86 @@ const ChatView: React.FC<Props> = (props) => {
 			}
 		}
 
-		apiService.listMessagesCall(
-			waId,
-			undefined,
-			undefined,
-			MESSAGES_PER_PAGE,
-			offset ?? 0,
-			undefined,
-			undefined,
-			beforeTime,
-			sinceTime,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const chatMessagesResponse = new ChatMessagesResponse(
-					response.data,
-					messages,
-					true
-				);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchMessages({
+				wa_id: waId ?? '',
+				limit: MESSAGES_PER_PAGE,
+				offset: offset ?? 0,
+				before_time: beforeTime,
+				since_time: sinceTime,
+			});
 
-				if (sinceTime && isInitialWithSinceTime === true) {
-					if (chatMessagesResponse.next) {
-						/*count > limit*/
-						setAtBottom(false);
-						listMessages(
-							false,
-							callback,
-							beforeTime,
-							chatMessagesResponse.count - MESSAGES_PER_PAGE,
-							sinceTime,
-							false,
-							replaceAll
-						);
-						return false;
-					}
-				}
-
-				const preparedMessages = chatMessagesResponse.messages;
-				const preparedReactions = chatMessagesResponse.reactions;
-
-				const lastMessage = getLastObject(preparedMessages);
-
-				// Pagination filters for events
-				let beforeTimeForEvents = beforeTime;
-				let sinceTimeForEvents = sinceTime;
-
-				if (isInitial) {
-					beforeTimeForEvents = undefined;
-				} else {
-					if (!beforeTime) {
-						beforeTimeForEvents = lastMessage?.timestamp;
-					}
-				}
-
-				if (!sinceTime) {
-					sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
-				}
-
-				// List assignment and tagging history depends on user choice
-				if (getDisplayAssignmentAndTaggingHistory()) {
-					// List assignment events
-					listChatAssignmentEvents(
-						preparedMessages,
-						preparedReactions,
-						isInitial,
+			if (sinceTime && isInitialWithSinceTime === true) {
+				if (data.next) {
+					/*count > limit*/
+					setAtBottom(false);
+					await listMessages(
+						false,
 						callback,
-						replaceAll,
 						beforeTime,
+						data.count - MESSAGES_PER_PAGE,
 						sinceTime,
-						beforeTimeForEvents,
-						sinceTimeForEvents
+						false,
+						replaceAll
 					);
-				} else {
-					finishLoadingMessages(
-						preparedMessages,
-						preparedReactions,
-						isInitial,
-						callback,
-						replaceAll,
-						beforeTime,
-						sinceTime
-					);
+					return false;
 				}
-			},
-			(error: AxiosError) => {
-				setLoadingMoreMessages(false);
+			}
 
-				if (isInitial && !axios.isCancel(error)) {
-					window.displayCustomError('Failed to load messages!');
+			const preparedMessages = prepareMessageList(data.results);
+			const preparedReactions = prepareReactions(preparedMessages);
+
+			const lastMessage = getLastObject(preparedMessages);
+
+			// Pagination filters for events
+			let beforeTimeForEvents = beforeTime;
+			let sinceTimeForEvents = sinceTime;
+
+			if (isInitial) {
+				beforeTimeForEvents = undefined;
+			} else {
+				if (!beforeTime) {
+					beforeTimeForEvents = lastMessage?.timestamp;
 				}
-			},
-			navigate
-		);
+			}
+
+			if (!sinceTime) {
+				sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
+			}
+
+			// List assignment and tagging history depends on user choice
+			if (getDisplayAssignmentAndTaggingHistory()) {
+				// List assignment events
+				listChatAssignmentEvents(
+					preparedMessages,
+					preparedReactions,
+					isInitial,
+					callback,
+					replaceAll,
+					beforeTime,
+					sinceTime,
+					beforeTimeForEvents,
+					sinceTimeForEvents
+				);
+			} else {
+				finishLoadingMessages(
+					preparedMessages,
+					preparedReactions,
+					isInitial,
+					callback,
+					replaceAll,
+					beforeTime,
+					sinceTime
+				);
+			}
+		} catch (error: any | AxiosError) {
+			setLoadingMoreMessages(false);
+
+			if (isInitial && !axios.isCancel(error)) {
+				window.displayCustomError('Failed to load messages!');
+			}
+		}
 	};
 
 	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages

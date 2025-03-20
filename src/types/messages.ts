@@ -3,6 +3,20 @@ import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
 import { Template } from '@src/types/templates';
 
+export interface FetchMessagesRequest {
+	wa_id: string;
+	limit?: number;
+	offset?: number;
+	since_time?: number;
+	before_time?: number;
+	mark_as_received?: number;
+	chat_tag_id?: number;
+	search?: string;
+	assigned_to_me?: boolean;
+	assigned_group?: number;
+	from_us?: boolean;
+}
+
 export interface Message {
 	id: string;
 	waba_payload: WabaPayload;

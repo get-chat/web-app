@@ -48,10 +48,12 @@ class ChatMessagesResponse {
 	static prepareReactions(messages: ChatMessageList) {
 		let reactions: ReactionList = {};
 		Object.entries(messages)
-			.filter((item) => item[1].type === ChatMessageModel.TYPE_REACTION)
+			.filter(
+				(item) => item[1].waba_payload.type === ChatMessageModel.TYPE_REACTION
+			)
 			.forEach((item) => {
 				const message = item[1];
-				const parentMessageId = message.reaction?.message_id;
+				const parentMessageId = message.waba_payload.reaction?.message_id;
 				if (parentMessageId) {
 					if (!reactions[parentMessageId]) {
 						reactions[parentMessageId] = [message];

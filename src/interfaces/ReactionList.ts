@@ -1,7 +1,7 @@
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
 
 interface ReactionList {
-	[key: string]: ChatMessageModel[];
+	[key: string]: Message[];
 }
 
 export default ReactionList;
