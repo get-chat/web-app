@@ -66,6 +66,9 @@ export interface WabaPayload {
 	audio?: Audio;
 	voice?: Voice;
 	document?: Document;
+	location?: Location;
+	order?: any;
+	contacts?: any[];
 	messaging_product?: string;
 	interactive?: Interactive;
 	sticker?: Sticker;
@@ -111,7 +114,15 @@ export interface Document {
 	id: string;
 	mime_type?: string;
 	link?: string;
+	filename?: string;
 	caption?: string;
+}
+
+export interface Location {
+	latitude: number;
+	longitude: number;
+	name?: string;
+	address?: string;
 }
 
 export interface Interactive {

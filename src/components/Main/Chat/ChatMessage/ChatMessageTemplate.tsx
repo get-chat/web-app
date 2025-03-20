@@ -13,9 +13,10 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import PrintMessage from '@src/components/PrintMessage';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PhoneIcon from '@mui/icons-material/Phone';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
+import { Message } from '@src/types/messages';
+import { getHeaderFileLink } from '@src/helpers/MessageHelper';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -29,7 +30,7 @@ const getIconByType = (type: string) => {
 };
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 	templateData: Template | undefined;
 	onPreview: (type: string, source: string) => void;
 	onOptionsClick: (e: React.MouseEvent) => void;
@@ -64,22 +65,22 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											{component.format === 'IMAGE' && (
 												<ChatMessageImage
 													data={data}
-													source={data.getHeaderFileLink('image')}
+													source={getHeaderFileLink(data, 'image')}
 													onPreview={() =>
 														onPreview(
 															ATTACHMENT_TYPE_IMAGE,
-															data.getHeaderFileLink('image')
+															getHeaderFileLink(data, 'image')
 														)
 													}
 												/>
 											)}
 											{component.format === 'VIDEO' && (
 												<ChatMessageVideo
-													source={data.getHeaderFileLink('video')}
+													source={getHeaderFileLink(data, 'video')}
 													onPreview={() =>
 														onPreview(
 															ATTACHMENT_TYPE_VIDEO,
-															data.getHeaderFileLink('video')
+															getHeaderFileLink(data, 'video')
 														)
 													}
 													onOptionsClick={onOptionsClick}
@@ -92,7 +93,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 												<PrintMessage
 													message={insertTemplateComponentParameters(
 														component,
-														data.templateParameters ?? []
+														data.waba_payload?.template?.components ?? []
 													)}
 													as="div"
 													linkify={true}
@@ -106,7 +107,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 										<PrintMessage
 											message={insertTemplateComponentParameters(
 												component,
-												data.templateParameters ?? []
+												data.waba_payload?.template?.components ?? []
 											)}
 											as="div"
 											linkify={true}
@@ -118,7 +119,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 										<PrintMessage
 											message={insertTemplateComponentParameters(
 												component,
-												data.templateParameters ?? []
+												data.waba_payload?.template?.components ?? []
 											)}
 											as="div"
 											linkify={true}
@@ -132,14 +133,15 @@ const ChatMessageTemplate: React.FC<Props> = ({
 												(button: any, buttonIndex: number) => {
 													let href: string;
 
-													const targetParams = data.templateParameters?.find(
-														(item) => {
-															return (
-																item.type === 'button' &&
-																item.index === buttonIndex
-															);
-														}
-													);
+													const targetParams =
+														data.waba_payload?.template?.components?.find(
+															(item) => {
+																return (
+																	item.type?.toLowerCase() === 'button' &&
+																	item.index === buttonIndex
+																);
+															}
+														);
 
 													switch (button.type) {
 														case 'URL':

@@ -154,7 +154,7 @@ export const hasMediaToPreview = (message: Message) => {
 	);
 };
 
-const getHeaderFileLink = (message: Message, type: string) => {
+export const getHeaderFileLink = (message: Message, type: string) => {
 	try {
 		if (message.waba_payload?.type === ChatMessageModel.TYPE_TEMPLATE) {
 			if (message.waba_payload?.template?.components) {

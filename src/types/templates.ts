@@ -16,6 +16,7 @@ export interface TemplateLanguage {
 export interface TemplateComponent {
 	type: 'HEADER' | 'BODY' | 'FOOTER' | 'BUTTON' | 'BUTTONS';
 	format?: 'TEXT' | 'IMAGE' | 'VIDEO' | 'DOCUMENT';
+	index: number;
 	text?: string;
 	image?: object;
 	video?: object;
