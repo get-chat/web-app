@@ -1,6 +1,8 @@
 import api from '@src/api/axiosInstance';
 import {
 	ChangePasswordRequest,
+	ConvertRefreshTokenRequest,
+	ConvertRefreshTokenResponse,
 	LoginRequest,
 	LoginResponse,
 } from '@src/types/auth';
@@ -21,5 +23,13 @@ export const changePassword = async (data: ChangePasswordRequest) => {
 
 export const logout = async () => {
 	const response = await api.get<EmptyResponse>('/auth/logout/');
+	return response.data;
+};
+
+export const convertRefreshToken = async (data: ConvertRefreshTokenRequest) => {
+	const response = await api.post<ConvertRefreshTokenResponse>(
+		'/auth/convert_refresh_token/',
+		data
+	);
 	return response.data;
 };

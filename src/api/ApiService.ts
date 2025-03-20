@@ -63,24 +63,6 @@ export class ApiService {
 		);
 	};
 
-	convertRefreshTokenCall = (
-		refreshToken,
-		keepRefreshToken: boolean,
-		successCallback,
-		errorCallback,
-		completeCallback
-	) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}auth/convert_refresh_token/`, {
-				refresh_token: refreshToken,
-				keep_refresh_token: keepRefreshToken,
-			}),
-			successCallback,
-			errorCallback,
-			completeCallback
-		);
-	};
-
 	bulkSendCall = (body, successCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getRequestConfig()),
