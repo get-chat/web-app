@@ -4,9 +4,10 @@ import React from 'react';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
 import styles from './ChatMessageErrors.module.css';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 	retryMessage?: (message: ChatMessageModel) => void;
 }
 
@@ -15,8 +16,8 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 
 	return (
 		<>
-			{data.errors &&
-				data.errors.map((error: any, index: number) => (
+			{data.waba_payload?.errors &&
+				data.waba_payload.errors.map((error: any, index: number) => (
 					<div className={styles.container} key={index}>
 						<div className={styles.recommendation}>
 							{error.recommendation && (
@@ -46,8 +47,8 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 							)}
 						</div>
 
-						{data.isFromUs &&
-							data.isFailed &&
+						{data.from_us &&
+							data.is_failed &&
 							data.canRetry() &&
 							retryMessage && (
 								<Button

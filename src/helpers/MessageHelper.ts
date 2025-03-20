@@ -76,6 +76,14 @@ export const generateMessageInternalId = (getChatId: string) => {
 	return +'getchatId_' + getChatId;
 };
 
+export const hasAnyStatus = (message: Message) => {
+	return (
+		(message.waba_statuses?.sent ?? 0) > 0 ||
+		(message.waba_statuses?.delivered ?? 0) > 0 ||
+		(message.waba_statuses?.read ?? 0) > 0
+	);
+};
+
 export const getMessageCaption = (message: Message | undefined) => {
 	if (message) {
 		const caption =

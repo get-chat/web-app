@@ -39,7 +39,10 @@ import { setState } from '@src/store/reducers/UIReducer';
 import { Template } from '@src/types/templates';
 import {
 	generateImageLink,
+	generateStickerLink,
 	generateVideoLink,
+	getMessageTimestamp,
+	hasAnyStatus,
 	hasMediaToPreview,
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
@@ -100,7 +103,7 @@ const ChatMessage: React.FC<Props> = ({
 				data.initials,
 				type,
 				source,
-				data.timestamp
+				getMessageTimestamp(data)
 			);
 
 			dispatch(setPreviewMediaObject(previewData));
@@ -120,7 +123,9 @@ const ChatMessage: React.FC<Props> = ({
 				['messageType__' + data.waba_payload?.type]: true,
 			})}
 		>
-			{displayDate && <MessageDateIndicator timestamp={data.timestamp} />}
+			{displayDate && (
+				<MessageDateIndicator timestamp={getMessageTimestamp(data)} />
+			)}
 
 			{data.assignmentEvent && (
 				<ChatAssignmentEvent data={data.assignmentEvent} />
@@ -132,17 +137,17 @@ const ChatMessage: React.FC<Props> = ({
 				<div>
 					{(displaySender || displayDate) && (
 						<div className="chat__name">
-							{data.isFromUs
+							{data.from_us
 								? data.senderName
 								: contactProvidersData?.[data.waId ?? '']?.[0]?.name ??
 								  data.senderName}
 						</div>
 					)}
 
-					{data.type === ChatMessageModel.TYPE_STICKER && (
+					{data.waba_payload?.type === ChatMessageModel.TYPE_STICKER && (
 						<img
 							className="chat__media chat__sticker"
-							src={data.generateStickerLink()}
+							src={generateStickerLink(data)}
 							alt={data.caption ?? ''}
 						/>
 					)}
@@ -153,8 +158,8 @@ const ChatMessage: React.FC<Props> = ({
 							[styles.messageWithReaction]: reactions.length > 0,
 							['messageType__' + data.type]: true,
 							hasMedia: hasMediaToPreview(data),
-							chat__outgoing: data.isFromUs,
-							chat__received: data.isFromUs && data.isRead(),
+							chat__outgoing: data.from_us,
+							chat__received: data.from_us && data.isRead(),
 							hiddenSender: !displaySender && !displayDate,
 							chat__failed: data.isFailed,
 						})}
@@ -163,7 +168,7 @@ const ChatMessage: React.FC<Props> = ({
 							<div
 								className={cx({
 									[styles.actions]: true,
-									[styles.right]: !data.isFromUs,
+									[styles.right]: !data.from_us,
 									[styles.nonText]: data.type !== ChatMessageModel.TYPE_TEXT,
 									[styles.isExpired]: !!isExpired,
 								})}
@@ -177,8 +182,9 @@ const ChatMessage: React.FC<Props> = ({
 									</div>
 								)}
 
-								{((data.isFromUs && data.type === ChatMessageModel.TYPE_TEXT) ||
-									data.type === ChatMessageModel.TYPE_AUDIO) && (
+								{((data.from_us &&
+									data.waba_payload?.type === ChatMessageModel.TYPE_TEXT) ||
+									data.waba_payload?.type === ChatMessageModel.TYPE_AUDIO) && (
 									<div
 										className={styles.action}
 										onClick={(event) => onOptionsClick?.(event, data)}
@@ -294,7 +300,7 @@ const ChatMessage: React.FC<Props> = ({
 							'\u00A0'
 						)}
 
-						{!data.hasAnyStatus() && (
+						{!hasAnyStatus(data) && (
 							<ChatMessageErrors data={data} retryMessage={retryMessage} />
 						)}
 
@@ -311,10 +317,14 @@ const ChatMessage: React.FC<Props> = ({
 							}}
 						>
 							<span className="chat__timestamp">
-								<Moment date={data.timestamp} format={dateFormat} unix />
+								<Moment
+									date={getMessageTimestamp(data)}
+									format={dateFormat}
+									unix
+								/>
 							</span>
 
-							{(!data.isFailed || data.hasAnyStatus()) && data.from_us && (
+							{(!data.is_failed || hasAnyStatus(data)) && data.from_us && (
 								<>
 									{data.isPending() && (
 										<AccessTimeIcon
