@@ -1,14 +1,14 @@
 import { Button } from '@mui/material';
 import Linkify from 'linkify-react';
 import React from 'react';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
 import styles from './ChatMessageErrors.module.css';
 import { Message } from '@src/types/messages';
+import { canRetry } from '@src/helpers/MessageHelper';
 
 interface Props {
 	data: Message;
-	retryMessage?: (message: ChatMessageModel) => void;
+	retryMessage?: (message: Message) => void;
 }
 
 const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
@@ -49,7 +49,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 
 						{data.from_us &&
 							data.is_failed &&
-							data.canRetry() &&
+							canRetry(data) &&
 							retryMessage && (
 								<Button
 									color="inherit"

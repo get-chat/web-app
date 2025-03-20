@@ -134,13 +134,13 @@ const ChatMessage: React.FC<Props> = ({
 				<MessageDateIndicator timestamp={getMessageTimestamp(data)} />
 			)}
 
-			{data.assignmentEvent && (
-				<ChatAssignmentEvent data={data.assignmentEvent} />
+			{data.assignment_event && (
+				<ChatAssignmentEvent data={data.assignment_event} />
 			)}
 
-			{data.taggingEvent && <ChatTaggingEvent data={data.taggingEvent} />}
+			{data.tagging_event && <ChatTaggingEvent data={data.tagging_event} />}
 
-			{!data.assignmentEvent && !data.taggingEvent && (
+			{!data.assignment_event && !data.tagging_event && (
 				<div>
 					{(displaySender || displayDate) && (
 						<div className="chat__name">
@@ -203,12 +203,13 @@ const ChatMessage: React.FC<Props> = ({
 							</div>
 						)}
 
-						{data.isForwarded && (
-							<div className={styles.forwarded}>
-								<ReplyIcon />
-								<span>{t('Forwarded')}</span>
-							</div>
-						)}
+						{data.waba_payload?.context?.forwarded ??
+							(false && (
+								<div className={styles.forwarded}>
+									<ReplyIcon />
+									<span>{t('Forwarded')}</span>
+								</div>
+							))}
 
 						{data.contextMessage !== undefined && (
 							<ContextChatMessage
@@ -217,7 +218,7 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{data.referral && (
+						{data.waba_payload?.referral && (
 							<ChatMessageReferral
 								data={data}
 								onPreview={onPreview}

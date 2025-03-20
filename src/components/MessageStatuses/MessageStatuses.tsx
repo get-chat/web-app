@@ -13,7 +13,11 @@ import useReactions from '@src/hooks/useReactions';
 import { CALENDAR_SHORT } from '@src/Constants';
 import PrintMessage from '@src/components/PrintMessage';
 import { Message } from '@src/types/messages';
-import { getMessageTimestamp, getSenderName } from '@src/helpers/MessageHelper';
+import {
+	getMessageTimestamp,
+	getSenderName,
+	hasAnyStatus,
+} from '@src/helpers/MessageHelper';
 
 interface Props {
 	message?: Message;
@@ -131,11 +135,11 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 							)}
 						</div>
 
-						{message.hasErrors() && (
+						{(message.waba_payload?.errors?.length ?? 0) > 0 && (
 							<div className={styles.section}>
 								<h5>
 									{t(
-										message.hasAnyStatus()
+										hasAnyStatus(message)
 											? 'There were some problems sending your message, but your message was sent successfully after problems have resolved.'
 											: 'There are some problems sending your message:'
 									)}

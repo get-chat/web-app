@@ -1836,7 +1836,6 @@ const ChatView: React.FC<Props> = (props) => {
 					id: response.data.id,
 					from_us: true,
 					received: false,
-					context: {},
 					customer_wa_id: requestBody.wa_id ?? '',
 					tags: [],
 					chat_tags: [],

@@ -4,6 +4,7 @@ import { getObjLength } from './ObjectHelper';
 // @ts-ignore
 import htmlToFormattedText from 'html-to-formatted-text';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import { getMessageTimestamp } from '@src/helpers/MessageHelper';
 
 export const isString = (anyVar: any) => {
 	return typeof anyVar === 'string';
@@ -120,7 +121,7 @@ export const hasInternetConnection = () => {
 
 export const sortMessagesAsc = (messages: ChatMessageList) => {
 	let sortedNextState = Object.entries(messages).sort(
-		(a, b) => a[1].timestamp - b[1].timestamp
+		(a, b) => getMessageTimestamp(a[1]) - getMessageTimestamp(b[1])
 	);
 	return Object.fromEntries(sortedNextState);
 };

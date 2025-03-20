@@ -188,7 +188,18 @@ const getHeaderFileLink = (message: Message, type: string) => {
 	return undefined;
 };
 
-const generateReferralVideoLink = (message: Message) => {
+export const generateReferralImageLink = (message: Message) => {
+	if (message.waba_payload?.referral?.image) {
+		return (
+			message.waba_payload.referral.image.link ??
+			generateMediaLink(message.waba_payload.referral.image.id)
+		);
+	} else if (message.waba_payload?.referral?.image_url) {
+		return message.waba_payload?.referral.image_url;
+	}
+};
+
+export const generateReferralVideoLink = (message: Message) => {
 	if (message.waba_payload?.referral?.video) {
 		return (
 			message.waba_payload.referral.video.link ??
@@ -254,6 +265,28 @@ export const generateStickerLink = (message: Message) => {
 		message.waba_payload?.sticker?.link ??
 		generateMediaLink(message.waba_payload?.sticker?.id)
 	);
+};
+
+export const canRetry = (message: Message) => {
+	let result = false;
+
+	if (
+		message.waba_payload?.errors &&
+		Array.isArray(message.waba_payload.errors)
+	) {
+		for (let i = 0; i < message.waba_payload.errors.length; i++) {
+			if (
+				ChatMessageModel.ERR_CODES_FOR_RETRY.includes(
+					message.waba_payload.errors[i]['code']
+				)
+			) {
+				result = true;
+				break;
+			}
+		}
+	}
+
+	return result;
 };
 
 export const formatMessage = (message: string | undefined) => {

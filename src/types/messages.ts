@@ -39,13 +39,14 @@ export interface Message {
 	from_us: boolean;
 	received: boolean;
 	sender?: Sender;
-	context: any;
 	customer_wa_id: string;
 	tags: any[];
 	chat_tags: Tag[];
 	is_failed: boolean;
 	resend_payload?: CreateMessageRequest;
 	reactions?: Message[];
+	assignment_event?: any;
+	tagging_event?: any;
 }
 
 export interface WabaPayload {
@@ -71,6 +72,7 @@ export interface WabaPayload {
 	reaction?: Reaction;
 	errors?: any[];
 	referral: any;
+	context: any;
 }
 
 export interface Text {
