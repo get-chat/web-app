@@ -1,15 +1,15 @@
 import React from 'react';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import styles from './ReactionDetails.module.css';
 import { Menu } from '@mui/material';
 import useReactions from '@src/hooks/useReactions';
 import PrintMessage from '@src/components/PrintMessage';
 import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '@src/Constants';
+import { Message } from '@src/types/messages';
 
 export type Props = {
-	message: ChatMessageModel | undefined;
-	reactionsHistory: ChatMessageModel[];
+	message: Message | undefined;
+	reactionsHistory: Message[];
 	anchorElement: HTMLElement | undefined;
 	setAnchorElement: (anchorElement: HTMLElement | undefined) => void;
 };
@@ -37,19 +37,19 @@ const ReactionDetails: React.FC<Props> = ({
 		>
 			<div className={styles.reactions}>
 				{reactions
-					?.filter((item) => !!item.reaction?.emoji)
+					?.filter((item) => !!item.waba_payload.reaction?.emoji)
 					.map((reaction) => (
 						<div className={styles.reaction} key={reaction.id}>
 							<div className={styles.sender}>{reaction.senderName}</div>
 							<div className={styles.timestamp}>
 								<Moment
-									date={reaction.timestamp}
+									date={reaction.waba_payload.timestamp}
 									calendar={CALENDAR_SHORT}
 									unix
 								/>
 							</div>
 							<PrintMessage
-								message={reaction.reaction?.emoji ?? ''}
+								message={reaction.waba_payload.reaction?.emoji ?? ''}
 								smallEmoji
 							/>
 						</div>

@@ -2151,10 +2151,11 @@ const ChatView: React.FC<Props> = (props) => {
 
 				{Object.entries(messages).map((message, index) => {
 					// Ignoring reaction messages
-					if (message[1].type === ChatMessageModel.TYPE_REACTION) return;
+					if (message[1].waba_payload.type === ChatMessageModel.TYPE_REACTION)
+						return;
 
 					// Message date is created here and passed to ChatMessage for a better performance
-					const curMsgDate = moment.unix(message[1].timestamp);
+					const curMsgDate = moment.unix(message[1].waba_payload.timestamp);
 
 					if (index === 0) {
 						lastPrintedDate = undefined;
@@ -2164,7 +2165,7 @@ const ChatView: React.FC<Props> = (props) => {
 					let willDisplayDate = false;
 					if (lastPrintedDate === undefined) {
 						willDisplayDate = true;
-						lastPrintedDate = moment.unix(message[1].timestamp);
+						lastPrintedDate = moment.unix(message[1].waba_payload.timestamp);
 					} else {
 						if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
 							willDisplayDate = true;
