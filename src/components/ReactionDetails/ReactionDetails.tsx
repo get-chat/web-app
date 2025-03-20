@@ -6,6 +6,7 @@ import PrintMessage from '@src/components/PrintMessage';
 import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '@src/Constants';
 import { Message } from '@src/types/messages';
+import { getSenderName } from '@src/helpers/MessageHelper';
 
 export type Props = {
 	message: Message | undefined;
@@ -40,7 +41,7 @@ const ReactionDetails: React.FC<Props> = ({
 					?.filter((item) => !!item.waba_payload.reaction?.emoji)
 					.map((reaction) => (
 						<div className={styles.reaction} key={reaction.id}>
-							<div className={styles.sender}>{reaction.senderName}</div>
+							<div className={styles.sender}>{getSenderName(reaction)}</div>
 							<div className={styles.timestamp}>
 								<Moment
 									date={reaction.waba_payload.timestamp}

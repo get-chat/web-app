@@ -49,6 +49,24 @@ export const prepareReactions = (messages: ChatMessageList) => {
 	return reactions;
 };
 
+export const getMessageTimestamp = (message: Message) =>
+	parseIntSafely(message.waba_payload.timestamp) ?? -1;
+
+export const getSenderName = (message: Message) => {
+	if (message.sender) {
+		const firstName = message.sender.first_name;
+		const lastName = message.sender.last_name;
+
+		if (firstName || lastName) {
+			return firstName + (lastName ? ' ' + lastName : '');
+		} else {
+			return message.sender?.username;
+		}
+	}
+
+	return !message.from_us ? message.contact?.waba_payload?.profile?.name : 'Us';
+};
+
 export const generateMessageInternalId = (getChatId: string) => {
 	return +'getchatId_' + getChatId;
 };

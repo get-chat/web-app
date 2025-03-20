@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { useAppSelector } from '@src/store/hooks';
 import ReactionList from '@src/interfaces/ReactionList';
+import { getMessageTimestamp } from '@src/helpers/MessageHelper';
 
 interface Props {
 	MESSAGES_PER_PAGE: number;
@@ -32,14 +33,14 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 			}
 
 			if (i === 0) {
-				previousTimestamp = message.timestamp;
+				previousTimestamp = getMessageTimestamp(message);
 			} else {
-				if (message.timestamp !== previousTimestamp) {
+				if (getMessageTimestamp(message) !== previousTimestamp) {
 					isSame = false;
 					break;
 				}
 
-				previousTimestamp = message.timestamp;
+				previousTimestamp = getMessageTimestamp(message);
 			}
 		}
 
