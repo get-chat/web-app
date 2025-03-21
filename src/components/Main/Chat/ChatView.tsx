@@ -28,7 +28,6 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '@src/Constants';
-import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
@@ -113,7 +112,11 @@ import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
 import { fetchMessages } from '@src/api/messagesApi';
-import { CreateMessageRequest, Message } from '@src/types/messages';
+import {
+	CreateMessageRequest,
+	Message,
+	MessageType,
+} from '@src/types/messages';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -305,7 +308,7 @@ const ChatView: React.FC<Props> = (props) => {
 			};
 
 			// Use proper method to send message depends on its type
-			if (requestBody.type === ChatMessageModel.TYPE_TEXT) {
+			if (requestBody.type === MessageType.text) {
 				sendMessage(
 					false,
 					undefined,
@@ -313,7 +316,7 @@ const ChatView: React.FC<Props> = (props) => {
 					successCallback,
 					completeCallback
 				);
-			} else if (requestBody.type === ChatMessageModel.TYPE_TEMPLATE) {
+			} else if (requestBody.type === MessageType.template) {
 				sendTemplateMessage(
 					false,
 					undefined,
@@ -321,7 +324,7 @@ const ChatView: React.FC<Props> = (props) => {
 					successCallback,
 					completeCallback
 				);
-			} else if (requestBody.type === ChatMessageModel.TYPE_INTERACTIVE) {
+			} else if (requestBody.type === MessageType.interactive) {
 				sendInteractiveMessage(
 					false,
 					undefined,
@@ -1316,8 +1319,7 @@ const ChatView: React.FC<Props> = (props) => {
 			// then load more messages
 			if (
 				Object.entries(preparedMessages).filter(
-					(item) =>
-						item[1].waba_payload?.type !== ChatMessageModel.TYPE_REACTION
+					(item) => item[1].waba_payload?.type !== MessageType.reaction
 				).length <
 				MESSAGES_PER_PAGE - 10
 			) {
@@ -1455,7 +1457,7 @@ const ChatView: React.FC<Props> = (props) => {
 		if (waId) {
 			await sendMessage(true, undefined, {
 				wa_id: waId,
-				type: ChatMessageModel.TYPE_TEXT,
+				type: MessageType.text,
 				text: {
 					body: text.trim(),
 				},
@@ -1469,10 +1471,10 @@ const ChatView: React.FC<Props> = (props) => {
 		dispatch(setSelectionModeEnabled(true));
 		dispatch(setBulkSend(true));
 
-		if (type === ChatMessageModel.TYPE_TEXT) {
+		if (type === MessageType.text) {
 			const preparedInput = translateHTMLInputToText(input).trim();
 			payload = {
-				type: ChatMessageModel.TYPE_TEXT,
+				type: MessageType.text,
 				text: {
 					body: preparedInput,
 				},
@@ -1498,7 +1500,7 @@ const ChatView: React.FC<Props> = (props) => {
 	const sendReaction = (messageId: string, emoji: string | null) => {
 		const requestBody = {
 			wa_id: waId,
-			type: ChatMessageModel.TYPE_REACTION,
+			type: MessageType.reaction,
 			reaction: {
 				message_id: messageId,
 				emoji: emoji,
@@ -1553,7 +1555,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 			requestBody = {
 				wa_id: waId,
-				type: ChatMessageModel.TYPE_TEXT,
+				type: MessageType.text,
 				text: {
 					body: preparedInput,
 				},
@@ -1689,7 +1691,7 @@ const ChatView: React.FC<Props> = (props) => {
 		} else {
 			requestBody = {
 				wa_id: waId,
-				type: ChatMessageModel.TYPE_INTERACTIVE,
+				type: MessageType.interactive,
 				interactive: interactiveMessage,
 			};
 		}
@@ -1848,7 +1850,7 @@ const ChatView: React.FC<Props> = (props) => {
 				/*let text;
 
 				if (
-					requestBody.type === ChatMessageModel.TYPE_TEXT ||
+					requestBody.type === MessageType.text ||
 					requestBody.text
 				) {
 					text = requestBody.text?.body;
@@ -1934,23 +1936,23 @@ const ChatView: React.FC<Props> = (props) => {
 		message.resend_payload.wa_id = message.waba_payload?.wa_id;
 
 		switch (message.waba_payload?.type) {
-			case ChatMessageModel.TYPE_TEXT:
+			case MessageType.text:
 				sendMessage(true, undefined, message.resend_payload);
 				break;
-			case ChatMessageModel.TYPE_TEMPLATE:
+			case MessageType.template:
 				sendTemplateMessage(true, undefined, message.resend_payload);
 				break;
-			case ChatMessageModel.TYPE_INTERACTIVE:
+			case MessageType.interactive:
 				sendInteractiveMessage(true, undefined, message.resend_payload);
 				break;
 			default:
 				if (
 					message.waba_payload?.wa_id &&
 					[
-						ChatMessageModel.TYPE_AUDIO,
-						ChatMessageModel.TYPE_VIDEO,
-						ChatMessageModel.TYPE_IMAGE,
-						ChatMessageModel.TYPE_VOICE,
+						MessageType.audio,
+						MessageType.video,
+						MessageType.image,
+						MessageType.voice,
 					].includes(message.waba_payload.type)
 				) {
 					sendFile(undefined, undefined, undefined, message.resend_payload);
@@ -2186,8 +2188,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 				{Object.entries(messages).map((message, index) => {
 					// Ignoring reaction messages
-					if (message[1].waba_payload?.type === ChatMessageModel.TYPE_REACTION)
-						return;
+					if (message[1].waba_payload?.type === MessageType.reaction) return;
 
 					// Message date is created here and passed to ChatMessage for a better performance
 					const curMsgDate = moment.unix(getMessageTimestamp(message[1]));

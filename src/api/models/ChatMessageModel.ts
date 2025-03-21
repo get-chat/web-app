@@ -6,7 +6,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
-import { MessageStatus, Reaction } from '@src/types/messages';
+import { MessageStatus, MessageType, Reaction } from '@src/types/messages';
 
 export class ChatMessageModel {
 	static TYPE_TEXT = 'text';
@@ -200,7 +200,7 @@ export class ChatMessageModel {
 		return new ChatMessageModel({
 			from_us: true,
 			waba_payload: {
-				type: ChatMessageModel.TYPE_TEMPLATE,
+				type: MessageType.template,
 				template: template,
 				timestamp: getUnixTimestamp(),
 			},
@@ -211,7 +211,7 @@ export class ChatMessageModel {
 		return new ChatMessageModel({
 			from_us: true,
 			waba_payload: {
-				type: ChatMessageModel.TYPE_INTERACTIVE,
+				type: MessageType.interactive,
 				interactive: interactive,
 				timestamp: getUnixTimestamp(),
 			},
@@ -395,7 +395,7 @@ export class ChatMessageModel {
 
 	getHeaderFileLink(type: string) {
 		try {
-			if (this.type === ChatMessageModel.TYPE_TEMPLATE) {
+			if (this.type === MessageType.template) {
 				if (this.templateParameters) {
 					for (let i = 0; i < this.templateParameters.length; i++) {
 						const component = this.templateParameters[i];

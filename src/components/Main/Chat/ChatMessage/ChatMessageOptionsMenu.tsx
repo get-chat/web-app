@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
 import { ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { download } from '@src/helpers/DownloadHelper';
 import DownloadIcon from '@mui/icons-material/Download';
 import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
-import { Message } from '@src/types/messages';
+import { Message, MessageType } from '@src/types/messages';
 import {
 	generateAudioLink,
 	generateVideoLink,
@@ -89,7 +88,7 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 			{/*<MenuItem>Delete</MenuItem>*/}
 
 			{optionsChatMessage &&
-				optionsChatMessage.waba_payload?.type === ChatMessageModel.TYPE_TEXT &&
+				optionsChatMessage.waba_payload?.type === MessageType.text &&
 				optionsChatMessage.from_us && (
 					<MenuItem onClick={handleCreateSavedResponse}>
 						<ListItemIcon>

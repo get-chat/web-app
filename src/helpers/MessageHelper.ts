@@ -4,7 +4,7 @@ import { getLastObject } from './ObjectHelper';
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { Message, MessageStatus } from '@src/types/messages';
+import { Message, MessageStatus, MessageType } from '@src/types/messages';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
 
@@ -33,9 +33,7 @@ export const prepareMessageList = (
 export const prepareReactions = (messages: ChatMessageList) => {
 	let reactions: ReactionList = {};
 	Object.values(messages)
-		.filter(
-			(item) => item.waba_payload?.type === ChatMessageModel.TYPE_REACTION
-		)
+		.filter((item) => item.waba_payload?.type === MessageType.reaction)
 		.forEach((item) => {
 			const message = item;
 			const parentMessageId = message.waba_payload?.reaction?.message_id;
@@ -156,7 +154,7 @@ export const hasMediaToPreview = (message: Message) => {
 
 export const getHeaderFileLink = (message: Message, type: string) => {
 	try {
-		if (message.waba_payload?.type === ChatMessageModel.TYPE_TEMPLATE) {
+		if (message.waba_payload?.type === MessageType.template) {
 			if (message.waba_payload?.template?.components) {
 				for (
 					let i = 0;

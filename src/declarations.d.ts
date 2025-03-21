@@ -1,7 +1,5 @@
 import { AppConfig } from '@src/config/application';
 import { AxiosError } from 'axios';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import PendingMessage from '@src/interfaces/PendingMessage';
 
 export {};
 

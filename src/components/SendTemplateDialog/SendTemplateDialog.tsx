@@ -9,7 +9,6 @@ import { Button } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { useTranslation } from 'react-i18next';
 import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import PubSub from 'pubsub-js';
 import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
@@ -17,7 +16,7 @@ import {
 } from '@src/Constants';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import { Template } from '@src/types/templates';
-import { CreateMessageRequest } from '@src/types/messages';
+import { CreateMessageRequest, MessageType } from '@src/types/messages';
 
 export type Props = {
 	isVisible: boolean;
@@ -25,7 +24,7 @@ export type Props = {
 	chosenTemplate?: Template;
 	onSend: (template: Template) => void;
 	sendCallback?: () => void;
-	onBulkSend: (type: string, payload: BulkSendPayload) => void;
+	onBulkSend: (type: MessageType, payload: BulkSendPayload) => void;
 	isBulkOnly: boolean;
 	selectTemplateCallback?: () => void;
 };
@@ -109,7 +108,7 @@ const SendTemplateDialog: React.FC<Props> = ({
 
 	const bulkSend = (template: Template) => {
 		const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
-		onBulkSend(ChatMessageModel.TYPE_TEMPLATE, payload);
+		onBulkSend(MessageType.template, payload);
 		sendCallback?.();
 		close();
 	};

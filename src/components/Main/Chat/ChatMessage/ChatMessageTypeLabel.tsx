@@ -1,6 +1,6 @@
 import React from 'react';
-import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
+import { MessageType } from '@src/types/messages';
 
 interface Props {
 	type: string;
@@ -11,27 +11,17 @@ const ChatMessageTypeLabel: React.FC<Props> = ({ type }) => {
 
 	return (
 		<span className="chatMessageTypeLabel">
-			{type === ChatMessageModel.TYPE_IMAGE && <span>{t('Image')}</span>}
+			{type === MessageType.image && <span>{t('Image')}</span>}
+			{type === MessageType.video && <span>{t('Video')}</span>}
+			{type === MessageType.voice && <span>{t('Voice')}</span>}
+			{type === MessageType.audio && <span>{t('Audio')}</span>}
+			{type === MessageType.document && <span>{t('Document')}</span>}
+			{type === MessageType.sticker && <span>{t('Sticker')}</span>}
+			{type === MessageType.location && <span>{t('Location')}</span>}
+			{type === MessageType.template && <span>{t('Template')}</span>}
+			{type === MessageType.interactive && <span>{t('Interactive')}</span>}
 
-			{type === ChatMessageModel.TYPE_VIDEO && <span>{t('Video')}</span>}
-
-			{type === ChatMessageModel.TYPE_VOICE && <span>{t('Voice')}</span>}
-
-			{type === ChatMessageModel.TYPE_AUDIO && <span>{t('Audio')}</span>}
-
-			{type === ChatMessageModel.TYPE_DOCUMENT && <span>{t('Document')}</span>}
-
-			{type === ChatMessageModel.TYPE_STICKER && <span>{t('Sticker')}</span>}
-
-			{type === ChatMessageModel.TYPE_LOCATION && <span>{t('Location')}</span>}
-
-			{type === ChatMessageModel.TYPE_TEMPLATE && <span>{t('Template')}</span>}
-
-			{type === ChatMessageModel.TYPE_INTERACTIVE && (
-				<span>{t('Interactive')}</span>
-			)}
-
-			{type === ChatMessageModel.TYPE_CONTACTS && <span>{t('Contacts')}</span>}
+			{type === MessageType.contacts && <span>{t('Contacts')}</span>}
 		</span>
 	);
 };

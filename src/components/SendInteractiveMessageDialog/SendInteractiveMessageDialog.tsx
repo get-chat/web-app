@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './SendInteractiveMessageDialog.module.css';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import {
 	DescribedInteractive,
 	InteractiveParameter,
@@ -16,6 +15,8 @@ import { isEmptyString } from '@src/helpers/Helpers';
 import Alert from '@mui/material/Alert';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { Message } from '@src/types/messages';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 export type Props = {
 	isVisible: boolean;
@@ -31,7 +32,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	onSend,
 }) => {
 	const [payload, setPayload] = useState<any>({});
-	const [messageData, setMessageData] = useState<ChatMessageModel | null>(null);
+	const [messageData, setMessageData] = useState<Message | null>(null);
 	const [isShowErrors, setIsShowErrors] = useState(false);
 	const [isShowingAdvanced, setIsShowingAdvanced] = useState(false);
 

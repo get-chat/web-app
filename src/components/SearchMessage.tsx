@@ -6,7 +6,6 @@ import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '../Constants';
 import SearchBar from './SearchBar';
 import { useParams } from 'react-router-dom';
-import ChatMessageModel from '../api/models/ChatMessageModel';
 import SearchMessageResult from './SearchMessageResult';
 import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +16,7 @@ import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 import { useAppDispatch } from '@src/store/hooks';
 import { setSearchMessagesVisible } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import { Message } from '@src/types/messages';
 
 export type Props = {
 	initialKeyword: string;
@@ -122,7 +122,7 @@ const SearchMessage: React.FC<Props> = ({
 		);
 	};
 
-	const goToMessage = (data: ChatMessageModel) => {
+	const goToMessage = (data: Message) => {
 		PubSub.publish(EVENT_TOPIC_GO_TO_MSG_ID, data);
 
 		if (isMobileOnly) {

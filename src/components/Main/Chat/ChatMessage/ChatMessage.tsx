@@ -7,7 +7,6 @@ import Moment from 'react-moment';
 import '../../../../styles/InputRange.css';
 import NoteIcon from '@mui/icons-material/Note';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import MessageDateIndicator from '../MessageDateIndicator';
 import ContextChatMessage from './ContextChatMessage';
 import ReplyIcon from '@mui/icons-material/Reply';
@@ -51,7 +50,7 @@ import {
 	isPending,
 	isRead,
 } from '@src/helpers/MessageHelper';
-import { Message } from '@src/types/messages';
+import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 interface Props {
@@ -151,7 +150,7 @@ const ChatMessage: React.FC<Props> = ({
 						</div>
 					)}
 
-					{data.waba_payload?.type === ChatMessageModel.TYPE_STICKER && (
+					{data.waba_payload?.type === MessageType.sticker && (
 						<img
 							className="chat__media chat__sticker"
 							src={generateStickerLink(data)}
@@ -177,7 +176,7 @@ const ChatMessage: React.FC<Props> = ({
 									[styles.actions]: true,
 									[styles.right]: !data.from_us,
 									[styles.nonText]:
-										data.waba_payload?.type !== ChatMessageModel.TYPE_TEXT,
+										data.waba_payload?.type !== MessageType.text,
 									[styles.isExpired]: !!isExpired,
 								})}
 							>
@@ -191,8 +190,8 @@ const ChatMessage: React.FC<Props> = ({
 								)}
 
 								{((data.from_us &&
-									data.waba_payload?.type === ChatMessageModel.TYPE_TEXT) ||
-									data.waba_payload?.type === ChatMessageModel.TYPE_AUDIO) && (
+									data.waba_payload?.type === MessageType.text) ||
+									data.waba_payload?.type === MessageType.audio) && (
 									<div
 										className={styles.action}
 										onClick={(event) => onOptionsClick?.(event, data)}
@@ -227,7 +226,7 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_IMAGE && (
+						{data.waba_payload?.type === MessageType.image && (
 							<ChatMessageImage
 								data={data}
 								source={generateImageLink(data)}
@@ -237,7 +236,7 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_VIDEO && (
+						{data.waba_payload?.type === MessageType.video && (
 							<ChatMessageVideo
 								source={generateVideoLink(data)}
 								onPreview={() =>
@@ -247,26 +246,26 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{(data.waba_payload?.type === ChatMessageModel.TYPE_VOICE ||
-							data.waba_payload?.type === ChatMessageModel.TYPE_AUDIO) && (
+						{(data.waba_payload?.type === MessageType.voice ||
+							data.waba_payload?.type === MessageType.audio) && (
 							<ChatMessageVoice data={data} />
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_DOCUMENT && (
+						{data.waba_payload?.type === MessageType.document && (
 							<ChatMessageDocument data={data} />
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_STICKER && (
+						{data.waba_payload?.type === MessageType.sticker && (
 							<span>
 								<NoteIcon fontSize="small" />
 							</span>
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_LOCATION && (
+						{data.waba_payload?.type === MessageType.location && (
 							<ChatMessageLocation data={data} />
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_TEMPLATE && (
+						{data.waba_payload?.type === MessageType.template && (
 							<ChatMessageTemplate
 								data={data}
 								templateData={templateData}
@@ -277,15 +276,15 @@ const ChatMessage: React.FC<Props> = ({
 							/>
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_INTERACTIVE && (
+						{data.waba_payload?.type === MessageType.interactive && (
 							<InteractiveMessage data={data} />
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_ORDER && (
+						{data.waba_payload?.type === MessageType.order && (
 							<OrderMessage data={data} />
 						)}
 
-						{data.waba_payload?.type === ChatMessageModel.TYPE_CONTACTS && (
+						{data.waba_payload?.type === MessageType.contacts && (
 							<ContactsMessage data={data} />
 						)}
 

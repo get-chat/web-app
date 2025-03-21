@@ -1,7 +1,6 @@
 import React from 'react';
 import '../styles/SearchMessageResult.css';
 import Moment from 'react-moment';
-import ChatMessageModel from '../api/models/ChatMessageModel';
 import DoneAll from '@mui/icons-material/DoneAll';
 import DoneIcon from '@mui/icons-material/Done';
 import { CALENDAR_NORMAL } from '../Constants';
@@ -15,7 +14,7 @@ import {
 	isDeliveredOrRead,
 	isRead,
 } from '@src/helpers/MessageHelper';
-import { Message } from '@src/types/messages';
+import { Message, MessageType } from '@src/types/messages';
 
 interface Props {
 	displaySender: boolean;
@@ -46,16 +45,15 @@ const SearchMessageResult: React.FC<Props> = ({
 				</div>
 				<div className="searchResult__message__body">
 					<span className="searchResult__message__body__type">
-						{data.from_us &&
-							data.waba_payload?.type === ChatMessageModel.TYPE_TEXT && (
-								<span className={isRead(data) ? 'chat__received' : ''}>
-									{isDeliveredOrRead(data) ? (
-										<DoneAll className="chat__iconDoneAll" />
-									) : (
-										<DoneIcon />
-									)}
-								</span>
-							)}
+						{data.from_us && data.waba_payload?.type === MessageType.text && (
+							<span className={isRead(data) ? 'chat__received' : ''}>
+								{isDeliveredOrRead(data) ? (
+									<DoneAll className="chat__iconDoneAll" />
+								) : (
+									<DoneIcon />
+								)}
+							</span>
+						)}
 
 						<ChatMessageTypeIcon type={data.waba_payload?.type ?? ''} />
 					</span>

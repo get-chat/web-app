@@ -36,7 +36,6 @@ import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
 import ChangePasswordDialog from './ChangePasswordDialog';
-import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -124,7 +123,7 @@ import {
 	setChatContactName,
 } from '@src/helpers/ChatHelper';
 import { getMessageTimestamp, getSenderName } from '@src/helpers/MessageHelper';
-import { Message } from '@src/types/messages';
+import { Message, MessageType } from '@src/types/messages';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -1226,7 +1225,7 @@ const Sidebar: React.FC<Props> = ({
 							</Alert>
 						)}
 
-						{bulkSendPayload?.type !== ChatMessageModel.TYPE_TEMPLATE && (
+						{bulkSendPayload?.type !== MessageType.template && (
 							<Alert severity="warning" className={styles.bulkAlert}>
 								<Trans>
 									Session messages can be sent only to recipients who wrote to

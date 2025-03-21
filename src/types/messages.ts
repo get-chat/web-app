@@ -54,7 +54,7 @@ export interface Message {
 export interface WabaPayload {
 	id: string;
 	from?: string;
-	type: string;
+	type: MessageType;
 	timestamp: string;
 	to?: string;
 	wa_id?: string;
@@ -201,6 +201,23 @@ export interface Permissions {
 	can_use_tags: boolean;
 	can_read_chats: string;
 	can_write_to_chats: string;
+}
+
+export enum MessageType {
+	text = 'text',
+	image = 'image',
+	video = 'video',
+	voice = 'voice',
+	audio = 'audio',
+	document = 'document',
+	sticker = 'sticker',
+	location = 'location',
+	template = 'template',
+	button = 'button',
+	interactive = 'interactive',
+	order = 'order',
+	contacts = 'contacts',
+	reaction = 'reaction',
 }
 
 export enum MessageStatus {

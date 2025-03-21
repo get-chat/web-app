@@ -1,4 +1,3 @@
-import ChatMessageModel from '../api/models/ChatMessageModel';
 import {
 	ATTACHMENT_TYPE_DOCUMENT,
 	ATTACHMENT_TYPE_IMAGE,
@@ -10,6 +9,7 @@ import { Chat } from '@src/types/chats';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import { User } from '@src/types/users';
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
+import { MessageType } from '@src/types/messages';
 
 export const isChatExpired = (chat: Chat | undefined) =>
 	getPastHoursByTimestamp(chat?.contact.last_message_timestamp ?? 0) >= 24;
@@ -63,7 +63,7 @@ export const generateTemplateMessagePayload = (
 	templateMessage: Template
 ): any => {
 	return {
-		type: ChatMessageModel.TYPE_TEMPLATE,
+		type: MessageType.template,
 		template: {
 			namespace: templateMessage.namespace,
 			name: templateMessage.name,

@@ -18,8 +18,8 @@ import StepPreviewCSVData from '../BulkSendTemplateViaCSV/components/StepPreview
 import StepUploadCSV from './components/StepUploadCSV';
 import StepSelectPrimaryKey from '../BulkSendTemplateViaCSV/components/StepSelectPrimaryKey';
 import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import { MessageType } from '@src/types/messages';
 
 interface Props {
 	open: boolean;
@@ -201,9 +201,7 @@ const UploadRecipientsCSV: React.FC<Props> = ({
 						setPrimaryKeyColumn={setPrimaryKeyColumn}
 						primaryKeyType={primaryKeyType}
 						setPrimaryKeyType={setPrimaryKeyType}
-						isTagsDisabled={
-							bulkSendPayload?.type !== ChatMessageModel.TYPE_TEMPLATE
-						}
+						isTagsDisabled={bulkSendPayload?.type !== MessageType.template}
 					/>
 				)}
 			</DialogContent>

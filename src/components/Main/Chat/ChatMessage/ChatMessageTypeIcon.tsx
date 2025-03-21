@@ -1,5 +1,4 @@
 import React from 'react';
-import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import VideocamIcon from '@mui/icons-material/Videocam';
 import MicIcon from '@mui/icons-material/Mic';
 import AudiotrackIcon from '@mui/icons-material/Audiotrack';
@@ -10,6 +9,7 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import { MessageType } from '@src/types/messages';
 
 interface Props {
 	type: string;
@@ -18,16 +18,16 @@ interface Props {
 const ChatMessageTypeIcon: React.FC<Props> = ({ type }) => {
 	return (
 		<span>
-			{type === ChatMessageModel.TYPE_IMAGE && <PhotoCameraIcon />}
-			{type === ChatMessageModel.TYPE_VIDEO && <VideocamIcon />}
-			{type === ChatMessageModel.TYPE_VOICE && <MicIcon />}
-			{type === ChatMessageModel.TYPE_AUDIO && <AudiotrackIcon />}
-			{type === ChatMessageModel.TYPE_DOCUMENT && <InsertDriveFileIcon />}
-			{type === ChatMessageModel.TYPE_STICKER && <NoteIcon />}
-			{type === ChatMessageModel.TYPE_LOCATION && <LocationOnIcon />}
-			{type === ChatMessageModel.TYPE_TEMPLATE && <SmsIcon />}
-			{type === ChatMessageModel.TYPE_INTERACTIVE && <TouchAppIcon />}
-			{type === ChatMessageModel.TYPE_CONTACTS && <ContactsIcon />}
+			{type === MessageType.image && <PhotoCameraIcon />}
+			{type === MessageType.video && <VideocamIcon />}
+			{type === MessageType.voice && <MicIcon />}
+			{type === MessageType.audio && <AudiotrackIcon />}
+			{type === MessageType.document && <InsertDriveFileIcon />}
+			{type === MessageType.sticker && <NoteIcon />}
+			{type === MessageType.location && <LocationOnIcon />}
+			{type === MessageType.template && <SmsIcon />}
+			{type === MessageType.interactive && <TouchAppIcon />}
+			{type === MessageType.contacts && <ContactsIcon />}
 		</span>
 	);
 };
