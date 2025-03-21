@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { clone } from '@src/helpers/ObjectHelper';
 import PubSub from 'pubsub-js';
@@ -24,10 +23,7 @@ const useMessageStatuses = ({ initialMessage }: Props) => {
 	}, [initialMessage]);
 
 	useEffect(() => {
-		const onPostMessageStatusChange = function (
-			msg: string,
-			data: ChatMessageModel
-		) {
+		const onPostMessageStatusChange = function (msg: string, data: Message) {
 			if (data && message?.id === data.id) {
 				setMessage(clone(data) as Message);
 			}

@@ -16,7 +16,6 @@ import Alert from '@mui/material/Alert';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Message } from '@src/types/messages';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { fromInteractive } from '@src/helpers/MessageHelper';
 
 export type Props = {

@@ -114,7 +114,6 @@ import {
 	Message,
 	MessageType,
 } from '@src/types/messages';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -628,10 +627,9 @@ const ChatView: React.FC<Props> = (props) => {
 
 							// Check if any message is displayed with internal id
 							// Fix duplicated messages in this way
-							const internalIdString =
-								ChatMessageModel.generateInternalIdStringStatic(
-									statusObj?.getchatId
-								);
+							const internalIdString = generateMessageInternalId(
+								statusObj?.getchatId
+							);
 
 							if (internalIdString in newState) {
 								wabaIdOrGetchatId = internalIdString;
