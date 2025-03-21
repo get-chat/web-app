@@ -81,7 +81,7 @@ import { fetchGroups } from '@src/api/groupsApi';
 import { GroupList } from '@src/types/groups';
 import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
-import { Message, MessageStatus } from '@src/types/messages';
+import { Message, MessageStatus, WebhookMessage } from '@src/types/messages';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -462,7 +462,8 @@ const Main: React.FC = () => {
 
 			ws.onmessage = function (event) {
 				try {
-					const data = JSON.parse(event.data);
+					console.log(event.data);
+					const data = JSON.parse(event.data) as WebhookMessage;
 					console.log(data);
 
 					if (data.type === 'waba_webhook') {

@@ -2,6 +2,7 @@ import { Contact } from '@src/types/contacts';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
 import { Template } from '@src/types/templates';
+import { User } from '@src/types/users';
 
 export interface FetchMessagesRequest {
 	wa_id?: string;
@@ -49,6 +50,7 @@ export interface Message {
 	tagging_event?: any;
 	forwarded?: boolean;
 	context?: Message;
+	chat_assignment?: ChatAssignment;
 }
 
 export interface WabaPayload {
@@ -201,6 +203,28 @@ export interface Permissions {
 	can_use_tags: boolean;
 	can_read_chats: string;
 	can_write_to_chats: string;
+}
+
+export interface WebhookMessage {
+	type: string;
+	waba_payload?: WebhookMessageWabaPayload;
+}
+
+export interface WebhookMessageWabaPayload {
+	incoming_messages?: Message[];
+	outgoing_messages?: Message[];
+	statuses?: Message[];
+	chat_assignment?: ChatAssignment;
+}
+
+export interface ChatAssignment {
+	assigned_group_set?: Group;
+	assigned_group_was_cleared: boolean;
+	assigned_to_user_set?: User;
+	assigned_to_user_was_cleared: boolean;
+	done_by?: User;
+	timestamp: number;
+	wa_id: string;
 }
 
 export enum MessageType {
