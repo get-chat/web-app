@@ -4,7 +4,7 @@ import { Group } from '@src/types/groups';
 import { Template } from '@src/types/templates';
 
 export interface FetchMessagesRequest {
-	wa_id: string;
+	wa_id?: string;
 	limit?: number;
 	offset?: number;
 	since_time?: number;

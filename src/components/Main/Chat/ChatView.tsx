@@ -81,7 +81,6 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
@@ -598,7 +597,7 @@ const ChatView: React.FC<Props> = (props) => {
 					});
 
 					// Reactions
-					const preparedReactions = ChatMessagesResponse.prepareReactions(data);
+					const preparedReactions = prepareReactions(data);
 					setReactions((prevState) =>
 						mergeReactionLists(prevState, preparedReactions)
 					);

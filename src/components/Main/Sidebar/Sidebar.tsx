@@ -67,7 +67,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import { AxiosError, CancelTokenSource } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 import PasswordIcon from '@mui/icons-material/Password';
@@ -90,7 +90,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import classNames from 'classnames/bind';
-import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 import DateRangeDialog from '@src/components/DateRangeDialog';
 import {
 	convertDateToUnixTimestamp,
@@ -122,8 +121,13 @@ import {
 	getLastMessageTimestamp,
 	setChatContactName,
 } from '@src/helpers/ChatHelper';
-import { getMessageTimestamp, getSenderName } from '@src/helpers/MessageHelper';
+import {
+	getMessageTimestamp,
+	getSenderName,
+	prepareMessageList,
+} from '@src/helpers/MessageHelper';
 import { Message, MessageType } from '@src/types/messages';
+import { fetchMessages } from '@src/api/messagesApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -766,7 +770,7 @@ const Sidebar: React.FC<Props> = ({
 		}
 	};
 
-	const searchMessages = (cancelTokenSource?: CancelTokenSource) => {
+	const searchMessages = async (cancelTokenSource?: CancelTokenSource) => {
 		// Convert dates to Unix timestamps
 		const messagesSinceTime = filterStartDate
 			? convertDateToUnixTimestamp(filterStartDate)
@@ -775,24 +779,22 @@ const Sidebar: React.FC<Props> = ({
 			? convertDateToUnixTimestamp(filterEndDate)
 			: undefined;
 
-		apiService.listMessagesCall(
-			undefined,
-			keyword,
-			filterTagId,
-			30,
-			undefined,
-			filterAssignedToMe ? true : undefined,
-			filterAssignedGroupId,
-			messageBeforeTime,
-			messagesSinceTime,
-			cancelTokenSource?.token,
-			(response: AxiosResponse) => {
-				const messagesResponse = new ChatMessagesResponse(response.data);
-				setChatMessages(messagesResponse.messages);
-			},
-			undefined,
-			navigate
-		);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchMessages({
+				search: keyword,
+				chat_tag_id: filterTagId,
+				limit: 30,
+				assigned_to_me: filterAssignedToMe ? true : undefined,
+				assigned_group: filterAssignedGroupId,
+				before_time: messageBeforeTime,
+				since_time: messagesSinceTime,
+			});
+			const preparedMessages = prepareMessageList(data.results);
+			setChatMessages(preparedMessages);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const goToMessage = (chatMessage: Message) => {

@@ -11,12 +11,13 @@ import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '../contexts/ApplicationContext';
 import { generateCancelToken } from '../helpers/ApiHelper';
-import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
-import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
+import { CancelTokenSource } from 'axios';
 import { useAppDispatch } from '@src/store/hooks';
 import { setSearchMessagesVisible } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { Message } from '@src/types/messages';
+import { fetchMessages } from '@src/api/messagesApi';
+import { prepareMessageList } from '@src/helpers/MessageHelper';
 
 export type Props = {
 	initialKeyword: string;
@@ -105,21 +106,20 @@ const SearchMessage: React.FC<Props> = ({
 
 		setLoading(true);
 
-		apiService.searchMessagesCall(
-			waId,
-			keyword,
-			30,
-			cancelTokenSourceRef.current.token,
-			(response: AxiosResponse) => {
-				const chatMessagesResponse = new ChatMessagesResponse(response.data);
-				setResults(chatMessagesResponse.messages);
-				setLoading(false);
-			},
-			(error: AxiosError) => {
-				console.log(error);
-				setLoading(false);
-			}
-		);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchMessages({
+				wa_id: waId,
+				search: keyword,
+				limit: 30,
+			});
+			const preparedMessages = prepareMessageList(data.results);
+			setResults(preparedMessages);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const goToMessage = (data: Message) => {
