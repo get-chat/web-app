@@ -123,6 +123,8 @@ import {
 	getLastMessageTimestamp,
 	setChatContactName,
 } from '@src/helpers/ChatHelper';
+import { getMessageTimestamp, getSenderName } from '@src/helpers/MessageHelper';
+import { Message } from '@src/types/messages';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -360,7 +362,7 @@ const Sidebar: React.FC<Props> = ({
 				Object.entries(data).forEach((message) => {
 					//const msgId = message[0];
 					const chatMessage = message[1];
-					const chatMessageWaId = chatMessage.waId;
+					const chatMessageWaId = chatMessage.customer_wa_id;
 
 					const chatKey = CHAT_KEY_PREFIX + chatMessageWaId;
 
@@ -378,10 +380,13 @@ const Sidebar: React.FC<Props> = ({
 						changedAny = true;
 
 						// Update existing chat
-						nextState[chatKey].last_message = chatMessage.payload;
+						nextState[chatKey] = {
+							...nextState[chatKey],
+							last_message: chatMessage,
+						};
 
 						// Incoming
-						if (!chatMessage.isFromUs) {
+						if (!chatMessage.from_us) {
 							// Update name and initials on incoming message if name is missing
 							const chat = nextState[chatKey];
 							if (chat) {
@@ -390,14 +395,14 @@ const Sidebar: React.FC<Props> = ({
 									// Update sidebar chat name
 									setChatContactName(
 										nextState[chatKey],
-										chatMessage.senderName
+										getSenderName(chatMessage)
 									);
 
 									// Check if current chat
 									if (waId === chatMessageWaId) {
 										PubSub.publish(
 											EVENT_TOPIC_UPDATE_PERSON_NAME,
-											chatMessage.senderName
+											getSenderName(chatMessage)
 										);
 									}
 								}
@@ -407,7 +412,7 @@ const Sidebar: React.FC<Props> = ({
 
 					// New chatMessages
 					if (
-						!chatMessage.isFromUs &&
+						!chatMessage.from_us &&
 						(waId !== chatMessageWaId ||
 							document.visibilityState === 'hidden' ||
 							isBlurred)
@@ -428,7 +433,7 @@ const Sidebar: React.FC<Props> = ({
 						dispatch(setNewMessages({ ...preparedNewMessages }));
 
 						// Display a notification
-						if (chatMessageWaId && !chatMessage.isFromUs) {
+						if (chatMessageWaId && !chatMessage.from_us) {
 							displayNotification(
 								t('New messages'),
 								t('You have new messages!'),
@@ -791,13 +796,13 @@ const Sidebar: React.FC<Props> = ({
 		);
 	};
 
-	const goToMessage = (chatMessage: ChatMessageModel) => {
-		if (waId !== chatMessage.waId) {
-			navigate(`/main/chat/${chatMessage.waId}`, {
+	const goToMessage = (chatMessage: Message) => {
+		if (waId !== chatMessage.customer_wa_id) {
+			navigate(`/main/chat/${chatMessage.customer_wa_id}`, {
 				state: {
 					goToMessage: {
 						id: chatMessage.id,
-						timestamp: chatMessage.timestamp,
+						timestamp: getMessageTimestamp(chatMessage),
 					},
 				},
 			});
@@ -1322,9 +1327,7 @@ const Sidebar: React.FC<Props> = ({
 										messageData={message[1]}
 										keyword={searchedKeyword}
 										displaySender={true}
-										onClick={(chatMessage: ChatMessageModel) =>
-											goToMessage(chatMessage)
-										}
+										onClick={(chatMessage: Message) => goToMessage(chatMessage)}
 									/>
 								))}
 							</div>
