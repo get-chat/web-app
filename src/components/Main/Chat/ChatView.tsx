@@ -195,7 +195,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const [isAtBottom, setAtBottom] = useState(false);
 
-	const [lastMessageId, setLastMessageId] = useState();
+	const [lastMessageId, setLastMessageId] = useState<string>();
 
 	const [chosenTemplate, setChosenTemplate] = useState<Template>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
@@ -1033,10 +1033,12 @@ const ChatView: React.FC<Props> = (props) => {
 				// Person information is loaded, now load messages
 				if (loadMessages) {
 					listMessages(true, function (preparedMessages: ChatMessageList) {
-						const lastPreparedMessage = getLastObject(preparedMessages);
+						const lastPreparedMessage = getLastObject(
+							preparedMessages
+						) as Message;
 						setLastMessageId(
-							lastPreparedMessage?.id ??
-								lastPreparedMessage?.generateInternalIdString()
+							lastPreparedMessage?.waba_payload?.id ??
+								generateMessageInternalId(lastPreparedMessage?.id)
 						);
 
 						// Scroll to message if goToMessageId is defined
