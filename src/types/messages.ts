@@ -20,7 +20,7 @@ export interface FetchMessagesRequest {
 
 export interface CreateMessageRequest {
 	wa_id?: string;
-	type?: string;
+	type?: MessageType;
 	text?: Text;
 	template?: Template;
 	interactive?: Interactive;
@@ -39,7 +39,7 @@ export interface Message {
 	contact?: Contact;
 	from_us: boolean;
 	received: boolean;
-	sender?: Sender;
+	sender?: User;
 	customer_wa_id: string;
 	tags: any[];
 	chat_tags: Tag[];
@@ -180,18 +180,6 @@ export interface WabaStatuses {
 	sent?: number;
 	delivered?: number;
 	read?: number;
-}
-
-export interface Sender {
-	url: string;
-	id: number;
-	username: string;
-	first_name: string;
-	last_name: string;
-	email: string;
-	profile: Profile;
-	groups: Group[];
-	permissions: Permissions;
 }
 
 export interface Profile {

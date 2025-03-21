@@ -479,7 +479,8 @@ const Main: React.FC = () => {
 							const preparedMessages: ChatMessageList = {};
 
 							incomingMessages.forEach((message: Message) => {
-								preparedMessages[message.id] = message;
+								preparedMessages[message.waba_payload?.id ?? message.id] =
+									message;
 							});
 
 							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -492,7 +493,8 @@ const Main: React.FC = () => {
 							const preparedMessages: ChatMessageList = {};
 
 							outgoingMessages.forEach((message: Message) => {
-								preparedMessages[message.id] = message;
+								preparedMessages[message.waba_payload?.id ?? message.id] =
+									message;
 							});
 
 							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);

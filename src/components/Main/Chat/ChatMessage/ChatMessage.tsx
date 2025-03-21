@@ -109,7 +109,7 @@ const ChatMessage: React.FC<Props> = ({
 				generateInitialsHelper(getSenderName(data)),
 				type,
 				source,
-				getMessageTimestamp(data)
+				getMessageTimestamp(data) ?? -1
 			);
 
 			dispatch(setPreviewMediaObject(previewData));

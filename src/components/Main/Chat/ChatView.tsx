@@ -114,6 +114,7 @@ import {
 	Message,
 	MessageType,
 } from '@src/types/messages';
+import { getUnixTimestamp } from '@src/helpers/DateHelper';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1844,7 +1845,13 @@ const ChatView: React.FC<Props> = (props) => {
 					tags: [],
 					chat_tags: [],
 					is_failed: false,
-					...requestBody,
+					sender: currentUser,
+					waba_payload: {
+						id: response.data.id,
+						timestamp: getUnixTimestamp().toString(),
+						...requestBody,
+						type: requestBody.type ?? MessageType.none,
+					},
 				};
 				prevState[generateMessageInternalId(message.id)] = message;
 				return { ...prevState };
