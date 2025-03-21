@@ -1,9 +1,7 @@
 import { replaceEmojis } from './EmojiHelper';
-import { getLastObject } from './ObjectHelper';
 // @ts-ignore
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import {
 	ChatAssignment,
 	ChatTagging,
@@ -333,9 +331,7 @@ export const canRetry = (message: Message) => {
 	) {
 		for (let i = 0; i < message.waba_payload.errors.length; i++) {
 			if (
-				ChatMessageModel.ERR_CODES_FOR_RETRY.includes(
-					message.waba_payload.errors[i]['code']
-				)
+				ERR_CODES_FOR_RETRY.includes(message.waba_payload.errors[i]['code'])
 			) {
 				result = true;
 				break;
@@ -356,15 +352,6 @@ export const formatMessage = (message: string | undefined) => {
 	return formatted;
 };
 
-export const messageHelper = (messagesObject: ChatMessageList) => {
-	const last = getLastObject(messagesObject);
-	return extractTimestampFromMessage(last);
-};
-
-export const extractTimestampFromMessage = (message: ChatMessageModel) => {
-	return message?.timestamp ?? -1;
-};
-
 export const generateMessagePreview = (payload: any) => {
 	const messageType = payload?.type;
 	if (messageType === 'text') {
@@ -375,3 +362,8 @@ export const generateMessagePreview = (payload: any) => {
 		return messageType;
 	}
 };
+
+export const ERR_CODES_FOR_RETRY = [
+	400, 410, 429, 430, 432, 433, 470, 471, 500, 1000, 1005, 1011, 1015, 1016,
+	1018, 1023, 1024, 1026, 1031,
+];

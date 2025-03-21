@@ -1,5 +1,5 @@
-import ChatMessageModel from '../models/ChatMessageModel';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
+import { fromAssignmentEvent } from '@src/helpers/MessageHelper';
 
 class ChatAssignmentEventsResponse {
 	public messages: ChatMessageList;
@@ -11,7 +11,7 @@ class ChatAssignmentEventsResponse {
 
 		const messages: ChatMessageList = {};
 		data.results.forEach((assignmentEvent: any) => {
-			const prepared = ChatMessageModel.fromAssignmentEvent(assignmentEvent);
+			const prepared = fromAssignmentEvent(assignmentEvent);
 			messages[prepared.id] = prepared;
 		});
 		this.messages = messages;

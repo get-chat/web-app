@@ -62,11 +62,9 @@ import {
 	getObjLength,
 } from '@src/helpers/ObjectHelper';
 import {
-	extractTimestampFromMessage,
 	generateMessageInternalId,
 	getMessageTimestamp,
 	getUniqueSender,
-	messageHelper,
 	prepareMessageList,
 	prepareReactions,
 } from '@src/helpers/MessageHelper';
@@ -444,7 +442,7 @@ const ChatView: React.FC<Props> = (props) => {
 						if (currentNewMessages > 0) {
 							const lastMessage = getLastObject(messages);
 							if (lastMessage) {
-								markAsReceived(extractTimestampFromMessage(lastMessage));
+								markAsReceived(getMessageTimestamp(lastMessage));
 							}
 						}
 					}
@@ -562,8 +560,7 @@ const ChatView: React.FC<Props> = (props) => {
 								}
 
 								if (hasAnyIncomingMsg) {
-									const lastMessageTimestamp =
-										extractTimestampFromMessage(lastMessage);
+									const lastMessageTimestamp = getMessageTimestamp(lastMessage);
 
 									// Mark new message as received if visible
 									if (canSeeLastMessage(messagesContainer.current)) {
@@ -1307,7 +1304,8 @@ const ChatView: React.FC<Props> = (props) => {
 			// TODO: Check unread messages first and then decide to do it or not
 			// beforeTime is not passed only for initial request
 			// Mark messages as received
-			const lastMessageTimestamp = messageHelper(preparedMessages);
+			const lastMessage = getLastObject(messagesObject);
+			const lastMessageTimestamp = getMessageTimestamp(lastMessage);
 			markAsReceived(lastMessageTimestamp);
 
 			// Auto focus
