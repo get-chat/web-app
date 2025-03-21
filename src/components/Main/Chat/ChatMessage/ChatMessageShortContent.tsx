@@ -10,7 +10,7 @@ import { Template } from '@src/types/templates';
 import { MessageType, Reaction } from '@src/types/messages';
 
 interface Props {
-	type: string;
+	type: MessageType;
 	text?: string | undefined | null;
 	caption?: string | undefined | null;
 	buttonText?: string | undefined | null;

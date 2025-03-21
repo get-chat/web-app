@@ -39,8 +39,8 @@ const UploadRecipientsCSV: React.FC<Props> = ({
 	const STEP_SELECT_PRIMARY_KEY = 2;
 
 	const [activeStep, setActiveStep] = React.useState(STEP_UPLOAD_CSV);
-	const [csvHeader, setCsvHeader] = useState<{}>();
-	const [csvData, setCsvData] = useState<{}[]>();
+	const [csvHeader, setCsvHeader] = useState<string[]>();
+	const [csvData, setCsvData] = useState<{ [key: string]: string }[]>();
 	const [csvError, setCsvError] = useState<string>();
 	const [isExceededLimits, setExceededLimits] = useState(false);
 	const [primaryKeyColumn, setPrimaryKeyColumn] = useState('');

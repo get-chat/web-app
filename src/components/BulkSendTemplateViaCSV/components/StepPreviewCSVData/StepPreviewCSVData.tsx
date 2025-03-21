@@ -14,7 +14,7 @@ import { getMaxDirectRecipients } from '@src/helpers/BulkSendHelper';
 
 interface Props {
 	csvHeader?: string[];
-	csvData: string[][];
+	csvData: { [key: string]: string }[] | undefined;
 	isExceededLimits: boolean;
 }
 
@@ -64,7 +64,10 @@ const StepPreviewCSVData: React.FC<Props> = ({
 
 			{(csvData?.length ?? 0) > PREVIEW_LIMIT && (
 				<div className="mt-3">
-					{t('There are %d more row(s)...', csvData.length - PREVIEW_LIMIT)}
+					{t(
+						'There are %d more row(s)...',
+						(csvData?.length ?? 0) - PREVIEW_LIMIT
+					)}
 				</div>
 			)}
 

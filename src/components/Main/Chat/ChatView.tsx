@@ -117,6 +117,7 @@ import {
 	Message,
 	MessageType,
 } from '@src/types/messages';
+import ChatMessageModel from '@src/api/models/ChatMessageModel';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
