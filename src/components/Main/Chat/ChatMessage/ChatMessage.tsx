@@ -203,17 +203,16 @@ const ChatMessage: React.FC<Props> = ({
 							</div>
 						)}
 
-						{data.waba_payload?.context?.forwarded ??
-							(false && (
-								<div className={styles.forwarded}>
-									<ReplyIcon />
-									<span>{t('Forwarded')}</span>
-								</div>
-							))}
+						{data.context?.forwarded && (
+							<div className={styles.forwarded}>
+								<ReplyIcon />
+								<span>{t('Forwarded')}</span>
+							</div>
+						)}
 
-						{data.contextMessage !== undefined && (
+						{data.context && (
 							<ContextChatMessage
-								contextMessage={data.contextMessage}
+								contextMessage={data.context}
 								goToMessageId={goToMessageId}
 							/>
 						)}
@@ -292,15 +291,15 @@ const ChatMessage: React.FC<Props> = ({
 
 						{data.waba_payload?.text?.body ??
 						getMessageCaption(data) ??
-						data.buttonText ??
-						data.interactiveButtonText ? (
+						data.waba_payload?.button?.text ??
+						data.waba_payload?.interactive?.button_reply?.title ? (
 							<PrintMessage
 								className="wordBreakWord"
 								message={
 									data.waba_payload?.text?.body ??
 									getMessageCaption(data) ??
-									data.buttonText ??
-									data.interactiveButtonText ??
+									data.waba_payload?.button?.text ??
+									data.waba_payload?.interactive?.button_reply?.title ??
 									''
 								}
 								linkify={true}
@@ -317,7 +316,7 @@ const ChatMessage: React.FC<Props> = ({
 							className="chat__message__info"
 							onClick={() => {
 								if (data.from_us && isInfoClickable) {
-									const clonedMessage = clone(data) as ChatMessageModel;
+									const clonedMessage = clone(data) as Message;
 									// Injecting reactions
 									clonedMessage.reactions = reactions;
 									setMessageWithStatuses?.(clonedMessage);

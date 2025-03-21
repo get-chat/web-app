@@ -47,6 +47,8 @@ export interface Message {
 	reactions?: Message[];
 	assignment_event?: any;
 	tagging_event?: any;
+	forwarded?: boolean;
+	context?: Message;
 }
 
 export interface WabaPayload {
@@ -75,7 +77,12 @@ export interface WabaPayload {
 	reaction?: Reaction;
 	errors?: any[];
 	referral: any;
-	context: any;
+	context?: WabaPayloadContext;
+}
+
+export interface WabaPayloadContext {
+	id: string;
+	from: string;
 }
 
 export interface Text {
