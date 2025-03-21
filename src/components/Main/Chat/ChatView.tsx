@@ -1304,7 +1304,7 @@ const ChatView: React.FC<Props> = (props) => {
 			// TODO: Check unread messages first and then decide to do it or not
 			// beforeTime is not passed only for initial request
 			// Mark messages as received
-			const lastMessage = getLastObject(messagesObject);
+			const lastMessage = getLastObject(preparedMessages);
 			const lastMessageTimestamp = getMessageTimestamp(lastMessage);
 			markAsReceived(lastMessageTimestamp);
 

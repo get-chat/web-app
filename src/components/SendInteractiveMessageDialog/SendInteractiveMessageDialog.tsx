@@ -17,6 +17,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Message } from '@src/types/messages';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { fromInteractive } from '@src/helpers/MessageHelper';
 
 export type Props = {
 	isVisible: boolean;
@@ -50,7 +51,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	useEffect(() => {
 		if (payload) {
-			setMessageData(ChatMessageModel.fromInteractive({ ...payload }));
+			setMessageData(fromInteractive({ ...payload }));
 		}
 	}, [payload]);
 

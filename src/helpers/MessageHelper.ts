@@ -12,6 +12,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
 import { generateUniqueID } from '@src/helpers/Helpers';
+import { getUnixTimestamp } from '@src/helpers/DateHelper';
 
 export const prepareMessageList = (
 	messages: Message[],
@@ -86,6 +87,18 @@ export const fromAssignmentEvent = (
 			id,
 			type: MessageType.none,
 			timestamp: assignmentEvent.timestamp?.toString(),
+		},
+	};
+};
+
+export const fromInteractive = (interactive: any): Message => {
+	return {
+		...generateEmptyMessage(),
+		waba_payload: {
+			id: generateUniqueID(),
+			type: MessageType.interactive,
+			interactive: interactive,
+			timestamp: getUnixTimestamp().toString(),
 		},
 	};
 };
