@@ -4,9 +4,16 @@ import { getLastObject } from './ObjectHelper';
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import ChatMessageModel from '@src/api/models/ChatMessageModel';
-import { Message, MessageStatus, MessageType } from '@src/types/messages';
+import {
+	ChatAssignment,
+	ChatTagging,
+	Message,
+	MessageStatus,
+	MessageType,
+} from '@src/types/messages';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
+import { generateUniqueID } from '@src/helpers/Helpers';
 
 export const prepareMessageList = (
 	messages: Message[],
@@ -47,6 +54,58 @@ export const prepareReactions = (messages: ChatMessageList) => {
 		});
 
 	return reactions;
+};
+
+export const generateEmptyMessage = () => {
+	const message: Message = {
+		id: '',
+		customer_wa_id: '',
+		from_us: true,
+		received: true,
+		tags: [],
+		chat_tags: [],
+		is_failed: false,
+		waba_payload: {
+			id: '',
+			type: MessageType.none,
+			timestamp: '-1',
+		},
+	};
+	return message;
+};
+
+export const fromAssignmentEvent = (
+	assignmentEvent: ChatAssignment
+): Message => {
+	const id =
+		'assignmentEvent_' + assignmentEvent.timestamp + '_' + generateUniqueID();
+	return {
+		...generateEmptyMessage(),
+		id,
+		customer_wa_id: assignmentEvent.wa_id,
+		assignment_event: assignmentEvent,
+		waba_payload: {
+			id,
+			type: MessageType.none,
+			timestamp: assignmentEvent.timestamp?.toString(),
+		},
+	};
+};
+
+export const fromTaggingEvent = (taggingEvent: ChatTagging): Message => {
+	const id =
+		'taggingEvent_' + taggingEvent.timestamp + '_' + generateUniqueID();
+	return {
+		...generateEmptyMessage(),
+		id,
+		customer_wa_id: taggingEvent.chat,
+		tagging_event: taggingEvent,
+		waba_payload: {
+			id,
+			type: MessageType.none,
+			timestamp: taggingEvent.timestamp?.toString(),
+		},
+	};
 };
 
 export const getMessageTimestamp = (message: Message) =>

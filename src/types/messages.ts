@@ -46,11 +46,10 @@ export interface Message {
 	is_failed: boolean;
 	resend_payload?: CreateMessageRequest;
 	reactions?: Message[];
-	assignment_event?: any;
-	tagging_event?: any;
+	assignment_event?: ChatAssignment;
+	tagging_event?: ChatTagging;
 	forwarded?: boolean;
 	context?: Message;
-	chat_assignment?: ChatAssignment;
 }
 
 export interface WabaPayload {
@@ -78,7 +77,7 @@ export interface WabaPayload {
 	sticker?: Sticker;
 	reaction?: Reaction;
 	errors?: any[];
-	referral: any;
+	referral?: any;
 	context?: WabaPayloadContext;
 }
 
@@ -215,6 +214,7 @@ export interface WebhookMessageWabaPayload {
 	outgoing_messages?: Message[];
 	statuses?: Message[];
 	chat_assignment?: ChatAssignment;
+	chat_tagging?: ChatTagging;
 }
 
 export interface ChatAssignment {
@@ -227,7 +227,17 @@ export interface ChatAssignment {
 	wa_id: string;
 }
 
+export interface ChatTagging {
+	timestamp: number;
+	action: 'added' | 'removed';
+	tag: Tag;
+	chat: string;
+	extra: any;
+	done_by?: User;
+}
+
 export enum MessageType {
+	none = 'none',
 	text = 'text',
 	image = 'image',
 	video = 'video',

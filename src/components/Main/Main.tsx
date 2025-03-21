@@ -24,7 +24,6 @@ import {
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 } from '@src/Constants';
-import ChatMessageModel from '../../api/models/ChatMessageModel';
 import PreviewMedia from './PreviewMedia';
 import { getToken } from '@src/helpers/StorageHelper';
 import ChatAssignment from './ChatAssignment';
@@ -82,6 +81,10 @@ import { GroupList } from '@src/types/groups';
 import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
 import { Message, MessageStatus, WebhookMessage } from '@src/types/messages';
+import {
+	fromAssignmentEvent,
+	fromTaggingEvent,
+} from '@src/helpers/MessageHelper';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -540,8 +543,7 @@ const Main: React.FC = () => {
 
 						if (chatAssignment) {
 							const preparedMessages: ChatMessageList = {};
-							const prepared =
-								ChatMessageModel.fromAssignmentEvent(chatAssignment);
+							const prepared = fromAssignmentEvent(chatAssignment);
 							preparedMessages[prepared.id] = prepared;
 
 							PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
@@ -550,8 +552,8 @@ const Main: React.FC = () => {
 							setTimeout(function () {
 								dispatch(
 									setChatAssignment({
-										waId: prepared.waId,
-										assignmentEvent: prepared.assignmentEvent,
+										waId: prepared.customer_wa_id,
+										assignmentEvent: prepared.assignment_event,
 									})
 								);
 							}, 100);
@@ -562,7 +564,7 @@ const Main: React.FC = () => {
 
 						if (chatTagging) {
 							const preparedMessages: ChatMessageList = {};
-							const prepared = ChatMessageModel.fromTaggingEvent(chatTagging);
+							const prepared = fromTaggingEvent(chatTagging);
 							preparedMessages[prepared.id] = prepared;
 
 							PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
@@ -572,8 +574,8 @@ const Main: React.FC = () => {
 								// Update chats
 								dispatch(
 									setChatTagging({
-										waId: prepared.waId,
-										taggingEvent: prepared.taggingEvent,
+										waId: prepared.customer_wa_id,
+										taggingEvent: prepared.tagging_event,
 									})
 								);
 							}, 100);
