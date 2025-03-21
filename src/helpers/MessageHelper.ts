@@ -132,8 +132,8 @@ export const fromTaggingEvent = (taggingEvent: ChatTagging): Message => {
 	};
 };
 
-export const getMessageTimestamp = (message: Message) =>
-	parseIntSafely(message.waba_payload?.timestamp) ?? -1;
+export const getMessageTimestamp = (message: Message | undefined) =>
+	message ? parseIntSafely(message.waba_payload?.timestamp) : undefined;
 
 export const getSenderName = (message: Message) => {
 	if (message.sender) {
@@ -154,7 +154,7 @@ export const getUniqueSender = (message: Message) =>
 	message.sender?.username ?? message.waba_payload?.from;
 
 export const generateMessageInternalId = (getChatId: string) => {
-	return +'getchatId_' + getChatId;
+	return 'getchatId_' + getChatId;
 };
 
 export const hasAnyStatus = (message: Message) => {

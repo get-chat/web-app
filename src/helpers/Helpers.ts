@@ -121,7 +121,8 @@ export const hasInternetConnection = () => {
 
 export const sortMessagesAsc = (messages: ChatMessageList) => {
 	let sortedNextState = Object.entries(messages).sort(
-		(a, b) => getMessageTimestamp(a[1]) - getMessageTimestamp(b[1])
+		(a, b) =>
+			(getMessageTimestamp(a[1]) ?? -1) - (getMessageTimestamp(b[1]) ?? -1)
 	);
 	return Object.fromEntries(sortedNextState);
 };

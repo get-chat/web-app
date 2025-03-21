@@ -33,14 +33,14 @@ const useChat = ({ MESSAGES_PER_PAGE }: Props) => {
 			}
 
 			if (i === 0) {
-				previousTimestamp = getMessageTimestamp(message);
+				previousTimestamp = getMessageTimestamp(message) ?? -1;
 			} else {
 				if (getMessageTimestamp(message) !== previousTimestamp) {
 					isSame = false;
 					break;
 				}
 
-				previousTimestamp = getMessageTimestamp(message);
+				previousTimestamp = getMessageTimestamp(message) ?? -1;
 			}
 		}
 

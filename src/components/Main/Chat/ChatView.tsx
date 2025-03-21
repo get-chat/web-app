@@ -441,7 +441,7 @@ const ChatView: React.FC<Props> = (props) => {
 						if (currentNewMessages > 0) {
 							const lastMessage = getLastObject(messages);
 							if (lastMessage) {
-								markAsReceived(getMessageTimestamp(lastMessage));
+								markAsReceived(getMessageTimestamp(lastMessage) ?? -1);
 							}
 						}
 					}
@@ -456,7 +456,7 @@ const ChatView: React.FC<Props> = (props) => {
 							listMessages(
 								false,
 								undefined,
-								getFirstObject(messages)?.timestamp
+								getMessageTimestamp(getFirstObject(messages))
 							);
 						}
 					} else {
@@ -473,7 +473,7 @@ const ChatView: React.FC<Props> = (props) => {
 									undefined,
 									undefined,
 									undefined,
-									getLastObject(messages)?.timestamp,
+									getMessageTimestamp(getLastObject(messages)),
 									true,
 									false
 								);
@@ -563,7 +563,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 									// Mark new message as received if visible
 									if (canSeeLastMessage(messagesContainer.current)) {
-										markAsReceived(lastMessageTimestamp);
+										markAsReceived(lastMessageTimestamp ?? -1);
 									} else {
 										setCurrentNewMessages((prevState) => prevState + 1);
 									}
@@ -946,11 +946,11 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	useEffect(() => {
-		const onGoToMessageId = function (msg: string, data: any) {
+		const onGoToMessageId = function (msg: string, data: Message) {
 			const msgId = data.id;
-			const timestamp = data.timestamp;
+			const timestamp = getMessageTimestamp(data);
 
-			goToMessageId(msgId, timestamp);
+			goToMessageId(msgId, timestamp ?? -1);
 		};
 
 		// Subscribe for scrolling to message event
@@ -1044,7 +1044,10 @@ const ChatView: React.FC<Props> = (props) => {
 						// Scroll to message if goToMessageId is defined
 						const goToMessage = location.state?.goToMessage;
 						if (goToMessage !== undefined) {
-							goToMessageId(goToMessage.id, goToMessage.timestamp);
+							goToMessageId(
+								goToMessage.id,
+								getMessageTimestamp(goToMessage) ?? -1
+							);
 						}
 					});
 				}
@@ -1182,7 +1185,7 @@ const ChatView: React.FC<Props> = (props) => {
 			const preparedMessages = prepareMessageList(data.results);
 			const preparedReactions = prepareReactions(preparedMessages);
 
-			const lastMessage = getLastObject(preparedMessages);
+			const lastMessage = getLastObject(preparedMessages) as Message;
 
 			// Pagination filters for events
 			let beforeTimeForEvents = beforeTime;
@@ -1192,12 +1195,13 @@ const ChatView: React.FC<Props> = (props) => {
 				beforeTimeForEvents = undefined;
 			} else {
 				if (!beforeTime) {
-					beforeTimeForEvents = lastMessage?.timestamp;
+					beforeTimeForEvents = getMessageTimestamp(lastMessage);
 				}
 			}
 
 			if (!sinceTime) {
-				sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
+				const firstMessage = getFirstObject(preparedMessages) as Message;
+				sinceTimeForEvents = getMessageTimestamp(firstMessage);
 			}
 
 			// List assignment and tagging history depends on user choice
@@ -1306,7 +1310,7 @@ const ChatView: React.FC<Props> = (props) => {
 			// Mark messages as received
 			const lastMessage = getLastObject(preparedMessages);
 			const lastMessageTimestamp = getMessageTimestamp(lastMessage);
-			markAsReceived(lastMessageTimestamp);
+			markAsReceived(lastMessageTimestamp ?? -1);
 
 			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
@@ -1325,7 +1329,7 @@ const ChatView: React.FC<Props> = (props) => {
 				await listMessages(
 					false,
 					undefined,
-					getFirstObject(preparedMessages)?.timestamp
+					getMessageTimestamp(getFirstObject(preparedMessages) as Message)
 				);
 			}
 		}
@@ -1844,62 +1848,6 @@ const ChatView: React.FC<Props> = (props) => {
 				};
 				prevState[generateMessageInternalId(message.id)] = message;
 				return { ...prevState };
-
-				/*let text;
-
-				if (
-					requestBody.type === MessageType.text ||
-					requestBody.text
-				) {
-					text = requestBody.text?.body;
-				}
-
-				let getchatId;
-				if (response) {
-					getchatId = response.data.id;
-				}
-
-				const timestamp = generateUnixTimestamp();
-				const storedMessage = new ChatMessageModel();
-				storedMessage.getchatId = getchatId;
-				storedMessage.id = storedMessage.generateInternalIdString();
-				storedMessage.waId = waId ?? '';
-				storedMessage.type = requestBody.type;
-				storedMessage.text = text;
-
-				storedMessage.templateName = requestBody.template?.name;
-				storedMessage.templateNamespace = requestBody.template?.namespace;
-				storedMessage.templateLanguage = requestBody.template?.language?.code;
-				storedMessage.templateParameters = requestBody.template?.components;
-
-				if (!storedMessage.payload) {
-					storedMessage.payload = {};
-				}
-
-				if (requestBody.interactive) {
-					storedMessage.payload.interactive = requestBody.interactive;
-				}
-
-				storedMessage.imageLink = requestBody.image?.link;
-				storedMessage.videoLink = requestBody.video?.link;
-				storedMessage.audioLink = requestBody.audio?.link;
-				storedMessage.documentLink = requestBody.document?.link;
-
-				storedMessage.caption =
-					requestBody.image?.caption ??
-					requestBody.video?.caption ??
-					requestBody.audio?.caption ??
-					requestBody.document?.caption;
-
-				storedMessage.isFromUs = true;
-				storedMessage.username = currentUser?.username;
-				storedMessage.isFailed = false;
-				storedMessage.isStored = true;
-				storedMessage.timestamp = timestamp;
-				storedMessage.resendPayload = requestBody;
-
-				prevState[storedMessage.id] = storedMessage;
-				return { ...prevState };*/
 			});
 		});
 	};
@@ -2189,7 +2137,7 @@ const ChatView: React.FC<Props> = (props) => {
 					if (message[1].waba_payload?.type === MessageType.reaction) return;
 
 					// Message date is created here and passed to ChatMessage for a better performance
-					const curMsgDate = moment.unix(getMessageTimestamp(message[1]));
+					const curMsgDate = moment.unix(getMessageTimestamp(message[1]) ?? -1);
 
 					if (index === 0) {
 						lastPrintedDate = undefined;
@@ -2199,7 +2147,9 @@ const ChatView: React.FC<Props> = (props) => {
 					let willDisplayDate = false;
 					if (lastPrintedDate === undefined) {
 						willDisplayDate = true;
-						lastPrintedDate = moment.unix(getMessageTimestamp(message[1]));
+						lastPrintedDate = moment.unix(
+							getMessageTimestamp(message[1]) ?? -1
+						);
 					} else {
 						if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
 							willDisplayDate = true;
