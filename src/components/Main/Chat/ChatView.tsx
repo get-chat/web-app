@@ -614,8 +614,6 @@ const ChatView: React.FC<Props> = (props) => {
 			data: { [key: string]: WebhookMessageStatus }
 		) {
 			if (data && isLoaded) {
-				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
-
 				let receivedNewErrors = false;
 				const prevScrollTop = messagesContainer.current?.scrollTop;
 				const prevScrollHeight = messagesContainer.current?.scrollHeight;
@@ -627,8 +625,10 @@ const ChatView: React.FC<Props> = (props) => {
 
 						Object.entries(data).forEach((statusEntry) => {
 							let wabaIdOrGetchatId = statusEntry[0];
-
 							const statusObj = statusEntry[1];
+
+							// Check if status data belongs to active chat
+							if (statusObj.recipient_id !== waId) return;
 
 							// Check if any message is displayed with internal id
 							// Fix duplicated messages in this way

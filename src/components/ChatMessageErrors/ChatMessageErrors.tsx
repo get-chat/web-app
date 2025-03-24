@@ -17,7 +17,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 	return (
 		<>
 			{data.waba_payload?.errors &&
-				data.waba_payload.errors.map((error: any, index: number) => (
+				data.waba_payload.errors.map((error, index) => (
 					<div className={styles.container} key={index}>
 						<div className={styles.recommendation}>
 							{error.recommendation && (

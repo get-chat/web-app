@@ -470,7 +470,6 @@ const Main: React.FC = () => {
 
 			ws.onmessage = function (event) {
 				try {
-					console.log(event.data);
 					const data = JSON.parse(event.data) as WebhookMessage;
 					console.log(data);
 

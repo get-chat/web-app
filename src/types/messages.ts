@@ -76,9 +76,17 @@ export interface WabaPayload {
 	interactive?: Interactive;
 	sticker?: Sticker;
 	reaction?: Reaction;
-	errors?: any[];
+	errors?: ChatMessageError[];
 	referral?: any;
 	context?: WabaPayloadContext;
+}
+
+export interface ChatMessageError {
+	title?: string;
+	code?: number;
+	details?: string;
+	href?: string;
+	recommendation?: string;
 }
 
 export interface WabaPayloadContext {
@@ -231,7 +239,7 @@ export interface WebhookMessageStatus {
 	getchat_id: string;
 	recipient_id: string;
 	status: MessageStatus;
-	errors: any[];
+	errors: ChatMessageError[];
 	timestamp: string;
 }
 
