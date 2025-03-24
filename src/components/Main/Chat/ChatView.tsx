@@ -965,7 +965,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	useEffect(() => {
 		const onGoToMessageId = function (msg: string, data: Message) {
-			const msgId = data.id;
+			const msgId = data.waba_payload?.id ?? data.id;
 			const timestamp = getMessageTimestamp(data);
 
 			goToMessageId(msgId, timestamp ?? -1);
@@ -1060,10 +1060,12 @@ const ChatView: React.FC<Props> = (props) => {
 						);
 
 						// Scroll to message if goToMessageId is defined
-						const goToMessage = location.state?.goToMessage;
+						const goToMessage = location.state?.goToMessage as
+							| Message
+							| undefined;
 						if (goToMessage !== undefined) {
 							goToMessageId(
-								goToMessage.id,
+								goToMessage.waba_payload?.id ?? goToMessage.id,
 								getMessageTimestamp(goToMessage) ?? -1
 							);
 						}
@@ -2240,7 +2242,11 @@ const ChatView: React.FC<Props> = (props) => {
 			<ReactionDetails
 				message={optionsChatMessage}
 				reactionsHistory={
-					optionsChatMessage ? reactions[optionsChatMessage.id] ?? [] : []
+					optionsChatMessage
+						? reactions[
+								optionsChatMessage.waba_payload?.id ?? optionsChatMessage.id
+						  ] ?? []
+						: []
 				}
 				anchorElement={reactionDetailsAnchorEl}
 				setAnchorElement={setReactionDetailsAnchorEl}

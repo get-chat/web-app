@@ -25,8 +25,8 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 	};
 
 	const handleEmojiSelect = (emoji: Emoji | null) => {
-		if (emoji && message?.id) {
-			onReaction(message.id, emoji.native);
+		if (emoji && message?.waba_payload?.id) {
+			onReaction(message.waba_payload.id, emoji.native);
 		}
 
 		hide();

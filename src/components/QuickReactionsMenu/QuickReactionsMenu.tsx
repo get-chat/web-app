@@ -42,8 +42,8 @@ const QuickReactionsMenu: React.FC<Props> = ({
 					<div
 						key={emoji}
 						onClick={() => {
-							if (message?.id) {
-								onReaction(message.id, emoji);
+							if (message?.waba_payload?.id) {
+								onReaction(message.waba_payload.id, emoji);
 							}
 							hide();
 						}}
