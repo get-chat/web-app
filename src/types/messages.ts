@@ -142,10 +142,14 @@ export interface Location {
 }
 
 export interface Interactive {
-	body: Body;
 	type: string;
-	action: Action;
-	button_reply: ButtonReply;
+	header?: any;
+	body?: Body;
+	footer?: any;
+	nfm_reply?: any;
+	action?: Action;
+	button_reply?: ButtonReply;
+	list_reply?: any;
 }
 
 export interface Reaction {
@@ -158,7 +162,16 @@ export interface Body {
 }
 
 export interface Action {
-	buttons: Button[];
+	name: string;
+	buttons?: Button[];
+	parameters?: {
+		url?: string;
+		display_text?: string;
+		flow_cta?: string;
+	};
+	sections?: any[];
+	catalog_id?: string;
+	product_retailer_id?: string;
 }
 
 export interface Button {

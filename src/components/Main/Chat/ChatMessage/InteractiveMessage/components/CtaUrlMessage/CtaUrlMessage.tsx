@@ -5,12 +5,9 @@ import React from 'react';
 import LaunchIcon from '@mui/icons-material/Launch';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const CtaUrlMessage: React.FC<InteractiveMessageProps> = ({
-	header,
-	body,
-	footer,
-	action,
-}) => {
+const CtaUrlMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
+	const { header, body, footer, action } = interactive ?? {};
+
 	return (
 		<>
 			{header && (
