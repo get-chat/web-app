@@ -120,47 +120,6 @@ export class ApiService {
 		);
 	};
 
-	listMessagesCall = (
-		waId,
-		search,
-		chatTagId,
-		limit,
-		offset,
-		assignedToMe,
-		assignedGroup,
-		beforeTime,
-		sinceTime,
-		cancelToken,
-		successCallback,
-		errorCallback,
-		history
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}messages/`,
-				getRequestConfig(
-					{
-						wa_id: waId,
-						search: search,
-						chat_tag_id: chatTagId,
-						offset: offset ?? 0,
-						assigned_to_me: assignedToMe,
-						assigned_group: assignedGroup,
-						before_time: beforeTime,
-						since_time: sinceTime,
-						limit: limit,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				errorCallback?.(error);
-				handleIfUnauthorized(error, history);
-			}
-		);
-	};
-
 	listChatAssignmentEventsCall = (
 		waId,
 		beforeTime,
