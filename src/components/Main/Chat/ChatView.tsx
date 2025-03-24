@@ -520,20 +520,20 @@ const ChatView: React.FC<Props> = (props) => {
 					setMessages((prevState) => {
 						let newState;
 						const preparedMessages: ChatMessageList = {};
-						Object.entries(data).forEach((message) => {
-							const msgId = message[0];
-							const chatMessage = message[1];
+						Object.entries(data).forEach((messageEntry) => {
+							const messageWabaId = messageEntry[0];
+							const message = messageEntry[1];
 
-							if (waId === chatMessage?.customer_wa_id) {
+							if (waId === message?.customer_wa_id) {
 								// Replace message displayed with internal id
-								const internalIdString = generateMessageInternalId(message[0]);
+								const internalIdString = generateMessageInternalId(message.id);
 								if (internalIdString in prevState) {
 									delete prevState[internalIdString];
 								}
 
-								preparedMessages[msgId] = chatMessage;
+								preparedMessages[messageWabaId] = message;
 
-								if (!chatMessage.from_us) {
+								if (!message.from_us) {
 									hasAnyIncomingMsg = true;
 								}
 							}
