@@ -200,7 +200,7 @@ export interface WebhookMessage {
 export interface WebhookMessageWabaPayload {
 	incoming_messages?: Message[];
 	outgoing_messages?: Message[];
-	statuses?: Message[];
+	statuses?: WebhookMessageStatus[];
 	chat_assignment?: ChatAssignment;
 	chat_tagging?: ChatTagging;
 	bulk_message_tasks?: any[];
@@ -224,6 +224,15 @@ export interface ChatTagging {
 	chat: string;
 	extra: any;
 	done_by?: User;
+}
+
+export interface WebhookMessageStatus {
+	id: string;
+	getchat_id: string;
+	recipient_id: string;
+	status: MessageStatus;
+	errors: any[];
+	timestamp: string;
 }
 
 export enum MessageType {

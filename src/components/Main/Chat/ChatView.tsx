@@ -113,6 +113,7 @@ import {
 	CreateMessageRequest,
 	Message,
 	MessageType,
+	WebhookMessageStatus,
 } from '@src/types/messages';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 
@@ -608,7 +609,10 @@ const ChatView: React.FC<Props> = (props) => {
 		);
 
 		// Status changes
-		const onMessageStatusChange = function (msg: string, data: any) {
+		const onMessageStatusChange = function (
+			msg: string,
+			data: { [key: string]: WebhookMessageStatus }
+		) {
 			if (data && isLoaded) {
 				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
 
@@ -621,15 +625,15 @@ const ChatView: React.FC<Props> = (props) => {
 						const newState = prevState;
 						let changedAny = false;
 
-						Object.entries(data).forEach((status) => {
-							let wabaIdOrGetchatId = status[0];
+						Object.entries(data).forEach((statusEntry) => {
+							let wabaIdOrGetchatId = statusEntry[0];
 
-							const statusObj: any = status[1];
+							const statusObj = statusEntry[1];
 
 							// Check if any message is displayed with internal id
 							// Fix duplicated messages in this way
 							const internalIdString = generateMessageInternalId(
-								statusObj?.getchatId
+								statusObj?.getchat_id
 							);
 
 							if (internalIdString in newState) {
@@ -652,22 +656,24 @@ const ChatView: React.FC<Props> = (props) => {
 									newState[wabaIdOrGetchatId].waba_statuses = {};
 								}
 
-								if (statusObj.sentTimestamp) {
+								if (statusObj.status === 'sent') {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].waba_statuses!.sent =
-										statusObj.sentTimestamp;
+									newState[wabaIdOrGetchatId].waba_statuses!.sent = parseInt(
+										statusObj.timestamp
+									);
 								}
 
-								if (statusObj.deliveredTimestamp) {
+								if (statusObj.status === 'delivered') {
 									changedAny = true;
 									newState[wabaIdOrGetchatId].waba_statuses!.delivered =
-										statusObj.deliveredTimestamp;
+										parseInt(statusObj.timestamp);
 								}
 
-								if (statusObj.readTimestamp) {
+								if (statusObj.status === 'read') {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].waba_statuses!.read =
-										statusObj.readTimestamp;
+									newState[wabaIdOrGetchatId].waba_statuses!.read = parseInt(
+										statusObj.timestamp
+									);
 								}
 
 								if (statusObj.errors) {

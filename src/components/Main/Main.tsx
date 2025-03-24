@@ -80,7 +80,12 @@ import { fetchGroups } from '@src/api/groupsApi';
 import { GroupList } from '@src/types/groups';
 import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
-import { Message, MessageStatus, WebhookMessage } from '@src/types/messages';
+import {
+	Message,
+	MessageStatus,
+	WebhookMessage,
+	WebhookMessageStatus,
+} from '@src/types/messages';
 import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
@@ -504,35 +509,11 @@ const Main: React.FC = () => {
 						const statuses = wabaPayload?.statuses;
 
 						if (statuses) {
-							const preparedStatuses: { [key: string]: any } = {};
-							statuses.forEach((statusObj: any) => {
-								if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
-									preparedStatuses[statusObj.id] = {};
-								}
-
-								// Inject getchat id to avoid duplicated messages
-								preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
-
-								if (statusObj.status === MessageStatus.sent) {
-									preparedStatuses[statusObj.id].sentTimestamp =
-										statusObj.timestamp;
-								}
-
-								if (statusObj.status === MessageStatus.delivered) {
-									preparedStatuses[statusObj.id].deliveredTimestamp =
-										statusObj.timestamp;
-								}
-
-								if (statusObj.status === MessageStatus.read) {
-									preparedStatuses[statusObj.id].readTimestamp =
-										statusObj.timestamp;
-								}
-
-								// Handling errors
-								if (statusObj.errors) {
-									preparedStatuses[statusObj.id].errors = statusObj.errors;
-								}
-							});
+							const preparedStatuses: { [key: string]: WebhookMessageStatus } =
+								{};
+							statuses.forEach(
+								(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
+							);
 
 							PubSub.publish(
 								EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
