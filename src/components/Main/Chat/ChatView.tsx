@@ -637,7 +637,18 @@ const ChatView: React.FC<Props> = (props) => {
 							}
 
 							if (wabaIdOrGetchatId in newState) {
-								if (!newState[wabaIdOrGetchatId].waba_statuses) {
+								// Making message mutable
+								newState[wabaIdOrGetchatId] = {
+									...newState[wabaIdOrGetchatId],
+								};
+
+								if (newState[wabaIdOrGetchatId].waba_statuses) {
+									// Making waba_statuses mutable
+									newState[wabaIdOrGetchatId].waba_statuses = {
+										...newState[wabaIdOrGetchatId].waba_statuses,
+									};
+								} else {
+									// Creating missing waba_statuses
 									newState[wabaIdOrGetchatId].waba_statuses = {};
 								}
 
