@@ -541,7 +541,7 @@ const ChatView: React.FC<Props> = (props) => {
 						});
 
 						if (getObjLength(preparedMessages) > 0) {
-							const lastMessage = getLastObject(preparedMessages);
+							const lastMessage = getLastObject(preparedMessages) as Message;
 
 							if (isAtBottom) {
 								const prevScrollTop = messagesContainer.current?.scrollTop;
@@ -588,7 +588,7 @@ const ChatView: React.FC<Props> = (props) => {
 							}
 
 							// Update last message id
-							setLastMessageId(lastMessage.id);
+							setLastMessageId(lastMessage.waba_payload?.id ?? lastMessage.id);
 						}
 
 						return newState ?? prevState;
