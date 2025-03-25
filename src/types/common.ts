@@ -1,3 +1,8 @@
+export interface ApiResponse<T> {
+	status: number;
+	data: T;
+}
+
 export interface PaginatedResponse<T> {
 	count: number;
 	next: string | null;

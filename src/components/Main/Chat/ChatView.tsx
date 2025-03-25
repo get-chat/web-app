@@ -108,7 +108,7 @@ import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
-import { fetchMessages } from '@src/api/messagesApi';
+import { createMessage, fetchMessages } from '@src/api/messagesApi';
 import {
 	CreateMessageRequest,
 	Message,
@@ -1513,14 +1513,18 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const sanitizeRequestBody = (requestBody: any) => {
+	const sanitizeRequestBody = (
+		requestBody: CreateMessageRequest
+	): CreateMessageRequest => {
 		const sanitizedRequestBody = { ...requestBody };
 		delete sanitizedRequestBody['pending_message_unique_id'];
 		return sanitizedRequestBody;
 	};
 
-	const sendReaction = (messageId: string, emoji: string | null) => {
-		const requestBody = {
+	const sendReaction = async (messageId: string, emoji: string | null) => {
+		if (!emoji) return;
+
+		const requestBody: CreateMessageRequest = {
 			wa_id: waId,
 			type: MessageType.reaction,
 			reaction: {
@@ -1529,22 +1533,18 @@ const ChatView: React.FC<Props> = (props) => {
 			},
 		};
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			() => {
-				// Done
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-					if (status === 453) {
-						setExpired(true);
-					}
-
-					handleIfUnauthorized(error);
+		try {
+			await createMessage(requestBody);
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+				if (status === 453) {
+					setExpired(true);
 				}
+
+				handleIfUnauthorized(error);
 			}
-		);
+		}
 	};
 
 	const sendMessage = async (
@@ -1599,45 +1599,34 @@ const ChatView: React.FC<Props> = (props) => {
 			return;
 		}
 
-		/*try {
-			const data = await createMessage(requestBody);
-		} catch (error: any | AxiosError) {
-
-		}*/
-
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				successCallback?.();
-				completeCallback?.();
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-					// Switch to expired mode if status code is 453
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				completeCallback?.();
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+			successCallback?.();
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+				// Switch to expired mode if status code is 453
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+		} finally {
+			completeCallback?.();
+		}
 
 		// Close emoji picker
 		PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
 	};
 
-	const sendTemplateMessage = (
+	const sendTemplateMessage = async (
 		willQueue: boolean,
 		templateMessage?: Template,
 		customPayload?: object,
@@ -1664,42 +1653,37 @@ const ChatView: React.FC<Props> = (props) => {
 			return;
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				successCallback?.();
-				completeCallback?.();
-
-				// Hide dialog by this event
-				PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const errors = error.response.data?.waba_response?.errors;
-					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
-
-					const status = error.response.status;
-
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				completeCallback?.();
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+			successCallback?.();
+
+			// Hide dialog by this event
+			PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const errors = error.response.data?.waba_response?.errors;
+				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+
+				const status = error.response.status;
+
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+		} finally {
+			completeCallback?.();
+		}
 	};
 
-	const sendInteractiveMessage = (
+	const sendInteractiveMessage = async (
 		willQueue: boolean,
 		interactiveMessage?: object,
 		customPayload?: object,
@@ -1729,33 +1713,29 @@ const ChatView: React.FC<Props> = (props) => {
 			return;
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				successCallback?.();
-				completeCallback?.();
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				completeCallback?.();
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+
+			successCallback?.();
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+		} finally {
+			completeCallback?.();
+		}
 	};
 
 	const uploadMedia = (
@@ -1796,7 +1776,7 @@ const ChatView: React.FC<Props> = (props) => {
 		);
 	};
 
-	const sendFile = (
+	const sendFile = async (
 		receiverWaId: string | undefined,
 		fileURL: string | undefined,
 		chosenFile: ChosenFileClass | undefined,
@@ -1817,47 +1797,44 @@ const ChatView: React.FC<Props> = (props) => {
 			};
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				// Send next request (or resend callback)
-				completeCallback?.();
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				// Send next when it fails, a retry can be considered
-				// If custom payload is empty, it means it is resending, so it is just a success callback
-				if (!customPayload) {
-					completeCallback?.();
-				}
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+
+			// Send next request (or resend callback)
+			completeCallback?.();
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+
+			// Send next when it fails, a retry can be considered
+			// If custom payload is empty, it means it is resending, so it is just a success callback
+			if (!customPayload) {
+				completeCallback?.();
+			}
+		}
 	};
 
 	const displayMessageInChatManually = (
 		requestBody: CreateMessageRequest,
-		response: AxiosResponse
+		messageId: string
 	) => {
 		flushSync(() => {
 			setMessages((prevState) => {
 				const message: Message = {
-					id: response.data.id,
+					id: messageId,
 					from_us: true,
 					received: false,
 					customer_wa_id: requestBody.wa_id ?? '',
@@ -1866,7 +1843,7 @@ const ChatView: React.FC<Props> = (props) => {
 					is_failed: false,
 					sender: currentUser,
 					waba_payload: {
-						id: response.data.id,
+						id: messageId,
 						timestamp: getUnixTimestamp().toString(),
 						...requestBody,
 						type: requestBody.type ?? MessageType.none,

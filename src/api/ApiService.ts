@@ -200,17 +200,6 @@ export class ApiService {
 		);
 	};
 
-	sendMessageCall = (body, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}messages/`, body, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	uploadMediaCall = (formData, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}media/`, formData, getRequestConfig()),

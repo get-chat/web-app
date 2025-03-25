@@ -29,7 +29,13 @@ export interface CreateMessageRequest {
 	audio?: Audio;
 	voice?: Voice;
 	document?: Document;
+	reaction?: Reaction;
 	pending_message_unique_id?: string;
+}
+
+export interface CreateMessageResponse {
+	reason: string;
+	id: string;
 }
 
 export interface Message {
