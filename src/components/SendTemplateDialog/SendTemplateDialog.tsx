@@ -76,6 +76,8 @@ const SendTemplateDialog: React.FC<Props> = ({
 			msg: any,
 			data: CreateMessageRequest
 		) {
+			// Make data mutable
+			data = { ...data };
 			// Remove injected fields
 			delete data.wa_id;
 			delete data.pending_message_unique_id;

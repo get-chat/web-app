@@ -1,12 +1,12 @@
 export interface Template {
 	name: string;
 	category: string;
-	language: TemplateLanguage;
+	language: TemplateLanguage | string;
 	components: TemplateComponent[] | null;
 	namespace: string;
-	rejected_reason: string;
+	rejected_reason?: string;
 	status: string;
-	params: any;
+	params?: any;
 }
 
 export interface TemplateLanguage {
@@ -16,13 +16,14 @@ export interface TemplateLanguage {
 export interface TemplateComponent {
 	type: 'HEADER' | 'BODY' | 'FOOTER' | 'BUTTON' | 'BUTTONS';
 	format?: 'TEXT' | 'IMAGE' | 'VIDEO' | 'DOCUMENT';
-	index: number;
+	index?: number;
 	text?: string;
 	image?: object;
 	video?: object;
 	document?: object;
 	buttons?: any[];
-	parameters: any[];
+	parameters?: any[];
+	example?: any;
 }
 
 export interface TemplateParameter {

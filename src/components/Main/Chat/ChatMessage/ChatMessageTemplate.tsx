@@ -149,7 +149,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 																targetParams &&
 																button.url.replace(
 																	/\{\{[\d]+\}\}/g,
-																	targetParams.parameters[0].text
+																	targetParams.parameters?.[0]?.text
 																);
 															break;
 														case 'PHONE_NUMBER':

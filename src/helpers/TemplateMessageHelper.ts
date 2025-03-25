@@ -39,18 +39,16 @@ export const insertTemplateComponentParameters = (
 		const component = params[i];
 
 		if (component.type === type) {
-			if (component.parameters) {
-				component.parameters.forEach(
-					(param: TemplateParameter, index: number) => {
-						const paramType = param.type;
+			component.parameters?.forEach(
+				(param: TemplateParameter, index: number) => {
+					const paramType = param.type;
 
-						const paramValue =
-							// @ts-ignore
-							param[paramType]?.fallback_value ?? param[paramType];
-						text = text.replace(`{{${index + 1}}}`, paramValue);
-					}
-				);
-			}
+					const paramValue =
+						// @ts-ignore
+						param[paramType]?.fallback_value ?? param[paramType];
+					text = text.replace(`{{${index + 1}}}`, paramValue);
+				}
+			);
 
 			break;
 		}
@@ -61,6 +59,8 @@ export const insertTemplateComponentParameters = (
 
 export const sortTemplateComponents = (components: TemplateComponent[]) => {
 	if (!components) return [];
+	// Make components mutable
+	components = [...components];
 
 	const getComponentOrderByType = (componentType: string) => {
 		switch (componentType) {

@@ -249,7 +249,7 @@ export const getHeaderFileLink = (message: Message, type: string) => {
 					if (
 						component &&
 						component.type.toLowerCase() === 'header' &&
-						component.parameters.length
+						component.parameters?.length
 					) {
 						for (let j = 0; j < component.parameters.length; j++) {
 							const param = component.parameters[j];
@@ -357,7 +357,9 @@ export const canRetry = (message: Message) => {
 	) {
 		for (let i = 0; i < message.waba_payload.errors.length; i++) {
 			if (
-				ERR_CODES_FOR_RETRY.includes(message.waba_payload.errors[i]['code'])
+				ERR_CODES_FOR_RETRY.includes(
+					message.waba_payload.errors[i]?.['code'] ?? 0
+				)
 			) {
 				result = true;
 				break;

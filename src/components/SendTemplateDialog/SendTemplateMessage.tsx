@@ -136,7 +136,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 		if (hasError) return;
 
-		const finalData = template;
+		const finalData = { ...template };
 		finalData.params = Object.values(preparedParams);
 
 		if (isBulk) {
