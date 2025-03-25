@@ -13,8 +13,6 @@ export const fetchChats = async (
 };
 
 export const fetchChat = async (wa_id: string) => {
-	const response = await axios.get<Chat>('/chats/', {
-		params: { wa_id },
-	});
+	const response = await axios.get<Chat>(`/chats/${wa_id}/`);
 	return response.data;
 };

@@ -38,19 +38,19 @@ const ReactionDetails: React.FC<Props> = ({
 		>
 			<div className={styles.reactions}>
 				{reactions
-					?.filter((item) => !!item.waba_payload.reaction?.emoji)
+					?.filter((item) => !!item.waba_payload?.reaction?.emoji)
 					.map((reaction) => (
 						<div className={styles.reaction} key={reaction.id}>
 							<div className={styles.sender}>{getSenderName(reaction)}</div>
 							<div className={styles.timestamp}>
 								<Moment
-									date={reaction.waba_payload.timestamp}
+									date={reaction.waba_payload?.timestamp}
 									calendar={CALENDAR_SHORT}
 									unix
 								/>
 							</div>
 							<PrintMessage
-								message={reaction.waba_payload.reaction?.emoji ?? ''}
+								message={reaction.waba_payload?.reaction?.emoji ?? ''}
 								smallEmoji
 							/>
 						</div>

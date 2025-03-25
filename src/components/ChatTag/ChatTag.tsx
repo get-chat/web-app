@@ -18,7 +18,7 @@ const ChatTag: React.FC<Props> = ({ id }) => {
 	return (
 		<SellIcon
 			style={{
-				fill: tag?.color ?? 'white',
+				fill: tag?.web_inbox_color ?? 'white',
 			}}
 		/>
 	);

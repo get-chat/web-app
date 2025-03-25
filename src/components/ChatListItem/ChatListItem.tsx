@@ -27,6 +27,7 @@ import {
 	isLastMessageOutgoing,
 } from '@src/helpers/ChatHelper';
 import { getMessageCaption } from '@src/helpers/MessageHelper';
+import { MessageType } from '@src/types/messages';
 
 const cx = classNames.bind(styles);
 
@@ -227,17 +228,19 @@ const ChatListItem = (props: any) => {
 						<div className={styles.lastMessageWrapper}>
 							<div className={styles.lastMessage}>
 								<ChatMessageShortContent
-									type={data.last_message?.waba_payload.type ?? ''}
-									template={data.last_message?.waba_payload.template}
-									buttonText={data.last_message?.waba_payload.button?.text}
+									type={
+										data.last_message?.waba_payload?.type ?? MessageType.none
+									}
+									template={data.last_message?.waba_payload?.template}
+									buttonText={data.last_message?.waba_payload?.button?.text}
 									interactiveButtonText={
 										data.last_message?.waba_payload?.interactive?.button_reply
 											?.title
 									}
-									text={data.last_message?.waba_payload.text?.body}
+									text={data.last_message?.waba_payload?.text?.body}
 									caption={getMessageCaption(data.last_message)}
 									isLastMessageFromUs={isLastMessageOutgoing(data)}
-									reaction={data.last_message?.waba_payload.reaction}
+									reaction={data.last_message?.waba_payload?.reaction}
 								/>
 							</div>
 
@@ -246,17 +249,15 @@ const ChatListItem = (props: any) => {
 									<div className={styles.tags}>
 										<Tooltip title={generateTagNames()} disableInteractive>
 											<div>
-												{data.tags
-													.slice(0, 3)
-													.map((tagItem: any, tagIndex: number) => (
-														<SellIcon
-															key={tagIndex.toString()}
-															className={styles.tagIcon}
-															style={{
-																fill: tagItem.color,
-															}}
-														/>
-													))}
+												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
+													<SellIcon
+														key={tagIndex.toString()}
+														className={styles.tagIcon}
+														style={{
+															fill: tagItem.web_inbox_color,
+														}}
+													/>
+												))}
 											</div>
 										</Tooltip>
 									</div>
