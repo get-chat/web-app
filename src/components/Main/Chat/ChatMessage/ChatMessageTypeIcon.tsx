@@ -12,7 +12,7 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import { MessageType } from '@src/types/messages';
 
 interface Props {
-	type: string;
+	type: MessageType;
 }
 
 const ChatMessageTypeIcon: React.FC<Props> = ({ type }) => {

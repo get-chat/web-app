@@ -55,7 +55,9 @@ const SearchMessageResult: React.FC<Props> = ({
 							</span>
 						)}
 
-						<ChatMessageTypeIcon type={data.waba_payload?.type ?? ''} />
+						<ChatMessageTypeIcon
+							type={data.waba_payload?.type ?? MessageType.none}
+						/>
 					</span>
 					<PrintMessage
 						message={

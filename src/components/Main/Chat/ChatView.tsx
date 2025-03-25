@@ -965,7 +965,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	useEffect(() => {
 		const onGoToMessageId = function (msg: string, data: Message) {
-			const msgId = data.waba_payload?.id ?? data.id;
+			const msgId = data.id;
 			const timestamp = getMessageTimestamp(data);
 
 			goToMessageId(msgId, timestamp ?? -1);
@@ -1065,7 +1065,7 @@ const ChatView: React.FC<Props> = (props) => {
 							| undefined;
 						if (goToMessage !== undefined) {
 							goToMessageId(
-								goToMessage.waba_payload?.id ?? goToMessage.id,
+								goToMessage.id,
 								getMessageTimestamp(goToMessage) ?? -1
 							);
 						}

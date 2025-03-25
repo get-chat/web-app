@@ -2,7 +2,7 @@ import React from 'react';
 import { ATTACHMENT_TYPE_IMAGE } from '@src/Constants';
 import '../../../../styles/ContextChatMessage.css';
 import ChatMessageShortContent from './ChatMessageShortContent';
-import { Message } from '@src/types/messages';
+import { Message, MessageType } from '@src/types/messages';
 import {
 	generateImageLink,
 	getMessageCaption,
@@ -23,7 +23,10 @@ const ContextChatMessage: React.FC<Props> = ({
 		<div
 			className="chat__message__context"
 			onClick={() =>
-				goToMessageId?.(contextMessage.id, getMessageTimestamp(contextMessage))
+				goToMessageId?.(
+					contextMessage.id,
+					getMessageTimestamp(contextMessage) ?? -1
+				)
 			}
 		>
 			<div className="chat__message__context__info">
@@ -33,7 +36,7 @@ const ContextChatMessage: React.FC<Props> = ({
 
 				<span className="chat__message__context__info__message">
 					<ChatMessageShortContent
-						type={contextMessage.waba_payload?.type ?? ''}
+						type={contextMessage.waba_payload?.type ?? MessageType.none}
 						template={contextMessage.waba_payload?.template}
 						buttonText={contextMessage.waba_payload?.button?.text}
 						interactiveButtonText={
