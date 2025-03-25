@@ -172,34 +172,6 @@ export class ApiService {
 		);
 	};
 
-	searchMessagesCall = (
-		waId,
-		search,
-		limit,
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}messages/`,
-				getRequestConfig(
-					{
-						wa_id: waId,
-						search: search,
-						limit: limit,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	uploadMediaCall = (formData, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}media/`, formData, getRequestConfig()),
