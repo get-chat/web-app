@@ -114,7 +114,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 		setPreviewSendMediaVisible(false);
 	};
 
-	const handleSelectedFiles = (selectedFiles: object) => {
+	const handleSelectedFiles = (selectedFiles: FileList) => {
 		console.log(selectedFiles);
 
 		if (getObjLength(selectedFiles) > 0) {
