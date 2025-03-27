@@ -32,7 +32,7 @@ import { MessageType } from '@src/types/messages';
 const cx = classNames.bind(styles);
 
 const ChatListItem = (props: any) => {
-	const { isReadOnly, isSelectionModeEnabled, isBulkSend } = useAppSelector(
+	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
 		(state) => state.UI
 	);
 
@@ -118,7 +118,7 @@ const ChatListItem = (props: any) => {
 							className={styles.selection}
 							checked={isSelected}
 							color="primary"
-							disabled={isDisabled && isBulkSend}
+							disabled={isDisabled}
 						/>
 					)}
 

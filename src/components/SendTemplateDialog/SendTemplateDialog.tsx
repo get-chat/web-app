@@ -15,7 +15,7 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 } from '@src/Constants';
 import { Template } from '@src/types/templates';
-import { CreateMessageRequest, MessageType } from '@src/types/messages';
+import { CreateMessageRequest } from '@src/types/messages';
 
 export type Props = {
 	isVisible: boolean;
@@ -131,8 +131,6 @@ const SendTemplateDialog: React.FC<Props> = ({
 					setErrors={setErrors}
 					// @ts-ignore
 					sendButtonInnerRef={sendButtonRef}
-					// @ts-ignore
-					bulkSendButtonInnerRef={bulkSendButtonRef}
 				/>
 
 				{errors && (

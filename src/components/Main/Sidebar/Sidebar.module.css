@@ -44,17 +44,6 @@
 	margin-top: 7px;
 }
 
-.bulkAlert {
-	padding: 2px 10px !important;
-	margin: 10px 10px 0;
-}
-
-.bulkAlert a {
-	font-weight: 600;
-	color: var(--color-light-blue);
-	cursor: pointer;
-}
-
 .chatsCount {
 	font-size: 12px;
 	font-weight: 600;
