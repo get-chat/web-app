@@ -54,7 +54,6 @@ import {
 	generateTemplateMessagePayload,
 	prepareSendFilePayload,
 } from '@src/helpers/ChatHelper';
-import { isMobileOnly } from 'react-device-detect';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import {
 	getFirstObject,
@@ -90,17 +89,12 @@ import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
 // @ts-ignore
 import decode from 'unescape';
-import {
-	setBulkSend,
-	setSelectionModeEnabled,
-	setState,
-} from '@src/store/reducers/UIReducer';
+import { setState } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import InteractiveMessageList from '@src/components/InteractiveMessageList';
 import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 import ReactionDetails from '@src/components/ReactionDetails';
-import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import ChosenFileClass from '@src/ChosenFileClass';
 import ReactionList from '@src/interfaces/ReactionList';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
@@ -131,7 +125,6 @@ interface Props {
 	displayNotification: (title: string, body: string, chatWaId: string) => void;
 	isChatOnly: boolean;
 	setChatTagsVisible: (value: boolean) => void;
-	setBulkSendPayload: (value: BulkSendPayload) => void;
 	searchMessagesByKeyword: (keyword: string) => void;
 	setMessageWithStatuses: (value?: Message) => void;
 }
@@ -1489,30 +1482,6 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const bulkSendMessage = (type: string, payload?: BulkSendPayload) => {
-		dispatch(setSelectionModeEnabled(true));
-		dispatch(setBulkSend(true));
-
-		if (type === MessageType.text) {
-			const preparedInput = translateHTMLInputToText(input).trim();
-			payload = {
-				type: MessageType.text,
-				text: {
-					body: preparedInput,
-				},
-			};
-		}
-
-		if (payload) {
-			props.setBulkSendPayload(payload);
-		}
-
-		// Close chat on mobile
-		if (isMobileOnly) {
-			closeChat();
-		}
-	};
-
 	const sanitizeRequestBody = (
 		requestBody: CreateMessageRequest
 	): CreateMessageRequest => {
@@ -2252,8 +2221,6 @@ const ChatView: React.FC<Props> = (props) => {
 				chosenTemplate={chosenTemplate}
 				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
 				sendCallback={() => dispatch(setState({ isTemplatesVisible: false }))}
-				onBulkSend={bulkSendMessage}
-				isBulkOnly={false}
 			/>
 
 			{isSavedResponsesVisible && (
@@ -2268,7 +2235,6 @@ const ChatView: React.FC<Props> = (props) => {
 					input={input}
 					setInput={setInput}
 					sendMessage={sendMessage}
-					bulkSendMessage={bulkSendMessage}
 					setSelectedFiles={setSelectedFiles}
 					accept={accept}
 					sendHandledChosenFiles={sendHandledChosenFiles}

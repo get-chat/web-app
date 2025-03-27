@@ -31,18 +31,15 @@ import {
 } from '@src/Constants';
 import { replaceEmojis } from '@src/helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
-import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import ContactsModal from '../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 import classNames from 'classnames/bind';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
-import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
-import { MessageType } from '@src/types/messages';
 
 const cx = classNames.bind(styles);
 
@@ -59,7 +56,6 @@ interface Props {
 		successCallback?: () => void,
 		completeCallback?: () => void
 	) => void;
-	bulkSendMessage: (type: string, payload?: BulkSendPayload) => void;
 	setSelectedFiles: (value: any) => void;
 	accept: string;
 	setAccept: (value: string) => void;
@@ -76,7 +72,6 @@ const ChatFooter: React.FC<Props> = ({
 	input,
 	setInput,
 	sendMessage,
-	bulkSendMessage,
 	setSelectedFiles,
 	accept,
 	setAccept,
@@ -623,18 +618,6 @@ const ChatFooter: React.FC<Props> = ({
 							sendHandledChosenFiles={sendHandledChosenFiles}
 						/>
 					</div>
-
-					{hasInput() && (
-						<Tooltip title={t('Bulk Send')} placement="top" disableInteractive>
-							<IconButton
-								className={styles.actionIcon}
-								onClick={() => bulkSendMessage(MessageType.text)}
-								size="small"
-							>
-								<DynamicFeedIcon />
-							</IconButton>
-						</Tooltip>
-					)}
 
 					{!isExpired && !hasInput() && !isRecording && (
 						<Tooltip title={t('Voice')} placement="top" disableInteractive>

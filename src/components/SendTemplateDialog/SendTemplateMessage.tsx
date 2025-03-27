@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Button, ButtonBase, TextField, InputAdornment } from '@mui/material';
+import { Button, ButtonBase, InputAdornment, TextField } from '@mui/material';
 import '../../styles/SendTemplateMessage.css';
 import FileInput from '../FileInput';
 import Alert from '@mui/material/Alert';
@@ -36,7 +36,6 @@ interface Props {
 	bulkSend: (data: Template) => void;
 	send: (data: Template) => void;
 	sendButtonInnerRef: React.Ref<HTMLButtonElement>;
-	bulkSendButtonInnerRef: React.Ref<HTMLButtonElement>;
 }
 
 const SendTemplateMessage: React.FC<Props> = ({
@@ -46,7 +45,6 @@ const SendTemplateMessage: React.FC<Props> = ({
 	bulkSend,
 	send,
 	sendButtonInnerRef,
-	bulkSendButtonInnerRef,
 }) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
@@ -434,13 +432,6 @@ const SendTemplateMessage: React.FC<Props> = ({
 				className="hidden"
 			>
 				{t('Send')}
-			</Button>
-			<Button
-				ref={bulkSendButtonInnerRef}
-				onClick={() => sendAfterCheck(true)}
-				className="hidden"
-			>
-				{t('Bulk Send')}
 			</Button>
 		</div>
 	);
