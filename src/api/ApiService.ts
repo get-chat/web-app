@@ -479,19 +479,4 @@ export class ApiService {
 			}
 		);
 	};
-
-	retrieveBulkMessageTaskElementsCall = (
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}bulk_message_elements/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
 }
