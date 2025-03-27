@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
-import ChatList from '@src/interfaces/ChatList';
+import { ChatList } from '@src/types/chats';
 
 interface ChatsState {
 	value: ChatList;
@@ -14,10 +14,10 @@ const chatsSlice = createSlice({
 	name: 'chats',
 	initialState,
 	reducers: {
-		setChats: (state, chats) => {
+		setChats: (state, chats: PayloadAction<ChatList>) => {
 			state.value = chats.payload;
 		},
-		addChats: (state, chats) => {
+		addChats: (state, chats: PayloadAction<ChatList>) => {
 			state.value = { ...state.value, ...chats.payload };
 		},
 		setChatAssignment: (state, action) => {
@@ -28,19 +28,20 @@ const chatsSlice = createSlice({
 
 				if (assignmentEvent) {
 					if (assignmentEvent.assigned_to_user_set) {
-						existingChat.assignedToUser = assignmentEvent.assigned_to_user_set;
+						existingChat.assigned_to_user =
+							assignmentEvent.assigned_to_user_set;
 					}
 
 					if (assignmentEvent.assigned_to_user_was_cleared) {
-						existingChat.assignedToUser = undefined;
+						existingChat.assigned_to_user = undefined;
 					}
 
 					if (assignmentEvent.assigned_group_set) {
-						existingChat.assignedGroup = assignmentEvent.assigned_group_set;
+						existingChat.assigned_group = assignmentEvent.assigned_group_set;
 					}
 
 					if (assignmentEvent.assigned_group_was_cleared) {
-						existingChat.assignedGroup = undefined;
+						existingChat.assigned_group = undefined;
 					}
 
 					state.value[chatKey] = existingChat;

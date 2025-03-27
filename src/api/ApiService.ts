@@ -2,11 +2,7 @@
 import axios from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_FORCE_LOGOUT } from '../Constants';
-import {
-	clearUserSession,
-	getRequestConfig,
-	handleIfUnauthorized,
-} from '../helpers/ApiHelper';
+import { getRequestConfig, handleIfUnauthorized } from '../helpers/ApiHelper';
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 import { AppConfig } from '@src/config/application';
 
@@ -67,233 +63,9 @@ export class ApiService {
 		);
 	};
 
-	listHealthStatus = (successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}status/health/`, getRequestConfig()),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	loginCall = (username, password, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}auth/token/`, {
-				username: username,
-				password: password,
-			}),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	convertRefreshTokenCall = (
-		refreshToken,
-		keepRefreshToken: boolean,
-		successCallback,
-		errorCallback,
-		completeCallback
-	) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}auth/convert_refresh_token/`, {
-				refresh_token: refreshToken,
-				keep_refresh_token: keepRefreshToken,
-			}),
-			successCallback,
-			errorCallback,
-			completeCallback
-		);
-	};
-
-	logoutCall = (successCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}auth/logout/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	changePasswordCall = (
-		currentPassword,
-		newPassword,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.put(
-				`${this.apiBaseURL}users/password/change/`,
-				{
-					current_password: currentPassword,
-					new_password: newPassword,
-				},
-				getRequestConfig()
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	listChatsCall = (
-		dynamicFilters,
-		keyword,
-		chatTagId,
-		limit,
-		offset,
-		assignedToMe,
-		assignedGroup,
-		messagesBeforeTime,
-		messagesSinceTime,
-		cancelToken,
-		successCallback,
-		errorCallback,
-		history
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}chats/`,
-				getRequestConfig(
-					{
-						...dynamicFilters,
-						search: keyword,
-						chat_tag_id: chatTagId,
-						limit: limit,
-						offset: offset,
-						assigned_to_me: assignedToMe,
-						assigned_group: assignedGroup,
-						messages_before_time: messagesBeforeTime,
-						messages_since_time: messagesSinceTime,
-					},
-					cancelToken,
-					undefined,
-					0
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				handleIfUnauthorized(error, history);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	bulkSendCall = (body, successCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	listUsersCall = (limit, successCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}users/`,
-				getRequestConfig({
-					limit: limit,
-				})
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	retrieveCurrentUserCall = (successCallback, history) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}users/current/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-
-				// Exceptional handling for invalid token
-				if (error?.response?.status === 403) {
-					clearUserSession('invalidToken', undefined, history);
-				} else {
-					handleIfUnauthorized(error, history);
-				}
-			}
-		);
-	};
-
-	issueTemplateRefreshRequestCall = (
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}templates/refresh/issue/`,
-				{},
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	checkTemplateRefreshStatusCall = (
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}templates/refresh/status/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	listTemplatesCall = (cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}templates/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	listSavedResponsesCall = (successCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}saved_responses/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	createSavedResponseCall = (text, successCallback) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}saved_responses/`,
-				{
-					text: text,
-				},
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
-	deleteSavedResponseCall = (id, successCallback) => {
-		this.handleRequest(
-			axios.delete(
-				`${this.apiBaseURL}saved_responses/${id}/`,
-				getRequestConfig()
-			),
 			successCallback,
 			(error) => {
 				window.displayError(error);
@@ -337,16 +109,6 @@ export class ApiService {
 		);
 	};
 
-	listTagsCall = (successCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}tags/`, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	retrievePersonCall = (waId, cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(
@@ -355,47 +117,6 @@ export class ApiService {
 			),
 			successCallback,
 			errorCallback
-		);
-	};
-
-	listMessagesCall = (
-		waId,
-		search,
-		chatTagId,
-		limit,
-		offset,
-		assignedToMe,
-		assignedGroup,
-		beforeTime,
-		sinceTime,
-		cancelToken,
-		successCallback,
-		errorCallback,
-		history
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}messages/`,
-				getRequestConfig(
-					{
-						wa_id: waId,
-						search: search,
-						chat_tag_id: chatTagId,
-						offset: offset ?? 0,
-						assigned_to_me: assignedToMe,
-						assigned_group: assignedGroup,
-						before_time: beforeTime,
-						since_time: sinceTime,
-						limit: limit,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				errorCallback?.(error);
-				handleIfUnauthorized(error, history);
-			}
 		);
 	};
 
@@ -451,45 +172,6 @@ export class ApiService {
 		);
 	};
 
-	searchMessagesCall = (
-		waId,
-		search,
-		limit,
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}messages/`,
-				getRequestConfig(
-					{
-						wa_id: waId,
-						search: search,
-						limit: limit,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
-	sendMessageCall = (body, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}messages/`, body, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	uploadMediaCall = (formData, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}media/`, formData, getRequestConfig()),
@@ -526,17 +208,6 @@ export class ApiService {
 			(error) => {
 				handleIfUnauthorized(error, history);
 			}
-		);
-	};
-
-	retrieveChatCall = (waId, cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}chats/${waId}/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
 		);
 	};
 
@@ -656,17 +327,6 @@ export class ApiService {
 			axios.patch(
 				`${this.apiBaseURL}chat_assignment/${waId}/`,
 				data,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
-	listGroupsCall = (cancelToken?, successCallback?, errorCallback?) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}groups/`,
 				getRequestConfig(undefined, cancelToken)
 			),
 			successCallback,

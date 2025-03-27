@@ -5,10 +5,10 @@ import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
 import { useAppSelector } from '@src/store/hooks';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
 
 interface Props {
-	onClick: (template: TemplateModel) => void;
+	onClick: (template: Template) => void;
 	customSelectButtonTitle?: string;
 	displayRegisterTemplate?: boolean;
 }

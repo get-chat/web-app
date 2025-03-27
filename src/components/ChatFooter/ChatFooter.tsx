@@ -29,7 +29,6 @@ import {
 	EVENT_TOPIC_FOCUS_MESSAGE_INPUT,
 	EVENT_TOPIC_REQUEST_MIC_PERMISSION,
 } from '@src/Constants';
-import ChatMessageModel from '../../api/models/ChatMessageModel';
 import { replaceEmojis } from '@src/helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
@@ -43,6 +42,7 @@ import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
+import { MessageType } from '@src/types/messages';
 
 const cx = classNames.bind(styles);
 
@@ -628,7 +628,7 @@ const ChatFooter: React.FC<Props> = ({
 						<Tooltip title={t('Bulk Send')} placement="top" disableInteractive>
 							<IconButton
 								className={styles.actionIcon}
-								onClick={() => bulkSendMessage(ChatMessageModel.TYPE_TEXT)}
+								onClick={() => bulkSendMessage(MessageType.text)}
 								size="small"
 							>
 								<DynamicFeedIcon />

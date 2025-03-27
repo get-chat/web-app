@@ -27,7 +27,6 @@ import styles from './ChatHeader.module.css';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import classNames from 'classnames/bind';
 import PersonModel from '@src/api/models/PersonModel';
-import ChatModel from '@src/api/models/ChatModel';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -35,11 +34,12 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
+import { Chat } from '@src/types/chats';
 
 const cx = classNames.bind(styles);
 
 interface Props {
-	chat?: ChatModel;
+	chat?: Chat;
 	person?: PersonModel;
 	contactProvidersData: { [key: string]: any };
 	isChatOnly: boolean | Number;
@@ -173,10 +173,10 @@ const ChatHeader: React.FC<Props> = ({
 					<div className={styles.assigneeActions}>
 						<AssigneeChip
 							assigneeType="user"
-							name={chat.assignedToUser?.username}
-							secondaryName={chat.assignedGroup?.name}
-							assignedUserId={chat.assignedToUser?.id}
-							assignedGroupId={chat.assignedGroup?.id}
+							name={chat.assigned_to_user?.username}
+							secondaryName={chat.assigned_group?.name}
+							assignedUserId={chat.assigned_to_user?.id}
+							assignedGroupId={chat.assigned_group?.id}
 							isActionable={!isReadOnly}
 							onAction={(userId, groupId) => {
 								partialUpdateChatAssignment(waId, userId, groupId);

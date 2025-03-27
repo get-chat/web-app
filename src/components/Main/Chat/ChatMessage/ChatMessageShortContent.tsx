@@ -2,23 +2,22 @@ import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
 import ReplyIcon from '@mui/icons-material/Reply';
-import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import PrintMessage from '../../../PrintMessage';
 import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
-import ReactionModel from '@src/api/models/ReactionModel';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
+import { MessageType, Reaction } from '@src/types/messages';
 
 interface Props {
-	type: string;
+	type: MessageType;
 	text?: string | undefined | null;
 	caption?: string | undefined | null;
 	buttonText?: string | undefined | null;
 	interactiveButtonText?: string | undefined | null;
 	isLastMessageFromUs: boolean;
-	template?: TemplateModel | undefined;
-	reaction?: ReactionModel | undefined;
+	template?: Template | undefined;
+	reaction?: Reaction | undefined;
 }
 
 const ChatMessageShortContent: React.FC<Props> = ({
@@ -35,7 +34,7 @@ const ChatMessageShortContent: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	const print = () => {
-		if (type === ChatMessageModel.TYPE_TEMPLATE && template) {
+		if (type === MessageType.template && template) {
 			const templateData = templates[template.name];
 			if (templateData) {
 				const component = templateData.components?.filter(
@@ -44,16 +43,14 @@ const ChatMessageShortContent: React.FC<Props> = ({
 				if (component) {
 					return insertTemplateComponentParameters(
 						component,
-						template.components
+						template.components ?? []
 					);
 				}
 			}
-		} else if (
-			[ChatMessageModel.TYPE_TEXT, ChatMessageModel.TYPE_BUTTON].includes(type)
-		) {
+		} else if ([MessageType.text, MessageType.button].includes(type)) {
 			const finalText = text ?? buttonText ?? interactiveButtonText ?? '';
 			return <PrintMessage message={finalText} smallEmoji={true} />;
-		} else if (type === ChatMessageModel.TYPE_REACTION) {
+		} else if (type === MessageType.reaction) {
 			let rawText = '';
 			if (isLastMessageFromUs) {
 				rawText = reaction?.emoji

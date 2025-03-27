@@ -1,11 +1,12 @@
 import { ApiService } from '@src/api/ApiService';
 import { getURLParams } from '@src/helpers/URLHelper';
 import { clearUserSession } from '@src/helpers/ApiHelper';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { storeToken } from '@src/helpers/StorageHelper';
+import { convertRefreshToken } from '@src/api/authApi';
 
 const useRefreshToken = () => {
-	const handle = (apiService: ApiService, onComplete?: () => void) => {
+	const handle = async (apiService: ApiService, onComplete?: () => void) => {
 		const refreshToken = getURLParams().get('refresh_token');
 		const keepRefreshToken = getURLParams().get('keep_refresh_token') === '1';
 		if (refreshToken) {
@@ -13,27 +14,21 @@ const useRefreshToken = () => {
 			clearUserSession(undefined, undefined, undefined);
 
 			// Converting refresh token
-			apiService.convertRefreshTokenCall(
-				refreshToken,
-				keepRefreshToken,
-				(response: AxiosResponse) => {
-					// Store token in local storage
-					storeToken(response.data.token);
-				},
-				(error: AxiosError) => {
-					const reason = btoa(error.response?.data?.reason ?? '');
+			try {
+				const data = await convertRefreshToken({
+					refresh_token: refreshToken,
+					keep_refresh_token: keepRefreshToken,
+				});
+				// Store token in local storage
+				storeToken(data.token);
+			} catch (error: any | AxiosError) {
+				const reason = btoa(error.response?.data?.reason ?? '');
 
-					// Redirect it this way as routes are not initialized yet
-					window.history.pushState(
-						null,
-						'',
-						'/id_token_error?reason=' + reason
-					);
-				},
-				() => {
-					onComplete?.();
-				}
-			);
+				// Redirect it this way as routes are not initialized yet
+				window.history.pushState(null, '', '/id_token_error?reason=' + reason);
+			} finally {
+				onComplete?.();
+			}
 		} else {
 			onComplete?.();
 		}

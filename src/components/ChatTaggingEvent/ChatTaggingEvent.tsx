@@ -3,14 +3,10 @@ import styles from './ChatTaggingEvent.module.css';
 import Moment from 'react-moment';
 import { Trans } from 'react-i18next';
 import SellIcon from '@mui/icons-material/Sell';
+import { ChatTagging } from '@src/types/messages';
 
 interface Props {
-	data: {
-		done_by: any;
-		tag?: any;
-		action: any;
-		timestamp?: string;
-	};
+	data: ChatTagging;
 }
 
 const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
@@ -36,7 +32,7 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 									tag:{' '}
 									<SellIcon
 										style={{
-											fill: data.tag?.color,
+											fill: data.tag?.web_inbox_color,
 										}}
 									/>
 									<span className="bold">%(tag)s</span>.
@@ -53,7 +49,7 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 									A tag was {data.action}:{' '}
 									<SellIcon
 										style={{
-											fill: data.tag?.color,
+											fill: data.tag?.web_inbox_color,
 										}}
 									/>
 									<span className="bold">%(tag)s</span>.

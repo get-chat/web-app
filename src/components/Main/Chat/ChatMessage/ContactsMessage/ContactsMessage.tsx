@@ -8,16 +8,16 @@ import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ChatIcon from '@mui/icons-material/Chat';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 }
 
 const ContactsMessage: React.FC<Props> = ({ data }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const { contacts } = data?.payload || data?.resendPayload;
+	const contacts = data?.waba_payload?.contacts; // || data?.resend_payload;
 
 	const handleClick = (targetWaId: string) => {
 		const waId = prepareWaId(targetWaId);

@@ -1,12 +1,12 @@
 import React from 'react';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import PrintMessage from '@src/components/PrintMessage';
 import { Menu } from '@mui/material';
 import styles from './QuickReactionsMenu.module.css';
 import AddIcon from '@mui/icons-material/Add';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	message: ChatMessageModel | undefined;
+	message: Message | undefined;
 	anchorElement: HTMLElement | undefined;
 	setAnchorElement: (anchorElement: HTMLElement | undefined) => void;
 	setEmojiPickerAnchorElement: (anchorElement: HTMLElement | undefined) => void;
@@ -42,8 +42,8 @@ const QuickReactionsMenu: React.FC<Props> = ({
 					<div
 						key={emoji}
 						onClick={() => {
-							if (message?.id) {
-								onReaction(message.id, emoji);
+							if (message?.waba_payload?.id) {
+								onReaction(message.waba_payload.id, emoji);
 							}
 							hide();
 						}}

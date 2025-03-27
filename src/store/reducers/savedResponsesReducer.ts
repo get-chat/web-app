@@ -1,19 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SavedResponseList } from '@src/api/responses/SavedResponsesResponse';
+import { SavedResponse } from '@src/types/savedResponses';
 
 interface SavedResponsesState {
-	value: SavedResponseList;
+	value: SavedResponse[];
 }
 
 const initialState: SavedResponsesState = {
-	value: {},
+	value: [],
 };
 
 const savedResponsesSlice = createSlice({
 	name: 'savedResponses',
 	initialState,
 	reducers: {
-		setSavedResponses: (state, action: PayloadAction<SavedResponseList>) => {
+		setSavedResponses: (state, action: PayloadAction<SavedResponse[]>) => {
 			state.value = action.payload;
 		},
 	},

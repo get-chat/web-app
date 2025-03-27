@@ -5,12 +5,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const AddressMessage: React.FC<InteractiveMessageProps> = ({
-	header,
-	body,
-	footer,
-	action,
-}) => {
+const AddressMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
+	const { header, body, footer, action } = interactive ?? {};
 	const { t } = useTranslation();
 
 	return (

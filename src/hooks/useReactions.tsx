@@ -1,22 +1,23 @@
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useMemo } from 'react';
+import { Message } from '@src/types/messages';
+import { getMessageTimestamp } from '@src/helpers/MessageHelper';
 
 interface Props {
-	reactionsHistory?: ChatMessageModel[];
+	reactionsHistory?: Message[];
 }
 
 const useReactions = ({ reactionsHistory }: Props) => {
-	const getLatestReactions = (): ChatMessageModel[] => {
-		const latestReactionsMap: Map<string, ChatMessageModel> = new Map();
+	const getLatestReactions = (): Message[] => {
+		const latestReactionsMap: Map<string, Message> = new Map();
 
 		reactionsHistory?.forEach((reaction) => {
-			const sender = reaction.payload.from;
+			const sender = reaction.waba_payload?.from ?? '';
 			const existingReaction = latestReactionsMap.get(sender);
 
 			// Update the map if no entry exists or if this reaction has a later timestamp
 			if (
 				!existingReaction ||
-				reaction.timestamp > existingReaction.timestamp
+				getMessageTimestamp(reaction) > getMessageTimestamp(existingReaction)
 			) {
 				latestReactionsMap.set(sender, reaction);
 			}
@@ -31,10 +32,10 @@ const useReactions = ({ reactionsHistory }: Props) => {
 	const reactionsWithCount = useMemo(() => {
 		return Object.entries(
 			reactions
-				.filter((reaction) => !!reaction.reaction?.emoji)
-				.map((reaction) => reaction.reaction!.emoji)
+				.filter((reaction) => !!reaction.waba_payload?.reaction?.emoji)
+				.map((reaction) => reaction.waba_payload?.reaction!.emoji)
 				.reduce((acc: { [emoji: string]: number }, emoji) => {
-					acc[emoji] = (acc[emoji] || 0) + 1;
+					acc[emoji ?? ''] = (acc[emoji ?? ''] || 0) + 1;
 					return acc;
 				}, {})
 		).map(([emoji, count]) => ({ emoji, count }));

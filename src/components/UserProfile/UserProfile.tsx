@@ -51,7 +51,9 @@ const UserProfile: React.FC<Props> = ({
 							</div>
 
 							<h3>{currentUser.username}</h3>
-							<span>{currentUser.firstName + ' ' + currentUser.lastName}</span>
+							<span>
+								{currentUser.first_name + ' ' + currentUser.last_name}
+							</span>
 
 							{!isReadOnly && (
 								<div className="sidebarBusinessProfile__body__changePasswordContainer">

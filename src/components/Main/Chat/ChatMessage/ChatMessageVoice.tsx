@@ -11,10 +11,18 @@ import {
 import { isAudioMimeTypeSupported } from '@src/helpers/FileHelper';
 import UnsupportedFileClass from '../../../../UnsupportedFileClass';
 import CustomAvatar from '@src/components/CustomAvatar';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
+import {
+	generateAudioLink,
+	generateVoiceLink,
+	getMessageMimeType,
+	getSenderName,
+	hasAnyAudio,
+} from '@src/helpers/MessageHelper';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 }
 
 const ChatMessageVoice: React.FC<Props> = ({ data }) => {
@@ -37,7 +45,7 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 
 	useEffect(() => {
 		// Subscribing only if there is voice or audio
-		if (data.hasAnyAudio()) {
+		if (hasAnyAudio(data)) {
 			const token = PubSub.subscribe(
 				EVENT_TOPIC_CHAT_MESSAGE,
 				onChatMessageEvent
@@ -64,7 +72,7 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 				// Pause others
 				PubSub.publishSync(EVENT_TOPIC_CHAT_MESSAGE, 'pause');
 
-				if (isAudioMimeTypeSupported(data.mimeType)) {
+				if (isAudioMimeTypeSupported(getMessageMimeType(data))) {
 					audio.current.play().catch((error) => {
 						console.error(error);
 					});
@@ -72,8 +80,8 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 				} else {
 					const unsupportedFile = new UnsupportedFileClass({
 						name: data.id,
-						link: data.audioLink,
-						mimeType: data.mimeType,
+						link: data.waba_payload?.audio?.link ?? generateAudioLink(data),
+						mimeType: getMessageMimeType(data),
 					});
 					PubSub.publish(EVENT_TOPIC_UNSUPPORTED_FILE, unsupportedFile);
 				}
@@ -148,7 +156,9 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 				<audio
 					ref={audio}
 					src={
-						data.voiceId ? data.generateVoiceLink() : data.generateAudioLink()
+						data.waba_payload?.voice?.id
+							? generateVoiceLink(data)
+							: generateAudioLink(data)
 					}
 					preload="none"
 					//onLoadedMetadata={(event) => console.log(event.target.duration)}
@@ -156,8 +166,11 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 
 				<CustomAvatar
 					generateBgColorBy={
-						Boolean(data.voiceId !== undefined ?? data.voiceLink !== undefined)
-							? data.senderName
+						Boolean(
+							data.waba_payload?.voice?.id !== undefined ??
+								generateVoiceLink(data) !== undefined
+						)
+							? getSenderName(data)
 							: undefined
 					}
 					style={{
@@ -165,8 +178,8 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 					}}
 					className="audioMessageAvatar"
 				>
-					{data.voiceId !== undefined ? (
-						<span>{data.initials}</span>
+					{data.waba_payload?.voice?.id !== undefined ? (
+						<span>{generateInitialsHelper(getSenderName(data))}</span>
 					) : (
 						<HeadsetIcon />
 					)}

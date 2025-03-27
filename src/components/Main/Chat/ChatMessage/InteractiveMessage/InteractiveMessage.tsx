@@ -16,6 +16,7 @@ import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMes
 import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/FlowMessage';
 import NfmReply from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/NfmReply';
 import CatalogMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CatalogMessage';
+import { Message } from '@src/types/messages';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -32,13 +33,14 @@ export enum InteractiveMessageTypes {
 }
 
 interface Props {
-	data: any;
+	data: Message;
 }
 
 const InteractiveMessage: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
-	const { header, body, footer, action, type, nfm_reply } =
-		data?.payload?.interactive ?? {};
+	const { body, action, type, nfm_reply } =
+		data?.waba_payload?.interactive ?? {};
+	const interactive = data?.waba_payload?.interactive;
 
 	return (
 		<>
@@ -48,84 +50,44 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 			{type === InteractiveMessageTypes.list_reply && (
 				<div>
-					<div>{data.payload.interactive.list_reply.title}</div>
+					<div>{data.waba_payload?.interactive?.list_reply.title}</div>
 					<div style={{ opacity: 0.5, fontSize: '0.8em' }}>
-						{data.payload.interactive.list_reply.description}
+						{data.waba_payload?.interactive?.list_reply.description}
 					</div>
 				</div>
 			)}
 
 			{type === InteractiveMessageTypes.button && (
-				<ButtonsMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<ButtonsMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.list && (
-				<ListMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<ListMessage interactive={interactive} />
 			)}
 
 			{(type === InteractiveMessageTypes.product ||
 				type === InteractiveMessageTypes.product_list) && (
-				<ProductMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<ProductMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.cta_url && (
-				<CtaUrlMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<CtaUrlMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.address_message && (
-				<AddressMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<AddressMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.address_message && (
-				<AddressMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<AddressMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.flow && (
-				<FlowMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<FlowMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.catalog_message && (
-				<CatalogMessage
-					header={header}
-					body={body}
-					footer={footer}
-					action={action}
-				/>
+				<CatalogMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.location_request_message && (

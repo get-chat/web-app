@@ -1,13 +1,14 @@
 import { Button } from '@mui/material';
 import Linkify from 'linkify-react';
 import React from 'react';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import { useTranslation } from 'react-i18next';
 import styles from './ChatMessageErrors.module.css';
+import { Message } from '@src/types/messages';
+import { canRetry } from '@src/helpers/MessageHelper';
 
 interface Props {
-	data: ChatMessageModel;
-	retryMessage?: (message: ChatMessageModel) => void;
+	data: Message;
+	retryMessage?: (message: Message) => void;
 }
 
 const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
@@ -15,8 +16,8 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 
 	return (
 		<>
-			{data.errors &&
-				data.errors.map((error: any, index: number) => (
+			{data.waba_payload?.errors &&
+				data.waba_payload.errors.map((error, index) => (
 					<div className={styles.container} key={index}>
 						<div className={styles.recommendation}>
 							{error.recommendation && (
@@ -46,9 +47,9 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 							)}
 						</div>
 
-						{data.isFromUs &&
-							data.isFailed &&
-							data.canRetry() &&
+						{data.from_us &&
+							data.is_failed &&
+							canRetry(data) &&
 							retryMessage && (
 								<Button
 									color="inherit"

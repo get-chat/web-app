@@ -4,12 +4,9 @@ import { Button } from '@mui/material';
 import React from 'react';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const FlowMessage: React.FC<InteractiveMessageProps> = ({
-	header,
-	body,
-	footer,
-	action,
-}) => {
+const FlowMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
+	const { header, body, footer, action } = interactive ?? {};
+
 	return (
 		<>
 			{header && (

@@ -1,20 +1,25 @@
-import UserModel from '@src/api/models/UserModel';
-import ChatModel from '@src/api/models/ChatModel';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
-import ChatList from '@src/interfaces/ChatList';
+import { User } from '@src/types/users';
+import { Chat, ChatList } from '@src/types/chats';
+import {
+	isChatAssignedToGroupId,
+	isChatAssignedToUser,
+	isChatAssignedToUserAnyGroup,
+	isChatIncludingTagId,
+} from '@src/helpers/ChatHelper';
 
-const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
-	const canReadChats = currentUser?.permissions?.canReadChats;
+const hasPermission = (currentUser: User, chat: Chat) => {
+	const canReadChats = currentUser?.permissions?.can_read_chats;
 
 	switch (canReadChats) {
 		case 'all':
 			return true;
 		case 'user':
-			return chat.isAssignedToUser(currentUser);
+			return isChatAssignedToUser(chat, currentUser);
 		case 'group':
 			return (
-				chat.isAssignedToUser(currentUser) ||
-				chat.isAssignedToUserAnyGroup(currentUser)
+				isChatAssignedToUser(chat, currentUser) ||
+				isChatAssignedToUserAnyGroup(chat, currentUser)
 			);
 		default:
 			return false;
@@ -22,8 +27,8 @@ const hasPermission = (currentUser: UserModel, chat: ChatModel) => {
 };
 
 export const filterChat = (
-	currentUser: UserModel | undefined,
-	chat: ChatModel,
+	currentUser: User | undefined,
+	chat: Chat,
 	filterTagId?: number,
 	filterAssignedToMe?: boolean,
 	filterAssignedGroupId?: number
@@ -31,22 +36,22 @@ export const filterChat = (
 	if (!currentUser) return true;
 
 	if (filterTagId) {
-		return chat.hasTag(filterTagId);
+		return isChatIncludingTagId(chat, filterTagId);
 	}
 
 	if (filterAssignedToMe) {
-		return chat.isAssignedToUser(currentUser);
+		return isChatAssignedToUser(chat, currentUser);
 	}
 
 	if (filterAssignedGroupId) {
-		return chat.isAssignedToGroup(filterAssignedGroupId);
+		return isChatAssignedToGroupId(chat, filterAssignedGroupId);
 	}
 
 	return true;
 };
 
 export const handleChatAssignmentEvent = (
-	currentUser: UserModel | undefined,
+	currentUser: User | undefined,
 	chats: ChatList,
 	data: any
 ) => {
@@ -58,9 +63,9 @@ export const handleChatAssignmentEvent = (
 	let newMissingChats: string[] = [];
 	let isChatsChanged = false;
 
-	const canReadChatsAll = currentUser.permissions.canReadChats === 'all';
-	const canReadChatsGroup = currentUser.permissions.canReadChats === 'group';
-	const canReadChatsUser = currentUser.permissions.canReadChats === 'user';
+	const canReadChatsAll = currentUser.permissions.can_read_chats === 'all';
+	const canReadChatsGroup = currentUser.permissions.can_read_chats === 'group';
+	const canReadChatsUser = currentUser.permissions.can_read_chats === 'user';
 
 	const checkIsUserInGroup = (groupId: number) =>
 		Boolean(currentUser?.groups.find((group) => group.id === groupId));
@@ -82,9 +87,9 @@ export const handleChatAssignmentEvent = (
 
 		const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
 		const isChatLoaded = chats.hasOwnProperty(chatKey);
-		const assignedGroup = chats[chatKey]?.assignedGroup;
+		const assignedGroup = chats[chatKey]?.assigned_group;
 		const isAlreadyAssignedToCurrentUser =
-			chats[chatKey]?.assignedToUser?.id === currentUser.id;
+			chats[chatKey]?.assigned_to_user?.id === currentUser.id;
 
 		const queueMissingChat = () => newMissingChats.push(assignmentData.waId);
 

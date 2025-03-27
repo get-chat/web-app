@@ -8,23 +8,23 @@ import DialogActions from '@mui/material/DialogActions';
 import { Button } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { useTranslation } from 'react-i18next';
-import TemplateModel from '@src/api/models/TemplateModel';
 import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
 import PubSub from 'pubsub-js';
 import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 } from '@src/Constants';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
+import { Template } from '@src/types/templates';
+import { CreateMessageRequest, MessageType } from '@src/types/messages';
 
 export type Props = {
 	isVisible: boolean;
 	setVisible: (visible: boolean) => void;
-	chosenTemplate?: TemplateModel;
-	onSend: (template: TemplateModel) => void;
+	chosenTemplate?: Template;
+	onSend: (template: Template) => void;
 	sendCallback?: () => void;
-	onBulkSend: (type: string, payload: BulkSendPayload) => void;
+	onBulkSend: (type: MessageType, payload: BulkSendPayload) => void;
 	isBulkOnly: boolean;
 	selectTemplateCallback?: () => void;
 };
@@ -42,9 +42,8 @@ const SendTemplateDialog: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	const [isSending, setSending] = useState(false);
-	const [errors, setErrors] = useState<[]>();
-	const [sentTemplateMessage, setSentTemplateMessage] =
-		useState<TemplateModel>();
+	const [errors, setErrors] = useState<string[]>();
+	const [sentTemplateMessage, setSentTemplateMessage] = useState<Template>();
 
 	const dialogContentRef = useRef<HTMLDivElement>();
 	const sendButtonRef = useRef<HTMLButtonElement>();
@@ -73,10 +72,15 @@ const SendTemplateDialog: React.FC<Props> = ({
 			onSendTemplateMessageError
 		);
 
-		const onSentTemplateMessage = function (msg: any, data: any) {
+		const onSentTemplateMessage = function (
+			msg: any,
+			data: CreateMessageRequest
+		) {
+			// Make data mutable
+			data = { ...data };
 			// Remove injected fields
 			delete data.wa_id;
-			delete data.pendingMessageUniqueId;
+			delete data.pending_message_unique_id;
 
 			// Check if sent message is equal to current pending one
 			if (
@@ -104,9 +108,9 @@ const SendTemplateDialog: React.FC<Props> = ({
 		setVisible(false);
 	};
 
-	const bulkSend = (template: TemplateModel) => {
+	const bulkSend = (template: Template) => {
 		const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
-		onBulkSend(ChatMessageModel.TYPE_TEMPLATE, payload);
+		onBulkSend(MessageType.template, payload);
 		sendCallback?.();
 		close();
 	};
@@ -122,12 +126,16 @@ const SendTemplateDialog: React.FC<Props> = ({
 		bulkSendButtonRef.current?.click();
 	};
 
-	const sendAction = (template: TemplateModel) => {
+	const sendAction = (template: Template) => {
 		const messageToBeSent = template ?? chosenTemplate;
 		setSentTemplateMessage(messageToBeSent);
 		onSend(messageToBeSent);
 		sendCallback?.();
 	};
+
+	if (!chosenTemplate) {
+		return <></>;
+	}
 
 	return (
 		<Dialog open={isVisible} onClose={close}>
@@ -135,11 +143,13 @@ const SendTemplateDialog: React.FC<Props> = ({
 			<DialogContent ref={dialogContentRef}>
 				<SendTemplateMessage
 					data={chosenTemplate}
-					send={(template: TemplateModel) => sendAction(template)}
+					send={(template: Template) => sendAction(template)}
 					setSending={setSending}
 					setErrors={setErrors}
 					bulkSend={bulkSend}
+					// @ts-ignore
 					sendButtonInnerRef={sendButtonRef}
+					// @ts-ignore
 					bulkSendButtonInnerRef={bulkSendButtonRef}
 				/>
 

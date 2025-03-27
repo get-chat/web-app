@@ -2,17 +2,18 @@ import React from 'react';
 import { Button } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 }
 
 const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 	const config = React.useContext(AppConfigContext);
 
-	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${config?.APP_GOOGLE_MAPS_API_KEY}&&q=${data.location?.latitude},${data.location?.longitude}&q=`;
-	const mapURL = `https://www.google.com/maps/place/${data.location?.latitude},${data.location?.longitude}`;
+	const location = data.waba_payload?.location;
+	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${config?.APP_GOOGLE_MAPS_API_KEY}&&q=${location?.latitude},${location?.longitude}&q=`;
+	const mapURL = `https://www.google.com/maps/place/${location?.latitude},${location?.longitude}`;
 
 	const share = async () => {
 		if (navigator.share) {
@@ -47,16 +48,16 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 				src={mapEmbedURL}
 			/>
 
-			{data.location && (
+			{data.waba_payload?.location && (
 				<>
-					{data.location.name && (
+					{data.waba_payload?.location.name && (
 						<div className="chat__message__location__name">
-							{data.location.name}
+							{data.waba_payload.location.name}
 						</div>
 					)}
-					{data.location.address && (
+					{data.waba_payload.location.address && (
 						<div className="chat__message__location__address">
-							{data.location.address}
+							{data.waba_payload.location.address}
 						</div>
 					)}
 				</>

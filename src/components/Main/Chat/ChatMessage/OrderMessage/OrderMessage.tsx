@@ -2,14 +2,14 @@ import React from 'react';
 import { Trans } from 'react-i18next';
 
 import styles from './OrderMessage.module.css';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 }
 
 const OrderMessage: React.FC<Props> = ({ data }) => {
-	const { catalog_id, text, product_items } = data.payload.order;
+	const { catalog_id, text, product_items } = data.waba_payload?.order;
 
 	return (
 		<>

@@ -16,7 +16,7 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
-import TagModel from '@src/api/models/TagModel';
+import { Tag } from '@src/types/tags';
 
 interface Props {
 	open: boolean;
@@ -38,7 +38,7 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 		setOpen(false);
 	};
 
-	const handleClick = (tag: TagModel | undefined) => {
+	const handleClick = (tag: Tag | undefined) => {
 		dispatch(setFilterTagId(tag?.id));
 		close();
 	};
@@ -62,7 +62,7 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 										<div className="chatTagsListWrapper__tag">
 											<SellIcon
 												style={{
-													fill: tag.color,
+													fill: tag.web_inbox_color,
 												}}
 											/>
 											{tag.name}

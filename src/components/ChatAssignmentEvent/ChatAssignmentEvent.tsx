@@ -2,16 +2,10 @@ import React from 'react';
 import styles from './ChatAssignmentEvent.module.css';
 import Moment from 'react-moment';
 import { Trans, useTranslation } from 'react-i18next';
+import { ChatAssignment } from '@src/types/messages';
 
 interface Props {
-	data: {
-		done_by: any;
-		assigned_to_user_set: any;
-		assigned_group_set: any;
-		assigned_to_user_was_cleared: any;
-		assigned_group_was_cleared: any;
-		timestamp?: string;
-	};
+	data: ChatAssignment;
 }
 
 const ChatAssignmentEvent: React.FC<Props> = ({ data }) => {

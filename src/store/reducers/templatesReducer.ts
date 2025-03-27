@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TemplateList } from '@src/api/responses/TemplatesResponse';
+import { TemplateList } from '@src/types/templates';
 
 interface TemplatesState {
 	value: TemplateList;

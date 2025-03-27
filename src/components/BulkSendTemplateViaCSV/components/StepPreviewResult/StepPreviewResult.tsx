@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import ChatMessage from '../../../Main/Chat/ChatMessage/ChatMessage';
 import { ErrorBoundary } from '@sentry/react';
-import ChatMessageModel from '../../../../api/models/ChatMessageModel';
 import { generateFinalTemplateParams } from '@src/helpers/TemplateMessageHelper';
 import styles from './StepPreviewResult.module.css';
 import { useAppSelector } from '@src/store/hooks';
-import TemplateModel from '@src/api/models/TemplateModel';
+import { Template } from '@src/types/templates';
+import { Message } from '@src/types/messages';
+import { fromTemplate } from '@src/helpers/MessageHelper';
 
 interface Props {
-	template: TemplateModel;
+	template: Template;
 	params: any;
 	csvData: any;
 }
 
 const StepPreviewResult: React.FC<Props> = ({ template, params, csvData }) => {
-	const [messageData, setMessageData] = useState<ChatMessageModel>();
+	const [messageData, setMessageData] = useState<Message>();
 
 	const templates = useAppSelector((state) => state.templates.value);
 
@@ -69,7 +70,7 @@ const StepPreviewResult: React.FC<Props> = ({ template, params, csvData }) => {
 		const data = { ...template };
 		data.components = Object.values(preparedParams);
 
-		setMessageData(ChatMessageModel.fromTemplate(data));
+		setMessageData(fromTemplate(data));
 	}, [templates, template, params, csvData]);
 
 	return (
@@ -79,7 +80,9 @@ const StepPreviewResult: React.FC<Props> = ({ template, params, csvData }) => {
 					<ErrorBoundary>
 						<ChatMessage
 							data={messageData}
-							templateData={templates[messageData.templateName ?? '']}
+							templateData={
+								templates[messageData.waba_payload?.template?.name ?? '']
+							}
 							disableMediaPreview
 							isInfoClickable={false}
 						/>

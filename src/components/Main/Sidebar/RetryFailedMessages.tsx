@@ -10,9 +10,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { Trans, useTranslation } from 'react-i18next';
-import ChatList from '@src/interfaces/ChatList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
+import { ChatList } from '@src/types/chats';
+import { getChatContactName } from '@src/helpers/ChatHelper';
 
 interface Props {
 	contactProvidersData: { [key: string]: any };
@@ -59,7 +60,7 @@ const RetryFailedMessages: React.FC<Props> = ({
 		failedWaIds.forEach((waId) => {
 			const name =
 				contactProvidersData[waId]?.[0]?.name ??
-				chats[CHAT_KEY_PREFIX + waId]?.name;
+				getChatContactName(chats[CHAT_KEY_PREFIX + waId]);
 			namesArray.push(name ?? waId);
 		});
 

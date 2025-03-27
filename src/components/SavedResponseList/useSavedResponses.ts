@@ -1,41 +1,35 @@
-import React from 'react';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { AxiosResponse } from 'axios';
-import SavedResponsesResponse from '@src/api/responses/SavedResponsesResponse';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
 import { useAppDispatch } from '@src/store/hooks';
+import {
+	deleteSavedResponse,
+	fetchSavedResponses,
+} from '@src/api/savedResponsesApi';
 
 const useSavedResponses = () => {
-	// @ts-ignore
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const dispatch = useAppDispatch();
 
-	const listSavedResponses = async () => {
-		await apiService.listSavedResponsesCall((response: AxiosResponse) => {
-			const savedResponsesResponse = new SavedResponsesResponse(response.data);
-
-			// Store
-			dispatch(setSavedResponses(savedResponsesResponse.savedResponses));
-		});
+	const handleFetchSavedResponses = async () => {
+		try {
+			const data = await fetchSavedResponses();
+			dispatch(setSavedResponses(data.results));
+		} catch (error) {
+			console.error('Failed to fetch responses:', error);
+		}
 	};
 
-	const deleteSavedResponse = async (id: number) => {
-		await apiService.deleteSavedResponseCall(id, (response: AxiosResponse) => {
-			console.log(response.data);
-
-			// Display a success message
-			// @ts-ignore
+	const handleDeleteSavedResponse = async (id: number) => {
+		try {
+			await deleteSavedResponse(id);
 			window.displaySuccess('Deleted response successfully!');
-
-			// Reload saved responses
-			listSavedResponses();
-		});
+			await handleFetchSavedResponses();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	return {
-		listSavedResponses,
-		deleteSavedResponse,
+		listSavedResponses: handleFetchSavedResponses,
+		deleteSavedResponse: handleDeleteSavedResponse,
 	};
 };
 

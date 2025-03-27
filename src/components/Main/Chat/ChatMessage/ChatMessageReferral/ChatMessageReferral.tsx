@@ -7,10 +7,14 @@ import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
 import { Tooltip } from '@mui/material';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
-import ChatMessageModel from '@src/api/models/ChatMessageModel';
+import { Message } from '@src/types/messages';
+import {
+	generateReferralImageLink,
+	generateReferralVideoLink,
+} from '@src/helpers/MessageHelper';
 
 interface Props {
-	data: ChatMessageModel;
+	data: Message;
 	onPreview: (type: string, source: string) => void;
 	onOptionsClick: (e: React.MouseEvent) => void;
 }
@@ -22,7 +26,7 @@ const ChatMessageReferral: React.FC<Props> = ({
 }) => {
 	const { t } = useTranslation();
 
-	const { referral } = data;
+	const referral = data.waba_payload?.referral;
 
 	const goToSourceURL = () => {
 		window.open(referral.source_url, '_blank')?.focus();
@@ -42,11 +46,11 @@ const ChatMessageReferral: React.FC<Props> = ({
 						<ChatMessageImage
 							className={styles.referralMedia}
 							data={referral}
-							source={data.generateReferralImageLink()}
+							source={generateReferralImageLink(data)}
 							onPreview={() =>
 								onPreview(
 									ATTACHMENT_TYPE_IMAGE,
-									data.generateReferralImageLink()
+									generateReferralImageLink(data)
 								)
 							}
 						/>
@@ -54,11 +58,11 @@ const ChatMessageReferral: React.FC<Props> = ({
 
 					{(referral.video || referral.video_url) && (
 						<ChatMessageVideo
-							source={data.generateReferralVideoLink()}
+							source={generateReferralVideoLink(data)}
 							onPreview={() =>
 								onPreview(
 									ATTACHMENT_TYPE_VIDEO,
-									data.generateReferralVideoLink()
+									generateReferralVideoLink(data)
 								)
 							}
 							onOptionsClick={onOptionsClick}

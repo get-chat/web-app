@@ -4,9 +4,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-
-import ChatMessageModel from '../../api/models/ChatMessageModel';
-
 import styles from './ContactsModal.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
@@ -14,6 +11,7 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import Contacts from '@src/components/Contacts';
 import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse } from 'axios';
+import { MessageType } from '@src/types/messages';
 
 interface DialogHeaderProps {
 	children?: JSX.Element | string;
@@ -61,7 +59,7 @@ const ContactsModal: React.FC<Props> = ({
 	const handleSendMessage = () => {
 		const payload = {
 			wa_id: recipientWaId,
-			type: ChatMessageModel.TYPE_CONTACTS,
+			type: MessageType.contacts,
 			contacts: [...selectedContacts].map((contact) => ({
 				name: {
 					formatted_name: contact.name,

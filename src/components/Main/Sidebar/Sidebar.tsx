@@ -32,12 +32,10 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import SearchBar from '../../SearchBar';
 import SidebarContactResult from './SidebarContactResult';
-import ChatModel from '../../../api/models/ChatModel';
 import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
 import ChangePasswordDialog from './ChangePasswordDialog';
-import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import SearchMessageResult from '../../SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -63,14 +61,13 @@ import {
 } from '@src/helpers/SidebarHelper';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
-import ChatsResponse from '../../../api/responses/ChatsResponse';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import { AxiosError, CancelTokenSource } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 import PasswordIcon from '@mui/icons-material/Password';
@@ -93,15 +90,11 @@ import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import classNames from 'classnames/bind';
-import ChatList from '@src/interfaces/ChatList';
-import ChatMessagesResponse from '@src/api/responses/ChatMessagesResponse';
 import DateRangeDialog from '@src/components/DateRangeDialog';
 import {
 	convertDateToUnixTimestamp,
 	formatDateRangeFilters,
 } from '@src/helpers/DateHelper';
-import GroupModel from '@src/api/models/GroupModel';
-import TagModel from '@src/api/models/TagModel';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
@@ -116,6 +109,25 @@ import PersonModel from '@src/api/models/PersonModel';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
+import { isUserInGroup } from '@src/helpers/UserHelper';
+import { Tag } from '@src/types/tags';
+import { Group } from '@src/types/groups';
+import { fetchChat, fetchChats } from '@src/api/chatsApi';
+import { PaginatedResponse } from '@src/types/common';
+import { Chat, ChatList } from '@src/types/chats';
+import {
+	getChatContactName,
+	getLastIncomingMessageTimestamp,
+	getLastMessageTimestamp,
+	setChatContactName,
+} from '@src/helpers/ChatHelper';
+import {
+	getMessageTimestamp,
+	getSenderName,
+	prepareMessageList,
+} from '@src/helpers/MessageHelper';
+import { Message, MessageType } from '@src/types/messages';
+import { fetchMessages } from '@src/api/messagesApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -353,7 +365,7 @@ const Sidebar: React.FC<Props> = ({
 				Object.entries(data).forEach((message) => {
 					//const msgId = message[0];
 					const chatMessage = message[1];
-					const chatMessageWaId = chatMessage.waId;
+					const chatMessageWaId = chatMessage.customer_wa_id;
 
 					const chatKey = CHAT_KEY_PREFIX + chatMessageWaId;
 
@@ -371,23 +383,29 @@ const Sidebar: React.FC<Props> = ({
 						changedAny = true;
 
 						// Update existing chat
-						nextState[chatKey].setLastMessage(chatMessage.payload);
+						nextState[chatKey] = {
+							...nextState[chatKey],
+							last_message: chatMessage,
+						};
 
 						// Incoming
-						if (!chatMessage.isFromUs) {
+						if (!chatMessage.from_us) {
 							// Update name and initials on incoming message if name is missing
 							const chat = nextState[chatKey];
 							if (chat) {
-								const chatName = chat.name;
+								const chatName = getChatContactName(chat);
 								if (!containsLetters(chatName)) {
 									// Update sidebar chat name
-									nextState[chatKey].setName(chatMessage.senderName);
+									setChatContactName(
+										nextState[chatKey],
+										getSenderName(chatMessage)
+									);
 
 									// Check if current chat
 									if (waId === chatMessageWaId) {
 										PubSub.publish(
 											EVENT_TOPIC_UPDATE_PERSON_NAME,
-											chatMessage.senderName
+											getSenderName(chatMessage)
 										);
 									}
 								}
@@ -397,7 +415,7 @@ const Sidebar: React.FC<Props> = ({
 
 					// New chatMessages
 					if (
-						!chatMessage.isFromUs &&
+						!chatMessage.from_us &&
 						(waId !== chatMessageWaId ||
 							document.visibilityState === 'hidden' ||
 							isBlurred)
@@ -418,7 +436,7 @@ const Sidebar: React.FC<Props> = ({
 						dispatch(setNewMessages({ ...preparedNewMessages }));
 
 						// Display a notification
-						if (chatMessageWaId && !chatMessage.isFromUs) {
+						if (chatMessageWaId && !chatMessage.from_us) {
 							displayNotification(
 								t('New messages'),
 								t('You have new messages!'),
@@ -567,13 +585,17 @@ const Sidebar: React.FC<Props> = ({
 	const sortChats = (state: ChatList) => {
 		let sortedState = Object.entries(state).sort(
 			(a, b) =>
-				(b[1].lastReceivedMessageTimestamp ?? b[1].lastMessageTimestamp ?? 0) -
-				(a[1].lastReceivedMessageTimestamp ?? a[1].lastMessageTimestamp ?? 0)
+				(getLastIncomingMessageTimestamp(b[1]) ??
+					getLastMessageTimestamp(b[1]) ??
+					0) -
+				(getLastIncomingMessageTimestamp(a[1]) ??
+					getLastMessageTimestamp(a[1]) ??
+					0)
 		);
 		return Object.fromEntries(sortedState);
 	};
 
-	const listChats = (
+	const listChats = async (
 		cancelTokenSource?: CancelTokenSource,
 		isInitial: boolean = false,
 		offset?: number,
@@ -598,155 +620,157 @@ const Sidebar: React.FC<Props> = ({
 			? convertDateToUnixTimestamp(filterEndDate)
 			: undefined;
 
-		apiService.listChatsCall(
-			dynamicFilters,
-			keyword,
-			filterTagId,
-			chatsLimit,
-			offset,
-			filterAssignedToMe ? true : undefined,
-			filterAssignedGroupId,
-			messageBeforeTime,
-			messagesSinceTime,
-			cancelTokenSource?.token,
-			(response: AxiosResponse) => {
-				const chatsResponse = new ChatsResponse(response.data);
-
-				dispatch(setChatsCount(chatsResponse.count));
-
-				// Store
-				if (replaceAll) {
-					dispatch(setChats(chatsResponse.chats));
-				} else {
-					dispatch(addChats(chatsResponse.chats));
-				}
-
-				if (isInitial) {
-					dispatch(setState({ loadingProgress: 100 }));
-				}
-
-				const willNotify = !isInitial;
-
-				const preparedNewMessages: { [key: string]: NewMessageModel } = {};
-				response.data.results.forEach((newMessage: any) => {
-					const newWaId = newMessage.contact.waba_payload.wa_id;
-					const newAmount = newMessage.new_messages;
-					const prepared = new NewMessageModel(newWaId, newAmount);
-					preparedNewMessages[prepared.waId] = prepared;
-				});
-
-				if (willNotify) {
-					let hasAnyNewMessages = false;
-					let chatMessageWaId: string | undefined;
-
-					const prevState = { ...newMessages };
-
-					// Update new messages
-					Object.entries(preparedNewMessages).forEach((newMsg) => {
-						const newMsgWaId = newMsg[0];
-						const number = newMsg[1].newMessages;
-						if (newMsgWaId !== waId) {
-							// TODO: Consider a new contact (last part of the condition)
-							if (
-								prevState[newMsgWaId] &&
-								number >
-									prevState[newMsgWaId]
-										.newMessages /*|| (!prevState[newMsgWaId] && number > 0)*/
-							) {
-								hasAnyNewMessages = true;
-
-								// There can be multiple new chats, we take first one
-								if (chatMessageWaId === newMsgWaId)
-									chatMessageWaId = newMsgWaId;
-							}
-						}
-					});
-
-					// When state is a JSON object, it is unable to understand whether it is different or same and renders again
-					// So we check if new state is actually different from previous state
-					if (
-						JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)
-					) {
-						dispatch(setNewMessages({ ...prevState, ...preparedNewMessages }));
-					} else {
-						dispatch(setNewMessages(prevState));
-					}
-
-					// Display a notification
-					if (chatMessageWaId && hasAnyNewMessages) {
-						displayNotification(
-							t('New messages'),
-							t('You have new messages!'),
-							chatMessageWaId
-						);
-					}
-				} else {
-					dispatch(setNewMessages({ ...newMessages, ...preparedNewMessages }));
-				}
-
-				setLoadingMoreChats(false);
-				setLoadingChats(false);
-			},
-			(error: AxiosError) => {
-				console.log(error);
-
-				setLoadingMoreChats(false);
-				setLoadingChats(false);
-
-				if (isInitial) {
-					dispatch(setState({ isInitialResourceFailed: true }));
-				}
-			},
-			navigate
-		);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchChats(
+				{
+					search: keyword,
+					chat_tag_id: filterTagId,
+					limit: chatsLimit,
+					offset,
+					assigned_to_me: filterAssignedToMe ? true : undefined,
+					assigned_group: filterAssignedGroupId,
+					messages_before_time: messageBeforeTime,
+					messages_since_time: messagesSinceTime,
+				},
+				dynamicFilters
+			);
+			processChatsData(data, isInitial, replaceAll);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			setLoadingMoreChats(false);
+			setLoadingChats(false);
+			if (isInitial) {
+				dispatch(setState({ isInitialResourceFailed: true }));
+			}
+		}
 	};
 
-	const retrieveChat = (chatWaId: string) => {
-		apiService.retrieveChatCall(
-			chatWaId,
-			undefined,
-			(response: AxiosResponse) => {
-				// Remove this chat from missing chats list
-				setMissingChats((prevState) =>
-					prevState.filter((item) => item !== chatWaId)
+	const processChatsData = (
+		data: PaginatedResponse<Chat>,
+		isInitial: boolean,
+		replaceAll: boolean
+	) => {
+		dispatch(setChatsCount(data.count));
+
+		const chatList: ChatList = {};
+		data.results.forEach(
+			(item) => (chatList[CHAT_KEY_PREFIX + item.wa_id] = item)
+		);
+
+		// Store
+		if (replaceAll) {
+			dispatch(setChats(chatList));
+		} else {
+			dispatch(addChats(chatList));
+		}
+
+		if (isInitial) {
+			dispatch(setState({ loadingProgress: 100 }));
+		}
+
+		const willNotify = !isInitial;
+
+		const preparedNewMessages: { [key: string]: NewMessageModel } = {};
+		data.results.forEach((newMessage: any) => {
+			const newWaId = newMessage.contact.waba_payload.wa_id;
+			const newAmount = newMessage.new_messages;
+			const prepared = new NewMessageModel(newWaId, newAmount);
+			preparedNewMessages[prepared.waId] = prepared;
+		});
+
+		if (willNotify) {
+			let hasAnyNewMessages = false;
+			let chatMessageWaId: string | undefined;
+
+			const prevState = { ...newMessages };
+
+			// Update new messages
+			Object.entries(preparedNewMessages).forEach((newMsg) => {
+				const newMsgWaId = newMsg[0];
+				const number = newMsg[1].newMessages;
+				if (newMsgWaId !== waId) {
+					// TODO: Consider a new contact (last part of the condition)
+					if (
+						prevState[newMsgWaId] &&
+						number >
+							prevState[newMsgWaId]
+								.newMessages /*|| (!prevState[newMsgWaId] && number > 0)*/
+					) {
+						hasAnyNewMessages = true;
+
+						// There can be multiple new chats, we take first one
+						if (chatMessageWaId === newMsgWaId) chatMessageWaId = newMsgWaId;
+					}
+				}
+			});
+
+			// When state is a JSON object, it is unable to understand whether it is different or same and renders again
+			// So we check if new state is actually different from previous state
+			if (JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)) {
+				dispatch(setNewMessages({ ...prevState, ...preparedNewMessages }));
+			} else {
+				dispatch(setNewMessages(prevState));
+			}
+
+			// Display a notification
+			if (chatMessageWaId && hasAnyNewMessages) {
+				displayNotification(
+					t('New messages'),
+					t('You have new messages!'),
+					chatMessageWaId
 				);
+			}
+		} else {
+			dispatch(setNewMessages({ ...newMessages, ...preparedNewMessages }));
+		}
 
-				const preparedChat = new ChatModel(response.data);
-
-				// Don't display chat if tab case is "me" and chat is not assigned to user
-				if (filterAssignedToMe) {
-					if (
-						!preparedChat.assignedToUser ||
-						preparedChat.assignedToUser.id !== currentUser?.id
-					) {
-						console.log(
-							'Chat will not be displayed as it does not belong to current tab.'
-						);
-						return;
-					}
-				} else if (filterAssignedGroupId) {
-					if (
-						!preparedChat.assignedGroup ||
-						currentUser?.isInGroup(preparedChat.assignedGroup.id)
-					) {
-						console.log(
-							'Chat will not be displayed as it does not belong to current tab.'
-						);
-						return;
-					}
-				}
-
-				const prevState = { ...chats };
-				prevState[CHAT_KEY_PREFIX + chatWaId] = preparedChat;
-				const sortedNextState = sortChats(prevState);
-
-				dispatch(setChats({ ...sortedNextState }));
-			},
-			(error: AxiosError) => console.log(error)
-		);
+		setLoadingMoreChats(false);
+		setLoadingChats(false);
 	};
 
-	const searchMessages = (cancelTokenSource?: CancelTokenSource) => {
+	const retrieveChat = async (chatWaId: string) => {
+		try {
+			const data = await fetchChat(chatWaId);
+			// Remove this chat from missing chats list
+			setMissingChats((prevState) =>
+				prevState.filter((item) => item !== chatWaId)
+			);
+
+			// Don't display chat if tab case is "me" and chat is not assigned to user
+			if (filterAssignedToMe) {
+				if (
+					!data.assigned_to_user ||
+					data.assigned_to_user.id !== currentUser?.id
+				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
+					return;
+				}
+			} else if (filterAssignedGroupId) {
+				if (
+					!data.assigned_group ||
+					isUserInGroup(currentUser, data.assigned_group.id)
+				) {
+					console.log(
+						'Chat will not be displayed as it does not belong to current tab.'
+					);
+					return;
+				}
+			}
+
+			const prevState: ChatList = { ...chats };
+			prevState[CHAT_KEY_PREFIX + chatWaId] = data;
+			const sortedNextState = sortChats(prevState);
+
+			dispatch(setChats({ ...sortedNextState }));
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const searchMessages = async (cancelTokenSource?: CancelTokenSource) => {
 		// Convert dates to Unix timestamps
 		const messagesSinceTime = filterStartDate
 			? convertDateToUnixTimestamp(filterStartDate)
@@ -755,33 +779,31 @@ const Sidebar: React.FC<Props> = ({
 			? convertDateToUnixTimestamp(filterEndDate)
 			: undefined;
 
-		apiService.listMessagesCall(
-			undefined,
-			keyword,
-			filterTagId,
-			30,
-			undefined,
-			filterAssignedToMe ? true : undefined,
-			filterAssignedGroupId,
-			messageBeforeTime,
-			messagesSinceTime,
-			cancelTokenSource?.token,
-			(response: AxiosResponse) => {
-				const messagesResponse = new ChatMessagesResponse(response.data);
-				setChatMessages(messagesResponse.messages);
-			},
-			undefined,
-			navigate
-		);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchMessages({
+				search: keyword,
+				chat_tag_id: filterTagId,
+				limit: 30,
+				assigned_to_me: filterAssignedToMe ? true : undefined,
+				assigned_group: filterAssignedGroupId,
+				before_time: messageBeforeTime,
+				since_time: messagesSinceTime,
+			});
+			const preparedMessages = prepareMessageList(data.results);
+			setChatMessages(preparedMessages);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
-	const goToMessage = (chatMessage: ChatMessageModel) => {
-		if (waId !== chatMessage.waId) {
-			navigate(`/main/chat/${chatMessage.waId}`, {
+	const goToMessage = (chatMessage: Message) => {
+		if (waId !== chatMessage.customer_wa_id) {
+			navigate(`/main/chat/${chatMessage.customer_wa_id}`, {
 				state: {
 					goToMessage: {
 						id: chatMessage.id,
-						timestamp: chatMessage.timestamp,
+						timestamp: getMessageTimestamp(chatMessage),
 					},
 				},
 			});
@@ -1084,7 +1106,7 @@ const Sidebar: React.FC<Props> = ({
 						elevation={3}
 					>
 						{tags &&
-							tags.slice(0, 10).map((tag: TagModel) => (
+							tags.slice(0, 10).map((tag: Tag) => (
 								<MenuItem
 									onClick={() => {
 										dispatch(setFilterTagId(tag.id));
@@ -1095,7 +1117,7 @@ const Sidebar: React.FC<Props> = ({
 									<ListItemIcon>
 										<SellIcon
 											style={{
-												fill: tag.color,
+												fill: tag.web_inbox_color,
 											}}
 										/>
 									</ListItemIcon>
@@ -1142,7 +1164,7 @@ const Sidebar: React.FC<Props> = ({
 										(userGroup) => userGroup.id === item.id
 									)
 								)
-								.map((group: GroupModel) => (
+								.map((group: Group) => (
 									<MenuItem
 										onClick={() => {
 											setFilterAssignedGroupId(group.id);
@@ -1205,7 +1227,7 @@ const Sidebar: React.FC<Props> = ({
 							</Alert>
 						)}
 
-						{bulkSendPayload?.type !== ChatMessageModel.TYPE_TEMPLATE && (
+						{bulkSendPayload?.type !== MessageType.template && (
 							<Alert severity="warning" className={styles.bulkAlert}>
 								<Trans>
 									Session messages can be sent only to recipients who wrote to
@@ -1227,8 +1249,8 @@ const Sidebar: React.FC<Props> = ({
 							<>
 								<h3>{t('Tags')}</h3>
 								<div>
-									{Object.entries(tags).map((tag) => (
-										<SelectableChatTag key={tag[0]} data={tag[1]} />
+									{tags.map((tag) => (
+										<SelectableChatTag key={tag.id} data={tag} />
 									))}
 								</div>
 							</>
@@ -1266,7 +1288,7 @@ const Sidebar: React.FC<Props> = ({
 						>
 							{(item) => (
 								<ChatListItem
-									key={item.waId}
+									key={item.wa_id}
 									chatData={item}
 									keyword={searchedKeyword}
 									contactProvidersData={contactProvidersData}
@@ -1306,9 +1328,7 @@ const Sidebar: React.FC<Props> = ({
 										messageData={message[1]}
 										keyword={searchedKeyword}
 										displaySender={true}
-										onClick={(chatMessage: ChatMessageModel) =>
-											goToMessage(chatMessage)
-										}
+										onClick={(chatMessage: Message) => goToMessage(chatMessage)}
 									/>
 								))}
 							</div>
@@ -1391,8 +1411,8 @@ const Sidebar: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Export chats')}
 				</MenuItem>*/}
-				{currentUser?.isAdmin && <Divider />}
-				{currentUser?.isAdmin && (
+				{currentUser?.profile?.role === 'admin' && <Divider />}
+				{currentUser?.profile?.role === 'admin' && (
 					<MenuItem
 						component={Link}
 						href={getHubURL(config?.API_BASE_URL ?? '')}

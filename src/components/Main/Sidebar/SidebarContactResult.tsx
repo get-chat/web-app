@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 import PersonModel from '@src/api/models/PersonModel';
-import ChatModel from '@src/api/models/ChatModel';
+import { Chat } from '@src/types/chats';
+import { getChatContactName } from '@src/helpers/ChatHelper';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 interface Props {
 	contactData: PersonModel | undefined;
-	chatData?: ChatModel;
+	chatData?: Chat;
 }
 
 const SidebarContactResult: React.FC<Props> = ({ contactData, chatData }) => {
@@ -17,11 +19,11 @@ const SidebarContactResult: React.FC<Props> = ({ contactData, chatData }) => {
 	return (
 		<Link to={''}>
 			<div id={contactData?.waId}>
-				<CustomAvatar generateBgColorBy={chatData?.name}>
-					{chatData?.initials}
+				<CustomAvatar generateBgColorBy={getChatContactName(chatData)}>
+					{generateInitialsHelper(getChatContactName(chatData))}
 				</CustomAvatar>
 				<div className="sidebarContactResult__info">
-					<h2>{chatData?.name}</h2>
+					<h2>{getChatContactName(chatData)}</h2>
 					<p className="sidebarContactResult__info__status">{t('Status')}</p>
 				</div>
 			</div>

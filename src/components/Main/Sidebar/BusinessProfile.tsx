@@ -32,7 +32,7 @@ function BusinessProfile(props: any) {
 	const { isReadOnly } = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 
-	const isAdmin = currentUser?.isAdmin ?? false;
+	const isAdmin = currentUser?.profile?.role === 'admin';
 
 	const { t } = useTranslation();
 

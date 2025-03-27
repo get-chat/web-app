@@ -28,7 +28,6 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '@src/Constants';
-import ChatMessageModel from '../../../api/models/ChatMessageModel';
 import PersonModel from '../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
@@ -39,7 +38,6 @@ import PubSub from 'pubsub-js';
 import MessageDateIndicator from './MessageDateIndicator';
 import {
 	generateUniqueID,
-	generateUnixTimestamp,
 	hasInternetConnection,
 	isScrollable,
 	sortMessagesAsc,
@@ -64,8 +62,11 @@ import {
 	getObjLength,
 } from '@src/helpers/ObjectHelper';
 import {
-	extractTimestampFromMessage,
-	messageHelper,
+	generateMessageInternalId,
+	getMessageTimestamp,
+	getUniqueSender,
+	prepareMessageList,
+	prepareReactions,
 } from '@src/helpers/MessageHelper';
 import { isLocalHost } from '@src/helpers/URLHelper';
 import {
@@ -78,7 +79,6 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import ChatMessagesResponse from '../../../api/responses/ChatMessagesResponse';
 import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
 import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
 import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
@@ -86,10 +86,8 @@ import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectRed
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
-import TemplateModel from '@src/api/models/TemplateModel';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useChat from '@src/components/Main/Chat/useChat';
-import ChatModel from '@src/api/models/ChatModel';
 // @ts-ignore
 import decode from 'unescape';
 import {
@@ -107,6 +105,17 @@ import ChosenFileClass from '@src/ChosenFileClass';
 import ReactionList from '@src/interfaces/ReactionList';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
+import { Template } from '@src/types/templates';
+import { fetchChat } from '@src/api/chatsApi';
+import { Chat } from '@src/types/chats';
+import { createMessage, fetchMessages } from '@src/api/messagesApi';
+import {
+	CreateMessageRequest,
+	Message,
+	MessageType,
+	WebhookMessageStatus,
+} from '@src/types/messages';
+import { getUnixTimestamp } from '@src/helpers/DateHelper';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -124,10 +133,10 @@ interface Props {
 	setChatTagsVisible: (value: boolean) => void;
 	setBulkSendPayload: (value: BulkSendPayload) => void;
 	searchMessagesByKeyword: (keyword: string) => void;
-	setMessageWithStatuses: (value?: ChatMessageModel) => void;
+	setMessageWithStatuses: (value?: Message) => void;
 }
 
-const Chat: React.FC<Props> = (props) => {
+const ChatView: React.FC<Props> = (props) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const {
@@ -170,7 +179,7 @@ const Chat: React.FC<Props> = (props) => {
 	const [isExpired, setExpired] = useState(false);
 
 	const [person, setPerson] = useState<PersonModel>();
-	const [chat, setChat] = useState<ChatModel>();
+	const [chat, setChat] = useState<Chat>();
 
 	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
@@ -188,9 +197,9 @@ const Chat: React.FC<Props> = (props) => {
 
 	const [isAtBottom, setAtBottom] = useState(false);
 
-	const [lastMessageId, setLastMessageId] = useState();
+	const [lastMessageId, setLastMessageId] = useState<string>();
 
-	const [chosenTemplate, setChosenTemplate] = useState<TemplateModel>();
+	const [chosenTemplate, setChosenTemplate] = useState<Template>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
 		useState(false);
 
@@ -298,7 +307,7 @@ const Chat: React.FC<Props> = (props) => {
 			};
 
 			// Use proper method to send message depends on its type
-			if (requestBody.type === ChatMessageModel.TYPE_TEXT) {
+			if (requestBody.type === MessageType.text) {
 				sendMessage(
 					false,
 					undefined,
@@ -306,7 +315,7 @@ const Chat: React.FC<Props> = (props) => {
 					successCallback,
 					completeCallback
 				);
-			} else if (requestBody.type === ChatMessageModel.TYPE_TEMPLATE) {
+			} else if (requestBody.type === MessageType.template) {
 				sendTemplateMessage(
 					false,
 					undefined,
@@ -314,7 +323,7 @@ const Chat: React.FC<Props> = (props) => {
 					successCallback,
 					completeCallback
 				);
-			} else if (requestBody.type === ChatMessageModel.TYPE_INTERACTIVE) {
+			} else if (requestBody.type === MessageType.interactive) {
 				sendInteractiveMessage(
 					false,
 					undefined,
@@ -434,7 +443,7 @@ const Chat: React.FC<Props> = (props) => {
 						if (currentNewMessages > 0) {
 							const lastMessage = getLastObject(messages);
 							if (lastMessage) {
-								markAsReceived(extractTimestampFromMessage(lastMessage));
+								markAsReceived(getMessageTimestamp(lastMessage) ?? -1);
 							}
 						}
 					}
@@ -449,7 +458,7 @@ const Chat: React.FC<Props> = (props) => {
 							listMessages(
 								false,
 								undefined,
-								getFirstObject(messages)?.timestamp
+								getMessageTimestamp(getFirstObject(messages))
 							);
 						}
 					} else {
@@ -466,7 +475,7 @@ const Chat: React.FC<Props> = (props) => {
 									undefined,
 									undefined,
 									undefined,
-									getLastObject(messages)?.timestamp,
+									getMessageTimestamp(getLastObject(messages)),
 									true,
 									false
 								);
@@ -512,27 +521,27 @@ const Chat: React.FC<Props> = (props) => {
 					setMessages((prevState) => {
 						let newState;
 						const preparedMessages: ChatMessageList = {};
-						Object.entries(data).forEach((message) => {
-							const msgId = message[0];
-							const chatMessage = message[1];
+						Object.entries(data).forEach((messageEntry) => {
+							const messageWabaId = messageEntry[0];
+							const message = messageEntry[1];
 
-							if (waId === chatMessage?.waId) {
+							if (waId === message?.customer_wa_id) {
 								// Replace message displayed with internal id
-								const internalIdString = chatMessage.generateInternalIdString();
+								const internalIdString = generateMessageInternalId(message.id);
 								if (internalIdString in prevState) {
 									delete prevState[internalIdString];
 								}
 
-								preparedMessages[msgId] = chatMessage;
+								preparedMessages[messageWabaId] = message;
 
-								if (!chatMessage.isFromUs) {
+								if (!message.from_us) {
 									hasAnyIncomingMsg = true;
 								}
 							}
 						});
 
 						if (getObjLength(preparedMessages) > 0) {
-							const lastMessage = getLastObject(preparedMessages);
+							const lastMessage = getLastObject(preparedMessages) as Message;
 
 							if (isAtBottom) {
 								const prevScrollTop = messagesContainer.current?.scrollTop;
@@ -552,12 +561,11 @@ const Chat: React.FC<Props> = (props) => {
 								}
 
 								if (hasAnyIncomingMsg) {
-									const lastMessageTimestamp =
-										extractTimestampFromMessage(lastMessage);
+									const lastMessageTimestamp = getMessageTimestamp(lastMessage);
 
 									// Mark new message as received if visible
 									if (canSeeLastMessage(messagesContainer.current)) {
-										markAsReceived(lastMessageTimestamp);
+										markAsReceived(lastMessageTimestamp ?? -1);
 									} else {
 										setCurrentNewMessages((prevState) => prevState + 1);
 									}
@@ -580,14 +588,14 @@ const Chat: React.FC<Props> = (props) => {
 							}
 
 							// Update last message id
-							setLastMessageId(lastMessage.id);
+							setLastMessageId(lastMessage.waba_payload?.id ?? lastMessage.id);
 						}
 
 						return newState ?? prevState;
 					});
 
 					// Reactions
-					const preparedReactions = ChatMessagesResponse.prepareReactions(data);
+					const preparedReactions = prepareReactions(data);
 					setReactions((prevState) =>
 						mergeReactionLists(prevState, preparedReactions)
 					);
@@ -601,10 +609,11 @@ const Chat: React.FC<Props> = (props) => {
 		);
 
 		// Status changes
-		const onMessageStatusChange = function (msg: string, data: any) {
+		const onMessageStatusChange = function (
+			msg: string,
+			data: { [key: string]: WebhookMessageStatus }
+		) {
 			if (data && isLoaded) {
-				// TODO: Check if message belongs to active conversation to avoid doing this unnecessarily
-
 				let receivedNewErrors = false;
 				const prevScrollTop = messagesContainer.current?.scrollTop;
 				const prevScrollHeight = messagesContainer.current?.scrollHeight;
@@ -614,52 +623,73 @@ const Chat: React.FC<Props> = (props) => {
 						const newState = prevState;
 						let changedAny = false;
 
-						Object.entries(data).forEach((status) => {
-							let wabaIdOrGetchatId = status[0];
+						Object.entries(data).forEach((statusEntry) => {
+							let wabaIdOrGetchatId = statusEntry[0];
+							const statusObj = statusEntry[1];
 
-							const statusObj: any = status[1];
+							// Check if status data belongs to active chat
+							if (statusObj.recipient_id !== waId) return;
 
 							// Check if any message is displayed with internal id
 							// Fix duplicated messages in this way
-							const internalIdString =
-								ChatMessageModel.generateInternalIdStringStatic(
-									statusObj?.getchatId
-								);
+							const internalIdString = generateMessageInternalId(
+								statusObj?.getchat_id
+							);
 
 							if (internalIdString in newState) {
 								wabaIdOrGetchatId = internalIdString;
 							}
 
 							if (wabaIdOrGetchatId in newState) {
-								if (statusObj.sentTimestamp) {
-									changedAny = true;
-									newState[wabaIdOrGetchatId].sentTimestamp =
-										statusObj.sentTimestamp;
+								// Making message mutable
+								newState[wabaIdOrGetchatId] = {
+									...newState[wabaIdOrGetchatId],
+								};
+
+								if (newState[wabaIdOrGetchatId].waba_statuses) {
+									// Making waba_statuses mutable
+									newState[wabaIdOrGetchatId].waba_statuses = {
+										...newState[wabaIdOrGetchatId].waba_statuses,
+									};
+								} else {
+									// Creating missing waba_statuses
+									newState[wabaIdOrGetchatId].waba_statuses = {};
 								}
 
-								if (statusObj.deliveredTimestamp) {
+								if (statusObj.status === 'sent') {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].deliveredTimestamp =
-										statusObj.deliveredTimestamp;
+									newState[wabaIdOrGetchatId].waba_statuses!.sent = parseInt(
+										statusObj.timestamp
+									);
 								}
 
-								if (statusObj.readTimestamp) {
+								if (statusObj.status === 'delivered') {
 									changedAny = true;
-									newState[wabaIdOrGetchatId].readTimestamp =
-										statusObj.readTimestamp;
+									newState[wabaIdOrGetchatId].waba_statuses!.delivered =
+										parseInt(statusObj.timestamp);
+								}
+
+								if (statusObj.status === 'read') {
+									changedAny = true;
+									newState[wabaIdOrGetchatId].waba_statuses!.read = parseInt(
+										statusObj.timestamp
+									);
 								}
 
 								if (statusObj.errors) {
 									receivedNewErrors = true;
 									changedAny = true;
-									newState[wabaIdOrGetchatId].isFailed = true;
+									newState[wabaIdOrGetchatId].is_failed = true;
 									// Merge with existing errors if exist
-									if (newState[wabaIdOrGetchatId].errors) {
-										newState[wabaIdOrGetchatId].errors?.concat(
+									if (newState[wabaIdOrGetchatId].waba_payload?.errors) {
+										newState[wabaIdOrGetchatId].waba_payload?.errors?.concat(
 											statusObj.errors
 										);
 									} else {
-										newState[wabaIdOrGetchatId].errors = statusObj.errors;
+										if (newState[wabaIdOrGetchatId].waba_payload) {
+											newState[wabaIdOrGetchatId].waba_payload!.errors =
+												statusObj.errors;
+										}
 									}
 								}
 
@@ -934,11 +964,11 @@ const Chat: React.FC<Props> = (props) => {
 	};
 
 	useEffect(() => {
-		const onGoToMessageId = function (msg: string, data: any) {
+		const onGoToMessageId = function (msg: string, data: Message) {
 			const msgId = data.id;
-			const timestamp = data.timestamp;
+			const timestamp = getMessageTimestamp(data);
 
-			goToMessageId(msgId, timestamp);
+			goToMessageId(msgId, timestamp ?? -1);
 		};
 
 		// Subscribe for scrolling to message event
@@ -965,8 +995,7 @@ const Chat: React.FC<Props> = (props) => {
 		}
 	}, [selectedFiles]);
 
-	const [optionsChatMessage, setOptionsChatMessage] =
-		useState<ChatMessageModel>();
+	const [optionsChatMessage, setOptionsChatMessage] = useState<Message>();
 	const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLElement>();
 	const [quickReactionAnchorEl, setQuickReactionAnchorEl] =
 		useState<HTMLElement>();
@@ -977,7 +1006,7 @@ const Chat: React.FC<Props> = (props) => {
 
 	const displayOptionsMenu = (
 		event: React.MouseEvent<Element | MouseEvent>,
-		chatMessage: ChatMessageModel
+		chatMessage: Message
 	) => {
 		// We need to use parent because menu view gets hidden
 		setMenuAnchorEl(event.currentTarget as HTMLElement);
@@ -986,7 +1015,7 @@ const Chat: React.FC<Props> = (props) => {
 
 	const displayQuickReactions = (
 		event: React.MouseEvent<Element | MouseEvent>,
-		chatMessage: ChatMessageModel
+		chatMessage: Message
 	) => {
 		setQuickReactionAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
@@ -994,22 +1023,20 @@ const Chat: React.FC<Props> = (props) => {
 
 	const displayReactionDetails = (
 		event: React.MouseEvent<Element | MouseEvent>,
-		chatMessage: ChatMessageModel
+		chatMessage: Message
 	) => {
 		setReactionDetailsAnchorEl(event.currentTarget as HTMLElement);
 		setOptionsChatMessage(chatMessage);
 	};
 
-	const retrieveChat = () => {
-		apiService.retrieveChatCall(
-			waId,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const preparedChat = new ChatModel(response.data);
-				setChat(preparedChat);
-			},
-			(error: AxiosError) => console.log(error)
-		);
+	const retrieveChat = async () => {
+		if (!waId) return;
+		try {
+			const data = await fetchChat(waId);
+			setChat(data);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const retrievePerson = (loadMessages: boolean) => {
@@ -1024,16 +1051,23 @@ const Chat: React.FC<Props> = (props) => {
 				// Person information is loaded, now load messages
 				if (loadMessages) {
 					listMessages(true, function (preparedMessages: ChatMessageList) {
-						const lastPreparedMessage = getLastObject(preparedMessages);
+						const lastPreparedMessage = getLastObject(
+							preparedMessages
+						) as Message;
 						setLastMessageId(
-							lastPreparedMessage?.id ??
-								lastPreparedMessage?.generateInternalIdString()
+							lastPreparedMessage?.waba_payload?.id ??
+								generateMessageInternalId(lastPreparedMessage?.id)
 						);
 
 						// Scroll to message if goToMessageId is defined
-						const goToMessage = location.state?.goToMessage;
+						const goToMessage = location.state?.goToMessage as
+							| Message
+							| undefined;
 						if (goToMessage !== undefined) {
-							goToMessageId(goToMessage.id, goToMessage.timestamp);
+							goToMessageId(
+								goToMessage.id,
+								getMessageTimestamp(goToMessage) ?? -1
+							);
 						}
 					});
 				}
@@ -1114,7 +1148,7 @@ const Chat: React.FC<Props> = (props) => {
 		setAtBottom(true);
 	};
 
-	const listMessages = (
+	const listMessages = async (
 		isInitial: boolean,
 		callback?: (preparedMessages: ChatMessageList) => void,
 		beforeTime?: number,
@@ -1141,101 +1175,91 @@ const Chat: React.FC<Props> = (props) => {
 			}
 		}
 
-		apiService.listMessagesCall(
-			waId,
-			undefined,
-			undefined,
-			MESSAGES_PER_PAGE,
-			offset ?? 0,
-			undefined,
-			undefined,
-			beforeTime,
-			sinceTime,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const chatMessagesResponse = new ChatMessagesResponse(
-					response.data,
-					messages,
-					true
-				);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchMessages({
+				wa_id: waId ?? '',
+				limit: MESSAGES_PER_PAGE,
+				offset: offset ?? 0,
+				before_time: beforeTime,
+				since_time: sinceTime,
+			});
 
-				if (sinceTime && isInitialWithSinceTime === true) {
-					if (chatMessagesResponse.next) {
-						/*count > limit*/
-						setAtBottom(false);
-						listMessages(
-							false,
-							callback,
-							beforeTime,
-							chatMessagesResponse.count - MESSAGES_PER_PAGE,
-							sinceTime,
-							false,
-							replaceAll
-						);
-						return false;
-					}
-				}
-
-				const preparedMessages = chatMessagesResponse.messages;
-				const preparedReactions = chatMessagesResponse.reactions;
-
-				const lastMessage = getLastObject(preparedMessages);
-
-				// Pagination filters for events
-				let beforeTimeForEvents = beforeTime;
-				let sinceTimeForEvents = sinceTime;
-
-				if (isInitial) {
-					beforeTimeForEvents = undefined;
-				} else {
-					if (!beforeTime) {
-						beforeTimeForEvents = lastMessage?.timestamp;
-					}
-				}
-
-				if (!sinceTime) {
-					sinceTimeForEvents = getFirstObject(preparedMessages)?.timestamp;
-				}
-
-				// List assignment and tagging history depends on user choice
-				if (getDisplayAssignmentAndTaggingHistory()) {
-					// List assignment events
-					listChatAssignmentEvents(
-						preparedMessages,
-						preparedReactions,
-						isInitial,
+			if (sinceTime && isInitialWithSinceTime === true) {
+				if (data.next) {
+					/*count > limit*/
+					setAtBottom(false);
+					await listMessages(
+						false,
 						callback,
-						replaceAll,
 						beforeTime,
+						data.count - MESSAGES_PER_PAGE,
 						sinceTime,
-						beforeTimeForEvents,
-						sinceTimeForEvents
+						false,
+						replaceAll
 					);
-				} else {
-					finishLoadingMessages(
-						preparedMessages,
-						preparedReactions,
-						isInitial,
-						callback,
-						replaceAll,
-						beforeTime,
-						sinceTime
-					);
+					return false;
 				}
-			},
-			(error: AxiosError) => {
-				setLoadingMoreMessages(false);
+			}
 
-				if (isInitial && !axios.isCancel(error)) {
-					window.displayCustomError('Failed to load messages!');
+			const preparedMessages = prepareMessageList(data.results);
+			const preparedReactions = prepareReactions(preparedMessages);
+
+			const lastMessage = getLastObject(preparedMessages) as Message;
+
+			// Pagination filters for events
+			let beforeTimeForEvents = beforeTime;
+			let sinceTimeForEvents = sinceTime;
+
+			if (isInitial) {
+				beforeTimeForEvents = undefined;
+			} else {
+				if (!beforeTime) {
+					beforeTimeForEvents = getMessageTimestamp(lastMessage);
 				}
-			},
-			navigate
-		);
+			}
+
+			if (!sinceTime) {
+				const firstMessage = getFirstObject(preparedMessages) as Message;
+				sinceTimeForEvents = getMessageTimestamp(firstMessage);
+			}
+
+			// List assignment and tagging history depends on user choice
+			if (getDisplayAssignmentAndTaggingHistory()) {
+				// List assignment events
+				await listChatAssignmentEvents(
+					preparedMessages,
+					preparedReactions,
+					isInitial,
+					callback,
+					replaceAll,
+					beforeTime,
+					sinceTime,
+					beforeTimeForEvents,
+					sinceTimeForEvents
+				);
+			} else {
+				await finishLoadingMessages(
+					preparedMessages,
+					preparedReactions,
+					isInitial,
+					callback,
+					replaceAll,
+					beforeTime,
+					sinceTime
+				);
+			}
+		} catch (error: any | AxiosError) {
+			setLoadingMoreMessages(false);
+
+			if (isInitial && !axios.isCancel(error)) {
+				window.displayCustomError('Failed to load messages!');
+			}
+		}
 	};
 
 	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
-	const finishLoadingMessages = (
+	const finishLoadingMessages = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
 		isInitial: boolean,
@@ -1304,8 +1328,9 @@ const Chat: React.FC<Props> = (props) => {
 			// TODO: Check unread messages first and then decide to do it or not
 			// beforeTime is not passed only for initial request
 			// Mark messages as received
-			const lastMessageTimestamp = messageHelper(preparedMessages);
-			markAsReceived(lastMessageTimestamp);
+			const lastMessage = getLastObject(preparedMessages);
+			const lastMessageTimestamp = getMessageTimestamp(lastMessage);
+			markAsReceived(lastMessageTimestamp ?? -1);
 
 			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
@@ -1316,15 +1341,15 @@ const Chat: React.FC<Props> = (props) => {
 			// then load more messages
 			if (
 				Object.entries(preparedMessages).filter(
-					(item) => item[1].type !== ChatMessageModel.TYPE_REACTION
+					(item) => item[1].waba_payload?.type !== MessageType.reaction
 				).length <
 				MESSAGES_PER_PAGE - 10
 			) {
 				setLoadingMoreMessages(true);
-				listMessages(
+				await listMessages(
 					false,
 					undefined,
-					getFirstObject(preparedMessages)?.timestamp
+					getMessageTimestamp(getFirstObject(preparedMessages) as Message)
 				);
 			}
 		}
@@ -1337,7 +1362,7 @@ const Chat: React.FC<Props> = (props) => {
 		}
 	};
 
-	const listChatAssignmentEvents = (
+	const listChatAssignmentEvents = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
 		isInitial: boolean,
@@ -1380,7 +1405,7 @@ const Chat: React.FC<Props> = (props) => {
 		);
 	};
 
-	const listChatTaggingEvents = (
+	const listChatTaggingEvents = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
 		isInitial: boolean,
@@ -1422,7 +1447,7 @@ const Chat: React.FC<Props> = (props) => {
 	};
 
 	const queueMessage = (
-		requestBody: any,
+		requestBody: CreateMessageRequest,
 		successCallback?: () => void,
 		errorCallback?: () => void,
 		completeCallback?: () => void,
@@ -1432,7 +1457,7 @@ const Chat: React.FC<Props> = (props) => {
 		const uniqueID = generateUniqueID();
 
 		// Inject id into requestBody
-		requestBody.pendingMessageUniqueId = uniqueID;
+		requestBody.pending_message_unique_id = uniqueID;
 
 		const updatedState = [...pendingMessages];
 		updatedState.push({
@@ -1450,24 +1475,28 @@ const Chat: React.FC<Props> = (props) => {
 		dispatch(setPendingMessages([...updatedState]));
 	};
 
-	const sendCustomTextMessage = (text: string) => {
-		sendMessage(true, undefined, {
-			wa_id: waId,
-			type: ChatMessageModel.TYPE_TEXT,
-			text: {
-				body: text.trim(),
-			},
-		});
+	const sendCustomTextMessage = async (text: string) => {
+		if (waId) {
+			await sendMessage(true, undefined, {
+				wa_id: waId,
+				type: MessageType.text,
+				text: {
+					body: text.trim(),
+				},
+			});
+		} else {
+			console.warn('Empty wa_id!');
+		}
 	};
 
 	const bulkSendMessage = (type: string, payload?: BulkSendPayload) => {
 		dispatch(setSelectionModeEnabled(true));
 		dispatch(setBulkSend(true));
 
-		if (type === ChatMessageModel.TYPE_TEXT) {
+		if (type === MessageType.text) {
 			const preparedInput = translateHTMLInputToText(input).trim();
 			payload = {
-				type: ChatMessageModel.TYPE_TEXT,
+				type: MessageType.text,
 				text: {
 					body: preparedInput,
 				},
@@ -1484,44 +1513,44 @@ const Chat: React.FC<Props> = (props) => {
 		}
 	};
 
-	const sanitizeRequestBody = (requestBody: any) => {
+	const sanitizeRequestBody = (
+		requestBody: CreateMessageRequest
+	): CreateMessageRequest => {
 		const sanitizedRequestBody = { ...requestBody };
-		delete sanitizedRequestBody['pendingMessageUniqueId'];
+		delete sanitizedRequestBody['pending_message_unique_id'];
 		return sanitizedRequestBody;
 	};
 
-	const sendReaction = (messageId: string, emoji: string | null) => {
-		const requestBody = {
+	const sendReaction = async (messageId: string, emoji: string | null) => {
+		if (!emoji) return;
+
+		const requestBody: CreateMessageRequest = {
 			wa_id: waId,
-			type: ChatMessageModel.TYPE_REACTION,
+			type: MessageType.reaction,
 			reaction: {
 				message_id: messageId,
 				emoji: emoji,
 			},
 		};
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			() => {
-				// Done
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-					if (status === 453) {
-						setExpired(true);
-					}
-
-					handleIfUnauthorized(error);
+		try {
+			await createMessage(requestBody);
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+				if (status === 453) {
+					setExpired(true);
 				}
+
+				handleIfUnauthorized(error);
 			}
-		);
+		}
 	};
 
-	const sendMessage = (
+	const sendMessage = async (
 		willQueue: boolean,
 		e?: Event | React.KeyboardEvent | React.MouseEvent,
-		customPayload?: object,
+		customPayload?: CreateMessageRequest,
 		successCallback?: () => void,
 		completeCallback?: () => void
 	) => {
@@ -1533,7 +1562,9 @@ const Chat: React.FC<Props> = (props) => {
 			return false;
 		}
 
-		let requestBody: object = {};
+		if (!waId) return false;
+
+		let requestBody: CreateMessageRequest = {};
 
 		if (e) {
 			const preparedInput = decode(translateHTMLInputToText(input).trim());
@@ -1546,7 +1577,7 @@ const Chat: React.FC<Props> = (props) => {
 
 			requestBody = {
 				wa_id: waId,
-				type: ChatMessageModel.TYPE_TEXT,
+				type: MessageType.text,
 				text: {
 					body: preparedInput,
 				},
@@ -1568,41 +1599,36 @@ const Chat: React.FC<Props> = (props) => {
 			return;
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				successCallback?.();
-				completeCallback?.();
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-					// Switch to expired mode if status code is 453
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				completeCallback?.();
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+			successCallback?.();
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+				// Switch to expired mode if status code is 453
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+		} finally {
+			completeCallback?.();
+		}
 
 		// Close emoji picker
 		PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
 	};
 
-	const sendTemplateMessage = (
+	const sendTemplateMessage = async (
 		willQueue: boolean,
-		templateMessage?: TemplateModel,
+		templateMessage?: Template,
 		customPayload?: object,
 		successCallback?: () => void,
 		completeCallback?: () => void
@@ -1627,42 +1653,37 @@ const Chat: React.FC<Props> = (props) => {
 			return;
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				successCallback?.();
-				completeCallback?.();
-
-				// Hide dialog by this event
-				PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const errors = error.response.data?.waba_response?.errors;
-					PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
-
-					const status = error.response.status;
-
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				completeCallback?.();
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+			successCallback?.();
+
+			// Hide dialog by this event
+			PubSub.publish(EVENT_TOPIC_SENT_TEMPLATE_MESSAGE, requestBody);
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const errors = error.response.data?.waba_response?.errors;
+				PubSub.publish(EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR, errors);
+
+				const status = error.response.status;
+
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+		} finally {
+			completeCallback?.();
+		}
 	};
 
-	const sendInteractiveMessage = (
+	const sendInteractiveMessage = async (
 		willQueue: boolean,
 		interactiveMessage?: object,
 		customPayload?: object,
@@ -1676,7 +1697,7 @@ const Chat: React.FC<Props> = (props) => {
 		} else {
 			requestBody = {
 				wa_id: waId,
-				type: ChatMessageModel.TYPE_INTERACTIVE,
+				type: MessageType.interactive,
 				interactive: interactiveMessage,
 			};
 		}
@@ -1692,33 +1713,29 @@ const Chat: React.FC<Props> = (props) => {
 			return;
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				successCallback?.();
-				completeCallback?.();
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				completeCallback?.();
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+
+			successCallback?.();
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+		} finally {
+			completeCallback?.();
+		}
 	};
 
 	const uploadMedia = (
@@ -1759,7 +1776,7 @@ const Chat: React.FC<Props> = (props) => {
 		);
 	};
 
-	const sendFile = (
+	const sendFile = async (
 		receiverWaId: string | undefined,
 		fileURL: string | undefined,
 		chosenFile: ChosenFileClass | undefined,
@@ -1780,105 +1797,65 @@ const Chat: React.FC<Props> = (props) => {
 			};
 		}
 
-		apiService.sendMessageCall(
-			sanitizeRequestBody(requestBody),
-			(response: AxiosResponse) => {
-				// Message is stored and will be sent later
-				if (response.status === 202) {
-					displayMessageInChatManually(requestBody, response);
-				}
-
-				// Send next request (or resend callback)
-				completeCallback?.();
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					const status = error.response.status;
-
-					if (status === 453) {
-						setExpired(true);
-					} else if (status >= 500) {
-						handleFailedMessage(requestBody);
-					}
-
-					handleIfUnauthorized(error);
-				}
-
-				// Send next when it fails, a retry can be considered
-				// If custom payload is empty, it means it is resending, so it is just a success callback
-				if (!customPayload) {
-					completeCallback?.();
-				}
+		try {
+			const response = await createMessage(sanitizeRequestBody(requestBody));
+			// Message is stored and will be sent later
+			if (response.status === 202) {
+				displayMessageInChatManually(requestBody, response.data.id);
 			}
-		);
+
+			// Send next request (or resend callback)
+			completeCallback?.();
+		} catch (error: any | AxiosError) {
+			if (error.response) {
+				const status = error.response.status;
+
+				if (status === 453) {
+					setExpired(true);
+				} else if (status >= 500) {
+					handleFailedMessage(requestBody);
+				}
+
+				handleIfUnauthorized(error);
+			}
+
+			// Send next when it fails, a retry can be considered
+			// If custom payload is empty, it means it is resending, so it is just a success callback
+			if (!customPayload) {
+				completeCallback?.();
+			}
+		}
 	};
 
 	const displayMessageInChatManually = (
-		requestBody: any,
-		response: AxiosResponse
+		requestBody: CreateMessageRequest,
+		messageId: string
 	) => {
 		flushSync(() => {
 			setMessages((prevState) => {
-				let text;
-
-				if (
-					requestBody.type === ChatMessageModel.TYPE_TEXT ||
-					requestBody.text
-				) {
-					text = requestBody.text.body;
-				}
-
-				let getchatId;
-				if (response) {
-					getchatId = response.data.id;
-				}
-
-				const timestamp = generateUnixTimestamp();
-				const storedMessage = new ChatMessageModel();
-				storedMessage.getchatId = getchatId;
-				storedMessage.id = storedMessage.generateInternalIdString();
-				storedMessage.waId = waId ?? '';
-				storedMessage.type = requestBody.type;
-				storedMessage.text = text;
-
-				storedMessage.templateName = requestBody.template?.name;
-				storedMessage.templateNamespace = requestBody.template?.namespace;
-				storedMessage.templateLanguage = requestBody.template?.language?.code;
-				storedMessage.templateParameters = requestBody.template?.components;
-
-				if (!storedMessage.payload) {
-					storedMessage.payload = {};
-				}
-
-				if (requestBody.interactive) {
-					storedMessage.payload.interactive = requestBody.interactive;
-				}
-
-				storedMessage.imageLink = requestBody.image?.link;
-				storedMessage.videoLink = requestBody.video?.link;
-				storedMessage.audioLink = requestBody.audio?.link;
-				storedMessage.documentLink = requestBody.document?.link;
-
-				storedMessage.caption =
-					requestBody.image?.caption ??
-					requestBody.video?.caption ??
-					requestBody.audio?.caption ??
-					requestBody.document?.caption;
-
-				storedMessage.isFromUs = true;
-				storedMessage.username = currentUser?.username;
-				storedMessage.isFailed = false;
-				storedMessage.isStored = true;
-				storedMessage.timestamp = timestamp;
-				storedMessage.resendPayload = requestBody;
-
-				prevState[storedMessage.id] = storedMessage;
+				const message: Message = {
+					id: messageId,
+					from_us: true,
+					received: false,
+					customer_wa_id: requestBody.wa_id ?? '',
+					tags: [],
+					chat_tags: [],
+					is_failed: false,
+					sender: currentUser,
+					waba_payload: {
+						id: messageId,
+						timestamp: getUnixTimestamp().toString(),
+						...requestBody,
+						type: requestBody.type ?? MessageType.none,
+					},
+				};
+				prevState[generateMessageInternalId(message.id)] = message;
 				return { ...prevState };
 			});
 		});
 	};
 
-	const handleFailedMessage = (requestBody: any) => {
+	const handleFailedMessage = (requestBody: CreateMessageRequest) => {
 		//displayMessageInChatManually(requestBody, false);
 
 		// Mark message in queue as failed
@@ -1886,7 +1863,7 @@ const Chat: React.FC<Props> = (props) => {
 			setPendingMessages([
 				...setPendingMessageFailed(
 					pendingMessages,
-					requestBody.pendingMessageUniqueId
+					requestBody.pending_message_unique_id ?? ''
 				),
 			])
 		);
@@ -1899,35 +1876,35 @@ const Chat: React.FC<Props> = (props) => {
 		dispatch(setState({ lastSendAttemptAt: new Date() }));
 	};
 
-	const retryMessage = (message: ChatMessageModel) => {
-		if (!message.resendPayload) {
+	const retryMessage = (message: Message) => {
+		if (!message.resend_payload) {
 			console.warn('Property is undefined: resendPayload', message);
 			return;
 		}
 
-		message.resendPayload.wa_id = message.waId;
+		message.resend_payload.wa_id = message.waba_payload?.wa_id;
 
-		switch (message.type) {
-			case ChatMessageModel.TYPE_TEXT:
-				sendMessage(true, undefined, message.resendPayload);
+		switch (message.waba_payload?.type) {
+			case MessageType.text:
+				sendMessage(true, undefined, message.resend_payload);
 				break;
-			case ChatMessageModel.TYPE_TEMPLATE:
-				sendTemplateMessage(true, undefined, message.resendPayload);
+			case MessageType.template:
+				sendTemplateMessage(true, undefined, message.resend_payload);
 				break;
-			case ChatMessageModel.TYPE_INTERACTIVE:
-				sendInteractiveMessage(true, undefined, message.resendPayload);
+			case MessageType.interactive:
+				sendInteractiveMessage(true, undefined, message.resend_payload);
 				break;
 			default:
 				if (
-					message.type &&
+					message.waba_payload?.wa_id &&
 					[
-						ChatMessageModel.TYPE_AUDIO,
-						ChatMessageModel.TYPE_VIDEO,
-						ChatMessageModel.TYPE_IMAGE,
-						ChatMessageModel.TYPE_VOICE,
-					].includes(message.type)
+						MessageType.audio,
+						MessageType.video,
+						MessageType.image,
+						MessageType.voice,
+					].includes(message.waba_payload.type)
 				) {
-					sendFile(undefined, undefined, undefined, message.resendPayload);
+					sendFile(undefined, undefined, undefined, message.resend_payload);
 				}
 				break;
 		}
@@ -2160,10 +2137,10 @@ const Chat: React.FC<Props> = (props) => {
 
 				{Object.entries(messages).map((message, index) => {
 					// Ignoring reaction messages
-					if (message[1].type === ChatMessageModel.TYPE_REACTION) return;
+					if (message[1].waba_payload?.type === MessageType.reaction) return;
 
 					// Message date is created here and passed to ChatMessage for a better performance
-					const curMsgDate = moment.unix(message[1].timestamp);
+					const curMsgDate = moment.unix(getMessageTimestamp(message[1]) ?? -1);
 
 					if (index === 0) {
 						lastPrintedDate = undefined;
@@ -2173,7 +2150,9 @@ const Chat: React.FC<Props> = (props) => {
 					let willDisplayDate = false;
 					if (lastPrintedDate === undefined) {
 						willDisplayDate = true;
-						lastPrintedDate = moment.unix(message[1].timestamp);
+						lastPrintedDate = moment.unix(
+							getMessageTimestamp(message[1]) ?? -1
+						);
 					} else {
 						if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
 							willDisplayDate = true;
@@ -2183,16 +2162,16 @@ const Chat: React.FC<Props> = (props) => {
 					}
 
 					let willDisplaySender = false;
-					const curSenderWaId = message[1].getUniqueSender();
+					const curSenderWaId = getUniqueSender(message[1]);
 					if (lastSenderWaId === undefined) {
 						willDisplaySender = true;
-						lastSenderWaId = message[1].getUniqueSender();
+						lastSenderWaId = getUniqueSender(message[1]);
 					} else {
 						if (lastSenderWaId !== curSenderWaId) {
 							willDisplaySender = true;
 						}
 
-						lastSenderWaId = message[1].getUniqueSender();
+						lastSenderWaId = getUniqueSender(message[1]);
 					}
 
 					return (
@@ -2200,7 +2179,9 @@ const Chat: React.FC<Props> = (props) => {
 							<ChatMessage
 								data={message[1]}
 								reactionsHistory={reactions[message[0]] ?? []}
-								templateData={templates[message[1]?.templateName ?? '']}
+								templateData={
+									templates[message[1]?.waba_payload?.template?.name ?? '']
+								}
 								displaySender={willDisplaySender}
 								displayDate={willDisplayDate}
 								isExpired={isExpired}
@@ -2238,7 +2219,11 @@ const Chat: React.FC<Props> = (props) => {
 			<ReactionDetails
 				message={optionsChatMessage}
 				reactionsHistory={
-					optionsChatMessage ? reactions[optionsChatMessage.id] ?? [] : []
+					optionsChatMessage
+						? reactions[
+								optionsChatMessage.waba_payload?.id ?? optionsChatMessage.id
+						  ] ?? []
+						: []
 				}
 				anchorElement={reactionDetailsAnchorEl}
 				setAnchorElement={setReactionDetailsAnchorEl}
@@ -2246,7 +2231,7 @@ const Chat: React.FC<Props> = (props) => {
 
 			{isTemplatesVisible && (
 				<TemplateListWithControls
-					onSelect={(template: TemplateModel) => {
+					onSelect={(template: Template) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);
 					}}
@@ -2320,4 +2305,4 @@ const Chat: React.FC<Props> = (props) => {
 	);
 };
 
-export default Chat;
+export default ChatView;

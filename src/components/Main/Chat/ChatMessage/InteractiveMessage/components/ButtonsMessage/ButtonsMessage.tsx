@@ -5,12 +5,9 @@ import styles from './ButtonsMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 
-const ButtonsMessage: React.FC<InteractiveMessageProps> = ({
-	header,
-	body,
-	footer,
-	action,
-}) => {
+const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
+	const { header, body, footer, action } = interactive ?? {};
+
 	return (
 		<>
 			{header && (

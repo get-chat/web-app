@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, ListItem } from '@mui/material';
 import '../../../styles/SelectableChatTag.css';
 import SellIcon from '@mui/icons-material/Sell';
-import TagModel from '@src/api/models/TagModel';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
+import { Tag } from '@src/types/tags';
 
 interface Props {
-	data: TagModel;
+	data: Tag;
 }
 
 const SelectableChatTag: React.FC<Props> = ({ data }) => {
@@ -43,7 +43,7 @@ const SelectableChatTag: React.FC<Props> = ({ data }) => {
 					color="primary"
 				/>
 				<div className="sidebarTag__selection__tag">
-					<SellIcon style={{ fill: data.color }} />
+					<SellIcon style={{ fill: data.web_inbox_color }} />
 					{data.name}
 				</div>
 			</div>

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import TagModel from '@src/api/models/TagModel';
+import { Tag } from '@src/types/tags';
 
 interface TagsState {
-	value: TagModel[];
+	value: Tag[];
 }
 
 const initialState: TagsState = {
@@ -13,7 +13,7 @@ const tagsSlice = createSlice({
 	name: 'tags',
 	initialState,
 	reducers: {
-		setTags: (state, action: PayloadAction<TagModel[]>) => {
+		setTags: (state, action: PayloadAction<Tag[]>) => {
 			state.value = action.payload;
 		},
 	},

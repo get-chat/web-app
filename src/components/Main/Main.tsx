@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
-import Chat from './Chat/Chat';
+import ChatView from './Chat/ChatView';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -24,7 +24,6 @@ import {
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 } from '@src/Constants';
-import ChatMessageModel from '../../api/models/ChatMessageModel';
 import PreviewMedia from './PreviewMedia';
 import { getToken } from '@src/helpers/StorageHelper';
 import ChatAssignment from './ChatAssignment';
@@ -32,7 +31,7 @@ import ChatTags from './ChatTags';
 import ChatTagsList from './ChatTagsList';
 import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
 import moment from 'moment';
-import { clearUserSession } from '@src/helpers/ApiHelper';
+import { clearUserSession, handleIfUnauthorized } from '@src/helpers/ApiHelper';
 import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
 import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
@@ -46,26 +45,20 @@ import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateVi
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
-import CurrentUserResponse from '../../api/responses/CurrentUserResponse';
-import TemplatesResponse from '../../api/responses/TemplatesResponse';
 import UploadRecipientsCSV from '../UploadRecipientsCSV';
 import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import UsersResponse from '@src/api/responses/UsersResponse';
 import { setUsers } from '@src/store/reducers/usersReducer';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
-import SavedResponsesResponse from '@src/api/responses/SavedResponsesResponse';
 import {
 	setChatAssignment,
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
 import BulkSendPayload from '@src/interfaces/BulkSendPayload';
-import GroupsResponse from '@src/api/responses/GroupsResponse';
 import { setGroups } from '@src/store/reducers/groupsReducer';
-import TagsResponse from '@src/api/responses/TagsResponse';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
@@ -76,6 +69,27 @@ import {
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
+import {
+	createSavedResponse,
+	fetchSavedResponses,
+} from '@src/api/savedResponsesApi';
+import { fetchCurrentUser, fetchUsers } from '@src/api/usersApi';
+import { User, UserList } from '@src/types/users';
+import { fetchTags } from '@src/api/tagsApi';
+import { fetchGroups } from '@src/api/groupsApi';
+import { GroupList } from '@src/types/groups';
+import { fetchTemplates } from '@src/api/templatesApi';
+import { TemplateList } from '@src/types/templates';
+import {
+	Message,
+	MessageStatus,
+	WebhookMessage,
+	WebhookMessageStatus,
+} from '@src/types/messages';
+import {
+	fromAssignmentEvent,
+	fromTaggingEvent,
+} from '@src/helpers/MessageHelper';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -130,8 +144,7 @@ const Main: React.FC = () => {
 
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
-	const [messageWithStatuses, setMessageWithStatuses] =
-		useState<ChatMessageModel>();
+	const [messageWithStatuses, setMessageWithStatuses] = useState<Message>();
 
 	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
 
@@ -457,7 +470,7 @@ const Main: React.FC = () => {
 
 			ws.onmessage = function (event) {
 				try {
-					const data = JSON.parse(event.data);
+					const data = JSON.parse(event.data) as WebhookMessage;
 					console.log(data);
 
 					if (data.type === 'waba_webhook') {
@@ -469,9 +482,9 @@ const Main: React.FC = () => {
 						if (incomingMessages) {
 							const preparedMessages: ChatMessageList = {};
 
-							incomingMessages.forEach((message: any) => {
-								const messageObj = new ChatMessageModel(message);
-								preparedMessages[messageObj.id] = messageObj;
+							incomingMessages.forEach((message: Message) => {
+								preparedMessages[message.waba_payload?.id ?? message.id] =
+									message;
 							});
 
 							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -483,9 +496,9 @@ const Main: React.FC = () => {
 						if (outgoingMessages) {
 							const preparedMessages: ChatMessageList = {};
 
-							outgoingMessages.forEach((message: any) => {
-								const messageObj = new ChatMessageModel(message);
-								preparedMessages[messageObj.id] = messageObj;
+							outgoingMessages.forEach((message: Message) => {
+								preparedMessages[message.waba_payload?.id ?? message.id] =
+									message;
 							});
 
 							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -495,35 +508,11 @@ const Main: React.FC = () => {
 						const statuses = wabaPayload?.statuses;
 
 						if (statuses) {
-							const preparedStatuses: { [key: string]: any } = {};
-							statuses.forEach((statusObj: any) => {
-								if (!preparedStatuses.hasOwnProperty(statusObj.id)) {
-									preparedStatuses[statusObj.id] = {};
-								}
-
-								// Inject getchat id to avoid duplicated messages
-								preparedStatuses[statusObj.id].getchatId = statusObj.getchat_id;
-
-								if (statusObj.status === ChatMessageModel.STATUS_SENT) {
-									preparedStatuses[statusObj.id].sentTimestamp =
-										statusObj.timestamp;
-								}
-
-								if (statusObj.status === ChatMessageModel.STATUS_DELIVERED) {
-									preparedStatuses[statusObj.id].deliveredTimestamp =
-										statusObj.timestamp;
-								}
-
-								if (statusObj.status === ChatMessageModel.STATUS_READ) {
-									preparedStatuses[statusObj.id].readTimestamp =
-										statusObj.timestamp;
-								}
-
-								// Handling errors
-								if (statusObj.errors) {
-									preparedStatuses[statusObj.id].errors = statusObj.errors;
-								}
-							});
+							const preparedStatuses: { [key: string]: WebhookMessageStatus } =
+								{};
+							statuses.forEach(
+								(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
+							);
 
 							PubSub.publish(
 								EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
@@ -536,8 +525,7 @@ const Main: React.FC = () => {
 
 						if (chatAssignment) {
 							const preparedMessages: ChatMessageList = {};
-							const prepared =
-								ChatMessageModel.fromAssignmentEvent(chatAssignment);
+							const prepared = fromAssignmentEvent(chatAssignment);
 							preparedMessages[prepared.id] = prepared;
 
 							PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
@@ -546,8 +534,8 @@ const Main: React.FC = () => {
 							setTimeout(function () {
 								dispatch(
 									setChatAssignment({
-										waId: prepared.waId,
-										assignmentEvent: prepared.assignmentEvent,
+										waId: prepared.customer_wa_id,
+										assignmentEvent: prepared.assignment_event,
 									})
 								);
 							}, 100);
@@ -558,7 +546,7 @@ const Main: React.FC = () => {
 
 						if (chatTagging) {
 							const preparedMessages: ChatMessageList = {};
-							const prepared = ChatMessageModel.fromTaggingEvent(chatTagging);
+							const prepared = fromTaggingEvent(chatTagging);
 							preparedMessages[prepared.id] = prepared;
 
 							PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
@@ -568,8 +556,8 @@ const Main: React.FC = () => {
 								// Update chats
 								dispatch(
 									setChatTagging({
-										waId: prepared.waId,
-										taggingEvent: prepared.taggingEvent,
+										waId: prepared.customer_wa_id,
+										taggingEvent: prepared.tagging_event,
 									})
 								);
 							}, 100);
@@ -743,20 +731,18 @@ const Main: React.FC = () => {
 		setLoadingComponent('Users');
 
 		try {
-			apiService.listUsersCall(5000, (response: AxiosResponse) => {
-				const usersResponse = new UsersResponse(response.data);
-
-				// Store
-				dispatch(setUsers(usersResponse.users));
-
-				setProgress(15);
+			const data = await fetchUsers(5000);
+			const userList: UserList = {};
+			data.results.forEach((user: User) => {
+				userList[user.id] = user;
 			});
+			dispatch(setUsers(userList));
 		} catch (error) {
 			console.error('Error in listUsers', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
-			// Trigger next request
-			listGroups();
+			setProgress(15);
+			await listGroups();
 		}
 	};
 
@@ -765,18 +751,16 @@ const Main: React.FC = () => {
 		setLoadingComponent('Groups');
 
 		try {
-			apiService.listGroupsCall(undefined, (response: AxiosResponse) => {
-				const groupsResponse = new GroupsResponse(response.data);
-
-				// Store
-				dispatch(setGroups(groupsResponse.groups));
-
-				setProgress(25);
-			});
+			const data = await fetchGroups();
+			const preparedGroups: GroupList = {};
+			data.results.forEach((item) => (preparedGroups[item.id] = item));
+			dispatch(setGroups(preparedGroups));
 		} catch (error) {
 			console.error('Error in listGroups', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
 		} finally {
+			setProgress(25);
+
 			// Trigger next request
 			listContacts();
 		}
@@ -787,25 +771,30 @@ const Main: React.FC = () => {
 		setLoadingComponent('Current User');
 
 		try {
-			apiService.retrieveCurrentUserCall((response: AxiosResponse) => {
-				const currentUserResponse = new CurrentUserResponse(response.data);
-				dispatch(setCurrentUser(currentUserResponse.currentUser));
+			const data = await fetchCurrentUser();
+			dispatch(setCurrentUser(data));
 
-				const role = currentUserResponse.currentUser.role;
+			const role = data.profile?.role;
 
-				// Only admins and users can access
-				if (role !== 'admin' && role !== 'user') {
-					clearUserSession('incorrectRole', location, navigate);
-				}
-
-				setProgress(10);
-			}, navigate);
-		} catch (error) {
+			// Only admins and users can access
+			if (role !== 'admin' && role !== 'user') {
+				clearUserSession('incorrectRole', location, navigate);
+			}
+		} catch (error: any | AxiosError) {
 			console.error('Error retrieving current user', error);
 			dispatch(setState({ isInitialResourceFailed: true }));
+
+			// Exceptional handling for invalid token
+			if (error?.response?.status === 403) {
+				clearUserSession('invalidToken', undefined, navigate);
+			} else {
+				handleIfUnauthorized(error, navigate);
+			}
 		} finally {
+			setProgress(10);
+
 			// Trigger next request
-			listUsers();
+			await listUsers();
 		}
 	};
 
@@ -823,78 +812,73 @@ const Main: React.FC = () => {
 			listTags();
 		};
 
-		apiService.listTemplatesCall(
-			undefined,
-			(response: AxiosResponse) => {
-				const templatesResponse = new TemplatesResponse(response.data);
+		try {
+			const data = await fetchTemplates();
+			const templateList: TemplateList = {};
+			data.results
+				.filter((item) => item.status === 'approved')
+				.forEach((item) => (templateList[item.name] = item));
+			dispatch(setTemplates(templateList));
 
-				dispatch(setTemplates(templatesResponse.templates));
+			if (!isRetry) {
+				completeCallback();
+			}
 
-				if (!isRetry) {
-					completeCallback();
-				}
-
-				dispatch(setState({ isTemplatesFailed: false }));
-			},
-			(error: AxiosError) => {
-				if (!isRetry) {
-					if (error.response) {
-						const status = error.response.status;
-						// Status code >= 500 means template management is not available
-						if (status >= 500) {
-							const reason = error.response.data?.reason;
-							displayCustomError(reason);
-							completeCallback();
-
-							// To trigger retrying periodically
-							dispatch(setState({ isTemplatesFailed: true }));
-						} else {
-							window.displayError(error);
-						}
-					} else {
-						// auto skip if no response
+			dispatch(setState({ isTemplatesFailed: false }));
+		} catch (error: any | AxiosError) {
+			if (!isRetry) {
+				if (error.response) {
+					const status = error.response.status;
+					// Status code >= 500 means template management is not available
+					if (status >= 500) {
+						const reason = error.response.data?.reason;
+						displayCustomError(reason);
 						completeCallback();
+
+						// To trigger retrying periodically
+						dispatch(setState({ isTemplatesFailed: true }));
+					} else {
 						window.displayError(error);
 					}
-
-					dispatch(setState({ isInitialResourceFailed: true }));
 				} else {
-					console.error(error);
+					// auto skip if no response
+					completeCallback();
+					window.displayError(error);
 				}
+
+				dispatch(setState({ isInitialResourceFailed: true }));
+			} else {
+				console.error(error);
 			}
-		);
-	};
-
-	// ** 5 **
-	const listSavedResponses = async () => {
-		try {
-			apiService.listSavedResponsesCall((response: AxiosResponse) => {
-				const savedResponsesResponse = new SavedResponsesResponse(
-					response.data
-				);
-
-				// Store
-				dispatch(setSavedResponses(savedResponsesResponse.savedResponses));
-
-				setProgress(50);
-			});
-		} catch (error) {
-			console.error('Error in listSavedResponses', error);
-			dispatch(setState({ isInitialResourceFailed: true }));
-		} finally {
-			// Trigger next request
-			listTemplates(false);
 		}
 	};
 
-	const createSavedResponse = (text: string) => {
-		apiService.createSavedResponseCall(text, () => {
+	// ** 5 **
+	const handleFetchSavedResponses = async () => {
+		try {
+			const data = await fetchSavedResponses();
+			dispatch(setSavedResponses(data.results));
+		} catch (error) {
+			console.error('Failed to fetch responses:', error);
+			dispatch(setState({ isInitialResourceFailed: true }));
+		} finally {
+			setProgress(50);
+			await listTemplates(false);
+		}
+	};
+
+	const handleCreateSavedResponse = async (text: string) => {
+		try {
+			await createSavedResponse({ text });
+
 			// Display a success message
 			displaySuccess('Saved as response successfully!');
 
 			// Reload saved responses
-			listSavedResponses();
-		});
+			await handleFetchSavedResponses();
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	// ** 4 **
@@ -905,7 +889,7 @@ const Main: React.FC = () => {
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
 			setLoadingComponent('Saved Responses');
-			listSavedResponses();
+			handleFetchSavedResponses();
 			return;
 		}
 
@@ -918,7 +902,7 @@ const Main: React.FC = () => {
 			setLoadingComponent('Saved Responses');
 
 			// Trigger next request
-			listSavedResponses();
+			handleFetchSavedResponses();
 		};
 
 		const makeRequest = async (pages?: string | undefined | null) => {
@@ -954,10 +938,8 @@ const Main: React.FC = () => {
 	// ** 7 **
 	const listTags = async () => {
 		try {
-			apiService.listTagsCall((response: AxiosResponse) => {
-				const tagsResponse = new TagsResponse(response.data);
-				dispatch(setTags(tagsResponse.tags));
-			});
+			const data = await fetchTags();
+			dispatch(setTags(data.results));
 		} catch (error) {
 			console.error('Error in listTags', error);
 		}
@@ -1029,8 +1011,8 @@ const Main: React.FC = () => {
 				)}
 
 				{isTemplatesReady && (
-					<Chat
-						createSavedResponse={createSavedResponse}
+					<ChatView
+						createSavedResponse={handleCreateSavedResponse}
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
 						displayNotification={displayNotification}

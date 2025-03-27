@@ -18,7 +18,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 import CheckIcon from '@mui/icons-material/Check';
-import { sortUsers } from '@src/helpers/UsersHelper';
+import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
 import { sortGroups } from '@src/helpers/GroupsHelper';
 
 export type AssigneeType = 'user' | 'group';
@@ -165,7 +165,7 @@ const AssigneeChip: React.FC<Props> = ({
 									<CheckIcon />
 								</ListItemIcon>
 							)}
-							{user.prepareUserLabel()}
+							{prepareUserLabel(user)}
 						</MenuItem>
 					))}
 
