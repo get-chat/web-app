@@ -41,7 +41,6 @@ import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
-import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
@@ -53,7 +52,6 @@ import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import DynamicFeedIcon from '@mui/icons-material/DynamicFeed';
 import {
 	filterChat,
 	handleChatAssignmentEvent,
@@ -151,7 +149,6 @@ const Sidebar: React.FC<Props> = ({
 		selectedTags,
 		selectedChats,
 		isSelectionModeEnabled,
-		isBulkSend,
 		isExportChat,
 	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -185,9 +182,6 @@ const Sidebar: React.FC<Props> = ({
 	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
 		null
 	);
-	const [bulkMessageMenuAnchorEl, setBulkMessageMenuAnchorEl] = useState<
-		(EventTarget & Element) | null
-	>(null);
 
 	const filteredChats = useMemo(
 		() =>
@@ -268,14 +262,6 @@ const Sidebar: React.FC<Props> = ({
 
 	const hideMenu = () => {
 		setAnchorEl(null);
-	};
-
-	const displayBulkMessageMenu = (event: MouseEvent) => {
-		setBulkMessageMenuAnchorEl(event.currentTarget);
-	};
-
-	const hideBulkMessageMenu = () => {
-		setBulkMessageMenuAnchorEl(null);
 	};
 
 	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
@@ -860,13 +846,6 @@ const Sidebar: React.FC<Props> = ({
 							</IconButton>
 						</Tooltip>
 					)}
-					{!isReadOnly && (
-						<Tooltip title={t('Bulk send')} disableInteractive>
-							<IconButton onClick={displayBulkMessageMenu} size="large">
-								<DynamicFeedIcon />
-							</IconButton>
-						</Tooltip>
-					)}
 					<Tooltip title={t('Notifications')} disableInteractive>
 						<IconButton onClick={displayNotifications} size="large">
 							<NotificationsIcon />
@@ -1289,8 +1268,6 @@ const Sidebar: React.FC<Props> = ({
 					chats={chats}
 				/>
 			)}
-
-			<BulkSendIndicator />
 
 			<Menu
 				anchorEl={anchorEl}
