@@ -63,16 +63,6 @@ export class ApiService {
 		);
 	};
 
-	bulkSendCall = (body, successCallback) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}bulk_messages/`, body, getRequestConfig()),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	resolveContactCall = (personWaId, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getRequestConfig()),

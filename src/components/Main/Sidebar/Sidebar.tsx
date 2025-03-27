@@ -43,7 +43,6 @@ import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import BulkSendIndicator from './BulkSendIndicator';
 import SelectableChatTag from './SelectableChatTag';
-import BulkSendActions from './BulkSendActions/BulkSendActions';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications/Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
@@ -74,17 +73,9 @@ import PasswordIcon from '@mui/icons-material/Password';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import SmsIcon from '@mui/icons-material/Sms';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Alert from '@mui/material/Alert';
-import {
-	getMaxDirectRecipients,
-	getMaxTagRecipients,
-} from '@src/helpers/BulkSendHelper';
 import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
@@ -107,8 +98,6 @@ import {
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
 import PersonModel from '@src/api/models/PersonModel';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
-import BulkSendPayload from '@src/interfaces/BulkSendPayload';
-import BulkMessageTaskModel from '@src/api/models/BulkMessageTaskModel';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
@@ -126,7 +115,7 @@ import {
 	getSenderName,
 	prepareMessageList,
 } from '@src/helpers/MessageHelper';
-import { Message, MessageType } from '@src/types/messages';
+import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
@@ -140,11 +129,6 @@ interface Props {
 	};
 	isChatOnly: boolean;
 	setChatTagsListVisible: (value: boolean) => void;
-	bulkSendPayload?: BulkSendPayload;
-	finishBulkSendMessage: (payload?: BulkMessageTaskModel) => void;
-	setBulkSendTemplateDialogVisible: (value: boolean) => void;
-	setBulkSendTemplateWithCallbackDialogVisible: (value: boolean) => void;
-	setSendBulkVoiceMessageDialogVisible: (value: boolean) => void;
 }
 
 const Sidebar: React.FC<Props> = ({
@@ -153,11 +137,6 @@ const Sidebar: React.FC<Props> = ({
 	contactProvidersData,
 	isChatOnly,
 	setChatTagsListVisible,
-	bulkSendPayload,
-	finishBulkSendMessage,
-	setBulkSendTemplateDialogVisible,
-	setBulkSendTemplateWithCallbackDialogVisible,
-	setSendBulkVoiceMessageDialogVisible,
 }) => {
 	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
@@ -297,22 +276,6 @@ const Sidebar: React.FC<Props> = ({
 
 	const hideBulkMessageMenu = () => {
 		setBulkMessageMenuAnchorEl(null);
-	};
-
-	const showBulkSendTemplateDialog = () => {
-		setBulkMessageMenuAnchorEl(null);
-		setBulkSendTemplateDialogVisible(true);
-	};
-
-	const showBulkSendTemplateViaCSVDialog = () => {
-		setBulkMessageMenuAnchorEl(null);
-		//setBulkSendTemplateViaCSVVisible(true);
-		setBulkSendTemplateWithCallbackDialogVisible(true);
-	};
-
-	const showSendBulkVoiceMessageDialog = () => {
-		setBulkMessageMenuAnchorEl(null);
-		setSendBulkVoiceMessageDialogVisible(true);
 	};
 
 	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
@@ -845,11 +808,6 @@ const Sidebar: React.FC<Props> = ({
 		dispatch(setState({ selectedTags: [], selectedChats: [] }));
 	};
 
-	const handleFinishBulkSendMessage = () => {
-		dispatch(setSelectionModeEnabled(false));
-		finishBulkSendMessage();
-	};
-
 	const displayNotifications = () => {
 		setNotificationsVisible(true);
 	};
@@ -925,13 +883,6 @@ const Sidebar: React.FC<Props> = ({
 					</Tooltip>
 				</div>
 			</div>
-
-			{isSelectionModeEnabled && isBulkSend && (
-				<BulkSendActions
-					cancelSelection={cancelSelection}
-					finishBulkSendMessage={handleFinishBulkSendMessage}
-				/>
-			)}
 
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
@@ -1209,40 +1160,6 @@ const Sidebar: React.FC<Props> = ({
 			</ClickAwayListener>
 
 			<div className="sidebar__results">
-				{isSelectionModeEnabled && isBulkSend && (
-					<>
-						<Alert severity="info" className={styles.bulkAlert}>
-							{t(
-								'Please select up to %s direct recipients.',
-								getMaxDirectRecipients()
-							)}
-						</Alert>
-
-						{tags && (
-							<Alert severity="info" className={styles.bulkAlert}>
-								{t(
-									'Please select tags that target up to %s recipients in total.',
-									getMaxTagRecipients()
-								)}
-							</Alert>
-						)}
-
-						{bulkSendPayload?.type !== MessageType.template && (
-							<Alert severity="warning" className={styles.bulkAlert}>
-								<Trans>
-									Session messages can be sent only to recipients who wrote to
-									you within last 24 hours. To send messages to expired chats,
-									use{' '}
-									<a onClick={showBulkSendTemplateDialog}>
-										Bulk send a template
-									</a>{' '}
-									function.
-								</Trans>
-							</Alert>
-						)}
-					</>
-				)}
-
 				{isSelectionModeEnabled && (
 					<>
 						{tags && (
@@ -1294,7 +1211,6 @@ const Sidebar: React.FC<Props> = ({
 									contactProvidersData={contactProvidersData}
 									filterAssignedToMe={filterAssignedToMe}
 									filterAssignedGroupId={filterAssignedGroupId}
-									bulkSendPayload={bulkSendPayload}
 								/>
 							)}
 						</ViewportList>
@@ -1433,34 +1349,6 @@ const Sidebar: React.FC<Props> = ({
 						<LogoutIcon />
 					</ListItemIcon>
 					{t('Logout')}
-				</MenuItem>
-			</Menu>
-
-			<Menu
-				anchorEl={bulkMessageMenuAnchorEl}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				open={Boolean(bulkMessageMenuAnchorEl)}
-				onClose={hideBulkMessageMenu}
-				elevation={3}
-			>
-				<MenuItem onClick={showBulkSendTemplateDialog}>
-					<ListItemIcon>
-						<SmsIcon />
-					</ListItemIcon>
-					{t('Bulk send a template')}
-				</MenuItem>
-				<MenuItem onClick={showBulkSendTemplateViaCSVDialog}>
-					<ListItemIcon>
-						<UploadFileIcon />
-					</ListItemIcon>
-					{t('Bulk send template with CSV')}
-				</MenuItem>
-				<MenuItem onClick={showSendBulkVoiceMessageDialog}>
-					<ListItemIcon>
-						<KeyboardVoiceIcon />
-					</ListItemIcon>
-					{t('Bulk send a voice message')}
 				</MenuItem>
 			</Menu>
 
