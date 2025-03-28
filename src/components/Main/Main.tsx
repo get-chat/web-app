@@ -12,13 +12,9 @@ import Alert from '@mui/material/Alert';
 import 'url-search-params-polyfill';
 import {
 	CONTACTS_TEMP_LIMIT,
-	EVENT_TOPIC_BULK_MESSAGE_TASK,
-	EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
-	EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
-	EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT,
 	EVENT_TOPIC_DISPLAY_ERROR,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
@@ -32,21 +28,14 @@ import ChatTagsList from './ChatTagsList';
 import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
 import moment from 'moment';
 import { clearUserSession, handleIfUnauthorized } from '@src/helpers/ApiHelper';
-import BulkMessageTaskElementModel from '../../api/models/BulkMessageTaskElementModel';
-import BulkMessageTaskModel from '../../api/models/BulkMessageTaskModel';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import SendBulkVoiceMessageDialog from '../SendBulkVoiceMessageDialog';
-import BulkSendTemplateViaCSV from '../BulkSendTemplateViaCSV/BulkSendTemplateViaCSV';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
-import BulkSendTemplateDialog from '../BulkSendTemplateDialog';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
-import UploadRecipientsCSV from '../UploadRecipientsCSV';
-import { findTagByName } from '@src/helpers/TagHelper';
 import { setTags } from '@src/store/reducers/tagsReducer';
 import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
@@ -57,13 +46,11 @@ import {
 	setChatAssignment,
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
-import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
 	setSearchMessagesVisible,
-	setSelectionModeEnabled,
 	setState,
 } from '@src/store/reducers/UIReducer';
 import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
@@ -82,7 +69,6 @@ import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
 import {
 	Message,
-	MessageStatus,
 	WebhookMessage,
 	WebhookMessageStatus,
 } from '@src/types/messages';
@@ -111,7 +97,6 @@ const Main: React.FC = () => {
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
-		isUploadRecipientsCSVVisible,
 	} = useAppSelector((state) => state.UI);
 	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
@@ -145,24 +130,6 @@ const Main: React.FC = () => {
 	const [unsupportedFile, setUnsupportedFile] = useState();
 
 	const [messageWithStatuses, setMessageWithStatuses] = useState<Message>();
-
-	const [bulkSendPayload, setBulkSendPayload] = useState<BulkSendPayload>();
-
-	const [isBulkSendTemplateDialogVisible, setBulkSendTemplateDialogVisible] =
-		useState(false);
-
-	const [
-		isBulkSendTemplateWithCallbackDialogVisible,
-		setBulkSendTemplateWithCallbackDialogVisible,
-	] = useState(false);
-
-	const [isBulkSendTemplateViaCSVVisible, setBulkSendTemplateViaCSVVisible] =
-		useState(false);
-
-	const [
-		isSendBulkVoiceMessageDialogVisible,
-		setSendBulkVoiceMessageDialogVisible,
-	] = useState(false);
 
 	const [, setNotificationHistory] = useState<{
 		[key: string]: string[];
@@ -237,50 +204,6 @@ const Main: React.FC = () => {
 		}
 
 		setErrorVisible(false);
-	};
-
-	const finishBulkSendMessage = (payload?: BulkMessageTaskModel) => {
-		const requestPayload: any = {};
-		const messagePayload = { ...bulkSendPayload };
-		const recipients = selectedChats;
-		const tags = selectedTags;
-
-		const preparedRecipients: { recipient: string }[] = [];
-		recipients.forEach((recipient) => {
-			preparedRecipients.push({ recipient: recipient });
-		});
-
-		const preparedTags: { tag_id: number }[] = [];
-		tags.forEach((tag) => {
-			preparedTags.push({ tag_id: tag });
-		});
-
-		requestPayload.recipients = payload
-			? payload.recipients
-			: preparedRecipients;
-		requestPayload.tags = preparedTags;
-		requestPayload.payload = payload
-			? { template: payload.template, type: payload.type }
-			: messagePayload;
-
-		apiService.bulkSendCall(requestPayload, (response: AxiosResponse) => {
-			// Disable selection mode
-			dispatch(setSelectionModeEnabled(false));
-
-			// Clear selections
-			dispatch(setState({ selectedTags: [], selectedChats: [] }));
-
-			// Clear input if text message
-			if (messagePayload.type === 'text') {
-				PubSub.publish(EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT);
-			}
-
-			const preparedBulkMessageTask = new BulkMessageTaskModel(response.data);
-			PubSub.publish(
-				EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED,
-				preparedBulkMessageTask
-			);
-		});
 	};
 
 	const goToChatByWaId = (_waId: string) => {
@@ -562,47 +485,6 @@ const Main: React.FC = () => {
 								);
 							}, 100);
 						}
-
-						const bulkMessageTasks = wabaPayload?.bulk_message_tasks;
-
-						if (bulkMessageTasks) {
-							console.log(bulkMessageTasks);
-
-							const preparedBulkMessageTasks: {
-								[key: string]: BulkMessageTaskModel;
-							} = {};
-
-							bulkMessageTasks.forEach((task: any) => {
-								const prepared = new BulkMessageTaskModel(task);
-								preparedBulkMessageTasks[prepared.id] = prepared;
-							});
-
-							PubSub.publish(
-								EVENT_TOPIC_BULK_MESSAGE_TASK,
-								preparedBulkMessageTasks
-							);
-						}
-
-						const bulkMessageTaskElements =
-							wabaPayload?.bulk_message_task_elements;
-
-						if (bulkMessageTaskElements) {
-							console.log(bulkMessageTaskElements);
-
-							const preparedBulkMessageTaskElements: {
-								[key: string]: BulkMessageTaskElementModel;
-							} = {};
-
-							bulkMessageTaskElements.forEach((element: any) => {
-								const prepared = new BulkMessageTaskElementModel(element);
-								preparedBulkMessageTaskElements[prepared.id] = prepared;
-							});
-
-							PubSub.publish(
-								EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT,
-								preparedBulkMessageTaskElements
-							);
-						}
 					}
 				} catch (error) {
 					console.error(error);
@@ -718,13 +600,6 @@ const Main: React.FC = () => {
 			PubSub.unsubscribe(markedAsReceivedEventToken);
 		};
 	}, [newMessages]);
-
-	// Clear selected chats and tags when bulk send payload changes
-	useEffect(() => {
-		if (bulkSendPayload) {
-			dispatch(setState({ selectedTags: [], selectedChats: [] }));
-		}
-	}, [bulkSendPayload]);
 
 	// ** 2 **
 	const listUsers = async () => {
@@ -945,38 +820,6 @@ const Main: React.FC = () => {
 		}
 	};
 
-	useEffect(() => {
-		if (bulkSendPayload) {
-			listTags();
-		}
-	}, [bulkSendPayload]);
-
-	const addBulkSendRecipients = (newWaIds: string[], newTags: string[]) => {
-		// Combine with selected chats
-		if (newWaIds.length > 0) {
-			dispatch(
-				setState({
-					selectedChats: [...new Set([...newWaIds, ...selectedChats])],
-				})
-			);
-		}
-
-		if (newTags.length > 0) {
-			const preparedNewTags: number[] = [];
-			newTags.forEach((tagName) => {
-				const curTag = findTagByName(tags, tagName);
-				if (curTag) {
-					preparedNewTags.push(curTag.id);
-				}
-			});
-			dispatch(
-				setState({
-					selectedTags: [...new Set([...preparedNewTags, ...selectedTags])],
-				})
-			);
-		}
-	};
-
 	const searchMessagesByKeyword = (_keyword: string) => {
 		setSearchMessagesInitialKeyword(_keyword);
 		dispatch(setSearchMessagesVisible(true));
@@ -998,15 +841,6 @@ const Main: React.FC = () => {
 						contactProvidersData={contactProvidersData}
 						isChatOnly={isChatOnly}
 						setChatTagsListVisible={setChatTagsListVisible}
-						bulkSendPayload={bulkSendPayload}
-						finishBulkSendMessage={finishBulkSendMessage}
-						setBulkSendTemplateDialogVisible={setBulkSendTemplateDialogVisible}
-						setBulkSendTemplateWithCallbackDialogVisible={
-							setBulkSendTemplateWithCallbackDialogVisible
-						}
-						setSendBulkVoiceMessageDialogVisible={
-							setSendBulkVoiceMessageDialogVisible
-						}
 					/>
 				)}
 
@@ -1018,7 +852,6 @@ const Main: React.FC = () => {
 						displayNotification={displayNotification}
 						isChatOnly={isChatOnly}
 						setChatTagsVisible={setChatTagsVisible}
-						setBulkSendPayload={setBulkSendPayload}
 						searchMessagesByKeyword={searchMessagesByKeyword}
 						setMessageWithStatuses={setMessageWithStatuses}
 					/>
@@ -1110,43 +943,6 @@ const Main: React.FC = () => {
 				</Snackbar>
 
 				{isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
-
-				<BulkSendTemplateDialog
-					open={isBulkSendTemplateDialogVisible}
-					setOpen={setBulkSendTemplateDialogVisible}
-					setBulkSendPayload={setBulkSendPayload}
-				/>
-
-				<BulkSendTemplateDialog
-					open={isBulkSendTemplateWithCallbackDialogVisible}
-					setOpen={setBulkSendTemplateWithCallbackDialogVisible}
-					setBulkSendPayload={setBulkSendPayload}
-					sendCallback={() => {
-						dispatch(setState({ isUploadRecipientsCSVVisible: true }));
-					}}
-				/>
-
-				<UploadRecipientsCSV
-					open={isUploadRecipientsCSVVisible}
-					setOpen={(isOpen) =>
-						dispatch(setState({ isUploadRecipientsCSVVisible: isOpen }))
-					}
-					addBulkSendRecipients={addBulkSendRecipients}
-					bulkSendPayload={bulkSendPayload}
-				/>
-
-				<BulkSendTemplateViaCSV
-					open={isBulkSendTemplateViaCSVVisible}
-					setOpen={setBulkSendTemplateViaCSVVisible}
-					finishBulkSendMessage={finishBulkSendMessage}
-				/>
-
-				<SendBulkVoiceMessageDialog
-					apiService={apiService}
-					open={isSendBulkVoiceMessageDialogVisible}
-					setOpen={setSendBulkVoiceMessageDialogVisible}
-					setBulkSendPayload={setBulkSendPayload}
-				/>
 			</div>
 		</Fade>
 	);

@@ -14,9 +14,8 @@ import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 } from '@src/Constants';
-import BulkSendPayload from '@src/interfaces/BulkSendPayload';
 import { Template } from '@src/types/templates';
-import { CreateMessageRequest, MessageType } from '@src/types/messages';
+import { CreateMessageRequest } from '@src/types/messages';
 
 export type Props = {
 	isVisible: boolean;
@@ -24,8 +23,6 @@ export type Props = {
 	chosenTemplate?: Template;
 	onSend: (template: Template) => void;
 	sendCallback?: () => void;
-	onBulkSend: (type: MessageType, payload: BulkSendPayload) => void;
-	isBulkOnly: boolean;
 	selectTemplateCallback?: () => void;
 };
 
@@ -35,8 +32,6 @@ const SendTemplateDialog: React.FC<Props> = ({
 	chosenTemplate,
 	onSend,
 	sendCallback,
-	onBulkSend,
-	isBulkOnly,
 	selectTemplateCallback,
 }) => {
 	const { t } = useTranslation();
@@ -47,7 +42,6 @@ const SendTemplateDialog: React.FC<Props> = ({
 
 	const dialogContentRef = useRef<HTMLDivElement>();
 	const sendButtonRef = useRef<HTMLButtonElement>();
-	const bulkSendButtonRef = useRef<HTMLButtonElement>();
 
 	useEffect(() => {
 		if (!isVisible) {
@@ -108,22 +102,11 @@ const SendTemplateDialog: React.FC<Props> = ({
 		setVisible(false);
 	};
 
-	const bulkSend = (template: Template) => {
-		const payload = generateTemplateMessagePayload(template ?? chosenTemplate);
-		onBulkSend(MessageType.template, payload);
-		sendCallback?.();
-		close();
-	};
-
 	const sendByRef = () => {
 		setSending(true);
 		sendButtonRef.current?.click();
 
 		selectTemplateCallback?.();
-	};
-
-	const bulkSendByRef = () => {
-		bulkSendButtonRef.current?.click();
 	};
 
 	const sendAction = (template: Template) => {
@@ -146,11 +129,8 @@ const SendTemplateDialog: React.FC<Props> = ({
 					send={(template: Template) => sendAction(template)}
 					setSending={setSending}
 					setErrors={setErrors}
-					bulkSend={bulkSend}
 					// @ts-ignore
 					sendButtonInnerRef={sendButtonRef}
-					// @ts-ignore
-					bulkSendButtonInnerRef={bulkSendButtonRef}
 				/>
 
 				{errors && (
@@ -168,24 +148,14 @@ const SendTemplateDialog: React.FC<Props> = ({
 				<Button onClick={close} color="secondary">
 					{t('Close')}
 				</Button>
-				{!isBulkOnly && (
-					<Button
-						onClick={sendByRef}
-						color="primary"
-						disabled={isSending}
-						autoFocus
-						data-test-id="send-template-message-button"
-					>
-						{t('Send')}
-					</Button>
-				)}
 				<Button
-					onClick={bulkSendByRef}
+					onClick={sendByRef}
 					color="primary"
 					disabled={isSending}
 					autoFocus
+					data-test-id="send-template-message-button"
 				>
-					{t('Bulk send')}
+					{t('Send')}
 				</Button>
 			</DialogActions>
 		</Dialog>

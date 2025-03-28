@@ -26,11 +26,6 @@ export const EVENT_TOPIC_UPDATE_PERSON_NAME = 'update_person_name';
 export const EVENT_TOPIC_CHAT_ASSIGNMENT = 'chat_assignment';
 export const EVENT_TOPIC_CHAT_TAGGING = 'chat_tagging';
 export const EVENT_TOPIC_UNSUPPORTED_FILE = 'unsupported_file';
-export const EVENT_TOPIC_BULK_MESSAGE_TASK = 'bulk_message_task';
-export const EVENT_TOPIC_BULK_MESSAGE_TASK_STARTED =
-	'bulk_message_task_started';
-export const EVENT_TOPIC_BULK_MESSAGE_TASK_ELEMENT =
-	'bulk_message_task_element';
 export const EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT = 'clear_text_message_input';
 export const EVENT_TOPIC_FORCE_REFRESH_CHAT = 'force_refresh_chat';
 export const EVENT_TOPIC_VOICE_RECORD_STARTING = 'voice_record_starting';
@@ -45,9 +40,6 @@ export const ATTACHMENT_TYPE_IMAGE = 'image';
 export const ATTACHMENT_TYPE_VIDEO = 'video';
 export const ATTACHMENT_TYPE_AUDIO = 'audio';
 export const ATTACHMENT_TYPE_DOCUMENT = 'document';
-
-export const MAX_BULK_DIRECT_RECIPIENTS_DEFAULT = 1000;
-export const MAX_BULK_TAG_RECIPIENTS_DEFAULT = 10000;
 
 export const EMPTY_IMAGE_BASE64 =
 	'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';

@@ -4,10 +4,7 @@ import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import CustomAvatar from '@src/components/CustomAvatar';
 import PubSub from 'pubsub-js';
-import {
-	EVENT_TOPIC_BULK_MESSAGE_TASK,
-	EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO,
-} from '@src/Constants';
+import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 
 interface Props {
 	className?: string;

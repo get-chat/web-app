@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Button, ButtonBase, TextField, InputAdornment } from '@mui/material';
+import { Button, ButtonBase, InputAdornment, TextField } from '@mui/material';
 import '../../styles/SendTemplateMessage.css';
 import FileInput from '../FileInput';
 import Alert from '@mui/material/Alert';
@@ -33,20 +33,16 @@ interface Props {
 	data: Template;
 	setSending: (value: boolean) => void;
 	setErrors: (value: string[]) => void;
-	bulkSend: (data: Template) => void;
 	send: (data: Template) => void;
 	sendButtonInnerRef: React.Ref<HTMLButtonElement>;
-	bulkSendButtonInnerRef: React.Ref<HTMLButtonElement>;
 }
 
 const SendTemplateMessage: React.FC<Props> = ({
 	data,
 	setSending,
 	setErrors,
-	bulkSend,
 	send,
 	sendButtonInnerRef,
-	bulkSendButtonInnerRef,
 }) => {
 	const { apiService } = React.useContext(ApplicationContext);
 
@@ -101,7 +97,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 		});
 	};
 
-	const sendAfterCheck = (isBulk: boolean = false) => {
+	const sendAfterCheck = () => {
 		let hasError = false;
 		const preparedParams = generateFinalTemplateParams(
 			template,
@@ -139,11 +135,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 		const finalData = { ...template };
 		finalData.params = Object.values(preparedParams);
 
-		if (isBulk) {
-			bulkSend(finalData);
-		} else {
-			send(finalData);
-		}
+		send(finalData);
 
 		/*Object.entries(params).forEach((paramEntry) => {
 			finalData.components[paramEntry[0]].params = paramEntry[1];
@@ -430,17 +422,10 @@ const SendTemplateMessage: React.FC<Props> = ({
 			))}
 			<Button
 				ref={sendButtonInnerRef}
-				onClick={() => sendAfterCheck(false)}
+				onClick={sendAfterCheck}
 				className="hidden"
 			>
 				{t('Send')}
-			</Button>
-			<Button
-				ref={bulkSendButtonInnerRef}
-				onClick={() => sendAfterCheck(true)}
-				className="hidden"
-			>
-				{t('Bulk Send')}
 			</Button>
 		</div>
 	);
