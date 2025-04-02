@@ -13,7 +13,7 @@ import { isChatExpired } from '@src/helpers/ChatHelper';
 const useChatListItem = ({ props }: { props: any }) => {
 	const data: Chat = props.chatData;
 
-	const { isSelectionModeEnabled, isBulkSend, selectedChats } = useAppSelector(
+	const { isSelectionModeEnabled, selectedChats } = useAppSelector(
 		(state) => state.UI
 	);
 
@@ -27,8 +27,8 @@ const useChatListItem = ({ props }: { props: any }) => {
 	const [remainingSeconds, setRemainingSeconds] = useState(0);
 
 	const isDisabled = useMemo(() => {
-		return isExpired && props.bulkSendPayload?.type !== 'template';
-	}, [isExpired, props.bulkSendPayload]);
+		return isExpired;
+	}, [isExpired]);
 
 	const { waId } = useParams();
 
@@ -153,7 +153,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 	}, [
 		isExpired,
 		isChatExpired(data),
-		data.last_message?.waba_payload.timestamp,
+		data.last_message?.waba_payload?.timestamp,
 	]);
 
 	const handleDroppedFiles = (event: DragEvent) => {
@@ -174,7 +174,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 	const handleClick = () => {
 		if (isSelectionModeEnabled) {
-			if (isDisabled && isBulkSend) return;
+			if (isDisabled) return;
 
 			let newSelectedState = !isSelected;
 

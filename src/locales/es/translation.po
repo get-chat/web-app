@@ -338,12 +338,6 @@ msgstr "Se eliminó una etiqueta: <4></4><5>%(tag)s</5>."
 msgid "Delete"
 msgstr "Eliminar"
 
-msgid "Bulk send"
-msgstr "Envío masivo"
-
-msgid "Bulk Send"
-msgstr "Envío masivo"
-
 msgid "Send a template message"
 msgstr "Enviar un mensaje de plantilla"
 
@@ -523,9 +517,6 @@ msgstr "Estado"
 msgid "Uploading a media file. Please wait..."
 msgstr "Subiendo un archivo multimedia. Por favor, espera..."
 
-msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
-msgstr "El mensaje masivo (ID: %s) no se pudo enviar al destinatario."
-
 msgid "Recipient: <1>%s</1>"
 msgstr "Destinatario: <1>%s</1>"
 
@@ -597,15 +588,6 @@ msgstr "Subir CSV"
 
 msgid "Next"
 msgstr "Siguiente"
-
-msgid "Bulk send a template"
-msgstr "Enviar plantilla masiva"
-
-msgid "Bulk send a voice message"
-msgstr "Enviar mensaje de voz masivo"
-
-msgid "Bulk send template with CSV"
-msgstr "Enviar plantilla masiva con CSV"
 
 msgid "Please select up to %s direct recipients."
 msgstr "Selecciona hasta %s destinatarios directos."
@@ -689,9 +671,6 @@ msgstr "Por favor, elige un tipo de vídeo admitido (mp4, 3gp)"
 
 msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
 msgstr "Por favor, elige un tipo de archivo admitido (png, jpg, mp4, 3gp)"
-
-msgid "Send bulk voice message"
-msgstr "Enviar mensaje de voz masivo"
 
 msgid "Click to record your message"
 msgstr "Haz clic para grabar tu mensaje"
@@ -852,15 +831,6 @@ msgstr "%dh"
 
 msgid "%dm"
 msgstr "%dm"
-
-msgid ""
-"Session messages can be sent only to recipients who wrote to you within "
-"last 24 hours. To send messages to expired chats, use <2>Bulk send a "
-"template</2> function."
-msgstr ""
-"Los mensajes de sesión solo se pueden enviar a los destinatarios que le "
-"escribieron en las últimas 24 horas. Para enviar mensajes a chats "
-"caducados, utilice la función <2>Enviar una plantilla en bloque</2>."
 
 msgid "Search, filter by tags, time, etc."
 msgstr "Busca, filtra por etiquetas, tiempo, etc."
