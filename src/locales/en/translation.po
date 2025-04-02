@@ -330,12 +330,6 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-msgid "Bulk send"
-msgstr ""
-
-msgid "Bulk Send"
-msgstr ""
-
 msgid "Send a template message"
 msgstr ""
 
@@ -515,9 +509,6 @@ msgstr ""
 msgid "Uploading a media file. Please wait..."
 msgstr ""
 
-msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
-msgstr ""
-
 msgid "Recipient: <1>%s</1>"
 msgstr ""
 
@@ -590,15 +581,6 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-msgid "Bulk send a template"
-msgstr ""
-
-msgid "Bulk send a voice message"
-msgstr ""
-
-msgid "Bulk send template with CSV"
-msgstr ""
-
 msgid "Please select up to %s direct recipients."
 msgstr ""
 
@@ -668,9 +650,6 @@ msgid "Please choose a supported video type (mp4, 3gp)"
 msgstr ""
 
 msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
-msgstr ""
-
-msgid "Send bulk voice message"
 msgstr ""
 
 msgid "Click to record your message"
@@ -826,12 +805,6 @@ msgid "%dh"
 msgstr ""
 
 msgid "%dm"
-msgstr ""
-
-msgid ""
-"Session messages can be sent only to recipients who wrote to you within last "
-"24 hours. To send messages to expired chats, use <2>Bulk send a template</2> "
-"function."
 msgstr ""
 
 msgid "Search, filter by tags, time, etc."

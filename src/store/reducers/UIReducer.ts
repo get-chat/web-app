@@ -7,7 +7,6 @@ interface UIState {
 	isContactDetailsVisible: boolean;
 	isSearchMessagesVisible: boolean;
 	isSelectionModeEnabled: boolean;
-	isBulkSend: boolean;
 	isExportChat: boolean;
 	loadingProgress: number;
 	loadingComponent: string;
@@ -35,7 +34,6 @@ const initialState: UIState = {
 	isContactDetailsVisible: false,
 	isSearchMessagesVisible: false,
 	isSelectionModeEnabled: false,
-	isBulkSend: false,
 	isExportChat: false,
 	loadingProgress: 0,
 	loadingComponent: '',
@@ -78,12 +76,8 @@ export const UISlice = createSlice({
 			state.isSelectionModeEnabled = action.payload;
 
 			if (!action.payload) {
-				state.isBulkSend = false;
 				state.isExportChat = false;
 			}
-		},
-		setBulkSend: (state, action: PayloadAction<boolean>) => {
-			state.isBulkSend = action.payload;
 		},
 		setExportChat: (state, action: PayloadAction<boolean>) => {
 			state.isExportChat = action.payload;
@@ -105,7 +99,6 @@ export const {
 	setReadOnly,
 	setSearchMessagesVisible,
 	setSelectionModeEnabled,
-	setBulkSend,
 	setExportChat,
 	toggleState,
 	setState,

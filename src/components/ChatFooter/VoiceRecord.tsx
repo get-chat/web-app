@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 
 interface Props {
-	voiceRecordCase: 'chat' | 'bulk';
+	voiceRecordCase: 'chat';
 	setRecording: (value: boolean) => void;
 	sendHandledChosenFiles: (data: ChosenFileList) => void;
 }

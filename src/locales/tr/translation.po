@@ -339,12 +339,6 @@ msgstr "A tag was silindi: <4></4><5>%(tag)s</5>."
 msgid "Delete"
 msgstr "Sil"
 
-msgid "Bulk send"
-msgstr "Toplu gönder"
-
-msgid "Bulk Send"
-msgstr "Toplu Gönder"
-
 msgid "Send a template message"
 msgstr "Bir taslak mesajı gönder"
 
@@ -524,9 +518,6 @@ msgstr "Durum"
 msgid "Uploading a media file. Please wait..."
 msgstr "Bir medya dosyası yükleniyor. Lütfen bekle..."
 
-msgid "Bulk message (ID: %s) couldn't be sent to a recipient."
-msgstr "Toplu mesaj (ID: %s) bir alıcıya gönderilemedi."
-
 msgid "Recipient: <1>%s</1>"
 msgstr "Alıcı: <1>%s</1>"
 
@@ -598,15 +589,6 @@ msgstr "CSV Yükle"
 
 msgid "Next"
 msgstr "Sıradaki"
-
-msgid "Bulk send a template"
-msgstr "Taslağı toplu gönder"
-
-msgid "Bulk send a voice message"
-msgstr "Sesli mesajı toplu gönder"
-
-msgid "Bulk send template with CSV"
-msgstr "CSV ile toplu gönder"
 
 msgid "Please select up to %s direct recipients."
 msgstr "Lütfen %s direk alıcıya kadar seçim yap."
@@ -693,9 +675,6 @@ msgstr "Lütfen desteklenen bir video türü seç (mp4, 3gp)"
 
 msgid "Please choose a supported file type (png, jpg, mp4, 3gp)"
 msgstr "Lütfen desteklenen bir dosya türü seç (png, jpg, mp4, 3gp)"
-
-msgid "Send bulk voice message"
-msgstr "Toplu sesli mesaj gönder"
 
 msgid "Click to record your message"
 msgstr "Mesajını kaydetmek için tıkla"
@@ -855,15 +834,6 @@ msgstr "%ds"
 
 msgid "%dm"
 msgstr "%dd"
-
-msgid ""
-"Session messages can be sent only to recipients who wrote to you within last "
-"24 hours. To send messages to expired chats, use <2>Bulk send a template</2> "
-"function."
-msgstr ""
-"Oturum mesajları yalnızca size son 24 saat içinde yazan alıcılara "
-"gönderilebilir. Süresi dolmuş sohbetlere mesaj göndermek için <2>Toplu "
-"taslak gönderme</2> işlevini kullanın."
 
 msgid "Search, filter by tags, time, etc."
 msgstr "Ara, filtrele: etiket, zaman vb."

@@ -230,8 +230,6 @@ export interface WebhookMessageWabaPayload {
 	statuses?: WebhookMessageStatus[];
 	chat_assignment?: ChatAssignment;
 	chat_tagging?: ChatTagging;
-	bulk_message_tasks?: any[];
-	bulk_message_task_elements?: any[];
 }
 
 export interface ChatAssignment {
