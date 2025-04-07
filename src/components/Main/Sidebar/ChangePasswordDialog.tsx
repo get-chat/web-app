@@ -7,7 +7,6 @@ import DialogActions from '@mui/material/DialogActions';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { AxiosError } from 'axios';
 import { changePassword } from '@src/api/authApi';
 
@@ -17,8 +16,6 @@ interface Props {
 }
 
 const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const { t } = useTranslation();
 
 	const [currentPassword, setCurrentPassword] = useState('');

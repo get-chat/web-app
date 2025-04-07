@@ -14,9 +14,9 @@ import {
 	getApiBaseURLsMergedWithConfig,
 	getToken,
 	storeToken,
-} from '../../helpers/StorageHelper';
+} from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../../contexts/ApplicationContext';
+import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import packageJson from '../../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -24,7 +24,6 @@ import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
 import { login, logout } from '@src/api/authApi';
 import * as Styled from './Login.styles';
-import { AdminPanelButton } from './Login.styles';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);

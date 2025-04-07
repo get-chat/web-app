@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../styles/Contacts.css';
 import {
 	Button,
 	IconButton,
@@ -16,6 +15,7 @@ import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse, CancelTokenSource } from 'axios';
+import * as Styled from './StartChat.styles';
 import Contacts from '@src/components/Contacts';
 
 interface Props {
@@ -23,7 +23,6 @@ interface Props {
 }
 
 const StartChat: React.FC<Props> = ({ onHide }) => {
-	// @ts-ignore
 	const { apiService } = React.useContext(ApplicationContext);
 
 	const { t } = useTranslation();
@@ -111,33 +110,29 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 	};
 
 	return (
-		<div className="contacts">
-			<div className="contacts__header">
+		<Styled.ContactsContainer>
+			<Styled.ContactsHeader>
 				<IconButton onClick={onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 
 				<h3>{t('New chat')}</h3>
-			</div>
+			</Styled.ContactsHeader>
 
-			<div className="contacts__startByPhoneNumberWrapper">
-				<div
-					className="contacts__startByPhoneNumber"
+			<Styled.StartByPhoneNumberWrapper>
+				<Styled.StartByPhoneNumber
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
 					<ListItem button>
-						<div
-							className="contacts__startByPhoneNumber__inner"
-							data-test-id="start-new-chat"
-						>
+						<Styled.StartByPhoneNumberInner data-test-id="start-new-chat">
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
-						</div>
+						</Styled.StartByPhoneNumberInner>
 					</ListItem>
-				</div>
+				</Styled.StartByPhoneNumber>
 
 				{isPhoneNumberFormVisible && (
-					<div className="contacts__startByPhoneNumberWrapper__formWrapper">
+					<Styled.FormWrapper>
 						<TextField
 							variant="standard"
 							label={t('Phone number')}
@@ -155,12 +150,12 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 						>
 							{t('Start')}
 						</Button>
-					</div>
+					</Styled.FormWrapper>
 				)}
-			</div>
+			</Styled.StartByPhoneNumberWrapper>
 
 			<Contacts verifyContact={verifyContact} isVerifying={isVerifying} />
-		</div>
+		</Styled.ContactsContainer>
 	);
 };
 

@@ -51,7 +51,6 @@ import RetryFailedMessages from './RetryFailedMessages';
 import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import {
 	filterChat,
 	handleChatAssignmentEvent,
@@ -136,8 +135,6 @@ const Sidebar: React.FC<Props> = ({
 	isChatOnly,
 	setChatTagsListVisible,
 }) => {
-	// @ts-ignore
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const {

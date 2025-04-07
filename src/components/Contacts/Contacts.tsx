@@ -5,6 +5,7 @@ import RecipientItem from '@src/components/RecipientItem';
 import Recipient from '@src/interfaces/Recipient';
 import { CircularProgress } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
+import * as Styled from './Contacts.styles';
 
 interface Props {
 	isSelectionModeEnabled?: boolean;
@@ -36,7 +37,7 @@ const Contacts: React.FC<Props> = ({
 				placeholder={t('Search for contacts')}
 			/>
 
-			<div className="contacts__body">
+			<Styled.ContactsBody>
 				{!isLoading && unifiedList.length === 0 && noContactsContent ? (
 					<>{noContactsContent}</>
 				) : (
@@ -61,13 +62,13 @@ const Contacts: React.FC<Props> = ({
 				)}
 
 				{isVerifying && (
-					<div className="contacts__body__loading">
+					<Styled.BodyLoading>
 						<CircularProgress color="inherit" />
-					</div>
+					</Styled.BodyLoading>
 				)}
 
 				{!isLoading && keyword?.length > 0 && unifiedList.length === 0 && (
-					<span className="contacts__body__hint">
+					<Styled.BodyHint>
 						<Trans
 							values={{
 								postProcess: 'sprintf',
@@ -77,9 +78,9 @@ const Contacts: React.FC<Props> = ({
 							No persons or contacts found for{' '}
 							<span className="searchOccurrence">%s</span>
 						</Trans>
-					</span>
+					</Styled.BodyHint>
 				)}
-			</div>
+			</Styled.ContactsBody>
 		</>
 	);
 };
