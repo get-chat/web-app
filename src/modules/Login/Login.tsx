@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/Login.css';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import {
@@ -15,15 +14,17 @@ import {
 	getApiBaseURLsMergedWithConfig,
 	getToken,
 	storeToken,
-} from '../helpers/StorageHelper';
+} from '../../helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../contexts/ApplicationContext';
-import packageJson from '../../package.json';
+import { ApplicationContext } from '../../contexts/ApplicationContext';
+import packageJson from '../../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
 import { login, logout } from '@src/api/authApi';
+import * as Styled from './Login.styles';
+import { AdminPanelButton } from './Login.styles';
 
 const Login = () => {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -146,19 +147,18 @@ const Login = () => {
 	};
 
 	return (
-		<div className="login">
+		<Styled.LoginWrapper>
 			<Fade in={true}>
-				<div className="login__body">
-					<div className="login__body__logoWrapper">
-						<img
-							className="login__body__logo"
+				<Styled.LoginBody>
+					<Styled.LogoWrapper>
+						<Styled.Logo
 							src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
 							alt="Logo"
 						/>
-					</div>
+					</Styled.LogoWrapper>
 
 					{storedURLs.length > 1 && (
-						<div className="login__body__inboxUrl mt-3 mb-3">
+						<Styled.InboxUrl>
 							<h3>{t('Your current inbox')}</h3>
 							<div>
 								{prepareURLForDisplay(apiService.apiBaseURL)}
@@ -170,7 +170,7 @@ const Login = () => {
 									{t('Change')}
 								</a>
 							</div>
-						</div>
+						</Styled.InboxUrl>
 					)}
 
 					<h2>{t('Welcome')}</h2>
@@ -210,8 +210,7 @@ const Login = () => {
 							{t('Log in')}
 						</Button>
 
-						<Button
-							className="login__body__adminPanel"
+						<Styled.AdminPanelButton
 							// @ts-ignore
 							color="black"
 							href={getHubURL(config?.API_BASE_URL ?? '')}
@@ -220,24 +219,22 @@ const Login = () => {
 							variant="text"
 						>
 							{t('Admin panel')}
-						</Button>
+						</Styled.AdminPanelButton>
 					</form>
 
 					{isValidatingToken && (
-						<div className="login__validatingToken">
+						<Styled.ValidatingToken>
 							<h2>{t('Welcome')}</h2>
 							<p>{t('We are validating your session, please wait.')}</p>
-						</div>
+						</Styled.ValidatingToken>
 					)}
 
 					{loginError && <Alert severity="error">{t(loginError)}</Alert>}
 
-					<div className="login__body__versionWrapper">
-						<span className="login__body__version">
-							Version: {packageJson.version}
-						</span>
-					</div>
-				</div>
+					<Styled.VersionWrapper>
+						<Styled.Version>Version: {packageJson.version}</Styled.Version>
+					</Styled.VersionWrapper>
+				</Styled.LoginBody>
 			</Fade>
 
 			<InboxSelectorDialog
@@ -248,7 +245,7 @@ const Login = () => {
 			<Backdrop className="login__backdrop" open={isLoggingIn}>
 				<CircularProgress color="inherit" />
 			</Backdrop>
-		</div>
+		</Styled.LoginWrapper>
 	);
 };
 
