@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import '../styles/Contact.css';
-import { ListItem } from '@mui/material';
-import ContactProviderHeader from './ContactProviderHeader';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ContactModel from '@src/api/models/ContactModel';
+import * as Styled from './Contact.styles';
+import ContactProviderHeader from '@src/components/ContactProviderHeader';
+import { ListItem } from '@mui/material';
 
 interface Props {
 	data: ContactModel;
@@ -13,7 +13,6 @@ interface Props {
 
 const Contact: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 	const { t } = useTranslation();
-
 	const [phoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
 
 	const handleClick = () => {
@@ -35,31 +34,28 @@ const Contact: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 	};
 
 	return (
-		<div className="contactWrapper">
+		<Styled.ContactWrapper>
 			<ListItem button>
-				<div className="contact" onClick={handleClick}>
-					<div className="contact__avatarWrapper">
+				<Styled.ContactContainer onClick={handleClick}>
+					<Styled.AvatarWrapper>
 						<CustomAvatar src={data.avatar}>{data.initials}</CustomAvatar>
-
 						{data.contactProvider !== undefined && (
 							<ContactProviderHeader type={data.contactProvider} />
 						)}
-					</div>
-					<div className="contact__info">
+					</Styled.AvatarWrapper>
+					<Styled.ContactInfo>
 						<h2>{data.name}</h2>
-
 						{data.phoneNumbers && data.phoneNumbers.length > 0 ? (
-							<div className="contact__info__phoneNumber">
+							<Styled.PhoneNumber>
 								{data.phoneNumbers[0].phoneNumber}
-							</div>
+							</Styled.PhoneNumber>
 						) : (
-							<div className="contact__info__missingPhoneNumber">
+							<Styled.MissingPhoneNumber>
 								{t('There is no phone number')}
-							</div>
+							</Styled.MissingPhoneNumber>
 						)}
-
 						{data.phoneNumbers && data.phoneNumbers.length > 1 && (
-							<div className="contact__info__otherPhoneNumbers">
+							<Styled.OtherPhoneNumbers>
 								<span>
 									{t('%d more phone number', {
 										postProcess: 'sprintf',
@@ -67,28 +63,26 @@ const Contact: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 										count: data.phoneNumbers?.length - 1,
 									})}
 								</span>
-							</div>
+							</Styled.OtherPhoneNumbers>
 						)}
-					</div>
-				</div>
+					</Styled.ContactInfo>
+				</Styled.ContactContainer>
 			</ListItem>
 
 			{phoneNumbersVisible && (
-				<div className="contactPhoneNumbersChoices">
+				<Styled.PhoneNumbersChoices>
 					<h3>{t('Choose a phone number')}</h3>
-					{Object.entries(data.phoneNumbers).map((phoneNumber) => (
-						<div
-							key={phoneNumber[0]}
-							className="contactPhoneNumbersChoices__choice"
-							onClick={() => goToChat(phoneNumber[1].phoneNumber)}
+					{data.phoneNumbers?.map((phoneNumber, index) => (
+						<Styled.PhoneNumberChoice
+							key={index}
+							onClick={() => goToChat(phoneNumber.phoneNumber)}
 						>
-							{phoneNumber[1].phoneNumber}
-							{phoneNumber[1].phoneNumber}
-						</div>
+							{phoneNumber.phoneNumber}
+						</Styled.PhoneNumberChoice>
 					))}
-				</div>
+				</Styled.PhoneNumbersChoices>
 			)}
-		</div>
+		</Styled.ContactWrapper>
 	);
 };
 
