@@ -4,22 +4,22 @@ import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import { CALENDAR_NORMAL, CHAT_KEY_PREFIX } from '@src/Constants';
-import '../../styles/ContactDetails.css';
+import * as Styled from './ContactDetails.styles';
 import Moment from 'react-moment';
 // @ts-ignore
-import googleLogo from '../../assets/images/ic-google.png';
+import googleLogo from '../../../assets/images/ic-google.png';
 // @ts-ignore
-import hubspotLogo from '../../assets/images/ic-hubspot.png';
+import hubspotLogo from '../../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
-import PrintMessage from '../PrintMessage';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
+import PrintMessage from '@src/components/PrintMessage';
 
 interface Props {
 	contactProvidersData: { [key: string]: any };
@@ -50,37 +50,40 @@ const ContactDetails: React.FC<Props> = ({
 		setChat(findChatByWaId());
 	}, []);
 
-	// TODO: Load chat via API instead as it might not be loaded yet in chat list
 	const findChatByWaId = () => {
 		const waId = contactData?.waId;
 		return chats[CHAT_KEY_PREFIX + waId];
 	};
 
 	return (
-		<div className="contactDetails">
-			<div className="contactDetails__header">
+		<Styled.ContactDetailsContainer>
+			<Styled.Header>
 				<IconButton onClick={hideContactDetails} size="large">
 					<CloseIcon />
 				</IconButton>
-
 				<h3>{t('Contact Details')}</h3>
-			</div>
+			</Styled.Header>
 
 			{contactData && (
-				<div className="contactDetails__body">
-					<div className="contactDetails__body__section">
-						<div className="contactDetails__body__avatarContainer">
+				<Styled.Body>
+					<Styled.Section>
+						<Styled.AvatarContainer>
 							<CustomAvatar
 								src={extractAvatarFromContactProviderData(
 									contactProvidersData[contactData.waId ?? ''],
 									true
 								)}
-								className="contactDetails__body__avatar"
+								style={{
+									height: '200px',
+									width: '200px',
+									fontSize: '5rem',
+									marginBottom: '15px',
+								}}
 								generateBgColorBy={contactData.name}
 							>
 								{contactData.initials}
 							</CustomAvatar>
-						</div>
+						</Styled.AvatarContainer>
 
 						<PrintMessage
 							as="h3"
@@ -92,7 +95,7 @@ const ContactDetails: React.FC<Props> = ({
 
 						{contactProvidersData[contactData.waId ?? '']?.[0]
 							?.companies?.[0] !== undefined && (
-							<div className="contactDetails__body__job">
+							<Styled.JobInfo>
 								<span>
 									{
 										contactProvidersData[contactData.waId ?? '']?.[0]
@@ -106,10 +109,10 @@ const ContactDetails: React.FC<Props> = ({
 											?.companies?.[0]?.company_name
 									}
 								</span>
-							</div>
+							</Styled.JobInfo>
 						)}
 
-						<div className="contactDetails__body__lastMessageAt">
+						<Styled.LastMessageAt>
 							Last message:{' '}
 							{contactData.lastMessageTimestamp &&
 							contactData.lastMessageTimestamp > 0 ? (
@@ -119,29 +122,24 @@ const ContactDetails: React.FC<Props> = ({
 							) : (
 								t('Never')
 							)}
-						</div>
+						</Styled.LastMessageAt>
 
 						{chat?.tags && chat.tags.length > 0 && (
-							<div className="contactDetails__body__tags mt-3">
+							<Styled.TagsContainer>
 								{chat?.tags.map((tag, index) => (
-									<div
-										className="contactDetails__body__tags__tag"
+									<Styled.Tag
 										key={index}
 										onClick={() => dispatch(setFilterTagId(tag.id))}
 									>
-										<SellIcon
-											style={{
-												fill: tag.web_inbox_color,
-											}}
-										/>
+										<SellIcon style={{ fill: tag.web_inbox_color }} />
 										<span className="bold">{tag.name}</span>
-									</div>
+									</Styled.Tag>
 								))}
-							</div>
+							</Styled.TagsContainer>
 						)}
 
 						{(chat?.assigned_to_user || chat?.assigned_group) && (
-							<div className="contactDetails__body__assignees mt-3">
+							<Styled.AssigneesContainer>
 								{chat?.assigned_to_user && (
 									<div>
 										<PersonIcon />
@@ -169,48 +167,43 @@ const ContactDetails: React.FC<Props> = ({
 										</Trans>
 									</div>
 								)}
-							</div>
+							</Styled.AssigneesContainer>
 						)}
-					</div>
+					</Styled.Section>
 
-					<div className="contactDetails__body__section">
-						<div className="contactDetails__body__section__title">
+					<Styled.Section>
+						<Styled.SectionTitle>
 							{t('WhatsApp Phone Number')}
-						</div>
+						</Styled.SectionTitle>
 						<a href={'tel:+' + contactData.waId}>{addPlus(contactData.waId)}</a>
-					</div>
+					</Styled.Section>
 
 					{contactProvidersData[contactData.waId ?? '']?.map(
 						(providerData: any, index: number) => (
-							<div
-								className="contactDetails__body__section"
+							<Styled.Section
 								key={index + '_' + providerData.contact_provider.id}
 							>
-								<div className="contactDetails__body__section__title mb-3">
-									<div className="contactDetails__body__section__providerTitle">
+								<Styled.SectionTitle>
+									<Styled.ProviderTitle>
 										{providerData.contact_provider.type === 'google' && (
 											<img
-												className="mr-1"
 												src={googleLogo}
 												alt={providerData.contact_provider.name}
 											/>
 										)}
 										{providerData.contact_provider.type === 'hubspot' && (
 											<img
-												className="mr-1"
 												src={hubspotLogo}
 												alt={providerData.contact_provider.name}
 											/>
 										)}
 										{providerData.contact_provider.name}
-									</div>
-								</div>
+									</Styled.ProviderTitle>
+								</Styled.SectionTitle>
 
-								<div className="contactDetails__body__section__content mb-2">
-									<div className="contactDetails__body__section__subtitle">
-										{t('Phone number')}
-									</div>
-									<div className="contactDetails__body__section__content__sub">
+								<Styled.Content>
+									<Styled.Subtitle>{t('Phone number')}</Styled.Subtitle>
+									<Styled.ContentSub>
 										{providerData.phone_numbers?.map(
 											(phoneNumber: any, phoneNumberIndex: number) => (
 												<div key={phoneNumberIndex}>
@@ -225,14 +218,12 @@ const ContactDetails: React.FC<Props> = ({
 												</div>
 											)
 										)}
-									</div>
-								</div>
+									</Styled.ContentSub>
+								</Styled.Content>
 
-								<div className="contactDetails__body__section__content">
-									<div className="contactDetails__body__section__subtitle">
-										{t('E-mail')}
-									</div>
-									<div className="contactDetails__body__section__content__sub">
+								<Styled.Content>
+									<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
+									<Styled.ContentSub>
 										{providerData.email_addresses?.map(
 											(emailAddress: any, emailAddressIndex: number) => (
 												<div key={emailAddressIndex}>
@@ -247,14 +238,14 @@ const ContactDetails: React.FC<Props> = ({
 												</div>
 											)
 										)}
-									</div>
-								</div>
-							</div>
+									</Styled.ContentSub>
+								</Styled.Content>
+							</Styled.Section>
 						)
 					)}
-				</div>
+				</Styled.Body>
 			)}
-		</div>
+		</Styled.ContactDetailsContainer>
 	);
 };
 
