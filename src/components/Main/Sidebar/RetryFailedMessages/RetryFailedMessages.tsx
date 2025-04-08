@@ -4,8 +4,7 @@ import {
 	getFirstFailedPendingMessage,
 	setAllFailedPendingMessagesWillRetry,
 } from '@src/helpers/PendingMessagesHelper';
-import '../../../styles/RetryFailedMessages.css';
-import Alert from '@mui/material/Alert';
+import * as Styled from './RetryFailedMessages.styles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
@@ -68,30 +67,28 @@ const RetryFailedMessages: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="retryFailedMessagesWrapper">
-			<Alert
-				className={
-					'retryFailedMessages' + (isSendingPendingMessages ? ' sending' : '')
-				}
+		<Styled.Wrapper>
+			<Styled.RetryAlert
 				severity="error"
 				elevation={0}
+				$sending={isSendingPendingMessages}
 			>
 				Failed to send messages to {generateFailedReceiversString()}.
 				<br />
-				<a href="#" className="bold" onClick={resendMessage}>
+				<Styled.RetryLink href="#" onClick={resendMessage}>
 					{t('Click to retry.')}
-				</a>
+				</Styled.RetryLink>
 				<br />
 				{lastSendAttemptAt && (
-					<div className="retryFailedMessages__lastSendAttemptAt">
+					<Styled.LastAttempt>
 						<Trans>
 							Last attempt at:{' '}
 							<Moment date={lastSendAttemptAt} format={dateFormat} />
 						</Trans>
-					</div>
+					</Styled.LastAttempt>
 				)}
-			</Alert>
-		</div>
+			</Styled.RetryAlert>
+		</Styled.Wrapper>
 	);
 };
 
