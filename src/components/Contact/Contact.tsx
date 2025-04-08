@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import CustomAvatar from '@src/components/CustomAvatar';
 import ContactModel from '@src/api/models/ContactModel';
 import * as Styled from './Contact.styles';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
@@ -38,7 +37,9 @@ const Contact: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 			<ListItem button>
 				<Styled.ContactContainer onClick={handleClick}>
 					<Styled.AvatarWrapper>
-						<CustomAvatar src={data.avatar}>{data.initials}</CustomAvatar>
+						<Styled.StyledCustomAvatar src={data.avatar}>
+							{data.initials}
+						</Styled.StyledCustomAvatar>
 						{data.contactProvider !== undefined && (
 							<ContactProviderHeader type={data.contactProvider} />
 						)}

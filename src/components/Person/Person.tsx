@@ -1,9 +1,8 @@
 import React from 'react';
-import '../styles/Contact.css';
 import { ListItem } from '@mui/material';
-import ContactProviderHeader from './ContactProviderHeader';
-import CustomAvatar from '@src/components/CustomAvatar';
+import ContactProviderHeader from '../ContactProviderHeader';
 import PersonModel from '@src/api/models/PersonModel';
+import * as Styled from '../Contact/Contact.styles';
 
 interface Props {
 	data: PersonModel;
@@ -27,28 +26,27 @@ const Person: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="contactWrapper">
+		<Styled.ContactWrapper>
 			<ListItem button>
-				<div className="contact" onClick={handleClick}>
-					<div className="contact__avatarWrapper">
-						<CustomAvatar
+				<Styled.ContactContainer onClick={handleClick}>
+					<Styled.AvatarWrapper>
+						<Styled.StyledCustomAvatar
 							src={contactProvidersData[data.waId ?? '']?.[0]?.avatar}
 							generateBgColorBy={data.name}
 						>
 							{data.initials}
-						</CustomAvatar>
+						</Styled.StyledCustomAvatar>
 						<ContactProviderHeader type="whatsapp" />
-					</div>
-					<div className="contact__info">
+					</Styled.AvatarWrapper>
+					<Styled.ContactInfo>
 						<h2>
 							{contactProvidersData[data.waId ?? '']?.[0]?.name ?? data.name}
 						</h2>
-
-						<div className="contact__info__phoneNumber">{data.waId}</div>
-					</div>
-				</div>
+						<Styled.PhoneNumber>{data.waId}</Styled.PhoneNumber>
+					</Styled.ContactInfo>
+				</Styled.ContactContainer>
 			</ListItem>
-		</div>
+		</Styled.ContactWrapper>
 	);
 };
 

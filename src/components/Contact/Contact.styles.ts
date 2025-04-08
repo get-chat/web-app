@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Avatar } from '@mui/material';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 export const ContactWrapper = styled.div`
 	background-color: white;
@@ -13,12 +13,12 @@ export const ContactContainer = styled.div`
 	cursor: pointer;
 `;
 
-export const StyledAvatar = styled(Avatar);
+export const StyledCustomAvatar = styled(CustomAvatar)``;
 
 export const AvatarWrapper = styled.div`
 	position: relative;
 
-	${StyledAvatar} {
+	${StyledCustomAvatar} {
 		align-self: baseline;
 		height: 50px;
 		width: 50px;
