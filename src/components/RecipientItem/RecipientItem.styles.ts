@@ -1,22 +1,24 @@
 import styled from 'styled-components';
+import { Checkbox, ListItemButton } from '@mui/material';
 import CustomAvatar from '@src/components/CustomAvatar';
 
-export const ContactWrapper = styled.div`
+export const Wrapper = styled.div`
 	background-color: white;
 `;
 
-export const ContactContainer = styled.div`
+export const StyledListItemButton = styled(ListItemButton)`
+	padding: 0 !important;
+	margin: 0 !important;
+`;
+
+export const StyledCustomAvatar = styled(CustomAvatar)``;
+
+export const Container = styled.div`
 	display: flex;
 	align-items: center;
 	flex: 1 1;
 	padding: 10px 15px;
 	cursor: pointer;
-`;
-
-export const StyledCustomAvatar = styled(CustomAvatar)``;
-
-export const AvatarWrapper = styled.div`
-	position: relative;
 
 	${StyledCustomAvatar} {
 		align-self: baseline;
@@ -25,14 +27,20 @@ export const AvatarWrapper = styled.div`
 	}
 `;
 
-export const ContactInfo = styled.div`
+export const AvatarWrapper = styled.div`
+	position: relative;
+`;
+
+export const Info = styled.div`
+	display: flex;
+	flex-direction: column;
 	flex: 1 1;
 	margin-left: 15px;
+`;
 
-	h2 {
-		font-weight: 600;
-		font-size: 14px;
-	}
+export const Name = styled.div`
+	font-weight: 600;
+	font-size: 14px;
 `;
 
 export const PhoneNumber = styled.div`
@@ -45,24 +53,17 @@ export const MissingPhoneNumber = styled.div`
 	color: rgba(0, 0, 45, 0.4);
 `;
 
-export const OtherPhoneNumbers = styled.div`
-	display: flex;
-	flex-direction: row;
-	font-size: 12px;
-	color: rgba(0, 0, 45, 0.6);
-`;
-
-export const PhoneNumbersChoices = styled.div`
+export const PhoneNumbersContainer = styled.div`
 	background-color: var(--color-primary-transparent);
 	padding: 10px 15px;
-
-	h3 {
-		font-size: 12px;
-		color: var(--color-primary);
-	}
 `;
 
-export const PhoneNumberChoice = styled.div`
+export const PhoneNumbersTitle = styled.div`
+	font-size: 12px;
+	color: var(--color-primary);
+`;
+
+export const Choice = styled.div`
 	cursor: pointer;
 	display: inline-block;
 	font-size: 14px;
@@ -79,3 +80,5 @@ export const PhoneNumberChoice = styled.div`
 		box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
 	}
 `;
+
+export const SelectionCheckbox = styled(Checkbox)``;

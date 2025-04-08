@@ -1,11 +1,11 @@
 import React from 'react';
-import '../styles/ContactProviderHeader.css';
 // @ts-ignore
-import googleLogo from '../assets/images/ic-google.png';
+import googleLogo from '../../assets/images/ic-google.png';
 // @ts-ignore
-import whatsappLogo from '../assets/images/ic-whatsapp.png';
+import whatsappLogo from '../../assets/images/ic-whatsapp.png';
 // @ts-ignore
-import hubspotLogo from '../assets/images/ic-hubspot.png';
+import hubspotLogo from '../../assets/images/ic-hubspot.png';
+import * as Styled from './ContactProviderHeader.styles';
 
 interface Props {
 	type: string;
@@ -13,11 +13,11 @@ interface Props {
 
 const ContactProviderHeader: React.FC<Props> = ({ type }) => {
 	return (
-		<div className="contactProviderHeader">
+		<Styled.Wrapper>
 			{type === 'whatsapp' && <img src={whatsappLogo} />}
 			{type === 'google' && <img src={googleLogo} />}
 			{type === 'hubspot' && <img src={hubspotLogo} />}
-		</div>
+		</Styled.Wrapper>
 	);
 };
 
