@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../../styles/BusinessProfile.css';
+import '../../../../styles/BusinessProfile.css';
 import {
 	Button,
 	FormControl,
@@ -10,7 +10,7 @@ import {
 	TextField,
 } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
-import FileInput from '../../FileInput';
+import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
@@ -24,6 +24,7 @@ import { AxiosResponse, CancelTokenSource } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
+import * as Styled from './BusinessProfile.styles';
 
 function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -218,48 +219,41 @@ function BusinessProfile(props: any) {
 	};
 
 	return (
-		<div className="sidebarBusinessProfile">
-			<div className="sidebarBusinessProfile__header">
+		<Styled.BusinessProfileContainer>
+			<Styled.Header>
 				<IconButton onClick={props.onHide} size="large">
 					<ArrowBack />
 				</IconButton>
-
 				<h3>{t('Business Profile')}</h3>
-			</div>
+			</Styled.Header>
 
-			<div className="sidebarBusinessProfile__body">
+			<Styled.Body>
 				{storedURLs.length > 1 && (
-					<div className="sidebarBusinessProfile__body__section">
-						<div className="sidebarBusinessProfile__body__section__header">
+					<Styled.Section>
+						<Styled.SectionHeader>
 							<h5>{t('Your current inbox')}</h5>
-						</div>
-
+						</Styled.SectionHeader>
 						{prepareURLForDisplay(apiService.apiBaseURL)}
-						<a
+						<Styled.ChangeInboxLink
 							href="#"
-							className="sidebarBusinessProfile__body__section__changeInbox ml-1"
+							className="ml-1"
 							onClick={() => setInboxSelectorVisible(true)}
 						>
 							{t('Change')}
-						</a>
-					</div>
+						</Styled.ChangeInboxLink>
+					</Styled.Section>
 				)}
 
-				<div className="sidebarBusinessProfile__body__section">
-					<div className="sidebarBusinessProfile__body__section__header">
+				<Styled.Section>
+					<Styled.SectionHeader>
 						<h5>{t('Business Profile')}</h5>
-					</div>
+					</Styled.SectionHeader>
 
 					{!isLoaded && <span>{t('Loading')}</span>}
 
 					{isLoaded && (
-						<div className="sidebarBusinessProfile__body__section__subSection">
-							<div
-								className={
-									'sidebarBusinessProfile__body__avatarContainer' +
-									(isAdmin ? ' editable' : '')
-								}
-							>
+						<Styled.SubSection>
+							<Styled.AvatarContainer $enabled={isAdmin}>
 								<FileInput
 									innerRef={fileInput}
 									handleSelectedFiles={(file: FileList) =>
@@ -277,7 +271,7 @@ function BusinessProfile(props: any) {
 										Delete profile photo
 									</Button>
 								)}
-							</div>
+							</Styled.AvatarContainer>
 
 							<form onSubmit={updateBusinessProfile}>
 								<div>
@@ -351,7 +345,7 @@ function BusinessProfile(props: any) {
 								</div>
 
 								{isAdmin && !isReadOnly && (
-									<div className="sidebarBusinessProfile__body__section__subSection__action">
+									<Styled.SubSectionAction>
 										<Button
 											type="submit"
 											disabled={isUpdating}
@@ -360,19 +354,19 @@ function BusinessProfile(props: any) {
 										>
 											{t('Update')}
 										</Button>
-									</div>
+									</Styled.SubSectionAction>
 								)}
 							</form>
-						</div>
+						</Styled.SubSection>
 					)}
-				</div>
-			</div>
+				</Styled.Section>
+			</Styled.Body>
 
 			<InboxSelectorDialog
 				isVisible={isInboxSelectorVisible}
 				setVisible={setInboxSelectorVisible}
 			/>
-		</div>
+		</Styled.BusinessProfileContainer>
 	);
 }
 
