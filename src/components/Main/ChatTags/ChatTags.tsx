@@ -10,7 +10,7 @@ import {
 	DialogTitle,
 	Link,
 } from '@mui/material';
-import '../../styles/ChatTags.css';
+import * as Styled from './ChatTags.styles';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -22,8 +22,13 @@ import { fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
 
-function ChatTags(props: any) {
-	// @ts-ignore
+interface Props {
+	open: boolean;
+	setOpen: (value: boolean) => void;
+	waId?: string;
+}
+
+const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
@@ -62,7 +67,7 @@ function ChatTags(props: any) {
 	}, [chatTags, allTags]);
 
 	const close = () => {
-		props.setOpen(false);
+		setOpen(false);
 	};
 
 	const onDeleteTag = (tag: Tag) => {
@@ -85,9 +90,9 @@ function ChatTags(props: any) {
 	};
 
 	const retrieveChat = async () => {
-		if (!props.waId) return;
+		if (!waId) return;
 		try {
-			const data = await fetchChat(props.waId);
+			const data = await fetchChat(waId);
 			setChat(data);
 			setChatTags(data.tags);
 
@@ -110,7 +115,7 @@ function ChatTags(props: any) {
 
 	const createChatTagging = (tag: Tag) => {
 		apiService.createChatTaggingCall(
-			props.waId,
+			waId,
 			tag.id,
 			(response: AxiosResponse) => {
 				setChatTags((prevState) => {
@@ -145,7 +150,7 @@ function ChatTags(props: any) {
 	};
 
 	return (
-		<Dialog open={props.open} onClose={close} className="chatTagsWrapper">
+		<Dialog open={open} onClose={close}>
 			<DialogTitle>{t('Chat tags')}</DialogTitle>
 			<DialogContent>
 				<DialogContentText>
@@ -153,7 +158,7 @@ function ChatTags(props: any) {
 				</DialogContentText>
 
 				{chatTags && (
-					<div className="chatTags__tags current mt-3">
+					<Styled.TagsContainer>
 						<h5>{t('Current tags')}</h5>
 						{chatTags?.length > 0 ? (
 							<div>
@@ -173,13 +178,13 @@ function ChatTags(props: any) {
 								))}
 							</div>
 						) : (
-							<div className="chatTags__tags__empty mt-1">{t('Empty')}</div>
+							<Styled.EmptyTags>{t('Empty')}</Styled.EmptyTags>
 						)}
-					</div>
+					</Styled.TagsContainer>
 				)}
 
 				{allTags && (
-					<div className="chatTags__tags mt-3">
+					<Styled.TagsContainer>
 						<h5>All tags</h5>
 						{unusedTags?.length > 0 ? (
 							<div>
@@ -200,12 +205,12 @@ function ChatTags(props: any) {
 								))}
 							</div>
 						) : (
-							<div className="chatTags__tags__empty mt-1">{t('Empty')}</div>
+							<Styled.EmptyTags>{t('Empty')}</Styled.EmptyTags>
 						)}
-					</div>
+					</Styled.TagsContainer>
 				)}
 
-				<div className="mt-3">
+				<Styled.ManageTagsLink>
 					<Link
 						href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 						target="_blank"
@@ -213,22 +218,21 @@ function ChatTags(props: any) {
 					>
 						{t('Manage tags')}
 					</Link>
-				</div>
+				</Styled.ManageTagsLink>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
 					{t('Close')}
 				</Button>
-				{/*<Button color="primary">Update</Button>*/}
 			</DialogActions>
 
 			{isLoading && (
-				<div className="chatTagsWrapper__loading">
+				<Styled.LoadingOverlay>
 					<CircularProgress size={28} />
-				</div>
+				</Styled.LoadingOverlay>
 			)}
 		</Dialog>
 	);
-}
+};
 
 export default ChatTags;
