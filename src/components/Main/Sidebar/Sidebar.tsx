@@ -43,7 +43,7 @@ import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import SelectableChatTag from './SelectableChatTag';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
-import Notifications from './Notifications/Notifications';
+import Notifications from './Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { getHubURL } from '@src/helpers/URLHelper';
