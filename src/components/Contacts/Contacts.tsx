@@ -1,6 +1,6 @@
 import React from 'react';
 import useContacts from '@src/components/Contacts/useContacts';
-import SearchBar from '@src/components/SearchBar';
+import SearchBar from '@src/components/SearchBar/SearchBar';
 import RecipientItem from '@src/components/RecipientItem';
 import Recipient from '@src/interfaces/Recipient';
 import { CircularProgress } from '@mui/material';

@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { SearchOutlined } from '@mui/icons-material';
-import '../styles/SearchBar.css';
+import * as Styled from './SearchBar.styles';
 import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
@@ -28,15 +28,10 @@ const SearchBar: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="searchBar__search">
-			<div className="searchBar__searchContainer">
-				{isLoading ? (
-					<CircularProgress />
-				) : (
-					<SearchOutlined className="searchBar__searchContainer__searchIcon" />
-				)}
-
-				<input
+		<Styled.SearchContainer>
+			<Styled.SearchInputContainer>
+				{isLoading ? <CircularProgress /> : <SearchOutlined />}
+				<Styled.SearchInput
 					placeholder={placeholder ?? t('Search')}
 					type="text"
 					autoComplete="off"
@@ -45,8 +40,8 @@ const SearchBar: React.FC<Props> = ({
 					onFocus={onFocus}
 					onBlur={onBlur}
 				/>
-			</div>
-		</div>
+			</Styled.SearchInputContainer>
+		</Styled.SearchContainer>
 	);
 };
 
