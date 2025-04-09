@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import LinearProgress from '@mui/material/LinearProgress';
-import '../../styles/LoadingScreen.css';
+import * as Styled from './LoadingScreen.styles';
 import { useTranslation } from 'react-i18next';
 import Alert from '@mui/material/Alert';
-import packageJson from '../../../package.json';
+import packageJson from '../../../../package.json';
 import { CircularProgress } from '@mui/material';
 import { useAppSelector } from '@src/store/hooks';
 
@@ -31,36 +31,32 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 		};
 	}, [loadingComponent]);
 
-	// const skip = () => {
-	//     props.setProgress(100);
-	// };
-
 	return (
-		<div className="loadingScreen">
+		<Styled.Container>
 			{!isHideLogo && (
-				<div className="loadingScreen__logoContainer">
+				<Styled.LogoWrapper>
 					<img
 						src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'}
 						alt="Logo"
 					/>
-				</div>
+				</Styled.LogoWrapper>
 			)}
 
-			<div className="loadingScreen__progressContainer">
+			<Styled.ProgressContainer>
 				{!isInitialResourceFailed && (
 					<LinearProgress variant="determinate" value={loadingProgress} />
 				)}
-			</div>
+			</Styled.ProgressContainer>
 
-			<div className="loadingScreen__details">
+			<Styled.Details>
 				<CircularProgress size={20} />
 				{t(loadingComponent ?? '')}
-			</div>
+			</Styled.Details>
 
 			{isLongTransactionInfoVisible && (
-				<div className="loadingScreen__longTransactionInfo">
+				<Styled.LongTransactionInfo>
 					{t('We are loading initial resources, please wait...')}
-				</div>
+				</Styled.LongTransactionInfo>
 			)}
 
 			{isInitialResourceFailed && (
@@ -69,21 +65,16 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 						{t('Something went wrong, this will be fixed automatically')}
 					</Alert>
 
-					<div className="loadingScreen__actions">
-						<a className="loadingScreen__link" href="mailto:support@get.chat">
+					<Styled.Actions>
+						<Styled.ContactLink href="mailto:support@get.chat">
 							{t('Contact us')}
-						</a>
-						{/* <span className="loadingScreen__link" onClick={skip}>
-                            {t("Skip")}
-                        </span> */}
-					</div>
+						</Styled.ContactLink>
+					</Styled.Actions>
 				</>
 			)}
 
-			<span className="loadingScreen__version">
-				Version: {packageJson.version}
-			</span>
-		</div>
+			<Styled.Version>Version: {packageJson.version}</Styled.Version>
+		</Styled.Container>
 	);
 };
 

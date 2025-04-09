@@ -1,8 +1,6 @@
-.loadingScreenOuter {
-	z-index: 500;
-}
+import styled from 'styled-components';
 
-.loadingScreen {
+export const Container = styled.div`
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -14,30 +12,32 @@
 	justify-content: center;
 	flex-direction: column;
 	padding: 30px 60px;
-}
+	z-index: 500;
+`;
 
-.loadingScreen__logoContainer {
+export const LogoWrapper = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-bottom: 50px;
-}
-
-.loadingScreen__logoContainer img {
-	height: 80px;
-	width: 80px;
-}
-
-.loadingScreen__progressContainer,
-.loadingScreen__logoContainer {
 	width: 100%;
 	max-width: 400px;
-}
 
-.loadingScreen__progressContainer .MuiLinearProgress-root {
-	height: 3px;
-}
+	img {
+		height: 80px;
+		width: 80px;
+	}
+`;
 
-.loadingScreen__details {
+export const ProgressContainer = styled.div`
+	width: 100%;
+	max-width: 400px;
+
+	.MuiLinearProgress-root {
+		height: 3px;
+	}
+`;
+
+export const Details = styled.div`
 	font-size: 16px;
 	font-weight: 600;
 	color: rgba(0, 0, 45, 0.4);
@@ -46,13 +46,13 @@
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-}
 
-.loadingScreen__details .MuiCircularProgress-root {
-	margin: 10px;
-}
+	.MuiCircularProgress-root {
+		margin: 10px;
+	}
+`;
 
-.loadingScreen__longTransactionInfo {
+export const LongTransactionInfo = styled.div`
 	margin-bottom: 10px;
 	font-size: 14px;
 	color: rgba(0, 0, 45, 0.3);
@@ -60,24 +60,24 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-}
+`;
 
-.loadingScreen__actions {
+export const Actions = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
-}
+`;
 
-.loadingScreen__link {
+export const ContactLink = styled.a`
 	display: inline-block;
 	cursor: pointer;
 	font-size: 18px;
 	color: var(--color-primary);
 	padding: 10px;
-}
+`;
 
-.loadingScreen__version {
+export const Version = styled.span`
 	display: block;
 	position: absolute;
 	bottom: 0;
@@ -86,4 +86,4 @@
 	margin-bottom: 15px;
 	font-size: 12px;
 	color: var(--lighter-text-color);
-}
+`;
