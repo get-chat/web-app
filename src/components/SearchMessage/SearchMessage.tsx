@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../styles/SearchMessage.css';
+import * as Styled from './SearchMessage.styles';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_GO_TO_MSG_ID } from '../Constants';
-import SearchBar from './SearchBar';
 import { useParams } from 'react-router-dom';
-import SearchMessageResult from './SearchMessageResult';
 import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '../contexts/ApplicationContext';
-import { generateCancelToken } from '../helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
 import { useAppDispatch } from '@src/store/hooks';
 import { setSearchMessagesVisible } from '@src/store/reducers/UIReducer';
@@ -18,6 +13,10 @@ import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
 import { prepareMessageList } from '@src/helpers/MessageHelper';
+import { generateCancelToken } from '@src/helpers/ApiHelper';
+import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
+import SearchBar from '@src/components/SearchBar';
+import SearchMessageResult from '@src/components/SearchMessageResult';
 
 export type Props = {
 	initialKeyword: string;
@@ -131,18 +130,18 @@ const SearchMessage: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="searchMessage">
-			<div className="searchMessage__header">
+		<Styled.SearchMessageContainer>
+			<Styled.Header>
 				<IconButton onClick={close} size="large">
 					<CloseIcon />
 				</IconButton>
 
 				<h3>{t('Search For Messages')}</h3>
-			</div>
+			</Styled.Header>
 
 			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
 
-			<div className="searchMessage__body">
+			<Styled.Body>
 				{Object.entries(results).map((message) => (
 					<SearchMessageResult
 						key={message[0]}
@@ -152,8 +151,8 @@ const SearchMessage: React.FC<Props> = ({
 						displaySender={false}
 					/>
 				))}
-			</div>
-		</div>
+			</Styled.Body>
+		</Styled.SearchMessageContainer>
 	);
 };
 
