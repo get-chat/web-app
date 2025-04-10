@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import * as Styled from './ChatTagsList.styles';
 import {
 	Button,
 	CircularProgress,
@@ -9,7 +10,6 @@ import {
 	Link,
 	ListItem,
 } from '@mui/material';
-import '../../styles/ChatTagsList.css';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -44,13 +44,15 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={close} className="chatTagsListWrapper">
+		<Styled.DialogWrapper open={open} onClose={close}>
 			<DialogTitle>{t('Tags')}</DialogTitle>
-			<DialogContent className="chatTagsListWrapper">
-				<div className="mb-3">{t('You can filter chats by tags.')}</div>
+			<DialogContent>
+				<Styled.DialogContentWrapper>
+					{t('You can filter chats by tags.')}
+				</Styled.DialogContentWrapper>
 
 				{tags && (
-					<div className="chatTagsList">
+					<div>
 						{tags.length > 0 ? (
 							<div>
 								{tags.map((tag) => (
@@ -59,24 +61,20 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 										button
 										onClick={() => handleClick(tag)}
 									>
-										<div className="chatTagsListWrapper__tag">
-											<SellIcon
-												style={{
-													fill: tag.web_inbox_color,
-												}}
-											/>
+										<Styled.TagItem>
+											<SellIcon style={{ fill: tag.web_inbox_color }} />
 											{tag.name}
-										</div>
+										</Styled.TagItem>
 									</ListItem>
 								))}
 							</div>
 						) : (
-							<div className="chatTagsList__empty">{t('Empty')}</div>
+							<Styled.EmptyState>{t('Empty')}</Styled.EmptyState>
 						)}
 					</div>
 				)}
 
-				<div className="mt-3">
+				<Styled.ManageTagsLink>
 					<Link
 						href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
 						target="_blank"
@@ -84,7 +82,7 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 					>
 						{t('Manage tags')}
 					</Link>
-				</div>
+				</Styled.ManageTagsLink>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
@@ -93,11 +91,11 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 			</DialogActions>
 
 			{isLoading && (
-				<div className="chatTagsListWrapper__loading">
+				<Styled.LoadingOverlay>
 					<CircularProgress size={28} />
-				</div>
+				</Styled.LoadingOverlay>
 			)}
-		</Dialog>
+		</Styled.DialogWrapper>
 	);
 };
 
