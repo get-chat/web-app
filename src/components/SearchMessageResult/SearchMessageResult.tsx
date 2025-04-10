@@ -1,12 +1,10 @@
 import React from 'react';
-import '../styles/SearchMessageResult.css';
+import * as Styled from './SearchMessageResult.styles';
 import Moment from 'react-moment';
-import DoneAll from '@mui/icons-material/DoneAll';
-import DoneIcon from '@mui/icons-material/Done';
-import { CALENDAR_NORMAL } from '../Constants';
-import ChatMessageTypeIcon from './Main/Chat/ChatMessage/ChatMessageTypeIcon';
+import { CALENDAR_NORMAL } from '@src/Constants';
+import ChatMessageTypeIcon from '../Main/Chat/ChatMessage/ChatMessageTypeIcon';
 import { ListItem } from '@mui/material';
-import PrintMessage from './PrintMessage';
+import PrintMessage from '../PrintMessage';
 import {
 	getMessageCaption,
 	getMessageTimestamp,
@@ -33,8 +31,8 @@ const SearchMessageResult: React.FC<Props> = ({
 
 	return (
 		<ListItem button onClick={() => onClick(data)}>
-			<div className="searchResult__message">
-				<div className="searchResult__message__header">
+			<Styled.MessageContainer>
+				<Styled.MessageHeader>
 					<Moment
 						unix
 						calendar={CALENDAR_NORMAL}
@@ -42,31 +40,33 @@ const SearchMessageResult: React.FC<Props> = ({
 					/>
 
 					{displaySender && <h3>{getSenderName(data)}</h3>}
-				</div>
-				<div className="searchResult__message__body">
-					<span className="searchResult__message__body__type">
+				</Styled.MessageHeader>
+				<Styled.MessageBody>
+					<Styled.MessageTypeContainer>
 						{data.from_us && data.waba_payload?.type === MessageType.text && (
-							<span className={isRead(data) ? 'chat__received' : ''}>
+							<Styled.ReceivedStatus
+								className={isRead(data) ? 'chat__received' : ''}
+							>
 								{isDeliveredOrRead(data) ? (
-									<DoneAll className="chat__iconDoneAll" />
+									<Styled.StyledDoneAll className="chat__iconDoneAll" />
 								) : (
-									<DoneIcon />
+									<Styled.StyledDone />
 								)}
-							</span>
+							</Styled.ReceivedStatus>
 						)}
 
 						<ChatMessageTypeIcon
 							type={data.waba_payload?.type ?? MessageType.none}
 						/>
-					</span>
+					</Styled.MessageTypeContainer>
 					<PrintMessage
 						message={
 							data.waba_payload?.text?.body ?? getMessageCaption(data) ?? ''
 						}
 						highlightText={keyword}
 					/>
-				</div>
-			</div>
+				</Styled.MessageBody>
+			</Styled.MessageContainer>
 		</ListItem>
 	);
 };

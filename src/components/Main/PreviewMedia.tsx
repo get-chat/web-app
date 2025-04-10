@@ -124,7 +124,7 @@ const PreviewMedia: React.FC<Props> = ({ data }) => {
 
 			{isZoomEnabled && data.type === ATTACHMENT_TYPE_IMAGE && (
 				<PreviewMediaZoom
-					src={data.source}
+					src={data.source ?? ''}
 					onClick={() => setZoomEnabled(false)}
 				/>
 			)}

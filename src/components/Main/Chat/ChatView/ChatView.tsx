@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../../styles/Chat.css';
+import '../../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
-import ChatMessage from './ChatMessage/ChatMessage';
+import ChatMessage from '../ChatMessage/ChatMessage';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
 	COMMAND_ASSIGN,
@@ -28,14 +28,14 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '@src/Constants';
-import PersonModel from '../../../api/models/PersonModel';
+import PersonModel from '../../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
 import ChatHeader from '@src/components/ChatHeader';
-import ChatMessageOptionsMenu from './ChatMessage/ChatMessageOptionsMenu';
+import ChatMessageOptionsMenu from '../ChatMessage/ChatMessageOptionsMenu';
 import moment from 'moment';
 import PubSub from 'pubsub-js';
-import MessageDateIndicator from './MessageDateIndicator';
+import MessageDateIndicator from '../MessageDateIndicator';
 import {
 	generateUniqueID,
 	hasInternetConnection,
@@ -43,13 +43,13 @@ import {
 	sortMessagesAsc,
 	translateHTMLInputToText,
 } from '@src/helpers/Helpers';
-import PreviewSendMedia from './PreviewSendMedia';
+import PreviewSendMedia from '../PreviewSendMedia';
 import {
 	getDroppedFiles,
 	handleDragOver,
 	prepareSelectedFiles,
 } from '@src/helpers/FileHelper';
-import SavedResponseList from '../../SavedResponseList';
+import SavedResponseList from '../../../SavedResponseList';
 import {
 	generateTemplateMessagePayload,
 	prepareSendFilePayload,
@@ -78,15 +78,15 @@ import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import ChatAssignmentEventsResponse from '../../../api/responses/ChatAssignmentEventsResponse';
-import ChatTaggingEventsResponse from '../../../api/responses/ChatTaggingEventsResponse';
+import ChatAssignmentEventsResponse from '../../../../api/responses/ChatAssignmentEventsResponse';
+import ChatTaggingEventsResponse from '../../../../api/responses/ChatTaggingEventsResponse';
 import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import useChat from '@src/components/Main/Chat/useChat';
+import useChat from '@src/components/Main/Chat/ChatView/useChat';
 // @ts-ignore
 import decode from 'unescape';
 import { setState } from '@src/store/reducers/UIReducer';

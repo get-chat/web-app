@@ -16,7 +16,7 @@ import { prepareMessageList } from '@src/helpers/MessageHelper';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
-import SearchMessageResult from '@src/components/SearchMessageResult';
+import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
 
 export type Props = {
 	initialKeyword: string;
