@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox, ListItem } from '@mui/material';
-import '../../../styles/SelectableChatTag.css';
 import SellIcon from '@mui/icons-material/Sell';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Tag } from '@src/types/tags';
+import * as Styled from './SelectableChatTag.styles';
 
 interface Props {
 	data: Tag;
@@ -35,19 +35,15 @@ const SelectableChatTag: React.FC<Props> = ({ data }) => {
 	};
 
 	return (
-		<ListItem className="sidebarTagListItem" button onClick={handleClick}>
-			<div className={'sidebarTag ' + (isSelected ? 'isSelected ' : '')}>
-				<Checkbox
-					className="sidebarTag__selection"
-					checked={isSelected}
-					color="primary"
-				/>
-				<div className="sidebarTag__selection__tag">
+		<Styled.StyledListItem onClick={handleClick}>
+			<Styled.TagContainer $isSelected={isSelected}>
+				<Checkbox checked={isSelected} color="primary" />
+				<Styled.TagContent>
 					<SellIcon style={{ fill: data.web_inbox_color }} />
 					{data.name}
-				</div>
-			</div>
-		</ListItem>
+				</Styled.TagContent>
+			</Styled.TagContainer>
+		</Styled.StyledListItem>
 	);
 };
 

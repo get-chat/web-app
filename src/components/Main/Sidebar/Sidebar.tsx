@@ -40,7 +40,7 @@ import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
-import SelectableChatTag from './SelectableChatTag';
+import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
