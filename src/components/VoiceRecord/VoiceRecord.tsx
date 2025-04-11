@@ -12,7 +12,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { displaySeconds } from '@src/helpers/Helpers';
 import DoneIcon from '@mui/icons-material/Done';
-import '@src/styles/VoiceRecord.css';
 import VoiceRecorder from '../../VoiceRecorder';
 import {
 	EVENT_TOPIC_DISPLAY_ERROR,
@@ -24,6 +23,7 @@ import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
+import * as Styled from './VoiceRecord.styles';
 
 interface Props {
 	voiceRecordCase: 'chat';
@@ -196,28 +196,20 @@ const VoiceRecord: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="voiceRecord">
+		<Styled.Container>
 			<Tooltip title={t('Cancel')} placement="top" disableInteractive>
-				<IconButton
-					onClick={stopVoiceRecord}
-					className="voiceRecord__cancelButton"
-					size="small"
-				>
+				<Styled.CancelButton onClick={stopVoiceRecord} size="small">
 					<CloseIcon />
-				</IconButton>
+				</Styled.CancelButton>
 			</Tooltip>
 
-			<FiberManualRecordIcon className="voiceRecord__recordIcon" />
-			<span className="voiceRecord__timer">{displaySeconds(timer)}</span>
+			<Styled.RecordIcon />
+			<Styled.Timer>{displaySeconds(timer)}</Styled.Timer>
 
 			<Tooltip title={t('Send')} placement="top" disableInteractive>
-				<IconButton
-					onClick={sendVoiceRecord}
-					className="voiceRecord__sendButton"
-					size="small"
-				>
+				<Styled.SendButton onClick={sendVoiceRecord} size="small">
 					<DoneIcon />
-				</IconButton>
+				</Styled.SendButton>
 			</Tooltip>
 
 			<Dialog open={open} onClose={handleClose}>
@@ -236,7 +228,7 @@ const VoiceRecord: React.FC<Props> = ({
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</div>
+		</Styled.Container>
 	);
 };
 
