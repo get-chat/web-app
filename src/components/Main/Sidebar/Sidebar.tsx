@@ -114,6 +114,7 @@ import {
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
+import * as Styled from './Sidebar.styles';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -805,8 +806,8 @@ const Sidebar: React.FC<Props> = ({
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
 	return (
-		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
-			<div className="sidebar__header">
+		<Styled.Sidebar $isHidden={isChatOnly}>
+			<Styled.Header>
 				<div className={styles.sessionContainer}>
 					<Tooltip title={t('Business Profile')} disableInteractive>
 						<div>
@@ -858,7 +859,7 @@ const Sidebar: React.FC<Props> = ({
 						</IconButton>
 					</Tooltip>
 				</div>
-			</div>
+			</Styled.Header>
 
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
@@ -1334,7 +1335,7 @@ const Sidebar: React.FC<Props> = ({
 			{isNotificationsVisible && (
 				<Notifications onHide={() => setNotificationsVisible(false)} />
 			)}
-		</div>
+		</Styled.Sidebar>
 	);
 };
 

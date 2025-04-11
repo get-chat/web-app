@@ -1,20 +1,3 @@
-.sidebar {
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	flex: 0.3;
-}
-
-.sidebar__header {
-	height: var(--header-height);
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 4px 15px;
-	background-color: var(--gray-light);
-	/*border-right: 1px solid lightgray;*/
-}
-
 .sidebar__headerRight {
 	display: flex;
 	align-items: center;
@@ -130,18 +113,6 @@
 }
 
 @media only screen and (max-width: 750px) {
-	.sidebar {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-	}
-
-	.sidebar__header {
-		padding: 4px 10px;
-	}
-
 	.sidebar__menu__refresh {
 		display: flex !important;
 	}
