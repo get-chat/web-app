@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../../styles/ChangePasswordDialog.css';
-import { Button, Dialog, TextField } from '@mui/material';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import Alert from '@mui/material/Alert';
+import * as Styled from './ChangePasswordDialog.styles';
+import {
+	Button,
+	DialogTitle,
+	DialogContent,
+	DialogActions,
+	TextField,
+} from '@mui/material';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changePassword } from '@src/api/authApi';
+import Alert from '@mui/material/Alert';
 
 interface Props {
 	open: boolean;
@@ -36,11 +39,9 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 	}, [timeoutRef]);
 
 	const close = () => {
-		// Close dialog
 		setOpen(false);
 
 		timeoutRef.current = setTimeout(function () {
-			// Reset states
 			setCurrentPassword('');
 			setNewPassword('');
 			setNewPasswordRepeat('');
@@ -83,10 +84,10 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={close} className="changePasswordDialog">
-			<DialogTitle>Change password</DialogTitle>
+		<Styled.StyledDialog open={open} onClose={close} fullWidth>
+			<DialogTitle>{t('Change password')}</DialogTitle>
 			<DialogContent>
-				<div className="changePasswordDialog__fields">
+				<Styled.FieldsContainer>
 					<TextField
 						variant="standard"
 						value={currentPassword}
@@ -117,7 +118,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 						autoComplete="new-password"
 						fullWidth
 					/>
-				</div>
+				</Styled.FieldsContainer>
 				{error && !isSuccess && (
 					<Alert severity="error">
 						<AlertTitle>{t('Error')}</AlertTitle>
@@ -143,7 +144,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 					{t('Change')}
 				</Button>
 			</DialogActions>
-		</Dialog>
+		</Styled.StyledDialog>
 	);
 };
 

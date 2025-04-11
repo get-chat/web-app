@@ -35,7 +35,7 @@ import SidebarContactResult from './SidebarContactResult';
 import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
-import ChangePasswordDialog from './ChangePasswordDialog';
+import ChangePasswordDialog from '../../ChangePasswordDialog';
 import SearchMessageResult from '../../SearchMessageResult/SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
