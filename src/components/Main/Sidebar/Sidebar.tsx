@@ -1,5 +1,4 @@
 import React, { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
-import '../../../styles/Sidebar.css';
 import {
 	CircularProgress,
 	ClickAwayListener,
@@ -832,7 +831,7 @@ const Sidebar: React.FC<Props> = ({
 					</Tooltip>
 				</div>
 
-				<div className="sidebar__headerRight">
+				<Styled.HeaderRight>
 					{!isReadOnly && (
 						<Tooltip title={t('New chat')} disableInteractive>
 							<IconButton
@@ -858,7 +857,7 @@ const Sidebar: React.FC<Props> = ({
 							<MoreVertIcon />
 						</IconButton>
 					</Tooltip>
-				</div>
+				</Styled.HeaderRight>
 			</Styled.Header>
 
 			{isSelectionModeEnabled && isExportChat && (
@@ -1136,7 +1135,7 @@ const Sidebar: React.FC<Props> = ({
 				</div>
 			</ClickAwayListener>
 
-			<div className="sidebar__results">
+			<Styled.ResultsContainer>
 				{isSelectionModeEnabled && (
 					<>
 						{tags && (
@@ -1160,9 +1159,9 @@ const Sidebar: React.FC<Props> = ({
 					searchedKeyword.trim().length === 0 &&
 					!isAnyActiveFilter &&
 					filteredChatsCount === 0 && (
-						<span className="sidebar__results__chats__noResult">
+						<Styled.NoResults>
 							<span>{t("You don't have any chats yet.")}</span>
-						</span>
+						</Styled.NoResults>
 					)}
 
 				{filteredChatsCount > 0 && (
@@ -1198,7 +1197,7 @@ const Sidebar: React.FC<Props> = ({
 					getObjLength(contactResults) > 0 && (
 						<>
 							<h3>{t('Contacts')}</h3>
-							<div className="sidebar__results__contacts">
+							<div>
 								{Object.entries(contactResults).map((contactResult) => (
 									<SidebarContactResult
 										key={contactResult[0]}
@@ -1214,7 +1213,7 @@ const Sidebar: React.FC<Props> = ({
 					getObjLength(chatMessages) > 0 && (
 						<>
 							<h3>{t('Messages')}</h3>
-							<div className="sidebar__results__messages">
+							<Styled.MessageList>
 								{Object.entries(chatMessages).map((message) => (
 									<SearchMessageResult
 										key={message[0]}
@@ -1224,19 +1223,19 @@ const Sidebar: React.FC<Props> = ({
 										onClick={(chatMessage: Message) => goToMessage(chatMessage)}
 									/>
 								))}
-							</div>
+							</Styled.MessageList>
 						</>
 					)}
-			</div>
+			</Styled.ResultsContainer>
 
 			<Fade in={isLoadingMoreChats} unmountOnExit>
-				<div className="sidebar__loadingMore">
+				<Styled.LoadingMore>
 					<Zoom in={isLoadingMoreChats}>
-						<div className="sidebar__loadingMore__wrapper">
+						<Styled.LoadingMoreWrapper>
 							<CircularProgress size={28} />
-						</div>
+						</Styled.LoadingMoreWrapper>
 					</Zoom>
-				</div>
+				</Styled.LoadingMore>
 			</Fade>
 
 			{isContactsVisible && (
@@ -1275,12 +1274,9 @@ const Sidebar: React.FC<Props> = ({
 				onClose={hideMenu}
 				elevation={3}
 			>
-				<MenuItem
-					className="sidebar__menu__refresh"
-					onClick={() => window.location.reload()}
-				>
+				<Styled.RefreshMenuItem onClick={() => window.location.reload()}>
 					{t('Refresh')}
-				</MenuItem>
+				</Styled.RefreshMenuItem>
 				{!isReadOnly && (
 					<MenuItem onClick={showChangePassword}>
 						<ListItemIcon>
