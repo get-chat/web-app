@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Alert } from '@mui/material';
 
 export const Wrapper = styled.div`
@@ -13,9 +13,9 @@ export const Wrapper = styled.div`
 export const RetryAlert = styled(Alert)<{ $sending?: boolean }>`
 	${({ $sending }) =>
 		$sending &&
-		`
-    opacity: 0.5;
-  `}
+		css`
+			opacity: 0.5;
+		`}
 `;
 
 export const LastAttempt = styled.div`

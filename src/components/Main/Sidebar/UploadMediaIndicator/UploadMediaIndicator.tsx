@@ -1,20 +1,23 @@
 import React from 'react';
 import { LinearProgress } from '@mui/material';
-import Alert from '@mui/material/Alert';
-import '../../../styles/UploadMediaIndicator.css';
 import { useTranslation } from 'react-i18next';
+import * as Styled from './UploadMediaIndicator.styles';
 
-function UploadMediaIndicator() {
+interface Props {
+	isMobile: boolean;
+}
+
+const UploadMediaIndicator: React.FC<Props> = ({ isMobile = false }) => {
 	const { t } = useTranslation();
 
 	return (
-		<div className="uploadingMediaIndicatorWrapper">
-			<Alert className="uploadingMediaIndicator" severity="info" elevation={0}>
+		<Styled.Wrapper $isMobile={isMobile}>
+			<Styled.StyledAlert severity="info" elevation={0}>
 				<div>{t('Uploading a media file. Please wait...')}</div>
 				<LinearProgress variant="indeterminate" />
-			</Alert>
-		</div>
+			</Styled.StyledAlert>
+		</Styled.Wrapper>
 	);
-}
+};
 
 export default UploadMediaIndicator;
