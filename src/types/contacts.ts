@@ -11,3 +11,8 @@ export interface ContactWabaPayload {
 	profile: Profile;
 	wa_id: string;
 }
+
+export interface ResolveContactResponse {
+	person?: Contact;
+	contact_provider_results: [];
+}

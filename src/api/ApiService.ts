@@ -63,14 +63,6 @@ export class ApiService {
 		);
 	};
 
-	resolveContactCall = (personWaId, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(`${this.apiBaseURL}contacts/${personWaId}`, getRequestConfig()),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	listContactsCall = (
 		search,
 		limit,
