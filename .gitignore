@@ -38,7 +38,9 @@ debug.log
 # Editors
 .idea
 
-
 # Cypress
 cypress/screenshots/
 cypress/videos/
+
+# translations
+/src/locales/**/*.mo

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import Recipient from '@src/interfaces/Recipient';
-import styles from './RecipientItem.module.css';
-import CustomAvatar from '@src/components/CustomAvatar';
-import { Checkbox, ListItemButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
+import * as Styled from './RecipientItem.styles';
 
 interface Props {
 	data: Recipient;
@@ -22,7 +20,6 @@ const RecipientItem: React.FC<Props> = ({
 	onSelect,
 }) => {
 	const [isPhoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
-
 	const { t } = useTranslation();
 
 	const handleClick = () => {
@@ -49,59 +46,58 @@ const RecipientItem: React.FC<Props> = ({
 	};
 
 	return (
-		<div className={styles.wrapper}>
-			<ListItemButton className={styles.listItem} onClick={handleClick}>
-				<div className={styles.container}>
+		<Styled.Wrapper>
+			<Styled.StyledListItemButton onClick={handleClick}>
+				<Styled.Container>
 					{isSelectionModeEnabled && (
-						<Checkbox
-							className={styles.selection}
-							checked={isSelected}
-							color="primary"
-						/>
+						<Styled.SelectionCheckbox checked={isSelected} color="primary" />
 					)}
 
-					<div className={styles.avatarWrapper}>
-						<CustomAvatar src={data.avatar} generateBgColorBy={data.name}>
+					<Styled.AvatarWrapper>
+						<Styled.StyledCustomAvatar
+							src={data.avatar}
+							generateBgColorBy={data.name}
+						>
 							{data.initials}
-						</CustomAvatar>
+						</Styled.StyledCustomAvatar>
 
 						{data.provider !== undefined && (
 							<ContactProviderHeader type={data.provider} />
 						)}
-					</div>
-					<div className={styles.info}>
-						<div className={styles.name}>{data.name}</div>
+					</Styled.AvatarWrapper>
+
+					<Styled.Info>
+						<Styled.Name>{data.name}</Styled.Name>
 
 						{data.phoneNumbers?.length > 0 ? (
-							<div className={styles.phoneNumber}>
+							<Styled.PhoneNumber>
 								{data.phoneNumbers[0]?.phoneNumber}
-							</div>
+							</Styled.PhoneNumber>
 						) : (
-							<div className={styles.missingPhoneNumber}>
+							<Styled.MissingPhoneNumber>
 								{t('There is no phone number')}
-							</div>
+							</Styled.MissingPhoneNumber>
 						)}
-					</div>
-				</div>
-			</ListItemButton>
+					</Styled.Info>
+				</Styled.Container>
+			</Styled.StyledListItemButton>
 
 			{!isSelectionModeEnabled && isPhoneNumbersVisible && (
-				<div className={styles.phoneNumbers}>
-					<div className={styles.phoneNumbersTitle}>
+				<Styled.PhoneNumbersContainer>
+					<Styled.PhoneNumbersTitle>
 						{t('Choose a phone number')}
-					</div>
-					{Object.entries(data.phoneNumbers).map((phoneNumber) => (
-						<div
-							key={phoneNumber[0]}
-							className={styles.choice}
-							onClick={() => goToChat(phoneNumber[1].phoneNumber)}
+					</Styled.PhoneNumbersTitle>
+					{data.phoneNumbers?.map((phoneNumber, index) => (
+						<Styled.Choice
+							key={index}
+							onClick={() => goToChat(phoneNumber.phoneNumber)}
 						>
-							{phoneNumber[1].phoneNumber}
-						</div>
+							{phoneNumber.phoneNumber}
+						</Styled.Choice>
 					))}
-				</div>
+				</Styled.PhoneNumbersContainer>
 			)}
-		</div>
+		</Styled.Wrapper>
 	);
 };
 

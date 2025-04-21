@@ -289,11 +289,6 @@ a.chat__document:hover {
 	fill: red;
 }
 
-.chat__headerRight {
-	display: flex;
-	justify-content: space-between;
-}
-
 .chat__body {
 	position: relative;
 	display: flex;

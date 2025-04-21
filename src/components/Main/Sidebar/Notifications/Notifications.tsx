@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../../../styles/Notifications.css';
+import * as Styled from './Notifications.styles';
 import CloseIcon from '@mui/icons-material/Close';
 import { IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -39,23 +39,23 @@ const Notifications: React.FC<Props> = ({ onHide }) => {
 	};
 
 	return (
-		<div className="notifications">
-			<div className="notifications__header">
+		<Styled.NotificationsContainer>
+			<Styled.Header>
 				<IconButton onClick={hideNotifications} size="large">
 					<CloseIcon />
 				</IconButton>
 
 				<h3>{t('Notifications')}</h3>
-			</div>
+			</Styled.Header>
 
-			<div className="notifications__body">
+			<Styled.Body>
 				{isLoaded && (
-					<div className="notifications__body__empty">
+					<Styled.EmptyState>
 						{t('You have no notifications')}
-					</div>
+					</Styled.EmptyState>
 				)}
-			</div>
-		</div>
+			</Styled.Body>
+		</Styled.NotificationsContainer>
 	);
 };
 

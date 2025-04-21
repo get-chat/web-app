@@ -942,7 +942,9 @@ const Main: React.FC = () => {
 					</Alert>
 				</Snackbar>
 
-				{isUploadingMedia && isMobileOnly && <UploadMediaIndicator />}
+				{isUploadingMedia && isMobileOnly && (
+					<UploadMediaIndicator isMobile={true} />
+				)}
 			</div>
 		</Fade>
 	);

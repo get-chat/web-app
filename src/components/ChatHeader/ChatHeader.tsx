@@ -1,5 +1,4 @@
 import React, { MouseEvent, useState } from 'react';
-import '../../styles/ChatHeader.css';
 import {
 	Divider,
 	IconButton,
@@ -21,11 +20,8 @@ import {
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
-import CustomAvatar from '@src/components/CustomAvatar';
 import AssigneeChip from '@src/components/AssigneeChip';
-import styles from './ChatHeader.module.css';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import classNames from 'classnames/bind';
 import PersonModel from '@src/api/models/PersonModel';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import SellIcon from '@mui/icons-material/Sell';
@@ -35,8 +31,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
-
-const cx = classNames.bind(styles);
+import * as Styled from './ChatHeader.styles';
 
 interface Props {
 	chat?: Chat;
@@ -115,31 +110,25 @@ const ChatHeader: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="chat__header" onDrop={(event) => event.preventDefault()}>
+		<Styled.Header onDrop={(event) => event.preventDefault()}>
 			{!isChatOnly && (
-				<div className="mobileOnly">
-					<IconButton
-						className="chat__header__backButton"
-						onClick={closeChat}
-						size="large"
-					>
+				<Styled.MobileOnly>
+					<Styled.BackButton onClick={closeChat} size="large">
 						<ArrowBack />
-					</IconButton>
-				</div>
+					</Styled.BackButton>
+				</Styled.MobileOnly>
 			)}
 
-			<div className="chat__header__clickable" onClick={showContactDetails}>
-				<CustomAvatar
+			<Styled.Clickable onClick={showContactDetails}>
+				<Styled.Avatar
 					src={extractAvatarFromContactProviderData(contactProvidersData[waId])}
-					className={
-						'chat__header__avatar ' + (person?.isExpired ? 'expired' : '')
-					}
+					$isExpired={person?.isExpired}
 					generateBgColorBy={!person?.isExpired ? person?.name : undefined}
 				>
 					{person?.initials}
-				</CustomAvatar>
+				</Styled.Avatar>
 
-				<div className="chat__headerInfo">
+				<Styled.HeaderInfo>
 					<PrintMessage
 						as="h3"
 						message={
@@ -149,28 +138,21 @@ const ChatHeader: React.FC<Props> = ({
 						}
 					/>
 
-					{/*<p><Moment date={contact?.lastMessageTimestamp} format={dateFormat} unix /></p>*/}
-
-					<div className={styles.subRow}>
-						<span
-							className={cx({
-								waId: true,
-								desktopOnly: true,
-							})}
-						>
+					<Styled.SubRow>
+						<Styled.WaId $desktopOnly>
 							{person?.waId ? addPlus(person?.waId) : ''}
-						</span>
+						</Styled.WaId>
 
 						{person?.isExpired && (
-							<span className={styles.expiredIndicator}>{t('Expired')}</span>
+							<Styled.ExpiredIndicator>{t('Expired')}</Styled.ExpiredIndicator>
 						)}
-					</div>
-				</div>
-			</div>
+					</Styled.SubRow>
+				</Styled.HeaderInfo>
+			</Styled.Clickable>
 
-			<div className="chat__headerRight">
+			<Styled.HeaderRight>
 				{chat && (
-					<div className={styles.assigneeActions}>
+					<Styled.AssigneeActions>
 						<AssigneeChip
 							assigneeType="user"
 							name={chat.assigned_to_user?.username}
@@ -182,7 +164,7 @@ const ChatHeader: React.FC<Props> = ({
 								partialUpdateChatAssignment(waId, userId, groupId);
 							}}
 						/>
-					</div>
+					</Styled.AssigneeActions>
 				)}
 
 				{isMobileOnly && hasFailedMessages && (
@@ -201,7 +183,7 @@ const ChatHeader: React.FC<Props> = ({
 				<IconButton onClick={displayMenu} size="large">
 					<MoreVert />
 				</IconButton>
-			</div>
+			</Styled.HeaderRight>
 
 			<Menu
 				anchorEl={anchorEl}
@@ -249,7 +231,7 @@ const ChatHeader: React.FC<Props> = ({
 					{t('Close view')}
 				</MenuItem>
 			</Menu>
-		</div>
+		</Styled.Header>
 	);
 };
 

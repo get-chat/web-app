@@ -21,7 +21,7 @@ import '../../styles/EmojiPicker.css';
 import PubSub from 'pubsub-js';
 import FileInput from '../FileInput';
 import { translateHTMLInputToText } from '@src/helpers/Helpers';
-import VoiceRecord from './VoiceRecord';
+import VoiceRecord from '../VoiceRecord';
 import {
 	EMOJI_SET,
 	EMOJI_SHEET_SIZE,

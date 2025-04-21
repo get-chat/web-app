@@ -6,7 +6,7 @@ import {
 	Routes,
 } from 'react-router-dom';
 
-import Login from './components/Login';
+import Login from './modules/Login/Login';
 import Main from './components/Main/Main';
 import RefreshTokenErrorPage from '@src/components/RefreshTokenErrorPage';
 

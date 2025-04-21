@@ -22,6 +22,10 @@ export const setChatContactName = (
 	name: string | undefined
 ) => {
 	if (chat && !!name) {
+		// Make data mutable
+		chat.contact.waba_payload.profile = {
+			...chat.contact.waba_payload.profile,
+		};
 		chat.contact.waba_payload.profile.name = name;
 	}
 };

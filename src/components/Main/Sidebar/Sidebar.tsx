@@ -1,5 +1,4 @@
 import React, { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
-import '../../../styles/Sidebar.css';
 import {
 	CircularProgress,
 	ClickAwayListener,
@@ -35,15 +34,15 @@ import SidebarContactResult from './SidebarContactResult';
 import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
-import ChangePasswordDialog from './ChangePasswordDialog';
-import SearchMessageResult from '../../SearchMessageResult';
+import ChangePasswordDialog from '../../ChangePasswordDialog';
+import SearchMessageResult from '../../SearchMessageResult/SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
-import SelectableChatTag from './SelectableChatTag';
+import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
-import Notifications from './Notifications/Notifications';
+import Notifications from './Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { getHubURL } from '@src/helpers/URLHelper';
@@ -51,7 +50,6 @@ import RetryFailedMessages from './RetryFailedMessages';
 import UploadMediaIndicator from './UploadMediaIndicator';
 import { Trans, useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import {
 	filterChat,
 	handleChatAssignmentEvent,
@@ -115,6 +113,7 @@ import {
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
+import * as Styled from './Sidebar.styles';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -136,8 +135,6 @@ const Sidebar: React.FC<Props> = ({
 	isChatOnly,
 	setChatTagsListVisible,
 }) => {
-	// @ts-ignore
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const {
@@ -808,8 +805,8 @@ const Sidebar: React.FC<Props> = ({
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
 	return (
-		<div className={'sidebar' + (isChatOnly ? ' hidden' : '')}>
-			<div className="sidebar__header">
+		<Styled.Sidebar $isHidden={isChatOnly}>
+			<Styled.Header>
 				<div className={styles.sessionContainer}>
 					<Tooltip title={t('Business Profile')} disableInteractive>
 						<div>
@@ -834,7 +831,7 @@ const Sidebar: React.FC<Props> = ({
 					</Tooltip>
 				</div>
 
-				<div className="sidebar__headerRight">
+				<Styled.HeaderRight>
 					{!isReadOnly && (
 						<Tooltip title={t('New chat')} disableInteractive>
 							<IconButton
@@ -860,8 +857,8 @@ const Sidebar: React.FC<Props> = ({
 							<MoreVertIcon />
 						</IconButton>
 					</Tooltip>
-				</div>
-			</div>
+				</Styled.HeaderRight>
+			</Styled.Header>
 
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
@@ -1138,7 +1135,7 @@ const Sidebar: React.FC<Props> = ({
 				</div>
 			</ClickAwayListener>
 
-			<div className="sidebar__results">
+			<Styled.ResultsContainer>
 				{isSelectionModeEnabled && (
 					<>
 						{tags && (
@@ -1162,9 +1159,9 @@ const Sidebar: React.FC<Props> = ({
 					searchedKeyword.trim().length === 0 &&
 					!isAnyActiveFilter &&
 					filteredChatsCount === 0 && (
-						<span className="sidebar__results__chats__noResult">
+						<Styled.NoResults>
 							<span>{t("You don't have any chats yet.")}</span>
-						</span>
+						</Styled.NoResults>
 					)}
 
 				{filteredChatsCount > 0 && (
@@ -1200,7 +1197,7 @@ const Sidebar: React.FC<Props> = ({
 					getObjLength(contactResults) > 0 && (
 						<>
 							<h3>{t('Contacts')}</h3>
-							<div className="sidebar__results__contacts">
+							<div>
 								{Object.entries(contactResults).map((contactResult) => (
 									<SidebarContactResult
 										key={contactResult[0]}
@@ -1216,7 +1213,7 @@ const Sidebar: React.FC<Props> = ({
 					getObjLength(chatMessages) > 0 && (
 						<>
 							<h3>{t('Messages')}</h3>
-							<div className="sidebar__results__messages">
+							<Styled.MessageList>
 								{Object.entries(chatMessages).map((message) => (
 									<SearchMessageResult
 										key={message[0]}
@@ -1226,19 +1223,19 @@ const Sidebar: React.FC<Props> = ({
 										onClick={(chatMessage: Message) => goToMessage(chatMessage)}
 									/>
 								))}
-							</div>
+							</Styled.MessageList>
 						</>
 					)}
-			</div>
+			</Styled.ResultsContainer>
 
 			<Fade in={isLoadingMoreChats} unmountOnExit>
-				<div className="sidebar__loadingMore">
+				<Styled.LoadingMore>
 					<Zoom in={isLoadingMoreChats}>
-						<div className="sidebar__loadingMore__wrapper">
+						<Styled.LoadingMoreWrapper>
 							<CircularProgress size={28} />
-						</div>
+						</Styled.LoadingMoreWrapper>
 					</Zoom>
-				</div>
+				</Styled.LoadingMore>
 			</Fade>
 
 			{isContactsVisible && (
@@ -1277,12 +1274,9 @@ const Sidebar: React.FC<Props> = ({
 				onClose={hideMenu}
 				elevation={3}
 			>
-				<MenuItem
-					className="sidebar__menu__refresh"
-					onClick={() => window.location.reload()}
-				>
+				<Styled.RefreshMenuItem onClick={() => window.location.reload()}>
 					{t('Refresh')}
-				</MenuItem>
+				</Styled.RefreshMenuItem>
 				{!isReadOnly && (
 					<MenuItem onClick={showChangePassword}>
 						<ListItemIcon>
@@ -1337,7 +1331,7 @@ const Sidebar: React.FC<Props> = ({
 			{isNotificationsVisible && (
 				<Notifications onHide={() => setNotificationsVisible(false)} />
 			)}
-		</div>
+		</Styled.Sidebar>
 	);
 };
 
