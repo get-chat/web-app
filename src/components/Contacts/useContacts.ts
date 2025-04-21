@@ -1,23 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PersonsResponse, {
-	PersonList,
-} from '@src/api/responses/PersonsResponse';
-import Recipient from '@src/interfaces/Recipient';
-import { AxiosResponse, CancelTokenSource } from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { fetchContacts } from '@src/api/contactsApi';
 import { Contact } from '@src/types/contacts';
+import { fetchPersons } from '@src/api/personsApi';
+import { PersonList, Recipient } from '@src/types/persons';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 const useContacts = () => {
-	// @ts-ignore
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const [keyword, setKeyword] = useState('');
 	const [contacts, setContacts] = useState<Contact[]>([]);
 	const [persons, setPersons] = useState<PersonList>({});
-	const [unifiedList, setUnifiedList] = useState<(Recipient | Contact)[]>([]);
+	const [unifiedList, setUnifiedList] = useState<Recipient[]>([]);
 	const [isLoading, setLoading] = useState(false);
 
 	let cancelTokenSourceRef = useRef<CancelTokenSource>();
@@ -31,12 +26,34 @@ const useContacts = () => {
 	}, []);
 
 	useEffect(() => {
+		const contactsAsRecipients: Recipient[] = contacts.map(
+			(item) =>
+				({
+					name: item.name,
+					initials: item.initials,
+					avatar: item.avatar,
+					phone_numbers: item.phone_numbers,
+					provider: item.contact_provider?.name,
+				} as Recipient)
+		);
+
+		const personsAsRecipients: Recipient[] = Object.values(persons).map(
+			(item) =>
+				({
+					name: item.waba_payload?.profile?.name,
+					initials: generateInitialsHelper(item.waba_payload?.profile?.name),
+					phone_numbers: [
+						{
+							phone_number: item.wa_id,
+						},
+					],
+					provider: 'whatsapp',
+				} as Recipient)
+		);
+
 		// Creating a unified list and sorting alphabetically
 		setUnifiedList(
-			[...Object.values(persons), ...contacts].sort(function (
-				a: Recipient,
-				b: Recipient
-			) {
+			[...contactsAsRecipients, ...personsAsRecipients].sort(function (a, b) {
 				return (
 					a.name?.toLowerCase()?.localeCompare(b.name?.toLowerCase() ?? '') ??
 					-1
@@ -67,19 +84,22 @@ const useContacts = () => {
 		};
 	}, [keyword]);
 
-	const listPersons = () => {
-		apiService.listPersonsCall(
-			keyword?.trim(),
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const personsResponse = new PersonsResponse(response.data);
-				setPersons(personsResponse.persons);
-				listContacts();
-			},
-			() => {
-				setLoading(false);
-			}
-		);
+	const listPersons = async () => {
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchPersons({
+				search: keyword?.trim(),
+			});
+			const personList: PersonList = {};
+			data.results.forEach((personData: any, personIndex: number) => {
+				personList[personIndex.toString()] = personData;
+			});
+			setPersons(personList);
+			await listContacts();
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			setLoading(false);
+		}
 	};
 
 	const listContacts = async () => {
@@ -91,7 +111,6 @@ const useContacts = () => {
 			setContacts(data.results);
 		} catch (error: any | AxiosResponse) {
 			console.error(error);
-		} finally {
 			setLoading(false);
 		}
 	};

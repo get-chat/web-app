@@ -14,6 +14,8 @@ export const resolveContact = async (wa_id: string) => {
 };
 
 export const fetchContacts = async (params: FetchContactsRequest) => {
-	const response = await axios.get<PaginatedResponse<Contact>>(`/contacts/`);
+	const response = await axios.get<PaginatedResponse<Contact>>(`/contacts/`, {
+		params,
+	});
 	return response.data;
 };

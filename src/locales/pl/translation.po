@@ -158,10 +158,10 @@ msgstr "Tagi"
 msgid "You can filter chats by tags."
 msgstr "Możesz filtrować czaty według tagów."
 
-msgid "Contact Details"
+msgid "ContactView Details"
 msgstr "Szczegóły kontaktu"
 
-msgid "Contact details"
+msgid "ContactView details"
 msgstr "Dane kontaktowe"
 
 msgid "Never"
@@ -185,7 +185,7 @@ msgstr "E-mail"
 msgid "Loading: %s"
 msgstr "Ładowanie: %s"
 
-msgid "Contact us"
+msgid "ContactView us"
 msgstr "Skontaktuj się z nami"
 
 msgid "Skip"
@@ -706,7 +706,7 @@ msgid "Chats"
 msgstr "Czaty"
 
 msgid ""
-"To be able to share contacts, you need to use one of our Contact Providers. "
+"To be able to share contacts, you need to use one of our ContactView Providers. "
 "<1>Click here</1> to go to our integrations page."
 msgstr ""
 "Aby móc udostępniać kontakty, musisz skorzystać z jednego z naszych "
@@ -749,7 +749,7 @@ msgstr "Aparat"
 msgid "Gallery"
 msgstr "Galeria"
 
-msgid "Contact"
+msgid "ContactView"
 msgstr "Kontakt"
 
 msgid "Preparing"

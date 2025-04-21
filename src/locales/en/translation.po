@@ -149,10 +149,10 @@ msgstr ""
 msgid "You can filter chats by tags."
 msgstr ""
 
-msgid "Contact Details"
+msgid "ContactView Details"
 msgstr ""
 
-msgid "Contact details"
+msgid "ContactView details"
 msgstr ""
 
 msgid "Never"
@@ -176,7 +176,7 @@ msgstr ""
 msgid "Loading: %s"
 msgstr ""
 
-msgid "Contact us"
+msgid "ContactView us"
 msgstr ""
 
 msgid "Skip"
@@ -683,7 +683,7 @@ msgid "Chats"
 msgstr ""
 
 msgid ""
-"To be able to share contacts, you need to use one of our Contact Providers. "
+"To be able to share contacts, you need to use one of our ContactView Providers. "
 "<1>Click here</1> to go to our integrations page."
 msgstr ""
 
@@ -723,7 +723,7 @@ msgstr ""
 msgid "Gallery"
 msgstr ""
 
-msgid "Contact"
+msgid "ContactView"
 msgstr ""
 
 msgid "Preparing"

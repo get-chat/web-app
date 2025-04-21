@@ -1040,7 +1040,7 @@ const ChatView: React.FC<Props> = (props) => {
 			setPerson(data);
 			setExpired(isPersonExpired(data));
 
-			// Person information is loaded, now load messages
+			// PersonView information is loaded, now load messages
 			if (loadMessages) {
 				listMessages(true, function (preparedMessages: ChatMessageList) {
 					const lastPreparedMessage = getLastObject(

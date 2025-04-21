@@ -1,15 +1,17 @@
 import { Profile } from '@src/types/messages';
 
 export interface Contact {
-	wa_id: string;
-	waba_payload: ContactWabaPayload;
+	name: string;
 	initials: string;
-	last_message_timestamp: number;
 	phone_numbers?: PhoneNumberDescribed[];
 	email_addresses?: string[];
 	urls?: string[];
+	avatar?: string;
+	large_avatar?: string;
 	contact_provider?: {
 		type: string;
+		name?: string;
+		id?: string;
 	};
 }
 

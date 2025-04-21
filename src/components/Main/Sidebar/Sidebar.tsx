@@ -92,7 +92,6 @@ import {
 	setState,
 } from '@src/store/reducers/UIReducer';
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
-import PersonModel from '@src/api/models/PersonModel';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';
@@ -114,6 +113,7 @@ import {
 import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
 import * as Styled from './Sidebar.styles';
+import { PersonList } from '@src/types/persons';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 const cx = classNames.bind(styles);
@@ -202,9 +202,7 @@ const Sidebar: React.FC<Props> = ({
 
 	const [searchedKeyword, setSearchedKeyword] = useState('');
 	const [chatMessages, setChatMessages] = useState<ChatMessageList>({});
-	const [contactResults, setContactResults] = useState<{
-		[key: string]: PersonModel;
-	}>({});
+	const [contactResults, setContactResults] = useState<PersonList>({});
 	const [isBusinessProfileVisible, setBusinessProfileVisible] = useState(false);
 	const [isUserProfileVisible, setUserProfileVisible] = useState(false);
 	const [isContactsVisible, setContactsVisible] = useState(false);

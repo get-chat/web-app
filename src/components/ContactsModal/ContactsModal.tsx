@@ -9,9 +9,9 @@ import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import Contacts from '@src/components/Contacts';
-import Recipient from '@src/interfaces/Recipient';
 import { AxiosResponse } from 'axios';
 import { MessageType } from '@src/types/messages';
+import { Recipient } from '@src/types/persons';
 
 interface DialogHeaderProps {
 	children?: JSX.Element | string;
@@ -64,8 +64,8 @@ const ContactsModal: React.FC<Props> = ({
 				name: {
 					formatted_name: contact.name,
 				},
-				phones: contact.phoneNumbers.map((phone) => ({
-					wa_id: phone?.phoneNumber || null,
+				phones: contact.phone_numbers.map((phone) => ({
+					wa_id: phone?.phone_number || null,
 				})),
 			})),
 		};

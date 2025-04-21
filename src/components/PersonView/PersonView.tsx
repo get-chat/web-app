@@ -1,23 +1,23 @@
 import React from 'react';
 import { ListItem } from '@mui/material';
 import ContactProviderHeader from '../ContactProviderHeader';
-import PersonModel from '@src/api/models/PersonModel';
-import * as Styled from '../Contact/Contact.styles';
+import * as Styled from '@src/components/ContactView/Contact.styles';
+import { Person } from '@src/types/persons';
 
 interface Props {
-	data: PersonModel;
-	verifyPhoneNumber: (data: PersonModel, waId: string) => void;
+	data: Person;
+	verifyPhoneNumber: (data: Person, waId: string) => void;
 	contactProvidersData: { [key: string]: any };
 }
 
-const Person: React.FC<Props> = ({
+const PersonView: React.FC<Props> = ({
 	data,
 	verifyPhoneNumber,
 	contactProvidersData,
 }) => {
 	const handleClick = () => {
-		if (data.waId) {
-			goToChat(data.waId);
+		if (data.wa_id) {
+			goToChat(data.wa_id);
 		}
 	};
 
@@ -31,8 +31,8 @@ const Person: React.FC<Props> = ({
 				<Styled.ContactContainer onClick={handleClick}>
 					<Styled.AvatarWrapper>
 						<Styled.StyledCustomAvatar
-							src={contactProvidersData[data.waId ?? '']?.[0]?.avatar}
-							generateBgColorBy={data.name}
+							src={contactProvidersData[data.wa_id ?? '']?.[0]?.avatar}
+							generateBgColorBy={data.waba_payload?.profile?.name}
 						>
 							{data.initials}
 						</Styled.StyledCustomAvatar>
@@ -40,9 +40,10 @@ const Person: React.FC<Props> = ({
 					</Styled.AvatarWrapper>
 					<Styled.ContactInfo>
 						<h2>
-							{contactProvidersData[data.waId ?? '']?.[0]?.name ?? data.name}
+							{contactProvidersData[data.wa_id ?? '']?.[0]?.name ??
+								data.waba_payload?.profile?.name}
 						</h2>
-						<Styled.PhoneNumber>{data.waId}</Styled.PhoneNumber>
+						<Styled.PhoneNumber>{data.wa_id}</Styled.PhoneNumber>
 					</Styled.ContactInfo>
 				</Styled.ContactContainer>
 			</ListItem>
@@ -50,4 +51,4 @@ const Person: React.FC<Props> = ({
 	);
 };
 
-export default Person;
+export default PersonView;
