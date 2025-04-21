@@ -63,17 +63,6 @@ export class ApiService {
 		);
 	};
 
-	retrievePersonCall = (waId, cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}persons/${waId}/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	listChatAssignmentEventsCall = (
 		waId,
 		beforeTime,

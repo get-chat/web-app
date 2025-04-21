@@ -28,7 +28,6 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '@src/Constants';
-import PersonModel from '../../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
 import ChatHeader from '@src/components/ChatHeader';
@@ -110,6 +109,9 @@ import {
 	WebhookMessageStatus,
 } from '@src/types/messages';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
+import { retrievePerson } from '@src/api/personsApi';
+import { isPersonExpired } from '@src/helpers/PersonHelper';
+import { Person } from '@src/types/persons';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -171,7 +173,7 @@ const ChatView: React.FC<Props> = (props) => {
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
 
-	const [person, setPerson] = useState<PersonModel>();
+	const [person, setPerson] = useState<Person>();
 	const [chat, setChat] = useState<Chat>();
 
 	const [input, setInput] = useState('');
@@ -382,7 +384,7 @@ const ChatView: React.FC<Props> = (props) => {
 		retrieveChat();
 
 		// Load contact and messages
-		retrievePerson(true);
+		doRetrievePerson(true);
 
 		return () => {
 			// Cancelling ongoing requests
@@ -568,9 +570,8 @@ const ChatView: React.FC<Props> = (props) => {
 										(prevState) =>
 											({
 												...prevState,
-												lastMessageTimestamp: lastMessageTimestamp,
-												isExpired: false,
-											} as PersonModel)
+												last_message_timestamp: lastMessageTimestamp,
+											} as Person)
 									);
 
 									// Chat is not expired anymore
@@ -776,7 +777,7 @@ const ChatView: React.FC<Props> = (props) => {
 				setLoaded(false);
 
 				// This method triggers loading messages with proper callback
-				retrievePerson(true);
+				doRetrievePerson(true);
 			}
 		};
 
@@ -815,7 +816,7 @@ const ChatView: React.FC<Props> = (props) => {
 					return {
 						...prevState,
 						name: name,
-					} as PersonModel;
+					} as Person;
 				} else {
 					return prevState;
 				}
@@ -1032,57 +1033,53 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const retrievePerson = (loadMessages: boolean) => {
-		apiService.retrievePersonCall(
-			waId,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const preparedPerson = new PersonModel(response.data);
-				setPerson(preparedPerson);
-				setExpired(preparedPerson.isExpired);
+	const doRetrievePerson = async (loadMessages: boolean) => {
+		try {
+			// TODO: Make request cancellable
+			const data = await retrievePerson(waId ?? '');
+			setPerson(data);
+			setExpired(isPersonExpired(data));
 
-				// Person information is loaded, now load messages
-				if (loadMessages) {
-					listMessages(true, function (preparedMessages: ChatMessageList) {
-						const lastPreparedMessage = getLastObject(
-							preparedMessages
-						) as Message;
-						setLastMessageId(
-							lastPreparedMessage?.waba_payload?.id ??
-								generateMessageInternalId(lastPreparedMessage?.id)
+			// Person information is loaded, now load messages
+			if (loadMessages) {
+				listMessages(true, function (preparedMessages: ChatMessageList) {
+					const lastPreparedMessage = getLastObject(
+						preparedMessages
+					) as Message;
+					setLastMessageId(
+						lastPreparedMessage?.waba_payload?.id ??
+							generateMessageInternalId(lastPreparedMessage?.id)
+					);
+
+					// Scroll to message if goToMessageId is defined
+					const goToMessage = location.state?.goToMessage as
+						| Message
+						| undefined;
+					if (goToMessage !== undefined) {
+						goToMessageId(
+							goToMessage.id,
+							getMessageTimestamp(goToMessage) ?? -1
 						);
-
-						// Scroll to message if goToMessageId is defined
-						const goToMessage = location.state?.goToMessage as
-							| Message
-							| undefined;
-						if (goToMessage !== undefined) {
-							goToMessageId(
-								goToMessage.id,
-								getMessageTimestamp(goToMessage) ?? -1
-							);
-						}
-					});
-				}
-			},
-			(error: AxiosError) => {
-				if (error.response?.status === 404) {
-					if (location.state.person) {
-						createPersonAndStartChat(
-							location.state.person.name,
-							location.state.person.initials
-						);
-					} else {
-						// To prevent missing data on refresh
-						//closeChat();
-
-						verifyContact();
 					}
-				} else {
-					window.displayError(error);
-				}
+				});
 			}
-		);
+		} catch (error: any | AxiosError) {
+			if (error.response?.status === 404) {
+				if (location.state.person) {
+					createPersonAndStartChat(
+						location.state.person.name,
+						location.state.person.initials
+					);
+				} else {
+					// To prevent missing data on refresh
+					//closeChat();
+
+					verifyContact();
+				}
+			} else {
+				window.displayError(error);
+			}
+		}
 	};
 
 	let verifyPhoneNumberCancelTokenSourceRef = useRef<CancelTokenSource>();
@@ -1128,10 +1125,17 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	const createPersonAndStartChat = (name: string, initials?: string) => {
-		const preparedPerson = new PersonModel({});
-		preparedPerson.name = name;
-		preparedPerson.initials = initials;
-		preparedPerson.waId = waId;
+		const preparedPerson: Person = {
+			waba_payload: {
+				profile: {
+					name: name,
+				},
+				wa_id: waId ?? '',
+			},
+			initials: initials ?? '',
+			wa_id: waId ?? '',
+			last_message_timestamp: -1,
+		};
 
 		setPerson(preparedPerson);
 

@@ -1,5 +1,5 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
-import PersonModel from '@src/api/models/PersonModel';
+import { Person } from '@src/types/persons';
 
 interface UIState {
 	isReadOnly: boolean;
@@ -19,7 +19,7 @@ interface UIState {
 	lastSendAttemptAt: Date | undefined;
 	selectedTags: number[];
 	selectedChats: string[];
-	chosenContact: PersonModel | undefined;
+	chosenContact: Person | undefined;
 	isChatAssignmentVisible: boolean;
 	isInitialResourceFailed: boolean;
 	isUploadRecipientsCSVVisible: boolean;

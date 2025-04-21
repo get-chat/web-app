@@ -1,4 +1,4 @@
-import { ContactWabaPayload, PhoneNumberDescribed } from '@src/types/contacts';
+import { ContactWabaPayload } from '@src/types/contacts';
 
 export interface Person {
 	wa_id: string;
@@ -6,3 +6,7 @@ export interface Person {
 	initials: string;
 	last_message_timestamp: number;
 }
+
+export type PersonList = {
+	[key: string]: Person;
+};

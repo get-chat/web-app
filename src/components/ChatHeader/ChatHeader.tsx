@@ -22,7 +22,6 @@ import { useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import AssigneeChip from '@src/components/AssigneeChip';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import PersonModel from '@src/api/models/PersonModel';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -32,10 +31,12 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import * as Styled from './ChatHeader.styles';
+import { Person } from '@src/types/persons';
+import { isPersonExpired } from '@src/helpers/PersonHelper';
 
 interface Props {
 	chat?: Chat;
-	person?: PersonModel;
+	person?: Person;
 	contactProvidersData: { [key: string]: any };
 	isChatOnly: boolean | Number;
 	setChatTagsVisible: (isVisible: boolean) => void;
@@ -122,8 +123,12 @@ const ChatHeader: React.FC<Props> = ({
 			<Styled.Clickable onClick={showContactDetails}>
 				<Styled.Avatar
 					src={extractAvatarFromContactProviderData(contactProvidersData[waId])}
-					$isExpired={person?.isExpired}
-					generateBgColorBy={!person?.isExpired ? person?.name : undefined}
+					$isExpired={isPersonExpired(person)}
+					generateBgColorBy={
+						!isPersonExpired(person)
+							? person?.waba_payload?.profile?.name
+							: undefined
+					}
 				>
 					{person?.initials}
 				</Styled.Avatar>
@@ -133,17 +138,17 @@ const ChatHeader: React.FC<Props> = ({
 						as="h3"
 						message={
 							contactProvidersData[waId]?.[0]?.name ??
-							person?.name ??
-							(person?.waId ? addPlus(person?.waId) : '')
+							person?.waba_payload?.profile?.name ??
+							(person?.wa_id ? addPlus(person?.wa_id) : '')
 						}
 					/>
 
 					<Styled.SubRow>
 						<Styled.WaId $desktopOnly>
-							{person?.waId ? addPlus(person?.waId) : ''}
+							{person?.wa_id ? addPlus(person?.wa_id) : ''}
 						</Styled.WaId>
 
-						{person?.isExpired && (
+						{isPersonExpired(person) && (
 							<Styled.ExpiredIndicator>{t('Expired')}</Styled.ExpiredIndicator>
 						)}
 					</Styled.SubRow>
