@@ -1,8 +1,8 @@
-import { Contact } from '@src/types/contacts';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
 import { Template } from '@src/types/templates';
 import { User } from '@src/types/users';
+import { Person } from '@src/types/persons';
 
 export interface FetchMessagesRequest {
 	wa_id?: string;
@@ -42,7 +42,7 @@ export interface Message {
 	id: string;
 	waba_payload?: WabaPayload;
 	waba_statuses?: WabaStatuses;
-	contact?: Contact;
+	contact?: Person;
 	from_us: boolean;
 	received: boolean;
 	sender?: User;

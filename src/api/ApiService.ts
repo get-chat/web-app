@@ -63,34 +63,6 @@ export class ApiService {
 		);
 	};
 
-	listContactsCall = (
-		search,
-		limit,
-		pages,
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}contacts/`,
-				getRequestConfig(
-					{
-						search: search,
-						limit: limit,
-						pages: pages,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	retrievePersonCall = (waId, cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(

@@ -1,10 +1,10 @@
-import { Contact } from '@src/types/contacts';
 import { Tag } from '@src/types/tags';
 import { Message } from '@src/types/messages';
 import { User } from '@src/types/users';
+import { Person } from '@src/types/persons';
 
 export interface Chat {
-	contact: Contact;
+	contact: Person;
 	new_messages: number;
 	wa_id: string;
 	last_message?: Message;

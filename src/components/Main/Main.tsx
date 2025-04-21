@@ -3,7 +3,7 @@ import Sidebar from './Sidebar/Sidebar';
 import ChatView from './Chat/ChatView';
 import { Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
@@ -37,7 +37,6 @@ import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTags } from '@src/store/reducers/tagsReducer';
-import ContactsResponse from '@src/api/responses/ContactsResponse';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setUsers } from '@src/store/reducers/usersReducer';
@@ -76,6 +75,7 @@ import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
 } from '@src/helpers/MessageHelper';
+import { fetchContacts } from '@src/api/contactsApi';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -764,7 +764,7 @@ const Main: React.FC = () => {
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
 			setLoadingComponent('Saved Responses');
-			handleFetchSavedResponses();
+			await handleFetchSavedResponses();
 			return;
 		}
 
@@ -781,30 +781,24 @@ const Main: React.FC = () => {
 		};
 
 		const makeRequest = async (pages?: string | undefined | null) => {
-			apiService.listContactsCall(
-				undefined,
-				CONTACTS_TEMP_LIMIT,
-				pages,
-				undefined,
-				(response: AxiosResponse) => {
-					const contactsResponse = new ContactsResponse(response.data);
-					mergedResults = mergedResults.concat(contactsResponse.results);
-					if (
-						contactsResponse.next &&
-						mergedResults.length < contactsResponse.count
-					) {
-						const nextURL = new URL(contactsResponse.next);
-						const pages = nextURL.searchParams.get('pages');
-						makeRequest(pages);
-					} else {
-						completeCallback();
-					}
-				},
-				(error: AxiosError) => {
-					console.error('Error in listContacts', error);
-					dispatch(setState({ isInitialResourceFailed: true }));
+			try {
+				const data = await fetchContacts({
+					limit: CONTACTS_TEMP_LIMIT,
+					pages: pages,
+				});
+
+				mergedResults = mergedResults.concat(data.results);
+				if (data.next && mergedResults.length < data.count) {
+					const nextURL = new URL(data.next);
+					const pages = nextURL.searchParams.get('pages');
+					await makeRequest(pages);
+				} else {
+					completeCallback();
 				}
-			);
+			} catch (error: any | AxiosError) {
+				console.error(error);
+				dispatch(setState({ isInitialResourceFailed: true }));
+			}
 		};
 
 		await makeRequest();
