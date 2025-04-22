@@ -184,25 +184,6 @@ export class ApiService {
 		);
 	};
 
-	listPersonsCall = (search, cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}persons/`,
-				getRequestConfig(
-					{
-						search: search,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	retrieveChatAssignmentCall = (waId, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(
