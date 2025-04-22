@@ -60,6 +60,7 @@ import {
 	getObjLength,
 } from '@src/helpers/ObjectHelper';
 import {
+	fromTaggingEvent,
 	generateMessageInternalId,
 	getMessageTimestamp,
 	getUniqueSender,
@@ -78,7 +79,6 @@ import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
 import ChatAssignmentEventsResponse from '../../../../api/responses/ChatAssignmentEventsResponse';
-import ChatTaggingEventsResponse from '../../../../api/responses/ChatTaggingEventsResponse';
 import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
@@ -112,6 +112,7 @@ import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { retrievePerson } from '@src/api/personsApi';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
 import { Person } from '@src/types/persons';
+import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1373,34 +1374,38 @@ const ChatView: React.FC<Props> = (props) => {
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
 	) => {
-		apiService.listChatTaggingEventsCall(
-			waId,
-			beforeTimeForEvents,
-			sinceTimeForEvents,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const chatTaggingEventsResponse = new ChatTaggingEventsResponse(
-					response.data,
-					true
-				);
+		// TODO: Make request cancellable
+		try {
+			const data = await fetchChatTaggingEvents({
+				wa_id: waId ?? '',
+				before_time: beforeTimeForEvents,
+				since_time: sinceTimeForEvents,
+			});
 
-				preparedMessages = {
-					...preparedMessages,
-					...chatTaggingEventsResponse.messages,
-				};
+			const eventMessages: ChatMessageList = {};
+			data.results.forEach((taggingEvent: any) => {
+				const prepared = fromTaggingEvent(taggingEvent);
+				eventMessages[prepared.id] = prepared;
+			});
 
-				// Finish loading
-				finishLoadingMessages(
-					preparedMessages,
-					preparedReactions,
-					isInitial,
-					callback,
-					replaceAll,
-					beforeTime,
-					sinceTime
-				);
-			}
-		);
+			preparedMessages = {
+				...preparedMessages,
+				...eventMessages,
+			};
+
+			// Finish loading
+			await finishLoadingMessages(
+				preparedMessages,
+				preparedReactions,
+				isInitial,
+				callback,
+				replaceAll,
+				beforeTime,
+				sinceTime
+			);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const queueMessage = (

@@ -89,32 +89,6 @@ export class ApiService {
 		);
 	};
 
-	listChatTaggingEventsCall = (
-		waId,
-		beforeTime,
-		sinceTime,
-		cancelToken,
-		successCallback
-	) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}chat_tagging_events/`,
-				getRequestConfig(
-					{
-						wa_id: waId,
-						before_time: beforeTime,
-						since_time: sinceTime,
-					},
-					cancelToken
-				)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	uploadMediaCall = (formData, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.post(`${this.apiBaseURL}media/`, formData, getRequestConfig()),
