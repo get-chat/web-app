@@ -1074,7 +1074,7 @@ const ChatView: React.FC<Props> = (props) => {
 					// To prevent missing data on refresh
 					//closeChat();
 
-					verifyContact();
+					createPersonAndStartChat(addPlus(waId), waId?.[0]);
 				}
 			} else {
 				window.displayError(error);
@@ -1083,46 +1083,6 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	let verifyPhoneNumberCancelTokenSourceRef = useRef<CancelTokenSource>();
-
-	const verifyContact = () => {
-		const onError = () => {
-			closeChat();
-			window.displayCustomError(
-				'There is no WhatsApp account connected to this phone number.'
-			);
-		};
-
-		let phoneNumber = prepareWaId(waId);
-		phoneNumber = addPlus(phoneNumber);
-
-		apiService.verifyContactsCall(
-			[phoneNumber],
-			verifyPhoneNumberCancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				if (
-					response.data.contacts &&
-					response.data.contacts.length > 0 &&
-					response.data.contacts[0].status === 'valid' &&
-					response.data.contacts[0].wa_id !== 'invalid'
-				) {
-					const returnedWaId = response.data.contacts[0].wa_id;
-
-					if (returnedWaId !== prepareWaId(waId)) {
-						// verifyContact returned a different waId, redirecting to chat page with new waId
-						navigate(`/main/chat/${returnedWaId}${location.search}`);
-					} else {
-						createPersonAndStartChat(addPlus(waId), waId?.[0]);
-					}
-				} else {
-					onError();
-				}
-			},
-			(error: AxiosError) => {
-				console.error(error);
-				onError();
-			}
-		);
-	};
 
 	const createPersonAndStartChat = (name: string, initials?: string) => {
 		const preparedPerson: Person = {

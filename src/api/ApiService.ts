@@ -258,30 +258,6 @@ export class ApiService {
 		);
 	};
 
-	verifyContactsCall = (
-		contacts,
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}contacts/verify/`,
-				{
-					blocking: 'wait',
-					contacts: contacts,
-					force_check: true,
-				},
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	retrieveBusinessProfileCall = (cancelToken, successCallback) => {
 		this.handleRequest(
 			axios.get(

@@ -70,43 +70,21 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 			return;
 		}
 
-		setVerifying(true);
+		// Skipping verifying as it is deprecated
 
-		apiService.verifyContactsCall(
-			[addPlus(waId)],
-			verifyPhoneNumberCancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				if (
-					response.data.contacts &&
-					response.data.contacts.length > 0 &&
-					response.data.contacts[0].status === 'valid' &&
-					response.data.contacts[0].wa_id !== 'invalid'
-				) {
-					const returnedWaId = response.data.contacts[0].wa_id;
-
-					navigate(`/main/chat/${returnedWaId}${location.search}`, {
-						state: {
-							person: {
-								name: data?.name,
-								initials: data?.initials,
-								avatar: data?.avatar,
-								waId: returnedWaId,
-							},
-						},
-					});
-
-					// Hide contacts
-					onHide();
-				} else {
-					failureCallback();
-				}
-
-				setVerifying(false);
+		navigate(`/main/chat/${waId}${location.search}`, {
+			state: {
+				person: {
+					name: data?.name,
+					initials: data?.initials,
+					avatar: data?.avatar,
+					waId: waId,
+				},
 			},
-			() => {
-				setVerifying(false);
-			}
-		);
+		});
+
+		// Hide contacts
+		onHide();
 	};
 
 	return (
