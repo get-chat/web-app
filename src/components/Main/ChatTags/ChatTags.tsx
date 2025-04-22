@@ -16,11 +16,12 @@ import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { Tag } from '@src/types/tags';
 import { fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
+import { createChatTagging } from '@src/api/chatTaggingApi';
 
 interface Props {
 	open: boolean;
@@ -74,8 +75,8 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		deleteChatTagging(tag);
 	};
 
-	const onClickTag = (tag: Tag) => {
-		createChatTagging(tag);
+	const onClickTag = async (tag: Tag) => {
+		await doCreateChatTagging(tag);
 	};
 
 	const makeUniqueTagsArray = (tagsArray: Tag[]) => {
@@ -113,25 +114,27 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		}
 	};
 
-	const createChatTagging = (tag: Tag) => {
-		apiService.createChatTaggingCall(
-			waId,
-			tag.id,
-			(response: AxiosResponse) => {
-				setChatTags((prevState) => {
-					let nextState = prevState.filter((curTag) => {
-						return curTag.id !== tag.id;
-					});
-
-					tag.tagging_id = response.data.id;
-
-					nextState.push(tag);
-					nextState = makeUniqueTagsArray(nextState);
-
-					return nextState;
+	const doCreateChatTagging = async (tag: Tag) => {
+		try {
+			const data = await createChatTagging({
+				tag: tag.id,
+				chat: waId ?? '',
+			});
+			setChatTags((prevState) => {
+				let nextState = prevState.filter((curTag) => {
+					return curTag.id !== tag.id;
 				});
-			}
-		);
+
+				tag.tagging_id = data.id;
+
+				nextState.push(tag);
+				nextState = makeUniqueTagsArray(nextState);
+
+				return nextState;
+			});
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const deleteChatTagging = (tag: Tag) => {

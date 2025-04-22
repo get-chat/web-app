@@ -154,23 +154,6 @@ export class ApiService {
 		);
 	};
 
-	createChatTaggingCall = (waId, chatTaggingId, successCallback) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}chat_tagging/`,
-				{
-					chat: waId,
-					tag: chatTaggingId,
-				},
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	deleteChatTaggingCall = (chatTaggingId, successCallback) => {
 		this.handleRequest(
 			axios.delete(
