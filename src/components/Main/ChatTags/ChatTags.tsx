@@ -21,7 +21,7 @@ import { Tag } from '@src/types/tags';
 import { fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
-import { createChatTagging } from '@src/api/chatTaggingApi';
+import { createChatTagging, deleteChatTagging } from '@src/api/chatTaggingApi';
 
 interface Props {
 	open: boolean;
@@ -71,8 +71,8 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		setOpen(false);
 	};
 
-	const onDeleteTag = (tag: Tag) => {
-		deleteChatTagging(tag);
+	const onDeleteTag = async (tag: Tag) => {
+		await doDeleteChatTagging(tag);
 	};
 
 	const onClickTag = async (tag: Tag) => {
@@ -137,19 +137,24 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		}
 	};
 
-	const deleteChatTagging = (tag: Tag) => {
-		apiService.deleteChatTaggingCall(
-			tag.tagging_id,
-			(response: AxiosResponse) => {
-				setChatTags((prevState) => {
-					let nextState = prevState.filter((curTag) => {
-						return curTag.id !== tag.id;
-					});
-					nextState = makeUniqueTagsArray(nextState);
-					return nextState;
+	const doDeleteChatTagging = async (tag: Tag) => {
+		if (!tag.tagging_id) {
+			console.warn('Chat tagging id is missing!', tag);
+			return;
+		}
+
+		try {
+			await deleteChatTagging(tag.tagging_id);
+			setChatTags((prevState) => {
+				let nextState = prevState.filter((curTag) => {
+					return curTag.id !== tag.id;
 				});
-			}
-		);
+				nextState = makeUniqueTagsArray(nextState);
+				return nextState;
+			});
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	return (

@@ -154,19 +154,6 @@ export class ApiService {
 		);
 	};
 
-	deleteChatTaggingCall = (chatTaggingId, successCallback) => {
-		this.handleRequest(
-			axios.delete(
-				`${this.apiBaseURL}chat_tagging/${chatTaggingId}`,
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	retrieveChatAssignmentCall = (waId, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(

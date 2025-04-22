@@ -11,3 +11,8 @@ export const createChatTagging = async (data: CreateChatTaggingRequest) => {
 	);
 	return response.data;
 };
+
+export const deleteChatTagging = async (id: number) => {
+	const response = await api.delete(`/chat_tagging/${id}/`);
+	return response.data;
+};
