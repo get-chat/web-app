@@ -2,10 +2,10 @@ import React from 'react';
 import styles from './ChatAssignmentEvent.module.css';
 import Moment from 'react-moment';
 import { Trans, useTranslation } from 'react-i18next';
-import { ChatAssignment } from '@src/types/messages';
+import { ChatAssignmentChangeEvent } from '@src/types/messages';
 
 interface Props {
-	data: ChatAssignment;
+	data: ChatAssignmentChangeEvent;
 }
 
 const ChatAssignmentEvent: React.FC<Props> = ({ data }) => {

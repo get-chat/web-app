@@ -3,7 +3,7 @@ import { replaceEmojis } from './EmojiHelper';
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import {
-	ChatAssignment,
+	ChatAssignmentChangeEvent,
 	ChatTagging,
 	Message,
 	MessageStatus,
@@ -75,7 +75,7 @@ export const generateEmptyMessage = () => {
 };
 
 export const fromAssignmentEvent = (
-	assignmentEvent: ChatAssignment
+	assignmentEvent: ChatAssignmentChangeEvent
 ): Message => {
 	const id =
 		'assignmentEvent_' + assignmentEvent.timestamp + '_' + generateUniqueID();

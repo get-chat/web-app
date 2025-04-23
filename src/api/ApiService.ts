@@ -128,22 +128,6 @@ export class ApiService {
 		);
 	};
 
-	retrieveChatAssignmentCall = (waId, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}chat_assignment/${waId}/`,
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				if (error?.response?.status !== 403) {
-					window.displayError(error);
-				}
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	updateChatAssignmentCall = (
 		waId,
 		assignedToUser,

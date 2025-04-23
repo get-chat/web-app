@@ -52,7 +52,7 @@ export interface Message {
 	is_failed: boolean;
 	resend_payload?: CreateMessageRequest;
 	reactions?: Message[];
-	assignment_event?: ChatAssignment;
+	assignment_event?: ChatAssignmentChangeEvent;
 	tagging_event?: ChatTagging;
 	forwarded?: boolean;
 	context?: Message;
@@ -228,11 +228,11 @@ export interface WebhookMessageWabaPayload {
 	incoming_messages?: Message[];
 	outgoing_messages?: Message[];
 	statuses?: WebhookMessageStatus[];
-	chat_assignment?: ChatAssignment;
+	chat_assignment?: ChatAssignmentChangeEvent;
 	chat_tagging?: ChatTagging;
 }
 
-export interface ChatAssignment {
+export interface ChatAssignmentChangeEvent {
 	assigned_group_set?: Group;
 	assigned_group_was_cleared: boolean;
 	assigned_to_user_set?: User;
