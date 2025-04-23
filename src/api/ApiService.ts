@@ -128,33 +128,6 @@ export class ApiService {
 		);
 	};
 
-	updateChatAssignmentCall = (
-		waId,
-		assignedToUser,
-		assignedGroup,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.put(
-				`${this.apiBaseURL}chat_assignment/${waId}/`,
-				{
-					wa_id: waId,
-					assigned_to_user: assignedToUser,
-					assigned_group: assignedGroup,
-				},
-				getRequestConfig()
-			),
-			successCallback,
-			(error) => {
-				if (error?.response?.status !== 403) {
-					window.displayError(error);
-				}
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	partialUpdateChatAssignmentCall = (
 		waId,
 		assignedToUser,

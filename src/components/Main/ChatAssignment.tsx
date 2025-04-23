@@ -15,14 +15,16 @@ import {
 } from '@mui/material';
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
 import { AxiosError } from 'axios';
 import { sortGroups } from '@src/helpers/GroupsHelper';
 import { GroupList } from '@src/types/groups';
 import { fetchGroups } from '@src/api/groupsApi';
-import { fetchChatAssignment } from '@src/api/chatAssignmentApi';
+import {
+	fetchChatAssignment,
+	updateChatAssignment,
+} from '@src/api/chatAssignmentApi';
 
 interface Props {
 	open: boolean;
@@ -31,8 +33,6 @@ interface Props {
 }
 
 const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const users = useAppSelector((state) => state.users.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isAdmin = currentUser?.profile?.role === 'admin';
@@ -76,25 +76,26 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 		}
 	};
 
-	const updateChatAssignment = () => {
-		apiService.updateChatAssignmentCall(
-			waId,
-			tempAssignedToUser === 'null' ? null : tempAssignedToUser,
-			tempAssignedGroup === 'null' ? null : tempAssignedGroup,
-			() => {
-				close();
-			},
-			(error: AxiosError) => {
-				if (error?.response?.status === 403) {
-					// @ts-ignore
-					window.displayCustomError(
-						'This chat could not be assigned as its assignments have been changed by another user recently.'
-					);
-				}
-
-				close();
+	const doUpdateChatAssignment = async () => {
+		try {
+			await updateChatAssignment({
+				wa_id: waId,
+				assigned_to_user:
+					tempAssignedToUser === 'null' ? null : parseInt(tempAssignedToUser),
+				assigned_group:
+					tempAssignedGroup === 'null' ? null : parseInt(tempAssignedGroup),
+			});
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			if (error?.response?.status === 403) {
+				// @ts-ignore
+				window.displayCustomError(
+					'This chat could not be assigned as its assignments have been changed by another user recently.'
+				);
 			}
-		);
+		} finally {
+			close();
+		}
 	};
 
 	const listGroups = async () => {
@@ -235,7 +236,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 					Close
 				</Button>
 				{(canChangeUserAssigment || canChangeGroupAssigment) && (
-					<Button color="primary" onClick={updateChatAssignment}>
+					<Button color="primary" onClick={doUpdateChatAssignment}>
 						{t('Update')}
 					</Button>
 				)}
