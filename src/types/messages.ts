@@ -1,8 +1,8 @@
 import { Tag } from '@src/types/tags';
-import { Group } from '@src/types/groups';
 import { Template } from '@src/types/templates';
 import { User } from '@src/types/users';
 import { Person } from '@src/types/persons';
+import { ChatAssignmentEvent } from '@src/types/chatAssignment';
 
 export interface FetchMessagesRequest {
 	wa_id?: string;
@@ -52,7 +52,7 @@ export interface Message {
 	is_failed: boolean;
 	resend_payload?: CreateMessageRequest;
 	reactions?: Message[];
-	assignment_event?: ChatAssignmentChangeEvent;
+	assignment_event?: ChatAssignmentEvent;
 	tagging_event?: ChatTagging;
 	forwarded?: boolean;
 	context?: Message;
@@ -228,18 +228,8 @@ export interface WebhookMessageWabaPayload {
 	incoming_messages?: Message[];
 	outgoing_messages?: Message[];
 	statuses?: WebhookMessageStatus[];
-	chat_assignment?: ChatAssignmentChangeEvent;
+	chat_assignment?: ChatAssignmentEvent;
 	chat_tagging?: ChatTagging;
-}
-
-export interface ChatAssignmentChangeEvent {
-	assigned_group_set?: Group;
-	assigned_group_was_cleared: boolean;
-	assigned_to_user_set?: User;
-	assigned_to_user_was_cleared: boolean;
-	done_by?: User;
-	timestamp: number;
-	wa_id: string;
 }
 
 export interface ChatTagging {

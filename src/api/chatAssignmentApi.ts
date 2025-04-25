@@ -1,8 +1,11 @@
 import axios from '@src/api/axiosInstance';
 import {
 	ChatAssignment,
+	ChatAssignmentEvent,
+	FetchChatAssignmentEventsRequest,
 	UpdateChatAssignmentRequest,
 } from '@src/types/chatAssignment';
+import { PaginatedResponse } from '@src/types/common';
 
 export const fetchChatAssignment = async (wa_id: string) => {
 	const response = await axios.get<ChatAssignment>(
@@ -17,6 +20,15 @@ export const updateChatAssignment = async (
 	const response = await axios.put<ChatAssignment>(
 		`/chat_assignment/${params.wa_id}/`,
 		{ params }
+	);
+	return response.data;
+};
+
+export const fetchChatAssignmentEvents = async (
+	params: FetchChatAssignmentEventsRequest
+) => {
+	const response = await axios.get<PaginatedResponse<ChatAssignmentEvent>>(
+		`/chat_assignment_events/`
 	);
 	return response.data;
 };

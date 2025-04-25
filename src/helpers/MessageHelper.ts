@@ -3,7 +3,6 @@ import { replaceEmojis } from './EmojiHelper';
 import { sanitize } from 'dompurify';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import {
-	ChatAssignmentChangeEvent,
 	ChatTagging,
 	Message,
 	MessageStatus,
@@ -14,6 +13,7 @@ import ReactionList from '@src/interfaces/ReactionList';
 import { generateUniqueID } from '@src/helpers/Helpers';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
+import { ChatAssignmentEvent } from '@src/types/chatAssignment';
 
 export const prepareMessageList = (
 	messages: Message[],
@@ -75,7 +75,7 @@ export const generateEmptyMessage = () => {
 };
 
 export const fromAssignmentEvent = (
-	assignmentEvent: ChatAssignmentChangeEvent
+	assignmentEvent: ChatAssignmentEvent
 ): Message => {
 	const id =
 		'assignmentEvent_' + assignmentEvent.timestamp + '_' + generateUniqueID();

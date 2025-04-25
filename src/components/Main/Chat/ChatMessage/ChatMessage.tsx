@@ -15,7 +15,7 @@ import ChatMessageImage from './ChatMessageImage';
 import ChatMessageDocument from './ChatMessageDocument';
 import ChatMessageVoice from './ChatMessageVoice';
 import ChatMessageTemplate from './ChatMessageTemplate';
-import ChatAssignmentEvent from '../../../ChatAssignmentEvent';
+import ChatAssignmentEventView from '../../../ChatAssignmentEventView';
 import ChatTaggingEvent from '../../../ChatTaggingEvent';
 import ChatMessageLocation from './ChatMessageLocation';
 import { useTranslation } from 'react-i18next';
@@ -134,7 +134,7 @@ const ChatMessage: React.FC<Props> = ({
 			)}
 
 			{data.assignment_event && (
-				<ChatAssignmentEvent data={data.assignment_event} />
+				<ChatAssignmentEventView data={data.assignment_event} />
 			)}
 
 			{data.tagging_event && <ChatTaggingEvent data={data.tagging_event} />}

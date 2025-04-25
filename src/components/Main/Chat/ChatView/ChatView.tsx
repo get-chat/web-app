@@ -60,6 +60,7 @@ import {
 	getObjLength,
 } from '@src/helpers/ObjectHelper';
 import {
+	fromAssignmentEvent,
 	fromTaggingEvent,
 	generateMessageInternalId,
 	getMessageTimestamp,
@@ -76,9 +77,8 @@ import {
 import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import ChatAssignmentEventsResponse from '../../../../api/responses/ChatAssignmentEventsResponse';
 import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
@@ -113,6 +113,7 @@ import { retrievePerson } from '@src/api/personsApi';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
 import { Person } from '@src/types/persons';
 import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
+import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1331,36 +1332,40 @@ const ChatView: React.FC<Props> = (props) => {
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
 	) => {
-		apiService.listChatAssignmentEventsCall(
-			waId,
-			beforeTimeForEvents,
-			sinceTimeForEvents,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const chatAssignmentEventsResponse = new ChatAssignmentEventsResponse(
-					response.data,
-					true
-				);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchChatAssignmentEvents({
+				wa_id: waId ?? '',
+				before_time: beforeTimeForEvents,
+				since_time: sinceTimeForEvents,
+			});
 
-				preparedMessages = {
-					...preparedMessages,
-					...chatAssignmentEventsResponse.messages,
-				};
+			const chatAssignmentEvents: ChatMessageList = {};
+			data.results.forEach((assignmentEvent: any) => {
+				const prepared = fromAssignmentEvent(assignmentEvent);
+				messages[prepared.id] = prepared;
+			});
 
-				// List chat tagging events
-				listChatTaggingEvents(
-					preparedMessages,
-					preparedReactions,
-					isInitial,
-					callback,
-					replaceAll,
-					beforeTime,
-					sinceTime,
-					beforeTimeForEvents,
-					sinceTimeForEvents
-				);
-			}
-		);
+			preparedMessages = {
+				...preparedMessages,
+				...chatAssignmentEvents,
+			};
+
+			// List chat tagging events
+			await listChatTaggingEvents(
+				preparedMessages,
+				preparedReactions,
+				isInitial,
+				callback,
+				replaceAll,
+				beforeTime,
+				sinceTime,
+				beforeTimeForEvents,
+				sinceTimeForEvents
+			);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const listChatTaggingEvents = async (
