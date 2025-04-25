@@ -28,3 +28,9 @@ export interface FetchChatAssignmentEventsRequest {
 	before_time?: number;
 	since_time?: number;
 }
+
+export interface PartialUpdateChatAssignmentRequest {
+	wa_id: string;
+	assigned_to_user?: number | null;
+	assigned_group?: number | null;
+}

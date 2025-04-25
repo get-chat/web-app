@@ -57,7 +57,6 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 				} else if (error?.response?.status === 503) {
 					handleProfilePhotoError(error);
 				} else {
-					// @ts-ignore
 					window.displayError(error);
 				}
 			}

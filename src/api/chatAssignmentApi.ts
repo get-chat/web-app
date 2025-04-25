@@ -3,6 +3,7 @@ import {
 	ChatAssignment,
 	ChatAssignmentEvent,
 	FetchChatAssignmentEventsRequest,
+	PartialUpdateChatAssignmentRequest,
 	UpdateChatAssignmentRequest,
 } from '@src/types/chatAssignment';
 import { PaginatedResponse } from '@src/types/common';
@@ -29,6 +30,16 @@ export const fetchChatAssignmentEvents = async (
 ) => {
 	const response = await axios.get<PaginatedResponse<ChatAssignmentEvent>>(
 		`/chat_assignment_events/`
+	);
+	return response.data;
+};
+
+export const partialUpdateChatAssignment = async (
+	params: PartialUpdateChatAssignmentRequest
+) => {
+	const response = await axios.patch<ChatAssignment>(
+		`/chat_assignment/${params.wa_id}/`,
+		{ params }
 	);
 	return response.data;
 };
