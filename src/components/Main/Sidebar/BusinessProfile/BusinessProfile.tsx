@@ -24,7 +24,10 @@ import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
-import { fetchBusinessProfileSettings } from '@src/api/settingsApi';
+import {
+	fetchBusinessProfileSettings,
+	partialUpdateBusinessProfileSettings,
+} from '@src/api/settingsApi';
 
 function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -106,20 +109,20 @@ function BusinessProfile(props: any) {
 
 		setUpdating(true);
 
-		apiService.updateBusinessProfileCall(
-			address,
-			description,
-			email,
-			vertical,
-			Object.values(websites),
-			cancelTokenSourceRef.current?.token,
-			() => {
-				updateProfileAbout(event);
-			},
-			() => {
-				setUpdating(false);
-			}
-		);
+		try {
+			// TODO: Make request cancellable
+			await partialUpdateBusinessProfileSettings({
+				address,
+				description,
+				email,
+				vertical,
+				websites: Object.values(websites),
+			});
+			await updateProfileAbout(event);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			setUpdating(false);
+		}
 	};
 
 	const retrieveProfilePhoto = () => {
