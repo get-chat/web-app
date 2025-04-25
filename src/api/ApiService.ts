@@ -102,19 +102,6 @@ export class ApiService {
 		);
 	};
 
-	retrieveBusinessProfileCall = (cancelToken, successCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}settings/business/profile/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	updateBusinessProfileCall = (
 		address,
 		description,

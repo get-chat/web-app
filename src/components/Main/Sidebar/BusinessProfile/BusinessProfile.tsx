@@ -19,11 +19,12 @@ import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
-import { AxiosResponse, CancelTokenSource } from 'axios';
+import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
+import { fetchBusinessProfileSettings } from '@src/api/settingsApi';
 
 function BusinessProfile(props: any) {
 	const { apiService } = React.useContext(ApplicationContext);
@@ -74,28 +75,28 @@ function BusinessProfile(props: any) {
 		};
 	}, []);
 
-	const retrieveBusinessProfile = () => {
-		apiService.retrieveBusinessProfileCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const data = response.data;
+	const retrieveBusinessProfile = async () => {
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchBusinessProfileSettings();
 
-				setAddress(data.address);
-				setDescription(data.description);
-				setEmail(data.email);
-				setVertical(data.vertical);
+			setAddress(data.address ?? '');
+			setDescription(data.description ?? '');
+			setEmail(data.email ?? '');
+			setVertical(data.vertical ?? '');
 
-				let websitesArray = data.websites;
-				if (websitesArray.length === 0) {
-					websitesArray = [];
-				}
-
-				setWebsites({ ...websitesArray });
-
-				// Load about
-				retrieveProfileAbout();
+			let websitesArray = data.websites;
+			if (websitesArray.length === 0) {
+				websitesArray = [];
 			}
-		);
+
+			setWebsites({ ...websitesArray });
+
+			// Load about
+			retrieveProfileAbout();
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const updateBusinessProfile = async (
