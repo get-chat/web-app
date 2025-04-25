@@ -15,7 +15,8 @@ export const partialUpdateBusinessProfileSettings = async (
 	params: PartialUpdateBusinessProfileSettings
 ) => {
 	const response = await axios.patch<BusinessProfileSettings>(
-		'/settings/business/profile/'
+		'/settings/business/profile/',
+		{ params }
 	);
 	return response.data;
 };
