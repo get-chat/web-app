@@ -26,6 +26,7 @@ import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
 import {
 	fetchBusinessProfileSettings,
+	fetchProfileAbout,
 	partialUpdateBusinessProfileSettings,
 } from '@src/api/settingsApi';
 
@@ -96,7 +97,7 @@ function BusinessProfile(props: any) {
 			setWebsites({ ...websitesArray });
 
 			// Load about
-			retrieveProfileAbout();
+			await retrieveProfileAbout();
 		} catch (error: any | AxiosError) {
 			console.error(error);
 		}
@@ -136,17 +137,16 @@ function BusinessProfile(props: any) {
 		);
 	};
 
-	const retrieveProfileAbout = () => {
-		apiService.retrieveProfileAboutCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const profile = response.data.settings?.profile;
-				setAbout(profile?.about?.text);
-				retrieveProfilePhoto();
-
-				setLoaded(true);
-			}
-		);
+	const retrieveProfileAbout = async () => {
+		try {
+			const data = await fetchProfileAbout();
+			setAbout(data.settings.profile?.about?.text ?? '');
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		} finally {
+			retrieveProfilePhoto();
+			setLoaded(true);
+		}
 	};
 
 	const updateProfileAbout = async (

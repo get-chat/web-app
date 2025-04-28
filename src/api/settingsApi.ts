@@ -2,6 +2,7 @@ import axios from '@src/api/axiosInstance';
 import {
 	BusinessProfileSettings,
 	PartialUpdateBusinessProfileSettings,
+	ProfileAboutResponse,
 } from '@src/types/settings';
 
 export const fetchBusinessProfileSettings = async () => {
@@ -17,6 +18,13 @@ export const partialUpdateBusinessProfileSettings = async (
 	const response = await axios.patch<BusinessProfileSettings>(
 		'/settings/business/profile/',
 		{ params }
+	);
+	return response.data;
+};
+
+export const fetchProfileAbout = async () => {
+	const response = await axios.get<ProfileAboutResponse>(
+		'/settings/profile/about/'
 	);
 	return response.data;
 };

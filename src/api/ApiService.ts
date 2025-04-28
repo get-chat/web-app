@@ -78,19 +78,6 @@ export class ApiService {
 		);
 	};
 
-	retrieveProfileAboutCall = (cancelToken, successCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}settings/profile/about/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
-
 	updateProfileAboutCall = (
 		about,
 		cancelToken,

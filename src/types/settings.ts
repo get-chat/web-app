@@ -13,3 +13,13 @@ export interface PartialUpdateBusinessProfileSettings {
 	vertical: string | null;
 	websites: string[];
 }
+
+export interface ProfileAboutResponse {
+	settings: {
+		profile?: {
+			about?: {
+				text: string | null;
+			};
+		};
+	};
+}
