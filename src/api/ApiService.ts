@@ -78,28 +78,6 @@ export class ApiService {
 		);
 	};
 
-	updateProfileAboutCall = (
-		about,
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.patch(
-				`${this.apiBaseURL}settings/profile/about/`,
-				{
-					text: about,
-				},
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	retrieveProfilePhotoCall = (cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(

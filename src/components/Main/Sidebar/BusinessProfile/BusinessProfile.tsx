@@ -28,6 +28,7 @@ import {
 	fetchBusinessProfileSettings,
 	fetchProfileAbout,
 	partialUpdateBusinessProfileSettings,
+	updateProfileAbout,
 } from '@src/api/settingsApi';
 
 function BusinessProfile(props: any) {
@@ -119,7 +120,7 @@ function BusinessProfile(props: any) {
 				vertical,
 				websites: Object.values(websites),
 			});
-			await updateProfileAbout(event);
+			await doUpdateProfileAbout(event);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			setUpdating(false);
@@ -149,21 +150,21 @@ function BusinessProfile(props: any) {
 		}
 	};
 
-	const updateProfileAbout = async (
+	const doUpdateProfileAbout = async (
 		event: React.FormEvent<HTMLFormElement>
 	) => {
 		event.preventDefault();
 
-		apiService.updateProfileAboutCall(
-			about,
-			cancelTokenSourceRef.current?.token,
-			() => {
-				setUpdating(false);
-			},
-			() => {
-				setUpdating(false);
-			}
-		);
+		try {
+			// TODO: Make request cancellable
+			await updateProfileAbout({
+				text: about,
+			});
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		} finally {
+			setUpdating(false);
+		}
 	};
 
 	const updateProfilePhoto = async (file: FileList) => {

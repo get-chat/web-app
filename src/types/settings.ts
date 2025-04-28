@@ -23,3 +23,7 @@ export interface ProfileAboutResponse {
 		};
 	};
 }
+
+export interface UpdateProfileAboutRequest {
+	text: string | null;
+}
