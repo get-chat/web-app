@@ -250,6 +250,11 @@ export interface WebhookMessageStatus {
 	timestamp: string;
 }
 
+export interface MarkAsReceivedRequest {
+	customer_wa_id: string;
+	timestamp: number;
+}
+
 export enum MessageType {
 	none = 'none',
 	text = 'text',

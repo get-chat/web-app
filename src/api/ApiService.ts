@@ -2,7 +2,7 @@
 import axios from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_FORCE_LOGOUT } from '../Constants';
-import { getRequestConfig, handleIfUnauthorized } from '../helpers/ApiHelper';
+import { getRequestConfig } from '../helpers/ApiHelper';
 import { getStorage, STORAGE_TAG_TOKEN } from '../helpers/StorageHelper';
 import { AppConfig } from '@src/config/application';
 
@@ -74,30 +74,6 @@ export class ApiService {
 					window.displayError(error);
 				}
 				errorCallback?.(error);
-			}
-		);
-	};
-
-	markAsReceivedCall = (
-		waId,
-		timestamp,
-		cancelToken,
-		successCallback,
-		errorCallback,
-		history
-	) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}mark_as_received/`,
-				{
-					customer_wa_id: waId,
-					timestamp: timestamp,
-				},
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				handleIfUnauthorized(error, history);
 			}
 		);
 	};

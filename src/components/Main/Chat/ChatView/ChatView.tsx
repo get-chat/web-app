@@ -101,7 +101,11 @@ import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
-import { createMessage, fetchMessages } from '@src/api/messagesApi';
+import {
+	createMessage,
+	fetchMessages,
+	markAsReceived,
+} from '@src/api/messagesApi';
 import {
 	CreateMessageRequest,
 	Message,
@@ -440,7 +444,7 @@ const ChatView: React.FC<Props> = (props) => {
 						if (currentNewMessages > 0) {
 							const lastMessage = getLastObject(messages);
 							if (lastMessage) {
-								markAsReceived(getMessageTimestamp(lastMessage) ?? -1);
+								doMarkAsReceived(getMessageTimestamp(lastMessage) ?? -1);
 							}
 						}
 					}
@@ -562,7 +566,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 									// Mark new message as received if visible
 									if (canSeeLastMessage(messagesContainer.current)) {
-										markAsReceived(lastMessageTimestamp ?? -1);
+										doMarkAsReceived(lastMessageTimestamp ?? -1);
 									} else {
 										setCurrentNewMessages((prevState) => prevState + 1);
 									}
@@ -1289,7 +1293,7 @@ const ChatView: React.FC<Props> = (props) => {
 			// Mark messages as received
 			const lastMessage = getLastObject(preparedMessages);
 			const lastMessageTimestamp = getMessageTimestamp(lastMessage);
-			markAsReceived(lastMessageTimestamp ?? -1);
+			doMarkAsReceived(lastMessageTimestamp ?? -1);
 
 			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
@@ -1891,20 +1895,18 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const markAsReceived = (timestamp: number) => {
-		apiService.markAsReceivedCall(
-			waId,
-			timestamp,
-			cancelTokenSourceRef.current?.token,
-			() => {
-				PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
-				setCurrentNewMessages(0);
-			},
-			(error: AxiosError) => {
-				console.log(error);
-			},
-			navigate
-		);
+	const doMarkAsReceived = async (timestamp: number) => {
+		try {
+			// TODO: Make request cancellable
+			await markAsReceived({
+				customer_wa_id: waId ?? '',
+				timestamp,
+			});
+			PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
+			setCurrentNewMessages(0);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const handleIfUnauthorized = (error: AxiosError) => {
