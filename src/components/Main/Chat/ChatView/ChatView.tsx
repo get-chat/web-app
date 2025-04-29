@@ -118,6 +118,7 @@ import { isPersonExpired } from '@src/helpers/PersonHelper';
 import { Person } from '@src/types/persons';
 import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
 import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
+import { createMedia } from '@src/api/mediaApi';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1685,7 +1686,7 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const uploadMedia = (
+	const uploadMedia = async (
 		chosenFile: ChosenFileClass,
 		payload: any,
 		formData: any,
@@ -1694,33 +1695,30 @@ const ChatView: React.FC<Props> = (props) => {
 		// To display a progress
 		dispatch(setState({ isUploadingMedia: true }));
 
-		apiService.uploadMediaCall(
-			formData,
-			(response: AxiosResponse) => {
-				// Convert parameters to a ChosenFile object
-				sendFile(
-					payload?.wa_id,
-					response.data.file,
-					chosenFile,
-					undefined,
-					function () {
-						completeCallback();
-						dispatch(setState({ isUploadingMedia: false }));
-					}
-				);
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					if (error.response) {
-						handleIfUnauthorized(error);
-					}
+		try {
+			const data = await createMedia(formData);
+			// Convert parameters to a ChosenFile object
+			await sendFile(
+				payload?.wa_id,
+				data.file,
+				chosenFile,
+				undefined,
+				function () {
+					completeCallback();
+					dispatch(setState({ isUploadingMedia: false }));
 				}
-
-				// A retry can be considered
-				completeCallback();
-				dispatch(setState({ isUploadingMedia: false }));
+			);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			if (error?.response?.status === 413) {
+				window.displayCustomError('The media file is too big to upload!');
+			} else {
+				window.displayError(error);
 			}
-		);
+
+			completeCallback();
+			dispatch(setState({ isUploadingMedia: false }));
+		}
 	};
 
 	const sendFile = async (

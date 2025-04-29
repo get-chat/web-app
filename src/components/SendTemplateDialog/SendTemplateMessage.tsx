@@ -26,8 +26,9 @@ import {
 import PublishIcon from '@mui/icons-material/Publish';
 import LinkIcon from '@mui/icons-material/Link';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { Template } from '@src/types/templates';
+import { createMedia } from '@src/api/mediaApi';
 
 interface Props {
 	data: Template;
@@ -142,7 +143,10 @@ const SendTemplateMessage: React.FC<Props> = ({
 		});*/
 	};
 
-	const handleChosenMedia = (file: FileList | undefined, format: string) => {
+	const handleChosenMedia = async (
+		file: FileList | undefined,
+		format: string
+	) => {
 		if (!file) return;
 
 		// Image
@@ -182,18 +186,20 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 		setUploading(true);
 
-		apiService.uploadMediaCall(
-			formData,
-			(response: AxiosResponse) => {
-				const fileURL = response.data.file;
-				setHeaderFileURL(fileURL);
-
-				setUploading(false);
-			},
-			() => {
-				setUploading(false);
+		try {
+			const data = await createMedia(formData);
+			const fileURL = data.file;
+			setHeaderFileURL(fileURL);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			if (error?.response?.status === 413) {
+				window.displayCustomError('The media file is too big to upload!');
+			} else {
+				window.displayError(error);
 			}
-		);
+		} finally {
+			setUploading(false);
+		}
 	};
 
 	const getMimetypeByFormat = (format: string) => {

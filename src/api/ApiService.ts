@@ -63,21 +63,6 @@ export class ApiService {
 		);
 	};
 
-	uploadMediaCall = (formData, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.post(`${this.apiBaseURL}media/`, formData, getRequestConfig()),
-			successCallback,
-			(error) => {
-				if (error?.response?.status === 413) {
-					window.displayCustomError('The media file is too big to upload!');
-				} else {
-					window.displayError(error);
-				}
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	retrieveProfilePhotoCall = (cancelToken, successCallback, errorCallback) => {
 		this.handleRequest(
 			axios.get(
