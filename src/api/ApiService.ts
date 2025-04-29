@@ -62,17 +62,4 @@ export class ApiService {
 			errorCallback
 		);
 	};
-
-	deleteProfilePhotoCall = (cancelToken, successCallback) => {
-		this.handleRequest(
-			axios.delete(
-				`${this.apiBaseURL}settings/profile/photo/`,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-			}
-		);
-	};
 }

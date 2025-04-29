@@ -46,6 +46,9 @@ export const fetchProfilePhoto = async () => {
 };
 
 export const updateProfilePhoto = async (formData: FormData) => {
-	const response = await axios.post('/settings/profile/photo/', formData);
-	return response.data;
+	return await axios.post('/settings/profile/photo/', formData);
+};
+
+export const deleteProfilePhoto = async () => {
+	return await axios.delete('/settings/profile/photo/');
 };

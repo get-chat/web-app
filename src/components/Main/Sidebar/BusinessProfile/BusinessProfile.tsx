@@ -25,6 +25,7 @@ import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
 import {
+	deleteProfilePhoto,
 	fetchBusinessProfileSettings,
 	fetchProfileAbout,
 	fetchProfilePhoto,
@@ -188,14 +189,15 @@ function BusinessProfile(props: any) {
 		}
 	};
 
-	const deleteProfilePhoto = () => {
-		apiService.deleteProfilePhotoCall(
-			cancelTokenSourceRef.current?.token,
-			() => {
-				//setProfilePhoto(undefined);
-				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
-			}
-		);
+	const doDeleteProfilePhoto = async () => {
+		try {
+			// TODO: Make request cancellable
+			await deleteProfilePhoto();
+			//setProfilePhoto(undefined);
+			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const verticalOptions = [
@@ -271,7 +273,7 @@ function BusinessProfile(props: any) {
 								/>
 
 								{profilePhoto && isAdmin && !isReadOnly && (
-									<Button onClick={deleteProfilePhoto} color="secondary">
+									<Button onClick={doDeleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>
 								)}
