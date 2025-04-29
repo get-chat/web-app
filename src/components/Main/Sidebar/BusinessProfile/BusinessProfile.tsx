@@ -19,7 +19,7 @@ import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
-import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import { AxiosError, CancelTokenSource } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
@@ -27,6 +27,7 @@ import * as Styled from './BusinessProfile.styles';
 import {
 	fetchBusinessProfileSettings,
 	fetchProfileAbout,
+	fetchProfilePhoto,
 	partialUpdateBusinessProfileSettings,
 	updateProfileAbout,
 } from '@src/api/settingsApi';
@@ -127,15 +128,15 @@ function BusinessProfile(props: any) {
 		}
 	};
 
-	const retrieveProfilePhoto = () => {
-		apiService.retrieveProfilePhotoCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const base64 = binaryToBase64(response.data);
-				setProfilePhoto(base64);
-			},
-			undefined
-		);
+	const retrieveProfilePhoto = async () => {
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchProfilePhoto();
+			const base64 = binaryToBase64(data);
+			setProfilePhoto(base64);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const retrieveProfileAbout = async () => {

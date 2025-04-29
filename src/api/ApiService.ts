@@ -63,17 +63,6 @@ export class ApiService {
 		);
 	};
 
-	retrieveProfilePhotoCall = (cancelToken, successCallback, errorCallback) => {
-		this.handleRequest(
-			axios.get(
-				`${this.apiBaseURL}settings/profile/photo/`,
-				getRequestConfig(undefined, cancelToken, 'arraybuffer')
-			),
-			successCallback,
-			errorCallback
-		);
-	};
-
 	updateProfilePhotoCall = (
 		formData,
 		cancelToken,

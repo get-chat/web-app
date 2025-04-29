@@ -37,3 +37,10 @@ export const updateProfileAbout = async (params: UpdateProfileAboutRequest) => {
 	);
 	return response.data;
 };
+
+export const fetchProfilePhoto = async () => {
+	const response = await axios.get<ArrayBuffer>('/settings/profile/photo/', {
+		responseType: 'arraybuffer',
+	});
+	return response.data;
+};
