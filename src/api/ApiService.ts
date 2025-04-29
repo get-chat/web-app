@@ -63,26 +63,6 @@ export class ApiService {
 		);
 	};
 
-	updateProfilePhotoCall = (
-		formData,
-		cancelToken,
-		successCallback,
-		errorCallback
-	) => {
-		this.handleRequest(
-			axios.post(
-				`${this.apiBaseURL}settings/profile/photo/`,
-				formData,
-				getRequestConfig(undefined, cancelToken)
-			),
-			successCallback,
-			(error) => {
-				window.displayError(error);
-				errorCallback?.(error);
-			}
-		);
-	};
-
 	deleteProfilePhotoCall = (cancelToken, successCallback) => {
 		this.handleRequest(
 			axios.delete(

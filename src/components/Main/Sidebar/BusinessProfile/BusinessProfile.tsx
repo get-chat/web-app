@@ -30,6 +30,7 @@ import {
 	fetchProfilePhoto,
 	partialUpdateBusinessProfileSettings,
 	updateProfileAbout,
+	updateProfilePhoto,
 } from '@src/api/settingsApi';
 
 function BusinessProfile(props: any) {
@@ -168,25 +169,23 @@ function BusinessProfile(props: any) {
 		}
 	};
 
-	const updateProfilePhoto = async (file: FileList) => {
+	const doUpdateProfilePhoto = async (file: FileList) => {
 		const formData = new FormData();
 		formData.append('file_encoded', file[0]);
 
-		apiService.updateProfilePhotoCall(
-			formData,
-			cancelTokenSourceRef.current?.token,
-			() => {
-				setUpdating(false);
+		try {
+			// TODO: Make request cancellable
+			await updateProfilePhoto(formData);
+			// Display new photo
+			await retrieveProfilePhoto();
 
-				// Display new photo
-				retrieveProfilePhoto();
-
-				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
-			},
-			() => {
-				setUpdating(false);
-			}
-		);
+			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			window.displayError(error);
+		} finally {
+			setUpdating(false);
+		}
 	};
 
 	const deleteProfilePhoto = () => {
@@ -262,7 +261,7 @@ function BusinessProfile(props: any) {
 								<FileInput
 									innerRef={fileInput}
 									handleSelectedFiles={(file: FileList) =>
-										updateProfilePhoto(file)
+										doUpdateProfilePhoto(file)
 									}
 									accept="image/jpeg, image/png"
 									multiple={false}

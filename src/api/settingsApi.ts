@@ -44,3 +44,8 @@ export const fetchProfilePhoto = async () => {
 	});
 	return response.data;
 };
+
+export const updateProfilePhoto = async (formData: FormData) => {
+	const response = await axios.post('/settings/profile/photo/', formData);
+	return response.data;
+};
