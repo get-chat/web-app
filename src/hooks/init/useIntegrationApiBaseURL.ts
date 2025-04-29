@@ -1,4 +1,3 @@
-import { ApiService } from '@src/api/ApiService';
 import {
 	getApiBaseURLs,
 	getCurrentApiBaseURL,
@@ -8,13 +7,11 @@ import {
 import { getIntegrationApiBaseURL } from '@src/helpers/URLHelper';
 import { AxiosError } from 'axios';
 import { AppConfig } from '@src/config/application';
+import { fetchBase } from '@src/api/healthApi';
+import api from '@src/api/axiosInstance';
 
 const useIntegrationApiBaseURL = () => {
-	const handle = (
-		apiService: ApiService,
-		config: AppConfig,
-		onComplete?: () => void
-	) => {
+	const handle = async (config: AppConfig, onComplete?: () => void) => {
 		// Previously stored api base url
 		const storedApiBaseURL = getCurrentApiBaseURL();
 
@@ -23,7 +20,7 @@ const useIntegrationApiBaseURL = () => {
 
 		if (integrationApiBaseURL) {
 			// Replace api base url of api service
-			apiService.setApiBaseURL(integrationApiBaseURL);
+			api.defaults.baseURL = integrationApiBaseURL;
 
 			const inboxRespondsCallback = () => {
 				storeCurrentApiBaseURL(integrationApiBaseURL);
@@ -38,26 +35,24 @@ const useIntegrationApiBaseURL = () => {
 			};
 
 			// Make a request to inbox to check if integration api base url responds
-			apiService.baseCall(
-				() => {
-					inboxRespondsCallback();
-				},
-				(error: AxiosError) => {
-					console.log(error);
+			try {
+				await fetchBase();
+				inboxRespondsCallback();
+			} catch (error: any | AxiosError) {
+				console.error(error);
 
-					// Keep integration api base url if status is 403
-					// Status 403 means inbox is responding but user is not authenticated
-					if (error.response?.status !== 403) {
-						// Revert api base url
-						apiService.setApiBaseURL(storedApiBaseURL ?? config.API_BASE_URL);
-					}
-
-					inboxRespondsCallback();
+				// Keep integration api base url if status is 403
+				// Status 403 means inbox is responding but user is not authenticated
+				if (error.response?.status !== 403) {
+					// Revert api base url
+					api.defaults.baseURL = storedApiBaseURL ?? config.API_BASE_URL;
 				}
-			);
+
+				inboxRespondsCallback();
+			}
 		} else {
 			if (storedApiBaseURL) {
-				apiService.setApiBaseURL(storedApiBaseURL);
+				api.defaults.baseURL = storedApiBaseURL;
 			}
 
 			onComplete?.();

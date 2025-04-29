@@ -76,7 +76,6 @@ import {
 } from '@src/helpers/PendingMessagesHelper';
 import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
 import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
@@ -139,8 +138,6 @@ interface Props {
 }
 
 const ChatView: React.FC<Props> = (props) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const {
 		isReadOnly,
 		isSendingPendingMessages,

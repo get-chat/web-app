@@ -11,7 +11,6 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
@@ -33,9 +32,9 @@ import {
 	updateProfileAbout,
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
+import api from '@src/api/axiosInstance';
 
 function BusinessProfile(props: any) {
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
@@ -239,7 +238,7 @@ function BusinessProfile(props: any) {
 						<Styled.SectionHeader>
 							<h5>{t('Your current inbox')}</h5>
 						</Styled.SectionHeader>
-						{prepareURLForDisplay(apiService.apiBaseURL)}
+						{prepareURLForDisplay(api.defaults.baseURL ?? '')}
 						<Styled.ChangeInboxLink
 							href="#"
 							className="ml-1"

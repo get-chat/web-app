@@ -9,11 +9,10 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import { AxiosResponse, CancelTokenSource } from 'axios';
+import { CancelTokenSource } from 'axios';
 import * as Styled from './StartChat.styles';
 import Contacts from '@src/components/Contacts';
 import { Recipient } from '@src/types/persons';
@@ -23,8 +22,6 @@ interface Props {
 }
 
 const StartChat: React.FC<Props> = ({ onHide }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const { t } = useTranslation();
 
 	const [isVerifying, setVerifying] = useState(false);

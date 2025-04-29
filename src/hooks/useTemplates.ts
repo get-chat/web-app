@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
@@ -17,9 +16,6 @@ const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
 
 const useTemplates = () => {
-	// noinspection JSCheckFunctionSignatures
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const dispatch = useAppDispatch();
 
 	const retryCount = useRef(0);

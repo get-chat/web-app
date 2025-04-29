@@ -16,7 +16,6 @@ import {
 	isVideoSupported,
 } from '@src/helpers/MediaFilesHelper';
 import { Trans, useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import PubSub from 'pubsub-js';
 import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
@@ -45,8 +44,6 @@ const SendTemplateMessage: React.FC<Props> = ({
 	send,
 	sendButtonInnerRef,
 }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const { t } = useTranslation();
 
 	const template = data;

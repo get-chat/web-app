@@ -12,7 +12,7 @@ import { getURLParams } from '@src/helpers/URLHelper';
 const AppBody: React.FC = () => {
 	const [bgColor] = useState(getURLParams().get('bg_color'));
 
-	const { isLoading, config, apiService } = useAppInit();
+	const { isLoading, config } = useAppInit();
 
 	const dispatch = useAppDispatch();
 
@@ -28,13 +28,9 @@ const AppBody: React.FC = () => {
 			className={'app' + (isIPad13 ? ' absoluteFullscreen' : '')}
 			style={bgColor ? { background: '#' + bgColor } : undefined}
 		>
-			{!isLoading && apiService && (
+			{!isLoading && (
 				<AppConfigContext.Provider value={config}>
-					<ApplicationContext.Provider
-						value={{
-							apiService: apiService,
-						}}
-					>
+					<ApplicationContext.Provider value={{}}>
 						<AppRoutes />
 					</ApplicationContext.Provider>
 				</AppConfigContext.Provider>

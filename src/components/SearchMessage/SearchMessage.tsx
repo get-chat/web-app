@@ -29,9 +29,6 @@ const SearchMessage: React.FC<Props> = ({
 }) => {
 	const dispatch = useAppDispatch();
 
-	// @ts-ignore
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const { t } = useTranslation();
 
 	const [results, setResults] = useState<ChatMessageList>({});

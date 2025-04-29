@@ -33,7 +33,6 @@ import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTags } from '@src/store/reducers/tagsReducer';
@@ -76,13 +75,13 @@ import {
 	fromTaggingEvent,
 } from '@src/helpers/MessageHelper';
 import { fetchContacts } from '@src/api/contactsApi';
+import api from '@src/api/axiosInstance';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
 }
 
 const Main: React.FC = () => {
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const {
@@ -354,7 +353,7 @@ const Main: React.FC = () => {
 			console.log('Connecting to websocket server');
 
 			// WebSocket, consider a separate env variable for ws address
-			ws = new WebSocket(getWebSocketURL(apiService.apiBaseURL));
+			ws = new WebSocket(getWebSocketURL(api.defaults.baseURL ?? ''));
 
 			ws.onopen = function () {
 				console.log('Connected to websocket server.');
@@ -871,7 +870,7 @@ const Main: React.FC = () => {
 
 				{isChatAssignmentVisible && (
 					<ChatAssignment
-						waId={waId}
+						waId={waId ?? ''}
 						open={isChatAssignmentVisible}
 						setOpen={(value: boolean) =>
 							dispatch(setState({ isChatAssignmentVisible: value }))

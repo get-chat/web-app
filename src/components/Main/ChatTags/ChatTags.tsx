@@ -14,9 +14,8 @@ import * as Styled from './ChatTags.styles';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { Tag } from '@src/types/tags';
 import { fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
@@ -30,7 +29,6 @@ interface Props {
 }
 
 const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const { t } = useTranslation();

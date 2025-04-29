@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import { AxiosError, CancelTokenSource } from 'axios';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import CustomAvatar from '@src/components/CustomAvatar';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
@@ -13,8 +12,6 @@ interface Props {
 }
 
 const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const [isLoaded, setLoaded] = useState(false);
 	const [profilePhoto, setProfilePhoto] = useState<string>();
 
