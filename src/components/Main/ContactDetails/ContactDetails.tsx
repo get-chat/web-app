@@ -199,7 +199,8 @@ const ContactDetails: React.FC<Props> = ({
 												alt={providerData.contact_provider.name}
 											/>
 										)}
-										{providerData.contact_provider.name}
+										{providerData.contact_provider.name ??
+											providerData.contact_provider.type}
 									</Styled.ProviderTitle>
 								</Styled.SectionTitle>
 
@@ -223,25 +224,27 @@ const ContactDetails: React.FC<Props> = ({
 									</Styled.ContentSub>
 								</Styled.Content>
 
-								<Styled.Content>
-									<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
-									<Styled.ContentSub>
-										{providerData.email_addresses?.map(
-											(emailAddress: any, emailAddressIndex: number) => (
-												<div key={emailAddressIndex}>
-													<a href={'mailto:' + emailAddress.email_address}>
-														{emailAddress.email_address}
-													</a>
-													{emailAddress.description && (
-														<span className="ml-1">
-															({emailAddress.description})
-														</span>
-													)}
-												</div>
-											)
-										)}
-									</Styled.ContentSub>
-								</Styled.Content>
+								{Boolean(providerData.email_addresses?.length ?? 0 > 0) && (
+									<Styled.Content>
+										<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
+										<Styled.ContentSub>
+											{providerData.email_addresses?.map(
+												(emailAddress: any, emailAddressIndex: number) => (
+													<div key={emailAddressIndex}>
+														<a href={'mailto:' + emailAddress.email_address}>
+															{emailAddress.email_address}
+														</a>
+														{emailAddress.description && (
+															<span className="ml-1">
+																({emailAddress.description})
+															</span>
+														)}
+													</div>
+												)
+											)}
+										</Styled.ContentSub>
+									</Styled.Content>
+								)}
 							</Styled.Section>
 						)
 					)}
