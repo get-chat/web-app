@@ -1351,7 +1351,7 @@ const ChatView: React.FC<Props> = (props) => {
 			const chatAssignmentEvents: ChatMessageList = {};
 			data.results.forEach((assignmentEvent: any) => {
 				const prepared = fromAssignmentEvent(assignmentEvent);
-				messages[prepared.id] = prepared;
+				chatAssignmentEvents[prepared.id] = prepared;
 			});
 
 			preparedMessages = {
