@@ -330,6 +330,10 @@ const Sidebar: React.FC<Props> = ({
 						nextState[chatKey] = {
 							...nextState[chatKey],
 							last_message: chatMessage,
+							contact: {
+								...nextState[chatKey].contact,
+								last_message_timestamp: getMessageTimestamp(chatMessage) ?? -1,
+							},
 						};
 
 						// Incoming

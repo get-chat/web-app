@@ -153,6 +153,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 	}, [
 		isExpired,
 		isChatExpired(data),
+		data.contact?.last_message_timestamp,
 		data.last_message?.waba_payload?.timestamp,
 	]);
 

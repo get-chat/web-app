@@ -276,6 +276,8 @@ const ChatListItem = (props: any) => {
 					</div>
 				</div>
 
+				{data.contact?.last_message_timestamp}
+
 				<span className={styles.waId}>{addPlus(data.wa_id)}</span>
 
 				{hasFailedMessages() && (
