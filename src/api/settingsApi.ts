@@ -14,11 +14,11 @@ export const fetchBusinessProfileSettings = async () => {
 };
 
 export const partialUpdateBusinessProfileSettings = async (
-	params: PartialUpdateBusinessProfileSettings
+	data: PartialUpdateBusinessProfileSettings
 ) => {
 	const response = await axios.patch<BusinessProfileSettings>(
 		'/settings/business/profile/',
-		{ params }
+		data
 	);
 	return response.data;
 };
@@ -30,10 +30,10 @@ export const fetchProfileAbout = async () => {
 	return response.data;
 };
 
-export const updateProfileAbout = async (params: UpdateProfileAboutRequest) => {
+export const updateProfileAbout = async (data: UpdateProfileAboutRequest) => {
 	const response = await axios.patch<ProfileAboutResponse>(
 		'/settings/profile/about/',
-		{ params }
+		data
 	);
 	return response.data;
 };

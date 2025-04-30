@@ -16,11 +16,11 @@ export const fetchChatAssignment = async (wa_id: string) => {
 };
 
 export const updateChatAssignment = async (
-	params: UpdateChatAssignmentRequest
+	data: UpdateChatAssignmentRequest
 ) => {
 	const response = await axios.put<ChatAssignment>(
-		`/chat_assignment/${params.wa_id}/`,
-		{ params }
+		`/chat_assignment/${data.wa_id}/`,
+		data
 	);
 	return response.data;
 };
@@ -29,17 +29,18 @@ export const fetchChatAssignmentEvents = async (
 	params: FetchChatAssignmentEventsRequest
 ) => {
 	const response = await axios.get<PaginatedResponse<ChatAssignmentEvent>>(
-		`/chat_assignment_events/`
+		`/chat_assignment_events/`,
+		{ params }
 	);
 	return response.data;
 };
 
 export const partialUpdateChatAssignment = async (
-	params: PartialUpdateChatAssignmentRequest
+	data: PartialUpdateChatAssignmentRequest
 ) => {
 	const response = await axios.patch<ChatAssignment>(
-		`/chat_assignment/${params.wa_id}/`,
-		{ params }
+		`/chat_assignment/${data.wa_id}/`,
+		data
 	);
 	return response.data;
 };
