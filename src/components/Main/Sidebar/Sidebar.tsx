@@ -330,11 +330,15 @@ const Sidebar: React.FC<Props> = ({
 						nextState[chatKey] = {
 							...nextState[chatKey],
 							last_message: chatMessage,
-							contact: {
-								...nextState[chatKey].contact,
-								last_message_timestamp: getMessageTimestamp(chatMessage) ?? -1,
-							},
 						};
+
+						// Update last incoming message timestamp
+						if (!chatMessage.from_us && nextState[chatKey].contact) {
+							// Make data mutable
+							nextState[chatKey].contact = { ...nextState[chatKey].contact };
+							nextState[chatKey].contact.last_message_timestamp =
+								getMessageTimestamp(chatMessage) ?? -1;
+						}
 
 						// Incoming
 						if (!chatMessage.from_us) {
