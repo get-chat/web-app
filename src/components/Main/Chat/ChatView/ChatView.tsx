@@ -78,7 +78,7 @@ import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelpe
 import { useTranslation } from 'react-i18next';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import axios, { AxiosError, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -741,10 +741,13 @@ const ChatView: React.FC<Props> = (props) => {
 		};
 
 		// Chat assignment
-		const onChatAssignment = function (msg: string, data: any) {
+		const onChatAssignment = function (
+			msg: string,
+			data: { [key: string]: Message }
+		) {
 			// This event always has a single message
-			const prepared = getFirstObject(data);
-			if (waId === prepared.waId) {
+			const prepared = getFirstObject(data) as Message;
+			if (waId === prepared.customer_wa_id) {
 				addMessagesData(data);
 
 				// Reload chat to update assignee information
@@ -758,10 +761,13 @@ const ChatView: React.FC<Props> = (props) => {
 		);
 
 		// Chat tagging
-		const onChatAssignmentOrChatTagging = function (msg: string, data: any) {
+		const onChatAssignmentOrChatTagging = function (
+			msg: string,
+			data: { [key: string]: Message }
+		) {
 			// This event always has a single message
-			const prepared = getFirstObject(data);
-			if (waId === prepared.waId) {
+			const prepared = getFirstObject(data) as Message;
+			if (waId === prepared.customer_wa_id) {
 				addMessagesData(data);
 			}
 		};
