@@ -98,7 +98,7 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 				<Styled.StartByPhoneNumber
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
-					<ListItem button>
+					<ListItem button style={{ padding: 0 }}>
 						<Styled.StartByPhoneNumberInner data-test-id="start-new-chat">
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
