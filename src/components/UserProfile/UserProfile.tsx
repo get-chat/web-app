@@ -5,6 +5,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
+import * as Styled from '../Main/Sidebar/BusinessProfile/BusinessProfile.styles';
 
 interface Props {
 	onHide: () => void;
@@ -21,24 +22,24 @@ const UserProfile: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	return (
-		<div className="sidebarBusinessProfile">
-			<div className="sidebarBusinessProfile__header">
+		<Styled.BusinessProfileContainer>
+			<Styled.Header>
 				<IconButton onClick={onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 
 				<h3>{t('Profile')}</h3>
-			</div>
+			</Styled.Header>
 
-			<div className="sidebarBusinessProfile__body">
-				<div className="sidebarBusinessProfile__body__section">
+			<Styled.Body>
+				<Styled.Section>
 					{currentUser && (
 						<div>
-							<div className="sidebarBusinessProfile__body__section__header">
+							<Styled.SectionHeader>
 								<h5>{t('Personal Profile')}</h5>
-							</div>
+							</Styled.SectionHeader>
 
-							<div className="sidebarBusinessProfile__body__avatarContainer">
+							<Styled.AvatarContainer>
 								<CustomAvatar
 									src={
 										currentUser?.profile?.large_avatar ??
@@ -48,7 +49,7 @@ const UserProfile: React.FC<Props> = ({
 								>
 									{generateInitialsHelper(currentUser.username)}
 								</CustomAvatar>
-							</div>
+							</Styled.AvatarContainer>
 
 							<h3>{currentUser.username}</h3>
 							<span>
@@ -56,20 +57,20 @@ const UserProfile: React.FC<Props> = ({
 							</span>
 
 							{!isReadOnly && (
-								<div className="sidebarBusinessProfile__body__changePasswordContainer">
+								<Styled.ChangePasswordContainer>
 									<Button
 										onClick={() => setChangePasswordDialogVisible(true)}
 										color="secondary"
 									>
 										{t('Change password')}
 									</Button>
-								</div>
+								</Styled.ChangePasswordContainer>
 							)}
 						</div>
 					)}
-				</div>
-			</div>
-		</div>
+				</Styled.Section>
+			</Styled.Body>
+		</Styled.BusinessProfileContainer>
 	);
 };
 
