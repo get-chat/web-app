@@ -5,6 +5,7 @@ import {
 	CreateMessageRequest,
 	CreateMessageResponse,
 	FetchMessagesRequest,
+	MarkAsReceivedRequest,
 	Message,
 } from '@src/types/messages';
 
@@ -21,4 +22,8 @@ export const createMessage = async (data: CreateMessageRequest) => {
 		status: response.status,
 		data: response.data,
 	} as ApiResponse<CreateMessageResponse>;
+};
+
+export const markAsReceived = async (data: MarkAsReceivedRequest) => {
+	return await api.post('/mark_as_received/', data);
 };

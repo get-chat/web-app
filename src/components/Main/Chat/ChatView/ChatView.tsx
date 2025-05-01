@@ -28,7 +28,6 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 } from '@src/Constants';
-import PersonModel from '../../../../api/models/PersonModel';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
 import ChatHeader from '@src/components/ChatHeader';
@@ -61,6 +60,8 @@ import {
 	getObjLength,
 } from '@src/helpers/ObjectHelper';
 import {
+	fromAssignmentEvent,
+	fromTaggingEvent,
 	generateMessageInternalId,
 	getMessageTimestamp,
 	getUniqueSender,
@@ -75,12 +76,9 @@ import {
 } from '@src/helpers/PendingMessagesHelper';
 import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
-import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
-import ChatAssignmentEventsResponse from '../../../../api/responses/ChatAssignmentEventsResponse';
-import ChatTaggingEventsResponse from '../../../../api/responses/ChatTaggingEventsResponse';
-import axios, { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
+import axios, { AxiosError, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -102,7 +100,11 @@ import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { Template } from '@src/types/templates';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
-import { createMessage, fetchMessages } from '@src/api/messagesApi';
+import {
+	createMessage,
+	fetchMessages,
+	markAsReceived,
+} from '@src/api/messagesApi';
 import {
 	CreateMessageRequest,
 	Message,
@@ -110,6 +112,12 @@ import {
 	WebhookMessageStatus,
 } from '@src/types/messages';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
+import { retrievePerson } from '@src/api/personsApi';
+import { isPersonExpired } from '@src/helpers/PersonHelper';
+import { Person } from '@src/types/persons';
+import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
+import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
+import { createMedia } from '@src/api/mediaApi';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -130,8 +138,6 @@ interface Props {
 }
 
 const ChatView: React.FC<Props> = (props) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const {
 		isReadOnly,
 		isSendingPendingMessages,
@@ -171,7 +177,7 @@ const ChatView: React.FC<Props> = (props) => {
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 	const [isExpired, setExpired] = useState(false);
 
-	const [person, setPerson] = useState<PersonModel>();
+	const [person, setPerson] = useState<Person>();
 	const [chat, setChat] = useState<Chat>();
 
 	const [input, setInput] = useState('');
@@ -382,7 +388,7 @@ const ChatView: React.FC<Props> = (props) => {
 		retrieveChat();
 
 		// Load contact and messages
-		retrievePerson(true);
+		doRetrievePerson(true);
 
 		return () => {
 			// Cancelling ongoing requests
@@ -436,7 +442,7 @@ const ChatView: React.FC<Props> = (props) => {
 						if (currentNewMessages > 0) {
 							const lastMessage = getLastObject(messages);
 							if (lastMessage) {
-								markAsReceived(getMessageTimestamp(lastMessage) ?? -1);
+								doMarkAsReceived(getMessageTimestamp(lastMessage) ?? -1);
 							}
 						}
 					}
@@ -558,7 +564,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 									// Mark new message as received if visible
 									if (canSeeLastMessage(messagesContainer.current)) {
-										markAsReceived(lastMessageTimestamp ?? -1);
+										doMarkAsReceived(lastMessageTimestamp ?? -1);
 									} else {
 										setCurrentNewMessages((prevState) => prevState + 1);
 									}
@@ -568,9 +574,8 @@ const ChatView: React.FC<Props> = (props) => {
 										(prevState) =>
 											({
 												...prevState,
-												lastMessageTimestamp: lastMessageTimestamp,
-												isExpired: false,
-											} as PersonModel)
+												last_message_timestamp: lastMessageTimestamp,
+											} as Person)
 									);
 
 									// Chat is not expired anymore
@@ -736,10 +741,13 @@ const ChatView: React.FC<Props> = (props) => {
 		};
 
 		// Chat assignment
-		const onChatAssignment = function (msg: string, data: any) {
+		const onChatAssignment = function (
+			msg: string,
+			data: { [key: string]: Message }
+		) {
 			// This event always has a single message
-			const prepared = getFirstObject(data);
-			if (waId === prepared.waId) {
+			const prepared = getFirstObject(data) as Message;
+			if (waId === prepared.customer_wa_id) {
 				addMessagesData(data);
 
 				// Reload chat to update assignee information
@@ -753,10 +761,13 @@ const ChatView: React.FC<Props> = (props) => {
 		);
 
 		// Chat tagging
-		const onChatAssignmentOrChatTagging = function (msg: string, data: any) {
+		const onChatAssignmentOrChatTagging = function (
+			msg: string,
+			data: { [key: string]: Message }
+		) {
 			// This event always has a single message
-			const prepared = getFirstObject(data);
-			if (waId === prepared.waId) {
+			const prepared = getFirstObject(data) as Message;
+			if (waId === prepared.customer_wa_id) {
 				addMessagesData(data);
 			}
 		};
@@ -776,7 +787,7 @@ const ChatView: React.FC<Props> = (props) => {
 				setLoaded(false);
 
 				// This method triggers loading messages with proper callback
-				retrievePerson(true);
+				doRetrievePerson(true);
 			}
 		};
 
@@ -815,7 +826,7 @@ const ChatView: React.FC<Props> = (props) => {
 					return {
 						...prevState,
 						name: name,
-					} as PersonModel;
+					} as Person;
 				} else {
 					return prevState;
 				}
@@ -1032,106 +1043,69 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const retrievePerson = (loadMessages: boolean) => {
-		apiService.retrievePersonCall(
-			waId,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const preparedPerson = new PersonModel(response.data);
-				setPerson(preparedPerson);
-				setExpired(preparedPerson.isExpired);
+	const doRetrievePerson = async (loadMessages: boolean) => {
+		try {
+			// TODO: Make request cancellable
+			const data = await retrievePerson(waId ?? '');
+			setPerson(data);
+			setExpired(isPersonExpired(data));
 
-				// Person information is loaded, now load messages
-				if (loadMessages) {
-					listMessages(true, function (preparedMessages: ChatMessageList) {
-						const lastPreparedMessage = getLastObject(
-							preparedMessages
-						) as Message;
-						setLastMessageId(
-							lastPreparedMessage?.waba_payload?.id ??
-								generateMessageInternalId(lastPreparedMessage?.id)
+			// PersonView information is loaded, now load messages
+			if (loadMessages) {
+				listMessages(true, function (preparedMessages: ChatMessageList) {
+					const lastPreparedMessage = getLastObject(
+						preparedMessages
+					) as Message;
+					setLastMessageId(
+						lastPreparedMessage?.waba_payload?.id ??
+							generateMessageInternalId(lastPreparedMessage?.id)
+					);
+
+					// Scroll to message if goToMessageId is defined
+					const goToMessage = location.state?.goToMessage as
+						| Message
+						| undefined;
+					if (goToMessage !== undefined) {
+						goToMessageId(
+							goToMessage.id,
+							getMessageTimestamp(goToMessage) ?? -1
 						);
-
-						// Scroll to message if goToMessageId is defined
-						const goToMessage = location.state?.goToMessage as
-							| Message
-							| undefined;
-						if (goToMessage !== undefined) {
-							goToMessageId(
-								goToMessage.id,
-								getMessageTimestamp(goToMessage) ?? -1
-							);
-						}
-					});
-				}
-			},
-			(error: AxiosError) => {
-				if (error.response?.status === 404) {
-					if (location.state.person) {
-						createPersonAndStartChat(
-							location.state.person.name,
-							location.state.person.initials
-						);
-					} else {
-						// To prevent missing data on refresh
-						//closeChat();
-
-						verifyContact();
 					}
-				} else {
-					window.displayError(error);
-				}
+				});
 			}
-		);
+		} catch (error: any | AxiosError) {
+			if (error.response?.status === 404) {
+				if (location.state.person) {
+					createPersonAndStartChat(
+						location.state.person.name,
+						location.state.person.initials
+					);
+				} else {
+					// To prevent missing data on refresh
+					//closeChat();
+
+					createPersonAndStartChat(addPlus(waId), waId?.[0]);
+				}
+			} else {
+				window.displayError(error);
+			}
+		}
 	};
 
 	let verifyPhoneNumberCancelTokenSourceRef = useRef<CancelTokenSource>();
 
-	const verifyContact = () => {
-		const onError = () => {
-			closeChat();
-			window.displayCustomError(
-				'There is no WhatsApp account connected to this phone number.'
-			);
-		};
-
-		let phoneNumber = prepareWaId(waId);
-		phoneNumber = addPlus(phoneNumber);
-
-		apiService.verifyContactsCall(
-			[phoneNumber],
-			verifyPhoneNumberCancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				if (
-					response.data.contacts &&
-					response.data.contacts.length > 0 &&
-					response.data.contacts[0].status === 'valid' &&
-					response.data.contacts[0].wa_id !== 'invalid'
-				) {
-					const returnedWaId = response.data.contacts[0].wa_id;
-
-					if (returnedWaId !== prepareWaId(waId)) {
-						// verifyContact returned a different waId, redirecting to chat page with new waId
-						navigate(`/main/chat/${returnedWaId}${location.search}`);
-					} else {
-						createPersonAndStartChat(addPlus(waId), waId?.[0]);
-					}
-				} else {
-					onError();
-				}
-			},
-			(error: AxiosError) => {
-				console.error(error);
-				onError();
-			}
-		);
-	};
-
 	const createPersonAndStartChat = (name: string, initials?: string) => {
-		const preparedPerson = new PersonModel({});
-		preparedPerson.name = name;
-		preparedPerson.initials = initials;
-		preparedPerson.waId = waId;
+		const preparedPerson: Person = {
+			waba_payload: {
+				profile: {
+					name: name,
+				},
+				wa_id: waId ?? '',
+			},
+			initials: initials ?? '',
+			wa_id: waId ?? '',
+			last_message_timestamp: -1,
+		};
 
 		setPerson(preparedPerson);
 
@@ -1198,7 +1172,7 @@ const ChatView: React.FC<Props> = (props) => {
 			const preparedMessages = prepareMessageList(data.results);
 			const preparedReactions = prepareReactions(preparedMessages);
 
-			const lastMessage = getLastObject(preparedMessages) as Message;
+			const lastMessage = getFirstObject(preparedMessages) as Message;
 
 			// Pagination filters for events
 			let beforeTimeForEvents = beforeTime;
@@ -1213,7 +1187,7 @@ const ChatView: React.FC<Props> = (props) => {
 			}
 
 			if (!sinceTime) {
-				const firstMessage = getFirstObject(preparedMessages) as Message;
+				const firstMessage = getLastObject(preparedMessages) as Message;
 				sinceTimeForEvents = getMessageTimestamp(firstMessage);
 			}
 
@@ -1323,7 +1297,7 @@ const ChatView: React.FC<Props> = (props) => {
 			// Mark messages as received
 			const lastMessage = getLastObject(preparedMessages);
 			const lastMessageTimestamp = getMessageTimestamp(lastMessage);
-			markAsReceived(lastMessageTimestamp ?? -1);
+			doMarkAsReceived(lastMessageTimestamp ?? -1);
 
 			// Auto focus
 			PubSub.publish(EVENT_TOPIC_FOCUS_MESSAGE_INPUT);
@@ -1366,36 +1340,40 @@ const ChatView: React.FC<Props> = (props) => {
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
 	) => {
-		apiService.listChatAssignmentEventsCall(
-			waId,
-			beforeTimeForEvents,
-			sinceTimeForEvents,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const chatAssignmentEventsResponse = new ChatAssignmentEventsResponse(
-					response.data,
-					true
-				);
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchChatAssignmentEvents({
+				wa_id: waId ?? '',
+				before_time: beforeTimeForEvents,
+				since_time: sinceTimeForEvents,
+			});
 
-				preparedMessages = {
-					...preparedMessages,
-					...chatAssignmentEventsResponse.messages,
-				};
+			const chatAssignmentEvents: ChatMessageList = {};
+			data.results.forEach((assignmentEvent: any) => {
+				const prepared = fromAssignmentEvent(assignmentEvent);
+				chatAssignmentEvents[prepared.id] = prepared;
+			});
 
-				// List chat tagging events
-				listChatTaggingEvents(
-					preparedMessages,
-					preparedReactions,
-					isInitial,
-					callback,
-					replaceAll,
-					beforeTime,
-					sinceTime,
-					beforeTimeForEvents,
-					sinceTimeForEvents
-				);
-			}
-		);
+			preparedMessages = {
+				...preparedMessages,
+				...chatAssignmentEvents,
+			};
+
+			// List chat tagging events
+			await listChatTaggingEvents(
+				preparedMessages,
+				preparedReactions,
+				isInitial,
+				callback,
+				replaceAll,
+				beforeTime,
+				sinceTime,
+				beforeTimeForEvents,
+				sinceTimeForEvents
+			);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const listChatTaggingEvents = async (
@@ -1409,34 +1387,38 @@ const ChatView: React.FC<Props> = (props) => {
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
 	) => {
-		apiService.listChatTaggingEventsCall(
-			waId,
-			beforeTimeForEvents,
-			sinceTimeForEvents,
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const chatTaggingEventsResponse = new ChatTaggingEventsResponse(
-					response.data,
-					true
-				);
+		// TODO: Make request cancellable
+		try {
+			const data = await fetchChatTaggingEvents({
+				wa_id: waId ?? '',
+				before_time: beforeTimeForEvents,
+				since_time: sinceTimeForEvents,
+			});
 
-				preparedMessages = {
-					...preparedMessages,
-					...chatTaggingEventsResponse.messages,
-				};
+			const eventMessages: ChatMessageList = {};
+			data.results.forEach((taggingEvent: any) => {
+				const prepared = fromTaggingEvent(taggingEvent);
+				eventMessages[prepared.id] = prepared;
+			});
 
-				// Finish loading
-				finishLoadingMessages(
-					preparedMessages,
-					preparedReactions,
-					isInitial,
-					callback,
-					replaceAll,
-					beforeTime,
-					sinceTime
-				);
-			}
-		);
+			preparedMessages = {
+				...preparedMessages,
+				...eventMessages,
+			};
+
+			// Finish loading
+			await finishLoadingMessages(
+				preparedMessages,
+				preparedReactions,
+				isInitial,
+				callback,
+				replaceAll,
+				beforeTime,
+				sinceTime
+			);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const queueMessage = (
@@ -1707,7 +1689,7 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const uploadMedia = (
+	const uploadMedia = async (
 		chosenFile: ChosenFileClass,
 		payload: any,
 		formData: any,
@@ -1716,33 +1698,30 @@ const ChatView: React.FC<Props> = (props) => {
 		// To display a progress
 		dispatch(setState({ isUploadingMedia: true }));
 
-		apiService.uploadMediaCall(
-			formData,
-			(response: AxiosResponse) => {
-				// Convert parameters to a ChosenFile object
-				sendFile(
-					payload?.wa_id,
-					response.data.file,
-					chosenFile,
-					undefined,
-					function () {
-						completeCallback();
-						dispatch(setState({ isUploadingMedia: false }));
-					}
-				);
-			},
-			(error: AxiosError) => {
-				if (error.response) {
-					if (error.response) {
-						handleIfUnauthorized(error);
-					}
+		try {
+			const data = await createMedia(formData);
+			// Convert parameters to a ChosenFile object
+			await sendFile(
+				payload?.wa_id,
+				data.file,
+				chosenFile,
+				undefined,
+				function () {
+					completeCallback();
+					dispatch(setState({ isUploadingMedia: false }));
 				}
-
-				// A retry can be considered
-				completeCallback();
-				dispatch(setState({ isUploadingMedia: false }));
+			);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			if (error?.response?.status === 413) {
+				window.displayCustomError('The media file is too big to upload!');
+			} else {
+				window.displayError(error);
 			}
-		);
+
+			completeCallback();
+			dispatch(setState({ isUploadingMedia: false }));
+		}
 	};
 
 	const sendFile = async (
@@ -1917,20 +1896,18 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const markAsReceived = (timestamp: number) => {
-		apiService.markAsReceivedCall(
-			waId,
-			timestamp,
-			cancelTokenSourceRef.current?.token,
-			() => {
-				PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
-				setCurrentNewMessages(0);
-			},
-			(error: AxiosError) => {
-				console.log(error);
-			},
-			navigate
-		);
+	const doMarkAsReceived = async (timestamp: number) => {
+		try {
+			// TODO: Make request cancellable
+			await markAsReceived({
+				customer_wa_id: waId ?? '',
+				timestamp,
+			});
+			PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
+			setCurrentNewMessages(0);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const handleIfUnauthorized = (error: AxiosError) => {

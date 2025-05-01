@@ -56,7 +56,7 @@ export const isChatAssignedToUserAnyGroup = (
 export const isChatAssignedToGroupId = (
 	chat: Chat | undefined,
 	groupId: number
-) => chat?.assigned_to_user?.id == groupId;
+) => chat?.assigned_group?.id == groupId;
 
 export const isChatIncludingTagId = (chat: Chat | undefined, tagId: number) => {
 	const result = chat?.tags.find((item) => item.id === tagId);

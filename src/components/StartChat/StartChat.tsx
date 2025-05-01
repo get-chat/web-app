@@ -1,30 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	Button,
-	IconButton,
-	InputAdornment,
-	ListItem,
-	TextField,
-} from '@mui/material';
+import { Button, IconButton, InputAdornment } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { addPlus, prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
-import Recipient from '@src/interfaces/Recipient';
-import { AxiosResponse, CancelTokenSource } from 'axios';
+import { CancelTokenSource } from 'axios';
 import * as Styled from './StartChat.styles';
 import Contacts from '@src/components/Contacts';
+import { Recipient } from '@src/types/persons';
 
 interface Props {
 	onHide: () => void;
 }
 
 const StartChat: React.FC<Props> = ({ onHide }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const { t } = useTranslation();
 
 	const [isVerifying, setVerifying] = useState(false);
@@ -70,43 +61,21 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 			return;
 		}
 
-		setVerifying(true);
+		// Skipping verifying as it is deprecated
 
-		apiService.verifyContactsCall(
-			[addPlus(waId)],
-			verifyPhoneNumberCancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				if (
-					response.data.contacts &&
-					response.data.contacts.length > 0 &&
-					response.data.contacts[0].status === 'valid' &&
-					response.data.contacts[0].wa_id !== 'invalid'
-				) {
-					const returnedWaId = response.data.contacts[0].wa_id;
-
-					navigate(`/main/chat/${returnedWaId}${location.search}`, {
-						state: {
-							person: {
-								name: data?.name,
-								initials: data?.initials,
-								avatar: data?.avatar,
-								waId: returnedWaId,
-							},
-						},
-					});
-
-					// Hide contacts
-					onHide();
-				} else {
-					failureCallback();
-				}
-
-				setVerifying(false);
+		navigate(`/main/chat/${waId}${location.search}`, {
+			state: {
+				person: {
+					name: data?.name,
+					initials: data?.initials,
+					avatar: data?.avatar,
+					waId: waId,
+				},
 			},
-			() => {
-				setVerifying(false);
-			}
-		);
+		});
+
+		// Hide contacts
+		onHide();
 	};
 
 	return (
@@ -123,17 +92,21 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 				<Styled.StartByPhoneNumber
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
-					<ListItem button>
+					<Styled.StyledListItem
+						// @ts-ignore
+						button
+						style={{ padding: 0 }}
+					>
 						<Styled.StartByPhoneNumberInner data-test-id="start-new-chat">
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
 						</Styled.StartByPhoneNumberInner>
-					</ListItem>
+					</Styled.StyledListItem>
 				</Styled.StartByPhoneNumber>
 
 				{isPhoneNumberFormVisible && (
 					<Styled.FormWrapper>
-						<TextField
+						<Styled.StyledTextField
 							variant="standard"
 							label={t('Phone number')}
 							InputProps={{

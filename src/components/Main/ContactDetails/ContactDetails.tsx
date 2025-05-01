@@ -44,14 +44,14 @@ const ContactDetails: React.FC<Props> = ({
 	};
 
 	useEffect(() => {
-		if (contactData?.waId) {
-			retrieveContactData(contactData.waId);
+		if (contactData?.wa_id) {
+			retrieveContactData(contactData.wa_id);
 		}
 		setChat(findChatByWaId());
 	}, []);
 
 	const findChatByWaId = () => {
-		const waId = contactData?.waId;
+		const waId = contactData?.wa_id;
 		return chats[CHAT_KEY_PREFIX + waId];
 	};
 
@@ -61,7 +61,7 @@ const ContactDetails: React.FC<Props> = ({
 				<IconButton onClick={hideContactDetails} size="large">
 					<CloseIcon />
 				</IconButton>
-				<h3>{t('Contact Details')}</h3>
+				<h3>{t('ContactView Details')}</h3>
 			</Styled.Header>
 
 			{contactData && (
@@ -70,7 +70,7 @@ const ContactDetails: React.FC<Props> = ({
 						<Styled.AvatarContainer>
 							<CustomAvatar
 								src={extractAvatarFromContactProviderData(
-									contactProvidersData[contactData.waId ?? ''],
+									contactProvidersData[contactData.wa_id ?? ''],
 									true
 								)}
 								style={{
@@ -79,7 +79,7 @@ const ContactDetails: React.FC<Props> = ({
 									fontSize: '5rem',
 									marginBottom: '15px',
 								}}
-								generateBgColorBy={contactData.name}
+								generateBgColorBy={contactData.waba_payload?.profile?.name}
 							>
 								{contactData.initials}
 							</CustomAvatar>
@@ -88,24 +88,24 @@ const ContactDetails: React.FC<Props> = ({
 						<PrintMessage
 							as="h3"
 							message={
-								contactProvidersData[contactData.waId ?? '']?.[0]?.name ??
-								contactData.name
+								contactProvidersData[contactData.wa_id ?? '']?.[0]?.name ??
+								contactData.waba_payload?.profile?.name
 							}
 						/>
 
-						{contactProvidersData[contactData.waId ?? '']?.[0]
+						{contactProvidersData[contactData.wa_id ?? '']?.[0]
 							?.companies?.[0] !== undefined && (
 							<Styled.JobInfo>
 								<span>
 									{
-										contactProvidersData[contactData.waId ?? '']?.[0]
+										contactProvidersData[contactData.wa_id ?? '']?.[0]
 											?.companies?.[0]?.job_title
 									}
 								</span>{' '}
 								at{' '}
 								<span>
 									{
-										contactProvidersData[contactData.waId ?? '']?.[0]
+										contactProvidersData[contactData.wa_id ?? '']?.[0]
 											?.companies?.[0]?.company_name
 									}
 								</span>
@@ -114,10 +114,10 @@ const ContactDetails: React.FC<Props> = ({
 
 						<Styled.LastMessageAt>
 							Last message:{' '}
-							{contactData.lastMessageTimestamp &&
-							contactData.lastMessageTimestamp > 0 ? (
+							{contactData.last_message_timestamp &&
+							contactData.last_message_timestamp > 0 ? (
 								<Moment unix calendar={CALENDAR_NORMAL}>
-									{contactData.lastMessageTimestamp}
+									{contactData.last_message_timestamp}
 								</Moment>
 							) : (
 								t('Never')
@@ -175,10 +175,12 @@ const ContactDetails: React.FC<Props> = ({
 						<Styled.SectionTitle>
 							{t('WhatsApp Phone Number')}
 						</Styled.SectionTitle>
-						<a href={'tel:+' + contactData.waId}>{addPlus(contactData.waId)}</a>
+						<a href={'tel:+' + contactData.wa_id}>
+							{addPlus(contactData.wa_id)}
+						</a>
 					</Styled.Section>
 
-					{contactProvidersData[contactData.waId ?? '']?.map(
+					{contactProvidersData[contactData.wa_id ?? '']?.map(
 						(providerData: any, index: number) => (
 							<Styled.Section
 								key={index + '_' + providerData.contact_provider.id}
@@ -197,7 +199,8 @@ const ContactDetails: React.FC<Props> = ({
 												alt={providerData.contact_provider.name}
 											/>
 										)}
-										{providerData.contact_provider.name}
+										{providerData.contact_provider.name ??
+											providerData.contact_provider.type}
 									</Styled.ProviderTitle>
 								</Styled.SectionTitle>
 
@@ -221,25 +224,27 @@ const ContactDetails: React.FC<Props> = ({
 									</Styled.ContentSub>
 								</Styled.Content>
 
-								<Styled.Content>
-									<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
-									<Styled.ContentSub>
-										{providerData.email_addresses?.map(
-											(emailAddress: any, emailAddressIndex: number) => (
-												<div key={emailAddressIndex}>
-													<a href={'mailto:' + emailAddress.email_address}>
-														{emailAddress.email_address}
-													</a>
-													{emailAddress.description && (
-														<span className="ml-1">
-															({emailAddress.description})
-														</span>
-													)}
-												</div>
-											)
-										)}
-									</Styled.ContentSub>
-								</Styled.Content>
+								{Boolean(providerData.email_addresses?.length ?? 0 > 0) && (
+									<Styled.Content>
+										<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
+										<Styled.ContentSub>
+											{providerData.email_addresses?.map(
+												(emailAddress: any, emailAddressIndex: number) => (
+													<div key={emailAddressIndex}>
+														<a href={'mailto:' + emailAddress.email_address}>
+															{emailAddress.email_address}
+														</a>
+														{emailAddress.description && (
+															<span className="ml-1">
+																({emailAddress.description})
+															</span>
+														)}
+													</div>
+												)
+											)}
+										</Styled.ContentSub>
+									</Styled.Content>
+								)}
 							</Styled.Section>
 						)
 					)}

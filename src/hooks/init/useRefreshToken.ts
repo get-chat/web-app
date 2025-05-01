@@ -1,4 +1,3 @@
-import { ApiService } from '@src/api/ApiService';
 import { getURLParams } from '@src/helpers/URLHelper';
 import { clearUserSession } from '@src/helpers/ApiHelper';
 import { AxiosError } from 'axios';
@@ -6,7 +5,7 @@ import { storeToken } from '@src/helpers/StorageHelper';
 import { convertRefreshToken } from '@src/api/authApi';
 
 const useRefreshToken = () => {
-	const handle = async (apiService: ApiService, onComplete?: () => void) => {
+	const handle = async (onComplete?: () => void) => {
 		const refreshToken = getURLParams().get('refresh_token');
 		const keepRefreshToken = getURLParams().get('keep_refresh_token') === '1';
 		if (refreshToken) {

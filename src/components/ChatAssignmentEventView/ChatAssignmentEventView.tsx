@@ -1,14 +1,15 @@
 import React from 'react';
-import styles from './ChatAssignmentEvent.module.css';
+import styles from './ChatAssignmentEventView.module.css';
 import Moment from 'react-moment';
 import { Trans, useTranslation } from 'react-i18next';
-import { ChatAssignment } from '@src/types/messages';
+
+import { ChatAssignmentEvent } from '@src/types/chatAssignment';
 
 interface Props {
-	data: ChatAssignment;
+	data: ChatAssignmentEvent;
 }
 
-const ChatAssignmentEvent: React.FC<Props> = ({ data }) => {
+const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 	const { t } = useTranslation();
 
 	const dateFormat = 'H:mm';
@@ -77,4 +78,4 @@ const ChatAssignmentEvent: React.FC<Props> = ({ data }) => {
 	);
 };
 
-export default ChatAssignmentEvent;
+export default ChatAssignmentEventView;

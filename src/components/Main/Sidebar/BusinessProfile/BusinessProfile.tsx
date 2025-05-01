@@ -11,7 +11,6 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
@@ -19,14 +18,23 @@ import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
-import { AxiosResponse, CancelTokenSource } from 'axios';
+import { AxiosError, CancelTokenSource } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
+import {
+	deleteProfilePhoto,
+	fetchBusinessProfileSettings,
+	fetchProfileAbout,
+	fetchProfilePhoto,
+	partialUpdateBusinessProfileSettings,
+	updateProfileAbout,
+	updateProfilePhoto,
+} from '@src/api/settingsApi';
+import api from '@src/api/axiosInstance';
 
 function BusinessProfile(props: any) {
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
@@ -74,28 +82,28 @@ function BusinessProfile(props: any) {
 		};
 	}, []);
 
-	const retrieveBusinessProfile = () => {
-		apiService.retrieveBusinessProfileCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const data = response.data;
+	const retrieveBusinessProfile = async () => {
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchBusinessProfileSettings();
 
-				setAddress(data.address);
-				setDescription(data.description);
-				setEmail(data.email);
-				setVertical(data.vertical);
+			setAddress(data.address ?? '');
+			setDescription(data.description ?? '');
+			setEmail(data.email ?? '');
+			setVertical(data.vertical ?? '');
 
-				let websitesArray = data.websites;
-				if (websitesArray.length === 0) {
-					websitesArray = [];
-				}
-
-				setWebsites({ ...websitesArray });
-
-				// Load about
-				retrieveProfileAbout();
+			let websitesArray = data.websites;
+			if (websitesArray.length === 0) {
+				websitesArray = [];
 			}
-		);
+
+			setWebsites({ ...websitesArray });
+
+			// Load about
+			await retrieveProfileAbout();
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const updateBusinessProfile = async (
@@ -105,92 +113,90 @@ function BusinessProfile(props: any) {
 
 		setUpdating(true);
 
-		apiService.updateBusinessProfileCall(
-			address,
-			description,
-			email,
-			vertical,
-			Object.values(websites),
-			cancelTokenSourceRef.current?.token,
-			() => {
-				updateProfileAbout(event);
-			},
-			() => {
-				setUpdating(false);
-			}
-		);
+		try {
+			// TODO: Make request cancellable
+			await partialUpdateBusinessProfileSettings({
+				address,
+				description,
+				email,
+				vertical,
+				websites: Object.values(websites),
+			});
+			await doUpdateProfileAbout(event);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			setUpdating(false);
+		}
 	};
 
-	const retrieveProfilePhoto = () => {
-		apiService.retrieveProfilePhotoCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const base64 = binaryToBase64(response.data);
-				setProfilePhoto(base64);
-			},
-			undefined
-		);
+	const retrieveProfilePhoto = async () => {
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchProfilePhoto();
+			const base64 = binaryToBase64(data);
+			setProfilePhoto(base64);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
-	const retrieveProfileAbout = () => {
-		apiService.retrieveProfileAboutCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const profile = response.data.settings?.profile;
-				setAbout(profile?.about?.text);
-				retrieveProfilePhoto();
-
-				setLoaded(true);
-			}
-		);
+	const retrieveProfileAbout = async () => {
+		try {
+			const data = await fetchProfileAbout();
+			setAbout(data.settings.profile?.about?.text ?? '');
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		} finally {
+			retrieveProfilePhoto();
+			setLoaded(true);
+		}
 	};
 
-	const updateProfileAbout = async (
+	const doUpdateProfileAbout = async (
 		event: React.FormEvent<HTMLFormElement>
 	) => {
 		event.preventDefault();
 
-		apiService.updateProfileAboutCall(
-			about,
-			cancelTokenSourceRef.current?.token,
-			() => {
-				setUpdating(false);
-			},
-			() => {
-				setUpdating(false);
-			}
-		);
+		try {
+			// TODO: Make request cancellable
+			await updateProfileAbout({
+				text: about,
+			});
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		} finally {
+			setUpdating(false);
+		}
 	};
 
-	const updateProfilePhoto = async (file: FileList) => {
+	const doUpdateProfilePhoto = async (file: FileList) => {
 		const formData = new FormData();
 		formData.append('file_encoded', file[0]);
 
-		apiService.updateProfilePhotoCall(
-			formData,
-			cancelTokenSourceRef.current?.token,
-			() => {
-				setUpdating(false);
+		try {
+			// TODO: Make request cancellable
+			await updateProfilePhoto(formData);
+			// Display new photo
+			await retrieveProfilePhoto();
 
-				// Display new photo
-				retrieveProfilePhoto();
-
-				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
-			},
-			() => {
-				setUpdating(false);
-			}
-		);
+			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			window.displayError(error);
+		} finally {
+			setUpdating(false);
+		}
 	};
 
-	const deleteProfilePhoto = () => {
-		apiService.deleteProfilePhotoCall(
-			cancelTokenSourceRef.current?.token,
-			() => {
-				//setProfilePhoto(undefined);
-				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
-			}
-		);
+	const doDeleteProfilePhoto = async () => {
+		try {
+			// TODO: Make request cancellable
+			await deleteProfilePhoto();
+			//setProfilePhoto(undefined);
+			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const verticalOptions = [
@@ -232,7 +238,7 @@ function BusinessProfile(props: any) {
 						<Styled.SectionHeader>
 							<h5>{t('Your current inbox')}</h5>
 						</Styled.SectionHeader>
-						{prepareURLForDisplay(apiService.apiBaseURL)}
+						{prepareURLForDisplay(api.defaults.baseURL ?? '')}
 						<Styled.ChangeInboxLink
 							href="#"
 							className="ml-1"
@@ -256,7 +262,7 @@ function BusinessProfile(props: any) {
 								<FileInput
 									innerRef={fileInput}
 									handleSelectedFiles={(file: FileList) =>
-										updateProfilePhoto(file)
+										doUpdateProfilePhoto(file)
 									}
 									accept="image/jpeg, image/png"
 									multiple={false}
@@ -266,7 +272,7 @@ function BusinessProfile(props: any) {
 								/>
 
 								{profilePhoto && isAdmin && !isReadOnly && (
-									<Button onClick={deleteProfilePhoto} color="secondary">
+									<Button onClick={doDeleteProfilePhoto} color="secondary">
 										Delete profile photo
 									</Button>
 								)}

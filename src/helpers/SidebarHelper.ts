@@ -7,6 +7,7 @@ import {
 	isChatAssignedToUserAnyGroup,
 	isChatIncludingTagId,
 } from '@src/helpers/ChatHelper';
+import { Message } from '@src/types/messages';
 
 const hasPermission = (currentUser: User, chat: Chat) => {
 	const canReadChats = currentUser?.permissions?.can_read_chats;
@@ -53,7 +54,7 @@ export const filterChat = (
 export const handleChatAssignmentEvent = (
 	currentUser: User | undefined,
 	chats: ChatList,
-	data: any
+	data: { [key: string]: Message }
 ) => {
 	if (!currentUser) {
 		console.warn('Current user is empty!', currentUser);
@@ -72,8 +73,8 @@ export const handleChatAssignmentEvent = (
 
 	Object.entries(data).forEach((message) => {
 		//const msgId = message[0];
-		const assignmentData: any = message[1];
-		const assignmentEvent = assignmentData.assignmentEvent;
+		const assignmentData = message[1];
+		const assignmentEvent = assignmentData.assignment_event;
 
 		// If user is already able to read all chats
 		if (canReadChatsAll) {
@@ -85,13 +86,14 @@ export const handleChatAssignmentEvent = (
 			return;
 		}
 
-		const chatKey = CHAT_KEY_PREFIX + assignmentData.waId;
+		const chatKey = CHAT_KEY_PREFIX + assignmentData.customer_wa_id;
 		const isChatLoaded = chats.hasOwnProperty(chatKey);
 		const assignedGroup = chats[chatKey]?.assigned_group;
 		const isAlreadyAssignedToCurrentUser =
 			chats[chatKey]?.assigned_to_user?.id === currentUser.id;
 
-		const queueMissingChat = () => newMissingChats.push(assignmentData.waId);
+		const queueMissingChat = () =>
+			newMissingChats.push(assignmentData.customer_wa_id);
 
 		const deleteChat = () => {
 			delete chats[chatKey];

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import * as Styled from './UploadMediaIndicator.styles';
 
 interface Props {
-	isMobile: boolean;
+	isMobile?: boolean;
 }
 
 const UploadMediaIndicator: React.FC<Props> = ({ isMobile = false }) => {

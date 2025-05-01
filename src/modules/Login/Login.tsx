@@ -16,7 +16,6 @@ import {
 	storeToken,
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import packageJson from '../../../package.json';
 import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -24,9 +23,10 @@ import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
 import { login, logout } from '@src/api/authApi';
 import * as Styled from './Login.styles';
+import { fetchBase } from '@src/api/healthApi';
+import api from '@src/api/axiosInstance';
 
 const Login = () => {
-	const { apiService } = React.useContext(ApplicationContext);
 	const config = React.useContext(AppConfigContext);
 
 	const { t } = useTranslation();
@@ -79,24 +79,30 @@ const Login = () => {
 			}
 		}
 
+		doFetchBase();
+	}, []);
+
+	const doFetchBase = async () => {
 		const token = getToken();
 		if (token) {
 			setValidatingToken(true);
 
-			apiService.baseCall(
-				() => {
-					// Redirect to main route
-					navigate('/main');
-				},
-				() => {
-					setValidatingToken(false);
+			try {
+				await fetchBase();
 
-					// TODO: Make sure the response is Unauthorized
+				// Redirect to main route
+				navigate('/main');
+			} catch (error: any | AxiosError) {
+				console.error(error);
+
+				setValidatingToken(false);
+
+				if (error.response?.status == 403) {
 					clearToken();
 				}
-			);
+			}
 		}
-	}, []);
+	};
 
 	const doLogin = async (event: React.FormEvent) => {
 		event.preventDefault();
@@ -160,7 +166,7 @@ const Login = () => {
 						<Styled.InboxUrl>
 							<h3>{t('Your current inbox')}</h3>
 							<div>
-								{prepareURLForDisplay(apiService.apiBaseURL)}
+								{prepareURLForDisplay(api.defaults.baseURL ?? '')}
 								<a
 									href="#"
 									className="ml-1"

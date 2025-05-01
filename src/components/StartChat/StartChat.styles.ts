@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { ListItem, TextField } from '@mui/material';
 
-const StyledListItem = styled(ListItem)``;
-const StyledTextField = styled(TextField)``;
+export const StyledListItem = styled(ListItem)``;
+export const StyledTextField = styled(TextField)``;
 
 export const ContactsContainer = styled.div`
 	display: flex;

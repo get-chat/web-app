@@ -15,18 +15,24 @@ import {
 } from '@mui/material';
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { sortGroups } from '@src/helpers/GroupsHelper';
 import { GroupList } from '@src/types/groups';
 import { fetchGroups } from '@src/api/groupsApi';
+import {
+	fetchChatAssignment,
+	updateChatAssignment,
+} from '@src/api/chatAssignmentApi';
 
-function ChatAssignment(props: any) {
-	// @ts-ignore
-	const { apiService } = React.useContext(ApplicationContext);
+interface Props {
+	open: boolean;
+	setOpen: (value: boolean) => void;
+	waId: string;
+}
 
+const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 	const users = useAppSelector((state) => state.users.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isAdmin = currentUser?.profile?.role === 'admin';
@@ -35,8 +41,8 @@ function ChatAssignment(props: any) {
 
 	const [isLoading, setLoading] = useState(true);
 	const [groups, setGroups] = useState<GroupList>({});
-	const [assignedToUser, setAssignedToUser] = useState(null);
-	const [assignedGroup, setAssignedGroup] = useState(null);
+	const [assignedToUser, setAssignedToUser] = useState<number | null>(null);
+	const [assignedGroup, setAssignedGroup] = useState<number | null>(null);
 	const [tempAssignedToUser, setTempAssignedToUser] = useState('null');
 	const [tempAssignedGroup, setTempAssignedGroup] = useState('null');
 
@@ -45,52 +51,51 @@ function ChatAssignment(props: any) {
 	}, []);
 
 	const close = () => {
-		props.setOpen(false);
+		setOpen(false);
 	};
 
-	const retrieveChatAssignment = () => {
-		apiService.retrieveChatAssignmentCall(
-			props.waId,
-			(response: AxiosResponse) => {
-				// Data on server
-				setAssignedToUser(response.data.assigned_to_user);
-				setAssignedGroup(response.data.assigned_group);
+	const retrieveChatAssignment = async () => {
+		try {
+			const data = await fetchChatAssignment(waId);
+			// Data on server
+			setAssignedToUser(data.assigned_to_user);
+			setAssignedGroup(data.assigned_group);
 
-				// UI data
-				setTempAssignedToUser(response.data.assigned_to_user ?? 'null');
-				setTempAssignedGroup(response.data.assigned_group ?? 'null');
+			// UI data
+			setTempAssignedToUser(data.assigned_to_user?.toString() ?? 'null');
+			setTempAssignedGroup(data.assigned_group?.toString() ?? 'null');
 
+			setLoading(false);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			if (error?.response?.status === 403) {
 				setLoading(false);
-			},
-			(error: AxiosError) => {
-				if (error?.response?.status === 403) {
-					setLoading(false);
-				} else {
-					close();
-				}
+			} else {
+				close();
 			}
-		);
+		}
 	};
 
-	const updateChatAssignment = () => {
-		apiService.updateChatAssignmentCall(
-			props.waId,
-			tempAssignedToUser === 'null' ? null : tempAssignedToUser,
-			tempAssignedGroup === 'null' ? null : tempAssignedGroup,
-			() => {
-				close();
-			},
-			(error: AxiosError) => {
-				if (error?.response?.status === 403) {
-					// @ts-ignore
-					window.displayCustomError(
-						'This chat could not be assigned as its assignments have been changed by another user recently.'
-					);
-				}
-
-				close();
+	const doUpdateChatAssignment = async () => {
+		try {
+			await updateChatAssignment({
+				wa_id: waId,
+				assigned_to_user:
+					tempAssignedToUser === 'null' ? null : parseInt(tempAssignedToUser),
+				assigned_group:
+					tempAssignedGroup === 'null' ? null : parseInt(tempAssignedGroup),
+			});
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			if (error?.response?.status === 403) {
+				// @ts-ignore
+				window.displayCustomError(
+					'This chat could not be assigned as its assignments have been changed by another user recently.'
+				);
 			}
-		);
+		} finally {
+			close();
+		}
 	};
 
 	const listGroups = async () => {
@@ -102,7 +107,7 @@ function ChatAssignment(props: any) {
 		} catch (error) {
 			console.error(error);
 		} finally {
-			retrieveChatAssignment();
+			await retrieveChatAssignment();
 		}
 	};
 
@@ -133,7 +138,7 @@ function ChatAssignment(props: any) {
 	);
 
 	return (
-		<Dialog open={props.open} onClose={close} className="chatAssignmentWrapper">
+		<Dialog open={open} onClose={close} className="chatAssignmentWrapper">
 			<DialogTitle>Assign chat</DialogTitle>
 			<DialogContent className="chatAssignment">
 				{isAdmin && (
@@ -231,7 +236,7 @@ function ChatAssignment(props: any) {
 					Close
 				</Button>
 				{(canChangeUserAssigment || canChangeGroupAssigment) && (
-					<Button color="primary" onClick={updateChatAssignment}>
+					<Button color="primary" onClick={doUpdateChatAssignment}>
 						{t('Update')}
 					</Button>
 				)}
@@ -244,5 +249,5 @@ function ChatAssignment(props: any) {
 			)}
 		</Dialog>
 	);
-}
+};
 export default ChatAssignment;

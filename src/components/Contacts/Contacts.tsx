@@ -2,10 +2,10 @@ import React from 'react';
 import useContacts from '@src/components/Contacts/useContacts';
 import SearchBar from '@src/components/SearchBar/SearchBar';
 import RecipientItem from '@src/components/RecipientItem';
-import Recipient from '@src/interfaces/Recipient';
 import { CircularProgress } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import * as Styled from './Contacts.styles';
+import { Recipient } from '@src/types/persons';
 
 interface Props {
 	isSelectionModeEnabled?: boolean;
@@ -46,9 +46,9 @@ const Contacts: React.FC<Props> = ({
 							<RecipientItem
 								key={index}
 								data={item}
-								verifyPhoneNumber={(phoneNumber: string, data: Recipient) =>
-									verifyContact?.(phoneNumber, data)
-								}
+								verifyPhoneNumber={(phoneNumber: string, data: Recipient) => {
+									verifyContact?.(phoneNumber, data);
+								}}
 								isSelectionModeEnabled={isSelectionModeEnabled}
 								isSelected={Boolean(
 									selectedContacts?.find(

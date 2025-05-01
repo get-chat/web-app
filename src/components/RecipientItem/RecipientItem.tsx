@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Recipient from '@src/interfaces/Recipient';
 import { useTranslation } from 'react-i18next';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
 import * as Styled from './RecipientItem.styles';
+import { Recipient } from '@src/types/persons';
 
 interface Props {
 	data: Recipient;
@@ -28,9 +28,9 @@ const RecipientItem: React.FC<Props> = ({
 			return;
 		}
 
-		if (data.phoneNumbers && data.phoneNumbers.length > 0) {
-			if (data.phoneNumbers.length === 1) {
-				const phoneNumber = data.phoneNumbers[0].phoneNumber;
+		if (data.phone_numbers && data.phone_numbers.length > 0) {
+			if (data.phone_numbers.length === 1) {
+				const phoneNumber = data.phone_numbers[0].phone_number;
 				goToChat(phoneNumber);
 			} else {
 				setPhoneNumbersVisible((prevState) => !prevState);
@@ -69,9 +69,9 @@ const RecipientItem: React.FC<Props> = ({
 					<Styled.Info>
 						<Styled.Name>{data.name}</Styled.Name>
 
-						{data.phoneNumbers?.length > 0 ? (
+						{data.phone_numbers?.length > 0 ? (
 							<Styled.PhoneNumber>
-								{data.phoneNumbers[0]?.phoneNumber}
+								{data.phone_numbers[0]?.phone_number}
 							</Styled.PhoneNumber>
 						) : (
 							<Styled.MissingPhoneNumber>
@@ -87,12 +87,12 @@ const RecipientItem: React.FC<Props> = ({
 					<Styled.PhoneNumbersTitle>
 						{t('Choose a phone number')}
 					</Styled.PhoneNumbersTitle>
-					{data.phoneNumbers?.map((phoneNumber, index) => (
+					{data.phone_numbers?.map((phoneNumber, index) => (
 						<Styled.Choice
 							key={index}
-							onClick={() => goToChat(phoneNumber.phoneNumber)}
+							onClick={() => goToChat(phoneNumber.phone_number)}
 						>
-							{phoneNumber.phoneNumber}
+							{phoneNumber.phone_number}
 						</Styled.Choice>
 					))}
 				</Styled.PhoneNumbersContainer>

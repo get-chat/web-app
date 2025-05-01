@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
-import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
-import { ApplicationContext } from '@src/contexts/ApplicationContext';
+import { AxiosError, CancelTokenSource } from 'axios';
 import CustomAvatar from '@src/components/CustomAvatar';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
+import { fetchProfilePhoto } from '@src/api/settingsApi';
 
 interface Props {
 	className?: string;
@@ -12,8 +12,6 @@ interface Props {
 }
 
 const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
-	const { apiService } = React.useContext(ApplicationContext);
-
 	const [isLoaded, setLoaded] = useState(false);
 	const [profilePhoto, setProfilePhoto] = useState<string>();
 
@@ -35,33 +33,30 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 		}
 	};
 
-	const retrieveProfilePhoto = () => {
-		apiService.retrieveProfilePhotoCall(
-			cancelTokenSourceRef.current?.token,
-			(response: AxiosResponse) => {
-				const base64 = binaryToBase64(response.data);
-				setProfilePhoto(base64);
+	const retrieveProfilePhoto = async () => {
+		try {
+			// TODO: Make request cancellable
+			const data = await fetchProfilePhoto();
+			const base64 = binaryToBase64(data);
+			setProfilePhoto(base64);
+
+			// Finish
+			setLoaded(true);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+
+			// No photo
+			if (error?.response?.status === 404) {
+				setProfilePhoto(undefined);
 
 				// Finish
 				setLoaded(true);
-			},
-			(error: AxiosError) => {
-				console.log(error);
-
-				// No photo
-				if (error?.response?.status === 404) {
-					setProfilePhoto(undefined);
-
-					// Finish
-					setLoaded(true);
-				} else if (error?.response?.status === 503) {
-					handleProfilePhotoError(error);
-				} else {
-					// @ts-ignore
-					window.displayError(error);
-				}
+			} else if (error?.response?.status === 503) {
+				handleProfilePhotoError(error);
+			} else {
+				window.displayError(error);
 			}
-		);
+		}
 	};
 
 	useEffect(() => {
