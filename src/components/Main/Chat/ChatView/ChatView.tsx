@@ -1172,7 +1172,7 @@ const ChatView: React.FC<Props> = (props) => {
 			const preparedMessages = prepareMessageList(data.results);
 			const preparedReactions = prepareReactions(preparedMessages);
 
-			const lastMessage = getLastObject(preparedMessages) as Message;
+			const lastMessage = getFirstObject(preparedMessages) as Message;
 
 			// Pagination filters for events
 			let beforeTimeForEvents = beforeTime;
@@ -1187,7 +1187,7 @@ const ChatView: React.FC<Props> = (props) => {
 			}
 
 			if (!sinceTime) {
-				const firstMessage = getFirstObject(preparedMessages) as Message;
+				const firstMessage = getLastObject(preparedMessages) as Message;
 				sinceTimeForEvents = getMessageTimestamp(firstMessage);
 			}
 
