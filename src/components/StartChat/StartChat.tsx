@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	Button,
-	IconButton,
-	InputAdornment,
-	ListItem,
-	TextField,
-} from '@mui/material';
+import { Button, IconButton, InputAdornment } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -98,17 +92,21 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 				<Styled.StartByPhoneNumber
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
-					<ListItem button style={{ padding: 0 }}>
+					<Styled.StyledListItem
+						// @ts-ignore
+						button
+						style={{ padding: 0 }}
+					>
 						<Styled.StartByPhoneNumberInner data-test-id="start-new-chat">
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
 						</Styled.StartByPhoneNumberInner>
-					</ListItem>
+					</Styled.StyledListItem>
 				</Styled.StartByPhoneNumber>
 
 				{isPhoneNumberFormVisible && (
 					<Styled.FormWrapper>
-						<TextField
+						<Styled.StyledTextField
 							variant="standard"
 							label={t('Phone number')}
 							InputProps={{
