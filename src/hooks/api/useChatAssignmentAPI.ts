@@ -27,7 +27,6 @@ const useChatAssignmentAPI = () => {
 	) => {
 		console.log('Partially updating chat assignment...');
 		try {
-			// TODO: Make request cancellable
 			const data = partialUpdateChatAssignment({
 				wa_id: waId ?? '',
 				assigned_to_user: assignedToUser,

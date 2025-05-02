@@ -26,11 +26,12 @@ export const updateChatAssignment = async (
 };
 
 export const fetchChatAssignmentEvents = async (
-	params: FetchChatAssignmentEventsRequest
+	params: FetchChatAssignmentEventsRequest,
+	signal?: AbortSignal
 ) => {
 	const response = await axios.get<PaginatedResponse<ChatAssignmentEvent>>(
 		`/chat_assignment_events/`,
-		{ params }
+		{ params, signal }
 	);
 	return response.data;
 };
