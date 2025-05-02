@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
-import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { setIsRefreshingTemplates } from '@src/store/reducers/isRefreshingTemplatesReducer';
 import { AXIOS_ERROR_CODE_TIMEOUT } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
-import { AxiosError, CancelTokenSource } from 'axios';
+import { AxiosError } from 'axios';
 import {
 	checkTemplateRefreshStatus,
 	fetchTemplates,
@@ -20,14 +19,14 @@ const useTemplates = () => {
 
 	const retryCount = useRef(0);
 
-	const cancelTokenSourceRef = useRef<CancelTokenSource>();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
-		cancelTokenSourceRef.current = generateCancelToken();
+		abortControllerRef.current = new AbortController();
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current?.cancel();
+			abortControllerRef.current?.abort();
 		};
 	}, []);
 
@@ -73,8 +72,9 @@ const useTemplates = () => {
 		};
 
 		try {
-			// TODO: Make request cancellable
-			const data = await checkTemplateRefreshStatus();
+			const data = await checkTemplateRefreshStatus(
+				abortControllerRef.current?.signal
+			);
 			if (data.currently_refreshing) {
 				console.log('Templates are still being refreshed.');
 				errorCallback();

@@ -10,9 +10,10 @@ export const fetchTemplates = async () => {
 	return response.data;
 };
 
-export const checkTemplateRefreshStatus = async () => {
+export const checkTemplateRefreshStatus = async (signal?: AbortSignal) => {
 	const response = await api.get<CheckTemplateRefreshStatusResponse>(
-		'/templates/refresh/status/'
+		'/templates/refresh/status/',
+		{ signal }
 	);
 	return response.data;
 };
