@@ -6,19 +6,22 @@ import {
 	UpdateProfileAboutRequest,
 } from '@src/types/settings';
 
-export const fetchBusinessProfileSettings = async () => {
+export const fetchBusinessProfileSettings = async (signal?: AbortSignal) => {
 	const response = await axios.get<BusinessProfileSettings>(
-		'/settings/business/profile/'
+		'/settings/business/profile/',
+		{ signal }
 	);
 	return response.data;
 };
 
 export const partialUpdateBusinessProfileSettings = async (
-	data: PartialUpdateBusinessProfileSettings
+	data: PartialUpdateBusinessProfileSettings,
+	signal?: AbortSignal
 ) => {
 	const response = await axios.patch<BusinessProfileSettings>(
 		'/settings/business/profile/',
-		data
+		data,
+		{ signal }
 	);
 	return response.data;
 };
@@ -30,25 +33,35 @@ export const fetchProfileAbout = async () => {
 	return response.data;
 };
 
-export const updateProfileAbout = async (data: UpdateProfileAboutRequest) => {
+export const updateProfileAbout = async (
+	data: UpdateProfileAboutRequest,
+	signal?: AbortSignal
+) => {
 	const response = await axios.patch<ProfileAboutResponse>(
 		'/settings/profile/about/',
-		data
+		data,
+		{
+			signal,
+		}
 	);
 	return response.data;
 };
 
-export const fetchProfilePhoto = async () => {
+export const fetchProfilePhoto = async (signal?: AbortSignal) => {
 	const response = await axios.get<ArrayBuffer>('/settings/profile/photo/', {
 		responseType: 'arraybuffer',
+		signal,
 	});
 	return response.data;
 };
 
-export const updateProfilePhoto = async (formData: FormData) => {
-	return await axios.post('/settings/profile/photo/', formData);
+export const updateProfilePhoto = async (
+	formData: FormData,
+	signal?: AbortSignal
+) => {
+	return await axios.post('/settings/profile/photo/', formData, { signal });
 };
 
-export const deleteProfilePhoto = async () => {
-	return await axios.delete('/settings/profile/photo/');
+export const deleteProfilePhoto = async (signal?: AbortSignal) => {
+	return await axios.delete('/settings/profile/photo/', { signal });
 };
