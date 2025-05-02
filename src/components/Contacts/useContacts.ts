@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { AxiosError, AxiosResponse, CancelTokenSource } from 'axios';
-import { generateCancelToken } from '@src/helpers/ApiHelper';
+import { AxiosError, AxiosResponse } from 'axios';
 import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
 import { fetchContacts } from '@src/api/contactsApi';
 import { Contact } from '@src/types/contacts';
@@ -15,13 +14,13 @@ const useContacts = () => {
 	const [unifiedList, setUnifiedList] = useState<Recipient[]>([]);
 	const [isLoading, setLoading] = useState(false);
 
-	let cancelTokenSourceRef = useRef<CancelTokenSource>();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	let timeout = useRef<NodeJS.Timeout>();
 
 	useEffect(() => {
 		return () => {
-			cancelTokenSourceRef.current?.cancel();
+			abortControllerRef.current?.abort();
 		};
 	}, []);
 
@@ -63,8 +62,8 @@ const useContacts = () => {
 	}, [contacts, persons]);
 
 	useEffect(() => {
-		// Generate a token
-		cancelTokenSourceRef.current = generateCancelToken();
+		// Generate an abort controller
+		abortControllerRef.current = new AbortController();
 
 		setLoading(true);
 
@@ -78,7 +77,7 @@ const useContacts = () => {
 		}, 500);
 
 		return () => {
-			cancelTokenSourceRef.current?.cancel();
+			abortControllerRef.current?.abort();
 			clearTimeout(timeout.current);
 			setLoading(false);
 		};
@@ -86,10 +85,12 @@ const useContacts = () => {
 
 	const listPersons = async () => {
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchPersons({
-				search: keyword?.trim(),
-			});
+			const data = await fetchPersons(
+				{
+					search: keyword?.trim(),
+				},
+				abortControllerRef.current?.signal
+			);
 			const personList: PersonList = {};
 			data.results.forEach((personData: any, personIndex: number) => {
 				personList[personIndex.toString()] = personData;

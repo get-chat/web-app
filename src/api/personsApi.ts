@@ -7,9 +7,13 @@ export const retrievePerson = async (wa_id: string, signal?: AbortSignal) => {
 	return response.data;
 };
 
-export const fetchPersons = async (params: FetchPersonsRequest) => {
+export const fetchPersons = async (
+	params: FetchPersonsRequest,
+	signal?: AbortSignal
+) => {
 	const response = await axios.get<PaginatedResponse<Person>>('/persons/', {
 		params,
+		signal,
 	});
 	return response.data;
 };

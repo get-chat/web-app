@@ -41,7 +41,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import SelectableChatTag from '../../SelectableChatTag';
-import { clearUserSession, generateCancelToken } from '@src/helpers/ApiHelper';
+import { clearUserSession } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
 import { Notifications as NotificationsIcon } from '@mui/icons-material';
 import { getObjLength } from '@src/helpers/ObjectHelper';
@@ -62,7 +62,7 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosError, CancelTokenSource } from 'axios';
+import { AxiosError } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 import PasswordIcon from '@mui/icons-material/Password';
@@ -259,28 +259,28 @@ const Sidebar: React.FC<Props> = ({
 		setAnchorEl(null);
 	};
 
-	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
 		// Trigger loading indicator
 		setLoadingChats(true);
 
-		// Generate a token
-		cancelTokenSourceRef.current = generateCancelToken();
+		// Generate an abort controller
+		abortControllerRef.current = new AbortController();
 
 		timer.current = setTimeout(() => {
-			listChats(cancelTokenSourceRef.current, true, chatsOffset, true);
+			listChats(true, chatsOffset, true);
 
 			if (keyword.trim().length > 0) {
-				searchMessages(cancelTokenSourceRef.current);
+				searchMessages();
 			}
 
 			setSearchedKeyword(keyword);
 		}, 500);
 
 		return () => {
-			if (cancelTokenSourceRef.current) {
-				cancelTokenSourceRef.current.cancel(
+			if (abortControllerRef.current) {
+				abortControllerRef.current.abort(
 					'Operation canceled due to new request.'
 				);
 			}
@@ -505,12 +505,7 @@ const Sidebar: React.FC<Props> = ({
 						el.scrollHeight - el.scrollTop - el.clientHeight <
 						CHAT_LIST_SCROLL_OFFSET
 					) {
-						listChats(
-							cancelTokenSourceRef.current,
-							false,
-							getObjLength(chats),
-							false
-						);
+						listChats(false, getObjLength(chats), false);
 					}
 				}
 			}, 100);
@@ -548,7 +543,6 @@ const Sidebar: React.FC<Props> = ({
 	};
 
 	const listChats = async (
-		cancelTokenSource?: CancelTokenSource,
 		isInitial: boolean = false,
 		offset?: number,
 		replaceAll: boolean = false
@@ -573,7 +567,6 @@ const Sidebar: React.FC<Props> = ({
 			: undefined;
 
 		try {
-			// TODO: Make request cancellable
 			const data = await fetchChats(
 				{
 					search: keyword,
@@ -585,7 +578,8 @@ const Sidebar: React.FC<Props> = ({
 					messages_before_time: messageBeforeTime,
 					messages_since_time: messagesSinceTime,
 				},
-				dynamicFilters
+				dynamicFilters,
+				abortControllerRef.current?.signal
 			);
 			processChatsData(data, isInitial, replaceAll);
 		} catch (error: any | AxiosError) {
@@ -722,7 +716,7 @@ const Sidebar: React.FC<Props> = ({
 		}
 	};
 
-	const searchMessages = async (cancelTokenSource?: CancelTokenSource) => {
+	const searchMessages = async () => {
 		// Convert dates to Unix timestamps
 		const messagesSinceTime = filterStartDate
 			? convertDateToUnixTimestamp(filterStartDate)
@@ -732,16 +726,18 @@ const Sidebar: React.FC<Props> = ({
 			: undefined;
 
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchMessages({
-				search: keyword,
-				chat_tag_id: filterTagId,
-				limit: 30,
-				assigned_to_me: filterAssignedToMe ? true : undefined,
-				assigned_group: filterAssignedGroupId,
-				before_time: messageBeforeTime,
-				since_time: messagesSinceTime,
-			});
+			const data = await fetchMessages(
+				{
+					search: keyword,
+					chat_tag_id: filterTagId,
+					limit: 30,
+					assigned_to_me: filterAssignedToMe ? true : undefined,
+					assigned_group: filterAssignedGroupId,
+					before_time: messageBeforeTime,
+					since_time: messagesSinceTime,
+				},
+				abortControllerRef.current?.signal
+			);
 			const preparedMessages = prepareMessageList(data.results);
 			setChatMessages(preparedMessages);
 		} catch (error) {

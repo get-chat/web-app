@@ -4,10 +4,12 @@ import { Chat, FetchChatsParams } from '@src/types/chats';
 
 export const fetchChats = async (
 	params: FetchChatsParams,
-	dynamic_filters?: { [key: string]: any }
+	dynamic_filters?: { [key: string]: any },
+	signal?: AbortSignal
 ) => {
 	const response = await axios.get<PaginatedResponse<Chat>>('/chats/', {
 		params: { ...params, ...dynamic_filters },
+		signal,
 	});
 	return response.data;
 };
