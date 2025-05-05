@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
-import { AxiosError, CancelTokenSource } from 'axios';
+import { AxiosError } from 'axios';
 import CustomAvatar from '@src/components/CustomAvatar';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
@@ -15,13 +15,15 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 	const [isLoaded, setLoaded] = useState(false);
 	const [profilePhoto, setProfilePhoto] = useState<string>();
 
-	const cancelTokenSourceRef = useRef<CancelTokenSource>();
-
 	const handleProfilePhotoError = (error: AxiosError) => {
 		try {
 			// Convert ArrayBuffer to string
 			const textDecoder = new TextDecoder();
-			const responseText = textDecoder.decode(error.response?.data);
+			const responseText = textDecoder.decode(
+				error.response?.data
+					? (error.response?.data as BufferSource)
+					: undefined
+			);
 
 			// Attempt to parse the string as JSON
 			const parsedError = JSON.parse(responseText);
@@ -35,7 +37,6 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 
 	const retrieveProfilePhoto = async () => {
 		try {
-			// TODO: Make request cancellable
 			const data = await fetchProfilePhoto();
 			const base64 = binaryToBase64(data);
 			setProfilePhoto(base64);

@@ -6,14 +6,12 @@ import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
 import { isMobileOnly } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
-import { CancelTokenSource } from 'axios';
 import { useAppDispatch } from '@src/store/hooks';
 import { setSearchMessagesVisible } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
 import { prepareMessageList } from '@src/helpers/MessageHelper';
-import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
 import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
@@ -82,18 +80,18 @@ const SearchMessage: React.FC<Props> = ({
 		dispatch(setSearchMessagesVisible(false));
 	};
 
-	let cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	const search = async () => {
 		// Check if there are any previous pending requests
-		if (cancelTokenSourceRef.current) {
-			cancelTokenSourceRef.current.cancel(
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort(
 				'Operation canceled due to new request.'
 			);
 		}
 
-		// Generate a token
-		cancelTokenSourceRef.current = generateCancelToken();
+		// Generate an abort controller
+		abortControllerRef.current = new AbortController();
 
 		if (keyword.trim().length === 0) {
 			setResults({});
@@ -103,12 +101,14 @@ const SearchMessage: React.FC<Props> = ({
 		setLoading(true);
 
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchMessages({
-				wa_id: waId,
-				search: keyword,
-				limit: 30,
-			});
+			const data = await fetchMessages(
+				{
+					wa_id: waId,
+					search: keyword,
+					limit: 30,
+				},
+				abortControllerRef.current?.signal
+			);
 			const preparedMessages = prepareMessageList(data.results);
 			setResults(preparedMessages);
 		} catch (error) {

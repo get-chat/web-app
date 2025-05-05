@@ -203,7 +203,7 @@ const ChatView: React.FC<Props> = (props) => {
 		useState(false);
 
 	const messagesContainer = useRef<HTMLDivElement>(null);
-	const cancelTokenSourceRef = useRef<CancelTokenSource>();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	const { waId } = useParams();
 
@@ -217,8 +217,8 @@ const ChatView: React.FC<Props> = (props) => {
 			props.retrieveContactData(waId);
 		}
 
-		// Generate a token
-		cancelTokenSourceRef.current = generateCancelToken();
+		// Generate an abort controller
+		abortControllerRef.current = new AbortController();
 
 		if (messagesContainer.current) {
 			// Scroll to bottom automatically on message
@@ -256,7 +256,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current?.cancel();
+			abortControllerRef.current?.abort();
 
 			// Cancel verifying phone number
 			verifyPhoneNumberCancelTokenSourceRef.current?.cancel();
@@ -392,10 +392,10 @@ const ChatView: React.FC<Props> = (props) => {
 
 		return () => {
 			// Cancelling ongoing requests
-			cancelTokenSourceRef.current?.cancel();
+			abortControllerRef.current?.abort();
 
-			// Generate a new token, because component is not destroyed
-			cancelTokenSourceRef.current = generateCancelToken();
+			// Generate a new abort controller, because component is not destroyed
+			abortControllerRef.current = new AbortController();
 		};
 	}, [waId]);
 
@@ -1045,8 +1045,10 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const doRetrievePerson = async (loadMessages: boolean) => {
 		try {
-			// TODO: Make request cancellable
-			const data = await retrievePerson(waId ?? '');
+			const data = await retrievePerson(
+				waId ?? '',
+				abortControllerRef.current?.signal
+			);
 			setPerson(data);
 			setExpired(isPersonExpired(data));
 
@@ -1143,14 +1145,16 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchMessages({
-				wa_id: waId ?? '',
-				limit: MESSAGES_PER_PAGE,
-				offset: offset ?? 0,
-				before_time: beforeTime,
-				since_time: sinceTime,
-			});
+			const data = await fetchMessages(
+				{
+					wa_id: waId ?? '',
+					limit: MESSAGES_PER_PAGE,
+					offset: offset ?? 0,
+					before_time: beforeTime,
+					since_time: sinceTime,
+				},
+				abortControllerRef.current?.signal
+			);
 
 			if (sinceTime && isInitialWithSinceTime === true) {
 				if (data.next) {
@@ -1341,12 +1345,14 @@ const ChatView: React.FC<Props> = (props) => {
 		sinceTimeForEvents?: number
 	) => {
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchChatAssignmentEvents({
-				wa_id: waId ?? '',
-				before_time: beforeTimeForEvents,
-				since_time: sinceTimeForEvents,
-			});
+			const data = await fetchChatAssignmentEvents(
+				{
+					wa_id: waId ?? '',
+					before_time: beforeTimeForEvents,
+					since_time: sinceTimeForEvents,
+				},
+				abortControllerRef.current?.signal
+			);
 
 			const chatAssignmentEvents: ChatMessageList = {};
 			data.results.forEach((assignmentEvent: any) => {
@@ -1387,13 +1393,15 @@ const ChatView: React.FC<Props> = (props) => {
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
 	) => {
-		// TODO: Make request cancellable
 		try {
-			const data = await fetchChatTaggingEvents({
-				wa_id: waId ?? '',
-				before_time: beforeTimeForEvents,
-				since_time: sinceTimeForEvents,
-			});
+			const data = await fetchChatTaggingEvents(
+				{
+					wa_id: waId ?? '',
+					before_time: beforeTimeForEvents,
+					since_time: sinceTimeForEvents,
+				},
+				abortControllerRef.current?.signal
+			);
 
 			const eventMessages: ChatMessageList = {};
 			data.results.forEach((taggingEvent: any) => {
@@ -1898,11 +1906,13 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const doMarkAsReceived = async (timestamp: number) => {
 		try {
-			// TODO: Make request cancellable
-			await markAsReceived({
-				customer_wa_id: waId ?? '',
-				timestamp,
-			});
+			await markAsReceived(
+				{
+					customer_wa_id: waId ?? '',
+					timestamp,
+				},
+				abortControllerRef.current?.signal
+			);
 			PubSub.publish(EVENT_TOPIC_MARKED_AS_RECEIVED, waId);
 			setCurrentNewMessages(0);
 		} catch (error: any | AxiosError) {

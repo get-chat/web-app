@@ -9,9 +9,13 @@ import {
 	Message,
 } from '@src/types/messages';
 
-export const fetchMessages = async (params: FetchMessagesRequest) => {
+export const fetchMessages = async (
+	params: FetchMessagesRequest,
+	signal?: AbortSignal
+) => {
 	const response = await axios.get<PaginatedResponse<Message>>('/messages/', {
 		params,
+		signal,
 	});
 	return response.data;
 };
@@ -24,6 +28,9 @@ export const createMessage = async (data: CreateMessageRequest) => {
 	} as ApiResponse<CreateMessageResponse>;
 };
 
-export const markAsReceived = async (data: MarkAsReceivedRequest) => {
-	return await api.post('/mark_as_received/', data);
+export const markAsReceived = async (
+	data: MarkAsReceivedRequest,
+	signal?: AbortSignal
+) => {
+	return await api.post('/mark_as_received/', data, { signal });
 };

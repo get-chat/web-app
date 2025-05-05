@@ -22,11 +22,12 @@ export const deleteChatTagging = async (id: number) => {
 };
 
 export const fetchChatTaggingEvents = async (
-	params: FetchChatTaggingEventsRequest
+	params: FetchChatTaggingEventsRequest,
+	signal?: AbortSignal
 ) => {
 	const response = await axios.get<PaginatedResponse<FetchChatTaggingEvent>>(
 		'/chat_tagging_events/',
-		{ params }
+		{ params, signal }
 	);
 	return response.data;
 };

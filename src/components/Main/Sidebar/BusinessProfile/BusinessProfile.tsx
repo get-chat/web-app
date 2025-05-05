@@ -11,14 +11,13 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
-import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
-import { AxiosError, CancelTokenSource } from 'axios';
+import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
@@ -59,7 +58,7 @@ function BusinessProfile(props: any) {
 
 	const fileInput = useRef<HTMLInputElement>();
 
-	const cancelTokenSourceRef = useRef<CancelTokenSource>();
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
 		const handleKey = (event: KeyboardEvent) => {
@@ -72,20 +71,21 @@ function BusinessProfile(props: any) {
 		document.addEventListener('keydown', handleKey);
 
 		// Generate a token
-		cancelTokenSourceRef.current = generateCancelToken();
+		abortControllerRef.current = new AbortController();
 
 		retrieveBusinessProfile();
 
 		return () => {
 			document.removeEventListener('keydown', handleKey);
-			cancelTokenSourceRef.current?.cancel();
+			abortControllerRef.current?.abort();
 		};
 	}, []);
 
 	const retrieveBusinessProfile = async () => {
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchBusinessProfileSettings();
+			const data = await fetchBusinessProfileSettings(
+				abortControllerRef.current?.signal
+			);
 
 			setAddress(data.address ?? '');
 			setDescription(data.description ?? '');
@@ -114,14 +114,16 @@ function BusinessProfile(props: any) {
 		setUpdating(true);
 
 		try {
-			// TODO: Make request cancellable
-			await partialUpdateBusinessProfileSettings({
-				address,
-				description,
-				email,
-				vertical,
-				websites: Object.values(websites),
-			});
+			await partialUpdateBusinessProfileSettings(
+				{
+					address,
+					description,
+					email,
+					vertical,
+					websites: Object.values(websites),
+				},
+				abortControllerRef.current?.signal
+			);
 			await doUpdateProfileAbout(event);
 		} catch (error: any | AxiosError) {
 			console.error(error);
@@ -131,8 +133,7 @@ function BusinessProfile(props: any) {
 
 	const retrieveProfilePhoto = async () => {
 		try {
-			// TODO: Make request cancellable
-			const data = await fetchProfilePhoto();
+			const data = await fetchProfilePhoto(abortControllerRef.current?.signal);
 			const base64 = binaryToBase64(data);
 			setProfilePhoto(base64);
 		} catch (error: any | AxiosError) {
@@ -158,10 +159,12 @@ function BusinessProfile(props: any) {
 		event.preventDefault();
 
 		try {
-			// TODO: Make request cancellable
-			await updateProfileAbout({
-				text: about,
-			});
+			await updateProfileAbout(
+				{
+					text: about,
+				},
+				abortControllerRef.current?.signal
+			);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 		} finally {
@@ -174,8 +177,7 @@ function BusinessProfile(props: any) {
 		formData.append('file_encoded', file[0]);
 
 		try {
-			// TODO: Make request cancellable
-			await updateProfilePhoto(formData);
+			await updateProfilePhoto(formData, abortControllerRef.current?.signal);
 			// Display new photo
 			await retrieveProfilePhoto();
 
@@ -190,8 +192,7 @@ function BusinessProfile(props: any) {
 
 	const doDeleteProfilePhoto = async () => {
 		try {
-			// TODO: Make request cancellable
-			await deleteProfilePhoto();
+			await deleteProfilePhoto(abortControllerRef.current?.signal);
 			//setProfilePhoto(undefined);
 			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
 		} catch (error: any | AxiosError) {
