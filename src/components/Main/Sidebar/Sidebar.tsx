@@ -91,7 +91,7 @@ import {
 	setSelectionModeEnabled,
 	setState,
 } from '@src/store/reducers/UIReducer';
-import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
+import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';

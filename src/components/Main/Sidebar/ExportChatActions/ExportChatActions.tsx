@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import styles from './ExportChatActions.module.css';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
+import * as Styled from './ExportChatActions.styles';
 
 interface Props {
 	onShowDateRange: () => void;
@@ -19,10 +19,10 @@ const ExportChatActions: React.FC<Props> = ({
 	const { selectedTags, selectedChats } = useAppSelector((state) => state.UI);
 
 	return (
-		<div className={styles.container}>
-			<h3>{t('Export Chats')}</h3>
+		<Styled.Container>
+			<Styled.Title>{t('Export Chats')}</Styled.Title>
 
-			<div className={styles.recipients}>
+			<Styled.Recipients>
 				<Trans
 					values={{
 						postProcess: 'sprintf',
@@ -34,9 +34,9 @@ const ExportChatActions: React.FC<Props> = ({
 				>
 					Selected %(contacts_count)d contact(s) and %(tags_count)d tag(s).
 				</Trans>
-			</div>
+			</Styled.Recipients>
 
-			<div className={styles.actions}>
+			<Styled.Actions>
 				<Button color="secondary" onClick={onCancel}>
 					{t('Cancel')}
 				</Button>
@@ -52,8 +52,8 @@ const ExportChatActions: React.FC<Props> = ({
 				>
 					{t('Export')}
 				</Button>
-			</div>
-		</div>
+			</Styled.Actions>
+		</Styled.Container>
 	);
 };
 
