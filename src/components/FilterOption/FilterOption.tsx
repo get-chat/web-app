@@ -1,10 +1,6 @@
 import React, { MouseEvent } from 'react';
-import styles from './FilterOption.module.css';
-import { ButtonBase, IconButton } from '@mui/material';
-import classNames from 'classnames/bind';
 import CloseIcon from '@mui/icons-material/Close';
-
-const cx = classNames.bind(styles);
+import * as Styled from './FilterOption.styles';
 
 interface Props {
 	icon?: JSX.Element;
@@ -20,22 +16,20 @@ const FilterOption: React.FC<Props> = ({
 	isActive = false,
 }) => {
 	return (
-		<ButtonBase
+		<Styled.Container
+			// @ts-ignore
 			component="div"
 			onClick={onClick}
-			className={cx({
-				container: true,
-				active: isActive,
-			})}
+			$isActive={isActive}
 		>
 			{icon}
-			<div className={styles.label}>{label}</div>
+			<Styled.Label>{label}</Styled.Label>
 			{isActive && (
-				<IconButton className={styles.actionIcon} size="small">
+				<Styled.ActionIcon size="small">
 					<CloseIcon />
-				</IconButton>
+				</Styled.ActionIcon>
 			)}
-		</ButtonBase>
+		</Styled.Container>
 	);
 };
 
