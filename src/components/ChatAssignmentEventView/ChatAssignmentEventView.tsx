@@ -1,9 +1,8 @@
 import React from 'react';
-import styles from './ChatAssignmentEventView.module.css';
 import Moment from 'react-moment';
 import { Trans, useTranslation } from 'react-i18next';
-
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
+import * as Styled from './ChatAssignmentEventView.styles';
 
 interface Props {
 	data: ChatAssignmentEvent;
@@ -15,10 +14,10 @@ const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 	const dateFormat = 'H:mm';
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.content}>
-				<div className={styles.wrapper}>
-					<div className={styles.title}>
+		<Styled.Container>
+			<Styled.Content>
+				<Styled.Wrapper>
+					<Styled.Title>
 						{data.done_by ? (
 							<div>
 								<Trans
@@ -33,7 +32,7 @@ const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 						) : (
 							<div>{t('Chat assignments were changed.')}</div>
 						)}
-					</div>
+					</Styled.Title>
 
 					{data.assigned_to_user_set && (
 						<div>
@@ -68,13 +67,13 @@ const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 					{data.assigned_group_was_cleared && (
 						<div>{t('cleared assigned group')}</div>
 					)}
-				</div>
+				</Styled.Wrapper>
 
-				<div className={styles.timestamp}>
+				<Styled.Timestamp>
 					<Moment date={data.timestamp} format={dateFormat} unix />
-				</div>
-			</div>
-		</div>
+				</Styled.Timestamp>
+			</Styled.Content>
+		</Styled.Container>
 	);
 };
 
