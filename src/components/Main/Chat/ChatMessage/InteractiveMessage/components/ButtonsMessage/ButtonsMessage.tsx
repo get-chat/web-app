@@ -1,9 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
-
-import styles from './ButtonsMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import * as Styled from './ButtonsMessage.styles';
 
 const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
@@ -11,28 +10,28 @@ const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	return (
 		<>
 			{header && (
-				<div className={styles.header}>
+				<Styled.Header>
 					<PrintMessage linkify message={header.text} />
-				</div>
+				</Styled.Header>
 			)}
 			{body && (
-				<div className={styles.body}>
+				<Styled.Body>
 					<PrintMessage linkify message={body.text} />
-				</div>
+				</Styled.Body>
 			)}
 			{footer && (
-				<div className={styles.footer}>
+				<Styled.Footer>
 					<PrintMessage linkify message={footer.text} />
-				</div>
+				</Styled.Footer>
 			)}
 			{action?.buttons && Array.isArray(action?.buttons) && (
-				<div className={styles.actions}>
+				<Styled.Actions>
 					{action?.buttons.map(({ reply }, index: number) => (
 						<Button key={reply?.id ?? index} color="primary" fullWidth disabled>
 							{reply?.title}
 						</Button>
 					))}
-				</div>
+				</Styled.Actions>
 			)}
 		</>
 	);
