@@ -30,8 +30,6 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import { clone } from '@src/helpers/ObjectHelper';
-import classNames from 'classnames/bind';
-import styles from './ChatMessage.module.css';
 import { InsertEmoticon } from '@mui/icons-material';
 import useReactions from '@src/hooks/useReactions';
 import { setState } from '@src/store/reducers/UIReducer';
@@ -52,6 +50,7 @@ import {
 } from '@src/helpers/MessageHelper';
 import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import * as Styled from './ChatMessage.styles';
 
 interface Props {
 	data: Message;
@@ -118,16 +117,11 @@ const ChatMessage: React.FC<Props> = ({
 
 	const dateFormat = 'H:mm';
 
-	const cx = classNames.bind(styles);
-
 	return (
-		<div
+		<Styled.ChatMessageOuter
 			id={'message_' + data.id}
-			className={cx({
-				chat__message__outer: true,
-				outgoing: data.from_us,
-				['messageType__' + data.waba_payload?.type]: true,
-			})}
+			$isOutgoing={data.from_us}
+			$type={data.waba_payload?.type}
 		>
 			{displayDate && (
 				<MessageDateIndicator timestamp={getMessageTimestamp(data)} />
@@ -142,12 +136,12 @@ const ChatMessage: React.FC<Props> = ({
 			{!data.assignment_event && !data.tagging_event && (
 				<div>
 					{(displaySender || displayDate) && (
-						<div className="chat__name">
+						<Styled.SenderName $isOutgoing={data.from_us}>
 							{data.from_us
 								? getSenderName(data)
 								: contactProvidersData?.[data.waba_payload?.wa_id ?? '']?.[0]
 										?.name ?? getSenderName(data)}
-						</div>
+						</Styled.SenderName>
 					)}
 
 					{data.waba_payload?.type === MessageType.sticker && (
@@ -158,55 +152,46 @@ const ChatMessage: React.FC<Props> = ({
 						/>
 					)}
 
-					<div
-						className={cx({
-							chat__message: true,
-							[styles.messageWithReaction]: reactions.length > 0,
-							['messageType__' + data.waba_payload?.type]: true,
-							hasMedia: hasMediaToPreview(data),
-							chat__outgoing: data.from_us,
-							chat__received: data.from_us && isRead(data),
-							hiddenSender: !displaySender && !displayDate,
-							chat__failed: data.is_failed,
-						})}
+					<Styled.ChatMessage
+						$type={data.waba_payload?.type ?? MessageType.none}
+						$isOutgoing={data.from_us}
+						$isReceived={data.from_us && isRead(data)}
+						$hasMedia={hasMediaToPreview(data)}
+						$hasReaction={reactions.length > 0}
+						$isSenderHidden={!displaySender && !displayDate}
+						$isFailed={data.is_failed}
 					>
 						{isActionsEnabled && (
-							<div
-								className={cx({
-									[styles.actions]: true,
-									[styles.right]: !data.from_us,
-									[styles.nonText]:
-										data.waba_payload?.type !== MessageType.text,
-									[styles.isExpired]: !!isExpired,
-								})}
+							<Styled.Actions
+								$isRight={!data.from_us}
+								$isNonText={data.waba_payload?.type !== MessageType.text}
+								$isExpired={!!isExpired}
 							>
 								{!isExpired && (
-									<div
-										className={styles.action}
+									<Styled.Action
 										onClick={(event) => onQuickReactionsClick?.(event, data)}
 									>
 										<InsertEmoticon />
-									</div>
+									</Styled.Action>
 								)}
 
 								{((data.from_us &&
 									data.waba_payload?.type === MessageType.text) ||
 									data.waba_payload?.type === MessageType.audio) && (
-									<div
-										className={styles.action}
+									<Styled.Action
 										onClick={(event) => onOptionsClick?.(event, data)}
 									>
 										<ExpandMoreIcon />
-									</div>
+									</Styled.Action>
 								)}
-							</div>
+							</Styled.Actions>
 						)}
 
 						{data.context?.forwarded && (
-							<div className={styles.forwarded}>
+							<Styled.Forwarded>
 								<ReplyIcon />
 								<span>{t('Forwarded')}</span>
-							</div>
+							</Styled.Forwarded>
 						)}
 
 						{data.context && (
@@ -369,28 +354,27 @@ const ChatMessage: React.FC<Props> = ({
 						</span>
 
 						{reactionsWithCount && reactionsWithCount.length > 0 && (
-							<div
-								className={styles.reactions}
+							<Styled.Reactions
 								onClick={(event) => onReactionDetailsClick?.(event, data)}
 							>
 								{reactionsWithCount.map((item) => (
-									<div key={item.emoji} className={styles.reaction}>
+									<Styled.Reaction key={item.emoji}>
 										<PrintMessage message={item.emoji} />
-									</div>
+									</Styled.Reaction>
 								))}
 								{reactionsWithCount.length > 1 && (
-									<div className={styles.reactionCount}>
+									<Styled.ReactionCount>
 										{reactionsWithCount.length}
-									</div>
+									</Styled.ReactionCount>
 								)}
-							</div>
+							</Styled.Reactions>
 						)}
 
 						<div style={{ clear: 'both' }} />
-					</div>
+					</Styled.ChatMessage>
 				</div>
 			)}
-		</div>
+		</Styled.ChatMessageOuter>
 	);
 };
 
