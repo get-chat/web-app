@@ -167,7 +167,7 @@ const Main: React.FC = () => {
 		setSuccessVisible(true);
 	};
 
-	const displayError = (error: AxiosError) => {
+	const displayError = (error: AxiosError | any) => {
 		if (!axios.isCancel(error)) {
 			setErrorMessage(
 				error.response?.data?.reason ??
