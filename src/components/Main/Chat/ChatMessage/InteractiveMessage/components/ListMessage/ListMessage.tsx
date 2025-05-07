@@ -1,38 +1,37 @@
 import React from 'react';
-
-import styles from './ListMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import * as Styled from './ListMessage.styles';
 
 const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
 	const sections = action?.sections;
 
 	return (
-		<div className={styles.message}>
+		<Styled.Message>
 			{header && (
-				<div className={styles.header}>
+				<Styled.Header>
 					<PrintMessage linkify message={header.text} />
-				</div>
+				</Styled.Header>
 			)}
 			{body && (
-				<div className={styles.body}>
+				<Styled.Body>
 					<PrintMessage linkify message={body.text} />
-				</div>
+				</Styled.Body>
 			)}
 			{footer && (
-				<div className={styles.footer}>
+				<Styled.Footer>
 					<PrintMessage linkify message={footer.text} />
-				</div>
+				</Styled.Footer>
 			)}
 
 			{sections && Array.isArray(sections) && (
-				<div className={styles.actions}>
-					<ul className={styles.list}>
+				<Styled.Actions>
+					<Styled.List>
 						{sections.map(({ title, rows }) => (
 							<li key={title}>
-								<h3 className={styles.title}>{title}</h3>
-								<ul className={styles.list}>
+								<Styled.Title>{title}</Styled.Title>
+								<Styled.List>
 									{rows.map(
 										({
 											id,
@@ -45,17 +44,17 @@ const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 										}) => (
 											<li key={id}>
 												<p>{title}</p>
-												<p className={styles.description}>{description}</p>
+												<Styled.Description>{description}</Styled.Description>
 											</li>
 										)
 									)}
-								</ul>
+								</Styled.List>
 							</li>
 						))}
-					</ul>
-				</div>
+					</Styled.List>
+				</Styled.Actions>
 			)}
-		</div>
+		</Styled.Message>
 	);
 };
 

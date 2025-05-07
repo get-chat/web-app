@@ -1,28 +1,30 @@
-.message {
+import styled from 'styled-components';
+
+export const Message = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
-}
+`;
 
-.actions {
+export const Actions = styled.div`
 	display: flex;
 	flex-direction: column;
-}
+`;
 
-.header {
+export const Header = styled.div`
 	font-weight: 600;
-}
+`;
 
-.body {
+export const Body = styled.div`
 	font-weight: normal;
-}
+`;
 
-.footer {
+export const Footer = styled.div`
 	opacity: 0.5;
 	margin-bottom: 5px;
-}
+`;
 
-.list {
+export const List = styled.ul`
 	display: flex;
 	flex-direction: column;
 	list-style: none;
@@ -30,14 +32,16 @@
 	padding: 0;
 	width: 100%;
 	gap: 5px;
-}
+`;
 
-.title {
+export const Title = styled.h3`
 	font-size: 1em;
 	border-bottom: 1px solid #ccc;
-}
+	margin: 0;
+`;
 
-.description {
+export const Description = styled.p`
 	opacity: 0.5;
 	font-size: 0.8em;
-}
+	margin: 0;
+`;
