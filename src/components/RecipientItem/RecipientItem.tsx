@@ -36,7 +36,6 @@ const RecipientItem: React.FC<Props> = ({
 				setPhoneNumbersVisible((prevState) => !prevState);
 			}
 		} else {
-			// @ts-ignore
 			window.displayCustomError('This contact has no phone number.');
 		}
 	};

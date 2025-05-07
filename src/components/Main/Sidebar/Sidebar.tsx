@@ -767,9 +767,7 @@ const Sidebar: React.FC<Props> = ({
 
 	const goToSettings = () => {
 		setAnchorEl(null);
-		// @ts-ignore
 		if (window.AndroidWebInterface) {
-			// @ts-ignore
 			window.AndroidWebInterface.goToSettings();
 		}
 	};

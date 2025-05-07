@@ -23,13 +23,11 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 				if (e.toString().includes('AbortError')) {
 					console.log('Ignored AbortError.');
 				} else {
-					// @ts-ignore
 					window.displayCustomError(e.toString());
 				}
 			}
 		} else if (navigator.clipboard) {
 			await navigator.clipboard.writeText(mapURL);
-			// @ts-ignore
 			window.displaySuccess('Copied!');
 		} else {
 			console.log('HTTPS is required for this feature!');

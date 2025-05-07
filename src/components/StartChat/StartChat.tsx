@@ -48,7 +48,6 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 
 	const verifyContact = (phoneNumber: string, data?: Recipient) => {
 		const failureCallback = () => {
-			// @ts-ignore
 			window.displayCustomError(
 				'There is no WhatsApp account connected to this phone number.'
 			);

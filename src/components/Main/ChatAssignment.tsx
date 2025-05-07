@@ -88,7 +88,6 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			if (error?.response?.status === 403) {
-				// @ts-ignore
 				window.displayCustomError(
 					'This chat could not be assigned as its assignments have been changed by another user recently.'
 				);

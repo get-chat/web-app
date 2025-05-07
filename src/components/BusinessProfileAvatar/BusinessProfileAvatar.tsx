@@ -28,7 +28,6 @@ const BusinessProfileAvatar: React.FC<Props> = ({ className, onClick }) => {
 			// Attempt to parse the string as JSON
 			const parsedError = JSON.parse(responseText);
 
-			// @ts-ignore
 			window.displayCustomError(parsedError.reason ?? 'An error has occurred.');
 		} catch (e) {
 			console.error('Error parsing response:', e);
