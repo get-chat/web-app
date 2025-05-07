@@ -9,9 +9,9 @@ import {
 	storeCurrentApiBaseURL,
 } from '@src/helpers/StorageHelper';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
-import styles from './InboxSelectorDialog.module.css';
 import { Button, DialogActions, ListItemButton } from '@mui/material';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import * as Styled from './InboxSelectorDialog.styles';
 
 interface Props {
 	isVisible: boolean;
@@ -59,22 +59,20 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 		<Dialog open={isVisible} onClose={close}>
 			<DialogTitle>{t('Select an inbox')}</DialogTitle>
 			<DialogContent>
-				<div className={styles.listWrapper}>
-					<div className={styles.list}>
+				<Styled.ListWrapper>
+					<Styled.List>
 						{urls.map((item, index) => (
 							<ListItemButton key={index} onClick={() => onSelect(item)}>
 								<div>
 									<div>{prepareURLForDisplay(item)}</div>
 									{item === current && (
-										<div className={styles.current}>
-											{t('Your current inbox')}
-										</div>
+										<Styled.Current>{t('Your current inbox')}</Styled.Current>
 									)}
 								</div>
 							</ListItemButton>
 						))}
-					</div>
-				</div>
+					</Styled.List>
+				</Styled.ListWrapper>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={close} color="secondary">
