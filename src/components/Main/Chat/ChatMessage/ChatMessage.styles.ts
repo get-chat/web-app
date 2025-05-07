@@ -47,22 +47,15 @@ export const Actions = styled.div<{
 }>`
 	position: absolute;
 	top: 4px;
-	left: 0;
+	left: ${(props) => (props.$isRight ? 'unset' : '0')};
+	right: ${(props) => (props.$isRight ? '0' : 'unset')};
 	opacity: 0;
 	display: flex;
 	gap: 5px;
 	transition: all 0.5s;
 	margin: 0 -10px;
-
-	&:not(.right) {
-		transform: translate(-100%, 0);
-	}
-
-	&.right {
-		left: unset;
-		right: 0;
-		transform: translate(100%, 0);
-	}
+	transform: ${(props) =>
+		props.$isRight ? 'translate(100%, 0)' : 'translate(-100%, 0)'};
 `;
 
 export const Action = styled.div`
