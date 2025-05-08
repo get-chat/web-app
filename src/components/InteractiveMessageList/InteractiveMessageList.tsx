@@ -1,8 +1,8 @@
-import styles from './InteractiveMessageList.module.css';
-import { Button } from '@mui/material';
 import React, { useState } from 'react';
+import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
+import { List, Item, Description } from './InteractiveMessageList.styles';
 
 export interface InteractiveParameter {
 	key: string;
@@ -235,9 +235,9 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 		<>
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
-					<div className={'interactiveMessages ' + styles.list}>
+					<List>
 						{INTERACTIVE_MESSAGES.map((item, index) => (
-							<div className={styles.item} key={index}>
+							<Item key={index}>
 								<Button
 									onClick={() => {
 										setSelectedDescribedInteractive(item);
@@ -248,15 +248,14 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 								>
 									<div>
 										<h4>{t(item.title)}</h4>
-										<div
-											className={styles.description}
+										<Description
 											dangerouslySetInnerHTML={{ __html: t(item.description) }}
 										/>
 									</div>
 								</Button>
-							</div>
+							</Item>
 						))}
-					</div>
+					</List>
 				</div>
 			</div>
 
