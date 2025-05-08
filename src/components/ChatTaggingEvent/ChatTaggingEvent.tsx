@@ -1,9 +1,15 @@
 import React from 'react';
-import styles from './ChatTaggingEvent.module.css';
 import Moment from 'react-moment';
 import { Trans } from 'react-i18next';
 import SellIcon from '@mui/icons-material/Sell';
 import { ChatTagging } from '@src/types/messages';
+import {
+	Container,
+	Content,
+	Wrapper,
+	Title,
+	Timestamp,
+} from './ChatTaggingEvent.styles';
 
 interface Props {
 	data: ChatTagging;
@@ -13,10 +19,10 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 	const dateFormat = 'H:mm';
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.content}>
-				<div className={styles.wrapper}>
-					<div className={styles.title}>
+		<Container>
+			<Content>
+				<Wrapper>
+					<Title>
 						{data.done_by ? (
 							<div>
 								<Trans
@@ -56,14 +62,14 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 								</Trans>
 							</div>
 						)}
-					</div>
-				</div>
+					</Title>
+				</Wrapper>
 
-				<div className={styles.timestamp}>
+				<Timestamp>
 					<Moment date={data.timestamp} format={dateFormat} unix />
-				</div>
-			</div>
-		</div>
+				</Timestamp>
+			</Content>
+		</Container>
 	);
 };
 

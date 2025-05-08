@@ -1,18 +1,20 @@
-.container {
+import styled from 'styled-components';
+
+export const Container = styled.div`
 	display: flex;
 	justify-content: center;
 	margin-bottom: 25px;
-}
+`;
 
-.content {
+export const Content = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	border-radius: 10px;
 	font-size: 12px;
-}
+`;
 
-.wrapper {
+export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -22,23 +24,22 @@
 	padding: 5px 10px;
 	border-radius: 10px;
 	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
-}
+`;
 
-.title {
-}
+export const Title = styled.div`
+	.MuiSvgIcon-root {
+		height: 16px !important;
+		width: 16px !important;
+		margin-right: 3px !important;
+	}
 
-.title :global(.MuiSvgIcon-root) {
-	height: 16px !important;
-	width: 16px !important;
-	margin-right: 3px !important;
-}
+	> div {
+		display: inline-block;
+	}
+`;
 
-.title > div {
-	display: inline-block;
-}
-
-.timestamp {
+export const Timestamp = styled.div`
 	color: rgba(0, 0, 45, 0.6);
 	margin-top: 5px;
 	font-size: x-small;
-}
+`;
