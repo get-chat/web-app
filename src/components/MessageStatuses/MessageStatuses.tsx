@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './MessageStatuses.module.css';
 import { Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +17,7 @@ import {
 	getSenderName,
 	hasAnyStatus,
 } from '@src/helpers/MessageHelper';
+import * as Styled from './MessageStatuses.styles';
 
 interface Props {
 	message?: Message;
@@ -34,18 +34,18 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 	});
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.header}>
+		<Styled.Container>
+			<Styled.Header>
 				<IconButton onClick={close} size="large">
 					<CloseIcon />
 				</IconButton>
 
 				<h3>{t('Message Information')}</h3>
-			</div>
-			<div className={styles.body}>
+			</Styled.Header>
+			<Styled.Body>
 				{message && (
 					<>
-						<div className={styles.preview}>
+						<Styled.Preview>
 							<ChatMessage
 								data={message}
 								templateData={
@@ -54,19 +54,17 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 										: undefined
 								}
 							/>
-						</div>
+						</Styled.Preview>
 
 						{reactions.length > 0 && (
-							<div className={styles.section}>
+							<Styled.Section>
 								<h5>{t('Reactions')}</h5>
 								{reactions
 									.filter((item) => !!item.waba_payload?.reaction?.emoji)
 									.map((reaction) => (
-										<div className={styles.reaction}>
-											<div className={styles.sender}>
-												{getSenderName(reaction)}
-											</div>
-											<div className={styles.timestamp}>
+										<Styled.Reaction key={reaction.id}>
+											<div className="sender">{getSenderName(reaction)}</div>
+											<div className="timestamp">
 												<Moment
 													date={getMessageTimestamp(reaction)}
 													calendar={CALENDAR_SHORT}
@@ -77,66 +75,66 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 												message={reaction.waba_payload?.reaction?.emoji ?? ''}
 												smallEmoji
 											/>
-										</div>
+										</Styled.Reaction>
 									))}
-							</div>
+							</Styled.Section>
 						)}
 
-						<div className={styles.section}>
+						<Styled.Section>
 							{message.waba_statuses?.sent && (
 								<>
-									<div className={styles.subSection}>
-										<div className={styles.subSectionTitle}>
+									<Styled.SubSection>
+										<Styled.SubSectionTitle>
 											<DoneIcon color="inherit" />
 											<h5>{t('Sent at')}</h5>
-										</div>
+										</Styled.SubSectionTitle>
 										<Moment
 											date={message.waba_statuses.sent}
 											format={dateFormat}
 											unix
-											className={styles.subSectionText}
+											className={Styled.SubSectionText}
 										/>
-									</div>
+									</Styled.SubSection>
 								</>
 							)}
 							{message.waba_statuses?.delivered && (
 								<>
 									<Divider />
-									<div className={styles.subSection}>
-										<div className={styles.subSectionTitle}>
+									<Styled.SubSection>
+										<Styled.SubSectionTitle>
 											<DoneAll color="inherit" />
 											<h5>{t('Delivered at')}</h5>
-										</div>
+										</Styled.SubSectionTitle>
 										<Moment
 											date={message.waba_statuses.delivered}
 											format={dateFormat}
 											unix
-											className={styles.subSectionText}
+											className={Styled.SubSectionText}
 										/>
-									</div>
+									</Styled.SubSection>
 								</>
 							)}
 							{message.waba_statuses?.read && (
 								<>
 									<Divider />
-									<div className={styles.subSection}>
-										<div className={styles.subSectionTitle}>
-											<DoneAll color="inherit" className={styles.blueIcon} />
+									<Styled.SubSection>
+										<Styled.SubSectionTitle>
+											<Styled.BlueIcon color="inherit" />
 											<h5>{t('Read at')}</h5>
-										</div>
+										</Styled.SubSectionTitle>
 										<Moment
 											date={message.waba_statuses.read}
 											format={dateFormat}
 											unix
-											className={styles.subSectionText}
+											className={Styled.SubSectionText}
 										/>
-									</div>
+									</Styled.SubSection>
 								</>
 							)}
-						</div>
+						</Styled.Section>
 
 						{(message.waba_payload?.errors?.length ?? 0) > 0 && (
-							<div className={styles.section}>
+							<Styled.Section>
 								<h5>
 									{t(
 										hasAnyStatus(message)
@@ -145,12 +143,12 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 									)}
 								</h5>
 								<ChatMessageErrors data={message} />
-							</div>
+							</Styled.Section>
 						)}
 					</>
 				)}
-			</div>
-		</div>
+			</Styled.Body>
+		</Styled.Container>
 	);
 };
 
