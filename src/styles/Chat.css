@@ -378,6 +378,7 @@ a.chat__document:hover {
 .templateMessages .templateMessageWrapper .chat__message,
 .savedResponses .savedResponseWrapper .chat__message {
 	margin-bottom: 0 !important;
+	align-self: center;
 }
 
 .templateMessageWrapper,

@@ -11,6 +11,8 @@ import { getObjLength } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
+import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
+import { MessageType } from '@src/types/messages';
 
 export type Props = {
 	sendCustomTextMessage: (text: string) => void;
@@ -54,12 +56,16 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 
 					{savedResponses.map((savedResponse) => (
 						<div key={savedResponse.id} className="savedResponseWrapper">
-							<div className="chat__savedResponse chat__message chat__outgoing">
+							<StyledChatMessage.ChatMessage
+								$type={MessageType.text}
+								$isOutgoing={true}
+								className="chat__savedResponse"
+							>
 								{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
 								<div className="savedResponse__message">
 									{savedResponse.text}
 								</div>
-							</div>
+							</StyledChatMessage.ChatMessage>
 
 							<Button
 								onClick={() => sendCustomTextMessage(savedResponse.text)}
