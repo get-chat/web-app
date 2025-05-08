@@ -1,9 +1,15 @@
 import React from 'react';
 import { Trans } from 'react-i18next';
-
-import styles from './ProductMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import {
+	Actions,
+	Header,
+	Body,
+	Footer,
+	List,
+	Item,
+} from './ProductMessage.styles';
 
 const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
@@ -14,14 +20,14 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 
 	return (
 		<>
-			<div className={styles.actions}>
+			<Actions>
 				{action.sections ? (
-					<ul className={styles.list}>
+					<List>
 						{action.sections.map((section, idx) => (
-							<li className={styles.item} key={idx}>
+							<Item key={idx}>
 								<div>{section.title}</div>
 								{section.product_items && (
-									<ul className={styles.list}>
+									<List>
 										{section.product_items.map(
 											({
 												product_retailer_id,
@@ -40,11 +46,11 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 												</li>
 											)
 										)}
-									</ul>
+									</List>
 								)}
-							</li>
+							</Item>
 						))}
-					</ul>
+					</List>
 				) : (
 					<>
 						<div>
@@ -69,21 +75,21 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 						</div>
 					</>
 				)}
-			</div>
+			</Actions>
 			{header && (
-				<div className={styles.header}>
+				<Header>
 					<PrintMessage linkify message={header.text} />
-				</div>
+				</Header>
 			)}
 			{body && (
-				<div className={styles.body}>
+				<Body>
 					<PrintMessage linkify message={body.text} />
-				</div>
+				</Body>
 			)}
 			{footer && (
-				<div className={styles.footer}>
+				<Footer>
 					<PrintMessage linkify message={footer.text} />
-				</div>
+				</Footer>
 			)}
 		</>
 	);
