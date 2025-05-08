@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
+import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
+import { MessageType } from '@src/types/messages';
 
 interface Props {
 	onClick: (template: Template) => void;
@@ -77,7 +79,10 @@ const TemplatesList: React.FC<Props> = ({
 
 				{Object.entries(templates).map((template) => (
 					<div key={template[0]} className="templateMessageWrapper">
-						<div className="chat__message chat__outgoing messageType__template">
+						<StyledChatMessage.ChatMessage
+							$type={MessageType.template}
+							$isOutgoing={true}
+						>
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
 							<div className="templateMessage__message">
 								<h4>{template[1].name}</h4>
@@ -92,7 +97,7 @@ const TemplatesList: React.FC<Props> = ({
 									)
 								)}
 							</div>
-						</div>
+						</StyledChatMessage.ChatMessage>
 						{template[1].status === 'approved' && (
 							<Button
 								onClick={() => {
