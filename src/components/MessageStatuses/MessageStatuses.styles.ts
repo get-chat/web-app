@@ -51,7 +51,7 @@ export const Preview = styled.div`
 	box-shadow: 0 1px 3px var(--shadow-light);
 	margin-bottom: 10px;
 
-	.chat__message.hiddenSender {
+	.chat__message {
 		margin-top: 0;
 		margin-bottom: 0;
 	}

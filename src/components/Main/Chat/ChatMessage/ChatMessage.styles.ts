@@ -196,5 +196,9 @@ export const ChatMessage = styled.div.attrs({
 		css`
 			margin-left: auto;
 			background-color: #dcf8c6;
+
+			& .chat__message__info {
+				cursor: pointer;
+			}
 		`}
 `;
