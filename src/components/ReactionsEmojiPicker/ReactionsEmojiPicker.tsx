@@ -1,11 +1,10 @@
 import React from 'react';
-import styles from './ReactionsEmojiPicker.module.css';
-import { Menu } from '@mui/material';
 // @ts-ignore
 import { Emoji, NimblePicker } from 'emoji-mart';
 import { EMOJI_SET, EMOJI_SHEET_SIZE } from '@src/Constants';
 import data from 'emoji-mart/data/facebook.json';
 import { Message } from '@src/types/messages';
+import * as Styled from './ReactionsEmojiPicker.styles';
 
 interface Props {
 	message: Message | undefined;
@@ -33,7 +32,7 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 	};
 
 	return (
-		<Menu
+		<Styled.StyledMenu
 			transitionDuration={0}
 			anchorEl={anchorElement}
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
@@ -42,9 +41,8 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 			onClose={() => setAnchorElement(undefined)}
 			elevation={0}
 			disableAutoFocusItem={true}
-			className={styles.menu}
 		>
-			<div className={styles.emojiPicker}>
+			<Styled.EmojiPickerContainer>
 				<NimblePicker
 					set={EMOJI_SET}
 					sheetSize={EMOJI_SHEET_SIZE}
@@ -53,8 +51,8 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 					emojiSize={32}
 					onSelect={handleEmojiSelect}
 				/>
-			</div>
-		</Menu>
+			</Styled.EmojiPickerContainer>
+		</Styled.StyledMenu>
 	);
 };
 
