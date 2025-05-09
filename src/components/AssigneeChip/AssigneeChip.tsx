@@ -64,6 +64,10 @@ const AssigneeChip: React.FC<Props> = ({
 				PopperProps={{ style: { zIndex: 1 } }}
 			>
 				<Styled.Container
+					className={`
+          ${isActionable ? 'clickable' : ''}
+          ${Boolean(menuAnchorEl) ? 'menuOpen' : ''}
+        `}
 					clickable={isActionable}
 					onClick={isActionable ? displayMenu : undefined}
 				>
