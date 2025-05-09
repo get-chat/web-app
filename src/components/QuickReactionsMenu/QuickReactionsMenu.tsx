@@ -1,9 +1,8 @@
 import React from 'react';
 import PrintMessage from '@src/components/PrintMessage';
-import { Menu } from '@mui/material';
-import styles from './QuickReactionsMenu.module.css';
 import AddIcon from '@mui/icons-material/Add';
 import { Message } from '@src/types/messages';
+import * as Styled from './QuickReactionsMenu.styles';
 
 interface Props {
 	message: Message | undefined;
@@ -27,7 +26,7 @@ const QuickReactionsMenu: React.FC<Props> = ({
 	};
 
 	return (
-		<Menu
+		<Styled.StyledMenu
 			anchorEl={anchorElement}
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
 			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
@@ -35,9 +34,8 @@ const QuickReactionsMenu: React.FC<Props> = ({
 			onClose={() => setAnchorElement(undefined)}
 			elevation={0}
 			disableAutoFocusItem={true}
-			className={styles.menu}
 		>
-			<div className={styles.reactions}>
+			<Styled.ReactionsContainer>
 				{EMOJIS.map((emoji) => (
 					<div
 						key={emoji}
@@ -59,8 +57,8 @@ const QuickReactionsMenu: React.FC<Props> = ({
 				>
 					<AddIcon />
 				</div>
-			</div>
-		</Menu>
+			</Styled.ReactionsContainer>
+		</Styled.StyledMenu>
 	);
 };
 
