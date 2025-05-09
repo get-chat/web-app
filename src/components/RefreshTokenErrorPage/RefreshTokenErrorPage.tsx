@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import styles from './RefreshTokenErrorPage.module.css';
 import { Button } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import * as Styled from './RefreshTokenErrorPage.styles';
 
 const RefreshTokenErrorPage: React.FC = () => {
 	const navigate = useNavigate();
@@ -24,8 +24,8 @@ const RefreshTokenErrorPage: React.FC = () => {
 	});
 
 	return (
-		<div className={styles.container}>
-			<Alert severity="error" className={styles.error}>
+		<Styled.Container>
+			<Alert severity="error" className={Styled.ErrorAlert}>
 				<AlertTitle>{t('Failed to log in')}</AlertTitle>
 				{t(reason)}
 			</Alert>
@@ -35,7 +35,7 @@ const RefreshTokenErrorPage: React.FC = () => {
 					{t('Log in with password instead')}
 				</Button>
 			</div>
-		</div>
+		</Styled.Container>
 	);
 };
 
