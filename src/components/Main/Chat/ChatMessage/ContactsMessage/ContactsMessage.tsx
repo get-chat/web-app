@@ -1,14 +1,9 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import { ButtonBase } from '@mui/material';
-
-import styles from './ContactsMessage.module.css';
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
-import CustomAvatar from '@src/components/CustomAvatar';
-import ChatIcon from '@mui/icons-material/Chat';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { Message } from '@src/types/messages';
+import * as Styled from './ContactsMessage.styles';
 
 interface Props {
 	data: Message;
@@ -17,7 +12,7 @@ interface Props {
 const ContactsMessage: React.FC<Props> = ({ data }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const contacts = data?.waba_payload?.contacts; // || data?.resend_payload;
+	const contacts = data?.waba_payload?.contacts;
 
 	const handleClick = (targetWaId: string) => {
 		const waId = prepareWaId(targetWaId);
@@ -25,46 +20,42 @@ const ContactsMessage: React.FC<Props> = ({ data }) => {
 	};
 
 	return (
-		<div className={styles.root}>
+		<Styled.Root>
 			{contacts?.map((contact: any, contactIndex: number) => (
-				<div key={contactIndex} className={styles.item}>
-					<div className={styles.header}>
+				<Styled.Item key={contactIndex}>
+					<Styled.Header>
 						<>
-							<CustomAvatar
-								className={styles.avatar}
-								generateBgColorBy={contact.name?.formatted_name}
-							>
+							<Styled.Avatar generateBgColorBy={contact.name?.formatted_name}>
 								{generateInitialsHelper(contact.name?.formatted_name ?? '')}
-							</CustomAvatar>
-							<div key={contactIndex} className={styles.name}>
+							</Styled.Avatar>
+							<Styled.Name key={contactIndex}>
 								{contact.name?.formatted_name ?? ''}
-							</div>
+							</Styled.Name>
 						</>
-					</div>
-					<div className={styles.footer}>
+					</Styled.Header>
+					<Styled.Footer>
 						{contact.phones?.map((phoneObj: any, phoneObjIndex: number) => (
-							<ButtonBase
+							<Styled.MessageButton
 								key={phoneObjIndex}
-								className={styles.messageButton}
 								onClick={() => handleClick(phoneObj.wa_id)}
 							>
-								<ChatIcon className={styles.messageButtonIcon} />
-								<div className={styles.phoneNumberContainer}>
+								<Styled.MessageButtonIcon />
+								<Styled.PhoneNumberContainer>
 									{phoneObj?.type && (
-										<div className={styles.phoneNumberType}>
+										<Styled.PhoneNumberType>
 											{phoneObj.type}
-										</div>
+										</Styled.PhoneNumberType>
 									)}
-									<div className={styles.phoneNumber}>
+									<Styled.PhoneNumber>
 										{phoneObj.phone ?? phoneObj.wa_id}
-									</div>
-								</div>
-							</ButtonBase>
+									</Styled.PhoneNumber>
+								</Styled.PhoneNumberContainer>
+							</Styled.MessageButton>
 						))}
-					</div>
-				</div>
+					</Styled.Footer>
+				</Styled.Item>
 			))}
-		</div>
+		</Styled.Root>
 	);
 };
 
