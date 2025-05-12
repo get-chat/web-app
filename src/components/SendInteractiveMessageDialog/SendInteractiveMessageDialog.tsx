@@ -5,18 +5,26 @@ import { Button, TextField } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './SendInteractiveMessageDialog.module.css';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import {
 	DescribedInteractive,
 	InteractiveParameter,
 } from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
-import Alert from '@mui/material/Alert';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Message } from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
+import {
+	Advanced,
+	AdvancedToggle,
+	Container,
+	Description,
+	HelperText,
+	PreviewContainer,
+	StyledAlert,
+	TextFieldWrapper,
+} from './SendInteractiveMessageDialog.styles';
 
 export type Props = {
 	isVisible: boolean;
@@ -66,12 +74,10 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			return;
 		}
 
-		// Removing header if text is empty
 		if (cloneObj.header && isEmptyString(cloneObj.header.text)) {
 			delete cloneObj.header;
 		}
 
-		// Removing footer if text is empty
 		if (cloneObj.footer && isEmptyString(cloneObj.footer.text)) {
 			delete cloneObj.footer;
 		}
@@ -85,7 +91,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			return '';
 		}
 
-		const replacedStr = str.replace(/[._]/g, ' '); // Replace dots and underscores with spaces
+		const replacedStr = str.replace(/[._]/g, ' ');
 		return replacedStr.charAt(0).toUpperCase() + replacedStr.slice(1);
 	}
 
@@ -95,15 +101,14 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	function setNestedValue(obj: any, path: string, value: any) {
 		const keys = path.split('.');
-		const lastKey = keys.pop(); // Get the last key (e.g., 'display_text')
+		const lastKey = keys.pop();
 
 		const cloneObj = JSON.parse(JSON.stringify(obj));
 
-		// Traverse the object to the second-to-last key
 		const nestedObj = keys.reduce((acc, key) => acc && acc[key], cloneObj);
 
 		if (nestedObj && lastKey) {
-			nestedObj[lastKey] = value; // Set the new value
+			nestedObj[lastKey] = value;
 		}
 
 		return cloneObj;
@@ -125,7 +130,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	const renderInput = (parameter: InteractiveParameter) => (
-		<div className={styles.textFieldWrapper} key={parameter.key}>
+		<TextFieldWrapper key={parameter.key}>
 			<TextField
 				variant="standard"
 				value={getNestedValue(payload, parameter.key)}
@@ -146,14 +151,13 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				}
 			/>
 			{parameter.description && (
-				<div
-					className={styles.helperText}
+				<HelperText
 					dangerouslySetInnerHTML={{
 						__html: t(parameter.description),
 					}}
 				/>
 			)}
-		</div>
+		</TextFieldWrapper>
 	);
 
 	return (
@@ -163,22 +167,21 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			</DialogTitle>
 			<DialogContent>
 				{describedInteractive && (
-					<div className={styles.container}>
+					<Container>
 						<div>
-							<div
-								className={styles.description}
+							<Description
 								dangerouslySetInnerHTML={{
 									__html: t(describedInteractive.description),
 								}}
 							/>
 							{describedInteractive.warning && (
-								<Alert className={styles.alert} severity="warning">
+								<StyledAlert severity="warning">
 									<div
 										dangerouslySetInnerHTML={{
 											__html: t(describedInteractive.warning),
 										}}
 									/>
-								</Alert>
+								</StyledAlert>
 							)}
 							<div>
 								{payload &&
@@ -191,8 +194,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 								describedInteractive.parameters.filter(
 									(parameter) => parameter.advanced
 								).length > 0 && (
-									<div
-										className={styles.advancedToggle}
+									<AdvancedToggle
 										onClick={() =>
 											setIsShowingAdvanced((prevState) => !prevState)
 										}
@@ -207,30 +209,29 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 												? 'Hide advanced settings'
 												: 'Show advanced settings'
 										)}
-									</div>
+									</AdvancedToggle>
 								)}
-							<div
-								className={styles.advanced}
+							<Advanced
 								style={{ display: isShowingAdvanced ? 'block' : 'none' }}
 							>
 								{payload &&
 									describedInteractive.parameters
 										.filter((parameter) => parameter.advanced)
 										.map((parameter) => renderInput(parameter))}
-							</div>
+							</Advanced>
 
 							{describedInteractive.info && (
-								<Alert className={styles.alert} severity="info">
+								<StyledAlert severity="info">
 									<div
 										dangerouslySetInnerHTML={{
 											__html: t(describedInteractive.info),
 										}}
 									/>
-								</Alert>
+								</StyledAlert>
 							)}
 						</div>
 
-						<div className={styles.previewContainer}>
+						<PreviewContainer>
 							{messageData && (
 								<ChatMessage
 									data={messageData}
@@ -238,8 +239,8 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									isInfoClickable={false}
 								/>
 							)}
-						</div>
-					</div>
+						</PreviewContainer>
+					</Container>
 				)}
 			</DialogContent>
 			<DialogActions>
