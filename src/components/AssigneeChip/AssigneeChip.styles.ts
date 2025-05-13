@@ -3,7 +3,7 @@ import { ButtonBase, IconButton, Menu } from '@mui/material';
 
 export const Container = styled(ButtonBase).attrs({
 	className: 'assigneeChip',
-})<{ clickable?: boolean }>`
+})<{ $isClickable?: boolean }>`
 	background-color: var(--gray-light) !important;
 	border-radius: 10px !important;
 	font-size: 12px;
@@ -11,7 +11,7 @@ export const Container = styled(ButtonBase).attrs({
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
-	cursor: ${({ clickable }) => (clickable ? 'pointer' : 'default')};
+	cursor: ${({ $isClickable }) => ($isClickable ? 'pointer' : 'default')};
 
 	.MuiSvgIcon-root {
 		color: var(--default-text-color) !important;
@@ -21,8 +21,8 @@ export const Container = styled(ButtonBase).attrs({
 	}
 `;
 
-export const Name = styled.span<{ wider?: boolean }>`
-	max-width: ${({ wider }) => (wider ? '110px' : '55px')};
+export const Name = styled.span<{ $isWider?: boolean }>`
+	max-width: ${({ $isWider }) => ($isWider ? '110px' : '55px')};
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;

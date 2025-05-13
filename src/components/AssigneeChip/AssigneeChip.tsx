@@ -65,10 +65,9 @@ const AssigneeChip: React.FC<Props> = ({
 			>
 				<Styled.Container
 					className={`
-          ${isActionable ? 'clickable' : ''}
           ${Boolean(menuAnchorEl) ? 'menuOpen' : ''}
         `}
-					clickable={isActionable}
+					$isClickable={isActionable}
 					onClick={isActionable ? displayMenu : undefined}
 				>
 					<Styled.Avatar
@@ -86,7 +85,7 @@ const AssigneeChip: React.FC<Props> = ({
 					</Styled.Avatar>
 
 					{(!dense || name) && (
-						<Styled.Name wider={isActionable && !!secondaryName}>
+						<Styled.Name $isWider={isActionable && !!secondaryName}>
 							{name ?? (!dense ? t('Unassigned') : '')}
 							{!dense && secondaryName && ', ' + secondaryName}
 						</Styled.Name>
