@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 import BoltIcon from '@mui/icons-material/Bolt';
 
@@ -29,7 +29,7 @@ export const Command = styled.span<{ $isStatic: boolean }>`
   `}
 `;
 
-export const CommandIcon = styled.div`
+const sharedIconStyles = css`
 	height: 20px !important;
 	width: 20px !important;
 	margin-right: 5px;
@@ -37,10 +37,12 @@ export const CommandIcon = styled.div`
 
 export const StaticCommandIcon = styled(KeyboardCommandKeyIcon)`
 	color: #50da26 !important;
+	${sharedIconStyles}
 `;
 
 export const DynamicCommandIcon = styled(BoltIcon)`
 	color: #ffbe1b !important;
+	${sharedIconStyles}
 `;
 
 export const Description = styled.div`

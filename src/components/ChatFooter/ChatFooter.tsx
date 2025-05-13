@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Badge, Fab, Grow, IconButton, Tooltip, Zoom } from '@mui/material';
+import { Grow, Tooltip, Zoom } from '@mui/material';
 import {
 	ArrowDownward,
 	AttachFile,
@@ -15,7 +15,6 @@ import NotesIcon from '@mui/icons-material/Notes';
 import MicIcon from '@mui/icons-material/Mic';
 // @ts-ignore
 import { Emoji, NimblePicker } from 'emoji-mart';
-import styles from './ChatFooter.module.css';
 import 'emoji-mart/css/emoji-mart.css';
 import '../../styles/EmojiPicker.css';
 import PubSub from 'pubsub-js';
@@ -35,13 +34,31 @@ import ContactsModal from '../ContactsModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
-import classNames from 'classnames/bind';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
-
-const cx = classNames.bind(styles);
+import {
+	ActionIcon,
+	ActionSeparator,
+	ActionsRow,
+	ActionsRowLeft,
+	ActionsRowRight,
+	AttachmentContainer,
+	AttachmentOptionDocument,
+	AttachmentOptionImageAndVideo,
+	AttachmentOptions,
+	CommandActionIcon,
+	Container,
+	EmojiPickerContainer,
+	Footer,
+	Row,
+	ScrollButton,
+	ScrollButtonWrapper,
+	TypeBox,
+	TypeBoxEditable,
+	TypeBoxHint,
+} from './ChatFooter.styles';
 
 interface Props {
 	waId: string | undefined;
@@ -305,13 +322,7 @@ const ChatFooter: React.FC<Props> = ({
 	const ACCEPT_DOCUMENT = '*.*';
 
 	return (
-		<div
-			className={cx({
-				chatFooterGlobal: true,
-				container: true,
-			})}
-			onDrop={(event) => event.preventDefault()}
-		>
+		<Container onDrop={(event) => event.preventDefault()}>
 			{isQuickActionsMenuVisible && (
 				<QuickActionsMenu
 					input={translateHTMLInputToText(input).trim()}
@@ -323,7 +334,7 @@ const ChatFooter: React.FC<Props> = ({
 			)}
 
 			{isEmojiPickerVisible && (
-				<div className={styles.emojiPicker}>
+				<EmojiPickerContainer>
 					<NimblePicker
 						set={EMOJI_SET}
 						sheetSize={EMOJI_SHEET_SIZE}
@@ -332,7 +343,7 @@ const ChatFooter: React.FC<Props> = ({
 						emojiSize={32}
 						onSelect={handleEmojiSelect}
 					/>
-				</div>
+				</EmojiPickerContainer>
 			)}
 
 			<ContactsModal
@@ -344,130 +355,93 @@ const ChatFooter: React.FC<Props> = ({
 				recipientWaId={waId}
 			/>
 
-			<div className={cx({ row: true, footer: true })}>
-				<form>
-					<div
-						className={cx({
-							typeBox: true,
-							expired: isExpired,
-						})}
-					>
-						{!input && (
-							<div className={styles.typeBoxHint}>
-								{isExpired ? (
-									<span>
-										{t(
-											'This chat has expired. You need to answer with template messages.'
-										)}
-									</span>
-								) : (
-									<span>{t('Type a message')}</span>
-								)}
-							</div>
-						)}
-						<div
-							id="typeBox__editable"
-							ref={editable}
-							className={styles.typeBoxEditable}
-							contentEditable="true"
-							onFocus={handleFocus}
-							onMouseUp={handleMouseUp}
-							onPaste={(event) => handlePaste(event)}
-							onCopy={(event) => handleCopy(event)}
-							onDrop={(event) => event.preventDefault()}
-							spellCheck="true"
-							onInput={(event) => handleEditableChange(event)}
-							onKeyDown={(e: React.KeyboardEvent) => {
-								if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
-							}}
-						/>
-					</div>
-					<button
-						onClick={(e: React.MouseEvent) => sendMessage(true, e)}
-						type="submit"
-					>
-						{t('Send a message')}
-					</button>
-				</form>
-			</div>
+			<Row>
+				<Footer className={isExpired ? 'expired' : ''}>
+					<form>
+						<TypeBox className={isExpired ? 'expired' : ''}>
+							{!input && (
+								<TypeBoxHint>
+									{isExpired ? (
+										<span>
+											{t(
+												'This chat has expired. You need to answer with template messages.'
+											)}
+										</span>
+									) : (
+										<span>{t('Type a message')}</span>
+									)}
+								</TypeBoxHint>
+							)}
+							<TypeBoxEditable
+								id="typeBox__editable"
+								ref={editable}
+								contentEditable="true"
+								onFocus={handleFocus}
+								onMouseUp={handleMouseUp}
+								onPaste={(event) => handlePaste(event)}
+								onCopy={(event) => handleCopy(event)}
+								onDrop={(event) => event.preventDefault()}
+								spellCheck="true"
+								onInput={(event) => handleEditableChange(event)}
+								onKeyDown={(e: React.KeyboardEvent) => {
+									if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
+								}}
+							/>
+						</TypeBox>
+						<button
+							onClick={(e: React.MouseEvent) => sendMessage(true, e)}
+							type="submit"
+							style={{ display: 'none' }}
+						>
+							{t('Send a message')}
+						</button>
+					</form>
+				</Footer>
+			</Row>
 
-			<div
-				className={cx({
-					row: true,
-					actionsRow: true,
-				})}
-			>
-				<div
-					className={cx({
-						actionsRowLeft: true,
-						desktopOnly: isRecording,
-					})}
-				>
+			<ActionsRow>
+				<ActionsRowLeft>
 					<Tooltip
 						title={t('Quick Actions')}
 						placement="top"
 						disableInteractive
 					>
-						<IconButton
-							className={cx({
-								actionIcon: true,
-								active: isQuickActionsMenuVisible,
-								commandActionIcon: true,
-							})}
+						<CommandActionIcon
+							className={isQuickActionsMenuVisible ? 'active' : ''}
 							onClick={displayQuickActionsMenu}
 							size="small"
 						>
 							<KeyboardCommandKeyIcon />
-						</IconButton>
+						</CommandActionIcon>
 					</Tooltip>
 
-					<div
-						className={cx({
-							actionSeparator: true,
-							desktopOnly: isAttachmentOptionsVisible,
-						})}
-					/>
+					<ActionSeparator />
 
-					<Tooltip
-						title={t('Templates')}
-						placement="top"
-						className={cx({
-							desktopOnly: isAttachmentOptionsVisible,
-						})}
-						disableInteractive
-					>
-						<IconButton
+					<Tooltip title={t('Templates')} placement="top" disableInteractive>
+						<ActionIcon
 							data-test-id="templates-button"
 							onClick={toggleTemplateMessages}
-							className={cx({
-								actionIcon: true,
-								active: isTemplatesVisible,
-							})}
+							className={isTemplatesVisible ? 'active' : ''}
 							size="small"
 						>
 							<SmsIcon />
-						</IconButton>
+						</ActionIcon>
 					</Tooltip>
 
 					{!isExpired && (
 						<Tooltip
 							title={t('Interactive Messages')}
 							placement="top"
-							className={cx({
-								desktopOnly: isAttachmentOptionsVisible,
-							})}
 							disableInteractive
+							className={isAttachmentOptionsVisible ? 'desktopOnly' : ''}
 						>
-							<IconButton
+							<ActionIcon
 								onClick={toggleInteractiveMessages}
-								className={cx({
-									actionIcon: true,
-									active: isInteractiveMessagesVisible,
-								})}
+								className={isInteractiveMessagesVisible ? 'active' : ''}
 								size="small"
 							>
 								<TryIcon />
-							</IconButton>
+							</ActionIcon>
 						</Tooltip>
 					)}
 
@@ -475,97 +449,68 @@ const ChatFooter: React.FC<Props> = ({
 						<Tooltip
 							title={t('Saved Responses')}
 							placement="top"
-							className={cx({
-								desktopOnly: isAttachmentOptionsVisible,
-							})}
+							className={isAttachmentOptionsVisible ? 'desktopOnly' : ''}
 							disableInteractive
 						>
-							<IconButton
+							<ActionIcon
 								onClick={toggleSavedResponses}
-								className={cx({
-									actionIcon: true,
-									active: isSavedResponsesVisible,
-								})}
+								className={isSavedResponsesVisible ? 'active' : ''}
 								size="small"
 							>
 								<NotesIcon />
-							</IconButton>
+							</ActionIcon>
 						</Tooltip>
 					)}
 
-					{!isExpired && <div className={styles.actionSeparator} />}
+					{!isExpired && <ActionSeparator />}
 
 					{!isExpired && (
-						<Tooltip
-							title={t('Emoji')}
-							placement="top"
-							className={cx({
-								desktopOnly: isAttachmentOptionsVisible,
-							})}
-							disableInteractive
-						>
-							<IconButton
-								className={cx({
-									actionIcon: true,
-									active: isEmojiPickerVisible,
-								})}
+						<Tooltip title={t('Emoji')} placement="top" disableInteractive>
+							<ActionIcon
+								className={isEmojiPickerVisible ? 'active' : ''}
 								onClick={toggleEmojiPicker}
 								size="small"
 							>
 								<InsertEmoticon />
-							</IconButton>
+							</ActionIcon>
 						</Tooltip>
 					)}
 
 					{!isExpired && (
-						<div
-							className={cx({
-								attachmentContainer: true,
-								open: isAttachmentOptionsVisible,
-							})}
+						<AttachmentContainer
+							className={isAttachmentOptionsVisible ? 'open' : ''}
 						>
 							<Tooltip
 								title={t('Attachment')}
 								placement="top"
 								disableInteractive
 							>
-								<IconButton
-									className={cx({
-										actionIcon: true,
-										active: isAttachmentOptionsVisible,
-									})}
+								<ActionIcon
+									className={isAttachmentOptionsVisible ? 'active' : ''}
 									size="small"
 									onClick={() =>
 										setAttachmentOptionsVisible(!isAttachmentOptionsVisible)
 									}
 								>
 									<AttachFile />
-								</IconButton>
+								</ActionIcon>
 							</Tooltip>
 
 							<Grow in={isAttachmentOptionsVisible} unmountOnExit>
-								<div
-									className={cx({
-										attachmentOptions: true,
-									})}
-								>
+								<AttachmentOptions>
 									<Tooltip
 										title={t('Images & Videos')}
 										placement="top"
 										disableInteractive
 									>
-										<IconButton
-											className={cx({
-												actionIcon: true,
-												attachmentOptionImageAndVideo: true,
-											})}
+										<AttachmentOptionImageAndVideo
 											onClick={() =>
 												handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
 											}
 											size="small"
 										>
 											<ImageIcon />
-										</IconButton>
+										</AttachmentOptionImageAndVideo>
 									</Tooltip>
 
 									<Tooltip
@@ -573,16 +518,12 @@ const ChatFooter: React.FC<Props> = ({
 										placement="top"
 										disableInteractive
 									>
-										<IconButton
-											className={cx({
-												actionIcon: true,
-												attachmentOptionDocument: true,
-											})}
+										<AttachmentOptionDocument
 											onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
 											size="small"
 										>
 											<InsertDriveFileIcon />
-										</IconButton>
+										</AttachmentOptionDocument>
 									</Tooltip>
 
 									<Tooltip
@@ -590,28 +531,18 @@ const ChatFooter: React.FC<Props> = ({
 										placement="top"
 										disableInteractive
 									>
-										<IconButton
-											className={cx({
-												actionIcon: true,
-											})}
-											onClick={openContactsModal}
-											size="small"
-										>
+										<ActionIcon onClick={openContactsModal} size="small">
 											<ContactsIcon />
-										</IconButton>
+										</ActionIcon>
 									</Tooltip>
-								</div>
+								</AttachmentOptions>
 							</Grow>
-						</div>
+						</AttachmentContainer>
 					)}
-				</div>
+				</ActionsRowLeft>
 
-				<div className={styles.actionsRowRight}>
-					<div
-						className={cx({
-							hidden: !isRecording,
-						})}
-					>
+				<ActionsRowRight>
+					<div className={!isRecording ? 'hidden' : ''}>
 						<VoiceRecord
 							voiceRecordCase="chat"
 							setRecording={setRecording}
@@ -621,32 +552,30 @@ const ChatFooter: React.FC<Props> = ({
 
 					{!isExpired && !hasInput() && !isRecording && (
 						<Tooltip title={t('Voice')} placement="top" disableInteractive>
-							<IconButton
-								className={styles.actionIcon}
+							<ActionIcon
 								onClick={() =>
 									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
 								}
 								size="small"
 							>
 								<MicIcon />
-							</IconButton>
+							</ActionIcon>
 						</Tooltip>
 					)}
 
 					{hasInput() && (
 						<Tooltip title={t('Send')} placement="top" disableInteractive>
-							<IconButton
-								className={styles.actionIcon}
+							<ActionIcon
 								onClick={(e) => sendMessage(true, e)}
 								data-test-id="send-message-button"
 								size="small"
 							>
 								<Send />
-							</IconButton>
+							</ActionIcon>
 						</Tooltip>
 					)}
-				</div>
-			</div>
+				</ActionsRowRight>
+			</ActionsRow>
 
 			<div className="hidden">
 				<FileInput
@@ -670,8 +599,7 @@ const ChatFooter: React.FC<Props> = ({
 			</div>
 
 			<Zoom in={isScrollButtonVisible}>
-				<Badge
-					className={styles.scrollButtonWrapper}
+				<ScrollButtonWrapper
 					color="primary"
 					overlap="rectangular"
 					badgeContent={currentNewMessages}
@@ -681,16 +609,12 @@ const ChatFooter: React.FC<Props> = ({
 						horizontal: 'left',
 					}}
 				>
-					<Fab
-						onClick={handleScrollButtonClick}
-						className={styles.scrollButton}
-						size="small"
-					>
+					<ScrollButton onClick={handleScrollButtonClick} size="small">
 						<ArrowDownward />
-					</Fab>
-				</Badge>
+					</ScrollButton>
+				</ScrollButtonWrapper>
 			</Zoom>
-		</div>
+		</Container>
 	);
 };
 

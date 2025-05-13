@@ -1,7 +1,9 @@
 import styled from 'styled-components';
-import { Badge, Fab, Grow, IconButton, Tooltip, Zoom } from '@mui/material';
+import { Badge, Fab, IconButton } from '@mui/material';
 
-export const Container = styled.div`
+export const Container = styled.div.attrs({
+	className: 'container chatFooterGlobal',
+})`
 	position: relative;
 	border-left: 1px solid lightgray;
 	display: flex;
@@ -139,7 +141,7 @@ export const TypeBoxEditable = styled.div`
 		max-height: 160px;
 	}
 
-	[contenteditable] {
+	&[contenteditable] {
 		outline: 1px solid transparent;
 	}
 `;
@@ -209,5 +211,3 @@ export const ExpiredWarning = styled.div`
 export const CommandActionIcon = styled(ActionIcon)``;
 export const AttachmentOptionImageAndVideo = styled(ActionIcon)``;
 export const AttachmentOptionDocument = styled(ActionIcon)``;
-export const DesktopOnly = styled.div``;
-export const Hidden = styled.div``;

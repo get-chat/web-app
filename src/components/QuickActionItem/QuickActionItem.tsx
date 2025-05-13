@@ -13,9 +13,9 @@ const QuickActionItem: React.FC<Props> = ({ item, isSelected, itemProps }) => {
 		<Styled.Container $isSelected={isSelected} {...itemProps}>
 			<div>
 				{item.isStatic ? (
-					<Styled.StaticCommandIcon className={Styled.CommandIcon} />
+					<Styled.StaticCommandIcon />
 				) : (
-					<Styled.DynamicCommandIcon className={Styled.CommandIcon} />
+					<Styled.DynamicCommandIcon />
 				)}
 				<Styled.Command $isStatic={item.isStatic} className="bold">
 					{item.isStatic ? item.command : item.command.substring(1)}
