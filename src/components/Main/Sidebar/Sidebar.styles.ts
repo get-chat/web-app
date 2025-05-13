@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { MenuItem } from '@mui/material';
+import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
+import CustomAvatar from '@src/components/CustomAvatar';
 
 export const Sidebar = styled.div<{ $isHidden?: boolean }>`
 	position: relative;
@@ -105,4 +107,20 @@ export const RefreshMenuItem = styled(MenuItem)`
 	@media only screen and (max-width: 750px) {
 		display: flex !important;
 	}
+`;
+
+export const SessionContainer = styled.div`
+	position: relative;
+	display: flex;
+	flex-direction: row;
+`;
+
+export const BusinessAvatar = styled(BusinessProfileAvatar)`
+	cursor: pointer;
+`;
+
+export const UserAvatar = styled(CustomAvatar)`
+	cursor: pointer;
+	margin-left: -12px;
+	outline: 1px solid var(--gray-light);
 `;

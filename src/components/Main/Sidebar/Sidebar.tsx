@@ -807,29 +807,27 @@ const Sidebar: React.FC<Props> = ({
 	return (
 		<Styled.Sidebar $isHidden={isChatOnly}>
 			<Styled.Header>
-				<div className={styles.sessionContainer}>
+				<Styled.SessionContainer>
 					<Tooltip title={t('Business Profile')} disableInteractive>
 						<div>
-							<BusinessProfileAvatar
-								className={styles.businessAvatar}
+							<Styled.BusinessAvatar
 								onClick={() => setBusinessProfileVisible(true)}
 							/>
 						</div>
 					</Tooltip>
 					<Tooltip title={currentUser?.username} disableInteractive>
 						<div>
-							<CustomAvatar
+							<Styled.UserAvatar
 								generateBgColorBy={currentUser?.username}
-								className={styles.userAvatar}
 								onClick={() => setUserProfileVisible(true)}
 							>
 								{currentUser
 									? generateInitialsHelper(currentUser?.username)
 									: ''}
-							</CustomAvatar>
+							</Styled.UserAvatar>
 						</div>
 					</Tooltip>
-				</div>
+				</Styled.SessionContainer>
 
 				<Styled.HeaderRight>
 					{!isReadOnly && (
