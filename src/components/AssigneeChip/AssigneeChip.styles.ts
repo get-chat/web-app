@@ -3,6 +3,7 @@ import { ButtonBase, IconButton, Menu } from '@mui/material';
 
 export const Container = styled(ButtonBase).attrs({
 	className: 'assigneeChip',
+	component: 'div',
 })<{ $isClickable?: boolean }>`
 	background-color: var(--gray-light) !important;
 	border-radius: 10px !important;
