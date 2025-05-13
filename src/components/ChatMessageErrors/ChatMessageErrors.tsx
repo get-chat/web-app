@@ -1,10 +1,9 @@
-import { Button } from '@mui/material';
 import Linkify from 'linkify-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './ChatMessageErrors.module.css';
 import { Message } from '@src/types/messages';
 import { canRetry } from '@src/helpers/MessageHelper';
+import * as Styled from './ChatMessageErrors.styles';
 
 interface Props {
 	data: Message;
@@ -18,51 +17,50 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 		<>
 			{data.waba_payload?.errors &&
 				data.waba_payload.errors.map((error, index) => (
-					<div className={styles.container} key={index}>
-						<div className={styles.recommendation}>
+					<Styled.Container key={index}>
+						<Styled.Recommendation>
 							{error.recommendation && (
 								<Linkify options={{ target: '_blank' }}>
 									{t(error.recommendation)}
 								</Linkify>
 							)}
-						</div>
+						</Styled.Recommendation>
 
-						<div className={styles.error}>
+						<Styled.Error>
 							<h5>{t('Details')}</h5>
-							<div className={styles.errorTitle}>
+							<Styled.ErrorTitle>
 								{t(error.title ?? 'Error')}{' '}
-								<span className={styles.code}>
+								<Styled.Code>
 									{error.code && t('(Code: %d)', error.code)}
-								</span>
-							</div>
-							<div className={styles.errorDetails}>
+								</Styled.Code>
+							</Styled.ErrorTitle>
+							<Styled.ErrorDetails>
 								{error.details && t(error.details)}
-							</div>
+							</Styled.ErrorDetails>
 							{error.href && (
-								<div className={styles.errorLink}>
+								<Styled.ErrorLink>
 									<a href={error.href} target="_blank">
 										{t('Click here for more information.')}
 									</a>
-								</div>
+								</Styled.ErrorLink>
 							)}
-						</div>
+						</Styled.Error>
 
 						{data.from_us &&
 							data.is_failed &&
 							canRetry(data) &&
 							retryMessage && (
-								<Button
+								<Styled.RetryButton
 									color="inherit"
 									fullWidth
 									size="small"
 									variant="outlined"
-									className={styles.retry}
 									onClick={() => retryMessage?.(data)}
 								>
 									{t('Retry')}
-								</Button>
+								</Styled.RetryButton>
 							)}
-					</div>
+					</Styled.Container>
 				))}
 		</>
 	);

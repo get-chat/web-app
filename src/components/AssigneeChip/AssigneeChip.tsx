@@ -1,25 +1,16 @@
 import React from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
-import styles from './AssigneeChip.module.css';
 import GroupIcon from '@mui/icons-material/Group';
 import PersonIcon from '@mui/icons-material/Person';
-import classNames from 'classnames/bind';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-	ButtonBase,
-	Divider,
-	IconButton,
-	ListItemIcon,
-	Menu,
-	MenuItem,
-	Tooltip,
-} from '@mui/material';
+import { Divider, ListItemIcon, MenuItem, Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 import CheckIcon from '@mui/icons-material/Check';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
 import { sortGroups } from '@src/helpers/GroupsHelper';
+import * as Styled from './AssigneeChip.styles';
 
 export type AssigneeType = 'user' | 'group';
 
@@ -34,8 +25,6 @@ interface Props {
 	isActionable?: boolean;
 	onAction?: (userId?: number | null, groupId?: number | null) => void;
 }
-
-const cx = classNames.bind(styles);
 
 const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
@@ -74,21 +63,16 @@ const AssigneeChip: React.FC<Props> = ({
 				disableInteractive
 				PopperProps={{ style: { zIndex: 1 } }}
 			>
-				<ButtonBase
-					component="div"
-					className={cx({
-						assigneeChip: true,
-						container: true,
-						clickable: isActionable,
-						menuOpen: Boolean(menuAnchorEl),
-					})}
+				<Styled.Container
+					className={`
+          ${Boolean(menuAnchorEl) ? 'menuOpen' : ''}
+        `}
+					$isClickable={isActionable}
 					onClick={isActionable ? displayMenu : undefined}
 				>
-					<CustomAvatar
-						className={cx({
-							avatar: true,
-							unassigned: !Boolean(name),
-						})}
+					<Styled.Avatar
+						as={CustomAvatar}
+						unassigned={!Boolean(name)}
 						generateBgColorBy={name}
 					>
 						{assigneeType === 'group' ? (
@@ -98,31 +82,25 @@ const AssigneeChip: React.FC<Props> = ({
 						) : (
 							<PersonIcon />
 						)}
-					</CustomAvatar>
+					</Styled.Avatar>
 
 					{(!dense || name) && (
-						<span
-							className={cx({
-								name: true,
-								wider: isActionable && secondaryName,
-							})}
-						>
+						<Styled.Name $isWider={isActionable && !!secondaryName}>
 							{name ?? (!dense ? t('Unassigned') : '')}
 							{!dense && secondaryName && ', ' + secondaryName}
-						</span>
+						</Styled.Name>
 					)}
 
 					{isActionable && (
-						<IconButton className={styles.actionIcon} size="small">
+						<Styled.ActionIcon size="small">
 							<ExpandMoreIcon />
-						</IconButton>
+						</Styled.ActionIcon>
 					)}
-				</ButtonBase>
+				</Styled.Container>
 			</Tooltip>
 
 			{isActionable && (
-				<Menu
-					className={styles.menu}
+				<Styled.StyledMenu
 					anchorEl={menuAnchorEl}
 					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 					transformOrigin={{ vertical: 'top', horizontal: 'right' }}
@@ -130,15 +108,12 @@ const AssigneeChip: React.FC<Props> = ({
 					onClose={hideMenu}
 					elevation={3}
 				>
-					<h6 className={styles.menuHeader}>
+					<Styled.MenuHeader>
 						<PersonIcon /> {t('Users')}
-					</h6>
+					</Styled.MenuHeader>
 
 					<MenuItem
-						className={cx({
-							menuItem: true,
-							menuItemDefault: assignedUserId,
-						})}
+						className="menuItem menuItemDefault"
 						onClick={() => selectUser(null)}
 					>
 						{!assignedUserId && (
@@ -151,11 +126,9 @@ const AssigneeChip: React.FC<Props> = ({
 
 					{sortUsers(users).map((user) => (
 						<MenuItem
-							className={cx({
-								menuItem: true,
-								menuItemDefault: user.id !== assignedUserId,
-							})}
-							// @ts-ignore
+							className={`menuItem ${
+								user.id !== assignedUserId ? 'menuItemDefault' : ''
+							}`}
 							key={user.id}
 							value={user.id}
 							onClick={() => selectUser(user.id)}
@@ -171,15 +144,12 @@ const AssigneeChip: React.FC<Props> = ({
 
 					<Divider />
 
-					<h6 className={styles.menuHeader}>
+					<Styled.MenuHeader>
 						<GroupIcon /> {t('Groups')}
-					</h6>
+					</Styled.MenuHeader>
 
 					<MenuItem
-						className={cx({
-							menuItem: true,
-							menuItemDefault: assignedGroupId,
-						})}
+						className="menuItem menuItemDefault"
 						onClick={() => selectGroup(null)}
 					>
 						{!assignedGroupId && (
@@ -192,11 +162,9 @@ const AssigneeChip: React.FC<Props> = ({
 
 					{sortGroups(groups).map((group) => (
 						<MenuItem
-							className={cx({
-								menuItem: true,
-								menuItemDefault: group.id !== assignedGroupId,
-							})}
-							// @ts-ignore
+							className={`menuItem ${
+								group.id !== assignedGroupId ? 'menuItemDefault' : ''
+							}`}
 							key={group.id}
 							value={group.id}
 							onClick={() => selectGroup(group.id)}
@@ -209,7 +177,7 @@ const AssigneeChip: React.FC<Props> = ({
 							{group.name}
 						</MenuItem>
 					))}
-				</Menu>
+				</Styled.StyledMenu>
 			)}
 		</>
 	);

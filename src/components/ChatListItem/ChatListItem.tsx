@@ -1,8 +1,6 @@
 import React, { MouseEvent, TouchEvent, useMemo } from 'react';
-import { Checkbox, ListItemButton, Tooltip } from '@mui/material';
-import WarningIcon from '@mui/icons-material/Warning';
+import { Tooltip } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import Moment from 'react-moment';
 import {
 	extractAvatarFromContactProviderData,
 	generateInitialsHelper,
@@ -14,10 +12,8 @@ import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
-import SellIcon from '@mui/icons-material/Sell';
 import useChatListItem from '@src/components/ChatListItem/useChatListItem';
-import styles from './ChatListItem.module.css';
-import classNames from 'classnames/bind';
+import * as Styled from './ChatListItem.styles';
 import AssigneeChip from '@src/components/AssigneeChip';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import { useAppSelector } from '@src/store/hooks';
@@ -28,8 +24,6 @@ import {
 } from '@src/helpers/ChatHelper';
 import { getMessageCaption } from '@src/helpers/MessageHelper';
 import { MessageType } from '@src/types/messages';
-
-const cx = classNames.bind(styles);
 
 const ChatListItem = (props: any) => {
 	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
@@ -99,32 +93,30 @@ const ChatListItem = (props: any) => {
 	}, [data.assigned_to_user, data.assigned_group]);
 
 	return (
-		<ListItemButton onClick={handleClick} className={styles.listItem}>
-			<div
+		<Styled.ListItem onClick={handleClick}>
+			<Styled.Wrapper
 				id={data.wa_id}
-				className={cx({
-					wrapper: true,
-					active: waId === data.wa_id,
-					expired: isExpired,
-					almostExpired: remainingSeconds < 8 * 60 * 60,
-					selected: isSelectionModeEnabled && isSelected,
-				})}
+				className={`
+          ${waId === data.wa_id ? 'active' : ''}
+          ${isExpired ? 'expired' : ''}
+          ${remainingSeconds < 8 * 60 * 60 ? 'almostExpired' : ''}
+          ${isSelectionModeEnabled && isSelected ? 'selected' : ''}
+        `}
 				onDrop={handleDroppedFiles}
 				onDragOver={handleDragOver}
 			>
-				<div className={styles.item}>
+				<Styled.Item className={isExpired ? 'expired' : ''}>
 					{isSelectionModeEnabled && (
-						<Checkbox
-							className={styles.selection}
+						<Styled.Selection
 							checked={isSelected}
 							color="primary"
 							disabled={isDisabled}
 						/>
 					)}
 
-					<div className={styles.avatarWrapper}>
+					<Styled.AvatarWrapper>
 						<CustomAvatar
-							className={styles.mainAvatar}
+							className="mainAvatar"
 							src={extractAvatarFromContactProviderData(
 								props.contactProvidersData[data.wa_id]
 							)}
@@ -136,14 +128,14 @@ const ChatListItem = (props: any) => {
 						</CustomAvatar>
 
 						{newMessagesForChat > 0 && (
-							<div className={styles.newMessagesBadge}>
+							<Styled.NewMessagesBadge>
 								{newMessagesForChat > 99 ? '99+' : newMessagesForChat}
-							</div>
+							</Styled.NewMessagesBadge>
 						)}
-					</div>
+					</Styled.AvatarWrapper>
 
-					<div className={styles.info}>
-						<div className={styles.nameWrapper}>
+					<Styled.Info>
+						<Styled.NameWrapper>
 							<h2>
 								{props.keyword && props.keyword.trim().length > 0 ? (
 									<PrintMessage
@@ -159,11 +151,8 @@ const ChatListItem = (props: any) => {
 							</h2>
 
 							{isUserAssignmentChipVisible() && (
-								<div
-									className={cx({
-										assigneeChipWrapper: true,
-										empty: !data.assigned_to_user,
-									})}
+								<Styled.AssigneeChipWrapper
+									className={!data.assigned_to_user ? 'empty' : ''}
 									onClick={preventEvents}
 									onMouseDown={preventEvents}
 									onMouseUp={preventEvents}
@@ -181,15 +170,12 @@ const ChatListItem = (props: any) => {
 											partialUpdateChatAssignment(data.wa_id, userId, groupId);
 										}}
 									/>
-								</div>
+								</Styled.AssigneeChipWrapper>
 							)}
 
 							{isGroupAssignmentChipVisible() && (
-								<div
-									className={cx({
-										assigneeChipWrapper: true,
-										empty: !data.assigned_group,
-									})}
+								<Styled.AssigneeChipWrapper
+									className={!data.assigned_group ? 'empty' : ''}
 									onClick={preventEvents}
 									onMouseDown={preventEvents}
 									onMouseUp={preventEvents}
@@ -206,7 +192,7 @@ const ChatListItem = (props: any) => {
 											partialUpdateChatAssignment(data.wa_id, userId, groupId);
 										}}
 									/>
-								</div>
+								</Styled.AssigneeChipWrapper>
 							)}
 
 							{!isExpired && timeLeft && (
@@ -215,18 +201,18 @@ const ChatListItem = (props: any) => {
 									placement="top"
 									disableInteractive
 								>
-									<div className={styles.timeLeft}>
-										<div className={styles.timeLeftIconWrapper}>
+									<Styled.TimeLeft>
+										<Styled.TimeLeftIconWrapper>
 											<HourglassBottomIcon />
-										</div>
+										</Styled.TimeLeftIconWrapper>
 										<span>{timeLeft}</span>
-									</div>
+									</Styled.TimeLeft>
 								</Tooltip>
 							)}
-						</div>
+						</Styled.NameWrapper>
 
-						<div className={styles.lastMessageWrapper}>
-							<div className={styles.lastMessage}>
+						<Styled.LastMessageWrapper>
+							<Styled.LastMessage>
 								<ChatMessageShortContent
 									type={
 										data.last_message?.waba_payload?.type ?? MessageType.none
@@ -242,17 +228,16 @@ const ChatListItem = (props: any) => {
 									isLastMessageFromUs={isLastMessageOutgoing(data)}
 									reaction={data.last_message?.waba_payload?.reaction}
 								/>
-							</div>
+							</Styled.LastMessage>
 
-							<div className={styles.dateTagWrapper}>
+							<Styled.DateTagWrapper>
 								{data.tags?.length > 0 && (
-									<div className={styles.tags}>
+									<Styled.Tags>
 										<Tooltip title={generateTagNames()} disableInteractive>
 											<div>
 												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
-													<SellIcon
+													<Styled.TagIcon
 														key={tagIndex.toString()}
-														className={styles.tagIcon}
 														style={{
 															fill: tagItem.web_inbox_color,
 														}}
@@ -260,36 +245,35 @@ const ChatListItem = (props: any) => {
 												))}
 											</div>
 										</Tooltip>
-									</div>
+									</Styled.Tags>
 								)}
 
 								{Boolean(getLastMessageTimestamp(data)) && (
-									<Moment
-										className={styles.lastMessageDate}
+									<Styled.LastMessageDate
 										date={getLastMessageTimestamp(data)}
 										calendar={CALENDAR_SHORT}
 										unix
 									/>
 								)}
-							</div>
-						</div>
-					</div>
-				</div>
+							</Styled.DateTagWrapper>
+						</Styled.LastMessageWrapper>
+					</Styled.Info>
+				</Styled.Item>
 
-				<span className={styles.waId}>{addPlus(data.wa_id)}</span>
+				<Styled.WaId>{addPlus(data.wa_id)}</Styled.WaId>
 
 				{hasFailedMessages() && (
-					<div className={styles.failedMessagesIndicator}>
+					<Styled.FailedMessagesIndicator>
 						<Tooltip
 							title={t('This chat has failed messages!')}
 							disableInteractive
 						>
-							<WarningIcon className="error" />
+							<Styled.ErrorIcon />
 						</Tooltip>
-					</div>
+					</Styled.FailedMessagesIndicator>
 				)}
-			</div>
-		</ListItemButton>
+			</Styled.Wrapper>
+		</Styled.ListItem>
 	);
 };
 

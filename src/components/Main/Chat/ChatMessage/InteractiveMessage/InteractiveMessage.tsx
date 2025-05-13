@@ -1,13 +1,9 @@
 import React from 'react';
-
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { useTranslation } from 'react-i18next';
-
 import ButtonsMessage from './components/ButtonsMessage';
 import ListMessage from './components/ListMessage';
 import ProductMessage from './components/ProductMessage';
-
-import styles from './InteractiveMessage.module.css';
 import { Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
@@ -17,6 +13,7 @@ import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessag
 import NfmReply from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/NfmReply';
 import CatalogMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CatalogMessage';
 import { Message } from '@src/types/messages';
+import * as Styled from './InteractiveMessage.styles';
 
 export enum InteractiveMessageTypes {
 	list_reply = 'list_reply',
@@ -44,9 +41,9 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 	return (
 		<>
-			<div className={styles.caption}>
+			<Styled.Caption>
 				<TouchAppIcon /> {t('Interactive message')}
-			</div>
+			</Styled.Caption>
 
 			{type === InteractiveMessageTypes.list_reply && (
 				<div>
@@ -93,9 +90,9 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 			{type === InteractiveMessageTypes.location_request_message && (
 				<>
 					{body && (
-						<div className={styles.body}>
+						<Styled.Body>
 							<PrintMessage linkify message={body.text} />
-						</div>
+						</Styled.Body>
 					)}
 					{action?.name === 'send_location' && (
 						<Button

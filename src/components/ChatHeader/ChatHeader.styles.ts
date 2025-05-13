@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { IconButton } from '@mui/material';
 import CustomAvatar from '@src/components/CustomAvatar';
 
@@ -41,7 +41,13 @@ export const Clickable = styled.div`
 export const Avatar = styled(CustomAvatar)<{
 	$isExpired?: boolean;
 }>`
-	${({ $isExpired }) => $isExpired && `img { filter: grayscale(100%); }`}
+	${({ $isExpired }) =>
+		$isExpired &&
+		css`
+			img {
+				filter: grayscale(100%);
+			}
+		`}
 `;
 
 export const HeaderInfo = styled.div`

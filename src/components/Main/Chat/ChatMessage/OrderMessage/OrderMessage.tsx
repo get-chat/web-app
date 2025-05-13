@@ -1,7 +1,6 @@
 import React from 'react';
 import { Trans } from 'react-i18next';
-
-import styles from './OrderMessage.module.css';
+import { Title, List, Item } from './OrderMessage.styles';
 import { Message } from '@src/types/messages';
 
 interface Props {
@@ -13,7 +12,7 @@ const OrderMessage: React.FC<Props> = ({ data }) => {
 
 	return (
 		<>
-			<div className={styles.title}>
+			<Title>
 				<Trans
 					values={{
 						postProcess: 'sprintf',
@@ -22,13 +21,13 @@ const OrderMessage: React.FC<Props> = ({ data }) => {
 				>
 					<b>Catalog ID</b>: %s
 				</Trans>
-			</div>
+			</Title>
 
-			<ul className={styles.list}>
+			<List>
 				{product_items.map(
 					// @ts-ignore
 					({ product_retailer_id, item_price, quantity, currency }) => (
-						<li key={product_retailer_id} className={styles.item}>
+						<Item key={product_retailer_id}>
 							<div>
 								<Trans
 									values={{
@@ -59,10 +58,10 @@ const OrderMessage: React.FC<Props> = ({ data }) => {
 									<b>Price</b>: %d %s
 								</Trans>
 							</div>
-						</li>
+						</Item>
 					)
 				)}
-			</ul>
+			</List>
 			<p>{text}</p>
 		</>
 	);

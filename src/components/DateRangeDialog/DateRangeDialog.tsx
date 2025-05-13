@@ -7,7 +7,6 @@ import 'react-date-range/dist/theme/default.css';
 import {
 	Button,
 	DialogActions,
-	FormControl,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -22,7 +21,7 @@ import {
 	getUserPreferences,
 	storeUserPreference,
 } from '@src/helpers/StorageHelper';
-import styles from './DateRangeDialog.module.css';
+import * as Styled from './DateRangeDialog.styles';
 
 interface Props {
 	open: boolean;
@@ -114,7 +113,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 
 	return (
 		<Dialog open={open} onClose={close}>
-			<div className={styles.calendarContainer}>
+			<Styled.CalendarContainer>
 				<DateRangePicker
 					ranges={[dateRange]}
 					onChange={handleChange}
@@ -124,10 +123,10 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 					staticRanges={customStaticRanges}
 					inputRanges={[]}
 				/>
-			</div>
+			</Styled.CalendarContainer>
 
-			<div className={styles.weekStartDaySelectorContainer}>
-				<FormControl className={styles.formControl}>
+			<Styled.WeekStartDaySelectorContainer>
+				<Styled.FormControlStyled>
 					<InputLabel id="select-label">{t('Start week on')}</InputLabel>
 					<Select
 						labelId="select-label"
@@ -138,8 +137,8 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 						<MenuItem value="0">{t('Sunday')}</MenuItem>
 						<MenuItem value="1">{t('Monday')}</MenuItem>
 					</Select>
-				</FormControl>
-			</div>
+				</Styled.FormControlStyled>
+			</Styled.WeekStartDaySelectorContainer>
 
 			<DialogActions>
 				<Button onClick={close} color="secondary">

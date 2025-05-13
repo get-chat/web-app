@@ -1,12 +1,11 @@
 import React from 'react';
-import styles from './ReactionDetails.module.css';
-import { Menu } from '@mui/material';
 import useReactions from '@src/hooks/useReactions';
 import PrintMessage from '@src/components/PrintMessage';
 import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '@src/Constants';
 import { Message } from '@src/types/messages';
 import { getSenderName } from '@src/helpers/MessageHelper';
+import * as Styled from './ReactionDetails.styles';
 
 export type Props = {
 	message: Message | undefined;
@@ -26,7 +25,7 @@ const ReactionDetails: React.FC<Props> = ({
 	});
 
 	return (
-		<Menu
+		<Styled.StyledMenu
 			anchorEl={anchorElement}
 			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
 			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
@@ -34,29 +33,28 @@ const ReactionDetails: React.FC<Props> = ({
 			onClose={() => setAnchorElement(undefined)}
 			elevation={0}
 			disableAutoFocusItem={true}
-			className={styles.menu}
 		>
-			<div className={styles.reactions}>
+			<Styled.ReactionsContainer>
 				{reactions
 					?.filter((item) => !!item.waba_payload?.reaction?.emoji)
 					.map((reaction) => (
-						<div className={styles.reaction} key={reaction.id}>
-							<div className={styles.sender}>{getSenderName(reaction)}</div>
-							<div className={styles.timestamp}>
+						<Styled.ReactionItem key={reaction.id}>
+							<Styled.SenderName>{getSenderName(reaction)}</Styled.SenderName>
+							<Styled.Timestamp>
 								<Moment
 									date={reaction.waba_payload?.timestamp}
 									calendar={CALENDAR_SHORT}
 									unix
 								/>
-							</div>
+							</Styled.Timestamp>
 							<PrintMessage
 								message={reaction.waba_payload?.reaction?.emoji ?? ''}
 								smallEmoji
 							/>
-						</div>
+						</Styled.ReactionItem>
 					))}
-			</div>
-		</Menu>
+			</Styled.ReactionsContainer>
+		</Styled.StyledMenu>
 	);
 };
 

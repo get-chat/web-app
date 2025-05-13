@@ -23,7 +23,6 @@ const ContactView: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 				setPhoneNumbersVisible((prevState) => !prevState);
 			}
 		} else {
-			// @ts-ignore
 			window.displayCustomError('This contact has no phone number.');
 		}
 	};

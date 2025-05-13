@@ -1,7 +1,5 @@
 import React from 'react';
-import ReviewsIcon from '@mui/icons-material/Reviews';
 import { useTranslation } from 'react-i18next';
-import styles from './ChatMessageReferral.module.css';
 import ChatMessageImage from '../ChatMessageImage';
 import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
@@ -12,6 +10,7 @@ import {
 	generateReferralImageLink,
 	generateReferralVideoLink,
 } from '@src/helpers/MessageHelper';
+import * as Styled from './ChatMessageReferral.styles';
 
 interface Props {
 	data: Message;
@@ -34,17 +33,17 @@ const ChatMessageReferral: React.FC<Props> = ({
 
 	return (
 		<div>
-			<div className={styles.header} onClick={goToSourceURL}>
-				<ReviewsIcon className={styles.headerIcon} />
+			<Styled.Header onClick={goToSourceURL}>
+				<Styled.HeaderIcon />
 				{t('Message via ' + (referral.source_type ?? 'referral'))}
 				<br />
-			</div>
+			</Styled.Header>
 
-			<div className={styles.referralContainer}>
+			<Styled.ReferralContainer>
 				<div>
 					{(referral.image || referral.image_url) && (
 						<ChatMessageImage
-							className={styles.referralMedia}
+							className={Styled.ReferralMedia}
 							data={referral}
 							source={generateReferralImageLink(data)}
 							onPreview={() =>
@@ -69,7 +68,7 @@ const ChatMessageReferral: React.FC<Props> = ({
 						/>
 					)}
 				</div>
-				<div className={styles.referralBody} onClick={goToSourceURL}>
+				<Styled.ReferralBody onClick={goToSourceURL}>
 					<Tooltip
 						title={referral.source_id}
 						placement="top-start"
@@ -79,12 +78,14 @@ const ChatMessageReferral: React.FC<Props> = ({
 							<PrintMessage message={referral.headline} linkify={true} />
 						</h4>
 					</Tooltip>
-					<div className={styles.referralTextBody}>
+					<Styled.ReferralTextBody>
 						<PrintMessage message={referral.body} linkify={true} />
-					</div>
-					<div className={styles.referralSourceURL}>{referral.source_url}</div>
-				</div>
-			</div>
+					</Styled.ReferralTextBody>
+					<Styled.ReferralSourceURL>
+						{referral.source_url}
+					</Styled.ReferralSourceURL>
+				</Styled.ReferralBody>
+			</Styled.ReferralContainer>
 		</div>
 	);
 };

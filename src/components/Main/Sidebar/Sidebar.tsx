@@ -58,9 +58,7 @@ import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
-import CustomAvatar from '@src/components/CustomAvatar';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import styles from '@src/components/Main/Sidebar/Sidebar.module.css';
 import SellIcon from '@mui/icons-material/Sell';
 import { AxiosError } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
@@ -76,7 +74,6 @@ import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import classNames from 'classnames/bind';
 import DateRangeDialog from '@src/components/DateRangeDialog';
 import {
 	convertDateToUnixTimestamp,
@@ -84,14 +81,13 @@ import {
 } from '@src/helpers/DateHelper';
 import useChatFilters from '@src/components/Main/Sidebar/useChatFilters';
 import { ViewportList } from 'react-viewport-list';
-import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import UserProfile from '@src/components/UserProfile';
 import {
 	setExportChat,
 	setSelectionModeEnabled,
 	setState,
 } from '@src/store/reducers/UIReducer';
-import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions/ExportChatActions';
+import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';
@@ -116,7 +112,6 @@ import * as Styled from './Sidebar.styles';
 import { PersonList } from '@src/types/persons';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
-const cx = classNames.bind(styles);
 
 interface Props {
 	isLoaded: boolean;
@@ -767,9 +762,7 @@ const Sidebar: React.FC<Props> = ({
 
 	const goToSettings = () => {
 		setAnchorEl(null);
-		// @ts-ignore
 		if (window.AndroidWebInterface) {
-			// @ts-ignore
 			window.AndroidWebInterface.goToSettings();
 		}
 	};
@@ -809,29 +802,27 @@ const Sidebar: React.FC<Props> = ({
 	return (
 		<Styled.Sidebar $isHidden={isChatOnly}>
 			<Styled.Header>
-				<div className={styles.sessionContainer}>
+				<Styled.SessionContainer>
 					<Tooltip title={t('Business Profile')} disableInteractive>
 						<div>
-							<BusinessProfileAvatar
-								className={styles.businessAvatar}
+							<Styled.BusinessAvatar
 								onClick={() => setBusinessProfileVisible(true)}
 							/>
 						</div>
 					</Tooltip>
 					<Tooltip title={currentUser?.username} disableInteractive>
 						<div>
-							<CustomAvatar
+							<Styled.UserAvatar
 								generateBgColorBy={currentUser?.username}
-								className={styles.userAvatar}
 								onClick={() => setUserProfileVisible(true)}
 							>
 								{currentUser
 									? generateInitialsHelper(currentUser?.username)
 									: ''}
-							</CustomAvatar>
+							</Styled.UserAvatar>
 						</div>
 					</Tooltip>
-				</div>
+				</Styled.SessionContainer>
 
 				<Styled.HeaderRight>
 					{!isReadOnly && (
@@ -892,19 +883,9 @@ const Sidebar: React.FC<Props> = ({
 					}
 				}}
 			>
-				<div
-					className={cx({
-						searchOrFilterGroup: true,
-						expanded: isForceDisplayFilters,
-					})}
-				>
+				<Styled.SearchOrFilterGroup $isExpanded={isForceDisplayFilters}>
 					<Collapse in={Boolean(isAnyActiveFilter || keyword)}>
-						<div
-							className={cx({
-								filterGroup: true,
-								active: true,
-							})}
-						>
+						<Styled.FilterGroup $isActive={true}>
 							{filterAssignedToMe && (
 								<FilterOption
 									icon={<PersonIcon />}
@@ -954,7 +935,7 @@ const Sidebar: React.FC<Props> = ({
 									isActive
 								/>
 							))}
-						</div>
+						</Styled.FilterGroup>
 					</Collapse>
 
 					<SearchBar
@@ -966,12 +947,7 @@ const Sidebar: React.FC<Props> = ({
 
 					<Collapse in={isForceDisplayFilters}>
 						<>
-							<div
-								className={cx({
-									filterGroup: true,
-									all: true,
-								})}
-							>
+							<Styled.FilterGroup $isAll={true}>
 								{!filterAssignedToMe && (
 									<FilterOption
 										icon={<PersonIcon />}
@@ -1004,10 +980,10 @@ const Sidebar: React.FC<Props> = ({
 									label={t('Time')}
 									onClick={() => setDateRangeDialogVisible(true)}
 								/>
-							</div>
+							</Styled.FilterGroup>
 
 							{(keyword || isAnyActiveFilter) && (
-								<div className={styles.chatsCount}>
+								<Styled.ChatsCount>
 									{isLoadingChats && <CircularProgress size={14} />}
 									{isLoadingChats ? (
 										t('Loading chats')
@@ -1022,13 +998,12 @@ const Sidebar: React.FC<Props> = ({
 											%d chat found
 										</Trans>
 									)}
-								</div>
+								</Styled.ChatsCount>
 							)}
 						</>
 					</Collapse>
 
 					<Menu
-						className={styles.filterMenu}
 						anchorEl={tagsMenuAnchorEl}
 						open={Boolean(tagsMenuAnchorEl)}
 						onClose={() => setTagsMenuAnchorEl(undefined)}
@@ -1080,7 +1055,6 @@ const Sidebar: React.FC<Props> = ({
 					</Menu>
 
 					<Menu
-						className={styles.filterMenu}
 						anchorEl={groupsMenuAnchorEl}
 						open={Boolean(groupsMenuAnchorEl)}
 						onClose={() => setGroupsMenuAnchorEl(undefined)}
@@ -1134,7 +1108,7 @@ const Sidebar: React.FC<Props> = ({
 							}
 						}}
 					/>
-				</div>
+				</Styled.SearchOrFilterGroup>
 			</ClickAwayListener>
 
 			<Styled.ResultsContainer>
@@ -1167,13 +1141,10 @@ const Sidebar: React.FC<Props> = ({
 					)}
 
 				{filteredChatsCount > 0 && (
-					<div
-						className={cx({
-							sidebar__results__chats: true,
-							chatList: true,
-							unpacked:
-								searchedKeyword.trim().length > 0 || isSelectionModeEnabled,
-						})}
+					<Styled.ChatList
+						$isUnpacked={
+							searchedKeyword.trim().length > 0 || isSelectionModeEnabled
+						}
 						ref={chatListRef}
 					>
 						<ViewportList
@@ -1192,7 +1163,7 @@ const Sidebar: React.FC<Props> = ({
 								/>
 							)}
 						</ViewportList>
-					</div>
+					</Styled.ChatList>
 				)}
 
 				{searchedKeyword.trim().length > 0 &&

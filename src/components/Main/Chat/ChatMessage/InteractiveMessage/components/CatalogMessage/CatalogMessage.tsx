@@ -1,9 +1,9 @@
-import styles from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/ButtonsMessage/ButtonsMessage.module.css';
 import PrintMessage from '@src/components/PrintMessage';
 import { Button } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import * as Styled from './CatalogMessage.styles';
 
 const CatalogMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
@@ -12,19 +12,19 @@ const CatalogMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	return (
 		<>
 			{header && (
-				<div className={styles.header}>
+				<Styled.Header>
 					<PrintMessage linkify message={header.text} />
-				</div>
+				</Styled.Header>
 			)}
 			{body && (
-				<div className={styles.body}>
+				<Styled.Body>
 					<PrintMessage linkify message={body.text} />
-				</div>
+				</Styled.Body>
 			)}
 			{footer && (
-				<div className={styles.footer}>
+				<Styled.Footer>
 					<PrintMessage linkify message={footer.text} />
-				</div>
+				</Styled.Footer>
 			)}
 			{action?.name === 'catalog_message' && (
 				<Button

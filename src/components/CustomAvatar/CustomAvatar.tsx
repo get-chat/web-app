@@ -1,11 +1,6 @@
 import React, { useMemo } from 'react';
-import { Avatar } from '@mui/material';
-
-import styles from './CustomAvatar.module.css';
-import classNames from 'classnames/bind';
+import * as Styled from './CustomAvatar.styles';
 import { generateAvatarColor } from '@src/helpers/AvatarHelper';
-
-const cx = classNames.bind(styles);
 
 interface Props {
 	className?: string;
@@ -34,13 +29,12 @@ const CustomAvatar: React.FC<Props> = ({
 			: undefined;
 	}, [generateBgColorBy, src]);
 
+	const isLight = !Boolean(style?.backgroundColor ?? bgColor);
+
 	return (
-		<Avatar
-			className={cx({
-				customAvatar: true,
-				[className ?? '']: true,
-				light: !Boolean(style?.backgroundColor ?? bgColor),
-			})}
+		<Styled.StyledAvatar
+			className={className}
+			$isLight={isLight}
 			src={src}
 			style={{
 				...style,
@@ -51,7 +45,7 @@ const CustomAvatar: React.FC<Props> = ({
 			ref={ref}
 		>
 			{children}
-		</Avatar>
+		</Styled.StyledAvatar>
 	);
 };
 
