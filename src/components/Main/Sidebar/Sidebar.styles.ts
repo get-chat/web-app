@@ -124,3 +124,17 @@ export const UserAvatar = styled(CustomAvatar)`
 	margin-left: -12px;
 	outline: 1px solid var(--gray-light);
 `;
+
+export const SearchOrFilterGroup = styled.div<{
+	$isExpanded?: boolean;
+}>`
+	background-color: ${({ $isExpanded }) =>
+		$isExpanded ? 'var(--gray-light)' : 'white'};
+	padding: 10px 0;
+	transition: background-color ease-in 0.2s;
+
+	& .searchBar__search {
+		background-color: transparent;
+		padding: 0 15px !important;
+	}
+`;

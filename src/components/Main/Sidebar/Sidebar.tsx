@@ -888,12 +888,7 @@ const Sidebar: React.FC<Props> = ({
 					}
 				}}
 			>
-				<div
-					className={cx({
-						searchOrFilterGroup: true,
-						expanded: isForceDisplayFilters,
-					})}
-				>
+				<Styled.SearchOrFilterGroup $isExpanded={isForceDisplayFilters}>
 					<Collapse in={Boolean(isAnyActiveFilter || keyword)}>
 						<div
 							className={cx({
@@ -1130,7 +1125,7 @@ const Sidebar: React.FC<Props> = ({
 							}
 						}}
 					/>
-				</div>
+				</Styled.SearchOrFilterGroup>
 			</ClickAwayListener>
 
 			<Styled.ResultsContainer>

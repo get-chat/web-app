@@ -1,21 +1,3 @@
-.searchOrFilterGroup {
-	background-color: white;
-	padding: 10px 0;
-	transition: background-color ease-in 0.2s;
-}
-
-.searchOrFilterGroup.expanded {
-	background-color: var(--gray-light);
-}
-
-.searchOrFilterGroup :global(.searchBar__search) {
-	background-color: transparent;
-}
-
-.searchOrFilterGroup :global(.searchBar__search) {
-	padding: 0 15px !important;
-}
-
 .filterGroup {
 	padding: 0 15px;
 }
