@@ -74,10 +74,12 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			return;
 		}
 
+		// Removing header if text is empty
 		if (cloneObj.header && isEmptyString(cloneObj.header.text)) {
 			delete cloneObj.header;
 		}
 
+		// Removing footer if text is empty
 		if (cloneObj.footer && isEmptyString(cloneObj.footer.text)) {
 			delete cloneObj.footer;
 		}
@@ -91,7 +93,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			return '';
 		}
 
-		const replacedStr = str.replace(/[._]/g, ' ');
+		const replacedStr = str.replace(/[._]/g, ' '); // Replace dots and underscores with spaces
 		return replacedStr.charAt(0).toUpperCase() + replacedStr.slice(1);
 	}
 
@@ -101,14 +103,15 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	function setNestedValue(obj: any, path: string, value: any) {
 		const keys = path.split('.');
-		const lastKey = keys.pop();
+		const lastKey = keys.pop(); // Get the last key (e.g., 'display_text')
 
 		const cloneObj = JSON.parse(JSON.stringify(obj));
 
+		// Traverse the object to the second-to-last key
 		const nestedObj = keys.reduce((acc, key) => acc && acc[key], cloneObj);
 
 		if (nestedObj && lastKey) {
-			nestedObj[lastKey] = value;
+			nestedObj[lastKey] = value; // Set the new value
 		}
 
 		return cloneObj;
