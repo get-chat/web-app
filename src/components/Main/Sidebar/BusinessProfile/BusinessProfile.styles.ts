@@ -70,6 +70,13 @@ export const SubSection = styled.div`
 	}
 `;
 
+export const FieldErrorMessage = styled.div`
+	color: var(--red-dark);
+	font-size: 13px;
+	margin-top: -10px;
+	margin-bottom: 20px;
+`;
+
 export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
 	display: flex;
 	justify-content: center;

@@ -1022,3 +1022,6 @@ msgstr "Katalog mesajları, ürün kataloğunuzu tamamen WhatsApp üzerinden ser
 
 msgid "View catalog"
 msgstr "Kataloğu görüntüle"
+
+msgid "This field is required!"
+msgstr "Bu alan gereklidir!"

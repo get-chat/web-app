@@ -997,3 +997,6 @@ msgstr ""
 
 msgid "View catalog"
 msgstr ""
+
+msgid "This field is required!"
+msgstr ""

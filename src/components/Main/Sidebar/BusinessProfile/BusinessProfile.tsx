@@ -51,6 +51,7 @@ function BusinessProfile(props: any) {
 	const [vertical, setVertical] = useState('');
 	const [websites, setWebsites] = useState({});
 	const [about, setAbout] = useState('');
+	const [aboutError, setAboutError] = useState<string | null>(null);
 	const [profilePhoto, setProfilePhoto] = useState<string>();
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
@@ -110,6 +111,14 @@ function BusinessProfile(props: any) {
 		event: React.FormEvent<HTMLFormElement>
 	) => {
 		event.preventDefault();
+
+		setAboutError(null);
+
+		// Check if about field is empty
+		if (!about.trim()) {
+			setAboutError('This field is required!');
+			return;
+		}
 
 		setUpdating(true);
 
@@ -292,7 +301,15 @@ function BusinessProfile(props: any) {
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										error={Boolean(aboutError)}
 									/>
+
+									{Boolean(aboutError) && (
+										<Styled.FieldErrorMessage>
+											{t(aboutError ?? '')}
+										</Styled.FieldErrorMessage>
+									)}
+
 									<TextField
 										variant="standard"
 										value={address}
