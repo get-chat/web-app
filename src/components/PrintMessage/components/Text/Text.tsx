@@ -9,9 +9,9 @@ const Text: React.FC<PrintMessageComponentProps> = ({
 	linkify,
 }) => {
 	return useMemo(() => {
-		const boldRegex = /\*(.*?)\*/gi;
-		const italicRegex = /_(.*?)_/gi;
-		const strikeRegex = /~(.*?)~/gi;
+		const boldRegex = /(?<!\w)\*(?! )(.*?)(?<! )\*(?!\w)/g;
+		const italicRegex = /(?<!\w)_(?! )(.*?)(?<! )_(?!\w)/g;
+		const strikeRegex = /(?<!\w)~(?! )(.*?)(?<! )~(?!\w)/g;
 		const codeRegex = /```(.*?)```/gi;
 
 		const config = {
