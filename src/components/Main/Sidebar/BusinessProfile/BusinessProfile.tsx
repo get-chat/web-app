@@ -116,7 +116,7 @@ function BusinessProfile(props: any) {
 
 		// Check if about field is empty
 		if (!about.trim()) {
-			setAboutError('This field is required');
+			setAboutError('This field is required!');
 			return;
 		}
 
@@ -306,7 +306,7 @@ function BusinessProfile(props: any) {
 
 									{Boolean(aboutError) && (
 										<Styled.FieldErrorMessage>
-											{aboutError}
+											{t(aboutError ?? '')}
 										</Styled.FieldErrorMessage>
 									)}
 
