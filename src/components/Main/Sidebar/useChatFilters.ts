@@ -196,7 +196,7 @@ const useChatFilters = () => {
 
 			// Prepare navigate options
 			const options = {
-				pathname: location.pathname,
+				pathname: location?.pathname,
 				search: `?${createSearchParams(params)}`,
 			};
 

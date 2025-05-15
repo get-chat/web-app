@@ -60,7 +60,7 @@ const Login = () => {
 			delete params['integration_api_base_url'];
 
 			const options = {
-				pathname: location.pathname,
+				pathname: location?.pathname,
 				search: `?${createSearchParams(params)}`,
 			};
 
