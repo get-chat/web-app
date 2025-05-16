@@ -13,6 +13,7 @@ interface Props {
 	height?: number;
 	width?: number;
 	onClick?: () => void;
+	onError?: () => void;
 	_ref?: any;
 }
 
@@ -24,6 +25,7 @@ const Image: React.FC<Props> = ({
 	height,
 	width,
 	onClick,
+	onError,
 	_ref,
 }) => {
 	const [data, setData] = useState<string>();
@@ -54,6 +56,7 @@ const Image: React.FC<Props> = ({
 				console.log(error);
 				if (error.response === undefined) {
 					setFallbackSrc(src);
+					onError?.();
 				}
 			});
 
