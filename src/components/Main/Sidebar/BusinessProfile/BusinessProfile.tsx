@@ -283,7 +283,7 @@ function BusinessProfile(props: any) {
 
 								{profilePhoto && isAdmin && !isReadOnly && (
 									<Button onClick={doDeleteProfilePhoto} color="secondary">
-										Delete profile photo
+										{t('Delete profile photo')}
 									</Button>
 								)}
 							</Styled.AvatarContainer>
@@ -360,7 +360,7 @@ function BusinessProfile(props: any) {
 
 											{verticalOptions.map((verticalOption, index) => (
 												<MenuItem key={index} value={verticalOption}>
-													{verticalOption}
+													{t(verticalOption)}
 												</MenuItem>
 											))}
 										</Select>
