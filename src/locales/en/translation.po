@@ -1000,3 +1000,6 @@ msgstr ""
 
 msgid "This field is required!"
 msgstr ""
+
+msgid "This image isn't available anymore."
+msgstr ""

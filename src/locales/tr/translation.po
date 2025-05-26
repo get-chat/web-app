@@ -1025,3 +1025,6 @@ msgstr "Kataloğu görüntüle"
 
 msgid "This field is required!"
 msgstr "Bu alan gereklidir!"
+
+msgid "This image isn't available anymore."
+msgstr "Bu resim artık mevcut değil."
