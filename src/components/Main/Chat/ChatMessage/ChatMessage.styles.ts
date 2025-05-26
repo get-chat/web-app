@@ -128,14 +128,6 @@ export const ChatMessageOuter = styled.div.attrs({
 	$isOutgoing?: boolean;
 	$type?: string;
 }>`
-	${({ $type }) =>
-		$type &&
-		css`
-			img {
-				filter: grayscale(100%);
-			}
-		`}
-
 	&:hover ${Actions} {
 		opacity: 1;
 	}
