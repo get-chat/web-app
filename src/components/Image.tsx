@@ -54,9 +54,9 @@ const Image: React.FC<Props> = ({
 			})
 			.catch((error) => {
 				console.log(error);
+				onError?.();
 				if (error.response === undefined) {
 					setFallbackSrc(src);
-					onError?.();
 				}
 			});
 

@@ -17,6 +17,7 @@ import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
 import { Message } from '@src/types/messages';
 import { getHeaderFileLink } from '@src/helpers/MessageHelper';
+import MissingContent from './MissingContent';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -191,7 +192,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 								]
 							</span>
 						) : (
-							<span>[{t('Missing template')}]</span>
+							<MissingContent>{t('Missing template')}</MissingContent>
 						)}
 					</div>
 				)}
