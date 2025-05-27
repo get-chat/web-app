@@ -88,7 +88,10 @@ import {
 	setState,
 } from '@src/store/reducers/UIReducer';
 import ExportChatActions from '@src/components/Main/Sidebar/ExportChatActions';
-import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
+import {
+	mergeNewMessages,
+	setNewMessages,
+} from '@src/store/reducers/newMessagesReducer';
 import { isUserInGroup } from '@src/helpers/UserHelper';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
@@ -110,6 +113,7 @@ import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
 import * as Styled from './Sidebar.styles';
 import { PersonList } from '@src/types/persons';
+import { store } from '@src/store';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -624,7 +628,8 @@ const Sidebar: React.FC<Props> = ({
 			let hasAnyNewMessages = false;
 			let chatMessageWaId: string | undefined;
 
-			const prevState = { ...newMessages };
+			// Get the latest data directly as a workaround
+			const prevState = { ...store.getState().newMessages.value };
 
 			// Update new messages
 			Object.entries(preparedNewMessages).forEach((newMsg) => {
@@ -648,11 +653,7 @@ const Sidebar: React.FC<Props> = ({
 
 			// When state is a JSON object, it is unable to understand whether it is different or same and renders again
 			// So we check if new state is actually different from previous state
-			if (JSON.stringify(preparedNewMessages) !== JSON.stringify(prevState)) {
-				dispatch(setNewMessages({ ...prevState, ...preparedNewMessages }));
-			} else {
-				dispatch(setNewMessages(prevState));
-			}
+			dispatch(mergeNewMessages(preparedNewMessages));
 
 			// Display a notification
 			if (chatMessageWaId && hasAnyNewMessages) {
