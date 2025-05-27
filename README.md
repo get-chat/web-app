@@ -149,6 +149,32 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - `bg_color`: Changes the background color. Expected value is any hexadecimal color without # (pound) sign. Example: `bg_color=ff0000`.
 
+## Embedding
+
+When embedding get.chat Web App inside an `<iframe>`, it's important to configure the `iframe` element with the proper permissions to ensure full functionality.
+
+### Clipboard API Permission
+
+If you're using features that interact with the clipboard—such as copying a message or location—inside an `iframe`, you may encounter the following error:
+
+`Error: NotAllowedError: The Clipboard API has been blocked because of a permissions policy applied to the current document.`
+
+This happens because the **Clipboard API** (e.g., `navigator.clipboard.writeText`) is restricted by default in iframes unless explicitly allowed.
+
+#### ✅ Solution
+
+Add the `allow="clipboard-write"` attribute to the `<iframe>` tag to enable clipboard operations:
+
+```html
+<iframe
+  src="https://..."
+  allow="clipboard-write"
+  ...>
+</iframe>
+```
+
+This permission is required for any clipboard-related features to work inside the iframe context.
+
 ## Available Scripts
 
 In the project directory, you can run:
