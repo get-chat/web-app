@@ -16,9 +16,12 @@ const newMessagesSlice = createSlice({
 		setNewMessages: (state, action: PayloadAction<NewMessageList>) => {
 			state.value = action.payload;
 		},
+		mergeNewMessages: (state, action: PayloadAction<NewMessageList>) => {
+			state.value = { ...state.value, ...action.payload };
+		},
 	},
 });
 
-export const { setNewMessages } = newMessagesSlice.actions;
+export const { setNewMessages, mergeNewMessages } = newMessagesSlice.actions;
 
 export default newMessagesSlice.reducer;
