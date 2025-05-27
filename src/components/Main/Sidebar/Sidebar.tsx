@@ -1,4 +1,11 @@
-import React, { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+	MouseEvent,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import {
 	CircularProgress,
 	ClickAwayListener,
@@ -179,20 +186,47 @@ const Sidebar: React.FC<Props> = ({
 		null
 	);
 
-	const filteredChats = useMemo(
-		() =>
-			Object.values(chats).filter((chat) => {
-				// Filter by helper method
-				return filterChat(
-					currentUser,
-					chat,
-					filterTagId,
-					filterAssignedToMe,
-					filterAssignedGroupId
-				);
-			}),
-		[chats, currentUser, filterTagId, filterAssignedToMe, filterAssignedGroupId]
-	);
+	const chatListRef = useRef<HTMLDivElement | null>(null);
+	const prevOffsetRef = useRef<number>(0);
+
+	const filteredChats = useMemo(() => {
+		// Calculating and storing previous offset top of chat list
+		const anchorEl = chatListRef.current;
+		const container = chatListRef.current;
+
+		if (anchorEl && container) {
+			const containerScrollTop = container.scrollTop;
+			const anchorOffsetTop = anchorEl.offsetTop;
+			prevOffsetRef.current = anchorOffsetTop - containerScrollTop;
+		}
+
+		return Object.values(chats).filter((chat) => {
+			// Filter by helper method
+			return filterChat(
+				currentUser,
+				chat,
+				filterTagId,
+				filterAssignedToMe,
+				filterAssignedGroupId
+			);
+		});
+	}, [
+		chats,
+		currentUser,
+		filterTagId,
+		filterAssignedToMe,
+		filterAssignedGroupId,
+	]);
+
+	useLayoutEffect(() => {
+		const anchorEl = chatListRef.current;
+		const container = chatListRef.current;
+
+		if (anchorEl && container) {
+			const newOffsetTop = anchorEl.offsetTop;
+			container.scrollTop = newOffsetTop - prevOffsetRef.current;
+		}
+	}, [filteredChats]);
 
 	const filteredChatsCount = useMemo(
 		() => getObjLength(filteredChats),
@@ -222,7 +256,6 @@ const Sidebar: React.FC<Props> = ({
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
-	const chatListRef = useRef<HTMLDivElement | null>(null);
 	const timer = useRef<NodeJS.Timeout>();
 
 	const navigate = useNavigate();
