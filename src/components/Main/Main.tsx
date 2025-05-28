@@ -90,14 +90,13 @@ const Main: React.FC = () => {
 		isBlurred,
 		isUploadingMedia,
 		isTemplatesFailed,
-		selectedTags,
-		selectedChats,
+		// selectedTags,
+		// selectedChats,
 		isChatAssignmentVisible,
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
 	} = useAppSelector((state) => state.UI);
-	const tags = useAppSelector((state) => state.tags.value);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
 	);
