@@ -277,19 +277,33 @@ const Main: React.FC = () => {
 			if (Notification.permission === 'granted') {
 				displayNtf();
 			} else {
-				// Request permission from user
-				// TODO: Safari doesn't return a promise, fix it
-				Notification.requestPermission()
-					?.then(function (p) {
-						if (p === 'granted') {
+				// Request permission from user, handling both Promise and non-Promise versions
+				try {
+					const permissionResult = Notification.requestPermission();
+
+					if (permissionResult instanceof Promise) {
+						permissionResult
+							.then(function (p) {
+								if (p === 'granted') {
+									displayNtf();
+								} else {
+									console.log('User blocked notifications.');
+								}
+							})
+							.catch(function (err) {
+								console.error('Notification permission error:', err);
+							});
+					} else {
+						// Some browsers return a string directly
+						if (permissionResult === 'granted') {
 							displayNtf();
 						} else {
 							console.log('User blocked notifications.');
 						}
-					})
-					.catch(function (err) {
-						console.error(err);
-					});
+					}
+				} catch (err) {
+					console.error('Notification permission exception:', err);
+				}
 			}
 		}
 	};
