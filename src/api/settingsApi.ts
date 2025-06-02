@@ -59,7 +59,12 @@ export const updateProfilePhoto = async (
 	formData: FormData,
 	signal?: AbortSignal
 ) => {
-	return await axios.post('/settings/profile/photo/', formData, { signal });
+	return await axios.post('/settings/profile/photo/', formData, {
+		signal,
+		headers: {
+			'Content-Type': 'multipart/form-data',
+		},
+	});
 };
 
 export const deleteProfilePhoto = async (signal?: AbortSignal) => {
