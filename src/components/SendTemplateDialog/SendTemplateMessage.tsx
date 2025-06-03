@@ -79,6 +79,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 			return prevState;
 		});
+		setErrors([]);
 	}, [headerFileURL, params]);
 
 	const updateParam = (
