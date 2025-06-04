@@ -106,9 +106,11 @@ import {
 	markAsReceived,
 } from '@src/api/messagesApi';
 import {
+	ChatMessageError,
 	CreateMessageRequest,
 	Message,
 	MessageType,
+	WabaPayload,
 	WebhookMessageStatus,
 } from '@src/types/messages';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
@@ -680,11 +682,26 @@ const ChatView: React.FC<Props> = (props) => {
 									newState[wabaIdOrGetchatId].is_failed = true;
 									// Merge with existing errors if exist
 									if (newState[wabaIdOrGetchatId].waba_payload?.errors) {
+										// Make data mutable
+										newState[wabaIdOrGetchatId].waba_payload = {
+											...newState[wabaIdOrGetchatId].waba_payload,
+										} as WabaPayload;
+										newState[wabaIdOrGetchatId].waba_payload!.errors = [
+											...(newState[wabaIdOrGetchatId].waba_payload!.errors ??
+												[]),
+										];
+
 										newState[wabaIdOrGetchatId].waba_payload?.errors?.concat(
 											statusObj.errors
 										);
 									} else {
 										if (newState[wabaIdOrGetchatId].waba_payload) {
+											// Make data mutable
+											newState[wabaIdOrGetchatId].waba_payload!.errors = [
+												...(newState[wabaIdOrGetchatId].waba_payload!.errors ??
+													[]),
+											];
+
 											newState[wabaIdOrGetchatId].waba_payload!.errors =
 												statusObj.errors;
 										}
