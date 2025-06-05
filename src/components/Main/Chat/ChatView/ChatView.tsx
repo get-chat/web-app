@@ -680,33 +680,25 @@ const ChatView: React.FC<Props> = (props) => {
 									receivedNewErrors = true;
 									changedAny = true;
 									newState[wabaIdOrGetchatId].is_failed = true;
-									// Merge with existing errors if exist
-									if (newState[wabaIdOrGetchatId].waba_payload?.errors) {
-										// Make data mutable
+
+									// Make data mutable
+									if (newState[wabaIdOrGetchatId].waba_payload) {
 										newState[wabaIdOrGetchatId].waba_payload = {
 											...newState[wabaIdOrGetchatId].waba_payload,
 										} as WabaPayload;
+
+										// Update errors data
 										newState[wabaIdOrGetchatId].waba_payload!.errors = [
 											...(newState[wabaIdOrGetchatId].waba_payload!.errors ??
 												[]),
+											...statusObj.errors,
 										];
 
-										newState[wabaIdOrGetchatId].waba_payload?.errors?.concat(
-											statusObj.errors
-										);
-									} else {
-										if (newState[wabaIdOrGetchatId].waba_payload) {
-											// Make data mutable
-											newState[wabaIdOrGetchatId].waba_payload!.errors = [
-												...(newState[wabaIdOrGetchatId].waba_payload!.errors ??
-													[]),
-											];
-
-											newState[wabaIdOrGetchatId].waba_payload!.errors =
-												statusObj.errors;
-										}
+										console.log(statusObj.errors);
 									}
 								}
+
+								console.log(newState[wabaIdOrGetchatId]);
 
 								// Notify MessageStatuses component
 								PubSub.publish(
