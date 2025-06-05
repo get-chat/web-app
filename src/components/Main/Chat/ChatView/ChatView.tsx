@@ -693,12 +693,8 @@ const ChatView: React.FC<Props> = (props) => {
 												[]),
 											...statusObj.errors,
 										];
-
-										console.log(statusObj.errors);
 									}
 								}
-
-								console.log(newState[wabaIdOrGetchatId]);
 
 								// Notify MessageStatuses component
 								PubSub.publish(
