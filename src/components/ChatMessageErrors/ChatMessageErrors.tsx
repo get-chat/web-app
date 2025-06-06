@@ -18,13 +18,13 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 			{data.waba_payload?.errors &&
 				data.waba_payload.errors.map((error, index) => (
 					<Styled.Container key={index}>
-						<Styled.Recommendation>
-							{error.recommendation && (
+						{error.recommendation && (
+							<Styled.Recommendation>
 								<Linkify options={{ target: '_blank' }}>
 									{t(error.recommendation)}
 								</Linkify>
-							)}
-						</Styled.Recommendation>
+							</Styled.Recommendation>
+						)}
 
 						<Styled.Error>
 							<h5>{t('Details')}</h5>
