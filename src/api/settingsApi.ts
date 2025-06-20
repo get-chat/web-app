@@ -1,6 +1,7 @@
 import axios from '@src/api/axiosInstance';
 import {
 	BusinessProfileSettings,
+	CheckSettingsRefreshStatusResponse,
 	PartialUpdateBusinessProfileSettings,
 	ProfileAboutResponse,
 	UpdateProfileAboutRequest,
@@ -71,6 +72,15 @@ export const issueSettingsRefreshRequest = async (signal?: AbortSignal) => {
 	return await axios.post('/settings/refresh/issue/', {
 		signal,
 	});
+};
+
+export const checkSettingsRefreshStatus = async (signal?: AbortSignal) => {
+	return await axios.get<CheckSettingsRefreshStatusResponse>(
+		'/settings/refresh/status/',
+		{
+			signal,
+		}
+	);
 };
 
 export const deleteProfilePhoto = async (signal?: AbortSignal) => {
