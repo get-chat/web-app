@@ -67,6 +67,12 @@ export const updateProfilePhoto = async (
 	});
 };
 
+export const issueSettingsRefreshRequest = async (signal?: AbortSignal) => {
+	return await axios.post('/settings/refresh/issue/', {
+		signal,
+	});
+};
+
 export const deleteProfilePhoto = async (signal?: AbortSignal) => {
 	return await axios.delete('/settings/profile/photo/', { signal });
 };
