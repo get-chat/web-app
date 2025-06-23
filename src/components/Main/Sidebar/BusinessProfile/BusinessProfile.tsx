@@ -306,6 +306,7 @@ const BusinessProfile: React.FC<Props> = ({
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 										error={Boolean(aboutError)}
 									/>
 
@@ -325,6 +326,7 @@ const BusinessProfile: React.FC<Props> = ({
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 									/>
 									<TextField
 										variant="standard"
@@ -336,6 +338,7 @@ const BusinessProfile: React.FC<Props> = ({
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 									/>
 									<TextField
 										variant="standard"
@@ -347,12 +350,13 @@ const BusinessProfile: React.FC<Props> = ({
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 									/>
 
 									<FormControl
 										variant="standard"
 										fullWidth={true}
-										disabled={!isAdmin || isReadOnly}
+										disabled={!isAdmin || isReadOnly || isUpdating}
 									>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
