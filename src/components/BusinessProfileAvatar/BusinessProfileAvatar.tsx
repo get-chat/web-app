@@ -1,5 +1,7 @@
 import React from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
+import * as Styled from './BusinessProfileAvatar.styles';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	className?: string;
@@ -12,12 +14,21 @@ const BusinessProfileAvatar: React.FC<Props> = ({
 	onClick,
 	profilePhoto,
 }) => {
+	const { isUploadingProfilePhoto, isRefreshingSettings } = useAppSelector(
+		(state) => state.UI
+	);
+
 	return (
-		<CustomAvatar
-			className={className}
-			src={profilePhoto ? 'data:image/png;base64,' + profilePhoto : undefined}
-			onClick={onClick}
-		/>
+		<Styled.Container>
+			<CustomAvatar
+				className={className}
+				src={profilePhoto ? 'data:image/png;base64,' + profilePhoto : undefined}
+				onClick={onClick}
+			/>
+			{(isRefreshingSettings || isUploadingProfilePhoto) && (
+				<Styled.StyledCircularProgress size={40} />
+			)}
+		</Styled.Container>
 	);
 };
 

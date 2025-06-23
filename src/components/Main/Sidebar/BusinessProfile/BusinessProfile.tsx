@@ -11,7 +11,7 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
@@ -30,6 +30,7 @@ import {
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
+import { setState } from '@src/store/reducers/UIReducer';
 
 interface Props {
 	onHide: () => void;
@@ -43,6 +44,8 @@ const BusinessProfile: React.FC<Props> = ({
 	profilePhoto,
 }) => {
 	const config = React.useContext(AppConfigContext);
+
+	const dispatch = useAppDispatch();
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -181,8 +184,13 @@ const BusinessProfile: React.FC<Props> = ({
 		const formData = new FormData();
 		formData.append('file_encoded', file[0]);
 
+		dispatch(setState({ isUploadingProfilePhoto: true }));
+
 		try {
 			await updateProfilePhoto(formData, abortControllerRef.current?.signal);
+
+			// Set refreshing state to true
+			dispatch(setState({ isRefreshingSettings: true }));
 
 			// Check settings refresh status and load the new profile photo
 			await handleCheckSettingsRefreshStatus();
@@ -191,6 +199,7 @@ const BusinessProfile: React.FC<Props> = ({
 			window.displayError(error);
 		} finally {
 			setUpdating(false);
+			dispatch(setState({ isUploadingProfilePhoto: false }));
 		}
 	};
 

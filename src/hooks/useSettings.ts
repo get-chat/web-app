@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AxiosError } from 'axios';
-import {
-	AXIOS_ERROR_CODE_TIMEOUT,
-	EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO,
-} from '@src/Constants';
+import { AXIOS_ERROR_CODE_TIMEOUT } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import {
@@ -74,7 +71,7 @@ const useSettings = () => {
 				retryCount.current = 0;
 				await retrieveProfilePhoto();
 
-				PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+				dispatch(setState({ isRefreshingSettings: false }));
 			}
 		} catch (error: any | AxiosError) {
 			console.log(error);
