@@ -32,7 +32,11 @@ import {
 import api from '@src/api/axiosInstance';
 import useSettings from '@src/hooks/useSettings';
 
-function BusinessProfile(props: any) {
+interface Props {
+	onHide: () => void;
+}
+
+const BusinessProfile: React.FC<Props> = ({ onHide }) => {
 	const config = React.useContext(AppConfigContext);
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
@@ -65,7 +69,7 @@ function BusinessProfile(props: any) {
 		const handleKey = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				// Escape
-				props.onHide();
+				onHide();
 			}
 		};
 
@@ -224,7 +228,7 @@ function BusinessProfile(props: any) {
 	return (
 		<Styled.BusinessProfileContainer>
 			<Styled.Header>
-				<IconButton onClick={props.onHide} size="large">
+				<IconButton onClick={onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 				<h3>{t('Business Profile')}</h3>
@@ -379,6 +383,6 @@ function BusinessProfile(props: any) {
 			/>
 		</Styled.BusinessProfileContainer>
 	);
-}
+};
 
 export default BusinessProfile;

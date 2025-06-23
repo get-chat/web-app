@@ -1257,10 +1257,7 @@ const Sidebar: React.FC<Props> = ({
 			)}
 
 			{isBusinessProfileVisible && (
-				<BusinessProfile
-					onHide={() => setBusinessProfileVisible(false)}
-					displayEditBusinessProfile={displayEditBusinessProfile}
-				/>
+				<BusinessProfile onHide={() => setBusinessProfileVisible(false)} />
 			)}
 
 			{isUploadingMedia && !isMobileOnly && <UploadMediaIndicator />}
