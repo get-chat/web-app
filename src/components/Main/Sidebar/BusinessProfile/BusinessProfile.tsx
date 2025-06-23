@@ -20,18 +20,17 @@ import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
-import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
 import {
 	deleteProfilePhoto,
 	fetchBusinessProfileSettings,
 	fetchProfileAbout,
-	fetchProfilePhoto,
 	partialUpdateBusinessProfileSettings,
 	updateProfileAbout,
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
+import useSettings from '@src/hooks/useSettings';
 
 function BusinessProfile(props: any) {
 	const config = React.useContext(AppConfigContext);
@@ -52,10 +51,11 @@ function BusinessProfile(props: any) {
 	const [websites, setWebsites] = useState({});
 	const [about, setAbout] = useState('');
 	const [aboutError, setAboutError] = useState<string | null>(null);
-	const [profilePhoto, setProfilePhoto] = useState<string>();
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
+
+	const { handleCheckSettingsRefreshStatus, profilePhoto } = useSettings();
 
 	const fileInput = useRef<HTMLInputElement>();
 
@@ -140,16 +140,6 @@ function BusinessProfile(props: any) {
 		}
 	};
 
-	const retrieveProfilePhoto = async () => {
-		try {
-			const data = await fetchProfilePhoto(abortControllerRef.current?.signal);
-			const base64 = binaryToBase64(data);
-			setProfilePhoto(base64);
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		}
-	};
-
 	const retrieveProfileAbout = async () => {
 		try {
 			const data = await fetchProfileAbout();
@@ -157,7 +147,6 @@ function BusinessProfile(props: any) {
 		} catch (error: any | AxiosError) {
 			console.error(error);
 		} finally {
-			retrieveProfilePhoto();
 			setLoaded(true);
 		}
 	};
@@ -187,10 +176,9 @@ function BusinessProfile(props: any) {
 
 		try {
 			await updateProfilePhoto(formData, abortControllerRef.current?.signal);
-			// Display new photo
-			await retrieveProfilePhoto();
 
-			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+			// Check settings refresh status and load the new profile photo
+			await handleCheckSettingsRefreshStatus();
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			window.displayError(error);

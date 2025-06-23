@@ -26,6 +26,7 @@ interface UIState {
 	isTemplatesVisible: boolean;
 	isSavedResponsesVisible: boolean;
 	isInteractiveMessagesVisible: boolean;
+	isRefreshingSettings: boolean;
 }
 
 const initialState: UIState = {
@@ -53,6 +54,7 @@ const initialState: UIState = {
 	isTemplatesVisible: false,
 	isSavedResponsesVisible: false,
 	isInteractiveMessagesVisible: false,
+	isRefreshingSettings: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

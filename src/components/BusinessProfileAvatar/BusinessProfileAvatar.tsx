@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import { AxiosError } from 'axios';
 import CustomAvatar from '@src/components/CustomAvatar';
-import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 import { fetchProfilePhoto } from '@src/api/settingsApi';
+import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
 
 interface Props {
 	className?: string;
