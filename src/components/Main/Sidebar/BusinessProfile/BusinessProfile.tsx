@@ -30,13 +30,18 @@ import {
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
-import useSettings from '@src/hooks/useSettings';
 
 interface Props {
 	onHide: () => void;
+	handleCheckSettingsRefreshStatus: () => Promise<void>;
+	profilePhoto: string | undefined;
 }
 
-const BusinessProfile: React.FC<Props> = ({ onHide }) => {
+const BusinessProfile: React.FC<Props> = ({
+	onHide,
+	handleCheckSettingsRefreshStatus,
+	profilePhoto,
+}) => {
 	const config = React.useContext(AppConfigContext);
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
@@ -58,8 +63,6 @@ const BusinessProfile: React.FC<Props> = ({ onHide }) => {
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
-
-	const { handleCheckSettingsRefreshStatus, profilePhoto } = useSettings();
 
 	const fileInput = useRef<HTMLInputElement>();
 
@@ -271,6 +274,7 @@ const BusinessProfile: React.FC<Props> = ({ onHide }) => {
 								/>
 								<BusinessProfileAvatar
 									onClick={handleBusinessProfileAvatarClick}
+									profilePhoto={profilePhoto}
 								/>
 
 								{profilePhoto && isAdmin && !isReadOnly && (

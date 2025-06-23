@@ -121,6 +121,7 @@ import { fetchMessages } from '@src/api/messagesApi';
 import * as Styled from './Sidebar.styles';
 import { PersonList } from '@src/types/persons';
 import { store } from '@src/store';
+import useSettings from '@src/hooks/useSettings';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -185,6 +186,8 @@ const Sidebar: React.FC<Props> = ({
 	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
 		null
 	);
+
+	const { handleCheckSettingsRefreshStatus, profilePhoto } = useSettings();
 
 	const chatListRef = useRef<HTMLDivElement | null>(null);
 	const prevOffsetRef = useRef<number>(0);
@@ -841,6 +844,7 @@ const Sidebar: React.FC<Props> = ({
 						<div>
 							<Styled.BusinessAvatar
 								onClick={() => setBusinessProfileVisible(true)}
+								profilePhoto={profilePhoto}
 							/>
 						</div>
 					</Tooltip>
@@ -1257,7 +1261,11 @@ const Sidebar: React.FC<Props> = ({
 			)}
 
 			{isBusinessProfileVisible && (
-				<BusinessProfile onHide={() => setBusinessProfileVisible(false)} />
+				<BusinessProfile
+					onHide={() => setBusinessProfileVisible(false)}
+					handleCheckSettingsRefreshStatus={handleCheckSettingsRefreshStatus}
+					profilePhoto={profilePhoto}
+				/>
 			)}
 
 			{isUploadingMedia && !isMobileOnly && <UploadMediaIndicator />}

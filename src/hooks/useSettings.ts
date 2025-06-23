@@ -23,10 +23,12 @@ const useSettings = () => {
 
 	const abortControllerRef = useRef<AbortController | null>(null);
 
+	const [isLoadedProfilePhoto, setIsLoadedProfilePhoto] = useState(false);
 	const [profilePhoto, setProfilePhoto] = useState<string>();
 
 	useEffect(() => {
 		abortControllerRef.current = new AbortController();
+		retrieveProfilePhoto();
 
 		return () => {
 			// Cancelling ongoing requests
@@ -90,11 +92,45 @@ const useSettings = () => {
 
 	const retrieveProfilePhoto = async () => {
 		try {
-			const data = await fetchProfilePhoto(abortControllerRef.current?.signal);
+			const data = await fetchProfilePhoto();
 			const base64 = binaryToBase64(data);
 			setProfilePhoto(base64);
+
+			// Finish
+			setIsLoadedProfilePhoto(true);
 		} catch (error: any | AxiosError) {
 			console.error(error);
+
+			// No photo
+			if (error?.response?.status === 404) {
+				setProfilePhoto(undefined);
+
+				// Finish
+				setIsLoadedProfilePhoto(true);
+			} else if (error?.response?.status === 503) {
+				handleProfilePhotoError(error);
+			} else {
+				window.displayError(error);
+			}
+		}
+	};
+
+	const handleProfilePhotoError = (error: AxiosError) => {
+		try {
+			// Convert ArrayBuffer to string
+			const textDecoder = new TextDecoder();
+			const responseText = textDecoder.decode(
+				error.response?.data
+					? (error.response?.data as BufferSource)
+					: undefined
+			);
+
+			// Attempt to parse the string as JSON
+			const parsedError = JSON.parse(responseText);
+
+			window.displayCustomError(parsedError.reason ?? 'An error has occurred.');
+		} catch (e) {
+			console.error('Error parsing response:', e);
 		}
 	};
 
