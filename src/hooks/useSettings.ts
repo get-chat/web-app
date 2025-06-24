@@ -53,7 +53,7 @@ const useSettings = () => {
 				retryCount.current = 0;
 
 				window.displayCustomError(
-					'Too many attempts to refresh settings! Please try again in a while.'
+					'We need some time to apply your profile changes. Please come back later.'
 				);
 			}
 		};
