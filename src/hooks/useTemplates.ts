@@ -15,9 +15,9 @@ const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
 
 const useTemplates = () => {
-	const dispatch = useAppDispatch();
-
 	const retryCount = useRef(0);
+
+	const dispatch = useAppDispatch();
 
 	const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -64,6 +64,7 @@ const useTemplates = () => {
 			} else {
 				console.log('Too many attempts to refresh templates!');
 				dispatch(setIsRefreshingTemplates(false));
+				retryCount.current = 0;
 
 				window.displayCustomError(
 					'Too many attempts to refresh templates! Please try again in a while.'

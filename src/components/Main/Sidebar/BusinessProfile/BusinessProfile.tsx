@@ -11,7 +11,7 @@ import {
 import { ArrowBack } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { getApiBaseURLsMergedWithConfig } from '@src/helpers/StorageHelper';
@@ -20,21 +20,32 @@ import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
-import { binaryToBase64 } from '@src/helpers/ImageHelper';
 import * as Styled from './BusinessProfile.styles';
 import {
 	deleteProfilePhoto,
 	fetchBusinessProfileSettings,
 	fetchProfileAbout,
-	fetchProfilePhoto,
 	partialUpdateBusinessProfileSettings,
 	updateProfileAbout,
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
+import { setState } from '@src/store/reducers/UIReducer';
 
-function BusinessProfile(props: any) {
+interface Props {
+	onHide: () => void;
+	handleCheckSettingsRefreshStatus: () => Promise<void>;
+	profilePhoto: string | undefined;
+}
+
+const BusinessProfile: React.FC<Props> = ({
+	onHide,
+	handleCheckSettingsRefreshStatus,
+	profilePhoto,
+}) => {
 	const config = React.useContext(AppConfigContext);
+
+	const dispatch = useAppDispatch();
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -52,7 +63,6 @@ function BusinessProfile(props: any) {
 	const [websites, setWebsites] = useState({});
 	const [about, setAbout] = useState('');
 	const [aboutError, setAboutError] = useState<string | null>(null);
-	const [profilePhoto, setProfilePhoto] = useState<string>();
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
@@ -65,7 +75,7 @@ function BusinessProfile(props: any) {
 		const handleKey = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				// Escape
-				props.onHide();
+				onHide();
 			}
 		};
 
@@ -140,16 +150,6 @@ function BusinessProfile(props: any) {
 		}
 	};
 
-	const retrieveProfilePhoto = async () => {
-		try {
-			const data = await fetchProfilePhoto(abortControllerRef.current?.signal);
-			const base64 = binaryToBase64(data);
-			setProfilePhoto(base64);
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		}
-	};
-
 	const retrieveProfileAbout = async () => {
 		try {
 			const data = await fetchProfileAbout();
@@ -157,7 +157,6 @@ function BusinessProfile(props: any) {
 		} catch (error: any | AxiosError) {
 			console.error(error);
 		} finally {
-			retrieveProfilePhoto();
 			setLoaded(true);
 		}
 	};
@@ -185,17 +184,22 @@ function BusinessProfile(props: any) {
 		const formData = new FormData();
 		formData.append('file_encoded', file[0]);
 
+		dispatch(setState({ isUploadingProfilePhoto: true }));
+
 		try {
 			await updateProfilePhoto(formData, abortControllerRef.current?.signal);
-			// Display new photo
-			await retrieveProfilePhoto();
 
-			PubSub.publish(EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO);
+			// Set refreshing state to true
+			dispatch(setState({ isRefreshingSettings: true }));
+
+			// Check settings refresh status and load the new profile photo
+			await handleCheckSettingsRefreshStatus();
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			window.displayError(error);
 		} finally {
 			setUpdating(false);
+			dispatch(setState({ isUploadingProfilePhoto: false }));
 		}
 	};
 
@@ -236,7 +240,7 @@ function BusinessProfile(props: any) {
 	return (
 		<Styled.BusinessProfileContainer>
 			<Styled.Header>
-				<IconButton onClick={props.onHide} size="large">
+				<IconButton onClick={onHide} size="large">
 					<ArrowBack />
 				</IconButton>
 				<h3>{t('Business Profile')}</h3>
@@ -279,6 +283,7 @@ function BusinessProfile(props: any) {
 								/>
 								<BusinessProfileAvatar
 									onClick={handleBusinessProfileAvatarClick}
+									profilePhoto={profilePhoto}
 								/>
 
 								{profilePhoto && isAdmin && !isReadOnly && (
@@ -301,6 +306,7 @@ function BusinessProfile(props: any) {
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 										error={Boolean(aboutError)}
 									/>
 
@@ -320,6 +326,7 @@ function BusinessProfile(props: any) {
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 									/>
 									<TextField
 										variant="standard"
@@ -331,6 +338,7 @@ function BusinessProfile(props: any) {
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 									/>
 									<TextField
 										variant="standard"
@@ -342,12 +350,13 @@ function BusinessProfile(props: any) {
 										InputProps={{
 											readOnly: !isAdmin || isReadOnly,
 										}}
+										disabled={isUpdating}
 									/>
 
 									<FormControl
 										variant="standard"
 										fullWidth={true}
-										disabled={!isAdmin || isReadOnly}
+										disabled={!isAdmin || isReadOnly || isUpdating}
 									>
 										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
 										<Select
@@ -391,6 +400,6 @@ function BusinessProfile(props: any) {
 			/>
 		</Styled.BusinessProfileContainer>
 	);
-}
+};
 
 export default BusinessProfile;

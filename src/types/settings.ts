@@ -27,3 +27,7 @@ export interface ProfileAboutResponse {
 export interface UpdateProfileAboutRequest {
 	text: string | null;
 }
+
+export interface CheckSettingsRefreshStatusResponse {
+	currently_refreshing: boolean;
+}

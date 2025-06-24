@@ -1,13 +1,14 @@
-import axios from '@src/api/axiosInstance';
 import {
 	BusinessProfileSettings,
+	CheckSettingsRefreshStatusResponse,
 	PartialUpdateBusinessProfileSettings,
 	ProfileAboutResponse,
 	UpdateProfileAboutRequest,
 } from '@src/types/settings';
+import api from '@src/api/axiosInstance';
 
 export const fetchBusinessProfileSettings = async (signal?: AbortSignal) => {
-	const response = await axios.get<BusinessProfileSettings>(
+	const response = await api.get<BusinessProfileSettings>(
 		'/settings/business/profile/',
 		{ signal }
 	);
@@ -18,7 +19,7 @@ export const partialUpdateBusinessProfileSettings = async (
 	data: PartialUpdateBusinessProfileSettings,
 	signal?: AbortSignal
 ) => {
-	const response = await axios.patch<BusinessProfileSettings>(
+	const response = await api.patch<BusinessProfileSettings>(
 		'/settings/business/profile/',
 		data,
 		{ signal }
@@ -27,7 +28,7 @@ export const partialUpdateBusinessProfileSettings = async (
 };
 
 export const fetchProfileAbout = async () => {
-	const response = await axios.get<ProfileAboutResponse>(
+	const response = await api.get<ProfileAboutResponse>(
 		'/settings/profile/about/'
 	);
 	return response.data;
@@ -37,7 +38,7 @@ export const updateProfileAbout = async (
 	data: UpdateProfileAboutRequest,
 	signal?: AbortSignal
 ) => {
-	const response = await axios.patch<ProfileAboutResponse>(
+	const response = await api.patch<ProfileAboutResponse>(
 		'/settings/profile/about/',
 		data,
 		{
@@ -48,7 +49,7 @@ export const updateProfileAbout = async (
 };
 
 export const fetchProfilePhoto = async (signal?: AbortSignal) => {
-	const response = await axios.get<ArrayBuffer>('/settings/profile/photo/', {
+	const response = await api.get<ArrayBuffer>('/settings/profile/photo/', {
 		responseType: 'arraybuffer',
 		signal,
 	});
@@ -59,7 +60,7 @@ export const updateProfilePhoto = async (
 	formData: FormData,
 	signal?: AbortSignal
 ) => {
-	return await axios.post('/settings/profile/photo/', formData, {
+	return await api.post('/settings/profile/photo/', formData, {
 		signal,
 		headers: {
 			'Content-Type': 'multipart/form-data',
@@ -67,6 +68,23 @@ export const updateProfilePhoto = async (
 	});
 };
 
+export const issueSettingsRefreshRequest = async (signal?: AbortSignal) => {
+	const response = await api.post('/settings/refresh/issue/', {
+		signal,
+	});
+	return response.data;
+};
+
+export const checkSettingsRefreshStatus = async (signal?: AbortSignal) => {
+	const response = await api.get<CheckSettingsRefreshStatusResponse>(
+		'/settings/refresh/status/',
+		{
+			signal,
+		}
+	);
+	return response.data;
+};
+
 export const deleteProfilePhoto = async (signal?: AbortSignal) => {
-	return await axios.delete('/settings/profile/photo/', { signal });
+	return await api.delete('/settings/profile/photo/', { signal });
 };

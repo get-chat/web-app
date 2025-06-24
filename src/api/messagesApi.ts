@@ -1,4 +1,3 @@
-import axios from '@src/api/axiosInstance';
 import api from '@src/api/axiosInstance';
 import { ApiResponse, PaginatedResponse } from '@src/types/common';
 import {
@@ -13,7 +12,7 @@ export const fetchMessages = async (
 	params: FetchMessagesRequest,
 	signal?: AbortSignal
 ) => {
-	const response = await axios.get<PaginatedResponse<Message>>('/messages/', {
+	const response = await api.get<PaginatedResponse<Message>>('/messages/', {
 		params,
 		signal,
 	});

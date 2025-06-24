@@ -26,6 +26,8 @@ interface UIState {
 	isTemplatesVisible: boolean;
 	isSavedResponsesVisible: boolean;
 	isInteractiveMessagesVisible: boolean;
+	isUploadingProfilePhoto: boolean;
+	isRefreshingSettings: boolean;
 }
 
 const initialState: UIState = {
@@ -53,6 +55,8 @@ const initialState: UIState = {
 	isTemplatesVisible: false,
 	isSavedResponsesVisible: false,
 	isInteractiveMessagesVisible: false,
+	isUploadingProfilePhoto: false,
+	isRefreshingSettings: false,
 };
 
 const closeSections = (state: Draft<UIState>) => {

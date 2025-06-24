@@ -49,7 +49,7 @@ export const Section = styled.div`
 		text-align: center;
 	}
 
-	span:not(.MuiButton-label),
+	span:not(.MuiButton-label):not(.MuiCircularProgress-root),
 	.subSection > div {
 		font-size: 14px;
 		color: rgba(0, 0, 45, 0.6);
@@ -87,10 +87,13 @@ export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
 		margin-bottom: 15px;
 	}
 
+	.BusinessProfileAvatarContainer {
+		margin-bottom: 15px;
+	}
+
 	.MuiAvatar-root {
 		height: 200px;
 		width: 200px;
-		margin-bottom: 15px;
 		font-size: 5rem !important;
 		transition: opacity linear 0.1s;
 
