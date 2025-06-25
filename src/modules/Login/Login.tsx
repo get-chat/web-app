@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import {
@@ -27,7 +27,7 @@ import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 
 const Login = () => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const { t } = useTranslation();
 
@@ -237,7 +237,7 @@ const Login = () => {
 					{loginError && <Alert severity="error">{t(loginError)}</Alert>}
 
 					<Styled.VersionWrapper>
-						<Styled.Version>Version: {packageJson.version}</Styled.Version>
+						<Styled.Version>Version: {packageJson?.version}</Styled.Version>
 					</Styled.VersionWrapper>
 				</Styled.LoginBody>
 			</Fade>

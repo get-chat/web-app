@@ -2,6 +2,7 @@ import React, {
 	MouseEvent,
 	useEffect,
 	useLayoutEffect,
+	useContext,
 	useMemo,
 	useRef,
 	useState,
@@ -142,7 +143,7 @@ const Sidebar: React.FC<Props> = ({
 	isChatOnly,
 	setChatTagsListVisible,
 }) => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const {
 		hasFailedMessages,

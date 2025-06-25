@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import ChatView from './Chat/ChatView';
 import { Fade, Snackbar } from '@mui/material';
@@ -82,7 +82,7 @@ function useQuery() {
 }
 
 const Main: React.FC = () => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const {
 		loadingProgress,

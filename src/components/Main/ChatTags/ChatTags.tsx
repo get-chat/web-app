@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
 	Button,
 	Chip,
@@ -29,7 +29,7 @@ interface Props {
 }
 
 const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const { t } = useTranslation();
 

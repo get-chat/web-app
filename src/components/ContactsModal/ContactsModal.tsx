@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
@@ -28,7 +28,7 @@ const ContactsModal: React.FC<Props> = ({
 	sendMessage,
 	recipientWaId,
 }) => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const [selectedContacts, setSelectedContacts] = useState<Recipient[]>([]);
 
