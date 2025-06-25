@@ -3,9 +3,9 @@ import { TextEncoder, TextDecoder } from 'util';
 
 // Polyfill TextEncoder/TextDecoder for React Router
 global.TextEncoder = TextEncoder;
+// @ts-ignore
 global.TextDecoder = TextDecoder;
 
-// Other global mocks if needed
 global.URL.createObjectURL = jest.fn();
 global.URL.revokeObjectURL = jest.fn();
 
@@ -15,4 +15,8 @@ jest.mock('./src/VoiceRecorder', () => ({
 		startRecording: jest.fn(),
 		stopRecording: jest.fn(),
 	})),
+}));
+
+jest.mock('react-i18next', () => ({
+	useTranslation: () => ({ t: (key: string) => key }),
 }));

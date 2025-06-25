@@ -1,7 +1,7 @@
-import React from 'react';
+import { createContext } from 'react';
 
 interface Props {}
 
-const ApplicationContext = React.createContext<Props>({});
+const ApplicationContext = createContext<Props>({});
 
 export { ApplicationContext };

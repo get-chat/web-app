@@ -13,7 +13,7 @@ module.exports = {
 	testMatch: [
 		'**/*.(test|spec).(js|jsx|ts|tsx)'
 	],
-	setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+	setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 	transformIgnorePatterns: [
 		'/node_modules/(?!(react-use-navigate-list)/)',
 		'/node_modules/(?!(react|react-dom|@testing-library)/)',

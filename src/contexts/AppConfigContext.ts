@@ -1,6 +1,6 @@
-import React from 'react';
+import { createContext } from 'react';
 import { AppConfig } from '@src/config/application';
 
-const AppConfigContext = React.createContext<AppConfig | null>(null);
+const AppConfigContext = createContext<AppConfig | null>(null);
 
 export { AppConfigContext };
