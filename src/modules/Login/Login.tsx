@@ -26,7 +26,7 @@ import * as Styled from './Login.styles';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 
-const Login = () => {
+const Login: React.FC = () => {
 	const config = useContext(AppConfigContext);
 
 	const { t } = useTranslation();
@@ -216,10 +216,7 @@ const Login = () => {
 						</Button>
 
 						<Styled.AdminPanelButton
-							// @ts-ignore
-							color="black"
 							href={getHubURL(config?.API_BASE_URL ?? '')}
-							target="_blank"
 							fullWidth
 							variant="text"
 						>
