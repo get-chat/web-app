@@ -18,7 +18,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@src/*": ["./src/*"]
-		}
+		},
+		"types": ["cypress"]
 	},
 	"include": ["src", "public", "src/declaration.d.ts"]
 }
