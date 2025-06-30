@@ -24,6 +24,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.10.5",
 		"@emotion/styled": "^11.10.5",
+		"@jest/globals": "^30.0.3",
 		"@mui/icons-material": "^5.10.16",
 		"@mui/lab": "5.0.0-alpha.110",
 		"@mui/material": "^5.10.16",

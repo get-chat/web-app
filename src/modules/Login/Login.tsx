@@ -184,7 +184,7 @@ const Login = () => {
 					<form onSubmit={doLogin}>
 						<TextField
 							variant="standard"
-							data-test-id="username"
+							data-testid="username"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
 							label={t('Username')}
@@ -194,7 +194,7 @@ const Login = () => {
 						/>
 						<TextField
 							variant="standard"
-							data-test-id="password"
+							data-testid="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							type="password"
@@ -204,7 +204,7 @@ const Login = () => {
 							fullWidth={true}
 						/>
 						<Button
-							data-test-id="submit"
+							data-testid="submit"
 							type="submit"
 							size="large"
 							variant="contained"
