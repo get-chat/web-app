@@ -22,7 +22,7 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	const { t } = useTranslation();
 
 	const [deleteId, setDeleteId] = useState<number>();
-	const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = useState(false);
 
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 

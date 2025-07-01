@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from '../../../Image';
 import { useTranslation } from 'react-i18next';
 import MissingContent from '@src/components/Main/Chat/ChatMessage/MissingContent';
@@ -16,7 +16,7 @@ const ChatMessageImage: React.FC<Props> = ({
 	data,
 	onPreview,
 }) => {
-	const [isAvailable, setIsAvailable] = React.useState(true);
+	const [isAvailable, setIsAvailable] = useState(true);
 
 	const { t } = useTranslation();
 

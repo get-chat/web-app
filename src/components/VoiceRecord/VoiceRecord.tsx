@@ -45,7 +45,7 @@ const VoiceRecord: React.FC<Props> = ({
 
 	const { waId } = useParams();
 
-	const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = useState(false);
 
 	const handleClose = () => {
 		setOpen(false);
