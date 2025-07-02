@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
-import { resetAuthApiMocks } from './__mocks__/api/authApi';
-import { resetStorageHelperMocks } from './__mocks__/Helpers/StorageHelper';
+import { resetAuthApiMocks } from '@src/__mocks__/@src/api/authApi';
+import { resetStorageHelperMocks } from '@src/__mocks__/@src/helpers/StorageHelper';
 
 // Global mock reset function
 beforeEach(() => {

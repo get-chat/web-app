@@ -4,16 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { TestProviders } from '@src/__mocks__/test-utils';
 import Login from '@src/modules/Login';
 
-// Mock the modules at the top level
-jest.mock('@src/api/authApi', () => ({
-	login: jest.fn(),
-}));
-
-jest.mock('@src/helpers/StorageHelper', () => ({
-	storeToken: jest.fn(),
-	getToken: jest.fn(() => null),
-	getApiBaseURLsMergedWithConfig: jest.fn(() => []),
-}));
+jest.mock('@src/api/authApi');
+jest.mock('@src/helpers/StorageHelper');
 
 describe('Login Component - Successful Login', () => {
 	const user = userEvent.setup();
