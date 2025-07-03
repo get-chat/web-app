@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ChatMessageLocation: React.FC<Props> = ({ data }) => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const location = data.waba_payload?.location;
 	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${config?.APP_GOOGLE_MAPS_API_KEY}&&q=${location?.latitude},${location?.longitude}&q=`;

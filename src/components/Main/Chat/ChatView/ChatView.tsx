@@ -157,9 +157,20 @@ const ChatView: React.FC<Props> = (props) => {
 	const { t } = useTranslation();
 
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+	const location = useLocation();
+
+	const { waId } = useParams();
+	const [isLoaded, setLoaded] = useState(false);
+	const [isExpired, setExpired] = useState(false);
+
+	const handleIfUnauthorized = (error: AxiosError) => {
+		if (error.response?.status === 401) {
+			clearUserSession('invalidToken', undefined, navigate);
+		}
+	};
 
 	const {
-		currentUser,
 		users,
 		templates,
 		savedResponses,
@@ -167,22 +178,30 @@ const ChatView: React.FC<Props> = (props) => {
 		setMessages,
 		reactions,
 		setReactions,
+		input,
+		setInput,
 		isTimestampsSame,
 		mergeReactionLists,
 		fixedDateIndicatorText,
 		prepareFixedDateIndicator,
+		sanitizeRequestBody,
+		displayMessageInChatManually,
+		sendMessage,
+		queueMessage,
+		handleFailedMessage,
 	} = useChat({
+		waId,
+		isLoaded,
+		setExpired,
+		handleIfUnauthorized,
 		MESSAGES_PER_PAGE,
 	});
 
-	const [isLoaded, setLoaded] = useState(false);
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
-	const [isExpired, setExpired] = useState(false);
 
 	const [person, setPerson] = useState<Person>();
 	const [chat, setChat] = useState<Chat>();
 
-	const [input, setInput] = useState('');
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
 	const [hasOlderMessagesToLoad, setHasOlderMessagesToLoad] = useState(true);
 
@@ -207,12 +226,7 @@ const ChatView: React.FC<Props> = (props) => {
 	const messagesContainer = useRef<HTMLDivElement>(null);
 	const abortControllerRef = useRef<AbortController | null>(null);
 
-	const { waId } = useParams();
-
 	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
-
-	const navigate = useNavigate();
-	const location = useLocation();
 
 	useEffect(() => {
 		if (waId) {
@@ -1434,35 +1448,6 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const queueMessage = (
-		requestBody: CreateMessageRequest,
-		successCallback?: () => void,
-		errorCallback?: () => void,
-		completeCallback?: () => void,
-		formData?: any,
-		chosenFile?: ChosenFileClass
-	) => {
-		const uniqueID = generateUniqueID();
-
-		// Inject id into requestBody
-		requestBody.pending_message_unique_id = uniqueID;
-
-		const updatedState = [...pendingMessages];
-		updatedState.push({
-			id: uniqueID,
-			requestBody: requestBody,
-			successCallback: successCallback,
-			errorCallback: errorCallback,
-			completeCallback: completeCallback,
-			formData: formData,
-			chosenFile: chosenFile,
-			isFailed: false,
-			willRetry: false,
-		});
-
-		dispatch(setPendingMessages([...updatedState]));
-	};
-
 	const sendCustomTextMessage = async (text: string) => {
 		if (waId) {
 			await sendMessage(true, undefined, {
@@ -1475,14 +1460,6 @@ const ChatView: React.FC<Props> = (props) => {
 		} else {
 			console.warn('Empty wa_id!');
 		}
-	};
-
-	const sanitizeRequestBody = (
-		requestBody: CreateMessageRequest
-	): CreateMessageRequest => {
-		const sanitizedRequestBody = { ...requestBody };
-		delete sanitizedRequestBody['pending_message_unique_id'];
-		return sanitizedRequestBody;
 	};
 
 	const sendReaction = async (messageId: string, emoji: string | null) => {
@@ -1509,85 +1486,6 @@ const ChatView: React.FC<Props> = (props) => {
 				handleIfUnauthorized(error);
 			}
 		}
-	};
-
-	const sendMessage = async (
-		willQueue: boolean,
-		e?: Event | React.KeyboardEvent | React.MouseEvent,
-		customPayload?: CreateMessageRequest,
-		successCallback?: () => void,
-		completeCallback?: () => void
-	) => {
-		e?.preventDefault();
-
-		// Check if there is internet connection
-		if (!hasInternetConnection()) {
-			window.displayCustomError('Check your internet connection.');
-			return false;
-		}
-
-		if (!waId) return false;
-
-		let requestBody: CreateMessageRequest = {};
-
-		if (e) {
-			const preparedInput = decode(translateHTMLInputToText(input).trim());
-
-			if (preparedInput === '') {
-				return false;
-			}
-
-			console.log('You typed: ', preparedInput);
-
-			requestBody = {
-				wa_id: waId,
-				type: MessageType.text,
-				text: {
-					body: preparedInput,
-				},
-			};
-		} else if (customPayload) {
-			// Resend payload is being sent
-			requestBody = customPayload;
-		}
-
-		// Queue message
-		if (willQueue) {
-			if (!isLoaded) {
-				console.warn('Cancelled sending.');
-				return;
-			}
-
-			queueMessage(requestBody, successCallback, undefined, completeCallback);
-			clearInput();
-			return;
-		}
-
-		try {
-			const response = await createMessage(sanitizeRequestBody(requestBody));
-			// Message is stored and will be sent later
-			if (response.status === 202) {
-				displayMessageInChatManually(requestBody, response.data.id);
-			}
-			successCallback?.();
-		} catch (error: any | AxiosError) {
-			if (error.response) {
-				const status = error.response.status;
-				// Switch to expired mode if status code is 453
-				if (status === 453) {
-					setExpired(true);
-				} else if (status >= 500) {
-					handleFailedMessage(requestBody);
-				}
-
-				handleIfUnauthorized(error);
-			}
-		} finally {
-			completeCallback?.();
-		}
-
-		// Close emoji picker
-		PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
 	};
 
 	const sendTemplateMessage = async (
@@ -1788,55 +1686,6 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	const displayMessageInChatManually = (
-		requestBody: CreateMessageRequest,
-		messageId: string
-	) => {
-		flushSync(() => {
-			setMessages((prevState) => {
-				const message: Message = {
-					id: messageId,
-					from_us: true,
-					received: false,
-					customer_wa_id: requestBody.wa_id ?? '',
-					tags: [],
-					chat_tags: [],
-					is_failed: false,
-					sender: currentUser,
-					waba_payload: {
-						id: messageId,
-						timestamp: getUnixTimestamp().toString(),
-						...requestBody,
-						type: requestBody.type ?? MessageType.none,
-					},
-				};
-				prevState[generateMessageInternalId(message.id)] = message;
-				return { ...prevState };
-			});
-		});
-	};
-
-	const handleFailedMessage = (requestBody: CreateMessageRequest) => {
-		//displayMessageInChatManually(requestBody, false);
-
-		// Mark message in queue as failed
-		dispatch(
-			setPendingMessages([
-				...setPendingMessageFailed(
-					pendingMessages,
-					requestBody.pending_message_unique_id ?? ''
-				),
-			])
-		);
-		dispatch(setState({ isSendingPendingMessages: false }));
-
-		// This will be used to display a warning before refreshing
-		dispatch(setState({ hasFailedMessages: true }));
-
-		// Last attempt at
-		dispatch(setState({ lastSendAttemptAt: new Date() }));
-	};
-
 	const retryMessage = (message: Message) => {
 		if (!message.resend_payload) {
 			console.warn('Property is undefined: resendPayload', message);
@@ -1922,12 +1771,6 @@ const ChatView: React.FC<Props> = (props) => {
 			setCurrentNewMessages(0);
 		} catch (error: any | AxiosError) {
 			console.error(error);
-		}
-	};
-
-	const handleIfUnauthorized = (error: AxiosError) => {
-		if (error.response?.status === 401) {
-			clearUserSession('invalidToken', undefined, navigate);
 		}
 	};
 

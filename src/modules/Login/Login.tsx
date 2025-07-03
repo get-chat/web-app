@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import {
@@ -26,8 +26,8 @@ import * as Styled from './Login.styles';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 
-const Login = () => {
-	const config = React.useContext(AppConfigContext);
+const Login: React.FC = () => {
+	const config = useContext(AppConfigContext);
 
 	const { t } = useTranslation();
 
@@ -184,7 +184,7 @@ const Login = () => {
 					<form onSubmit={doLogin}>
 						<TextField
 							variant="standard"
-							data-test-id="username"
+							data-testid="username"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
 							label={t('Username')}
@@ -194,7 +194,7 @@ const Login = () => {
 						/>
 						<TextField
 							variant="standard"
-							data-test-id="password"
+							data-testid="password"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							type="password"
@@ -204,7 +204,7 @@ const Login = () => {
 							fullWidth={true}
 						/>
 						<Button
-							data-test-id="submit"
+							data-testid="submit"
 							type="submit"
 							size="large"
 							variant="contained"
@@ -216,10 +216,7 @@ const Login = () => {
 						</Button>
 
 						<Styled.AdminPanelButton
-							// @ts-ignore
-							color="black"
 							href={getHubURL(config?.API_BASE_URL ?? '')}
-							target="_blank"
 							fullWidth
 							variant="text"
 						>
@@ -237,7 +234,7 @@ const Login = () => {
 					{loginError && <Alert severity="error">{t(loginError)}</Alert>}
 
 					<Styled.VersionWrapper>
-						<Styled.Version>Version: {packageJson.version}</Styled.Version>
+						<Styled.Version>Version: {packageJson?.version}</Styled.Version>
 					</Styled.VersionWrapper>
 				</Styled.LoginBody>
 			</Fade>

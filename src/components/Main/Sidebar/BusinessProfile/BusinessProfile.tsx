@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
 	Button,
 	FormControl,
@@ -43,7 +43,7 @@ const BusinessProfile: React.FC<Props> = ({
 	handleCheckSettingsRefreshStatus,
 	profilePhoto,
 }) => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const dispatch = useAppDispatch();
 

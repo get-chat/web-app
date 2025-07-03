@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Trans } from 'react-i18next';
 import { Title, List, Item } from './OrderMessage.styles';
 import { Message } from '@src/types/messages';
@@ -67,4 +67,4 @@ const OrderMessage: React.FC<Props> = ({ data }) => {
 	);
 };
 
-export default React.memo(OrderMessage);
+export default memo(OrderMessage);

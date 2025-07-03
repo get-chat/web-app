@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -21,7 +21,7 @@ interface Props {
 const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	const { t } = useTranslation();
 
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const [current, setCurrent] = useState<string | null | undefined>();
 	const [urls, setUrls] = useState<string[]>([]);

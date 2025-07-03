@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import * as Styled from './ChatTagsList.styles';
 import {
 	Button,
@@ -24,7 +24,7 @@ interface Props {
 }
 
 const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
-	const config = React.useContext(AppConfigContext);
+	const config = useContext(AppConfigContext);
 
 	const tags = useAppSelector((state) => state.tags.value);
 

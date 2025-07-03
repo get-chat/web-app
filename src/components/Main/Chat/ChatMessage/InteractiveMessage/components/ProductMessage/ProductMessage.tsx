@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Trans } from 'react-i18next';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
@@ -95,4 +95,4 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	);
 };
 
-export default React.memo(ProductMessage);
+export default memo(ProductMessage);

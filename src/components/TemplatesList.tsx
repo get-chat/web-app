@@ -37,7 +37,7 @@ const TemplatesList: React.FC<Props> = ({
 
 	return (
 		<div className="templateMessagesWrapper">
-			<div className="templateMessages" data-test-id="template-messages">
+			<div className="templateMessages" data-testid="template-messages">
 				<div className="templateMessages__actions">
 					<div className="templateMessages__create">
 						{displayRegisterTemplate && (
