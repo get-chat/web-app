@@ -66,8 +66,8 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 					</Alert>
 
 					<Styled.Actions>
-						<Styled.ContactLink href="mailto:support@get.chat">
-							{t('Contact us')}
+						<Styled.ContactLink href="https://status.360dialog.com/">
+							{t('Go to 360Dialog Status Page')}
 						</Styled.ContactLink>
 					</Styled.Actions>
 				</>
