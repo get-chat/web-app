@@ -67,7 +67,7 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 
 					<Styled.Actions>
 						<Styled.ContactLink href="mailto:support@get.chat">
-							{t('ContactView us')}
+							{t('Contact us')}
 						</Styled.ContactLink>
 					</Styled.Actions>
 				</>

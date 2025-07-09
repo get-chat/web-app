@@ -181,7 +181,7 @@ msgstr "E-posta"
 msgid "Loading: %s"
 msgstr "Yükleniyor: %s"
 
-msgid "ContactView us"
+msgid "Contact us"
 msgstr "Bize ulaş"
 
 msgid "Skip"
