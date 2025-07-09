@@ -669,7 +669,11 @@ const Main: React.FC = () => {
 			}
 		} catch (error: any | AxiosError) {
 			console.error('Error retrieving current user', error);
-			dispatch(setState({ isInitialResourceFailed: true }));
+
+			// If not 404 (prevents false alarm when logged in as superadmin)
+			if (error?.response?.status !== 404) {
+				dispatch(setState({ isInitialResourceFailed: true }));
+			}
 
 			// Exceptional handling for invalid token
 			if (error?.response?.status === 403) {
