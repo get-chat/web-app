@@ -66,8 +66,17 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 					</Alert>
 
 					<Styled.Actions>
-						<Styled.ContactLink href="mailto:support@get.chat">
-							{t('ContactView us')}
+						<Styled.ContactLink
+							target="_blank"
+							href={
+								process.env.REACT_APP_ERROR_HELP_LINK_URL ??
+								'https://status.360dialog.com/'
+							}
+						>
+							{t(
+								process.env.REACT_APP_ERROR_HELP_LINK_TEXT ??
+									'Go to 360Dialog Status Page'
+							)}
 						</Styled.ContactLink>
 					</Styled.Actions>
 				</>

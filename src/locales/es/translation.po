@@ -179,7 +179,7 @@ msgstr "Correo electrónico"
 msgid "Loading: %s"
 msgstr "Cargando: %s"
 
-msgid "ContactView us"
+msgid "Contact us"
 msgstr "Contáctanos"
 
 msgid "Skip"

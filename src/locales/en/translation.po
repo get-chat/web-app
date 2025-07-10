@@ -176,7 +176,7 @@ msgstr ""
 msgid "Loading: %s"
 msgstr ""
 
-msgid "ContactView us"
+msgid "Contact us"
 msgstr ""
 
 msgid "Skip"

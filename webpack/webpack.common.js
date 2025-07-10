@@ -2,7 +2,21 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-require('dotenv').config();
+
+const dotenv = require('dotenv');
+const fs = require('fs');
+
+// Load `.env` manually from the root
+const envPath = path.resolve(__dirname, '../.env');
+const envVars = dotenv.parse(fs.readFileSync(envPath));
+
+// Filter only REACT_APP_* vars and stringify them for DefinePlugin
+const envKeys = Object.keys(envVars)
+	.filter(key => key.startsWith('REACT_APP_'))
+	.reduce((acc, key) => {
+		acc[`process.env.${key}`] = JSON.stringify(envVars[key]);
+		return acc;
+	}, {});
 
 module.exports = {
 	mode: 'none',
@@ -92,14 +106,7 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			process: 'process/browser',
 		}),
-		new webpack.DefinePlugin({
-			'process.env.REACT_APP_LOGO_URL': JSON.stringify(
-				process.env.REACT_APP_LOGO_URL
-			),
-			'process.env.REACT_APP_LOGO_BLACK_URL': JSON.stringify(
-				process.env.REACT_APP_LOGO_BLACK_URL
-			),
-		}),
+		new webpack.DefinePlugin(envKeys),
 		new MiniCssExtractPlugin({
 			filename: 'static/css/[name].[contenthash:8].css',
 		}),

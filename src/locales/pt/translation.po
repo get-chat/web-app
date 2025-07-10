@@ -171,7 +171,7 @@ msgstr "E-mail"
 msgid "Loading: %s"
 msgstr "Carregando: %s"
 
-msgid "ContactView us"
+msgid "Contact us"
 msgstr "Contate-nos"
 
 msgid "Skip"
