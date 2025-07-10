@@ -113,6 +113,10 @@ In order to display Google Maps Embed API in location messages, you need to prov
 
 `REACT_APP_LOGO_BLACK_URL`: Black and white version of application logo (used inside the loading screen).
 
+`REACT_APP_ERROR_HELP_LINK_TEXT`: Text to display as a helpful link when the app fails to load critical resources.
+
+`REACT_APP_ERROR_HELP_LINK_URL`: URL to open when users click the help link shown on loading failure.
+
 `SENTRY_AUTH_TOKEN`: This token is used for uploading source maps to Sentry automatically.
 
 ## How to add translations of a new language
