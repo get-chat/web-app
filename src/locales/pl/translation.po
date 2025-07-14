@@ -158,10 +158,10 @@ msgstr "Tagi"
 msgid "You can filter chats by tags."
 msgstr "Możesz filtrować czaty według tagów."
 
-msgid "ContactView Details"
+msgid "Contact Details"
 msgstr "Szczegóły kontaktu"
 
-msgid "ContactView details"
+msgid "Contact details"
 msgstr "Dane kontaktowe"
 
 msgid "Never"

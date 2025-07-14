@@ -205,7 +205,7 @@ const ChatHeader: React.FC<Props> = ({
 					<ListItemIcon>
 						<AccountBoxIcon />
 					</ListItemIcon>
-					{t('ContactView details')}
+					{t('Contact details')}
 				</MenuItem>
 				{!isReadOnly && <Divider />}
 				{!isReadOnly && (

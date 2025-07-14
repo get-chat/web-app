@@ -61,7 +61,7 @@ const ContactDetails: React.FC<Props> = ({
 				<IconButton onClick={hideContactDetails} size="large">
 					<CloseIcon />
 				</IconButton>
-				<h3>{t('ContactView Details')}</h3>
+				<h3>{t('Contact Details')}</h3>
 			</Styled.Header>
 
 			{contactData && (
