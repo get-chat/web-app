@@ -19,7 +19,6 @@ import { AxiosError } from 'axios';
 import { Tag } from '@src/types/tags';
 import { fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
-import { Chat } from '@src/types/chats';
 import { createChatTagging, deleteChatTagging } from '@src/api/chatTaggingApi';
 
 interface Props {
@@ -34,7 +33,6 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 	const { t } = useTranslation();
 
 	const [isLoading, setLoading] = useState(true);
-	const [chat, setChat] = useState<Chat>();
 	const [chatTags, setChatTags] = useState<Tag[]>([]);
 	const [unusedTags, setUnusedTags] = useState<Tag[]>([]);
 	const [allTags, setAllTags] = useState<Tag[]>([]);
@@ -45,21 +43,7 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 
 	useEffect(() => {
 		const nextState = allTags.filter((tag) => {
-			if (chatTags) {
-				let found = false;
-				for (let i = 0; i < chatTags.length; i++) {
-					const curTag = chatTags[i];
-					if (curTag.id === tag.id) {
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					return true;
-				}
-			} else {
-				return true;
-			}
+			return !chatTags || !chatTags.some((chatTag) => chatTag.id === tag.id);
 		});
 
 		setUnusedTags(nextState);
@@ -92,7 +76,6 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		if (!waId) return;
 		try {
 			const data = await fetchChat(waId);
-			setChat(data);
 			setChatTags(data.tags);
 
 			// Next

@@ -22,18 +22,18 @@ export const Container = styled(ButtonBase).attrs({
 	}
 `;
 
-export const Avatar = styled.div<{ unassigned?: boolean }>`
+export const Avatar = styled.div<{ iconColor?: string }>`
 	height: 19px !important;
 	width: 19px !important;
 	font-size: 11px !important;
 	margin-right: 5px;
 	align-self: center;
-	background-color: ${({ unassigned }) =>
-		unassigned ? 'rgba(0, 0, 0, 0.05) !important' : 'inherit'};
+	background-color: ${({ iconColor }) =>
+		iconColor ? 'white !important' : 'inherit'};
 
 	.MuiSvgIcon-root {
-		color: ${({ unassigned }) =>
-			unassigned ? 'rgba(0, 0, 0, 0.6) !important' : 'white !important'};
+		color: ${({ iconColor }) =>
+			iconColor ? iconColor : 'rgba(0, 0, 0, 0.6)'} !important;
 		height: 0.5em;
 		width: 0.5em;
 	}

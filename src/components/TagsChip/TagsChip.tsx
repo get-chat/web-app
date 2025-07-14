@@ -1,7 +1,7 @@
 import React, { MouseEvent, useContext, useState } from 'react';
 import * as Styled from './TagsChip.styles';
 import { Divider, Link, ListItemIcon, Menu, MenuItem } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { useAppSelector } from '@src/store/hooks';
 import { Tag } from '@src/types/tags';
 import SellIcon from '@mui/icons-material/Sell';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
@@ -22,8 +22,6 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const config = useContext(AppConfigContext);
 
-	const dispatch = useAppDispatch();
-
 	const { t } = useTranslation();
 
 	const isTagSelected = (tag: Tag): boolean => {
@@ -40,11 +38,21 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 					}
 				}}
 			>
-				<Styled.Avatar as={CustomAvatar} unassigned={true}>
+				<Styled.Avatar
+					as={CustomAvatar}
+					iconColor={selectedTags[0]?.web_inbox_color}
+				>
 					<SellIcon />
 				</Styled.Avatar>
 
-				<Styled.Label>Tags</Styled.Label>
+				<Styled.Label>
+					{selectedTags.length > 0
+						? selectedTags
+								.slice(0, 3)
+								.map((tag) => tag.name)
+								.join(', ')
+						: 'Tags'}
+				</Styled.Label>
 
 				<Styled.ActionIcon size="small">
 					<ExpandMoreIcon />
