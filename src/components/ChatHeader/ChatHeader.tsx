@@ -33,6 +33,7 @@ import { Chat } from '@src/types/chats';
 import * as Styled from './ChatHeader.styles';
 import { Person } from '@src/types/persons';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
+import TagsChip from '@src/components/TagsChip';
 
 interface Props {
 	chat?: Chat;
@@ -157,19 +158,25 @@ const ChatHeader: React.FC<Props> = ({
 
 			<Styled.HeaderRight>
 				{chat && (
-					<Styled.AssigneeActions>
-						<AssigneeChip
-							assigneeType="user"
-							name={chat.assigned_to_user?.username}
-							secondaryName={chat.assigned_group?.name}
-							assignedUserId={chat.assigned_to_user?.id}
-							assignedGroupId={chat.assigned_group?.id}
-							isActionable={!isReadOnly}
-							onAction={(userId, groupId) => {
-								partialUpdateChatAssignment(waId, userId, groupId);
-							}}
-						/>
-					</Styled.AssigneeActions>
+					<>
+						<Styled.AssigneeActions>
+							<TagsChip />
+						</Styled.AssigneeActions>
+
+						<Styled.AssigneeActions>
+							<AssigneeChip
+								assigneeType="user"
+								name={chat.assigned_to_user?.username}
+								secondaryName={chat.assigned_group?.name}
+								assignedUserId={chat.assigned_to_user?.id}
+								assignedGroupId={chat.assigned_group?.id}
+								isActionable={!isReadOnly}
+								onAction={(userId, groupId) => {
+									partialUpdateChatAssignment(waId, userId, groupId);
+								}}
+							/>
+						</Styled.AssigneeActions>
+					</>
 				)}
 
 				{isMobileOnly && hasFailedMessages && (

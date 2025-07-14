@@ -16,7 +16,8 @@
 		"prepare": "husky install",
 		"lint:staged": "lint-staged --allow-empty",
 		"lint:prettier": "prettier --check --ignore-unknown  src",
-		"lint:prettier:fix": "prettier --write --ignore-unknown src"
+		"lint:prettier:fix": "prettier --write --ignore-unknown src",
+		"format": "prettier --write --ignore-unknown src"
 	},
 	"lint-staged": {
 		"src/**/*": "pnpm lint:prettier"
