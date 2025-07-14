@@ -3,7 +3,6 @@ import * as Styled from './TagsChip.styles';
 import { Divider, Link, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { Tag } from '@src/types/tags';
-import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import SellIcon from '@mui/icons-material/Sell';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getHubURL } from '@src/helpers/URLHelper';
@@ -12,13 +11,13 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Label } from './TagsChip.styles';
 
 interface Props {
+	selectedTags: Tag[];
 	showChatTagsList: () => void;
 }
 
-const TagsChip: React.FC<Props> = ({ showChatTagsList }) => {
+const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 	const tags = useAppSelector((state) => state.tags.value);
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const config = useContext(AppConfigContext);
@@ -26,6 +25,10 @@ const TagsChip: React.FC<Props> = ({ showChatTagsList }) => {
 	const dispatch = useAppDispatch();
 
 	const { t } = useTranslation();
+
+	const isTagSelected = (tag: Tag): boolean => {
+		return selectedTags.some((t) => t.id === tag.id);
+	};
 
 	return (
 		<>
@@ -54,25 +57,50 @@ const TagsChip: React.FC<Props> = ({ showChatTagsList }) => {
 				onClose={() => setTagsMenuAnchorEl(undefined)}
 				elevation={3}
 			>
+				{selectedTags.map((tag, index) => (
+					<Styled.TagMenuItem
+						onClick={() => {
+							//dispatch(setFilterTagId(tag.id));
+							setTagsMenuAnchorEl(undefined);
+						}}
+						key={tag.id}
+						$isSelected={true}
+					>
+						<ListItemIcon>
+							<SellIcon
+								style={{
+									fill: tag.web_inbox_color,
+								}}
+							/>
+						</ListItemIcon>
+						{tag.name}
+					</Styled.TagMenuItem>
+				))}
+
+				{selectedTags.length > 0 && <Divider />}
+
 				{tags &&
-					tags.slice(0, 10).map((tag: Tag) => (
-						<MenuItem
-							onClick={() => {
-								dispatch(setFilterTagId(tag.id));
-								setTagsMenuAnchorEl(undefined);
-							}}
-							key={tag.id}
-						>
-							<ListItemIcon>
-								<SellIcon
-									style={{
-										fill: tag.web_inbox_color,
-									}}
-								/>
-							</ListItemIcon>
-							{tag.name}
-						</MenuItem>
-					))}
+					tags
+						.filter((item) => !isTagSelected(item))
+						.slice(0, 10)
+						.map((tag) => (
+							<Styled.TagMenuItem
+								onClick={() => {
+									//dispatch(setFilterTagId(tag.id));
+									setTagsMenuAnchorEl(undefined);
+								}}
+								key={tag.id}
+							>
+								<ListItemIcon>
+									<SellIcon
+										style={{
+											fill: tag.web_inbox_color,
+										}}
+									/>
+								</ListItemIcon>
+								{tag.name}
+							</Styled.TagMenuItem>
+						))}
 				<Divider />
 				{tags && tags.length > 10 && (
 					<MenuItem

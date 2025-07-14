@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ButtonBase, IconButton } from '@mui/material';
+import { ButtonBase, IconButton, MenuItem } from '@mui/material';
 
 export const Container = styled(ButtonBase).attrs({
 	className: 'tagsChip',
@@ -52,4 +52,11 @@ export const ActionIcon = styled(IconButton)`
 	height: 19px !important;
 	width: 19px !important;
 	margin-left: -2px !important;
+`;
+
+export const TagMenuItem = styled(MenuItem)<{ $isSelected?: boolean }>`
+	//background-color: ${({ $isSelected }) =>
+		$isSelected
+			? 'var(--color-primary-transparent)'
+			: 'transparent'} !important;
 `;
