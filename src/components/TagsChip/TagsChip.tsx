@@ -1,4 +1,4 @@
-import React, { FC, MouseEvent, useContext, useState } from 'react';
+import React, { MouseEvent, useContext, useState } from 'react';
 import * as Styled from './TagsChip.styles';
 import { Divider, Link, ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -10,6 +10,9 @@ import { getHubURL } from '@src/helpers/URLHelper';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
+import CustomAvatar from '@src/components/CustomAvatar';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Label } from './TagsChip.styles';
 
 interface Props {
 	showChatTagsList: () => void;
@@ -34,7 +37,15 @@ const TagsChip: React.FC<Props> = ({ showChatTagsList }) => {
 					}
 				}}
 			>
-				Tags
+				<Styled.Avatar as={CustomAvatar} unassigned={true}>
+					<SellIcon />
+				</Styled.Avatar>
+
+				<Styled.Label>Tags</Styled.Label>
+
+				<Styled.ActionIcon size="small">
+					<ExpandMoreIcon />
+				</Styled.ActionIcon>
 			</Styled.Container>
 
 			<Menu

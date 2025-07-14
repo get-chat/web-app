@@ -104,11 +104,11 @@ export const HeaderRight = styled.div`
 
 export const AssigneeActions = styled.div`
 	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
+	flex-direction: row;
+	align-items: center;
 	justify-content: center;
 	margin-right: 5px;
-	gap: 5px;
+	gap: 10px;
 
 	.assigneeChip {
 		background-color: rgba(0, 0, 45, 0.06) !important;

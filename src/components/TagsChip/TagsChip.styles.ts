@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { ButtonBase } from '@mui/material';
+import { ButtonBase, IconButton } from '@mui/material';
 
 export const Container = styled(ButtonBase).attrs({
 	className: 'tagsChip',
 	component: 'div',
 })<{ $isClickable?: boolean }>`
-	background-color: var(--gray-light) !important;
+	background-color: rgba(0, 0, 45, 0.06) !important;
 	border-radius: 10px !important;
 	font-size: 12px;
 	height: 19px;
@@ -20,4 +20,36 @@ export const Container = styled(ButtonBase).attrs({
 		width: 0.6em;
 		margin: 0 3px;
 	}
+`;
+
+export const Avatar = styled.div<{ unassigned?: boolean }>`
+	height: 19px !important;
+	width: 19px !important;
+	font-size: 11px !important;
+	margin-right: 5px;
+	align-self: center;
+	background-color: ${({ unassigned }) =>
+		unassigned ? 'rgba(0, 0, 0, 0.05) !important' : 'inherit'};
+
+	.MuiSvgIcon-root {
+		color: ${({ unassigned }) =>
+			unassigned ? 'rgba(0, 0, 0, 0.6) !important' : 'white !important'};
+		height: 0.5em;
+		width: 0.5em;
+	}
+`;
+
+export const Label = styled.span<{ $isWider?: boolean }>`
+	max-width: ${({ $isWider }) => ($isWider ? '110px' : '55px')};
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	margin-left: -2px;
+	margin-right: 5px;
+`;
+
+export const ActionIcon = styled(IconButton)`
+	height: 19px !important;
+	width: 19px !important;
+	margin-left: -2px !important;
 `;

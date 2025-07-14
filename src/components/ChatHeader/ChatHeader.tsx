@@ -158,25 +158,21 @@ const ChatHeader: React.FC<Props> = ({
 
 			<Styled.HeaderRight>
 				{chat && (
-					<>
-						<Styled.AssigneeActions>
-							<TagsChip />
-						</Styled.AssigneeActions>
+					<Styled.AssigneeActions>
+						<TagsChip showChatTagsList={showChatTagsAndHideMenu} />
 
-						<Styled.AssigneeActions>
-							<AssigneeChip
-								assigneeType="user"
-								name={chat.assigned_to_user?.username}
-								secondaryName={chat.assigned_group?.name}
-								assignedUserId={chat.assigned_to_user?.id}
-								assignedGroupId={chat.assigned_group?.id}
-								isActionable={!isReadOnly}
-								onAction={(userId, groupId) => {
-									partialUpdateChatAssignment(waId, userId, groupId);
-								}}
-							/>
-						</Styled.AssigneeActions>
-					</>
+						<AssigneeChip
+							assigneeType="user"
+							name={chat.assigned_to_user?.username}
+							secondaryName={chat.assigned_group?.name}
+							assignedUserId={chat.assigned_to_user?.id}
+							assignedGroupId={chat.assigned_group?.id}
+							isActionable={!isReadOnly}
+							onAction={(userId, groupId) => {
+								partialUpdateChatAssignment(waId, userId, groupId);
+							}}
+						/>
+					</Styled.AssigneeActions>
 				)}
 
 				{isMobileOnly && hasFailedMessages && (
