@@ -34,6 +34,9 @@ const ContactDetails: React.FC<Props> = ({
 
 	const chats = useAppSelector((state) => state.chats.value);
 	const { chosenContact: contactData } = useAppSelector((state) => state.UI);
+	const currentChatTags = useAppSelector(
+		(state) => state.currentChatTags.value
+	);
 
 	const [chat, setChat] = useState<Chat>();
 
@@ -124,9 +127,9 @@ const ContactDetails: React.FC<Props> = ({
 							)}
 						</Styled.LastMessageAt>
 
-						{chat?.tags && chat.tags.length > 0 && (
+						{currentChatTags && currentChatTags.length > 0 && (
 							<Styled.TagsContainer>
-								{chat?.tags.map((tag, index) => (
+								{currentChatTags.map((tag, index) => (
 									<Styled.Tag
 										key={index}
 										onClick={() => dispatch(setFilterTagId(tag.id))}

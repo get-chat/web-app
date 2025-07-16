@@ -35,13 +35,7 @@ import ChatMessageOptionsMenu from '../ChatMessage/ChatMessageOptionsMenu';
 import moment from 'moment';
 import PubSub from 'pubsub-js';
 import MessageDateIndicator from '../MessageDateIndicator';
-import {
-	generateUniqueID,
-	hasInternetConnection,
-	isScrollable,
-	sortMessagesAsc,
-	translateHTMLInputToText,
-} from '@src/helpers/Helpers';
+import { isScrollable, sortMessagesAsc } from '@src/helpers/Helpers';
 import PreviewSendMedia from '../PreviewSendMedia';
 import {
 	getDroppedFiles,
@@ -72,7 +66,6 @@ import { isLocalHost } from '@src/helpers/URLHelper';
 import {
 	getFirstPendingMessageToSend,
 	hasFailedPendingMessages,
-	setPendingMessageFailed,
 } from '@src/helpers/PendingMessagesHelper';
 import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
@@ -106,20 +99,19 @@ import {
 	markAsReceived,
 } from '@src/api/messagesApi';
 import {
-	ChatMessageError,
 	CreateMessageRequest,
 	Message,
 	MessageType,
 	WabaPayload,
 	WebhookMessageStatus,
 } from '@src/types/messages';
-import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { retrievePerson } from '@src/api/personsApi';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
 import { Person } from '@src/types/persons';
 import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
 import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
 import { createMedia } from '@src/api/mediaApi';
+import { setCurrentChatTags } from '@src/store/reducers/currentChatTagsReducer';
 
 const SCROLL_OFFSET = 0;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
@@ -1057,6 +1049,7 @@ const ChatView: React.FC<Props> = (props) => {
 		try {
 			const data = await fetchChat(waId);
 			setChat(data);
+			dispatch(setCurrentChatTags(data.tags));
 		} catch (error) {
 			console.error(error);
 		}

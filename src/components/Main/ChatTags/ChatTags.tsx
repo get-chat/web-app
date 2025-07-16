@@ -34,12 +34,16 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		chatTags,
 		allTags,
 		unusedTags,
-		onDeleteTag,
+		doDeleteChatTagging,
 		doCreateChatTagging,
-	} = useTags({ loadInitially: true, waId });
+	} = useTags({ loadInitially: true, waId: waId });
 
 	const onClickTag = async (tag: Tag) => {
 		await doCreateChatTagging(tag);
+	};
+
+	const onDeleteTag = async (tag: Tag) => {
+		await doDeleteChatTagging(tag);
 	};
 
 	const close = () => {

@@ -76,6 +76,7 @@ import {
 } from '@src/helpers/MessageHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
+import { setWaId } from '@src/store/reducers/waIdReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -579,6 +580,7 @@ const Main: React.FC = () => {
 
 	useEffect(() => {
 		setChecked(true);
+		dispatch(setWaId(waId));
 
 		return () => {
 			// Hide search messages, contact details, message statuses and chat assignment

@@ -4,6 +4,11 @@ import { fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
 import { createChatTagging, deleteChatTagging } from '@src/api/chatTaggingApi';
 import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import {
+	addCurrentChatTag,
+	removeCurrentChatTag,
+} from '@src/store/reducers/currentChatTagsReducer';
 
 interface Props {
 	loadInitially?: boolean;
@@ -15,6 +20,10 @@ const useTags = ({ loadInitially, waId }: Props) => {
 	const [chatTags, setChatTags] = useState<Tag[]>([]);
 	const [unusedTags, setUnusedTags] = useState<Tag[]>([]);
 	const [allTags, setAllTags] = useState<Tag[]>([]);
+
+	const currentChatWaId = useAppSelector((state) => state.waId.value);
+
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		if (loadInitially) {
@@ -29,10 +38,6 @@ const useTags = ({ loadInitially, waId }: Props) => {
 
 		setUnusedTags(nextState);
 	}, [chatTags, allTags]);
-
-	const onDeleteTag = async (tag: Tag) => {
-		await doDeleteChatTagging(tag);
-	};
 
 	const makeUniqueTagsArray = (tagsArray: Tag[]) => {
 		const uniqueTagsArray: { [key: string]: Tag } = {};
@@ -77,6 +82,10 @@ const useTags = ({ loadInitially, waId }: Props) => {
 
 			const updatedTag = { ...tag, tagging_id: data.id };
 
+			if (waId == currentChatWaId) {
+				dispatch(addCurrentChatTag(updatedTag));
+			}
+
 			setChatTags((prev) =>
 				makeUniqueTagsArray([
 					...prev.filter((t) => t.id !== tag.id),
@@ -97,6 +106,10 @@ const useTags = ({ loadInitially, waId }: Props) => {
 		try {
 			await deleteChatTagging(tag.tagging_id);
 
+			if (waId == currentChatWaId) {
+				dispatch(removeCurrentChatTag(tag));
+			}
+
 			setChatTags((prev) =>
 				makeUniqueTagsArray(prev.filter((t) => t.id !== tag.id))
 			);
@@ -110,7 +123,7 @@ const useTags = ({ loadInitially, waId }: Props) => {
 		chatTags,
 		allTags,
 		unusedTags,
-		onDeleteTag,
+		doDeleteChatTagging,
 		doCreateChatTagging,
 	};
 };

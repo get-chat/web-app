@@ -159,10 +159,7 @@ const ChatHeader: React.FC<Props> = ({
 			<Styled.HeaderRight>
 				{chat && (
 					<Styled.AssigneeActions>
-						<TagsChip
-							selectedTags={chat?.tags ?? []}
-							showChatTagsList={showChatTagsAndHideMenu}
-						/>
+						<TagsChip waId={waId} showChatTagsList={showChatTagsAndHideMenu} />
 
 						<AssigneeChip
 							assigneeType="user"

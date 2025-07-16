@@ -11,23 +11,30 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PersonIcon from '@mui/icons-material/Person';
 import CheckIcon from '@mui/icons-material/Check';
+import useTags from '@src/hooks/useTags';
 
 interface Props {
-	selectedTags: Tag[];
+	waId: string | undefined;
 	showChatTagsList: () => void;
 }
 
-const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
+const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
 	const tags = useAppSelector((state) => state.tags.value);
+	const currentChatTags = useAppSelector(
+		(state) => state.currentChatTags.value
+	);
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const config = useContext(AppConfigContext);
 
+	const { doDeleteChatTagging, doCreateChatTagging } = useTags({
+		loadInitially: false,
+		waId: waId,
+	});
 	const { t } = useTranslation();
 
 	const isTagSelected = (tag: Tag): boolean => {
-		return selectedTags.some((t) => t.id === tag.id);
+		return currentChatTags.some((t) => t.id === tag.id);
 	};
 
 	return (
@@ -42,14 +49,14 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 			>
 				<Styled.Avatar
 					as={CustomAvatar}
-					iconColor={selectedTags[0]?.web_inbox_color}
+					iconColor={currentChatTags[0]?.web_inbox_color}
 				>
 					<SellIcon />
 				</Styled.Avatar>
 
 				<Styled.Label>
-					{selectedTags.length > 0
-						? selectedTags
+					{currentChatTags.length > 0
+						? currentChatTags
 								.slice(0, 3)
 								.map((tag) => tag.name)
 								.join(', ')
@@ -71,11 +78,11 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 					<CheckIcon /> {t('Selected')}
 				</Styled.MenuHeader>
 
-				{selectedTags.map((tag, index) => (
+				{currentChatTags.map((tag, index) => (
 					<Styled.TagMenuItem
 						onClick={() => {
-							//dispatch(setFilterTagId(tag.id));
-							setTagsMenuAnchorEl(undefined);
+							doDeleteChatTagging(tag);
+							//setTagsMenuAnchorEl(undefined);
 						}}
 						selected={true}
 						key={tag.id}
@@ -92,7 +99,7 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 					</Styled.TagMenuItem>
 				))}
 
-				{selectedTags.length > 0 && <Divider />}
+				{currentChatTags.length > 0 && <Divider />}
 
 				<Styled.MenuHeader>
 					<SellIcon /> {t('Available')}
@@ -105,8 +112,8 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 						.map((tag) => (
 							<Styled.TagMenuItem
 								onClick={() => {
-									//dispatch(setFilterTagId(tag.id));
-									setTagsMenuAnchorEl(undefined);
+									doCreateChatTagging(tag);
+									//setTagsMenuAnchorEl(undefined);
 								}}
 								key={tag.id}
 							>
