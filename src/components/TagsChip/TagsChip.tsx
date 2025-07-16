@@ -11,6 +11,8 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PersonIcon from '@mui/icons-material/Person';
+import CheckIcon from '@mui/icons-material/Check';
 
 interface Props {
 	selectedTags: Tag[];
@@ -65,12 +67,17 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 				onClose={() => setTagsMenuAnchorEl(undefined)}
 				elevation={3}
 			>
+				<Styled.MenuHeader>
+					<CheckIcon /> {t('Selected')}
+				</Styled.MenuHeader>
+
 				{selectedTags.map((tag, index) => (
 					<Styled.TagMenuItem
 						onClick={() => {
 							//dispatch(setFilterTagId(tag.id));
 							setTagsMenuAnchorEl(undefined);
 						}}
+						selected={true}
 						key={tag.id}
 						$isSelected={true}
 					>
@@ -86,6 +93,10 @@ const TagsChip: React.FC<Props> = ({ selectedTags, showChatTagsList }) => {
 				))}
 
 				{selectedTags.length > 0 && <Divider />}
+
+				<Styled.MenuHeader>
+					<SellIcon /> {t('Available')}
+				</Styled.MenuHeader>
 
 				{tags &&
 					tags

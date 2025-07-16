@@ -54,9 +54,16 @@ export const ActionIcon = styled(IconButton)`
 	margin-left: -2px !important;
 `;
 
-export const TagMenuItem = styled(MenuItem)<{ $isSelected?: boolean }>`
-	//background-color: ${({ $isSelected }) =>
-		$isSelected
-			? 'var(--color-primary-transparent)'
-			: 'transparent'} !important;
+export const TagMenuItem = styled(MenuItem)<{ $isSelected?: boolean }>``;
+
+export const MenuHeader = styled.h6`
+	padding: 4px 12px;
+	display: flex;
+	align-items: center;
+
+	.MuiSvgIcon-root {
+		height: 13px;
+		width: 13px;
+		margin-right: 5px;
+	}
 `;
