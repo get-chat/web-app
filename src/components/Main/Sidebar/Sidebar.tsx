@@ -123,6 +123,7 @@ import * as Styled from './Sidebar.styles';
 import { PersonList } from '@src/types/persons';
 import { store } from '@src/store';
 import useSettings from '@src/hooks/useSettings';
+import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionIndicator';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -914,6 +915,8 @@ const Sidebar: React.FC<Props> = ({
 					onCancel={cancelSelection}
 				/>
 			)}
+
+			<WebSocketConnectionIndicator />
 
 			<ClickAwayListener
 				onClickAway={() => {
