@@ -115,6 +115,7 @@ const AssigneeChip: React.FC<Props> = ({
 					<MenuItem
 						className="menuItem menuItemDefault"
 						onClick={() => selectUser(null)}
+						selected={!assignedUserId}
 					>
 						{!assignedUserId && (
 							<ListItemIcon>
@@ -132,6 +133,7 @@ const AssigneeChip: React.FC<Props> = ({
 							key={user.id}
 							value={user.id}
 							onClick={() => selectUser(user.id)}
+							selected={user.id === assignedUserId}
 						>
 							{user.id === assignedUserId && (
 								<ListItemIcon>
@@ -151,6 +153,7 @@ const AssigneeChip: React.FC<Props> = ({
 					<MenuItem
 						className="menuItem menuItemDefault"
 						onClick={() => selectGroup(null)}
+						selected={!assignedGroupId}
 					>
 						{!assignedGroupId && (
 							<ListItemIcon>
@@ -168,6 +171,7 @@ const AssigneeChip: React.FC<Props> = ({
 							key={group.id}
 							value={group.id}
 							onClick={() => selectGroup(group.id)}
+							selected={group.id === assignedGroupId}
 						>
 							{group.id === assignedGroupId && (
 								<ListItemIcon>

@@ -144,10 +144,10 @@ msgstr "Tag"
 msgid "You can filter chats by tags."
 msgstr "Você pode filtrar bate-papos por tags."
 
-msgid "ContactView Details"
+msgid "Contact Details"
 msgstr "Detalhes do contato"
 
-msgid "ContactView details"
+msgid "Contact details"
 msgstr "Detalhes do contato"
 
 msgid "Never"

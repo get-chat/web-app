@@ -154,10 +154,10 @@ msgstr "Etiketler"
 msgid "You can filter chats by tags."
 msgstr "Sohbetleri etiketler ile filtreleyebilirsin."
 
-msgid "ContactView Details"
+msgid "Contact Details"
 msgstr "Kontak Detayları"
 
-msgid "ContactView details"
+msgid "Contact details"
 msgstr "Kontak detayları"
 
 msgid "Never"

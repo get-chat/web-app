@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import {
 	Button,
 	Chip,
@@ -15,12 +15,8 @@ import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import SellIcon from '@mui/icons-material/Sell';
-import { AxiosError } from 'axios';
 import { Tag } from '@src/types/tags';
-import { fetchTags } from '@src/api/tagsApi';
-import { fetchChat } from '@src/api/chatsApi';
-import { Chat } from '@src/types/chats';
-import { createChatTagging, deleteChatTagging } from '@src/api/chatTaggingApi';
+import useTags from '@src/hooks/useTags';
 
 interface Props {
 	open: boolean;
@@ -33,126 +29,25 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 
 	const { t } = useTranslation();
 
-	const [isLoading, setLoading] = useState(true);
-	const [chat, setChat] = useState<Chat>();
-	const [chatTags, setChatTags] = useState<Tag[]>([]);
-	const [unusedTags, setUnusedTags] = useState<Tag[]>([]);
-	const [allTags, setAllTags] = useState<Tag[]>([]);
+	const {
+		isLoading,
+		chatTags,
+		allTags,
+		unusedTags,
+		doDeleteChatTagging,
+		doCreateChatTagging,
+	} = useTags({ loadInitially: true, waId: waId });
 
-	useEffect(() => {
-		retrieveChat();
-	}, []);
-
-	useEffect(() => {
-		const nextState = allTags.filter((tag) => {
-			if (chatTags) {
-				let found = false;
-				for (let i = 0; i < chatTags.length; i++) {
-					const curTag = chatTags[i];
-					if (curTag.id === tag.id) {
-						found = true;
-						break;
-					}
-				}
-				if (!found) {
-					return true;
-				}
-			} else {
-				return true;
-			}
-		});
-
-		setUnusedTags(nextState);
-	}, [chatTags, allTags]);
-
-	const close = () => {
-		setOpen(false);
+	const onClickTag = async (tag: Tag) => {
+		await doCreateChatTagging(tag);
 	};
 
 	const onDeleteTag = async (tag: Tag) => {
 		await doDeleteChatTagging(tag);
 	};
 
-	const onClickTag = async (tag: Tag) => {
-		await doCreateChatTagging(tag);
-	};
-
-	const makeUniqueTagsArray = (tagsArray: Tag[]) => {
-		const uniqueTagsArray: { [key: string]: Tag } = {};
-		tagsArray.forEach((tag: Tag) => {
-			if (!uniqueTagsArray.hasOwnProperty(tag.id)) {
-				uniqueTagsArray[tag.id] = tag;
-			}
-		});
-
-		return Object.values(uniqueTagsArray);
-	};
-
-	const retrieveChat = async () => {
-		if (!waId) return;
-		try {
-			const data = await fetchChat(waId);
-			setChat(data);
-			setChatTags(data.tags);
-
-			// Next
-			await listTags();
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	const listTags = async () => {
-		try {
-			const data = await fetchTags();
-			setAllTags(data.results);
-			setLoading(false);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	const doCreateChatTagging = async (tag: Tag) => {
-		try {
-			const data = await createChatTagging({
-				tag: tag.id,
-				chat: waId ?? '',
-			});
-			setChatTags((prevState) => {
-				let nextState = prevState.filter((curTag) => {
-					return curTag.id !== tag.id;
-				});
-
-				tag.tagging_id = data.id;
-
-				nextState.push(tag);
-				nextState = makeUniqueTagsArray(nextState);
-
-				return nextState;
-			});
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		}
-	};
-
-	const doDeleteChatTagging = async (tag: Tag) => {
-		if (!tag.tagging_id) {
-			console.warn('Chat tagging id is missing!', tag);
-			return;
-		}
-
-		try {
-			await deleteChatTagging(tag.tagging_id);
-			setChatTags((prevState) => {
-				let nextState = prevState.filter((curTag) => {
-					return curTag.id !== tag.id;
-				});
-				nextState = makeUniqueTagsArray(nextState);
-				return nextState;
-			});
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		}
+	const close = () => {
+		setOpen(false);
 	};
 
 	return (

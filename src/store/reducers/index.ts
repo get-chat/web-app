@@ -12,6 +12,8 @@ import previewMediaObjectReducer from './previewMediaObjectReducer';
 import isRefreshingTemplatesReducer from './isRefreshingTemplatesReducer';
 import pendingMessagesReducer from './pendingMessagesReducer';
 import newMessagesReducer from './newMessagesReducer';
+import currentChatTagsReducer from './currentChatTagsReducer';
+import waIdReducer from './waIdReducer';
 
 const rootReducer = {
 	UI: UIReducer,
@@ -28,6 +30,8 @@ const rootReducer = {
 	chatsCount: chatsCountReducer,
 	previewMediaObject: previewMediaObjectReducer,
 	isRefreshingTemplates: isRefreshingTemplatesReducer,
+	currentChatTags: currentChatTagsReducer,
+	waId: waIdReducer,
 };
 
 export default rootReducer;

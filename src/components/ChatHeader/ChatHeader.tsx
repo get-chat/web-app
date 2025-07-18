@@ -33,6 +33,7 @@ import { Chat } from '@src/types/chats';
 import * as Styled from './ChatHeader.styles';
 import { Person } from '@src/types/persons';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
+import TagsChip from '@src/components/TagsChip';
 
 interface Props {
 	chat?: Chat;
@@ -158,6 +159,8 @@ const ChatHeader: React.FC<Props> = ({
 			<Styled.HeaderRight>
 				{chat && (
 					<Styled.AssigneeActions>
+						<TagsChip waId={waId} showChatTagsList={showChatTagsAndHideMenu} />
+
 						<AssigneeChip
 							assigneeType="user"
 							name={chat.assigned_to_user?.username}
@@ -202,7 +205,7 @@ const ChatHeader: React.FC<Props> = ({
 					<ListItemIcon>
 						<AccountBoxIcon />
 					</ListItemIcon>
-					{t('ContactView details')}
+					{t('Contact details')}
 				</MenuItem>
 				{!isReadOnly && <Divider />}
 				{!isReadOnly && (

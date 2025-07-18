@@ -149,10 +149,10 @@ msgstr ""
 msgid "You can filter chats by tags."
 msgstr ""
 
-msgid "ContactView Details"
+msgid "Contact Details"
 msgstr ""
 
-msgid "ContactView details"
+msgid "Contact details"
 msgstr ""
 
 msgid "Never"
