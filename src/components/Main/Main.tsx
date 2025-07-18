@@ -77,6 +77,7 @@ import {
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
+import * as Sentry from '@sentry/browser';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -390,13 +391,17 @@ const Main: React.FC = () => {
 
 			ws.onclose = function (event) {
 				if (event.code !== CODE_NORMAL) {
+					console.log('WebSocket closed unexpectedly:', event);
+
+					if ([1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015]) {
+						Sentry.captureException(
+							new Error(`WebSocket closed unexpectedly. Code: ${event.code}`)
+						);
+					}
+
 					console.log('Retrying connection to websocket server in 1 second.');
-
 					socketClosedAt = new Date();
-
-					setTimeout(function () {
-						connect();
-					}, 1000);
+					setTimeout(connect, 1000);
 				}
 			};
 
