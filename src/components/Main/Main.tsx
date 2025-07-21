@@ -78,6 +78,7 @@ import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
 import * as Sentry from '@sentry/browser';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -369,7 +370,7 @@ const Main: React.FC = () => {
 
 	useEffect(() => {
 		const CODE_NORMAL = 1000;
-		let ws: WebSocket;
+		let ws: ReconnectingWebSocket;
 
 		let socketClosedAt: Date | undefined;
 
@@ -381,9 +382,11 @@ const Main: React.FC = () => {
 			console.log('Connecting to websocket server');
 
 			// WebSocket, consider a separate env variable for ws address
-			ws = new WebSocket(getWebSocketURL(api.defaults.baseURL ?? ''));
+			ws = new ReconnectingWebSocket(
+				getWebSocketURL(api.defaults.baseURL ?? '')
+			);
 
-			ws.onopen = function () {
+			ws.addEventListener('open', () => {
 				console.log('Connected to websocket server.');
 
 				// Update state
@@ -396,16 +399,16 @@ const Main: React.FC = () => {
 					const differenceInMinutes =
 						Math.abs(now.getTime() - socketClosedAt.getTime()) / 1000 / 60;
 
-					// If window was blurred for more than 3 hours
+					// If window was blurred for more than 5 minutes
 					if (differenceInMinutes >= 5) {
 						window.location.reload();
 					} else {
 						socketClosedAt = undefined;
 					}
 				}
-			};
+			});
 
-			ws.onclose = function (event) {
+			ws.addEventListener('close', (event) => {
 				if (event.code !== CODE_NORMAL) {
 					console.log('WebSocket closed unexpectedly:', event);
 
@@ -429,23 +432,21 @@ const Main: React.FC = () => {
 						);
 					}
 
-					console.log('Retrying connection to websocket server in 1 second.');
 					socketClosedAt = new Date();
-					setTimeout(connect, 1000);
+				} else {
+					console.log('WebSocket closed. Will connect automatically.');
 				}
-			};
+			});
 
-			ws.onerror = function (event) {
+			ws.addEventListener('error', (event) => {
 				Sentry.captureException(new Error('WebSocket error occurred.'), {
 					extra: {
 						event,
 					},
 				});
+			});
 
-				ws.close();
-			};
-
-			ws.onmessage = function (event) {
+			ws.addEventListener('message', (event) => {
 				try {
 					const data = JSON.parse(event.data) as WebhookMessage;
 					console.log(data);
@@ -546,7 +547,7 @@ const Main: React.FC = () => {
 					// Do not force Sentry if exceptions can't be handled without a user feedback dialog
 					//Sentry.captureException(error);
 				}
-			};
+			});
 		};
 
 		connect();

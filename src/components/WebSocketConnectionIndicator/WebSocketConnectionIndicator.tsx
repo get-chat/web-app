@@ -30,17 +30,6 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 						</>
 					)}
 
-					<div>
-						<Styled.ExtraDetailsTitle
-							onClick={() => setExtraDetailsOpen(!isExtraDetailsOpen)}
-						>
-							{isExtraDetailsOpen ? t('Hide details') : t('Show details')}
-						</Styled.ExtraDetailsTitle>
-						<Styled.ExtraDetails in={isExtraDetailsOpen}>
-							{t('Code: %d', webSocketDisconnectionCode ?? 0)}
-						</Styled.ExtraDetails>
-					</div>
-
 					{navigator.onLine &&
 						isWebSocketDisconnected &&
 						webSocketDisconnectionCode && (

@@ -77,6 +77,7 @@
 		"react-string-replace-recursively": "^0.2.0",
 		"react-use-navigate-list": "github:get-chat/react-use-navigate-list",
 		"react-viewport-list": "^7.1.1",
+		"reconnecting-websocket": "^4.4.0",
 		"source-map-explorer": "^2.5.3",
 		"styled-components": "^6.1.17",
 		"unescape": "^1.0.1",

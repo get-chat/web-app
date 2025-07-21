@@ -31,8 +31,10 @@ export const ExtraDetailsTitle = styled.div`
 	font-size: 12px;
 	margin-top: 5px;
 	cursor: pointer;
+	color: rgba(255, 255, 255, 0.8);
+	-webkit-user-select: none;
 `;
 
 export const ExtraDetails = styled(Collapse)`
-	font-size: 14px;
+	font-size: 12px;
 `;
