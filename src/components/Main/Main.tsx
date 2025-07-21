@@ -333,6 +333,17 @@ const Main: React.FC = () => {
 			retrieveCurrentUser();
 		}
 
+		const handleBrowserOffline = () => {
+			dispatch(setState({ isBrowserOffline: true }));
+		};
+
+		const handleBrowserOnline = () => {
+			dispatch(setState({ isBrowserOffline: false }));
+		};
+
+		window.addEventListener('offline', handleBrowserOffline);
+		window.addEventListener('online', handleBrowserOnline);
+
 		const onUnsupportedFileEvent = function (msg: string, data: any) {
 			setUnsupportedFile(data);
 			setDownloadUnsupportedFileVisible(true);
@@ -349,6 +360,8 @@ const Main: React.FC = () => {
 		);
 
 		return () => {
+			window.removeEventListener('offline', handleBrowserOffline);
+			window.removeEventListener('online', handleBrowserOnline);
 			PubSub.unsubscribe(displayErrorEventToken);
 			PubSub.unsubscribe(unsupportedFileEventToken);
 		};
@@ -373,6 +386,9 @@ const Main: React.FC = () => {
 			ws.onopen = function () {
 				console.log('Connected to websocket server.');
 
+				// Update state
+				dispatch(setState({ isWebSocketDisconnected: false }));
+
 				ws.send(JSON.stringify({ token: getToken() }));
 
 				if (socketClosedAt) {
@@ -393,9 +409,23 @@ const Main: React.FC = () => {
 				if (event.code !== CODE_NORMAL) {
 					console.log('WebSocket closed unexpectedly:', event);
 
+					// Update State
+					dispatch(
+						setState({
+							isWebSocketDisconnected: true,
+							webSocketDisconnectionCode: event.code,
+						})
+					);
+
+					// Report the error to Sentry if caused by server
 					if ([1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015]) {
 						Sentry.captureException(
-							new Error(`WebSocket closed unexpectedly. Code: ${event.code}`)
+							new Error(`WebSocket closed unexpectedly. Code: ${event.code}`),
+							{
+								extra: {
+									event,
+								},
+							}
 						);
 					}
 
@@ -405,7 +435,13 @@ const Main: React.FC = () => {
 				}
 			};
 
-			ws.onerror = function () {
+			ws.onerror = function (event) {
+				Sentry.captureException(new Error('WebSocket error occurred.'), {
+					extra: {
+						event,
+					},
+				});
+
 				ws.close();
 			};
 

@@ -12,8 +12,18 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 		<Styled.Container>
 			<ReportIcon />
 			<div>
-				<Styled.Title>{t('You are not connected')}</Styled.Title>
-				<Styled.Details>{t('Try refreshing the page!')}</Styled.Details>
+				<Styled.Title>{t('Connection error')}</Styled.Title>
+				<Styled.Details>
+					{!navigator.onLine ? (
+						<>{t('You are not connected to the internet.')}</>
+					) : (
+						<>
+							{t(
+								'Connection lost. You may not receive new messages in real time.'
+							)}
+						</>
+					)}
+				</Styled.Details>
 			</div>
 		</Styled.Container>
 	);

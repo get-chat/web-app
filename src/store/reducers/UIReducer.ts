@@ -28,6 +28,9 @@ interface UIState {
 	isInteractiveMessagesVisible: boolean;
 	isUploadingProfilePhoto: boolean;
 	isRefreshingSettings: boolean;
+	isBrowserOffline: boolean;
+	isWebSocketDisconnected: boolean;
+	webSocketDisconnectionCode: number | undefined;
 }
 
 const initialState: UIState = {
@@ -57,6 +60,9 @@ const initialState: UIState = {
 	isInteractiveMessagesVisible: false,
 	isUploadingProfilePhoto: false,
 	isRefreshingSettings: false,
+	isBrowserOffline: false,
+	isWebSocketDisconnected: false,
+	webSocketDisconnectionCode: undefined,
 };
 
 const closeSections = (state: Draft<UIState>) => {

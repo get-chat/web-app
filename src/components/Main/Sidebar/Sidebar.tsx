@@ -156,6 +156,8 @@ const Sidebar: React.FC<Props> = ({
 		selectedChats,
 		isSelectionModeEnabled,
 		isExportChat,
+		isBrowserOffline,
+		isWebSocketDisconnected,
 	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const chats = useAppSelector((state) => state.chats.value);
@@ -916,7 +918,9 @@ const Sidebar: React.FC<Props> = ({
 				/>
 			)}
 
-			<WebSocketConnectionIndicator />
+			{(isWebSocketDisconnected || isBrowserOffline) && (
+				<WebSocketConnectionIndicator />
+			)}
 
 			<ClickAwayListener
 				onClickAway={() => {
