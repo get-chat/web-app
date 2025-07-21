@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Collapse } from '@mui/material';
+import { Button, Collapse } from '@mui/material';
 
 export const Container = styled.div`
 	display: flex;
@@ -38,3 +38,24 @@ export const ExtraDetailsTitle = styled.div`
 export const ExtraDetails = styled(Collapse)`
 	font-size: 12px;
 `;
+
+export const RefreshContainer = styled.div`
+	margin-top: 15px;
+`;
+
+export const RefreshText = styled.div`
+	font-size: 12px;
+	font-weight: 600;
+	margin-bottom: 8px;
+`;
+
+export const RefreshButton = styled(Button)({
+	boxShadow: 'none !important',
+	backgroundColor: '#ffffff !important',
+	borderColor: '#ffffff !important',
+	color: 'var(--red) !important',
+	'&:hover': {
+		boxShadow: 'none !important',
+		backgroundColor: 'rgba(255, 255, 255, 0.85) !important',
+	},
+});

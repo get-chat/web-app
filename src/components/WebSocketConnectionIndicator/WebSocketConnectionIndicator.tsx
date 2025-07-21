@@ -3,7 +3,6 @@ import * as Styled from './WebSocketConnectionIndicator.styles';
 import { useTranslation } from 'react-i18next';
 import ReportIcon from '@mui/icons-material/Report';
 import { useAppSelector } from '@src/store/hooks';
-import { Collapse } from '@mui/material';
 
 interface Props {}
 
@@ -44,6 +43,24 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 								</Styled.ExtraDetails>
 							</div>
 						)}
+
+					<Styled.RefreshContainer>
+						<Styled.RefreshText>
+							{t(
+								'If the issue persists, you can try refreshing the page manually.'
+							)}
+						</Styled.RefreshText>
+						<Styled.RefreshButton
+							color="primary"
+							variant="contained"
+							size="small"
+							onClick={() => {
+								window.location.reload();
+							}}
+						>
+							{t('Refresh the page')}
+						</Styled.RefreshButton>
+					</Styled.RefreshContainer>
 				</Styled.Details>
 			</div>
 		</Styled.Container>

@@ -918,7 +918,7 @@ const Sidebar: React.FC<Props> = ({
 				/>
 			)}
 
-			{(isWebSocketDisconnected || isBrowserOffline) && (
+			{(isWebSocketDisconnected || isBrowserOffline || true) && (
 				<WebSocketConnectionIndicator />
 			)}
 
