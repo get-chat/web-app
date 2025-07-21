@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Styled from './WebSocketConnectionIndicator.styles';
 import { useTranslation } from 'react-i18next';
 import ReportIcon from '@mui/icons-material/Report';
+import { useAppSelector } from '@src/store/hooks';
+import { Collapse } from '@mui/material';
 
 interface Props {}
 
 const WebSocketConnectionIndicator: React.FC<Props> = () => {
 	const { t } = useTranslation();
+	const { isWebSocketDisconnected, webSocketDisconnectionCode } =
+		useAppSelector((state) => state.UI);
+
+	const [isExtraDetailsOpen, setExtraDetailsOpen] = useState(false);
 
 	return (
 		<Styled.Container>
@@ -23,6 +29,32 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 							)}
 						</>
 					)}
+
+					<div>
+						<Styled.ExtraDetailsTitle
+							onClick={() => setExtraDetailsOpen(!isExtraDetailsOpen)}
+						>
+							{isExtraDetailsOpen ? t('Hide details') : t('Show details')}
+						</Styled.ExtraDetailsTitle>
+						<Styled.ExtraDetails in={isExtraDetailsOpen}>
+							{t('Code: %d', webSocketDisconnectionCode ?? 0)}
+						</Styled.ExtraDetails>
+					</div>
+
+					{navigator.onLine &&
+						isWebSocketDisconnected &&
+						webSocketDisconnectionCode && (
+							<div>
+								<Styled.ExtraDetailsTitle
+									onClick={() => setExtraDetailsOpen(!isExtraDetailsOpen)}
+								>
+									{isExtraDetailsOpen ? t('Hide details') : t('Show details')}
+								</Styled.ExtraDetailsTitle>
+								<Styled.ExtraDetails in={isExtraDetailsOpen}>
+									{t('Code: %d', webSocketDisconnectionCode ?? 0)}
+								</Styled.ExtraDetails>
+							</div>
+						)}
 				</Styled.Details>
 			</div>
 		</Styled.Container>
