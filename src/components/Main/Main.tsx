@@ -409,16 +409,16 @@ const Main: React.FC = () => {
 			});
 
 			ws.addEventListener('close', (event) => {
+				// Update State
+				dispatch(
+					setState({
+						isWebSocketDisconnected: true,
+						webSocketDisconnectionCode: event.code,
+					})
+				);
+
 				if (event.code !== CODE_NORMAL) {
 					console.log('WebSocket closed unexpectedly:', event);
-
-					// Update State
-					dispatch(
-						setState({
-							isWebSocketDisconnected: true,
-							webSocketDisconnectionCode: event.code,
-						})
-					);
 
 					// Report the error to Sentry if caused by server
 					if ([1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015]) {
