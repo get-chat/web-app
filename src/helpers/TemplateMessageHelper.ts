@@ -78,8 +78,6 @@ export const insertTemplateComponentParameters = (
 
 	if (!params) return text;
 
-	console.log(params);
-
 	for (let i = 0; i < params.length; i++) {
 		const component = params[i];
 
