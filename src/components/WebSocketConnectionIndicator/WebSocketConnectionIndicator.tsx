@@ -8,8 +8,11 @@ interface Props {}
 
 const WebSocketConnectionIndicator: React.FC<Props> = () => {
 	const { t } = useTranslation();
-	const { isWebSocketDisconnected, webSocketDisconnectionCode } =
-		useAppSelector((state) => state.UI);
+	const {
+		isBrowserOffline,
+		isWebSocketDisconnected,
+		webSocketDisconnectionCode,
+	} = useAppSelector((state) => state.UI);
 
 	return (
 		<Styled.Container>
@@ -17,7 +20,7 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 			<div>
 				<Styled.Title>
 					{t('Connection error')}{' '}
-					{navigator.onLine &&
+					{!isBrowserOffline &&
 						isWebSocketDisconnected &&
 						webSocketDisconnectionCode && (
 							<Styled.TitleCode>
@@ -26,7 +29,7 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 						)}
 				</Styled.Title>
 				<Styled.Details>
-					{!navigator.onLine ? (
+					{isBrowserOffline ? (
 						<>{t('You are not connected to the internet.')}</>
 					) : (
 						<>
