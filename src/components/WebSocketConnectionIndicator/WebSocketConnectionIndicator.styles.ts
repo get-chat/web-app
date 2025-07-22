@@ -41,6 +41,9 @@ export const ExtraDetails = styled(Collapse)`
 
 export const RefreshContainer = styled.div`
 	margin-top: 15px;
+	display: flex;
+	gap: 15px;
+	align-items: flex-start;
 `;
 
 export const RefreshText = styled.div`
@@ -49,13 +52,13 @@ export const RefreshText = styled.div`
 	margin-bottom: 8px;
 `;
 
-export const RefreshButton = styled(Button)({
-	boxShadow: 'none !important',
-	backgroundColor: '#ffffff !important',
-	borderColor: '#ffffff !important',
-	color: 'var(--red) !important',
-	'&:hover': {
-		boxShadow: 'none !important',
-		backgroundColor: 'rgba(255, 255, 255, 0.85) !important',
-	},
-});
+export const RefreshButton = styled(Button)`
+	box-shadow: none !important;
+	background-color: white !important;
+	color: var(--red) !important;
+	padding: 2px 10px !important;
+	&:hover {
+		box-shadow: none !important;
+		background-color: rgba(255, 255, 255, 0.85) !important;
+	}
+`;

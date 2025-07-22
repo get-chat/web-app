@@ -58,7 +58,7 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 								window.location.reload();
 							}}
 						>
-							{t('Refresh the page')}
+							{t('Refresh')}
 						</Styled.RefreshButton>
 					</Styled.RefreshContainer>
 				</Styled.Details>
