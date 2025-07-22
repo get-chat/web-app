@@ -78,6 +78,8 @@ export const insertTemplateComponentParameters = (
 
 	if (!params) return text;
 
+	console.log(params);
+
 	for (let i = 0; i < params.length; i++) {
 		const component = params[i];
 
@@ -89,7 +91,8 @@ export const insertTemplateComponentParameters = (
 					const paramValue =
 						// @ts-ignore
 						param[paramType]?.fallback_value ?? param[paramType];
-					text = text.replace(`{{${index + 1}}}`, paramValue);
+					const paramKey = (param.parameter_name ?? index + 1).toString();
+					text = safeReplaceParam(text, paramKey, paramValue);
 				}
 			);
 
@@ -98,6 +101,42 @@ export const insertTemplateComponentParameters = (
 	}
 
 	return text;
+};
+
+/**
+ * Safely replaces all occurrences of a template parameter in text,
+ * regardless of whitespace variations inside the placeholders.
+ *
+ * @param {string} text - The template text containing placeholders
+ * @param {string} paramKey - The parameter name/key (without braces)
+ * @param {string} paramValue - The value to insert
+ * @returns {string} The text with all matching placeholders replaced
+ *
+ * @example
+ * safeReplaceParam("Hello {{ name }}", "name", "Berkay") // "Hello Berkay"
+ * @example
+ * safeReplaceParam("Hello {{name}}", "name", "Berkay")  // "Hello Berkay"
+ * @example
+ * safeReplaceParam("Hello {{ name}}", "name", "Berkay") // "Hello Berkay"
+ */
+export const safeReplaceParam = (
+	text: string,
+	paramKey: string,
+	paramValue: string
+): string => {
+	// Create regex pattern that matches any whitespace variations
+	const pattern = new RegExp(
+		`\\{\\{\\s*${escapeRegExp(paramKey)}\\s*\\}\\}`,
+		'g'
+	);
+	return text.replace(pattern, paramValue);
+};
+
+/**
+ * Escapes special regex characters in a string
+ */
+const escapeRegExp = (string: string) => {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
 
 export const sortTemplateComponents = (components: TemplateComponent[]) => {
