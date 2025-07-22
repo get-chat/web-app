@@ -379,7 +379,7 @@ const Main: React.FC = () => {
 				return;
 			}
 
-			console.log('Connecting to websocket server');
+			console.log('Connecting to websocket server...');
 
 			// WebSocket, consider a separate env variable for ws address
 			ws = new ReconnectingWebSocket(
