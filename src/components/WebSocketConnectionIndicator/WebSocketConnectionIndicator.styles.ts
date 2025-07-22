@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, Collapse } from '@mui/material';
+import { Button } from '@mui/material';
 
 export const Container = styled.div`
 	display: flex;
@@ -22,21 +22,13 @@ export const Title = styled.div`
 	font-size: 16px;
 `;
 
+export const TitleCode = styled.span`
+	opacity: 0.75;
+	font-weight: 400;
+`;
+
 export const Details = styled.div`
 	font-size: 14px;
-`;
-
-export const ExtraDetailsTitle = styled.div`
-	font-weight: 600;
-	font-size: 12px;
-	margin-top: 5px;
-	cursor: pointer;
-	color: rgba(255, 255, 255, 0.8);
-	-webkit-user-select: none;
-`;
-
-export const ExtraDetails = styled(Collapse)`
-	font-size: 12px;
 `;
 
 export const RefreshContainer = styled.div`

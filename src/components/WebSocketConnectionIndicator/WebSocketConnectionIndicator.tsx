@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as Styled from './WebSocketConnectionIndicator.styles';
 import { useTranslation } from 'react-i18next';
 import ReportIcon from '@mui/icons-material/Report';
@@ -11,13 +11,20 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 	const { isWebSocketDisconnected, webSocketDisconnectionCode } =
 		useAppSelector((state) => state.UI);
 
-	const [isExtraDetailsOpen, setExtraDetailsOpen] = useState(false);
-
 	return (
 		<Styled.Container>
 			<ReportIcon />
 			<div>
-				<Styled.Title>{t('Connection error')}</Styled.Title>
+				<Styled.Title>
+					{t('Connection error')}{' '}
+					{navigator.onLine &&
+						isWebSocketDisconnected &&
+						webSocketDisconnectionCode && (
+							<Styled.TitleCode>
+								({t('Code: %d', webSocketDisconnectionCode ?? 0)})
+							</Styled.TitleCode>
+						)}
+				</Styled.Title>
 				<Styled.Details>
 					{!navigator.onLine ? (
 						<>{t('You are not connected to the internet.')}</>
@@ -28,21 +35,6 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 							)}
 						</>
 					)}
-
-					{navigator.onLine &&
-						isWebSocketDisconnected &&
-						webSocketDisconnectionCode && (
-							<div>
-								<Styled.ExtraDetailsTitle
-									onClick={() => setExtraDetailsOpen(!isExtraDetailsOpen)}
-								>
-									{isExtraDetailsOpen ? t('Hide details') : t('Show details')}
-								</Styled.ExtraDetailsTitle>
-								<Styled.ExtraDetails in={isExtraDetailsOpen}>
-									{t('Code: %d', webSocketDisconnectionCode ?? 0)}
-								</Styled.ExtraDetails>
-							</div>
-						)}
 
 					<Styled.RefreshContainer>
 						<Styled.RefreshText>
