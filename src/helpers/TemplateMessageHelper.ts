@@ -9,12 +9,53 @@ import {
 	TemplateParameter,
 } from '@src/types/templates';
 
-export const getTemplateParams = (text: string | undefined) => {
+/**
+ * Extracts all template parameter placeholders from a template text string.
+ *
+ * @param {string | undefined} text - The template text containing placeholders (e.g., "Hello {{1}}, welcome to {{company_name}}")
+ * @returns {string[]} Array of matched placeholder strings (e.g., ["{{1}}", "{{company_name}}"])
+ *
+ * @example
+ * getTemplateParams("Hello {{1}}, welcome to {{company_name}}")
+ * // Returns: ["{{1}}", "{{company_name}}"]
+ *
+ * @example
+ * getTemplateParams("Text with no placeholders")
+ * // Returns: []
+ *
+ * @example
+ * getTemplateParams(undefined)
+ * // Returns: []
+ */
+export const getTemplateParams = (text: string | undefined): string[] => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
 	return matches ? matches : [];
 };
 
-export const extractParameterPlaceholder = (templateParam: string) => {
+/**
+ * Extracts the inner key from a template parameter placeholder.
+ *
+ * @param {string} templateParam - The full parameter placeholder (e.g., "{{1}}", "{{ customer_name }}")
+ * @returns {string | null} The extracted key (e.g., "1", "customer_name") or null if no match found
+ *
+ * @remarks
+ * - Trims whitespace from the extracted key
+ * - Returns null for malformed placeholders
+ * - Handles both numeric and string-based placeholders
+ *
+ * @example
+ * extractParameterKey("{{1}}")
+ * // Returns: "1"
+ *
+ * @example
+ * extractParameterKey("{{ customer_name }}")
+ * // Returns: "customer_name"
+ *
+ * @example
+ * extractParameterKey("invalid{pattern")
+ * // Returns: null
+ */
+export const extractParameterKey = (templateParam: string) => {
 	const match = templateParam.match(/\{\{(.+?)\}\}/);
 	return match ? match[1].trim() : null;
 };
@@ -101,7 +142,7 @@ const generateParamsForComponent = (
 		if (preparedParams[key] === undefined) {
 			preparedParams[key] = {};
 		}
-		const paramPlaceholder = extractParameterPlaceholder(extractedParam);
+		const paramPlaceholder = extractParameterKey(extractedParam);
 		if (paramPlaceholder) {
 			preparedParams[key][paramPlaceholder] = {
 				type: 'text',
