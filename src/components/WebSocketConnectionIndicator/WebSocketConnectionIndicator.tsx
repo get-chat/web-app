@@ -21,7 +21,7 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 						isWebSocketDisconnected &&
 						webSocketDisconnectionCode && (
 							<Styled.TitleCode>
-								({t('Code: %d', webSocketDisconnectionCode ?? 0)})
+								{t('(Code: %d)', webSocketDisconnectionCode ?? 0)}
 							</Styled.TitleCode>
 						)}
 				</Styled.Title>

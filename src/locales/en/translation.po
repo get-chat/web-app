@@ -1006,3 +1006,15 @@ msgstr ""
 
 msgid "Go to 360Dialog Status Page"
 msgstr ""
+
+msgid "Connection error"
+msgstr ""
+
+msgid "You are not connected to the internet."
+msgstr ""
+
+msgid "Connection lost. You may not receive new messages in real time."
+msgstr ""
+
+msgid "If the issue persists, you can try refreshing the page manually."
+msgstr ""
