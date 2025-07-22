@@ -28,6 +28,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { AxiosError } from 'axios';
 import { Template } from '@src/types/templates';
 import { createMedia } from '@src/api/mediaApi';
+import { isStringNumber } from '@src/helpers/IntegerHelper';
 
 interface Props {
 	data: Template;
@@ -90,7 +91,14 @@ const SendTemplateMessage: React.FC<Props> = ({
 		setParams((prevState) => {
 			const nextState = prevState;
 
-			nextState[index][paramKey ?? 0].text = event.target.value;
+			if (!!paramKey && nextState[index][paramKey]) {
+				nextState[index][paramKey].text = event.target.value;
+
+				// Inject parameter name if key is not a number
+				if (!isStringNumber(paramKey)) {
+					nextState[index][paramKey].parameter_name = paramKey;
+				}
+			}
 
 			return { ...nextState };
 		});
