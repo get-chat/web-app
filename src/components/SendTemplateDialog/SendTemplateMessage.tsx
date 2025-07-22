@@ -9,7 +9,7 @@ import {
 	generateFinalTemplateParams,
 	generateTemplateParamsByValues,
 	getTemplateParams,
-	templateParamToInteger,
+	extractParameterPlaceholder,
 } from '@src/helpers/TemplateMessageHelper';
 import {
 	isImageSupported,
@@ -362,20 +362,21 @@ const SendTemplateMessage: React.FC<Props> = ({
 										multiline
 										value={
 											params[compIndex]
-												? params[compIndex][templateParamToInteger(param) ?? 0]
-														.text
+												? params[compIndex][
+														extractParameterPlaceholder(param) ?? ''
+												  ]?.text
 												: ''
 										}
 										onChange={(event) =>
 											updateParam(
 												event,
 												compIndex,
-												templateParamToInteger(param)
+												extractParameterPlaceholder(param)
 											)
 										}
 										className="templateMessage__param"
 										key={paramIndex}
-										label={templateParamToInteger(param)}
+										label={extractParameterPlaceholder(param)}
 										fullWidth={true}
 									/>
 								))}
@@ -405,14 +406,14 @@ const SendTemplateMessage: React.FC<Props> = ({
 													updateParam(
 														event,
 														compIndex,
-														templateParamToInteger(param)
+														extractParameterPlaceholder(param)
 													)
 												}
 												value={
 													params[compIndex]
 														? params[compIndex][
-																templateParamToInteger(param) ?? 0
-														  ].text
+																extractParameterPlaceholder(param) ?? ''
+														  ]?.text
 														: ''
 												}
 											/>

@@ -13,10 +13,12 @@ export const getTemplateParams = (text: string | undefined) => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
 	return matches ? matches : [];
 };
-export const templateParamToInteger = (templateParam: string) => {
-	const match = templateParam.match(/\d+/);
-	return match ? match[0] : null;
+
+export const extractParameterPlaceholder = (templateParam: string) => {
+	const match = templateParam.match(/\{\{(.+?)\}\}/);
+	return match ? match[1].trim() : null;
 };
+
 export const insertTemplateComponentParameters = (
 	component: TemplateComponent,
 	params: any[]
@@ -99,9 +101,9 @@ const generateParamsForComponent = (
 		if (preparedParams[key] === undefined) {
 			preparedParams[key] = {};
 		}
-		const paramInt = templateParamToInteger(extractedParam);
-		if (paramInt) {
-			preparedParams[key][paramInt] = {
+		const paramPlaceholder = extractParameterPlaceholder(extractedParam);
+		if (paramPlaceholder) {
+			preparedParams[key][paramPlaceholder] = {
 				type: 'text',
 				text: paramValues
 					? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
