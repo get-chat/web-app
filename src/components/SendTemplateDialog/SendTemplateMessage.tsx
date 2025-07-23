@@ -9,7 +9,7 @@ import {
 	generateFinalTemplateParams,
 	generateTemplateParamsByValues,
 	getTemplateParams,
-	templateParamToInteger,
+	extractParameterKey,
 } from '@src/helpers/TemplateMessageHelper';
 import {
 	isImageSupported,
@@ -28,6 +28,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { AxiosError } from 'axios';
 import { Template } from '@src/types/templates';
 import { createMedia } from '@src/api/mediaApi';
+import { isStringNumber } from '@src/helpers/IntegerHelper';
 
 interface Props {
 	data: Template;
@@ -90,7 +91,14 @@ const SendTemplateMessage: React.FC<Props> = ({
 		setParams((prevState) => {
 			const nextState = prevState;
 
-			nextState[index][paramKey ?? 0].text = event.target.value;
+			if (!!paramKey && nextState[index][paramKey]) {
+				nextState[index][paramKey].text = event.target.value;
+
+				// Inject parameter name if key is not a number
+				if (!isStringNumber(paramKey)) {
+					nextState[index][paramKey].parameter_name = paramKey;
+				}
+			}
 
 			return { ...nextState };
 		});
@@ -362,20 +370,16 @@ const SendTemplateMessage: React.FC<Props> = ({
 										multiline
 										value={
 											params[compIndex]
-												? params[compIndex][templateParamToInteger(param) ?? 0]
-														.text
+												? params[compIndex][extractParameterKey(param) ?? '']
+														?.text
 												: ''
 										}
 										onChange={(event) =>
-											updateParam(
-												event,
-												compIndex,
-												templateParamToInteger(param)
-											)
+											updateParam(event, compIndex, extractParameterKey(param))
 										}
 										className="templateMessage__param"
 										key={paramIndex}
-										label={templateParamToInteger(param)}
+										label={extractParameterKey(param)}
 										fullWidth={true}
 									/>
 								))}
@@ -405,14 +409,14 @@ const SendTemplateMessage: React.FC<Props> = ({
 													updateParam(
 														event,
 														compIndex,
-														templateParamToInteger(param)
+														extractParameterKey(param)
 													)
 												}
 												value={
 													params[compIndex]
 														? params[compIndex][
-																templateParamToInteger(param) ?? 0
-														  ].text
+																extractParameterKey(param) ?? ''
+														  ]?.text
 														: ''
 												}
 											/>

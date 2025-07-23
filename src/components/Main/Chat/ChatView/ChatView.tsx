@@ -1089,7 +1089,7 @@ const ChatView: React.FC<Props> = (props) => {
 			}
 		} catch (error: any | AxiosError) {
 			if (error.response?.status === 404) {
-				if (location.state.person) {
+				if (location.state?.person) {
 					createPersonAndStartChat(
 						location.state.person.name,
 						location.state.person.initials
