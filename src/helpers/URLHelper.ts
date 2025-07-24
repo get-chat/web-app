@@ -22,12 +22,12 @@ export const getWebSocketURL = (apiBaseURL: string) => {
 		apiBaseURL === '/api/v2/'
 	) {
 		const baseURL = getBaseURL();
-		return prepareWebsocketURL(baseURL);
+		return prepareWebSocketURL(baseURL);
 	} else {
-		return prepareWebsocketURL(apiBaseURL);
+		return prepareWebSocketURL(apiBaseURL);
 	}
 };
-const prepareWebsocketURL = (url: string) => {
+const prepareWebSocketURL = (url: string) => {
 	return url
 		.replace('https://', 'wss://websockets-')
 		.replace('http://', 'wss://websockets-')

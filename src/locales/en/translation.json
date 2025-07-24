@@ -324,5 +324,9 @@
 	"View catalog": "",
 	"This field is required!": "",
 	"This image isn't available anymore.": "",
-	"Go to 360Dialog Status Page": ""
+	"Go to 360Dialog Status Page": "",
+	"Connection error": "",
+	"You are not connected to the internet.": "",
+	"Connection lost. You may not receive new messages in real time.": "",
+	"If the issue persists, you can try refreshing the page manually.": ""
 }

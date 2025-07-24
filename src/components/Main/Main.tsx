@@ -77,6 +77,8 @@ import {
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
+import * as Sentry from '@sentry/browser';
+import ReconnectingWebSocket from 'reconnecting-websocket';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -110,14 +112,11 @@ const Main: React.FC = () => {
 	const { waId } = useParams();
 
 	const [checked, setChecked] = useState(false);
-
 	const [isTemplatesReady, setTemplatesReady] = useState(false);
-
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
 	const [successMessage, setSuccessMessage] = useState('');
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
-
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
@@ -332,6 +331,17 @@ const Main: React.FC = () => {
 			retrieveCurrentUser();
 		}
 
+		const handleBrowserOffline = () => {
+			dispatch(setState({ isBrowserOffline: true }));
+		};
+
+		const handleBrowserOnline = () => {
+			dispatch(setState({ isBrowserOffline: false }));
+		};
+
+		window.addEventListener('offline', handleBrowserOffline);
+		window.addEventListener('online', handleBrowserOnline);
+
 		const onUnsupportedFileEvent = function (msg: string, data: any) {
 			setUnsupportedFile(data);
 			setDownloadUnsupportedFileVisible(true);
@@ -348,6 +358,8 @@ const Main: React.FC = () => {
 		);
 
 		return () => {
+			window.removeEventListener('offline', handleBrowserOffline);
+			window.removeEventListener('online', handleBrowserOnline);
 			PubSub.unsubscribe(displayErrorEventToken);
 			PubSub.unsubscribe(unsupportedFileEventToken);
 		};
@@ -355,22 +367,32 @@ const Main: React.FC = () => {
 
 	useEffect(() => {
 		const CODE_NORMAL = 1000;
-		let ws: WebSocket;
+		let ws: ReconnectingWebSocket;
 
 		let socketClosedAt: Date | undefined;
+		let isHandledConnectionError = false;
 
 		const connect = () => {
 			if (loadingProgress < 100) {
 				return;
 			}
 
-			console.log('Connecting to websocket server');
+			console.log('Connecting to websocket server...');
 
 			// WebSocket, consider a separate env variable for ws address
-			ws = new WebSocket(getWebSocketURL(api.defaults.baseURL ?? ''));
+			ws = new ReconnectingWebSocket(
+				getWebSocketURL(api.defaults.baseURL ?? ''),
+				undefined,
+				{
+					debug: false,
+				}
+			);
 
-			ws.onopen = function () {
+			ws.addEventListener('open', () => {
 				console.log('Connected to websocket server.');
+
+				// Update state
+				dispatch(setState({ isWebSocketDisconnected: false }));
 
 				ws.send(JSON.stringify({ token: getToken() }));
 
@@ -379,32 +401,65 @@ const Main: React.FC = () => {
 					const differenceInMinutes =
 						Math.abs(now.getTime() - socketClosedAt.getTime()) / 1000 / 60;
 
-					// If window was blurred for more than 3 hours
+					// If window was blurred for more than 5 minutes
 					if (differenceInMinutes >= 5) {
 						window.location.reload();
 					} else {
 						socketClosedAt = undefined;
 					}
 				}
-			};
+			});
 
-			ws.onclose = function (event) {
+			ws.addEventListener('close', (event) => {
+				// Update State
+				dispatch(
+					setState({
+						isWebSocketDisconnected: true,
+						webSocketDisconnectionCode: event.code,
+					})
+				);
+
 				if (event.code !== CODE_NORMAL) {
-					console.log('Retrying connection to websocket server in 1 second.');
+					console.log('WebSocket closed unexpectedly:', event);
+
+					// Report the error to Sentry if caused by server
+					if ([1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015]) {
+						Sentry.captureException(
+							new Error(`WebSocket closed unexpectedly. Code: ${event.code}`),
+							{
+								extra: {
+									event,
+								},
+							}
+						);
+					}
 
 					socketClosedAt = new Date();
-
-					setTimeout(function () {
-						connect();
-					}, 1000);
+				} else {
+					console.log('WebSocket closed. Will connect automatically.');
 				}
-			};
+			});
 
-			ws.onerror = function () {
-				ws.close();
-			};
+			ws.addEventListener('error', (event) => {
+				// Check if connection error is already reported
+				if (ws.readyState == ws.CLOSED && isHandledConnectionError) {
+					return;
+				}
 
-			ws.onmessage = function (event) {
+				// Mark as connection error is reported
+				if (ws.readyState == ws.CLOSED && !isHandledConnectionError) {
+					isHandledConnectionError = true;
+				}
+
+				// Report error to Sentry
+				Sentry.captureException(new Error('WebSocket error occurred.'), {
+					extra: {
+						event,
+					},
+				});
+			});
+
+			ws.addEventListener('message', (event) => {
 				try {
 					const data = JSON.parse(event.data) as WebhookMessage;
 					console.log(data);
@@ -505,7 +560,7 @@ const Main: React.FC = () => {
 					// Do not force Sentry if exceptions can't be handled without a user feedback dialog
 					//Sentry.captureException(error);
 				}
-			};
+			});
 		};
 
 		connect();
