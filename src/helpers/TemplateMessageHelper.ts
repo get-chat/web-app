@@ -9,14 +9,57 @@ import {
 	TemplateParameter,
 } from '@src/types/templates';
 
-export const getTemplateParams = (text: string | undefined) => {
+/**
+ * Extracts all template parameter placeholders from a template text string.
+ *
+ * @param {string | undefined} text - The template text containing placeholders (e.g., "Hello {{1}}, welcome to {{company_name}}")
+ * @returns {string[]} Array of matched placeholder strings (e.g., ["{{1}}", "{{company_name}}"])
+ *
+ * @example
+ * getTemplateParams("Hello {{1}}, welcome to {{company_name}}")
+ * // Returns: ["{{1}}", "{{company_name}}"]
+ *
+ * @example
+ * getTemplateParams("Text with no placeholders")
+ * // Returns: []
+ *
+ * @example
+ * getTemplateParams(undefined)
+ * // Returns: []
+ */
+export const getTemplateParams = (text: string | undefined): string[] => {
 	const matches = text?.match(/\{{(.*?)\}}/g);
 	return matches ? matches : [];
 };
-export const templateParamToInteger = (templateParam: string) => {
-	const match = templateParam.match(/\d+/);
-	return match ? match[0] : null;
+
+/**
+ * Extracts the inner key from a template parameter placeholder.
+ *
+ * @param {string} templateParam - The full parameter placeholder (e.g., "{{1}}", "{{ customer_name }}")
+ * @returns {string | null} The extracted key (e.g., "1", "customer_name") or null if no match found
+ *
+ * @remarks
+ * - Trims whitespace from the extracted key
+ * - Returns null for malformed placeholders
+ * - Handles both numeric and string-based placeholders
+ *
+ * @example
+ * extractParameterKey("{{1}}")
+ * // Returns: "1"
+ *
+ * @example
+ * extractParameterKey("{{ customer_name }}")
+ * // Returns: "customer_name"
+ *
+ * @example
+ * extractParameterKey("invalid{pattern")
+ * // Returns: null
+ */
+export const extractParameterKey = (templateParam: string) => {
+	const match = templateParam.match(/\{\{(.+?)\}\}/);
+	return match ? match[1].trim() : null;
 };
+
 export const insertTemplateComponentParameters = (
 	component: TemplateComponent,
 	params: any[]
@@ -46,7 +89,8 @@ export const insertTemplateComponentParameters = (
 					const paramValue =
 						// @ts-ignore
 						param[paramType]?.fallback_value ?? param[paramType];
-					text = text.replace(`{{${index + 1}}}`, paramValue);
+					const paramKey = (param.parameter_name ?? index + 1).toString();
+					text = safeReplaceParam(text, paramKey, paramValue);
 				}
 			);
 
@@ -55,6 +99,42 @@ export const insertTemplateComponentParameters = (
 	}
 
 	return text;
+};
+
+/**
+ * Safely replaces all occurrences of a template parameter in text,
+ * regardless of whitespace variations inside the placeholders.
+ *
+ * @param {string} text - The template text containing placeholders
+ * @param {string} paramKey - The parameter name/key (without braces)
+ * @param {string} paramValue - The value to insert
+ * @returns {string} The text with all matching placeholders replaced
+ *
+ * @example
+ * safeReplaceParam("Hello {{ name }}", "name", "Berkay") // "Hello Berkay"
+ * @example
+ * safeReplaceParam("Hello {{name}}", "name", "Berkay")  // "Hello Berkay"
+ * @example
+ * safeReplaceParam("Hello {{ name}}", "name", "Berkay") // "Hello Berkay"
+ */
+export const safeReplaceParam = (
+	text: string,
+	paramKey: string,
+	paramValue: string
+): string => {
+	// Create regex pattern that matches any whitespace variations
+	const pattern = new RegExp(
+		`\\{\\{\\s*${escapeRegExp(paramKey)}\\s*\\}\\}`,
+		'g'
+	);
+	return text.replace(pattern, paramValue);
+};
+
+/**
+ * Escapes special regex characters in a string
+ */
+const escapeRegExp = (string: string) => {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 };
 
 export const sortTemplateComponents = (components: TemplateComponent[]) => {
@@ -99,9 +179,9 @@ const generateParamsForComponent = (
 		if (preparedParams[key] === undefined) {
 			preparedParams[key] = {};
 		}
-		const paramInt = templateParamToInteger(extractedParam);
-		if (paramInt) {
-			preparedParams[key][paramInt] = {
+		const paramPlaceholder = extractParameterKey(extractedParam);
+		if (paramPlaceholder) {
+			preparedParams[key][paramPlaceholder] = {
 				type: 'text',
 				text: paramValues
 					? paramValues[extractedParamIndex + (hasHeader ? 2 : 1)]
