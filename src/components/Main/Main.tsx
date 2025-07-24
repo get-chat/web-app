@@ -112,14 +112,11 @@ const Main: React.FC = () => {
 	const { waId } = useParams();
 
 	const [checked, setChecked] = useState(false);
-
 	const [isTemplatesReady, setTemplatesReady] = useState(false);
-
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
 	const [successMessage, setSuccessMessage] = useState('');
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
-
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
@@ -373,6 +370,8 @@ const Main: React.FC = () => {
 		let ws: ReconnectingWebSocket;
 
 		let socketClosedAt: Date | undefined;
+		let isConnectedOnce = false;
+		let isHandledConnectionError = false;
 
 		const connect = () => {
 			if (loadingProgress < 100) {
@@ -383,11 +382,17 @@ const Main: React.FC = () => {
 
 			// WebSocket, consider a separate env variable for ws address
 			ws = new ReconnectingWebSocket(
-				getWebSocketURL(api.defaults.baseURL ?? '')
+				getWebSocketURL(api.defaults.baseURL ?? ''),
+				undefined,
+				{
+					debug: false,
+				}
 			);
 
 			ws.addEventListener('open', () => {
 				console.log('Connected to websocket server.');
+
+				isConnectedOnce = true;
 
 				// Update state
 				dispatch(setState({ isWebSocketDisconnected: false }));
@@ -439,6 +444,21 @@ const Main: React.FC = () => {
 			});
 
 			ws.addEventListener('error', (event) => {
+				// Check if connection error is already reported
+				if (
+					ws.readyState == ws.CLOSED &&
+					!isConnectedOnce &&
+					isHandledConnectionError
+				) {
+					return;
+				}
+
+				// Mark as connection error is reported
+				if (ws.readyState == ws.CLOSED && !isHandledConnectionError) {
+					isHandledConnectionError = true;
+				}
+
+				// Report error to Sentry
 				Sentry.captureException(new Error('WebSocket error occurred.'), {
 					extra: {
 						event,
