@@ -370,7 +370,6 @@ const Main: React.FC = () => {
 		let ws: ReconnectingWebSocket;
 
 		let socketClosedAt: Date | undefined;
-		let isConnectedOnce = false;
 		let isHandledConnectionError = false;
 
 		const connect = () => {
@@ -391,8 +390,6 @@ const Main: React.FC = () => {
 
 			ws.addEventListener('open', () => {
 				console.log('Connected to websocket server.');
-
-				isConnectedOnce = true;
 
 				// Update state
 				dispatch(setState({ isWebSocketDisconnected: false }));
@@ -445,11 +442,7 @@ const Main: React.FC = () => {
 
 			ws.addEventListener('error', (event) => {
 				// Check if connection error is already reported
-				if (
-					ws.readyState == ws.CLOSED &&
-					!isConnectedOnce &&
-					isHandledConnectionError
-				) {
+				if (ws.readyState == ws.CLOSED && isHandledConnectionError) {
 					return;
 				}
 
