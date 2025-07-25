@@ -368,9 +368,10 @@ const Main: React.FC = () => {
 	useEffect(() => {
 		const CODE_NORMAL = 1000;
 		const CODE_GOING_AWAY = 1001;
-		let ws: ReconnectingWebSocket;
+		let ws: ReconnectingWebSocket | null = null;
 
 		let socketClosedAt: Date | undefined;
+		let hasConnectedOnce = false;
 		let isHandledConnectionError = false;
 
 		const connect = () => {
@@ -392,10 +393,12 @@ const Main: React.FC = () => {
 			ws.addEventListener('open', () => {
 				console.log('Connected to websocket server.');
 
+				hasConnectedOnce = true;
+
 				// Update state
 				dispatch(setState({ isWebSocketDisconnected: false }));
 
-				ws.send(JSON.stringify({ token: getToken() }));
+				ws?.send(JSON.stringify({ token: getToken() }));
 
 				if (socketClosedAt) {
 					const now = new Date();
@@ -433,7 +436,7 @@ const Main: React.FC = () => {
 						break;
 					default:
 						console.warn(
-							`WebSocket closed unexpectedly with code ${event.code}`
+							`WebSocket closed unexpectedly with code: ${event.code}`
 						);
 				}
 
@@ -445,8 +448,11 @@ const Main: React.FC = () => {
 						)
 					) {
 						Sentry.captureException(
-							new Error(`WebSocket closed unexpectedly. Code: ${event.code}`),
+							new Error(
+								`WebSocket closed unexpectedly with code: ${event.code}`
+							),
 							{
+								fingerprint: ['websocket-error', ws?.url ?? ''],
 								extra: {
 									event,
 								},
@@ -456,18 +462,18 @@ const Main: React.FC = () => {
 
 					socketClosedAt = new Date();
 				} else {
-					console.log('WebSocket closed. Will connect automatically.');
+					console.log('WebSocket closed and it will re-connect automatically.');
 				}
 			});
 
 			ws.addEventListener('error', (event) => {
 				// Check if connection error is already reported
-				if (ws.readyState == ws.CLOSED && isHandledConnectionError) {
+				if (hasConnectedOnce && isHandledConnectionError) {
 					return;
 				}
 
 				// Mark as connection error is reported
-				if (ws.readyState == ws.CLOSED && !isHandledConnectionError) {
+				if (!hasConnectedOnce && !isHandledConnectionError) {
 					isHandledConnectionError = true;
 				}
 
@@ -577,8 +583,6 @@ const Main: React.FC = () => {
 				} catch (error) {
 					console.error(error);
 					console.log(event.data);
-					// Do not force Sentry if exceptions can't be handled without a user feedback dialog
-					//Sentry.captureException(error);
 				}
 			});
 		};
@@ -587,6 +591,7 @@ const Main: React.FC = () => {
 
 		return () => {
 			ws?.close(CODE_NORMAL);
+			ws = null;
 		};
 	}, [loadingProgress]);
 
