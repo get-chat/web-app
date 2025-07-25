@@ -367,6 +367,7 @@ const Main: React.FC = () => {
 
 	useEffect(() => {
 		const CODE_NORMAL = 1000;
+		const CODE_GOING_AWAY = 1001;
 		let ws: ReconnectingWebSocket;
 
 		let socketClosedAt: Date | undefined;
@@ -411,17 +412,32 @@ const Main: React.FC = () => {
 			});
 
 			ws.addEventListener('close', (event) => {
-				// Update State
-				dispatch(
-					setState({
-						isWebSocketDisconnected: true,
-						webSocketDisconnectionCode: event.code,
-					})
-				);
+				if (event.code !== CODE_GOING_AWAY) {
+					// Update state if not caused by page unload or URL change (Firefox)
+					dispatch(
+						setState({
+							isWebSocketDisconnected: true,
+							webSocketDisconnectionCode: event.code,
+						})
+					);
+				}
+
+				switch (event.code) {
+					case CODE_NORMAL:
+						console.log('WebSocket closed normally.');
+						break;
+					case CODE_GOING_AWAY:
+						console.log(
+							'WebSocket closed: going away (tab navigated or closed).'
+						);
+						break;
+					default:
+						console.warn(
+							`WebSocket closed unexpectedly with code ${event.code}`
+						);
+				}
 
 				if (event.code !== CODE_NORMAL) {
-					console.log('WebSocket closed unexpectedly:', event);
-
 					// Report the error to Sentry if caused by server
 					if (
 						[1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015].includes(
