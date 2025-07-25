@@ -468,7 +468,7 @@ const Main: React.FC = () => {
 
 			ws.addEventListener('error', (event) => {
 				// Check if connection error is already reported
-				if (hasConnectedOnce && isHandledConnectionError) {
+				if (!hasConnectedOnce && isHandledConnectionError) {
 					return;
 				}
 
