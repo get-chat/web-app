@@ -423,7 +423,11 @@ const Main: React.FC = () => {
 					console.log('WebSocket closed unexpectedly:', event);
 
 					// Report the error to Sentry if caused by server
-					if ([1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015]) {
+					if (
+						[1002, 1003, 1006, 1009, 1011, 1012, 1013, 1015].includes(
+							event.code
+						)
+					) {
 						Sentry.captureException(
 							new Error(`WebSocket closed unexpectedly. Code: ${event.code}`),
 							{
