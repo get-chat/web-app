@@ -28,8 +28,16 @@ export const initializeSentry = (config: AppConfig) => {
 
 			ignoreErrors: ['ResizeObserver loop limit exceeded'],
 			beforeSend(event) {
+				const extraEvent = event.extra?.event as any;
+				const isWebSocketEvent =
+					typeof extraEvent === 'object' &&
+					extraEvent !== null &&
+					('wasClean' in extraEvent ||
+						(typeof extraEvent.target == 'string' &&
+							extraEvent.target.includes('WebSocket')));
+
 				// Check if it is an exception, and if so, show the report dialog
-				if (event.exception) {
+				if (event.exception && !isWebSocketEvent) {
 					Sentry.showReportDialog({ eventId: event.event_id });
 				}
 				return event;
