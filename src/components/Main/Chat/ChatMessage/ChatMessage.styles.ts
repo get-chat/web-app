@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { MessageType } from '@src/types/messages';
+import { DoneAll } from '@mui/icons-material';
 
 export const Reactions = styled.div`
 	background-color: white;
@@ -193,4 +194,16 @@ export const ChatMessage = styled.div.attrs({
 				cursor: pointer;
 			}
 		`}
+
+	${({ $isReceived }) =>
+		$isReceived &&
+		css`
+			& ${DoneAllIcon} {
+				fill: var(--color-light-blue);
+			}
+		`}
+`;
+
+export const DoneAllIcon = styled(DoneAll)`
+	fill: #8990b4;
 `;
