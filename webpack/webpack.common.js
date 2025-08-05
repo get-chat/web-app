@@ -8,7 +8,11 @@ const fs = require('fs');
 
 // Load `.env` manually from the root
 const envPath = path.resolve(__dirname, '../.env');
-const envVars = dotenv.parse(fs.readFileSync(envPath));
+
+let envVars = {};
+if (fs.existsSync(envPath)) {
+	envVars = dotenv.parse(fs.readFileSync(envPath));
+}
 
 // Filter only REACT_APP_* vars and stringify them for DefinePlugin
 const envKeys = Object.keys(envVars)
