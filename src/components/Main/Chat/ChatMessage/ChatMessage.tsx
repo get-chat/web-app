@@ -335,7 +335,7 @@ const ChatMessage: React.FC<Props> = ({
 									)}
 
 									{isDeliveredOrRead(data) && (
-										<DoneAll
+										<Styled.DoneAllIcon
 											className="chat__iconDoneAll"
 											color="inherit"
 											style={iconStyles}

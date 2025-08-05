@@ -195,10 +195,6 @@ a.chat__document:hover {
 	float: right;
 }
 
-.chat__message__info .MuiSvgIcon-root:not(.chat__received .chat__iconDoneAll) {
-	color: #8990b4 !important;
-}
-
 .chat__timestamp {
 	color: rgba(0, 0, 45, 0.6);
 	margin-left: 10px;
@@ -212,10 +208,6 @@ a.chat__document:hover {
 	height: 10px;
 	width: 10px;
 	margin-left: 5px;
-}
-
-.chat__received .chat__iconDoneAll * {
-	fill: var(--color-light-blue);
 }
 
 .chat__iconError * {
