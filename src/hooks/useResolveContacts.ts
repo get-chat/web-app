@@ -78,7 +78,7 @@ const useResolveContacts = () => {
 			});
 		} catch (error: any | AxiosError) {
 			if (error.response?.status === 404) {
-				console.warn('ContactView is not found.');
+				console.warn('Contact is not found.');
 			} else {
 				console.error(error.response);
 			}
