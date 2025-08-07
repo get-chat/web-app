@@ -706,7 +706,7 @@ msgid "Chats"
 msgstr "Czaty"
 
 msgid ""
-"To be able to share contacts, you need to use one of our ContactView Providers. "
+"To be able to share contacts, you need to use one of our Contact Providers. "
 "<1>Click here</1> to go to our integrations page."
 msgstr ""
 "Aby móc udostępniać kontakty, musisz skorzystać z jednego z naszych "

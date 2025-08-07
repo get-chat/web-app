@@ -387,10 +387,14 @@ const Sidebar: React.FC<Props> = ({
 								const chatName = getChatContactName(chat);
 								if (!containsLetters(chatName)) {
 									// Update sidebar chat name
-									setChatContactName(
+									const updatedChat = setChatContactName(
 										nextState[chatKey],
 										getSenderName(chatMessage)
 									);
+
+									if (updatedChat) {
+										nextState[chatKey] = updatedChat;
+									}
 
 									// Check if current chat
 									if (waId === chatMessageWaId) {

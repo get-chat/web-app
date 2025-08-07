@@ -16,6 +16,7 @@ import {
 } from '@src/Constants';
 import { Template } from '@src/types/templates';
 import { CreateMessageRequest } from '@src/types/messages';
+import { makeMutable } from '@src/helpers/DataHelper';
 
 export type Props = {
 	isVisible: boolean;
@@ -71,7 +72,8 @@ const SendTemplateDialog: React.FC<Props> = ({
 			data: CreateMessageRequest
 		) {
 			// Make data mutable
-			data = { ...data };
+			data = makeMutable(data);
+
 			// Remove injected fields
 			delete data.wa_id;
 			delete data.pending_message_unique_id;

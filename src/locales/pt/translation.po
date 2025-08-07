@@ -668,7 +668,7 @@ msgstr "Não está vendo seus novos modelos?"
 msgid "Chats"
 msgstr "Bate-papos"
 
-msgid "To be able to share contacts, you need to use one of our ContactView Providers. <1>Click here</1> to go to our integrations page."
+msgid "To be able to share contacts, you need to use one of our Contact Providers. <1>Click here</1> to go to our integrations page."
 msgstr "Para poder compartilhar contatos, você precisa usar um de nossos Provedores de Contatos. <1>Clique aqui</1> para ir para nossa página de integrações."
 
 msgid "Send contacts"

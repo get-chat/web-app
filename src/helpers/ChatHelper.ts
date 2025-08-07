@@ -10,6 +10,7 @@ import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import { User } from '@src/types/users';
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { MessageType } from '@src/types/messages';
+import { makeMutable } from '@src/helpers/DataHelper';
 
 export const isChatExpired = (chat: Chat | undefined) =>
 	getPastHoursByTimestamp(chat?.contact.last_message_timestamp ?? 0) >= 24;
@@ -23,11 +24,13 @@ export const setChatContactName = (
 ) => {
 	if (chat && !!name) {
 		// Make data mutable
-		chat.contact.waba_payload.profile = {
-			...chat.contact.waba_payload.profile,
-		};
+		chat = makeMutable(chat);
+
+		// Update name field
 		chat.contact.waba_payload.profile.name = name;
 	}
+
+	return chat;
 };
 
 export const getLastMessageTimestamp = (chat: Chat | undefined) =>
