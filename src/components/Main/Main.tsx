@@ -570,111 +570,7 @@ const Main: React.FC = () => {
 			});
 
 			ws.addEventListener('message', (event) => {
-				try {
-					const data = JSON.parse(event.data) as WebhookMessage;
-					console.log(data);
-
-					// Breadcrumb for each message
-					Sentry.addBreadcrumb({
-						category: 'websocket',
-						message: 'WebSocket message received',
-						level: 'info',
-					});
-
-					if (data.type === 'waba_webhook') {
-						const wabaPayload = data.waba_payload;
-
-						// Incoming messages
-						const incomingMessages = wabaPayload?.incoming_messages;
-
-						if (incomingMessages) {
-							const preparedMessages: ChatMessageList = {};
-
-							incomingMessages.forEach((message: Message) => {
-								preparedMessages[message.waba_payload?.id ?? message.id] =
-									message;
-							});
-
-							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-						}
-
-						// Outgoing messages
-						const outgoingMessages = wabaPayload?.outgoing_messages;
-
-						if (outgoingMessages) {
-							const preparedMessages: ChatMessageList = {};
-
-							outgoingMessages.forEach((message: Message) => {
-								preparedMessages[message.waba_payload?.id ?? message.id] =
-									message;
-							});
-
-							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-						}
-
-						// Statuses
-						const statuses = wabaPayload?.statuses;
-
-						if (statuses) {
-							const preparedStatuses: { [key: string]: WebhookMessageStatus } =
-								{};
-							statuses.forEach(
-								(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
-							);
-
-							PubSub.publish(
-								EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-								preparedStatuses
-							);
-						}
-
-						// Chat assignment
-						const chatAssignment = wabaPayload?.chat_assignment;
-
-						if (chatAssignment) {
-							const preparedMessages: ChatMessageList = {};
-							const prepared = fromAssignmentEvent(chatAssignment);
-							preparedMessages[prepared.id] = prepared;
-
-							PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
-
-							// Update chats with delay not to break EventBus
-							setTimeout(function () {
-								dispatch(
-									setChatAssignment({
-										waId: prepared.customer_wa_id,
-										assignmentEvent: prepared.assignment_event,
-									})
-								);
-							}, 100);
-						}
-
-						// Chat tagging
-						const chatTagging = wabaPayload?.chat_tagging;
-
-						if (chatTagging) {
-							const preparedMessages: ChatMessageList = {};
-							const prepared = fromTaggingEvent(chatTagging);
-							preparedMessages[prepared.id] = prepared;
-
-							PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
-
-							// Update chats with delay not to break EventBus
-							setTimeout(function () {
-								// Update chats
-								dispatch(
-									setChatTagging({
-										waId: prepared.customer_wa_id,
-										taggingEvent: prepared.tagging_event,
-									})
-								);
-							}, 100);
-						}
-					}
-				} catch (error) {
-					console.error(error);
-					console.log(event.data);
-				}
+				handleWSIncomingMessage(event);
 			});
 		};
 
@@ -687,6 +583,111 @@ const Main: React.FC = () => {
 			ws = null;
 		};
 	}, [loadingProgress]);
+
+	const handleWSIncomingMessage = (event: MessageEvent<any>) => {
+		try {
+			const data = JSON.parse(event.data) as WebhookMessage;
+			console.log(data);
+
+			// Breadcrumb for each message
+			Sentry.addBreadcrumb({
+				category: 'websocket',
+				message: 'WebSocket message received',
+				level: 'info',
+			});
+
+			if (data.type === 'waba_webhook') {
+				const wabaPayload = data.waba_payload;
+
+				// Incoming messages
+				const incomingMessages = wabaPayload?.incoming_messages;
+
+				if (incomingMessages) {
+					const preparedMessages: ChatMessageList = {};
+
+					incomingMessages.forEach((message: Message) => {
+						preparedMessages[message.waba_payload?.id ?? message.id] = message;
+					});
+
+					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+				}
+
+				// Outgoing messages
+				const outgoingMessages = wabaPayload?.outgoing_messages;
+
+				if (outgoingMessages) {
+					const preparedMessages: ChatMessageList = {};
+
+					outgoingMessages.forEach((message: Message) => {
+						preparedMessages[message.waba_payload?.id ?? message.id] = message;
+					});
+
+					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+				}
+
+				// Statuses
+				const statuses = wabaPayload?.statuses;
+
+				if (statuses) {
+					const preparedStatuses: { [key: string]: WebhookMessageStatus } = {};
+					statuses.forEach(
+						(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
+					);
+
+					PubSub.publish(
+						EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+						preparedStatuses
+					);
+				}
+
+				// Chat assignment
+				const chatAssignment = wabaPayload?.chat_assignment;
+
+				if (chatAssignment) {
+					const preparedMessages: ChatMessageList = {};
+					const prepared = fromAssignmentEvent(chatAssignment);
+					preparedMessages[prepared.id] = prepared;
+
+					PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
+
+					// Update chats with delay not to break EventBus
+					setTimeout(function () {
+						dispatch(
+							setChatAssignment({
+								waId: prepared.customer_wa_id,
+								assignmentEvent: prepared.assignment_event,
+							})
+						);
+					}, 100);
+				}
+
+				// Chat tagging
+				const chatTagging = wabaPayload?.chat_tagging;
+
+				if (chatTagging) {
+					const preparedMessages: ChatMessageList = {};
+					const prepared = fromTaggingEvent(chatTagging);
+					preparedMessages[prepared.id] = prepared;
+
+					PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
+
+					// Update chats with delay not to break EventBus
+					setTimeout(function () {
+						// Update chats
+						dispatch(
+							setChatTagging({
+								waId: prepared.customer_wa_id,
+								taggingEvent: prepared.tagging_event,
+							})
+						);
+					}, 100);
+				}
+			}
+		} catch (error) {
+			console.error(error);
+			console.log(event.data);
+		}
+	};
 
 	useEffect(() => {
 		// Window close event
