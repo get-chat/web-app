@@ -374,12 +374,28 @@ const Main: React.FC = () => {
 		let hasConnectedOnce = false;
 		let isHandledConnectionError = false;
 
+		// Create spans
+		let wsSpan: any = undefined;
+		let disconnectSpan: any = undefined;
+
 		const connect = () => {
 			if (loadingProgress < 100) {
 				return;
 			}
 
 			console.log('Connecting to websocket server...');
+
+			// Start a Sentry span for the WS connection lifecycle
+			Sentry.startSpan(
+				{
+					name: 'websocket.connect',
+					op: 'websocket.connect',
+				},
+				(span) => {
+					wsSpan = span;
+					return wsSpan;
+				}
+			);
 
 			// WebSocket, consider a separate env variable for ws address
 			ws = new ReconnectingWebSocket(
@@ -392,6 +408,17 @@ const Main: React.FC = () => {
 
 			ws.addEventListener('open', () => {
 				console.log('Connected to websocket server.');
+
+				// Breadcrumb for visibility in Sentry issues
+				Sentry.addBreadcrumb({
+					category: 'websocket',
+					message: 'Connected to websocket server.',
+					level: 'info',
+				});
+
+				// Mark connection attribute
+				wsSpan?.setAttribute('connection_status', 'opened');
+				wsSpan?.setAttribute('connected_at', new Date().toISOString());
 
 				hasConnectedOnce = true;
 
@@ -415,6 +442,40 @@ const Main: React.FC = () => {
 			});
 
 			ws.addEventListener('close', (event) => {
+				// Start a short-lived span for the disconnect event
+				Sentry.startSpan(
+					{
+						name: 'websocket.disconnect',
+						op: 'websocket.disconnect',
+					},
+					(span) => {
+						disconnectSpan = span;
+						return disconnectSpan;
+					}
+				);
+
+				// Add breadcrumb with close details
+				Sentry.addBreadcrumb({
+					category: 'websocket',
+					message: `WebSocket connection closed`,
+					data: {
+						code: event.code,
+						reason: event.reason,
+						wasClean: event.wasClean,
+					},
+					level: event.wasClean ? 'info' : 'warning',
+				});
+
+				// Attach attributes to both spans for better searchable context
+				disconnectSpan?.setAttributes({
+					close_code: event.code,
+					reason: event.reason,
+					was_clean: event.wasClean,
+				});
+				wsSpan?.setAttribute('close_code', event.code);
+				wsSpan?.setAttribute('close_reason', event.reason);
+				wsSpan?.setAttribute('was_clean', event.wasClean);
+
 				if (event.code !== CODE_GOING_AWAY) {
 					// Update state if not caused by page unload or URL change (Firefox)
 					dispatch(
@@ -464,6 +525,17 @@ const Main: React.FC = () => {
 				} else {
 					console.log('WebSocket closed and it will re-connect automatically.');
 				}
+
+				// Set span statuses and finish spans
+				if (event.wasClean) {
+					disconnectSpan?.setStatus?.('ok');
+				} else {
+					disconnectSpan?.setStatus?.('internal_error');
+				}
+				disconnectSpan?.end();
+
+				// End the lifecycle span if still open
+				wsSpan?.end();
 			});
 
 			ws.addEventListener('error', (event) => {
@@ -477,113 +549,28 @@ const Main: React.FC = () => {
 					isHandledConnectionError = true;
 				}
 
+				// Breadcrumb + capture
+				Sentry.addBreadcrumb({
+					category: 'websocket',
+					message: 'WebSocket error occurred',
+					data: { event },
+					level: 'error',
+				});
+
 				// Report error to Sentry
 				Sentry.captureException(new Error('WebSocket error occurred.'), {
 					extra: {
 						event,
 					},
 				});
+
+				// Annotate the lifecycle span
+				wsSpan?.setAttribute('error', JSON.stringify(event));
+				wsSpan?.setStatus?.('internal_error');
 			});
 
 			ws.addEventListener('message', (event) => {
-				try {
-					const data = JSON.parse(event.data) as WebhookMessage;
-					console.log(data);
-
-					if (data.type === 'waba_webhook') {
-						const wabaPayload = data.waba_payload;
-
-						// Incoming messages
-						const incomingMessages = wabaPayload?.incoming_messages;
-
-						if (incomingMessages) {
-							const preparedMessages: ChatMessageList = {};
-
-							incomingMessages.forEach((message: Message) => {
-								preparedMessages[message.waba_payload?.id ?? message.id] =
-									message;
-							});
-
-							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-						}
-
-						// Outgoing messages
-						const outgoingMessages = wabaPayload?.outgoing_messages;
-
-						if (outgoingMessages) {
-							const preparedMessages: ChatMessageList = {};
-
-							outgoingMessages.forEach((message: Message) => {
-								preparedMessages[message.waba_payload?.id ?? message.id] =
-									message;
-							});
-
-							PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-						}
-
-						// Statuses
-						const statuses = wabaPayload?.statuses;
-
-						if (statuses) {
-							const preparedStatuses: { [key: string]: WebhookMessageStatus } =
-								{};
-							statuses.forEach(
-								(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
-							);
-
-							PubSub.publish(
-								EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-								preparedStatuses
-							);
-						}
-
-						// Chat assignment
-						const chatAssignment = wabaPayload?.chat_assignment;
-
-						if (chatAssignment) {
-							const preparedMessages: ChatMessageList = {};
-							const prepared = fromAssignmentEvent(chatAssignment);
-							preparedMessages[prepared.id] = prepared;
-
-							PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
-
-							// Update chats with delay not to break EventBus
-							setTimeout(function () {
-								dispatch(
-									setChatAssignment({
-										waId: prepared.customer_wa_id,
-										assignmentEvent: prepared.assignment_event,
-									})
-								);
-							}, 100);
-						}
-
-						// Chat tagging
-						const chatTagging = wabaPayload?.chat_tagging;
-
-						if (chatTagging) {
-							const preparedMessages: ChatMessageList = {};
-							const prepared = fromTaggingEvent(chatTagging);
-							preparedMessages[prepared.id] = prepared;
-
-							PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
-
-							// Update chats with delay not to break EventBus
-							setTimeout(function () {
-								// Update chats
-								dispatch(
-									setChatTagging({
-										waId: prepared.customer_wa_id,
-										taggingEvent: prepared.tagging_event,
-									})
-								);
-							}, 100);
-						}
-					}
-				} catch (error) {
-					console.error(error);
-					console.log(event.data);
-				}
+				handleWSIncomingMessage(event);
 			});
 		};
 
@@ -591,9 +578,116 @@ const Main: React.FC = () => {
 
 		return () => {
 			ws?.close(CODE_NORMAL);
+			// Ensure any lifecycle span is ended on unmount
+			wsSpan?.end?.();
 			ws = null;
 		};
 	}, [loadingProgress]);
+
+	const handleWSIncomingMessage = (event: MessageEvent<any>) => {
+		try {
+			const data = JSON.parse(event.data) as WebhookMessage;
+			console.log(data);
+
+			// Breadcrumb for each message
+			Sentry.addBreadcrumb({
+				category: 'websocket',
+				message: 'WebSocket message received',
+				level: 'info',
+			});
+
+			if (data.type === 'waba_webhook') {
+				const wabaPayload = data.waba_payload;
+
+				// Incoming messages
+				const incomingMessages = wabaPayload?.incoming_messages;
+
+				if (incomingMessages) {
+					const preparedMessages: ChatMessageList = {};
+
+					incomingMessages.forEach((message: Message) => {
+						preparedMessages[message.waba_payload?.id ?? message.id] = message;
+					});
+
+					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+				}
+
+				// Outgoing messages
+				const outgoingMessages = wabaPayload?.outgoing_messages;
+
+				if (outgoingMessages) {
+					const preparedMessages: ChatMessageList = {};
+
+					outgoingMessages.forEach((message: Message) => {
+						preparedMessages[message.waba_payload?.id ?? message.id] = message;
+					});
+
+					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+				}
+
+				// Statuses
+				const statuses = wabaPayload?.statuses;
+
+				if (statuses) {
+					const preparedStatuses: { [key: string]: WebhookMessageStatus } = {};
+					statuses.forEach(
+						(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
+					);
+
+					PubSub.publish(
+						EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+						preparedStatuses
+					);
+				}
+
+				// Chat assignment
+				const chatAssignment = wabaPayload?.chat_assignment;
+
+				if (chatAssignment) {
+					const preparedMessages: ChatMessageList = {};
+					const prepared = fromAssignmentEvent(chatAssignment);
+					preparedMessages[prepared.id] = prepared;
+
+					PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
+
+					// Update chats with delay not to break EventBus
+					setTimeout(function () {
+						dispatch(
+							setChatAssignment({
+								waId: prepared.customer_wa_id,
+								assignmentEvent: prepared.assignment_event,
+							})
+						);
+					}, 100);
+				}
+
+				// Chat tagging
+				const chatTagging = wabaPayload?.chat_tagging;
+
+				if (chatTagging) {
+					const preparedMessages: ChatMessageList = {};
+					const prepared = fromTaggingEvent(chatTagging);
+					preparedMessages[prepared.id] = prepared;
+
+					PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
+
+					// Update chats with delay not to break EventBus
+					setTimeout(function () {
+						// Update chats
+						dispatch(
+							setChatTagging({
+								waId: prepared.customer_wa_id,
+								taggingEvent: prepared.tagging_event,
+							})
+						);
+					}, 100);
+				}
+			}
+		} catch (error) {
+			console.error(error);
+			console.log(event.data);
+		}
+	};
 
 	useEffect(() => {
 		// Window close event
