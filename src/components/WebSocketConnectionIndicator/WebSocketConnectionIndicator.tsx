@@ -68,7 +68,7 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 					{isWebSocketDisconnected && !isBrowserOffline && (
 						<>
 							<Styled.RefreshContainer>
-								<Styled.RefreshText>
+								<Styled.RefreshText $highlight={showCacheSuggestion}>
 									{showCacheSuggestion
 										? t(
 												'Please try refreshing the page. If the problem persists, clearing your browser cache may help.'
