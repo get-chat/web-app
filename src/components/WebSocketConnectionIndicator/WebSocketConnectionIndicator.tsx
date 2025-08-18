@@ -91,8 +91,6 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 						</>
 					)}
 				</Styled.Details>
-
-				<div>{t('')}</div>
 			</div>
 		</Styled.Container>
 	);
