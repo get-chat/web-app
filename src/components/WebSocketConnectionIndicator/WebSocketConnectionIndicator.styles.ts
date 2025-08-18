@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Button } from '@mui/material';
 
 export const Container = styled.div`
@@ -38,10 +38,21 @@ export const RefreshContainer = styled.div`
 	align-items: flex-start;
 `;
 
-export const RefreshText = styled.div`
+export const RefreshText = styled.div<{
+	$highlight?: boolean;
+}>`
 	font-size: 12px;
 	font-weight: 600;
 	margin-bottom: 8px;
+	padding: 4px 8px;
+
+	${(props) =>
+		props.$highlight &&
+		css`
+			border-radius: 10px;
+			background-color: var(--red-dark);
+			transition: all 0.5s ease;
+		`}
 `;
 
 export const RefreshButton = styled(Button)`
