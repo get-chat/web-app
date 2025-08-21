@@ -9,7 +9,7 @@ import i18next from 'i18next';
 import { getBaseDomain } from '@src/helpers/URLHelper';
 
 export const initializeSentry = (config: AppConfig) => {
-	if (config.APP_SENTRY_DSN) {
+	if (process.env.NODE_ENV === 'production' && config.APP_SENTRY_DSN) {
 		Sentry.init({
 			debug: true,
 			dsn: config.APP_SENTRY_DSN,
