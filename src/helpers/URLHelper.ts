@@ -4,16 +4,36 @@ export const isLocalHost = () => {
 	);
 };
 
-export const getAdminPanelURL = (apiBaseURL: string) => {
-	return apiBaseURL.replace('/api/v1', '/admin');
-};
+/**
+ * Extracts the base domain (protocol + host) from an API URL.
+ * Removes any `/api/...` or trailing slash at the end.
+ *
+ * Examples:
+ *   "https://example.com/api/v1/"  -> "https://example.com"
+ *   "https://sub.domain.com/api"   -> "https://sub.domain.com"
+ *   "http://localhost:8000/"       -> "http://localhost:8000"
+ */
+export function getBaseDomain(apiURL: string): string {
+	try {
+		const url = new URL(apiURL);
+
+		// Rebuild only origin (protocol + host + port if present)
+		return url.origin;
+	} catch (e) {
+		console.error('Invalid API URL:', apiURL, e);
+		return apiURL;
+	}
+}
+
 export const getHubURL = (apiBaseURL: string) => {
 	return apiBaseURL.replace('/api/v1', '/hub');
 };
+
 export const getBaseURL = () => {
 	const windowLocation = window.location;
 	return windowLocation.protocol + '//' + windowLocation.host + '/';
 };
+
 export const getWebSocketURL = (apiBaseURL: string) => {
 	if (
 		!apiBaseURL ||
@@ -27,6 +47,7 @@ export const getWebSocketURL = (apiBaseURL: string) => {
 		return prepareWebSocketURL(apiBaseURL);
 	}
 };
+
 const prepareWebSocketURL = (url: string) => {
 	return url
 		.replace('https://', 'wss://websockets-')
