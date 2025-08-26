@@ -32,6 +32,7 @@ import {
 	CHAT_FILTER_PREFIX,
 	CHAT_KEY_PREFIX,
 	EVENT_TOPIC_CHAT_ASSIGNMENT,
+	EVENT_TOPIC_FORCE_REFRESH_CHAT_LIST,
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
@@ -335,6 +336,22 @@ const Sidebar: React.FC<Props> = ({
 		filterStartDate,
 		filterEndDate,
 	]);
+
+	useEffect(() => {
+		const onForceRefreshChatList = function (msg: string, data: any) {
+			// Force refresh chat list
+			listChats(false, undefined, true);
+		};
+
+		const forceRefreshChatListEventToken = PubSub.subscribe(
+			EVENT_TOPIC_FORCE_REFRESH_CHAT_LIST,
+			onForceRefreshChatList
+		);
+
+		return () => {
+			PubSub.unsubscribe(forceRefreshChatListEventToken);
+		};
+	}, [waId]);
 
 	useEffect(() => {
 		// New chatMessages

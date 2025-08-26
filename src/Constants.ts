@@ -28,6 +28,7 @@ export const EVENT_TOPIC_CHAT_TAGGING = 'chat_tagging';
 export const EVENT_TOPIC_UNSUPPORTED_FILE = 'unsupported_file';
 export const EVENT_TOPIC_CLEAR_TEXT_MESSAGE_INPUT = 'clear_text_message_input';
 export const EVENT_TOPIC_FORCE_REFRESH_CHAT = 'force_refresh_chat';
+export const EVENT_TOPIC_FORCE_REFRESH_CHAT_LIST = 'force_refresh_chat_list';
 export const EVENT_TOPIC_VOICE_RECORD_STARTING = 'voice_record_starting';
 export const EVENT_TOPIC_FOCUS_MESSAGE_INPUT = 'focus_message_input';
 export const EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO =
