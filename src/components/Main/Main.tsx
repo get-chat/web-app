@@ -16,6 +16,7 @@ import {
 	EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 	EVENT_TOPIC_CHAT_TAGGING,
 	EVENT_TOPIC_DISPLAY_ERROR,
+	EVENT_TOPIC_FORCE_REFRESH_CHAT,
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
@@ -337,6 +338,9 @@ const Main: React.FC = () => {
 
 		const handleBrowserOnline = () => {
 			dispatch(setState({ isBrowserOffline: false }));
+
+			// Force refresh chat
+			PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
 		};
 
 		window.addEventListener('offline', handleBrowserOffline);
