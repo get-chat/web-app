@@ -1010,7 +1010,7 @@ msgstr ""
 msgid "Connection error"
 msgstr ""
 
-msgid "You are not connected to the internet."
+msgid "No Internet connection. The inbox will refresh after the Internet is back."
 msgstr ""
 
 msgid "Connection lost. You may not receive new messages in real time."

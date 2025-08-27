@@ -326,7 +326,7 @@
 	"This image isn't available anymore.": "",
 	"Go to 360Dialog Status Page": "",
 	"Connection error": "",
-	"You are not connected to the internet.": "",
+	"No Internet connection. The inbox will refresh after the Internet is back.": "",
 	"Connection lost. You may not receive new messages in real time.": "",
 	"If the issue persists, you can try refreshing the page manually.": ""
 }
