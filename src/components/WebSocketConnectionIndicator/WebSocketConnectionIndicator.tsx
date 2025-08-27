@@ -56,7 +56,11 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 				</Styled.Title>
 				<Styled.Details>
 					{isBrowserOffline ? (
-						<>{t('You are not connected to the internet.')}</>
+						<>
+							{t(
+								'No Internet connection. The inbox will refresh after the Internet is back.'
+							)}
+						</>
 					) : (
 						<>
 							{t(
