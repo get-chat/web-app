@@ -52,7 +52,10 @@ import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
-import { Notifications as NotificationsIcon } from '@mui/icons-material';
+import {
+	Notifications as NotificationsIcon,
+	QrCode,
+} from '@mui/icons-material';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
@@ -1331,6 +1334,13 @@ const Sidebar: React.FC<Props> = ({
 						<CloudSyncIcon />
 					</ListItemIcon>
 					{t('Refresh contacts')}
+				</MenuItem>
+				<Divider />
+				<MenuItem>
+					<ListItemIcon>
+						<QrCode />
+					</ListItemIcon>
+					{t('Open in WhatsApp')}
 				</MenuItem>
 				{/*<Divider />
 				<MenuItem onClick={exportChats}>
