@@ -8,7 +8,7 @@ import {
 	Select,
 	TextField,
 } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBack, QrCode } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -266,6 +266,7 @@ const BusinessProfile: React.FC<Props> = ({
 				<Styled.Section>
 					<Styled.SectionHeader>
 						<h5>{t('Business Profile')}</h5>
+						<QrCode />
 					</Styled.SectionHeader>
 
 					{!isLoaded && <span>{t('Loading')}</span>}
@@ -281,6 +282,7 @@ const BusinessProfile: React.FC<Props> = ({
 									accept="image/jpeg, image/png"
 									multiple={false}
 								/>
+
 								<BusinessProfileAvatar
 									onClick={handleBusinessProfileAvatarClick}
 									profilePhoto={profilePhoto}
