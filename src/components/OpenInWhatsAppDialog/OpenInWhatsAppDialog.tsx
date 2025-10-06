@@ -35,7 +35,9 @@ const OpenInWhatsAppDialog: React.FC<Props> = ({
 						{t('Scan this code to start a WhatsApp chat with this number.')}
 					</Styled.ContentTitle>
 					<a href={`https://wa.me/${phoneNumber}`} target="_blank">
-						<QRCodeSVG value={`https://wa.me/${phoneNumber}`} size={200} />
+						<Styled.QRContainer>
+							<QRCodeSVG value={`https://wa.me/${phoneNumber}`} size={200} />
+						</Styled.QRContainer>
 					</a>
 				</Styled.ContentWrapper>
 			</DialogContent>

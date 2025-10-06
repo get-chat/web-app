@@ -25,3 +25,9 @@ export const ContentTitle = styled.div`
 	font-size: 16px;
 	margin: 60px 0 20px 0;
 `;
+
+export const QRContainer = styled.div`
+	padding: 20px;
+	border-radius: 20px;
+	background-color: var(--gray-lighter);
+`;
