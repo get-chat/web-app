@@ -14,6 +14,7 @@ import pendingMessagesReducer from './pendingMessagesReducer';
 import newMessagesReducer from './newMessagesReducer';
 import currentChatTagsReducer from './currentChatTagsReducer';
 import waIdReducer from './waIdReducer';
+import phoneNumberReducer from '@src/store/reducers/phoneNumberReducer';
 
 const rootReducer = {
 	UI: UIReducer,
@@ -32,6 +33,7 @@ const rootReducer = {
 	isRefreshingTemplates: isRefreshingTemplatesReducer,
 	currentChatTags: currentChatTagsReducer,
 	waId: waIdReducer,
+	phoneNumber: phoneNumberReducer,
 };
 
 export default rootReducer;

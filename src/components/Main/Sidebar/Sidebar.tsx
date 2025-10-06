@@ -129,6 +129,8 @@ import { store } from '@src/store';
 import useSettings from '@src/hooks/useSettings';
 import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionIndicator';
 import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
+import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
+import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -306,6 +308,10 @@ const Sidebar: React.FC<Props> = ({
 	};
 
 	const abortControllerRef = useRef<AbortController | null>(null);
+
+	useEffect(() => {
+		doFetchWhatsAppAccounts();
+	}, []);
 
 	useEffect(() => {
 		// Trigger loading indicator
@@ -774,6 +780,15 @@ const Sidebar: React.FC<Props> = ({
 			const sortedNextState = sortChats(prevState);
 
 			dispatch(setChats({ ...sortedNextState }));
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const doFetchWhatsAppAccounts = async () => {
+		try {
+			const data = await fetchWhatsAppAccounts(true);
+			dispatch(setPhoneNumber(data.results[0]?.phone_number));
 		} catch (error) {
 			console.error(error);
 		}

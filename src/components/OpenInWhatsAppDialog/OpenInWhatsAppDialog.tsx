@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DialogActions, DialogTitle } from '@mui/material';
+import { Button, DialogActions } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
 import * as Styled from './OpenInWhatsAppDialog.styles';
 import { QRCodeSVG } from 'qrcode.react';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
+import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
 	open: boolean;
@@ -19,6 +20,8 @@ const OpenInWhatsAppDialog: React.FC<Props> = ({
 }) => {
 	const { t } = useTranslation();
 
+	const phoneNumber = useAppSelector((state) => state.phoneNumber.value);
+
 	const close = () => {
 		setOpen(false);
 	};
@@ -31,8 +34,8 @@ const OpenInWhatsAppDialog: React.FC<Props> = ({
 					<Styled.ContentTitle>
 						{t('Scan this code to start a WhatsApp chat with this number.')}
 					</Styled.ContentTitle>
-					<a href={'https://wa.me/0000'} target="_blank">
-						<QRCodeSVG value={'https://wa.me/0000'} size={200} />
+					<a href={`https://wa.me/${phoneNumber}`} target="_blank">
+						<QRCodeSVG value={`https://wa.me/${phoneNumber}`} size={200} />
 					</a>
 				</Styled.ContentWrapper>
 			</DialogContent>
