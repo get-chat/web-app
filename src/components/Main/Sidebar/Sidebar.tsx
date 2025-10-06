@@ -128,6 +128,7 @@ import { PersonList } from '@src/types/persons';
 import { store } from '@src/store';
 import useSettings from '@src/hooks/useSettings';
 import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionIndicator';
+import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -251,6 +252,8 @@ const Sidebar: React.FC<Props> = ({
 	const [isUserProfileVisible, setUserProfileVisible] = useState(false);
 	const [isContactsVisible, setContactsVisible] = useState(false);
 	const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] =
+		useState(false);
+	const [isOpenInWhatsAppDialogVisible, setOpenInWhatsAppDialogVisible] =
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isLoadingChats, setLoadingChats] = useState(false);
@@ -837,6 +840,11 @@ const Sidebar: React.FC<Props> = ({
 		setChangePasswordDialogVisible(true);
 	};
 
+	const showOpenInWhatsApp = () => {
+		setAnchorEl(null);
+		setOpenInWhatsAppDialogVisible(true);
+	};
+
 	const showChatTagsList = () => {
 		setAnchorEl(null);
 		setChatTagsListVisible(true);
@@ -1336,7 +1344,7 @@ const Sidebar: React.FC<Props> = ({
 					{t('Refresh contacts')}
 				</MenuItem>
 				<Divider />
-				<MenuItem>
+				<MenuItem onClick={showOpenInWhatsApp}>
 					<ListItemIcon>
 						<QrCode />
 					</ListItemIcon>
@@ -1377,6 +1385,11 @@ const Sidebar: React.FC<Props> = ({
 			<ChangePasswordDialog
 				open={isChangePasswordDialogVisible}
 				setOpen={setChangePasswordDialogVisible}
+			/>
+
+			<OpenInWhatsAppDialog
+				open={isOpenInWhatsAppDialogVisible}
+				setOpen={setOpenInWhatsAppDialogVisible}
 			/>
 
 			{isNotificationsVisible && (
