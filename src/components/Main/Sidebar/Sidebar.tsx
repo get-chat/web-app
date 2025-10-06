@@ -272,6 +272,8 @@ const Sidebar: React.FC<Props> = ({
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
+	const [originalDocumentTitle, setOriginalDocumentTitle] = useState('');
+
 	const timer = useRef<NodeJS.Timeout>();
 
 	const navigate = useNavigate();
@@ -310,8 +312,18 @@ const Sidebar: React.FC<Props> = ({
 	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
-		doFetchWhatsAppAccounts();
+		setOriginalDocumentTitle(document.title);
+
+		return () => {
+			document.title = originalDocumentTitle;
+		};
 	}, []);
+
+	useEffect(() => {
+		if (isLoaded) {
+			doFetchWhatsAppAccounts();
+		}
+	}, [isLoaded]);
 
 	useEffect(() => {
 		// Trigger loading indicator
@@ -788,7 +800,13 @@ const Sidebar: React.FC<Props> = ({
 	const doFetchWhatsAppAccounts = async () => {
 		try {
 			const data = await fetchWhatsAppAccounts(true);
-			dispatch(setPhoneNumber(data.results[0]?.phone_number));
+			const phoneNumber = data.results[0]?.phone_number;
+
+			if (phoneNumber) {
+				dispatch(setPhoneNumber());
+
+				document.title = `+${phoneNumber} - ${document.title}`;
+			}
 		} catch (error) {
 			console.error(error);
 		}
