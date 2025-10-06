@@ -1305,6 +1305,7 @@ const Sidebar: React.FC<Props> = ({
 					onHide={() => setBusinessProfileVisible(false)}
 					handleCheckSettingsRefreshStatus={handleCheckSettingsRefreshStatus}
 					profilePhoto={profilePhoto}
+					showOpenInWhatsApp={showOpenInWhatsApp}
 				/>
 			)}
 

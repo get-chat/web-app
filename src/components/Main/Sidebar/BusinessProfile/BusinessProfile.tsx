@@ -36,12 +36,14 @@ interface Props {
 	onHide: () => void;
 	handleCheckSettingsRefreshStatus: () => Promise<void>;
 	profilePhoto: string | undefined;
+	showOpenInWhatsApp: () => void;
 }
 
 const BusinessProfile: React.FC<Props> = ({
 	onHide,
 	handleCheckSettingsRefreshStatus,
 	profilePhoto,
+	showOpenInWhatsApp,
 }) => {
 	const config = useContext(AppConfigContext);
 
@@ -266,7 +268,7 @@ const BusinessProfile: React.FC<Props> = ({
 				<Styled.Section>
 					<Styled.SectionHeader>
 						<h5>{t('Business Profile')}</h5>
-						<QrCode />
+						<QrCode onClick={showOpenInWhatsApp} />
 					</Styled.SectionHeader>
 
 					{!isLoaded && <span>{t('Loading')}</span>}
