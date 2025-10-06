@@ -4,13 +4,19 @@ import { Button, DialogActions, DialogTitle } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent';
 import * as Styled from './OpenInWhatsAppDialog.styles';
 import { QRCodeSVG } from 'qrcode.react';
+import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 
 interface Props {
 	open: boolean;
 	setOpen: (value: boolean) => void;
+	profilePhoto: string | undefined;
 }
 
-const OpenInWhatsAppDialog: React.FC<Props> = ({ open, setOpen }) => {
+const OpenInWhatsAppDialog: React.FC<Props> = ({
+	open,
+	setOpen,
+	profilePhoto,
+}) => {
 	const { t } = useTranslation();
 
 	const close = () => {
@@ -19,13 +25,15 @@ const OpenInWhatsAppDialog: React.FC<Props> = ({ open, setOpen }) => {
 
 	return (
 		<Styled.StyledDialog open={open} onClose={close} fullWidth>
-			<DialogTitle>{t('Open in WhatsApp')}</DialogTitle>
 			<DialogContent>
 				<Styled.ContentWrapper>
+					<BusinessProfileAvatar profilePhoto={profilePhoto} />
 					<Styled.ContentTitle>
 						{t('Scan this code to start a WhatsApp chat with this number.')}
 					</Styled.ContentTitle>
-					<QRCodeSVG value={'https://wa.me/0000'} size={200} />
+					<a href={'https://wa.me/0000'} target="_blank">
+						<QRCodeSVG value={'https://wa.me/0000'} size={200} />
+					</a>
 				</Styled.ContentWrapper>
 			</DialogContent>
 			<DialogActions>

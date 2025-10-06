@@ -1391,6 +1391,7 @@ const Sidebar: React.FC<Props> = ({
 			<OpenInWhatsAppDialog
 				open={isOpenInWhatsAppDialogVisible}
 				setOpen={setOpenInWhatsAppDialogVisible}
+				profilePhoto={profilePhoto}
 			/>
 
 			{isNotificationsVisible && (
