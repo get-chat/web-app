@@ -51,6 +51,7 @@ const BusinessProfile: React.FC<Props> = ({
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const phoneNumber = useAppSelector((state) => state.phoneNumber.value);
 
 	const isAdmin = currentUser?.profile?.role === 'admin';
 
@@ -299,6 +300,18 @@ const BusinessProfile: React.FC<Props> = ({
 
 							<form onSubmit={updateBusinessProfile}>
 								<div>
+									<TextField
+										variant="standard"
+										value={phoneNumber ? `+${phoneNumber}` : ''}
+										label={t('Phone number')}
+										size="medium"
+										fullWidth={true}
+										InputProps={{
+											readOnly: !isAdmin || isReadOnly,
+										}}
+										disabled={true}
+									/>
+
 									<TextField
 										variant="standard"
 										value={about}

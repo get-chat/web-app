@@ -803,7 +803,7 @@ const Sidebar: React.FC<Props> = ({
 			const phoneNumber = data.results[0]?.phone_number;
 
 			if (phoneNumber) {
-				dispatch(setPhoneNumber());
+				dispatch(setPhoneNumber(phoneNumber));
 
 				document.title = `+${phoneNumber} - ${document.title}`;
 			}
