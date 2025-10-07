@@ -8,7 +8,7 @@ import {
 	Select,
 	TextField,
 } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBack, QrCode } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -36,12 +36,14 @@ interface Props {
 	onHide: () => void;
 	handleCheckSettingsRefreshStatus: () => Promise<void>;
 	profilePhoto: string | undefined;
+	showOpenInWhatsApp: () => void;
 }
 
 const BusinessProfile: React.FC<Props> = ({
 	onHide,
 	handleCheckSettingsRefreshStatus,
 	profilePhoto,
+	showOpenInWhatsApp,
 }) => {
 	const config = useContext(AppConfigContext);
 
@@ -49,6 +51,7 @@ const BusinessProfile: React.FC<Props> = ({
 
 	const { isReadOnly } = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const phoneNumber = useAppSelector((state) => state.phoneNumber.value);
 
 	const isAdmin = currentUser?.profile?.role === 'admin';
 
@@ -266,6 +269,7 @@ const BusinessProfile: React.FC<Props> = ({
 				<Styled.Section>
 					<Styled.SectionHeader>
 						<h5>{t('Business Profile')}</h5>
+						<QrCode onClick={showOpenInWhatsApp} />
 					</Styled.SectionHeader>
 
 					{!isLoaded && <span>{t('Loading')}</span>}
@@ -281,6 +285,7 @@ const BusinessProfile: React.FC<Props> = ({
 									accept="image/jpeg, image/png"
 									multiple={false}
 								/>
+
 								<BusinessProfileAvatar
 									onClick={handleBusinessProfileAvatarClick}
 									profilePhoto={profilePhoto}
@@ -295,6 +300,18 @@ const BusinessProfile: React.FC<Props> = ({
 
 							<form onSubmit={updateBusinessProfile}>
 								<div>
+									<TextField
+										variant="standard"
+										value={phoneNumber ? `+${phoneNumber}` : ''}
+										label={t('Phone number')}
+										size="medium"
+										fullWidth={true}
+										InputProps={{
+											readOnly: !isAdmin || isReadOnly,
+										}}
+										disabled={true}
+									/>
+
 									<TextField
 										variant="standard"
 										value={about}

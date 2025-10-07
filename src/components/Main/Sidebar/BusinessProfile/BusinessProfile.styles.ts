@@ -136,6 +136,11 @@ export const SectionHeader = styled.div`
 		color: var(--color-primary);
 		flex: 1 1;
 	}
+
+	.MuiSvgIcon-root {
+		color: #000 !important;
+		cursor: pointer;
+	}
 `;
 
 export const SubSectionAction = styled.div`

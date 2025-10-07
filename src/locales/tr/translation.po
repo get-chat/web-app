@@ -1028,3 +1028,6 @@ msgstr "Bu alan gereklidir!"
 
 msgid "This image isn't available anymore."
 msgstr "Bu resim artık mevcut değil."
+
+msgid "Scan this code to start a WhatsApp chat with this number."
+msgstr "Bu numarayla WhatsApp sohbeti başlatmak için bu kodu tarayın."

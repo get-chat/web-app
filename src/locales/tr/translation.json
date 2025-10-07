@@ -323,5 +323,6 @@
 	"Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp.": "Katalog mesajları, ürün kataloğunuzu tamamen WhatsApp üzerinden sergilemenize olanak tanıyan mesajlardır.",
 	"View catalog": "Kataloğu görüntüle",
 	"This field is required!": "Bu alan gereklidir!",
-	"This image isn't available anymore.": "Bu resim artık mevcut değil."
+	"This image isn't available anymore.": "Bu resim artık mevcut değil.",
+	"Scan this code to start a WhatsApp chat with this number.": "Bu numarayla WhatsApp sohbeti başlatmak için bu kodu tarayın."
 }

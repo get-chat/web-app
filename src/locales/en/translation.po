@@ -1018,3 +1018,6 @@ msgstr ""
 
 msgid "If the issue persists, you can try refreshing the page manually."
 msgstr ""
+
+msgid "Scan this code to start a WhatsApp chat with this number."
+msgstr ""

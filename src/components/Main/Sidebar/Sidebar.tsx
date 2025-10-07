@@ -52,7 +52,10 @@ import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
-import { Notifications as NotificationsIcon } from '@mui/icons-material';
+import {
+	Notifications as NotificationsIcon,
+	QrCode,
+} from '@mui/icons-material';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
@@ -125,6 +128,9 @@ import { PersonList } from '@src/types/persons';
 import { store } from '@src/store';
 import useSettings from '@src/hooks/useSettings';
 import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionIndicator';
+import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
+import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
+import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -249,6 +255,8 @@ const Sidebar: React.FC<Props> = ({
 	const [isContactsVisible, setContactsVisible] = useState(false);
 	const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] =
 		useState(false);
+	const [isOpenInWhatsAppDialogVisible, setOpenInWhatsAppDialogVisible] =
+		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
@@ -263,6 +271,8 @@ const Sidebar: React.FC<Props> = ({
 	const [groupsMenuAnchorEl, setGroupsMenuAnchorEl] = useState<Element>();
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
+
+	const [originalDocumentTitle, setOriginalDocumentTitle] = useState('');
 
 	const timer = useRef<NodeJS.Timeout>();
 
@@ -300,6 +310,20 @@ const Sidebar: React.FC<Props> = ({
 	};
 
 	const abortControllerRef = useRef<AbortController | null>(null);
+
+	useEffect(() => {
+		setOriginalDocumentTitle(document.title);
+
+		return () => {
+			document.title = originalDocumentTitle;
+		};
+	}, []);
+
+	useEffect(() => {
+		if (isLoaded) {
+			doFetchWhatsAppAccounts();
+		}
+	}, [isLoaded]);
 
 	useEffect(() => {
 		// Trigger loading indicator
@@ -773,6 +797,21 @@ const Sidebar: React.FC<Props> = ({
 		}
 	};
 
+	const doFetchWhatsAppAccounts = async () => {
+		try {
+			const data = await fetchWhatsAppAccounts(true);
+			const phoneNumber = data.results[0]?.phone_number;
+
+			if (phoneNumber) {
+				dispatch(setPhoneNumber(phoneNumber));
+
+				document.title = `+${phoneNumber} - ${document.title}`;
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	const searchMessages = async () => {
 		// Convert dates to Unix timestamps
 		const messagesSinceTime = filterStartDate
@@ -832,6 +871,11 @@ const Sidebar: React.FC<Props> = ({
 	const showChangePassword = () => {
 		setAnchorEl(null);
 		setChangePasswordDialogVisible(true);
+	};
+
+	const showOpenInWhatsApp = () => {
+		setAnchorEl(null);
+		setOpenInWhatsAppDialogVisible(true);
 	};
 
 	const showChatTagsList = () => {
@@ -1294,6 +1338,7 @@ const Sidebar: React.FC<Props> = ({
 					onHide={() => setBusinessProfileVisible(false)}
 					handleCheckSettingsRefreshStatus={handleCheckSettingsRefreshStatus}
 					profilePhoto={profilePhoto}
+					showOpenInWhatsApp={showOpenInWhatsApp}
 				/>
 			)}
 
@@ -1332,6 +1377,13 @@ const Sidebar: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Refresh contacts')}
 				</MenuItem>
+				<Divider />
+				<MenuItem onClick={showOpenInWhatsApp}>
+					<ListItemIcon>
+						<QrCode />
+					</ListItemIcon>
+					{t('Open in WhatsApp')}
+				</MenuItem>
 				{/*<Divider />
 				<MenuItem onClick={exportChats}>
 					<ListItemIcon>
@@ -1367,6 +1419,12 @@ const Sidebar: React.FC<Props> = ({
 			<ChangePasswordDialog
 				open={isChangePasswordDialogVisible}
 				setOpen={setChangePasswordDialogVisible}
+			/>
+
+			<OpenInWhatsAppDialog
+				open={isOpenInWhatsAppDialogVisible}
+				setOpen={setOpenInWhatsAppDialogVisible}
+				profilePhoto={profilePhoto}
 			/>
 
 			{isNotificationsVisible && (

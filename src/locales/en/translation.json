@@ -328,5 +328,6 @@
 	"Connection error": "",
 	"No Internet connection. The inbox will refresh after the Internet is back.": "",
 	"Connection lost. You may not receive new messages in real time.": "",
-	"If the issue persists, you can try refreshing the page manually.": ""
+	"If the issue persists, you can try refreshing the page manually.": "",
+	"Scan this code to start a WhatsApp chat with this number.": ""
 }
