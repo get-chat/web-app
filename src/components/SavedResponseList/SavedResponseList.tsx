@@ -30,10 +30,13 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	const [isLoading, setLoading] = useState<boolean>(false);
 	const [isSearchTriggered, setSearchTriggered] = useState<boolean>(false);
 	const [search, setSearch] = useState<string>('');
-	const [savedResponses, setSavedResponses] = useState<SavedResponse[]>([]);
 
 	const savedResponsesUIState = useAppSelector(
 		(state) => state.savedResponses.value
+	);
+
+	const [savedResponses, setSavedResponses] = useState<SavedResponse[]>(
+		savedResponsesUIState
 	);
 
 	const { deleteSavedResponse } = useSavedResponses();
@@ -48,10 +51,14 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	};
 
 	useEffect(() => {
-		if (isSearchTriggered) {
-			handleFetchSavedResponses();
-		}
-	}, [search, isSearchTriggered]);
+		if (!isSearchTriggered) return;
+
+		const delay = setTimeout(handleFetchSavedResponses, 500);
+
+		return () => {
+			clearTimeout(delay);
+		};
+	}, [search]);
 
 	const handleFetchSavedResponses = async () => {
 		setLoading(true);
@@ -82,25 +89,23 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 					<SearchBar
 						value={search}
 						onChange={(text) => {
-							setSearchTriggered(true);
 							setSearch(text);
+							setSearchTriggered(true);
 						}}
 						isLoading={isLoading}
 						placeholder={t('Search')}
 					/>
 				</Styled.SearchContainer>
 				<div className="savedResponses">
-					{savedResponses.length === 0 &&
-						savedResponsesUIState.length === 0 && (
-							<div className="savedResponses__emptyInfo mt-3">
-								{t('No response message have been saved yet.')}
-							</div>
-						)}
+					{savedResponses.length === 0 && (
+						<div className="savedResponses__emptyInfo mt-3">
+							{search
+								? t('No response message found.')
+								: t('No response message have been saved yet.')}
+						</div>
+					)}
 
-					{(savedResponses.length === 0
-						? savedResponsesUIState
-						: savedResponses
-					).map((savedResponse) => (
+					{savedResponses.map((savedResponse) => (
 						<div key={savedResponse.id} className="savedResponseWrapper">
 							<StyledChatMessage.ChatMessage
 								$type={MessageType.text}
