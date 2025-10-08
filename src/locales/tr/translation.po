@@ -1031,3 +1031,9 @@ msgstr "Bu resim artık mevcut değil."
 
 msgid "Scan this code to start a WhatsApp chat with this number."
 msgstr "Bu numarayla WhatsApp sohbeti başlatmak için bu kodu tarayın."
+
+msgid "Search response messages"
+msgstr "Yanıt mesajları ara"
+
+msgid "No response message found."
+msgstr "Hiç yanıt mesajı bulunamadı."

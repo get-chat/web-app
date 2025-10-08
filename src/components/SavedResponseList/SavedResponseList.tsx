@@ -93,7 +93,7 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 							setSearchTriggered(true);
 						}}
 						isLoading={isLoading}
-						placeholder={t('Search')}
+						placeholder={t('Search response messages')}
 					/>
 				</Styled.SearchContainer>
 				<div className="savedResponses">

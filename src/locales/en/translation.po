@@ -1021,3 +1021,10 @@ msgstr ""
 
 msgid "Scan this code to start a WhatsApp chat with this number."
 msgstr ""
+
+msgid "Search response messages"
+msgstr ""
+
+
+msgid "No response message found."
+msgstr ""
