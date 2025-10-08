@@ -6,6 +6,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	TextField,
 } from '@mui/material';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
@@ -13,6 +14,7 @@ import { useAppSelector } from '@src/store/hooks';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
 import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
 import { MessageType } from '@src/types/messages';
+import * as Styled from './SavedResponseList.styles';
 
 export type Props = {
 	sendCustomTextMessage: (text: string) => void;
@@ -47,6 +49,9 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	return (
 		<div className="savedResponsesOuter">
 			<div className="savedResponsesWrapper">
+				<Styled.SearchContainer>
+					<input placeholder={t('Search')} autoComplete="off" />
+				</Styled.SearchContainer>
 				<div className="savedResponses">
 					{getObjLength(savedResponses) === 0 && (
 						<div className="savedResponses__emptyInfo mt-3">
