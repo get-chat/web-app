@@ -15,6 +15,7 @@ import useSavedResponses from '@src/components/SavedResponseList/useSavedRespons
 import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
 import { MessageType } from '@src/types/messages';
 import * as Styled from './SavedResponseList.styles';
+import SearchBar from '@src/components/SearchBar';
 
 export type Props = {
 	sendCustomTextMessage: (text: string) => void;
@@ -25,6 +26,9 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 
 	const [deleteId, setDeleteId] = useState<number>();
 	const [open, setOpen] = useState(false);
+
+	const [isLoading, setLoading] = useState<boolean>(false);
+	const [search, setSearch] = useState<string>('');
 
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 
@@ -50,7 +54,12 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 		<div className="savedResponsesOuter">
 			<div className="savedResponsesWrapper">
 				<Styled.SearchContainer>
-					<input placeholder={t('Search')} autoComplete="off" />
+					<SearchBar
+						value={search}
+						onChange={setSearch}
+						isLoading={isLoading}
+						placeholder={t('Search')}
+					/>
 				</Styled.SearchContainer>
 				<div className="savedResponses">
 					{getObjLength(savedResponses) === 0 && (
