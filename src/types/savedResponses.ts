@@ -5,6 +5,10 @@ export interface SavedResponse {
 	timestamp: number;
 }
 
+export interface FetchSavedResponsesParams {
+	text?: string;
+}
+
 export interface CreateSavedResponseRequest {
 	text: string;
 }

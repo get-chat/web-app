@@ -10,7 +10,9 @@ export const SearchContainer = styled.div.attrs({
 	/*border-bottom: 1px solid rgba(0, 0, 45, 0.03);*/
 `;
 
-export const SearchInputContainer = styled.div`
+export const SearchInputContainer = styled.div.attrs({
+	className: 'searchBar__inputContainer',
+})`
 	position: relative;
 	display: flex;
 	align-items: center;

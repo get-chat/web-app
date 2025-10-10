@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Button,
 	Dialog,
@@ -7,12 +7,15 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from '@mui/material';
-import { getObjLength } from '@src/helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
 import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
 import { MessageType } from '@src/types/messages';
+import * as Styled from './SavedResponseList.styles';
+import SearchBar from '@src/components/SearchBar';
+import { fetchSavedResponses } from '@src/api/savedResponsesApi';
+import { SavedResponse } from '@src/types/savedResponses';
 
 export type Props = {
 	sendCustomTextMessage: (text: string) => void;
@@ -24,7 +27,17 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	const [deleteId, setDeleteId] = useState<number>();
 	const [open, setOpen] = useState(false);
 
-	const savedResponses = useAppSelector((state) => state.savedResponses.value);
+	const [isLoading, setLoading] = useState<boolean>(false);
+	const [isSearchTriggered, setSearchTriggered] = useState<boolean>(false);
+	const [search, setSearch] = useState<string>('');
+
+	const savedResponsesUIState = useAppSelector(
+		(state) => state.savedResponses.value
+	);
+
+	const [savedResponses, setSavedResponses] = useState<SavedResponse[]>(
+		savedResponsesUIState
+	);
 
 	const { deleteSavedResponse } = useSavedResponses();
 
@@ -37,6 +50,31 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 		setOpen(true);
 	};
 
+	useEffect(() => {
+		if (!isSearchTriggered) return;
+
+		const delay = setTimeout(handleFetchSavedResponses, 500);
+
+		return () => {
+			clearTimeout(delay);
+		};
+	}, [search]);
+
+	const handleFetchSavedResponses = async () => {
+		setLoading(true);
+
+		try {
+			const data = await fetchSavedResponses(
+				!!search ? { text: search } : undefined
+			);
+			setSavedResponses(data.results);
+		} catch (error) {
+			console.error('Failed to fetch responses:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const handleDeleteSavedResponse = async () => {
 		if (deleteId) {
 			await deleteSavedResponse(deleteId);
@@ -47,10 +85,23 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	return (
 		<div className="savedResponsesOuter">
 			<div className="savedResponsesWrapper">
+				<Styled.SearchContainer>
+					<SearchBar
+						value={search}
+						onChange={(text) => {
+							setSearch(text);
+							setSearchTriggered(true);
+						}}
+						isLoading={isLoading}
+						placeholder={t('Search response messages')}
+					/>
+				</Styled.SearchContainer>
 				<div className="savedResponses">
-					{getObjLength(savedResponses) === 0 && (
+					{savedResponses.length === 0 && (
 						<div className="savedResponses__emptyInfo mt-3">
-							{t('No response message have been saved yet.')}
+							{search
+								? t('No response message found.')
+								: t('No response message have been saved yet.')}
 						</div>
 					)}
 

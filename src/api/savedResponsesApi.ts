@@ -2,13 +2,21 @@ import api from './axiosInstance';
 import {
 	CreateSavedResponseRequest,
 	CreateSavedResponseResponse,
+	FetchSavedResponsesParams,
 	SavedResponse,
 } from '../types/savedResponses';
 import { PaginatedResponse } from '@src/types/common';
 
-export const fetchSavedResponses = async () => {
+export const fetchSavedResponses = async (
+	params?: FetchSavedResponsesParams,
+	signal?: AbortSignal
+) => {
 	const response = await api.get<PaginatedResponse<SavedResponse>>(
-		'/saved_responses/'
+		'/saved_responses/',
+		{
+			params: params,
+			signal,
+		}
 	);
 	return response.data;
 };
