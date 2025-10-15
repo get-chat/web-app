@@ -18,4 +18,9 @@ module.exports = {
 		'/node_modules/(?!(react-use-navigate-list)/)',
 		'/node_modules/(?!(react|react-dom|@testing-library)/)',
 	],
+	// FIX: Ignore Playwright test files so Jest doesn't try to run them
+	testPathIgnorePatterns: [
+		'/node_modules/',
+		'/playwright/'
+	],
 };

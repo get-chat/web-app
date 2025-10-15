@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const Container = styled.div.attrs({
+	id: 'loading-screen',
+})`
 	position: absolute;
 	top: 0;
 	left: 0;

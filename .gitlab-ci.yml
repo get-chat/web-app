@@ -11,6 +11,7 @@ stages:
 
 variables:
   NODE_IMAGE: node:18-alpine
+  PLAYWRIGHT_IMAGE: mcr.microsoft.com/playwright:v1.56.0-jammy
 
   PNPM_STORE_DIR: .pnpm-store
 
@@ -122,7 +123,7 @@ Lint:
     - pnpm lint:prettier
 
 
-Test:
+Test Unit:
   stage: test
   image: $NODE_IMAGE
 
@@ -159,6 +160,68 @@ Test:
       coverage_report:
         coverage_format: cobertura
         path: coverage/cobertura-coverage.xml
+
+
+Test E2E:
+  stage: test
+  image: $PLAYWRIGHT_IMAGE
+
+  cache:
+    <<: *cache_config
+    policy: pull
+
+  dependencies:
+    - Build
+
+  before_script:
+    - npm install --location=global --no-fund pnpm
+    - pnpm config set store-dir $PNPM_STORE_DIR
+    - apt-get update && apt-get install -y gettext-base
+
+    # Backup any existing config.json to avoid conflict with Pages
+    - if [ -f build/config.json ]; then mv build/config.json build/config.json.bak; fi
+
+    # Generate E2E config.json
+    - envsubst < public/config.json.tmpl > build/config.json
+    - echo "Generated build/config.json content:"
+    - cat build/config.json
+    - echo "--------------------------------------------------"
+
+    # Generate .env.e2e for credentials
+    - echo "E2E_TEST_USERNAME=$E2E_TEST_USERNAME" > .env.e2e
+    - echo "E2E_TEST_PASSWORD=$E2E_TEST_PASSWORD" >> .env.e2e
+    - echo "Generated .env.e2e content:"
+    - cat .env.e2e
+    - echo "--------------------------------------------------"
+
+    - pnpm install --prefer-offline
+
+  script:
+    - pnpm exec serve -s build -l 3000 &
+    - echo "Waiting for the application server to start..."
+    - until curl -s http://localhost:3000 > /dev/null; do sleep 1; done
+    - pnpm exec dotenv -e .env.e2e -- pnpm test:e2e
+
+  after_script:
+    # Clean up only E2E-generated files
+    - rm -f .env.e2e
+    - rm -f build/config.json
+
+    # Restore original config.json if it existed
+    - if [ -f build/config.json.bak ]; then mv build/config.json.bak build/config.json; fi
+
+  artifacts:
+    name: "uat-results"
+    when: always
+    paths:
+      - playwright/screenshots/
+      - playwright-report/
+      - playwright-results/
+    expire_in: 7 days
+    expose_as: "UAT Results"
+
+  rules:
+    - when: manual
 
 
 #Security audit:
@@ -247,6 +310,9 @@ Create release on git tag:
 Pages:
   stage: pages
   image: $NODE_IMAGE
+  needs:
+    - Build
+    - Test Unit
   variables:
     APP_API_BASE_URL: "https://staging.inbox.getchat.360dialog.io/api/v1/"
     APP_ENV_NAME: "development"

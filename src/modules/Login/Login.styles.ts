@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
 
-export const LoginWrapper = styled.div`
+export const LoginWrapper = styled.div.attrs({
+	id: 'login',
+})`
 	position: absolute;
 	align-items: center;
 	justify-content: center;

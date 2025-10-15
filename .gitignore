@@ -26,6 +26,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.e2e
 
 npm-debug.log*
 .pnpm-debug.log*
@@ -47,3 +48,15 @@ cypress/videos/
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/playwright/screenshots/
+
+# gitlab-ci
+.gitlab-ci-local/
