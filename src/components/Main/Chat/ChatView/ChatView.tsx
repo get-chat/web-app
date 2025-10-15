@@ -1925,7 +1925,7 @@ const ChatView: React.FC<Props> = (props) => {
 			</Zoom>
 
 			<div
-				id="chat__body"
+				id="chat-body"
 				className="chat__body"
 				ref={messagesContainer}
 				onDrop={(event) => event.preventDefault()}
