@@ -526,8 +526,9 @@ const ChatView: React.FC<Props> = (props) => {
 					let hasAnyIncomingMsg = false;
 
 					setMessages((prevState) => {
-						let newState;
+						let newState = { ...prevState };
 						const preparedMessages: ChatMessageList = {};
+
 						Object.entries(data).forEach((messageEntry) => {
 							const messageWabaId = messageEntry[0];
 							const message = messageEntry[1];
@@ -535,8 +536,8 @@ const ChatView: React.FC<Props> = (props) => {
 							if (waId === message?.customer_wa_id) {
 								// Replace message displayed with internal id
 								const internalIdString = generateMessageInternalId(message.id);
-								if (internalIdString in prevState) {
-									delete prevState[internalIdString];
+								if (internalIdString in newState) {
+									delete newState[internalIdString];
 								}
 
 								preparedMessages[messageWabaId] = message;
@@ -550,13 +551,13 @@ const ChatView: React.FC<Props> = (props) => {
 						if (getObjLength(preparedMessages) > 0) {
 							const lastMessage = getLastObject(preparedMessages) as Message;
 
+							newState = { ...newState, ...preparedMessages };
+
 							if (isAtBottom) {
 								const prevScrollTop = messagesContainer.current?.scrollTop;
 								const prevScrollHeight =
 									messagesContainer.current?.scrollHeight;
 								const isCurrentlyLastMessageVisible = isLastMessageVisible();
-
-								newState = { ...prevState, ...preparedMessages };
 
 								if (!isCurrentlyLastMessageVisible) {
 									persistScrollStateFromBottom(
@@ -597,7 +598,7 @@ const ChatView: React.FC<Props> = (props) => {
 							setLastMessageId(lastMessage.waba_payload?.id ?? lastMessage.id);
 						}
 
-						return newState ?? prevState;
+						return newState;
 					});
 
 					// Reactions
