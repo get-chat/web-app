@@ -8,9 +8,9 @@ export const Container = styled.div<{
 	align-items: center;
 	justify-content: space-between;
 	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
-	margin-top: 10px;
 	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};
 	transition: background-color 0.2s ease-in-out;
+	cursor: pointer;
 `;
 
 export const Title = styled.div`

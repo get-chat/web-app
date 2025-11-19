@@ -28,7 +28,10 @@ const UserAvailability = () => {
 	};
 
 	return (
-		<Styled.Container $isAvailable={isAvailable}>
+		<Styled.Container
+			$isAvailable={isAvailable}
+			onClick={toggleUserAvailability}
+		>
 			<div>
 				<Styled.Title>
 					{isAvailable ? t('You are active now.') : t('You are inactive now.')}
@@ -40,7 +43,10 @@ const UserAvailability = () => {
 			<Switch
 				defaultChecked={false}
 				checked={isAvailable}
-				onClick={toggleUserAvailability}
+				onClick={(event) => {
+					event.stopPropagation(); // prevent parent click
+					toggleUserAvailability();
+				}}
 				color={isAvailable ? 'success' : 'warning'}
 			/>
 		</Styled.Container>
