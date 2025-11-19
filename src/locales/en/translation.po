@@ -1025,6 +1025,14 @@ msgstr ""
 msgid "Search response messages"
 msgstr ""
 
-
 msgid "No response message found."
+msgstr ""
+
+msgid "You are active now."
+msgstr ""
+
+msgid "You are inactive now."
+msgstr ""
+
+msgid "Click to toggle your status."
 msgstr ""

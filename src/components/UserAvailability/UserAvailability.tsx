@@ -37,14 +37,14 @@ const UserAvailability = () => {
 					{isAvailable ? t('You are active now.') : t('You are inactive now.')}
 				</Styled.Title>
 				<Styled.Description>
-					{t('Tap to change your status.')}
+					{t('Click to toggle your status.')}
 				</Styled.Description>
 			</div>
 			<Switch
 				defaultChecked={false}
 				checked={isAvailable}
 				onClick={(event) => {
-					event.stopPropagation(); // prevent parent click
+					event.stopPropagation();
 					toggleUserAvailability();
 				}}
 				color={isAvailable ? 'success' : 'warning'}
