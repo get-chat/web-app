@@ -28,3 +28,11 @@ export interface User {
 export type UserList = {
 	[key: string]: User;
 };
+
+export interface UpdateUserAvailabilityRequest {
+	is_available: boolean;
+}
+
+export interface UpdateUserAvailabilityResponse {
+	is_available: boolean;
+}

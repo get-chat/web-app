@@ -8,9 +8,17 @@ export const Container = styled.div<{
 	align-items: center;
 	justify-content: space-between;
 	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
-	font-size: 14px;
-	font-weight: 600;
 	margin-top: 10px;
 	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};
 	transition: background-color 0.2s ease-in-out;
+`;
+
+export const Title = styled.div`
+	font-size: 14px;
+	font-weight: 600;
+`;
+
+export const Description = styled.div`
+	font-size: 12px;
+	font-weight: 500;
 `;
