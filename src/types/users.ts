@@ -2,6 +2,7 @@ import { Group } from '@src/types/groups';
 
 export interface UserProfile {
 	role: string;
+	is_available: boolean;
 	large_avatar: string;
 	avatar: string;
 }

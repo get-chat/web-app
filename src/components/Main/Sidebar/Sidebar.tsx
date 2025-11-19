@@ -131,6 +131,7 @@ import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionInd
 import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
+import UserAvailability from '@src/components/UserAvailability';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -1221,6 +1222,8 @@ const Sidebar: React.FC<Props> = ({
 					/>
 				</Styled.SearchOrFilterGroup>
 			</ClickAwayListener>
+
+			<UserAvailability />
 
 			<Styled.ResultsContainer>
 				{isSelectionModeEnabled && (
