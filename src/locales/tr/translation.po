@@ -1046,3 +1046,9 @@ msgstr "Şu anda aktif değilsin."
 
 msgid "Click to toggle your status."
 msgstr "Durumunu değiştirmek için tıkla."
+
+msgid "New assignment"
+msgstr "Yeni atama"
+
+msgid "A new chat has been assigned to you!"
+msgstr "Sana yeni bir sohbet atandı!"

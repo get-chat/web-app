@@ -107,6 +107,7 @@ const Main: React.FC = () => {
 		(state) => state.previewMediaObject.value
 	);
 	const newMessages = useAppSelector((state) => state.newMessages.value);
+	const currentUser = useAppSelector((state) => state.currentUser.value);
 
 	const dispatch = useAppDispatch();
 
@@ -655,6 +656,18 @@ const Main: React.FC = () => {
 					const preparedMessages: ChatMessageList = {};
 					const prepared = fromAssignmentEvent(chatAssignment);
 					preparedMessages[prepared.id] = prepared;
+
+					// Display a notification when a chat is assigned to current user by another user
+					if (
+						prepared.assignment_event?.assigned_to_user_set?.id ==
+							currentUser?.id &&
+						prepared.assignment_event?.done_by?.id !== currentUser?.id
+					) {
+						displayNotification(
+							t('New assignment'),
+							t('A new chat has been assigned to you!')
+						);
+					}
 
 					PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
 

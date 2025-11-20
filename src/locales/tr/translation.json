@@ -329,5 +329,7 @@
 	"No response message found.": "Hiç yanıt mesajı bulunamadı.",
 	"You are active now.": "Şu anda aktifsin.",
 	"You are inactive now.": "Şu anda aktif değilsin.",
-	"Click to toggle your status.": "Durumunu değiştirmek için tıkla."
+	"Click to toggle your status.": "Durumunu değiştirmek için tıkla.",
+	"New assignment": "Yeni atama",
+	"A new chat has been assigned to you!": "Sana yeni bir sohbet atandı!"
 }
