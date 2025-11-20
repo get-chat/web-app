@@ -81,6 +81,7 @@ import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
 import * as Sentry from '@sentry/browser';
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -843,6 +844,7 @@ const Main: React.FC = () => {
 		try {
 			const data = await fetchCurrentUser();
 			dispatch(setCurrentUser(data));
+			dispatch(setIsUserAvailable(data.profile?.is_available ?? false));
 
 			const role = data.profile?.role;
 
