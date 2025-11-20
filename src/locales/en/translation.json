@@ -331,5 +331,8 @@
 	"If the issue persists, you can try refreshing the page manually.": "",
 	"Scan this code to start a WhatsApp chat with this number.": "",
 	"Search response messages": "",
-	"No response message found.": ""
+	"No response message found.": "",
+	"You are active now.": "",
+	"You are inactive now.": "",
+	"Click to toggle your status.": ""
 }

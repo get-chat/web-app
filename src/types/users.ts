@@ -2,6 +2,7 @@ import { Group } from '@src/types/groups';
 
 export interface UserProfile {
 	role: string;
+	is_available: boolean;
 	large_avatar: string;
 	avatar: string;
 }
@@ -27,3 +28,11 @@ export interface User {
 export type UserList = {
 	[key: string]: User;
 };
+
+export interface UpdateUserAvailabilityRequest {
+	is_available: boolean;
+}
+
+export interface UpdateUserAvailabilityResponse {
+	is_available: boolean;
+}

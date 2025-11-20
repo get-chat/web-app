@@ -1037,3 +1037,12 @@ msgstr "Yanıt mesajları ara"
 
 msgid "No response message found."
 msgstr "Hiç yanıt mesajı bulunamadı."
+
+msgid "You are active now."
+msgstr "Şu anda aktifsin."
+
+msgid "You are inactive now."
+msgstr "Şu anda aktif değilsin."
+
+msgid "Click to toggle your status."
+msgstr "Durumunu değiştirmek için tıkla."

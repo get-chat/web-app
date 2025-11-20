@@ -326,5 +326,8 @@
 	"This image isn't available anymore.": "Bu resim artık mevcut değil.",
 	"Scan this code to start a WhatsApp chat with this number.": "Bu numarayla WhatsApp sohbeti başlatmak için bu kodu tarayın.",
 	"Search response messages": "Yanıt mesajları ara",
-	"No response message found.": "Hiç yanıt mesajı bulunamadı."
+	"No response message found.": "Hiç yanıt mesajı bulunamadı.",
+	"You are active now.": "Şu anda aktifsin.",
+	"You are inactive now.": "Şu anda aktif değilsin.",
+	"Click to toggle your status.": "Durumunu değiştirmek için tıkla."
 }
