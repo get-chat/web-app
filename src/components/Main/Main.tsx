@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import ChatView from './Chat/ChatView';
-import { Fade, Snackbar } from '@mui/material';
+import { Button, Fade, Snackbar } from '@mui/material';
 import PubSub from 'pubsub-js';
 import axios, { AxiosError } from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -119,12 +119,17 @@ const Main: React.FC = () => {
 	const [isTemplatesReady, setTemplatesReady] = useState(false);
 	const [isSuccessVisible, setSuccessVisible] = useState(false);
 	const [successMessage, setSuccessMessage] = useState('');
+	const [infoMessage, setInfoMessage] = useState('');
+	const [isInfoVisible, setInfoVisible] = useState(false);
 	const [isErrorVisible, setErrorVisible] = useState(false);
 	const [errorMessage, setErrorMessage] = useState('');
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
 		useState(false);
+	const [infoClickAction, setInfoClickAction] = useState<(() => void) | null>(
+		null
+	);
 
 	const [searchMessagesInitialKeyword, setSearchMessagesInitialKeyword] =
 		useState('');
@@ -170,6 +175,15 @@ const Main: React.FC = () => {
 		setSuccessVisible(true);
 	};
 
+	const displayInfo = (
+		message: string,
+		onClickInfo: (() => void) | null = null
+	) => {
+		setInfoMessage(message);
+		setInfoVisible(true);
+		setInfoClickAction(() => onClickInfo);
+	};
+
 	const displayError = (error: AxiosError | any) => {
 		if (!axios.isCancel(error)) {
 			setErrorMessage(
@@ -195,6 +209,17 @@ const Main: React.FC = () => {
 		}
 
 		setSuccessVisible(false);
+	};
+
+	const handleInfoClose = (
+		event: React.SyntheticEvent<any> | Event,
+		reason?: string
+	) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setInfoVisible(false);
 	};
 
 	const handleErrorClose = (
@@ -665,8 +690,12 @@ const Main: React.FC = () => {
 					) {
 						displayNotification(
 							t('New assignment'),
-							t('A new chat has been assigned to you!')
+							t('A new chat has been assigned to you!'),
+							prepared.customer_wa_id
 						);
+						displayInfo(t('A new chat has been assigned to you!'), () => {
+							navigate(`/main/chat/${prepared.customer_wa_id}`);
+						});
 					}
 
 					PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
@@ -1136,6 +1165,30 @@ const Main: React.FC = () => {
 						elevation={4}
 					>
 						{t(successMessage)}
+					</Alert>
+				</Snackbar>
+
+				<Snackbar
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+					open={isInfoVisible}
+					action={
+						<Button
+							color="secondary"
+							size="small"
+							onClick={() => infoClickAction?.()}
+						>
+							{t('Display')}
+						</Button>
+					}
+					autoHideDuration={6000}
+					onClose={handleInfoClose}
+				>
+					<Alert
+						onClose={(event) => handleInfoClose(event)}
+						severity="info"
+						elevation={4}
+					>
+						{t(infoMessage)}
 					</Alert>
 				</Snackbar>
 
