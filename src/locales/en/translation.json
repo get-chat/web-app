@@ -334,5 +334,9 @@
 	"No response message found.": "",
 	"You are active now.": "",
 	"You are inactive now.": "",
-	"Click to toggle your status.": ""
+	"Click to toggle your status.": "",
+	"New assignment": "",
+	"A new chat has been assigned to you!": "",
+	"A new chat has been assigned to you: %s": "",
+	"Display": ""
 }

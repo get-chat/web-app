@@ -1036,3 +1036,15 @@ msgstr ""
 
 msgid "Click to toggle your status."
 msgstr ""
+
+msgid "New assignment"
+msgstr ""
+
+msgid "A new chat has been assigned to you!"
+msgstr ""
+
+msgid "A new chat has been assigned to you: %s"
+msgstr ""
+
+msgid "Display"
+msgstr ""
