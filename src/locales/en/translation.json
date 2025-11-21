@@ -336,5 +336,7 @@
 	"You are inactive now.": "",
 	"Click to toggle your status.": "",
 	"New assignment": "",
-	"A new chat has been assigned to you!": ""
+	"A new chat has been assigned to you!": "",
+	"A new chat has been assigned to you: %s": "",
+	"Display": ""
 }

@@ -1052,3 +1052,9 @@ msgstr "Yeni atama"
 
 msgid "A new chat has been assigned to you!"
 msgstr "Sana yeni bir sohbet atandı!"
+
+msgid "A new chat has been assigned to you: %s"
+msgstr "Sana yeni bir sohbet atandı: %s"
+
+msgid "Display"
+msgstr "Göster"

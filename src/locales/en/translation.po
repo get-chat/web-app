@@ -1042,3 +1042,9 @@ msgstr ""
 
 msgid "A new chat has been assigned to you!"
 msgstr ""
+
+msgid "A new chat has been assigned to you: %s"
+msgstr ""
+
+msgid "Display"
+msgstr ""

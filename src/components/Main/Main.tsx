@@ -693,9 +693,16 @@ const Main: React.FC = () => {
 							t('A new chat has been assigned to you!'),
 							prepared.customer_wa_id
 						);
-						displayInfo(t('A new chat has been assigned to you!'), () => {
-							navigate(`/main/chat/${prepared.customer_wa_id}`);
-						});
+						displayInfo(
+							t(
+								'A new chat has been assigned to you: %s',
+								prepared.contact?.waba_payload?.profile?.name ||
+									prepared.customer_wa_id
+							),
+							() => {
+								navigate(`/main/chat/${prepared.customer_wa_id}`);
+							}
+						);
 					}
 
 					PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
@@ -1171,15 +1178,6 @@ const Main: React.FC = () => {
 				<Snackbar
 					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 					open={isInfoVisible}
-					action={
-						<Button
-							color="secondary"
-							size="small"
-							onClick={() => infoClickAction?.()}
-						>
-							{t('Display')}
-						</Button>
-					}
 					autoHideDuration={6000}
 					onClose={handleInfoClose}
 				>
@@ -1187,6 +1185,17 @@ const Main: React.FC = () => {
 						onClose={(event) => handleInfoClose(event)}
 						severity="info"
 						elevation={4}
+						action={
+							!!infoClickAction && (
+								<Button
+									color="secondary"
+									size="small"
+									onClick={() => infoClickAction?.()}
+								>
+									{t('Display')}
+								</Button>
+							)
+						}
 					>
 						{t(infoMessage)}
 					</Alert>

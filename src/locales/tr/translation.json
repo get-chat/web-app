@@ -331,5 +331,7 @@
 	"You are inactive now.": "Şu anda aktif değilsin.",
 	"Click to toggle your status.": "Durumunu değiştirmek için tıkla.",
 	"New assignment": "Yeni atama",
-	"A new chat has been assigned to you!": "Sana yeni bir sohbet atandı!"
+	"A new chat has been assigned to you!": "Sana yeni bir sohbet atandı!",
+	"A new chat has been assigned to you: %s": "Sana yeni bir sohbet atandı: %s",
+	"Display": "Göster"
 }

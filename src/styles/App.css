@@ -179,6 +179,10 @@ a {
 	text-transform: none;
 }
 
+.MuiAlert-action {
+	padding: 2px 0 0 16px !important;
+}
+
 .MuiAlert-message a {
 	font-weight: 600;
 	text-decoration: underline;
