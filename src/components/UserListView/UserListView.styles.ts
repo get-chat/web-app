@@ -37,6 +37,12 @@ export const Description = styled.div`
 	font-size: 14px;
 `;
 
+export const LoadingContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	padding: 15px;
+`;
+
 export const Body = styled.div`
 	position: relative;
 	flex: 1 1;
@@ -69,6 +75,7 @@ export const UserUsername = styled.div`
 export const UserRole = styled.div`
 	font-weight: 500;
 	font-size: 12px;
+	color: var(--lighter-text-color);
 `;
 
 export const UserAvailability = styled.div<{

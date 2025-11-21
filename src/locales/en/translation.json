@@ -338,5 +338,7 @@
 	"New assignment": "",
 	"A new chat has been assigned to you!": "",
 	"A new chat has been assigned to you: %s": "",
-	"Display": ""
+	"Display": "",
+	"Active": "",
+	"Inactive": ""
 }

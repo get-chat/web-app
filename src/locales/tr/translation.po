@@ -1058,3 +1058,9 @@ msgstr "Sana yeni bir sohbet atandı: %s"
 
 msgid "Display"
 msgstr "Göster"
+
+msgid "Active"
+msgstr "Aktif"
+
+msgid "Inactive"
+msgstr "İnaktif"

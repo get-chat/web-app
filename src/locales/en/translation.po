@@ -1048,3 +1048,9 @@ msgstr ""
 
 msgid "Display"
 msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""

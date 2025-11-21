@@ -333,5 +333,7 @@
 	"New assignment": "Yeni atama",
 	"A new chat has been assigned to you!": "Sana yeni bir sohbet atandı!",
 	"A new chat has been assigned to you: %s": "Sana yeni bir sohbet atandı: %s",
-	"Display": "Göster"
+	"Display": "Göster",
+	"Active": "Aktif",
+	"Inactive": "İnaktif"
 }

@@ -1,7 +1,7 @@
 import * as Styled from './UserListView.styles';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
-import { IconButton, Switch } from '@mui/material';
+import { CircularProgress, IconButton, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
 import { User, UserList } from '@src/types/users';
@@ -16,6 +16,7 @@ interface Props {
 const UserListView: React.FC<Props> = ({ onHide }) => {
 	const { t } = useTranslation();
 
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [users, setUsers] = useState<UserList>({});
 
 	useEffect(() => {
@@ -23,6 +24,7 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 	}, []);
 
 	const listUsers = async () => {
+		setIsLoading(true);
 		try {
 			const data = await fetchUsers(1000);
 			const userList: UserList = {};
@@ -32,6 +34,8 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 			setUsers(userList);
 		} catch (error) {
 			console.error('Error in listUsers', error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -71,33 +75,40 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 			<Styled.Description>
 				{t('As an admin, you can change active status of users.')}
 			</Styled.Description>
-			<Styled.Body>
-				{Object.values(users).map((user) => (
-					<Styled.UserItem>
-						<Styled.UserMeta>
-							<CustomAvatar generateBgColorBy={user.username}>
-								{generateInitialsHelper(user.username)}
-							</CustomAvatar>
-							<div>
-								<Styled.UserUsername>{user.username}</Styled.UserUsername>
-								<Styled.UserRole>{user.profile.role}</Styled.UserRole>
-							</div>
-						</Styled.UserMeta>
-						<Styled.UserAvailability $isAvailable={user.profile.is_available}>
-							<Styled.UserAvailabilityLabel>
-								{user.profile.is_available ? t('Active') : t('Inactive')}
-							</Styled.UserAvailabilityLabel>
-							<Switch
-								color={user.profile.is_available ? 'success' : 'warning'}
-								checked={user.profile.is_available}
-								onClick={() =>
-									toggleUserAvailability(user.id, user.profile.is_available)
-								}
-							/>
-						</Styled.UserAvailability>
-					</Styled.UserItem>
-				))}
-			</Styled.Body>
+
+			{isLoading ? (
+				<Styled.LoadingContainer>
+					<CircularProgress />
+				</Styled.LoadingContainer>
+			) : (
+				<Styled.Body>
+					{Object.values(users).map((user) => (
+						<Styled.UserItem>
+							<Styled.UserMeta>
+								<CustomAvatar generateBgColorBy={user.username}>
+									{generateInitialsHelper(user.username)}
+								</CustomAvatar>
+								<div>
+									<Styled.UserUsername>{user.username}</Styled.UserUsername>
+									<Styled.UserRole>{user.profile.role}</Styled.UserRole>
+								</div>
+							</Styled.UserMeta>
+							<Styled.UserAvailability $isAvailable={user.profile.is_available}>
+								<Styled.UserAvailabilityLabel>
+									{user.profile.is_available ? t('Active') : t('Inactive')}
+								</Styled.UserAvailabilityLabel>
+								<Switch
+									color={user.profile.is_available ? 'success' : 'warning'}
+									checked={user.profile.is_available}
+									onClick={() =>
+										toggleUserAvailability(user.id, user.profile.is_available)
+									}
+								/>
+							</Styled.UserAvailability>
+						</Styled.UserItem>
+					))}
+				</Styled.Body>
+			)}
 		</Styled.Container>
 	);
 };
