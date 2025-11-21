@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
 import { IconButton, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { fetchUsers } from '@src/api/usersApi';
+import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
 import { User, UserList } from '@src/types/users';
-import { setState } from '@src/store/reducers/UIReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import { AxiosError } from 'axios';
 
 interface Props {
 	onHide: () => void;
@@ -35,6 +35,30 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 		}
 	};
 
+	const toggleUserAvailability = async (
+		userId: number,
+		isAvailable: boolean
+	) => {
+		try {
+			const data = await updateUserAvailability(userId, {
+				is_available: !isAvailable,
+			});
+			// Update local state
+			setUsers((prev) => ({
+				...prev,
+				[userId]: {
+					...prev[userId],
+					profile: {
+						...prev[userId].profile,
+						is_available: data.is_available,
+					},
+				},
+			}));
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
+	};
+
 	return (
 		<Styled.Container>
 			<Styled.Header>
@@ -49,7 +73,7 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 			</Styled.Description>
 			<Styled.Body>
 				{Object.values(users).map((user) => (
-					<Styled.UserItem $isAvailable={user.profile.is_available}>
+					<Styled.UserItem>
 						<Styled.UserMeta>
 							<CustomAvatar generateBgColorBy={user.username}>
 								{generateInitialsHelper(user.username)}
@@ -59,13 +83,16 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 								<Styled.UserRole>{user.profile.role}</Styled.UserRole>
 							</div>
 						</Styled.UserMeta>
-						<Styled.UserAvailability>
-							<div>
+						<Styled.UserAvailability $isAvailable={user.profile.is_available}>
+							<Styled.UserAvailabilityLabel>
 								{user.profile.is_available ? t('Active') : t('Inactive')}
-							</div>
+							</Styled.UserAvailabilityLabel>
 							<Switch
 								color={user.profile.is_available ? 'success' : 'warning'}
 								checked={user.profile.is_available}
+								onClick={() =>
+									toggleUserAvailability(user.id, user.profile.is_available)
+								}
 							/>
 						</Styled.UserAvailability>
 					</Styled.UserItem>

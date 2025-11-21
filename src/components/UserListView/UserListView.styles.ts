@@ -44,16 +44,12 @@ export const Body = styled.div`
 	overflow-y: auto;
 `;
 
-export const UserItem = styled.div<{
-	$isAvailable: boolean;
-}>`
+export const UserItem = styled.div`
 	padding: 10px 15px;
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	justify-content: space-between;
-	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
-	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};
 `;
 
 export const UserMeta = styled.div`
@@ -75,9 +71,24 @@ export const UserRole = styled.div`
 	font-size: 12px;
 `;
 
-export const UserAvailability = styled.div`
+export const UserAvailability = styled.div<{
+	$isAvailable: boolean;
+}>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	font-size: 14px;
+	padding: 0 0 0 15px;
+	border-radius: 20px;
+	width: 140px;
+	justify-content: space-between;
+	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
+	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};
+	transition: background-color 0.2s ease-in-out;
+`;
+
+export const UserAvailabilityLabel = styled.div`
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 `;
