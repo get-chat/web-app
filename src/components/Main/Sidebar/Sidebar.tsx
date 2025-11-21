@@ -955,13 +955,14 @@ const Sidebar: React.FC<Props> = ({
 							<NotificationsIcon />
 						</IconButton>
 					</Tooltip>
-					{currentUser?.profile?.role === 'admin' && (
-						<Tooltip title={t('Users')} disableInteractive>
-							<IconButton onClick={displayUserList} size="large">
-								<GroupIcon />
-							</IconButton>
-						</Tooltip>
-					)}
+					{config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' &&
+						currentUser?.profile?.role === 'admin' && (
+							<Tooltip title={t('Users')} disableInteractive>
+								<IconButton onClick={displayUserList} size="large">
+									<GroupIcon />
+								</IconButton>
+							</Tooltip>
+						)}
 					<Tooltip title={t('Options')} disableInteractive>
 						<IconButton
 							onClick={displayMenu}
@@ -1236,7 +1237,9 @@ const Sidebar: React.FC<Props> = ({
 				</Styled.SearchOrFilterGroup>
 			</ClickAwayListener>
 
-			<UserAvailability />
+			{config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' && (
+				<UserAvailability />
+			)}
 
 			<Styled.ResultsContainer>
 				{isSelectionModeEnabled && (

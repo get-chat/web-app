@@ -8,6 +8,7 @@ export interface AppConfig {
 	APP_NOTIFICATIONS_LIMIT_PER_MINUTE: string;
 	APP_GOOGLE_MAPS_API_KEY: string;
 	APP_IS_READ_ONLY: string;
+	APP_IS_USER_AVAILABILITY_ENABLED: string;
 }
 
 export const loadAppConfig = async (): Promise<AppConfig> => {
