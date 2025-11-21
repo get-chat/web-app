@@ -335,5 +335,6 @@
 	"A new chat has been assigned to you: %s": "Sana yeni bir sohbet atandı: %s",
 	"Display": "Göster",
 	"Active": "Aktif",
-	"Inactive": "İnaktif"
+	"Inactive": "İnaktif",
+	"As an admin, you can change active status of users.": "Yönetici olarak kullanıcıların aktif durumlarını değiştirebilirsiniz."
 }

@@ -340,5 +340,6 @@
 	"A new chat has been assigned to you: %s": "",
 	"Display": "",
 	"Active": "",
-	"Inactive": ""
+	"Inactive": "",
+	"As an admin, you can change active status of users.": ""
 }

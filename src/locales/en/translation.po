@@ -1054,3 +1054,6 @@ msgstr ""
 
 msgid "Inactive"
 msgstr ""
+
+msgid "As an admin, you can change active status of users."
+msgstr ""
