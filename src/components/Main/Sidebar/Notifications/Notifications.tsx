@@ -34,14 +34,10 @@ const Notifications: React.FC<Props> = ({ onHide }) => {
 		};
 	}, []);
 
-	const hideNotifications = () => {
-		onHide();
-	};
-
 	return (
 		<Styled.NotificationsContainer>
 			<Styled.Header>
-				<IconButton onClick={hideNotifications} size="large">
+				<IconButton onClick={onHide} size="large">
 					<CloseIcon />
 				</IconButton>
 
