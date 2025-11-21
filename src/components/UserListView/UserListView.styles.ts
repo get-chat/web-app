@@ -44,12 +44,16 @@ export const Body = styled.div`
 	overflow-y: auto;
 `;
 
-export const UserItem = styled.div`
+export const UserItem = styled.div<{
+	$isAvailable: boolean;
+}>`
 	padding: 10px 15px;
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	justify-content: space-between;
+	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
+	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};
 `;
 
 export const UserMeta = styled.div`
@@ -58,6 +62,17 @@ export const UserMeta = styled.div`
 	align-items: center;
 	font-weight: 600;
 	font-size: 14px;
+`;
+
+export const UserUsername = styled.div`
+	font-weight: 600;
+	font-size: 14px;
+	color: var(--default-text-color);
+`;
+
+export const UserRole = styled.div`
+	font-weight: 500;
+	font-size: 12px;
 `;
 
 export const UserAvailability = styled.div`

@@ -49,12 +49,15 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 			</Styled.Description>
 			<Styled.Body>
 				{Object.values(users).map((user) => (
-					<Styled.UserItem>
+					<Styled.UserItem $isAvailable={user.profile.is_available}>
 						<Styled.UserMeta>
 							<CustomAvatar generateBgColorBy={user.username}>
 								{generateInitialsHelper(user.username)}
 							</CustomAvatar>
-							<div>{user.username}</div>
+							<div>
+								<Styled.UserUsername>{user.username}</Styled.UserUsername>
+								<Styled.UserRole>{user.profile.role}</Styled.UserRole>
+							</div>
 						</Styled.UserMeta>
 						<Styled.UserAvailability>
 							<div>
