@@ -132,6 +132,7 @@ import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 import UserAvailability from '@src/components/UserAvailability';
+import UserListView from '@src/components/UserListView';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -259,6 +260,7 @@ const Sidebar: React.FC<Props> = ({
 	const [isOpenInWhatsAppDialogVisible, setOpenInWhatsAppDialogVisible] =
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
+	const [isUserListVisible, setUserListVisible] = useState(false);
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 
@@ -897,6 +899,10 @@ const Sidebar: React.FC<Props> = ({
 		setNotificationsVisible(true);
 	};
 
+	const displayUserList = () => {
+		setUserListVisible(true);
+	};
+
 	const isAnyActiveFilter = Boolean(
 		getObjLength(dynamicFilters) > 0 ||
 			filterAssignedToMe ||
@@ -949,6 +955,14 @@ const Sidebar: React.FC<Props> = ({
 							<NotificationsIcon />
 						</IconButton>
 					</Tooltip>
+					{config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' &&
+						currentUser?.profile?.role === 'admin' && (
+							<Tooltip title={t('Users')} disableInteractive>
+								<IconButton onClick={displayUserList} size="large">
+									<GroupIcon />
+								</IconButton>
+							</Tooltip>
+						)}
 					<Tooltip title={t('Options')} disableInteractive>
 						<IconButton
 							onClick={displayMenu}
@@ -1223,7 +1237,9 @@ const Sidebar: React.FC<Props> = ({
 				</Styled.SearchOrFilterGroup>
 			</ClickAwayListener>
 
-			<UserAvailability />
+			{config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' && (
+				<UserAvailability />
+			)}
 
 			<Styled.ResultsContainer>
 				{isSelectionModeEnabled && (
@@ -1432,6 +1448,10 @@ const Sidebar: React.FC<Props> = ({
 
 			{isNotificationsVisible && (
 				<Notifications onHide={() => setNotificationsVisible(false)} />
+			)}
+
+			{isUserListVisible && (
+				<UserListView onHide={() => setUserListVisible(false)} />
 			)}
 		</Styled.Sidebar>
 	);
