@@ -1,4 +1,4 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useContext, useEffect, useState } from 'react';
 import {
 	Divider,
 	IconButton,
@@ -38,6 +38,7 @@ import TagsChip from '@src/components/TagsChip';
 import { AxiosError } from 'axios';
 import { updateResolved } from '@src/api/chatsApi';
 import DoneIcon from '@mui/icons-material/Done';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 
 interface Props {
 	chat?: Chat;
@@ -58,6 +59,8 @@ const ChatHeader: React.FC<Props> = ({
 	closeChat,
 	waId,
 }) => {
+	const config = useContext(AppConfigContext);
+
 	const dispatch = useAppDispatch();
 
 	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
@@ -236,22 +239,26 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
-				{!isReadOnly && <Divider />}
-				{!isReadOnly && !isResolved && (
-					<MenuItem onClick={() => updateResolvedCall(true)}>
-						<ListItemIcon>
-							<DoneIcon />
-						</ListItemIcon>
-						{t('Mark as resolved')}
-					</MenuItem>
-				)}
-				{!isReadOnly && isResolved && (
-					<MenuItem onClick={() => updateResolvedCall(false)}>
-						<ListItemIcon>
-							<SettingsBackupRestoreIcon />
-						</ListItemIcon>
-						{t('Mark as unresolved')}
-					</MenuItem>
+				{config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' && (
+					<>
+						{!isReadOnly && <Divider />}
+						{!isReadOnly && !isResolved && (
+							<MenuItem onClick={() => updateResolvedCall(true)}>
+								<ListItemIcon>
+									<DoneIcon />
+								</ListItemIcon>
+								{t('Mark as resolved')}
+							</MenuItem>
+						)}
+						{!isReadOnly && isResolved && (
+							<MenuItem onClick={() => updateResolvedCall(false)}>
+								<ListItemIcon>
+									<SettingsBackupRestoreIcon />
+								</ListItemIcon>
+								{t('Mark as unresolved')}
+							</MenuItem>
+						)}
+					</>
 				)}
 				{!isReadOnly && <Divider />}
 				{!isReadOnly && (

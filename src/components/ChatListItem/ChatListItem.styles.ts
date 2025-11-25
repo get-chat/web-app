@@ -227,6 +227,22 @@ export const TimeLeftIconWrapper = styled.div`
 	}
 `;
 
+export const ResolvedIndicator = styled.div`
+	height: 19px;
+	width: 19px;
+	border-radius: 15px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: #2e7d33;
+
+	.MuiSvgIcon-root {
+		height: 13px !important;
+		width: 13px !important;
+		color: #fff !important;
+	}
+`;
+
 export const NewMessagesBadge = styled.div`
 	position: absolute;
 	bottom: -3px;

@@ -24,6 +24,7 @@ import {
 } from '@src/helpers/ChatHelper';
 import { getMessageCaption } from '@src/helpers/MessageHelper';
 import { MessageType } from '@src/types/messages';
+import DoneIcon from '@mui/icons-material/Done';
 
 const ChatListItem = (props: any) => {
 	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
@@ -207,6 +208,18 @@ const ChatListItem = (props: any) => {
 										</Styled.TimeLeftIconWrapper>
 										<span>{timeLeft}</span>
 									</Styled.TimeLeft>
+								</Tooltip>
+							)}
+
+							{data.contact.resolved && (
+								<Tooltip
+									title={t('Resolved')}
+									placement="top"
+									disableInteractive
+								>
+									<Styled.ResolvedIndicator>
+										<DoneIcon />
+									</Styled.ResolvedIndicator>
 								</Tooltip>
 							)}
 						</Styled.NameWrapper>
