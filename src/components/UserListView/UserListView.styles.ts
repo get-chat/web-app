@@ -89,6 +89,9 @@ export const UserRole = styled.div`
 	font-weight: 500;
 	font-size: 12px;
 	color: var(--lighter-text-color);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 `;
 
 export const UserAvailability = styled.div<{
