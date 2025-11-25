@@ -21,6 +21,7 @@ import {
 	EVENT_TOPIC_MARKED_AS_RECEIVED,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
+	EVENT_TOPIC_USER_AVAILABILITY,
 } from '@src/Constants';
 import PreviewMedia from './PreviewMedia';
 import { getToken } from '@src/helpers/StorageHelper';
@@ -738,6 +739,18 @@ const Main: React.FC = () => {
 							})
 						);
 					}, 100);
+				}
+
+				// User availability
+				const userAvailability = wabaPayload?.user_availability;
+
+				if (userAvailability) {
+					// Check if user is current user
+					if (userAvailability.user.id == currentUser?.id) {
+						dispatch(setIsUserAvailable(userAvailability.is_available));
+					}
+
+					PubSub.publish(EVENT_TOPIC_USER_AVAILABILITY, userAvailability);
 				}
 			}
 		} catch (error) {

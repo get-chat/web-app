@@ -36,3 +36,8 @@ export interface UpdateUserAvailabilityRequest {
 export interface UpdateUserAvailabilityResponse {
 	is_available: boolean;
 }
+
+export interface UserAvailabilityEvent {
+	is_available: boolean;
+	user: User;
+}
