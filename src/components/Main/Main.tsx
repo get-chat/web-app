@@ -45,6 +45,7 @@ import { setUsers } from '@src/store/reducers/usersReducer';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
 import {
 	setChatAssignment,
+	setChatResolved,
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
 import { setGroups } from '@src/store/reducers/groupsReducer';
@@ -673,6 +674,21 @@ const Main: React.FC = () => {
 						EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
 						preparedStatuses
 					);
+				}
+
+				// Resolved
+				const chatResolved = wabaPayload?.chat_resolved;
+
+				if (chatResolved) {
+					// Update chats with delay not to break EventBus
+					setTimeout(function () {
+						dispatch(
+							setChatResolved({
+								waId: chatResolved.wa_id,
+								resolvedEvent: chatResolved,
+							})
+						);
+					}, 100);
 				}
 
 				// Chat assignment

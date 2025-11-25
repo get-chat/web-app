@@ -341,5 +341,8 @@
 	"Display": "",
 	"Active": "",
 	"Inactive": "",
-	"As an admin, you can change active status of users.": ""
+	"As an admin, you can change active status of users.": "",
+	"Resolved": "",
+	"Mark as resolved": "",
+	"Mark as unresolved": ""
 }

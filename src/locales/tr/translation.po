@@ -1067,3 +1067,12 @@ msgstr "İnaktif"
 
 msgid "As an admin, you can change active status of users."
 msgstr "Yönetici olarak kullanıcıların aktif durumlarını değiştirebilirsiniz."
+
+msgid "Resolved"
+msgstr "Çözüldü"
+
+msgid "Mark as resolved"
+msgstr "Çözüldü olarak işaretle"
+
+msgid "Mark as unresolved"
+msgstr "Çözülmedi olarak işaretle"
