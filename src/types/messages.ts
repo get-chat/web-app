@@ -1,8 +1,9 @@
 import { Tag } from '@src/types/tags';
 import { Template } from '@src/types/templates';
-import { User } from '@src/types/users';
+import { User, UserAvailabilityEvent } from '@src/types/users';
 import { Person } from '@src/types/persons';
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
+import UserAvailability from '@src/components/UserAvailability';
 
 export interface FetchMessagesRequest {
 	wa_id?: string;
@@ -230,6 +231,7 @@ export interface WebhookMessageWabaPayload {
 	statuses?: WebhookMessageStatus[];
 	chat_assignment?: ChatAssignmentEvent;
 	chat_tagging?: ChatTagging;
+	user_availability?: UserAvailabilityEvent;
 }
 
 export interface ChatTagging {

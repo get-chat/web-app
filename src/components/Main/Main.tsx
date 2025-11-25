@@ -739,6 +739,16 @@ const Main: React.FC = () => {
 						);
 					}, 100);
 				}
+
+				// User availability
+				const userAvailability = wabaPayload?.user_availability;
+
+				if (userAvailability) {
+					// Check if user is current user
+					if (userAvailability.user.id == currentUser?.id) {
+						dispatch(setIsUserAvailable(userAvailability.is_available));
+					}
+				}
 			}
 		} catch (error) {
 			console.error(error);
