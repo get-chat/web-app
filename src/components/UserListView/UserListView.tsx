@@ -4,10 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, IconButton, Switch } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
-import { User, UserList } from '@src/types/users';
+import { User, UserAvailabilityEvent, UserList } from '@src/types/users';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { AxiosError } from 'axios';
+import PubSub from 'pubsub-js';
+import { EVENT_TOPIC_USER_AVAILABILITY } from '@src/Constants';
 
 interface Props {
 	onHide: () => void;
@@ -22,6 +24,24 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 	useEffect(() => {
 		listUsers();
 	}, []);
+
+	useEffect(() => {
+		const onUserAvailabilityEvent = function (
+			msg: string,
+			data: UserAvailabilityEvent
+		) {
+			updateSingleUserAvailability(data.user.id, data.is_available);
+		};
+
+		const userAvailabilityEventToken = PubSub.subscribe(
+			EVENT_TOPIC_USER_AVAILABILITY,
+			onUserAvailabilityEvent
+		);
+
+		return () => {
+			PubSub.unsubscribe(userAvailabilityEventToken);
+		};
+	}, [users]);
 
 	const listUsers = async () => {
 		setIsLoading(true);
@@ -39,6 +59,22 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 		}
 	};
 
+	const updateSingleUserAvailability = (
+		userId: number,
+		isAvailable: boolean
+	) => {
+		setUsers((prev) => ({
+			...prev,
+			[userId]: {
+				...prev[userId],
+				profile: {
+					...prev[userId].profile,
+					is_available: isAvailable,
+				},
+			},
+		}));
+	};
+
 	const toggleUserAvailability = async (
 		userId: number,
 		isAvailable: boolean
@@ -48,16 +84,7 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 				is_available: !isAvailable,
 			});
 			// Update local state
-			setUsers((prev) => ({
-				...prev,
-				[userId]: {
-					...prev[userId],
-					profile: {
-						...prev[userId].profile,
-						is_available: data.is_available,
-					},
-				},
-			}));
+			updateSingleUserAvailability(userId, data.is_available);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 		}

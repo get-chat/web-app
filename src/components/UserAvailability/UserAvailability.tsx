@@ -21,7 +21,7 @@ const UserAvailability = () => {
 			const data = await updateUserAvailability(currentUser?.id ?? 0, {
 				is_available: !isUserAvailable,
 			});
-			//dispatch(setIsUserAvailable(data.is_available));
+			dispatch(setIsUserAvailable(data.is_available));
 		} catch (error: any | AxiosError) {
 			console.error(error);
 		}
