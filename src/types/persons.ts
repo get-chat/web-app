@@ -5,6 +5,7 @@ export interface Person {
 	waba_payload: ContactWabaPayload;
 	initials: string;
 	last_message_timestamp: number;
+	resolved: boolean;
 }
 
 export interface FetchPersonsRequest {

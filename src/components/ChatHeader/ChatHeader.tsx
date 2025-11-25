@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import {
 	Divider,
 	IconButton,
@@ -27,6 +27,7 @@ import SellIcon from '@mui/icons-material/Sell';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import CloseIcon from '@mui/icons-material/Close';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
@@ -34,6 +35,9 @@ import * as Styled from './ChatHeader.styles';
 import { Person } from '@src/types/persons';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
 import TagsChip from '@src/components/TagsChip';
+import { AxiosError } from 'axios';
+import { updateResolved } from '@src/api/chatsApi';
+import DoneIcon from '@mui/icons-material/Done';
 
 interface Props {
 	chat?: Chat;
@@ -60,6 +64,12 @@ const ChatHeader: React.FC<Props> = ({
 
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
+
+	const [isResolved, setIsResolved] = useState(false);
+
+	useEffect(() => {
+		setIsResolved(chat?.contact?.resolved ?? false);
+	}, [chat]);
 
 	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
@@ -104,6 +114,19 @@ const ChatHeader: React.FC<Props> = ({
 
 		// Force refresh chat
 		PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
+	};
+
+	const updateResolvedCall = async (resolved: boolean) => {
+		hideMenu();
+
+		try {
+			const data = await updateResolved(waId, {
+				resolved: resolved,
+			});
+			setIsResolved(data.resolved);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
 	};
 
 	const closeChatAndHideMenu = () => {
@@ -151,6 +174,12 @@ const ChatHeader: React.FC<Props> = ({
 
 						{isPersonExpired(person) && (
 							<Styled.ExpiredIndicator>{t('Expired')}</Styled.ExpiredIndicator>
+						)}
+
+						{isResolved && (
+							<Styled.ResolvedIndicator>
+								{t('Resolved')}
+							</Styled.ResolvedIndicator>
 						)}
 					</Styled.SubRow>
 				</Styled.HeaderInfo>
@@ -207,6 +236,23 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
+				{!isReadOnly && <Divider />}
+				{!isReadOnly && !isResolved && (
+					<MenuItem onClick={() => updateResolvedCall(true)}>
+						<ListItemIcon>
+							<DoneIcon />
+						</ListItemIcon>
+						{t('Mark as resolved')}
+					</MenuItem>
+				)}
+				{!isReadOnly && isResolved && (
+					<MenuItem onClick={() => updateResolvedCall(false)}>
+						<ListItemIcon>
+							<SettingsBackupRestoreIcon />
+						</ListItemIcon>
+						{t('Mark as unresolved')}
+					</MenuItem>
+				)}
 				{!isReadOnly && <Divider />}
 				{!isReadOnly && (
 					<MenuItem onClick={showChatAssignmentAndHideMenu}>
