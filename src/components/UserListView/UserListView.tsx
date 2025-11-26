@@ -115,10 +115,10 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 								<CustomAvatar generateBgColorBy={user.username}>
 									{generateInitialsHelper(user.username)}
 								</CustomAvatar>
-								<div>
+								<Styled.UserInfo>
 									<Styled.UserUsername>{user.username}</Styled.UserUsername>
 									<Styled.UserRole>{user.profile.role}</Styled.UserRole>
-								</div>
+								</Styled.UserInfo>
 							</Styled.UserMeta>
 							<Styled.UserAvailability $isAvailable={user.profile.is_available}>
 								<Styled.UserAvailabilityLabel>

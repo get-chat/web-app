@@ -64,18 +64,34 @@ export const UserMeta = styled.div`
 	align-items: center;
 	font-weight: 600;
 	font-size: 14px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+`;
+
+export const UserInfo = styled.div`
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	flex: 1;
 `;
 
 export const UserUsername = styled.div`
 	font-weight: 600;
 	font-size: 14px;
 	color: var(--default-text-color);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 `;
 
 export const UserRole = styled.div`
 	font-weight: 500;
 	font-size: 12px;
 	color: var(--lighter-text-color);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 `;
 
 export const UserAvailability = styled.div<{

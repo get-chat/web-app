@@ -69,11 +69,29 @@ const chatsSlice = createSlice({
 				state.value = { ...state.value };
 			}
 		},
+		setChatResolved: (state, action) => {
+			const chatKey = CHAT_KEY_PREFIX + action.payload?.waId;
+			const existingChat = state.value[chatKey];
+			if (existingChat) {
+				const resolvedEvent = action.payload?.resolvedEvent;
+
+				existingChat.contact.resolved = resolvedEvent.resolved;
+
+				state.value[chatKey] = existingChat;
+				// Trigger update
+				state.value = { ...state.value };
+			}
+		},
 	},
 });
 
 // Action creators are generated for each case reducer function
-export const { setChats, addChats, setChatAssignment, setChatTagging } =
-	chatsSlice.actions;
+export const {
+	setChats,
+	addChats,
+	setChatAssignment,
+	setChatTagging,
+	setChatResolved,
+} = chatsSlice.actions;
 
 export default chatsSlice.reducer;

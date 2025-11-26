@@ -336,5 +336,8 @@
 	"Display": "Göster",
 	"Active": "Aktif",
 	"Inactive": "İnaktif",
-	"As an admin, you can change active status of users.": "Yönetici olarak kullanıcıların aktif durumlarını değiştirebilirsiniz."
+	"As an admin, you can change active status of users.": "Yönetici olarak kullanıcıların aktif durumlarını değiştirebilirsiniz.",
+	"Resolved": "Çözüldü",
+	"Mark as resolved": "Çözüldü olarak işaretle",
+	"Mark as unresolved": "Çözülmedi olarak işaretle"
 }

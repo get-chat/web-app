@@ -97,6 +97,14 @@ export const ExpiredIndicator = styled.span`
 	padding: 0 5px;
 `;
 
+export const ResolvedIndicator = styled.span`
+	font-size: 12px;
+	color: #2e7d33 !important;
+	background-color: #c9e4cb;
+	border-radius: 10px;
+	padding: 0 5px;
+`;
+
 export const HeaderRight = styled.div`
 	display: flex;
 	justify-content: space-between;

@@ -1120,6 +1120,7 @@ const ChatView: React.FC<Props> = (props) => {
 			initials: initials ?? '',
 			wa_id: waId ?? '',
 			last_message_timestamp: -1,
+			resolved: false,
 		};
 
 		setPerson(preparedPerson);

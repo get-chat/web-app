@@ -36,3 +36,12 @@ export interface FetchChatsParams {
 export interface ChatList {
 	[key: string]: Chat;
 }
+
+export interface ResolveChatRequest {
+	resolved: boolean;
+}
+
+export interface ResolveChatResponse {
+	wa_id: string;
+	resolved: boolean;
+}

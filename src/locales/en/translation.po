@@ -1057,3 +1057,12 @@ msgstr ""
 
 msgid "As an admin, you can change active status of users."
 msgstr ""
+
+msgid "Resolved"
+msgstr ""
+
+msgid "Mark as resolved"
+msgstr ""
+
+msgid "Mark as unresolved"
+msgstr ""

@@ -231,6 +231,7 @@ export interface WebhookMessageWabaPayload {
 	statuses?: WebhookMessageStatus[];
 	chat_assignment?: ChatAssignmentEvent;
 	chat_tagging?: ChatTagging;
+	chat_resolved?: ChatResolvedEvent;
 	user_availability?: UserAvailabilityEvent;
 }
 
@@ -241,6 +242,11 @@ export interface ChatTagging {
 	chat: string;
 	extra: any;
 	done_by?: User;
+}
+
+export interface ChatResolvedEvent {
+	resolved: boolean;
+	wa_id: string;
 }
 
 export interface WebhookMessageStatus {

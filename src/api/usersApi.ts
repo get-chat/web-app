@@ -5,10 +5,6 @@ import {
 	UpdateUserAvailabilityResponse,
 	User,
 } from '@src/types/users';
-import {
-	CreateChatTaggingRequest,
-	CreateChatTaggingResponse,
-} from '@src/types/chatTagging';
 import api from './axiosInstance';
 
 export const fetchUsers = async (limit?: number) => {
