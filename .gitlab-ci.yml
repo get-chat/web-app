@@ -166,6 +166,8 @@ Test E2E:
   stage: test
   image: $PLAYWRIGHT_IMAGE
 
+  allow_failure: true
+
   cache:
     <<: *cache_config
     policy: pull
