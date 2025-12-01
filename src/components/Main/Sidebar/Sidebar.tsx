@@ -133,6 +133,7 @@ import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 import UserAvailability from '@src/components/UserAvailability';
 import UserListView from '@src/components/UserListView';
+import { updateUserAvailability } from '@src/api/usersApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -169,6 +170,9 @@ const Sidebar: React.FC<Props> = ({
 		isWebSocketDisconnected,
 	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const isUserAvailable = useAppSelector(
+		(state) => state.isUserAvailable.value
+	);
 	const chats = useAppSelector((state) => state.chats.value);
 	const chatsCount = useAppSelector((state) => state.chatsCount.value);
 	const tags = useAppSelector((state) => state.tags.value);
@@ -283,7 +287,16 @@ const Sidebar: React.FC<Props> = ({
 
 	const dispatch = useAppDispatch();
 
-	const logOut = () => {
+	const logOut = async () => {
+		// Set as unavailable on logout
+		if (isUserAvailable) {
+			try {
+				await updateUserAvailability(currentUser?.id, { is_available: false });
+			} catch (error: any | AxiosError) {
+				console.error(error);
+			}
+		}
+
 		clearUserSession(undefined, undefined, navigate);
 
 		// TODO: Consider calling it in clearUserSession method
