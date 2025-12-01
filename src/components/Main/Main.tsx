@@ -62,7 +62,11 @@ import {
 	createSavedResponse,
 	fetchSavedResponses,
 } from '@src/api/savedResponsesApi';
-import { fetchCurrentUser, fetchUsers } from '@src/api/usersApi';
+import {
+	fetchCurrentUser,
+	fetchUsers,
+	updateUserAvailability,
+} from '@src/api/usersApi';
 import { User, UserList } from '@src/types/users';
 import { fetchTags } from '@src/api/tagsApi';
 import { fetchGroups } from '@src/api/groupsApi';
@@ -930,6 +934,12 @@ const Main: React.FC = () => {
 			if (role !== 'admin' && role !== 'user') {
 				clearUserSession('incorrectRole', location, navigate);
 			}
+
+			// Set as available initially
+			const availabilityData = await updateUserAvailability(data.id, {
+				is_available: true,
+			});
+			dispatch(setIsUserAvailable(availabilityData.is_available));
 		} catch (error: any | AxiosError) {
 			console.error('Error retrieving current user', error);
 
