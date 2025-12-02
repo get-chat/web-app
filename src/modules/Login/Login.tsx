@@ -25,6 +25,7 @@ import { login, logout } from '@src/api/authApi';
 import * as Styled from './Login.styles';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
+import { fetchCurrentUser, updateUserAvailability } from '@src/api/usersApi';
 
 const Login: React.FC = () => {
 	const config = useContext(AppConfigContext);
@@ -125,6 +126,17 @@ const Login: React.FC = () => {
 			// Android web interface
 			if (window.AndroidWebInterface) {
 				window.AndroidWebInterface.registerUserToken(data.token ?? '');
+			}
+
+			// Check if user availability is enabled
+			if (config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true') {
+				// Get current user id
+				const userData = await fetchCurrentUser();
+
+				// Set as available on login
+				if (!userData.profile.is_available) {
+					await updateUserAvailability(userData.id, { is_available: true });
+				}
 			}
 
 			// Redirect to main route
