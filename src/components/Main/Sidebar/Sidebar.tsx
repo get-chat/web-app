@@ -289,7 +289,11 @@ const Sidebar: React.FC<Props> = ({
 
 	const logOut = async () => {
 		// Set as unavailable on logout
-		if (isUserAvailable && !!currentUser) {
+		if (
+			config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' &&
+			isUserAvailable &&
+			!!currentUser
+		) {
 			try {
 				await updateUserAvailability(currentUser.id, { is_available: false });
 			} catch (error: any | AxiosError) {
