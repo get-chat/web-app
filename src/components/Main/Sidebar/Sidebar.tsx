@@ -486,7 +486,9 @@ const Sidebar: React.FC<Props> = ({
 
 						// Increase number of new chatMessages
 						if (chatMessageWaId) {
-							preparedNewMessages[chatMessageWaId].newMessages++;
+							const cloned = { ...preparedNewMessages[chatMessageWaId] };
+							cloned.newMessages++;
+							preparedNewMessages[chatMessageWaId] = cloned;
 						}
 
 						dispatch(setNewMessages({ ...preparedNewMessages }));
