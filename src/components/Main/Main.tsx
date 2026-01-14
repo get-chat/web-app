@@ -78,7 +78,7 @@ import {
 import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
-	fromWabaPayload,
+	fromIncomingMessageWabaPayload,
 } from '@src/helpers/MessageHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
@@ -650,7 +650,8 @@ const Main: React.FC = () => {
 						const preparedMessages: ChatMessageList = {};
 
 						incomingMessages.forEach((payload) => {
-							preparedMessages[payload.id] = fromWabaPayload(payload);
+							preparedMessages[payload.id] =
+								fromIncomingMessageWabaPayload(payload);
 						});
 
 						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);

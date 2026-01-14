@@ -75,7 +75,9 @@ export const generateEmptyMessage = () => {
 	return message;
 };
 
-export const fromWabaPayload = (wabaPayload: MessageWabaPayload): Message => {
+export const fromIncomingMessageWabaPayload = (
+	wabaPayload: MessageWabaPayload
+): Message => {
 	return {
 		waba_payload: wabaPayload,
 		id: wabaPayload.id,
