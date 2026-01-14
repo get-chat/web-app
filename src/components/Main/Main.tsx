@@ -637,18 +637,67 @@ const Main: React.FC = () => {
 			if (data.type === 'waba_webhook') {
 				const wabaPayload = data.waba_payload;
 
-				// Incoming messages
-				const incomingMessages =
-					data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.messages; //wabaPayload?.incoming_messages;
+				if (config?.APP_IS_USING_CLOUD_API_EVENTS === 'true') {
+					// Incoming messages (Cloud API)
+					const incomingMessages =
+						data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.messages;
 
-				if (incomingMessages) {
-					const preparedMessages: ChatMessageList = {};
+					if (incomingMessages) {
+						const preparedMessages: ChatMessageList = {};
 
-					incomingMessages.forEach((message: WabaPayload) => {
-						preparedMessages[message.id] = fromWabaPayload(message);
-					});
+						incomingMessages.forEach((message: WabaPayload) => {
+							preparedMessages[message.id] = fromWabaPayload(message);
+						});
 
-					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+					}
+
+					// Statuses (Cloud API)
+					const statuses =
+						data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.statuses;
+
+					if (statuses) {
+						const preparedStatuses: { [key: string]: WebhookMessageStatus } =
+							{};
+						statuses.forEach(
+							(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
+						);
+
+						PubSub.publish(
+							EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+							preparedStatuses
+						);
+					}
+				} else {
+					// Incoming messages (On-Premise)
+					const incomingMessages = wabaPayload?.incoming_messages;
+
+					if (incomingMessages) {
+						const preparedMessages: ChatMessageList = {};
+
+						incomingMessages.forEach((message) => {
+							preparedMessages[message.waba_payload?.id ?? message.id] =
+								message;
+						});
+
+						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+					}
+
+					// Statuses (On-Premise)
+					const statuses = wabaPayload?.statuses;
+
+					if (statuses) {
+						const preparedStatuses: { [key: string]: WebhookMessageStatus } =
+							{};
+						statuses.forEach(
+							(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
+						);
+
+						PubSub.publish(
+							EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
+							preparedStatuses
+						);
+					}
 				}
 
 				// Outgoing messages
@@ -662,22 +711,6 @@ const Main: React.FC = () => {
 					});
 
 					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-				}
-
-				// Statuses
-				const statuses =
-					data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.statuses; // wabaPayload?.statuses;
-
-				if (statuses) {
-					const preparedStatuses: { [key: string]: WebhookMessageStatus } = {};
-					statuses.forEach(
-						(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
-					);
-
-					PubSub.publish(
-						EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-						preparedStatuses
-					);
 				}
 
 				// Resolved
