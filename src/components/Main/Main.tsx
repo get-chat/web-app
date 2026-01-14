@@ -78,6 +78,7 @@ import {
 import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
+	fromWabaPayload,
 } from '@src/helpers/MessageHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
@@ -644,16 +645,7 @@ const Main: React.FC = () => {
 					const preparedMessages: ChatMessageList = {};
 
 					incomingMessages.forEach((message: WabaPayload) => {
-						preparedMessages[message.id] = {
-							waba_payload: message,
-							id: message.id,
-							customer_wa_id: message.from ?? '',
-							from_us: false,
-							received: true,
-							tags: [],
-							chat_tags: [],
-							is_failed: false,
-						};
+						preparedMessages[message.id] = fromWabaPayload(message);
 					});
 
 					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
