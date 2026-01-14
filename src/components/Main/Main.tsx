@@ -71,6 +71,7 @@ import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
 import {
 	Message,
+	WabaPayload,
 	WebhookMessage,
 	WebhookMessageStatus,
 } from '@src/types/messages';
@@ -636,13 +637,23 @@ const Main: React.FC = () => {
 				const wabaPayload = data.waba_payload;
 
 				// Incoming messages
-				const incomingMessages = wabaPayload?.incoming_messages;
+				const incomingMessages =
+					data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.messages; //wabaPayload?.incoming_messages;
 
 				if (incomingMessages) {
 					const preparedMessages: ChatMessageList = {};
 
-					incomingMessages.forEach((message: Message) => {
-						preparedMessages[message.waba_payload?.id ?? message.id] = message;
+					incomingMessages.forEach((message: WabaPayload) => {
+						preparedMessages[message.id] = {
+							waba_payload: message,
+							id: message.id,
+							customer_wa_id: message.from ?? '',
+							from_us: false,
+							received: true,
+							tags: [],
+							chat_tags: [],
+							is_failed: false,
+						};
 					});
 
 					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -662,7 +673,8 @@ const Main: React.FC = () => {
 				}
 
 				// Statuses
-				const statuses = wabaPayload?.statuses;
+				const statuses =
+					data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.statuses; // wabaPayload?.statuses;
 
 				if (statuses) {
 					const preparedStatuses: { [key: string]: WebhookMessageStatus } = {};
