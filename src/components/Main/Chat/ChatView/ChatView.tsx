@@ -102,7 +102,7 @@ import {
 	CreateMessageRequest,
 	Message,
 	MessageType,
-	WabaPayload,
+	MessageWabaPayload,
 	WebhookMessageStatus,
 } from '@src/types/messages';
 import { retrievePerson } from '@src/api/personsApi';
@@ -692,7 +692,7 @@ const ChatView: React.FC<Props> = (props) => {
 									if (newState[wabaIdOrGetchatId].waba_payload) {
 										newState[wabaIdOrGetchatId].waba_payload = {
 											...newState[wabaIdOrGetchatId].waba_payload,
-										} as WabaPayload;
+										} as MessageWabaPayload;
 
 										// Update errors data
 										newState[wabaIdOrGetchatId].waba_payload!.errors = [

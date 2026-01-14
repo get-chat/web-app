@@ -71,8 +71,8 @@ import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
 import {
 	Message,
-	WabaPayload,
-	WebhookMessage,
+	MessageWabaPayload,
+	LegacyWabaWebhook,
 	WebhookMessageStatus,
 } from '@src/types/messages';
 import {
@@ -86,6 +86,7 @@ import { setWaId } from '@src/store/reducers/waIdReducer';
 import * as Sentry from '@sentry/browser';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
+import { WabaWebhook, WabaWebhookWabaPayload } from '@src/types/webhook';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -624,7 +625,7 @@ const Main: React.FC = () => {
 
 	const handleWSIncomingMessage = (event: MessageEvent<any>) => {
 		try {
-			const data = JSON.parse(event.data) as WebhookMessage;
+			const data = JSON.parse(event.data) as LegacyWabaWebhook;
 			console.log(data);
 
 			// Breadcrumb for each message
@@ -638,15 +639,18 @@ const Main: React.FC = () => {
 				const wabaPayload = data.waba_payload;
 
 				if (config?.APP_IS_USING_CLOUD_API_EVENTS === 'true') {
+					const wabaWebhookWabaPayload =
+						data.waba_payload as WabaWebhookWabaPayload;
+
 					// Incoming messages (Cloud API)
 					const incomingMessages =
-						data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.messages;
+						wabaWebhookWabaPayload?.entry?.[0]?.changes?.[0]?.value?.messages;
 
 					if (incomingMessages) {
 						const preparedMessages: ChatMessageList = {};
 
-						incomingMessages.forEach((message: WabaPayload) => {
-							preparedMessages[message.id] = fromWabaPayload(message);
+						incomingMessages.forEach((payload) => {
+							preparedMessages[payload.id] = fromWabaPayload(payload);
 						});
 
 						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
@@ -654,7 +658,7 @@ const Main: React.FC = () => {
 
 					// Statuses (Cloud API)
 					const statuses =
-						data.waba_payload?.entry?.[0]?.changes?.[0]?.value?.statuses;
+						wabaWebhookWabaPayload?.entry?.[0]?.changes?.[0]?.value?.statuses;
 
 					if (statuses) {
 						const preparedStatuses: { [key: string]: WebhookMessageStatus } =

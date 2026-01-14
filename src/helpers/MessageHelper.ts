@@ -7,7 +7,7 @@ import {
 	Message,
 	MessageStatus,
 	MessageType,
-	WabaPayload,
+	MessageWabaPayload,
 } from '@src/types/messages';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
@@ -75,7 +75,7 @@ export const generateEmptyMessage = () => {
 	return message;
 };
 
-export const fromWabaPayload = (wabaPayload: WabaPayload): Message => {
+export const fromWabaPayload = (wabaPayload: MessageWabaPayload): Message => {
 	return {
 		waba_payload: wabaPayload,
 		id: wabaPayload.id,

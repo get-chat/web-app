@@ -41,7 +41,7 @@ export interface CreateMessageResponse {
 
 export interface Message {
 	id: string;
-	waba_payload?: WabaPayload;
+	waba_payload?: MessageWabaPayload;
 	waba_statuses?: WabaStatuses;
 	contact?: Person;
 	from_us: boolean;
@@ -59,7 +59,7 @@ export interface Message {
 	context?: Message;
 }
 
-export interface WabaPayload {
+export interface MessageWabaPayload {
 	id: string;
 	from?: string;
 	type: MessageType;
@@ -220,12 +220,12 @@ export interface Permissions {
 	can_write_to_chats: string;
 }
 
-export interface WebhookMessage {
+export interface LegacyWabaWebhook {
 	type: string;
-	waba_payload?: WebhookMessageWabaPayload;
+	waba_payload?: LegacyWabaWebhookWabaPayload;
 }
 
-export interface WebhookMessageWabaPayload {
+export interface LegacyWabaWebhookWabaPayload {
 	incoming_messages?: Message[];
 	outgoing_messages?: Message[];
 	statuses?: WebhookMessageStatus[];
@@ -255,6 +255,18 @@ export interface WebhookMessageStatus {
 	recipient_id: string;
 	status: MessageStatus;
 	errors: ChatMessageError[];
+	conversation?: {
+		id: string;
+		origin: {
+			type: string;
+		};
+	};
+	pricing?: {
+		billable: boolean;
+		pricing_model: string;
+		category: string;
+		type: string;
+	};
 	timestamp: string;
 }
 
