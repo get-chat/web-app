@@ -1,5 +1,3 @@
-import { Profile } from '@src/types/messages';
-
 export interface Contact {
 	name: string;
 	initials: string;
@@ -21,7 +19,9 @@ export interface PhoneNumberDescribed {
 }
 
 export interface ContactWabaPayload {
-	profile: Profile;
+	profile: {
+		name: string;
+	};
 	wa_id: string;
 }
 

@@ -1,4 +1,5 @@
 import { MessageWabaPayload, WebhookMessageStatus } from '@src/types/messages';
+import { ContactWabaPayload } from '@src/types/contacts';
 
 export interface WabaWebhook {
 	type: string;
@@ -23,7 +24,7 @@ export interface WabaWebhookChange {
 export interface WabaWebhookValue {
 	messaging_product: string;
 	metadata: WabaWebhookMetadata;
-	contacts?: WabaWebhookContact[];
+	contacts?: ContactWabaPayload[];
 	messages?: MessageWabaPayload[];
 	statuses?: WebhookMessageStatus[];
 }
@@ -31,13 +32,4 @@ export interface WabaWebhookValue {
 export interface WabaWebhookMetadata {
 	display_phone_number: string;
 	phone_number_id: string;
-}
-
-// --- Message Related Interfaces ---
-
-export interface WabaWebhookContact {
-	profile: {
-		name: string;
-	};
-	wa_id: string;
 }

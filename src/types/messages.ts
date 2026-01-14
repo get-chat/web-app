@@ -210,10 +210,6 @@ export interface WabaStatuses {
 	read?: number;
 }
 
-export interface Profile {
-	name: string;
-}
-
 export interface Permissions {
 	can_use_tags: boolean;
 	can_read_chats: string;
