@@ -73,13 +73,15 @@ import {
 	Message,
 	MessageWabaPayload,
 	LegacyWabaWebhook,
-	WebhookMessageStatus,
 } from '@src/types/messages';
 import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
-	fromIncomingMessageWabaPayload,
 } from '@src/helpers/MessageHelper';
+import {
+	processCloudApiWebhookPayload,
+	processOnPremiseWebhookPayload,
+} from '@src/helpers/CloudApiWebhookHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
@@ -642,66 +644,28 @@ const Main: React.FC = () => {
 					const wabaWebhookWabaPayload =
 						data.waba_payload as WabaWebhookWabaPayload;
 
-					// Incoming messages (Cloud API)
-					const incomingMessages =
-						wabaWebhookWabaPayload?.entry?.[0]?.changes?.[0]?.value?.messages;
+					const { messages, statuses } = processCloudApiWebhookPayload(
+						wabaWebhookWabaPayload
+					);
 
-					if (incomingMessages) {
-						const preparedMessages: ChatMessageList = {};
-
-						incomingMessages.forEach((payload) => {
-							preparedMessages[payload.id] =
-								fromIncomingMessageWabaPayload(payload);
-						});
-
-						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+					if (Object.keys(messages).length > 0) {
+						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
 					}
 
-					// Statuses (Cloud API)
-					const statuses =
-						wabaWebhookWabaPayload?.entry?.[0]?.changes?.[0]?.value?.statuses;
-
-					if (statuses) {
-						const preparedStatuses: { [key: string]: WebhookMessageStatus } =
-							{};
-						statuses.forEach(
-							(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
-						);
-
-						PubSub.publish(
-							EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-							preparedStatuses
-						);
+					if (Object.keys(statuses).length > 0) {
+						PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
 					}
 				} else {
-					// Incoming messages (On-Premise)
-					const incomingMessages = wabaPayload?.incoming_messages;
+					// On-Premise
+					const { messages, statuses } =
+						processOnPremiseWebhookPayload(wabaPayload);
 
-					if (incomingMessages) {
-						const preparedMessages: ChatMessageList = {};
-
-						incomingMessages.forEach((message) => {
-							preparedMessages[message.waba_payload?.id ?? message.id] =
-								message;
-						});
-
-						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+					if (Object.keys(messages).length > 0) {
+						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
 					}
 
-					// Statuses (On-Premise)
-					const statuses = wabaPayload?.statuses;
-
-					if (statuses) {
-						const preparedStatuses: { [key: string]: WebhookMessageStatus } =
-							{};
-						statuses.forEach(
-							(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
-						);
-
-						PubSub.publish(
-							EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-							preparedStatuses
-						);
+					if (Object.keys(statuses).length > 0) {
+						PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
 					}
 				}
 
