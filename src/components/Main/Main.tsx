@@ -71,19 +71,24 @@ import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
 import {
 	Message,
-	WebhookMessage,
-	WebhookMessageStatus,
+	MessageWabaPayload,
+	LegacyWabaWebhook,
 } from '@src/types/messages';
 import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
 } from '@src/helpers/MessageHelper';
+import {
+	processCloudApiWebhookPayload,
+	processOnPremiseWebhookPayload,
+} from '@src/helpers/CloudApiWebhookHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
 import * as Sentry from '@sentry/browser';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
+import { WabaWebhook, WabaWebhookWabaPayload } from '@src/types/webhook';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -622,7 +627,7 @@ const Main: React.FC = () => {
 
 	const handleWSIncomingMessage = (event: MessageEvent<any>) => {
 		try {
-			const data = JSON.parse(event.data) as WebhookMessage;
+			const data = JSON.parse(event.data) as LegacyWabaWebhook;
 			console.log(data);
 
 			// Breadcrumb for each message
@@ -635,17 +640,33 @@ const Main: React.FC = () => {
 			if (data.type === 'waba_webhook') {
 				const wabaPayload = data.waba_payload;
 
-				// Incoming messages
-				const incomingMessages = wabaPayload?.incoming_messages;
+				if (config?.APP_IS_USING_CLOUD_API_EVENTS === 'true') {
+					const wabaWebhookWabaPayload =
+						data.waba_payload as WabaWebhookWabaPayload;
 
-				if (incomingMessages) {
-					const preparedMessages: ChatMessageList = {};
+					const { messages, statuses } = processCloudApiWebhookPayload(
+						wabaWebhookWabaPayload
+					);
 
-					incomingMessages.forEach((message: Message) => {
-						preparedMessages[message.waba_payload?.id ?? message.id] = message;
-					});
+					if (Object.keys(messages).length > 0) {
+						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
+					}
 
-					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
+					if (Object.keys(statuses).length > 0) {
+						PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
+					}
+				} else {
+					// On-Premise
+					const { messages, statuses } =
+						processOnPremiseWebhookPayload(wabaPayload);
+
+					if (Object.keys(messages).length > 0) {
+						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
+					}
+
+					if (Object.keys(statuses).length > 0) {
+						PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
+					}
 				}
 
 				// Outgoing messages
@@ -659,21 +680,6 @@ const Main: React.FC = () => {
 					});
 
 					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, preparedMessages);
-				}
-
-				// Statuses
-				const statuses = wabaPayload?.statuses;
-
-				if (statuses) {
-					const preparedStatuses: { [key: string]: WebhookMessageStatus } = {};
-					statuses.forEach(
-						(statusObj) => (preparedStatuses[statusObj.id] = statusObj)
-					);
-
-					PubSub.publish(
-						EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE,
-						preparedStatuses
-					);
 				}
 
 				// Resolved

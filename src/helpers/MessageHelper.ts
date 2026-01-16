@@ -7,6 +7,7 @@ import {
 	Message,
 	MessageStatus,
 	MessageType,
+	MessageWabaPayload,
 } from '@src/types/messages';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
@@ -72,6 +73,21 @@ export const generateEmptyMessage = () => {
 		},
 	};
 	return message;
+};
+
+export const fromIncomingMessageWabaPayload = (
+	wabaPayload: MessageWabaPayload
+): Message => {
+	return {
+		waba_payload: wabaPayload,
+		id: wabaPayload.id,
+		customer_wa_id: wabaPayload.from ?? wabaPayload.wa_id ?? '',
+		from_us: false,
+		received: true,
+		tags: [],
+		chat_tags: [],
+		is_failed: false,
+	} as Message;
 };
 
 export const fromAssignmentEvent = (
