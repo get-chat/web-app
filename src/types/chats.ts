@@ -22,6 +22,7 @@ export interface FetchChatsParams {
 	assigned_group?: number;
 	messages_since_time?: number;
 	messages_before_time?: number;
+	unread?: boolean;
 	blocked?: boolean;
 	reported?: boolean;
 	message_has_referral?: boolean;

@@ -7,6 +7,7 @@ enum FilterQueryParams {
 	CHAT_TAG_ID = 'cf_chat_tag_id',
 	MESSAGES_SINCE_TIME = 'cf_messages_since_time',
 	MESSAGES_BEFORE_TIME = 'cf_messages_before_time',
+	UNREAD = 'cf_unread',
 }
 
 export default FilterQueryParams;

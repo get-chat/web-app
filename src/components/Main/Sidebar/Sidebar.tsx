@@ -86,6 +86,7 @@ import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
 import DateRangeDialog from '@src/components/DateRangeDialog';
 import {
 	convertDateToUnixTimestamp,
@@ -197,6 +198,8 @@ const Sidebar: React.FC<Props> = ({
 		setFilterStartDate,
 		filterEndDate,
 		setFilterEndDate,
+		filterUnread,
+		setFilterUnread,
 	} = useChatFilters();
 
 	const { waId } = useParams();
@@ -225,17 +228,21 @@ const Sidebar: React.FC<Props> = ({
 			return filterChat(
 				currentUser,
 				chat,
+				newMessages,
 				filterTagId,
 				filterAssignedToMe,
-				filterAssignedGroupId
+				filterAssignedGroupId,
+				filterUnread
 			);
 		});
 	}, [
 		chats,
 		currentUser,
+		newMessages,
 		filterTagId,
 		filterAssignedToMe,
 		filterAssignedGroupId,
+		filterUnread,
 	]);
 
 	useLayoutEffect(() => {
@@ -379,6 +386,7 @@ const Sidebar: React.FC<Props> = ({
 		filterTagId,
 		filterStartDate,
 		filterEndDate,
+		filterUnread,
 	]);
 
 	useEffect(() => {
@@ -683,6 +691,7 @@ const Sidebar: React.FC<Props> = ({
 					assigned_group: filterAssignedGroupId,
 					messages_before_time: messageBeforeTime,
 					messages_since_time: messagesSinceTime,
+					unread: filterUnread ? true : undefined,
 				},
 				dynamicFilters,
 				abortControllerRef.current?.signal
@@ -927,7 +936,8 @@ const Sidebar: React.FC<Props> = ({
 			filterAssignedToMe ||
 			filterAssignedGroupId ||
 			filterTagId ||
-			filterStartDate
+			filterStartDate ||
+			filterUnread
 	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
@@ -1031,6 +1041,14 @@ const Sidebar: React.FC<Props> = ({
 				<Styled.SearchOrFilterGroup $isExpanded={isForceDisplayFilters}>
 					<Collapse in={Boolean(isAnyActiveFilter || keyword)}>
 						<Styled.FilterGroup $isActive={true}>
+							{filterUnread && (
+								<FilterOption
+									icon={<MarkChatUnreadIcon />}
+									label={t('Unread')}
+									onClick={() => setFilterUnread(false)}
+									isActive
+								/>
+							)}
 							{filterAssignedToMe && (
 								<FilterOption
 									icon={<PersonIcon />}
@@ -1093,6 +1111,13 @@ const Sidebar: React.FC<Props> = ({
 					<Collapse in={isForceDisplayFilters}>
 						<>
 							<Styled.FilterGroup $isAll={true}>
+								{!filterUnread && (
+									<FilterOption
+										icon={<MarkChatUnreadIcon />}
+										label={t('Unread')}
+										onClick={() => setFilterUnread(true)}
+									/>
+								)}
 								{!filterAssignedToMe && (
 									<FilterOption
 										icon={<PersonIcon />}

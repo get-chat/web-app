@@ -8,6 +8,7 @@ import {
 	isChatIncludingTagId,
 } from '@src/helpers/ChatHelper';
 import { Message } from '@src/types/messages';
+import NewMessageList from '@src/interfaces/NewMessageList';
 
 const hasPermission = (currentUser: User, chat: Chat) => {
 	const canReadChats = currentUser?.permissions?.can_read_chats;
@@ -30,9 +31,11 @@ const hasPermission = (currentUser: User, chat: Chat) => {
 export const filterChat = (
 	currentUser: User | undefined,
 	chat: Chat,
+	newMessages: NewMessageList,
 	filterTagId?: number,
 	filterAssignedToMe?: boolean,
-	filterAssignedGroupId?: number
+	filterAssignedGroupId?: number,
+	filterUnread?: boolean
 ) => {
 	if (!currentUser) return true;
 
@@ -46,6 +49,10 @@ export const filterChat = (
 
 	if (filterAssignedGroupId) {
 		return isChatAssignedToGroupId(chat, filterAssignedGroupId);
+	}
+
+	if (filterUnread) {
+		return (newMessages[chat.contact.wa_id]?.newMessages ?? 0) > 0;
 	}
 
 	return true;

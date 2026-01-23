@@ -5,6 +5,7 @@ export interface UserPreference {
 		filterAssignedGroupId?: number;
 		filterStartDate?: number;
 		filterEndDate?: number;
+		filterUnread?: boolean;
 	};
 	dynamicFilters?: { [key: string]: any };
 	weekStartsOn?: number;
