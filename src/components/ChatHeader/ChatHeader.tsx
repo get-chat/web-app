@@ -239,10 +239,10 @@ const ChatHeader: React.FC<Props> = ({
 					</ListItemIcon>
 					{t('Contact details')}
 				</MenuItem>
-				{config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true' && (
+				{!isReadOnly && (
 					<>
-						{!isReadOnly && <Divider />}
-						{!isReadOnly && !isResolved && (
+						<Divider />
+						{!isResolved && (
 							<MenuItem onClick={() => updateResolvedCall(true)}>
 								<ListItemIcon>
 									<DoneIcon />
@@ -250,7 +250,7 @@ const ChatHeader: React.FC<Props> = ({
 								{t('Mark as resolved')}
 							</MenuItem>
 						)}
-						{!isReadOnly && isResolved && (
+						{isResolved && (
 							<MenuItem onClick={() => updateResolvedCall(false)}>
 								<ListItemIcon>
 									<SettingsBackupRestoreIcon />
