@@ -77,6 +77,9 @@ const useChatFilters = () => {
 			? new Date(initialUserPreference?.filters?.filterEndDate)
 			: undefined
 	);
+	const [filterUnread, setFilterUnread] = useState<boolean>(
+		initialUserPreference?.filters?.filterUnread || false
+	);
 
 	const isMounted = useRef(false);
 
@@ -138,6 +141,8 @@ const useChatFilters = () => {
 			);
 
 			setFilterEndDate(parseDateFilter(FilterQueryParams.MESSAGES_BEFORE_TIME));
+
+			setFilterUnread(searchParams.get(FilterQueryParams.UNREAD) === '1');
 		}
 	}, [hasAnyFilterQueryParam]);
 
@@ -151,6 +156,7 @@ const useChatFilters = () => {
 					filterAssignedGroupId: filterAssignedGroupId,
 					filterStartDate: filterStartDate?.getTime(),
 					filterEndDate: filterEndDate?.getTime(),
+					filterUnread: filterUnread,
 				},
 				dynamicFilters: dynamicFilters,
 			});
@@ -164,6 +170,7 @@ const useChatFilters = () => {
 		filterTagId,
 		filterStartDate,
 		filterEndDate,
+		filterUnread,
 	]);
 
 	const location = useLocation();
@@ -179,6 +186,7 @@ const useChatFilters = () => {
 				[FilterQueryParams.CHAT_TAG_ID]: filterTagId,
 				[FilterQueryParams.MESSAGES_SINCE_TIME]: formatDate(filterStartDate),
 				[FilterQueryParams.MESSAGES_BEFORE_TIME]: formatDate(filterEndDate),
+				[FilterQueryParams.UNREAD]: filterUnread ? 1 : null,
 			};
 
 			// Combine with dynamic filters to update URL
@@ -213,6 +221,7 @@ const useChatFilters = () => {
 		filterTagId,
 		filterStartDate,
 		filterEndDate,
+		filterUnread,
 	]);
 
 	const removeDynamicFilter = (key: string) => {
@@ -238,6 +247,8 @@ const useChatFilters = () => {
 		setFilterStartDate,
 		filterEndDate,
 		setFilterEndDate,
+		filterUnread,
+		setFilterUnread,
 	};
 };
 
