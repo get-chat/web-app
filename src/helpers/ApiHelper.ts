@@ -1,5 +1,6 @@
 import {
 	clearContactProvidersData,
+	clearMessageDrafts,
 	clearToken,
 	getStorage,
 	STORAGE_TAG_TOKEN,
@@ -63,6 +64,7 @@ export const clearUserSession = (
 ) => {
 	clearToken();
 	clearContactProvidersData();
+	clearMessageDrafts();
 
 	let path;
 

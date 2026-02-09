@@ -75,17 +75,12 @@ export const Footer = styled.div`
 	align-items: center;
 	padding: 0 10px;
 	max-height: 400px;
+	transition: all ease-out 0.5s;
 
 	&.expired {
 		height: auto !important;
 		align-items: normal;
 		flex-direction: column;
-		padding: 15px;
-		border-left: 1px solid lightgray;
-
-		@media only screen and (max-width: 750px) {
-			border-left: none;
-		}
 	}
 
 	> .MuiIconButton-root {
@@ -115,6 +110,7 @@ export const TypeBox = styled.div`
 	margin-bottom: 5px;
 	border: none;
 	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
+	transition: all ease-out 0.5s;
 
 	&:focus {
 		outline: none;

@@ -13,6 +13,7 @@ const STORAGE_TAG_CONTACT_PROVIDERS_DATA = 'contact_providers_data';
 const STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME = 'contact_providers_data_time';
 const STORAGE_TAG_CURRENT_API_BASE_URL = 'current_api_base_url';
 const STORAGE_TAG_API_BASE_URLS = 'api_base_urls';
+const STORAGE_TAG_MESSAGE_DRAFTS = 'message_drafts';
 
 const getLocalStorage = () => {
 	try {
@@ -199,4 +200,58 @@ const clearContactProvidersDataIfExpired = () => {
 	} else {
 		storeContactProvidersDataTime(now);
 	}
+};
+
+// Message Drafts Storage
+interface MessageDrafts {
+	[waId: string]: string;
+}
+
+export const getMessageDrafts = (): MessageDrafts => {
+	try {
+		const data = getStorage()?.getItem(STORAGE_TAG_MESSAGE_DRAFTS);
+		return data ? JSON.parse(data) : {};
+	} catch (e) {
+		console.warn(e);
+		return {};
+	}
+};
+
+export const getMessageDraft = (waId: string): string | undefined => {
+	const drafts = getMessageDrafts();
+	return drafts[waId];
+};
+
+export const storeMessageDraft = (waId: string, draft: string) => {
+	try {
+		const drafts = getMessageDrafts();
+		if (draft && draft.trim().length > 0) {
+			drafts[waId] = draft;
+		} else {
+			// Remove empty drafts
+			delete drafts[waId];
+		}
+		getStorage()?.setItem(STORAGE_TAG_MESSAGE_DRAFTS, JSON.stringify(drafts));
+	} catch (e) {
+		if (isQuotaExceededError(e)) {
+			console.warn(
+				'Storage quota exceeded when saving draft, clearing old drafts'
+			);
+			clearMessageDrafts();
+		}
+	}
+};
+
+export const removeMessageDraft = (waId: string) => {
+	try {
+		const drafts = getMessageDrafts();
+		delete drafts[waId];
+		getStorage()?.setItem(STORAGE_TAG_MESSAGE_DRAFTS, JSON.stringify(drafts));
+	} catch (e) {
+		console.warn(e);
+	}
+};
+
+export const clearMessageDrafts = () => {
+	getStorage()?.removeItem(STORAGE_TAG_MESSAGE_DRAFTS);
 };
