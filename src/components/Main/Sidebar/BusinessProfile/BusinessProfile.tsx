@@ -293,7 +293,7 @@ const BusinessProfile: React.FC<Props> = ({
 
 								{profilePhoto && isAdmin && !isReadOnly && (
 									<Button onClick={doDeleteProfilePhoto} color="secondary">
-										Delete profile photo
+										{t('Delete profile photo')}
 									</Button>
 								)}
 							</Styled.AvatarContainer>
@@ -386,7 +386,7 @@ const BusinessProfile: React.FC<Props> = ({
 
 											{verticalOptions.map((verticalOption, index) => (
 												<MenuItem key={index} value={verticalOption}>
-													{verticalOption}
+													{t(verticalOption)}
 												</MenuItem>
 											))}
 										</Select>
