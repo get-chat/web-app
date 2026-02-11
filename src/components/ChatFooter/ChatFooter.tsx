@@ -183,22 +183,72 @@ const ChatFooter: React.FC<Props> = ({
 		}
 	}, [input]);
 
+	// Track waId to detect chat switches (for draft restoration)
+	const prevWaIdRef = useRef<string | undefined>(undefined);
+	const prevInputRef = useRef(input);
+
 	useEffect(() => {
-		// Clear editable div when message is sent
-		if (input === '' && editable.current) {
-			editable.current.innerHTML = '';
+		if (editable.current) {
+			const waIdChanged = prevWaIdRef.current !== waId;
+			const inputCleared = prevInputRef.current !== '' && input === '';
+			// Also detect when input goes from empty to non-empty (draft restored after initial render)
+			const inputRestored =
+				prevInputRef.current === '' &&
+				input !== '' &&
+				editable.current.innerHTML === '';
+
+			// Only update innerHTML when:
+			// 1. waId changed (draft restoration when switching chats)
+			// 2. input was cleared (message sent or cleared externally)
+			// 3. input was restored (draft loaded after initial render)
+			if (waIdChanged || inputCleared || inputRestored) {
+				editable.current.innerHTML = input;
+
+				// Move cursor to the end if there is actual text content
+				const textContent = translateHTMLInputToText(input);
+				if (textContent && textContent.trim().length > 0) {
+					const moveCursorToEnd = () => {
+						try {
+							const el = editable.current;
+							if (!el) return;
+
+							// Focus is required for the cursor to be visible and correctly placed
+							el.focus();
+
+							const range = document.createRange();
+							const selection = window.getSelection();
+
+							if (selection) {
+								range.selectNodeContents(el);
+								range.collapse(false);
+								selection.removeAllRanges();
+								selection.addRange(range);
+							}
+						} catch (e) {
+							console.warn('Failed to move cursor to end', e);
+						}
+					};
+
+					// Execute immediately
+					moveCursorToEnd();
+					// And also on next tick to ensure DOM is ready
+					setTimeout(moveCursorToEnd, 10);
+				}
+			}
 		}
-	}, [editable, input]);
+		prevWaIdRef.current = waId;
+		prevInputRef.current = input;
+	}, [editable, input, waId]);
 
 	const toggleTemplateMessages = () => {
 		// If messages container is already scrolled to bottom
 		/*const elem = messagesContainer.current;
-        const offset = 5;
+		const offset = 5;
 
-        let willScroll = false;
-        if (elem.offsetHeight + elem.scrollTop >= (elem.scrollHeight - offset)) {
-            willScroll = true;
-        }*/
+		let willScroll = false;
+		if (elem.offsetHeight + elem.scrollTop >= (elem.scrollHeight - offset)) {
+			willScroll = true;
+		}*/
 
 		if (!isTemplatesVisible) {
 			setAttachmentOptionsVisible(false);
@@ -359,7 +409,7 @@ const ChatFooter: React.FC<Props> = ({
 				<Footer className={isExpired ? 'expired' : ''}>
 					<form>
 						<TypeBox className={isExpired ? 'expired' : ''}>
-							{!input && (
+							{translateHTMLInputToText(input).trim() === '' && (
 								<TypeBoxHint>
 									{isExpired ? (
 										<span>

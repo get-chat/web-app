@@ -376,7 +376,6 @@ const ChatView: React.FC<Props> = (props) => {
 			setState({ isTemplatesVisible: false, isSavedResponsesVisible: false })
 		);
 		setAtBottom(false);
-		setInput('');
 		setScrollButtonVisible(false);
 
 		setPreviewSendMediaVisible(false);

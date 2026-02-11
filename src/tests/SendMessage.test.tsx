@@ -33,6 +33,12 @@ jest.mock('@src/store/hooks', () => ({
 	useAppDispatch: () => mockDispatch,
 }));
 
+jest.mock('@src/helpers/StorageHelper', () => ({
+	getMessageDraft: jest.fn(),
+	storeMessageDraft: jest.fn(),
+	removeMessageDraft: jest.fn(),
+}));
+
 // Mock global
 global.window.displayCustomError = jest.fn();
 

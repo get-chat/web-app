@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import ReactionList from '@src/interfaces/ReactionList';
@@ -28,6 +28,11 @@ import { flushSync } from 'react-dom';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { setPendingMessageFailed } from '@src/helpers/PendingMessagesHelper';
 import { setState } from '@src/store/reducers/UIReducer';
+import {
+	getMessageDraft,
+	removeMessageDraft,
+	storeMessageDraft,
+} from '@src/helpers/StorageHelper';
 
 interface Props {
 	waId: string | undefined;
@@ -52,7 +57,62 @@ const useChat = ({
 	const [messages, setMessages] = useState<ChatMessageList>({});
 	const [reactions, setReactions] = useState<ReactionList>({});
 
-	const [input, setInput] = useState('');
+	const [input, setInputState] = useState('');
+	const [prevWaId, setPrevWaId] = useState(waId);
+
+	// Ref for debouncing draft saves
+	const draftSaveTimeoutRef = useRef<NodeJS.Timeout>();
+
+	// Custom setInput that also saves draft
+	const setInput = (value: string) => {
+		setInputState(value);
+
+		// Only save draft if waId exists
+		if (waId) {
+			// Debounce the draft save to avoid excessive storage writes
+			if (draftSaveTimeoutRef.current) {
+				clearTimeout(draftSaveTimeoutRef.current);
+			}
+			draftSaveTimeoutRef.current = setTimeout(() => {
+				storeMessageDraft(waId, value);
+			}, 300);
+		}
+	};
+
+	// Reset input immediately when waId changes to avoid showing previous chat's draft
+	// And save the previous draft synchronously
+	if (waId !== prevWaId) {
+		// Clear any pending save timeout
+		if (draftSaveTimeoutRef.current) {
+			clearTimeout(draftSaveTimeoutRef.current);
+		}
+
+		// Save the draft for the previous chat
+		if (prevWaId) {
+			// We use the current 'input' which holds the value for prevWaId
+			storeMessageDraft(prevWaId, input);
+		}
+
+		setPrevWaId(waId);
+		setInputState('');
+	}
+
+	// Restore draft when waId changes
+	useEffect(() => {
+		if (waId) {
+			const savedDraft = getMessageDraft(waId);
+			if (savedDraft) {
+				setInputState(savedDraft);
+			}
+		}
+
+		return () => {
+			// Cleanup timeout on unmount
+			if (draftSaveTimeoutRef.current) {
+				clearTimeout(draftSaveTimeoutRef.current);
+			}
+		};
+	}, [waId]);
 
 	const [fixedDateIndicatorText, setFixedDateIndicatorText] =
 		useState<string>();
@@ -111,7 +171,11 @@ const useChat = ({
 			}
 
 			queueMessage(requestBody, successCallback, undefined, completeCallback);
-			setInput('');
+			setInputState('');
+			// Clear the draft when message is queued
+			if (waId) {
+				removeMessageDraft(waId);
+			}
 			return;
 		}
 
