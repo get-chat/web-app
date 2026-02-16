@@ -97,6 +97,8 @@ const useContacts = () => {
 			});
 			setPersons(personList);
 			await listContacts();
+
+			setLoading(false);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			setLoading(false);
@@ -112,7 +114,6 @@ const useContacts = () => {
 			setContacts(data.results);
 		} catch (error: any | AxiosResponse) {
 			console.error(error);
-			setLoading(false);
 		}
 	};
 
