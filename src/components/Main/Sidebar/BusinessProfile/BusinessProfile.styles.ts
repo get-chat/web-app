@@ -82,6 +82,7 @@ export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+	gap: 15px;
 
 	.MuiButton-root {
 		margin-bottom: 15px;
@@ -106,6 +107,14 @@ export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
       }
     `}
 	}
+`;
+
+export const UsernameContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+	margin-top: 15px;
 `;
 
 export const AvatarDeleteContainer = styled.div`

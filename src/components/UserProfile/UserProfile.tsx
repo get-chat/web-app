@@ -51,10 +51,12 @@ const UserProfile: React.FC<Props> = ({
 								</CustomAvatar>
 							</Styled.AvatarContainer>
 
-							<h3>{currentUser.username}</h3>
-							<span>
-								{currentUser.first_name + ' ' + currentUser.last_name}
-							</span>
+							<Styled.UsernameContainer>
+								<h3>{currentUser.username}</h3>
+								<span>
+									{currentUser.first_name + ' ' + currentUser.last_name}
+								</span>
+							</Styled.UsernameContainer>
 
 							{!isReadOnly && (
 								<Styled.ChangePasswordContainer>
