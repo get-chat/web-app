@@ -4,6 +4,7 @@ export interface BusinessProfileSettings {
 	email: string | null;
 	vertical: string | null;
 	websites: string[];
+	about: string | null;
 }
 
 export interface PartialUpdateBusinessProfileSettings {
@@ -12,6 +13,7 @@ export interface PartialUpdateBusinessProfileSettings {
 	email: string | null;
 	vertical: string | null;
 	websites: string[];
+	about: string | null;
 }
 
 export interface ProfileAboutResponse {

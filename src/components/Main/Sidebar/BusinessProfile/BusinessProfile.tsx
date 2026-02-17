@@ -24,9 +24,7 @@ import * as Styled from './BusinessProfile.styles';
 import {
 	deleteProfilePhoto,
 	fetchBusinessProfileSettings,
-	fetchProfileAbout,
 	partialUpdateBusinessProfileSettings,
-	updateProfileAbout,
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
@@ -105,6 +103,7 @@ const BusinessProfile: React.FC<Props> = ({
 			setDescription(data.description ?? '');
 			setEmail(data.email ?? '');
 			setVertical(data.vertical ?? '');
+			setAbout(data.about ?? '');
 
 			let websitesArray = data.websites;
 			if (websitesArray.length === 0) {
@@ -112,11 +111,10 @@ const BusinessProfile: React.FC<Props> = ({
 			}
 
 			setWebsites({ ...websitesArray });
-
-			// Load about
-			await retrieveProfileAbout();
 		} catch (error: any | AxiosError) {
 			console.error(error);
+		} finally {
+			setLoaded(true);
 		}
 	};
 
@@ -143,41 +141,13 @@ const BusinessProfile: React.FC<Props> = ({
 					email,
 					vertical,
 					websites: Object.values(websites),
+					about: about,
 				},
 				abortControllerRef.current?.signal
 			);
-			await doUpdateProfileAbout(event);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			setUpdating(false);
-		}
-	};
-
-	const retrieveProfileAbout = async () => {
-		try {
-			const data = await fetchProfileAbout();
-			setAbout(data.settings.profile?.about?.text ?? '');
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		} finally {
-			setLoaded(true);
-		}
-	};
-
-	const doUpdateProfileAbout = async (
-		event: React.FormEvent<HTMLFormElement>
-	) => {
-		event.preventDefault();
-
-		try {
-			await updateProfileAbout(
-				{
-					text: about,
-				},
-				abortControllerRef.current?.signal
-			);
-		} catch (error: any | AxiosError) {
-			console.error(error);
 		} finally {
 			setUpdating(false);
 		}
