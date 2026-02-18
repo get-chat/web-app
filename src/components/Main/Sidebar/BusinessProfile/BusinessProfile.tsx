@@ -24,9 +24,7 @@ import * as Styled from './BusinessProfile.styles';
 import {
 	deleteProfilePhoto,
 	fetchBusinessProfileSettings,
-	fetchProfileAbout,
 	partialUpdateBusinessProfileSettings,
-	updateProfileAbout,
 	updateProfilePhoto,
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
@@ -105,6 +103,7 @@ const BusinessProfile: React.FC<Props> = ({
 			setDescription(data.description ?? '');
 			setEmail(data.email ?? '');
 			setVertical(data.vertical ?? '');
+			setAbout(data.about ?? '');
 
 			let websitesArray = data.websites;
 			if (websitesArray.length === 0) {
@@ -112,11 +111,10 @@ const BusinessProfile: React.FC<Props> = ({
 			}
 
 			setWebsites({ ...websitesArray });
-
-			// Load about
-			await retrieveProfileAbout();
 		} catch (error: any | AxiosError) {
 			console.error(error);
+		} finally {
+			setLoaded(true);
 		}
 	};
 
@@ -143,41 +141,13 @@ const BusinessProfile: React.FC<Props> = ({
 					email,
 					vertical,
 					websites: Object.values(websites),
+					about: about,
 				},
 				abortControllerRef.current?.signal
 			);
-			await doUpdateProfileAbout(event);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			setUpdating(false);
-		}
-	};
-
-	const retrieveProfileAbout = async () => {
-		try {
-			const data = await fetchProfileAbout();
-			setAbout(data.settings.profile?.about?.text ?? '');
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		} finally {
-			setLoaded(true);
-		}
-	};
-
-	const doUpdateProfileAbout = async (
-		event: React.FormEvent<HTMLFormElement>
-	) => {
-		event.preventDefault();
-
-		try {
-			await updateProfileAbout(
-				{
-					text: about,
-				},
-				abortControllerRef.current?.signal
-			);
-		} catch (error: any | AxiosError) {
-			console.error(error);
 		} finally {
 			setUpdating(false);
 		}
@@ -217,23 +187,28 @@ const BusinessProfile: React.FC<Props> = ({
 	};
 
 	const verticalOptions = [
-		'Automotive',
-		'Beauty, Spa and Salon',
-		'Clothing and Apparel',
-		'Education',
-		'Entertainment',
-		'Event Planning and Service',
-		'Finance and Banking',
-		'Food and Grocery',
-		'Public Service',
-		'Hotel and Lodging',
-		'Medical and Health',
-		'Non-profit',
-		'Professional Services',
-		'Shopping and Retail',
-		'Travel and Transportation',
-		'Restaurant',
-		'Other',
+		{ value: 'AUTO', label: 'Automotive' },
+		{ value: 'BEAUTY', label: 'Beauty, Spa and Salon' },
+		{ value: 'APPAREL', label: 'Clothing and Apparel' },
+		{ value: 'EDU', label: 'Education' },
+		{ value: 'ENTERTAIN', label: 'Entertainment' },
+		{ value: 'EVENT_PLAN', label: 'Event Planning and Service' },
+		{ value: 'FINANCE', label: 'Finance and Banking' },
+		{ value: 'GROCERY', label: 'Food and Grocery' },
+		{ value: 'GOVT', label: 'Public Service' },
+		{ value: 'HOTEL', label: 'Hotel and Lodging' },
+		{ value: 'HEALTH', label: 'Medical and Health' },
+		{ value: 'NONPROFIT', label: 'Non-profit' },
+		{ value: 'PROF_SERVICES', label: 'Professional Services' },
+		{ value: 'RETAIL', label: 'Shopping and Retail' },
+		{ value: 'TRAVEL', label: 'Travel and Transportation' },
+		{ value: 'RESTAURANT', label: 'Restaurant' },
+		{ value: 'ALCOHOL', label: 'Alcohol' },
+		{ value: 'ONLINE_GAMBLING', label: 'Online Gambling' },
+		{ value: 'PHYSICAL_GAMBLING', label: 'Physical Gambling' },
+		{ value: 'OTC_DRUGS', label: 'OTC Drugs' },
+		{ value: 'MATRIMONY_SERVICE', label: 'Matrimony Service' },
+		{ value: 'OTHER', label: 'Other' },
 	];
 
 	const handleBusinessProfileAvatarClick = () => {
@@ -384,9 +359,12 @@ const BusinessProfile: React.FC<Props> = ({
 										>
 											<MenuItem value="">{t('None')}</MenuItem>
 
-											{verticalOptions.map((verticalOption, index) => (
-												<MenuItem key={index} value={verticalOption}>
-													{verticalOption}
+											{verticalOptions.map((verticalOption) => (
+												<MenuItem
+													key={verticalOption.value}
+													value={verticalOption.value}
+												>
+													{verticalOption.label}
 												</MenuItem>
 											))}
 										</Select>
