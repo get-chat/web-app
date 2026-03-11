@@ -637,7 +637,7 @@ const Main: React.FC = () => {
 				level: 'info',
 			});
 
-			if (data.type === 'waba_webhook') {
+			if (data.type === 'waba_webhook' || data.type === 'getchat_webhook') {
 				const wabaPayload = data.waba_payload;
 
 				if (config?.APP_IS_USING_CLOUD_API_EVENTS === 'true') {
