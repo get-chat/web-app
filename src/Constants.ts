@@ -35,6 +35,9 @@ export const EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO =
 	'reload_business_profile_photo';
 export const EVENT_TOPIC_USER_AVAILABILITY = 'user_availability';
 
+export const WS_EVENT_TYPE_WABA = 'waba_webhook';
+export const WS_EVENT_TYPE_GETCHAT = 'getchat_webhook';
+
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
 

@@ -22,6 +22,8 @@ import {
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 	EVENT_TOPIC_USER_AVAILABILITY,
+	WS_EVENT_TYPE_GETCHAT,
+	WS_EVENT_TYPE_WABA,
 } from '@src/Constants';
 import PreviewMedia from './PreviewMedia';
 import { getToken } from '@src/helpers/StorageHelper';
@@ -78,17 +80,14 @@ import {
 	fromAssignmentEvent,
 	fromTaggingEvent,
 } from '@src/helpers/MessageHelper';
-import {
-	processCloudApiWebhookPayload,
-	processOnPremiseWebhookPayload,
-} from '@src/helpers/CloudApiWebhookHelper';
+import { processCloudApiWebhookPayload } from '@src/helpers/CloudApiWebhookHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
 import * as Sentry from '@sentry/browser';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
-import { WabaWebhook, WabaWebhookWabaPayload } from '@src/types/webhook';
+import { WabaWebhookWabaPayload } from '@src/types/webhook';
 
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
@@ -637,37 +636,22 @@ const Main: React.FC = () => {
 				level: 'info',
 			});
 
-			if (data.type === 'waba_webhook' || data.type === 'getchat_webhook') {
-				const wabaPayload = data.waba_payload;
+			if (data.type === WS_EVENT_TYPE_WABA) {
+				// Cloud API WABA events: incoming messages and status updates
+				const { messages, statuses } = processCloudApiWebhookPayload(
+					data.waba_payload as WabaWebhookWabaPayload
+				);
 
-				if (config?.APP_IS_USING_CLOUD_API_EVENTS === 'true') {
-					const wabaWebhookWabaPayload =
-						data.waba_payload as WabaWebhookWabaPayload;
-
-					const { messages, statuses } = processCloudApiWebhookPayload(
-						wabaWebhookWabaPayload
-					);
-
-					if (Object.keys(messages).length > 0) {
-						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
-					}
-
-					if (Object.keys(statuses).length > 0) {
-						PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
-					}
-				} else {
-					// On-Premise
-					const { messages, statuses } =
-						processOnPremiseWebhookPayload(wabaPayload);
-
-					if (Object.keys(messages).length > 0) {
-						PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
-					}
-
-					if (Object.keys(statuses).length > 0) {
-						PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
-					}
+				if (Object.keys(messages).length > 0) {
+					PubSub.publish(EVENT_TOPIC_NEW_CHAT_MESSAGES, messages);
 				}
+
+				if (Object.keys(statuses).length > 0) {
+					PubSub.publish(EVENT_TOPIC_CHAT_MESSAGE_STATUS_CHANGE, statuses);
+				}
+			} else if (data.type === WS_EVENT_TYPE_GETCHAT) {
+				// GetChat custom events: flat payload format
+				const wabaPayload = data.waba_payload;
 
 				// Outgoing messages
 				const outgoingMessages = wabaPayload?.outgoing_messages;
@@ -730,7 +714,6 @@ const Main: React.FC = () => {
 
 					PubSub.publish(EVENT_TOPIC_CHAT_ASSIGNMENT, preparedMessages);
 
-					// Update chats with delay not to break EventBus
 					setTimeout(function () {
 						dispatch(
 							setChatAssignment({
@@ -751,9 +734,7 @@ const Main: React.FC = () => {
 
 					PubSub.publish(EVENT_TOPIC_CHAT_TAGGING, preparedMessages);
 
-					// Update chats with delay not to break EventBus
 					setTimeout(function () {
-						// Update chats
 						dispatch(
 							setChatTagging({
 								waId: prepared.customer_wa_id,
@@ -767,7 +748,6 @@ const Main: React.FC = () => {
 				const userAvailability = wabaPayload?.user_availability;
 
 				if (userAvailability) {
-					// Check if user is current user
 					if (userAvailability.user.id == currentUser?.id) {
 						dispatch(setIsUserAvailable(userAvailability.is_available));
 					}
