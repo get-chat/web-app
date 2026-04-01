@@ -1,8 +1,5 @@
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import {
-	LegacyWabaWebhookWabaPayload,
-	WebhookMessageStatus,
-} from '@src/types/messages';
+import { WebhookMessageStatus } from '@src/types/messages';
 import { WabaWebhookWabaPayload } from '@src/types/webhook';
 import { fromIncomingMessageWabaPayload } from '@src/helpers/MessageHelper';
 
@@ -35,25 +32,6 @@ export const processCloudApiWebhookPayload = (
 				});
 			}
 		});
-	});
-
-	return { messages, statuses };
-};
-
-export const processOnPremiseWebhookPayload = (
-	payload: LegacyWabaWebhookWabaPayload | undefined
-): WebhookResult => {
-	const messages: ChatMessageList = {};
-	const statuses: { [key: string]: WebhookMessageStatus } = {};
-
-	// Incoming messages
-	payload?.incoming_messages?.forEach((message) => {
-		messages[message.waba_payload?.id ?? message.id] = message;
-	});
-
-	// Statuses
-	payload?.statuses?.forEach((statusObj) => {
-		statuses[statusObj.id] = statusObj;
 	});
 
 	return { messages, statuses };
