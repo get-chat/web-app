@@ -60,18 +60,19 @@ const useChat = ({
 	const [input, setInputState] = useState('');
 	const [prevWaId, setPrevWaId] = useState(waId);
 
+	// Ref for debouncing draft saves
 	const draftSaveTimeoutRef = useRef<NodeJS.Timeout>();
 
-	const cancelPendingDraftSave = () => {
-		clearTimeout(draftSaveTimeoutRef.current);
-		draftSaveTimeoutRef.current = undefined;
-	};
-
+	// Custom setInput that also saves draft
 	const setInput = (value: string) => {
 		setInputState(value);
 
+		// Only save draft if waId exists
 		if (waId) {
-			cancelPendingDraftSave();
+			// Debounce the draft save to avoid excessive storage writes
+			if (draftSaveTimeoutRef.current) {
+				clearTimeout(draftSaveTimeoutRef.current);
+			}
 			draftSaveTimeoutRef.current = setTimeout(() => {
 				storeMessageDraft(waId, value);
 			}, 300);
@@ -81,10 +82,14 @@ const useChat = ({
 	// Reset input immediately when waId changes to avoid showing previous chat's draft
 	// And save the previous draft synchronously
 	if (waId !== prevWaId) {
-		cancelPendingDraftSave();
+		// Clear any pending save timeout
+		if (draftSaveTimeoutRef.current) {
+			clearTimeout(draftSaveTimeoutRef.current);
+		}
 
+		// Save the draft for the previous chat
 		if (prevWaId) {
-			// 'input' still holds the value for prevWaId at this render
+			// We use the current 'input' which holds the value for prevWaId
 			storeMessageDraft(prevWaId, input);
 		}
 
@@ -102,7 +107,10 @@ const useChat = ({
 		}
 
 		return () => {
-			cancelPendingDraftSave();
+			// Cleanup timeout on unmount
+			if (draftSaveTimeoutRef.current) {
+				clearTimeout(draftSaveTimeoutRef.current);
+			}
 		};
 	}, [waId]);
 
@@ -163,12 +171,8 @@ const useChat = ({
 			}
 
 			queueMessage(requestBody, successCallback, undefined, completeCallback);
-
-			// Cancel the pending debounced save so it can't resurrect the
-			// just-sent text as a draft after we clear it below.
-			cancelPendingDraftSave();
-
 			setInputState('');
+			// Clear the draft when message is queued
 			if (waId) {
 				removeMessageDraft(waId);
 			}
