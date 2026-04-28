@@ -35,6 +35,7 @@ import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
@@ -106,6 +107,8 @@ const ChatFooter: React.FC<Props> = ({
 		isSavedResponsesVisible,
 		isInteractiveMessagesVisible,
 	} = useAppSelector((state) => state.UI);
+
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const fileInput = useRef<HTMLInputElement>(null);
 	const editable = useRef<HTMLDivElement>(null);
@@ -465,20 +468,22 @@ const ChatFooter: React.FC<Props> = ({
 						</CommandActionIcon>
 					</Tooltip>
 
-					<ActionSeparator />
+					{!(isUserActionsRestricted && isExpired) && <ActionSeparator />}
 
-					<Tooltip title={t('Templates')} placement="top" disableInteractive>
-						<ActionIcon
-							data-test-id="templates-button"
-							onClick={toggleTemplateMessages}
-							className={isTemplatesVisible ? 'active' : ''}
-							size="small"
-						>
-							<SmsIcon />
-						</ActionIcon>
-					</Tooltip>
+					{!isUserActionsRestricted && (
+						<Tooltip title={t('Templates')} placement="top" disableInteractive>
+							<ActionIcon
+								data-test-id="templates-button"
+								onClick={toggleTemplateMessages}
+								className={isTemplatesVisible ? 'active' : ''}
+								size="small"
+							>
+								<SmsIcon />
+							</ActionIcon>
+						</Tooltip>
+					)}
 
-					{!isExpired && (
+					{!isExpired && !isUserActionsRestricted && (
 						<Tooltip
 							title={t('Interactive Messages')}
 							placement="top"
