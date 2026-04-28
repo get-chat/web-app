@@ -9,6 +9,7 @@ import { handleDragOver } from '@src/helpers/FileHelper';
 import { CALENDAR_SHORT } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import { Trans, useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import CustomAvatar from '@src/components/CustomAvatar';
@@ -30,6 +31,8 @@ const ChatListItem = (props: any) => {
 	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
 		(state) => state.UI
 	);
+
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const newMessages = useAppSelector((state) => state.newMessages.value);
 
@@ -273,7 +276,9 @@ const ChatListItem = (props: any) => {
 					</Styled.Info>
 				</Styled.Item>
 
-				<Styled.WaId>{addPlus(data.wa_id)}</Styled.WaId>
+				{!isUserActionsRestricted && (
+					<Styled.WaId>{addPlus(data.wa_id)}</Styled.WaId>
+				)}
 
 				{hasFailedMessages() && (
 					<Styled.FailedMessagesIndicator>

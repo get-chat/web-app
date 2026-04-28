@@ -66,7 +66,7 @@ import {
 	filterChat,
 	handleChatAssignmentEvent,
 } from '@src/helpers/SidebarHelper';
-import { isRegularUserActionsRestricted } from '@src/helpers/ConfigHelper';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
@@ -172,10 +172,7 @@ const Sidebar: React.FC<Props> = ({
 		isWebSocketDisconnected,
 	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
-	const isUserActionsRestricted = isRegularUserActionsRestricted(
-		config,
-		currentUser
-	);
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 	const isUserAvailable = useAppSelector(
 		(state) => state.isUserAvailable.value
 	);

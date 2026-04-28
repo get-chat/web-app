@@ -4,6 +4,7 @@ import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { Message } from '@src/types/messages';
 import * as Styled from './ContactsMessage.styles';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 interface Props {
 	data: Message;
@@ -13,6 +14,7 @@ const ContactsMessage: React.FC<Props> = ({ data }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const contacts = data?.waba_payload?.contacts;
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const handleClick = (targetWaId: string) => {
 		const waId = prepareWaId(targetWaId);
@@ -46,9 +48,11 @@ const ContactsMessage: React.FC<Props> = ({ data }) => {
 											{phoneObj.type}
 										</Styled.PhoneNumberType>
 									)}
-									<Styled.PhoneNumber>
-										{phoneObj.phone ?? phoneObj.wa_id}
-									</Styled.PhoneNumber>
+									{!isUserActionsRestricted && (
+										<Styled.PhoneNumber>
+											{phoneObj.phone ?? phoneObj.wa_id}
+										</Styled.PhoneNumber>
+									)}
 								</Styled.PhoneNumberContainer>
 							</Styled.MessageButton>
 						))}

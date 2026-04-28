@@ -39,6 +39,7 @@ import { AxiosError } from 'axios';
 import { updateResolved } from '@src/api/chatsApi';
 import DoneIcon from '@mui/icons-material/Done';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 interface Props {
 	chat?: Chat;
@@ -64,6 +65,8 @@ const ChatHeader: React.FC<Props> = ({
 	const dispatch = useAppDispatch();
 
 	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
+
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const { t } = useTranslation();
 	const [anchorEl, setAnchorEl] = useState<Element>();
@@ -166,14 +169,16 @@ const ChatHeader: React.FC<Props> = ({
 						message={
 							contactProvidersData[waId]?.[0]?.name ??
 							person?.waba_payload?.profile?.name ??
-							(person?.wa_id ? addPlus(person?.wa_id) : '')
+							(person?.wa_id && !isUserActionsRestricted
+								? addPlus(person?.wa_id)
+								: '')
 						}
 					/>
 
 					<Styled.SubRow>
-						<Styled.WaId $desktopOnly>
-							{person?.wa_id ? addPlus(person?.wa_id) : ''}
-						</Styled.WaId>
+						{person?.wa_id && !isUserActionsRestricted && (
+							<Styled.WaId $desktopOnly>{addPlus(person?.wa_id)}</Styled.WaId>
+						)}
 
 						{isPersonExpired(person) && (
 							<Styled.ExpiredIndicator>{t('Expired')}</Styled.ExpiredIndicator>

@@ -4,6 +4,7 @@ import * as Styled from './Contact.styles';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
 import { ListItem } from '@mui/material';
 import { Contact } from '@src/types/contacts';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 interface Props {
 	data: Contact;
@@ -13,6 +14,7 @@ interface Props {
 const ContactView: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 	const { t } = useTranslation();
 	const [phoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const handleClick = () => {
 		if (data.phone_numbers && data.phone_numbers.length > 0) {
@@ -45,14 +47,15 @@ const ContactView: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 					</Styled.AvatarWrapper>
 					<Styled.ContactInfo>
 						<h2>{data.name}</h2>
-						{data.phone_numbers && data.phone_numbers.length > 0 ? (
-							<Styled.PhoneNumber>
-								{data.phone_numbers[0].phone_number}
-							</Styled.PhoneNumber>
-						) : (
+						{!data.phone_numbers?.length && (
 							<Styled.MissingPhoneNumber>
 								{t('There is no phone number')}
 							</Styled.MissingPhoneNumber>
+						)}
+						{!!data.phone_numbers?.length && !isUserActionsRestricted && (
+							<Styled.PhoneNumber>
+								{data.phone_numbers[0].phone_number}
+							</Styled.PhoneNumber>
 						)}
 						{data.phone_numbers && data.phone_numbers.length > 1 && (
 							<Styled.OtherPhoneNumbers>
@@ -72,14 +75,15 @@ const ContactView: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 			{phoneNumbersVisible && (
 				<Styled.PhoneNumbersChoices>
 					<h3>{t('Choose a phone number')}</h3>
-					{data.phone_numbers?.map((phoneNumber, index) => (
-						<Styled.PhoneNumberChoice
-							key={index}
-							onClick={() => goToChat(phoneNumber.phone_number)}
-						>
-							{phoneNumber.phone_number}
-						</Styled.PhoneNumberChoice>
-					))}
+					{!isUserActionsRestricted &&
+						data.phone_numbers?.map((phoneNumber, index) => (
+							<Styled.PhoneNumberChoice
+								key={index}
+								onClick={() => goToChat(phoneNumber.phone_number)}
+							>
+								{phoneNumber.phone_number}
+							</Styled.PhoneNumberChoice>
+						))}
 				</Styled.PhoneNumbersChoices>
 			)}
 		</Styled.ContactWrapper>

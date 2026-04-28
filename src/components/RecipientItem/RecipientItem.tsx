@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
 import * as Styled from './RecipientItem.styles';
 import { Recipient } from '@src/types/persons';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 interface Props {
 	data: Recipient;
@@ -21,6 +22,7 @@ const RecipientItem: React.FC<Props> = ({
 }) => {
 	const [isPhoneNumbersVisible, setPhoneNumbersVisible] = useState(false);
 	const { t } = useTranslation();
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const handleClick = () => {
 		if (isSelectionModeEnabled) {
@@ -68,14 +70,15 @@ const RecipientItem: React.FC<Props> = ({
 					<Styled.Info>
 						<Styled.Name>{data.name}</Styled.Name>
 
-						{data.phone_numbers?.length > 0 ? (
-							<Styled.PhoneNumber>
-								{data.phone_numbers[0]?.phone_number}
-							</Styled.PhoneNumber>
-						) : (
+						{!(data.phone_numbers?.length > 0) && (
 							<Styled.MissingPhoneNumber>
 								{t('There is no phone number')}
 							</Styled.MissingPhoneNumber>
+						)}
+						{data.phone_numbers?.length > 0 && !isUserActionsRestricted && (
+							<Styled.PhoneNumber>
+								{data.phone_numbers[0]?.phone_number}
+							</Styled.PhoneNumber>
 						)}
 					</Styled.Info>
 				</Styled.Container>
@@ -86,14 +89,15 @@ const RecipientItem: React.FC<Props> = ({
 					<Styled.PhoneNumbersTitle>
 						{t('Choose a phone number')}
 					</Styled.PhoneNumbersTitle>
-					{data.phone_numbers?.map((phoneNumber, index) => (
-						<Styled.Choice
-							key={index}
-							onClick={() => goToChat(phoneNumber.phone_number)}
-						>
-							{phoneNumber.phone_number}
-						</Styled.Choice>
-					))}
+					{!isUserActionsRestricted &&
+						data.phone_numbers?.map((phoneNumber, index) => (
+							<Styled.Choice
+								key={index}
+								onClick={() => goToChat(phoneNumber.phone_number)}
+							>
+								{phoneNumber.phone_number}
+							</Styled.Choice>
+						))}
 				</Styled.PhoneNumbersContainer>
 			)}
 		</Styled.Wrapper>
