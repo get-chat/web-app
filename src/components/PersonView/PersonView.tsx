@@ -3,6 +3,7 @@ import { ListItem } from '@mui/material';
 import ContactProviderHeader from '../ContactProviderHeader';
 import * as Styled from '@src/components/ContactView/Contact.styles';
 import { Person } from '@src/types/persons';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 interface Props {
 	data: Person;
@@ -15,6 +16,8 @@ const PersonView: React.FC<Props> = ({
 	verifyPhoneNumber,
 	contactProvidersData,
 }) => {
+	const isUserActionsRestricted = useIsUserActionsRestricted();
+
 	const handleClick = () => {
 		if (data.wa_id) {
 			goToChat(data.wa_id);
@@ -43,7 +46,9 @@ const PersonView: React.FC<Props> = ({
 							{contactProvidersData[data.wa_id ?? '']?.[0]?.name ??
 								data.waba_payload?.profile?.name}
 						</h2>
-						<Styled.PhoneNumber>{data.wa_id}</Styled.PhoneNumber>
+						{!isUserActionsRestricted && (
+							<Styled.PhoneNumber>{data.wa_id}</Styled.PhoneNumber>
+						)}
 					</Styled.ContactInfo>
 				</Styled.ContactContainer>
 			</ListItem>

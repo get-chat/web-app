@@ -13,6 +13,7 @@ import {
 import { sortTemplateComponents } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 export type Props = {
 	input: string;
@@ -23,6 +24,8 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 	const savedResponses = useAppSelector((state) => state.savedResponses.value);
 	const templates = useAppSelector((state) => state.templates.value);
 	const users = useAppSelector((state) => state.users.value);
+
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const { t } = useTranslation();
 
@@ -185,6 +188,12 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		return items
 			.filter(
 				(item) =>
+					!isUserActionsRestricted ||
+					(item.command !== COMMAND_TEMPLATE &&
+						!item.customActionCommand?.startsWith(COMMAND_TEMPLATE + ' '))
+			)
+			.filter(
+				(item) =>
 					inputArray.every((inputWord, index) => {
 						// Check if a word matches
 						if (index === 0) {
@@ -198,7 +207,14 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 				item.id = generateCommandString(item);
 				return item;
 			});
-	}, [input, isExpired, savedResponses, templates, users]);
+	}, [
+		input,
+		isExpired,
+		isUserActionsRestricted,
+		savedResponses,
+		templates,
+		users,
+	]);
 
 	return { data, generateCommandString };
 };

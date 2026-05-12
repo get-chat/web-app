@@ -12,6 +12,7 @@ import googleLogo from '../../../assets/images/ic-google.png';
 import hubspotLogo from '../../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import { Trans, useTranslation } from 'react-i18next';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
@@ -39,6 +40,8 @@ const ContactDetails: React.FC<Props> = ({
 	);
 
 	const [chat, setChat] = useState<Chat>();
+
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const dispatch = useAppDispatch();
 
@@ -174,72 +177,56 @@ const ContactDetails: React.FC<Props> = ({
 						)}
 					</Styled.Section>
 
-					<Styled.Section>
-						<Styled.SectionTitle>
-							{t('WhatsApp Phone Number')}
-						</Styled.SectionTitle>
-						<a href={'tel:+' + contactData.wa_id}>
-							{addPlus(contactData.wa_id)}
-						</a>
-					</Styled.Section>
+					{!isUserActionsRestricted && (
+						<Styled.Section>
+							<Styled.SectionTitle>
+								{t('WhatsApp Phone Number')}
+							</Styled.SectionTitle>
+							<a href={'tel:+' + contactData.wa_id}>
+								{addPlus(contactData.wa_id)}
+							</a>
+						</Styled.Section>
+					)}
 
-					{contactProvidersData[contactData.wa_id ?? '']?.map(
-						(providerData: any, index: number) => (
-							<Styled.Section
-								key={index + '_' + providerData.contact_provider.id}
-							>
-								<Styled.SectionTitle>
-									<Styled.ProviderTitle>
-										{providerData.contact_provider.type === 'google' && (
-											<img
-												src={googleLogo}
-												alt={providerData.contact_provider.name}
-											/>
-										)}
-										{providerData.contact_provider.type === 'hubspot' && (
-											<img
-												src={hubspotLogo}
-												alt={providerData.contact_provider.name}
-											/>
-										)}
-										{providerData.contact_provider.name ??
-											providerData.contact_provider.type}
-									</Styled.ProviderTitle>
-								</Styled.SectionTitle>
+					{!isUserActionsRestricted &&
+						contactProvidersData[contactData.wa_id ?? '']?.map(
+							(providerData: any, index: number) => (
+								<Styled.Section
+									key={index + '_' + providerData.contact_provider.id}
+								>
+									<Styled.SectionTitle>
+										<Styled.ProviderTitle>
+											{providerData.contact_provider.type === 'google' && (
+												<img
+													src={googleLogo}
+													alt={providerData.contact_provider.name}
+												/>
+											)}
+											{providerData.contact_provider.type === 'hubspot' && (
+												<img
+													src={hubspotLogo}
+													alt={providerData.contact_provider.name}
+												/>
+											)}
+											{providerData.contact_provider.name ??
+												providerData.contact_provider.type}
+										</Styled.ProviderTitle>
+									</Styled.SectionTitle>
 
-								<Styled.Content>
-									<Styled.Subtitle>{t('Phone number')}</Styled.Subtitle>
-									<Styled.ContentSub>
-										{providerData.phone_numbers?.map(
-											(phoneNumber: any, phoneNumberIndex: number) => (
-												<div key={phoneNumberIndex}>
-													<a href={'tel:' + addPlus(phoneNumber.phone_number)}>
-														<span>{addPlus(phoneNumber.phone_number)}</span>
-													</a>
-													{phoneNumber.description && (
-														<span className="ml-1">
-															({phoneNumber.description})
-														</span>
-													)}
-												</div>
-											)
-										)}
-									</Styled.ContentSub>
-								</Styled.Content>
-
-								{Boolean(providerData.email_addresses?.length ?? 0 > 0) && (
 									<Styled.Content>
-										<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
+										<Styled.Subtitle>{t('Phone number')}</Styled.Subtitle>
 										<Styled.ContentSub>
-											{providerData.email_addresses?.map(
-												(emailAddress: any, emailAddressIndex: number) => (
-													<div key={emailAddressIndex}>
-														<a href={'mailto:' + emailAddress.email_address}>
-															{emailAddress.email_address}
+											{providerData.phone_numbers?.map(
+												(phoneNumber: any, phoneNumberIndex: number) => (
+													<div key={phoneNumberIndex}>
+														<a
+															href={'tel:' + addPlus(phoneNumber.phone_number)}
+														>
+															<span>{addPlus(phoneNumber.phone_number)}</span>
 														</a>
-														{emailAddress.description && (
+														{phoneNumber.description && (
 															<span className="ml-1">
-																({emailAddress.description})
+																({phoneNumber.description})
 															</span>
 														)}
 													</div>
@@ -247,10 +234,31 @@ const ContactDetails: React.FC<Props> = ({
 											)}
 										</Styled.ContentSub>
 									</Styled.Content>
-								)}
-							</Styled.Section>
-						)
-					)}
+
+									{Boolean(providerData.email_addresses?.length ?? 0 > 0) && (
+										<Styled.Content>
+											<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
+											<Styled.ContentSub>
+												{providerData.email_addresses?.map(
+													(emailAddress: any, emailAddressIndex: number) => (
+														<div key={emailAddressIndex}>
+															<a href={'mailto:' + emailAddress.email_address}>
+																{emailAddress.email_address}
+															</a>
+															{emailAddress.description && (
+																<span className="ml-1">
+																	({emailAddress.description})
+																</span>
+															)}
+														</div>
+													)
+												)}
+											</Styled.ContentSub>
+										</Styled.Content>
+									)}
+								</Styled.Section>
+							)
+						)}
 				</Styled.Body>
 			)}
 		</Styled.ContactDetailsContainer>
