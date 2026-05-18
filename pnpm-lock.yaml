@@ -97,7 +97,10 @@ dependencies:
     version: 0.4.12
   linkify-react:
     specifier: ^4.3.2
-    version: registry.npmjs.org/linkify-react@4.3.2(linkifyjs@4.3.2)(react@19.1.0)
+    version: registry.npmjs.org/linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.1.0)
+  linkifyjs:
+    specifier: ^4.3.3
+    version: registry.npmjs.org/linkifyjs@4.3.3
   moment:
     specifier: ^2.29.4
     version: 2.29.4
@@ -8019,7 +8022,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: registry.npmjs.org/graceful-fs@4.2.10
+      graceful-fs: registry.npmjs.org/graceful-fs@4.2.11
 
   /jsonpointer@5.0.1:
     resolution: {integrity: sha512-p/nXbhSEcu3pZRdkW1OfJhpsVtW1gd4Wa1fnQc9YLiTfAjn0312eMKimbdIQzuZl9aa9xUGaRlP9T/CJE/ditQ==}
@@ -15528,7 +15531,7 @@ packages:
     version: 4.1.2
     dependencies:
       pascal-case: registry.npmjs.org/pascal-case@3.1.2
-      tslib: registry.npmjs.org/tslib@2.4.0
+      tslib: registry.npmjs.org/tslib@2.8.1
 
   registry.npmjs.org/camelcase@5.3.1:
     resolution: {integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/camelcase/-/camelcase-5.3.1.tgz}
@@ -16300,7 +16303,7 @@ packages:
     version: 3.0.4
     dependencies:
       no-case: registry.npmjs.org/no-case@3.0.4
-      tslib: registry.npmjs.org/tslib@2.4.0
+      tslib: registry.npmjs.org/tslib@2.8.1
 
   registry.npmjs.org/dotenv-cli@10.0.0:
     resolution: {integrity: sha512-lnOnttzfrzkRx2echxJHQRB6vOAMSCzzZg79IxpC00tU42wZPuZkQxNNrrwVAxaQZIIh001l4PxVlCrBxngBzA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/dotenv-cli/-/dotenv-cli-10.0.0.tgz}
@@ -19239,7 +19242,7 @@ packages:
     version: 1.2.4
     dev: true
 
-  registry.npmjs.org/linkify-react@4.3.2(linkifyjs@4.3.2)(react@19.1.0):
+  registry.npmjs.org/linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.1.0):
     resolution: {integrity: sha512-mi744h1hf+WDsr+paJgSBBgYNLMWNSHyM9V9LVUo03RidNGdw1VpI7Twnt+K3pEh3nIzB4xiiAgZxpd61ItKpQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/linkify-react/-/linkify-react-4.3.2.tgz}
     id: registry.npmjs.org/linkify-react/4.3.2
     name: linkify-react
@@ -19248,14 +19251,14 @@ packages:
       linkifyjs: ^4.0.0
       react: '>= 15.0.0'
     dependencies:
-      linkifyjs: registry.npmjs.org/linkifyjs@4.3.2
+      linkifyjs: registry.npmjs.org/linkifyjs@4.3.3
       react: registry.npmjs.org/react@19.1.0
     dev: false
 
-  registry.npmjs.org/linkifyjs@4.3.2:
-    resolution: {integrity: sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/linkifyjs/-/linkifyjs-4.3.2.tgz}
+  registry.npmjs.org/linkifyjs@4.3.3:
+    resolution: {integrity: sha512-P8aEP5U/D1/IlTY2OeYsErdwh9bGuLE30NcXtKEjgdHcahveQoQwM2yZNsioQHsWFz0P7KKudisbrzCgR0sDHg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/linkifyjs/-/linkifyjs-4.3.3.tgz}
     name: linkifyjs
-    version: 4.3.2
+    version: 4.3.3
     dev: false
 
   registry.npmjs.org/listr2@3.14.0(enquirer@2.3.6):
@@ -19399,7 +19402,7 @@ packages:
     name: lower-case
     version: 2.0.2
     dependencies:
-      tslib: registry.npmjs.org/tslib@2.4.0
+      tslib: registry.npmjs.org/tslib@2.8.1
 
   registry.npmjs.org/lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/lru-cache/-/lru-cache-10.4.3.tgz}
@@ -19636,7 +19639,7 @@ packages:
     version: 3.0.4
     dependencies:
       lower-case: registry.npmjs.org/lower-case@2.0.2
-      tslib: registry.npmjs.org/tslib@2.4.0
+      tslib: registry.npmjs.org/tslib@2.8.1
 
   registry.npmjs.org/node-fetch@2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.7.tgz}
@@ -19883,7 +19886,7 @@ packages:
     version: 3.0.4
     dependencies:
       dot-case: registry.npmjs.org/dot-case@3.0.4
-      tslib: registry.npmjs.org/tslib@2.4.0
+      tslib: registry.npmjs.org/tslib@2.8.1
 
   registry.npmjs.org/parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz}
@@ -19934,7 +19937,7 @@ packages:
     version: 3.1.2
     dependencies:
       no-case: registry.npmjs.org/no-case@3.0.4
-      tslib: registry.npmjs.org/tslib@2.4.0
+      tslib: registry.npmjs.org/tslib@2.8.1
 
   registry.npmjs.org/path-exists@3.0.0:
     resolution: {integrity: sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/path-exists/-/path-exists-3.0.0.tgz}
@@ -21329,11 +21332,6 @@ packages:
     version: 1.14.1
     dev: false
 
-  registry.npmjs.org/tslib@2.4.0:
-    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz}
-    name: tslib
-    version: 2.4.0
-
   registry.npmjs.org/tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz}
     name: tslib
@@ -21344,7 +21342,6 @@ packages:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz}
     name: tslib
     version: 2.8.1
-    dev: true
 
   registry.npmjs.org/tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.6.0.tgz}
