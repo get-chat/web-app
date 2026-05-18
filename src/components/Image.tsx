@@ -1,9 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import axios, { CancelTokenSource } from 'axios';
-import { binaryToBase64 } from '../helpers/ImageHelper';
+import React from 'react';
 import { isEmptyString } from '../helpers/Helpers';
 import { EMPTY_IMAGE_BASE64 } from '../Constants';
-import { generateCancelToken } from '../helpers/ApiHelper';
 
 interface Props {
 	src?: string | undefined;
@@ -28,60 +25,19 @@ const Image: React.FC<Props> = ({
 	onError,
 	_ref,
 }) => {
-	const [data, setData] = useState<string>();
-	const [mime, setMime] = useState('');
-	const [fallbackSrc, setFallbackSrc] = useState<string>();
-
-	const cancelTokenSourceRef = useRef<CancelTokenSource | undefined>();
-
-	useEffect(() => {
-		// Generate a token
-		cancelTokenSourceRef.current = generateCancelToken();
-
-		if (!src) return;
-
-		axios
-			.get(src, {
-				responseType: 'arraybuffer',
-				cancelToken: cancelTokenSourceRef.current.token,
-			})
-			.then((res) => {
-				const mimetype = res.headers['content-type'];
-				const base64 = binaryToBase64(res.data);
-
-				setData(base64);
-				setMime(mimetype);
-			})
-			.catch((error) => {
-				console.log(error);
-				onError?.();
-				if (error.response === undefined) {
-					setFallbackSrc(src);
-				}
-			});
-
-		return () => {
-			// Cancelling ongoing requests
-			cancelTokenSourceRef.current?.cancel();
-		};
-	}, [src]);
-
-	const getSrc = () => {
-		return !isEmptyString(data) && !isEmptyString(mime) !== undefined
-			? `data:${mime};base64,${data}`
-			: fallbackSrc ?? EMPTY_IMAGE_BASE64;
-	};
+	const resolvedSrc = !isEmptyString(src) ? src : EMPTY_IMAGE_BASE64;
 
 	return (
 		<img
 			ref={_ref}
-			src={getSrc()}
+			src={resolvedSrc}
 			alt={alt}
 			className={className}
 			style={style}
 			height={height}
 			width={width}
 			onClick={onClick}
+			onError={onError}
 		/>
 	);
 };
