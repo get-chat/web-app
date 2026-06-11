@@ -81,6 +81,7 @@ import {
 	fromTaggingEvent,
 } from '@src/helpers/MessageHelper';
 import { processCloudApiWebhookPayload } from '@src/helpers/CloudApiWebhookHelper';
+import { getChatPath } from '@src/helpers/RouteHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
@@ -240,7 +241,7 @@ const Main: React.FC = () => {
 	};
 
 	const goToChatByWaId = (_waId: string) => {
-		navigate(`/main/chat/${_waId}${location.search}`);
+		navigate(`${getChatPath(_waId)}${location.search}`);
 	};
 
 	const displayNotification = (
@@ -707,7 +708,7 @@ const Main: React.FC = () => {
 									prepared.customer_wa_id
 							),
 							() => {
-								navigate(`/main/chat/${prepared.customer_wa_id}`);
+								navigate(getChatPath(prepared.customer_wa_id));
 							}
 						);
 					}

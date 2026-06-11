@@ -11,7 +11,12 @@ module.exports = merge(commonWebpackConfig, {
 		static: {
 			directory: path.resolve(__dirname, '../public'),
 		},
-		historyApiFallback: true,
+		// disableDotRule is required so deep links whose path contains a dot
+		// (e.g. BSUID chat ids like /main/chat/US.123456789012345678) fall back
+		// to index.html instead of being treated as a static file request.
+		historyApiFallback: {
+			disableDotRule: true,
+		},
 		compress: true,
 		port: 3000,
 		open: true,

@@ -1098,7 +1098,7 @@ const ChatView: React.FC<Props> = (props) => {
 					// To prevent missing data on refresh
 					//closeChat();
 
-					createPersonAndStartChat(addPlus(waId), waId?.[0]);
+					createPersonAndStartChat(addPlus(waId) ?? '', waId?.[0]);
 				}
 			} else {
 				window.displayError(error);

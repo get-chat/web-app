@@ -4,6 +4,7 @@ import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import { getChatPath } from '@src/helpers/RouteHelper';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
@@ -62,7 +63,7 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 
 		// Skipping verifying as it is deprecated
 
-		navigate(`/main/chat/${waId}${location.search}`, {
+		navigate(`${getChatPath(waId)}${location.search}`, {
 			state: {
 				person: {
 					name: data?.name,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import { getChatPath } from '@src/helpers/RouteHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { Message } from '@src/types/messages';
 import * as Styled from './ContactsMessage.styles';
@@ -18,7 +19,7 @@ const ContactsMessage: React.FC<Props> = ({ data }) => {
 
 	const handleClick = (targetWaId: string) => {
 		const waId = prepareWaId(targetWaId);
-		navigate(`/main/chat/${waId}${location.search}`);
+		navigate(`${getChatPath(waId)}${location.search}`);
 	};
 
 	return (
