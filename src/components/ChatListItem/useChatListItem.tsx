@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import { isChatExpired } from '@src/helpers/ChatHelper';
+import { getChatPath } from '@src/helpers/RouteHelper';
 
 const useChatListItem = ({ props }: { props: any }) => {
 	const data: Chat = props.chatData;
@@ -167,7 +168,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 		const files = getDroppedFiles(event);
 
 		// Switching to related chat
-		navigate(`/main/chat/${data.wa_id}${location.search}`);
+		navigate(`${getChatPath(data.wa_id)}${location.search}`);
 
 		// Sending files via eventbus
 		PubSub.publish(EVENT_TOPIC_DROPPED_FILES, files);
@@ -208,7 +209,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 				return [...prevState];
 			});
 		} else {
-			navigate(`/main/chat/${data.wa_id}${location.search}`);
+			navigate(`${getChatPath(data.wa_id)}${location.search}`);
 		}
 	};
 

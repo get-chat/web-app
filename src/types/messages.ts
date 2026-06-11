@@ -62,6 +62,9 @@ export interface Message {
 export interface MessageWabaPayload {
 	id: string;
 	from?: string;
+	// Business-Scoped User ID of the sender; the only sender identifier present
+	// when the contact hides their phone number (BSUID-only contacts).
+	from_user_id?: string;
 	type: MessageType;
 	timestamp: string;
 	to?: string;

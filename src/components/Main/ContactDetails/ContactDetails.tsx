@@ -11,7 +11,7 @@ import googleLogo from '../../../assets/images/ic-google.png';
 // @ts-ignore
 import hubspotLogo from '../../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
-import { addPlus } from '@src/helpers/PhoneNumberHelper';
+import { addPlus, isPhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import { Trans, useTranslation } from 'react-i18next';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
@@ -177,7 +177,7 @@ const ContactDetails: React.FC<Props> = ({
 						)}
 					</Styled.Section>
 
-					{!isUserActionsRestricted && (
+					{!isUserActionsRestricted && isPhoneNumber(contactData.wa_id) && (
 						<Styled.Section>
 							<Styled.SectionTitle>
 								{t('WhatsApp Phone Number')}

@@ -81,7 +81,8 @@ export const fromIncomingMessageWabaPayload = (
 	return {
 		waba_payload: wabaPayload,
 		id: wabaPayload.id,
-		customer_wa_id: wabaPayload.from ?? wabaPayload.wa_id ?? '',
+		customer_wa_id:
+			wabaPayload.from ?? wabaPayload.from_user_id ?? wabaPayload.wa_id ?? '',
 		from_us: false,
 		received: true,
 		tags: [],

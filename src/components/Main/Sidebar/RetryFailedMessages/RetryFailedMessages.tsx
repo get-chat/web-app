@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { ChatList } from '@src/types/chats';
 import { getChatContactName } from '@src/helpers/ChatHelper';
+import { getChatPath } from '@src/helpers/RouteHelper';
 
 interface Props {
 	contactProvidersData: { [key: string]: any };
@@ -49,7 +50,7 @@ const RetryFailedMessages: React.FC<Props> = ({
 		const firstFailedMessage = getFirstFailedPendingMessage(pendingMessages);
 		const waId = firstFailedMessage?.requestBody?.wa_id;
 		if (waId) {
-			navigate(`/main/chat/${waId}${location.search}`);
+			navigate(`${getChatPath(waId)}${location.search}`);
 		}
 	};
 

@@ -107,6 +107,7 @@ import {
 	setNewMessages,
 } from '@src/store/reducers/newMessagesReducer';
 import { isUserInGroup } from '@src/helpers/UserHelper';
+import { getChatPath } from '@src/helpers/RouteHelper';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
 import { fetchChat, fetchChats } from '@src/api/chatsApi';
@@ -876,7 +877,7 @@ const Sidebar: React.FC<Props> = ({
 
 	const goToMessage = (chatMessage: Message) => {
 		if (waId !== chatMessage.customer_wa_id) {
-			navigate(`/main/chat/${chatMessage.customer_wa_id}`, {
+			navigate(getChatPath(chatMessage.customer_wa_id), {
 				state: {
 					goToMessage: {
 						id: chatMessage.id,

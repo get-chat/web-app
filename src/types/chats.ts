@@ -7,6 +7,10 @@ export interface Chat {
 	contact: Person;
 	new_messages: number;
 	wa_id: string;
+	// Business-Scoped User ID, set when the contact hides their phone number.
+	bsuid?: string | null;
+	// Null for username-only (BSUID) contacts.
+	phone_number?: string | null;
 	last_message?: Message;
 	assigned_to_user?: User;
 	assigned_group: any;

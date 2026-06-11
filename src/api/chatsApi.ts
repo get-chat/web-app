@@ -22,7 +22,9 @@ export const fetchChats = async (
 };
 
 export const fetchChat = async (wa_id: string) => {
-	const response = await axios.get<Chat>(`/chats/${wa_id}/`);
+	const response = await axios.get<Chat>(
+		`/chats/${encodeURIComponent(wa_id)}/`
+	);
 	return response.data;
 };
 
@@ -31,7 +33,7 @@ export const updateResolved = async (
 	data: ResolveChatRequest
 ) => {
 	const response = await api.patch<ResolveChatResponse>(
-		`/chats/${wa_id}/resolve`,
+		`/chats/${encodeURIComponent(wa_id)}/resolve`,
 		data
 	);
 	return response.data;
