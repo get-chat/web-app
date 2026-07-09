@@ -38,6 +38,10 @@ export const EVENT_TOPIC_USER_AVAILABILITY = 'user_availability';
 export const WS_EVENT_TYPE_WABA = 'waba_webhook';
 export const WS_EVENT_TYPE_GETCHAT = 'getchat_webhook';
 
+// Cloud API webhook change fields for outbound message echoes
+export const WEBHOOK_FIELD_MESSAGE_ECHOES = 'message_echoes';
+export const WEBHOOK_FIELD_SMB_MESSAGE_ECHOES = 'smb_message_echoes';
+
 export const EMOJI_SET = 'facebook';
 export const EMOJI_SHEET_SIZE = 64;
 

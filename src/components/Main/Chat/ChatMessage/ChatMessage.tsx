@@ -37,6 +37,7 @@ import {
 	generateImageLink,
 	generateStickerLink,
 	generateVideoLink,
+	getEchoOriginLabel,
 	getMessageCaption,
 	getMessageTimestamp,
 	getSenderName,
@@ -46,9 +47,11 @@ import {
 	isJustSent,
 	isPending,
 	isRead,
+	isUnsupportedMessageType,
 } from '@src/helpers/MessageHelper';
 import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import MissingContent from './MissingContent';
 import * as Styled from './ChatMessage.styles';
 
 interface Props {
@@ -100,6 +103,8 @@ const ChatMessage: React.FC<Props> = ({
 		reactionsHistory,
 	});
 
+	const echoOriginLabel = getEchoOriginLabel(data);
+
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
@@ -137,7 +142,9 @@ const ChatMessage: React.FC<Props> = ({
 					{(displaySender || displayDate) && (
 						<Styled.SenderName $isOutgoing={data.from_us}>
 							{data.from_us
-								? getSenderName(data)
+								? echoOriginLabel
+									? t(echoOriginLabel)
+									: getSenderName(data)
 								: contactProvidersData?.[data.waba_payload?.wa_id ?? '']?.[0]
 										?.name ?? getSenderName(data)}
 						</Styled.SenderName>
@@ -270,6 +277,10 @@ const ChatMessage: React.FC<Props> = ({
 
 						{data.waba_payload?.type === MessageType.contacts && (
 							<ContactsMessage data={data} />
+						)}
+
+						{isUnsupportedMessageType(data.waba_payload?.type) && (
+							<MissingContent>{t('Unsupported message')}</MissingContent>
 						)}
 
 						{data.waba_payload?.text?.body ??

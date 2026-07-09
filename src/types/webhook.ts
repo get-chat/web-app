@@ -1,4 +1,8 @@
-import { MessageWabaPayload, WebhookMessageStatus } from '@src/types/messages';
+import {
+	Message,
+	MessageWabaPayload,
+	WebhookMessageStatus,
+} from '@src/types/messages';
 import { ContactWabaPayload } from '@src/types/contacts';
 
 export interface WabaWebhook {
@@ -9,6 +13,9 @@ export interface WabaWebhook {
 export interface WabaWebhookWabaPayload {
 	object: string;
 	entry: WabaWebhookEntry[];
+	// Message echo events (field: message_echoes | smb_message_echoes) carry
+	// the getchat-serialized messages next to the Cloud API envelope
+	echo_messages?: Message[];
 }
 
 export interface WabaWebhookEntry {

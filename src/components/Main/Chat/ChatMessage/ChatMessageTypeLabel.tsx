@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MessageType } from '@src/types/messages';
+import { isUnsupportedMessageType } from '@src/helpers/MessageHelper';
 
 interface Props {
 	type: string;
@@ -22,6 +23,10 @@ const ChatMessageTypeLabel: React.FC<Props> = ({ type }) => {
 			{type === MessageType.interactive && <span>{t('Interactive')}</span>}
 
 			{type === MessageType.contacts && <span>{t('Contacts')}</span>}
+
+			{isUnsupportedMessageType(type) && (
+				<span>{t('Unsupported message')}</span>
+			)}
 		</span>
 	);
 };

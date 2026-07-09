@@ -5,6 +5,7 @@ import ChatMessageList from '@src/interfaces/ChatMessageList';
 import {
 	ChatTagging,
 	Message,
+	MessageEchoOrigin,
 	MessageStatus,
 	MessageType,
 	MessageWabaPayload,
@@ -167,12 +168,29 @@ export const getSenderName = (message: Message) => {
 	return !message.from_us ? message.contact?.waba_payload?.profile?.name : 'Us';
 };
 
+// Untranslated label; callers are expected to pass it through t()
+export const getEchoOriginLabel = (message: Message) => {
+	if (!message.echo_origin) return undefined;
+	return message.echo_origin === MessageEchoOrigin.smb
+		? 'via WhatsApp Business App'
+		: 'via API';
+};
+
 export const getUniqueSender = (message: Message) =>
-	message.sender?.username ?? message.waba_payload?.from;
+	message.sender?.username ??
+	// ':' cannot appear in usernames, so echo groups can never collide with one
+	(message.echo_origin
+		? 'echo:' + message.echo_origin
+		: message.waba_payload?.from);
 
 export const generateMessageInternalId = (getChatId: string) => {
 	return 'getchatId_' + getChatId;
 };
+
+const KNOWN_MESSAGE_TYPES = new Set<string>(Object.values(MessageType));
+
+export const isUnsupportedMessageType = (type: string | undefined) =>
+	type !== undefined && !KNOWN_MESSAGE_TYPES.has(type);
 
 export const hasAnyStatus = (message: Message) => {
 	return (
