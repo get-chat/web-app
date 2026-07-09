@@ -57,6 +57,17 @@ export interface Message {
 	tagging_event?: ChatTagging;
 	forwarded?: boolean;
 	context?: Message;
+	// Client-side only: set for messages delivered via message echo webhook
+	// events (sent outside get.chat), derived from the webhook change field
+	echo_origin?: MessageEchoOrigin;
+}
+
+// Where an echoed outgoing message was sent from, based on the webhook
+// change field: message_echoes (API) or smb_message_echoes (WhatsApp
+// Business app / Coexistence)
+export enum MessageEchoOrigin {
+	api = 'api',
+	smb = 'smb',
 }
 
 export interface MessageWabaPayload {

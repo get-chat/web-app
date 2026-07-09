@@ -1,12 +1,30 @@
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import { WebhookMessageStatus } from '@src/types/messages';
+import { MessageEchoOrigin, WebhookMessageStatus } from '@src/types/messages';
 import { WabaWebhookWabaPayload } from '@src/types/webhook';
-import { fromIncomingMessageWabaPayload } from '@src/helpers/MessageHelper';
+import {
+	fromIncomingMessageWabaPayload,
+	generateMessageInternalId,
+} from '@src/helpers/MessageHelper';
+import { WEBHOOK_FIELD_SMB_MESSAGE_ECHOES } from '@src/Constants';
 
 interface WebhookResult {
 	messages: ChatMessageList;
 	statuses: { [key: string]: WebhookMessageStatus };
 }
+
+const findEchoOrigin = (payload: WabaWebhookWabaPayload): MessageEchoOrigin => {
+	let origin = MessageEchoOrigin.api;
+
+	payload?.entry?.forEach((entry) => {
+		entry?.changes?.forEach((change) => {
+			if (change?.field === WEBHOOK_FIELD_SMB_MESSAGE_ECHOES) {
+				origin = MessageEchoOrigin.smb;
+			}
+		});
+	});
+
+	return origin;
+};
 
 export const processCloudApiWebhookPayload = (
 	payload: WabaWebhookWabaPayload
@@ -33,6 +51,23 @@ export const processCloudApiWebhookPayload = (
 			}
 		});
 	});
+
+	// Message echoes: outgoing messages sent outside get.chat, delivered as
+	// getchat-serialized messages next to the Cloud API envelope
+	const echoMessages = payload?.echo_messages;
+	if (echoMessages) {
+		const echoOrigin = findEchoOrigin(payload);
+		echoMessages.forEach((message) => {
+			// Same keying as prepareMessageList, so a later REST fetch of the
+			// same message dedupes instead of rendering it twice
+			const messageKey =
+				message.waba_payload?.id ?? generateMessageInternalId(message.id);
+			messages[messageKey] = {
+				...message,
+				echo_origin: echoOrigin,
+			};
+		});
+	}
 
 	return { messages, statuses };
 };
