@@ -229,9 +229,10 @@ const ChatView: React.FC<Props> = (props) => {
 		// Generate an abort controller
 		abortControllerRef.current = new AbortController();
 
+		// Scroll to bottom automatically on message
+		let observer: MutationObserver | undefined;
 		if (messagesContainer.current) {
-			// Scroll to bottom automatically on message
-			const observer = new MutationObserver(persistScrollStateOnNewMessage);
+			observer = new MutationObserver(persistScrollStateOnNewMessage);
 			observer.observe(messagesContainer.current, {
 				childList: true,
 			});
@@ -269,6 +270,9 @@ const ChatView: React.FC<Props> = (props) => {
 
 			// Cancel verifying phone number
 			verifyPhoneNumberCancelTokenSourceRef.current?.cancel();
+
+			// Stop observing new messages for automatic scrolling
+			observer?.disconnect();
 
 			// Unsubscribe
 			PubSub.unsubscribe(handleFilesDroppedEventToken);
@@ -898,12 +902,41 @@ const ChatView: React.FC<Props> = (props) => {
 		//setScrollButtonVisible(false);
 	};
 
-	const persistScrollStateOnNewMessage = () => {
+	const scrollToBottom = (smooth: boolean = false) => {
+		const el = messagesContainer.current;
+		el?.scroll({
+			top: el.scrollHeight - el.offsetHeight - SCROLL_OFFSET,
+			...(smooth ? { behavior: 'smooth' as const } : {}),
+		});
+	};
+
+	const persistScrollStateOnNewMessage = (mutations: MutationRecord[]) => {
 		const target = messagesContainer.current;
-		if (target && canSeeLastMessage(target)) {
-			target.scroll({
-				top: target.scrollHeight - target.offsetHeight - SCROLL_OFFSET,
+		if (!target) return;
+
+		// The observer fires after new nodes are already inserted, so measuring
+		// the distance to the bottom at this point includes the height of the
+		// new message itself. Subtract it to know where the user was before the
+		// insertion; otherwise messages taller than the visibility offset
+		// (media, long texts, templates) would never trigger the auto scroll.
+		let addedHeight = 0;
+		mutations.forEach((mutation) => {
+			mutation.addedNodes.forEach((node) => {
+				if (node instanceof HTMLElement) {
+					addedHeight += node.offsetHeight;
+				}
 			});
+		});
+
+		const wasNearBottom =
+			target.scrollHeight -
+				addedHeight -
+				target.scrollTop -
+				target.clientHeight <
+			SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET;
+
+		if (wasNearBottom) {
+			scrollToBottom();
 		}
 	};
 
