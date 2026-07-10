@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { Tag } from '@src/types/tags';
-import { fetchTags } from '@src/api/tagsApi';
+import { createTag, fetchTags } from '@src/api/tagsApi';
 import { fetchChat } from '@src/api/chatsApi';
 import { createChatTagging, deleteChatTagging } from '@src/api/chatTaggingApi';
 import { useEffect, useState } from 'react';
@@ -9,6 +9,7 @@ import {
 	addCurrentChatTag,
 	removeCurrentChatTag,
 } from '@src/store/reducers/currentChatTagsReducer';
+import { addTag } from '@src/store/reducers/tagsReducer';
 
 interface Props {
 	loadInitially?: boolean;
@@ -118,6 +119,22 @@ const useTags = ({ loadInitially, waId }: Props) => {
 		}
 	};
 
+	const doCreateTag = async (name: string, color: string): Promise<Tag> => {
+		const createdTag = await createTag({
+			name: name,
+			web_inbox_color: color,
+		});
+
+		// Make the new tag available everywhere it is listed
+		dispatch(addTag(createdTag));
+		setAllTags((prev) => makeUniqueTagsArray([...prev, createdTag]));
+
+		// Assign it to the current chat right away
+		await doCreateChatTagging(createdTag);
+
+		return createdTag;
+	};
+
 	return {
 		isLoading,
 		chatTags,
@@ -125,6 +142,7 @@ const useTags = ({ loadInitially, waId }: Props) => {
 		unusedTags,
 		doDeleteChatTagging,
 		doCreateChatTagging,
+		doCreateTag,
 	};
 };
 
