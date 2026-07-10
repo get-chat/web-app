@@ -1,4 +1,5 @@
-import React, {
+import {
+	forwardRef,
 	KeyboardEvent,
 	ReactNode,
 	useEffect,
@@ -34,7 +35,7 @@ interface Props {
 
 // forwardRef so the component can safely be a direct child of a MUI Menu,
 // whose MenuList may clone children and pass a ref for focus management.
-const CreateTagControl = React.forwardRef<HTMLDivElement, Props>(
+const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 	({ doCreateTag, trigger, stopMenuKeyDownPropagation }, ref) => {
 		const { t } = useTranslation();
 
