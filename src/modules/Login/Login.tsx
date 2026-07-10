@@ -21,11 +21,14 @@ import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
-import { login, logout } from '@src/api/authApi';
+import { fetchSessionToken, login, logout } from '@src/api/authApi';
 import * as Styled from './Login.styles';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 import { fetchCurrentUser, updateUserAvailability } from '@src/api/usersApi';
+import { User } from '@src/types/users';
+import CustomAvatar from '@src/components/CustomAvatar';
+import { generateInitialsHelper } from '@src/helpers/Helpers';
 
 const Login: React.FC = () => {
 	const config = useContext(AppConfigContext);
@@ -48,6 +51,7 @@ const Login: React.FC = () => {
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
+	const [sessionUser, setSessionUser] = useState<User>();
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -84,6 +88,7 @@ const Login: React.FC = () => {
 	}, []);
 
 	const doFetchBase = async () => {
+		// Token stored in local storage has priority over the backend session
 		const token = getToken();
 		if (token) {
 			setValidatingToken(true);
@@ -93,6 +98,7 @@ const Login: React.FC = () => {
 
 				// Redirect to main route
 				navigate('/main');
+				return;
 			} catch (error: any | AxiosError) {
 				console.error(error);
 
@@ -103,6 +109,58 @@ const Login: React.FC = () => {
 				}
 			}
 		}
+
+		// No (valid) token, check if there is a backend session (admin panel or SSO)
+		// Skipped for invalidToken error case as the session is being cleared then
+		if (!getToken() && errorCase !== 'invalidToken') {
+			try {
+				// withCredentials sends the session cookie also cross-origin (local dev)
+				setSessionUser(await fetchCurrentUser({ withCredentials: true }));
+			} catch (error) {
+				// No backend session, user has to log in with the form
+			}
+		}
+	};
+
+	const continueWithSession = async () => {
+		setLoggingIn(true);
+
+		try {
+			const data = await fetchSessionToken();
+			await completeLogin(data.token);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+
+			setLoggingIn(false);
+			setSessionUser(undefined);
+			setLoginError('Your session has expired. Please log in again.');
+		}
+	};
+
+	const completeLogin = async (token: string) => {
+		// Store token in local storage
+		storeToken(token);
+
+		// Android web interface
+		if (window.AndroidWebInterface) {
+			window.AndroidWebInterface.registerUserToken(token ?? '');
+		}
+
+		// Check if user availability is enabled
+		if (config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true') {
+			// Get current user id
+			const userData = await fetchCurrentUser();
+
+			// Set as available on login
+			if (!userData.profile.is_available) {
+				await updateUserAvailability(userData.id, { is_available: true });
+			}
+		}
+
+		// Redirect to main route
+		navigate(
+			(location.state?.nextPath ?? '/main') + location.state?.search ?? ''
+		);
 	};
 
 	const doLogin = async (event: React.FormEvent) => {
@@ -120,29 +178,7 @@ const Login: React.FC = () => {
 
 		try {
 			const data = await login({ username, password });
-			// Store token in local storage
-			storeToken(data.token);
-
-			// Android web interface
-			if (window.AndroidWebInterface) {
-				window.AndroidWebInterface.registerUserToken(data.token ?? '');
-			}
-
-			// Check if user availability is enabled
-			if (config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true') {
-				// Get current user id
-				const userData = await fetchCurrentUser();
-
-				// Set as available on login
-				if (!userData.profile.is_available) {
-					await updateUserAvailability(userData.id, { is_available: true });
-				}
-			}
-
-			// Redirect to main route
-			navigate(
-				(location.state?.nextPath ?? '/main') + location.state?.search ?? ''
-			);
+			await completeLogin(data.token);
 		} catch (error: any | AxiosError) {
 			// Hide the loading animation
 			setLoggingIn(false);
@@ -191,7 +227,46 @@ const Login: React.FC = () => {
 					)}
 
 					<h2>{t('Welcome')}</h2>
-					<p>{t('Please login to start')}</p>
+					<p>
+						{sessionUser
+							? t('Pick up where you left off')
+							: t('Please login to start')}
+					</p>
+
+					{sessionUser && (
+						<>
+							<Styled.SessionCard
+								data-testid="continue-with-session"
+								focusRipple
+								onClick={continueWithSession}
+							>
+								<CustomAvatar
+									src={
+										sessionUser.profile?.large_avatar ??
+										sessionUser.profile?.avatar
+									}
+									generateBgColorBy={sessionUser.username}
+								>
+									{generateInitialsHelper(sessionUser.username)}
+								</CustomAvatar>
+								<Styled.SessionCardInfo>
+									<Styled.SessionCardLabel>
+										{t('Continue as')}
+									</Styled.SessionCardLabel>
+									<Styled.SessionCardName>
+										{[sessionUser.first_name, sessionUser.last_name]
+											.filter(Boolean)
+											.join(' ') || sessionUser.username}
+									</Styled.SessionCardName>
+								</Styled.SessionCardInfo>
+								<Styled.SessionCardArrow />
+							</Styled.SessionCard>
+
+							<Styled.OrDivider>
+								{t('or log in with another account')}
+							</Styled.OrDivider>
+						</>
+					)}
 
 					<form onSubmit={doLogin}>
 						<TextField

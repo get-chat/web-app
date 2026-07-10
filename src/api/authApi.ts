@@ -13,6 +13,15 @@ export const login = async (data: LoginRequest) => {
 	return response.data;
 };
 
+// Retrieves the auth token using the backend session cookie, if any
+export const fetchSessionToken = async () => {
+	const response = await api.get<LoginResponse>('/auth/token/current/', {
+		// Send the session cookie also when the API runs on another origin (local dev)
+		withCredentials: true,
+	});
+	return response.data;
+};
+
 export const changePassword = async (data: ChangePasswordRequest) => {
 	const response = await api.put<EmptyResponse>(
 		'/users/password/change/',

@@ -1,4 +1,5 @@
 import axios from './axiosInstance';
+import { AxiosRequestConfig } from 'axios';
 import { PaginatedResponse } from '@src/types/common';
 import {
 	UpdateUserAvailabilityRequest,
@@ -14,8 +15,10 @@ export const fetchUsers = async (limit?: number) => {
 	return response.data;
 };
 
-export const fetchCurrentUser = async (): Promise<User> => {
-	const response = await axios.get<User>('/users/current/');
+export const fetchCurrentUser = async (
+	config?: AxiosRequestConfig
+): Promise<User> => {
+	const response = await axios.get<User>('/users/current/', config);
 	return response.data;
 };
 
