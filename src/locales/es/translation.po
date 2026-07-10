@@ -146,6 +146,15 @@ msgstr "Vacío"
 msgid "Manage tags"
 msgstr "Gestionar etiquetas"
 
+msgid "Create new tag"
+msgstr "Crear nueva etiqueta"
+
+msgid "Tag name"
+msgstr "Nombre de la etiqueta"
+
+msgid "Save"
+msgstr "Guardar"
+
 msgid "Tags"
 msgstr "Etiquetas"
 

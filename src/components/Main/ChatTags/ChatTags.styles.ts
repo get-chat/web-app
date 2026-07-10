@@ -27,6 +27,16 @@ export const EmptyTags = styled.div`
 	margin-top: 4px;
 `;
 
+export const CreateTagContainer = styled.div`
+	margin-top: 16px;
+`;
+
+export const CreateTagForm = styled.form`
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+`;
+
 export const ManageTagsLink = styled.div`
 	margin-top: 12px;
 `;

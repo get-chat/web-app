@@ -143,6 +143,15 @@ msgstr ""
 msgid "Manage tags"
 msgstr ""
 
+msgid "Create new tag"
+msgstr ""
+
+msgid "Tag name"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
 msgid "Tags"
 msgstr ""
 

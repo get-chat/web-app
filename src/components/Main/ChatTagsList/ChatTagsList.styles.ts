@@ -46,3 +46,13 @@ export const ManageTagsLink = styled.div`
 export const DialogContentWrapper = styled.div`
 	margin-bottom: 12px;
 `;
+
+export const CreateTagContainer = styled.div`
+	margin-top: 16px;
+`;
+
+export const CreateTagForm = styled.form`
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+`;

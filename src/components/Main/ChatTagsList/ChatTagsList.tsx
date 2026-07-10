@@ -7,16 +7,23 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	IconButton,
 	Link,
 	ListItem,
+	TextField,
 } from '@mui/material';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
+import { setTags } from '@src/store/reducers/tagsReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@mui/icons-material/Sell';
+import AddIcon from '@mui/icons-material/Add';
+import CheckIcon from '@mui/icons-material/Check';
 import { Tag } from '@src/types/tags';
+import { createTag } from '@src/api/tagsApi';
+import { DEFAULT_TAG_COLOR } from '@src/helpers/TagHelper';
 
 interface Props {
 	open: boolean;
@@ -32,15 +39,44 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 
 	const [isLoading, setLoading] = useState(false);
 
+	const [isCreating, setCreating] = useState(false);
+	const [newTagName, setNewTagName] = useState('');
+	const [isSaving, setSaving] = useState(false);
+
 	const dispatch = useAppDispatch();
 
+	const cancelCreateTag = () => {
+		setCreating(false);
+		setNewTagName('');
+	};
+
 	const close = () => {
+		cancelCreateTag();
 		setOpen(false);
 	};
 
 	const handleClick = (tag: Tag | undefined) => {
 		dispatch(setFilterTagId(tag?.id));
 		close();
+	};
+
+	const handleCreateTag = async () => {
+		const name = newTagName.trim();
+		if (!name || isSaving) return;
+
+		setSaving(true);
+		try {
+			// Created without assigning it to any chat, just made available for filtering.
+			const createdTag = await createTag({
+				name,
+				web_inbox_color: DEFAULT_TAG_COLOR,
+			});
+			dispatch(setTags([...(tags ?? []), createdTag]));
+		} catch (error) {
+			console.error(error);
+		}
+		setSaving(false);
+		cancelCreateTag();
 	};
 
 	return (
@@ -73,6 +109,45 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 						)}
 					</div>
 				)}
+
+				<Styled.CreateTagContainer>
+					{isCreating ? (
+						<Styled.CreateTagForm
+							onSubmit={(event) => {
+								event.preventDefault();
+								handleCreateTag();
+							}}
+						>
+							<TextField
+								variant="standard"
+								size="small"
+								autoFocus
+								fullWidth
+								placeholder={t('Tag name')}
+								value={newTagName}
+								onChange={(event) => setNewTagName(event.target.value)}
+								disabled={isSaving}
+							/>
+							<IconButton
+								type="submit"
+								color="primary"
+								size="small"
+								aria-label={t('Save')}
+								disabled={!newTagName.trim() || isSaving}
+							>
+								<CheckIcon />
+							</IconButton>
+						</Styled.CreateTagForm>
+					) : (
+						<Button
+							startIcon={<AddIcon />}
+							onClick={() => setCreating(true)}
+							size="small"
+						>
+							{t('Create new tag')}
+						</Button>
+					)}
+				</Styled.CreateTagContainer>
 
 				<Styled.ManageTagsLink>
 					<Link
