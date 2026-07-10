@@ -152,6 +152,15 @@ msgstr "Puste"
 msgid "Manage tags"
 msgstr "Zarządzaj tagami"
 
+msgid "Create new tag"
+msgstr "Utwórz nowy tag"
+
+msgid "Tag name"
+msgstr "Nazwa tagu"
+
+msgid "Save"
+msgstr "Zapisz"
+
 msgid "Tags"
 msgstr "Tagi"
 

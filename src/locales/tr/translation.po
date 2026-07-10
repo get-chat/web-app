@@ -148,6 +148,15 @@ msgstr "Boş"
 msgid "Manage tags"
 msgstr "Etiketleri yönet"
 
+msgid "Create new tag"
+msgstr "Yeni etiket oluştur"
+
+msgid "Tag name"
+msgstr "Etiket adı"
+
+msgid "Save"
+msgstr "Kaydet"
+
 msgid "Tags"
 msgstr "Etiketler"
 

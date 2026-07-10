@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	Button,
 	Chip,
@@ -8,13 +8,17 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	IconButton,
 	Link,
+	TextField,
 } from '@mui/material';
 import * as Styled from './ChatTags.styles';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import SellIcon from '@mui/icons-material/Sell';
+import AddIcon from '@mui/icons-material/Add';
+import CheckIcon from '@mui/icons-material/Check';
 import { Tag } from '@src/types/tags';
 import useTags from '@src/hooks/useTags';
 
@@ -36,7 +40,12 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		unusedTags,
 		doDeleteChatTagging,
 		doCreateChatTagging,
+		doCreateTag,
 	} = useTags({ loadInitially: true, waId: waId });
+
+	const [isCreating, setCreating] = useState(false);
+	const [newTagName, setNewTagName] = useState('');
+	const [isSaving, setSaving] = useState(false);
 
 	const onClickTag = async (tag: Tag) => {
 		await doCreateChatTagging(tag);
@@ -46,7 +55,23 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		await doDeleteChatTagging(tag);
 	};
 
+	const cancelCreateTag = () => {
+		setCreating(false);
+		setNewTagName('');
+	};
+
+	const handleCreateTag = async () => {
+		const name = newTagName.trim();
+		if (!name || isSaving) return;
+
+		setSaving(true);
+		await doCreateTag(name);
+		setSaving(false);
+		cancelCreateTag();
+	};
+
 	const close = () => {
+		cancelCreateTag();
 		setOpen(false);
 	};
 
@@ -110,6 +135,45 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 						)}
 					</Styled.TagsContainer>
 				)}
+
+				<Styled.CreateTagContainer>
+					{isCreating ? (
+						<Styled.CreateTagForm
+							onSubmit={(event) => {
+								event.preventDefault();
+								handleCreateTag();
+							}}
+						>
+							<TextField
+								variant="standard"
+								size="small"
+								autoFocus
+								fullWidth
+								placeholder={t('Tag name')}
+								value={newTagName}
+								onChange={(event) => setNewTagName(event.target.value)}
+								disabled={isSaving}
+							/>
+							<IconButton
+								type="submit"
+								color="primary"
+								size="small"
+								aria-label={t('Save')}
+								disabled={!newTagName.trim() || isSaving}
+							>
+								<CheckIcon />
+							</IconButton>
+						</Styled.CreateTagForm>
+					) : (
+						<Button
+							startIcon={<AddIcon />}
+							onClick={() => setCreating(true)}
+							size="small"
+						>
+							{t('Create new tag')}
+						</Button>
+					)}
+				</Styled.CreateTagContainer>
 
 				<Styled.ManageTagsLink>
 					<Link

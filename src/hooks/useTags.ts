@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 import { Tag } from '@src/types/tags';
-import { fetchTags } from '@src/api/tagsApi';
+import { createTag, fetchTags } from '@src/api/tagsApi';
+import { DEFAULT_TAG_COLOR } from '@src/helpers/TagHelper';
 import { fetchChat } from '@src/api/chatsApi';
 import { createChatTagging, deleteChatTagging } from '@src/api/chatTaggingApi';
 import { useEffect, useState } from 'react';
@@ -97,6 +98,26 @@ const useTags = ({ loadInitially, waId }: Props) => {
 		}
 	};
 
+	const doCreateTag = async (name: string) => {
+		const trimmedName = name.trim();
+		if (!trimmedName) return;
+
+		try {
+			const createdTag = await createTag({
+				name: trimmedName,
+				web_inbox_color: DEFAULT_TAG_COLOR,
+			});
+
+			// Make the new tag available in the full list of tags.
+			setAllTags((prev) => makeUniqueTagsArray([...prev, createdTag]));
+
+			// Assign the freshly created tag to the current chat.
+			await doCreateChatTagging(createdTag);
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
+	};
+
 	const doDeleteChatTagging = async (tag: Tag) => {
 		if (!tag.tagging_id) {
 			console.warn('Chat tagging id is missing!', tag);
@@ -125,6 +146,7 @@ const useTags = ({ loadInitially, waId }: Props) => {
 		unusedTags,
 		doDeleteChatTagging,
 		doCreateChatTagging,
+		doCreateTag,
 	};
 };
 

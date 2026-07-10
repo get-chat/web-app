@@ -138,6 +138,15 @@ msgstr "Vazio"
 msgid "Manage tags"
 msgstr "Gerenciar tags"
 
+msgid "Create new tag"
+msgstr "Criar nova tag"
+
+msgid "Tag name"
+msgstr "Nome da tag"
+
+msgid "Save"
+msgstr "Salvar"
+
 msgid "Tags"
 msgstr "Tag"
 
