@@ -15,6 +15,9 @@ export const MapWrapper = styled.div`
 	width: 100%;
 	height: 320px;
 	background-color: rgba(0, 0, 45, 0.06);
+	border-radius: 10px;
+	overflow: hidden;
+	margin-top: 8px;
 `;
 
 // This element's DOM is fully managed by Google Maps once the map is
