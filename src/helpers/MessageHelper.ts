@@ -17,6 +17,12 @@ import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
 
+// WhatsApp renders a link preview only for URLs starting with http:// or
+// https:// (and only for the first URL in the body)
+export const containsPreviewableURL = (text: string): boolean => {
+	return /https?:\/\/\S+/i.test(text);
+};
+
 export const prepareMessageList = (
 	messages: Message[],
 	existingMessages: ChatMessageList = {}

@@ -118,6 +118,7 @@ export interface WabaPayloadContext {
 
 export interface Text {
 	body: string;
+	preview_url?: boolean;
 }
 
 export interface Video {

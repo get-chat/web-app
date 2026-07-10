@@ -1,4 +1,5 @@
 import {
+	containsPreviewableURL,
 	getEchoOriginLabel,
 	getSenderName,
 	getUniqueSender,
@@ -71,6 +72,24 @@ describe('getUniqueSender - echoed messages', () => {
 			)
 		).toBe('echo:smb');
 		expect(getUniqueSender(buildOutgoingMessage())).toBe('4915792500517');
+	});
+});
+
+describe('containsPreviewableURL', () => {
+	it('detects http and https URLs', () => {
+		expect(containsPreviewableURL('Check https://get.chat for info')).toBe(
+			true
+		);
+		expect(containsPreviewableURL('http://example.com')).toBe(true);
+		expect(containsPreviewableURL('HTTPS://EXAMPLE.COM')).toBe(true);
+	});
+
+	it('rejects text without a previewable URL', () => {
+		expect(containsPreviewableURL('Hello world')).toBe(false);
+		// WhatsApp does not render previews for scheme-less URLs
+		expect(containsPreviewableURL('visit example.com today')).toBe(false);
+		expect(containsPreviewableURL('ftp://example.com')).toBe(false);
+		expect(containsPreviewableURL('')).toBe(false);
 	});
 });
 

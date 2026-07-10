@@ -55,6 +55,7 @@ import {
 } from '@src/helpers/ObjectHelper';
 import {
 	fromAssignmentEvent,
+	containsPreviewableURL,
 	fromTaggingEvent,
 	generateMessageInternalId,
 	getMessageTimestamp,
@@ -1444,11 +1445,16 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const sendCustomTextMessage = async (text: string) => {
 		if (waId) {
+			const preparedText = text.trim();
 			await sendMessage(true, undefined, {
 				wa_id: waId,
 				type: MessageType.text,
 				text: {
-					body: text.trim(),
+					body: preparedText,
+					// Render a link preview on the recipient's device
+					...(containsPreviewableURL(preparedText)
+						? { preview_url: true }
+						: {}),
 				},
 			});
 		} else {
