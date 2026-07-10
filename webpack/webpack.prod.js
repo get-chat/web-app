@@ -2,7 +2,7 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const commonWebpackConfig = require('./webpack.common.js');
+const commonWebpackConfig = require('./webpack.common.js')(false);
 const packageJson = require('../package.json');
 const { sentryWebpackPlugin } = require("@sentry/webpack-plugin");
 
