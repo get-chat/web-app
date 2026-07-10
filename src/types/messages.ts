@@ -31,6 +31,7 @@ export interface CreateMessageRequest {
 	voice?: Voice;
 	document?: Document;
 	reaction?: Reaction;
+	location?: Location;
 	pending_message_unique_id?: string;
 }
 
@@ -160,6 +161,7 @@ export interface Location {
 	longitude: number;
 	name?: string;
 	address?: string;
+	url?: string;
 }
 
 export interface Interactive {

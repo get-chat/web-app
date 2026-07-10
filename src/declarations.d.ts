@@ -12,6 +12,7 @@ declare global {
 		displaySuccess: (message: string) => void;
 		goToChatByWaId: (waId: string) => void;
 		customStorage: { [key: string]: string };
+		google?: any;
 	}
 }
 

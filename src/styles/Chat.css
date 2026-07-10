@@ -42,12 +42,34 @@
 
 .chat__message__location__name {
 	margin-top: 5px;
+	font-weight: 600;
 }
 
 .chat__message__location__address {
 	font-size: 12px;
 	color: rgba(0, 0, 45, 0.5);
 	margin-bottom: 10px;
+}
+
+.chat__message__location__url {
+	font-size: 12px;
+	color: var(--color-primary) !important;
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-bottom: 10px;
+}
+
+.chat__message__location__url:hover {
+	text-decoration: underline;
+}
+
+.chat__message__location__actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 8px;
 }
 
 .chat__message__location__share {
@@ -57,6 +79,13 @@
 
 .chat__message__location__share .MuiSvgIcon-root {
 	color: var(--color-primary) !important;
+	height: 0.8em;
+	width: 0.8em;
+}
+
+.chat__message__location__open .MuiSvgIcon-root {
+	/* Follow the button label color */
+	color: inherit !important;
 	height: 0.8em;
 	width: 0.8em;
 }

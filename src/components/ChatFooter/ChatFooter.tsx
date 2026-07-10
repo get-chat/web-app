@@ -11,6 +11,7 @@ import TryIcon from '@mui/icons-material/Try';
 import ImageIcon from '@mui/icons-material/Image';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import ContactsIcon from '@mui/icons-material/Contacts';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import NotesIcon from '@mui/icons-material/Notes';
 import MicIcon from '@mui/icons-material/Mic';
 // @ts-ignore
@@ -31,6 +32,7 @@ import {
 import { replaceEmojis } from '@src/helpers/EmojiHelper';
 import { useTranslation } from 'react-i18next';
 import ContactsModal from '../ContactsModal';
+import LocationModal from '../LocationModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
@@ -117,6 +119,7 @@ const ChatFooter: React.FC<Props> = ({
 		useState(false);
 	const [isEmojiPickerVisible, setEmojiPickerVisible] = useState(false);
 	const [contactsModalVisible, setContactsModalVisible] = useState(false);
+	const [locationModalVisible, setLocationModalVisible] = useState(false);
 	const [isQuickActionsMenuVisible, setQuickActionsMenuVisible] =
 		useState(false);
 
@@ -408,6 +411,15 @@ const ChatFooter: React.FC<Props> = ({
 				recipientWaId={waId}
 			/>
 
+			<LocationModal
+				open={locationModalVisible}
+				onClose={() => setLocationModalVisible(false)}
+				sendMessage={(payload, onSuccess) =>
+					sendMessage(false, undefined, payload, onSuccess)
+				}
+				recipientWaId={waId}
+			/>
+
 			<Row>
 				<Footer className={isExpired ? 'expired' : ''}>
 					<form>
@@ -588,6 +600,19 @@ const ChatFooter: React.FC<Props> = ({
 									>
 										<ActionIcon onClick={openContactsModal} size="small">
 											<ContactsIcon />
+										</ActionIcon>
+									</Tooltip>
+
+									<Tooltip
+										title={t('Location')}
+										placement="top"
+										disableInteractive
+									>
+										<ActionIcon
+											onClick={() => setLocationModalVisible(true)}
+											size="small"
+										>
+											<LocationOnIcon />
 										</ActionIcon>
 									</Tooltip>
 								</AttachmentOptions>
