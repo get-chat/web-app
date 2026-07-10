@@ -1,5 +1,6 @@
 import {
 	addPlus,
+	isIndianPhoneNumber,
 	isPhoneNumber,
 	prepareWaId,
 } from '@src/helpers/PhoneNumberHelper';
@@ -44,6 +45,25 @@ describe('PhoneNumberHelper', () => {
 		it('passes through nullish input', () => {
 			expect(prepareWaId(undefined)).toBeUndefined();
 			expect(prepareWaId(null)).toBeUndefined();
+		});
+	});
+
+	describe('isIndianPhoneNumber', () => {
+		it('recognizes Indian (+91) phone numbers', () => {
+			expect(isIndianPhoneNumber('919876543210')).toBe(true);
+			expect(isIndianPhoneNumber('+919876543210')).toBe(true);
+		});
+
+		it('rejects phone numbers from other countries', () => {
+			expect(isIndianPhoneNumber('905383192532')).toBe(false);
+			// +1 (US) number containing 91 later in the number
+			expect(isIndianPhoneNumber('19155550123')).toBe(false);
+		});
+
+		it('rejects BSUIDs and nullish input', () => {
+			expect(isIndianPhoneNumber('IN.123456789012345678')).toBe(false);
+			expect(isIndianPhoneNumber(undefined)).toBe(false);
+			expect(isIndianPhoneNumber(null)).toBe(false);
 		});
 	});
 

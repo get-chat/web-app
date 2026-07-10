@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
+import { useAppSelector } from '@src/store/hooks';
+import { isIndianPhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { List, Item, Description } from './InteractiveMessageList.styles';
 
 export interface InteractiveParameter {
@@ -82,7 +84,7 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		description:
 			'Address messages give your users a simpler way to share the shipping address with your business.',
 		warning:
-			'Currently, address messages are supported in the following two countries: India and Singapore. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages" target="_blank">Click here</a> to read more information.',
+			'Currently, address messages are only available for businesses based in India and their India customers. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages" target="_blank">Click here</a> to read more information.',
 		payload: {
 			type: 'address_message',
 			header: {
@@ -227,6 +229,22 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 		useState<any>(null);
 	const [isDialogVisible, setDialogVisible] = useState(false);
 
+	const businessPhoneNumber = useAppSelector(
+		(state) => state.phoneNumber.value
+	);
+	const currentChatWaId = useAppSelector((state) => state.waId.value);
+
+	// Address messages are only available for businesses based in India (+91)
+	// and their India customers, so hide them for everyone else
+	const isAddressMessageAvailable =
+		isIndianPhoneNumber(businessPhoneNumber) &&
+		isIndianPhoneNumber(currentChatWaId);
+
+	const availableInteractiveMessages = INTERACTIVE_MESSAGES.filter(
+		(item) =>
+			item.payload.type !== 'address_message' || isAddressMessageAvailable
+	);
+
 	const send = (payload: any) => {
 		onSend(payload);
 	};
@@ -236,7 +254,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
 					<List>
-						{INTERACTIVE_MESSAGES.map((item, index) => (
+						{availableInteractiveMessages.map((item, index) => (
 							<Item key={index}>
 								<Button
 									onClick={() => {
