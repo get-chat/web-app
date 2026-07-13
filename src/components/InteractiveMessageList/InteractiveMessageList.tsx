@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Button } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
+import { useAppSelector } from '@src/store/hooks';
+import { isIndianPhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { List, Item, Description } from './InteractiveMessageList.styles';
 
 export interface InteractiveParameter {
@@ -10,6 +12,9 @@ export interface InteractiveParameter {
 	advanced?: boolean;
 	placeholder?: string;
 	description?: string;
+	maxLength?: number;
+	// Renders a dedicated control instead of a plain text field
+	control?: 'listSections' | 'carouselCards' | 'replyButtons';
 }
 
 export interface DescribedInteractive {
@@ -78,11 +83,164 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 		],
 	},
 	{
+		title: 'Send reply buttons message',
+		description:
+			'Reply buttons messages offer up to <strong>3 buttons</strong> as quick answer options. They are a quicker way for your customers to make a selection, and the tapped button is sent back to you as a reply.',
+		payload: {
+			type: 'button',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				buttons: [
+					{
+						type: 'reply',
+						reply: {
+							id: '',
+							title: '',
+						},
+					},
+				],
+			},
+		},
+		parameters: [
+			{ key: 'header.text', placeholder: 'Header', maxLength: 60 },
+			{
+				key: 'body.text',
+				placeholder: 'Body',
+				required: true,
+				maxLength: 1024,
+			},
+			{ key: 'footer.text', placeholder: 'Footer', maxLength: 60 },
+			{ key: 'action.buttons', control: 'replyButtons' },
+		],
+	},
+	{
+		title: 'Send list message',
+		description:
+			'List messages offer your customers a choice of up to <strong>10 options</strong>, organized in one or more sections. The options are revealed when the customer taps the <strong>button</strong> and the selected option is sent back to you as a reply.',
+		payload: {
+			type: 'list',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				button: '',
+				sections: [
+					{
+						title: '',
+						rows: [
+							{
+								id: '',
+								title: '',
+								description: '',
+							},
+						],
+					},
+				],
+			},
+		},
+		parameters: [
+			{ key: 'header.text', placeholder: 'Header', maxLength: 60 },
+			{
+				key: 'body.text',
+				placeholder: 'Body',
+				required: true,
+				maxLength: 4096,
+			},
+			{ key: 'footer.text', placeholder: 'Footer', maxLength: 60 },
+			{
+				key: 'action.button',
+				placeholder: 'Button text',
+				required: true,
+				maxLength: 20,
+			},
+			{ key: 'action.sections', control: 'listSections' },
+		],
+	},
+	{
+		title: 'Send media carousel message',
+		description:
+			'Media carousel messages display a set of <strong>2 to 10</strong> horizontally scrollable cards. Each card shows an <strong>image or video</strong>, an optional body text and a <strong>URL button</strong>.',
+		info: 'Cards with quick-reply buttons are currently only supported when sent via the API.',
+		payload: {
+			type: 'carousel',
+			body: {
+				text: '',
+			},
+			action: {
+				cards: [
+					{
+						type: 'cta_url',
+						header: {
+							type: 'image',
+							image: {
+								link: '',
+							},
+						},
+						body: {
+							text: '',
+						},
+						action: {
+							name: 'cta_url',
+							parameters: {
+								display_text: '',
+								url: '',
+							},
+						},
+					},
+					{
+						type: 'cta_url',
+						header: {
+							type: 'image',
+							image: {
+								link: '',
+							},
+						},
+						body: {
+							text: '',
+						},
+						action: {
+							name: 'cta_url',
+							parameters: {
+								display_text: '',
+								url: '',
+							},
+						},
+					},
+				],
+			},
+		},
+		parameters: [
+			{
+				key: 'body.text',
+				placeholder: 'Body',
+				required: true,
+				maxLength: 1024,
+			},
+			{ key: 'action.cards', control: 'carouselCards' },
+		],
+	},
+	{
 		title: 'Send address message',
 		description:
 			'Address messages give your users a simpler way to share the shipping address with your business.',
 		warning:
-			'Currently, address messages are supported in the following two countries: India and Singapore. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages" target="_blank">Click here</a> to read more information.',
+			'Currently, address messages are only available for businesses based in India and their India customers. <a href="https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages" target="_blank">Click here</a> to read more information.',
 		payload: {
 			type: 'address_message',
 			header: {
@@ -227,6 +385,22 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 		useState<any>(null);
 	const [isDialogVisible, setDialogVisible] = useState(false);
 
+	const businessPhoneNumber = useAppSelector(
+		(state) => state.phoneNumber.value
+	);
+	const currentChatWaId = useAppSelector((state) => state.waId.value);
+
+	// Address messages are only available for businesses based in India (+91)
+	// and their India customers, so hide them for everyone else
+	const isAddressMessageAvailable =
+		isIndianPhoneNumber(businessPhoneNumber) &&
+		isIndianPhoneNumber(currentChatWaId);
+
+	const availableInteractiveMessages = INTERACTIVE_MESSAGES.filter(
+		(item) =>
+			item.payload.type !== 'address_message' || isAddressMessageAvailable
+	);
+
 	const send = (payload: any) => {
 		onSend(payload);
 	};
@@ -236,7 +410,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 			<div className="interactiveMessagesOuter">
 				<div className="interactiveMessagesWrapper">
 					<List>
-						{INTERACTIVE_MESSAGES.map((item, index) => (
+						{availableInteractiveMessages.map((item, index) => (
 							<Item key={index}>
 								<Button
 									onClick={() => {

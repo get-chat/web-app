@@ -16,6 +16,10 @@ export interface WabaWebhookWabaPayload {
 	// Message echo events (field: message_echoes | smb_message_echoes) carry
 	// the getchat-serialized messages next to the Cloud API envelope
 	echo_messages?: Message[];
+	// Incoming message events carry the getchat-serialized messages as well;
+	// they include the fields the Cloud API envelope lacks, such as the
+	// resolved context (the replied message)
+	incoming_messages?: Message[];
 }
 
 export interface WabaWebhookEntry {

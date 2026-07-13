@@ -31,6 +31,7 @@ export interface CreateMessageRequest {
 	voice?: Voice;
 	document?: Document;
 	reaction?: Reaction;
+	location?: Location;
 	pending_message_unique_id?: string;
 }
 
@@ -117,6 +118,7 @@ export interface WabaPayloadContext {
 
 export interface Text {
 	body: string;
+	preview_url?: boolean;
 }
 
 export interface Video {
@@ -160,6 +162,7 @@ export interface Location {
 	longitude: number;
 	name?: string;
 	address?: string;
+	url?: string;
 }
 
 export interface Interactive {
@@ -184,6 +187,7 @@ export interface Body {
 
 export interface Action {
 	name: string;
+	button?: string;
 	buttons?: Button[];
 	parameters?: {
 		url?: string;
@@ -191,8 +195,28 @@ export interface Action {
 		flow_cta?: string;
 	};
 	sections?: any[];
+	cards?: CarouselCard[];
 	catalog_id?: string;
 	product_retailer_id?: string;
+}
+
+export interface CarouselCard {
+	card_index?: number;
+	type?: string;
+	header?: any;
+	body?: Body;
+	action?: Action;
+}
+
+export interface ListRow {
+	id: string;
+	title: string;
+	description?: string;
+}
+
+export interface ListSection {
+	title?: string;
+	rows: ListRow[];
 }
 
 export interface Button {

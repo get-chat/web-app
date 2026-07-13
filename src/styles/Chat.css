@@ -22,6 +22,27 @@
 	opacity: 0.3;
 }
 
+@keyframes chatMessageAppear {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.chat__message__outer--appear {
+	animation: chatMessageAppear 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat__message__outer--appear {
+		animation: none;
+	}
+}
+
 .chat__media,
 .chat__location__iframe {
 	border-radius: 6px;
@@ -42,12 +63,34 @@
 
 .chat__message__location__name {
 	margin-top: 5px;
+	font-weight: 600;
 }
 
 .chat__message__location__address {
 	font-size: 12px;
 	color: rgba(0, 0, 45, 0.5);
 	margin-bottom: 10px;
+}
+
+.chat__message__location__url {
+	font-size: 12px;
+	color: var(--color-primary) !important;
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	margin-bottom: 10px;
+}
+
+.chat__message__location__url:hover {
+	text-decoration: underline;
+}
+
+.chat__message__location__actions {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 8px;
 }
 
 .chat__message__location__share {
@@ -57,6 +100,13 @@
 
 .chat__message__location__share .MuiSvgIcon-root {
 	color: var(--color-primary) !important;
+	height: 0.8em;
+	width: 0.8em;
+}
+
+.chat__message__location__open .MuiSvgIcon-root {
+	/* Follow the button label color */
+	color: inherit !important;
 	height: 0.8em;
 	width: 0.8em;
 }
@@ -210,6 +260,36 @@ a.chat__document:hover {
 	margin-left: 5px;
 }
 
+/* Status changes swap one icon for another, so animate the icons in.
+The pending icon is excluded: it is always the initial status, appearing
+only together with the message itself, and its element remounts (and
+would animate again) when the pending message is replaced by the
+stored one. */
+.chat__iconDone,
+.chat__iconDoneAll,
+.chat__iconError {
+	animation: chatStatusIconAppear 0.3s ease-out;
+}
+
+@keyframes chatStatusIconAppear {
+	from {
+		opacity: 0;
+		transform: scale(0.5);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat__iconDone,
+	.chat__iconDoneAll,
+	.chat__iconError {
+		animation: none;
+	}
+}
+
 .chat__iconError * {
 	fill: red;
 }
@@ -224,6 +304,9 @@ a.chat__document:hover {
 	overflow-x: hidden;
 	border-left: 1px solid rgba(0, 0, 45, 0.05);
 	min-height: 0;
+	/* Served from the public folder, not bundled by webpack */
+	background-image: url('/pattern.svg');
+	background-repeat: repeat;
 }
 
 .chat__body__empty {

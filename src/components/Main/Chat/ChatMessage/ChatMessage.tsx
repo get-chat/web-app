@@ -165,6 +165,7 @@ const ChatMessage: React.FC<Props> = ({
 						$hasMedia={hasMediaToPreview(data)}
 						$hasReaction={reactions.length > 0}
 						$isSenderHidden={!displaySender && !displayDate}
+						$isFirstInGroup={displaySender || displayDate}
 						$isFailed={data.is_failed}
 					>
 						{isActionsEnabled && (

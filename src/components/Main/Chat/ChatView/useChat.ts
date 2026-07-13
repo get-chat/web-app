@@ -3,6 +3,7 @@ import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import ReactionList from '@src/interfaces/ReactionList';
 import {
+	containsPreviewableURL,
 	generateMessageInternalId,
 	getMessageTimestamp,
 } from '@src/helpers/MessageHelper';
@@ -148,6 +149,10 @@ const useChat = ({
 				type: MessageType.text,
 				text: {
 					body: preparedInput,
+					// Render a link preview on the recipient's device
+					...(containsPreviewableURL(preparedInput)
+						? { preview_url: true }
+						: {}),
 				},
 			};
 		} else if (customPayload) {

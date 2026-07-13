@@ -33,3 +33,17 @@ export const addPlus = (phoneNumber: string | undefined | null) => {
 	if (!phoneNumber || !isPhoneNumber(phoneNumber)) return phoneNumber;
 	return phoneNumber.includes('+') ? phoneNumber : `+${phoneNumber}`;
 };
+
+// India's country calling code. E.164 country codes are prefix-free, so a
+// startsWith check on a normalized number is unambiguous.
+const INDIA_CALLING_CODE = '91';
+
+// True when the identifier is a phone number from India (+91).
+// BSUIDs and other non phone-number identifiers return false.
+export const isIndianPhoneNumber = (
+	identifier: string | undefined | null
+): boolean => {
+	if (!isPhoneNumber(identifier)) return false;
+	const digits = prepareWaId(identifier);
+	return typeof digits === 'string' && digits.startsWith(INDIA_CALLING_CODE);
+};

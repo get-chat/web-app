@@ -7,12 +7,14 @@ import SellIcon from '@mui/icons-material/Sell';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import { getHubURL } from '@src/helpers/URLHelper';
 import SettingsIcon from '@mui/icons-material/Settings';
+import AddIcon from '@mui/icons-material/Add';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckIcon from '@mui/icons-material/Check';
 import useTags from '@src/hooks/useTags';
+import CreateTagControl from '@src/components/CreateTagControl/CreateTagControl';
 
 interface Props {
 	waId: string | undefined;
@@ -27,7 +29,7 @@ const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
 	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const config = useContext(AppConfigContext);
 
-	const { doDeleteChatTagging, doCreateChatTagging } = useTags({
+	const { doDeleteChatTagging, doCreateChatTagging, doCreateTag } = useTags({
 		loadInitially: false,
 		waId: waId,
 	});
@@ -127,6 +129,21 @@ const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
 								{tag.name}
 							</Styled.TagMenuItem>
 						))}
+				<Divider />
+
+				<CreateTagControl
+					doCreateTag={doCreateTag}
+					stopMenuKeyDownPropagation
+					trigger={(openForm) => (
+						<MenuItem onClick={openForm}>
+							<ListItemIcon>
+								<AddIcon />
+							</ListItemIcon>
+							{t('Create new tag')}
+						</MenuItem>
+					)}
+				/>
+
 				<Divider />
 				{tags && tags.length > 10 && (
 					<MenuItem

@@ -15,8 +15,10 @@ import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import SellIcon from '@mui/icons-material/Sell';
+import AddIcon from '@mui/icons-material/Add';
 import { Tag } from '@src/types/tags';
 import useTags from '@src/hooks/useTags';
+import CreateTagControl from '@src/components/CreateTagControl/CreateTagControl';
 
 interface Props {
 	open: boolean;
@@ -36,6 +38,7 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 		unusedTags,
 		doDeleteChatTagging,
 		doCreateChatTagging,
+		doCreateTag,
 	} = useTags({ loadInitially: true, waId: waId });
 
 	const onClickTag = async (tag: Tag) => {
@@ -110,6 +113,21 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 						)}
 					</Styled.TagsContainer>
 				)}
+
+				<Styled.TagsContainer>
+					<CreateTagControl
+						doCreateTag={doCreateTag}
+						trigger={(openForm) => (
+							<Chip
+								icon={<AddIcon />}
+								label={t('Create new tag')}
+								variant="outlined"
+								clickable
+								onClick={openForm}
+							/>
+						)}
+					/>
+				</Styled.TagsContainer>
 
 				<Styled.ManageTagsLink>
 					<Link

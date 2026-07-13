@@ -1,6 +1,8 @@
 import React, { useContext } from 'react';
 import { Button } from '@mui/material';
 import ShareIcon from '@mui/icons-material/Share';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { Message } from '@src/types/messages';
 
@@ -10,10 +12,12 @@ interface Props {
 
 const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 	const config = useContext(AppConfigContext);
+	const { t } = useTranslation();
 
 	const location = data.waba_payload?.location;
-	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${config?.APP_GOOGLE_MAPS_API_KEY}&&q=${location?.latitude},${location?.longitude}&q=`;
-	const mapURL = `https://www.google.com/maps/place/${location?.latitude},${location?.longitude}`;
+	const coordinates = `${location?.latitude},${location?.longitude}`;
+	const mapEmbedURL = `https://www.google.com/maps/embed/v1/place?key=${config?.APP_GOOGLE_MAPS_API_KEY}&q=${coordinates}`;
+	const mapURL = `https://www.google.com/maps/place/${coordinates}`;
 
 	const share = async () => {
 		if (navigator.share) {
@@ -46,32 +50,51 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 				src={mapEmbedURL}
 			/>
 
-			{data.waba_payload?.location && (
-				<>
-					{data.waba_payload?.location.name && (
-						<div className="chat__message__location__name">
-							{data.waba_payload.location.name}
-						</div>
-					)}
-					{data.waba_payload.location.address && (
-						<div className="chat__message__location__address">
-							{data.waba_payload.location.address}
-						</div>
-					)}
-				</>
+			{location?.name && (
+				<div className="chat__message__location__name">{location.name}</div>
+			)}
+			{location?.address && (
+				<div className="chat__message__location__address">
+					{location.address}
+				</div>
+			)}
+			{location?.url && (
+				<a
+					className="chat__message__location__url"
+					href={location.url}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{location.url}
+				</a>
 			)}
 
-			<Button
-				className="chat__message__location__share"
-				color="primary"
-				variant="outlined"
-				size="small"
-				disableElevation
-				startIcon={<ShareIcon />}
-				onClick={share}
-			>
-				Share
-			</Button>
+			<div className="chat__message__location__actions">
+				<Button
+					className="chat__message__location__open"
+					color="primary"
+					size="small"
+					disableElevation
+					startIcon={<OpenInNewIcon />}
+					href={mapURL}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{t('Open')}
+				</Button>
+
+				<Button
+					className="chat__message__location__share"
+					color="primary"
+					variant="outlined"
+					size="small"
+					disableElevation
+					startIcon={<ShareIcon />}
+					onClick={share}
+				>
+					{t('Share')}
+				</Button>
+			</div>
 		</div>
 	);
 };

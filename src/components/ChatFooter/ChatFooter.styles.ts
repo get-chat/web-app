@@ -8,6 +8,8 @@ export const Container = styled.div.attrs({
 	border-left: 1px solid lightgray;
 	display: flex;
 	flex-direction: column;
+	background-image: url('/pattern.svg');
+	background-repeat: repeat;
 
 	@media only screen and (max-width: 750px) {
 		border-left: none;

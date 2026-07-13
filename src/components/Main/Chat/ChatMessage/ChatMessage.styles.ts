@@ -143,6 +143,7 @@ export const ChatMessage = styled.div.attrs({
 	$hasMedia?: boolean;
 	$hasReaction?: boolean;
 	$isSenderHidden?: boolean;
+	$isFirstInGroup?: boolean;
 	$isFailed?: boolean;
 }>`
 	position: relative;
@@ -155,10 +156,10 @@ export const ChatMessage = styled.div.attrs({
 			: 'fit-content'};
 	background-color: #ffffff;
 	margin-bottom: 25px;
-	box-shadow: 0 5px 3px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 5px 3px -6px rgb(142 112 97);
 	max-width: 70%;
 	transition: opacity 1s ease;
-	margin-top: ${(props) => (props.$isSenderHidden ? '-20px' : '0')};
+	margin-top: ${(props) => (props.$isSenderHidden ? '-22px' : '0')};
 
 	& a {
 		color: var(--color-light-blue);
@@ -195,6 +196,34 @@ export const ChatMessage = styled.div.attrs({
 			}
 		`}
 
+	// The first message of each sender group carries a small tail pointing
+	// to the sender's side; the tail inherits the background so it matches
+	// every bubble color
+	${({ $isFirstInGroup, $isOutgoing }) =>
+		$isFirstInGroup &&
+		css`
+			${$isOutgoing ? 'border-top-right-radius' : 'border-top-left-radius'}: 0;
+
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				${$isOutgoing ? 'right' : 'left'}: -6px;
+				width: 6px;
+				height: 10px;
+				background: inherit;
+				/* Straight-edged fallback for browsers without path() support */
+				clip-path: ${$isOutgoing
+					? 'polygon(0 0, 100% 0, 0 100%)'
+					: 'polygon(0 0, 100% 0, 100% 100%)'};
+				/* A soft sweep with a rounded tip, leaving the bubble edge
+				tangentially so the junction stays smooth */
+				clip-path: ${$isOutgoing
+					? "path('M0 0 L0 10 C0 8 1.4 5.6 5.4 2.6 Q6 1 4.4 0 Z')"
+					: "path('M6 0 L6 10 C6 8 4.6 5.6 0.6 2.6 Q0 1 1.6 0 Z')"};
+			}
+		`}
+
 	${({ $isReceived }) =>
 		$isReceived &&
 		css`
@@ -206,4 +235,6 @@ export const ChatMessage = styled.div.attrs({
 
 export const DoneAllIcon = styled(DoneAll)`
 	fill: #8990b4;
+	/* Softens the color change from delivered to read */
+	transition: fill 0.3s ease;
 `;

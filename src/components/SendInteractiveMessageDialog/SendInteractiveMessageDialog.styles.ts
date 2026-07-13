@@ -3,7 +3,7 @@ import Alert from '@mui/material/Alert';
 
 export const Container = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	gap: 30px;
 
 	@media only screen and (max-width: 750px) {
@@ -65,8 +65,15 @@ export const AdvancedToggle = styled.div`
 
 export const Advanced = styled.div``;
 
+export const PreviewTitle = styled.div`
+	font-size: 18px;
+	margin-bottom: 10px;
+`;
+
 export const PreviewContainer = styled.div`
 	background-color: var(--chat-bg);
+	background-image: url('/pattern.svg');
+	background-repeat: repeat;
 	padding: 10px;
 	border-radius: 10px;
 	overflow-y: auto;
@@ -78,5 +85,6 @@ export const PreviewContainer = styled.div`
 
 	.chat__message {
 		margin-top: 0;
+		margin-bottom: 0;
 	}
 `;

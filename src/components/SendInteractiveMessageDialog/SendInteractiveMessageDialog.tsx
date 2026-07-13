@@ -13,8 +13,19 @@ import {
 import { isEmptyString } from '@src/helpers/Helpers';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Message } from '@src/types/messages';
+import {
+	Button as ReplyButton,
+	CarouselCard,
+	ListSection,
+	Message,
+} from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
+import ListSectionsEditor from './ListSectionsEditor';
+import ReplyButtonsEditor from './ReplyButtonsEditor';
+import CarouselCardsEditor, {
+	getCardMediaLink,
+	MIN_CAROUSEL_CARDS,
+} from './CarouselCardsEditor';
 import {
 	Advanced,
 	AdvancedToggle,
@@ -22,6 +33,7 @@ import {
 	Description,
 	HelperText,
 	PreviewContainer,
+	PreviewTitle,
 	StyledAlert,
 	TextFieldWrapper,
 } from './SendInteractiveMessageDialog.styles';
@@ -84,6 +96,56 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			delete cloneObj.footer;
 		}
 
+		// Reply button ids are required by the API but meaningless to compose
+		// by hand, so assign them sequentially
+		if (cloneObj.type === 'button' && Array.isArray(cloneObj.action?.buttons)) {
+			cloneObj.action.buttons = cloneObj.action.buttons.map(
+				(button: any, index: number) => ({
+					...button,
+					reply: { ...button.reply, id: `button_${index + 1}` },
+				})
+			);
+		}
+
+		// Carousel cards are ordered by a required index, so assign it
+		// sequentially and drop the empty optional card bodies
+		if (cloneObj.type === 'carousel' && Array.isArray(cloneObj.action?.cards)) {
+			cloneObj.action.cards = cloneObj.action.cards.map(
+				(card: any, index: number) => {
+					const cleanCard = { ...card, card_index: index };
+					if (cleanCard.body && isEmptyString(cleanCard.body.text)) {
+						delete cleanCard.body;
+					}
+					return cleanCard;
+				}
+			);
+		}
+
+		// List rows require an id, but composing one by hand is meaningless,
+		// so assign sequential ids and drop the empty optional fields
+		if (cloneObj.type === 'list' && Array.isArray(cloneObj.action?.sections)) {
+			let rowNumber = 0;
+			cloneObj.action.sections = cloneObj.action.sections.map(
+				(section: any) => {
+					const cleanSection = {
+						...section,
+						rows: section.rows.map((row: any) => {
+							rowNumber += 1;
+							const cleanRow = { ...row, id: `row_${rowNumber}` };
+							if (isEmptyString(cleanRow.description)) {
+								delete cleanRow.description;
+							}
+							return cleanRow;
+						}),
+					};
+					if (isEmptyString(cleanSection.title)) {
+						delete cleanSection.title;
+					}
+					return cleanSection;
+				}
+			);
+		}
+
 		onSend(cloneObj);
 		close();
 	};
@@ -127,41 +189,134 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			) {
 				isValid = false;
 			}
+
+			if (parameter.control === 'replyButtons') {
+				const buttons: ReplyButton[] =
+					getNestedValue(payload, parameter.key) ?? [];
+				if (
+					!buttons.length ||
+					buttons.some((button) => isEmptyString(button.reply?.title ?? ''))
+				) {
+					isValid = false;
+				}
+			}
+
+			if (parameter.control === 'carouselCards') {
+				const cards: CarouselCard[] =
+					getNestedValue(payload, parameter.key) ?? [];
+				if (
+					cards.length < MIN_CAROUSEL_CARDS ||
+					cards.some(
+						(card) =>
+							isEmptyString(getCardMediaLink(card)) ||
+							isEmptyString(card.action?.parameters?.display_text ?? '') ||
+							isEmptyString(card.action?.parameters?.url ?? '')
+					)
+				) {
+					isValid = false;
+				}
+			}
+
+			if (parameter.control === 'listSections') {
+				const sections: ListSection[] =
+					getNestedValue(payload, parameter.key) ?? [];
+				const rows = sections.flatMap((section) => section.rows ?? []);
+				if (!rows.length || rows.some((row) => isEmptyString(row.title))) {
+					isValid = false;
+				}
+				// Section titles are only mandatory when there are multiple sections
+				if (
+					sections.length > 1 &&
+					sections.some((section) => isEmptyString(section.title ?? ''))
+				) {
+					isValid = false;
+				}
+			}
 		});
 
 		return isValid;
 	};
 
-	const renderInput = (parameter: InteractiveParameter) => (
-		<TextFieldWrapper key={parameter.key}>
-			<TextField
-				variant="standard"
-				value={getNestedValue(payload, parameter.key)}
-				onChange={(e) =>
-					setPayload((prevState: any) =>
-						setNestedValue(prevState, parameter.key, e.target.value)
-					)
-				}
-				label={t(parameter.placeholder || keyToLabel(parameter.key))}
-				size="small"
-				multiline={true}
-				fullWidth={true}
-				required={parameter.required}
-				error={
-					isShowErrors && parameter.required
-						? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
-						: false
-				}
-			/>
-			{parameter.description && (
-				<HelperText
-					dangerouslySetInnerHTML={{
-						__html: t(parameter.description),
-					}}
+	const renderInput = (parameter: InteractiveParameter) => {
+		if (parameter.control === 'replyButtons') {
+			return (
+				<ReplyButtonsEditor
+					key={parameter.key}
+					buttons={getNestedValue(payload, parameter.key) ?? []}
+					onChange={(buttons) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, buttons)
+						)
+					}
+					isShowErrors={isShowErrors}
 				/>
-			)}
-		</TextFieldWrapper>
-	);
+			);
+		}
+
+		if (parameter.control === 'carouselCards') {
+			return (
+				<CarouselCardsEditor
+					key={parameter.key}
+					cards={getNestedValue(payload, parameter.key) ?? []}
+					onChange={(cards) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, cards)
+						)
+					}
+					isShowErrors={isShowErrors}
+				/>
+			);
+		}
+
+		if (parameter.control === 'listSections') {
+			return (
+				<ListSectionsEditor
+					key={parameter.key}
+					sections={getNestedValue(payload, parameter.key) ?? []}
+					onChange={(sections) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, sections)
+						)
+					}
+					isShowErrors={isShowErrors}
+				/>
+			);
+		}
+
+		return (
+			<TextFieldWrapper key={parameter.key}>
+				<TextField
+					variant="standard"
+					value={getNestedValue(payload, parameter.key)}
+					onChange={(e) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, e.target.value)
+						)
+					}
+					label={t(parameter.placeholder || keyToLabel(parameter.key))}
+					size="small"
+					multiline={true}
+					fullWidth={true}
+					required={parameter.required}
+					inputProps={
+						parameter.maxLength ? { maxLength: parameter.maxLength } : undefined
+					}
+					error={
+						isShowErrors && parameter.required
+							? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
+							: false
+					}
+				/>
+				{parameter.description && (
+					<HelperText
+						dangerouslySetInnerHTML={{
+							__html: t(parameter.description),
+						}}
+					/>
+				)}
+			</TextFieldWrapper>
+		);
+	};
 
 	return (
 		<Dialog open={isVisible} onClose={close}>
@@ -234,15 +389,18 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 							)}
 						</div>
 
-						<PreviewContainer>
-							{messageData && (
-								<ChatMessage
-									data={messageData}
-									disableMediaPreview
-									isInfoClickable={false}
-								/>
-							)}
-						</PreviewContainer>
+						<div>
+							<PreviewTitle>{t('Preview')}</PreviewTitle>
+							<PreviewContainer>
+								{messageData && (
+									<ChatMessage
+										data={messageData}
+										disableMediaPreview
+										isInfoClickable={false}
+									/>
+								)}
+							</PreviewContainer>
+						</div>
 					</Container>
 				)}
 			</DialogContent>
