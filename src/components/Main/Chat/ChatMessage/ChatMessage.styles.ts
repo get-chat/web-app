@@ -159,7 +159,7 @@ export const ChatMessage = styled.div.attrs({
 	box-shadow: 0 5px 3px -6px rgb(142 112 97);
 	max-width: 70%;
 	transition: opacity 1s ease;
-	margin-top: ${(props) => (props.$isSenderHidden ? '-20px' : '0')};
+	margin-top: ${(props) => (props.$isSenderHidden ? '-22px' : '0')};
 
 	& a {
 		color: var(--color-light-blue);
