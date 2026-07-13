@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 
 export const Container = styled.div`
 	background-color: #ffbdbd;
-	color: #953434;ag
+	color: #953434;
 	border-radius: 10px;
 	padding: 10px;
 
