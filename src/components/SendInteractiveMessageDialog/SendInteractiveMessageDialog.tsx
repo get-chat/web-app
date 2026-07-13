@@ -13,9 +13,13 @@ import {
 import { isEmptyString } from '@src/helpers/Helpers';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { ListSection, Message } from '@src/types/messages';
+import { CarouselCard, ListSection, Message } from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
 import ListSectionsEditor from './ListSectionsEditor';
+import CarouselCardsEditor, {
+	getCardMediaLink,
+	MIN_CAROUSEL_CARDS,
+} from './CarouselCardsEditor';
 import {
 	Advanced,
 	AdvancedToggle,
@@ -84,6 +88,20 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		// Removing footer if text is empty
 		if (cloneObj.footer && isEmptyString(cloneObj.footer.text)) {
 			delete cloneObj.footer;
+		}
+
+		// Carousel cards are ordered by a required index, so assign it
+		// sequentially and drop the empty optional card bodies
+		if (cloneObj.type === 'carousel' && Array.isArray(cloneObj.action?.cards)) {
+			cloneObj.action.cards = cloneObj.action.cards.map(
+				(card: any, index: number) => {
+					const cleanCard = { ...card, card_index: index };
+					if (cleanCard.body && isEmptyString(cleanCard.body.text)) {
+						delete cleanCard.body;
+					}
+					return cleanCard;
+				}
+			);
 		}
 
 		// List rows require an id, but composing one by hand is meaningless,
@@ -155,6 +173,22 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				isValid = false;
 			}
 
+			if (parameter.control === 'carouselCards') {
+				const cards: CarouselCard[] =
+					getNestedValue(payload, parameter.key) ?? [];
+				if (
+					cards.length < MIN_CAROUSEL_CARDS ||
+					cards.some(
+						(card) =>
+							isEmptyString(getCardMediaLink(card)) ||
+							isEmptyString(card.action?.parameters?.display_text ?? '') ||
+							isEmptyString(card.action?.parameters?.url ?? '')
+					)
+				) {
+					isValid = false;
+				}
+			}
+
 			if (parameter.control === 'listSections') {
 				const sections: ListSection[] =
 					getNestedValue(payload, parameter.key) ?? [];
@@ -176,6 +210,21 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	const renderInput = (parameter: InteractiveParameter) => {
+		if (parameter.control === 'carouselCards') {
+			return (
+				<CarouselCardsEditor
+					key={parameter.key}
+					cards={getNestedValue(payload, parameter.key) ?? []}
+					onChange={(cards) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, cards)
+						)
+					}
+					isShowErrors={isShowErrors}
+				/>
+			);
+		}
+
 		if (parameter.control === 'listSections') {
 			return (
 				<ListSectionsEditor

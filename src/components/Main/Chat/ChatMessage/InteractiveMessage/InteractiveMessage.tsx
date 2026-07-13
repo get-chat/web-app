@@ -12,6 +12,7 @@ import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMes
 import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/FlowMessage';
 import NfmReply from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/NfmReply';
 import CatalogMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CatalogMessage';
+import CarouselMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CarouselMessage';
 import { Message } from '@src/types/messages';
 import * as Styled from './InteractiveMessage.styles';
 
@@ -27,6 +28,7 @@ export enum InteractiveMessageTypes {
 	flow = 'flow',
 	nfm_reply = 'nfm_reply',
 	catalog_message = 'catalog_message',
+	carousel = 'carousel',
 }
 
 interface Props {
@@ -85,6 +87,10 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 			{type === InteractiveMessageTypes.catalog_message && (
 				<CatalogMessage interactive={interactive} />
+			)}
+
+			{type === InteractiveMessageTypes.carousel && (
+				<CarouselMessage interactive={interactive} />
 			)}
 
 			{type === InteractiveMessageTypes.location_request_message && (

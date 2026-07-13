@@ -195,8 +195,17 @@ export interface Action {
 		flow_cta?: string;
 	};
 	sections?: any[];
+	cards?: CarouselCard[];
 	catalog_id?: string;
 	product_retailer_id?: string;
+}
+
+export interface CarouselCard {
+	card_index?: number;
+	type?: string;
+	header?: any;
+	body?: Body;
+	action?: Action;
 }
 
 export interface ListRow {

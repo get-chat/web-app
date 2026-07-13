@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { Button } from '@mui/material';
 
 export const Container = styled.div`
-	border: 1px solid var(--red-dark);
-	background-color: #ffeeee;
+	background-color: #ffbdbd;
+	color: #953434;ag
 	border-radius: 10px;
 	padding: 10px;
 

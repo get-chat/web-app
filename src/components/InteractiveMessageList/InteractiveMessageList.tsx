@@ -14,7 +14,7 @@ export interface InteractiveParameter {
 	description?: string;
 	maxLength?: number;
 	// Renders a dedicated control instead of a plain text field
-	control?: 'listSections';
+	control?: 'listSections' | 'carouselCards';
 }
 
 export interface DescribedInteractive {
@@ -130,6 +130,69 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				maxLength: 20,
 			},
 			{ key: 'action.sections', control: 'listSections' },
+		],
+	},
+	{
+		title: 'Send media carousel message',
+		description:
+			'Media carousel messages display a set of <strong>2 to 10</strong> horizontally scrollable cards. Each card shows an <strong>image or video</strong>, an optional body text and a <strong>URL button</strong>.',
+		info: 'Cards with quick-reply buttons are currently only supported when sent via the API.',
+		payload: {
+			type: 'carousel',
+			body: {
+				text: '',
+			},
+			action: {
+				cards: [
+					{
+						type: 'cta_url',
+						header: {
+							type: 'image',
+							image: {
+								link: '',
+							},
+						},
+						body: {
+							text: '',
+						},
+						action: {
+							name: 'cta_url',
+							parameters: {
+								display_text: '',
+								url: '',
+							},
+						},
+					},
+					{
+						type: 'cta_url',
+						header: {
+							type: 'image',
+							image: {
+								link: '',
+							},
+						},
+						body: {
+							text: '',
+						},
+						action: {
+							name: 'cta_url',
+							parameters: {
+								display_text: '',
+								url: '',
+							},
+						},
+					},
+				],
+			},
+		},
+		parameters: [
+			{
+				key: 'body.text',
+				placeholder: 'Body',
+				required: true,
+				maxLength: 1024,
+			},
+			{ key: 'action.cards', control: 'carouselCards' },
 		],
 	},
 	{
