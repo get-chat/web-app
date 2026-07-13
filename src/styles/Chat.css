@@ -304,6 +304,9 @@ stored one. */
 	overflow-x: hidden;
 	border-left: 1px solid rgba(0, 0, 45, 0.05);
 	min-height: 0;
+	/* Served from the public folder, not bundled by webpack */
+	background-image: url('/pattern.svg');
+	background-repeat: repeat;
 }
 
 .chat__body__empty {

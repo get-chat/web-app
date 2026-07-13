@@ -82,7 +82,20 @@ module.exports = (isDevelopment) => {
 				},
 				{
 					test: /\.css$/i,
-					use: [styleLoader, 'css-loader'],
+					use: [
+						styleLoader,
+						{
+							loader: 'css-loader',
+							options: {
+								url: {
+									// Root-relative urls point to files served from the
+									// public folder; leave them to the browser instead of
+									// resolving them as modules at build time
+									filter: (url) => !url.startsWith('/'),
+								},
+							},
+						},
+					],
 				},
 				{
 					test: /\.pcss/,
