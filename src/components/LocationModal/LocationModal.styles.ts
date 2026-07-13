@@ -1,10 +1,7 @@
 import styled from 'styled-components';
 import { DialogContent, DialogTitle } from '@mui/material';
 
-export const StyledDialogTitle = styled(DialogTitle)`
-	background-color: var(--color-primary);
-	color: white;
-`;
+export const StyledDialogTitle = styled(DialogTitle)``;
 
 export const StyledDialogContent = styled(DialogContent)`
 	padding: 0 !important;
@@ -47,11 +44,11 @@ export const Fields = styled.div`
 	display: flex;
 	flex-direction: column;
 	gap: 12px;
-	padding: 16px 24px 8px;
+	padding: 16px 0 8px;
 `;
 
 export const CurrentLocationRow = styled.div`
-	padding: 8px 24px 0;
+	padding: 8px 0 0;
 `;
 
 export const Coordinates = styled.div`
