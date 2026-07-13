@@ -114,7 +114,8 @@ import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
 import { createMedia } from '@src/api/mediaApi';
 import { setCurrentChatTags } from '@src/store/reducers/currentChatTagsReducer';
 
-const SCROLL_OFFSET = 0;
+// Small offset kept below the bottom edge when scrolling to the bottom
+const SCROLL_OFFSET = 15;
 const SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET = 150;
 const SCROLL_TOP_OFFSET_TO_LOAD_MORE = 2000;
 const MESSAGES_PER_PAGE = 30;
@@ -238,6 +239,48 @@ const ChatView: React.FC<Props> = (props) => {
 			});
 		}
 
+		// When the messages container is resized (templates, interactive
+		// messages or saved responses panels toggling in the footer area),
+		// restore the distance from the bottom so the visible messages stay
+		// in place instead of being covered. The distance is tracked on
+		// scroll and restored as an absolute position, because the browser
+		// itself clamps (or anchors) scrollTop during a resize and applying
+		// a relative height difference on top of that correction would move
+		// the view away from where the user left it.
+		let resizeObserver: ResizeObserver | undefined;
+		let untrackDistanceFromBottom: (() => void) | undefined;
+		if (messagesContainer.current) {
+			const el = messagesContainer.current;
+			let distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+			let lastKnownHeight = el.clientHeight;
+
+			const trackDistanceFromBottom = () => {
+				// Scroll events fired while the container height differs from
+				// the last height handled by the resize observer are resize
+				// transients: e.g. the browser clamping scrollTop when the
+				// container grows. Recording those would corrupt the tracked
+				// distance right before the observer restores it.
+				if (el.clientHeight !== lastKnownHeight) return;
+				distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+			};
+
+			el.addEventListener('scroll', trackDistanceFromBottom);
+			untrackDistanceFromBottom = () =>
+				el.removeEventListener('scroll', trackDistanceFromBottom);
+
+			resizeObserver = new ResizeObserver(() => {
+				// Only react to height changes; width changes (such as the
+				// scrollbar appearing when a chat is first populated) fire the
+				// observer too, but restoring the scroll position for them
+				// would race the initial positioning of the chat
+				if (el.clientHeight === lastKnownHeight) return;
+
+				el.scrollTop = el.scrollHeight - el.clientHeight - distanceFromBottom;
+				lastKnownHeight = el.clientHeight;
+			});
+			resizeObserver.observe(el);
+		}
+
 		// Handle files dragged and dropped to sidebar chat
 		const handleFilesDropped = function (msg: string, data: any) {
 			setSelectedFiles(data);
@@ -273,6 +316,10 @@ const ChatView: React.FC<Props> = (props) => {
 
 			// Stop observing new messages for automatic scrolling
 			observer?.disconnect();
+
+			// Stop observing container size changes
+			resizeObserver?.disconnect();
+			untrackDistanceFromBottom?.();
 
 			// Unsubscribe
 			PubSub.unsubscribe(handleFilesDroppedEventToken);
@@ -564,11 +611,7 @@ const ChatView: React.FC<Props> = (props) => {
 								const isCurrentlyLastMessageVisible = isLastMessageVisible();
 
 								if (!isCurrentlyLastMessageVisible) {
-									persistScrollStateFromBottom(
-										prevScrollHeight,
-										prevScrollTop,
-										0
-									);
+									persistScrollStateFromBottom(prevScrollHeight, prevScrollTop);
 									displayScrollButton();
 								}
 
@@ -724,7 +767,7 @@ const ChatView: React.FC<Props> = (props) => {
 				});
 
 				if (receivedNewErrors) {
-					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop);
 				}
 			}
 		};
@@ -748,7 +791,7 @@ const ChatView: React.FC<Props> = (props) => {
 				});
 
 				if (!isCurrentlyLastMessageVisible) {
-					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop, 0);
+					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop);
 					displayScrollButton();
 				}
 			} else {
@@ -914,19 +957,58 @@ const ChatView: React.FC<Props> = (props) => {
 		const target = messagesContainer.current;
 		if (!target) return;
 
+		// Batches that remove nodes (e.g. replacing all messages when a chat
+		// is loaded or a message is jumped to) manage the scroll position
+		// explicitly, so they must not trigger the auto scroll
+		if (mutations.some((mutation) => mutation.removedNodes.length > 0)) {
+			return;
+		}
+
 		// The observer fires after new nodes are already inserted, so measuring
 		// the distance to the bottom at this point includes the height of the
 		// new message itself. Subtract it to know where the user was before the
 		// insertion; otherwise messages taller than the visibility offset
 		// (media, long texts, templates) would never trigger the auto scroll.
 		let addedHeight = 0;
+		let addedMessageCount = 0;
+		const addedNodes = new Set<Node>();
 		mutations.forEach((mutation) => {
 			mutation.addedNodes.forEach((node) => {
 				if (node instanceof HTMLElement) {
+					addedNodes.add(node);
 					addedHeight += node.offsetHeight;
+					if (node.id?.startsWith('message_')) {
+						addedMessageCount++;
+					}
 				}
 			});
 		});
+
+		// Locate the last message element and count the messages in the
+		// container. Static elements like the trailing spacer are ignored;
+		// checking sibling positions directly would be misled by them.
+		let lastMessageElement: Element | undefined;
+		let totalMessageCount = 0;
+		for (const child of target.children) {
+			if (child.id?.startsWith('message_')) {
+				totalMessageCount++;
+				lastMessageElement = child;
+			}
+		}
+
+		// Only new messages appended at the end may auto scroll; older
+		// messages prepended while scrolling up through the history must
+		// never move the view
+		if (!lastMessageElement || !addedNodes.has(lastMessageElement)) {
+			return;
+		}
+
+		// The initial population of a chat inserts the whole list into an
+		// empty container at once; its scroll position is managed
+		// explicitly by finishLoadingMessages, so it must not auto scroll
+		if (addedMessageCount >= totalMessageCount) {
+			return;
+		}
 
 		const wasNearBottom =
 			target.scrollHeight -
@@ -942,16 +1024,12 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const persistScrollStateFromBottom = (
 		prevScrollHeight: number | undefined,
-		prevScrollTop: number | undefined,
-		offset: number | undefined
+		prevScrollTop: number | undefined
 	) => {
 		if (messagesContainer.current) {
 			const nextScrollHeight = messagesContainer.current.scrollHeight;
 			messagesContainer.current.scrollTop =
-				nextScrollHeight -
-				(prevScrollHeight ?? 0) +
-				(prevScrollTop ?? 0) -
-				(offset ?? 0);
+				nextScrollHeight - (prevScrollHeight ?? 0) + (prevScrollTop ?? 0);
 		}
 	};
 
@@ -1322,11 +1400,16 @@ const ChatView: React.FC<Props> = (props) => {
 			});
 
 			if (!sinceTime || replaceAll) {
-				persistScrollStateFromBottom(
-					prevScrollHeight,
-					prevScrollTop,
-					SCROLL_OFFSET
-				);
+				if (isInitial || replaceAll) {
+					// Land at the bottom (with the small offset). This must be
+					// an absolute position: computing it relative to the
+					// previous scroll state would subtract the offset again on
+					// every loading pass and make the view drift upwards
+					scrollToBottom();
+				} else {
+					// Older messages prepended: preserve the current position
+					persistScrollStateFromBottom(prevScrollHeight, prevScrollTop);
+				}
 			} else if (sinceTime) {
 				if (messagesContainer.current) {
 					messagesContainer.current.scrollTop = prevScrollTop ?? 0;
