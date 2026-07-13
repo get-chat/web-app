@@ -47,6 +47,8 @@ export const Body = styled.div`
 
 export const Preview = styled.div`
 	background-color: var(--chat-bg);
+	background-image: url('/pattern.svg');
+	background-repeat: repeat;
 	padding: 15px;
 	box-shadow: 0 1px 3px var(--shadow-light);
 	margin-bottom: 10px;
