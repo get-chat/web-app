@@ -1063,7 +1063,13 @@ const ChatView: React.FC<Props> = (props) => {
 	) => {
 		if (messagesContainer.current) {
 			if (msgId) {
-				if (messages[msgId]) {
+				// Messages are keyed by their WhatsApp id, but contexts and
+				// search results refer to messages by their getchat id
+				const isLoaded =
+					msgId in messages ||
+					Object.values(messages).some((message) => message.id === msgId);
+
+				if (isLoaded) {
 					console.log('This message is already loaded.');
 					scrollToChild(msgId);
 				} else {
