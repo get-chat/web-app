@@ -208,18 +208,19 @@ export const ChatMessage = styled.div.attrs({
 				content: '';
 				position: absolute;
 				top: 0;
-				${$isOutgoing ? 'right' : 'left'}: -8px;
-				width: 8px;
-				height: 13px;
+				${$isOutgoing ? 'right' : 'left'}: -6px;
+				width: 6px;
+				height: 10px;
 				background: inherit;
 				/* Straight-edged fallback for browsers without path() support */
 				clip-path: ${$isOutgoing
 					? 'polygon(0 0, 100% 0, 0 100%)'
 					: 'polygon(0 0, 100% 0, 100% 100%)'};
-				/* A soft sweep with a rounded tip */
+				/* A soft sweep with a rounded tip, leaving the bubble edge
+				tangentially so the junction stays smooth */
 				clip-path: ${$isOutgoing
-					? "path('M0 0 L0 13 Q4.5 8.5 7.2 3 Q8 1.2 6.2 0 Z')"
-					: "path('M8 0 L8 13 Q3.5 8.5 0.8 3 Q0 1.2 1.8 0 Z')"};
+					? "path('M0 0 L0 10 C0 8 1.4 5.6 5.4 2.6 Q6 1 4.4 0 Z')"
+					: "path('M6 0 L6 10 C6 8 4.6 5.6 0.6 2.6 Q0 1 1.6 0 Z')"};
 			}
 		`}
 
