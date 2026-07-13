@@ -206,4 +206,6 @@ export const ChatMessage = styled.div.attrs({
 
 export const DoneAllIcon = styled(DoneAll)`
 	fill: #8990b4;
+	/* Softens the color change from delivered to read */
+	transition: fill 0.3s ease;
 `;

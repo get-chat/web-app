@@ -260,6 +260,36 @@ a.chat__document:hover {
 	margin-left: 5px;
 }
 
+/* Status changes swap one icon for another, so animate the icons in.
+The pending icon is excluded: it is always the initial status, appearing
+only together with the message itself, and its element remounts (and
+would animate again) when the pending message is replaced by the
+stored one. */
+.chat__iconDone,
+.chat__iconDoneAll,
+.chat__iconError {
+	animation: chatStatusIconAppear 0.3s ease-out;
+}
+
+@keyframes chatStatusIconAppear {
+	from {
+		opacity: 0;
+		transform: scale(0.5);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat__iconDone,
+	.chat__iconDoneAll,
+	.chat__iconError {
+		animation: none;
+	}
+}
+
 .chat__iconError * {
 	fill: red;
 }
