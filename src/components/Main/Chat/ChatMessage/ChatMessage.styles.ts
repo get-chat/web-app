@@ -156,7 +156,7 @@ export const ChatMessage = styled.div.attrs({
 			: 'fit-content'};
 	background-color: #ffffff;
 	margin-bottom: 25px;
-	box-shadow: 0 5px 3px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 5px 3px -6px rgb(142 112 97);
 	max-width: 70%;
 	transition: opacity 1s ease;
 	margin-top: ${(props) => (props.$isSenderHidden ? '-20px' : '0')};
