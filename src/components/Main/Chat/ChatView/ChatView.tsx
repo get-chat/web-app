@@ -473,6 +473,9 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	}, [waId, newMessages]);
 
+	// To detect the scroll direction across handler re-registrations
+	const lastScrollTopRef = useRef<number>(0);
+
 	useEffect(() => {
 		const messagesContainerCopy = messagesContainer.current;
 		const dateIndicators = messagesContainerCopy?.querySelectorAll(
@@ -485,6 +488,10 @@ const ChatView: React.FC<Props> = (props) => {
 		// Consider replacing this with IntersectionObserver
 		// Browser support should be considered: https://caniuse.com/intersectionobserver
 		function handleScroll(e: Event | React.UIEvent<HTMLElement>) {
+			const isScrollingUp =
+				(e.target as HTMLElement).scrollTop < lastScrollTopRef.current;
+			lastScrollTopRef.current = (e.target as HTMLElement).scrollTop;
+
 			if (debounceTimer) {
 				window.clearTimeout(debounceTimer);
 			}
@@ -506,8 +513,13 @@ const ChatView: React.FC<Props> = (props) => {
 						}
 					}
 
+					// Approaching the top only counts when the user is scrolling
+					// upwards; in a short history the bottom of the chat is also
+					// within the offset, and scrolling down (or the automatic
+					// scroll after sending) must not load older messages
 					if (
 						el.scrollTop <= SCROLL_TOP_OFFSET_TO_LOAD_MORE &&
+						isScrollingUp &&
 						hasOlderMessagesToLoad
 					) {
 						//console.log("Scrolled to top");
@@ -1010,6 +1022,14 @@ const ChatView: React.FC<Props> = (props) => {
 			return;
 		}
 
+		// The observer runs before the browser paints, so the animation
+		// plays from the first frame of a newly appended message
+		addedNodes.forEach((node) => {
+			if (node instanceof HTMLElement && node.id?.startsWith('message_')) {
+				node.classList.add('chat__message__outer--appear');
+			}
+		});
+
 		const wasNearBottom =
 			target.scrollHeight -
 				addedHeight -
@@ -1018,7 +1038,7 @@ const ChatView: React.FC<Props> = (props) => {
 			SCROLL_LAST_MESSAGE_VISIBILITY_OFFSET;
 
 		if (wasNearBottom) {
-			scrollToBottom();
+			scrollToBottom(true);
 		}
 	};
 

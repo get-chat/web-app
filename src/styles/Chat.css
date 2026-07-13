@@ -22,6 +22,27 @@
 	opacity: 0.3;
 }
 
+@keyframes chatMessageAppear {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.chat__message__outer--appear {
+	animation: chatMessageAppear 0.3s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat__message__outer--appear {
+		animation: none;
+	}
+}
+
 .chat__media,
 .chat__location__iframe {
 	border-radius: 6px;
