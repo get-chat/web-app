@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
+import ReplyIcon from '@mui/icons-material/Reply';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 import { CarouselCard } from '@src/types/messages';
@@ -62,9 +63,10 @@ const CarouselMessage: React.FC<InteractiveMessageProps> = ({
 									Array.isArray(card.action.buttons) &&
 									card.action.buttons.map(({ reply }, buttonIndex) => (
 										<Button
-											key={reply?.id ?? buttonIndex}
+											key={buttonIndex}
 											color="primary"
 											fullWidth
+											startIcon={<ReplyIcon />}
 											disabled
 										>
 											{reply?.title}
