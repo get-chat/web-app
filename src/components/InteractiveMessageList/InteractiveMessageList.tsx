@@ -14,7 +14,7 @@ export interface InteractiveParameter {
 	description?: string;
 	maxLength?: number;
 	// Renders a dedicated control instead of a plain text field
-	control?: 'listSections' | 'carouselCards';
+	control?: 'listSections' | 'carouselCards' | 'replyButtons';
 }
 
 export interface DescribedInteractive {
@@ -80,6 +80,46 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				required: true,
 				placeholder: 'Action Display Text',
 			},
+		],
+	},
+	{
+		title: 'Send reply buttons message',
+		description:
+			'Reply buttons messages offer up to <strong>3 buttons</strong> as quick answer options. They are a quicker way for your customers to make a selection, and the tapped button is sent back to you as a reply.',
+		payload: {
+			type: 'button',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				buttons: [
+					{
+						type: 'reply',
+						reply: {
+							id: '',
+							title: '',
+						},
+					},
+				],
+			},
+		},
+		parameters: [
+			{ key: 'header.text', placeholder: 'Header', maxLength: 60 },
+			{
+				key: 'body.text',
+				placeholder: 'Body',
+				required: true,
+				maxLength: 1024,
+			},
+			{ key: 'footer.text', placeholder: 'Footer', maxLength: 60 },
+			{ key: 'action.buttons', control: 'replyButtons' },
 		],
 	},
 	{

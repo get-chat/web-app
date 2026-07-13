@@ -27,7 +27,7 @@ const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 			{action?.buttons && Array.isArray(action?.buttons) && (
 				<Styled.Actions>
 					{action?.buttons.map(({ reply }, index: number) => (
-						<Button key={reply?.id ?? index} color="primary" fullWidth disabled>
+						<Button key={index} color="primary" fullWidth disabled>
 							{reply?.title}
 						</Button>
 					))}

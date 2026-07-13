@@ -13,9 +13,15 @@ import {
 import { isEmptyString } from '@src/helpers/Helpers';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { CarouselCard, ListSection, Message } from '@src/types/messages';
+import {
+	Button as ReplyButton,
+	CarouselCard,
+	ListSection,
+	Message,
+} from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
 import ListSectionsEditor from './ListSectionsEditor';
+import ReplyButtonsEditor from './ReplyButtonsEditor';
 import CarouselCardsEditor, {
 	getCardMediaLink,
 	MIN_CAROUSEL_CARDS,
@@ -88,6 +94,17 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 		// Removing footer if text is empty
 		if (cloneObj.footer && isEmptyString(cloneObj.footer.text)) {
 			delete cloneObj.footer;
+		}
+
+		// Reply button ids are required by the API but meaningless to compose
+		// by hand, so assign them sequentially
+		if (cloneObj.type === 'button' && Array.isArray(cloneObj.action?.buttons)) {
+			cloneObj.action.buttons = cloneObj.action.buttons.map(
+				(button: any, index: number) => ({
+					...button,
+					reply: { ...button.reply, id: `button_${index + 1}` },
+				})
+			);
 		}
 
 		// Carousel cards are ordered by a required index, so assign it
@@ -173,6 +190,17 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				isValid = false;
 			}
 
+			if (parameter.control === 'replyButtons') {
+				const buttons: ReplyButton[] =
+					getNestedValue(payload, parameter.key) ?? [];
+				if (
+					!buttons.length ||
+					buttons.some((button) => isEmptyString(button.reply?.title ?? ''))
+				) {
+					isValid = false;
+				}
+			}
+
 			if (parameter.control === 'carouselCards') {
 				const cards: CarouselCard[] =
 					getNestedValue(payload, parameter.key) ?? [];
@@ -210,6 +238,21 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	const renderInput = (parameter: InteractiveParameter) => {
+		if (parameter.control === 'replyButtons') {
+			return (
+				<ReplyButtonsEditor
+					key={parameter.key}
+					buttons={getNestedValue(payload, parameter.key) ?? []}
+					onChange={(buttons) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, buttons)
+						)
+					}
+					isShowErrors={isShowErrors}
+				/>
+			);
+		}
+
 		if (parameter.control === 'carouselCards') {
 			return (
 				<CarouselCardsEditor

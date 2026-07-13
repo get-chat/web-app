@@ -52,6 +52,19 @@ export const processCloudApiWebhookPayload = (
 		});
 	});
 
+	// Incoming messages are also delivered as getchat-serialized messages
+	// next to the Cloud API envelope. They carry the fields the envelope
+	// lacks (most notably the resolved reply context), so they replace the
+	// envelope-derived versions built above.
+	const incomingMessages = payload?.incoming_messages;
+	if (incomingMessages) {
+		incomingMessages.forEach((message) => {
+			const messageKey =
+				message.waba_payload?.id ?? generateMessageInternalId(message.id);
+			messages[messageKey] = message;
+		});
+	}
+
 	// Message echoes: outgoing messages sent outside get.chat, delivered as
 	// getchat-serialized messages next to the Cloud API envelope
 	const echoMessages = payload?.echo_messages;

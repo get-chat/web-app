@@ -56,6 +56,63 @@ describe('processCloudApiWebhookPayload - incoming message wa_id resolution', ()
 	});
 });
 
+describe('processCloudApiWebhookPayload - serialized incoming messages', () => {
+	const envelopeMessage = {
+		id: 'wamid.REPLY',
+		from: '905383192532',
+		type: 'text',
+		timestamp: '1783956959',
+		text: { body: 'Replying to you' },
+		// The envelope context only refers to the replied message
+		context: { id: 'wamid.ORIGINAL', from: '4930754386733' },
+	};
+
+	const serializedMessage = {
+		id: '0b6b4f6e-0000-0000-0000-000000000000',
+		waba_payload: envelopeMessage,
+		contact: { wa_id: '905383192532' },
+		from_us: false,
+		received: false,
+		sender: null,
+		// The serialized message resolves the context into a full message
+		context: {
+			id: '706371f3-0000-0000-0000-000000000000',
+			waba_payload: {
+				id: 'wamid.ORIGINAL',
+				to: '905383192532',
+				type: 'text',
+				timestamp: '1783956931',
+				text: { body: 'Original message' },
+			},
+			from_us: true,
+		},
+		customer_wa_id: '905383192532',
+		tags: [],
+		chat_tags: [],
+	};
+
+	it('prefers the serialized message carrying the resolved reply context', () => {
+		const payload = buildPayload(envelopeMessage) as any;
+		payload.incoming_messages = [serializedMessage];
+
+		const { messages } = processCloudApiWebhookPayload(payload);
+
+		const message = messages['wamid.REPLY'];
+		expect(message.id).toBe(serializedMessage.id);
+		expect(message.context?.waba_payload?.text?.body).toBe('Original message');
+	});
+
+	it('falls back to the envelope message when no serialized one is present', () => {
+		const { messages } = processCloudApiWebhookPayload(
+			buildPayload(envelopeMessage)
+		);
+
+		const message = messages['wamid.REPLY'];
+		expect(message).toBeDefined();
+		expect(message.context).toBeUndefined();
+	});
+});
+
 const buildEchoPayload = (
 	field: string,
 	echoMessage: any
