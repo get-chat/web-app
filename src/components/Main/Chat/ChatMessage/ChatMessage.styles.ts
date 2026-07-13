@@ -143,6 +143,7 @@ export const ChatMessage = styled.div.attrs({
 	$hasMedia?: boolean;
 	$hasReaction?: boolean;
 	$isSenderHidden?: boolean;
+	$isFirstInGroup?: boolean;
 	$isFailed?: boolean;
 }>`
 	position: relative;
@@ -192,6 +193,33 @@ export const ChatMessage = styled.div.attrs({
 
 			& .chat__message__info {
 				cursor: pointer;
+			}
+		`}
+
+	// The first message of each sender group carries a small tail pointing
+	// to the sender's side; the tail inherits the background so it matches
+	// every bubble color
+	${({ $isFirstInGroup, $isOutgoing }) =>
+		$isFirstInGroup &&
+		css`
+			${$isOutgoing ? 'border-top-right-radius' : 'border-top-left-radius'}: 0;
+
+			&::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				${$isOutgoing ? 'right' : 'left'}: -8px;
+				width: 8px;
+				height: 13px;
+				background: inherit;
+				/* Straight-edged fallback for browsers without path() support */
+				clip-path: ${$isOutgoing
+					? 'polygon(0 0, 100% 0, 0 100%)'
+					: 'polygon(0 0, 100% 0, 100% 100%)'};
+				/* A soft sweep with a rounded tip */
+				clip-path: ${$isOutgoing
+					? "path('M0 0 L0 13 Q4.5 8.5 7.2 3 Q8 1.2 6.2 0 Z')"
+					: "path('M8 0 L8 13 Q3.5 8.5 0.8 3 Q0 1.2 1.8 0 Z')"};
 			}
 		`}
 
