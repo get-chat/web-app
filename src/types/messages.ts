@@ -187,6 +187,7 @@ export interface Body {
 
 export interface Action {
 	name: string;
+	button?: string;
 	buttons?: Button[];
 	parameters?: {
 		url?: string;
@@ -196,6 +197,17 @@ export interface Action {
 	sections?: any[];
 	catalog_id?: string;
 	product_retailer_id?: string;
+}
+
+export interface ListRow {
+	id: string;
+	title: string;
+	description?: string;
+}
+
+export interface ListSection {
+	title?: string;
+	rows: ListRow[];
 }
 
 export interface Button {

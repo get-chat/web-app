@@ -12,6 +12,9 @@ export interface InteractiveParameter {
 	advanced?: boolean;
 	placeholder?: string;
 	description?: string;
+	maxLength?: number;
+	// Renders a dedicated control instead of a plain text field
+	control?: 'listSections';
 }
 
 export interface DescribedInteractive {
@@ -77,6 +80,56 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 				required: true,
 				placeholder: 'Action Display Text',
 			},
+		],
+	},
+	{
+		title: 'Send list message',
+		description:
+			'List messages offer your customers a choice of up to <strong>10 options</strong>, organized in one or more sections. The options are revealed when the customer taps the <strong>button</strong> and the selected option is sent back to you as a reply.',
+		payload: {
+			type: 'list',
+			header: {
+				type: 'text',
+				text: '',
+			},
+			body: {
+				text: '',
+			},
+			footer: {
+				text: '',
+			},
+			action: {
+				button: '',
+				sections: [
+					{
+						title: '',
+						rows: [
+							{
+								id: '',
+								title: '',
+								description: '',
+							},
+						],
+					},
+				],
+			},
+		},
+		parameters: [
+			{ key: 'header.text', placeholder: 'Header', maxLength: 60 },
+			{
+				key: 'body.text',
+				placeholder: 'Body',
+				required: true,
+				maxLength: 4096,
+			},
+			{ key: 'footer.text', placeholder: 'Footer', maxLength: 60 },
+			{
+				key: 'action.button',
+				placeholder: 'Button text',
+				required: true,
+				maxLength: 20,
+			},
+			{ key: 'action.sections', control: 'listSections' },
 		],
 	},
 	{

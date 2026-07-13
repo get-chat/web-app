@@ -13,8 +13,9 @@ import {
 import { isEmptyString } from '@src/helpers/Helpers';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Message } from '@src/types/messages';
+import { ListSection, Message } from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
+import ListSectionsEditor from './ListSectionsEditor';
 import {
 	Advanced,
 	AdvancedToggle,
@@ -22,6 +23,7 @@ import {
 	Description,
 	HelperText,
 	PreviewContainer,
+	PreviewTitle,
 	StyledAlert,
 	TextFieldWrapper,
 } from './SendInteractiveMessageDialog.styles';
@@ -84,6 +86,31 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			delete cloneObj.footer;
 		}
 
+		// List rows require an id, but composing one by hand is meaningless,
+		// so assign sequential ids and drop the empty optional fields
+		if (cloneObj.type === 'list' && Array.isArray(cloneObj.action?.sections)) {
+			let rowNumber = 0;
+			cloneObj.action.sections = cloneObj.action.sections.map(
+				(section: any) => {
+					const cleanSection = {
+						...section,
+						rows: section.rows.map((row: any) => {
+							rowNumber += 1;
+							const cleanRow = { ...row, id: `row_${rowNumber}` };
+							if (isEmptyString(cleanRow.description)) {
+								delete cleanRow.description;
+							}
+							return cleanRow;
+						}),
+					};
+					if (isEmptyString(cleanSection.title)) {
+						delete cleanSection.title;
+					}
+					return cleanSection;
+				}
+			);
+		}
+
 		onSend(cloneObj);
 		close();
 	};
@@ -127,41 +154,77 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			) {
 				isValid = false;
 			}
+
+			if (parameter.control === 'listSections') {
+				const sections: ListSection[] =
+					getNestedValue(payload, parameter.key) ?? [];
+				const rows = sections.flatMap((section) => section.rows ?? []);
+				if (!rows.length || rows.some((row) => isEmptyString(row.title))) {
+					isValid = false;
+				}
+				// Section titles are only mandatory when there are multiple sections
+				if (
+					sections.length > 1 &&
+					sections.some((section) => isEmptyString(section.title ?? ''))
+				) {
+					isValid = false;
+				}
+			}
 		});
 
 		return isValid;
 	};
 
-	const renderInput = (parameter: InteractiveParameter) => (
-		<TextFieldWrapper key={parameter.key}>
-			<TextField
-				variant="standard"
-				value={getNestedValue(payload, parameter.key)}
-				onChange={(e) =>
-					setPayload((prevState: any) =>
-						setNestedValue(prevState, parameter.key, e.target.value)
-					)
-				}
-				label={t(parameter.placeholder || keyToLabel(parameter.key))}
-				size="small"
-				multiline={true}
-				fullWidth={true}
-				required={parameter.required}
-				error={
-					isShowErrors && parameter.required
-						? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
-						: false
-				}
-			/>
-			{parameter.description && (
-				<HelperText
-					dangerouslySetInnerHTML={{
-						__html: t(parameter.description),
-					}}
+	const renderInput = (parameter: InteractiveParameter) => {
+		if (parameter.control === 'listSections') {
+			return (
+				<ListSectionsEditor
+					key={parameter.key}
+					sections={getNestedValue(payload, parameter.key) ?? []}
+					onChange={(sections) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, sections)
+						)
+					}
+					isShowErrors={isShowErrors}
 				/>
-			)}
-		</TextFieldWrapper>
-	);
+			);
+		}
+
+		return (
+			<TextFieldWrapper key={parameter.key}>
+				<TextField
+					variant="standard"
+					value={getNestedValue(payload, parameter.key)}
+					onChange={(e) =>
+						setPayload((prevState: any) =>
+							setNestedValue(prevState, parameter.key, e.target.value)
+						)
+					}
+					label={t(parameter.placeholder || keyToLabel(parameter.key))}
+					size="small"
+					multiline={true}
+					fullWidth={true}
+					required={parameter.required}
+					inputProps={
+						parameter.maxLength ? { maxLength: parameter.maxLength } : undefined
+					}
+					error={
+						isShowErrors && parameter.required
+							? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
+							: false
+					}
+				/>
+				{parameter.description && (
+					<HelperText
+						dangerouslySetInnerHTML={{
+							__html: t(parameter.description),
+						}}
+					/>
+				)}
+			</TextFieldWrapper>
+		);
+	};
 
 	return (
 		<Dialog open={isVisible} onClose={close}>
@@ -234,15 +297,18 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 							)}
 						</div>
 
-						<PreviewContainer>
-							{messageData && (
-								<ChatMessage
-									data={messageData}
-									disableMediaPreview
-									isInfoClickable={false}
-								/>
-							)}
-						</PreviewContainer>
+						<div>
+							<PreviewTitle>{t('Preview')}</PreviewTitle>
+							<PreviewContainer>
+								{messageData && (
+									<ChatMessage
+										data={messageData}
+										disableMediaPreview
+										isInfoClickable={false}
+									/>
+								)}
+							</PreviewContainer>
+						</div>
 					</Container>
 				)}
 			</DialogContent>
