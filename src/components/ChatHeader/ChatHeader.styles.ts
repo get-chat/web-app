@@ -7,8 +7,17 @@ export const Header = styled.div`
 	display: flex;
 	align-items: center;
 	padding: 0 15px;
-	background-color: var(--gray-light);
+	background-color: #6843301f;
 	border-left: 1px solid lightgray;
+
+	&
+		.MuiSvgIcon-root:not(.MuiAvatar-root *):not(
+			.MuiAlert-root .MuiSvgIcon-root
+		):not(.MuiRadio-root .MuiSvgIcon-root):not(
+			.MuiCheckbox-root .MuiSvgIcon-root
+		):not(.MuiButton-root .MuiSvgIcon-root):not(.MuiStepIcon-root) {
+		color: var(--chat-icon);
+	}
 
 	@media only screen and (max-width: 750px) {
 		padding: 4px 10px;
@@ -54,6 +63,7 @@ export const HeaderInfo = styled.div`
 	padding-left: 15px;
 
 	> h3 {
+		color: var(--chat-icon-dark);
 		font-size: 16px;
 		margin-bottom: 0;
 	}
@@ -65,7 +75,7 @@ export const HeaderInfo = styled.div`
 
 	> p {
 		margin-bottom: 0;
-		color: var(--lighter-text-color);
+		color: var(--chat-icon);
 	}
 `;
 
@@ -79,7 +89,7 @@ export const SubRow = styled.div`
 
 export const WaId = styled.span<{ $desktopOnly?: boolean }>`
 	font-size: 12px;
-	color: rgba(0, 0, 45, 0.45);
+	color: var(--chat-icon);
 	${({ $desktopOnly }) =>
 		$desktopOnly &&
 		`
@@ -91,8 +101,8 @@ export const WaId = styled.span<{ $desktopOnly?: boolean }>`
 
 export const ExpiredIndicator = styled.span`
 	font-size: 12px;
-	color: #7a7a18 !important;
-	background-color: #a9a92a36;
+	color: #fff !important;
+	background-color: var(--chat-icon);
 	border-radius: 10px;
 	padding: 0 5px;
 `;
@@ -118,8 +128,9 @@ export const AssigneeActions = styled.div`
 	margin-right: 5px;
 	gap: 10px;
 
-	.assigneeChip {
-		background-color: rgba(0, 0, 45, 0.06) !important;
+	.assigneeChip,
+	.tagsChip {
+		background-color: var(--chat-bg) !important;
 	}
 
 	@media only screen and (max-width: 500px) {

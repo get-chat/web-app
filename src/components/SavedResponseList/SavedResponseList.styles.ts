@@ -3,9 +3,16 @@ import styled from 'styled-components';
 export const SearchContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	background-color: rgba(0, 0, 0, 0.05);
+
+	& .MuiSvgIcon-root {
+		color: var(--chat-icon) !important;
+	}
 
 	& .searchBar__inputContainer {
 		background-color: transparent;
+
+		& input::placeholder {
+			color: var(--chat-icon) !important;
+		}
 	}
 `;

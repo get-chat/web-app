@@ -13,10 +13,10 @@
 	--header-height: 56px;
 	--font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system,
 		BlinkMacSystemFont, 'Arial', sans-serif;
-	--wrapper-border-radius: 10px;
+	--wrapper-border-radius: 15px;
 	--chat-bg: #e8e0dc;
-	--chat-icon: #645652;
-	--chat-icon-dark: #463732;
+	--chat-icon: #774e3a;
+	--chat-icon-dark: #5e3826;
 	--red: #fa1313;
 	--red-dark: #961414;
 }

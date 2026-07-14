@@ -5,5 +5,4 @@ export const ChatView = styled.div`
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	background-color: var(--chat-bg);
 `;

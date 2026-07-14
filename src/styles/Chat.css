@@ -4,6 +4,8 @@
 	flex-direction: column;
 	position: relative;
 	background-color: var(--chat-bg);
+	background-image: url('/pattern.svg');
+	background-repeat: repeat;
 }
 
 .chat.chatFullWidth {
@@ -304,9 +306,6 @@ stored one. */
 	overflow-x: hidden;
 	border-left: 1px solid rgba(0, 0, 45, 0.05);
 	min-height: 0;
-	/* Served from the public folder, not bundled by webpack */
-	background-image: url('/pattern.svg');
-	background-repeat: repeat;
 }
 
 .chat__body__empty {
@@ -350,7 +349,7 @@ stored one. */
 .chat__body__dateIndicator .chat__message__dateContainer__indicator {
 	pointer-events: auto;
 	background-color: #e1f5fe;
-	box-shadow: 0 6px 10px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: 0 6px 10px -6px rgb(185, 152, 136);
 }
 
 .chat__empty {
@@ -380,7 +379,8 @@ stored one. */
 .savedResponsesWrapper,
 .interactiveMessagesWrapper {
 	overflow: hidden;
-	background-color: rgba(0, 0, 0, 0.05);
+	background-color: #6843301f;
+	/*background-color: rgba(0, 0, 0, 0.05);*/
 	border-radius: 10px; /*0 0 10px 10px;*/
 	/*box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);*/
 }
@@ -523,9 +523,9 @@ stored one. */
 
 .chat__message__dateContainer__indicator {
 	font-size: 12px;
-	border-radius: 10px;
-	padding: 8px 10px;
-	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
+	border-radius: 20px;
+	padding: 6px 10px;
+	box-shadow: 0 4px 5px -6px rgb(185, 152, 136);
 	background-color: #e1f5feeb;
 	/*text-transform: uppercase;*/
 }
