@@ -361,7 +361,16 @@ const Main: React.FC = () => {
 		window.goToChatByWaId = goToChatByWaId;
 
 		if (!getToken()) {
-			clearUserSession('notLoggedIn', location, navigate);
+			// Plain /main is the default entry point, reaching it without a
+			// session is expected; deep links redirect with an error instead
+			if (location.pathname.replace(/\/+$/, '') === '/main') {
+				clearUserSession(undefined, undefined, undefined);
+				navigate('/main/login', {
+					state: { nextPath: location.pathname, search: location.search },
+				});
+			} else {
+				clearUserSession('notLoggedIn', location, navigate);
+			}
 		} else {
 			// Retrieve current user, this will trigger other requests
 			retrieveCurrentUser();
