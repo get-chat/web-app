@@ -41,6 +41,14 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 
 	const { deleteSavedResponse } = useSavedResponses();
 
+	// Keep the list in sync with the store (e.g. a message saved as response),
+	// unless the user is filtering via search
+	useEffect(() => {
+		if (!search) {
+			setSavedResponses(savedResponsesUIState);
+		}
+	}, [savedResponsesUIState]);
+
 	const handleClose = () => {
 		setOpen(false);
 	};
@@ -76,10 +84,11 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	};
 
 	const handleDeleteSavedResponse = async () => {
+		setOpen(false);
 		if (deleteId) {
 			await deleteSavedResponse(deleteId);
+			await handleFetchSavedResponses();
 		}
-		setOpen(false);
 	};
 
 	return (
