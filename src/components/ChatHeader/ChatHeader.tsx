@@ -5,6 +5,7 @@ import {
 	ListItemIcon,
 	Menu,
 	MenuItem,
+	Skeleton,
 	Tooltip,
 } from '@mui/material';
 import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
@@ -150,47 +151,68 @@ const ChatHeader: React.FC<Props> = ({
 				</Styled.MobileOnly>
 			)}
 
-			<Styled.Clickable onClick={showContactDetails}>
-				<Styled.Avatar
-					src={extractAvatarFromContactProviderData(contactProvidersData[waId])}
-					$isExpired={isPersonExpired(person)}
-					generateBgColorBy={
-						!isPersonExpired(person)
-							? person?.waba_payload?.profile?.name
-							: undefined
-					}
-				>
-					{person?.initials}
-				</Styled.Avatar>
+			<Styled.Clickable
+				onClick={person ? showContactDetails : undefined}
+				$isLoading={!person}
+			>
+				{!person ? (
+					<>
+						<Skeleton variant="circular" width={40} height={40} />
+						<Styled.HeaderInfo>
+							<Skeleton variant="text" width={140} sx={{ fontSize: 16 }} />
+							<Skeleton variant="text" width={100} sx={{ fontSize: 12 }} />
+						</Styled.HeaderInfo>
+					</>
+				) : (
+					<>
+						<Styled.Avatar
+							src={extractAvatarFromContactProviderData(
+								contactProvidersData[waId]
+							)}
+							$isExpired={isPersonExpired(person)}
+							generateBgColorBy={
+								!isPersonExpired(person)
+									? person.waba_payload?.profile?.name
+									: undefined
+							}
+						>
+							{person.initials}
+						</Styled.Avatar>
 
-				<Styled.HeaderInfo>
-					<PrintMessage
-						as="h3"
-						message={
-							contactProvidersData[waId]?.[0]?.name ??
-							person?.waba_payload?.profile?.name ??
-							(person?.wa_id && !isUserActionsRestricted
-								? addPlus(person?.wa_id)
-								: '')
-						}
-					/>
+						<Styled.HeaderInfo>
+							<PrintMessage
+								as="h3"
+								message={
+									contactProvidersData[waId]?.[0]?.name ??
+									person.waba_payload?.profile?.name ??
+									(person.wa_id && !isUserActionsRestricted
+										? addPlus(person.wa_id)
+										: '')
+								}
+							/>
 
-					<Styled.SubRow>
-						{person?.wa_id && !isUserActionsRestricted && (
-							<Styled.WaId $desktopOnly>{addPlus(person?.wa_id)}</Styled.WaId>
-						)}
+							<Styled.SubRow>
+								{person.wa_id && !isUserActionsRestricted && (
+									<Styled.WaId $desktopOnly>
+										{addPlus(person.wa_id)}
+									</Styled.WaId>
+								)}
 
-						{isPersonExpired(person) && (
-							<Styled.ExpiredIndicator>{t('Expired')}</Styled.ExpiredIndicator>
-						)}
+								{isPersonExpired(person) && (
+									<Styled.ExpiredIndicator>
+										{t('Expired')}
+									</Styled.ExpiredIndicator>
+								)}
 
-						{isResolved && (
-							<Styled.ResolvedIndicator>
-								{t('Resolved')}
-							</Styled.ResolvedIndicator>
-						)}
-					</Styled.SubRow>
-				</Styled.HeaderInfo>
+								{isResolved && (
+									<Styled.ResolvedIndicator>
+										{t('Resolved')}
+									</Styled.ResolvedIndicator>
+								)}
+							</Styled.SubRow>
+						</Styled.HeaderInfo>
+					</>
+				)}
 			</Styled.Clickable>
 
 			<Styled.HeaderRight>

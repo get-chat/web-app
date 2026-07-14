@@ -37,11 +37,11 @@ export const BackButton = styled(IconButton)`
 	margin-right: 5px !important;
 `;
 
-export const Clickable = styled.div`
+export const Clickable = styled.div<{ $isLoading?: boolean }>`
 	flex: 1;
 	display: flex;
 	align-items: center;
-	cursor: pointer;
+	cursor: ${({ $isLoading }) => ($isLoading ? 'default' : 'pointer')};
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
