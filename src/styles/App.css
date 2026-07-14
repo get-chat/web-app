@@ -44,7 +44,8 @@
 	background-color: var(--gray-light);
 	height: calc(100vh - 40px);
 	width: 90vw;
-	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.7);
+	outline: 1px solid #fff;
+	box-shadow: 0 4px 15px -6px rgba(0, 0, 45, 0.3);
 	max-width: 1500px;
 	border-radius: var(--wrapper-border-radius);
 	overflow: hidden;
@@ -55,6 +56,8 @@
 	width: 100vw;
 	max-width: none;
 	border-radius: 0;
+	outline: none;
+	box-shadow: none;
 }
 
 h1,
