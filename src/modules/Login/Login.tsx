@@ -8,7 +8,7 @@ import {
 	useParams,
 	useSearchParams,
 } from 'react-router-dom';
-import Alert from '@mui/material/Alert';
+import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import {
 	clearToken,
 	getApiBaseURLsMergedWithConfig,
@@ -202,7 +202,7 @@ const Login: React.FC = () => {
 	return (
 		<Styled.LoginWrapper>
 			<Fade in={true}>
-				<Styled.LoginBody>
+				<Styled.LoginColumn>
 					<Styled.LogoWrapper>
 						<Styled.Logo
 							src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
@@ -210,120 +210,127 @@ const Login: React.FC = () => {
 						/>
 					</Styled.LogoWrapper>
 
-					{storedURLs.length > 1 && (
-						<Styled.InboxUrl>
-							<h3>{t('Your current inbox')}</h3>
-							<div>
-								{prepareURLForDisplay(api.defaults.baseURL ?? '')}
-								<a
-									href="#"
-									className="ml-1"
-									onClick={() => setInboxSelectorVisible(true)}
+					<Styled.LoginBody>
+						{storedURLs.length > 1 && (
+							<Styled.InboxUrl>
+								<h3>{t('Your current inbox')}</h3>
+								<div>
+									{prepareURLForDisplay(api.defaults.baseURL ?? '')}
+									<a
+										href="#"
+										className="ml-1"
+										onClick={() => setInboxSelectorVisible(true)}
+									>
+										{t('Change')}
+									</a>
+								</div>
+							</Styled.InboxUrl>
+						)}
+
+						<h2>{t('Welcome')}</h2>
+						<p>
+							{sessionUser
+								? t('Pick up where you left off')
+								: t('Please login to start')}
+						</p>
+
+						{sessionUser && (
+							<>
+								<Styled.SessionCard
+									data-testid="continue-with-session"
+									focusRipple
+									onClick={continueWithSession}
 								>
-									{t('Change')}
-								</a>
-							</div>
-						</Styled.InboxUrl>
-					)}
+									<CustomAvatar
+										src={
+											sessionUser.profile?.large_avatar ??
+											sessionUser.profile?.avatar
+										}
+										generateBgColorBy={sessionUser.username}
+									>
+										{generateInitialsHelper(sessionUser.username)}
+									</CustomAvatar>
+									<Styled.SessionCardInfo>
+										<Styled.SessionCardLabel>
+											{t('Continue as')}
+										</Styled.SessionCardLabel>
+										<Styled.SessionCardName>
+											{[sessionUser.first_name, sessionUser.last_name]
+												.filter(Boolean)
+												.join(' ') || sessionUser.username}
+										</Styled.SessionCardName>
+									</Styled.SessionCardInfo>
+									<Styled.SessionCardArrow />
+								</Styled.SessionCard>
 
-					<h2>{t('Welcome')}</h2>
-					<p>
-						{sessionUser
-							? t('Pick up where you left off')
-							: t('Please login to start')}
-					</p>
+								<Styled.OrDivider>
+									{t('or log in with another account')}
+								</Styled.OrDivider>
+							</>
+						)}
 
-					{sessionUser && (
-						<>
-							<Styled.SessionCard
-								data-testid="continue-with-session"
-								focusRipple
-								onClick={continueWithSession}
+						{loginError && (
+							<Styled.LoginAlert severity="error">
+								{t(loginError)}
+							</Styled.LoginAlert>
+						)}
+
+						<form onSubmit={doLogin}>
+							<TextField
+								variant="standard"
+								data-testid="username"
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+								label={t('Username')}
+								autoComplete="username"
+								size="medium"
+								fullWidth={true}
+							/>
+							<TextField
+								variant="standard"
+								data-testid="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								type="password"
+								label={t('Password')}
+								autoComplete="current-password"
+								size="medium"
+								fullWidth={true}
+							/>
+							<Button
+								data-testid="submit"
+								type="submit"
+								size="large"
+								variant="contained"
+								color="primary"
+								fullWidth
+								disableElevation
 							>
-								<CustomAvatar
-									src={
-										sessionUser.profile?.large_avatar ??
-										sessionUser.profile?.avatar
-									}
-									generateBgColorBy={sessionUser.username}
-								>
-									{generateInitialsHelper(sessionUser.username)}
-								</CustomAvatar>
-								<Styled.SessionCardInfo>
-									<Styled.SessionCardLabel>
-										{t('Continue as')}
-									</Styled.SessionCardLabel>
-									<Styled.SessionCardName>
-										{[sessionUser.first_name, sessionUser.last_name]
-											.filter(Boolean)
-											.join(' ') || sessionUser.username}
-									</Styled.SessionCardName>
-								</Styled.SessionCardInfo>
-								<Styled.SessionCardArrow />
-							</Styled.SessionCard>
+								{t('Log in')}
+							</Button>
+						</form>
 
-							<Styled.OrDivider>
-								{t('or log in with another account')}
-							</Styled.OrDivider>
-						</>
-					)}
+						<Styled.AdminPanelRow>
+							<Styled.AdminPanelLink
+								href={getHubURL(config?.API_BASE_URL ?? '')}
+							>
+								{t('Admin panel')}
+								<OpenInNewRoundedIcon />
+							</Styled.AdminPanelLink>
+						</Styled.AdminPanelRow>
 
-					<form onSubmit={doLogin}>
-						<TextField
-							variant="standard"
-							data-testid="username"
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
-							label={t('Username')}
-							autoComplete="username"
-							size="medium"
-							fullWidth={true}
-						/>
-						<TextField
-							variant="standard"
-							data-testid="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							type="password"
-							label={t('Password')}
-							autoComplete="current-password"
-							size="medium"
-							fullWidth={true}
-						/>
-						<Button
-							data-testid="submit"
-							type="submit"
-							size="large"
-							variant="contained"
-							color="primary"
-							fullWidth
-							disableElevation
-						>
-							{t('Log in')}
-						</Button>
-
-						<Styled.AdminPanelButton
-							href={getHubURL(config?.API_BASE_URL ?? '')}
-							fullWidth
-							variant="text"
-						>
-							{t('Admin panel')}
-						</Styled.AdminPanelButton>
-					</form>
-
-					{isValidatingToken && (
-						<Styled.ValidatingToken>
-							<h2>{t('Welcome')}</h2>
-							<p>{t('We are validating your session, please wait.')}</p>
-						</Styled.ValidatingToken>
-					)}
-
-					{loginError && <Alert severity="error">{t(loginError)}</Alert>}
+						{isValidatingToken && (
+							<Styled.ValidatingToken>
+								<h2>{t('Welcome')}</h2>
+								<p>{t('We are validating your session, please wait.')}</p>
+							</Styled.ValidatingToken>
+						)}
+					</Styled.LoginBody>
 
 					<Styled.VersionWrapper>
 						<Styled.Version>Version: {packageJson?.version}</Styled.Version>
 					</Styled.VersionWrapper>
-				</Styled.LoginBody>
+				</Styled.LoginColumn>
 			</Fade>
 
 			<InboxSelectorDialog

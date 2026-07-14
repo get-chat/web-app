@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 import ButtonBase from '@mui/material/ButtonBase';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 
@@ -7,88 +7,142 @@ export const LoginWrapper = styled.div.attrs({
 	id: 'login',
 })`
 	position: absolute;
-	align-items: center;
-	justify-content: center;
 	display: flex;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	/*background-color: var(--gray-light);*/
+	overflow-y: auto;
+	padding: 24px;
+	background: radial-gradient(
+			480px 320px at 50% 16%,
+			rgba(101, 203, 172, 0.16),
+			transparent 70%
+		),
+		linear-gradient(180deg, var(--gray-lighter), #e9ecf2);
 
 	@media only screen and (max-width: 750px) {
-		background-color: white;
+		padding: 0;
+		background: white;
 	}
+`;
+
+export const LoginColumn = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	max-width: 450px;
+	margin: auto;
 `;
 
 export const LoginBody = styled.div`
 	position: relative;
 	width: 100%;
-	max-width: 450px;
 	background-color: white;
 	border-radius: 15px;
-	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.7);
-	padding: 20px 30px 30px 30px;
+	border: 1px solid rgba(255, 255, 255, 0.8);
+	box-shadow: 0 24px 48px -24px rgba(0, 0, 45, 0.35),
+		0 1px 2px rgba(0, 0, 45, 0.06);
+	padding: 30px 32px 26px;
 
 	@media only screen and (max-width: 750px) {
-		max-width: 100%;
 		border-radius: 0;
+		border: none;
 		box-shadow: none;
 	}
 
 	h2 {
-		margin-bottom: 5px;
+		margin: 0 0 4px;
 		text-align: center;
+		font-size: 24px;
+		font-weight: 700;
+		letter-spacing: -0.01em;
 	}
 
 	p {
-		margin-bottom: 15px;
+		margin: 0 0 20px;
 		text-align: center;
 		color: var(--lighter-text-color);
 	}
 
 	> form > button {
-		margin: 5px auto 10px;
+		margin: 8px 0 0;
+		border-radius: 10px;
+		text-transform: none;
+		font-size: 15px;
+		font-weight: 600;
+		padding-block: 10px;
 	}
 
 	.MuiFormControl-root {
 		margin-bottom: 15px;
 	}
-
-	.MuiButton-label {
-		font-size: 18px;
-	}
-
-	.MuiAlert-root {
-		margin-top: 15px;
-	}
 `;
 
 export const LogoWrapper = styled.div`
-	clear: both;
 	display: flex;
 	justify-content: center;
+	margin-bottom: 20px;
+
+	@media only screen and (max-width: 750px) {
+		margin-top: 40px;
+	}
 `;
 
 export const Logo = styled.img`
-	height: 80px;
-	width: 80px;
-	margin-top: 15px;
-	margin-bottom: 15px;
+	height: 64px;
+	width: 64px;
 `;
 
 export const InboxUrl = styled.div`
 	font-size: 12px;
 	text-align: center;
-	margin-block: 15px;
+	margin-block: 0 15px;
 
 	a {
 		color: var(--color-secondary);
 	}
 `;
 
-export const AdminPanelButton = styled(Button)`
-	margin-top: 10px !important;
+export const LoginAlert = styled(Alert)`
+	border-radius: 10px !important;
+	margin-bottom: 15px;
+	align-items: center;
+`;
+
+export const AdminPanelRow = styled.div`
+	display: flex;
+	justify-content: center;
+	margin-top: 18px;
+`;
+
+export const AdminPanelLink = styled.a`
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 13px;
+	color: var(--lighter-text-color);
+	text-decoration: none;
+	transition: color 0.2s ease;
+
+	svg {
+		font-size: 15px;
+	}
+
+	&:hover {
+		color: var(--default-text-color);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 `;
 
 export const SessionCard = styled(ButtonBase)`
@@ -197,19 +251,24 @@ export const ValidatingToken = styled.div`
 	right: 0;
 	bottom: 0;
 	background-color: white;
-	border-radius: 10px;
+	border-radius: 15px;
 `;
 
 export const VersionWrapper = styled.div`
 	display: flex;
 	justify-content: center;
-	margin-top: 45px;
-	margin-bottom: -75px;
+	margin-top: 20px;
+
+	@media only screen and (max-width: 750px) {
+		margin-bottom: 20px;
+	}
 `;
 
 export const Version = styled.div`
-	font-size: 12px;
+	font-size: 11px;
+	letter-spacing: 0.02em;
 	color: var(--lighter-text-color);
+	opacity: 0.8;
 `;
 
 export const Backdrop = styled.div`
