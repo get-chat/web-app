@@ -22,8 +22,8 @@ export const Wrapper = styled.div`
 	font-size: 12px;
 	background-color: rgba(255, 255, 255, 0.8);
 	padding: 5px 10px;
-	border-radius: 10px;
-	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
+	border-radius: 20px;
+	box-shadow: 0 4px 5px -6px rgb(185, 152, 136);
 `;
 
 export const Title = styled.div``;

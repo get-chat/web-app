@@ -348,7 +348,7 @@ stored one. */
 
 .chat__body__dateIndicator .chat__message__dateContainer__indicator {
 	pointer-events: auto;
-	background-color: #e1f5fe;
+	background-color: white;
 	box-shadow: 0 6px 10px -6px rgb(185, 152, 136);
 }
 
@@ -397,7 +397,7 @@ stored one. */
 .templateMessages__emptyInfo,
 .savedResponses__emptyInfo {
 	font-size: 15px;
-	color: rgba(0, 0, 45, 0.8);
+	color: var(--chat-icon);
 }
 
 .templateMessages__actions {
@@ -407,7 +407,7 @@ stored one. */
 	align-items: center;
 	margin-bottom: 10px;
 	border-bottom: 1px solid rgba(0, 0, 45, 0.1);
-	padding-bottom: 5px;
+	padding-bottom: 10px;
 }
 
 .templateMessages__actions a {
@@ -415,7 +415,7 @@ stored one. */
 }
 
 .templateMessages__create a {
-	color: var(--default-text-color);
+	color: var(--chat-icon-dark);
 	font-weight: 600;
 	font-size: 13px;
 }
@@ -423,7 +423,7 @@ stored one. */
 .templateMessages__refresh {
 	font-size: 13px;
 	padding: 3px 5px;
-	color: var(--default-text-color);
+	color: var(--chat-icon);
 }
 
 .templateMessages__refresh > span:first-child {
@@ -434,6 +434,7 @@ stored one. */
 	font-size: 13px !important;
 	font-weight: 600;
 	display: inline-block;
+	color: var(--chat-icon-dark);
 }
 
 .templateMessages .templateMessageWrapper,
@@ -460,6 +461,7 @@ stored one. */
 .templateMessageWrapper > button,
 .savedResponseWrapper > button {
 	margin-left: 15px;
+	color: var(--chat-icon-dark);
 }
 
 .templateMessage__message,
@@ -526,7 +528,9 @@ stored one. */
 	border-radius: 20px;
 	padding: 6px 10px;
 	box-shadow: 0 4px 5px -6px rgb(185, 152, 136);
-	background-color: #e1f5feeb;
+	background-color: rgba(255, 255, 255, 0.6);
+	color: var(--chat-icon);
+	font-weight: 600;
 	/*text-transform: uppercase;*/
 }
 

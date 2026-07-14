@@ -24,6 +24,7 @@ export const Item = styled.div`
 
 	& .MuiButton-text {
 		text-align: left;
+		color: var(--chat-icon-dark);
 	}
 `;
 
@@ -37,4 +38,5 @@ export const Alert = styled.div`
 
 export const Description = styled.div`
 	font-size: 12px;
+	color: var(--chat-icon);
 `;
