@@ -461,6 +461,10 @@ stored one. */
 .templateMessageWrapper > button,
 .savedResponseWrapper > button {
 	margin-left: 15px;
+}
+
+.templateMessageWrapper > button.MuiButton-textBlack,
+.savedResponseWrapper > button.MuiButton-textBlack {
 	color: var(--chat-icon-dark);
 }
 
