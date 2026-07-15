@@ -31,7 +31,7 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 							<Styled.ErrorTitle>
 								{t(error.title ?? 'Error')}{' '}
 								<Styled.Code>
-									{error.code && t('(Code: %d)', error.code)}
+									{error.code && t('(Code: %d)', Number(error.code))}
 								</Styled.Code>
 							</Styled.ErrorTitle>
 							<Styled.ErrorDetails>

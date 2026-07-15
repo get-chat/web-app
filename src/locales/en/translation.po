@@ -539,7 +539,7 @@ msgstr ""
 msgid "<0>Quantity</0>: %d"
 msgstr ""
 
-msgid "<0>Price</0>: %d %s"
+msgid "<0>Price</0>: %s %s"
 msgstr ""
 
 msgid "Copied!"

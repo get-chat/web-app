@@ -548,8 +548,8 @@ msgstr "<0>Katalog ID</0>: %s"
 msgid "<0>Quantity</0>: %d"
 msgstr "<0>Adet</0>: %d"
 
-msgid "<0>Price</0>: %d %s"
-msgstr "<0>Fiyat</0>: %d %s"
+msgid "<0>Price</0>: %s %s"
+msgstr "<0>Fiyat</0>: %s %s"
 
 msgid "Copied!"
 msgstr "Kopyalandı!"

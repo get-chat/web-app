@@ -42,7 +42,7 @@ const OrderMessage: React.FC<Props> = ({ data }) => {
 								<Trans
 									values={{
 										postProcess: 'sprintf',
-										sprintf: [quantity],
+										sprintf: [Number(quantity)],
 									}}
 								>
 									<b>Quantity</b>: %d
@@ -55,7 +55,7 @@ const OrderMessage: React.FC<Props> = ({ data }) => {
 										sprintf: [item_price, currency],
 									}}
 								>
-									<b>Price</b>: %d %s
+									<b>Price</b>: %s %s
 								</Trans>
 							</div>
 						</Item>

@@ -174,7 +174,7 @@
 	"<0>Product retailer ID<0>: %s": "<0>Identyfikator sprzedawcy produktu <0>: %s",
 	"<0>Catalog ID</0>: %s": "<0>Identyfikator katalogu</ 0>: %s",
 	"<0>Quantity</0>: %d": "<0>Ilość</ 0>: %d",
-	"<0>Price</0>: %d %s": "<0>Cena</0>: %d %s",
+	"<0>Price</0>: %s %s": "<0>Cena</0>: %s %s",
 	"Copied!": "Skopiowano!",
 	"Missing parameters": "Brakujące parametry",
 	"You need to fill the parameters!": "Musisz wypełnić parametry!",

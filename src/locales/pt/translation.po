@@ -530,8 +530,8 @@ msgstr "<0>ID do catálogo</0> : %s"
 msgid "<0>Quantity</0>: %d"
 msgstr "<0>Quantidade</0> : %d"
 
-msgid "<0>Price</0>: %d %s"
-msgstr "<0>Preço</0> : %d %s"
+msgid "<0>Price</0>: %s %s"
+msgstr "<0>Preço</0> : %s %s"
 
 msgid "Copied!"
 msgstr "Copiado!"

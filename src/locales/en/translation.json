@@ -172,7 +172,7 @@
 	"<0>Product retailer ID<0>: %s": "",
 	"<0>Catalog ID</0>: %s": "",
 	"<0>Quantity</0>: %d": "",
-	"<0>Price</0>: %d %s": "",
+	"<0>Price</0>: %s %s": "",
 	"Copied!": "",
 	"Missing parameters": "",
 	"You need to fill the parameters!": "",

@@ -172,7 +172,7 @@
 	"<0>Product retailer ID<0>: %s": "<0>ID do varejista do produto<0>: %s",
 	"<0>Catalog ID</0>: %s": "<0>ID do catálogo</0> : %s",
 	"<0>Quantity</0>: %d": "<0>Quantidade</0> : %d",
-	"<0>Price</0>: %d %s": "<0>Preço</0> : %d %s",
+	"<0>Price</0>: %s %s": "<0>Preço</0> : %s %s",
 	"Copied!": "Copiado!",
 	"Missing parameters": "Parâmetros ausentes",
 	"You need to fill the parameters!": "Você precisa preencher os parâmetros!",
