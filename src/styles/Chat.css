@@ -24,10 +24,14 @@
 	opacity: 0.3;
 }
 
+/* The entrance must never paint outside the row's layout box: downward
+overflow (e.g. a translateY slide) briefly extends the scrollable area
+of .chat__body, flashing its auto scrollbar in short chats. Scaling up
+from the bottom edge stays within the box. */
 @keyframes chatMessageAppear {
 	from {
 		opacity: 0;
-		transform: translateY(12px);
+		transform: scaleY(0.92);
 	}
 	to {
 		opacity: 1;
@@ -37,6 +41,7 @@
 
 .chat__message__outer--appear {
 	animation: chatMessageAppear 0.3s ease-out;
+	transform-origin: bottom;
 }
 
 @media (prefers-reduced-motion: reduce) {
