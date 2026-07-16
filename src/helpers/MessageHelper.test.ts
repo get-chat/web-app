@@ -46,6 +46,14 @@ describe('getEchoOriginLabel', () => {
 	it('returns undefined for regular outgoing messages', () => {
 		expect(getEchoOriginLabel(buildOutgoingMessage())).toBeUndefined();
 	});
+
+	it('labels REST-fetched API echoes via the stored is_echo marker', () => {
+		// After a page refresh echoes arrive via REST, which carries no
+		// echo_origin — only waba_payload.is_echo
+		const message = buildOutgoingMessage();
+		message.waba_payload!.is_echo = true;
+		expect(getEchoOriginLabel(message)).toBe('via API');
+	});
 });
 
 describe('getSenderName - echoed messages', () => {
@@ -72,6 +80,12 @@ describe('getUniqueSender - echoed messages', () => {
 			)
 		).toBe('echo:smb');
 		expect(getUniqueSender(buildOutgoingMessage())).toBe('4915792500517');
+	});
+
+	it('groups REST-fetched API echoes with webhook-delivered ones', () => {
+		const message = buildOutgoingMessage();
+		message.waba_payload!.is_echo = true;
+		expect(getUniqueSender(message)).toBe('echo:api');
 	});
 });
 
