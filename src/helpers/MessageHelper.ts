@@ -38,7 +38,16 @@ export const prepareMessageList = (
 			// Consider switching to getchat id only
 			const messageKey =
 				message.waba_payload?.id ?? generateMessageInternalId(message.id);
-			result[messageKey] = message;
+			// is_failed is client-side only (set by the websocket status
+			// handler); REST responses carry the errors in waba_payload
+			// instead, so derive it — otherwise failed messages regress from
+			// the error icon to the pending clock icon after a page refresh.
+			// Outgoing only, mirroring the websocket path: status events (and
+			// with them is_failed) exist only for business-sent messages.
+			const isFailed =
+				message.is_failed ||
+				(message.from_us && (message.waba_payload?.errors?.length ?? 0) > 0);
+			result[messageKey] = isFailed ? { ...message, is_failed: true } : message;
 		}
 	});
 
