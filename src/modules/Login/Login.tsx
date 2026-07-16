@@ -196,7 +196,12 @@ const Login: React.FC = () => {
 	};
 
 	const logoutToClearSession = async () => {
-		await logout();
+		try {
+			await logout();
+		} catch (error) {
+			// Ignored, there may be no backend session to clear
+			console.error(error);
+		}
 	};
 
 	return (

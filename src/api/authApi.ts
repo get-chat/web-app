@@ -30,8 +30,17 @@ export const changePassword = async (data: ChangePasswordRequest) => {
 	return response.data;
 };
 
+// Clears the backend session (Django LogoutView, POST-only since Django 5.0)
 export const logout = async () => {
-	const response = await api.get<EmptyResponse>('/auth/logout/');
+	const response = await api.post<EmptyResponse>('/auth/logout/', undefined, {
+		// Send the session cookie also when the API runs on another origin (local dev)
+		withCredentials: true,
+		// Django's LogoutView is CSRF-protected; axios attaches the header
+		// for same-origin requests only, cross-origin logout is rejected by
+		// Django's CSRF origin check anyway
+		xsrfCookieName: 'csrftoken',
+		xsrfHeaderName: 'X-CSRFToken',
+	});
 	return response.data;
 };
 
