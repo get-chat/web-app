@@ -105,7 +105,7 @@ export const SenderName = styled.div.attrs({
 	$isOutgoing?: boolean;
 }>`
 	display: block;
-	margin: 0 10px;
+	margin: 0 10px 2px;
 	font-size: x-small;
 	font-weight: 600;
 	color: rgba(0, 0, 45, 0.75);
