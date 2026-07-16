@@ -24,7 +24,6 @@ export const Wrapper = styled.div`
 
 	&.active {
 		background-color: var(--gray-lighter);
-		box-shadow: inset 3px 0 0 var(--color-primary);
 	}
 
 	&.selected {

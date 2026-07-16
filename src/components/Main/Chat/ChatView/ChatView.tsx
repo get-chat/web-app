@@ -169,7 +169,17 @@ const ChatView: React.FC<Props> = (props) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const { waId } = useParams();
+	const { waId: routeWaId } = useParams();
+
+	// Keeps the last open chat rendered while the exit fade plays; content
+	// is then cleared by the [waId] effect once the transition unmounts
+	const chatViewTransition = useUnmountTransition(!!routeWaId);
+	const lastWaIdRef = useRef(routeWaId);
+	if (routeWaId) {
+		lastWaIdRef.current = routeWaId;
+	}
+	const waId = chatViewTransition.isExiting ? lastWaIdRef.current : routeWaId;
+
 	const [isLoaded, setLoaded] = useState(false);
 	const [isExpired, setExpired] = useState(false);
 
@@ -2041,10 +2051,12 @@ const ChatView: React.FC<Props> = (props) => {
 			className={
 				'chat' +
 				(waId ? ' chatOpen' : '') +
+				(chatViewTransition.isExiting ? ' chatExiting' : '') +
 				(props.isChatOnly ? ' chatFullWidth' : '')
 			}
 			onDrop={(event) => handleDrop(event)}
 			onDragOver={(event) => handleDragOver(event)}
+			onAnimationEnd={chatViewTransition.handleAnimationEnd}
 		>
 			{/*<Prompt when={hasFailedMessages}
                     message={confirmationMessage} />*/}

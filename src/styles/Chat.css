@@ -12,6 +12,44 @@
 	flex: 1;
 }
 
+/* The chat view fades in when a chat is opened and fades out when it is
+closed ("Close view"); switching between chats does not replay it since
+.chatOpen persists. The exit pairs with useUnmountTransition in
+ChatView, which keeps the last chat rendered until animationend. */
+@keyframes chatViewFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes chatViewFadeOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+.chat.chatOpen {
+	animation: chatViewFadeIn 0.15s ease-out;
+}
+
+.chat.chatExiting {
+	animation: chatViewFadeOut 0.15s ease-in forwards;
+	pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat.chatOpen,
+	.chat.chatExiting {
+		animation: none;
+	}
+}
+
 .chat__message__failed__info {
 	font-size: 12px;
 	color: red;
@@ -52,7 +90,7 @@ from the bottom edge stays within the box. */
 
 .chat__media,
 .chat__location__iframe {
-	border-radius: 6px;
+	border-radius: 8px;
 	display: block;
 	margin: -1px -6px 4px -6px;
 	height: 150px;
