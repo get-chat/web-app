@@ -20,7 +20,13 @@ export const SearchInputContainer = styled.div.attrs({
 	width: 100%;
 	height: 35px;
 	border-radius: 10px;
-	/*box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);*/
+	transition: background-color ease-out 0.15s, box-shadow ease-out 0.15s;
+
+	&:focus-within {
+		background-color: #fff;
+		box-shadow: 0 0 0 1px var(--color-primary),
+			0 0 0 4px rgba(101, 203, 172, 0.2);
+	}
 
 	> .MuiSvgIcon-root {
 		color: var(--lighter-text-color);

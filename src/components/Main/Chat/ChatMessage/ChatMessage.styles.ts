@@ -149,14 +149,15 @@ export const ChatMessage = styled.div.attrs({
 	position: relative;
 	font-size: 14px;
 	padding: 5px 10px;
-	border-radius: 10px;
+	border-radius: 12px;
 	width: ${(props) =>
 		props.$hasMedia || props.$type === MessageType.location
 			? 'min-content'
 			: 'fit-content'};
 	background-color: #ffffff;
 	margin-bottom: 25px;
-	box-shadow: 0 5px 3px -6px rgb(142 112 97);
+	box-shadow: 0 1px 1px rgba(94, 56, 38, 0.1),
+		0 2px 6px -2px rgba(94, 56, 38, 0.12);
 	max-width: 70%;
 	transition: opacity 1s ease;
 	margin-top: ${(props) => (props.$isSenderHidden ? '-22px' : '0')};

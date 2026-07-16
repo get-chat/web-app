@@ -106,15 +106,20 @@ export const TypeBox = styled.div`
 	background-color: white;
 	height: auto;
 	flex: 1;
-	border-radius: 10px;
+	border-radius: 12px;
 	margin-bottom: 5px;
 	border: none;
-	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
-	transition: all ease-out 0.5s;
+	box-shadow: var(--shadow-sm), 0 0 0 1px rgba(94, 56, 38, 0.06);
+	transition: box-shadow ease-out 0.2s, background-color ease-out 0.2s;
 
 	&:focus {
 		outline: none;
 		border: none;
+	}
+
+	&:focus-within {
+		box-shadow: var(--shadow-sm), 0 0 0 1px var(--color-primary),
+			0 0 0 4px rgba(101, 203, 172, 0.2);
 	}
 
 	&.expired {

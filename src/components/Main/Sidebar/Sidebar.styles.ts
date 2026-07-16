@@ -70,7 +70,7 @@ export const LoadingMoreWrapper = styled.div`
 	padding: 10px 10px 4px 10px;
 	border-radius: 40px;
 	background-color: white;
-	box-shadow: 0 6px 15px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: var(--shadow-md);
 `;
 
 export const ResultsContainer = styled.div`

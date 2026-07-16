@@ -16,9 +16,15 @@ export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	cursor: pointer;
+	transition: background-color ease-out 0.15s;
+
+	&:hover {
+		background-color: var(--gray-lighter);
+	}
 
 	&.active {
 		background-color: var(--gray-lighter);
+		box-shadow: inset 3px 0 0 var(--color-primary);
 	}
 
 	&.selected {
