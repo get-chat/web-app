@@ -5,12 +5,17 @@ import { IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	onHide: () => void;
 }
 
-const Notifications: React.FC<Props> = ({ onHide }) => {
+const Notifications: React.FC<Props> = ({
+	onHide,
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const { t } = useTranslation();
 
 	const [isLoaded] = useState(true);
@@ -35,7 +40,10 @@ const Notifications: React.FC<Props> = ({ onHide }) => {
 	}, []);
 
 	return (
-		<Styled.NotificationsContainer>
+		<Styled.NotificationsContainer
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			<Styled.Header>
 				<IconButton onClick={onHide} size="large">
 					<CloseIcon />

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
+import {
+	overlayPanelTransition,
+	PanelTransitionStyleProps,
+} from '@src/styles/panelTransitions';
 
-export const BusinessProfileContainer = styled.div`
+export const BusinessProfileContainer = styled.div<PanelTransitionStyleProps>`
 	display: flex;
 	flex-direction: column;
 	position: absolute;
@@ -10,6 +14,8 @@ export const BusinessProfileContainer = styled.div`
 	bottom: 0;
 	background-color: var(--gray-light);
 	z-index: 10;
+
+	${overlayPanelTransition}
 `;
 
 export const Header = styled.div`

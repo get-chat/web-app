@@ -4,17 +4,23 @@ import TemplatesList from '../TemplatesList';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import * as Styled from './TemplateListWithControls.styles';
 
 export type Props = {
 	onSelect: (template: Template) => void;
-};
+} & PanelTransitionProps;
 
-const TemplateListWithControls: React.FC<Props> = ({ onSelect }) => {
+const TemplateListWithControls: React.FC<Props> = ({
+	onSelect,
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const { t } = useTranslation();
 	const { isLoadingTemplates } = useAppSelector((state) => state.UI);
 
 	return (
-		<div className="templateMessagesOuter">
+		<Styled.Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 			{/*<SearchBar />*/}
 
 			{isLoadingTemplates ? (
@@ -26,7 +32,7 @@ const TemplateListWithControls: React.FC<Props> = ({ onSelect }) => {
 					customSelectButtonTitle={undefined}
 				/>
 			)}
-		</div>
+		</Styled.Outer>
 	);
 };
 

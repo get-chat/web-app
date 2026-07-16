@@ -16,12 +16,17 @@ import * as Styled from './SavedResponseList.styles';
 import SearchBar from '@src/components/SearchBar';
 import { fetchSavedResponses } from '@src/api/savedResponsesApi';
 import { SavedResponse } from '@src/types/savedResponses';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
 export type Props = {
 	sendCustomTextMessage: (text: string) => void;
-};
+} & PanelTransitionProps;
 
-const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
+const SavedResponseList: React.FC<Props> = ({
+	sendCustomTextMessage,
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const { t } = useTranslation();
 
 	const [deleteId, setDeleteId] = useState<number>();
@@ -92,7 +97,7 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 	};
 
 	return (
-		<div className="savedResponsesOuter">
+		<Styled.Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 			<div className="savedResponsesWrapper">
 				<Styled.SearchContainer>
 					<SearchBar
@@ -161,7 +166,7 @@ const SavedResponseList: React.FC<Props> = ({ sendCustomTextMessage }) => {
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</div>
+		</Styled.Outer>
 	);
 };
 

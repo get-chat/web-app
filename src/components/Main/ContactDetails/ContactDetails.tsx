@@ -21,8 +21,9 @@ import SellIcon from '@mui/icons-material/Sell';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import PrintMessage from '@src/components/PrintMessage';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	contactProvidersData: { [key: string]: any };
 	retrieveContactData: (personWaId: string, onComplete?: () => void) => void;
 }
@@ -30,6 +31,8 @@ interface Props {
 const ContactDetails: React.FC<Props> = ({
 	contactProvidersData,
 	retrieveContactData,
+	isExiting,
+	onAnimationEnd,
 }) => {
 	const { t } = useTranslation();
 
@@ -62,7 +65,10 @@ const ContactDetails: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.ContactDetailsContainer>
+		<Styled.ContactDetailsContainer
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			<Styled.Header>
 				<IconButton onClick={hideContactDetails} size="large">
 					<CloseIcon />

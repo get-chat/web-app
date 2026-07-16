@@ -52,6 +52,7 @@ import {
 } from '@src/store/reducers/chatsReducer';
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
+import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
 	setSearchMessagesVisible,
@@ -151,6 +152,16 @@ const Main: React.FC = () => {
 
 	const { resolveContact, contactProvidersData, setContactProvidersData } =
 		useResolveContacts();
+
+	const searchMessagesTransition = useUnmountTransition(
+		isSearchMessagesVisible
+	);
+	const contactDetailsTransition = useUnmountTransition(
+		isContactDetailsVisible
+	);
+	const messageStatusesTransition = useUnmountTransition(
+		isMessageStatusesVisible
+	);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const query = useQuery();
@@ -1126,22 +1137,30 @@ const Main: React.FC = () => {
 					/>
 				)}
 
-				{isSearchMessagesVisible && (
+				{searchMessagesTransition.isMounted && (
 					<SearchMessage
 						initialKeyword={searchMessagesInitialKeyword}
 						setInitialKeyword={setSearchMessagesInitialKeyword}
+						isExiting={searchMessagesTransition.isExiting}
+						onAnimationEnd={searchMessagesTransition.handleAnimationEnd}
 					/>
 				)}
 
-				{isContactDetailsVisible && (
+				{contactDetailsTransition.isMounted && (
 					<ContactDetails
 						contactProvidersData={contactProvidersData}
 						retrieveContactData={resolveContact}
+						isExiting={contactDetailsTransition.isExiting}
+						onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
 					/>
 				)}
 
-				{isMessageStatusesVisible && (
-					<MessageStatuses message={messageWithStatuses} />
+				{messageStatusesTransition.isMounted && (
+					<MessageStatuses
+						message={messageWithStatuses}
+						isExiting={messageStatusesTransition.isExiting}
+						onAnimationEnd={messageStatusesTransition.handleAnimationEnd}
+					/>
 				)}
 
 				{isChatAssignmentVisible && (

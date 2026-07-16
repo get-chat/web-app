@@ -15,15 +15,18 @@ import { prepareMessageList } from '@src/helpers/MessageHelper';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
 import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
 export type Props = {
 	initialKeyword: string;
 	setInitialKeyword: (_keyword: string) => void;
-};
+} & PanelTransitionProps;
 
 const SearchMessage: React.FC<Props> = ({
 	initialKeyword,
 	setInitialKeyword,
+	isExiting,
+	onAnimationEnd,
 }) => {
 	const dispatch = useAppDispatch();
 
@@ -127,7 +130,10 @@ const SearchMessage: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.SearchMessageContainer>
+		<Styled.SearchMessageContainer
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			<Styled.Header>
 				<IconButton onClick={close} size="large">
 					<CloseIcon />

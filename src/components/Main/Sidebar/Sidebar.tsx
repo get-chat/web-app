@@ -48,6 +48,7 @@ import SearchMessageResult from '../../SearchMessageResult/SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
 import StartChat from '../../StartChat';
+import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession } from '@src/helpers/ApiHelper';
@@ -275,6 +276,13 @@ const Sidebar: React.FC<Props> = ({
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isUserListVisible, setUserListVisible] = useState(false);
+	const contactsTransition = useUnmountTransition(isContactsVisible);
+	const userProfileTransition = useUnmountTransition(isUserProfileVisible);
+	const businessProfileTransition = useUnmountTransition(
+		isBusinessProfileVisible
+	);
+	const notificationsTransition = useUnmountTransition(isNotificationsVisible);
+	const userListTransition = useUnmountTransition(isUserListVisible);
 	const [isLoadingChats, setLoadingChats] = useState(false);
 	const [isLoadingMoreChats, setLoadingMoreChats] = useState(false);
 
@@ -1388,23 +1396,31 @@ const Sidebar: React.FC<Props> = ({
 				</Styled.LoadingMore>
 			</Fade>
 
-			{isContactsVisible && (
-				<StartChat onHide={() => setContactsVisible(false)} />
-			)}
-
-			{isUserProfileVisible && (
-				<UserProfile
-					onHide={() => setUserProfileVisible(false)}
-					setChangePasswordDialogVisible={setChangePasswordDialogVisible}
+			{contactsTransition.isMounted && (
+				<StartChat
+					onHide={() => setContactsVisible(false)}
+					isExiting={contactsTransition.isExiting}
+					onAnimationEnd={contactsTransition.handleAnimationEnd}
 				/>
 			)}
 
-			{isBusinessProfileVisible && (
+			{userProfileTransition.isMounted && (
+				<UserProfile
+					onHide={() => setUserProfileVisible(false)}
+					setChangePasswordDialogVisible={setChangePasswordDialogVisible}
+					isExiting={userProfileTransition.isExiting}
+					onAnimationEnd={userProfileTransition.handleAnimationEnd}
+				/>
+			)}
+
+			{businessProfileTransition.isMounted && (
 				<BusinessProfile
 					onHide={() => setBusinessProfileVisible(false)}
 					handleCheckSettingsRefreshStatus={handleCheckSettingsRefreshStatus}
 					profilePhoto={profilePhoto}
 					showOpenInWhatsApp={showOpenInWhatsApp}
+					isExiting={businessProfileTransition.isExiting}
+					onAnimationEnd={businessProfileTransition.handleAnimationEnd}
 				/>
 			)}
 
@@ -1493,12 +1509,20 @@ const Sidebar: React.FC<Props> = ({
 				profilePhoto={profilePhoto}
 			/>
 
-			{isNotificationsVisible && (
-				<Notifications onHide={() => setNotificationsVisible(false)} />
+			{notificationsTransition.isMounted && (
+				<Notifications
+					onHide={() => setNotificationsVisible(false)}
+					isExiting={notificationsTransition.isExiting}
+					onAnimationEnd={notificationsTransition.handleAnimationEnd}
+				/>
 			)}
 
-			{isUserListVisible && (
-				<UserListView onHide={() => setUserListVisible(false)} />
+			{userListTransition.isMounted && (
+				<UserListView
+					onHide={() => setUserListVisible(false)}
+					isExiting={userListTransition.isExiting}
+					onAnimationEnd={userListTransition.handleAnimationEnd}
+				/>
 			)}
 		</Styled.Sidebar>
 	);

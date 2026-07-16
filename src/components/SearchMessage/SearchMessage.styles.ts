@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { ListItem } from '@mui/material';
+import {
+	PanelTransitionStyleProps,
+	sidePanelTransition,
+} from '@src/styles/panelTransitions';
 
-export const SearchMessageContainer = styled.div`
+export const SearchMessageContainer = styled.div<PanelTransitionStyleProps>`
 	display: flex;
 	flex-direction: column;
 	flex: 0.4 1;
@@ -16,6 +20,8 @@ export const SearchMessageContainer = styled.div`
 		z-index: 10;
 		border-left: none;
 	}
+
+	${sidePanelTransition}
 `;
 
 export const Header = styled.div`

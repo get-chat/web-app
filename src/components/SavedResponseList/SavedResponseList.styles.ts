@@ -1,4 +1,14 @@
 import styled from 'styled-components';
+import {
+	footerPanelTransition,
+	PanelTransitionStyleProps,
+} from '@src/styles/panelTransitions';
+
+export const Outer = styled.div.attrs({
+	className: 'savedResponsesOuter',
+})<PanelTransitionStyleProps>`
+	${footerPanelTransition}
+`;
 
 export const SearchContainer = styled.div`
 	display: flex;

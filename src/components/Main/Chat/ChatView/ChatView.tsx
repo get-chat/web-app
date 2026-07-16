@@ -78,6 +78,7 @@ import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
+import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import useChat from '@src/components/Main/Chat/ChatView/useChat';
 // @ts-ignore
 import decode from 'unescape';
@@ -141,6 +142,20 @@ const ChatView: React.FC<Props> = (props) => {
 		isSavedResponsesVisible,
 		isInteractiveMessagesVisible,
 	} = useAppSelector((state) => state.UI);
+
+	// Footer panel animations are currently turned off (isEnabled: false)
+	// but stay wired; see footerPanelTransition to re-enable them
+	const templatesTransition = useUnmountTransition(isTemplatesVisible, {
+		isEnabled: false,
+	});
+	const savedResponsesTransition = useUnmountTransition(
+		isSavedResponsesVisible,
+		{ isEnabled: false }
+	);
+	const interactiveMessagesTransition = useUnmountTransition(
+		isInteractiveMessagesVisible,
+		{ isEnabled: false }
+	);
 
 	const pendingMessages = useAppSelector(
 		(state) => state.pendingMessages.value
@@ -2175,20 +2190,24 @@ const ChatView: React.FC<Props> = (props) => {
 				setAnchorElement={setReactionDetailsAnchorEl}
 			/>
 
-			{isTemplatesVisible && (
+			{templatesTransition.isMounted && (
 				<TemplateListWithControls
 					onSelect={(template: Template) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);
 					}}
+					isExiting={templatesTransition.isExiting}
+					onAnimationEnd={templatesTransition.handleAnimationEnd}
 				/>
 			)}
 
-			{isInteractiveMessagesVisible && (
+			{interactiveMessagesTransition.isMounted && (
 				<InteractiveMessageList
 					onSend={(interactiveMessage) =>
 						sendInteractiveMessage(true, interactiveMessage)
 					}
+					isExiting={interactiveMessagesTransition.isExiting}
+					onAnimationEnd={interactiveMessagesTransition.handleAnimationEnd}
 				/>
 			)}
 
@@ -2200,8 +2219,12 @@ const ChatView: React.FC<Props> = (props) => {
 				sendCallback={() => dispatch(setState({ isTemplatesVisible: false }))}
 			/>
 
-			{isSavedResponsesVisible && (
-				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
+			{savedResponsesTransition.isMounted && (
+				<SavedResponseList
+					sendCustomTextMessage={sendCustomTextMessage}
+					isExiting={savedResponsesTransition.isExiting}
+					onAnimationEnd={savedResponsesTransition.handleAnimationEnd}
+				/>
 			)}
 
 			{!isReadOnly && (

@@ -1,6 +1,10 @@
 import styled from 'styled-components';
+import {
+	overlayPanelTransition,
+	PanelTransitionStyleProps,
+} from '@src/styles/panelTransitions';
 
-export const Container = styled.div`
+export const Container = styled.div<PanelTransitionStyleProps>`
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -9,6 +13,8 @@ export const Container = styled.div`
 	background-color: white;
 	display: flex;
 	flex-direction: column;
+
+	${overlayPanelTransition}
 `;
 
 export const Header = styled.div`

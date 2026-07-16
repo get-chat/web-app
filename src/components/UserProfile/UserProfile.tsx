@@ -6,8 +6,9 @@ import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import * as Styled from '../Main/Sidebar/BusinessProfile/BusinessProfile.styles';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	onHide: () => void;
 	setChangePasswordDialogVisible: (isVisible: boolean) => void;
 }
@@ -15,6 +16,8 @@ interface Props {
 const UserProfile: React.FC<Props> = ({
 	onHide,
 	setChangePasswordDialogVisible,
+	isExiting,
+	onAnimationEnd,
 }) => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const { isReadOnly } = useAppSelector((state) => state.UI);
@@ -22,7 +25,10 @@ const UserProfile: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	return (
-		<Styled.BusinessProfileContainer>
+		<Styled.BusinessProfileContainer
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			<Styled.Header>
 				<IconButton onClick={onHide} size="large">
 					<ArrowBack />
