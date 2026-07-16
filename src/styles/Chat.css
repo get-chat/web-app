@@ -534,7 +534,7 @@ stored one. */
 
 .chat__message__dateContainer__indicator {
 	font-size: 12px;
-	border-radius: 20px;
+	border-radius: 15px;
 	padding: 6px 10px;
 	box-shadow: 0 4px 5px -6px rgb(185, 152, 136);
 	background-color: rgba(255, 255, 255, 0.6);
