@@ -1393,10 +1393,7 @@ const ChatView: React.FC<Props> = (props) => {
 				// time window (beforeTimeForEvents/sinceTimeForEvents), not on
 				// each other, so fetch them concurrently instead of chaining.
 				const [assignmentEvents, taggingEvents] = await Promise.all([
-					listChatAssignmentEvents(
-						beforeTimeForEvents,
-						sinceTimeForEvents
-					),
+					listChatAssignmentEvents(beforeTimeForEvents, sinceTimeForEvents),
 					listChatTaggingEvents(beforeTimeForEvents, sinceTimeForEvents),
 				]);
 
