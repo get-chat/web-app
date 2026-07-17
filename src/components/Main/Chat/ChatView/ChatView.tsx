@@ -1389,17 +1389,29 @@ const ChatView: React.FC<Props> = (props) => {
 
 			// List assignment and tagging history depends on user choice
 			if (getDisplayAssignmentAndTaggingHistory()) {
-				// List assignment events
-				await listChatAssignmentEvents(
-					preparedMessages,
+				// Assignment and tagging events both depend only on the message
+				// time window (beforeTimeForEvents/sinceTimeForEvents), not on
+				// each other, so fetch them concurrently instead of chaining.
+				const [assignmentEvents, taggingEvents] = await Promise.all([
+					listChatAssignmentEvents(
+						beforeTimeForEvents,
+						sinceTimeForEvents
+					),
+					listChatTaggingEvents(beforeTimeForEvents, sinceTimeForEvents),
+				]);
+
+				await finishLoadingMessages(
+					{
+						...preparedMessages,
+						...assignmentEvents,
+						...taggingEvents,
+					},
 					preparedReactions,
 					isInitial,
 					callback,
 					replaceAll,
 					beforeTime,
-					sinceTime,
-					beforeTimeForEvents,
-					sinceTimeForEvents
+					sinceTime
 				);
 			} else {
 				await finishLoadingMessages(
@@ -1421,7 +1433,7 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
+	// Flow: listMessages -> (listChatAssignmentEvents + listChatTaggingEvents in parallel) -> finishLoadingMessages
 	const finishLoadingMessages = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
@@ -1538,16 +1550,9 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	const listChatAssignmentEvents = async (
-		preparedMessages: ChatMessageList,
-		preparedReactions: ReactionList,
-		isInitial: boolean,
-		callback?: (messages: ChatMessageList) => void,
-		replaceAll?: boolean,
-		beforeTime?: number,
-		sinceTime?: number,
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
-	) => {
+	): Promise<ChatMessageList> => {
 		try {
 			const data = await fetchChatAssignmentEvents(
 				{
@@ -1564,39 +1569,21 @@ const ChatView: React.FC<Props> = (props) => {
 				chatAssignmentEvents[prepared.id] = prepared;
 			});
 
-			preparedMessages = {
-				...preparedMessages,
-				...chatAssignmentEvents,
-			};
-
-			// List chat tagging events
-			await listChatTaggingEvents(
-				preparedMessages,
-				preparedReactions,
-				isInitial,
-				callback,
-				replaceAll,
-				beforeTime,
-				sinceTime,
-				beforeTimeForEvents,
-				sinceTimeForEvents
-			);
+			return chatAssignmentEvents;
 		} catch (error: any | AxiosError) {
+			// On cancel (chat switch) re-throw so listMessages aborts the whole
+			// load instead of committing stale data. On real errors, degrade
+			// gracefully: return no events so messages still render.
+			if (axios.isCancel(error)) throw error;
 			console.error(error);
+			return {};
 		}
 	};
 
 	const listChatTaggingEvents = async (
-		preparedMessages: ChatMessageList,
-		preparedReactions: ReactionList,
-		isInitial: boolean,
-		callback?: (messages: ChatMessageList) => void,
-		replaceAll?: boolean,
-		beforeTime?: number,
-		sinceTime?: number,
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
-	) => {
+	): Promise<ChatMessageList> => {
 		try {
 			const data = await fetchChatTaggingEvents(
 				{
@@ -1613,23 +1600,14 @@ const ChatView: React.FC<Props> = (props) => {
 				eventMessages[prepared.id] = prepared;
 			});
 
-			preparedMessages = {
-				...preparedMessages,
-				...eventMessages,
-			};
-
-			// Finish loading
-			await finishLoadingMessages(
-				preparedMessages,
-				preparedReactions,
-				isInitial,
-				callback,
-				replaceAll,
-				beforeTime,
-				sinceTime
-			);
+			return eventMessages;
 		} catch (error: any | AxiosError) {
+			// On cancel (chat switch) re-throw so listMessages aborts the whole
+			// load instead of committing stale data. On real errors, degrade
+			// gracefully: return no events so messages still render.
+			if (axios.isCancel(error)) throw error;
 			console.error(error);
+			return {};
 		}
 	};
 
