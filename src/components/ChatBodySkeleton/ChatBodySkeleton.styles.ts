@@ -22,7 +22,12 @@ animationend. */
 export const Container = styled.div<PanelTransitionStyleProps>`
 	position: absolute;
 	inset: 0;
-	z-index: 1;
+	/* No positive z-index on purpose: as the last positioned sibling the
+	overlay already paints above .chat__body's content by paint order. A
+	positive z-index would let it escape above the loading screen while
+	that screen is mid-fade — MUI's <Fade> puts opacity < 1 on the loading
+	screen's wrapper, which traps its own z-index in a new stacking context
+	and drops it to the auto level this overlay would then outrank. */
 	pointer-events: none;
 	display: flex;
 	flex-direction: column;
