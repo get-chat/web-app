@@ -1003,6 +1003,18 @@ const Sidebar: React.FC<Props> = ({
 								</IconButton>
 							</Tooltip>
 						)}
+					{currentUser?.profile?.role === 'admin' && (
+						<Tooltip title={t('Admin panel')} disableInteractive>
+							<Styled.AdminPanelButton
+								component="a"
+								href={getHubURL(config?.API_BASE_URL ?? '')}
+								target="_blank"
+								size="large"
+							>
+								<AdminPanelSettingsIcon />
+							</Styled.AdminPanelButton>
+						</Tooltip>
+					)}
 					<Tooltip title={t('Options')} disableInteractive>
 						<IconButton
 							onClick={displayMenu}

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { MenuItem } from '@mui/material';
+import { IconButton, MenuItem } from '@mui/material';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import CustomAvatar from '@src/components/CustomAvatar';
 
@@ -48,6 +48,15 @@ export const HeaderRight = styled.div`
 		font-size: 24px !important;
 	}
 `;
+
+/* Hidden on narrow screens where the header runs out of room; the
+options menu keeps an Admin panel entry there. The cast restores MUI's
+polymorphic typing (component="a" + href) lost through styled(). */
+export const AdminPanelButton = styled(IconButton)`
+	@media only screen and (max-width: 1024px) {
+		display: none !important;
+	}
+` as typeof IconButton;
 
 export const LoadingMore = styled.div`
 	position: absolute;
