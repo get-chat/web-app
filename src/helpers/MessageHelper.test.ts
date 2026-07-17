@@ -4,6 +4,7 @@ import {
 	getSenderName,
 	getUniqueSender,
 	isUnsupportedMessageType,
+	prepareMessageList,
 } from '@src/helpers/MessageHelper';
 import { Message, MessageEchoOrigin, MessageType } from '@src/types/messages';
 
@@ -46,6 +47,14 @@ describe('getEchoOriginLabel', () => {
 	it('returns undefined for regular outgoing messages', () => {
 		expect(getEchoOriginLabel(buildOutgoingMessage())).toBeUndefined();
 	});
+
+	it('labels REST-fetched API echoes via the stored is_echo marker', () => {
+		// After a page refresh echoes arrive via REST, which carries no
+		// echo_origin — only waba_payload.is_echo
+		const message = buildOutgoingMessage();
+		message.waba_payload!.is_echo = true;
+		expect(getEchoOriginLabel(message)).toBe('via API');
+	});
 });
 
 describe('getSenderName - echoed messages', () => {
@@ -72,6 +81,46 @@ describe('getUniqueSender - echoed messages', () => {
 			)
 		).toBe('echo:smb');
 		expect(getUniqueSender(buildOutgoingMessage())).toBe('4915792500517');
+	});
+
+	it('groups REST-fetched API echoes with webhook-delivered ones', () => {
+		const message = buildOutgoingMessage();
+		message.waba_payload!.is_echo = true;
+		expect(getUniqueSender(message)).toBe('echo:api');
+	});
+});
+
+describe('prepareMessageList - failed messages', () => {
+	// REST responses have no is_failed field (it is set client-side by the
+	// websocket status handler), only the errors stored in waba_payload
+	const buildRestError = () => [
+		{ code: 131047, title: 'Re-engagement message' },
+	];
+
+	it('derives is_failed from stored payload errors on outgoing messages', () => {
+		const message = buildOutgoingMessage();
+		message.waba_payload!.errors = buildRestError();
+		delete (message as Partial<Message>).is_failed;
+
+		const prepared = prepareMessageList([message]);
+		expect(prepared['wamid.TEST'].is_failed).toBe(true);
+	});
+
+	it('does not flag outgoing messages without errors', () => {
+		const message = buildOutgoingMessage();
+		delete (message as Partial<Message>).is_failed;
+
+		const prepared = prepareMessageList([message]);
+		expect(prepared['wamid.TEST'].is_failed).toBeFalsy();
+	});
+
+	it('does not flag incoming messages with errors (e.g. unsupported types)', () => {
+		const message = buildOutgoingMessage({ from_us: false });
+		message.waba_payload!.errors = buildRestError();
+		delete (message as Partial<Message>).is_failed;
+
+		const prepared = prepareMessageList([message]);
+		expect(prepared['wamid.TEST'].is_failed).toBeFalsy();
 	});
 });
 

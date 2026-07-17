@@ -14,6 +14,7 @@ import { sortTemplateComponents } from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
+import { User } from '@src/types/users';
 
 export type Props = {
 	input: string;
@@ -129,14 +130,14 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		}
 
 		if (startsWithCommand(COMMAND_ASSIGN, COMMAND_ASSIGN_ALIAS)) {
-			Object.values(users).forEach((user: any) => {
+			Object.values(users).forEach((user: User) => {
 				items.push({
 					command: COMMAND_ASSIGN,
 					isStatic: true,
 					parameters: [user.username],
 					description: [
 						'Assign this chat to ' + user.username,
-						'User role: ' + user.role,
+						'User role: ' + user.profile.role,
 					].join('\n'),
 					runCommand: true,
 				});

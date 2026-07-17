@@ -11,12 +11,13 @@ import { CancelTokenSource } from 'axios';
 import * as Styled from './StartChat.styles';
 import Contacts from '@src/components/Contacts';
 import { Recipient } from '@src/types/persons';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	onHide: () => void;
 }
 
-const StartChat: React.FC<Props> = ({ onHide }) => {
+const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 	const { t } = useTranslation();
 
 	const [isVerifying, setVerifying] = useState(false);
@@ -79,7 +80,10 @@ const StartChat: React.FC<Props> = ({ onHide }) => {
 	};
 
 	return (
-		<Styled.ContactsContainer>
+		<Styled.ContactsContainer
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			<Styled.ContactsHeader>
 				<IconButton onClick={onHide} size="large">
 					<ArrowBack />

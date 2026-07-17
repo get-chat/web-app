@@ -4,7 +4,13 @@ import { useTranslation } from 'react-i18next';
 import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
 import { useAppSelector } from '@src/store/hooks';
 import { isIndianPhoneNumber } from '@src/helpers/PhoneNumberHelper';
-import { List, Item, Description } from './InteractiveMessageList.styles';
+import {
+	List,
+	Item,
+	Description,
+	Outer,
+} from './InteractiveMessageList.styles';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
 export interface InteractiveParameter {
 	key: string;
@@ -375,11 +381,15 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 	},
 ];
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	onSend: (interactiveMessage: any) => void;
 }
 
-const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
+const InteractiveMessageList: React.FC<Props> = ({
+	onSend,
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const { t } = useTranslation();
 	const [selectedDescribedInteractive, setSelectedDescribedInteractive] =
 		useState<any>(null);
@@ -407,7 +417,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 
 	return (
 		<>
-			<div className="interactiveMessagesOuter">
+			<Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 				<div className="interactiveMessagesWrapper">
 					<List>
 						{availableInteractiveMessages.map((item, index) => (
@@ -431,7 +441,7 @@ const InteractiveMessageList: React.FC<Props> = ({ onSend }) => {
 						))}
 					</List>
 				</div>
-			</div>
+			</Outer>
 
 			<SendInteractiveMessageDialog
 				isVisible={isDialogVisible}

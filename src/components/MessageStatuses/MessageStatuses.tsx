@@ -18,14 +18,19 @@ import {
 	hasAnyStatus,
 } from '@src/helpers/MessageHelper';
 import * as Styled from './MessageStatuses.styles';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	message?: Message;
 }
 
 const dateFormat = 'H:mm, DD.MM.YYYY';
 
-const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
+const MessageStatuses: React.FC<Props> = ({
+	message: initialMessage,
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const { t } = useTranslation();
 
 	const { message, templates, close } = useMessageStatuses({ initialMessage });
@@ -34,7 +39,7 @@ const MessageStatuses: React.FC<Props> = ({ message: initialMessage }) => {
 	});
 
 	return (
-		<Styled.Container>
+		<Styled.Container $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 			<Styled.Header>
 				<IconButton onClick={close} size="large">
 					<CloseIcon />

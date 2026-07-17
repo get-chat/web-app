@@ -81,6 +81,9 @@ export interface MessageWabaPayload {
 	timestamp: string;
 	to?: string;
 	wa_id?: string;
+	// Present on stored API echoes (set upstream by 360dialog); the only echo
+	// marker that survives a REST fetch, since echo_origin is not persisted
+	is_echo?: boolean;
 	recipient_type?: string;
 	verify_contact?: boolean;
 	text?: Text;

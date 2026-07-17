@@ -72,7 +72,7 @@ export const PreviewTitle = styled.div`
 
 export const PreviewContainer = styled.div`
 	background-color: var(--chat-bg);
-	background-image: url('/pattern.svg');
+	background-image: var(--chat-bg-image);
 	background-repeat: repeat;
 	padding: 10px;
 	border-radius: 10px;

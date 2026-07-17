@@ -6,8 +6,8 @@
 
 /* width */
 ::-webkit-scrollbar {
-	width: 5px;
-	height: 5px;
+	width: 6px;
+	height: 6px;
 	background: transparent;
 }
 
@@ -19,21 +19,23 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
 	background: rgba(0, 0, 45, 0.2);
+	border-radius: 999px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background: rgba(0, 0, 45, 0.6);
+	background: rgba(0, 0, 45, 0.35);
 }
 
 .app {
 	display: grid;
 	place-items: center;
-	background: linear-gradient(
-		0deg,
-		rgb(240, 241, 246) 45%,
-		rgba(201, 205, 223, 1) 100%
-	);
+	background: radial-gradient(
+			110% 80% at 50% 0%,
+			rgba(101, 203, 172, 0.12) 0%,
+			rgba(101, 203, 172, 0) 60%
+		),
+		linear-gradient(0deg, rgb(240, 241, 246) 45%, rgb(206, 210, 226) 100%);
 	height: 100vh;
 }
 
@@ -44,8 +46,8 @@
 	background-color: var(--gray-light);
 	height: calc(100vh - 40px);
 	width: 90vw;
-	outline: 1px solid #fff;
-	box-shadow: 0 4px 15px -6px rgba(0, 0, 45, 0.3);
+	outline: 1px solid rgba(255, 255, 255, 0.75);
+	box-shadow: var(--shadow-lg);
 	max-width: 1500px;
 	border-radius: var(--wrapper-border-radius);
 	overflow: hidden;
@@ -171,7 +173,7 @@ a {
 }
 
 .MuiAlert-root {
-	border-radius: 10px !important;
+	border-radius: 12px !important;
 }
 
 .MuiAlert-root .MuiButton-root {
@@ -216,7 +218,7 @@ a {
 }
 
 .MuiPaper-rounded {
-	border-radius: 10px !important;
+	border-radius: 12px !important;
 }
 
 .MuiDialogTitle-root {
@@ -258,6 +260,8 @@ a {
 	right: 0;
 	bottom: 0;
 	background-color: rgba(255, 255, 255, 0.8);
+	-webkit-backdrop-filter: blur(12px);
+	backdrop-filter: blur(12px);
 	z-index: 99;
 }
 
@@ -269,7 +273,7 @@ a {
 	width: 100%;
 	padding: 4px 15px;
 	background-color: white;
-	box-shadow: 0 0 15px rgba(0, 0, 45, 0.2);
+	box-shadow: var(--shadow-md);
 }
 
 .app_imagePreview__header__senderInfo {

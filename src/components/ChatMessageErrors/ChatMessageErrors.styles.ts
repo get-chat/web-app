@@ -10,6 +10,7 @@ export const Container = styled.div`
 	a {
 		text-decoration: underline;
 		font-weight: 600;
+		color: #953434;
 	}
 `;
 

@@ -38,7 +38,16 @@ export const prepareMessageList = (
 			// Consider switching to getchat id only
 			const messageKey =
 				message.waba_payload?.id ?? generateMessageInternalId(message.id);
-			result[messageKey] = message;
+			// is_failed is client-side only (set by the websocket status
+			// handler); REST responses carry the errors in waba_payload
+			// instead, so derive it — otherwise failed messages regress from
+			// the error icon to the pending clock icon after a page refresh.
+			// Outgoing only, mirroring the websocket path: status events (and
+			// with them is_failed) exist only for business-sent messages.
+			const isFailed =
+				message.is_failed ||
+				(message.from_us && (message.waba_payload?.errors?.length ?? 0) > 0);
+			result[messageKey] = isFailed ? { ...message, is_failed: true } : message;
 		}
 	});
 
@@ -174,20 +183,33 @@ export const getSenderName = (message: Message) => {
 	return !message.from_us ? message.contact?.waba_payload?.profile?.name : 'Us';
 };
 
+// echo_origin only exists on messages delivered via echo webhook events; a
+// REST fetch of the same message carries only the is_echo marker in its
+// stored payload (API echoes only — the backend does not persist the origin
+// of SMB echoes), so fall back to it to keep the label after a page refresh
+export const getMessageEchoOrigin = (
+	message: Message
+): MessageEchoOrigin | undefined =>
+	message.echo_origin ??
+	(message.waba_payload?.is_echo ? MessageEchoOrigin.api : undefined);
+
 // Untranslated label; callers are expected to pass it through t()
 export const getEchoOriginLabel = (message: Message) => {
-	if (!message.echo_origin) return undefined;
-	return message.echo_origin === MessageEchoOrigin.smb
+	const echoOrigin = getMessageEchoOrigin(message);
+	if (!echoOrigin) return undefined;
+	return echoOrigin === MessageEchoOrigin.smb
 		? 'via WhatsApp Business App'
 		: 'via API';
 };
 
-export const getUniqueSender = (message: Message) =>
-	message.sender?.username ??
-	// ':' cannot appear in usernames, so echo groups can never collide with one
-	(message.echo_origin
-		? 'echo:' + message.echo_origin
-		: message.waba_payload?.from);
+export const getUniqueSender = (message: Message) => {
+	const echoOrigin = getMessageEchoOrigin(message);
+	return (
+		message.sender?.username ??
+		// ':' cannot appear in usernames, so echo groups can never collide with one
+		(echoOrigin ? 'echo:' + echoOrigin : message.waba_payload?.from)
+	);
+};
 
 export const generateMessageInternalId = (getChatId: string) => {
 	return 'getchatId_' + getChatId;

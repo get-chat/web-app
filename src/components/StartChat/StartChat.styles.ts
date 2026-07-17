@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import { ListItem, TextField } from '@mui/material';
+import {
+	overlayPanelTransition,
+	PanelTransitionStyleProps,
+} from '@src/styles/panelTransitions';
 
 export const StyledListItem = styled(ListItem)``;
 export const StyledTextField = styled(TextField)``;
 
-export const ContactsContainer = styled.div`
+export const ContactsContainer = styled.div<PanelTransitionStyleProps>`
 	display: flex;
 	flex-direction: column;
 	position: absolute;
@@ -14,6 +18,8 @@ export const ContactsContainer = styled.div`
 	bottom: 0;
 	background-color: white;
 	z-index: 10;
+
+	${overlayPanelTransition}
 `;
 
 export const ContactsHeader = styled.div`

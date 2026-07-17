@@ -10,12 +10,17 @@ import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_USER_AVAILABILITY } from '@src/Constants';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	onHide: () => void;
 }
 
-const UserListView: React.FC<Props> = ({ onHide }) => {
+const UserListView: React.FC<Props> = ({
+	onHide,
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const { t } = useTranslation();
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -91,7 +96,7 @@ const UserListView: React.FC<Props> = ({ onHide }) => {
 	};
 
 	return (
-		<Styled.Container>
+		<Styled.Container $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 			<Styled.Header>
 				<IconButton onClick={onHide} size="large">
 					<CloseIcon />

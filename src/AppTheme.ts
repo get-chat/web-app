@@ -17,6 +17,7 @@ const AppTheme = createTheme({
 	typography: {
 		button: {
 			textTransform: 'none',
+			fontWeight: 600,
 		},
 		fontFamily: [
 			'Inter',

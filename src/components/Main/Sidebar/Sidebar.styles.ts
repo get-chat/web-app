@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { MenuItem } from '@mui/material';
+import { IconButton, MenuItem } from '@mui/material';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import CustomAvatar from '@src/components/CustomAvatar';
 
@@ -49,6 +49,15 @@ export const HeaderRight = styled.div`
 	}
 `;
 
+/* Hidden on narrow screens where the header runs out of room; the
+options menu keeps an Admin panel entry there. The cast restores MUI's
+polymorphic typing (component="a" + href) lost through styled(). */
+export const AdminPanelButton = styled(IconButton)`
+	@media only screen and (max-width: 1024px) {
+		display: none !important;
+	}
+` as typeof IconButton;
+
 export const LoadingMore = styled.div`
 	position: absolute;
 	bottom: 0;
@@ -70,7 +79,7 @@ export const LoadingMoreWrapper = styled.div`
 	padding: 10px 10px 4px 10px;
 	border-radius: 40px;
 	background-color: white;
-	box-shadow: 0 6px 15px -6px rgba(0, 0, 45, 0.4);
+	box-shadow: var(--shadow-md);
 `;
 
 export const ResultsContainer = styled.div`
@@ -145,7 +154,7 @@ export const FilterGroup = styled.div<{
 }>`
 	padding: 0 15px;
 	margin-bottom: ${({ $isActive }) => ($isActive ? '2px' : '0')};
-	margin-top: ${({ $isAll }) => ($isAll ? '7px' : '0')};
+	margin-top: ${({ $isAll }) => ($isAll ? '10px' : '0')};
 `;
 
 export const ChatsCount = styled.div`

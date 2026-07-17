@@ -1,4 +1,14 @@
 import styled from 'styled-components';
+import {
+	footerPanelTransition,
+	PanelTransitionStyleProps,
+} from '@src/styles/panelTransitions';
+
+export const Outer = styled.div.attrs({
+	className: 'interactiveMessagesOuter',
+})<PanelTransitionStyleProps>`
+	${footerPanelTransition}
+`;
 
 export const List = styled.div.attrs({
 	className: 'interactiveMessages',

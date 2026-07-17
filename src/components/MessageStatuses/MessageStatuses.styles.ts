@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import { DoneAll } from '@mui/icons-material';
+import {
+	PanelTransitionStyleProps,
+	sidePanelTransition,
+} from '@src/styles/panelTransitions';
 
-export const Container = styled.div`
+export const Container = styled.div<PanelTransitionStyleProps>`
 	display: flex;
 	flex-direction: column;
 	flex: 0.4 1;
@@ -16,6 +20,8 @@ export const Container = styled.div`
 		bottom: 0;
 		border-left: none;
 	}
+
+	${sidePanelTransition}
 `;
 
 export const Header = styled.div`
@@ -47,7 +53,7 @@ export const Body = styled.div`
 
 export const Preview = styled.div`
 	background-color: var(--chat-bg);
-	background-image: url('/pattern.svg');
+	background-image: var(--chat-bg-image);
 	background-repeat: repeat;
 	padding: 15px;
 	box-shadow: 0 1px 3px var(--shadow-light);

@@ -29,8 +29,9 @@ import {
 } from '@src/api/settingsApi';
 import api from '@src/api/axiosInstance';
 import { setState } from '@src/store/reducers/UIReducer';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
-interface Props {
+interface Props extends PanelTransitionProps {
 	onHide: () => void;
 	handleCheckSettingsRefreshStatus: () => Promise<void>;
 	profilePhoto: string | undefined;
@@ -42,6 +43,8 @@ const BusinessProfile: React.FC<Props> = ({
 	handleCheckSettingsRefreshStatus,
 	profilePhoto,
 	showOpenInWhatsApp,
+	isExiting,
+	onAnimationEnd,
 }) => {
 	const config = useContext(AppConfigContext);
 
@@ -216,7 +219,10 @@ const BusinessProfile: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.BusinessProfileContainer>
+		<Styled.BusinessProfileContainer
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			<Styled.Header>
 				<IconButton onClick={onHide} size="large">
 					<ArrowBack />

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from '../ChatMessage/ChatMessage';
+import ChatBodySkeleton from '@src/components/ChatBodySkeleton';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
 	COMMAND_ASSIGN,
@@ -78,6 +79,7 @@ import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
+import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import useChat from '@src/components/Main/Chat/ChatView/useChat';
 // @ts-ignore
 import decode from 'unescape';
@@ -142,6 +144,20 @@ const ChatView: React.FC<Props> = (props) => {
 		isInteractiveMessagesVisible,
 	} = useAppSelector((state) => state.UI);
 
+	// Footer panel animations are currently turned off (isEnabled: false)
+	// but stay wired; see footerPanelTransition to re-enable them
+	const templatesTransition = useUnmountTransition(isTemplatesVisible, {
+		isEnabled: false,
+	});
+	const savedResponsesTransition = useUnmountTransition(
+		isSavedResponsesVisible,
+		{ isEnabled: false }
+	);
+	const interactiveMessagesTransition = useUnmountTransition(
+		isInteractiveMessagesVisible,
+		{ isEnabled: false }
+	);
+
 	const pendingMessages = useAppSelector(
 		(state) => state.pendingMessages.value
 	);
@@ -154,7 +170,17 @@ const ChatView: React.FC<Props> = (props) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
-	const { waId } = useParams();
+	const { waId: routeWaId } = useParams();
+
+	// Keeps the last open chat rendered while the exit fade plays; content
+	// is then cleared by the [waId] effect once the transition unmounts
+	const chatViewTransition = useUnmountTransition(!!routeWaId);
+	const lastWaIdRef = useRef(routeWaId);
+	if (routeWaId) {
+		lastWaIdRef.current = routeWaId;
+	}
+	const waId = chatViewTransition.isExiting ? lastWaIdRef.current : routeWaId;
+
 	const [isLoaded, setLoaded] = useState(false);
 	const [isExpired, setExpired] = useState(false);
 
@@ -192,6 +218,19 @@ const ChatView: React.FC<Props> = (props) => {
 	});
 
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
+
+	// Owned by the load path: set inside the same flushSync that commits
+	// the first page of messages, so the skeleton starts cross-fading on
+	// the exact commit the messages render (isLoaded flips later)
+	const [isInitialMessagesRendered, setInitialMessagesRendered] =
+		useState(false);
+	const isSkeletonVisible = !!waId && !isInitialMessagesRendered;
+	// Skipped (isEnabled) while no chat is open: the exit animation could
+	// not run inside the mobile display:none chat pane, which would leave
+	// the overlay mounted forever waiting for animationend
+	const skeletonTransition = useUnmountTransition(isSkeletonVisible, {
+		isEnabled: !!routeWaId,
+	});
 
 	const [person, setPerson] = useState<Person>();
 	const [chat, setChat] = useState<Chat>();
@@ -417,6 +456,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	useEffect(() => {
 		setLoaded(false);
+		setInitialMessagesRendered(false);
 
 		// Clear values for next route
 		setPerson(undefined);
@@ -854,6 +894,7 @@ const ChatView: React.FC<Props> = (props) => {
 				// Clear existing messages
 				flushSync(() => {
 					setMessages({});
+					setInitialMessagesRendered(false);
 				});
 				setLoaded(false);
 
@@ -1348,17 +1389,26 @@ const ChatView: React.FC<Props> = (props) => {
 
 			// List assignment and tagging history depends on user choice
 			if (getDisplayAssignmentAndTaggingHistory()) {
-				// List assignment events
-				await listChatAssignmentEvents(
-					preparedMessages,
+				// Assignment and tagging events both depend only on the message
+				// time window (beforeTimeForEvents/sinceTimeForEvents), not on
+				// each other, so fetch them concurrently instead of chaining.
+				const [assignmentEvents, taggingEvents] = await Promise.all([
+					listChatAssignmentEvents(beforeTimeForEvents, sinceTimeForEvents),
+					listChatTaggingEvents(beforeTimeForEvents, sinceTimeForEvents),
+				]);
+
+				await finishLoadingMessages(
+					{
+						...preparedMessages,
+						...assignmentEvents,
+						...taggingEvents,
+					},
 					preparedReactions,
 					isInitial,
 					callback,
 					replaceAll,
 					beforeTime,
-					sinceTime,
-					beforeTimeForEvents,
-					sinceTimeForEvents
+					sinceTime
 				);
 			} else {
 				await finishLoadingMessages(
@@ -1380,7 +1430,7 @@ const ChatView: React.FC<Props> = (props) => {
 		}
 	};
 
-	// Chain: listMessages -> listChatAssignmentEvents -> listChatTaggingEvents -> finishLoadingMessages
+	// Flow: listMessages -> (listChatAssignmentEvents + listChatTaggingEvents in parallel) -> finishLoadingMessages
 	const finishLoadingMessages = async (
 		preparedMessages: ChatMessageList,
 		preparedReactions: ReactionList,
@@ -1423,6 +1473,10 @@ const ChatView: React.FC<Props> = (props) => {
 						return mergeReactionLists(prevState, preparedReactions);
 					}
 				});
+
+				// In the same commit as the messages, so the loading skeleton
+				// starts cross-fading the moment they render
+				setInitialMessagesRendered(true);
 			});
 
 			if (!sinceTime || replaceAll) {
@@ -1446,6 +1500,9 @@ const ChatView: React.FC<Props> = (props) => {
 				console.log('No more items to load.');
 				setHasOlderMessagesToLoad(false);
 			}
+
+			// Chat has no messages: nothing renders, dismiss the skeleton
+			setInitialMessagesRendered(true);
 		}
 
 		setLoaded(true);
@@ -1490,16 +1547,9 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	const listChatAssignmentEvents = async (
-		preparedMessages: ChatMessageList,
-		preparedReactions: ReactionList,
-		isInitial: boolean,
-		callback?: (messages: ChatMessageList) => void,
-		replaceAll?: boolean,
-		beforeTime?: number,
-		sinceTime?: number,
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
-	) => {
+	): Promise<ChatMessageList> => {
 		try {
 			const data = await fetchChatAssignmentEvents(
 				{
@@ -1516,39 +1566,21 @@ const ChatView: React.FC<Props> = (props) => {
 				chatAssignmentEvents[prepared.id] = prepared;
 			});
 
-			preparedMessages = {
-				...preparedMessages,
-				...chatAssignmentEvents,
-			};
-
-			// List chat tagging events
-			await listChatTaggingEvents(
-				preparedMessages,
-				preparedReactions,
-				isInitial,
-				callback,
-				replaceAll,
-				beforeTime,
-				sinceTime,
-				beforeTimeForEvents,
-				sinceTimeForEvents
-			);
+			return chatAssignmentEvents;
 		} catch (error: any | AxiosError) {
+			// On cancel (chat switch) re-throw so listMessages aborts the whole
+			// load instead of committing stale data. On real errors, degrade
+			// gracefully: return no events so messages still render.
+			if (axios.isCancel(error)) throw error;
 			console.error(error);
+			return {};
 		}
 	};
 
 	const listChatTaggingEvents = async (
-		preparedMessages: ChatMessageList,
-		preparedReactions: ReactionList,
-		isInitial: boolean,
-		callback?: (messages: ChatMessageList) => void,
-		replaceAll?: boolean,
-		beforeTime?: number,
-		sinceTime?: number,
 		beforeTimeForEvents?: number,
 		sinceTimeForEvents?: number
-	) => {
+	): Promise<ChatMessageList> => {
 		try {
 			const data = await fetchChatTaggingEvents(
 				{
@@ -1565,23 +1597,14 @@ const ChatView: React.FC<Props> = (props) => {
 				eventMessages[prepared.id] = prepared;
 			});
 
-			preparedMessages = {
-				...preparedMessages,
-				...eventMessages,
-			};
-
-			// Finish loading
-			await finishLoadingMessages(
-				preparedMessages,
-				preparedReactions,
-				isInitial,
-				callback,
-				replaceAll,
-				beforeTime,
-				sinceTime
-			);
+			return eventMessages;
 		} catch (error: any | AxiosError) {
+			// On cancel (chat switch) re-throw so listMessages aborts the whole
+			// load instead of committing stale data. On real errors, degrade
+			// gracefully: return no events so messages still render.
+			if (axios.isCancel(error)) throw error;
 			console.error(error);
+			return {};
 		}
 	};
 
@@ -2026,10 +2049,12 @@ const ChatView: React.FC<Props> = (props) => {
 			className={
 				'chat' +
 				(waId ? ' chatOpen' : '') +
+				(chatViewTransition.isExiting ? ' chatExiting' : '') +
 				(props.isChatOnly ? ' chatFullWidth' : '')
 			}
 			onDrop={(event) => handleDrop(event)}
 			onDragOver={(event) => handleDragOver(event)}
+			onAnimationEnd={chatViewTransition.handleAnimationEnd}
 		>
 			{/*<Prompt when={hasFailedMessages}
                     message={confirmationMessage} />*/}
@@ -2056,6 +2081,9 @@ const ChatView: React.FC<Props> = (props) => {
 				in={
 					isLoaded &&
 					!isLoadingMoreMessages &&
+					// Not while the loading skeleton is still cross-fading away
+					// (it paints above this indicator)
+					!skeletonTransition.isMounted &&
 					fixedDateIndicatorText !== undefined &&
 					fixedDateIndicatorText.trim().length > 0
 				}
@@ -2065,7 +2093,7 @@ const ChatView: React.FC<Props> = (props) => {
 				</div>
 			</Zoom>
 
-			<Zoom in={(waId && !isLoaded) || isLoadingMoreMessages} unmountOnExit>
+			<Zoom in={isLoadingMoreMessages} unmountOnExit>
 				<div className="chat__body__loadingMore">
 					<div className="chat__body__loadingMore__wrapper">
 						<CircularProgress size={28} />
@@ -2073,78 +2101,98 @@ const ChatView: React.FC<Props> = (props) => {
 				</div>
 			</Zoom>
 
-			<div
-				id="chat-body"
-				className="chat__body"
-				ref={messagesContainer}
-				onDrop={(event) => event.preventDefault()}
-			>
-				<div className="chat__empty" />
-
-				{Object.entries(messages).map((message, index) => {
-					// Ignoring reaction messages
-					if (message[1].waba_payload?.type === MessageType.reaction) return;
-
-					// Message date is created here and passed to ChatMessage for a better performance
-					const curMsgDate = moment.unix(getMessageTimestamp(message[1]) ?? -1);
-
-					if (index === 0) {
-						lastPrintedDate = undefined;
-						lastSenderWaId = undefined;
+			<div className="chat__body__outer">
+				<div
+					id="chat-body"
+					className={
+						'chat__body' +
+						(skeletonTransition.isExiting ? ' chat__body--appearing' : '')
 					}
+					ref={messagesContainer}
+					onDrop={(event) => event.preventDefault()}
+				>
+					<div className="chat__empty" />
 
-					let willDisplayDate = false;
-					if (lastPrintedDate === undefined) {
-						willDisplayDate = true;
-						lastPrintedDate = moment.unix(
+					{Object.entries(messages).map((message, index) => {
+						// Ignoring reaction messages
+						if (message[1].waba_payload?.type === MessageType.reaction) return;
+
+						// Message date is created here and passed to ChatMessage for a better performance
+						const curMsgDate = moment.unix(
 							getMessageTimestamp(message[1]) ?? -1
 						);
-					} else {
-						if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
+
+						if (index === 0) {
+							lastPrintedDate = undefined;
+							lastSenderWaId = undefined;
+						}
+
+						let willDisplayDate = false;
+						if (lastPrintedDate === undefined) {
 							willDisplayDate = true;
+							lastPrintedDate = moment.unix(
+								getMessageTimestamp(message[1]) ?? -1
+							);
+						} else {
+							if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
+								willDisplayDate = true;
+							}
+
+							lastPrintedDate = curMsgDate;
 						}
 
-						lastPrintedDate = curMsgDate;
-					}
-
-					let willDisplaySender = false;
-					const curSenderWaId = getUniqueSender(message[1]);
-					if (lastSenderWaId === undefined) {
-						willDisplaySender = true;
-						lastSenderWaId = getUniqueSender(message[1]);
-					} else {
-						if (lastSenderWaId !== curSenderWaId) {
+						let willDisplaySender = false;
+						const curSenderWaId = getUniqueSender(message[1]);
+						if (lastSenderWaId === undefined) {
 							willDisplaySender = true;
+							lastSenderWaId = getUniqueSender(message[1]);
+						} else {
+							if (lastSenderWaId !== curSenderWaId) {
+								willDisplaySender = true;
+							}
+
+							lastSenderWaId = getUniqueSender(message[1]);
 						}
 
-						lastSenderWaId = getUniqueSender(message[1]);
-					}
+						return (
+							<ErrorBoundary key={message[0]}>
+								<ChatMessage
+									data={message[1]}
+									reactionsHistory={reactions[message[0]] ?? []}
+									templateData={
+										templates[message[1]?.waba_payload?.template?.name ?? '']
+									}
+									displaySender={willDisplaySender}
+									displayDate={willDisplayDate}
+									isExpired={isExpired}
+									goToMessageId={goToMessageId}
+									retryMessage={retryMessage}
+									onOptionsClick={displayOptionsMenu}
+									onQuickReactionsClick={displayQuickReactions}
+									onReactionDetailsClick={displayReactionDetails}
+									contactProvidersData={props.contactProvidersData}
+									setMessageWithStatuses={props.setMessageWithStatuses}
+									isActionsEnabled={true}
+								/>
+							</ErrorBoundary>
+						);
+					})}
 
-					return (
-						<ErrorBoundary key={message[0]}>
-							<ChatMessage
-								data={message[1]}
-								reactionsHistory={reactions[message[0]] ?? []}
-								templateData={
-									templates[message[1]?.waba_payload?.template?.name ?? '']
-								}
-								displaySender={willDisplaySender}
-								displayDate={willDisplayDate}
-								isExpired={isExpired}
-								goToMessageId={goToMessageId}
-								retryMessage={retryMessage}
-								onOptionsClick={displayOptionsMenu}
-								onQuickReactionsClick={displayQuickReactions}
-								onReactionDetailsClick={displayReactionDetails}
-								contactProvidersData={props.contactProvidersData}
-								setMessageWithStatuses={props.setMessageWithStatuses}
-								isActionsEnabled={true}
-							/>
-						</ErrorBoundary>
-					);
-				})}
+					<div className="chat__body__empty" />
+				</div>
 
-				<div className="chat__body__empty" />
+				{/* Overlays the chat body without taking layout space (so it can
+			never affect the body's height or scrollbar) and cross-fades away
+			once the loaded messages render underneath */}
+				{skeletonTransition.isMounted && (
+					<ChatBodySkeleton
+						// Remount per chat: a switch mid-fade gets a freshly
+						// randomized pattern instead of reusing the previous one
+						key={waId}
+						isExiting={skeletonTransition.isExiting}
+						onAnimationEnd={skeletonTransition.handleAnimationEnd}
+					/>
+				)}
 			</div>
 
 			<QuickReactionsMenu
@@ -2175,20 +2223,24 @@ const ChatView: React.FC<Props> = (props) => {
 				setAnchorElement={setReactionDetailsAnchorEl}
 			/>
 
-			{isTemplatesVisible && (
+			{templatesTransition.isMounted && (
 				<TemplateListWithControls
 					onSelect={(template: Template) => {
 						setChosenTemplate(template);
 						setSendTemplateDialogVisible(true);
 					}}
+					isExiting={templatesTransition.isExiting}
+					onAnimationEnd={templatesTransition.handleAnimationEnd}
 				/>
 			)}
 
-			{isInteractiveMessagesVisible && (
+			{interactiveMessagesTransition.isMounted && (
 				<InteractiveMessageList
 					onSend={(interactiveMessage) =>
 						sendInteractiveMessage(true, interactiveMessage)
 					}
+					isExiting={interactiveMessagesTransition.isExiting}
+					onAnimationEnd={interactiveMessagesTransition.handleAnimationEnd}
 				/>
 			)}
 
@@ -2200,8 +2252,12 @@ const ChatView: React.FC<Props> = (props) => {
 				sendCallback={() => dispatch(setState({ isTemplatesVisible: false }))}
 			/>
 
-			{isSavedResponsesVisible && (
-				<SavedResponseList sendCustomTextMessage={sendCustomTextMessage} />
+			{savedResponsesTransition.isMounted && (
+				<SavedResponseList
+					sendCustomTextMessage={sendCustomTextMessage}
+					isExiting={savedResponsesTransition.isExiting}
+					onAnimationEnd={savedResponsesTransition.handleAnimationEnd}
+				/>
 			)}
 
 			{!isReadOnly && (

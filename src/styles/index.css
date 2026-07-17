@@ -10,11 +10,18 @@
 	--default-text-color: #212329;
 	--lighter-text-color: rgb(90, 92, 105);
 	--shadow-light: rgba(0, 0, 45, 0.08);
+	--shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06),
+		0 1px 3px rgba(16, 24, 40, 0.08);
+	--shadow-md: 0 2px 4px -2px rgba(16, 24, 40, 0.06),
+		0 4px 12px -2px rgba(16, 24, 40, 0.12);
+	--shadow-lg: 0 2px 6px rgba(0, 0, 45, 0.06),
+		0 24px 48px -12px rgba(0, 0, 45, 0.18);
 	--header-height: 56px;
 	--font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system,
 		BlinkMacSystemFont, 'Arial', sans-serif;
 	--wrapper-border-radius: 15px;
 	--chat-bg: #e8e0dc;
+	--chat-bg-image: url('/pattern.svg');
 	--chat-icon: #774e3a;
 	--chat-icon-dark: #5e3826;
 	--red: #fa1313;
@@ -74,6 +81,11 @@ textarea {
 svg {
 	overflow: hidden;
 	vertical-align: middle;
+}
+
+:focus-visible {
+	outline: 2px solid rgba(101, 203, 172, 0.8);
+	outline-offset: 2px;
 }
 
 code {

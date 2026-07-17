@@ -1,6 +1,10 @@
 import styled from 'styled-components';
+import {
+	PanelTransitionStyleProps,
+	sidePanelTransition,
+} from '@src/styles/panelTransitions';
 
-export const ContactDetailsContainer = styled.div`
+export const ContactDetailsContainer = styled.div<PanelTransitionStyleProps>`
 	display: flex;
 	flex-direction: column;
 	flex: 0.4 1;
@@ -15,6 +19,8 @@ export const ContactDetailsContainer = styled.div`
 		bottom: 0;
 		border-left: none;
 	}
+
+	${sidePanelTransition}
 `;
 
 export const Header = styled.div`

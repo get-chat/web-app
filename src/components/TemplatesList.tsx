@@ -1,6 +1,8 @@
 import React from 'react';
 import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import { SendButton } from '@src/components/SavedResponseList/SavedResponseList.styles';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
@@ -99,16 +101,18 @@ const TemplatesList: React.FC<Props> = ({
 							</div>
 						</StyledChatMessage.ChatMessage>
 						{template[1].status === 'approved' && (
-							<Button
-								onClick={() => {
-									console.log('Selected template', template[1]);
-									onClick?.(template[1]);
-								}}
-								// @ts-ignore
-								color="black"
-							>
-								{customSelectButtonTitle ?? t('Send')}
-							</Button>
+							<Tooltip title={customSelectButtonTitle ?? t('Send')}>
+								<SendButton
+									aria-label={customSelectButtonTitle ?? t('Send')}
+									onClick={() => {
+										console.log('Selected template', template[1]);
+										onClick?.(template[1]);
+									}}
+									size="small"
+								>
+									<SendIcon />
+								</SendButton>
+							</Tooltip>
 						)}
 					</div>
 				))}
