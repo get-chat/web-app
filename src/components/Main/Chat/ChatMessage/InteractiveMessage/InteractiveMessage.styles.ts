@@ -5,6 +5,7 @@ export const Caption = styled.div`
 	align-items: center;
 	font-size: x-small;
 	margin-bottom: 5px;
+	color: rgba(0, 0, 45, 0.6);
 	gap: 5px;
 
 	.MuiSvgIcon-root {
