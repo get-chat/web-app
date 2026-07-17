@@ -6,7 +6,10 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	Tooltip,
 } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
@@ -132,19 +135,24 @@ const SavedResponseList: React.FC<Props> = ({
 								</div>
 							</StyledChatMessage.ChatMessage>
 
-							<Button
-								onClick={() => sendCustomTextMessage(savedResponse.text)}
-								// @ts-ignore
-								color="black"
-							>
-								{t('Send')}
-							</Button>
-							<Button
-								onClick={() => attemptToDelete(savedResponse.id)}
-								color="secondary"
-							>
-								{t('Delete')}
-							</Button>
+							<Tooltip title={t('Send')}>
+								<Styled.SendButton
+									aria-label={t('Send')}
+									onClick={() => sendCustomTextMessage(savedResponse.text)}
+									size="small"
+								>
+									<SendIcon />
+								</Styled.SendButton>
+							</Tooltip>
+							<Tooltip title={t('Delete')}>
+								<Styled.DeleteButton
+									aria-label={t('Delete')}
+									onClick={() => attemptToDelete(savedResponse.id)}
+									size="small"
+								>
+									<DeleteOutlineIcon />
+								</Styled.DeleteButton>
+							</Tooltip>
 						</div>
 					))}
 				</div>
