@@ -25,6 +25,11 @@ interface Options {
 	isEnabled?: boolean;
 }
 
+// Generously above every exit animation duration; only fires when
+// animationend never arrives (e.g. the animation was cancelled by a
+// mid-exit prefers-reduced-motion change or a display: none ancestor)
+const UNMOUNT_FALLBACK_MS = 1000;
+
 const useUnmountTransition = (isVisible: boolean, options?: Options) => {
 	const isEnabled = options?.isEnabled ?? true;
 	const [isMounted, setIsMounted] = useState(isVisible);
@@ -39,6 +44,15 @@ const useUnmountTransition = (isVisible: boolean, options?: Options) => {
 		) {
 			// No exit animation will play, so animationend never fires
 			setIsMounted(false);
+		} else {
+			// Safety net: CSS stays the source of truth via animationend,
+			// but a cancelled animation (reduced-motion flipped mid-exit,
+			// hidden subtree) must not leave the component mounted forever
+			const fallback = setTimeout(
+				() => setIsMounted(false),
+				UNMOUNT_FALLBACK_MS
+			);
+			return () => clearTimeout(fallback);
 		}
 	}, [isVisible, isEnabled]);
 

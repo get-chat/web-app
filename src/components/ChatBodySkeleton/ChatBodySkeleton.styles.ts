@@ -1,19 +1,57 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import { Skeleton } from '@mui/material';
 import { messageBubbleTail } from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
+import { PanelTransitionStyleProps } from '@src/styles/panelTransitions';
 
-export const Container = styled.div`
+const fadeOut = keyframes`
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+`;
+
+/* Overlays .chat__body inside .chat__body__outer without participating
+in its layout, so the skeleton can never affect the body's height or
+scrollbar. Transparent: the bubbles sit over .chat's own wallpaper and
+dissolve away while the loaded messages fade in underneath (see
+.chat__body--appearing in Chat.css). Exit pairs with
+useUnmountTransition in ChatView, which keeps the overlay mounted until
+animationend. */
+export const Container = styled.div<PanelTransitionStyleProps>`
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	/* If the pattern is taller than the chat body, shrink and clip at the
-	top instead of overflowing, which would show a scrollbar during load */
-	min-height: 0;
 	overflow: hidden;
-	/* The bubble tails (messageBubbleTail) stick out 6px beyond the
-	bubbles; move the clipping edges outward so they are not cut off */
-	margin: 0 -6px;
-	padding: 0 6px;
+	padding: var(--chat-body-padding);
+	/* Mirror the body's border geometry (the visible border underneath
+	shows through) so content boxes align exactly */
+	border-left: var(--chat-body-border-left);
+	border-color: transparent;
+	/* Reserve the same classic-scrollbar gutter as .chat__body so the
+	skeleton bubbles stay pixel-aligned with the messages beneath */
+	scrollbar-gutter: stable;
+
+	/* When the body is shorter than the pattern, clip the topmost rows
+	(via the overflow above) instead of squeezing every row into view */
+	& > * {
+		flex-shrink: 0;
+	}
+
+	${({ $isExiting }) =>
+		$isExiting &&
+		css`
+			animation: ${fadeOut} 0.25s ease-out forwards;
+		`}
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
 `;
 
 /* Mirrors .chat__message__dateContainer and the assignment/tagging event

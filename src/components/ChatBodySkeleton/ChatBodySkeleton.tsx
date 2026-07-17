@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { Fragment, memo, useMemo } from 'react';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import * as Styled from './ChatBodySkeleton.styles';
 
 type BubbleSpec = { width: string; height: number };
@@ -56,7 +57,10 @@ const generateRows = (): SkeletonRow[] => {
 			kind: 'group',
 			isOutgoing,
 			nameWidth: Math.round(randomBetween(50, 110)),
-			bubbles: Array.from({ length: randomFrom([1, 1, 2, 2, 3]) }, generateBubble),
+			bubbles: Array.from(
+				{ length: randomFrom([1, 1, 2, 2, 3]) },
+				generateBubble
+			),
 		});
 
 		if (i === eventAfterGroup) {
@@ -79,16 +83,25 @@ const generateRows = (): SkeletonRow[] => {
 };
 
 /**
- * Placeholder for the chat body while a chat initially loads: a date
- * indicator, incoming and outgoing message groups and centered
+ * Placeholder overlaying the chat body while a chat initially loads: a
+ * date indicator, incoming and outgoing message groups and centered
  * assignment/tagging event rows, shaped like the real components. The
- * pattern is randomized per mount for variety.
+ * pattern is randomized per mount for variety. Cross-fades away over
+ * the loaded messages via the forwarded transition props.
  */
-const ChatBodySkeleton: React.FC = () => {
+const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
+	isExiting,
+	onAnimationEnd,
+}) => {
 	const rows = useMemo(generateRows, []);
 
 	return (
-		<Styled.Container aria-hidden data-test-id="chat-body-skeleton">
+		<Styled.Container
+			aria-hidden
+			data-test-id="chat-body-skeleton"
+			$isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
 			{rows.map((row, index) => {
 				switch (row.kind) {
 					case 'date':
@@ -106,7 +119,7 @@ const ChatBodySkeleton: React.FC = () => {
 						);
 					case 'group':
 						return (
-							<React.Fragment key={index}>
+							<Fragment key={index}>
 								<Styled.SenderName
 									$isOutgoing={row.isOutgoing}
 									width={row.nameWidth}
@@ -120,7 +133,7 @@ const ChatBodySkeleton: React.FC = () => {
 										height={bubble.height}
 									/>
 								))}
-							</React.Fragment>
+							</Fragment>
 						);
 				}
 			})}
@@ -128,4 +141,6 @@ const ChatBodySkeleton: React.FC = () => {
 	);
 };
 
-export default ChatBodySkeleton;
+// Memoized: ChatView re-renders frequently while a chat loads, and the
+// skeleton's output only depends on its two stable props
+export default memo(ChatBodySkeleton);

@@ -219,6 +219,19 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
 
+	// Owned by the load path: set inside the same flushSync that commits
+	// the first page of messages, so the skeleton starts cross-fading on
+	// the exact commit the messages render (isLoaded flips later)
+	const [isInitialMessagesRendered, setInitialMessagesRendered] =
+		useState(false);
+	const isSkeletonVisible = !!waId && !isInitialMessagesRendered;
+	// Skipped (isEnabled) while no chat is open: the exit animation could
+	// not run inside the mobile display:none chat pane, which would leave
+	// the overlay mounted forever waiting for animationend
+	const skeletonTransition = useUnmountTransition(isSkeletonVisible, {
+		isEnabled: !!routeWaId,
+	});
+
 	const [person, setPerson] = useState<Person>();
 	const [chat, setChat] = useState<Chat>();
 
@@ -443,6 +456,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 	useEffect(() => {
 		setLoaded(false);
+		setInitialMessagesRendered(false);
 
 		// Clear values for next route
 		setPerson(undefined);
@@ -880,6 +894,7 @@ const ChatView: React.FC<Props> = (props) => {
 				// Clear existing messages
 				flushSync(() => {
 					setMessages({});
+					setInitialMessagesRendered(false);
 				});
 				setLoaded(false);
 
@@ -1449,6 +1464,10 @@ const ChatView: React.FC<Props> = (props) => {
 						return mergeReactionLists(prevState, preparedReactions);
 					}
 				});
+
+				// In the same commit as the messages, so the loading skeleton
+				// starts cross-fading the moment they render
+				setInitialMessagesRendered(true);
 			});
 
 			if (!sinceTime || replaceAll) {
@@ -1472,6 +1491,9 @@ const ChatView: React.FC<Props> = (props) => {
 				console.log('No more items to load.');
 				setHasOlderMessagesToLoad(false);
 			}
+
+			// Chat has no messages: nothing renders, dismiss the skeleton
+			setInitialMessagesRendered(true);
 		}
 
 		setLoaded(true);
@@ -2084,6 +2106,9 @@ const ChatView: React.FC<Props> = (props) => {
 				in={
 					isLoaded &&
 					!isLoadingMoreMessages &&
+					// Not while the loading skeleton is still cross-fading away
+					// (it paints above this indicator)
+					!skeletonTransition.isMounted &&
 					fixedDateIndicatorText !== undefined &&
 					fixedDateIndicatorText.trim().length > 0
 				}
@@ -2101,85 +2126,98 @@ const ChatView: React.FC<Props> = (props) => {
 				</div>
 			</Zoom>
 
-			<div
-				id="chat-body"
-				className="chat__body"
-				ref={messagesContainer}
-				onDrop={(event) => event.preventDefault()}
-			>
-				<div className="chat__empty" />
-
-				{/* Hidden as soon as messages render (not on isLoaded, which
-				flips later) so skeleton and messages never stack up and
-				overflow the chat body */}
-				{!!waId && !isLoaded && Object.keys(messages).length === 0 && (
-					<ChatBodySkeleton />
-				)}
-
-				{Object.entries(messages).map((message, index) => {
-					// Ignoring reaction messages
-					if (message[1].waba_payload?.type === MessageType.reaction) return;
-
-					// Message date is created here and passed to ChatMessage for a better performance
-					const curMsgDate = moment.unix(getMessageTimestamp(message[1]) ?? -1);
-
-					if (index === 0) {
-						lastPrintedDate = undefined;
-						lastSenderWaId = undefined;
+			<div className="chat__body__outer">
+				<div
+					id="chat-body"
+					className={
+						'chat__body' +
+						(skeletonTransition.isExiting ? ' chat__body--appearing' : '')
 					}
+					ref={messagesContainer}
+					onDrop={(event) => event.preventDefault()}
+				>
+					<div className="chat__empty" />
 
-					let willDisplayDate = false;
-					if (lastPrintedDate === undefined) {
-						willDisplayDate = true;
-						lastPrintedDate = moment.unix(
+					{Object.entries(messages).map((message, index) => {
+						// Ignoring reaction messages
+						if (message[1].waba_payload?.type === MessageType.reaction) return;
+
+						// Message date is created here and passed to ChatMessage for a better performance
+						const curMsgDate = moment.unix(
 							getMessageTimestamp(message[1]) ?? -1
 						);
-					} else {
-						if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
+
+						if (index === 0) {
+							lastPrintedDate = undefined;
+							lastSenderWaId = undefined;
+						}
+
+						let willDisplayDate = false;
+						if (lastPrintedDate === undefined) {
 							willDisplayDate = true;
+							lastPrintedDate = moment.unix(
+								getMessageTimestamp(message[1]) ?? -1
+							);
+						} else {
+							if (!curMsgDate.isSame(lastPrintedDate, 'day')) {
+								willDisplayDate = true;
+							}
+
+							lastPrintedDate = curMsgDate;
 						}
 
-						lastPrintedDate = curMsgDate;
-					}
-
-					let willDisplaySender = false;
-					const curSenderWaId = getUniqueSender(message[1]);
-					if (lastSenderWaId === undefined) {
-						willDisplaySender = true;
-						lastSenderWaId = getUniqueSender(message[1]);
-					} else {
-						if (lastSenderWaId !== curSenderWaId) {
+						let willDisplaySender = false;
+						const curSenderWaId = getUniqueSender(message[1]);
+						if (lastSenderWaId === undefined) {
 							willDisplaySender = true;
+							lastSenderWaId = getUniqueSender(message[1]);
+						} else {
+							if (lastSenderWaId !== curSenderWaId) {
+								willDisplaySender = true;
+							}
+
+							lastSenderWaId = getUniqueSender(message[1]);
 						}
 
-						lastSenderWaId = getUniqueSender(message[1]);
-					}
+						return (
+							<ErrorBoundary key={message[0]}>
+								<ChatMessage
+									data={message[1]}
+									reactionsHistory={reactions[message[0]] ?? []}
+									templateData={
+										templates[message[1]?.waba_payload?.template?.name ?? '']
+									}
+									displaySender={willDisplaySender}
+									displayDate={willDisplayDate}
+									isExpired={isExpired}
+									goToMessageId={goToMessageId}
+									retryMessage={retryMessage}
+									onOptionsClick={displayOptionsMenu}
+									onQuickReactionsClick={displayQuickReactions}
+									onReactionDetailsClick={displayReactionDetails}
+									contactProvidersData={props.contactProvidersData}
+									setMessageWithStatuses={props.setMessageWithStatuses}
+									isActionsEnabled={true}
+								/>
+							</ErrorBoundary>
+						);
+					})}
 
-					return (
-						<ErrorBoundary key={message[0]}>
-							<ChatMessage
-								data={message[1]}
-								reactionsHistory={reactions[message[0]] ?? []}
-								templateData={
-									templates[message[1]?.waba_payload?.template?.name ?? '']
-								}
-								displaySender={willDisplaySender}
-								displayDate={willDisplayDate}
-								isExpired={isExpired}
-								goToMessageId={goToMessageId}
-								retryMessage={retryMessage}
-								onOptionsClick={displayOptionsMenu}
-								onQuickReactionsClick={displayQuickReactions}
-								onReactionDetailsClick={displayReactionDetails}
-								contactProvidersData={props.contactProvidersData}
-								setMessageWithStatuses={props.setMessageWithStatuses}
-								isActionsEnabled={true}
-							/>
-						</ErrorBoundary>
-					);
-				})}
+					<div className="chat__body__empty" />
+				</div>
 
-				<div className="chat__body__empty" />
+				{/* Overlays the chat body without taking layout space (so it can
+			never affect the body's height or scrollbar) and cross-fades away
+			once the loaded messages render underneath */}
+				{skeletonTransition.isMounted && (
+					<ChatBodySkeleton
+						// Remount per chat: a switch mid-fade gets a freshly
+						// randomized pattern instead of reusing the previous one
+						key={waId}
+						isExiting={skeletonTransition.isExiting}
+						onAnimationEnd={skeletonTransition.handleAnimationEnd}
+					/>
+				)}
 			</div>
 
 			<QuickReactionsMenu

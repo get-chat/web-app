@@ -4,8 +4,12 @@
 	flex-direction: column;
 	position: relative;
 	background-color: var(--chat-bg);
-	background-image: url('/pattern.svg');
+	background-image: var(--chat-bg-image);
 	background-repeat: repeat;
+	/* Single source for the chat body frame; the loading skeleton overlay
+	(ChatBodySkeleton) mirrors the body with these same variables */
+	--chat-body-padding: 10px 20px 0 20px;
+	--chat-body-border-left: 1px solid rgba(0, 0, 45, 0.05);
 }
 
 .chat.chatFullWidth {
@@ -339,16 +343,52 @@ stored one. */
 	fill: red;
 }
 
+/* Positioning context for the loading skeleton, which overlays the
+chat body without participating in its layout */
+.chat__body__outer {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+}
+
+/* The other half of the loading cross-dissolve: while the skeleton
+overlay fades out (ChatBodySkeleton, same 0.25s), the freshly rendered
+messages fade in over the chat wallpaper */
+@keyframes chatBodyAppear {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.chat__body--appearing {
+	animation: chatBodyAppear 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat__body--appearing {
+		animation: none;
+	}
+}
+
 .chat__body {
 	position: relative;
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-	padding: 10px 20px 0 20px;
+	padding: var(--chat-body-padding);
 	overflow-y: auto;
 	overflow-x: hidden;
-	border-left: 1px solid rgba(0, 0, 45, 0.05);
+	border-left: var(--chat-body-border-left);
 	min-height: 0;
+	/* Reserve the classic-scrollbar gutter even before content overflows,
+	so message width never jumps and the skeleton overlay (which reserves
+	the same gutter) stays pixel-aligned with the messages beneath it */
+	scrollbar-gutter: stable;
 }
 
 .chat__body__empty {
@@ -621,15 +661,12 @@ stored one. */
 		left: 0;
 		right: 0;
 		bottom: 0;
+		--chat-body-padding: 10px 10px 0 10px;
+		--chat-body-border-left: none;
 	}
 
 	.chat:not(.chatOpen) {
 		display: none;
-	}
-
-	.chat__body {
-		padding: 10px 10px 0 10px;
-		border-left: none;
 	}
 
 	.chat__message {
