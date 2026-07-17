@@ -134,6 +134,35 @@ export const ChatMessageOuter = styled.div.attrs({
 	}
 `;
 
+// The first message of each sender group carries a small tail pointing
+// to the sender's side; the tail inherits the background so it matches
+// every bubble color. Shared with ChatBodySkeleton so the placeholder
+// bubbles keep exactly the same shape.
+export const messageBubbleTail = css<{ $isOutgoing?: boolean }>`
+	${({ $isOutgoing }) => css`
+		${$isOutgoing ? 'border-top-right-radius' : 'border-top-left-radius'}: 0;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			${$isOutgoing ? 'right' : 'left'}: -6px;
+			width: 6px;
+			height: 10px;
+			background: inherit;
+			/* Straight-edged fallback for browsers without path() support */
+			clip-path: ${$isOutgoing
+				? 'polygon(0 0, 100% 0, 0 100%)'
+				: 'polygon(0 0, 100% 0, 100% 100%)'};
+			/* A soft sweep with a rounded tip, leaving the bubble edge
+			tangentially so the junction stays smooth */
+			clip-path: ${$isOutgoing
+				? "path('M0 0 L0 10 C0 8 1.4 5.6 5.4 2.6 Q6 1 4.4 0 Z')"
+				: "path('M6 0 L6 10 C6 8 4.6 5.6 0.6 2.6 Q0 1 1.6 0 Z')"};
+		}
+	`}
+`;
+
 export const ChatMessage = styled.div.attrs({
 	className: 'chat__message',
 })<{
@@ -197,33 +226,7 @@ export const ChatMessage = styled.div.attrs({
 			}
 		`}
 
-	// The first message of each sender group carries a small tail pointing
-	// to the sender's side; the tail inherits the background so it matches
-	// every bubble color
-	${({ $isFirstInGroup, $isOutgoing }) =>
-		$isFirstInGroup &&
-		css`
-			${$isOutgoing ? 'border-top-right-radius' : 'border-top-left-radius'}: 0;
-
-			&::before {
-				content: '';
-				position: absolute;
-				top: 0;
-				${$isOutgoing ? 'right' : 'left'}: -6px;
-				width: 6px;
-				height: 10px;
-				background: inherit;
-				/* Straight-edged fallback for browsers without path() support */
-				clip-path: ${$isOutgoing
-					? 'polygon(0 0, 100% 0, 0 100%)'
-					: 'polygon(0 0, 100% 0, 100% 100%)'};
-				/* A soft sweep with a rounded tip, leaving the bubble edge
-				tangentially so the junction stays smooth */
-				clip-path: ${$isOutgoing
-					? "path('M0 0 L0 10 C0 8 1.4 5.6 5.4 2.6 Q6 1 4.4 0 Z')"
-					: "path('M6 0 L6 10 C6 8 4.6 5.6 0.6 2.6 Q0 1 1.6 0 Z')"};
-			}
-		`}
+	${({ $isFirstInGroup }) => $isFirstInGroup && messageBubbleTail}
 
 	${({ $isReceived }) =>
 		$isReceived &&

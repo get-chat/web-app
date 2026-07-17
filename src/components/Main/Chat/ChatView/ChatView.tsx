@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import '../../../../styles/Chat.css';
 import { CircularProgress, Zoom } from '@mui/material';
 import ChatMessage from '../ChatMessage/ChatMessage';
+import ChatBodySkeleton from '@src/components/ChatBodySkeleton';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
 	COMMAND_ASSIGN,
@@ -2092,7 +2093,7 @@ const ChatView: React.FC<Props> = (props) => {
 				</div>
 			</Zoom>
 
-			<Zoom in={(waId && !isLoaded) || isLoadingMoreMessages} unmountOnExit>
+			<Zoom in={isLoadingMoreMessages} unmountOnExit>
 				<div className="chat__body__loadingMore">
 					<div className="chat__body__loadingMore__wrapper">
 						<CircularProgress size={28} />
@@ -2107,6 +2108,13 @@ const ChatView: React.FC<Props> = (props) => {
 				onDrop={(event) => event.preventDefault()}
 			>
 				<div className="chat__empty" />
+
+				{/* Hidden as soon as messages render (not on isLoaded, which
+				flips later) so skeleton and messages never stack up and
+				overflow the chat body */}
+				{!!waId && !isLoaded && Object.keys(messages).length === 0 && (
+					<ChatBodySkeleton />
+				)}
 
 				{Object.entries(messages).map((message, index) => {
 					// Ignoring reaction messages
