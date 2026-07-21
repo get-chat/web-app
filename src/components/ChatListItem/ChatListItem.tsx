@@ -1,10 +1,7 @@
 import React, { MouseEvent, TouchEvent, useMemo } from 'react';
 import { Tooltip } from '@mui/material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import {
-	extractAvatarFromContactProviderData,
-	generateInitialsHelper,
-} from '@src/helpers/Helpers';
+import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
 import { CALENDAR_SHORT } from '@src/Constants';
 import ChatMessageShortContent from '../Main/Chat/ChatMessage/ChatMessageShortContent';
@@ -128,7 +125,9 @@ const ChatListItem = (props: any) => {
 								!isExpired ? getChatContactName(data) : undefined
 							}
 						>
-							{generateInitialsHelper(getChatContactName(data))}
+							{/* Same initials source as ChatHeader and the other avatar
+						render sites, so the same contact gets the same avatar */}
+							{data.contact.initials}
 						</CustomAvatar>
 
 						{newMessagesForChat > 0 && (
