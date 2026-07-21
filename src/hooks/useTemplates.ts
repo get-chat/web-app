@@ -10,6 +10,10 @@ import {
 	issueTemplateRefreshRequest,
 } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
+import {
+	generateTemplateKey,
+	isTemplateApproved,
+} from '@src/helpers/TemplateMessageHelper';
 
 const MAX_RETRY = 15;
 const RETRY_DELAY = 1000;
@@ -105,8 +109,8 @@ const useTemplates = () => {
 			console.log('Loaded templates successfully!');
 			const templateList: TemplateList = {};
 			data.results
-				.filter((item) => item.status === 'approved')
-				.forEach((item) => (templateList[item.name] = item));
+				.filter(isTemplateApproved)
+				.forEach((item) => (templateList[generateTemplateKey(item)] = item));
 			dispatch(setTemplates(templateList));
 			dispatch(setIsRefreshingTemplates(false));
 

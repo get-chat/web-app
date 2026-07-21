@@ -6,8 +6,50 @@ import {
 import {
 	Template,
 	TemplateComponent,
+	TemplateLanguage,
+	TemplateList,
 	TemplateParameter,
 } from '@src/types/templates';
+
+/**
+ * Returns the language code of a template regardless of its shape.
+ * Templates from the API (Meta format) carry a plain string (e.g. "en_US"),
+ * while message waba payloads carry an object (e.g. { code: "en_US" }).
+ */
+export const getTemplateLanguageCode = (
+	language: TemplateLanguage | string | undefined
+): string | undefined =>
+	typeof language === 'string' ? language : language?.code;
+
+/**
+ * Generates the key a template is stored under in the template list.
+ * Templates are unique by name and language, not by name alone.
+ */
+export const generateTemplateKey = (template: Template): string =>
+	`${template.name}@${getTemplateLanguageCode(template.language) ?? ''}`;
+
+export const isTemplateApproved = (template: Template): boolean =>
+	template.status?.toLowerCase() === 'approved';
+
+/**
+ * Finds a template by name and (optionally) language. Falls back to the
+ * first template matching the name when there is no exact language match.
+ */
+export const findTemplate = (
+	templates: TemplateList,
+	name: string | undefined,
+	language?: TemplateLanguage | string
+): Template | undefined => {
+	if (!name) return undefined;
+
+	const languageCode = getTemplateLanguageCode(language);
+	if (languageCode) {
+		const exactMatch = templates[`${name}@${languageCode}`];
+		if (exactMatch) return exactMatch;
+	}
+
+	return Object.values(templates).find((template) => template.name === name);
+};
 
 /**
  * Extracts all template parameter placeholders from a template text string.

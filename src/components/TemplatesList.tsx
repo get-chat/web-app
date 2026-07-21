@@ -1,5 +1,9 @@
 import React from 'react';
-import { sortTemplateComponents } from '../helpers/TemplateMessageHelper';
+import {
+	getTemplateLanguageCode,
+	isTemplateApproved,
+	sortTemplateComponents,
+} from '../helpers/TemplateMessageHelper';
 import { Button, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { SendButton } from '@src/components/SavedResponseList/SavedResponseList.styles';
@@ -87,7 +91,15 @@ const TemplatesList: React.FC<Props> = ({
 						>
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
 							<div className="templateMessage__message">
-								<h4>{template[1].name}</h4>
+								<h4>
+									{template[1].name}
+									{getTemplateLanguageCode(template[1].language) && (
+										<span className="templateMessage__language">
+											{' '}
+											({getTemplateLanguageCode(template[1].language)})
+										</span>
+									)}
+								</h4>
 								{sortTemplateComponents(template[1].components ?? []).map(
 									(comp: any, index: number) => (
 										<div key={index}>
@@ -100,7 +112,7 @@ const TemplatesList: React.FC<Props> = ({
 								)}
 							</div>
 						</StyledChatMessage.ChatMessage>
-						{template[1].status === 'approved' && (
+						{isTemplateApproved(template[1]) && (
 							<Tooltip title={customSelectButtonTitle ?? t('Send')}>
 								<SendButton
 									aria-label={customSelectButtonTitle ?? t('Send')}

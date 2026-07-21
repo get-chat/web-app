@@ -3,7 +3,10 @@ import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
 import ReplyIcon from '@mui/icons-material/Reply';
 import PrintMessage from '../../../PrintMessage';
-import { insertTemplateComponentParameters } from '@src/helpers/TemplateMessageHelper';
+import {
+	findTemplate,
+	insertTemplateComponentParameters,
+} from '@src/helpers/TemplateMessageHelper';
 import { useAppSelector } from '@src/store/hooks';
 import { useTranslation } from 'react-i18next';
 import { Template } from '@src/types/templates';
@@ -35,7 +38,11 @@ const ChatMessageShortContent: React.FC<Props> = ({
 
 	const print = () => {
 		if (type === MessageType.template && template) {
-			const templateData = templates[template.name];
+			const templateData = findTemplate(
+				templates,
+				template.name,
+				template.language
+			);
 			if (templateData) {
 				const component = templateData.components?.filter(
 					(comp) => comp.type === 'BODY'

@@ -73,6 +73,10 @@ import { GroupList } from '@src/types/groups';
 import { fetchTemplates } from '@src/api/templatesApi';
 import { TemplateList } from '@src/types/templates';
 import {
+	generateTemplateKey,
+	isTemplateApproved,
+} from '@src/helpers/TemplateMessageHelper';
+import {
 	Message,
 	MessageWabaPayload,
 	LegacyWabaWebhook,
@@ -977,8 +981,8 @@ const Main: React.FC = () => {
 			const data = await fetchTemplates();
 			const templateList: TemplateList = {};
 			data.results
-				.filter((item) => item.status === 'approved')
-				.forEach((item) => (templateList[item.name] = item));
+				.filter(isTemplateApproved)
+				.forEach((item) => (templateList[generateTemplateKey(item)] = item));
 			dispatch(setTemplates(templateList));
 
 			if (!isRetry) {

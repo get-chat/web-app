@@ -94,6 +94,7 @@ import ReactionList from '@src/interfaces/ReactionList';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { setPendingMessages } from '@src/store/reducers/pendingMessagesReducer';
 import { Template } from '@src/types/templates';
+import { findTemplate } from '@src/helpers/TemplateMessageHelper';
 import { fetchChat } from '@src/api/chatsApi';
 import { Chat } from '@src/types/chats';
 import {
@@ -1956,7 +1957,7 @@ const ChatView: React.FC<Props> = (props) => {
 			if (templateName) {
 				console.log('Send template: ' + templateName);
 
-				const template = templates[templateName];
+				const template = findTemplate(templates, templateName);
 
 				if (template) {
 					setChosenTemplate(template);
@@ -2162,9 +2163,11 @@ const ChatView: React.FC<Props> = (props) => {
 								<ChatMessage
 									data={message[1]}
 									reactionsHistory={reactions[message[0]] ?? []}
-									templateData={
-										templates[message[1]?.waba_payload?.template?.name ?? '']
-									}
+									templateData={findTemplate(
+										templates,
+										message[1]?.waba_payload?.template?.name,
+										message[1]?.waba_payload?.template?.language
+									)}
 									displaySender={willDisplaySender}
 									displayDate={willDisplayDate}
 									isExpired={isExpired}
