@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const SearchContainer = styled.div.attrs({
 	className: 'searchBar__search',
@@ -12,7 +12,7 @@ export const SearchContainer = styled.div.attrs({
 
 export const SearchInputContainer = styled.div.attrs({
 	className: 'searchBar__inputContainer',
-})`
+})<{ $isFocusStyleEnabled?: boolean }>`
 	position: relative;
 	display: flex;
 	align-items: center;
@@ -22,11 +22,15 @@ export const SearchInputContainer = styled.div.attrs({
 	border-radius: 10px;
 	transition: background-color ease-out 0.15s, box-shadow ease-out 0.15s;
 
-	&:focus-within {
-		background-color: #fff;
-		box-shadow: 0 0 0 1px var(--color-primary),
-			0 0 0 4px rgba(101, 203, 172, 0.2);
-	}
+	${({ $isFocusStyleEnabled = true }) =>
+		$isFocusStyleEnabled &&
+		css`
+			&:focus-within {
+				background-color: #fff;
+				box-shadow: 0 0 0 1px var(--color-primary),
+					0 0 0 4px rgba(101, 203, 172, 0.2);
+			}
+		`}
 
 	> .MuiSvgIcon-root {
 		color: var(--lighter-text-color);

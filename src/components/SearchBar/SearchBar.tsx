@@ -11,6 +11,9 @@ export type Props = {
 	placeholder?: string;
 	onFocus?: () => void;
 	onBlur?: () => void;
+	// The focused input lifts to white with a glow; disable where the
+	// search bar sits on a surface that treatment clashes with
+	isFocusStyleEnabled?: boolean;
 };
 
 const SearchBar: React.FC<Props> = ({
@@ -20,6 +23,7 @@ const SearchBar: React.FC<Props> = ({
 	placeholder,
 	onFocus,
 	onBlur,
+	isFocusStyleEnabled = true,
 }) => {
 	const { t } = useTranslation();
 
@@ -29,7 +33,7 @@ const SearchBar: React.FC<Props> = ({
 
 	return (
 		<Styled.SearchContainer>
-			<Styled.SearchInputContainer>
+			<Styled.SearchInputContainer $isFocusStyleEnabled={isFocusStyleEnabled}>
 				{isLoading ? <CircularProgress /> : <SearchOutlined />}
 				<Styled.SearchInput
 					placeholder={placeholder ?? t('Search')}

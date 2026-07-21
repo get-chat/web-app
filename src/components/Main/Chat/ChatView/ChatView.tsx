@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../../styles/Chat.css';
-import { CircularProgress, Zoom } from '@mui/material';
+import { CircularProgress, ClickAwayListener, Zoom } from '@mui/material';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import ChatBodySkeleton from '@src/components/ChatBodySkeleton';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -85,7 +85,10 @@ import useChat from '@src/components/Main/Chat/ChatView/useChat';
 import decode from 'unescape';
 import { setState } from '@src/store/reducers/UIReducer';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import InteractiveMessageList from '@src/components/InteractiveMessageList';
+import InteractiveMessageList, {
+	DescribedInteractive,
+} from '@src/components/InteractiveMessageList';
+import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
 import QuickReactionsMenu from '@src/components/QuickReactionsMenu';
 import ReactionsEmojiPicker from '@src/components/ReactionsEmojiPicker';
 import ReactionDetails from '@src/components/ReactionDetails';
@@ -255,6 +258,11 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const [chosenTemplate, setChosenTemplate] = useState<Template>();
 	const [isSendTemplateDialogVisible, setSendTemplateDialogVisible] =
+		useState(false);
+
+	const [chosenInteractive, setChosenInteractive] =
+		useState<DescribedInteractive>();
+	const [isSendInteractiveDialogVisible, setSendInteractiveDialogVisible] =
 		useState(false);
 
 	const messagesContainer = useRef<HTMLDivElement>(null);
@@ -2230,21 +2238,30 @@ const ChatView: React.FC<Props> = (props) => {
 			/>
 
 			{templatesTransition.isMounted && (
-				<TemplateListWithControls
-					onSelect={(template: Template) => {
-						setChosenTemplate(template);
-						setSendTemplateDialogVisible(true);
-					}}
-					isExiting={templatesTransition.isExiting}
-					onAnimationEnd={templatesTransition.handleAnimationEnd}
-				/>
+				<ClickAwayListener
+					onClickAway={() => dispatch(setState({ isTemplatesVisible: false }))}
+				>
+					<TemplateListWithControls
+						onSelect={(template: Template) => {
+							setChosenTemplate(template);
+							setSendTemplateDialogVisible(true);
+							// Close the panel as soon as a template is picked
+							dispatch(setState({ isTemplatesVisible: false }));
+						}}
+						isExiting={templatesTransition.isExiting}
+						onAnimationEnd={templatesTransition.handleAnimationEnd}
+					/>
+				</ClickAwayListener>
 			)}
 
 			{interactiveMessagesTransition.isMounted && (
 				<InteractiveMessageList
-					onSend={(interactiveMessage) =>
-						sendInteractiveMessage(true, interactiveMessage)
-					}
+					onSelect={(describedInteractive) => {
+						setChosenInteractive(describedInteractive);
+						setSendInteractiveDialogVisible(true);
+						// Close the panel as soon as a message type is picked
+						dispatch(setState({ isInteractiveMessagesVisible: false }));
+					}}
 					isExiting={interactiveMessagesTransition.isExiting}
 					onAnimationEnd={interactiveMessagesTransition.handleAnimationEnd}
 				/>
@@ -2256,6 +2273,15 @@ const ChatView: React.FC<Props> = (props) => {
 				chosenTemplate={chosenTemplate}
 				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
 				sendCallback={() => dispatch(setState({ isTemplatesVisible: false }))}
+			/>
+
+			<SendInteractiveMessageDialog
+				isVisible={isSendInteractiveDialogVisible}
+				setVisible={setSendInteractiveDialogVisible}
+				describedInteractive={chosenInteractive}
+				onSend={(interactiveMessage) =>
+					sendInteractiveMessage(true, interactiveMessage)
+				}
 			/>
 
 			{savedResponsesTransition.isMounted && (

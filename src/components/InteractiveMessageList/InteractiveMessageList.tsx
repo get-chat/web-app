@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
+import React from 'react';
+import { Button, ClickAwayListener } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import SendInteractiveMessageDialog from '@src/components/SendInteractiveMessageDialog';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setState } from '@src/store/reducers/UIReducer';
 import { isIndianPhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import {
 	List,
@@ -382,18 +382,21 @@ const INTERACTIVE_MESSAGES: DescribedInteractive[] = [
 ];
 
 interface Props extends PanelTransitionProps {
-	onSend: (interactiveMessage: any) => void;
+	// The send dialog itself is rendered by ChatView, so the panel can
+	// close on selection without unmounting the dialog
+	onSelect: (describedInteractive: DescribedInteractive) => void;
 }
 
 const InteractiveMessageList: React.FC<Props> = ({
-	onSend,
+	onSelect,
 	isExiting,
 	onAnimationEnd,
 }) => {
 	const { t } = useTranslation();
-	const [selectedDescribedInteractive, setSelectedDescribedInteractive] =
-		useState<any>(null);
-	const [isDialogVisible, setDialogVisible] = useState(false);
+	const dispatch = useAppDispatch();
+
+	const closePanel = () =>
+		dispatch(setState({ isInteractiveMessagesVisible: false }));
 
 	const businessPhoneNumber = useAppSelector(
 		(state) => state.phoneNumber.value
@@ -411,29 +414,24 @@ const InteractiveMessageList: React.FC<Props> = ({
 			item.payload.type !== 'address_message' || isAddressMessageAvailable
 	);
 
-	const send = (payload: any) => {
-		onSend(payload);
-	};
-
 	return (
-		<>
+		<ClickAwayListener onClickAway={closePanel}>
 			<Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 				<div className="interactiveMessagesWrapper">
 					<List>
 						{availableInteractiveMessages.map((item, index) => (
 							<Item key={index}>
 								<Button
-									onClick={() => {
-										setSelectedDescribedInteractive(item);
-										setDialogVisible(true);
-									}}
+									onClick={() => onSelect(item)}
 									// @ts-ignore
 									color="black"
 								>
 									<div>
 										<h4>{t(item.title)}</h4>
 										<Description
-											dangerouslySetInnerHTML={{ __html: t(item.description) }}
+											dangerouslySetInnerHTML={{
+												__html: t(item.description),
+											}}
 										/>
 									</div>
 								</Button>
@@ -442,14 +440,7 @@ const InteractiveMessageList: React.FC<Props> = ({
 					</List>
 				</div>
 			</Outer>
-
-			<SendInteractiveMessageDialog
-				isVisible={isDialogVisible}
-				setVisible={setDialogVisible}
-				describedInteractive={selectedDescribedInteractive}
-				onSend={(interactiveMessage) => send(interactiveMessage)}
-			/>
-		</>
+		</ClickAwayListener>
 	);
 };
 
