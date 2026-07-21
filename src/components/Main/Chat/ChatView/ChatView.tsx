@@ -1307,6 +1307,9 @@ const ChatView: React.FC<Props> = (props) => {
 		setLoaded(true);
 		setLoadingMoreMessages(false);
 		setAtBottom(true);
+		// New chat without a stored contact: listMessages is never called,
+		// so dismiss the loading skeleton here
+		setInitialMessagesRendered(true);
 	};
 
 	const listMessages = async (
