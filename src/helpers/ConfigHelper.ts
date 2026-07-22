@@ -7,6 +7,11 @@ const isFlagEnabled = (value: string | undefined) =>
 export const isReadOnlyConfig = (config: AppConfig | null) =>
 	isFlagEnabled(config?.APP_IS_READ_ONLY);
 
+// Shows the "Login with 360dialog" button in the login page (requires a
+// backend that supports append_refresh_token in loginWithAuthxToken)
+export const is360dialogLoginEnabled = (config: AppConfig | null) =>
+	isFlagEnabled(config?.APP_IS_360DIALOG_LOGIN_ENABLED);
+
 export const isRegularUserActionsRestricted = (
 	config: AppConfig | null,
 	currentUser: User | null | undefined

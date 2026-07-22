@@ -103,7 +103,7 @@ msgstr "Witaj"
 msgid "We are validating your session, please wait."
 msgstr "Weryfikujemy twoją sesję, proszę czekać."
 
-msgid "Please login to start"
+msgid "Please log in to start"
 msgstr "Zaloguj się, aby rozpocząć"
 
 msgid "Search For Messages"

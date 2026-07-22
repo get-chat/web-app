@@ -1,7 +1,10 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { MemoryRouter } from 'react-router-dom';
 import { TestProviders } from '@src/__mocks__/test-utils';
+import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import Login from '@src/modules/Login';
 
 jest.mock('@src/api/authApi');
@@ -51,5 +54,58 @@ describe('Login Component - Successful Login', () => {
 				require('@src/helpers/StorageHelper').storeToken
 			).toHaveBeenCalledWith('test-token-123');
 		});
+	});
+});
+
+describe('Login Component - Login with 360dialog', () => {
+	const renderWithConfig = (config: object, initialEntries = ['/']) =>
+		render(
+			<ThemeProvider theme={createTheme()}>
+				<AppConfigContext.Provider
+					// @ts-ignore
+					value={config}
+				>
+					<MemoryRouter initialEntries={initialEntries}>
+						<Login />
+					</MemoryRouter>
+				</AppConfigContext.Provider>
+			</ThemeProvider>
+		);
+
+	it('is hidden by default', () => {
+		render(
+			<TestProviders>
+				<Login />
+			</TestProviders>
+		);
+
+		expect(
+			screen.queryByTestId('login-with-360dialog')
+		).not.toBeInTheDocument();
+	});
+
+	it('is visible when enabled via config', () => {
+		renderWithConfig({
+			API_BASE_URL: 'http://test-api.com',
+			APP_IS_360DIALOG_LOGIN_ENABLED: 'true',
+		});
+
+		expect(screen.getByTestId('login-with-360dialog')).toBeInTheDocument();
+	});
+
+	it('displays the error reported by the SSO flow', () => {
+		renderWithConfig(
+			{
+				API_BASE_URL: 'http://test-api.com',
+				APP_IS_360DIALOG_LOGIN_ENABLED: 'true',
+			},
+			['/?360dialog_login_error=unauthorized']
+		);
+
+		expect(
+			screen.getByText(
+				'Your 360dialog account does not have access to this inbox.'
+			)
+		).toBeInTheDocument();
 	});
 });

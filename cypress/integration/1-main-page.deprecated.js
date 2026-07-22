@@ -76,7 +76,7 @@ describe('Main Page', () => {
 		cy.wait(2000);
 		cy.get('.login__body > p:nth-child(3)').should(
 			'have.text',
-			'Please login to start'
+			'Please log in to start'
 		);
 	});
 });

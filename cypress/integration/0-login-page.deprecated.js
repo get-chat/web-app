@@ -6,7 +6,7 @@ describe('Login Page', () => {
 		cy.get('.login__body > h2:nth-child(2)').should('have.text', 'Welcome');
 		cy.get('.login__body > p:nth-child(3)').should(
 			'have.text',
-			'Please login to start'
+			'Please log in to start'
 		);
 	});
 
