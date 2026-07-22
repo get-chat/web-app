@@ -79,8 +79,10 @@ const Login: React.FC = () => {
 		// in the backend sends the user back here with this param on failure)
 		if ('360dialog_login_error' in params) {
 			const ssoErrorMessages: { [key: string]: string } = {
+				// The account was logged out at 360dialog after this error,
+				// so trying again offers logging in with another account
 				unauthorized:
-					'Your 360dialog account does not have access to this inbox.',
+					'Your 360dialog account does not have access to this inbox. Please try again with another account.',
 				no_session:
 					'Could not retrieve your 360dialog session. Please try again.',
 			};

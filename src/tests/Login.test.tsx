@@ -104,7 +104,7 @@ describe('Login Component - Login with 360dialog', () => {
 
 		expect(
 			screen.getByText(
-				'Your 360dialog account does not have access to this inbox.'
+				'Your 360dialog account does not have access to this inbox. Please try again with another account.'
 			)
 		).toBeInTheDocument();
 	});
