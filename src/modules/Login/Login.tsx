@@ -249,7 +249,10 @@ const Login: React.FC = () => {
 
 		window.location.href = get360dialogLoginPageURL(
 			api.defaults.baseURL ?? '/api/v1/',
-			redirectUrl
+			redirectUrl,
+			// A backend session already offers "Continue as": using the button
+			// anyway means logging in with a different 360dialog account
+			!!sessionUser
 		);
 	};
 
