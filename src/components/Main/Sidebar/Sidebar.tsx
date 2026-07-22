@@ -1129,6 +1129,7 @@ const Sidebar: React.FC<Props> = ({
 						onChange={(_keyword) => search(_keyword)}
 						placeholder={t('Search, filter by tags, time, etc.')}
 						onFocus={() => setFiltersVisible(true)}
+						isFocusStyleEnabled={false}
 					/>
 
 					<Collapse in={isForceDisplayFilters}>

@@ -17,6 +17,7 @@ import {
 	getSenderName,
 	hasAnyStatus,
 } from '@src/helpers/MessageHelper';
+import { findTemplate } from '@src/helpers/TemplateMessageHelper';
 import * as Styled from './MessageStatuses.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
@@ -53,11 +54,11 @@ const MessageStatuses: React.FC<Props> = ({
 						<Styled.Preview>
 							<ChatMessage
 								data={message}
-								templateData={
-									message.waba_payload?.template?.name
-										? templates[message.waba_payload.template.name]
-										: undefined
-								}
+								templateData={findTemplate(
+									templates,
+									message.waba_payload?.template?.name,
+									message.waba_payload?.template?.language
+								)}
 							/>
 						</Styled.Preview>
 

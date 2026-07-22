@@ -148,12 +148,20 @@ const Login: React.FC = () => {
 
 		// Check if user availability is enabled
 		if (config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true') {
-			// Get current user id
-			const userData = await fetchCurrentUser();
+			try {
+				// Get current user id
+				const userData = await fetchCurrentUser();
 
-			// Set as available on login
-			if (!userData.profile.is_available) {
-				await updateUserAvailability(userData.id, { is_available: true });
+				// Set as available on login
+				if (userData.profile && !userData.profile.is_available) {
+					await updateUserAvailability(userData.id, { is_available: true });
+				}
+			} catch (error: any | AxiosError) {
+				// Accounts without a profile (e.g. superadmin) get a 404 here
+				// but can still use the app; Main handles them the same way
+				if (error?.response?.status !== 404) {
+					throw error;
+				}
 			}
 		}
 

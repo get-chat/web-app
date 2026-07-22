@@ -154,7 +154,7 @@ export const FilterGroup = styled.div<{
 }>`
 	padding: 0 15px;
 	margin-bottom: ${({ $isActive }) => ($isActive ? '2px' : '0')};
-	margin-top: ${({ $isAll }) => ($isAll ? '10px' : '0')};
+	margin-top: ${({ $isAll }) => ($isAll ? '5px' : '0')};
 `;
 
 export const ChatsCount = styled.div`

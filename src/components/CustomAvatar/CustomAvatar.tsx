@@ -29,6 +29,16 @@ const CustomAvatar: React.FC<Props> = ({
 			: undefined;
 	}, [generateBgColorBy, src]);
 
+	// MUI Avatar falls back to its person icon only when it receives no
+	// children at all; an empty string counts as content and would render
+	// a blank circle instead. String initials without a single letter are
+	// dropped too: phone-number-only contacts yield "+" or a digit, which
+	// is not a meaningful initial. \p{L} accepts letters of any script.
+	const content =
+		typeof children === 'string' && !/\p{L}/u.test(children)
+			? undefined
+			: children;
+
 	const isLight = !Boolean(style?.backgroundColor ?? bgColor);
 
 	return (
@@ -44,7 +54,7 @@ const CustomAvatar: React.FC<Props> = ({
 			onClick={onClick}
 			ref={ref}
 		>
-			{children}
+			{content}
 		</Styled.StyledAvatar>
 	);
 };

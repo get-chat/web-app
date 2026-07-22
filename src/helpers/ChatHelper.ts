@@ -11,6 +11,7 @@ import { User } from '@src/types/users';
 import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { MessageType } from '@src/types/messages';
 import { makeMutable } from '@src/helpers/DataHelper';
+import { getTemplateLanguageCode } from '@src/helpers/TemplateMessageHelper';
 
 export const isChatExpired = (chat: Chat | undefined) =>
 	getPastHoursByTimestamp(chat?.contact.last_message_timestamp ?? 0) >= 24;
@@ -69,18 +70,24 @@ export const isChatIncludingTagId = (chat: Chat | undefined, tagId: number) => {
 export const generateTemplateMessagePayload = (
 	templateMessage: Template
 ): any => {
-	return {
+	const payload: any = {
 		type: MessageType.template,
 		template: {
-			namespace: templateMessage.namespace,
 			name: templateMessage.name,
 			language: {
-				code: templateMessage.language,
+				code: getTemplateLanguageCode(templateMessage.language),
 				policy: 'deterministic',
 			},
 			components: templateMessage.params,
 		},
 	};
+
+	// Legacy 360dialog templates carried a namespace; Meta format ones do not
+	if (templateMessage.namespace) {
+		payload.template.namespace = templateMessage.namespace;
+	}
+
+	return payload;
 };
 
 export const prepareSendFilePayload = (

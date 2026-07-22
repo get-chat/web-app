@@ -93,6 +93,12 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 
 		const inputArray = input?.split(' ').filter((e) => e);
 
+		// Templates are stored per name and language; commands are name-based
+		const templatesByName = Object.values(templates).filter(
+			(template, index, all) =>
+				all.findIndex((item) => item.name === template.name) === index
+		);
+
 		if (
 			!isExpired &&
 			startsWithCommand(COMMAND_SAVED_RESPONSE, COMMAND_SAVED_RESPONSE_ALIAS)
@@ -109,7 +115,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		}
 
 		if (startsWithCommand(COMMAND_TEMPLATE, COMMAND_TEMPLATE_ALIAS)) {
-			Object.values(templates).forEach((template: any) => {
+			templatesByName.forEach((template: any) => {
 				const descriptionArray = sortTemplateComponents(
 					template.components
 				).map(
@@ -161,7 +167,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 		}
 
 		// Dynamic commands: templates
-		Object.values(templates).forEach((template) => {
+		templatesByName.forEach((template) => {
 			items.push({
 				command: '/' + template.name?.toLowerCase(),
 				isStatic: false,
