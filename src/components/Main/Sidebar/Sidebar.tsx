@@ -138,6 +138,7 @@ import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 import UserAvailability from '@src/components/UserAvailability';
 import UserListView from '@src/components/UserListView';
 import { updateUserAvailability } from '@src/api/usersApi';
+import { logout } from '@src/api/authApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -317,6 +318,17 @@ const Sidebar: React.FC<Props> = ({
 			} catch (error: any | AxiosError) {
 				console.error(error);
 			}
+		}
+
+		// Clear the backend session too, not just the local token. Otherwise a
+		// stale session lingers: the login page then shows "Continue as" and,
+		// on a "Login with 360dialog" retry, takes the sso_switch path (which
+		// depends on 360dialog's currently broken authx logout) instead of a
+		// clean login. Best effort — ignored if there is no session to clear.
+		try {
+			await logout();
+		} catch (error: any | AxiosError) {
+			console.error(error);
 		}
 
 		clearUserSession(undefined, undefined, navigate);
