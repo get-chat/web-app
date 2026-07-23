@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FormControl, ListSubheader, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 
 export const Row = styled.div`
 	display: flex;
@@ -8,25 +8,35 @@ export const Row = styled.div`
 	width: 100%;
 `;
 
-export const CountryControl = styled(FormControl)`
+export const CountryControl = styled.div`
 	width: 120px;
 	flex-shrink: 0;
-` as typeof FormControl;
-
-export const NationalNumberField = styled(TextField)`
-	flex: 1;
 `;
 
-export const SelectedValue = styled.span`
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	white-space: nowrap;
+export const CountryTrigger = styled(TextField)`
+	width: 100%;
+
+	.MuiInputBase-root,
+	.MuiInputBase-input {
+		cursor: pointer;
+		caret-color: transparent;
+	}
 
 	.PhoneNumberInput__flag {
 		font-size: 16px;
 		line-height: 1;
+		/* The input adornment dims its contents (action.active alpha); keep the
+		   flag at full color like the options list. */
+		color: rgba(0, 0, 0, 0.87);
 	}
+
+	.MuiSvgIcon-root {
+		color: rgba(0, 0, 0, 0.54);
+	}
+`;
+
+export const NationalNumberField = styled(TextField)`
+	flex: 1;
 `;
 
 export const Option = styled.span`
@@ -36,7 +46,7 @@ export const Option = styled.span`
 	width: 100%;
 
 	.PhoneNumberInput__flag {
-		font-size: 16px;
+		font-size: 18px;
 		line-height: 1;
 	}
 
@@ -52,14 +62,20 @@ export const Option = styled.span`
 	}
 `;
 
-export const SearchBox = styled(ListSubheader)`
-	padding: 6px 12px;
-	background-color: white;
+// Fixed header of the dropdown — sits above the scrollable options.
+export const SearchHeader = styled.div`
+	padding: 10px 12px;
+	flex-shrink: 0;
 
-	.MuiOutlinedInput-input {
-		padding: 6px 10px;
-		font-size: 0.875rem;
+	.searchBar__search {
+		padding: 0;
 	}
+`;
+
+// Only the options list scrolls; the rounded Paper clips its scrollbar.
+export const OptionsScroller = styled.div`
+	max-height: 320px;
+	overflow-y: auto;
 `;
 
 export const NoResults = styled.div`

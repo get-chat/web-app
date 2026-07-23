@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-	FormControl,
-	InputLabel,
-	ListSubheader,
+	InputAdornment,
 	MenuItem,
-	Select,
-	SelectChangeEvent,
+	MenuList,
+	Popover,
 	TextField,
 } from '@mui/material';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useTranslation } from 'react-i18next';
 import {
 	CountryCode,
@@ -17,6 +16,7 @@ import {
 	parsePhoneNumberFromString,
 } from 'libphonenumber-js';
 import { getFlagEmoji } from '@src/helpers/PhoneNumberHelper';
+import SearchBar from '@src/components/SearchBar/SearchBar';
 import * as Styled from './PhoneNumberInput.styles';
 
 interface CountryOption {
@@ -104,6 +104,12 @@ const PhoneNumberInput: React.FC<Props> = ({
 	const [search, setSearch] = useState('');
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const userSelectedCountryRef = useRef(false);
+	const countryAnchorRef = useRef<HTMLDivElement>(null);
+
+	// Only toggles visibility. The search is cleared after the close animation
+	// finishes (Popover onExited) so the list doesn't visibly re-expand while the
+	// menu is animating out.
+	const closeMenu = () => setMenuOpen(false);
 
 	// Apply the default country once it becomes available (the inbox number is
 	// loaded asynchronously), unless the user has already picked one.
@@ -123,32 +129,8 @@ const PhoneNumberInput: React.FC<Props> = ({
 		[options, country]
 	);
 
-	const visibleCount = useMemo(
-		() => options.filter((option) => optionMatches(option, search)).length,
-		[options, search]
-	);
-
-	// The full country list is built only while the menu is open, so typing in the
-	// phone-number field (menu closed) never pays the cost of rendering ~245 items.
-	const menuItems = useMemo(
-		() =>
-			options.map((option) => (
-				<MenuItem
-					key={option.country}
-					value={option.country}
-					sx={{ display: optionMatches(option, search) ? 'flex' : 'none' }}
-				>
-					<Styled.Option>
-						<span className="PhoneNumberInput__flag">
-							{getFlagEmoji(option.country)}
-						</span>
-						<span className="PhoneNumberInput__name">{option.name}</span>
-						<span className="PhoneNumberInput__code">
-							+{option.callingCode}
-						</span>
-					</Styled.Option>
-				</MenuItem>
-			)),
+	const filteredOptions = useMemo(
+		() => options.filter((option) => optionMatches(option, search)),
 		[options, search]
 	);
 
@@ -236,81 +218,97 @@ const PhoneNumberInput: React.FC<Props> = ({
 		setNationalNumber(toNationalDigits(national));
 	};
 
+	// Prebuild the rows so opening the menu doesn't rebuild ~245 elements each
+	// render. Ripple is disabled to keep mounting the list light (the biggest
+	// cost when the menu opens/closes).
+	const optionItems = useMemo(
+		() =>
+			filteredOptions.map((option) => (
+				<MenuItem
+					key={option.country}
+					selected={option.country === country}
+					disableRipple
+					onClick={() => {
+						handleCountryChange(option.country);
+						closeMenu();
+					}}
+				>
+					<Styled.Option>
+						<span className="PhoneNumberInput__flag">
+							{getFlagEmoji(option.country)}
+						</span>
+						<span className="PhoneNumberInput__name">{option.name}</span>
+						<span className="PhoneNumberInput__code">
+							+{option.callingCode}
+						</span>
+					</Styled.Option>
+				</MenuItem>
+			)),
+		// handleCountryChange / closeMenu only call state setters, so their
+		// captured closures stay valid across renders.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[filteredOptions, country]
+	);
+
 	return (
 		<Styled.Row>
-			<Styled.CountryControl variant="standard">
-				<InputLabel id="phone-country-label" shrink>
-					{t('Code')}
-				</InputLabel>
-				<Select
-					labelId="phone-country-label"
-					value={country ?? ''}
-					displayEmpty
-					open={isMenuOpen}
-					onOpen={() => setMenuOpen(true)}
-					onChange={(event: SelectChangeEvent) =>
-						handleCountryChange(event.target.value as CountryCode)
-					}
-					onClose={() => {
-						setMenuOpen(false);
-						setSearch('');
-					}}
-					renderValue={() =>
-						selectedOption ? (
-							<Styled.SelectedValue>
+			<Styled.CountryControl ref={countryAnchorRef}>
+				<Styled.CountryTrigger
+					variant="standard"
+					label={t('Code')}
+					InputLabelProps={{ shrink: true }}
+					value={selectedOption ? `+${selectedOption.callingCode}` : ''}
+					onClick={() => setMenuOpen(true)}
+					InputProps={{
+						readOnly: true,
+						startAdornment: selectedOption ? (
+							<InputAdornment position="start">
 								<span className="PhoneNumberInput__flag">
 									{getFlagEmoji(selectedOption.country)}
 								</span>
-								+{selectedOption.callingCode}
-							</Styled.SelectedValue>
-						) : (
-							''
-						)
-					}
-					MenuProps={{
-						autoFocus: false,
-						elevation: 3,
-						anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
-						transformOrigin: { vertical: 'top', horizontal: 'left' },
-						PaperProps: { sx: { maxHeight: 360, width: 320 } },
+							</InputAdornment>
+						) : null,
+						endAdornment: (
+							<InputAdornment position="end">
+								<ArrowDropDownIcon />
+							</InputAdornment>
+						),
 					}}
-				>
-					<Styled.SearchBox disableSticky>
-						<TextField
-							size="small"
-							autoFocus
-							fullWidth
-							variant="outlined"
-							placeholder={t('Search country')}
-							value={search}
-							onChange={(event) => setSearch(event.target.value)}
-							onClick={(event) => event.stopPropagation()}
-							onKeyDown={(event) => {
-								// Let the Select close on Escape, but keep typing (incl. space)
-								// inside the search field instead of triggering type-ahead.
-								if (event.key !== 'Escape') {
-									event.stopPropagation();
-								}
-							}}
-						/>
-					</Styled.SearchBox>
-
-					{/* When closed, render only the selected value as a hidden item so the
-					    Select's value stays in range without paying for ~245 items. */}
-					{isMenuOpen
-						? menuItems
-						: selectedOption && (
-								<MenuItem
-									value={selectedOption.country}
-									sx={{ display: 'none' }}
-								/>
-						  )}
-
-					{isMenuOpen && visibleCount === 0 && (
-						<Styled.NoResults>{t('No results')}</Styled.NoResults>
-					)}
-				</Select>
+				/>
 			</Styled.CountryControl>
+
+			<Popover
+				open={isMenuOpen}
+				anchorEl={countryAnchorRef.current}
+				onClose={closeMenu}
+				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+				transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+				elevation={3}
+				disableScrollLock
+				TransitionProps={{ onExited: () => setSearch('') }}
+				// The Paper clips its rounded corners; the search stays fixed at the
+				// top while only the options list below scrolls.
+				PaperProps={{ sx: { width: 320, overflow: 'hidden' } }}
+			>
+				<Styled.SearchHeader>
+					<SearchBar
+						value={search}
+						onChange={setSearch}
+						placeholder={t('Search country')}
+						autoFocus
+					/>
+				</Styled.SearchHeader>
+
+				<Styled.OptionsScroller>
+					<MenuList autoFocusItem={false} disablePadding>
+						{optionItems}
+
+						{filteredOptions.length === 0 && (
+							<Styled.NoResults>{t('No results')}</Styled.NoResults>
+						)}
+					</MenuList>
+				</Styled.OptionsScroller>
+			</Popover>
 
 			<Styled.NationalNumberField
 				variant="standard"
