@@ -29,6 +29,25 @@ export const getHubURL = (apiBaseURL: string) => {
 	return apiBaseURL.replace('/api/v1', '/hub');
 };
 
+/**
+ * URL of the backend login page that starts the "Login with 360dialog" SSO
+ * flow right away (?sso=360dialog) and sends the user back to redirectUrl
+ * with a refresh_token query parameter appended after a successful login.
+ * With switchAccount, the current 360dialog session is logged out first so
+ * that 360dialog offers picking an account instead of silently reusing it.
+ */
+export const get360dialogLoginPageURL = (
+	apiBaseURL: string,
+	redirectUrl: string,
+	switchAccount = false
+) => {
+	// apiBaseURL can be relative (same-origin deployments, e.g. "/api/v1/")
+	const origin = new URL(apiBaseURL, window.location.origin).origin;
+	return `${origin}/api/v1/auth/login/?sso=360dialog&next=${encodeURIComponent(
+		redirectUrl
+	)}${switchAccount ? '&sso_switch=1' : ''}`;
+};
+
 export const getBaseURL = () => {
 	const windowLocation = window.location;
 	return windowLocation.protocol + '//' + windowLocation.host + '/';

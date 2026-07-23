@@ -99,7 +99,7 @@ msgstr "Hoş geldin"
 msgid "We are validating your session, please wait."
 msgstr "Oturumunu doğruluyoruz, lütfen bekle."
 
-msgid "Please login to start"
+msgid "Please log in to start"
 msgstr "Lütfen başlamak için giriş yap"
 
 msgid "Search For Messages"

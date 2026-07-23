@@ -17,7 +17,14 @@ import {
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 import packageJson from '../../../package.json';
-import { getHubURL, prepareURLForDisplay } from '@src/helpers/URLHelper';
+import {
+	get360dialogLoginPageURL,
+	getHubURL,
+	prepareURLForDisplay,
+} from '@src/helpers/URLHelper';
+import { is360dialogLoginEnabled } from '@src/helpers/ConfigHelper';
+// @ts-ignore
+import dialog360Icon from '../../assets/images/ic-360dialog.png';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
@@ -59,11 +66,35 @@ const Login: React.FC = () => {
 	const [searchParams] = useSearchParams();
 
 	useEffect(() => {
-		// Remove integration_api_base_url param if exists
+		// Remove consumed params (if they exist) from the URL below
 		const params = Object.fromEntries(searchParams.entries());
+		let hasConsumedParams = false;
+
 		if ('integration_api_base_url' in params) {
 			delete params['integration_api_base_url'];
+			hasConsumedParams = true;
+		}
 
+		// Error reported by the "Login with 360dialog" flow (d360_sso_button.js
+		// in the backend sends the user back here with this param on failure)
+		if ('360dialog_login_error' in params) {
+			const ssoErrorMessages: { [key: string]: string } = {
+				// The account was logged out at 360dialog after this error,
+				// so trying again offers logging in with another account
+				unauthorized:
+					'Your 360dialog account does not have access to this inbox. Please try again with another account.',
+				no_session:
+					'Could not retrieve your 360dialog session. Please try again.',
+			};
+			setLoginError(
+				ssoErrorMessages[params['360dialog_login_error']] ??
+					'Logging in with 360dialog has failed. Please try again later.'
+			);
+			delete params['360dialog_login_error'];
+			hasConsumedParams = true;
+		}
+
+		if (hasConsumedParams) {
 			const options = {
 				pathname: location?.pathname,
 				search: `?${createSearchParams(params)}`,
@@ -203,6 +234,28 @@ const Login: React.FC = () => {
 		}
 	};
 
+	const doLoginWith360dialog = () => {
+		// Display the loading animation until the browser navigates away
+		setLoggingIn(true);
+
+		// The backend login page runs the SSO round trip with 360dialog and
+		// comes back to this URL with a refresh_token query parameter, which
+		// is converted into an auth token on load (useRefreshToken).
+		// Forked deployments can override the URL via config, but it has to
+		// be allowed by the backend (INBOX_SSO_ALLOWED_REDIRECT_URLS).
+		const redirectUrl =
+			config?.APP_360DIALOG_LOGIN_REDIRECT_URL ||
+			window.location.origin + window.location.pathname;
+
+		window.location.href = get360dialogLoginPageURL(
+			api.defaults.baseURL ?? '/api/v1/',
+			redirectUrl,
+			// A backend session already offers "Continue as": using the button
+			// anyway means logging in with a different 360dialog account
+			!!sessionUser
+		);
+	};
+
 	const logoutToClearSession = async () => {
 		try {
 			await logout();
@@ -244,7 +297,7 @@ const Login: React.FC = () => {
 						<p>
 							{sessionUser
 								? t('Pick up where you left off')
-								: t('Please login to start')}
+								: t('Please log in to start')}
 						</p>
 
 						{sessionUser && (
@@ -288,6 +341,24 @@ const Login: React.FC = () => {
 							</Styled.LoginAlert>
 						)}
 
+						{is360dialogLoginEnabled(config) && (
+							<>
+								<Styled.SSOLoginButton
+									data-testid="login-with-360dialog"
+									type="button"
+									size="large"
+									variant="contained"
+									fullWidth
+									disableElevation
+									onClick={doLoginWith360dialog}
+								>
+									<img src={dialog360Icon} alt="" />
+									{t('Login with 360dialog')}
+								</Styled.SSOLoginButton>
+								<Styled.OrDivider>{t('or')}</Styled.OrDivider>
+							</>
+						)}
+
 						<form onSubmit={doLogin}>
 							<TextField
 								variant="standard"
@@ -314,7 +385,7 @@ const Login: React.FC = () => {
 								data-testid="submit"
 								type="submit"
 								size="large"
-								variant="contained"
+								variant="outlined"
 								color="primary"
 								fullWidth
 								disableElevation

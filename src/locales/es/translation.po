@@ -97,7 +97,7 @@ msgstr "Bienvenido"
 msgid "We are validating your session, please wait."
 msgstr "Estamos validando tu sesión, por favor aguarde."
 
-msgid "Please login to start"
+msgid "Please log in to start"
 msgstr "Por favor, inicia sesión para comenzar"
 
 msgid "Search For Messages"

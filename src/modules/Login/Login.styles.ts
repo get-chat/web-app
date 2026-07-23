@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 
@@ -237,6 +238,20 @@ export const OrDivider = styled.div`
 		flex: 1;
 		height: 1px;
 		background-color: var(--gray-light);
+	}
+`;
+
+export const SSOLoginButton = styled(Button)`
+	border-radius: 10px !important;
+	text-transform: none !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	padding-block: 9px !important;
+
+	img {
+		width: 18px;
+		height: 18px;
+		margin-right: 8px;
 	}
 `;
 

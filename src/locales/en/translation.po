@@ -99,7 +99,7 @@ msgstr ""
 msgid "We are validating your session, please wait."
 msgstr ""
 
-msgid "Please login to start"
+msgid "Please log in to start"
 msgstr ""
 
 msgid "Search For Messages"
