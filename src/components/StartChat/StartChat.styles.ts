@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { ListItem, TextField } from '@mui/material';
+import { ListItem } from '@mui/material';
 import {
 	overlayPanelTransition,
 	PanelTransitionStyleProps,
 } from '@src/styles/panelTransitions';
 
 export const StyledListItem = styled(ListItem)``;
-export const StyledTextField = styled(TextField)``;
 
 export const ContactsContainer = styled.div<PanelTransitionStyleProps>`
 	display: flex;
@@ -73,10 +72,7 @@ export const StartByPhoneNumberInner = styled.div`
 
 export const FormWrapper = styled.div`
 	display: flex;
+	flex-direction: column;
+	gap: 12px;
 	padding: 10px 15px;
-
-	${StyledTextField} {
-		flex: 1;
-		margin-right: 15px;
-	}
 `;

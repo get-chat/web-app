@@ -1,5 +1,7 @@
 import {
 	addPlus,
+	getCountryFromWaId,
+	getFlagEmoji,
 	isIndianPhoneNumber,
 	isPhoneNumber,
 	prepareWaId,
@@ -84,6 +86,33 @@ describe('PhoneNumberHelper', () => {
 		it('passes through nullish input', () => {
 			expect(addPlus(undefined)).toBeUndefined();
 			expect(addPlus(null)).toBeNull();
+		});
+	});
+
+	describe('getCountryFromWaId', () => {
+		it('detects the ISO country from a digits-only wa_id', () => {
+			expect(getCountryFromWaId('905383192532')).toBe('TR');
+			expect(getCountryFromWaId('4915112345678')).toBe('DE');
+			expect(getCountryFromWaId('919876543210')).toBe('IN');
+		});
+
+		it('accepts a "+"-prefixed number', () => {
+			expect(getCountryFromWaId('+905383192532')).toBe('TR');
+		});
+
+		it('returns undefined for BSUIDs and nullish input', () => {
+			expect(getCountryFromWaId('US.123456789012345678')).toBeUndefined();
+			expect(getCountryFromWaId('')).toBeUndefined();
+			expect(getCountryFromWaId(undefined)).toBeUndefined();
+			expect(getCountryFromWaId(null)).toBeUndefined();
+		});
+	});
+
+	describe('getFlagEmoji', () => {
+		it('maps an ISO country code to its flag emoji', () => {
+			expect(getFlagEmoji('TR')).toBe('🇹🇷');
+			expect(getFlagEmoji('DE')).toBe('🇩🇪');
+			expect(getFlagEmoji('US')).toBe('🇺🇸');
 		});
 	});
 });

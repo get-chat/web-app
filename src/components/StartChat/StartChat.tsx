@@ -1,15 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, IconButton, InputAdornment } from '@mui/material';
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
+import { Button, IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
+import {
+	getCountryFromWaId,
+	prepareWaId,
+} from '@src/helpers/PhoneNumberHelper';
 import { getChatPath } from '@src/helpers/RouteHelper';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
 import * as Styled from './StartChat.styles';
 import Contacts from '@src/components/Contacts';
+import PhoneNumberInput from '@src/components/PhoneNumberInput';
+import { useAppSelector } from '@src/store/hooks';
 import { Recipient } from '@src/types/persons';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 
@@ -23,6 +34,13 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 	const [isVerifying, setVerifying] = useState(false);
 	const [isPhoneNumberFormVisible, setPhoneNumberFormVisible] = useState(false);
 	const [phoneNumber, setPhoneNumber] = useState('');
+	const [isPhoneNumberValid, setPhoneNumberValid] = useState(false);
+	const [isPhoneNumberInvalidShown, setPhoneNumberInvalidShown] =
+		useState(false);
+
+	// The inbox's own number (digits, no "+") is used to default the country code.
+	const businessNumber = useAppSelector((state) => state.phoneNumber.value);
+	const defaultCountry = getCountryFromWaId(businessNumber);
 
 	let verifyPhoneNumberCancelTokenSourceRef = useRef<CancelTokenSource>();
 
@@ -48,35 +66,53 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 		};
 	}, []);
 
-	const verifyContact = (phoneNumber: string, data?: Recipient) => {
-		const failureCallback = () => {
-			window.displayCustomError(
-				'There is no WhatsApp account connected to this phone number.'
-			);
-		};
+	const verifyContact = useCallback(
+		(phoneNumber: string, data?: Recipient) => {
+			const failureCallback = () => {
+				window.displayCustomError(
+					'There is no WhatsApp account connected to this phone number.'
+				);
+			};
 
-		const waId = prepareWaId(phoneNumber);
+			const waId = prepareWaId(phoneNumber);
 
-		if (!waId) {
-			failureCallback();
+			if (!waId) {
+				failureCallback();
+				return;
+			}
+
+			// Skipping verifying as it is deprecated
+
+			navigate(`${getChatPath(waId)}${location.search}`, {
+				state: {
+					person: {
+						name: data?.name,
+						initials: data?.initials,
+						avatar: data?.avatar,
+						waId: waId,
+					},
+				},
+			});
+
+			// Hide contacts
+			onHide();
+		},
+		[navigate, location.search, onHide]
+	);
+
+	// Memoized so typing in the phone-number field (which updates local state)
+	// does not re-render the whole contact list on every keystroke.
+	const contactsElement = useMemo(
+		() => <Contacts verifyContact={verifyContact} isVerifying={isVerifying} />,
+		[verifyContact, isVerifying]
+	);
+
+	const handleStartByPhone = () => {
+		if (!isPhoneNumberValid) {
+			setPhoneNumberInvalidShown(true);
 			return;
 		}
-
-		// Skipping verifying as it is deprecated
-
-		navigate(`${getChatPath(waId)}${location.search}`, {
-			state: {
-				person: {
-					name: data?.name,
-					initials: data?.initials,
-					avatar: data?.avatar,
-					waId: waId,
-				},
-			},
-		});
-
-		// Hide contacts
-		onHide();
+		verifyContact(phoneNumber);
 	};
 
 	return (
@@ -110,19 +146,24 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 
 				{isPhoneNumberFormVisible && (
 					<Styled.FormWrapper>
-						<Styled.StyledTextField
-							variant="standard"
-							label={t('Phone number')}
-							InputProps={{
-								startAdornment: (
-									<InputAdornment position="start">+</InputAdornment>
-								),
+						<PhoneNumberInput
+							defaultCountry={defaultCountry}
+							autoFocus
+							error={isPhoneNumberInvalidShown}
+							onChange={(value, isValid) => {
+								setPhoneNumber(value);
+								setPhoneNumberValid(isValid);
+								setPhoneNumberInvalidShown(false);
 							}}
-							onChange={(event) => setPhoneNumber(event.target.value)}
+							onEnter={handleStartByPhone}
 						/>
 						<Button
 							color="primary"
-							onClick={() => verifyContact(phoneNumber)}
+							variant="contained"
+							size="small"
+							fullWidth
+							disableElevation
+							onClick={handleStartByPhone}
 							data-test-id="start-chat-by-phone"
 						>
 							{t('Start')}
@@ -131,7 +172,7 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 				)}
 			</Styled.StartByPhoneNumberWrapper>
 
-			<Contacts verifyContact={verifyContact} isVerifying={isVerifying} />
+			{contactsElement}
 		</Styled.ContactsContainer>
 	);
 };
