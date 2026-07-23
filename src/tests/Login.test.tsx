@@ -72,12 +72,26 @@ describe('Login Component - Login with 360dialog', () => {
 			</ThemeProvider>
 		);
 
-	it('is hidden by default', () => {
-		render(
-			<TestProviders>
-				<Login />
-			</TestProviders>
-		);
+	it('is visible by default (enabled unless explicitly disabled)', () => {
+		// Covers an absent key and the empty value that config.json gets when
+		// the backend env var is unset
+		renderWithConfig({ API_BASE_URL: 'http://test-api.com' });
+		expect(screen.getByTestId('login-with-360dialog')).toBeInTheDocument();
+
+		renderWithConfig({
+			API_BASE_URL: 'http://test-api.com',
+			APP_IS_360DIALOG_LOGIN_ENABLED: '',
+		});
+		expect(
+			screen.getAllByTestId('login-with-360dialog').length
+		).toBeGreaterThan(0);
+	});
+
+	it('is hidden only when explicitly disabled', () => {
+		renderWithConfig({
+			API_BASE_URL: 'http://test-api.com',
+			APP_IS_360DIALOG_LOGIN_ENABLED: 'false',
+		});
 
 		expect(
 			screen.queryByTestId('login-with-360dialog')
