@@ -115,6 +115,20 @@ const Login: React.FC = () => {
 			}
 		}
 
+		// Start the "Login with 360dialog" flow automatically when requested via
+		// ?sso=360dialog, so it can be linked to directly without clicking the
+		// button. Skipped when already logged in (doFetchBase handles that). The
+		// SSO redirect target uses only the path, so the param is dropped on the
+		// way back and the flow does not restart.
+		if (
+			params['sso'] === '360dialog' &&
+			is360dialogLoginEnabled(config) &&
+			!getToken()
+		) {
+			doLoginWith360dialog();
+			return;
+		}
+
 		doFetchBase();
 	}, []);
 
