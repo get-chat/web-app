@@ -95,6 +95,9 @@ dependencies:
   js-file-download:
     specifier: ^0.4.12
     version: 0.4.12
+  libphonenumber-js:
+    specifier: ^1.13.9
+    version: registry.npmjs.org/libphonenumber-js@1.13.9
   linkify-react:
     specifier: ^4.3.2
     version: registry.npmjs.org/linkify-react@4.3.2(linkifyjs@4.3.3)(react@19.1.0)
@@ -19267,6 +19270,12 @@ packages:
     dependencies:
       prelude-ls: registry.npmjs.org/prelude-ls@1.2.1
       type-check: registry.npmjs.org/type-check@0.4.0
+    dev: false
+
+  registry.npmjs.org/libphonenumber-js@1.13.9:
+    resolution: {integrity: sha512-VNS5vWMM7r0P66BYv+TQJATxExEgLxN+34hfHDVhDkUsGAE4cRg0shCNSLTXNKm7nIUscC7AfB51TjxEeF7msQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.13.9.tgz}
+    name: libphonenumber-js
+    version: 1.13.9
     dev: false
 
   registry.npmjs.org/lines-and-columns@1.2.4:

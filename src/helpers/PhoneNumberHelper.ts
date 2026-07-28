@@ -1,3 +1,5 @@
+import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
+
 // A chat identifier (wa_id) used to always be a phone number, but it can now
 // also be a Business-Scoped User ID (BSUID) for contacts who hide their phone
 // number, e.g. "US.123456789012345678" or "US.ENT.123abc". A BSUID is NOT
@@ -46,4 +48,25 @@ export const isIndianPhoneNumber = (
 	if (!isPhoneNumber(identifier)) return false;
 	const digits = prepareWaId(identifier);
 	return typeof digits === 'string' && digits.startsWith(INDIA_CALLING_CODE);
+};
+
+// Detects the ISO country of a wa_id / phone number (e.g. "905383192532" -> "TR").
+// wa_ids are stored digits-only without a leading "+", so we add it before
+// parsing. BSUIDs and unparseable numbers return undefined.
+export const getCountryFromWaId = (
+	waId: string | undefined | null
+): CountryCode | undefined => {
+	if (!isPhoneNumber(waId)) return undefined;
+	const digits = prepareWaId(waId);
+	if (!digits) return undefined;
+	return parsePhoneNumberFromString(`+${digits}`)?.country;
+};
+
+// Returns the flag emoji for an ISO 3166-1 alpha-2 country code by mapping each
+// letter to its regional indicator symbol. Platforms without flag-emoji support
+// (e.g. Windows) render the two letters instead, which is an acceptable fallback.
+export const getFlagEmoji = (country: CountryCode): string => {
+	return country
+		.toUpperCase()
+		.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
 };

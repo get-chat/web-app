@@ -11,6 +11,7 @@ export type Props = {
 	placeholder?: string;
 	onFocus?: () => void;
 	onBlur?: () => void;
+	autoFocus?: boolean;
 	// The focused input lifts to white with a glow; disable where the
 	// search bar sits on a surface that treatment clashes with
 	isFocusStyleEnabled?: boolean;
@@ -23,6 +24,7 @@ const SearchBar: React.FC<Props> = ({
 	placeholder,
 	onFocus,
 	onBlur,
+	autoFocus,
 	isFocusStyleEnabled = true,
 }) => {
 	const { t } = useTranslation();
@@ -39,6 +41,7 @@ const SearchBar: React.FC<Props> = ({
 					placeholder={placeholder ?? t('Search')}
 					type="text"
 					autoComplete="off"
+					autoFocus={autoFocus}
 					value={value}
 					onChange={handleChange}
 					onFocus={onFocus}

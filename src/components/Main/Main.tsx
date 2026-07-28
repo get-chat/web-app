@@ -363,6 +363,19 @@ const Main: React.FC = () => {
 	};
 
 	useEffect(() => {
+		// Reset initial-load state so the loading screen shows on every mount.
+		// Without this, a logout→login cycle in the same tab (no page reload)
+		// remounts Main with loadingProgress still at 100 from the previous
+		// session, so the loading screen (gated by loadingProgress < 100) never
+		// appears and the empty view shows until resources finish loading.
+		dispatch(
+			setState({
+				loadingProgress: 0,
+				loadingComponent: '',
+				isInitialResourceFailed: false,
+			})
+		);
+
 		// Display custom errors in any component
 		window.displayCustomError = displayCustomError;
 

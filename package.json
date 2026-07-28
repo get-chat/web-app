@@ -52,6 +52,7 @@
     "i18next-http-backend": "^2.0.2",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "js-file-download": "^0.4.12",
+    "libphonenumber-js": "^1.13.9",
     "linkify-react": "^4.3.2",
     "linkifyjs": "^4.3.3",
     "moment": "^2.29.4",
