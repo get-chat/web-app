@@ -64,6 +64,11 @@ const buildCountryOptions = (locale: string): CountryOption[] => {
 		.sort((a, b) => a.name.localeCompare(b.name));
 };
 
+// Temporarily require only a non-empty number instead of a fully valid one.
+// Flip to `true` to re-enable strict libphonenumber validation (the logic below
+// is kept intact).
+const STRICT_PHONE_VALIDATION = false;
+
 // Lower-cases and strips diacritics so "tur" / "turkiye" matches "Türkiye".
 const normalizeText = (value: string): string =>
 	value
@@ -142,7 +147,10 @@ const PhoneNumberInput: React.FC<Props> = ({
 			return;
 		}
 		const value = `+${getCountryCallingCode(country)}${digits}`;
-		onChangeRef.current(value, isValidPhoneNumber(value));
+		// Reaching here already means a country + non-empty digits, so the "empty
+		// check" is satisfied; strict validation is applied only when enabled.
+		const isValid = STRICT_PHONE_VALIDATION ? isValidPhoneNumber(value) : true;
+		onChangeRef.current(value, isValid);
 	}, [country, nationalNumber]);
 
 	// Keep the national part as plain digits — no as-you-type spacing.
