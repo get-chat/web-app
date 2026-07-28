@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MemoryRouter } from 'react-router-dom';
 import { TestProviders } from '@src/__mocks__/test-utils';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import * as URLHelper from '@src/helpers/URLHelper';
 import Login from '@src/modules/Login';
 
 jest.mock('@src/api/authApi');
@@ -105,6 +106,37 @@ describe('Login Component - Login with 360dialog', () => {
 		});
 
 		expect(screen.getByTestId('login-with-360dialog')).toBeInTheDocument();
+	});
+
+	it('auto-starts the flow when opened with ?sso=360dialog', () => {
+		const spy = jest
+			.spyOn(URLHelper, 'get360dialogLoginPageURL')
+			.mockReturnValue('http://backend/api/v1/auth/login/?sso=360dialog');
+
+		renderWithConfig(
+			{
+				API_BASE_URL: 'http://test-api.com',
+				APP_IS_360DIALOG_LOGIN_ENABLED: 'true',
+			},
+			['/?sso=360dialog']
+		);
+
+		expect(spy).toHaveBeenCalled();
+
+		spy.mockRestore();
+	});
+
+	it('does not auto-start the flow without the query param', () => {
+		const spy = jest.spyOn(URLHelper, 'get360dialogLoginPageURL');
+
+		renderWithConfig({
+			API_BASE_URL: 'http://test-api.com',
+			APP_IS_360DIALOG_LOGIN_ENABLED: 'true',
+		});
+
+		expect(spy).not.toHaveBeenCalled();
+
+		spy.mockRestore();
 	});
 
 	it('displays the error reported by the SSO flow', () => {
