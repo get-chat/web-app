@@ -16,6 +16,7 @@ import currentChatTagsReducer from './currentChatTagsReducer';
 import waIdReducer from './waIdReducer';
 import phoneNumberReducer from '@src/store/reducers/phoneNumberReducer';
 import isUserAvailableReducer from '@src/store/reducers/isUserAvailableReducer';
+import isUserAvailabilityFeatureEnabledReducer from '@src/store/reducers/isUserAvailabilityFeatureEnabledReducer';
 
 const rootReducer = {
 	UI: UIReducer,
@@ -36,6 +37,7 @@ const rootReducer = {
 	waId: waIdReducer,
 	phoneNumber: phoneNumberReducer,
 	isUserAvailable: isUserAvailableReducer,
+	isUserAvailabilityFeatureEnabled: isUserAvailabilityFeatureEnabledReducer,
 };
 
 export default rootReducer;

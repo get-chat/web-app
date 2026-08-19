@@ -33,6 +33,7 @@ import * as Styled from './Login.styles';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 import { fetchCurrentUser, updateUserAvailability } from '@src/api/usersApi';
+import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
 import { User } from '@src/types/users';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
@@ -191,9 +192,12 @@ const Login: React.FC = () => {
 			window.AndroidWebInterface.registerUserToken(token ?? '');
 		}
 
-		// Check if user availability is enabled
-		if (config?.APP_IS_USER_AVAILABILITY_ENABLED === 'true') {
-			try {
+		// Check if the user availability feature set is enabled (backend
+		// setting, requires the token stored above)
+		try {
+			const { feature_set_enabled } = await fetchUserAvailabilitySettings();
+
+			if (feature_set_enabled) {
 				// Get current user id
 				const userData = await fetchCurrentUser();
 
@@ -201,12 +205,12 @@ const Login: React.FC = () => {
 				if (userData.profile && !userData.profile.is_available) {
 					await updateUserAvailability(userData.id, { is_available: true });
 				}
-			} catch (error: any | AxiosError) {
-				// Accounts without a profile (e.g. superadmin) get a 404 here
-				// but can still use the app; Main handles them the same way
-				if (error?.response?.status !== 404) {
-					throw error;
-				}
+			}
+		} catch (error: any | AxiosError) {
+			// Accounts without a profile (e.g. superadmin) get a 404 here
+			// but can still use the app; Main handles them the same way
+			if (error?.response?.status !== 404) {
+				throw error;
 			}
 		}
 
