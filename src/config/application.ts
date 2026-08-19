@@ -9,7 +9,6 @@ export interface AppConfig {
 	APP_GOOGLE_MAPS_API_KEY: string;
 	APP_GOOGLE_MAPS_MAP_ID?: string;
 	APP_IS_READ_ONLY: string;
-	APP_IS_USER_AVAILABILITY_ENABLED: string;
 	APP_IS_REGULAR_USER_ACTIONS_RESTRICTED: string;
 	APP_IS_360DIALOG_LOGIN_ENABLED?: string;
 	// Where the "Login with 360dialog" flow should send the user back to,

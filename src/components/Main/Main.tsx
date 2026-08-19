@@ -93,6 +93,8 @@ import { setWaId } from '@src/store/reducers/waIdReducer';
 import * as Sentry from '@sentry/browser';
 import ReconnectingWebSocket from 'reconnecting-websocket';
 import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
+import { setIsUserAvailabilityFeatureEnabled } from '@src/store/reducers/isUserAvailabilityFeatureEnabledReducer';
+import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
 import { WabaWebhookWabaPayload } from '@src/types/webhook';
 
 function useQuery() {
@@ -441,6 +443,23 @@ const Main: React.FC = () => {
 			PubSub.unsubscribe(displayErrorEventToken);
 			PubSub.unsubscribe(unsupportedFileEventToken);
 		};
+	}, []);
+
+	useEffect(() => {
+		// Whether the user availability feature set is enabled is a backend
+		// setting (toggleable by clients), checked once per app load
+		const checkUserAvailabilityFeature = async () => {
+			try {
+				const data = await fetchUserAvailabilitySettings();
+				dispatch(setIsUserAvailabilityFeatureEnabled(data.feature_set_enabled));
+			} catch (error) {
+				console.error('Error fetching user availability settings', error);
+			}
+		};
+
+		if (getToken()) {
+			checkUserAvailabilityFeature();
+		}
 	}, []);
 
 	useEffect(() => {

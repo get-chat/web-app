@@ -4,6 +4,7 @@ import {
 	PartialUpdateBusinessProfileSettings,
 	ProfileAboutResponse,
 	UpdateProfileAboutRequest,
+	UserAvailabilitySettings,
 } from '@src/types/settings';
 import api from '@src/api/axiosInstance';
 
@@ -66,6 +67,16 @@ export const updateProfilePhoto = async (
 			'Content-Type': 'multipart/form-data',
 		},
 	});
+};
+
+// Whether the user availability feature set is enabled for this inbox
+// (toggleable by clients at runtime, requires being logged in)
+export const fetchUserAvailabilitySettings = async (signal?: AbortSignal) => {
+	const response = await api.get<UserAvailabilitySettings>(
+		'/settings/useravailability/',
+		{ signal }
+	);
+	return response.data;
 };
 
 export const issueSettingsRefreshRequest = async (signal?: AbortSignal) => {

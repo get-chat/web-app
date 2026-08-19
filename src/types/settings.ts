@@ -33,3 +33,7 @@ export interface UpdateProfileAboutRequest {
 export interface CheckSettingsRefreshStatusResponse {
 	currently_refreshing: boolean;
 }
+
+export interface UserAvailabilitySettings {
+	feature_set_enabled: boolean;
+}
