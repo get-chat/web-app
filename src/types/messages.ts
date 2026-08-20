@@ -112,6 +112,13 @@ export interface ChatMessageError {
 	details?: string;
 	href?: string;
 	recommendation?: string;
+	// Cloud API / Graph API error format
+	message?: string;
+	type?: string;
+	error_data?: {
+		details?: string;
+	};
+	fbtrace_id?: string;
 }
 
 export interface WabaPayloadContext {
