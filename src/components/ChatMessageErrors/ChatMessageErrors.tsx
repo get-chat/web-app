@@ -16,52 +16,56 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 	return (
 		<>
 			{data.waba_payload?.errors &&
-				data.waba_payload.errors.map((error, index) => (
-					<Styled.Container key={index}>
-						{error.recommendation && (
-							<Styled.Recommendation>
-								<Linkify options={{ target: '_blank' }}>
-									{t(error.recommendation)}
-								</Linkify>
-							</Styled.Recommendation>
-						)}
-
-						<Styled.Error>
-							<h5>{t('Details')}</h5>
-							<Styled.ErrorTitle>
-								{t(error.title ?? 'Error')}{' '}
-								<Styled.Code>
-									{error.code && t('(Code: %d)', Number(error.code))}
-								</Styled.Code>
-							</Styled.ErrorTitle>
-							<Styled.ErrorDetails>
-								{error.details && t(error.details)}
-							</Styled.ErrorDetails>
-							{error.href && (
-								<Styled.ErrorLink>
-									<a href={error.href} target="_blank">
-										{t('Click here for more information.')}
-									</a>
-								</Styled.ErrorLink>
+				data.waba_payload.errors.map((error, index) => {
+					const details =
+						error.details ?? error.error_data?.details ?? error.message;
+					return (
+						<Styled.Container key={index}>
+							{error.recommendation && (
+								<Styled.Recommendation>
+									<Linkify options={{ target: '_blank' }}>
+										{t(error.recommendation)}
+									</Linkify>
+								</Styled.Recommendation>
 							)}
-						</Styled.Error>
 
-						{data.from_us &&
-							data.is_failed &&
-							canRetry(data) &&
-							retryMessage && (
-								<Styled.RetryButton
-									color="inherit"
-									fullWidth
-									size="small"
-									variant="outlined"
-									onClick={() => retryMessage?.(data)}
-								>
-									{t('Retry')}
-								</Styled.RetryButton>
-							)}
-					</Styled.Container>
-				))}
+							<Styled.Error>
+								<h5>{t('Details')}</h5>
+								<Styled.ErrorTitle>
+									{t(error.title ?? error.type ?? 'Error')}{' '}
+									<Styled.Code>
+										{error.code && t('(Code: %d)', Number(error.code))}
+									</Styled.Code>
+								</Styled.ErrorTitle>
+								<Styled.ErrorDetails>
+									{details && t(details)}
+								</Styled.ErrorDetails>
+								{error.href && (
+									<Styled.ErrorLink>
+										<a href={error.href} target="_blank">
+											{t('Click here for more information.')}
+										</a>
+									</Styled.ErrorLink>
+								)}
+							</Styled.Error>
+
+							{data.from_us &&
+								data.is_failed &&
+								canRetry(data) &&
+								retryMessage && (
+									<Styled.RetryButton
+										color="inherit"
+										fullWidth
+										size="small"
+										variant="outlined"
+										onClick={() => retryMessage?.(data)}
+									>
+										{t('Retry')}
+									</Styled.RetryButton>
+								)}
+						</Styled.Container>
+					);
+				})}
 		</>
 	);
 };
