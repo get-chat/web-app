@@ -8,19 +8,20 @@ module.exports = {
 	},
 	transform: {
 		'^.+\\.(js|jsx)$': 'babel-jest',
-		'^.+\\.(ts|tsx)$': 'ts-jest',
+		// `esModuleInterop` is off in tsconfig.json, so `import moment from
+		// 'moment'` (and other default imports of CommonJS modules) compiles to
+		// `require('moment').default`, which is undefined. The real build does
+		// not hit this because babel-loader adds the interop helper; ts-jest
+		// needs to be told, otherwise any test touching such a module throws
+		// "Cannot read properties of undefined".
+		'^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: { esModuleInterop: true } }],
 	},
-	testMatch: [
-		'**/*.(test|spec).(js|jsx|ts|tsx)'
-	],
+	testMatch: ['**/*.(test|spec).(js|jsx|ts|tsx)'],
 	setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 	transformIgnorePatterns: [
 		'/node_modules/(?!(react-use-navigate-list)/)',
 		'/node_modules/(?!(react|react-dom|@testing-library)/)',
 	],
 	// FIX: Ignore Playwright test files so Jest doesn't try to run them
-	testPathIgnorePatterns: [
-		'/node_modules/',
-		'/playwright/'
-	],
+	testPathIgnorePatterns: ['/node_modules/', '/playwright/'],
 };

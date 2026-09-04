@@ -108,6 +108,7 @@ import {
 	setNewMessages,
 } from '@src/store/reducers/newMessagesReducer';
 import { isUserInGroup } from '@src/helpers/UserHelper';
+import { mergeMessagingWindow } from '@src/helpers/PersonHelper';
 import { getChatPath } from '@src/helpers/RouteHelper';
 import { Tag } from '@src/types/tags';
 import { Group } from '@src/types/groups';
@@ -464,8 +465,13 @@ const Sidebar: React.FC<Props> = ({
 
 						// Update last incoming message timestamp
 						if (!chatMessage.from_us && nextState[chatKey].contact) {
-							// Make data mutable
-							nextState[chatKey].contact = { ...nextState[chatKey].contact };
+							// Make data mutable, and take over the messaging window the
+							// backend recomputed for this message, so the countdown and the
+							// expired styling stay right without re-fetching the chat
+							nextState[chatKey].contact = mergeMessagingWindow(
+								{ ...nextState[chatKey].contact },
+								chatMessage.contact
+							);
 							nextState[chatKey].contact.last_message_timestamp =
 								getMessageTimestamp(chatMessage) ?? -1;
 						}

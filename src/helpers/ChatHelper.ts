@@ -8,13 +8,13 @@ import { Template } from '@src/types/templates';
 import { Chat } from '@src/types/chats';
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import { User } from '@src/types/users';
-import { getPastHoursByTimestamp } from '@src/helpers/DateHelper';
 import { MessageType } from '@src/types/messages';
 import { makeMutable } from '@src/helpers/DataHelper';
 import { getTemplateLanguageCode } from '@src/helpers/TemplateMessageHelper';
+import { isPersonExpired } from '@src/helpers/PersonHelper';
 
 export const isChatExpired = (chat: Chat | undefined) =>
-	getPastHoursByTimestamp(chat?.contact.last_message_timestamp ?? 0) >= 24;
+	isPersonExpired(chat?.contact);
 
 export const getChatContactName = (chat: Chat | undefined) =>
 	chat?.contact.waba_payload.profile.name;

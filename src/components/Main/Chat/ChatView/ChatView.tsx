@@ -113,7 +113,10 @@ import {
 	WebhookMessageStatus,
 } from '@src/types/messages';
 import { retrievePerson } from '@src/api/personsApi';
-import { isPersonExpired } from '@src/helpers/PersonHelper';
+import {
+	isPersonExpired,
+	mergeMessagingWindow,
+} from '@src/helpers/PersonHelper';
 import { Person } from '@src/types/persons';
 import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
 import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
@@ -665,6 +668,24 @@ const ChatView: React.FC<Props> = (props) => {
 
 							newState = { ...newState, ...preparedMessages };
 
+							const lastMessageTimestamp = getMessageTimestamp(lastMessage);
+
+							if (hasAnyIncomingMsg) {
+								setPerson(
+									(prevState) =>
+										mergeMessagingWindow(
+											{
+												...prevState,
+												last_message_timestamp: lastMessageTimestamp,
+											},
+											lastMessage.contact
+										) as Person
+								);
+
+								// Chat is not expired anymore
+								setExpired(false);
+							}
+
 							if (isAtBottom) {
 								const prevScrollTop = messagesContainer.current?.scrollTop;
 								const prevScrollHeight =
@@ -677,26 +698,12 @@ const ChatView: React.FC<Props> = (props) => {
 								}
 
 								if (hasAnyIncomingMsg) {
-									const lastMessageTimestamp = getMessageTimestamp(lastMessage);
-
 									// Mark new message as received if visible
 									if (canSeeLastMessage(messagesContainer.current)) {
 										doMarkAsReceived(lastMessageTimestamp ?? -1);
 									} else {
 										setCurrentNewMessages((prevState) => prevState + 1);
 									}
-
-									// Update contact
-									setPerson(
-										(prevState) =>
-											({
-												...prevState,
-												last_message_timestamp: lastMessageTimestamp,
-											} as Person)
-									);
-
-									// Chat is not expired anymore
-									setExpired(false);
 								}
 							} else {
 								setCurrentNewMessages((prevState) => prevState + 1);

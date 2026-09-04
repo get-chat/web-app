@@ -9,6 +9,15 @@ export interface Person {
 	waba_payload: ContactWabaPayload;
 	initials: string;
 	last_message_timestamp: number;
+	// POSIX timestamp (seconds) after which a non-template message is rejected
+	// with HTTP 453. The effective customer care messaging window as computed by
+	// the API: never null there.
+	// Read it via getMessagingWindowExpiresAt() instead of assuming a duration.
+	messaging_window_expires_at?: number;
+	// What opened the conversation, as reported by Meta alongside the window:
+	// `service`, `marketing`, `utility`, `authentication`, or
+	// `referral_conversion` for a Click-to-WhatsApp (CTWA) ad. Null when unknown.
+	messaging_window_origin?: string | null;
 	resolved: boolean;
 }
 

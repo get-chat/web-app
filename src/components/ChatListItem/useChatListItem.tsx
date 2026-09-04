@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import { isChatExpired } from '@src/helpers/ChatHelper';
+import { getMessagingWindowExpiresAt } from '@src/helpers/PersonHelper';
 import { getChatPath } from '@src/helpers/RouteHelper';
 
 const useChatListItem = ({ props }: { props: any }) => {
@@ -111,8 +112,9 @@ const useChatListItem = ({ props }: { props: any }) => {
 
 	useEffect(() => {
 		async function calculateRemaining() {
-			const momentDate = moment.unix(data.contact.last_message_timestamp);
-			momentDate.add(1, 'day');
+			const momentDate = moment.unix(
+				getMessagingWindowExpiresAt(data.contact) ?? 0
+			);
 			const curDate = moment(new Date());
 			const hours = momentDate.diff(curDate, 'hours');
 			const seconds = momentDate.diff(curDate, 'seconds');
@@ -154,6 +156,7 @@ const useChatListItem = ({ props }: { props: any }) => {
 	}, [
 		isExpired,
 		isChatExpired(data),
+		data.contact?.messaging_window_expires_at,
 		data.contact?.last_message_timestamp,
 		data.last_message?.waba_payload?.timestamp,
 	]);
