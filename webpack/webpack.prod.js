@@ -38,6 +38,18 @@ module.exports = merge(commonWebpackConfig, {
 
 			// Optionally uncomment the line below to override automatic release name detection
 			//release: packageJson.version,
+
+			// Release creation and sourcemap upload are best-effort: the CI
+			// token is not authorized for this org/project, so `sentry-cli
+			// releases new` answers 403 on every pipeline build. Handling that
+			// here keeps it non-fatal by contract rather than by luck -- the
+			// plugin's own default has flipped between rethrowing (which killed
+			// the Build job on v3.1.2, as an unhandled rejection out of its
+			// async `writeBundle` hook) and merely logging, so it is not
+			// something to rely on across upgrades.
+			errorHandler: (err) => {
+				console.warn('[sentry-webpack-plugin] skipping Sentry upload:', err);
+			},
 		}),
 	],
 });
