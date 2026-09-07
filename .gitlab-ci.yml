@@ -42,11 +42,12 @@ variables:
 .install_pnpm: &install_pnpm
   before_script:
     - apk add --no-cache --upgrade bash git
-    # Pinned to match the `packageManager` field in package.json. Installing
-    # an unpinned (latest) pnpm makes it self-switch to that version and
-    # verify the downloaded engine against pnpm-lock.yaml, which fails on a
-    # pnpm-8 lockfile: ERR_PNPM_PNPM_ENGINE_IDENTITY_UNVERIFIABLE.
-    - npm install --location=global --no-fund pnpm@8.15.4
+    # Keep in sync with the `packageManager` field in package.json. Pinning an
+    # exact version matters: pnpm only reads a lockfile whose lockfileVersion it
+    # supports, and silently re-resolves every range from scratch when it does
+    # not, so a floating pnpm quietly installs a different tree than the one we
+    # committed and tested.
+    - npm install --location=global --no-fund pnpm@12.3.4
     - pnpm config set store-dir $PNPM_STORE_DIR
 
 
@@ -150,10 +151,10 @@ Test Unit:
   <<: *install_pnpm
   script:
     - pnpm install --prefer-offline
-    # `--` is required so the flags reach jest instead of pnpm itself:
-    # pnpm 8 parses unknown options rather than forwarding them. The form
-    # works on newer pnpm too, so it survives a future version bump.
-    - pnpm test -- --passWithNoTests --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
+    # No `--` separator here: pnpm forwards it verbatim, so jest takes every
+    # following flag as a test-path pattern, matches nothing, and exits 0
+    # without running a single test -- a green job that tested nothing.
+    - pnpm test --passWithNoTests --coverage --coverageReporters=text --coverageReporters=cobertura --coverageReporters=html
 
   # track our test coverage in GitLab's MR widget/ui
   coverage: '/All files.*\|\s+(\d+(?:\.\d+)?)/'
@@ -183,11 +184,12 @@ Test E2E:
     - Build
 
   before_script:
-    # Pinned to match the `packageManager` field in package.json. Installing
-    # an unpinned (latest) pnpm makes it self-switch to that version and
-    # verify the downloaded engine against pnpm-lock.yaml, which fails on a
-    # pnpm-8 lockfile: ERR_PNPM_PNPM_ENGINE_IDENTITY_UNVERIFIABLE.
-    - npm install --location=global --no-fund pnpm@8.15.4
+    # Keep in sync with the `packageManager` field in package.json. Pinning an
+    # exact version matters: pnpm only reads a lockfile whose lockfileVersion it
+    # supports, and silently re-resolves every range from scratch when it does
+    # not, so a floating pnpm quietly installs a different tree than the one we
+    # committed and tested.
+    - npm install --location=global --no-fund pnpm@12.3.4
     - pnpm config set store-dir $PNPM_STORE_DIR
     - apt-get update && apt-get install -y gettext-base
 
