@@ -60,7 +60,13 @@ Update project version on git tag:
 
   <<: *install_pnpm
   script:
-    - pnpm version --no-git-tag-version ${PACKAGE_VERSION}
+    # `npm version`, not `pnpm version`: pnpm validates the version already in
+    # package.json before writing the new one, and rejects our `local`
+    # placeholder with ERR_PNPM_INVALID_VERSION. That placeholder is
+    # deliberate -- untagged builds render "Version: local" in the UI and use it
+    # as the Sentry release name -- so the tool that rewrites it has to tolerate
+    # a non-semver starting point. npm writes the same single-line change.
+    - npm version --no-git-tag-version ${PACKAGE_VERSION}
 
   artifacts:
     name: version
