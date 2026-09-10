@@ -20,7 +20,11 @@ export const initializeSentry = (config: AppConfig) => {
 			],
 
 			// Tracing
-			tracesSampleRate: 0.5,
+			// Kept in sync with the backend's INBOX_SENTRY_TRACES_SAMPLE_RATE:
+			// distributed tracing propagates this decision to the inbox API, and
+			// the backend's traces_sampler inherits it - so this rate, not the
+			// backend one, governs every browser-initiated API transaction.
+			tracesSampleRate: 0.02,
 			// Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
 			tracePropagationTargets: ['localhost:3000', 'getchat.360dialog.io'],
 			// Session Replay
