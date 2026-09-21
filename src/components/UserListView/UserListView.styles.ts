@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from '@mui/material';
 import {
 	overlayPanelTransition,
 	PanelTransitionStyleProps,
@@ -41,6 +42,48 @@ export const Description = styled.div`
 	padding: 15px;
 	background-color: var(--gray-lighter);
 	font-size: 14px;
+`;
+
+export const Actions = styled.div`
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 15px;
+`;
+
+export const CreateUserButton = styled(Button)`
+	&& {
+		justify-content: flex-start;
+		padding: 11px 15px;
+		font-size: 14px;
+		color: var(--default-text-color);
+		background-color: white;
+		border: 1px solid var(--gray-light);
+
+		.MuiButton-startIcon {
+			color: var(--color-primary);
+		}
+
+		&:hover {
+			background-color: var(--color-primary-transparent);
+			box-shadow: inset 0 0 0 1px var(--color-primary), var(--shadow-md);
+		}
+	}
+` as typeof Button;
+
+export const Hint = styled.div`
+	display: flex;
+	align-items: flex-start;
+	gap: 7px;
+	font-size: 12.5px;
+	line-height: 1.45;
+	color: var(--lighter-text-color);
+
+	.MuiSvgIcon-root {
+		font-size: 16px;
+		flex-shrink: 0;
+		margin-top: 1px;
+	}
 `;
 
 export const LoadingContainer = styled.div`
@@ -91,6 +134,15 @@ export const UserUsername = styled.div`
 	overflow: hidden;
 `;
 
+export const UserEmail = styled.div`
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--default-text-color);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+`;
+
 export const UserRole = styled.div`
 	font-weight: 500;
 	font-size: 12px;
@@ -102,14 +154,16 @@ export const UserRole = styled.div`
 
 export const UserAvailability = styled.div<{
 	$isAvailable: boolean;
+	$hasSwitch: boolean;
 }>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	font-size: 14px;
-	padding: 0 0 0 15px;
+	padding: ${(props) => (props.$hasSwitch ? '0 0 0 15px' : '4px 15px')};
 	border-radius: 20px;
-	width: 140px;
+	width: ${(props) => (props.$hasSwitch ? '140px' : 'auto')};
+	flex-shrink: 0;
 	justify-content: space-between;
 	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
 	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};

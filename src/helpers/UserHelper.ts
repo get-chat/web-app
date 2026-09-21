@@ -1,4 +1,4 @@
-import { User, UserList } from '@src/types/users';
+import { User, UserList, UserRole } from '@src/types/users';
 
 export const sortUsers = (users: UserList): User[] => {
 	return Object.values(users)?.sort(function (a: User, b: User) {
@@ -9,6 +9,16 @@ export const sortUsers = (users: UserList): User[] => {
 		);
 	});
 };
+
+export const USER_ROLE_LABELS: { [key in UserRole]: string } = {
+	user: 'User',
+	admin: 'Admin',
+	app: 'App integration',
+};
+
+// Falls back to the raw value, so a role added by the API is still displayed
+export const getUserRoleLabel = (role: string | undefined) =>
+	USER_ROLE_LABELS[role as UserRole] ?? role ?? '';
 
 export const prepareUserLabel = (user: User) => {
 	let label = '';

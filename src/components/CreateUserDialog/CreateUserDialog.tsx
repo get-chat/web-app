@@ -25,10 +25,13 @@ import {
 	CreateUserResponse,
 	UserRole,
 } from '@src/types/users';
+import { USER_ROLE_LABELS } from '@src/helpers/UserHelper';
 
 interface Props {
 	open: boolean;
 	setOpen: (value: boolean) => void;
+	// Called once the user exists, so a caller showing a user list can refresh it
+	onCreated?: () => void;
 }
 
 // Usernames are validated by the API too, only alphanumeric characters are allowed
@@ -96,7 +99,7 @@ const parseApiError = (
 	};
 };
 
-const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
+const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 	const { t } = useTranslation();
 
 	const [username, setUsername] = useState('');
@@ -232,6 +235,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
 
 		setRequesting(false);
 		setCreatedUser(user);
+		onCreated?.();
 	};
 
 	const copyActivationLink = async () => {
@@ -353,9 +357,11 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
 									setRole(event.target.value as UserRole)
 								}
 							>
-								<MenuItem value="user">{t('User')}</MenuItem>
-								<MenuItem value="admin">{t('Admin')}</MenuItem>
-								<MenuItem value="app">{t('App integration')}</MenuItem>
+								{Object.entries(USER_ROLE_LABELS).map(([value, label]) => (
+									<MenuItem key={value} value={value}>
+										{t(label)}
+									</MenuItem>
+								))}
 							</Select>
 							<FormHelperText>{t(ROLE_DESCRIPTIONS[role])}</FormHelperText>
 						</FormControl>

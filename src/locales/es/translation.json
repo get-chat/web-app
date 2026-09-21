@@ -467,5 +467,6 @@
 	"Upload another image": "Subir otra imagen",
 	"Upload another video": "Subir otro vídeo",
 	"Upload another document": "Subir otro documento",
-	"Upload another file": "Subir otro archivo"
+	"Upload another file": "Subir otro archivo",
+	"Users could not be loaded.": "No se pudieron cargar los usuarios."
 }

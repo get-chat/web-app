@@ -965,6 +965,7 @@ const Sidebar: React.FC<Props> = ({
 	};
 
 	const displayUserList = () => {
+		setAnchorEl(null);
 		setUserListVisible(true);
 	};
 
@@ -1021,14 +1022,11 @@ const Sidebar: React.FC<Props> = ({
 							<NotificationsIcon />
 						</IconButton>
 					</Tooltip>
-					{isUserAvailabilityFeatureEnabled &&
-						currentUser?.profile?.role === 'admin' && (
-							<Tooltip title={t('Users')} disableInteractive>
-								<IconButton onClick={displayUserList} size="large">
-									<GroupIcon />
-								</IconButton>
-							</Tooltip>
-						)}
+					<Tooltip title={t('Users')} disableInteractive>
+						<IconButton onClick={displayUserList} size="large">
+							<GroupIcon />
+						</IconButton>
+					</Tooltip>
 					{currentUser?.profile?.role === 'admin' && (
 						<Tooltip title={t('Admin panel')} disableInteractive>
 							<Styled.AdminPanelButton
@@ -1502,6 +1500,13 @@ const Sidebar: React.FC<Props> = ({
 						<QrCode />
 					</ListItemIcon>
 					{t('Open in WhatsApp')}
+				</MenuItem>
+
+				<MenuItem onClick={displayUserList} data-test-id="users-button">
+					<ListItemIcon>
+						<GroupIcon />
+					</ListItemIcon>
+					{t('Users')}
 				</MenuItem>
 				{/*<Divider />
 				<MenuItem onClick={exportChats}>

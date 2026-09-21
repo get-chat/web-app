@@ -2,6 +2,8 @@ import * as Styled from './UserListView.styles';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, IconButton, Switch } from '@mui/material';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
 import { User, UserAvailabilityEvent, UserList } from '@src/types/users';
@@ -11,6 +13,9 @@ import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_USER_AVAILABILITY } from '@src/Constants';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { useAppSelector } from '@src/store/hooks';
+import { getUserRoleLabel, sortUsers } from '@src/helpers/UserHelper';
+import CreateUserDialog from '@src/components/CreateUserDialog';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -23,8 +28,23 @@ const UserListView: React.FC<Props> = ({
 }) => {
 	const { t } = useTranslation();
 
+	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const isReadOnly = useAppSelector((state) => state.UI.isReadOnly);
+	const isUserAvailabilityFeatureEnabled = useAppSelector(
+		(state) => state.isUserAvailabilityFeatureEnabled.value
+	);
+
+	// Listing users is allowed for everyone, but the API limits changing
+	// availability to the user themselves or an admin
+	const isAdmin = currentUser?.profile?.role === 'admin';
+	const canChangeAvailability = isUserAvailabilityFeatureEnabled && isAdmin;
+	const canCreateUsers = isAdmin && !isReadOnly;
+
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string>();
 	const [users, setUsers] = useState<UserList>({});
+	const [isCreateUserDialogVisible, setCreateUserDialogVisible] =
+		useState(false);
 
 	useEffect(() => {
 		listUsers();
@@ -50,6 +70,7 @@ const UserListView: React.FC<Props> = ({
 
 	const listUsers = async () => {
 		setIsLoading(true);
+		setError(undefined);
 		try {
 			const data = await fetchUsers(1000);
 			const userList: UserList = {};
@@ -59,6 +80,7 @@ const UserListView: React.FC<Props> = ({
 			setUsers(userList);
 		} catch (error) {
 			console.error('Error in listUsers', error);
+			setError('Users could not be loaded.');
 		} finally {
 			setIsLoading(false);
 		}
@@ -104,43 +126,85 @@ const UserListView: React.FC<Props> = ({
 
 				<h3>{t('Users')}</h3>
 			</Styled.Header>
-			<Styled.Description>
-				{t('As an admin, you can change active status of users.')}
-			</Styled.Description>
+			{(canChangeAvailability || canCreateUsers) && (
+				<Styled.Actions>
+					{canCreateUsers && (
+						<Styled.CreateUserButton
+							fullWidth
+							startIcon={<PersonAddAltIcon />}
+							onClick={() => setCreateUserDialogVisible(true)}
+							data-test-id="users-create-user-button"
+						>
+							{t('Create new user')}
+						</Styled.CreateUserButton>
+					)}
+					{canChangeAvailability && (
+						<Styled.Hint>
+							<InfoOutlinedIcon />
+							<span>
+								{t('As an admin, you can change active status of users.')}
+							</span>
+						</Styled.Hint>
+					)}
+				</Styled.Actions>
+			)}
 
 			{isLoading ? (
 				<Styled.LoadingContainer>
 					<CircularProgress />
 				</Styled.LoadingContainer>
+			) : error ? (
+				<Styled.Description>{t(error)}</Styled.Description>
 			) : (
 				<Styled.Body>
-					{Object.values(users).map((user) => (
-						<Styled.UserItem>
+					{sortUsers(users).map((user) => (
+						<Styled.UserItem key={user.id}>
 							<Styled.UserMeta>
 								<CustomAvatar generateBgColorBy={user.username}>
 									{generateInitialsHelper(user.username)}
 								</CustomAvatar>
 								<Styled.UserInfo>
 									<Styled.UserUsername>{user.username}</Styled.UserUsername>
-									<Styled.UserRole>{user.profile.role}</Styled.UserRole>
+									{user.email && (
+										<Styled.UserEmail>{user.email}</Styled.UserEmail>
+									)}
+									<Styled.UserRole>
+										{t(getUserRoleLabel(user.profile?.role))}
+									</Styled.UserRole>
 								</Styled.UserInfo>
 							</Styled.UserMeta>
-							<Styled.UserAvailability $isAvailable={user.profile.is_available}>
-								<Styled.UserAvailabilityLabel>
-									{user.profile.is_available ? t('Active') : t('Inactive')}
-								</Styled.UserAvailabilityLabel>
-								<Switch
-									color={user.profile.is_available ? 'success' : 'warning'}
-									checked={user.profile.is_available}
-									onClick={() =>
-										toggleUserAvailability(user.id, user.profile.is_available)
-									}
-								/>
-							</Styled.UserAvailability>
+							{isUserAvailabilityFeatureEnabled && (
+								<Styled.UserAvailability
+									$isAvailable={user.profile.is_available}
+									$hasSwitch={canChangeAvailability}
+								>
+									<Styled.UserAvailabilityLabel>
+										{user.profile.is_available ? t('Active') : t('Inactive')}
+									</Styled.UserAvailabilityLabel>
+									{canChangeAvailability && (
+										<Switch
+											color={user.profile.is_available ? 'success' : 'warning'}
+											checked={user.profile.is_available}
+											onClick={() =>
+												toggleUserAvailability(
+													user.id,
+													user.profile.is_available
+												)
+											}
+										/>
+									)}
+								</Styled.UserAvailability>
+							)}
 						</Styled.UserItem>
 					))}
 				</Styled.Body>
 			)}
+
+			<CreateUserDialog
+				open={isCreateUserDialogVisible}
+				setOpen={setCreateUserDialogVisible}
+				onCreated={listUsers}
+			/>
 		</Styled.Container>
 	);
 };
