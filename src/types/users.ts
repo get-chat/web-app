@@ -41,3 +41,29 @@ export interface UserAvailabilityEvent {
 	is_available: boolean;
 	user: User;
 }
+
+export type UserRole = 'user' | 'admin' | 'app';
+
+export interface CreateUserRequest {
+	username: string;
+	first_name?: string;
+	last_name?: string;
+	email?: string;
+	profile?: {
+		role: UserRole;
+	};
+}
+
+export interface CreateUserResponse
+	extends Pick<
+		User,
+		'url' | 'id' | 'username' | 'first_name' | 'last_name' | 'email'
+	> {
+	// Returned only once, right after the user is created
+	activation_url: string;
+	profile: Partial<UserProfile>;
+}
+
+export interface ChangeUserPasswordRequest {
+	password: string;
+}

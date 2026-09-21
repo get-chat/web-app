@@ -1066,3 +1066,72 @@ msgstr ""
 
 msgid "Mark as unresolved"
 msgstr ""
+
+msgid "Create new user"
+msgstr ""
+
+msgid "User created"
+msgstr ""
+
+msgid "First name"
+msgstr ""
+
+msgid "Last name"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
+msgid "Admin"
+msgstr ""
+
+msgid "App integration"
+msgstr ""
+
+msgid "Password (repeat)"
+msgstr ""
+
+msgid "Only letters and numbers are allowed."
+msgstr ""
+
+msgid "Username is required."
+msgstr ""
+
+msgid "Password must be at least 8 characters long."
+msgstr ""
+
+msgid "Passwords must match."
+msgstr ""
+
+msgid "Optional. Leave it empty if the user will sign in with 360dialog."
+msgstr ""
+
+msgid "Can use the inbox, except for actions marked as admin only."
+msgstr ""
+
+msgid "Full access to the inbox, including the admin panel."
+msgstr ""
+
+msgid "API access for chatbots and integrations, without inbox access."
+msgstr ""
+
+msgid "Activation link"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again."
+msgstr ""
+
+msgid "This link is shown only once. The account is ready to be used after the link is opened."
+msgstr ""
+
+msgid "The user was created, but the password could not be set."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "The user <1>%s</1> has been created."
+msgstr ""

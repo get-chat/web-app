@@ -44,6 +44,7 @@ import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
 import ChangePasswordDialog from '../../ChangePasswordDialog';
+import CreateUserDialog from '@src/components/CreateUserDialog';
 import SearchMessageResult from '../../SearchMessageResult/SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -80,6 +81,7 @@ import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 import PasswordIcon from '@mui/icons-material/Password';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -138,7 +140,9 @@ import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 import UserAvailability from '@src/components/UserAvailability';
 import UserListView from '@src/components/UserListView';
-import { updateUserAvailability } from '@src/api/usersApi';
+import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
+import { User, UserList } from '@src/types/users';
+import { setUsers } from '@src/store/reducers/usersReducer';
 import { logout } from '@src/api/authApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
@@ -278,6 +282,8 @@ const Sidebar: React.FC<Props> = ({
 	const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] =
 		useState(false);
 	const [isOpenInWhatsAppDialogVisible, setOpenInWhatsAppDialogVisible] =
+		useState(false);
+	const [isCreateUserDialogVisible, setCreateUserDialogVisible] =
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isUserListVisible, setUserListVisible] = useState(false);
@@ -932,6 +938,26 @@ const Sidebar: React.FC<Props> = ({
 		setChangePasswordDialogVisible(true);
 	};
 
+	const showCreateUser = () => {
+		setAnchorEl(null);
+		setCreateUserDialogVisible(true);
+	};
+
+	// Keeps the user list in sync after a new user is created, so that it can be
+	// picked in chat assignment without reloading the app
+	const refreshUsers = async () => {
+		try {
+			const data = await fetchUsers(5000);
+			const userList: UserList = {};
+			data.results.forEach((user: User) => {
+				userList[user.id] = user;
+			});
+			dispatch(setUsers(userList));
+		} catch (error: any | AxiosError) {
+			console.error(error);
+		}
+	};
+
 	const showOpenInWhatsApp = () => {
 		setAnchorEl(null);
 		setOpenInWhatsAppDialogVisible(true);
@@ -1502,6 +1528,14 @@ const Sidebar: React.FC<Props> = ({
 					{t('Export chats')}
 				</MenuItem>*/}
 				{currentUser?.profile?.role === 'admin' && <Divider />}
+				{currentUser?.profile?.role === 'admin' && !isReadOnly && (
+					<MenuItem onClick={showCreateUser} data-test-id="create-user-button">
+						<ListItemIcon>
+							<PersonAddAltIcon />
+						</ListItemIcon>
+						{t('Create new user')}
+					</MenuItem>
+				)}
 				{currentUser?.profile?.role === 'admin' && (
 					<MenuItem
 						component={Link}
@@ -1529,6 +1563,12 @@ const Sidebar: React.FC<Props> = ({
 			<ChangePasswordDialog
 				open={isChangePasswordDialogVisible}
 				setOpen={setChangePasswordDialogVisible}
+			/>
+
+			<CreateUserDialog
+				open={isCreateUserDialogVisible}
+				setOpen={setCreateUserDialogVisible}
+				onCreated={refreshUsers}
 			/>
 
 			<OpenInWhatsAppDialog

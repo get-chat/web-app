@@ -1,7 +1,10 @@
 import axios from './axiosInstance';
 import { AxiosRequestConfig } from 'axios';
-import { PaginatedResponse } from '@src/types/common';
+import { EmptyResponse, PaginatedResponse } from '@src/types/common';
 import {
+	ChangeUserPasswordRequest,
+	CreateUserRequest,
+	CreateUserResponse,
 	UpdateUserAvailabilityRequest,
 	UpdateUserAvailabilityResponse,
 	User,
@@ -28,6 +31,24 @@ export const updateUserAvailability = async (
 ) => {
 	const response = await api.patch<UpdateUserAvailabilityResponse>(
 		`/users/${user_id}/availability`,
+		data
+	);
+	return response.data;
+};
+
+// Admin only. The response contains an activation_url, which is returned only once.
+export const createUser = async (data: CreateUserRequest) => {
+	const response = await api.post<CreateUserResponse>('/users/', data);
+	return response.data;
+};
+
+// Admin only. The create endpoint doesn't accept a password, it is set separately.
+export const changeUserPassword = async (
+	user_id: number,
+	data: ChangeUserPasswordRequest
+) => {
+	const response = await api.put<EmptyResponse>(
+		`/users/${user_id}/password/change/`,
 		data
 	);
 	return response.data;
