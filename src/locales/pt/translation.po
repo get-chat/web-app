@@ -1417,3 +1417,6 @@ msgstr "Enviar outro documento"
 
 msgid "Upload another file"
 msgstr "Enviar outro arquivo"
+
+msgid "Users could not be loaded."
+msgstr "Não foi possível carregar os usuários."

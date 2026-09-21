@@ -25,6 +25,7 @@ import {
 	CreateUserResponse,
 	UserRole,
 } from '@src/types/users';
+import { USER_ROLE_LABELS } from '@src/helpers/UserHelper';
 
 interface Props {
 	open: boolean;
@@ -353,9 +354,11 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
 									setRole(event.target.value as UserRole)
 								}
 							>
-								<MenuItem value="user">{t('User')}</MenuItem>
-								<MenuItem value="admin">{t('Admin')}</MenuItem>
-								<MenuItem value="app">{t('App integration')}</MenuItem>
+								{Object.entries(USER_ROLE_LABELS).map(([value, label]) => (
+									<MenuItem key={value} value={value}>
+										{t(label)}
+									</MenuItem>
+								))}
 							</Select>
 							<FormHelperText>{t(ROLE_DESCRIPTIONS[role])}</FormHelperText>
 						</FormControl>

@@ -91,6 +91,15 @@ export const UserUsername = styled.div`
 	overflow: hidden;
 `;
 
+export const UserEmail = styled.div`
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--default-text-color);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+`;
+
 export const UserRole = styled.div`
 	font-weight: 500;
 	font-size: 12px;
@@ -102,14 +111,16 @@ export const UserRole = styled.div`
 
 export const UserAvailability = styled.div<{
 	$isAvailable: boolean;
+	$hasSwitch: boolean;
 }>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	font-size: 14px;
-	padding: 0 0 0 15px;
+	padding: ${(props) => (props.$hasSwitch ? '0 0 0 15px' : '4px 15px')};
 	border-radius: 20px;
-	width: 140px;
+	width: ${(props) => (props.$hasSwitch ? '140px' : 'auto')};
+	flex-shrink: 0;
 	justify-content: space-between;
 	background-color: ${(props) => (props.$isAvailable ? '#c9e4cb' : '#f5d597')};
 	color: ${(props) => (props.$isAvailable ? '#2e7d33' : '#644916')};

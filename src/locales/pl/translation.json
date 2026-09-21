@@ -470,5 +470,6 @@
 	"Upload another image": "Prześlij inny obraz",
 	"Upload another video": "Prześlij inne wideo",
 	"Upload another document": "Prześlij inny dokument",
-	"Upload another file": "Prześlij inny plik"
+	"Upload another file": "Prześlij inny plik",
+	"Users could not be loaded.": "Nie udało się wczytać użytkowników."
 }

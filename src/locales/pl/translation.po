@@ -1462,3 +1462,6 @@ msgstr "Prześlij inny dokument"
 
 msgid "Upload another file"
 msgstr "Prześlij inny plik"
+
+msgid "Users could not be loaded."
+msgstr "Nie udało się wczytać użytkowników."
