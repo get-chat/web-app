@@ -15,7 +15,7 @@ import {
 	isImageSupported,
 	isVideoSupported,
 } from '@src/helpers/MediaFilesHelper';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import PubSub from 'pubsub-js';
 import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
@@ -214,6 +214,17 @@ const SendTemplateMessage: React.FC<Props> = ({
 		if (format === 'DOCUMENT') return '*/*';
 	};
 
+	// Full sentences per format, so translations can inflect them freely
+	const getUploadLabel = (format: string, hasFile: boolean) => {
+		if (format === 'IMAGE')
+			return hasFile ? t('Upload another image') : t('Upload image');
+		if (format === 'VIDEO')
+			return hasFile ? t('Upload another video') : t('Upload video');
+		if (format === 'DOCUMENT')
+			return hasFile ? t('Upload another document') : t('Upload document');
+		return hasFile ? t('Upload another file') : t('Upload a file');
+	};
+
 	return (
 		<div className="sendTemplateMessage">
 			<h4 className="sendTemplateMessage__title">{template.name}</h4>
@@ -303,10 +314,10 @@ const SendTemplateMessage: React.FC<Props> = ({
 													disabled={isUploading}
 													startIcon={<PublishIcon />}
 												>
-													<Trans>
-														Upload {headerFileURL ? 'another ' : ''}
-														{comp.format?.toLowerCase()}
-													</Trans>
+													{getUploadLabel(
+														comp.format ?? '',
+														Boolean(headerFileURL)
+													)}
 												</Button>
 
 												{headerFileURL && (

@@ -29,7 +29,6 @@ import {
 interface Props {
 	open: boolean;
 	setOpen: (value: boolean) => void;
-	onCreated?: () => void;
 }
 
 // Usernames are validated by the API too, only alphanumeric characters are allowed
@@ -97,7 +96,7 @@ const parseApiError = (
 	};
 };
 
-const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
+const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
 	const { t } = useTranslation();
 
 	const [username, setUsername] = useState('');
@@ -146,6 +145,14 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 		}, 300);
 	};
 
+	// The activation link is returned once and cannot be requested again, so the
+	// dialog must not be dismissed by a backdrop click or Esc while the user is
+	// being created or while the link is on screen
+	const handleClose = () => {
+		if (isRequesting || createdUser) return;
+		close();
+	};
+
 	const validate = (): FieldErrors => {
 		const errors: FieldErrors = {};
 
@@ -155,7 +162,9 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 			errors.username = 'Only letters and numbers are allowed.';
 		}
 
-		if (!isAppRole && password.length > 0) {
+		// Setting a password is optional, but once either field is filled both
+		// have to be, otherwise the password would be silently dropped below
+		if (!isAppRole && (password.length > 0 || passwordRepeat.length > 0)) {
 			if (password.length < MIN_PASSWORD_LENGTH) {
 				errors.password = 'Password must be at least 8 characters long.';
 			} else if (password !== passwordRepeat) {
@@ -223,7 +232,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 
 		setRequesting(false);
 		setCreatedUser(user);
-		onCreated?.();
 	};
 
 	const copyActivationLink = async () => {
@@ -234,7 +242,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 	};
 
 	return (
-		<Styled.StyledDialog open={open} onClose={close} fullWidth>
+		<Styled.StyledDialog open={open} onClose={handleClose} fullWidth>
 			<DialogTitle>
 				{createdUser ? t('User created') : t('Create new user')}
 			</DialogTitle>
@@ -394,7 +402,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 			)}
 
 			<DialogActions>
-				<Button onClick={close} color="secondary">
+				<Button onClick={close} color="secondary" disabled={isRequesting}>
 					{createdUser ? t('Close') : t('Cancel')}
 				</Button>
 				{!createdUser && (

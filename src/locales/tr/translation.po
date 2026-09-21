@@ -539,8 +539,8 @@ msgstr "Lokasyon"
 msgid "Location: <1>%s</1>"
 msgstr "Lokasyon: <1>%s</1>"
 
-msgid "<0>Product retailer ID<0>: %s"
-msgstr "<0>Ürün satıcı ID<0>: %s"
+msgid "<0>Product retailer ID</0>: %s"
+msgstr "<0>Ürün satıcı ID</0>: %s"
 
 msgid "<0>Catalog ID</0>: %s"
 msgstr "<0>Katalog ID</0>: %s"
@@ -991,7 +991,7 @@ msgid "Location request message is a free-form message displaying only a <strong
 msgstr "Konum isteği mesajı, yalnızca bir <strong>gövde metni</strong> ve bir <strong>konum gönder</strong> düğmesi görüntüleyen serbest biçimli bir mesajdır. Bir WhatsApp kullanıcısı düğmeye dokunduğunda, bir konum paylaşım ekranı görüntülenir. Kullanıcı, paylaşım ekranından konumunu paylaşabilir."
 
 msgid "Enter your message here"
-msgstr ""
+msgstr "Mesajını buraya yaz"
 
 msgid "Send address message"
 msgstr "Adres mesajı gönder"
@@ -1028,6 +1028,21 @@ msgstr "Bu alan gereklidir!"
 
 msgid "This image isn't available anymore."
 msgstr "Bu resim artık mevcut değil."
+
+msgid "Go to 360Dialog Status Page"
+msgstr "360Dialog Durum Sayfasına Git"
+
+msgid "Connection error"
+msgstr "Bağlantı hatası"
+
+msgid "No Internet connection. The inbox will refresh after the Internet is back."
+msgstr "İnternet bağlantısı yok. İnternet geri geldiğinde gelen kutusu yenilenecek."
+
+msgid "Connection lost. You may not receive new messages in real time."
+msgstr "Bağlantı kesildi. Yeni mesajları gerçek zamanlı olarak almayabilirsin."
+
+msgid "If the issue persists, you can try refreshing the page manually."
+msgstr "Sorun devam ederse sayfayı elle yenilemeyi deneyebilirsin."
 
 msgid "Scan this code to start a WhatsApp chat with this number."
 msgstr "Bu numarayla WhatsApp sohbeti başlatmak için bu kodu tarayın."
@@ -1076,3 +1091,373 @@ msgstr "Çözüldü olarak işaretle"
 
 msgid "Mark as unresolved"
 msgstr "Çözülmedi olarak işaretle"
+
+
+msgid "Create new user"
+msgstr "Yeni kullanıcı oluştur"
+
+msgid "User created"
+msgstr "Kullanıcı oluşturuldu"
+
+msgid "First name"
+msgstr "Ad"
+
+msgid "Last name"
+msgstr "Soyad"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Admin"
+msgstr "Yönetici"
+
+msgid "App integration"
+msgstr "Uygulama entegrasyonu"
+
+msgid "Password (repeat)"
+msgstr "Şifre (tekrar)"
+
+msgid "Only letters and numbers are allowed."
+msgstr "Yalnızca harf ve rakamlara izin verilir."
+
+msgid "Username is required."
+msgstr "Kullanıcı adı gereklidir."
+
+msgid "Password must be at least 8 characters long."
+msgstr "Şifre en az 8 karakter uzunluğunda olmalıdır."
+
+msgid "Passwords must match."
+msgstr "Şifreler eşleşmelidir."
+
+msgid "Optional. Leave it empty if the user will sign in with 360dialog."
+msgstr "İsteğe bağlı. Kullanıcı 360dialog ile giriş yapacaksa boş bırak."
+
+msgid "Can use the inbox, except for actions marked as admin only."
+msgstr "Yalnızca yöneticilere işaretlenmiş işlemler dışında gelen kutusunu kullanabilir."
+
+msgid "Full access to the inbox, including the admin panel."
+msgstr "Yönetici paneli dahil olmak üzere gelen kutusuna tam erişim."
+
+msgid "API access for chatbots and integrations, without inbox access."
+msgstr "Sohbet botları ve entegrasyonlar için API erişimi, gelen kutusu erişimi olmadan."
+
+msgid "Activation link"
+msgstr "Etkinleştirme bağlantısı"
+
+msgid "Copy"
+msgstr "Kopyala"
+
+msgid "This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again."
+msgstr "Bu bağlantı yalnızca bir kez gösterilir. Bağlantıyı açmak kullanıcıyı etkinleştirir ve API jetonunu döndürür; bu jeton aynı bağlantıyla tekrar alınamaz."
+
+msgid "This link is shown only once. The account is ready to be used after the link is opened."
+msgstr "Bu bağlantı yalnızca bir kez gösterilir. Bağlantı açıldıktan sonra hesap kullanıma hazırdır."
+
+msgid "The user was created, but the password could not be set."
+msgstr "Kullanıcı oluşturuldu, ancak şifre ayarlanamadı."
+
+msgid "Create"
+msgstr "Oluştur"
+
+msgid "The user <1>%s</1> has been created."
+msgstr "<1>%s</1> kullanıcısı oluşturuldu."
+
+msgid "Add button"
+msgstr "Düğme ekle"
+
+msgid "Add card"
+msgstr "Kart ekle"
+
+msgid "Add option"
+msgstr "Seçenek ekle"
+
+msgid "Add section"
+msgstr "Bölüm ekle"
+
+msgid "Address (optional)"
+msgstr "Adres (isteğe bağlı)"
+
+msgid "Available"
+msgstr "Kullanılabilir"
+
+msgid "Button URL"
+msgstr "Düğme URL'si"
+
+msgid "Button text"
+msgstr "Düğme metni"
+
+msgid "Card %s"
+msgstr "Kart %s"
+
+msgid "Card body"
+msgstr "Kart gövdesi"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Continue as"
+msgstr "Şu kullanıcıyla devam et"
+
+msgid "Create new tag"
+msgstr "Yeni etiket oluştur"
+
+msgid "Create tag"
+msgstr "Etiket oluştur"
+
+msgid "Description:"
+msgstr "Açıklama:"
+
+msgid "Details"
+msgstr "Ayrıntılar"
+
+msgid "Enter a valid phone number"
+msgstr "Geçerli bir telefon numarası gir"
+
+msgid "Flow token:"
+msgstr "Flow jetonu:"
+
+msgid "Geolocation is not supported by your browser."
+msgstr "Tarayıcın konum belirlemeyi desteklemiyor."
+
+msgid "Interactive Messages"
+msgstr "Etkileşimli Mesajlar"
+
+msgid "Invalid parameters"
+msgstr "Geçersiz parametreler"
+
+msgid "Loading template messages..."
+msgstr "Taslak mesajlar yükleniyor..."
+
+msgid "Location name (optional)"
+msgstr "Konum adı (isteğe bağlı)"
+
+msgid "Location permission was denied. Please allow location access for this site in your browser settings."
+msgstr "Konum izni reddedildi. Lütfen tarayıcı ayarlarından bu siteye konum erişimi ver."
+
+msgid "Login with 360dialog"
+msgstr "360dialog ile giriş yap"
+
+msgid "Media is required"
+msgstr "Medya dosyası gereklidir"
+
+msgid "Name:"
+msgstr "Ad:"
+
+msgid "No results"
+msgstr "Sonuç yok"
+
+msgid "Open"
+msgstr "Aç"
+
+msgid "Open in WhatsApp"
+msgstr "WhatsApp'ta aç"
+
+msgid "Option description"
+msgstr "Seçenek açıklaması"
+
+msgid "Option title"
+msgstr "Seçenek başlığı"
+
+msgid "Order number:"
+msgstr "Sipariş numarası:"
+
+msgid "Parameters cannot have new-line/tab characters or more than 3 consecutive spaces!"
+msgstr "Parametreler satır sonu/sekme karakterleri ya da art arda 3'ten fazla boşluk içeremez!"
+
+msgid "Pick up where you left off"
+msgstr "Kaldığın yerden devam et"
+
+msgid "Please try refreshing the page. If the problem persists, clearing your browser cache may help."
+msgstr "Lütfen sayfayı yenilemeyi dene. Sorun devam ederse tarayıcı önbelleğini temizlemek yardımcı olabilir."
+
+msgid "Provide address"
+msgstr "Adres gir"
+
+msgid "Remove button"
+msgstr "Düğmeyi kaldır"
+
+msgid "Remove card"
+msgstr "Kartı kaldır"
+
+msgid "Remove option"
+msgstr "Seçeneği kaldır"
+
+msgid "Remove section"
+msgstr "Bölümü kaldır"
+
+msgid "Retrieving your location took too long. Please try again."
+msgstr "Konumun alınması çok uzun sürdü. Lütfen tekrar dene."
+
+msgid "Search country"
+msgstr "Ülke ara"
+
+msgid "Section title"
+msgstr "Bölüm başlığı"
+
+msgid "Selected"
+msgstr "Seçili"
+
+msgid "Send location"
+msgstr "Konum gönder"
+
+msgid "Sending..."
+msgstr "Gönderiliyor..."
+
+msgid "Share"
+msgstr "Paylaş"
+
+msgid "Tag name"
+msgstr "Etiket adı"
+
+msgid "The map could not be loaded. Please try again later."
+msgstr "Harita yüklenemedi. Lütfen daha sonra tekrar dene."
+
+msgid "This chat has failed messages!"
+msgstr "Bu sohbette başarısız mesajlar var!"
+
+msgid "This file type is not supported, however you can still download it."
+msgstr "Bu dosya türü desteklenmiyor, ancak yine de indirebilirsin."
+
+msgid "Topic radio:"
+msgstr "Konu seçimi:"
+
+msgid "Unable to retrieve your location."
+msgstr "Konumun alınamadı."
+
+msgid "Unread"
+msgstr "Okunmamış"
+
+msgid "Unsupported message"
+msgstr "Desteklenmeyen mesaj"
+
+msgid "Uploaded successfully"
+msgstr "Başarıyla yüklendi"
+
+msgid "Use my current location"
+msgstr "Mevcut konumumu kullan"
+
+msgid "Your location could not be determined. Please make sure Location Services are enabled for your browser in your system settings."
+msgstr "Konumun belirlenemedi. Lütfen sistem ayarlarında tarayıcın için Konum Servislerinin açık olduğundan emin ol."
+
+msgid "or"
+msgstr "veya"
+
+msgid "or log in with another account"
+msgstr "veya başka bir hesapla giriş yap"
+
+msgid "Current User"
+msgstr "Mevcut Kullanıcı"
+
+msgid "via WhatsApp Business App"
+msgstr "WhatsApp Business uygulaması üzerinden"
+
+msgid "via API"
+msgstr "API üzerinden"
+
+msgid "Header"
+msgstr "Başlık"
+
+msgid "Body"
+msgstr "Gövde"
+
+msgid "Footer"
+msgstr "Alt Bilgi"
+
+msgid "Action URL"
+msgstr "Eylem URL'si"
+
+msgid "Action Display Text"
+msgstr "Eylem Görünen Metni"
+
+msgid "Country ISO Code"
+msgstr "Ülke ISO Kodu"
+
+msgid "Flow Token"
+msgstr "Flow Jetonu"
+
+msgid "Flow ID"
+msgstr "Flow Kimliği"
+
+msgid "Flow CTA"
+msgstr "Flow CTA"
+
+msgid "Flow Action"
+msgstr "Flow Eylemi"
+
+msgid "Flow Action Screen"
+msgstr "Flow Eylem Ekranı"
+
+msgid "Call-to-action button text"
+msgstr "Eylem çağrısı düğmesi metni"
+
+msgid "Thumbnail Product Retailer ID"
+msgstr "Küçük Resim Ürün Satıcı Kimliği"
+
+msgid "Send reply buttons message"
+msgstr "Yanıt düğmeli mesaj gönder"
+
+msgid "Send list message"
+msgstr "Liste mesajı gönder"
+
+msgid "Send media carousel message"
+msgstr "Medya karuseli mesajı gönder"
+
+msgid "Reply buttons messages offer up to <strong>3 buttons</strong> as quick answer options. They are a quicker way for your customers to make a selection, and the tapped button is sent back to you as a reply."
+msgstr "Yanıt düğmeli mesajlar hızlı yanıt seçeneği olarak en fazla <strong>3 düğme</strong> sunar. Müşterilerinin seçim yapması için daha hızlı bir yoldur ve dokunulan düğme sana yanıt olarak geri gönderilir."
+
+msgid "List messages offer your customers a choice of up to <strong>10 options</strong>, organized in one or more sections. The options are revealed when the customer taps the <strong>button</strong> and the selected option is sent back to you as a reply."
+msgstr "Liste mesajları, bir veya daha fazla bölümde düzenlenmiş en fazla <strong>10 seçenek</strong> sunar. Seçenekler, müşteri <strong>düğmeye</strong> dokunduğunda görünür ve seçilen seçenek sana yanıt olarak geri gönderilir."
+
+msgid "Media carousel messages display a set of <strong>2 to 10</strong> horizontally scrollable cards. Each card shows an <strong>image or video</strong>, an optional body text and a <strong>URL button</strong>."
+msgstr "Medya karuseli mesajları, yatay olarak kaydırılabilen <strong>2 ila 10</strong> karttan oluşan bir set gösterir. Her kartta bir <strong>görsel veya video</strong>, isteğe bağlı bir gövde metni ve bir <strong>URL düğmesi</strong> bulunur."
+
+msgid "Cards with quick-reply buttons are currently only supported when sent via the API."
+msgstr "Hızlı yanıt düğmeli kartlar şu anda yalnızca API üzerinden gönderildiğinde destekleniyor."
+
+msgid "To send WhatsApp Flows with additional parameters, please use the API."
+msgstr "Ek parametrelerle WhatsApp Flows göndermek için lütfen API'yi kullan."
+
+msgid "Currently, address messages are only available for businesses based in India and their India customers. <a href=\"https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages\" target=\"_blank\">Click here</a> to read more information."
+msgstr "Şu anda adres mesajları yalnızca Hindistan merkezli işletmeler ve onların Hindistan'daki müşterileri için kullanılabilir. Daha fazla bilgi için <a href=\"https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages\" target=\"_blank\">buraya tıkla</a>."
+
+msgid "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Go to WhatsApp Manager</a> > Flows section to copy your Flow ID"
+msgstr "Flow kimliğini kopyalamak için <a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">WhatsApp Manager'a git</a> > Flows bölümü"
+
+msgid "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Go to WhatsApp Manager</a> > Flows section and open your Flow details page to list all screens available"
+msgstr "Kullanılabilir tüm ekranları listelemek için <a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">WhatsApp Manager'a git</a> > Flows bölümü ve Flow ayrıntıları sayfanı aç"
+
+msgid "Alcohol"
+msgstr "Alkol"
+
+msgid "Online Gambling"
+msgstr "Çevrim İçi Kumar"
+
+msgid "Physical Gambling"
+msgstr "Fiziksel Kumar"
+
+msgid "OTC Drugs"
+msgstr "Reçetesiz İlaçlar"
+
+msgid "Matrimony Service"
+msgstr "Evlilik Hizmeti"
+
+msgid "Upload image"
+msgstr "Görsel yükle"
+
+msgid "Upload video"
+msgstr "Video yükle"
+
+msgid "Upload document"
+msgstr "Belge yükle"
+
+msgid "Upload another image"
+msgstr "Başka bir görsel yükle"
+
+msgid "Upload another video"
+msgstr "Başka bir video yükle"
+
+msgid "Upload another document"
+msgstr "Başka bir belge yükle"
+
+msgid "Upload another file"
+msgstr "Başka bir dosya yükle"

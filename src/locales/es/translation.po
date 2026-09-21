@@ -61,6 +61,9 @@ msgstr "Contactos"
 msgid "No persons or contacts found for <1>%s</1>"
 msgstr "No se encontraron personas o contactos para <1>%s</1>"
 
+msgid "Unsupported file type"
+msgstr "Tipo de archivo no admitido"
+
 msgid "Close"
 msgstr "Cerrar"
 
@@ -538,7 +541,7 @@ msgstr "Ubicación"
 msgid "Location: <1>%s</1>"
 msgstr "Ubicación: <1>%s</1>"
 
-msgid "<0>Product retailer ID<0>: %s"
+msgid "<0>Product retailer ID</0>: %s"
 msgstr "<0>ID del minorista de producto</0>: %s"
 
 msgid "<0>Catalog ID</0>: %s"
@@ -659,9 +662,6 @@ msgstr ""
 
 msgid "Please enter a valid username and password!"
 msgstr "¡Por favor, introduce un nombre de usuario y contraseña válidos!"
-
-msgid "Unsupported file type"
-msgstr "Tipo de archivo no admitido"
 
 msgid "Please choose a supported image type (png, jpg)"
 msgstr "Por favor, elige un tipo de imagen admitido (png, jpg)"
@@ -894,63 +894,570 @@ msgstr "Lunes"
 
 msgid "%d chat found"
 msgid_plural "%d chats found"
-msgstr[0] "%d chat found"
-msgstr[1] "%d chats found"
+msgstr[0] "%d chat encontrado"
+msgstr[1] "%d chats encontrados"
 
 msgid "Loading chats"
-msgstr ""
+msgstr "Cargando chats"
 
 msgid "Unknown"
-msgstr ""
+msgstr "Desconocido"
 
 msgid "Close view"
-msgstr ""
+msgstr "Cerrar vista"
 
 msgid "Click here for more information."
-msgstr ""
+msgstr "Haz clic aquí para más información."
 
 msgid "(Code: %d)"
-msgstr ""
+msgstr "(Código: %d)"
 
 msgid "Waiting to be sent"
-msgstr ""
+msgstr "Esperando a ser enviado"
 
 msgid "Your current inbox"
-msgstr ""
+msgstr "Tu inbox actual"
 
 msgid "Select an inbox"
-msgstr ""
+msgstr "Selecciona un inbox"
 
 msgid "Failed to log in"
-msgstr ""
+msgstr "No se pudo iniciar sesión"
 
 msgid "Log in with password instead"
-msgstr ""
+msgstr "Iniciar sesión con contraseña en su lugar"
 
 msgid "Message Information"
-msgstr ""
+msgstr "Información del Mensaje"
 
 
 msgid "Sent at"
-msgstr ""
+msgstr "Enviado a las"
 
 
 msgid "Delivered at"
-msgstr ""
+msgstr "Entregado a las"
 
 
 msgid "Read at"
-msgstr ""
+msgstr "Leído a las"
 
 msgid "There are some problems sending your message:"
-msgstr ""
+msgstr "Hay algunos problemas al enviar tu mensaje:"
 
 msgid "There were some problems sending your message, but your message was sent successfully after problems have resolved."
-msgstr ""
+msgstr "Hubo algunos problemas al enviar tu mensaje, pero se envió correctamente una vez resueltos los problemas."
 
 msgid "Save as quick reply"
-msgstr ""
+msgstr "Guardar como respuesta rápida"
 
 
 msgid "Register new template"
-msgstr ""
+msgstr "Registrar nueva plantilla"
+
+msgid "Export Chats"
+msgstr "Exportar Chats"
+
+msgid "Export chats"
+msgstr "Exportar chats"
+
+msgid "Export by date"
+msgstr "Exportar por fecha"
+
+msgid "Export"
+msgstr "Exportar"
+
+msgid "You reacted with: %s"
+msgstr "Reaccionaste con: %s"
+
+msgid "Reacted with: %s"
+msgstr "Reaccionó con: %s"
+
+msgid "You deleted a reaction."
+msgstr "Eliminaste una reacción."
+
+msgid "Deleted a reaction."
+msgstr "Eliminó una reacción."
+
+msgid "Reactions"
+msgstr "Reacciones"
+
+msgid "Send an interactive message"
+msgstr "Enviar un mensaje interactivo"
+
+msgid "Send location request message"
+msgstr "Enviar mensaje de solicitud de ubicación"
+
+msgid "Location request message is a free-form message displaying only a <strong>body text</strong> and a <strong>send location button</strong>. When a WhatsApp user taps the button, a location sharing screen appears. The user can share their location from the sharing screen."
+msgstr "El mensaje de solicitud de ubicación es un mensaje de formato libre que muestra únicamente un <strong>texto del cuerpo</strong> y un <strong>botón de enviar ubicación</strong>. Cuando un usuario de WhatsApp toca el botón, aparece una pantalla para compartir la ubicación. El usuario puede compartir su ubicación desde esa pantalla."
+
+msgid "Enter your message here"
+msgstr "Escribe tu mensaje aquí"
+
+msgid "Send address message"
+msgstr "Enviar mensaje de dirección"
+
+msgid "Address messages give your users a simpler way to share the shipping address with your business."
+msgstr "Los mensajes de dirección ofrecen a tus usuarios una forma más sencilla de compartir la dirección de envío con tu empresa."
+
+msgid "Send call-to-action URL button message"
+msgstr "Enviar mensaje con botón de URL de llamada a la acción"
+
+msgid "Your customers may be hesitant to tap raw URLs containing lengthy or obscure strings in text messages. In these situations, you may wish to send an interactive call-to-action (CTA) URL button message."
+msgstr "Puede que tus clientes duden en tocar URLs sin formato que contienen cadenas largas o poco claras en los mensajes de texto. En esos casos, puedes enviar un mensaje interactivo con botón de URL de llamada a la acción (CTA)."
+
+msgid "Send flow message"
+msgstr "Enviar mensaje de Flow"
+
+msgid "You can use Flows to generate leads, recommend products, get new sales leads, or anything else where structured communication is more natural or comfortable for your customers."
+msgstr "Puedes usar los Flows para generar clientes potenciales, recomendar productos, conseguir nuevas oportunidades de venta o cualquier otra cosa en la que una comunicación estructurada sea más natural o cómoda para tus clientes."
+
+msgid "Message via referral"
+msgstr "Mensaje mediante referencia"
+
+msgid "Send catalog message"
+msgstr "Enviar mensaje de catálogo"
+
+msgid "Catalog messages are messages that allow you to showcase your product catalog entirely within WhatsApp."
+msgstr "Los mensajes de catálogo te permiten mostrar todo tu catálogo de productos dentro de WhatsApp."
+
+msgid "View catalog"
+msgstr "Ver catálogo"
+
+msgid "This field is required!"
+msgstr "¡Este campo es obligatorio!"
+
+msgid "This image isn't available anymore."
+msgstr "Esta imagen ya no está disponible."
+
+msgid "Go to 360Dialog Status Page"
+msgstr "Ir a la Página de Estado de 360Dialog"
+
+msgid "Connection error"
+msgstr "Error de conexión"
+
+msgid "No Internet connection. The inbox will refresh after the Internet is back."
+msgstr "Sin conexión a Internet. El inbox se actualizará cuando vuelva la conexión."
+
+msgid "Connection lost. You may not receive new messages in real time."
+msgstr "Se perdió la conexión. Es posible que no recibas mensajes nuevos en tiempo real."
+
+msgid "If the issue persists, you can try refreshing the page manually."
+msgstr "Si el problema persiste, puedes intentar actualizar la página manualmente."
+
+msgid "Scan this code to start a WhatsApp chat with this number."
+msgstr "Escanea este código para iniciar un chat de WhatsApp con este número."
+
+msgid "Search quick replies"
+msgstr "Buscar respuestas rápidas"
+
+msgid "No quick reply found."
+msgstr "No se encontró ninguna respuesta rápida."
+
+msgid "You are active now."
+msgstr "Ahora estás activo."
+
+msgid "You are inactive now."
+msgstr "Ahora estás inactivo."
+
+msgid "Click to toggle your status."
+msgstr "Haz clic para cambiar tu estado."
+
+msgid "New assignment"
+msgstr "Nueva asignación"
+
+msgid "A new chat has been assigned to you!"
+msgstr "¡Se te ha asignado un nuevo chat!"
+
+msgid "A new chat has been assigned to you: %s"
+msgstr "Se te ha asignado un nuevo chat: %s"
+
+msgid "Display"
+msgstr "Mostrar"
+
+msgid "Active"
+msgstr "Activo"
+
+msgid "Inactive"
+msgstr "Inactivo"
+
+msgid "As an admin, you can change active status of users."
+msgstr "Como administrador, puedes cambiar el estado activo de los usuarios."
+
+msgid "Resolved"
+msgstr "Resuelto"
+
+msgid "Mark as resolved"
+msgstr "Marcar como resuelto"
+
+msgid "Mark as unresolved"
+msgstr "Marcar como no resuelto"
+
+msgid "Create new user"
+msgstr "Crear nuevo usuario"
+
+msgid "User created"
+msgstr "Usuario creado"
+
+msgid "First name"
+msgstr "Nombre"
+
+msgid "Last name"
+msgstr "Apellido"
+
+msgid "Role"
+msgstr "Rol"
+
+msgid "Admin"
+msgstr "Administrador"
+
+msgid "App integration"
+msgstr "Integración de aplicación"
+
+msgid "Password (repeat)"
+msgstr "Contraseña (repetir)"
+
+msgid "Only letters and numbers are allowed."
+msgstr "Solo se permiten letras y números."
+
+msgid "Username is required."
+msgstr "El nombre de usuario es obligatorio."
+
+msgid "Password must be at least 8 characters long."
+msgstr "La contraseña debe tener al menos 8 caracteres."
+
+msgid "Passwords must match."
+msgstr "Las contraseñas deben coincidir."
+
+msgid "Optional. Leave it empty if the user will sign in with 360dialog."
+msgstr "Opcional. Déjalo vacío si el usuario iniciará sesión con 360dialog."
+
+msgid "Can use the inbox, except for actions marked as admin only."
+msgstr "Puede usar el inbox, excepto las acciones marcadas como exclusivas de administradores."
+
+msgid "Full access to the inbox, including the admin panel."
+msgstr "Acceso completo al inbox, incluido el panel de administración."
+
+msgid "API access for chatbots and integrations, without inbox access."
+msgstr "Acceso a la API para chatbots e integraciones, sin acceso al inbox."
+
+msgid "Activation link"
+msgstr "Enlace de activación"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again."
+msgstr "Este enlace se muestra una sola vez. Al abrirlo se activa el usuario y se devuelve el token de la API, que no se podrá volver a obtener con este enlace."
+
+msgid "This link is shown only once. The account is ready to be used after the link is opened."
+msgstr "Este enlace se muestra una sola vez. La cuenta estará lista para usarse después de abrir el enlace."
+
+msgid "The user was created, but the password could not be set."
+msgstr "El usuario se creó, pero no se pudo establecer la contraseña."
+
+msgid "Create"
+msgstr "Crear"
+
+msgid "The user <1>%s</1> has been created."
+msgstr "El usuario <1>%s</1> ha sido creado."
+
+msgid "Add button"
+msgstr "Añadir botón"
+
+msgid "Add card"
+msgstr "Añadir tarjeta"
+
+msgid "Add option"
+msgstr "Añadir opción"
+
+msgid "Add section"
+msgstr "Añadir sección"
+
+msgid "Address (optional)"
+msgstr "Dirección (opcional)"
+
+msgid "Available"
+msgstr "Disponibles"
+
+msgid "Button URL"
+msgstr "URL del botón"
+
+msgid "Button text"
+msgstr "Texto del botón"
+
+msgid "Card %s"
+msgstr "Tarjeta %s"
+
+msgid "Card body"
+msgstr "Cuerpo de la tarjeta"
+
+msgid "Code"
+msgstr "Código"
+
+msgid "Continue as"
+msgstr "Continuar como"
+
+msgid "Create new tag"
+msgstr "Crear nueva etiqueta"
+
+msgid "Create tag"
+msgstr "Crear etiqueta"
+
+msgid "Description:"
+msgstr "Descripción:"
+
+msgid "Details"
+msgstr "Detalles"
+
+msgid "Enter a valid phone number"
+msgstr "Introduce un número de teléfono válido"
+
+msgid "Flow token:"
+msgstr "Token del Flow:"
+
+msgid "Geolocation is not supported by your browser."
+msgstr "Tu navegador no admite la geolocalización."
+
+msgid "Interactive Messages"
+msgstr "Mensajes Interactivos"
+
+msgid "Invalid parameters"
+msgstr "Parámetros no válidos"
+
+msgid "Loading template messages..."
+msgstr "Cargando mensajes de plantilla..."
+
+msgid "Location name (optional)"
+msgstr "Nombre de la ubicación (opcional)"
+
+msgid "Location permission was denied. Please allow location access for this site in your browser settings."
+msgstr "Se denegó el permiso de ubicación. Por favor, permite el acceso a la ubicación para este sitio en la configuración de tu navegador."
+
+msgid "Login with 360dialog"
+msgstr "Iniciar sesión con 360dialog"
+
+msgid "Media is required"
+msgstr "El archivo multimedia es obligatorio"
+
+msgid "Name:"
+msgstr "Nombre:"
+
+msgid "No results"
+msgstr "Sin resultados"
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Open in WhatsApp"
+msgstr "Abrir en WhatsApp"
+
+msgid "Option description"
+msgstr "Descripción de la opción"
+
+msgid "Option title"
+msgstr "Título de la opción"
+
+msgid "Order number:"
+msgstr "Número de pedido:"
+
+msgid "Parameters cannot have new-line/tab characters or more than 3 consecutive spaces!"
+msgstr "¡Los parámetros no pueden contener saltos de línea, tabulaciones ni más de 3 espacios consecutivos!"
+
+msgid "Pick up where you left off"
+msgstr "Continúa donde lo dejaste"
+
+msgid "Please try refreshing the page. If the problem persists, clearing your browser cache may help."
+msgstr "Por favor, intenta actualizar la página. Si el problema persiste, puede ayudar borrar la caché de tu navegador."
+
+msgid "Provide address"
+msgstr "Proporcionar dirección"
+
+msgid "Remove button"
+msgstr "Eliminar botón"
+
+msgid "Remove card"
+msgstr "Eliminar tarjeta"
+
+msgid "Remove option"
+msgstr "Eliminar opción"
+
+msgid "Remove section"
+msgstr "Eliminar sección"
+
+msgid "Retrieving your location took too long. Please try again."
+msgstr "Se tardó demasiado en obtener tu ubicación. Por favor, inténtalo de nuevo."
+
+msgid "Search country"
+msgstr "Buscar país"
+
+msgid "Section title"
+msgstr "Título de la sección"
+
+msgid "Selected"
+msgstr "Seleccionadas"
+
+msgid "Send location"
+msgstr "Enviar ubicación"
+
+msgid "Sending..."
+msgstr "Enviando..."
+
+msgid "Share"
+msgstr "Compartir"
+
+msgid "Tag name"
+msgstr "Nombre de la etiqueta"
+
+msgid "The map could not be loaded. Please try again later."
+msgstr "No se pudo cargar el mapa. Por favor, inténtalo de nuevo más tarde."
+
+msgid "This chat has failed messages!"
+msgstr "¡Este chat tiene mensajes fallidos!"
+
+msgid "This file type is not supported, however you can still download it."
+msgstr "Este tipo de archivo no es compatible, pero aun así puedes descargarlo."
+
+msgid "Topic radio:"
+msgstr "Opción de tema:"
+
+msgid "Unable to retrieve your location."
+msgstr "No se pudo obtener tu ubicación."
+
+msgid "Unread"
+msgstr "No leídos"
+
+msgid "Unsupported message"
+msgstr "Mensaje no compatible"
+
+msgid "Uploaded successfully"
+msgstr "Subido correctamente"
+
+msgid "Use my current location"
+msgstr "Usar mi ubicación actual"
+
+msgid "Your location could not be determined. Please make sure Location Services are enabled for your browser in your system settings."
+msgstr "No se pudo determinar tu ubicación. Asegúrate de que los Servicios de Ubicación estén habilitados para tu navegador en la configuración de tu sistema."
+
+msgid "or"
+msgstr "o"
+
+msgid "or log in with another account"
+msgstr "o inicia sesión con otra cuenta"
+
+msgid "Current User"
+msgstr "Usuario Actual"
+
+msgid "via WhatsApp Business App"
+msgstr "mediante la app de WhatsApp Business"
+
+msgid "via API"
+msgstr "mediante la API"
+
+msgid "Header"
+msgstr "Encabezado"
+
+msgid "Body"
+msgstr "Cuerpo"
+
+msgid "Footer"
+msgstr "Pie de página"
+
+msgid "Action URL"
+msgstr "URL de la Acción"
+
+msgid "Action Display Text"
+msgstr "Texto Mostrado de la Acción"
+
+msgid "Country ISO Code"
+msgstr "Código ISO del País"
+
+msgid "Flow Token"
+msgstr "Token del Flow"
+
+msgid "Flow ID"
+msgstr "ID del Flow"
+
+msgid "Flow CTA"
+msgstr "CTA del Flow"
+
+msgid "Flow Action"
+msgstr "Acción del Flow"
+
+msgid "Flow Action Screen"
+msgstr "Pantalla de Acción del Flow"
+
+msgid "Call-to-action button text"
+msgstr "Texto del botón de llamada a la acción"
+
+msgid "Thumbnail Product Retailer ID"
+msgstr "ID del Minorista de Producto de la Miniatura"
+
+msgid "Send reply buttons message"
+msgstr "Enviar mensaje con botones de respuesta"
+
+msgid "Send list message"
+msgstr "Enviar mensaje de lista"
+
+msgid "Send media carousel message"
+msgstr "Enviar mensaje de carrusel multimedia"
+
+msgid "Reply buttons messages offer up to <strong>3 buttons</strong> as quick answer options. They are a quicker way for your customers to make a selection, and the tapped button is sent back to you as a reply."
+msgstr "Los mensajes con botones de respuesta ofrecen hasta <strong>3 botones</strong> como opciones de respuesta rápida. Son una forma más rápida de que tus clientes hagan una selección, y el botón pulsado se te envía de vuelta como respuesta."
+
+msgid "List messages offer your customers a choice of up to <strong>10 options</strong>, organized in one or more sections. The options are revealed when the customer taps the <strong>button</strong> and the selected option is sent back to you as a reply."
+msgstr "Los mensajes de lista ofrecen a tus clientes hasta <strong>10 opciones</strong>, organizadas en una o más secciones. Las opciones se muestran cuando el cliente pulsa el <strong>botón</strong>, y la opción seleccionada se te envía de vuelta como respuesta."
+
+msgid "Media carousel messages display a set of <strong>2 to 10</strong> horizontally scrollable cards. Each card shows an <strong>image or video</strong>, an optional body text and a <strong>URL button</strong>."
+msgstr "Los mensajes de carrusel multimedia muestran un conjunto de <strong>2 a 10</strong> tarjetas desplazables horizontalmente. Cada tarjeta muestra una <strong>imagen o vídeo</strong>, un texto de cuerpo opcional y un <strong>botón de URL</strong>."
+
+msgid "Cards with quick-reply buttons are currently only supported when sent via the API."
+msgstr "Las tarjetas con botones de respuesta rápida solo son compatibles actualmente cuando se envían a través de la API."
+
+msgid "To send WhatsApp Flows with additional parameters, please use the API."
+msgstr "Para enviar WhatsApp Flows con parámetros adicionales, por favor usa la API."
+
+msgid "Currently, address messages are only available for businesses based in India and their India customers. <a href=\"https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages\" target=\"_blank\">Click here</a> to read more information."
+msgstr "Actualmente, los mensajes de dirección solo están disponibles para empresas ubicadas en la India y sus clientes en la India. <a href=\"https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages\" target=\"_blank\">Haz clic aquí</a> para leer más información."
+
+msgid "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Go to WhatsApp Manager</a> > Flows section to copy your Flow ID"
+msgstr "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Ve al Administrador de WhatsApp</a> > sección Flows para copiar tu Flow ID"
+
+msgid "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Go to WhatsApp Manager</a> > Flows section and open your Flow details page to list all screens available"
+msgstr "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Ve al Administrador de WhatsApp</a> > sección Flows y abre la página de detalles de tu Flow para ver todas las pantallas disponibles"
+
+msgid "Alcohol"
+msgstr "Alcohol"
+
+msgid "Online Gambling"
+msgstr "Juegos de Azar en Línea"
+
+msgid "Physical Gambling"
+msgstr "Juegos de Azar Presenciales"
+
+msgid "OTC Drugs"
+msgstr "Medicamentos de Venta Libre"
+
+msgid "Matrimony Service"
+msgstr "Servicio Matrimonial"
+
+msgid "Upload image"
+msgstr "Subir imagen"
+
+msgid "Upload video"
+msgstr "Subir vídeo"
+
+msgid "Upload document"
+msgstr "Subir documento"
+
+msgid "Upload another image"
+msgstr "Subir otra imagen"
+
+msgid "Upload another video"
+msgstr "Subir otro vídeo"
+
+msgid "Upload another document"
+msgstr "Subir otro documento"
+
+msgid "Upload another file"
+msgstr "Subir otro archivo"

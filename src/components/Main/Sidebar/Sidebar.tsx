@@ -140,9 +140,7 @@ import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
 import UserAvailability from '@src/components/UserAvailability';
 import UserListView from '@src/components/UserListView';
-import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
-import { User, UserList } from '@src/types/users';
-import { setUsers } from '@src/store/reducers/usersReducer';
+import { updateUserAvailability } from '@src/api/usersApi';
 import { logout } from '@src/api/authApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
@@ -943,21 +941,6 @@ const Sidebar: React.FC<Props> = ({
 		setCreateUserDialogVisible(true);
 	};
 
-	// Keeps the user list in sync after a new user is created, so that it can be
-	// picked in chat assignment without reloading the app
-	const refreshUsers = async () => {
-		try {
-			const data = await fetchUsers(5000);
-			const userList: UserList = {};
-			data.results.forEach((user: User) => {
-				userList[user.id] = user;
-			});
-			dispatch(setUsers(userList));
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		}
-	};
-
 	const showOpenInWhatsApp = () => {
 		setAnchorEl(null);
 		setOpenInWhatsAppDialogVisible(true);
@@ -1568,7 +1551,6 @@ const Sidebar: React.FC<Props> = ({
 			<CreateUserDialog
 				open={isCreateUserDialogVisible}
 				setOpen={setCreateUserDialogVisible}
-				onCreated={refreshUsers}
 			/>
 
 			<OpenInWhatsAppDialog

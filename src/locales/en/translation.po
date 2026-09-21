@@ -530,7 +530,7 @@ msgstr ""
 msgid "Location: <1>%s</1>"
 msgstr ""
 
-msgid "<0>Product retailer ID<0>: %s"
+msgid "<0>Product retailer ID</0>: %s"
 msgstr ""
 
 msgid "<0>Catalog ID</0>: %s"
@@ -1134,4 +1134,304 @@ msgid "Create"
 msgstr ""
 
 msgid "The user <1>%s</1> has been created."
+msgstr ""
+
+msgid "Add button"
+msgstr ""
+
+msgid "Add card"
+msgstr ""
+
+msgid "Add option"
+msgstr ""
+
+msgid "Add section"
+msgstr ""
+
+msgid "Address (optional)"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Button URL"
+msgstr ""
+
+msgid "Button text"
+msgstr ""
+
+msgid "Card %s"
+msgstr ""
+
+msgid "Card body"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid "Continue as"
+msgstr ""
+
+msgid "Create new tag"
+msgstr ""
+
+msgid "Create tag"
+msgstr ""
+
+msgid "Description:"
+msgstr ""
+
+msgid "Details"
+msgstr ""
+
+msgid "Enter a valid phone number"
+msgstr ""
+
+msgid "Flow token:"
+msgstr ""
+
+msgid "Geolocation is not supported by your browser."
+msgstr ""
+
+msgid "Interactive Messages"
+msgstr ""
+
+msgid "Invalid parameters"
+msgstr ""
+
+msgid "Loading template messages..."
+msgstr ""
+
+msgid "Location name (optional)"
+msgstr ""
+
+msgid "Location permission was denied. Please allow location access for this site in your browser settings."
+msgstr ""
+
+msgid "Login with 360dialog"
+msgstr ""
+
+msgid "Media is required"
+msgstr ""
+
+msgid "Name:"
+msgstr ""
+
+msgid "No results"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Open in WhatsApp"
+msgstr ""
+
+msgid "Option description"
+msgstr ""
+
+msgid "Option title"
+msgstr ""
+
+msgid "Order number:"
+msgstr ""
+
+msgid "Parameters cannot have new-line/tab characters or more than 3 consecutive spaces!"
+msgstr ""
+
+msgid "Pick up where you left off"
+msgstr ""
+
+msgid "Please try refreshing the page. If the problem persists, clearing your browser cache may help."
+msgstr ""
+
+msgid "Provide address"
+msgstr ""
+
+msgid "Remove button"
+msgstr ""
+
+msgid "Remove card"
+msgstr ""
+
+msgid "Remove option"
+msgstr ""
+
+msgid "Remove section"
+msgstr ""
+
+msgid "Retrieving your location took too long. Please try again."
+msgstr ""
+
+msgid "Search country"
+msgstr ""
+
+msgid "Section title"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Send location"
+msgstr ""
+
+msgid "Sending..."
+msgstr ""
+
+msgid "Share"
+msgstr ""
+
+msgid "Tag name"
+msgstr ""
+
+msgid "The map could not be loaded. Please try again later."
+msgstr ""
+
+msgid "This chat has failed messages!"
+msgstr ""
+
+msgid "This file type is not supported, however you can still download it."
+msgstr ""
+
+msgid "Topic radio:"
+msgstr ""
+
+msgid "Unable to retrieve your location."
+msgstr ""
+
+msgid "Unread"
+msgstr ""
+
+msgid "Unsupported message"
+msgstr ""
+
+msgid "Uploaded successfully"
+msgstr ""
+
+msgid "Use my current location"
+msgstr ""
+
+msgid "Your location could not be determined. Please make sure Location Services are enabled for your browser in your system settings."
+msgstr ""
+
+msgid "or"
+msgstr ""
+
+msgid "or log in with another account"
+msgstr ""
+
+msgid "Current User"
+msgstr ""
+
+msgid "via WhatsApp Business App"
+msgstr ""
+
+msgid "via API"
+msgstr ""
+
+msgid "Header"
+msgstr ""
+
+msgid "Body"
+msgstr ""
+
+msgid "Footer"
+msgstr ""
+
+msgid "Action URL"
+msgstr ""
+
+msgid "Action Display Text"
+msgstr ""
+
+msgid "Country ISO Code"
+msgstr ""
+
+msgid "Flow Token"
+msgstr ""
+
+msgid "Flow ID"
+msgstr ""
+
+msgid "Flow CTA"
+msgstr ""
+
+msgid "Flow Action"
+msgstr ""
+
+msgid "Flow Action Screen"
+msgstr ""
+
+msgid "Call-to-action button text"
+msgstr ""
+
+msgid "Thumbnail Product Retailer ID"
+msgstr ""
+
+msgid "Send reply buttons message"
+msgstr ""
+
+msgid "Send list message"
+msgstr ""
+
+msgid "Send media carousel message"
+msgstr ""
+
+msgid "Reply buttons messages offer up to <strong>3 buttons</strong> as quick answer options. They are a quicker way for your customers to make a selection, and the tapped button is sent back to you as a reply."
+msgstr ""
+
+msgid "List messages offer your customers a choice of up to <strong>10 options</strong>, organized in one or more sections. The options are revealed when the customer taps the <strong>button</strong> and the selected option is sent back to you as a reply."
+msgstr ""
+
+msgid "Media carousel messages display a set of <strong>2 to 10</strong> horizontally scrollable cards. Each card shows an <strong>image or video</strong>, an optional body text and a <strong>URL button</strong>."
+msgstr ""
+
+msgid "Cards with quick-reply buttons are currently only supported when sent via the API."
+msgstr ""
+
+msgid "To send WhatsApp Flows with additional parameters, please use the API."
+msgstr ""
+
+msgid "Currently, address messages are only available for businesses based in India and their India customers. <a href=\"https://developers.facebook.com/docs/whatsapp/cloud-api/messages/address-messages\" target=\"_blank\">Click here</a> to read more information."
+msgstr ""
+
+msgid "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Go to WhatsApp Manager</a> > Flows section to copy your Flow ID"
+msgstr ""
+
+msgid "<a href=\"https://business.facebook.com/latest/whatsapp_manager\" target=\"_blank\">Go to WhatsApp Manager</a> > Flows section and open your Flow details page to list all screens available"
+msgstr ""
+
+msgid "Alcohol"
+msgstr ""
+
+msgid "Online Gambling"
+msgstr ""
+
+msgid "Physical Gambling"
+msgstr ""
+
+msgid "OTC Drugs"
+msgstr ""
+
+msgid "Matrimony Service"
+msgstr ""
+
+msgid "Upload image"
+msgstr ""
+
+msgid "Upload video"
+msgstr ""
+
+msgid "Upload document"
+msgstr ""
+
+msgid "Upload another image"
+msgstr ""
+
+msgid "Upload another video"
+msgstr ""
+
+msgid "Upload another document"
+msgstr ""
+
+msgid "Upload another file"
 msgstr ""
