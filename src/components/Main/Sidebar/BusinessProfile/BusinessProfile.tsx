@@ -370,7 +370,7 @@ const BusinessProfile: React.FC<Props> = ({
 													key={verticalOption.value}
 													value={verticalOption.value}
 												>
-													{verticalOption.label}
+													{t(verticalOption.label)}
 												</MenuItem>
 											))}
 										</Select>

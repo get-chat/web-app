@@ -201,7 +201,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 						) : (
 							<DialogContentText>
 								{t(
-									'This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will	clear the assignment.'
+									'This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.'
 								)}
 							</DialogContentText>
 						)}

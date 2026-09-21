@@ -44,6 +44,7 @@ import NewMessageModel from '../../../api/models/NewMessageModel';
 import PubSub from 'pubsub-js';
 import BusinessProfile from './BusinessProfile';
 import ChangePasswordDialog from '../../ChangePasswordDialog';
+import CreateUserDialog from '@src/components/CreateUserDialog';
 import SearchMessageResult from '../../SearchMessageResult/SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -80,6 +81,7 @@ import { addChats, setChats } from '@src/store/reducers/chatsReducer';
 import PasswordIcon from '@mui/icons-material/Password';
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import DateRangeIcon from '@mui/icons-material/DateRange';
@@ -278,6 +280,8 @@ const Sidebar: React.FC<Props> = ({
 	const [isChangePasswordDialogVisible, setChangePasswordDialogVisible] =
 		useState(false);
 	const [isOpenInWhatsAppDialogVisible, setOpenInWhatsAppDialogVisible] =
+		useState(false);
+	const [isCreateUserDialogVisible, setCreateUserDialogVisible] =
 		useState(false);
 	const [isNotificationsVisible, setNotificationsVisible] = useState(false);
 	const [isUserListVisible, setUserListVisible] = useState(false);
@@ -932,6 +936,11 @@ const Sidebar: React.FC<Props> = ({
 		setChangePasswordDialogVisible(true);
 	};
 
+	const showCreateUser = () => {
+		setAnchorEl(null);
+		setCreateUserDialogVisible(true);
+	};
+
 	const showOpenInWhatsApp = () => {
 		setAnchorEl(null);
 		setOpenInWhatsAppDialogVisible(true);
@@ -1502,6 +1511,14 @@ const Sidebar: React.FC<Props> = ({
 					{t('Export chats')}
 				</MenuItem>*/}
 				{currentUser?.profile?.role === 'admin' && <Divider />}
+				{currentUser?.profile?.role === 'admin' && !isReadOnly && (
+					<MenuItem onClick={showCreateUser} data-test-id="create-user-button">
+						<ListItemIcon>
+							<PersonAddAltIcon />
+						</ListItemIcon>
+						{t('Create new user')}
+					</MenuItem>
+				)}
 				{currentUser?.profile?.role === 'admin' && (
 					<MenuItem
 						component={Link}
@@ -1529,6 +1546,11 @@ const Sidebar: React.FC<Props> = ({
 			<ChangePasswordDialog
 				open={isChangePasswordDialogVisible}
 				setOpen={setChangePasswordDialogVisible}
+			/>
+
+			<CreateUserDialog
+				open={isCreateUserDialogVisible}
+				setOpen={setCreateUserDialogVisible}
 			/>
 
 			<OpenInWhatsAppDialog
