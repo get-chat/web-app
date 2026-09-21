@@ -30,6 +30,8 @@ import { USER_ROLE_LABELS } from '@src/helpers/UserHelper';
 interface Props {
 	open: boolean;
 	setOpen: (value: boolean) => void;
+	// Called once the user exists, so a caller showing a user list can refresh it
+	onCreated?: () => void;
 }
 
 // Usernames are validated by the API too, only alphanumeric characters are allowed
@@ -97,7 +99,7 @@ const parseApiError = (
 	};
 };
 
-const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
+const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 	const { t } = useTranslation();
 
 	const [username, setUsername] = useState('');
@@ -233,6 +235,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen }) => {
 
 		setRequesting(false);
 		setCreatedUser(user);
+		onCreated?.();
 	};
 
 	const copyActivationLink = async () => {

@@ -2,6 +2,8 @@ import * as Styled from './UserListView.styles';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, IconButton, Switch } from '@mui/material';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
 import { User, UserAvailabilityEvent, UserList } from '@src/types/users';
@@ -13,6 +15,7 @@ import { EVENT_TOPIC_USER_AVAILABILITY } from '@src/Constants';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import { useAppSelector } from '@src/store/hooks';
 import { getUserRoleLabel, sortUsers } from '@src/helpers/UserHelper';
+import CreateUserDialog from '@src/components/CreateUserDialog';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -26,6 +29,7 @@ const UserListView: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+	const isReadOnly = useAppSelector((state) => state.UI.isReadOnly);
 	const isUserAvailabilityFeatureEnabled = useAppSelector(
 		(state) => state.isUserAvailabilityFeatureEnabled.value
 	);
@@ -34,10 +38,13 @@ const UserListView: React.FC<Props> = ({
 	// availability to the user themselves or an admin
 	const isAdmin = currentUser?.profile?.role === 'admin';
 	const canChangeAvailability = isUserAvailabilityFeatureEnabled && isAdmin;
+	const canCreateUsers = isAdmin && !isReadOnly;
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string>();
 	const [users, setUsers] = useState<UserList>({});
+	const [isCreateUserDialogVisible, setCreateUserDialogVisible] =
+		useState(false);
 
 	useEffect(() => {
 		listUsers();
@@ -119,10 +126,27 @@ const UserListView: React.FC<Props> = ({
 
 				<h3>{t('Users')}</h3>
 			</Styled.Header>
-			{canChangeAvailability && (
-				<Styled.Description>
-					{t('As an admin, you can change active status of users.')}
-				</Styled.Description>
+			{(canChangeAvailability || canCreateUsers) && (
+				<Styled.Actions>
+					{canCreateUsers && (
+						<Styled.CreateUserButton
+							fullWidth
+							startIcon={<PersonAddAltIcon />}
+							onClick={() => setCreateUserDialogVisible(true)}
+							data-test-id="users-create-user-button"
+						>
+							{t('Create new user')}
+						</Styled.CreateUserButton>
+					)}
+					{canChangeAvailability && (
+						<Styled.Hint>
+							<InfoOutlinedIcon />
+							<span>
+								{t('As an admin, you can change active status of users.')}
+							</span>
+						</Styled.Hint>
+					)}
+				</Styled.Actions>
 			)}
 
 			{isLoading ? (
@@ -175,6 +199,12 @@ const UserListView: React.FC<Props> = ({
 					))}
 				</Styled.Body>
 			)}
+
+			<CreateUserDialog
+				open={isCreateUserDialogVisible}
+				setOpen={setCreateUserDialogVisible}
+				onCreated={listUsers}
+			/>
 		</Styled.Container>
 	);
 };

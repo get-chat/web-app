@@ -1022,14 +1022,11 @@ const Sidebar: React.FC<Props> = ({
 							<NotificationsIcon />
 						</IconButton>
 					</Tooltip>
-					{isUserAvailabilityFeatureEnabled &&
-						currentUser?.profile?.role === 'admin' && (
-							<Tooltip title={t('Users')} disableInteractive>
-								<IconButton onClick={displayUserList} size="large">
-									<GroupIcon />
-								</IconButton>
-							</Tooltip>
-						)}
+					<Tooltip title={t('Users')} disableInteractive>
+						<IconButton onClick={displayUserList} size="large">
+							<GroupIcon />
+						</IconButton>
+					</Tooltip>
 					{currentUser?.profile?.role === 'admin' && (
 						<Tooltip title={t('Admin panel')} disableInteractive>
 							<Styled.AdminPanelButton
