@@ -56,7 +56,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 							isStatic: true,
 							parameterHint: '<id>',
 							description: [
-								t('Send a saved response'),
+								t('Send a quick reply'),
 								'Alias: ' + COMMAND_SAVED_RESPONSE_ALIAS,
 							].join('\n'),
 						},
@@ -185,7 +185,7 @@ const useQuickActionsMenu = ({ input, isExpired }: Props) => {
 					command: '/' + savedResponse.text.toLowerCase(),
 					isStatic: false,
 					parameters: [],
-					description: t('Send this saved response'),
+					description: t('Send this quick reply'),
 					runCommand: true,
 					customActionCommand: COMMAND_SAVED_RESPONSE + ' ' + savedResponse.id,
 				});

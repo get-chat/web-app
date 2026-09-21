@@ -80,8 +80,13 @@ export const CONTACTS_TEMP_LIMIT = 100;
 
 export const FORM_VALIDATION_ERROR = 'FORM_VALIDATION_ERROR';
 
-export const COMMAND_SAVED_RESPONSE = '/response';
-export const COMMAND_SAVED_RESPONSE_ALIAS = '/r';
+export const COMMAND_SAVED_RESPONSE = '/quickreply';
+export const COMMAND_SAVED_RESPONSE_ALIAS = '/q';
+
+// Previous naming, still accepted so existing users are not broken,
+// but no longer suggested in the quick actions menu
+export const COMMAND_SAVED_RESPONSE_LEGACY = '/response';
+export const COMMAND_SAVED_RESPONSE_LEGACY_ALIAS = '/r';
 
 export const COMMAND_TEMPLATE = '/template';
 export const COMMAND_TEMPLATE_ALIAS = '/t';

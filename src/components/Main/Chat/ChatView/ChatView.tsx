@@ -9,6 +9,8 @@ import {
 	COMMAND_ASSIGN_ALIAS,
 	COMMAND_SAVED_RESPONSE,
 	COMMAND_SAVED_RESPONSE_ALIAS,
+	COMMAND_SAVED_RESPONSE_LEGACY,
+	COMMAND_SAVED_RESPONSE_LEGACY_ALIAS,
 	COMMAND_SEARCH,
 	COMMAND_SEARCH_ALIAS,
 	COMMAND_TEMPLATE,
@@ -1997,7 +1999,7 @@ const ChatView: React.FC<Props> = (props) => {
 				if (savedResponse) {
 					sendCustomTextMessage(savedResponse.text);
 				} else {
-					window.displayCustomError('Saved response not found!');
+					window.displayCustomError('Quick reply not found!');
 				}
 			}
 		};
@@ -2039,7 +2041,9 @@ const ChatView: React.FC<Props> = (props) => {
 					break;
 				}
 				case COMMAND_SAVED_RESPONSE:
-				case COMMAND_SAVED_RESPONSE_ALIAS: {
+				case COMMAND_SAVED_RESPONSE_ALIAS:
+				case COMMAND_SAVED_RESPONSE_LEGACY:
+				case COMMAND_SAVED_RESPONSE_LEGACY_ALIAS: {
 					handleSavedResponseCommand();
 					break;
 				}

@@ -186,11 +186,11 @@ msgstr "Existem mensagens não enviadas no chat. Se você continuar, eles serão
 msgid "An error has occurred."
 msgstr "Ocorreu um erro."
 
-msgid "Saved as response successfully!"
-msgstr "Salvo como resposta com sucesso!"
+msgid "Saved as quick reply successfully!"
+msgstr "Salvo como resposta rápida com sucesso!"
 
-msgid "Deleted response successfully!"
-msgstr "Resposta excluída com sucesso!"
+msgid "Deleted quick reply successfully!"
+msgstr "Resposta rápida excluída com sucesso!"
 
 msgid "Hey"
 msgstr "Ei"
@@ -225,8 +225,8 @@ msgstr "Adicione mais"
 msgid "Drag and drop here"
 msgstr "Arraste e solte aqui"
 
-msgid "No response message have been saved yet."
-msgstr "Nenhuma mensagem de resposta foi salva ainda."
+msgid "No quick replies have been saved yet."
+msgstr "Nenhuma resposta rápida foi salva ainda."
 
 msgid "Send"
 msgstr "Enviar"
@@ -234,8 +234,8 @@ msgstr "Enviar"
 msgid "Oops!"
 msgstr "Ops!"
 
-msgid "Are you sure you want to delete this saved response?"
-msgstr "Tem certeza de que deseja excluir esta resposta salva?"
+msgid "Are you sure you want to delete this quick reply?"
+msgstr "Tem certeza de que deseja excluir esta resposta rápida?"
 
 msgid "Yes"
 msgstr "Sim"
@@ -719,8 +719,8 @@ msgstr "Gravação"
 msgid "Toggle event history"
 msgstr "Alternar histórico de eventos"
 
-msgid "Saved Responses"
-msgstr "Respostas salvas"
+msgid "Quick Replies"
+msgstr "Respostas rápidas"
 
 msgid "Expired (commands only)"
 msgstr "Expirado (somente comandos)"
@@ -773,11 +773,11 @@ msgstr "Procure uma mensagem"
 msgid "Send this template"
 msgstr "Envie este modelo"
 
-msgid "Send a saved response"
-msgstr "Envie uma resposta salva"
+msgid "Send a quick reply"
+msgstr "Envie uma resposta rápida"
 
-msgid "Send this saved response"
-msgstr "Envie esta resposta salva"
+msgid "Send this quick reply"
+msgstr "Envie esta resposta rápida"
 
 msgid "Users"
 msgstr "Usuários"

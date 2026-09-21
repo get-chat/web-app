@@ -123,7 +123,7 @@ const SavedResponseList: React.FC<Props> = ({
 								setSearchTriggered(true);
 							}}
 							isLoading={isLoading}
-							placeholder={t('Search response messages')}
+							placeholder={t('Search quick replies')}
 							isFocusStyleEnabled={false}
 						/>
 					</Styled.SearchContainer>
@@ -131,8 +131,8 @@ const SavedResponseList: React.FC<Props> = ({
 						{savedResponses.length === 0 && (
 							<div className="savedResponses__emptyInfo mt-3">
 								{search
-									? t('No response message found.')
-									: t('No response message have been saved yet.')}
+									? t('No quick reply found.')
+									: t('No quick replies have been saved yet.')}
 							</div>
 						)}
 
@@ -180,7 +180,7 @@ const SavedResponseList: React.FC<Props> = ({
 					<DialogTitle>{t('Oops!')}</DialogTitle>
 					<DialogContent>
 						<DialogContentText>
-							{t('Are you sure you want to delete this saved response?')}
+							{t('Are you sure you want to delete this quick reply?')}
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
