@@ -20,7 +20,7 @@ const useSavedResponses = () => {
 	const handleDeleteSavedResponse = async (id: number) => {
 		try {
 			await deleteSavedResponse(id);
-			window.displaySuccess('Deleted response successfully!');
+			window.displaySuccess('Deleted quick reply successfully!');
 			await handleFetchSavedResponses();
 		} catch (error) {
 			console.error(error);

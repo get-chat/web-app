@@ -514,7 +514,7 @@ const ChatFooter: React.FC<Props> = ({
 
 					{!isExpired && (
 						<Tooltip
-							title={t('Saved Responses')}
+							title={t('Quick Replies')}
 							placement="top"
 							className={isAttachmentOptionsVisible ? 'desktopOnly' : ''}
 							disableInteractive

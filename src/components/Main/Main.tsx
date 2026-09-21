@@ -1069,7 +1069,7 @@ const Main: React.FC = () => {
 			await createSavedResponse({ text });
 
 			// Display a success message
-			displaySuccess('Saved as response successfully!');
+			displaySuccess('Saved as quick reply successfully!');
 
 			// Reload saved responses
 			await handleFetchSavedResponses();
@@ -1085,7 +1085,7 @@ const Main: React.FC = () => {
 		// Check if it needs to be loaded
 		if (Object.keys(contactProvidersData).length !== 0) {
 			setProgress(35);
-			setLoadingComponent('Saved Responses');
+			setLoadingComponent('Quick Replies');
 			await handleFetchSavedResponses();
 			return;
 		}
@@ -1096,7 +1096,7 @@ const Main: React.FC = () => {
 			setContactProvidersData(preparedData);
 
 			setProgress(35);
-			setLoadingComponent('Saved Responses');
+			setLoadingComponent('Quick Replies');
 
 			// Trigger next request
 			handleFetchSavedResponses();
