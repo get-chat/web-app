@@ -473,5 +473,18 @@
 	"App integrations are not e-mailed. Use the activation link below to get their API token.": "Las integraciones de aplicaciones no reciben correos. Usa el enlace de activación de abajo para obtener su token de API.",
 	"No activation e-mail was sent, so the user needs the activation link below from you.": "No se envió ningún correo de activación, así que el usuario necesita que le facilites el enlace de activación de abajo.",
 	"This link is shown only once. Keep it in case the e-mail does not arrive.": "Este enlace se muestra una sola vez. Guárdalo por si el correo no llega.",
-	"Activation e-mail sent to <1>%s</1>.": "Correo de activación enviado a <1>%s</1>."
+	"Activation e-mail sent to <1>%s</1>.": "Correo de activación enviado a <1>%s</1>.",
+	"At least 8 characters. Avoid common and entirely numeric passwords.": "Al menos 8 caracteres. Evita contraseñas comunes o solo numéricas.",
+	"Set password": "Establecer contraseña",
+	"Set your password": "Establece tu contraseña",
+	"Choose a password to finish activating your account.": "Elige una contraseña para terminar de activar tu cuenta.",
+	"This activation link is invalid or was already used.": "Este enlace de activación no es válido o ya se ha utilizado.",
+	"They can choose their own password with the activation link.": "El usuario puede elegir su propia contraseña con el enlace de activación.",
+	"This password is too short. It must contain at least 8 characters.": "Esta contraseña es demasiado corta. Debe tener al menos 8 caracteres.",
+	"This password is too common.": "Esta contraseña es demasiado común.",
+	"This password is entirely numeric.": "Esta contraseña es completamente numérica.",
+	"The password is too similar to the username.": "La contraseña es demasiado parecida al nombre de usuario.",
+	"The password is too similar to the first name.": "La contraseña es demasiado parecida al nombre.",
+	"The password is too similar to the last name.": "La contraseña es demasiado parecida al apellido.",
+	"The password is too similar to the email address.": "La contraseña es demasiado parecida a la dirección de correo."
 }

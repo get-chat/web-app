@@ -35,6 +35,8 @@ interface UIState {
 	// here right after they opened their activation link
 	isAccountActivated: boolean;
 	activatedUsername: string | undefined;
+	// The code of an activation link, while its user is choosing a password
+	activationCode: string | undefined;
 }
 
 const initialState: UIState = {
@@ -69,6 +71,7 @@ const initialState: UIState = {
 	webSocketDisconnectionCode: undefined,
 	isAccountActivated: false,
 	activatedUsername: undefined,
+	activationCode: undefined,
 };
 
 const closeSections = (state: Draft<UIState>) => {

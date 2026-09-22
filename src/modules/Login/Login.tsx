@@ -37,7 +37,9 @@ import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
 import { User } from '@src/types/users';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
-import { useAppSelector } from '@src/store/hooks';
+import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import { setState } from '@src/store/reducers/UIReducer';
+import SetPasswordForm from './SetPasswordForm';
 
 const Login: React.FC = () => {
 	const config = useContext(AppConfigContext);
@@ -60,6 +62,7 @@ const Login: React.FC = () => {
 	const activatedUsername = useAppSelector(
 		(state) => state.UI.activatedUsername
 	);
+	const activationCode = useAppSelector((state) => state.UI.activationCode);
 
 	const [username, setUsername] = useState(activatedUsername ?? '');
 	const [password, setPassword] = useState('');
@@ -79,6 +82,24 @@ const Login: React.FC = () => {
 
 	const navigate = useNavigate();
 	const location = useLocation();
+	const dispatch = useAppDispatch();
+
+	const onPasswordSet = (setUsername: string) => {
+		// Hand over to the login form, with the activation notice and the
+		// username prefilled
+		dispatch(
+			setState({
+				activationCode: undefined,
+				isAccountActivated: true,
+				activatedUsername: setUsername,
+			})
+		);
+	};
+
+	const onInvalidActivationCode = () => {
+		dispatch(setState({ activationCode: undefined }));
+		setLoginError('This activation link is invalid or was already used.');
+	};
 
 	const [searchParams] = useSearchParams();
 
@@ -174,7 +195,8 @@ const Login: React.FC = () => {
 
 		// No (valid) token, check if there is a backend session (admin panel or SSO)
 		// Skipped for invalidToken error case as the session is being cleared then
-		if (!getToken() && errorCase !== 'invalidToken') {
+		// and while an activation link's user is choosing their password
+		if (!getToken() && errorCase !== 'invalidToken' && !activationCode) {
 			try {
 				// withCredentials sends the session cookie also cross-origin (local dev)
 				setSessionUser(await fetchCurrentUser({ withCredentials: true }));
@@ -327,14 +349,25 @@ const Login: React.FC = () => {
 							</Styled.InboxUrl>
 						)}
 
-						<h2>{t('Welcome')}</h2>
+						<h2>{activationCode ? t('Set your password') : t('Welcome')}</h2>
 						<p>
-							{sessionUser
+							{activationCode
+								? t('Choose a password to finish activating your account.')
+								: sessionUser
 								? t('Pick up where you left off')
 								: t('Please log in to start')}
 						</p>
 
-						{sessionUser && (
+						{activationCode && (
+							<SetPasswordForm
+								code={activationCode}
+								username={activatedUsername}
+								onPasswordSet={onPasswordSet}
+								onInvalidCode={onInvalidActivationCode}
+							/>
+						)}
+
+						{!activationCode && sessionUser && (
 							<>
 								<Styled.SessionCard
 									data-testid="continue-with-session"
@@ -369,7 +402,7 @@ const Login: React.FC = () => {
 							</>
 						)}
 
-						{isAccountActivated && !loginError && (
+						{!activationCode && isAccountActivated && !loginError && (
 							<Styled.LoginAlert severity="success">
 								{t(
 									'Your account has been activated. Please log in to continue.'
@@ -377,13 +410,13 @@ const Login: React.FC = () => {
 							</Styled.LoginAlert>
 						)}
 
-						{loginError && (
+						{!activationCode && loginError && (
 							<Styled.LoginAlert severity="error">
 								{t(loginError)}
 							</Styled.LoginAlert>
 						)}
 
-						{is360dialogLoginEnabled(config) && (
+						{!activationCode && is360dialogLoginEnabled(config) && (
 							<>
 								<Styled.SSOLoginButton
 									data-testid="login-with-360dialog"
@@ -401,49 +434,53 @@ const Login: React.FC = () => {
 							</>
 						)}
 
-						<form onSubmit={doLogin}>
-							<TextField
-								variant="standard"
-								data-testid="username"
-								value={username}
-								onChange={(e) => setUsername(e.target.value)}
-								label={t('Username')}
-								autoComplete="username"
-								size="medium"
-								fullWidth={true}
-							/>
-							<TextField
-								variant="standard"
-								data-testid="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								type="password"
-								label={t('Password')}
-								autoComplete="current-password"
-								size="medium"
-								fullWidth={true}
-							/>
-							<Button
-								data-testid="submit"
-								type="submit"
-								size="large"
-								variant="outlined"
-								color="primary"
-								fullWidth
-								disableElevation
-							>
-								{t('Log in')}
-							</Button>
-						</form>
+						{!activationCode && (
+							<form onSubmit={doLogin}>
+								<TextField
+									variant="standard"
+									data-testid="username"
+									value={username}
+									onChange={(e) => setUsername(e.target.value)}
+									label={t('Username')}
+									autoComplete="username"
+									size="medium"
+									fullWidth={true}
+								/>
+								<TextField
+									variant="standard"
+									data-testid="password"
+									value={password}
+									onChange={(e) => setPassword(e.target.value)}
+									type="password"
+									label={t('Password')}
+									autoComplete="current-password"
+									size="medium"
+									fullWidth={true}
+								/>
+								<Button
+									data-testid="submit"
+									type="submit"
+									size="large"
+									variant="outlined"
+									color="primary"
+									fullWidth
+									disableElevation
+								>
+									{t('Log in')}
+								</Button>
+							</form>
+						)}
 
-						<Styled.AdminPanelRow>
-							<Styled.AdminPanelLink
-								href={getHubURL(config?.API_BASE_URL ?? '')}
-							>
-								{t('Admin panel')}
-								<OpenInNewRoundedIcon />
-							</Styled.AdminPanelLink>
-						</Styled.AdminPanelRow>
+						{!activationCode && (
+							<Styled.AdminPanelRow>
+								<Styled.AdminPanelLink
+									href={getHubURL(config?.API_BASE_URL ?? '')}
+								>
+									{t('Admin panel')}
+									<OpenInNewRoundedIcon />
+								</Styled.AdminPanelLink>
+							</Styled.AdminPanelRow>
+						)}
 
 						{isValidatingToken && (
 							<Styled.ValidatingToken>

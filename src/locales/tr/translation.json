@@ -473,5 +473,18 @@
 	"App integrations are not e-mailed. Use the activation link below to get their API token.": "Uygulama entegrasyonlarına e-posta gönderilmez. API jetonunu almak için aşağıdaki etkinleştirme bağlantısını kullanın.",
 	"No activation e-mail was sent, so the user needs the activation link below from you.": "Etkinleştirme e-postası gönderilmedi, bu yüzden aşağıdaki etkinleştirme bağlantısını kullanıcıya siz iletmelisiniz.",
 	"This link is shown only once. Keep it in case the e-mail does not arrive.": "Bu bağlantı yalnızca bir kez gösterilir. E-posta ulaşmazsa diye saklayın.",
-	"Activation e-mail sent to <1>%s</1>.": "Etkinleştirme e-postası <1>%s</1> adresine gönderildi."
+	"Activation e-mail sent to <1>%s</1>.": "Etkinleştirme e-postası <1>%s</1> adresine gönderildi.",
+	"At least 8 characters. Avoid common and entirely numeric passwords.": "En az 8 karakter. Yaygın ve yalnızca rakamlardan oluşan şifrelerden kaçının.",
+	"Set password": "Şifreyi belirle",
+	"Set your password": "Şifrenizi belirleyin",
+	"Choose a password to finish activating your account.": "Hesabınızın etkinleştirilmesini tamamlamak için bir şifre seçin.",
+	"This activation link is invalid or was already used.": "Bu etkinleştirme bağlantısı geçersiz veya daha önce kullanılmış.",
+	"They can choose their own password with the activation link.": "Kullanıcı, etkinleştirme bağlantısıyla kendi şifresini belirleyebilir.",
+	"This password is too short. It must contain at least 8 characters.": "Bu şifre çok kısa. En az 8 karakter içermelidir.",
+	"This password is too common.": "Bu şifre çok yaygın.",
+	"This password is entirely numeric.": "Bu şifre tamamen rakamlardan oluşuyor.",
+	"The password is too similar to the username.": "Şifre, kullanıcı adına çok benziyor.",
+	"The password is too similar to the first name.": "Şifre, ada çok benziyor.",
+	"The password is too similar to the last name.": "Şifre, soyada çok benziyor.",
+	"The password is too similar to the email address.": "Şifre, e-posta adresine çok benziyor."
 }

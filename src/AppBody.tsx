@@ -21,6 +21,18 @@ const AppBody: React.FC = () => {
 	useEffect(() => {
 		const params = getURLParams();
 
+		// Sent by the backend when a regular user opens their activation link:
+		// they choose a password on the login card before they can log in
+		const activationCode = params.get('set_password');
+		if (activationCode) {
+			dispatch(
+				setState({
+					activationCode,
+					activatedUsername: params.get('username') ?? undefined,
+				})
+			);
+		}
+
 		if (params.get('account_activated') === '1') {
 			dispatch(
 				setState({

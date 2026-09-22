@@ -1480,3 +1480,42 @@ msgstr "Nie wysłano wiadomości aktywacyjnej, więc musisz przekazać użytkown
 
 msgid "This link is shown only once. Keep it in case the e-mail does not arrive."
 msgstr "Ten link jest pokazywany tylko raz. Zachowaj go na wypadek, gdyby wiadomość nie dotarła."
+
+msgid "At least 8 characters. Avoid common and entirely numeric passwords."
+msgstr "Co najmniej 8 znaków. Unikaj popularnych haseł i haseł złożonych wyłącznie z cyfr."
+
+msgid "Set password"
+msgstr "Ustaw hasło"
+
+msgid "Set your password"
+msgstr "Ustaw swoje hasło"
+
+msgid "Choose a password to finish activating your account."
+msgstr "Wybierz hasło, aby dokończyć aktywację konta."
+
+msgid "This activation link is invalid or was already used."
+msgstr "Ten link aktywacyjny jest nieprawidłowy lub został już użyty."
+
+msgid "They can choose their own password with the activation link."
+msgstr "Użytkownik może ustawić własne hasło za pomocą linku aktywacyjnego."
+
+msgid "This password is too short. It must contain at least 8 characters."
+msgstr "To hasło jest za krótkie. Musi zawierać co najmniej 8 znaków."
+
+msgid "This password is too common."
+msgstr "To hasło jest zbyt popularne."
+
+msgid "This password is entirely numeric."
+msgstr "To hasło składa się wyłącznie z cyfr."
+
+msgid "The password is too similar to the username."
+msgstr "Hasło jest zbyt podobne do nazwy użytkownika."
+
+msgid "The password is too similar to the first name."
+msgstr "Hasło jest zbyt podobne do imienia."
+
+msgid "The password is too similar to the last name."
+msgstr "Hasło jest zbyt podobne do nazwiska."
+
+msgid "The password is too similar to the email address."
+msgstr "Hasło jest zbyt podobne do adresu e-mail."

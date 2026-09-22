@@ -33,6 +33,7 @@ import ChatTagsList from './ChatTagsList';
 import DownloadUnsupportedFile from '../DownloadUnsupportedFile';
 import moment from 'moment';
 import { clearUserSession, handleIfUnauthorized } from '@src/helpers/ApiHelper';
+import { logout } from '@src/api/authApi';
 import { getWebSocketURL } from '@src/helpers/URLHelper';
 import { isIPad13, isMobileOnly } from 'react-device-detect';
 import UploadMediaIndicator from './Sidebar/UploadMediaIndicator';
@@ -116,6 +117,7 @@ const Main: React.FC = () => {
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
+		activationCode,
 	} = useAppSelector((state) => state.UI);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
@@ -188,6 +190,18 @@ const Main: React.FC = () => {
 		if (value > loadingProgress) {
 			dispatch(setState({ loadingProgress: value }));
 		}
+	};
+
+	const logOutForActivation = async () => {
+		try {
+			await logout();
+		} catch (error: any | AxiosError) {
+			// Best effort, as on the regular logout: there may be no session
+			console.error(error);
+		}
+
+		clearUserSession(undefined, undefined, undefined);
+		navigate('/main/login');
 	};
 
 	const setLoadingComponent = (value: string) => {
@@ -401,6 +415,13 @@ const Main: React.FC = () => {
 			} else {
 				clearUserSession('notLoggedIn', location, navigate);
 			}
+		} else if (activationCode) {
+			// An activation link opened where somebody else is still logged in:
+			// the link wins, otherwise its new user could not finish on a shared
+			// machine. Log out - the backend session too, or the login card
+			// would offer to continue as that person - and let the login card
+			// show the password form.
+			logOutForActivation();
 		} else {
 			// Reaching the app consumes the activation notice shown on the login
 			// page. Without this it would come back on a later logout, which
