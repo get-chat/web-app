@@ -1464,3 +1464,6 @@ msgstr "Subir otro archivo"
 
 msgid "Users could not be loaded."
 msgstr "No se pudieron cargar los usuarios."
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr "Tu cuenta ha sido activada. Inicia sesión para continuar."

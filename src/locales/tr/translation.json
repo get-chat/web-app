@@ -468,5 +468,6 @@
 	"Upload another video": "Başka bir video yükle",
 	"Upload another document": "Başka bir belge yükle",
 	"Upload another file": "Başka bir dosya yükle",
-	"Users could not be loaded.": "Kullanıcılar yüklenemedi."
+	"Users could not be loaded.": "Kullanıcılar yüklenemedi.",
+	"Your account has been activated. Please log in to continue.": "Hesabınız etkinleştirildi. Devam etmek için giriş yapın."
 }

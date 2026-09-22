@@ -1438,3 +1438,6 @@ msgstr ""
 
 msgid "Users could not be loaded."
 msgstr ""
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr ""

@@ -31,6 +31,10 @@ interface UIState {
 	isBrowserOffline: boolean;
 	isWebSocketDisconnected: boolean;
 	webSocketDisconnectionCode: number | undefined;
+	// Set from the query parameters the backend appends when it sends a user
+	// here right after they opened their activation link
+	isAccountActivated: boolean;
+	activatedUsername: string | undefined;
 }
 
 const initialState: UIState = {
@@ -63,6 +67,8 @@ const initialState: UIState = {
 	isBrowserOffline: false,
 	isWebSocketDisconnected: false,
 	webSocketDisconnectionCode: undefined,
+	isAccountActivated: false,
+	activatedUsername: undefined,
 };
 
 const closeSections = (state: Draft<UIState>) => {

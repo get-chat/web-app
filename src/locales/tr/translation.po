@@ -1464,3 +1464,6 @@ msgstr "Başka bir dosya yükle"
 
 msgid "Users could not be loaded."
 msgstr "Kullanıcılar yüklenemedi."
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr "Hesabınız etkinleştirildi. Devam etmek için giriş yapın."

@@ -4,7 +4,7 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import AppRoutes from '@src/AppRoutes';
 import { useAppDispatch } from '@src/store/hooks';
-import { setReadOnly } from '@src/store/reducers/UIReducer';
+import { setReadOnly, setState } from '@src/store/reducers/UIReducer';
 import { isReadOnlyConfig } from '@src/helpers/ConfigHelper';
 import useAppInit from '@src/hooks/useAppInit';
 import { getURLParams } from '@src/helpers/URLHelper';
@@ -15,6 +15,21 @@ const AppBody: React.FC = () => {
 	const { isLoading, config } = useAppInit();
 
 	const dispatch = useAppDispatch();
+
+	// Read before the router mounts: it navigates /app -> /main -> /main/login
+	// without the query string, so the login page can no longer see these
+	useEffect(() => {
+		const params = getURLParams();
+
+		if (params.get('account_activated') === '1') {
+			dispatch(
+				setState({
+					isAccountActivated: true,
+					activatedUsername: params.get('username') ?? undefined,
+				})
+			);
+		}
+	}, []);
 
 	useEffect(() => {
 		if (config) {

@@ -1420,3 +1420,6 @@ msgstr "Enviar outro arquivo"
 
 msgid "Users could not be loaded."
 msgstr "Não foi possível carregar os usuários."
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr "Sua conta foi ativada. Faça login para continuar."

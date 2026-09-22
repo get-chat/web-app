@@ -37,6 +37,7 @@ import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
 import { User } from '@src/types/users';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import { useAppSelector } from '@src/store/hooks';
 
 const Login: React.FC = () => {
 	const config = useContext(AppConfigContext);
@@ -51,7 +52,16 @@ const Login: React.FC = () => {
 		invalidToken: 'Invalid token.',
 	};
 
-	const [username, setUsername] = useState('');
+	// Set by AppBody from the query parameters the backend appends after an
+	// activation link is opened
+	const isAccountActivated = useAppSelector(
+		(state) => state.UI.isAccountActivated
+	);
+	const activatedUsername = useAppSelector(
+		(state) => state.UI.activatedUsername
+	);
+
+	const [username, setUsername] = useState(activatedUsername ?? '');
 	const [password, setPassword] = useState('');
 	const [isLoggingIn, setLoggingIn] = useState(false);
 	const [isValidatingToken, setValidatingToken] = useState(false);
@@ -60,6 +70,12 @@ const Login: React.FC = () => {
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
 	const [sessionUser, setSessionUser] = useState<User>();
+
+	useEffect(() => {
+		if (activatedUsername) {
+			setUsername(activatedUsername);
+		}
+	}, [activatedUsername]);
 
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -351,6 +367,14 @@ const Login: React.FC = () => {
 									{t('or log in with another account')}
 								</Styled.OrDivider>
 							</>
+						)}
+
+						{isAccountActivated && !loginError && (
+							<Styled.LoginAlert severity="success">
+								{t(
+									'Your account has been activated. Please log in to continue.'
+								)}
+							</Styled.LoginAlert>
 						)}
 
 						{loginError && (

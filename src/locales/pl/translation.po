@@ -1465,3 +1465,6 @@ msgstr "Prześlij inny plik"
 
 msgid "Users could not be loaded."
 msgstr "Nie udało się wczytać użytkowników."
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr "Twoje konto zostało aktywowane. Zaloguj się, aby kontynuować."
