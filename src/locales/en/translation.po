@@ -1441,3 +1441,15 @@ msgstr ""
 
 msgid "Your account has been activated. Please log in to continue."
 msgstr ""
+
+msgid "An activation e-mail has been sent to <1>%s</1>."
+msgstr ""
+
+msgid "App integrations are not e-mailed. Use the activation link below to get their API token."
+msgstr ""
+
+msgid "No activation e-mail was sent, so the user needs the activation link below from you."
+msgstr ""
+
+msgid "This link is shown only once. Keep it in case the e-mail does not arrive."
+msgstr ""

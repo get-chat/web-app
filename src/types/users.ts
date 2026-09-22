@@ -61,6 +61,9 @@ export interface CreateUserResponse
 	> {
 	// Returned only once, right after the user is created
 	activation_url: string;
+	// False when no address was given, for "app" users, when the inbox has
+	// activation e-mails switched off, or when the delivery failed
+	activation_email_sent: boolean;
 	profile: Partial<UserProfile>;
 }
 

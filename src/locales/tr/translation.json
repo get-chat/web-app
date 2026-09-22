@@ -469,5 +469,9 @@
 	"Upload another document": "Başka bir belge yükle",
 	"Upload another file": "Başka bir dosya yükle",
 	"Users could not be loaded.": "Kullanıcılar yüklenemedi.",
-	"Your account has been activated. Please log in to continue.": "Hesabınız etkinleştirildi. Devam etmek için giriş yapın."
+	"Your account has been activated. Please log in to continue.": "Hesabınız etkinleştirildi. Devam etmek için giriş yapın.",
+	"An activation e-mail has been sent to <1>%s</1>.": "<1>%s</1> adresine bir etkinleştirme e-postası gönderildi.",
+	"App integrations are not e-mailed. Use the activation link below to get their API token.": "Uygulama entegrasyonlarına e-posta gönderilmez. API jetonunu almak için aşağıdaki etkinleştirme bağlantısını kullanın.",
+	"No activation e-mail was sent, so the user needs the activation link below from you.": "Etkinleştirme e-postası gönderilmedi, bu yüzden aşağıdaki etkinleştirme bağlantısını kullanıcıya siz iletmelisiniz.",
+	"This link is shown only once. Keep it in case the e-mail does not arrive.": "Bu bağlantı yalnızca bir kez gösterilir. E-posta ulaşmazsa diye saklayın."
 }

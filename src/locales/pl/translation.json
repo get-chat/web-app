@@ -472,5 +472,9 @@
 	"Upload another document": "Prześlij inny dokument",
 	"Upload another file": "Prześlij inny plik",
 	"Users could not be loaded.": "Nie udało się wczytać użytkowników.",
-	"Your account has been activated. Please log in to continue.": "Twoje konto zostało aktywowane. Zaloguj się, aby kontynuować."
+	"Your account has been activated. Please log in to continue.": "Twoje konto zostało aktywowane. Zaloguj się, aby kontynuować.",
+	"An activation e-mail has been sent to <1>%s</1>.": "Wiadomość aktywacyjna została wysłana na adres <1>%s</1>.",
+	"App integrations are not e-mailed. Use the activation link below to get their API token.": "Integracje aplikacji nie otrzymują wiadomości e-mail. Użyj poniższego linku aktywacyjnego, aby uzyskać token API.",
+	"No activation e-mail was sent, so the user needs the activation link below from you.": "Nie wysłano wiadomości aktywacyjnej, więc musisz przekazać użytkownikowi poniższy link aktywacyjny.",
+	"This link is shown only once. Keep it in case the e-mail does not arrive.": "Ten link jest pokazywany tylko raz. Zachowaj go na wypadek, gdyby wiadomość nie dotarła."
 }

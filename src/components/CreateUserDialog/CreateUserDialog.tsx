@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import { Trans, useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changeUserPassword, createUser } from '@src/api/usersApi';
@@ -264,6 +265,33 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						</Trans>
 					</Alert>
 
+					{createdUser.activation_email_sent ? (
+						<Alert
+							severity="info"
+							icon={<MarkEmailReadIcon fontSize="inherit" />}
+						>
+							<Trans
+								values={{
+									postProcess: 'sprintf',
+									sprintf: [createdUser.email],
+								}}
+							>
+								An activation e-mail has been sent to{' '}
+								<span className="bold">%s</span>.
+							</Trans>
+						</Alert>
+					) : (
+						<Alert severity="info">
+							{isAppRole
+								? t(
+										'App integrations are not e-mailed. Use the activation link below to get their API token.'
+								  )
+								: t(
+										'No activation e-mail was sent, so the user needs the activation link below from you.'
+								  )}
+						</Alert>
+					)}
+
 					<Styled.SectionLabel>{t('Activation link')}</Styled.SectionLabel>
 					<Styled.ActivationLinkContainer>
 						<Styled.ActivationLink>
@@ -280,6 +308,10 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						{isAppRole
 							? t(
 									'This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again.'
+							  )
+							: createdUser.activation_email_sent
+							? t(
+									'This link is shown only once. Keep it in case the e-mail does not arrive.'
 							  )
 							: t(
 									'This link is shown only once. The account is ready to be used after the link is opened.'
