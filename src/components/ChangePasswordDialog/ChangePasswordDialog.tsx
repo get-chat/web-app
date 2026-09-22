@@ -24,7 +24,8 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [newPasswordRepeat, setNewPasswordRepeat] = useState('');
-	const [error, setError] = useState<string>();
+	// English messages, translated one by one when shown
+	const [errors, setErrors] = useState<string[]>([]);
 	const [isRequesting, setRequesting] = useState(false);
 	const [isSuccess, setSuccess] = useState(false);
 
@@ -45,7 +46,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 			setCurrentPassword('');
 			setNewPassword('');
 			setNewPasswordRepeat('');
-			setError(undefined);
+			setErrors([]);
 			setRequesting(false);
 			setSuccess(false);
 		}, 300);
@@ -57,17 +58,17 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 			newPassword.length === 0 ||
 			newPasswordRepeat.length === 0
 		) {
-			setError('You must fill all fields!');
+			setErrors(['You must fill all fields!']);
 			return;
 		}
 
 		if (newPassword !== newPasswordRepeat) {
-			setError('Passwords must match!');
+			setErrors(['Passwords must match!']);
 			return;
 		}
 
 		setSuccess(false);
-		setError(undefined);
+		setErrors([]);
 		setRequesting(true);
 
 		try {
@@ -79,7 +80,14 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 			setSuccess(true);
 		} catch (error: any | AxiosError) {
 			setRequesting(false);
-			setError(error.response?.data?.reason ?? 'An error has occurred.');
+
+			const data = error.response?.data;
+			// A new password the validators turn down comes back as a list
+			if (Array.isArray(data?.new_password)) {
+				setErrors(data.new_password);
+			} else {
+				setErrors([data?.reason ?? 'An error has occurred.']);
+			}
 		}
 	};
 
@@ -119,10 +127,12 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 						fullWidth
 					/>
 				</Styled.FieldsContainer>
-				{error && !isSuccess && (
+				{errors.length > 0 && !isSuccess && (
 					<Alert severity="error">
 						<AlertTitle>{t('Error')}</AlertTitle>
-						{t(error)}
+						{errors.map((message) => (
+							<div key={message}>{t(message)}</div>
+						))}
 					</Alert>
 				)}
 				{isSuccess && (
