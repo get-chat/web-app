@@ -402,6 +402,13 @@ const Main: React.FC = () => {
 				clearUserSession('notLoggedIn', location, navigate);
 			}
 		} else {
+			// Reaching the app consumes the activation notice shown on the login
+			// page. Without this it would come back on a later logout, which
+			// keeps the page (and the store) alive.
+			dispatch(
+				setState({ isAccountActivated: false, activatedUsername: undefined })
+			);
+
 			// Retrieve current user, this will trigger other requests
 			retrieveCurrentUser();
 		}
