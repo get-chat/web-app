@@ -1468,8 +1468,8 @@ msgstr "Kullanıcılar yüklenemedi."
 msgid "Your account has been activated. Please log in to continue."
 msgstr "Hesabınız etkinleştirildi. Devam etmek için giriş yapın."
 
-msgid "An activation e-mail has been sent to <1>%s</1>."
-msgstr "<1>%s</1> adresine bir etkinleştirme e-postası gönderildi."
+msgid "Activation e-mail sent to <1>%s</1>."
+msgstr "Etkinleştirme e-postası <1>%s</1> adresine gönderildi."
 
 msgid "App integrations are not e-mailed. Use the activation link below to get their API token."
 msgstr "Uygulama entegrasyonlarına e-posta gönderilmez. API jetonunu almak için aşağıdaki etkinleştirme bağlantısını kullanın."

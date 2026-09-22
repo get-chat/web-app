@@ -470,8 +470,8 @@
 	"Upload another file": "Enviar outro arquivo",
 	"Users could not be loaded.": "Não foi possível carregar os usuários.",
 	"Your account has been activated. Please log in to continue.": "Sua conta foi ativada. Faça login para continuar.",
-	"An activation e-mail has been sent to <1>%s</1>.": "Um e-mail de ativação foi enviado para <1>%s</1>.",
 	"App integrations are not e-mailed. Use the activation link below to get their API token.": "Integrações de aplicativos não recebem e-mails. Use o link de ativação abaixo para obter o token de API.",
 	"No activation e-mail was sent, so the user needs the activation link below from you.": "Nenhum e-mail de ativação foi enviado, portanto o usuário precisa que você envie o link de ativação abaixo.",
-	"This link is shown only once. Keep it in case the e-mail does not arrive.": "Este link é exibido apenas uma vez. Guarde-o caso o e-mail não chegue."
+	"This link is shown only once. Keep it in case the e-mail does not arrive.": "Este link é exibido apenas uma vez. Guarde-o caso o e-mail não chegue.",
+	"Activation e-mail sent to <1>%s</1>.": "E-mail de ativação enviado para <1>%s</1>."
 }

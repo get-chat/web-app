@@ -1469,8 +1469,8 @@ msgstr "Nie udało się wczytać użytkowników."
 msgid "Your account has been activated. Please log in to continue."
 msgstr "Twoje konto zostało aktywowane. Zaloguj się, aby kontynuować."
 
-msgid "An activation e-mail has been sent to <1>%s</1>."
-msgstr "Wiadomość aktywacyjna została wysłana na adres <1>%s</1>."
+msgid "Activation e-mail sent to <1>%s</1>."
+msgstr "Wiadomość aktywacyjna wysłana na adres <1>%s</1>."
 
 msgid "App integrations are not e-mailed. Use the activation link below to get their API token."
 msgstr "Integracje aplikacji nie otrzymują wiadomości e-mail. Użyj poniższego linku aktywacyjnego, aby uzyskać token API."

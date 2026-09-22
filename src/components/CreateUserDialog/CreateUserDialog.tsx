@@ -276,8 +276,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 									sprintf: [createdUser.email],
 								}}
 							>
-								An activation e-mail has been sent to{' '}
-								<span className="bold">%s</span>.
+								Activation e-mail sent to <span className="bold">%s</span>.
 							</Trans>
 						</Alert>
 					) : (
