@@ -20,3 +20,12 @@ export interface ConvertRefreshTokenRequest {
 export interface ConvertRefreshTokenResponse {
 	token: string;
 }
+
+export interface SetPasswordWithActivationCodeRequest {
+	code: string;
+	password: string;
+}
+
+export interface SetPasswordWithActivationCodeResponse {
+	username: string;
+}

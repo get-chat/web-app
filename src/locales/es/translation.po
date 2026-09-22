@@ -1464,3 +1464,57 @@ msgstr "Subir otro archivo"
 
 msgid "Users could not be loaded."
 msgstr "No se pudieron cargar los usuarios."
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr "Tu cuenta ha sido activada. Inicia sesión para continuar."
+
+msgid "Activation e-mail sent to <1>%s</1>."
+msgstr "Correo de activación enviado a <1>%s</1>."
+
+msgid "App integrations are not e-mailed. Use the activation link below to get their API token."
+msgstr "Las integraciones de aplicaciones no reciben correos. Usa el enlace de activación de abajo para obtener su token de API."
+
+msgid "No activation e-mail was sent, so the user needs the activation link below from you."
+msgstr "No se envió ningún correo de activación, así que el usuario necesita que le facilites el enlace de activación de abajo."
+
+msgid "This link is shown only once. Keep it in case the e-mail does not arrive."
+msgstr "Este enlace se muestra una sola vez. Guárdalo por si el correo no llega."
+
+msgid "At least 8 characters. Avoid common and entirely numeric passwords."
+msgstr "Al menos 8 caracteres. Evita contraseñas comunes o solo numéricas."
+
+msgid "Set password"
+msgstr "Establecer contraseña"
+
+msgid "Set your password"
+msgstr "Establece tu contraseña"
+
+msgid "Choose a password to finish activating your account."
+msgstr "Elige una contraseña para terminar de activar tu cuenta."
+
+msgid "This activation link is invalid or was already used."
+msgstr "Este enlace de activación no es válido o ya se ha utilizado."
+
+msgid "They can choose their own password with the activation link."
+msgstr "El usuario puede elegir su propia contraseña con el enlace de activación."
+
+msgid "This password is too short. It must contain at least 8 characters."
+msgstr "Esta contraseña es demasiado corta. Debe tener al menos 8 caracteres."
+
+msgid "This password is too common."
+msgstr "Esta contraseña es demasiado común."
+
+msgid "This password is entirely numeric."
+msgstr "Esta contraseña es completamente numérica."
+
+msgid "The password is too similar to the username."
+msgstr "La contraseña es demasiado parecida al nombre de usuario."
+
+msgid "The password is too similar to the first name."
+msgstr "La contraseña es demasiado parecida al nombre."
+
+msgid "The password is too similar to the last name."
+msgstr "La contraseña es demasiado parecida al apellido."
+
+msgid "The password is too similar to the email address."
+msgstr "La contraseña es demasiado parecida a la dirección de correo."

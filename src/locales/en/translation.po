@@ -1438,3 +1438,57 @@ msgstr ""
 
 msgid "Users could not be loaded."
 msgstr ""
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr ""
+
+msgid "Activation e-mail sent to <1>%s</1>."
+msgstr ""
+
+msgid "App integrations are not e-mailed. Use the activation link below to get their API token."
+msgstr ""
+
+msgid "No activation e-mail was sent, so the user needs the activation link below from you."
+msgstr ""
+
+msgid "This link is shown only once. Keep it in case the e-mail does not arrive."
+msgstr ""
+
+msgid "At least 8 characters. Avoid common and entirely numeric passwords."
+msgstr ""
+
+msgid "Set password"
+msgstr ""
+
+msgid "Set your password"
+msgstr ""
+
+msgid "Choose a password to finish activating your account."
+msgstr ""
+
+msgid "This activation link is invalid or was already used."
+msgstr ""
+
+msgid "They can choose their own password with the activation link."
+msgstr ""
+
+msgid "This password is too short. It must contain at least 8 characters."
+msgstr ""
+
+msgid "This password is too common."
+msgstr ""
+
+msgid "This password is entirely numeric."
+msgstr ""
+
+msgid "The password is too similar to the username."
+msgstr ""
+
+msgid "The password is too similar to the first name."
+msgstr ""
+
+msgid "The password is too similar to the last name."
+msgstr ""
+
+msgid "The password is too similar to the email address."
+msgstr ""

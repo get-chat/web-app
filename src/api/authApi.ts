@@ -5,6 +5,8 @@ import {
 	ConvertRefreshTokenResponse,
 	LoginRequest,
 	LoginResponse,
+	SetPasswordWithActivationCodeRequest,
+	SetPasswordWithActivationCodeResponse,
 } from '@src/types/auth';
 import { EmptyResponse } from '@src/types/common';
 
@@ -47,6 +49,17 @@ export const logout = async () => {
 export const convertRefreshToken = async (data: ConvertRefreshTokenRequest) => {
 	const response = await api.post<ConvertRefreshTokenResponse>(
 		'/auth/convert_refresh_token/',
+		data
+	);
+	return response.data;
+};
+
+// Nobody is logged in yet: the code of the activation link is the credential
+export const setPasswordWithActivationCode = async (
+	data: SetPasswordWithActivationCodeRequest
+) => {
+	const response = await api.post<SetPasswordWithActivationCodeResponse>(
+		'/auth/set_password/',
 		data
 	);
 	return response.data;

@@ -79,6 +79,12 @@ export const LoginBody = styled.div`
 	.MuiFormControl-root {
 		margin-bottom: 15px;
 	}
+
+	/* A <p>, so the card's centred paragraph style above would apply to it */
+	.MuiFormHelperText-root {
+		margin: 4px 0 0;
+		text-align: left;
+	}
 `;
 
 export const LogoWrapper = styled.div`

@@ -1464,3 +1464,57 @@ msgstr "Başka bir dosya yükle"
 
 msgid "Users could not be loaded."
 msgstr "Kullanıcılar yüklenemedi."
+
+msgid "Your account has been activated. Please log in to continue."
+msgstr "Hesabınız etkinleştirildi. Devam etmek için giriş yapın."
+
+msgid "Activation e-mail sent to <1>%s</1>."
+msgstr "Etkinleştirme e-postası <1>%s</1> adresine gönderildi."
+
+msgid "App integrations are not e-mailed. Use the activation link below to get their API token."
+msgstr "Uygulama entegrasyonlarına e-posta gönderilmez. API jetonunu almak için aşağıdaki etkinleştirme bağlantısını kullanın."
+
+msgid "No activation e-mail was sent, so the user needs the activation link below from you."
+msgstr "Etkinleştirme e-postası gönderilmedi, bu yüzden aşağıdaki etkinleştirme bağlantısını kullanıcıya siz iletmelisiniz."
+
+msgid "This link is shown only once. Keep it in case the e-mail does not arrive."
+msgstr "Bu bağlantı yalnızca bir kez gösterilir. E-posta ulaşmazsa diye saklayın."
+
+msgid "At least 8 characters. Avoid common and entirely numeric passwords."
+msgstr "En az 8 karakter. Yaygın ve yalnızca rakamlardan oluşan şifrelerden kaçının."
+
+msgid "Set password"
+msgstr "Şifreyi belirle"
+
+msgid "Set your password"
+msgstr "Şifrenizi belirleyin"
+
+msgid "Choose a password to finish activating your account."
+msgstr "Hesabınızın etkinleştirilmesini tamamlamak için bir şifre seçin."
+
+msgid "This activation link is invalid or was already used."
+msgstr "Bu etkinleştirme bağlantısı geçersiz veya daha önce kullanılmış."
+
+msgid "They can choose their own password with the activation link."
+msgstr "Kullanıcı, etkinleştirme bağlantısıyla kendi şifresini belirleyebilir."
+
+msgid "This password is too short. It must contain at least 8 characters."
+msgstr "Bu şifre çok kısa. En az 8 karakter içermelidir."
+
+msgid "This password is too common."
+msgstr "Bu şifre çok yaygın."
+
+msgid "This password is entirely numeric."
+msgstr "Bu şifre tamamen rakamlardan oluşuyor."
+
+msgid "The password is too similar to the username."
+msgstr "Şifre, kullanıcı adına çok benziyor."
+
+msgid "The password is too similar to the first name."
+msgstr "Şifre, ada çok benziyor."
+
+msgid "The password is too similar to the last name."
+msgstr "Şifre, soyada çok benziyor."
+
+msgid "The password is too similar to the email address."
+msgstr "Şifre, e-posta adresine çok benziyor."

@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import { Trans, useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changeUserPassword, createUser } from '@src/api/usersApi';
@@ -112,7 +113,8 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 
 	const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 	const [error, setError] = useState<string>();
-	const [warning, setWarning] = useState<string>();
+	// English messages, translated one by one when shown
+	const [warnings, setWarnings] = useState<string[]>([]);
 	const [isRequesting, setRequesting] = useState(false);
 	const [createdUser, setCreatedUser] = useState<CreateUserResponse>();
 
@@ -142,7 +144,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 			setPasswordRepeat('');
 			setFieldErrors({});
 			setError(undefined);
-			setWarning(undefined);
+			setWarnings([]);
 			setRequesting(false);
 			setCreatedUser(undefined);
 		}, 300);
@@ -182,7 +184,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 		const errors = validate();
 		setFieldErrors(errors);
 		setError(undefined);
-		setWarning(undefined);
+		setWarnings([]);
 
 		if (Object.keys(errors).length > 0) {
 			return;
@@ -224,12 +226,14 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 			try {
 				await changeUserPassword(user.id, { password });
 			} catch (error: any | AxiosError) {
-				const parsedError = parseApiError(error);
-				setWarning(
-					parsedError.fieldErrors.password ??
-						parsedError.message ??
-						'The user was created, but the password could not be set.'
-				);
+				// The validators' messages come back as a list: keep them apart,
+				// so each one is translated on its own
+				const reasons = error?.response?.data?.password;
+				setWarnings([
+					'The user was created, but the password could not be set.',
+					...(Array.isArray(reasons) ? reasons : []),
+					'They can choose their own password with the activation link.',
+				]);
 			}
 		}
 
@@ -264,6 +268,32 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						</Trans>
 					</Alert>
 
+					{createdUser.activation_email_sent ? (
+						<Alert
+							severity="info"
+							icon={<MarkEmailReadIcon fontSize="inherit" />}
+						>
+							<Trans
+								values={{
+									postProcess: 'sprintf',
+									sprintf: [createdUser.email],
+								}}
+							>
+								Activation e-mail sent to <span className="bold">%s</span>.
+							</Trans>
+						</Alert>
+					) : (
+						<Alert severity="info">
+							{isAppRole
+								? t(
+										'App integrations are not e-mailed. Use the activation link below to get their API token.'
+								  )
+								: t(
+										'No activation e-mail was sent, so the user needs the activation link below from you.'
+								  )}
+						</Alert>
+					)}
+
 					<Styled.SectionLabel>{t('Activation link')}</Styled.SectionLabel>
 					<Styled.ActivationLinkContainer>
 						<Styled.ActivationLink>
@@ -281,12 +311,22 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 							? t(
 									'This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again.'
 							  )
+							: createdUser.activation_email_sent
+							? t(
+									'This link is shown only once. Keep it in case the e-mail does not arrive.'
+							  )
 							: t(
 									'This link is shown only once. The account is ready to be used after the link is opened.'
 							  )}
 					</Alert>
 
-					{warning && <Alert severity="warning">{t(warning)}</Alert>}
+					{warnings.length > 0 && (
+						<Alert severity="warning">
+							{warnings.map((message) => (
+								<div key={message}>{t(message)}</div>
+							))}
+						</Alert>
+					)}
 				</DialogContent>
 			) : (
 				<DialogContent>
