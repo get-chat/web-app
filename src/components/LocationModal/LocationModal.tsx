@@ -17,7 +17,10 @@ import {
 import { Field, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
 import { Spinner } from '@src/components/ui/spinner';
-import * as Styled from './LocationModal.styles';
+
+// Laid over the map while it loads or when it failed
+const mapOverlayClassName =
+	'absolute inset-0 flex items-center justify-center bg-white/80 p-4 text-center text-[14px] text-ink/60';
 
 interface Props {
 	open: boolean;
@@ -294,24 +297,24 @@ const LocationModal: React.FC<Props> = ({
 					<DialogTitle>{t('Send location')}</DialogTitle>
 				</DialogHeader>
 				<DialogBody>
-					<Styled.MapWrapper>
+					<div className="relative mt-[8px] h-80 w-full overflow-hidden rounded-[10px] bg-ink/6">
 						{/* Google Maps owns this element's DOM; keep it childless */}
-						<Styled.MapCanvas ref={mapCanvasRef} />
+						<div className="size-full" ref={mapCanvasRef} />
 
 						{isMapLoading && !mapError && (
-							<Styled.MapOverlay>
+							<div className={mapOverlayClassName}>
 								<Spinner size={28} className="text-primary" />
-							</Styled.MapOverlay>
+							</div>
 						)}
 
 						{mapError && (
-							<Styled.MapOverlay>
+							<div className={mapOverlayClassName}>
 								{t('The map could not be loaded. Please try again later.')}
-							</Styled.MapOverlay>
+							</div>
 						)}
-					</Styled.MapWrapper>
+					</div>
 
-					<Styled.CurrentLocationRow>
+					<div className="pt-2">
 						<Button
 							variant="ghost"
 							color="primary"
@@ -326,15 +329,15 @@ const LocationModal: React.FC<Props> = ({
 							)}
 							{t('Use my current location')}
 						</Button>
-					</Styled.CurrentLocationRow>
+					</div>
 
 					{position && (
-						<Styled.Coordinates>
+						<div className="px-6 text-[12px] text-ink/50">
 							{position.lat.toFixed(6)}, {position.lng.toFixed(6)}
-						</Styled.Coordinates>
+						</div>
 					)}
 
-					<Styled.Fields>
+					<div className="flex flex-col gap-3 pt-4 pb-2">
 						<Field className="gap-1">
 							<FieldLabel htmlFor={`${idPrefix}-name`}>
 								{t('Location name (optional)')}
@@ -357,7 +360,7 @@ const LocationModal: React.FC<Props> = ({
 								onChange={(event) => setAddress(event.target.value)}
 							/>
 						</Field>
-					</Styled.Fields>
+					</div>
 				</DialogBody>
 				<DialogFooter>
 					<Button variant="ghost" color="secondary" onClick={handleClose}>
