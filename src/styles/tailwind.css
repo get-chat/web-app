@@ -136,6 +136,8 @@
 	--animate-grow-in: grow-in 250ms cubic-bezier(0.4, 0, 0.2, 1);
 	--animate-grow-out: grow-out 170ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 	--animate-skeleton: skeleton 2s ease-in-out 0.5s infinite;
+	/* The recording dot of the voice recorder */
+	--animate-blink: blink 2s linear infinite;
 	--animate-progress-indeterminate: progress-indeterminate 1.4s
 		cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
@@ -253,6 +255,12 @@
 	@keyframes skeleton {
 		50% {
 			opacity: 0.4;
+		}
+	}
+
+	@keyframes blink {
+		50% {
+			opacity: 0.3;
 		}
 	}
 }

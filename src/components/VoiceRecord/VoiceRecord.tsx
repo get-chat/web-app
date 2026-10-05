@@ -24,7 +24,11 @@ import {
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
-import * as Styled from './VoiceRecord.styles';
+import { cn } from '@src/lib/utils';
+
+// MUI's small IconButton (5px padding) around a 20px icon: a 30px circle
+const actionClassName =
+	'size-7.5 rounded-full bg-transparent focus-visible:bg-transparent [&_.app-icon]:size-5!';
 
 interface Props {
 	voiceRecordCase: 'chat';
@@ -197,20 +201,40 @@ const VoiceRecord: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Container>
+		<div className="flex items-center justify-between rounded-[20px] bg-white shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)]">
 			<SimpleTooltip title={t('Cancel')} side="top" disableHoverableContent>
-				<Styled.CancelButton onClick={stopVoiceRecord}>
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-sm"
+					className={cn(
+						actionClassName,
+						'mr-5 hover:bg-[rgba(255,0,0,0.2)] max-md:mr-2.5 [&_.app-icon]:text-[red]!'
+					)}
+					onClick={stopVoiceRecord}
+				>
 					<CloseIcon />
-				</Styled.CancelButton>
+				</Button>
 			</SimpleTooltip>
 
-			<Styled.RecordIcon />
-			<Styled.Timer>{displaySeconds(timer)}</Styled.Timer>
+			<FiberManualRecordIcon className="mr-0.5 animate-blink text-[red]!" />
+			<span className="mr-5 min-w-12 text-center text-[14px] font-semibold text-ink/82 max-md:mr-2.5">
+				{displaySeconds(timer)}
+			</span>
 
 			<SimpleTooltip title={t('Send')} side="top" disableHoverableContent>
-				<Styled.SendButton onClick={sendVoiceRecord}>
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-sm"
+					className={cn(
+						actionClassName,
+						'hover:bg-[rgba(0,255,0,0.2)] [&_.app-icon]:text-[green]!'
+					)}
+					onClick={sendVoiceRecord}
+				>
 					<DoneIcon />
-				</Styled.SendButton>
+				</Button>
 			</SimpleTooltip>
 
 			<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
@@ -240,7 +264,7 @@ const VoiceRecord: React.FC<Props> = ({
 					</DialogFooter>
 				</DialogContent>
 			</Dialog>
-		</Styled.Container>
+		</div>
 	);
 };
 
