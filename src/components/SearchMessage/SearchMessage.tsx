@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as Styled from './SearchMessage.styles';
 import CloseIcon from '@src/components/icons/Close';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
@@ -14,7 +13,11 @@ import { prepareMessageList } from '@src/helpers/MessageHelper';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
 import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
-import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import {
+	PanelTransitionProps,
+	sidePanelAnimation,
+} from '@src/styles/panelTransitions';
+import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
 
 export type Props = {
@@ -130,21 +133,26 @@ const SearchMessage: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.SearchMessageContainer
-			$isExiting={isExiting}
+		<div
+			className={cn(
+				'flex flex-[0.4_1] flex-col border-l border-[lightgray] max-md:absolute max-md:inset-0 max-md:z-10 max-md:border-l-0',
+				sidePanelAnimation(isExiting)
+			)}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.Header>
+			<div className="flex h-(--header-height) items-center bg-gray-light px-3.75 py-1 max-md:px-2.5">
 				<Button variant="ghost" color="neutral" size="icon-xl" onClick={close}>
 					<CloseIcon />
 				</Button>
 
-				<h3>{t('Search For Messages')}</h3>
-			</Styled.Header>
+				<h3 className="ml-3.75 text-[16px] font-normal">
+					{t('Search For Messages')}
+				</h3>
+			</div>
 
 			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
 
-			<Styled.Body>
+			<div className="relative flex flex-1 flex-col overflow-y-auto bg-white">
 				{Object.entries(results).map((message) => (
 					<SearchMessageResult
 						key={message[0]}
@@ -154,8 +162,8 @@ const SearchMessage: React.FC<Props> = ({
 						displaySender={false}
 					/>
 				))}
-			</Styled.Body>
-		</Styled.SearchMessageContainer>
+			</div>
+		</div>
 	);
 };
 
