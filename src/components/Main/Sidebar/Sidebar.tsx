@@ -132,7 +132,9 @@ import {
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
 import { fetchMessages } from '@src/api/messagesApi';
-import * as Styled from './Sidebar.styles';
+import { cn } from '@src/lib/utils';
+import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
+import CustomAvatar from '@src/components/CustomAvatar';
 import { PersonList } from '@src/types/persons';
 import { store } from '@src/store';
 import useSettings from '@src/hooks/useSettings';
@@ -146,6 +148,11 @@ import { updateUserAvailability } from '@src/api/usersApi';
 import { logout } from '@src/api/authApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
+
+/** Heading of a group in the results list (Tags, Chats, Contacts, Messages) */
+const SectionTitle: React.FC<{ children: React.ReactNode }> = ({
+	children,
+}) => <h3 className="px-3.75 py-2.5 font-normal text-primary">{children}</h3>;
 
 interface Props {
 	isLoaded: boolean;
@@ -975,12 +982,18 @@ const Sidebar: React.FC<Props> = ({
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 
 	return (
-		<Styled.Sidebar $isHidden={isChatOnly}>
-			<Styled.Header>
-				<Styled.SessionContainer>
+		<div
+			className={cn(
+				'relative flex flex-[0.3] flex-col max-lg:flex-[0.4] max-md:absolute max-md:inset-0',
+				isChatOnly && 'hidden'
+			)}
+		>
+			<div className="flex h-(--header-height) items-center justify-between bg-gray-light px-3.75 py-1 max-md:px-2.5">
+				<div className="relative flex">
 					<SimpleTooltip title={t('Business Profile')} disableHoverableContent>
 						<div>
-							<Styled.BusinessAvatar
+							<BusinessProfileAvatar
+								className="cursor-pointer"
 								onClick={() => setBusinessProfileVisible(true)}
 								profilePhoto={profilePhoto}
 							/>
@@ -988,19 +1001,20 @@ const Sidebar: React.FC<Props> = ({
 					</SimpleTooltip>
 					<SimpleTooltip title={currentUser?.username} disableHoverableContent>
 						<div>
-							<Styled.UserAvatar
+							<CustomAvatar
+								className="-ml-3 cursor-pointer outline outline-gray-light"
 								generateBgColorBy={currentUser?.username}
 								onClick={() => setUserProfileVisible(true)}
 							>
 								{currentUser
 									? generateInitialsHelper(currentUser?.username)
 									: ''}
-							</Styled.UserAvatar>
+							</CustomAvatar>
 						</div>
 					</SimpleTooltip>
-				</Styled.SessionContainer>
+				</div>
 
-				<Styled.HeaderRight>
+				<div className="flex items-center justify-between">
 					{!isReadOnly && !isUserActionsRestricted && (
 						<SimpleTooltip title={t('New chat')} disableHoverableContent>
 							<Button
@@ -1036,8 +1050,11 @@ const Sidebar: React.FC<Props> = ({
 					</SimpleTooltip>
 					{currentUser?.profile?.role === 'admin' && (
 						<SimpleTooltip title={t('Admin panel')} disableHoverableContent>
-							<Styled.AdminPanelButton
+							{/* Hidden where the header runs out of room; the options menu
+							    has an Admin panel entry too */}
+							<Button
 								asChild
+								className="max-lg:hidden"
 								variant="ghost"
 								color="neutral"
 								size="icon-xl"
@@ -1045,7 +1062,7 @@ const Sidebar: React.FC<Props> = ({
 								<a href={getHubURL(config?.API_BASE_URL ?? '')} target="_blank">
 									<AdminPanelSettingsIcon />
 								</a>
-							</Styled.AdminPanelButton>
+							</Button>
 						</SimpleTooltip>
 					)}
 					<DropdownMenu open={isMenuVisible} onOpenChange={setMenuVisible}>
@@ -1062,9 +1079,13 @@ const Sidebar: React.FC<Props> = ({
 							</DropdownMenuTrigger>
 						</SimpleTooltip>
 						<DropdownMenuContent align="end">
-							<Styled.RefreshMenuItem onSelect={() => window.location.reload()}>
+							{/* Phones only: there is no browser reload button there */}
+							<DropdownMenuItem
+								className="md:hidden"
+								onSelect={() => window.location.reload()}
+							>
 								{t('Refresh')}
-							</Styled.RefreshMenuItem>
+							</DropdownMenuItem>
 							{!isReadOnly && (
 								<DropdownMenuItem onSelect={showChangePassword}>
 									<PasswordIcon />
@@ -1120,8 +1141,8 @@ const Sidebar: React.FC<Props> = ({
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
-				</Styled.HeaderRight>
-			</Styled.Header>
+				</div>
+			</div>
 
 			{isSelectionModeEnabled && isExportChat && (
 				<ExportChatActions
@@ -1157,10 +1178,15 @@ const Sidebar: React.FC<Props> = ({
 					}
 				}}
 			>
-				<Styled.SearchOrFilterGroup $isExpanded={isForceDisplayFilters}>
+				<div
+					className={cn(
+						'py-2.5 transition-[background-color] duration-200 ease-in',
+						isForceDisplayFilters ? 'bg-gray-light' : 'bg-white'
+					)}
+				>
 					<Collapsible open={Boolean(isAnyActiveFilter || keyword)}>
 						<CollapsibleContent>
-							<Styled.FilterGroup $isActive={true}>
+							<div className="mb-0.5 px-3.75">
 								{filterUnread && (
 									<FilterOption
 										icon={<MarkChatUnreadIcon />}
@@ -1221,7 +1247,7 @@ const Sidebar: React.FC<Props> = ({
 										isActive
 									/>
 								))}
-							</Styled.FilterGroup>
+							</div>
 						</CollapsibleContent>
 					</Collapsible>
 
@@ -1231,11 +1257,12 @@ const Sidebar: React.FC<Props> = ({
 						placeholder={t('Search, filter by tags, time, etc.')}
 						onFocus={() => setFiltersVisible(true)}
 						isFocusStyleEnabled={false}
+						className="bg-transparent py-0"
 					/>
 
 					<Collapsible open={isForceDisplayFilters}>
 						<CollapsibleContent>
-							<Styled.FilterGroup $isAll={true}>
+							<div className="mt-1.25 px-3.75">
 								{!filterUnread && (
 									<FilterOption
 										icon={<MarkChatUnreadIcon />}
@@ -1275,12 +1302,12 @@ const Sidebar: React.FC<Props> = ({
 									label={t('Time')}
 									onClick={() => setDateRangeDialogVisible(true)}
 								/>
-							</Styled.FilterGroup>
+							</div>
 
 							{(keyword || isAnyActiveFilter) && (
-								<Styled.ChatsCount>
+								<div className="flex items-center px-3.75 pt-3.75 text-[12px] font-semibold text-ink/50">
 									{isLoadingChats && (
-										<Spinner size={14} className="text-primary" />
+										<Spinner size={14} className="-mt-px mr-2 text-primary" />
 									)}
 									{isLoadingChats ? (
 										t('Loading chats')
@@ -1295,7 +1322,7 @@ const Sidebar: React.FC<Props> = ({
 											%d chat found
 										</Trans>
 									)}
-								</Styled.ChatsCount>
+								</div>
 							)}
 						</CollapsibleContent>
 					</Collapsible>
@@ -1398,17 +1425,17 @@ const Sidebar: React.FC<Props> = ({
 							}
 						}}
 					/>
-				</Styled.SearchOrFilterGroup>
+				</div>
 			</ClickAwayListener>
 
 			{isUserAvailabilityFeatureEnabled && <UserAvailability />}
 
-			<Styled.ResultsContainer>
+			<div className="flex flex-1 flex-col overflow-y-auto bg-white">
 				{isSelectionModeEnabled && (
 					<>
 						{tags && (
 							<>
-								<h3>{t('Tags')}</h3>
+								<SectionTitle>{t('Tags')}</SectionTitle>
 								<div>
 									{tags.map((tag) => (
 										<SelectableChatTag key={tag.id} data={tag} />
@@ -1420,23 +1447,25 @@ const Sidebar: React.FC<Props> = ({
 				)}
 
 				{(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) && (
-					<h3>{t('Chats')}</h3>
+					<SectionTitle>{t('Chats')}</SectionTitle>
 				)}
 
 				{!isLoadingChats &&
 					searchedKeyword.trim().length === 0 &&
 					!isAnyActiveFilter &&
 					filteredChatsCount === 0 && (
-						<Styled.NoResults>
+						<span className="block px-3.75 py-2.5 text-[14px] [word-break:break-word] text-ink/60">
 							<span>{t("You don't have any chats yet.")}</span>
-						</Styled.NoResults>
+						</span>
 					)}
 
 				{filteredChatsCount > 0 && (
-					<Styled.ChatList
-						$isUnpacked={
-							searchedKeyword.trim().length > 0 || isSelectionModeEnabled
-						}
+					<div
+						className={cn(
+							'flex-1 overflow-y-auto',
+							(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) &&
+								'flex-none overflow-y-hidden'
+						)}
 						ref={chatListRef}
 					>
 						<ViewportList
@@ -1455,13 +1484,13 @@ const Sidebar: React.FC<Props> = ({
 								/>
 							)}
 						</ViewportList>
-					</Styled.ChatList>
+					</div>
 				)}
 
 				{searchedKeyword.trim().length > 0 &&
 					getObjLength(contactResults) > 0 && (
 						<>
-							<h3>{t('Contacts')}</h3>
+							<SectionTitle>{t('Contacts')}</SectionTitle>
 							<div>
 								{Object.entries(contactResults).map((contactResult) => (
 									<SidebarContactResult
@@ -1477,8 +1506,8 @@ const Sidebar: React.FC<Props> = ({
 				{searchedKeyword.trim().length > 0 &&
 					getObjLength(chatMessages) > 0 && (
 						<>
-							<h3>{t('Messages')}</h3>
-							<Styled.MessageList>
+							<SectionTitle>{t('Messages')}</SectionTitle>
+							<div>
 								{Object.entries(chatMessages).map((message) => (
 									<SearchMessageResult
 										key={message[0]}
@@ -1488,17 +1517,17 @@ const Sidebar: React.FC<Props> = ({
 										onClick={(chatMessage: Message) => goToMessage(chatMessage)}
 									/>
 								))}
-							</Styled.MessageList>
+							</div>
 						</>
 					)}
-			</Styled.ResultsContainer>
+			</div>
 
 			{isLoadingMoreChats && (
-				<Styled.LoadingMore className="animate-fade-in">
-					<Styled.LoadingMoreWrapper className="animate-in zoom-in-95 fade-in-0">
+				<div className="absolute right-1.25 bottom-0 left-0 z-1 flex animate-fade-in justify-center bg-linear-to-t from-white to-white/0 pb-5">
+					<div className="animate-in rounded-[40px] bg-white px-2.5 pt-2.5 pb-1 shadow-md fade-in-0 zoom-in-95">
 						<Spinner size={28} className="text-primary" />
-					</Styled.LoadingMoreWrapper>
-				</Styled.LoadingMore>
+					</div>
+				</div>
 			)}
 
 			{contactsTransition.isMounted && (
@@ -1570,7 +1599,7 @@ const Sidebar: React.FC<Props> = ({
 					onAnimationEnd={userListTransition.handleAnimationEnd}
 				/>
 			)}
-		</Styled.Sidebar>
+		</div>
 	);
 };
 

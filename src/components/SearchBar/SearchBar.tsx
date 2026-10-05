@@ -15,6 +15,7 @@ export type Props = {
 	// The focused input lifts to white with a glow; disable where the
 	// search bar sits on a surface that treatment clashes with
 	isFocusStyleEnabled?: boolean;
+	className?: string;
 };
 
 // The leading search icon or spinner, laid over the input's left padding
@@ -29,6 +30,7 @@ const SearchBar: React.FC<Props> = ({
 	onBlur,
 	autoFocus,
 	isFocusStyleEnabled = true,
+	className,
 }) => {
 	const { t } = useTranslation();
 
@@ -39,7 +41,12 @@ const SearchBar: React.FC<Props> = ({
 	return (
 		// searchBar__search and searchBar__inputContainer are hooks that some
 		// parents still style
-		<div className="searchBar__search flex items-center px-3.75 py-2.5">
+		<div
+			className={cn(
+				'searchBar__search flex items-center px-3.75 py-2.5',
+				className
+			)}
+		>
 			<div
 				className={cn(
 					'searchBar__inputContainer relative flex h-8.75 w-full items-center rounded-[10px] bg-gray-light transition-[background-color,box-shadow] duration-150 ease-out',

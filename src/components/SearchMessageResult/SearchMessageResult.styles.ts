@@ -33,9 +33,12 @@ export const MessageHeader = styled.div`
 	font-size: 12px;
 	color: rgba(0, 0, 45, 0.45);
 
+	/* The sender's name, shown in the sidebar's search results */
 	h3 {
 		font-size: 14px;
-		color: var(--default-text-color);
+		font-weight: 400;
+		color: var(--color-primary);
+		padding: 10px 15px;
 		margin-top: 5px;
 		margin-bottom: 2px;
 	}
