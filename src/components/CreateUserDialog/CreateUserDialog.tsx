@@ -1,5 +1,4 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
-import * as Styled from './CreateUserDialog.styles';
 import ContentCopyIcon from '@src/components/icons/ContentCopy';
 import MarkEmailReadIcon from '@src/components/icons/MarkEmailRead';
 import { Trans, useTranslation } from 'react-i18next';
@@ -16,6 +15,7 @@ import { Button } from '@src/components/ui/button';
 import {
 	Dialog,
 	DialogBody,
+	DialogContent,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -44,6 +44,9 @@ interface Props {
 }
 
 // Usernames are validated by the API too, only alphanumeric characters are allowed
+// Two fields side by side, stacked on narrow screens
+const fieldsRowClassName = 'flex gap-3.75 max-[601px]:flex-col';
+
 const USERNAME_PATTERN = /^[A-Za-z0-9]+$/;
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -261,7 +264,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 
 	return (
 		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-			<Styled.StyledDialogContent aria-describedby={undefined}>
+			<DialogContent aria-describedby={undefined}>
 				<DialogHeader>
 					<DialogTitle>
 						{createdUser ? t('User created') : t('Create new user')}
@@ -270,7 +273,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 
 				{createdUser ? (
 					<DialogBody>
-						<Alert severity="success">
+						<Alert className="mt-2.5" severity="success">
 							<Trans
 								values={{
 									postProcess: 'sprintf',
@@ -282,7 +285,11 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						</Alert>
 
 						{createdUser.activation_email_sent ? (
-							<Alert severity="info" icon={<MarkEmailReadIcon />}>
+							<Alert
+								className="mt-2.5"
+								severity="info"
+								icon={<MarkEmailReadIcon />}
+							>
 								<Trans
 									values={{
 										postProcess: 'sprintf',
@@ -293,7 +300,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 								</Trans>
 							</Alert>
 						) : (
-							<Alert severity="info">
+							<Alert className="mt-2.5" severity="info">
 								{isAppRole
 									? t(
 											'App integrations are not e-mailed. Use the activation link below to get their API token.'
@@ -304,11 +311,13 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 							</Alert>
 						)}
 
-						<Styled.SectionLabel>{t('Activation link')}</Styled.SectionLabel>
-						<Styled.ActivationLinkContainer>
-							<Styled.ActivationLink>
+						<div className="mt-1.25 text-[13px] font-medium text-muted-foreground">
+							{t('Activation link')}
+						</div>
+						<div className="mt-[8px] flex items-center gap-1.25 rounded-[8px] bg-gray-lighter py-1.25 pr-1.25 pl-3">
+							<div className="flex-1 text-[13px] break-all text-foreground">
 								{createdUser.activation_url}
-							</Styled.ActivationLink>
+							</div>
 							<SimpleTooltip title={t('Copy')}>
 								<Button
 									variant="ghost"
@@ -319,9 +328,9 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 									<ContentCopyIcon className="size-5" />
 								</Button>
 							</SimpleTooltip>
-						</Styled.ActivationLinkContainer>
+						</div>
 
-						<Alert severity="warning">
+						<Alert className="mt-2.5" severity="warning">
 							{isAppRole
 								? t(
 										'This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again.'
@@ -336,7 +345,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						</Alert>
 
 						{warnings.length > 0 && (
-							<Alert severity="warning">
+							<Alert className="mt-2.5" severity="warning">
 								{warnings.map((message) => (
 									<div key={message}>{t(message)}</div>
 								))}
@@ -345,7 +354,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 					</DialogBody>
 				) : (
 					<DialogBody>
-						<Styled.FieldsContainer>
+						<div className="flex flex-col gap-3.75">
 							<Field
 								className="gap-1.5"
 								data-invalid={Boolean(fieldErrors.username) || undefined}
@@ -371,7 +380,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 								)}
 							</Field>
 
-							<Styled.FieldsRow>
+							<div className={fieldsRowClassName}>
 								<Field
 									className="gap-1.5"
 									data-invalid={Boolean(fieldErrors.first_name) || undefined}
@@ -409,7 +418,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 										<FieldError>{t(fieldErrors.last_name)}</FieldError>
 									)}
 								</Field>
-							</Styled.FieldsRow>
+							</div>
 
 							<Field
 								className="gap-1.5"
@@ -458,7 +467,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 
 							{!isAppRole && (
 								<>
-									<Styled.FieldsRow>
+									<div className={fieldsRowClassName}>
 										<Field
 											className="gap-1.5"
 											data-invalid={Boolean(fieldErrors.password) || undefined}
@@ -498,7 +507,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 												autoComplete="new-password"
 											/>
 										</Field>
-									</Styled.FieldsRow>
+									</div>
 
 									{fieldErrors.password ? (
 										<FieldError>{t(fieldErrors.password)}</FieldError>
@@ -511,9 +520,13 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 									)}
 								</>
 							)}
-						</Styled.FieldsContainer>
+						</div>
 
-						{error && <Alert severity="error">{t(error)}</Alert>}
+						{error && (
+							<Alert className="mt-2.5" severity="error">
+								{t(error)}
+							</Alert>
+						)}
 					</DialogBody>
 				)}
 
@@ -538,7 +551,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						</Button>
 					)}
 				</DialogFooter>
-			</Styled.StyledDialogContent>
+			</DialogContent>
 		</Dialog>
 	);
 };

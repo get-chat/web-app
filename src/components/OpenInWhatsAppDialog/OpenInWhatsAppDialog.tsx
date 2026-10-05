@@ -8,7 +8,6 @@ import {
 	DialogFooter,
 	DialogTitle,
 } from '@src/components/ui/dialog';
-import * as Styled from './OpenInWhatsAppDialog.styles';
 import { QRCodeSVG } from 'qrcode.react';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { useAppSelector } from '@src/store/hooks';
@@ -38,21 +37,24 @@ const OpenInWhatsAppDialog: React.FC<Props> = ({
 			<DialogContent aria-describedby={undefined} className="overflow-visible">
 				<DialogTitle className="sr-only">{t('Open in WhatsApp')}</DialogTitle>
 				<DialogBody>
-					<Styled.ContentWrapper>
-						<BusinessProfileAvatar profilePhoto={profilePhoto} />
-						<Styled.ContentTitle>
+					<div className="flex flex-col items-center">
+						<BusinessProfileAvatar
+							className="fixed -mt-2.5 size-25 outline-5 outline-white [&_img]:[-webkit-user-drag:none]"
+							profilePhoto={profilePhoto}
+						/>
+						<div className="mt-15 mb-5 text-[16px]">
 							{t('Scan this code to start a WhatsApp chat with this number.')}
-						</Styled.ContentTitle>
+						</div>
 						<a href={`https://wa.me/${phoneNumber}`} target="_blank">
-							<Styled.QRContainer>
+							<div className="rounded-[20px] bg-gray-lighter p-5">
 								<QRCodeSVG
 									value={`https://wa.me/${phoneNumber}`}
 									size={200}
 									bgColor={'var(--gray-lighter)'}
 								/>
-							</Styled.QRContainer>
+							</div>
 						</a>
-					</Styled.ContentWrapper>
+					</div>
 				</DialogBody>
 				<DialogFooter>
 					<Button variant="ghost" color="secondary" onClick={close}>

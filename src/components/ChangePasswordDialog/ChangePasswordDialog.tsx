@@ -1,5 +1,4 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
-import * as Styled from './ChangePasswordDialog.styles';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changePassword } from '@src/api/authApi';
@@ -8,6 +7,7 @@ import { Button } from '@src/components/ui/button';
 import {
 	Dialog,
 	DialogBody,
+	DialogContent,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -97,13 +97,13 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 
 	return (
 		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
-			<Styled.StyledDialogContent aria-describedby={undefined}>
+			<DialogContent aria-describedby={undefined}>
 				<DialogHeader>
 					<DialogTitle>{t('Change password')}</DialogTitle>
 				</DialogHeader>
 				<DialogBody>
-					<Styled.FieldsContainer>
-						<Field className="gap-1.5">
+					<div className="flex flex-col">
+						<Field className="mb-2.5 gap-1.5">
 							<FieldLabel htmlFor={`${id}-current-password`}>
 								{t('Current password')}
 							</FieldLabel>
@@ -117,7 +117,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 							/>
 						</Field>
 
-						<Field className="gap-1.5">
+						<Field className="mb-2.5 gap-1.5">
 							<FieldLabel htmlFor={`${id}-new-password`}>
 								{t('New password')}
 							</FieldLabel>
@@ -130,7 +130,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 							/>
 						</Field>
 
-						<Field className="gap-1.5">
+						<Field className="mb-2.5 gap-1.5">
 							<FieldLabel htmlFor={`${id}-new-password-repeat`}>
 								{t('New password (repeat)')}
 							</FieldLabel>
@@ -142,9 +142,9 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 								autoComplete="new-password"
 							/>
 						</Field>
-					</Styled.FieldsContainer>
+					</div>
 					{errors.length > 0 && !isSuccess && (
-						<Alert severity="error">
+						<Alert className="my-2.5" severity="error">
 							<AlertTitle>{t('Error')}</AlertTitle>
 							{errors.map((message) => (
 								<div key={message}>{t(message)}</div>
@@ -152,7 +152,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 						</Alert>
 					)}
 					{isSuccess && (
-						<Alert severity="success">
+						<Alert className="my-2.5" severity="success">
 							<AlertTitle>{t('Success')}</AlertTitle>
 							{t('Changed password successfully')}
 						</Alert>
@@ -171,7 +171,7 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 						{t('Change')}
 					</Button>
 				</DialogFooter>
-			</Styled.StyledDialogContent>
+			</DialogContent>
 		</Dialog>
 	);
 };

@@ -11,7 +11,7 @@ import {
 	DialogFooter,
 	DialogTitle,
 } from '@src/components/ui/dialog';
-import { FieldLabel } from '@src/components/ui/field';
+import { Field, FieldLabel } from '@src/components/ui/field';
 import {
 	Select,
 	SelectContent,
@@ -28,7 +28,6 @@ import {
 	getUserPreferences,
 	storeUserPreference,
 } from '@src/helpers/StorageHelper';
-import * as Styled from './DateRangeDialog.styles';
 
 interface Props {
 	open: boolean;
@@ -123,7 +122,7 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 			<DialogContent aria-describedby={undefined} className="w-auto">
 				<DialogTitle className="sr-only">{t('Export by date')}</DialogTitle>
 				<DialogBody className="p-0">
-					<Styled.CalendarContainer>
+					<div className="rounded-[10px] bg-gray-light shadow-[0_6px_6px_-6px_rgba(0,0,45,0.2)] [&_.rdrStaticRange]:border-none!">
 						<DateRangePicker
 							ranges={[dateRange]}
 							onChange={handleChange}
@@ -133,10 +132,10 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 							staticRanges={customStaticRanges}
 							inputRanges={[]}
 						/>
-					</Styled.CalendarContainer>
+					</div>
 
-					<Styled.WeekStartDaySelectorContainer>
-						<Styled.FormControlStyled>
+					<div className="mx-3.75 mt-3.75 flex">
+						<Field className="w-auto min-w-[135px] gap-1.5">
 							<FieldLabel htmlFor="week-start-day-select">
 								{t('Start week on')}
 							</FieldLabel>
@@ -153,8 +152,8 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 									<SelectItem value="1">{t('Monday')}</SelectItem>
 								</SelectContent>
 							</Select>
-						</Styled.FormControlStyled>
-					</Styled.WeekStartDaySelectorContainer>
+						</Field>
+					</div>
 				</DialogBody>
 
 				<DialogFooter>
