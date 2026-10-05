@@ -147,6 +147,7 @@ Views are styled with [Tailwind CSS](https://tailwindcss.com) v4, configured in 
   - breakpoints are the app's own: `max-md:` is the single-column phone layout (up to 750px), `max-sm:` a small phone (up to 500px), `2xl:` from 1501px
   - spacing uses Tailwind's scale, where 1 step is 4px and fractions are fine (`py-1.25` is 5px)
   - arbitrary values (`w-[310px]`) are fine for one-off measurements
+- **Fading pages and large containers:** use `animate-fade-in` / `animate-fade-out` (opacity only). tw-animate's `animate-in`/`animate-out` also animate `transform`, which makes `position: fixed` content inside (overlays, the loading screen) shrink to the container while the animation runs. They're fine for small elements, e.g. `animate-in zoom-in-95`.
 - **Cascade:** Tailwind's utilities live in CSS cascade layers, so the remaining global CSS and styled-components win over them. Use the `!` suffix (`size-4!`) only to beat such a rule, and remove it once that rule is gone.
 - Don't use the `dark:` variant; the app has no dark mode. `src/styles/App.css` still defines legacy `.mt-1`–`.mr-3` helpers (in 5px steps) that override Tailwind's classes of the same names.
 

@@ -1494,7 +1494,7 @@ const Sidebar: React.FC<Props> = ({
 			</Styled.ResultsContainer>
 
 			{isLoadingMoreChats && (
-				<Styled.LoadingMore className="animate-in fade-in-0">
+				<Styled.LoadingMore className="animate-fade-in">
 					<Styled.LoadingMoreWrapper className="animate-in zoom-in-95 fade-in-0">
 						<Spinner size={28} className="text-primary" />
 					</Styled.LoadingMoreWrapper>

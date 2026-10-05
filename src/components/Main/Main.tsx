@@ -1147,7 +1147,7 @@ const Main: React.FC = () => {
 	return (
 		<div
 			className={
-				'app__body animate-in fade-in-0' +
+				'app__body animate-fade-in' +
 				(isIPad13 ? ' absoluteFullscreen' : '') +
 				(isMaximize ? ' maximized' : '')
 			}
@@ -1241,8 +1241,8 @@ const Main: React.FC = () => {
 					className={cn(
 						'loadingScreenOuter',
 						loadingScreenTransition.isExiting
-							? 'animate-out fade-out-0 duration-1000 fill-mode-forwards'
-							: 'animate-in fade-in-0'
+							? 'animate-[fade-out_1s_cubic-bezier(0.4,0,0.2,1)_forwards]'
+							: 'animate-fade-in'
 					)}
 					onAnimationEnd={loadingScreenTransition.handleAnimationEnd}
 				>

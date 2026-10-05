@@ -103,6 +103,15 @@
 	--shadow-menu: 0 2px 5px rgba(11, 20, 26, 0.1),
 		0 8px 24px rgba(11, 20, 26, 0.14);
 
+	/*
+	 * Opacity-only fades, timed like MUI's Fade. Use these on pages and large
+	 * containers: tw-animate's animate-in/out also animate `transform`, which
+	 * makes position: fixed descendants (overlays, the loading screen) size
+	 * themselves to the container instead of the window while it runs.
+	 */
+	--animate-fade-in: fade-in 225ms cubic-bezier(0.4, 0, 0.2, 1);
+	--animate-fade-out: fade-out 195ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+
 	/* Quick fade and slight zoom from the trigger, for menus */
 	--animate-menu-in: menu-in 140ms cubic-bezier(0.2, 0, 0, 1);
 	--animate-menu-out: menu-out 100ms ease-in forwards;
@@ -119,6 +128,18 @@
 		from {
 			opacity: 0;
 			transform: scale(0.75, 0.5625);
+		}
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
 		}
 	}
 

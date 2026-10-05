@@ -325,7 +325,7 @@ const Login: React.FC = () => {
 
 	return (
 		<Styled.LoginWrapper>
-			<Styled.LoginColumn className="animate-in duration-225 fade-in-0">
+			<Styled.LoginColumn className="animate-fade-in">
 				<Styled.LogoWrapper>
 					<Styled.Logo
 						src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
@@ -500,7 +500,7 @@ const Login: React.FC = () => {
 			/>
 
 			{isLoggingIn && (
-				<div className="login__backdrop fixed inset-0 z-[1300] flex animate-in items-center justify-center bg-black/50 text-white fade-in-0">
+				<div className="login__backdrop fixed inset-0 z-[1300] flex animate-fade-in items-center justify-center bg-black/50 text-white">
 					<Spinner size={40} />
 				</div>
 			)}
