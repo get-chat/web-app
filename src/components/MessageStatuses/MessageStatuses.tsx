@@ -1,5 +1,4 @@
 import React from 'react';
-import CloseIcon from '@src/components/icons/Close';
 import { useTranslation } from 'react-i18next';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import Moment from 'react-moment';
@@ -17,9 +16,13 @@ import {
 	hasAnyStatus,
 } from '@src/helpers/MessageHelper';
 import { findTemplate } from '@src/helpers/TemplateMessageHelper';
-import * as Styled from './MessageStatuses.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
-import { Button } from '@src/components/ui/button';
+import SidePanel from '@src/components/SidePanel';
+import { ProfileSection } from '@src/components/ProfilePanel';
+import { cn } from '@src/lib/utils';
+
+// The small tick icons in front of each status
+const statusIconClassName = 'mr-1.25 size-[0.7em]!';
 import { Separator } from '@src/components/ui/separator';
 
 interface Props extends PanelTransitionProps {
@@ -41,18 +44,17 @@ const MessageStatuses: React.FC<Props> = ({
 	});
 
 	return (
-		<Styled.Container $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
-			<Styled.Header>
-				<Button variant="ghost" color="neutral" size="icon-xl" onClick={close}>
-					<CloseIcon />
-				</Button>
-
-				<h3>{t('Message Information')}</h3>
-			</Styled.Header>
-			<Styled.Body>
+		<SidePanel
+			className="z-10"
+			title={t('Message Information')}
+			onClose={close}
+			isExiting={isExiting}
+			onAnimationEnd={onAnimationEnd}
+		>
+			<div className="relative flex flex-1 flex-col overflow-y-auto bg-gray-light">
 				{message && (
 					<>
-						<Styled.Preview>
+						<div className="mb-2.5 bg-chat-bg bg-(image:--chat-bg-image) bg-repeat p-3.75 shadow-[0_1px_3px_var(--shadow-light)] [&_.chat\_\_message]:my-0!">
 							<ChatMessage
 								data={message}
 								templateData={findTemplate(
@@ -61,17 +63,19 @@ const MessageStatuses: React.FC<Props> = ({
 									message.waba_payload?.template?.language
 								)}
 							/>
-						</Styled.Preview>
+						</div>
 
 						{reactions.length > 0 && (
-							<Styled.Section>
+							<ProfileSection className="flex flex-col gap-2.5">
 								<h5>{t('Reactions')}</h5>
 								{reactions
 									.filter((item) => !!item.waba_payload?.reaction?.emoji)
 									.map((reaction) => (
-										<Styled.Reaction key={reaction.id}>
-											<div className="sender">{getSenderName(reaction)}</div>
-											<div className="timestamp">
+										<div key={reaction.id}>
+											<div className="text-[14px]">
+												{getSenderName(reaction)}
+											</div>
+											<div className="mb-1.25 text-[x-small] text-ink/60">
 												<Moment
 													date={getMessageTimestamp(reaction)}
 													calendar={CALENDAR_SHORT}
@@ -82,66 +86,65 @@ const MessageStatuses: React.FC<Props> = ({
 												message={reaction.waba_payload?.reaction?.emoji ?? ''}
 												smallEmoji
 											/>
-										</Styled.Reaction>
+										</div>
 									))}
-							</Styled.Section>
+							</ProfileSection>
 						)}
 
-						<Styled.Section>
+						<ProfileSection className="flex flex-col gap-2.5">
 							{message.waba_statuses?.sent && (
 								<>
-									<Styled.SubSection>
-										<Styled.SubSectionTitle>
-											<DoneIcon color="inherit" />
+									<div className="flex flex-col">
+										<div className="flex items-center">
+											<DoneIcon className={statusIconClassName} />
 											<h5>{t('Sent at')}</h5>
-										</Styled.SubSectionTitle>
+										</div>
 										<Moment
 											date={message.waba_statuses.sent}
 											format={dateFormat}
 											unix
-											className={Styled.SubSectionText}
 										/>
-									</Styled.SubSection>
+									</div>
 								</>
 							)}
 							{message.waba_statuses?.delivered && (
 								<>
 									<Separator className="bg-[rgba(0,0,45,0.05)]" />
-									<Styled.SubSection>
-										<Styled.SubSectionTitle>
-											<DoneAll color="inherit" />
+									<div className="flex flex-col">
+										<div className="flex items-center">
+											<DoneAll className={statusIconClassName} />
 											<h5>{t('Delivered at')}</h5>
-										</Styled.SubSectionTitle>
+										</div>
 										<Moment
 											date={message.waba_statuses.delivered}
 											format={dateFormat}
 											unix
-											className={Styled.SubSectionText}
 										/>
-									</Styled.SubSection>
+									</div>
 								</>
 							)}
 							{message.waba_statuses?.read && (
 								<>
 									<Separator className="bg-[rgba(0,0,45,0.05)]" />
-									<Styled.SubSection>
-										<Styled.SubSectionTitle>
-											<Styled.BlueIcon color="inherit" />
+									<div className="flex flex-col">
+										<div className="flex items-center">
+											<DoneAll
+												className={cn(statusIconClassName, 'fill-light-blue!')}
+											/>
 											<h5>{t('Read at')}</h5>
-										</Styled.SubSectionTitle>
+										</div>
 										<Moment
 											date={message.waba_statuses.read}
 											format={dateFormat}
 											unix
-											className={Styled.SubSectionText}
 										/>
-									</Styled.SubSection>
+									</div>
 								</>
 							)}
-						</Styled.Section>
+						</ProfileSection>
 
 						{(message.waba_payload?.errors?.length ?? 0) > 0 && (
-							<Styled.Section>
+							<ProfileSection className="flex flex-col gap-2.5">
 								<h5>
 									{t(
 										hasAnyStatus(message)
@@ -150,12 +153,12 @@ const MessageStatuses: React.FC<Props> = ({
 									)}
 								</h5>
 								<ChatMessageErrors data={message} />
-							</Styled.Section>
+							</ProfileSection>
 						)}
 					</>
 				)}
-			</Styled.Body>
-		</Styled.Container>
+			</div>
+		</SidePanel>
 	);
 };
 
