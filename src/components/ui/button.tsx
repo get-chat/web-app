@@ -28,7 +28,7 @@ const buttonVariants = cva(
 				outline:
 					'border border-(--btn)/40 text-(color:--btn) hover:border-(--btn) hover:bg-(--btn)/6',
 				ghost:
-					'text-(color:--btn) hover:bg-(--btn)/6 focus-visible:bg-(--btn)/12 focus-visible:ring-0 data-[state=open]:bg-(--btn)/10',
+					'text-(color:--btn) hover:bg-(--btn)/6 focus-visible:bg-(--btn)/12 focus-visible:ring-0',
 				link: 'text-(color:--btn) underline-offset-4 hover:underline',
 				unstyled: '',
 			},
