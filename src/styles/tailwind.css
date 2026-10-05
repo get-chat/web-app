@@ -51,7 +51,12 @@
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
-	--color-divider: var(--divider);
+	--color-menu-divider: var(--menu-divider);
+	--color-menu-hover: var(--menu-hover);
+	--color-menu-active: var(--menu-active);
+	--color-menu-icon: var(--menu-icon);
+	--color-menu-muted: var(--menu-muted);
+	--color-selection: var(--selection);
 
 	/* App-specific tokens from index.css */
 	--color-chat-bg: var(--chat-bg);
@@ -59,10 +64,14 @@
 	--color-chat-icon-dark: var(--chat-icon-dark);
 }
 
-/* Motion and depth borrowed from MUI, so migrated components feel the same */
 @theme {
-	--shadow-elevation-3: 0 3px 3px -2px rgba(0, 0, 0, 0.2),
-		0 3px 4px 0 rgba(0, 0, 0, 0.14), 0 1px 8px 0 rgba(0, 0, 0, 0.12);
+	/* Soft two-layer shadow of the menus in the Inbox Analytics design */
+	--shadow-menu: 0 2px 5px rgba(11, 20, 26, 0.1),
+		0 8px 24px rgba(11, 20, 26, 0.14);
+
+	/* Quick fade and slight zoom from the trigger, for menus */
+	--animate-menu-in: menu-in 140ms cubic-bezier(0.2, 0, 0, 1);
+	--animate-menu-out: menu-out 100ms ease-in forwards;
 
 	/* MUI's Grow transition, used by its menus and tooltips */
 	--animate-grow-in: grow-in 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -74,6 +83,20 @@
 		from {
 			opacity: 0;
 			transform: scale(0.75, 0.5625);
+		}
+	}
+
+	@keyframes menu-in {
+		from {
+			opacity: 0;
+			transform: scale(0.96);
+		}
+	}
+
+	@keyframes menu-out {
+		to {
+			opacity: 0;
+			transform: scale(0.96);
 		}
 	}
 
@@ -97,7 +120,7 @@
 	--background: #fff;
 	--foreground: var(--default-text-color);
 	--popover: #fff;
-	--popover-foreground: rgba(0, 0, 0, 0.87);
+	--popover-foreground: #111b21;
 	--primary: var(--color-primary);
 	--primary-foreground: rgba(0, 0, 0, 0.87);
 	--secondary: var(--gray-lighter);
@@ -110,7 +133,13 @@
 	--border: var(--gray-light);
 	--input: var(--gray-light);
 	--ring: rgba(101, 203, 172, 0.8);
-	--divider: rgba(0, 0, 45, 0.05);
+	/* Menu palette from the Inbox Analytics design */
+	--menu-hover: #f5f6f7;
+	--menu-active: #f0f2f5;
+	--menu-divider: #eceff1;
+	--menu-icon: #54656f;
+	--menu-muted: #667781;
+	--selection: #1f5bd8;
 }
 
 @layer base {

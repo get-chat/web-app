@@ -14,12 +14,12 @@ import { useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import AssigneeChip from '@src/components/AssigneeChip';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import SellIcon from '@mui/icons-material/Sell';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import CloseIcon from '@mui/icons-material/Close';
-import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedInOutlined';
+import SellIcon from '@mui/icons-material/SellOutlined';
+import EventNoteIcon from '@mui/icons-material/EventNoteOutlined';
+import AccountBoxIcon from '@mui/icons-material/AccountBoxOutlined';
+import CloseIcon from '@mui/icons-material/CloseOutlined';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestoreOutlined';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
@@ -28,7 +28,7 @@ import { isPersonExpired } from '@src/helpers/PersonHelper';
 import TagsChip from '@src/components/TagsChip';
 import { AxiosError } from 'axios';
 import { updateResolved } from '@src/api/chatsApi';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from '@mui/icons-material/DoneOutlined';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import CustomAvatar from '@src/components/CustomAvatar';
@@ -263,7 +263,7 @@ const ChatHeader: React.FC<Props> = ({
 							<MoreVert />
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end" className="min-w-48">
+					<DropdownMenuContent align="end">
 						<DropdownMenuItem onSelect={showContactDetails}>
 							<AccountBoxIcon />
 							{t('Contact details')}

@@ -2,17 +2,21 @@ import * as React from 'react';
 import { cn } from '@src/lib/utils';
 import CheckIcon from '@mui/icons-material/Check';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CircleIcon from '@mui/icons-material/Circle';
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 
-// Styled after the app's MUI menus (dense items, elevation 3, 12px corners), so
-// both look the same while the migration is in progress. z-[1300] is MUI's
-// modal layer, which keeps the menu above MUI dialogs and drawers.
+// Styled after the menus of the Inbox Analytics design: a borderless white
+// panel with a soft shadow, 32px rows with a muted 19px icon, and only a light
+// grey wash on the highlighted row. z-[1300] is MUI's modal layer, which keeps
+// menus above MUI dialogs and drawers.
 const menuSurface =
-	'z-[1300] min-w-4 overflow-x-hidden overflow-y-auto rounded-[12px] bg-popover py-2 text-popover-foreground shadow-elevation-3 data-[state=closed]:animate-grow-out data-[state=open]:animate-grow-in';
+	'z-[1300] min-w-48 overflow-x-hidden overflow-y-auto rounded-[12px] bg-popover py-1.5 text-popover-foreground shadow-menu data-[state=closed]:animate-menu-out data-[state=open]:animate-menu-in';
 
+// `!` on the icon colour: App.css colours every MUI icon grey. Icons that set
+// their own text colour keep it.
 const menuItem =
-	"relative flex min-h-8 cursor-pointer items-center gap-4 px-4 py-1 text-sm leading-[1.43] outline-none! select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-38 data-[highlighted]:bg-black/4 focus-visible:bg-black/12 data-[inset]:pl-[52px] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5!";
+	"relative flex h-8 cursor-pointer items-center gap-3.5 px-4 text-sm outline-none! select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[highlighted]:bg-menu-hover data-[inset]:pl-[49px] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='text-'])]:text-menu-icon! [&_svg:not([class*='size-'])]:size-[19px]!";
 
 function DropdownMenu({
 	...props
@@ -41,7 +45,7 @@ function DropdownMenuTrigger({
 
 function DropdownMenuContent({
 	className,
-	sideOffset = 0,
+	sideOffset = 6,
 	collisionPadding = 16,
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
@@ -86,7 +90,7 @@ function DropdownMenuItem({
 			data-variant={variant}
 			className={cn(
 				menuItem,
-				'data-[variant=destructive]:text-destructive data-[variant=destructive]:[&_svg]:text-destructive!',
+				"data-[variant=destructive]:text-destructive data-[variant=destructive]:[&_svg:not([class*='text-'])]:text-destructive!",
 				className
 			)}
 			{...props}
@@ -103,13 +107,13 @@ function DropdownMenuCheckboxItem({
 	return (
 		<DropdownMenuPrimitive.CheckboxItem
 			data-slot="dropdown-menu-checkbox-item"
-			className={cn(menuItem, 'pl-[52px]', className)}
+			className={cn(menuItem, 'group/checkbox', className)}
 			checked={checked}
 			{...props}
 		>
-			<span className="pointer-events-none absolute left-4 flex size-5 items-center justify-center">
+			<span className="flex size-[18px] shrink-0 items-center justify-center rounded-[4px] border-[1.5px] border-[#aeb7bf] bg-white group-data-[state=checked]/checkbox:border-selection group-data-[state=checked]/checkbox:bg-selection">
 				<DropdownMenuPrimitive.ItemIndicator>
-					<CheckIcon />
+					<CheckIcon className="size-3.5! text-white!" />
 				</DropdownMenuPrimitive.ItemIndicator>
 			</span>
 			{children}
@@ -136,14 +140,11 @@ function DropdownMenuRadioItem({
 	return (
 		<DropdownMenuPrimitive.RadioItem
 			data-slot="dropdown-menu-radio-item"
-			className={cn(menuItem, 'pl-[52px]', className)}
+			className={cn(menuItem, 'group/radio', className)}
 			{...props}
 		>
-			<span className="pointer-events-none absolute left-4 flex size-5 items-center justify-center">
-				<DropdownMenuPrimitive.ItemIndicator>
-					<CircleIcon className="size-2!" />
-				</DropdownMenuPrimitive.ItemIndicator>
-			</span>
+			<RadioButtonCheckedIcon className="hidden text-selection! group-data-[state=checked]/radio:block" />
+			<RadioButtonUncheckedIcon className="text-[#8696a0]! group-data-[state=checked]/radio:hidden" />
 			{children}
 		</DropdownMenuPrimitive.RadioItem>
 	);
@@ -161,7 +162,7 @@ function DropdownMenuLabel({
 			data-slot="dropdown-menu-label"
 			data-inset={inset}
 			className={cn(
-				'px-4 py-1.5 text-sm font-semibold data-[inset]:pl-[52px]',
+				'px-4 pt-2 pb-1 text-xs font-medium text-menu-muted data-[inset]:pl-[49px]',
 				className
 			)}
 			{...props}
@@ -176,7 +177,7 @@ function DropdownMenuSeparator({
 	return (
 		<DropdownMenuPrimitive.Separator
 			data-slot="dropdown-menu-separator"
-			className={cn('my-2 h-px bg-divider', className)}
+			className={cn('my-1.5 h-px bg-menu-divider', className)}
 			{...props}
 		/>
 	);
@@ -189,10 +190,7 @@ function DropdownMenuShortcut({
 	return (
 		<span
 			data-slot="dropdown-menu-shortcut"
-			className={cn(
-				'ml-auto pl-4 text-xs tracking-widest text-muted-foreground',
-				className
-			)}
+			className={cn('ml-auto pl-4 text-xs text-menu-muted', className)}
 			{...props}
 		/>
 	);
@@ -216,7 +214,7 @@ function DropdownMenuSubTrigger({
 		<DropdownMenuPrimitive.SubTrigger
 			data-slot="dropdown-menu-sub-trigger"
 			data-inset={inset}
-			className={cn(menuItem, 'data-[state=open]:bg-black/4', className)}
+			className={cn(menuItem, 'data-[state=open]:bg-menu-active', className)}
 			{...props}
 		>
 			{children}
