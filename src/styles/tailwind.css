@@ -19,16 +19,10 @@
 @layer theme, base, components, utilities;
 
 @import 'tailwindcss/theme.css' layer(theme);
-/*
- * All of src is scanned for class names. Legacy class names that would turn
- * into a Tailwind utility with a different meaning are excluded below:
- * ChatFooter's `container` would otherwise get Tailwind's max-widths.
- */
+/* All of src is scanned for class names */
 @import 'tailwindcss/utilities.css' layer(utilities) source('../');
 /* Enter/exit animation classes (animate-in, fade-in-0...) used by shadcn */
 @import 'tw-animate-css';
-
-@source not inline('container');
 
 @theme inline {
 	--radius-sm: calc(var(--radius) - 4px);

@@ -43,27 +43,7 @@ import { setState, toggleState } from '@src/store/reducers/UIReducer';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { Badge } from '@src/components/ui/badge';
 import { cn } from '@src/lib/utils';
-import {
-	ActionIcon,
-	ActionSeparator,
-	ActionsRow,
-	ActionsRowLeft,
-	ActionsRowRight,
-	AttachmentContainer,
-	AttachmentOptionDocument,
-	AttachmentOptionImageAndVideo,
-	AttachmentOptions,
-	CommandActionIcon,
-	Container,
-	EmojiPickerContainer,
-	Footer,
-	Row,
-	ScrollButton,
-	ScrollButtonWrapper,
-	TypeBox,
-	TypeBoxEditable,
-	TypeBoxHint,
-} from './ChatFooter.styles';
+import { Button } from '@src/components/ui/button';
 
 interface Props {
 	waId: string | undefined;
@@ -86,6 +66,37 @@ interface Props {
 	handleScrollButtonClick: () => void;
 	processCommand: (text: string) => void;
 }
+
+interface FooterActionButtonProps extends React.ComponentProps<typeof Button> {
+	/** Its panel or menu is open */
+	isActive?: boolean;
+}
+
+// MUI's small IconButton (5px padding) around a 20px icon: a 30px circle,
+// lifted onto white while its panel is open
+const FooterActionButton: React.FC<FooterActionButtonProps> = ({
+	isActive = false,
+	className,
+	...props
+}) => (
+	<Button
+		variant="ghost"
+		color="neutral"
+		size="icon-sm"
+		className={cn(
+			'size-7.5 rounded-full transition-all duration-200 ease-in [&_.app-icon]:size-5! [&_.app-icon]:text-chat-icon! [&_.app-icon]:transition-colors [&_.app-icon]:duration-200 [&_.app-icon]:ease-in',
+			isActive &&
+				'bg-white! shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)] [&_.app-icon]:text-chat-icon-dark!',
+			className
+		)}
+		{...props}
+	/>
+);
+
+// A thin divider between groups of footer buttons
+const ActionSeparator: React.FC = () => (
+	<div className="mx-1.25 h-5 w-px bg-black/10" />
+);
 
 const ChatFooter: React.FC<Props> = ({
 	waId,
@@ -380,7 +391,10 @@ const ChatFooter: React.FC<Props> = ({
 	const ACCEPT_DOCUMENT = '*.*';
 
 	return (
-		<Container onDrop={(event: React.DragEvent) => event.preventDefault()}>
+		<div
+			className="relative flex flex-col border-l border-[lightgray] max-md:border-l-0"
+			onDrop={(event: React.DragEvent) => event.preventDefault()}
+		>
 			{isQuickActionsMenuVisible && (
 				<QuickActionsMenu
 					input={translateHTMLInputToText(input).trim()}
@@ -392,7 +406,7 @@ const ChatFooter: React.FC<Props> = ({
 			)}
 
 			{isEmojiPickerVisible && (
-				<EmojiPickerContainer>
+				<div className="m-2.5 flex-1 rounded-[10px] bg-white">
 					<NimblePicker
 						set={EMOJI_SET}
 						sheetSize={EMOJI_SHEET_SIZE}
@@ -401,7 +415,7 @@ const ChatFooter: React.FC<Props> = ({
 						emojiSize={32}
 						onSelect={handleEmojiSelect}
 					/>
-				</EmojiPickerContainer>
+				</div>
 			)}
 
 			<ContactsModal
@@ -422,12 +436,29 @@ const ChatFooter: React.FC<Props> = ({
 				recipientWaId={waId}
 			/>
 
-			<Row>
-				<Footer className={isExpired ? 'expired' : ''}>
-					<form>
-						<TypeBox className={isExpired ? 'expired' : ''}>
+			<div className="flex-1">
+				<div
+					className={cn(
+						'flex max-h-100 justify-between px-2.5 transition-all duration-500 ease-out',
+						isExpired ? 'h-auto! flex-col [align-items:normal]' : 'items-center'
+					)}
+				>
+					<form className="flex flex-1">
+						<div
+							className={cn(
+								'relative mb-1.25 h-auto flex-1 overflow-hidden rounded-[12px] border-none transition-[box-shadow,background-color] duration-200 ease-out focus:border-none focus:outline-none',
+								isExpired
+									? 'bg-[#f2edea] shadow-none'
+									: 'bg-white shadow-[var(--shadow-sm),0_0_0_1px_rgba(94,56,38,0.06)] focus-within:shadow-[var(--shadow-sm),0_0_0_1px_var(--color-primary),0_0_0_4px_rgba(101,203,172,0.2)]'
+							)}
+						>
 							{translateHTMLInputToText(input).trim() === '' && (
-								<TypeBoxHint>
+								<div
+									className={cn(
+										'absolute z-0 w-full truncate py-2 pr-6.25 pl-3.75',
+										isExpired ? 'text-[#736054]' : 'text-[#9c8173]'
+									)}
+								>
 									{isExpired ? (
 										<span>
 											{t(
@@ -437,9 +468,12 @@ const ChatFooter: React.FC<Props> = ({
 									) : (
 										<span>{t('Type a message')}</span>
 									)}
-								</TypeBoxHint>
+								</div>
 							)}
-							<TypeBoxEditable
+							<div
+								// The transparent outline beats the app's global
+								// :focus-visible one
+								className="relative z-100 max-h-[250px] min-h-[26px] w-full overflow-y-auto px-3.75 py-2 [word-break:break-word] [outline:1px_solid_transparent]! max-md:max-h-40"
 								id="typeBox__editable"
 								ref={editable}
 								contentEditable="true"
@@ -460,7 +494,7 @@ const ChatFooter: React.FC<Props> = ({
 									if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
 								}}
 							/>
-						</TypeBox>
+						</div>
 						<button
 							onClick={(e: React.MouseEvent) => sendMessage(true, e)}
 							type="submit"
@@ -469,22 +503,22 @@ const ChatFooter: React.FC<Props> = ({
 							{t('Send a message')}
 						</button>
 					</form>
-				</Footer>
-			</Row>
+				</div>
+			</div>
 
-			<ActionsRow>
-				<ActionsRowLeft>
+			<div className="flex gap-[7px] px-2.5 pt-1.25 pb-2.5">
+				<div className="flex items-center gap-[7px]">
 					<SimpleTooltip
 						title={t('Quick Actions')}
 						side="top"
 						disableHoverableContent
 					>
-						<CommandActionIcon
-							className={isQuickActionsMenuVisible ? 'active' : ''}
+						<FooterActionButton
+							isActive={isQuickActionsMenuVisible}
 							onClick={displayQuickActionsMenu}
 						>
 							<KeyboardCommandKeyIcon />
-						</CommandActionIcon>
+						</FooterActionButton>
 					</SimpleTooltip>
 
 					{!(isUserActionsRestricted && isExpired) && <ActionSeparator />}
@@ -495,13 +529,13 @@ const ChatFooter: React.FC<Props> = ({
 							side="top"
 							disableHoverableContent
 						>
-							<ActionIcon
+							<FooterActionButton
 								data-test-id="templates-button"
 								onClick={toggleTemplateMessages}
-								className={isTemplatesVisible ? 'active' : ''}
+								isActive={isTemplatesVisible}
 							>
 								<SmsIcon />
-							</ActionIcon>
+							</FooterActionButton>
 						</SimpleTooltip>
 					)}
 
@@ -511,15 +545,13 @@ const ChatFooter: React.FC<Props> = ({
 							side="top"
 							disableHoverableContent
 						>
-							<ActionIcon
+							<FooterActionButton
 								onClick={toggleInteractiveMessages}
-								className={cn(
-									isAttachmentOptionsVisible && 'desktopOnly',
-									isInteractiveMessagesVisible && 'active'
-								)}
+								isActive={isInteractiveMessagesVisible}
+								className={cn(isAttachmentOptionsVisible && 'desktopOnly')}
 							>
 								<TryIcon />
-							</ActionIcon>
+							</FooterActionButton>
 						</SimpleTooltip>
 					)}
 
@@ -529,15 +561,13 @@ const ChatFooter: React.FC<Props> = ({
 							side="top"
 							disableHoverableContent
 						>
-							<ActionIcon
+							<FooterActionButton
 								onClick={toggleSavedResponses}
-								className={cn(
-									isAttachmentOptionsVisible && 'desktopOnly',
-									isSavedResponsesVisible && 'active'
-								)}
+								isActive={isSavedResponsesVisible}
+								className={cn(isAttachmentOptionsVisible && 'desktopOnly')}
 							>
 								<NotesIcon />
-							</ActionIcon>
+							</FooterActionButton>
 						</SimpleTooltip>
 					)}
 
@@ -549,48 +579,51 @@ const ChatFooter: React.FC<Props> = ({
 							side="top"
 							disableHoverableContent
 						>
-							<ActionIcon
-								className={isEmojiPickerVisible ? 'active' : ''}
+							<FooterActionButton
+								isActive={isEmojiPickerVisible}
 								onClick={toggleEmojiPicker}
 							>
 								<InsertEmoticon />
-							</ActionIcon>
+							</FooterActionButton>
 						</SimpleTooltip>
 					)}
 
 					{!isExpired && (
-						<AttachmentContainer
-							className={isAttachmentOptionsVisible ? 'open' : ''}
+						<div
+							className={cn(
+								'flex gap-1.25 rounded-[20px]',
+								isAttachmentOptionsVisible && 'bg-black/5'
+							)}
 						>
 							<SimpleTooltip
 								title={t('Attachment')}
 								side="top"
 								disableHoverableContent
 							>
-								<ActionIcon
-									className={isAttachmentOptionsVisible ? 'active' : ''}
+								<FooterActionButton
+									isActive={isAttachmentOptionsVisible}
 									onClick={() =>
 										setAttachmentOptionsVisible(!isAttachmentOptionsVisible)
 									}
 								>
 									<AttachFile />
-								</ActionIcon>
+								</FooterActionButton>
 							</SimpleTooltip>
 
 							{isAttachmentOptionsVisible && (
-								<AttachmentOptions className="animate-grow-in">
+								<div className="ml-1.25 flex animate-grow-in gap-[7px] max-md:ml-0">
 									<SimpleTooltip
 										title={t('Images & Videos')}
 										side="top"
 										disableHoverableContent
 									>
-										<AttachmentOptionImageAndVideo
+										<FooterActionButton
 											onClick={() =>
 												handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
 											}
 										>
 											<ImageIcon />
-										</AttachmentOptionImageAndVideo>
+										</FooterActionButton>
 									</SimpleTooltip>
 
 									<SimpleTooltip
@@ -598,11 +631,11 @@ const ChatFooter: React.FC<Props> = ({
 										side="top"
 										disableHoverableContent
 									>
-										<AttachmentOptionDocument
+										<FooterActionButton
 											onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
 										>
 											<InsertDriveFileIcon />
-										</AttachmentOptionDocument>
+										</FooterActionButton>
 									</SimpleTooltip>
 
 									<SimpleTooltip
@@ -610,9 +643,9 @@ const ChatFooter: React.FC<Props> = ({
 										side="top"
 										disableHoverableContent
 									>
-										<ActionIcon onClick={openContactsModal}>
+										<FooterActionButton onClick={openContactsModal}>
 											<ContactsIcon />
-										</ActionIcon>
+										</FooterActionButton>
 									</SimpleTooltip>
 
 									<SimpleTooltip
@@ -620,17 +653,19 @@ const ChatFooter: React.FC<Props> = ({
 										side="top"
 										disableHoverableContent
 									>
-										<ActionIcon onClick={() => setLocationModalVisible(true)}>
+										<FooterActionButton
+											onClick={() => setLocationModalVisible(true)}
+										>
 											<LocationOnIcon />
-										</ActionIcon>
+										</FooterActionButton>
 									</SimpleTooltip>
-								</AttachmentOptions>
+								</div>
 							)}
-						</AttachmentContainer>
+						</div>
 					)}
-				</ActionsRowLeft>
+				</div>
 
-				<ActionsRowRight>
+				<div className="flex flex-1 items-center justify-end gap-[7px]">
 					<div className={!isRecording ? 'hidden' : ''}>
 						<VoiceRecord
 							voiceRecordCase="chat"
@@ -645,28 +680,28 @@ const ChatFooter: React.FC<Props> = ({
 							side="top"
 							disableHoverableContent
 						>
-							<ActionIcon
+							<FooterActionButton
 								onClick={() =>
 									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
 								}
 							>
 								<MicIcon />
-							</ActionIcon>
+							</FooterActionButton>
 						</SimpleTooltip>
 					)}
 
 					{hasInput() && (
 						<SimpleTooltip title={t('Send')} side="top" disableHoverableContent>
-							<ActionIcon
+							<FooterActionButton
 								onClick={(e: React.MouseEvent) => sendMessage(true, e)}
 								data-test-id="send-message-button"
 							>
 								<Send />
-							</ActionIcon>
+							</FooterActionButton>
 						</SimpleTooltip>
 					)}
-				</ActionsRowRight>
-			</ActionsRow>
+				</div>
+			</div>
 
 			<div className="hidden">
 				<FileInput
@@ -690,14 +725,24 @@ const ChatFooter: React.FC<Props> = ({
 			</div>
 
 			{/* Stays mounted like MUI's Zoom did; zooms in each time it shows */}
-			<ScrollButtonWrapper
-				className={
+			{/* Holds the scroll button and its unread count badge, as MUI's Badge
+			did, on MUI's Fab layer so it floats over the messages */}
+			<span
+				className={cn(
+					'absolute right-5 bottom-28 z-1050 inline-flex',
 					isScrollButtonVisible ? 'animate-in zoom-in duration-225' : 'hidden!'
-				}
+				)}
 			>
-				<ScrollButton onClick={handleScrollButtonClick}>
+				{/* MUI's small Fab: a raised round 40px button */}
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-lg"
+					className="rounded-full bg-white! shadow-[0px_3px_5px_-1px_rgba(0,0,0,0.2),0px_6px_10px_0px_rgba(0,0,0,0.14),0px_1px_18px_0px_rgba(0,0,0,0.12)] [&_.app-icon]:size-6! [&_.app-icon]:text-(--color-primary-light)!"
+					onClick={handleScrollButtonClick}
+				>
 					<ArrowDownward />
-				</ScrollButton>
+				</Button>
 				{currentNewMessages !== 0 && (
 					<Badge
 						variant="solid"
@@ -708,8 +753,8 @@ const ChatFooter: React.FC<Props> = ({
 						{currentNewMessages > 99 ? '99+' : currentNewMessages}
 					</Badge>
 				)}
-			</ScrollButtonWrapper>
-		</Container>
+			</span>
+		</div>
 	);
 };
 
