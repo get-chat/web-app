@@ -61,9 +61,8 @@ const AssigneeChip: React.FC<Props> = ({
 		isActionable,
 	});
 
-	// Controlled so the chip can carry the "menuOpen" class, which keeps an
-	// empty chip visible in the chat list while its menu is open (assigneeChip
-	// and menuOpen are hooks for ChatListItem's styles)
+	// Controlled so the chip can carry data-menu-open, which keeps an empty
+	// chip visible in the chat list while its menu is open
 	const [isMenuOpen, setMenuOpen] = useState(false);
 
 	const hideMenu = () => {
@@ -82,8 +81,9 @@ const AssigneeChip: React.FC<Props> = ({
 
 	const chip = (
 		<ChatChip
-			className={cn('assigneeChip', isMenuOpen && 'menuOpen', className)}
+			className={className}
 			isClickable={isActionable}
+			data-menu-open={isMenuOpen || undefined}
 		>
 			<ChatChipAvatar
 				className={cn(!name && 'bg-black/5 [&_.app-icon]:text-black/60!')}

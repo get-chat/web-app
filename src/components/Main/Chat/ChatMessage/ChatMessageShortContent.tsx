@@ -21,6 +21,7 @@ interface Props {
 	isLastMessageFromUs: boolean;
 	template?: Template | undefined;
 	reaction?: Reaction | undefined;
+	className?: string;
 }
 
 const ChatMessageShortContent: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const ChatMessageShortContent: React.FC<Props> = ({
 	isLastMessageFromUs,
 	template,
 	reaction,
+	className,
 }) => {
 	const templates = useAppSelector((state) => state.templates.value);
 	const { t } = useTranslation();
@@ -85,7 +87,7 @@ const ChatMessageShortContent: React.FC<Props> = ({
 	};
 
 	return (
-		<div>
+		<div className={className}>
 			{isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
 			<ChatMessageTypeIcon type={type} />
 			{print()}
