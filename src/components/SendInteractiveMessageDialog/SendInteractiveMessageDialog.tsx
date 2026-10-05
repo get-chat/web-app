@@ -32,17 +32,12 @@ import CarouselCardsEditor, {
 	getCardMediaLink,
 	MIN_CAROUSEL_CARDS,
 } from './CarouselCardsEditor';
-import {
-	Advanced,
-	AdvancedToggle,
-	Container,
-	Description,
-	HelperText,
-	PreviewContainer,
-	PreviewTitle,
-	StyledAlert,
-	TextFieldWrapper,
-} from './SendInteractiveMessageDialog.styles';
+import { Alert } from '@src/components/ui/alert';
+
+// The notes under the description; their translated HTML may hold links.
+// Smaller text, but the line height of the Alert's own text-sm.
+const noteClassName =
+	'mt-3.75 px-2.5 py-1 text-[12px]/[calc(1.25/0.875)] [&_a]:font-semibold [&_a]:underline';
 
 export type Props = {
 	isVisible: boolean;
@@ -298,7 +293,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				: false;
 
 		return (
-			<TextFieldWrapper key={parameter.key}>
+			<div className="mt-2.5" key={parameter.key}>
 				<Field data-invalid={isInvalid || undefined} className="gap-1">
 					<FieldLabel htmlFor={inputId}>
 						{t(parameter.placeholder || keyToLabel(parameter.key))}
@@ -320,13 +315,14 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 					/>
 				</Field>
 				{parameter.description && (
-					<HelperText
+					<div
+						className="mt-1.25 text-[12px] text-[#6f7385] [&_a]:text-primary"
 						dangerouslySetInnerHTML={{
 							__html: t(parameter.description),
 						}}
 					/>
 				)}
-			</TextFieldWrapper>
+			</div>
 		);
 	};
 
@@ -340,21 +336,22 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 				</DialogHeader>
 				<DialogBody>
 					{describedInteractive && (
-						<Container>
+						<div className="flex flex-col gap-7.5">
 							<div>
-								<Description
+								<div
+									className="text-[14px] max-md:text-[12px]"
 									dangerouslySetInnerHTML={{
 										__html: t(describedInteractive.description),
 									}}
 								/>
 								{describedInteractive.warning && (
-									<StyledAlert severity="warning">
+									<Alert className={noteClassName} severity="warning">
 										<div
 											dangerouslySetInnerHTML={{
 												__html: t(describedInteractive.warning),
 											}}
 										/>
-									</StyledAlert>
+									</Alert>
 								)}
 								<div>
 									{payload &&
@@ -367,7 +364,8 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 									describedInteractive.parameters.filter(
 										(parameter) => parameter.advanced
 									).length > 0 && (
-										<AdvancedToggle
+										<div
+											className="mt-7.5 cursor-pointer text-[14px] font-semibold text-[#6f7385]"
 											onClick={() =>
 												setIsShowingAdvanced((prevState) => !prevState)
 											}
@@ -382,31 +380,29 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 													? 'Hide advanced settings'
 													: 'Show advanced settings'
 											)}
-										</AdvancedToggle>
+										</div>
 									)}
-								<Advanced
-									style={{ display: isShowingAdvanced ? 'block' : 'none' }}
-								>
+								<div style={{ display: isShowingAdvanced ? 'block' : 'none' }}>
 									{payload &&
 										describedInteractive.parameters
 											.filter((parameter) => parameter.advanced)
 											.map((parameter) => renderInput(parameter))}
-								</Advanced>
+								</div>
 
 								{describedInteractive.info && (
-									<StyledAlert severity="info">
+									<Alert className={noteClassName} severity="info">
 										<div
 											dangerouslySetInnerHTML={{
 												__html: t(describedInteractive.info),
 											}}
 										/>
-									</StyledAlert>
+									</Alert>
 								)}
 							</div>
 
 							<div>
-								<PreviewTitle>{t('Preview')}</PreviewTitle>
-								<PreviewContainer>
+								<div className="mb-2.5 text-[18px]">{t('Preview')}</div>
+								<div className="min-w-75 overflow-y-auto rounded-[10px] bg-chat-bg bg-(image:--chat-bg-image) bg-repeat p-2.5 max-md:min-w-auto [&_.chat\_\_message]:my-0!">
 									{messageData && (
 										<ChatMessage
 											data={messageData}
@@ -414,9 +410,9 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 											isInfoClickable={false}
 										/>
 									)}
-								</PreviewContainer>
+								</div>
 							</div>
-						</Container>
+						</div>
 					)}
 				</DialogBody>
 				<DialogFooter>

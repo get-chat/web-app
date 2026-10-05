@@ -7,7 +7,7 @@ import { isEmptyString } from '@src/helpers/Helpers';
 import { Button } from '@src/components/ui/button';
 import { Field, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
-import * as Styled from './ReplyButtonsEditor.styles';
+import { editorClassName, editorRowClassName } from './editorClassNames';
 
 // Limits imposed by the WhatsApp Business API for reply buttons messages
 const MAX_REPLY_BUTTONS = 3;
@@ -34,14 +34,14 @@ const ReplyButtonsEditor: React.FC<Props> = ({
 	});
 
 	return (
-		<Styled.Container>
+		<div className={editorClassName}>
 			{buttons.map((button, buttonIndex) => {
 				const inputId = `${idPrefix}-button-${buttonIndex}`;
 				const isInvalid =
 					isShowErrors && isEmptyString(button.reply?.title ?? '');
 
 				return (
-					<Styled.Row key={buttonIndex}>
+					<div className={editorRowClassName} key={buttonIndex}>
 						<Field data-invalid={isInvalid || undefined} className="gap-1">
 							<FieldLabel htmlFor={inputId}>{t('Button text')} *</FieldLabel>
 							<Input
@@ -77,7 +77,7 @@ const ReplyButtonsEditor: React.FC<Props> = ({
 						>
 							<CloseIcon fontSize="small" />
 						</Button>
-					</Styled.Row>
+					</div>
 				);
 			})}
 
@@ -91,7 +91,7 @@ const ReplyButtonsEditor: React.FC<Props> = ({
 				<AddIcon fontSize="small" />
 				{t('Add button')}
 			</Button>
-		</Styled.Container>
+		</div>
 	);
 };
 

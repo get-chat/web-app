@@ -12,7 +12,11 @@ import { Field, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
 import { Spinner } from '@src/components/ui/spinner';
 import { Textarea } from '@src/components/ui/textarea';
-import * as Styled from './CarouselCardsEditor.styles';
+import {
+	editorCardClassName,
+	editorClassName,
+	editorRowClassName,
+} from './editorClassNames';
 
 // Limits imposed by the WhatsApp Business API for media carousel messages
 export const MIN_CAROUSEL_CARDS = 2;
@@ -135,7 +139,7 @@ const CarouselCardsEditor: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Container>
+		<div className={editorClassName}>
 			{cards.map((card, cardIndex) => {
 				const cardId = `${idPrefix}-card-${cardIndex}`;
 				const isDisplayTextInvalid =
@@ -145,8 +149,8 @@ const CarouselCardsEditor: React.FC<Props> = ({
 					isShowErrors && isEmptyString(card.action?.parameters?.url ?? '');
 
 				return (
-					<Styled.Card key={cardIndex}>
-						<Styled.CardHeader>
+					<div className={editorCardClassName} key={cardIndex}>
+						<div className="flex items-center justify-between text-[12px] text-ink/50">
 							{t('Card %s', {
 								postProcess: 'sprintf',
 								sprintf: [cardIndex + 1],
@@ -163,9 +167,9 @@ const CarouselCardsEditor: React.FC<Props> = ({
 							>
 								<CloseIcon fontSize="small" />
 							</Button>
-						</Styled.CardHeader>
+						</div>
 
-						<Styled.FieldRow>
+						<div className={editorRowClassName}>
 							<Button
 								variant="ghost"
 								color="primary"
@@ -188,11 +192,13 @@ const CarouselCardsEditor: React.FC<Props> = ({
 								)}
 							</Button>
 							{isShowErrors && isEmptyString(getCardMediaLink(card)) && (
-								<Styled.ErrorText>{t('Media is required')}</Styled.ErrorText>
+								<span className="self-center text-[12px] text-[#d32f2f]">
+									{t('Media is required')}
+								</span>
 							)}
-						</Styled.FieldRow>
+						</div>
 
-						<Styled.FieldRow>
+						<div className={editorRowClassName}>
 							<Field className="gap-1">
 								<FieldLabel htmlFor={`${cardId}-body`}>
 									{t('Card body')}
@@ -211,9 +217,9 @@ const CarouselCardsEditor: React.FC<Props> = ({
 									}
 								/>
 							</Field>
-						</Styled.FieldRow>
+						</div>
 
-						<Styled.FieldRow>
+						<div className={editorRowClassName}>
 							<Field
 								data-invalid={isDisplayTextInvalid || undefined}
 								className="gap-1"
@@ -254,8 +260,8 @@ const CarouselCardsEditor: React.FC<Props> = ({
 									}
 								/>
 							</Field>
-						</Styled.FieldRow>
-					</Styled.Card>
+						</div>
+					</div>
 				);
 			})}
 
@@ -277,7 +283,7 @@ const CarouselCardsEditor: React.FC<Props> = ({
 				style={{ display: 'none' }}
 				onChange={uploadMedia}
 			/>
-		</Styled.Container>
+		</div>
 	);
 };
 

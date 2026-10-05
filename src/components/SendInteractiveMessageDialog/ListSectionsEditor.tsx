@@ -7,7 +7,11 @@ import { isEmptyString } from '@src/helpers/Helpers';
 import { Button } from '@src/components/ui/button';
 import { Field, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
-import * as Styled from './ListSectionsEditor.styles';
+import {
+	editorCardClassName,
+	editorClassName,
+	editorRowClassName,
+} from './editorClassNames';
 
 // Limits imposed by the WhatsApp Business API for interactive list messages
 export const MAX_LIST_ROWS = 10;
@@ -51,7 +55,7 @@ const ListSectionsEditor: React.FC<Props> = ({
 		});
 
 	return (
-		<Styled.Container>
+		<div className={editorClassName}>
 			{sections.map((section, sectionIndex) => {
 				const sectionTitleId = `${idPrefix}-section-${sectionIndex}`;
 				const isSectionTitleInvalid =
@@ -60,8 +64,8 @@ const ListSectionsEditor: React.FC<Props> = ({
 					isEmptyString(section.title ?? '');
 
 				return (
-					<Styled.Section key={sectionIndex}>
-						<Styled.SectionHeader>
+					<div className={editorCardClassName} key={sectionIndex}>
+						<div className="flex items-end gap-1.25">
 							<Field
 								data-invalid={isSectionTitleInvalid || undefined}
 								className="gap-1"
@@ -98,7 +102,7 @@ const ListSectionsEditor: React.FC<Props> = ({
 									<CloseIcon fontSize="small" />
 								</Button>
 							)}
-						</Styled.SectionHeader>
+						</div>
 
 						{section.rows.map((row, rowIndex) => {
 							const rowId = `${idPrefix}-section-${sectionIndex}-row-${rowIndex}`;
@@ -106,7 +110,7 @@ const ListSectionsEditor: React.FC<Props> = ({
 								isShowErrors && isEmptyString(row.title);
 
 							return (
-								<Styled.Row key={rowIndex}>
+								<div className={editorRowClassName} key={rowIndex}>
 									<Field
 										data-invalid={isRowTitleInvalid || undefined}
 										className="gap-1"
@@ -162,7 +166,7 @@ const ListSectionsEditor: React.FC<Props> = ({
 									>
 										<CloseIcon fontSize="small" />
 									</Button>
-								</Styled.Row>
+								</div>
 							);
 						})}
 
@@ -181,7 +185,7 @@ const ListSectionsEditor: React.FC<Props> = ({
 							<AddIcon fontSize="small" />
 							{t('Add option')}
 						</Button>
-					</Styled.Section>
+					</div>
 				);
 			})}
 
@@ -197,7 +201,7 @@ const ListSectionsEditor: React.FC<Props> = ({
 				<AddIcon fontSize="small" />
 				{t('Add section')}
 			</Button>
-		</Styled.Container>
+		</div>
 	);
 };
 
