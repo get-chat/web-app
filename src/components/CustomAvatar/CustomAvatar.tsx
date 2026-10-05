@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import * as Styled from './CustomAvatar.styles';
+import PersonIcon from '@src/components/icons/Person';
 import { generateAvatarColor } from '@src/helpers/AvatarHelper';
-import { AvatarFallback, AvatarImage } from '@src/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@src/components/ui/avatar';
 import { cn } from '@src/lib/utils';
 
 interface Props {
@@ -44,18 +44,21 @@ const CustomAvatar: React.FC<Props> = ({
 	const isLight = !Boolean(style?.backgroundColor ?? bgColor);
 
 	// MUI's Avatar showed the first letter of `alt` when the image failed and
-	// there were no children
-	const fallback = content ?? (src && alt ? alt[0] : <Styled.FallbackIcon />);
+	// there were no children; otherwise its person icon, at 75% of the avatar
+	const fallback =
+		content ?? (src && alt ? alt[0] : <PersonIcon className="size-[75%]!" />);
 
 	return (
-		<Styled.StyledAvatar
+		<Avatar
 			// customAvatar: lets stylesheets elsewhere in the app size or space
 			// avatars
 			className={cn(
 				'customAvatar items-center justify-center bg-[#e0e2e8] text-[1.25rem] leading-none font-semibold text-white',
+				// Grey initials on the light default background; on a colour,
+				// white icons
+				isLight ? 'text-[#6e7383]!' : '[&_.app-icon]:text-white!',
 				className
 			)}
-			$isLight={isLight}
 			style={{
 				...style,
 				backgroundColor: bgColor ?? style?.backgroundColor,
@@ -67,7 +70,7 @@ const CustomAvatar: React.FC<Props> = ({
 			<AvatarFallback className="bg-transparent text-inherit">
 				{fallback}
 			</AvatarFallback>
-		</Styled.StyledAvatar>
+		</Avatar>
 	);
 };
 
