@@ -1,9 +1,11 @@
 import React, { useContext, useState } from 'react';
 import {
 	Dialog,
+	DialogBody,
 	DialogContent,
 	DialogFooter,
 	DialogHeader,
+	DialogTitle,
 } from '@src/components/ui/dialog';
 import { Button } from '@src/components/ui/button';
 import { Trans, useTranslation } from 'react-i18next';
@@ -13,7 +15,6 @@ import Contacts from '@src/components/Contacts';
 import { AxiosResponse } from 'axios';
 import { MessageType } from '@src/types/messages';
 import { Recipient } from '@src/types/persons';
-import * as Styled from './ContactsModal.styles';
 
 interface Props {
 	open: boolean;
@@ -77,27 +78,32 @@ const ContactsModal: React.FC<Props> = ({
 		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
 			<DialogContent aria-describedby={undefined}>
 				<DialogHeader>
-					<Styled.StyledDialogTitle>
+					<DialogTitle className="flex items-center justify-between">
 						{t('Send contacts')}
-					</Styled.StyledDialogTitle>
+					</DialogTitle>
 				</DialogHeader>
-				<Styled.StyledDialogBody>
+				<DialogBody className="flex min-h-50 flex-1 flex-col p-0">
 					<Contacts
 						isSelectionModeEnabled={true}
 						selectedContacts={selectedContacts}
 						onSelect={handleSelect}
 						noContactsContent={
-							<Styled.NoContactsContent>
+							<div className="px-3.75 py-2.5 text-center font-normal">
 								<Trans>
 									To be able to share contacts, you need to use one of our
 									Contact Providers.{' '}
-									<a href={getHubURL(config?.API_BASE_URL ?? '')}>Click here</a>{' '}
+									<a
+										className="text-light-blue"
+										href={getHubURL(config?.API_BASE_URL ?? '')}
+									>
+										Click here
+									</a>{' '}
 									to go to our integrations page.
 								</Trans>
-							</Styled.NoContactsContent>
+							</div>
 						}
 					/>
-				</Styled.StyledDialogBody>
+				</DialogBody>
 				{selectedContacts.length > 0 && (
 					<DialogFooter>
 						<Button variant="ghost" color="primary" onClick={handleSendMessage}>

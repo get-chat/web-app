@@ -4,7 +4,6 @@ import SearchBar from '@src/components/SearchBar/SearchBar';
 import RecipientItem from '@src/components/RecipientItem';
 import { Spinner } from '@src/components/ui/spinner';
 import { Trans, useTranslation } from 'react-i18next';
-import * as Styled from './Contacts.styles';
 import { Recipient } from '@src/types/persons';
 
 interface Props {
@@ -37,7 +36,7 @@ const Contacts: React.FC<Props> = ({
 				placeholder={t('Search for contacts')}
 			/>
 
-			<Styled.ContactsBody>
+			<div className="relative flex-1 overflow-x-hidden overflow-y-auto">
 				{!isLoading && unifiedList.length === 0 && noContactsContent ? (
 					<>{noContactsContent}</>
 				) : (
@@ -62,13 +61,13 @@ const Contacts: React.FC<Props> = ({
 				)}
 
 				{isVerifying && (
-					<Styled.BodyLoading>
+					<div className="absolute inset-0 flex items-center justify-center bg-white/50 text-primary">
 						<Spinner size={40} />
-					</Styled.BodyLoading>
+					</div>
 				)}
 
 				{!isLoading && keyword?.length > 0 && unifiedList.length === 0 && (
-					<Styled.BodyHint>
+					<span className="block px-3.75 py-2.5 text-[14px] text-ink/60">
 						<Trans
 							values={{
 								postProcess: 'sprintf',
@@ -78,9 +77,9 @@ const Contacts: React.FC<Props> = ({
 							No persons or contacts found for{' '}
 							<span className="searchOccurrence">%s</span>
 						</Trans>
-					</Styled.BodyHint>
+					</span>
 				)}
-			</Styled.ContactsBody>
+			</div>
 		</>
 	);
 };
