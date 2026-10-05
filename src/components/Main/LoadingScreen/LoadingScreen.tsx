@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Progress } from '@src/components/ui/progress';
-import * as Styled from './LoadingScreen.styles';
 import { useTranslation } from 'react-i18next';
 import { Alert } from '@src/components/ui/alert';
 import packageJson from '../../../../package.json';
@@ -32,29 +31,36 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 	}, [loadingComponent]);
 
 	return (
-		<Styled.Container>
+		// The id is a hook for the e2e tests
+		<div
+			id="loading-screen"
+			className="absolute inset-0 z-500 flex flex-col items-center justify-center bg-gray-light px-15 py-7.5"
+		>
 			{!isHideLogo && (
-				<Styled.LogoWrapper>
+				<div className="mb-12.5 flex w-full max-w-100 justify-center">
 					<img
+						className="size-20"
 						src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'}
 						alt="Logo"
 					/>
-				</Styled.LogoWrapper>
+				</div>
 			)}
 
-			<Styled.ProgressContainer>
-				{!isInitialResourceFailed && <Progress value={loadingProgress} />}
-			</Styled.ProgressContainer>
+			<div className="w-full max-w-100">
+				{!isInitialResourceFailed && (
+					<Progress className="h-[3px]" value={loadingProgress} />
+				)}
+			</div>
 
-			<Styled.Details>
-				<Spinner size={20} className="text-primary" />
+			<div className="my-3.75 flex items-center justify-center text-[16px] font-semibold text-ink/40">
+				<Spinner size={20} className="m-2.5 text-primary" />
 				{t(loadingComponent ?? '')}
-			</Styled.Details>
+			</div>
 
 			{isLongTransactionInfoVisible && (
-				<Styled.LongTransactionInfo>
+				<div className="mb-2.5 flex items-center justify-center text-[14px] text-ink/30">
 					{t('We are loading initial resources, please wait...')}
-				</Styled.LongTransactionInfo>
+				</div>
 			)}
 
 			{isInitialResourceFailed && (
@@ -63,8 +69,9 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 						{t('Something went wrong, this will be fixed automatically')}
 					</Alert>
 
-					<Styled.Actions>
-						<Styled.ContactLink
+					<div className="flex items-center justify-center gap-2.5">
+						<a
+							className="inline-block cursor-pointer p-2.5 text-[18px] text-primary"
 							target="_blank"
 							href={
 								process.env.REACT_APP_ERROR_HELP_LINK_URL ??
@@ -75,13 +82,15 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 								process.env.REACT_APP_ERROR_HELP_LINK_TEXT ??
 									'Go to 360Dialog Status Page'
 							)}
-						</Styled.ContactLink>
-					</Styled.Actions>
+						</a>
+					</div>
 				</>
 			)}
 
-			<Styled.Version>Version: {packageJson.version}</Styled.Version>
-		</Styled.Container>
+			<span className="absolute bottom-0 left-1/2 mb-3.75 block -translate-x-1/2 text-[12px] text-muted-foreground">
+				Version: {packageJson.version}
+			</span>
+		</div>
 	);
 };
 
