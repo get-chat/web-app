@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
 import { isEmptyString } from '@src/helpers/Helpers';
 import { ClickAwayListener } from '@src/components/ui/click-away-listener';
-import * as Styled from './QuickActionsMenu.styles';
+import { Search as SearchOutlined } from '@src/components/icons';
 
 export type Props = {
 	input: string;
@@ -108,10 +108,11 @@ const QuickActionsMenu: React.FC<Props> = ({
 
 	return (
 		<ClickAwayListener onClickAway={close}>
-			<Styled.Container>
-				<Styled.SearchContainer>
-					<Styled.SearchIcon />
-					<Styled.SearchInput
+			<div className="absolute right-0 bottom-12.5 left-0 z-999 mx-2.5 flex flex-col overflow-hidden rounded-[10px] bg-white">
+				<div className="relative flex flex-1 items-center border-b border-gray-light bg-white">
+					<SearchOutlined className="pointer-events-none absolute left-0 my-auto ml-3.75 size-5!" />
+					<input
+						className="flex-1 border-none bg-transparent py-2.5 pr-3.75 pl-10 text-[16px] outline-none!"
 						type="text"
 						placeholder={t('Search quick actions')}
 						value={commandInput}
@@ -123,8 +124,9 @@ const QuickActionsMenu: React.FC<Props> = ({
 						// @ts-ignore
 						ref={inputRef}
 					/>
-				</Styled.SearchContainer>
-				<Styled.Results
+				</div>
+				<div
+					className="max-h-[315px] overflow-x-hidden overflow-y-auto border-none pb-1.25 outline-none!"
 					// @ts-ignore
 					ref={resultsRef}
 					onKeyDown={(e: React.KeyboardEvent) => e.preventDefault()}
@@ -140,10 +142,12 @@ const QuickActionsMenu: React.FC<Props> = ({
 					))}
 
 					{data.length === 0 && (
-						<Styled.NoResult>{t('No results found.')}</Styled.NoResult>
+						<div className="px-3.75 py-1.25 text-[14px] text-ink/50">
+							{t('No results found.')}
+						</div>
 					)}
-				</Styled.Results>
-			</Styled.Container>
+				</div>
+			</div>
 		</ClickAwayListener>
 	);
 };
