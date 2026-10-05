@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import CloseIcon from '@src/components/icons/Close';
 import PersonIcon from '@src/components/icons/Person';
 import GroupIcon from '@src/components/icons/Group';
 import { CALENDAR_NORMAL, CHAT_KEY_PREFIX } from '@src/Constants';
-import * as Styled from './ContactDetails.styles';
 import Moment from 'react-moment';
 // @ts-ignore
 import googleLogo from '../../../assets/images/ic-google.png';
@@ -21,7 +19,11 @@ import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import PrintMessage from '@src/components/PrintMessage';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
-import { Button } from '@src/components/ui/button';
+import SidePanel from '@src/components/SidePanel';
+import { ProfileSection } from '@src/components/ProfilePanel';
+
+// The icons in front of the assignees
+const assigneeIconClassName = 'mr-2.5 size-[0.8em]! align-middle';
 
 interface Props extends PanelTransitionProps {
 	contactProvidersData: { [key: string]: any };
@@ -65,45 +67,32 @@ const ContactDetails: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.ContactDetailsContainer
-			$isExiting={isExiting}
+		<SidePanel
+			className="z-10"
+			title={t('Contact Details')}
+			onClose={hideContactDetails}
+			isExiting={isExiting}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.Header>
-				<Button
-					variant="ghost"
-					color="neutral"
-					size="icon-xl"
-					onClick={hideContactDetails}
-				>
-					<CloseIcon />
-				</Button>
-				<h3>{t('Contact Details')}</h3>
-			</Styled.Header>
-
 			{contactData && (
-				<Styled.Body>
-					<Styled.Section>
-						<Styled.AvatarContainer>
+				<div className="relative flex flex-1 flex-col overflow-y-auto bg-gray-light">
+					<ProfileSection>
+						<div className="flex justify-center">
 							<CustomAvatar
 								src={extractAvatarFromContactProviderData(
 									contactProvidersData[contactData.wa_id ?? ''],
 									true
 								)}
-								style={{
-									height: '200px',
-									width: '200px',
-									fontSize: '5rem',
-									marginBottom: '15px',
-								}}
+								className="mb-3.75 size-50 text-[5rem]/none"
 								generateBgColorBy={contactData.waba_payload?.profile?.name}
 							>
 								{contactData.initials}
 							</CustomAvatar>
-						</Styled.AvatarContainer>
+						</div>
 
 						<PrintMessage
 							as="h3"
+							className="text-center text-[20px] font-semibold [&_.emoji-mart-emoji]:size-5!"
 							message={
 								contactProvidersData[contactData.wa_id ?? '']?.[0]?.name ??
 								contactData.waba_payload?.profile?.name
@@ -112,7 +101,7 @@ const ContactDetails: React.FC<Props> = ({
 
 						{contactProvidersData[contactData.wa_id ?? '']?.[0]
 							?.companies?.[0] !== undefined && (
-							<Styled.JobInfo>
+							<div className="mb-2.5 text-center text-[14px] font-semibold text-ink/40">
 								<span>
 									{
 										contactProvidersData[contactData.wa_id ?? '']?.[0]
@@ -126,10 +115,10 @@ const ContactDetails: React.FC<Props> = ({
 											?.companies?.[0]?.company_name
 									}
 								</span>
-							</Styled.JobInfo>
+							</div>
 						)}
 
-						<Styled.LastMessageAt>
+						<div className="text-center text-[14px]">
 							Last message:{' '}
 							{contactData.last_message_timestamp &&
 							contactData.last_message_timestamp > 0 ? (
@@ -139,27 +128,33 @@ const ContactDetails: React.FC<Props> = ({
 							) : (
 								t('Never')
 							)}
-						</Styled.LastMessageAt>
+						</div>
 
 						{currentChatTags && currentChatTags.length > 0 && (
-							<Styled.TagsContainer>
+							<div className="mt-[12px]">
 								{currentChatTags.map((tag, index) => (
-									<Styled.Tag
+									<div
+										className="mr-2.5 inline-block cursor-pointer"
 										key={index}
 										onClick={() => dispatch(setFilterTagId(tag.id))}
 									>
-										<SellIcon style={{ fill: tag.web_inbox_color }} />
-										<span className="bold">{tag.name}</span>
-									</Styled.Tag>
+										<SellIcon
+											className="mr-1.25 align-baseline"
+											style={{ fill: tag.web_inbox_color }}
+										/>
+										<span className="bold inline-block max-w-[150px] truncate">
+											{tag.name}
+										</span>
+									</div>
 								))}
-							</Styled.TagsContainer>
+							</div>
 						)}
 
 						{(chat?.assigned_to_user || chat?.assigned_group) && (
-							<Styled.AssigneesContainer>
+							<div className="mt-[12px] rounded-[10px] border-2 border-gray-light px-2.5 py-1.25 text-[14px]">
 								{chat?.assigned_to_user && (
-									<div>
-										<PersonIcon />
+									<div className="py-1.25">
+										<PersonIcon className={assigneeIconClassName} />
 										<Trans
 											values={{
 												postProcess: 'sprintf',
@@ -172,8 +167,8 @@ const ContactDetails: React.FC<Props> = ({
 								)}
 
 								{chat?.assigned_group && (
-									<div>
-										<GroupIcon />
+									<div className="py-1.25">
+										<GroupIcon className={assigneeIconClassName} />
 										<Trans
 											values={{
 												postProcess: 'sprintf',
@@ -184,29 +179,27 @@ const ContactDetails: React.FC<Props> = ({
 										</Trans>
 									</div>
 								)}
-							</Styled.AssigneesContainer>
+							</div>
 						)}
-					</Styled.Section>
+					</ProfileSection>
 
 					{!isUserActionsRestricted && isPhoneNumber(contactData.wa_id) && (
-						<Styled.Section>
-							<Styled.SectionTitle>
-								{t('WhatsApp Phone Number')}
-							</Styled.SectionTitle>
-							<a href={'tel:+' + contactData.wa_id}>
+						<ProfileSection>
+							<div className="text-[16px]">{t('WhatsApp Phone Number')}</div>
+							<a className="text-light-blue" href={'tel:+' + contactData.wa_id}>
 								{addPlus(contactData.wa_id)}
 							</a>
-						</Styled.Section>
+						</ProfileSection>
 					)}
 
 					{!isUserActionsRestricted &&
 						contactProvidersData[contactData.wa_id ?? '']?.map(
 							(providerData: any, index: number) => (
-								<Styled.Section
+								<ProfileSection
 									key={index + '_' + providerData.contact_provider.id}
 								>
-									<Styled.SectionTitle>
-										<Styled.ProviderTitle>
+									<div className="text-[16px]">
+										<div className="mb-[12px] inline-block rounded-[16px] bg-gray-light px-2.5 py-1.25 text-ink/80 [&_img]:mr-[4px] [&_img]:size-4 [&_img]:align-middle">
 											{providerData.contact_provider.type === 'google' && (
 												<img
 													src={googleLogo}
@@ -221,16 +214,17 @@ const ContactDetails: React.FC<Props> = ({
 											)}
 											{providerData.contact_provider.name ??
 												providerData.contact_provider.type}
-										</Styled.ProviderTitle>
-									</Styled.SectionTitle>
+										</div>
+									</div>
 
-									<Styled.Content>
-										<Styled.Subtitle>{t('Phone number')}</Styled.Subtitle>
-										<Styled.ContentSub>
+									<div className="mb-[8px]">
+										<div className="text-[14px]">{t('Phone number')}</div>
+										<div className="text-[14px] text-ink/60">
 											{providerData.phone_numbers?.map(
 												(phoneNumber: any, phoneNumberIndex: number) => (
 													<div key={phoneNumberIndex}>
 														<a
+															className="text-light-blue"
 															href={'tel:' + addPlus(phoneNumber.phone_number)}
 														>
 															<span>{addPlus(phoneNumber.phone_number)}</span>
@@ -243,17 +237,20 @@ const ContactDetails: React.FC<Props> = ({
 													</div>
 												)
 											)}
-										</Styled.ContentSub>
-									</Styled.Content>
+										</div>
+									</div>
 
 									{Boolean(providerData.email_addresses?.length ?? 0 > 0) && (
-										<Styled.Content>
-											<Styled.Subtitle>{t('E-mail')}</Styled.Subtitle>
-											<Styled.ContentSub>
+										<div className="mb-[8px]">
+											<div className="text-[14px]">{t('E-mail')}</div>
+											<div className="text-[14px] text-ink/60">
 												{providerData.email_addresses?.map(
 													(emailAddress: any, emailAddressIndex: number) => (
 														<div key={emailAddressIndex}>
-															<a href={'mailto:' + emailAddress.email_address}>
+															<a
+																className="text-light-blue"
+																href={'mailto:' + emailAddress.email_address}
+															>
 																{emailAddress.email_address}
 															</a>
 															{emailAddress.description && (
@@ -264,15 +261,15 @@ const ContactDetails: React.FC<Props> = ({
 														</div>
 													)
 												)}
-											</Styled.ContentSub>
-										</Styled.Content>
+											</div>
+										</div>
 									)}
-								</Styled.Section>
+								</ProfileSection>
 							)
 						)}
-				</Styled.Body>
+				</div>
 			)}
-		</Styled.ContactDetailsContainer>
+		</SidePanel>
 	);
 };
 

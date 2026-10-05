@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import CloseIcon from '@src/components/icons/Close';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
 import { isMobileOnly } from 'react-device-detect';
@@ -13,12 +12,8 @@ import { prepareMessageList } from '@src/helpers/MessageHelper';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
 import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
-import {
-	PanelTransitionProps,
-	sidePanelAnimation,
-} from '@src/styles/panelTransitions';
-import { cn } from '@src/lib/utils';
-import { Button } from '@src/components/ui/button';
+import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import SidePanel from '@src/components/SidePanel';
 
 export type Props = {
 	initialKeyword: string;
@@ -133,23 +128,13 @@ const SearchMessage: React.FC<Props> = ({
 	};
 
 	return (
-		<div
-			className={cn(
-				'flex flex-[0.4_1] flex-col border-l border-[lightgray] max-md:absolute max-md:inset-0 max-md:z-10 max-md:border-l-0',
-				sidePanelAnimation(isExiting)
-			)}
+		<SidePanel
+			title={t('Search For Messages')}
+			titleClassName="text-[16px]"
+			onClose={close}
+			isExiting={isExiting}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<div className="flex h-(--header-height) items-center bg-gray-light px-3.75 py-1 max-md:px-2.5">
-				<Button variant="ghost" color="neutral" size="icon-xl" onClick={close}>
-					<CloseIcon />
-				</Button>
-
-				<h3 className="ml-3.75 text-[16px] font-normal">
-					{t('Search For Messages')}
-				</h3>
-			</div>
-
 			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
 
 			<div className="relative flex flex-1 flex-col overflow-y-auto bg-white">
@@ -163,7 +148,7 @@ const SearchMessage: React.FC<Props> = ({
 					/>
 				))}
 			</div>
-		</div>
+		</SidePanel>
 	);
 };
 
