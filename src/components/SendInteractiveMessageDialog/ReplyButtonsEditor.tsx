@@ -46,7 +46,6 @@ const ReplyButtonsEditor: React.FC<Props> = ({
 							<FieldLabel htmlFor={inputId}>{t('Button text')} *</FieldLabel>
 							<Input
 								id={inputId}
-								variant="underline"
 								size="sm"
 								value={button.reply?.title ?? ''}
 								required

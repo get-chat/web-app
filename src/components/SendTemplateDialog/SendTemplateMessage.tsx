@@ -373,7 +373,6 @@ const SendTemplateMessage: React.FC<Props> = ({
 												</FieldLabel>
 												<Input
 													id={`${idPrefix}-file-url`}
-													variant="underline"
 													value={headerFileURL}
 													onChange={(event) =>
 														setHeaderFileURL(event.target.value)
@@ -414,9 +413,8 @@ const SendTemplateMessage: React.FC<Props> = ({
 										</FieldLabel>
 										<Textarea
 											id={`${idPrefix}-${compIndex}-param-${paramIndex}`}
-											variant="underline"
 											rows={1}
-											className="min-h-0 resize-none py-1"
+											className="min-h-9 resize-none"
 											value={
 												params[compIndex]
 													? params[compIndex][extractParameterKey(param) ?? '']
@@ -452,7 +450,6 @@ const SendTemplateMessage: React.FC<Props> = ({
 										{getTemplateParams(button.url).map((param, paramIndex) => (
 											<InputGroup
 												key={paramIndex}
-												variant="underline"
 												className="inline-flex w-auto align-bottom"
 											>
 												<InputGroupAddon align="inline-start">

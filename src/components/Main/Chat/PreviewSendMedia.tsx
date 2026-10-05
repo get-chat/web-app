@@ -276,7 +276,6 @@ const PreviewSendMedia: React.FC<Props> = ({
 							</FieldLabel>
 							<Input
 								id={captionInputId}
-								variant="underline"
 								value={currentCaption}
 								onChange={(e) => setCurrentCaption(e.target.value)}
 							/>

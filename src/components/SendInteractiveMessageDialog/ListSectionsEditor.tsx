@@ -72,7 +72,6 @@ const ListSectionsEditor: React.FC<Props> = ({
 								</FieldLabel>
 								<Input
 									id={sectionTitleId}
-									variant="underline"
 									size="sm"
 									value={section.title ?? ''}
 									required={isSectionTitleRequired}
@@ -117,7 +116,6 @@ const ListSectionsEditor: React.FC<Props> = ({
 										</FieldLabel>
 										<Input
 											id={`${rowId}-title`}
-											variant="underline"
 											size="sm"
 											value={row.title}
 											required
@@ -137,7 +135,6 @@ const ListSectionsEditor: React.FC<Props> = ({
 										</FieldLabel>
 										<Input
 											id={`${rowId}-description`}
-											variant="underline"
 											size="sm"
 											value={row.description ?? ''}
 											maxLength={ROW_DESCRIPTION_MAX_LENGTH}

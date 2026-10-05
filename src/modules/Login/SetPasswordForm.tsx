@@ -91,7 +91,6 @@ const SetPasswordForm: React.FC<Props> = ({
 					</FieldLabel>
 					<Input
 						id={`${idPrefix}-username`}
-						variant="underline"
 						value={username}
 						autoComplete="username"
 						readOnly
@@ -104,7 +103,6 @@ const SetPasswordForm: React.FC<Props> = ({
 				</FieldLabel>
 				<Input
 					id={`${idPrefix}-password`}
-					variant="underline"
 					value={password}
 					onChange={(event) => setPassword(event.target.value)}
 					type="password"
@@ -124,7 +122,6 @@ const SetPasswordForm: React.FC<Props> = ({
 				</FieldLabel>
 				<Input
 					id={`${idPrefix}-password-repeat`}
-					variant="underline"
 					value={passwordRepeat}
 					onChange={(event) => setPasswordRepeat(event.target.value)}
 					type="password"

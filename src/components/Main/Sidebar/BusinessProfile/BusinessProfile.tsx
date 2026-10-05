@@ -298,7 +298,6 @@ const BusinessProfile: React.FC<Props> = ({
 										</FieldLabel>
 										<Input
 											id={`${id}-phone-number`}
-											variant="underline"
 											value={phoneNumber ? `+${phoneNumber}` : ''}
 											readOnly={!isAdmin || isReadOnly}
 											disabled={true}
@@ -315,7 +314,6 @@ const BusinessProfile: React.FC<Props> = ({
 										</FieldLabel>
 										<Textarea
 											id={`${id}-about`}
-											variant="underline"
 											className="min-h-9"
 											value={about}
 											onChange={(e) => setAbout(e.target.value)}
@@ -340,7 +338,6 @@ const BusinessProfile: React.FC<Props> = ({
 										</FieldLabel>
 										<Input
 											id={`${id}-address`}
-											variant="underline"
 											value={address}
 											onChange={(e) => setAddress(e.target.value)}
 											readOnly={!isAdmin || isReadOnly}
@@ -356,7 +353,6 @@ const BusinessProfile: React.FC<Props> = ({
 										</FieldLabel>
 										<Input
 											id={`${id}-description`}
-											variant="underline"
 											value={description}
 											onChange={(e) => setDescription(e.target.value)}
 											readOnly={!isAdmin || isReadOnly}
@@ -372,7 +368,6 @@ const BusinessProfile: React.FC<Props> = ({
 										</FieldLabel>
 										<Input
 											id={`${id}-email`}
-											variant="underline"
 											value={email}
 											onChange={(e) => setEmail(e.target.value)}
 											readOnly={!isAdmin || isReadOnly}
@@ -396,11 +391,7 @@ const BusinessProfile: React.FC<Props> = ({
 											}
 											disabled={!isAdmin || isReadOnly || isUpdating}
 										>
-											<SelectTrigger
-												id={`${id}-vertical`}
-												variant="underline"
-												className="w-full"
-											>
+											<SelectTrigger id={`${id}-vertical`} className="w-full">
 												<SelectValue />
 											</SelectTrigger>
 											<SelectContent>

@@ -306,9 +306,8 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 					</FieldLabel>
 					<Textarea
 						id={inputId}
-						variant="underline"
 						rows={1}
-						className="min-h-0 resize-none py-1"
+						className="min-h-9 resize-none"
 						value={getNestedValue(payload, parameter.key) ?? ''}
 						onChange={(e) =>
 							setPayload((prevState: any) =>

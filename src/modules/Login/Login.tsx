@@ -440,7 +440,6 @@ const Login: React.FC = () => {
 								</FieldLabel>
 								<Input
 									id="login-username"
-									variant="underline"
 									value={username}
 									onChange={(e) => setUsername(e.target.value)}
 									autoComplete="username"
@@ -452,7 +451,6 @@ const Login: React.FC = () => {
 								</FieldLabel>
 								<Input
 									id="login-password"
-									variant="underline"
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
 									type="password"

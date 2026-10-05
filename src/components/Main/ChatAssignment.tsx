@@ -186,11 +186,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 							onValueChange={handleUserChange}
 							disabled={!canChangeUserAssigment}
 						>
-							<SelectTrigger
-								id="assign-user-select"
-								variant="underline"
-								className="w-full"
-							>
+							<SelectTrigger id="assign-user-select" className="w-full">
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
@@ -238,11 +234,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 							onValueChange={handleGroupChange}
 							disabled={!canChangeGroupAssigment}
 						>
-							<SelectTrigger
-								id="assign-group-select"
-								variant="underline"
-								className="w-full"
-							>
+							<SelectTrigger id="assign-group-select" className="w-full">
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>

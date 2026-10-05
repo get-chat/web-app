@@ -199,9 +199,8 @@ const CarouselCardsEditor: React.FC<Props> = ({
 								</FieldLabel>
 								<Textarea
 									id={`${cardId}-body`}
-									variant="underline"
 									rows={1}
-									className="min-h-0 resize-none py-1"
+									className="min-h-9 resize-none"
 									value={card.body?.text ?? ''}
 									maxLength={CARD_BODY_MAX_LENGTH}
 									onChange={(e) =>
@@ -224,7 +223,6 @@ const CarouselCardsEditor: React.FC<Props> = ({
 								</FieldLabel>
 								<Input
 									id={`${cardId}-display-text`}
-									variant="underline"
 									size="sm"
 									value={card.action?.parameters?.display_text ?? ''}
 									required
@@ -244,7 +242,6 @@ const CarouselCardsEditor: React.FC<Props> = ({
 								</FieldLabel>
 								<Input
 									id={`${cardId}-url`}
-									variant="underline"
 									size="sm"
 									value={card.action?.parameters?.url ?? ''}
 									required

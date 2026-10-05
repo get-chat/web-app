@@ -39,11 +39,7 @@ function CreateTemplate() {
 			<Field className="mb-[15px]">
 				<FieldLabel htmlFor="create-template-language">Language</FieldLabel>
 				<Select value={language} onValueChange={handleLanguageChange}>
-					<SelectTrigger
-						id="create-template-language"
-						variant="underline"
-						className="w-full"
-					>
+					<SelectTrigger id="create-template-language" className="w-full">
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>
@@ -55,11 +51,7 @@ function CreateTemplate() {
 			<Field className="mb-[15px]">
 				<FieldLabel htmlFor="create-template-category">Category</FieldLabel>
 				<Select value={category} onValueChange={handleCategoryChange}>
-					<SelectTrigger
-						id="create-template-category"
-						variant="underline"
-						className="w-full"
-					>
+					<SelectTrigger id="create-template-category" className="w-full">
 						<SelectValue />
 					</SelectTrigger>
 					<SelectContent>

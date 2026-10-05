@@ -341,7 +341,6 @@ const LocationModal: React.FC<Props> = ({
 							</FieldLabel>
 							<Input
 								id={`${idPrefix}-name`}
-								variant="underline"
 								size="sm"
 								value={name}
 								onChange={(event) => setName(event.target.value)}
@@ -353,7 +352,6 @@ const LocationModal: React.FC<Props> = ({
 							</FieldLabel>
 							<Input
 								id={`${idPrefix}-address`}
-								variant="underline"
 								size="sm"
 								value={address}
 								onChange={(event) => setAddress(event.target.value)}

@@ -324,7 +324,7 @@ const PhoneNumberInput: React.FC<Props> = ({
 					<Styled.CountryControl ref={countryAnchorRef}>
 						<Styled.CountryTrigger className="gap-1.5">
 							<FieldLabel htmlFor={`${id}-country`}>{t('Code')}</FieldLabel>
-							<InputGroup variant="underline" onClick={toggleMenu}>
+							<InputGroup onClick={toggleMenu}>
 								{selectedOption && (
 									<InputGroupAddon align="inline-start">
 										<span className="PhoneNumberInput__flag">
@@ -405,7 +405,6 @@ const PhoneNumberInput: React.FC<Props> = ({
 				</FieldLabel>
 				<Input
 					id={`${id}-national-number`}
-					variant="underline"
 					value={nationalNumber}
 					autoFocus={autoFocus}
 					aria-invalid={!!error || undefined}

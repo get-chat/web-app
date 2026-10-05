@@ -109,7 +109,6 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 							</FieldLabel>
 							<Input
 								id={`${id}-current-password`}
-								variant="underline"
 								value={currentPassword}
 								onChange={(event) => setCurrentPassword(event.target.value)}
 								type="password"
@@ -124,7 +123,6 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 							</FieldLabel>
 							<Input
 								id={`${id}-new-password`}
-								variant="underline"
 								value={newPassword}
 								onChange={(event) => setNewPassword(event.target.value)}
 								type="password"
@@ -138,7 +136,6 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 							</FieldLabel>
 							<Input
 								id={`${id}-new-password-repeat`}
-								variant="underline"
 								value={newPasswordRepeat}
 								onChange={(event) => setNewPasswordRepeat(event.target.value)}
 								type="password"

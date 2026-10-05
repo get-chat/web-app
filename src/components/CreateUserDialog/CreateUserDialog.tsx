@@ -355,7 +355,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 								</FieldLabel>
 								<Input
 									id={`${id}-username`}
-									variant="underline"
 									value={username}
 									onChange={(event) => setUsername(event.target.value)}
 									aria-invalid={Boolean(fieldErrors.username) || undefined}
@@ -382,7 +381,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 									</FieldLabel>
 									<Input
 										id={`${id}-first-name`}
-										variant="underline"
 										value={firstName}
 										onChange={(event) => setFirstName(event.target.value)}
 										aria-invalid={Boolean(fieldErrors.first_name) || undefined}
@@ -402,7 +400,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 									</FieldLabel>
 									<Input
 										id={`${id}-last-name`}
-										variant="underline"
 										value={lastName}
 										onChange={(event) => setLastName(event.target.value)}
 										aria-invalid={Boolean(fieldErrors.last_name) || undefined}
@@ -421,7 +418,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 								<FieldLabel htmlFor={`${id}-email`}>{t('E-mail')}</FieldLabel>
 								<Input
 									id={`${id}-email`}
-									variant="underline"
 									value={email}
 									onChange={(event) => setEmail(event.target.value)}
 									type="email"
@@ -443,7 +439,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 								>
 									<SelectTrigger
 										id="create-user-role-select"
-										variant="underline"
 										className="w-full"
 									>
 										<SelectValue />
@@ -473,7 +468,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 											</FieldLabel>
 											<Input
 												id={`${id}-password`}
-												variant="underline"
 												value={password}
 												onChange={(event) => setPassword(event.target.value)}
 												type="password"
@@ -493,7 +487,6 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 											</FieldLabel>
 											<Input
 												id={`${id}-password-repeat`}
-												variant="underline"
 												value={passwordRepeat}
 												onChange={(event) =>
 													setPasswordRepeat(event.target.value)

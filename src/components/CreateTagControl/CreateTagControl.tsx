@@ -109,7 +109,6 @@ const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 						onKeyDown={handleKeyDown}
 						placeholder={t('Tag name')}
 						size="sm"
-						variant="underline"
 						disabled={isSaving}
 					/>
 					<Button
