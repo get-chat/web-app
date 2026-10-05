@@ -10,8 +10,10 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 // panel with a soft shadow, 32px rows with a muted 19px icon, and only a light
 // grey wash on the highlighted row. z-[1300] is MUI's modal layer, which keeps
 // menus above MUI dialogs and drawers.
+// outline-none!: the panel takes focus when it opens, and like MUI's it shows
+// no outline (the app's global :focus-visible one would otherwise win)
 const menuSurface =
-	'z-[1300] min-w-48 overflow-x-hidden overflow-y-auto rounded-[12px] bg-popover py-1.5 text-popover-foreground shadow-menu data-[state=closed]:animate-menu-out data-[state=open]:animate-menu-in';
+	'z-[1300] min-w-48 overflow-x-hidden overflow-y-auto rounded-[12px] bg-popover py-1.5 text-popover-foreground shadow-menu outline-none! data-[state=closed]:animate-menu-out data-[state=open]:animate-menu-in';
 
 // `!` on the icon colour: App.css colours every MUI icon grey. Icons that set
 // their own text colour keep it.

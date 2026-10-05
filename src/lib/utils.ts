@@ -1,5 +1,15 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+// Our own theme values (tailwind.css) that tailwind-merge can't know about;
+// without them, e.g. shadow-menu and shadow-[…] would both be kept
+const twMerge = extendTailwindMerge({
+	extend: {
+		theme: {
+			shadow: ['menu'],
+		},
+	},
+});
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
