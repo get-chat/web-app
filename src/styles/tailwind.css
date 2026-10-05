@@ -85,11 +85,13 @@
 }
 
 /*
- * The app's shadows, as Tailwind's shadow-sm/md/lg. `static` keeps the
- * variables in the CSS even when no utility uses them, for the legacy styles
- * that read var(--shadow-md).
+ * App colours and shadows defined here once, for Tailwind (bg-light-blue,
+ * shadow-md...) and for the legacy styles that read them as variables:
+ * `static` keeps every variable in the CSS even when no utility uses it.
  */
 @theme static {
+	--color-light-blue: #4fc3f7;
+
 	--shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06),
 		0 1px 3px rgba(16, 24, 40, 0.08);
 	--shadow-md: 0 2px 4px -2px rgba(16, 24, 40, 0.06),
