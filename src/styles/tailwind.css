@@ -25,6 +25,8 @@
  * (`container`, `hidden`, `block`...). Add a folder here when migrating it.
  */
 @import 'tailwindcss/utilities.css' layer(utilities) source(none);
+/* Enter/exit animation classes (animate-in, fade-in-0...) used by shadcn */
+@import 'tw-animate-css';
 
 @source '../components/ui';
 @source '../components/ChatHeader';
@@ -77,6 +79,8 @@
 	--animate-grow-in: grow-in 250ms cubic-bezier(0.4, 0, 0.2, 1);
 	--animate-grow-out: grow-out 170ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 	--animate-skeleton: skeleton 2s ease-in-out 0.5s infinite;
+	--animate-progress-indeterminate: progress-indeterminate 1.4s
+		cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
 	/* Separate names: Radix only waits for an exit animation if its name differs */
 	@keyframes grow-in {
@@ -104,6 +108,15 @@
 		to {
 			opacity: 0;
 			transform: scale(0.75, 0.5625);
+		}
+	}
+
+	@keyframes progress-indeterminate {
+		from {
+			transform: translateX(-100%);
+		}
+		to {
+			transform: translateX(250%);
 		}
 	}
 

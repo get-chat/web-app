@@ -133,6 +133,7 @@ const ChatHeader: React.FC<Props> = ({
 				<div className="min-[501px]:hidden">
 					<Button
 						variant="ghost"
+						color="neutral"
 						size="icon-xl"
 						className={cn(headerIconButton, 'mr-[5px]')}
 						onClick={closeChat}
@@ -236,6 +237,7 @@ const ChatHeader: React.FC<Props> = ({
 						<TooltipTrigger asChild>
 							<Button
 								variant="ghost"
+								color="neutral"
 								size="icon-xl"
 								className={headerIconButton}
 								onClick={closeChat}
@@ -250,6 +252,7 @@ const ChatHeader: React.FC<Props> = ({
 				)}
 				<Button
 					variant="ghost"
+					color="neutral"
 					size="icon-xl"
 					className={headerIconButton}
 					onClick={showSearchMessages}
@@ -259,7 +262,12 @@ const ChatHeader: React.FC<Props> = ({
 
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" size="icon-xl" className={headerIconButton}>
+						<Button
+							variant="ghost"
+							color="neutral"
+							size="icon-xl"
+							className={headerIconButton}
+						>
 							<MoreVert />
 						</Button>
 					</DropdownMenuTrigger>

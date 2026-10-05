@@ -143,8 +143,8 @@ function DropdownMenuRadioItem({
 			className={cn(menuItem, 'group/radio', className)}
 			{...props}
 		>
-			<RadioButtonCheckedIcon className="hidden text-selection! group-data-[state=checked]/radio:block" />
-			<RadioButtonUncheckedIcon className="text-[#8696a0]! group-data-[state=checked]/radio:hidden" />
+			<RadioButtonCheckedIcon className="hidden! text-selection! group-data-[state=checked]/radio:block!" />
+			<RadioButtonUncheckedIcon className="text-[#8696a0]! group-data-[state=checked]/radio:hidden!" />
 			{children}
 		</DropdownMenuPrimitive.RadioItem>
 	);
