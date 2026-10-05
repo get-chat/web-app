@@ -11,7 +11,6 @@ import {
 	DialogTitle,
 } from '@src/components/ui/dialog';
 import { Spinner } from '@src/components/ui/spinner';
-import * as Styled from './ChatTags.styles';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -21,8 +20,12 @@ import { Tag } from '@src/types/tags';
 import useTags from '@src/hooks/useTags';
 import CreateTagControl from '@src/components/CreateTagControl/CreateTagControl';
 
-// MUI Chip's dark label (the neutral Badge text is lighter)
-const chipClassName = 'text-foreground';
+// MUI Chip's dark label (the neutral Badge text is lighter), spaced as the
+// chips were
+const chipClassName = 'mt-1.25 mr-1.25 text-foreground';
+
+// mt-[12px], not mt-3: App.css's legacy .mt-3 would win and make it 15px
+const sectionClassName = 'mt-[12px]';
 
 interface Props {
 	open: boolean;
@@ -69,7 +72,7 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 					</DialogDescription>
 
 					{chatTags && (
-						<Styled.TagsContainer>
+						<div className={sectionClassName}>
 							<h5>{t('Current tags')}</h5>
 							{chatTags?.length > 0 ? (
 								<div>
@@ -90,13 +93,15 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 									))}
 								</div>
 							) : (
-								<Styled.EmptyTags>{t('Empty')}</Styled.EmptyTags>
+								<div className="mt-[4px] text-[15px] text-ink/60">
+									{t('Empty')}
+								</div>
 							)}
-						</Styled.TagsContainer>
+						</div>
 					)}
 
 					{allTags && (
-						<Styled.TagsContainer>
+						<div className={sectionClassName}>
 							<h5>All tags</h5>
 							{unusedTags?.length > 0 ? (
 								<div>
@@ -119,12 +124,14 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 									))}
 								</div>
 							) : (
-								<Styled.EmptyTags>{t('Empty')}</Styled.EmptyTags>
+								<div className="mt-[4px] text-[15px] text-ink/60">
+									{t('Empty')}
+								</div>
 							)}
-						</Styled.TagsContainer>
+						</div>
 					)}
 
-					<Styled.TagsContainer>
+					<div className={sectionClassName}>
 						<CreateTagControl
 							doCreateTag={doCreateTag}
 							trigger={(openForm) => (
@@ -141,9 +148,9 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 								</Badge>
 							)}
 						/>
-					</Styled.TagsContainer>
+					</div>
 
-					<Styled.ManageTagsLink>
+					<div className={sectionClassName}>
 						<Button asChild variant="link" color="primary" size="none">
 							<a
 								href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
@@ -152,7 +159,7 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 								{t('Manage tags')}
 							</a>
 						</Button>
-					</Styled.ManageTagsLink>
+					</div>
 				</DialogBody>
 				<DialogFooter>
 					<Button variant="ghost" color="secondary" onClick={close}>
@@ -161,9 +168,9 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 				</DialogFooter>
 
 				{isLoading && (
-					<Styled.LoadingOverlay>
+					<div className="absolute inset-0 flex items-center justify-center bg-white">
 						<Spinner size={28} className="text-primary" />
-					</Styled.LoadingOverlay>
+					</div>
 				)}
 			</DialogContent>
 		</Dialog>

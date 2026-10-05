@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import * as Styled from './ChatTagsList.styles';
 import { Button } from '@src/components/ui/button';
 import {
 	Dialog,
 	DialogBody,
+	DialogContent,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -45,37 +45,44 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 
 	return (
 		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
-			<Styled.DialogWrapper aria-describedby={undefined}>
+			<DialogContent aria-describedby={undefined}>
 				<DialogHeader>
 					<DialogTitle>{t('Tags')}</DialogTitle>
 				</DialogHeader>
 				<DialogBody>
-					<Styled.DialogContentWrapper>
-						{t('You can filter chats by tags.')}
-					</Styled.DialogContentWrapper>
+					{/* mb-[12px], not mb-3: App.css's legacy .mb-3 would win */}
+					<div className="mb-[12px]">{t('You can filter chats by tags.')}</div>
 
 					{tags && (
 						<div>
 							{tags.length > 0 ? (
 								<div>
 									{tags.map((tag) => (
-										<Item key={tag.id} asChild size="xs" className="w-full">
+										<Item
+											key={tag.id}
+											asChild
+											size="xs"
+											className="mt-1.25 w-full rounded-[10px]"
+										>
 											<button type="button" onClick={() => handleClick(tag)}>
-												<Styled.TagItem>
-													<SellIcon style={{ fill: tag.web_inbox_color }} />
+												<div className="-mx-2.5 flex items-center text-[16px] font-semibold">
+													<SellIcon
+														className="mr-2.5"
+														style={{ fill: tag.web_inbox_color }}
+													/>
 													{tag.name}
-												</Styled.TagItem>
+												</div>
 											</button>
 										</Item>
 									))}
 								</div>
 							) : (
-								<Styled.EmptyState>{t('Empty')}</Styled.EmptyState>
+								<div className="text-[15px] text-ink/60">{t('Empty')}</div>
 							)}
 						</div>
 					)}
 
-					<Styled.ManageTagsLink>
+					<div className="mt-[12px]">
 						<Button asChild variant="link" color="primary" size="none">
 							<a
 								href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
@@ -84,7 +91,7 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 								{t('Manage tags')}
 							</a>
 						</Button>
-					</Styled.ManageTagsLink>
+					</div>
 				</DialogBody>
 				<DialogFooter>
 					<Button variant="ghost" color="secondary" onClick={close}>
@@ -93,11 +100,11 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 				</DialogFooter>
 
 				{isLoading && (
-					<Styled.LoadingOverlay>
+					<div className="absolute inset-0 flex items-center justify-center bg-white">
 						<Spinner size={28} className="text-primary" />
-					</Styled.LoadingOverlay>
+					</div>
 				)}
-			</Styled.DialogWrapper>
+			</DialogContent>
 		</Dialog>
 	);
 };

@@ -6,13 +6,13 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import * as Styled from './CreateTagControl.styles';
 import AddIcon from '@src/components/icons/Add';
 import { useTranslation } from 'react-i18next';
 import { Tag } from '@src/types/tags';
 import { Button } from '@src/components/ui/button';
 import { Input } from '@src/components/ui/input';
 import { Spinner } from '@src/components/ui/spinner';
+import { cn } from '@src/lib/utils';
 
 export const TAG_COLOR_PALETTE = [
 	'#E53935',
@@ -91,8 +91,9 @@ const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 		}
 
 		return (
-			<Styled.CreateTagForm
+			<div
 				ref={ref}
+				className="flex min-w-60 flex-col gap-2 px-3 pt-1.5 pb-2.5"
 				// Lets a menu around the form tell that a key was pressed in it
 				data-slot="create-tag-form"
 				onKeyDown={
@@ -101,7 +102,7 @@ const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 						: undefined
 				}
 			>
-				<Styled.CreateTagInputRow>
+				<div className="flex items-center gap-1.5">
 					<Input
 						ref={inputRef}
 						value={name}
@@ -125,20 +126,23 @@ const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 							<AddIcon fontSize="small" />
 						)}
 					</Button>
-				</Styled.CreateTagInputRow>
-				<Styled.ColorSwatchRow>
+				</div>
+				<div className="flex flex-wrap items-center gap-1.5">
 					{TAG_COLOR_PALETTE.map((swatch) => (
-						<Styled.ColorSwatch
+						<button
 							key={swatch}
 							type="button"
-							$color={swatch}
-							$isSelected={swatch === color}
+							className={cn(
+								'size-5 cursor-pointer rounded-full border-2 p-0 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] transition-transform duration-100 ease-in-out hover:scale-110',
+								swatch === color ? 'border-foreground' : 'border-transparent'
+							)}
+							style={{ backgroundColor: swatch }}
 							onClick={() => setColor(swatch)}
 							aria-label={swatch}
 						/>
 					))}
-				</Styled.ColorSwatchRow>
-			</Styled.CreateTagForm>
+				</div>
+			</div>
 		);
 	}
 );
