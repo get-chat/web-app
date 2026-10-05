@@ -17,6 +17,28 @@ export interface PanelTransitionStyleProps {
 	$isExiting?: boolean;
 }
 
+/*
+ * Tailwind versions of the transitions below, for panels styled with
+ * classes: put the returned classes on the panel's root. Without motion
+ * (prefers-reduced-motion) there is no animation; useUnmountTransition then
+ * unmounts after its fallback delay.
+ */
+
+/** Panels over the sidebar (contacts, profile...) slide in from the left */
+export const overlayPanelAnimation = (isExiting?: boolean) =>
+	isExiting
+		? 'pointer-events-none motion-safe:animate-slide-out-left'
+		: 'motion-safe:animate-slide-in-left';
+
+/**
+ * Side panels next to the chat (contact details, search...) grow into place;
+ * on phones, where they cover the chat, they slide in from the right
+ */
+export const sidePanelAnimation = (isExiting?: boolean) =>
+	isExiting
+		? 'pointer-events-none motion-safe:animate-side-panel-out motion-safe:max-md:animate-slide-out-right'
+		: 'motion-safe:animate-side-panel-in motion-safe:max-md:animate-slide-in-right';
+
 /* Side panels (ContactDetails, SearchMessage, MessageStatuses) are flex
 siblings of the sidebar and chat view; animating flex-grow lets the
 neighbors reflow smoothly instead of snapping to their new widths. The

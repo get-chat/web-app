@@ -1,10 +1,10 @@
-import * as Styled from './UserAvailability.styles';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { AxiosError } from 'axios';
 import { updateUserAvailability } from '@src/api/usersApi';
 import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
 import { Switch } from '@src/components/ui/switch';
+import { cn } from '@src/lib/utils';
 
 const UserAvailability = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -28,19 +28,24 @@ const UserAvailability = () => {
 	};
 
 	return (
-		<Styled.Container
-			$isAvailable={isUserAvailable}
+		<div
+			className={cn(
+				'flex cursor-pointer items-center justify-between py-2.5 pr-1.5 pl-3.75 transition-[background-color] duration-200 ease-in-out',
+				isUserAvailable
+					? 'bg-success-soft text-success'
+					: 'bg-warning-soft text-warning'
+			)}
 			onClick={toggleUserAvailability}
 		>
 			<div>
-				<Styled.Title>
+				<div className="text-[14px] font-semibold">
 					{isUserAvailable
 						? t('You are active now.')
 						: t('You are inactive now.')}
-				</Styled.Title>
-				<Styled.Description>
+				</div>
+				<div className="text-[12px] font-medium">
 					{t('Click to toggle your status.')}
-				</Styled.Description>
+				</div>
 			</div>
 			<Switch
 				checked={isUserAvailable}
@@ -53,7 +58,7 @@ const UserAvailability = () => {
 				color="success"
 				className="my-[9px] mr-3"
 			/>
-		</Styled.Container>
+		</div>
 	);
 };
 

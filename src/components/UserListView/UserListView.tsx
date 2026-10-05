@@ -1,4 +1,3 @@
-import * as Styled from './UserListView.styles';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
 import PersonAddAltIcon from '@src/components/icons/PersonAdd';
@@ -11,7 +10,12 @@ import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_USER_AVAILABILITY } from '@src/Constants';
-import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import {
+	overlayPanelAnimation,
+	PanelTransitionProps,
+} from '@src/styles/panelTransitions';
+import PanelHeader from '@src/components/PanelHeader';
+import { cn } from '@src/lib/utils';
 import { useAppSelector } from '@src/store/hooks';
 import { getUserRoleLabel, sortUsers } from '@src/helpers/UserHelper';
 import CreateUserDialog from '@src/components/CreateUserDialog';
@@ -120,70 +124,87 @@ const UserListView: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Container $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
-			<Styled.Header>
-				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
-					<CloseIcon />
-				</Button>
-
-				<h3>{t('Users')}</h3>
-			</Styled.Header>
+		<div
+			className={cn(
+				'absolute inset-0 flex flex-col bg-white',
+				overlayPanelAnimation(isExiting)
+			)}
+			onAnimationEnd={onAnimationEnd}
+		>
+			<PanelHeader title={t('Users')} icon={<CloseIcon />} onClose={onHide} />
 			{(canChangeAvailability || canCreateUsers) && (
-				<Styled.Actions>
+				<div className="flex flex-col gap-3 p-3.75">
 					{canCreateUsers && (
-						<Styled.CreateUserButton
+						<Button
 							variant="ghost"
 							color="neutral"
+							className="h-auto w-full justify-start gap-2 border border-gray-light bg-white px-3.75 py-2.75 text-foreground has-[>svg]:px-3.75 hover:bg-(--color-primary-transparent) hover:shadow-[inset_0_0_0_1px_var(--color-primary),var(--shadow-md)] [&_.app-icon]:size-5! [&_.app-icon]:text-primary!"
 							onClick={() => setCreateUserDialogVisible(true)}
 							data-test-id="users-create-user-button"
 						>
 							<PersonAddAltIcon />
 							{t('Create new user')}
-						</Styled.CreateUserButton>
+						</Button>
 					)}
 					{canChangeAvailability && (
-						<Styled.Hint>
+						<div className="flex items-start gap-1.75 text-[12.5px] leading-[1.45] text-muted-foreground [&_.app-icon]:mt-px [&_.app-icon]:shrink-0 [&_.app-icon]:text-[16px]!">
 							<InfoOutlinedIcon />
 							<span>
 								{t('As an admin, you can change active status of users.')}
 							</span>
-						</Styled.Hint>
+						</div>
 					)}
-				</Styled.Actions>
+				</div>
 			)}
 
 			{isLoading ? (
-				<Styled.LoadingContainer>
+				<div className="flex justify-center p-3.75">
 					<Spinner size={40} className="text-primary" />
-				</Styled.LoadingContainer>
+				</div>
 			) : error ? (
-				<Styled.Description>{t(error)}</Styled.Description>
+				<div className="flex bg-gray-lighter p-3.75 text-[14px]">
+					{t(error)}
+				</div>
 			) : (
-				<Styled.Body>
+				<div className="relative flex-1 overflow-x-hidden overflow-y-auto">
 					{sortUsers(users).map((user) => (
-						<Styled.UserItem key={user.id}>
-							<Styled.UserMeta>
+						<div
+							key={user.id}
+							className="flex items-center justify-between gap-2.5 px-3.75 py-2.5"
+						>
+							<div className="flex items-center gap-2.5 overflow-hidden text-[14px] font-semibold text-ellipsis whitespace-nowrap">
 								<CustomAvatar generateBgColorBy={user.username}>
 									{generateInitialsHelper(user.username)}
 								</CustomAvatar>
-								<Styled.UserInfo>
-									<Styled.UserUsername>{user.username}</Styled.UserUsername>
+								<div className="flex min-w-0 flex-1 flex-col">
+									<div className="truncate text-[14px] font-semibold text-foreground">
+										{user.username}
+									</div>
 									{user.email && (
-										<Styled.UserEmail>{user.email}</Styled.UserEmail>
+										<div className="truncate text-[13px] font-normal text-foreground">
+											{user.email}
+										</div>
 									)}
-									<Styled.UserRole>
+									<div className="truncate text-[12px] font-medium text-muted-foreground">
 										{t(getUserRoleLabel(user.profile?.role))}
-									</Styled.UserRole>
-								</Styled.UserInfo>
-							</Styled.UserMeta>
+									</div>
+								</div>
+							</div>
 							{isUserAvailabilityFeatureEnabled && (
-								<Styled.UserAvailability
-									$isAvailable={user.profile.is_available}
-									$hasSwitch={canChangeAvailability}
+								<div
+									className={cn(
+										'flex shrink-0 items-center justify-between gap-2.5 rounded-[20px] text-[14px] transition-[background-color] duration-200 ease-in-out',
+										canChangeAvailability
+											? 'w-[140px] py-0 pr-0 pl-3.75'
+											: 'px-3.75 py-1',
+										user.profile.is_available
+											? 'bg-success-soft text-success'
+											: 'bg-warning-soft text-warning'
+									)}
 								>
-									<Styled.UserAvailabilityLabel>
+									<div className="truncate">
 										{user.profile.is_available ? t('Active') : t('Inactive')}
-									</Styled.UserAvailabilityLabel>
+									</div>
 									{canChangeAvailability && (
 										<Switch
 											// MUI's success green when on; the margins keep MUI's
@@ -199,11 +220,11 @@ const UserListView: React.FC<Props> = ({
 											}
 										/>
 									)}
-								</Styled.UserAvailability>
+								</div>
 							)}
-						</Styled.UserItem>
+						</div>
 					))}
-				</Styled.Body>
+				</div>
 			)}
 
 			<CreateUserDialog
@@ -211,7 +232,7 @@ const UserListView: React.FC<Props> = ({
 				setOpen={setCreateUserDialogVisible}
 				onCreated={listUsers}
 			/>
-		</Styled.Container>
+		</div>
 	);
 };
 

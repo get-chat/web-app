@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as Styled from './Notifications.styles';
 import CloseIcon from '@src/components/icons/Close';
-import { Button } from '@src/components/ui/button';
+import PanelHeader from '@src/components/PanelHeader';
+import { cn } from '@src/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
-import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import {
+	overlayPanelAnimation,
+	PanelTransitionProps,
+} from '@src/styles/panelTransitions';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -40,26 +43,27 @@ const Notifications: React.FC<Props> = ({
 	}, []);
 
 	return (
-		<Styled.NotificationsContainer
-			$isExiting={isExiting}
+		<div
+			className={cn(
+				'absolute inset-0 flex flex-col bg-white',
+				overlayPanelAnimation(isExiting)
+			)}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.Header>
-				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
-					<CloseIcon />
-				</Button>
+			<PanelHeader
+				title={t('Notifications')}
+				icon={<CloseIcon />}
+				onClose={onHide}
+			/>
 
-				<h3>{t('Notifications')}</h3>
-			</Styled.Header>
-
-			<Styled.Body>
+			<div className="relative flex-1 overflow-x-hidden overflow-y-auto">
 				{isLoaded && (
-					<Styled.EmptyState>
+					<div className="px-3.75 py-2.5 text-[14px]">
 						{t('You have no notifications')}
-					</Styled.EmptyState>
+					</div>
 				)}
-			</Styled.Body>
-		</Styled.NotificationsContainer>
+			</div>
+		</div>
 	);
 };
 

@@ -201,7 +201,7 @@ const ChatHeader: React.FC<Props> = ({
 								)}
 
 								{isResolved && (
-									<span className="rounded-[10px] bg-[#c9e4cb] px-[5px] text-[#2e7d33]">
+									<span className="rounded-[10px] bg-success-soft px-[5px] text-success">
 										{t('Resolved')}
 									</span>
 								)}

@@ -82,6 +82,12 @@
 
 	/* The app's navy ink, used at different opacities: text-ink/60, bg-ink/5 */
 	--color-ink: rgb(0 0 45);
+
+	/* Status pairs: text on a soft background (active/resolved, inactive) */
+	--color-success: #2e7d33;
+	--color-success-soft: #c9e4cb;
+	--color-warning: #644916;
+	--color-warning-soft: #f5d597;
 }
 
 /*
@@ -114,6 +120,14 @@
 	--animate-fade-in: fade-in 225ms cubic-bezier(0.4, 0, 0.2, 1);
 	--animate-fade-out: fade-out 195ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
+	/* Panels: see src/styles/panelTransitions.ts for which to use */
+	--animate-slide-in-left: slide-in-left 0.25s ease-out;
+	--animate-slide-out-left: slide-out-left 0.2s ease-in forwards;
+	--animate-slide-in-right: slide-in-right 0.25s ease-out;
+	--animate-slide-out-right: slide-out-right 0.2s ease-in forwards;
+	--animate-side-panel-in: side-panel-in 0.3s ease-out;
+	--animate-side-panel-out: side-panel-out 0.25s ease-in forwards;
+
 	/* Quick fade and slight zoom from the trigger, for menus */
 	--animate-menu-in: menu-in 140ms cubic-bezier(0.2, 0, 0, 1);
 	--animate-menu-out: menu-out 100ms ease-in forwards;
@@ -141,6 +155,67 @@
 
 	@keyframes fade-out {
 		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-in-left {
+		from {
+			transform: translateX(-24px);
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-out-left {
+		to {
+			transform: translateX(-24px);
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-in-right {
+		from {
+			transform: translateX(24px);
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-out-right {
+		to {
+			transform: translateX(24px);
+			opacity: 0;
+		}
+	}
+
+	/*
+	 * Side panels grow their flex share so their neighbours reflow smoothly;
+	 * the endpoints match their static flex: 0.4 1. Content stays
+	 * transparent while narrow so text doesn't visibly rewrap.
+	 */
+	@keyframes side-panel-in {
+		0% {
+			flex-grow: 0.001;
+			opacity: 0;
+		}
+		40% {
+			opacity: 0;
+		}
+		100% {
+			flex-grow: 0.4;
+			opacity: 1;
+		}
+	}
+
+	@keyframes side-panel-out {
+		0% {
+			flex-grow: 0.4;
+			opacity: 1;
+		}
+		60% {
+			opacity: 0;
+		}
+		100% {
+			flex-grow: 0.001;
 			opacity: 0;
 		}
 	}
