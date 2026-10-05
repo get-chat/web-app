@@ -19,7 +19,7 @@ import { setState } from '@src/store/reducers/UIReducer';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
 import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
 import { MessageType } from '@src/types/messages';
-import * as Styled from './SavedResponseList.styles';
+import MessageActionButton from '@src/components/MessageActionButton';
 import SearchBar from '@src/components/SearchBar';
 import { fetchSavedResponses } from '@src/api/savedResponsesApi';
 import { SavedResponse } from '@src/types/savedResponses';
@@ -31,7 +31,6 @@ export type Props = {
 
 const SavedResponseList: React.FC<Props> = ({
 	sendCustomTextMessage,
-	isExiting,
 	onAnimationEnd,
 }) => {
 	const { t } = useTranslation();
@@ -115,9 +114,11 @@ const SavedResponseList: React.FC<Props> = ({
 				if (!open) closePanel();
 			}}
 		>
-			<Styled.Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
+			{/* savedResponsesOuter and the classes inside: styled in Chat.css */}
+			<div className="savedResponsesOuter" onAnimationEnd={onAnimationEnd}>
 				<div className="savedResponsesWrapper">
-					<Styled.SearchContainer>
+					{/* The search sits on the chat background, without its own */}
+					<div className="flex flex-col [&_.app-icon]:text-chat-icon! [&_.searchBar\_\_inputContainer]:bg-transparent [&_input::placeholder]:text-chat-icon!">
 						<SearchBar
 							value={search}
 							onChange={(text) => {
@@ -128,7 +129,7 @@ const SavedResponseList: React.FC<Props> = ({
 							placeholder={t('Search quick replies')}
 							isFocusStyleEnabled={false}
 						/>
-					</Styled.SearchContainer>
+					</div>
 					<div className="savedResponses">
 						{savedResponses.length === 0 && (
 							<div className="savedResponses__emptyInfo mt-3">
@@ -152,7 +153,7 @@ const SavedResponseList: React.FC<Props> = ({
 								</StyledChatMessage.ChatMessage>
 
 								<SimpleTooltip title={t('Send')}>
-									<Styled.SendButton
+									<MessageActionButton
 										aria-label={t('Send')}
 										onClick={() => {
 											sendCustomTextMessage(savedResponse.text);
@@ -161,15 +162,16 @@ const SavedResponseList: React.FC<Props> = ({
 										}}
 									>
 										<SendIcon />
-									</Styled.SendButton>
+									</MessageActionButton>
 								</SimpleTooltip>
 								<SimpleTooltip title={t('Delete')}>
-									<Styled.DeleteButton
+									<MessageActionButton
+										tone="delete"
 										aria-label={t('Delete')}
 										onClick={() => attemptToDelete(savedResponse.id)}
 									>
 										<DeleteOutlineIcon />
-									</Styled.DeleteButton>
+									</MessageActionButton>
 								</SimpleTooltip>
 							</div>
 						))}
@@ -201,7 +203,7 @@ const SavedResponseList: React.FC<Props> = ({
 						</DialogFooter>
 					</DialogContent>
 				</Dialog>
-			</Styled.Outer>
+			</div>
 		</ClickAwayListener>
 	);
 };

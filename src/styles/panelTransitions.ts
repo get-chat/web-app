@@ -1,5 +1,4 @@
 import React from 'react';
-import { css } from 'styled-components';
 
 /**
  * Enter/exit transitions for the inbox side panels. Exit animations pair
@@ -45,5 +44,4 @@ All the wiring is still in place. To animate them again:
    overlayPanelAnimation for the pattern. The exit animation is
    required, because useUnmountTransition unmounts on animationend.
 2. Flip { isEnabled: false } to true on the three useUnmountTransition
-   calls in ChatView.tsx. */
-export const footerPanelTransition = css<PanelTransitionStyleProps>``;
+   calls in ChatView.tsx, and pass isExiting on to the panels again. */

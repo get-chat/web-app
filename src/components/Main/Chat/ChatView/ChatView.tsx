@@ -155,7 +155,7 @@ const ChatView: React.FC<Props> = (props) => {
 	} = useAppSelector((state) => state.UI);
 
 	// Footer panel animations are currently turned off (isEnabled: false)
-	// but stay wired; see footerPanelTransition to re-enable them
+	// but stay wired; see the note on footer panels in panelTransitions.ts
 	const templatesTransition = useUnmountTransition(isTemplatesVisible, {
 		isEnabled: false,
 	});
