@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyIcon from '@src/components/icons/Reply';
 import PrintMessage from '../../../PrintMessage';
 import {
 	findTemplate,

@@ -27,7 +27,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.div`
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 16px !important;
 		width: 16px !important;
 		margin-right: 3px !important;

@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, MouseEvent, TouchEvent, useMemo } from 'react';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import HourglassBottomIcon from '@src/components/icons/HourglassBottom';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
 import { CALENDAR_SHORT } from '@src/Constants';
@@ -21,7 +21,7 @@ import {
 } from '@src/helpers/ChatHelper';
 import { getMessageCaption } from '@src/helpers/MessageHelper';
 import { MessageType } from '@src/types/messages';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from '@src/components/icons/Check';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 
 const ChatListItem = (props: any) => {

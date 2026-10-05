@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
-import BoltIcon from '@mui/icons-material/Bolt';
+import KeyboardCommandKeyIcon from '@src/components/icons/KeyboardCommandKey';
+import BoltIcon from '@src/components/icons/Bolt';
 
 export const Container = styled.div<{ $isSelected: boolean }>`
 	padding: 5px 15px;

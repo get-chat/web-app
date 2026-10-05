@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useId, useRef, useState } from 'react';
-import { ArrowBack, QrCode } from '@mui/icons-material';
+import { ArrowBack, QrCode } from '@src/components/icons';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';

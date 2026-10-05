@@ -10,7 +10,7 @@ export const Container = styled.div`
 	padding: 15px 15px;
 	gap: 15px;
 
-	& > .MuiSvgIcon-root {
+	& > .app-icon {
 		height: 48px;
 		width: 48px;
 		color: white !important;

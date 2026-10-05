@@ -65,14 +65,14 @@ export const ActionIcon = styled(Button).attrs({
 		transition: all ease-in 0.2s;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 20px;
 		width: 20px;
 		color: var(--chat-icon) !important;
 		transition: color ease-in 0.2s;
 	}
 
-	&.active .MuiSvgIcon-root {
+	&.active .app-icon {
 		color: var(--chat-icon-dark) !important;
 	}
 `;
@@ -210,7 +210,7 @@ export const ScrollButton = styled(Button).attrs({
 	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
 		0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		width: 24px;
 		height: 24px;
 		color: var(--color-primary-light) !important;

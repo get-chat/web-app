@@ -27,7 +27,7 @@ export const TagItem = styled.div`
 	display: flex;
 	align-items: center;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		margin-right: 10px;
 	}
 `;

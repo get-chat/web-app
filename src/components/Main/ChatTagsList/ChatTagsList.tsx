@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from '@src/components/icons/Sell';
 import { Tag } from '@src/types/tags';
 
 interface Props {

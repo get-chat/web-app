@@ -32,11 +32,11 @@ export const SearchInputContainer = styled.div.attrs({
 			}
 		`}
 
-	> .MuiSvgIcon-root {
+	> .app-icon {
 		color: var(--lighter-text-color);
 	}
 
-	> .MuiSvgIcon-root,
+	> .app-icon,
 	> [data-slot='spinner'] {
 		position: absolute;
 		left: 10px;

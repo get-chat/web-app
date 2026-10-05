@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { MessageType } from '@src/types/messages';
-import { DoneAll } from '@mui/icons-material';
+import { DoneAll } from '@src/components/icons';
 
 export const Reactions = styled.div`
 	background-color: white;
@@ -75,7 +75,7 @@ export const Action = styled.div`
 		background-color: rgba(100, 86, 82, 0.65);
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: white !important;
 		height: 18px !important;
 		width: 18px !important;
@@ -90,7 +90,7 @@ export const Forwarded = styled.div`
 	justify-content: center;
 	margin-bottom: 5px;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: rgba(0, 0, 45, 0.3) !important;
 		transform: scale(-1, 1);
 		height: 0.7em;

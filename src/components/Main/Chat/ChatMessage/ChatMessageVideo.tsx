@@ -1,5 +1,5 @@
 import React from 'react';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PlayArrowIcon from '@src/components/icons/PlayArrow';
 
 interface Props {
 	source: string;

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useAppSelector } from '@src/store/hooks';
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from '@src/components/icons/Sell';
 
 interface Props {
 	id?: number;

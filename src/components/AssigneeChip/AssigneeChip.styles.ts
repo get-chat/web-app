@@ -19,7 +19,7 @@ export const Container = styled.div.attrs({
 		box-shadow: 0 0 0 2px var(--color-primary);
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: var(--default-text-color) !important;
 		height: 0.6em;
 		width: 0.6em;
@@ -45,7 +45,7 @@ export const Avatar = styled.div<{ $unassigned?: boolean }>`
 	background-color: ${({ $unassigned }) =>
 		$unassigned ? 'rgba(0, 0, 0, 0.05) !important' : 'inherit'};
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: ${({ $unassigned }) =>
 			$unassigned ? 'rgba(0, 0, 0, 0.6) !important' : 'white !important'};
 		height: 0.5em;

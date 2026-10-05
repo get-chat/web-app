@@ -7,7 +7,7 @@ import {
 	useState,
 } from 'react';
 import * as Styled from './CreateTagControl.styles';
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@src/components/icons/Add';
 import { useTranslation } from 'react-i18next';
 import { Tag } from '@src/types/tags';
 import { Button } from '@src/components/ui/button';

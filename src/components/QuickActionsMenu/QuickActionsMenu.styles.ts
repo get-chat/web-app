@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SearchOutlined } from '@mui/icons-material';
+import { Search as SearchOutlined } from '@src/components/icons';
 
 export const Container = styled.div`
 	overflow: hidden;

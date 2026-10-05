@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/PreviewSendMedia.css';
-import CloseIcon from '@mui/icons-material/Close';
-import Send from '@mui/icons-material/Send';
-import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@src/components/icons/Close';
+import Send from '@src/components/icons/Send';
+import AddIcon from '@src/components/icons/Add';
 import {
 	ATTACHMENT_TYPE_AUDIO,
 	ATTACHMENT_TYPE_DOCUMENT,
@@ -17,8 +17,8 @@ import {
 	handleDragOver,
 	prepareSelectedFiles,
 } from '@src/helpers/FileHelper';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import InsertDriveFileIcon from '@src/components/icons/Draft';
+import AudiotrackIcon from '@src/components/icons/MusicNote';
 
 // @ts-ignore
 import { Document, Page, pdfjs } from 'react-pdf';

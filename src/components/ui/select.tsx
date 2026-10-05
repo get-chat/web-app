@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn, stopEscape } from '@src/lib/utils';
-import CheckIcon from '@mui/icons-material/Check';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CheckIcon from '@src/components/icons/Check';
+import ExpandMoreIcon from '@src/components/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@src/components/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@src/components/icons/KeyboardArrowDown';
 import { Select as SelectPrimitive } from 'radix-ui';
 import { fieldSurfaceVariants } from '@src/components/ui/input';
 

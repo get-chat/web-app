@@ -1,7 +1,7 @@
 import React from 'react';
 import Moment from 'react-moment';
 import { Trans } from 'react-i18next';
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from '@src/components/icons/Sell';
 import { ChatTagging } from '@src/types/messages';
 import {
 	Container,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn, stopEscape } from '@src/lib/utils';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@src/components/icons/Close';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
 import { Button } from '@src/components/ui/button';

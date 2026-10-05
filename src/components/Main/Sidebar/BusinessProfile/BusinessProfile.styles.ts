@@ -33,7 +33,7 @@ export const Header = styled.div`
 		font-size: 18px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: white !important;
 	}
 `;
@@ -99,7 +99,7 @@ export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
 		margin-bottom: 15px;
 	}
 
-	.MuiAvatar-root,
+	.customAvatar,
 	[data-slot='avatar'] {
 		height: 200px;
 		width: 200px;
@@ -154,7 +154,7 @@ export const SectionHeader = styled.div`
 		flex: 1 1;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: #000 !important;
 		cursor: pointer;
 	}

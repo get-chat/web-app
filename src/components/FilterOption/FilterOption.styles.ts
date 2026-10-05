@@ -29,7 +29,7 @@ export const Container = styled.div.attrs({
 			box-shadow: 0 0 0 2px rgba(101, 203, 172, 0.5);
 		}
 
-		.MuiSvgIcon-root {
+		.app-icon {
 			height: 12px !important;
 			width: 12px !important;
 			color: ${({ $isActive }) => ($isActive ? 'white !important' : 'inherit')};
@@ -48,7 +48,7 @@ export const ActionIcon = styled(Button)`
 		margin-left: -2px !important;
 		border-radius: 50%;
 
-		.MuiSvgIcon-root {
+		.app-icon {
 			color: white !important;
 		}
 	}

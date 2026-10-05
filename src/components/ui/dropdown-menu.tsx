@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { cn, stopEscape } from '@src/lib/utils';
-import CheckIcon from '@mui/icons-material/Check';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckIcon from '@src/components/icons/Check';
+import ChevronRightIcon from '@src/components/icons/ChevronRight';
+import RadioButtonCheckedIcon from '@src/components/icons/RadioButtonChecked';
+import RadioButtonUncheckedIcon from '@src/components/icons/RadioButtonUnchecked';
 import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 
 // Styled after the menus of the Inbox Analytics design: a borderless white

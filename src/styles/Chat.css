@@ -147,13 +147,13 @@ from the bottom edge stays within the box. */
 	justify-self: center;
 }
 
-.chat__message__location__share .MuiSvgIcon-root {
+.chat__message__location__share .app-icon {
 	color: var(--color-primary) !important;
 	height: 0.8em;
 	width: 0.8em;
 }
 
-.chat__message__location__open .MuiSvgIcon-root {
+.chat__message__location__open .app-icon {
 	/* Follow the button label color */
 	color: inherit !important;
 	height: 0.8em;
@@ -205,11 +205,11 @@ video.chat__media {
 	margin: 0 -4px;
 }
 
-.chat__voice > .MuiAvatar-root.audioMessageAvatar .MuiSvgIcon-root {
+.chat__voice > .customAvatar.audioMessageAvatar .app-icon {
 	color: white !important;
 }
 
-.chat__voice > .MuiAvatar-root {
+.chat__voice > .customAvatar {
 	margin: 0 4px 0 15px;
 }
 
@@ -260,7 +260,7 @@ a.chat__document:hover {
 	margin-bottom: 5px;
 }
 
-.chat__templateHeader .MuiSvgIcon-root {
+.chat__templateHeader .app-icon {
 	color: rgba(0, 0, 45, 0.4) !important;
 	width: 0.6em;
 	height: 0.6em;

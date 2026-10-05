@@ -41,7 +41,7 @@
 	justify-content: flex-start;
 }
 
-.sendTemplateMessage__section__provideFileChoices__choice > .MuiSvgIcon-root {
+.sendTemplateMessage__section__provideFileChoices__choice > .app-icon {
 	height: 50px;
 	width: 50px;
 	margin-bottom: 10px;

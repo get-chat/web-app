@@ -1,9 +1,9 @@
 import * as Styled from './UserListView.styles';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import CloseIcon from '@mui/icons-material/Close';
+import PersonAddAltIcon from '@src/components/icons/PersonAdd';
+import InfoOutlinedIcon from '@src/components/icons/Info';
+import CloseIcon from '@src/components/icons/Close';
 import { fetchUsers, updateUserAvailability } from '@src/api/usersApi';
 import { User, UserAvailabilityEvent, UserList } from '@src/types/users';
 import CustomAvatar from '@src/components/CustomAvatar';

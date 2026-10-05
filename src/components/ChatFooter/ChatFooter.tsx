@@ -2,17 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
 	ArrowDownward,
 	AttachFile,
-	InsertEmoticon,
+	Mood as InsertEmoticon,
 	Send,
-} from '@mui/icons-material';
-import SmsIcon from '@mui/icons-material/Sms';
-import TryIcon from '@mui/icons-material/Try';
-import ImageIcon from '@mui/icons-material/Image';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import ContactsIcon from '@mui/icons-material/Contacts';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import NotesIcon from '@mui/icons-material/Notes';
-import MicIcon from '@mui/icons-material/Mic';
+} from '@src/components/icons';
+import SmsIcon from '@src/components/icons/Sms';
+import TryIcon from '@src/components/icons/Reviews';
+import ImageIcon from '@src/components/icons/Image';
+import InsertDriveFileIcon from '@src/components/icons/Draft';
+import ContactsIcon from '@src/components/icons/Contacts';
+import LocationOnIcon from '@src/components/icons/LocationOn';
+import NotesIcon from '@src/components/icons/Notes';
+import MicIcon from '@src/components/icons/Mic';
 // @ts-ignore
 import { Emoji, NimblePicker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
@@ -34,7 +34,7 @@ import ContactsModal from '../ContactsModal';
 import LocationModal from '../LocationModal';
 import data from 'emoji-mart/data/facebook.json';
 import QuickActionsMenu from '@src/components/QuickActionsMenu';
-import KeyboardCommandKeyIcon from '@mui/icons-material/KeyboardCommandKey';
+import KeyboardCommandKeyIcon from '@src/components/icons/KeyboardCommandKey';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import ChosenFileList from '@src/interfaces/ChosenFileList';

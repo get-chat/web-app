@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Styled from './SearchMessage.styles';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@src/components/icons/Close';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
 import { isMobileOnly } from 'react-device-detect';

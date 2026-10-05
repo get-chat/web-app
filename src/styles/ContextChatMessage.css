@@ -30,7 +30,7 @@
 	-webkit-box-orient: vertical;
 }
 
-.chat__message__context__info__message .MuiSvgIcon-root {
+.chat__message__context__info__message .app-icon {
 	height: 0.8em;
 	width: 0.8em;
 	margin-right: 3px;

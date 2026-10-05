@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ReviewsIcon from '@mui/icons-material/Reviews';
+import ReviewsIcon from '@src/components/icons/Reviews';
 
 export const Header = styled.div`
 	display: block;

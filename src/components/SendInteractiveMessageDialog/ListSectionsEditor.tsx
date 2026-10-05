@@ -1,6 +1,6 @@
 import React, { useId } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@src/components/icons/Add';
+import CloseIcon from '@src/components/icons/Close';
 import { useTranslation } from 'react-i18next';
 import { ListRow, ListSection } from '@src/types/messages';
 import { isEmptyString } from '@src/helpers/Helpers';

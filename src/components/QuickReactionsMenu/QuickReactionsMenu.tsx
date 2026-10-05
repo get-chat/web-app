@@ -1,6 +1,6 @@
 import React from 'react';
 import PrintMessage from '@src/components/PrintMessage';
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@src/components/icons/Add';
 import { Message } from '@src/types/messages';
 import { Popover, PopoverAnchor } from '@src/components/ui/popover';
 import { useCenteredOverAnchor } from './useCenteredOverAnchor';

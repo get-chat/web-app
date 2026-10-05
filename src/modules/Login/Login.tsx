@@ -6,7 +6,7 @@ import {
 	useParams,
 	useSearchParams,
 } from 'react-router-dom';
-import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
+import OpenInNewRoundedIcon from '@src/components/icons/OpenInNew';
 import {
 	clearToken,
 	getApiBaseURLsMergedWithConfig,

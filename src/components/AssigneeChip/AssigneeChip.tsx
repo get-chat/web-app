@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
-import GroupIcon from '@mui/icons-material/Group';
-import PersonIcon from '@mui/icons-material/Person';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import GroupIcon from '@src/components/icons/Group';
+import PersonIcon from '@src/components/icons/Person';
+import ExpandMoreIcon from '@src/components/icons/KeyboardArrowDown';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from '@src/components/icons/Check';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
 import { sortGroups } from '@src/helpers/GroupsHelper';
 import {

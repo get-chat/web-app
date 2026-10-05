@@ -1,10 +1,10 @@
 import React from 'react';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
+import TouchAppIcon from '@src/components/icons/TouchApp';
 import { useTranslation } from 'react-i18next';
 import ButtonsMessage from './components/ButtonsMessage';
 import ListMessage from './components/ListMessage';
 import ProductMessage from './components/ProductMessage';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocationOnIcon from '@src/components/icons/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
 import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
 import AddressMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/AddressMessage';

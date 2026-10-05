@@ -105,7 +105,7 @@ export const Tag = styled.div`
 	display: inline-block;
 	margin-right: 10px;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		margin-right: 5px;
 		vertical-align: baseline;
 	}
@@ -130,7 +130,7 @@ export const AssigneesContainer = styled.div`
 		padding: 5px 0;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		vertical-align: middle;
 		margin-right: 10px;
 		height: 0.8em;

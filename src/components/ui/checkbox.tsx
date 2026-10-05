@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@src/lib/utils';
-import CheckIcon from '@mui/icons-material/Check';
-import RemoveIcon from '@mui/icons-material/Remove';
+import CheckIcon from '@src/components/icons/Check';
+import RemoveIcon from '@src/components/icons/Remove';
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 
 /*

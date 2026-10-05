@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Alert } from '@src/components/ui/alert';
 import { Button } from '@src/components/ui/button';
-import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import ArrowForwardRoundedIcon from '@src/components/icons/ArrowForward';
 
 export const LoginWrapper = styled.div.attrs({
 	id: 'login',
@@ -172,7 +172,7 @@ export const SessionCard = styled.button.attrs({ type: 'button' })`
 	transition: border-color 0.25s ease, background-color 0.25s ease,
 		box-shadow 0.25s ease;
 
-	.MuiAvatar-root {
+	.customAvatar {
 		width: 44px;
 		height: 44px;
 		font-size: 18px;

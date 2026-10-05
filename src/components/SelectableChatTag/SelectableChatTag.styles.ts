@@ -28,7 +28,7 @@ export const TagContent = styled.div`
 	margin-left: 10px;
 	font-weight: 600;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		margin-right: 8px;
 	}
 `;

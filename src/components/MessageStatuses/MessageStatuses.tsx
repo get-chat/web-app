@@ -1,10 +1,10 @@
 import React from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@src/components/icons/Close';
 import { useTranslation } from 'react-i18next';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import Moment from 'react-moment';
-import DoneIcon from '@mui/icons-material/Done';
-import DoneAll from '@mui/icons-material/DoneAll';
+import DoneIcon from '@src/components/icons/Check';
+import DoneAll from '@src/components/icons/DoneAll';
 import useMessageStatuses from '@src/components/MessageStatuses/useMessageStatuses';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import useReactions from '@src/hooks/useReactions';

@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import PersonIcon from '@mui/icons-material/Person';
+import PersonIcon from '@src/components/icons/Person';
 import { Avatar } from '@src/components/ui/avatar';
 
 export const StyledAvatar = styled(Avatar)<{ $isLight?: boolean }>`
@@ -10,7 +10,7 @@ export const StyledAvatar = styled(Avatar)<{ $isLight?: boolean }>`
 						color: #6e7383 !important;
 				  `
 				: css`
-						.MuiSvgIcon-root {
+						.app-icon {
 							color: #fff !important;
 						}
 				  `}

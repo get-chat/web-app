@@ -5,7 +5,7 @@ export const ContentWrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 
-	& .MuiAvatar-root {
+	& .customAvatar {
 		height: 100px;
 		width: 100px;
 		position: fixed;

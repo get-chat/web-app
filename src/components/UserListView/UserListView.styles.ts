@@ -32,7 +32,7 @@ export const Header = styled.div`
 		margin: 10px 15px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: white !important;
 	}
 `;
@@ -63,7 +63,7 @@ export const CreateUserButton = styled(Button)`
 		background-color: white;
 		border: 1px solid var(--gray-light);
 
-		.MuiSvgIcon-root {
+		.app-icon {
 			width: 20px;
 			height: 20px;
 			/* App.css greys every MUI icon outside MUI buttons */
@@ -85,7 +85,7 @@ export const Hint = styled.div`
 	line-height: 1.45;
 	color: var(--lighter-text-color);
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		font-size: 16px;
 		flex-shrink: 0;
 		margin-top: 1px;

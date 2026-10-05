@@ -24,7 +24,7 @@ export const SendButton = styled(Button).attrs(iconButtonAttrs)`
 		height: 40px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 20px;
 		width: 20px;
 		color: var(--chat-icon-dark) !important;
@@ -42,7 +42,7 @@ export const DeleteButton = styled(Button).attrs(iconButtonAttrs)`
 		height: 40px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 20px;
 		width: 20px;
 		color: var(--color-secondary) !important;
@@ -59,7 +59,7 @@ export const SearchContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 
-	& .MuiSvgIcon-root {
+	& .app-icon {
 		color: var(--chat-icon) !important;
 	}
 

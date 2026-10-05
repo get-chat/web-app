@@ -31,7 +31,7 @@ export const Header = styled.div`
 		margin: 10px 15px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: white !important;
 	}
 `;

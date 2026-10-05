@@ -56,7 +56,7 @@ export const ContactsHeader = styled.div`
 		font-size: 18px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: white !important;
 	}
 `;
@@ -82,7 +82,7 @@ export const StartByPhoneNumberInner = styled.div`
 	flex: 1;
 	padding: 20px 15px;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 0.8em;
 		width: 0.8em;
 		color: var(--color-primary) !important;

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useId, useRef, useState } from 'react';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
+import MyLocationIcon from '@src/components/icons/MyLocation';
 import { useTranslation } from 'react-i18next';
 import { AxiosResponse } from 'axios';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';

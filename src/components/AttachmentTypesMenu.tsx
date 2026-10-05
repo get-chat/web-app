@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@src/components/icons/Add';
+import CloseIcon from '@src/components/icons/Close';
 import { Button } from '@src/components/ui/button';
 import {
 	DropdownMenu,

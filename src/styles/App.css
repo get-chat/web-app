@@ -164,18 +164,13 @@
 	width: 100% !important;
 }
 
-.MuiSvgIcon-root:not(.MuiAlert-root .MuiSvgIcon-root):not(
-		.MuiRadio-root .MuiSvgIcon-root
-	):not(.MuiCheckbox-root .MuiSvgIcon-root):not(
-		.MuiButton-root .MuiSvgIcon-root
-	):not(.MuiStepIcon-root) {
+/*
+ * Default icon colour. The repeated class keeps this exactly as specific as the
+ * MUI-era rule it replaces (10 classes), so other icon colour rules still only
+ * win with !important.
+ */
+.app-icon.app-icon.app-icon.app-icon.app-icon.app-icon.app-icon.app-icon.app-icon.app-icon {
 	color: #6f7385;
-}
-
-.MuiSvgIcon-root.error:not(.MuiAlert-root .MuiSvgIcon-root):not(
-		.MuiRadio-root .MuiSvgIcon-root
-	):not(.MuiCheckbox-root .MuiSvgIcon-root) {
-	color: red;
 }
 
 .app__mediaPreview {
@@ -222,7 +217,7 @@
 	display: block;
 }
 
-.app__mediaPreview__header .MuiAvatar-root {
+.app__mediaPreview__header .customAvatar {
 	margin-left: 5px;
 }
 
@@ -293,7 +288,7 @@
 	margin-top: -3px;
 }
 
-.activeIconButton .MuiSvgIcon-root {
+.activeIconButton .app-icon {
 	color: var(--color-primary) !important;
 }
 

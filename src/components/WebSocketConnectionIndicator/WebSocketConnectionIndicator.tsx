@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Styled from './WebSocketConnectionIndicator.styles';
 import { useTranslation } from 'react-i18next';
-import ReportIcon from '@mui/icons-material/Report';
+import ReportIcon from '@src/components/icons/Report';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {}

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DoneAll, Done } from '@mui/icons-material';
+import { DoneAll, Check as Done } from '@src/components/icons';
 
 // Was MUI's clickable ListItem, which the result lists rendered without padding
 export const Result = styled.div`
@@ -48,7 +48,7 @@ export const MessageBody = styled.div`
 `;
 
 export const MessageTypeContainer = styled.span`
-	.MuiSvgIcon-root {
+	.app-icon {
 		margin-right: 5px;
 		margin-left: 0 !important;
 		width: 0.75em;

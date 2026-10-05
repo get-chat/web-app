@@ -6,7 +6,7 @@ import {
 } from '../helpers/TemplateMessageHelper';
 import { Button } from '@src/components/ui/button';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from '@src/components/icons/Send';
 import { SendButton } from '@src/components/SavedResponseList/SavedResponseList.styles';
 import { getObjLength } from '../helpers/ObjectHelper';
 import { useTranslation } from 'react-i18next';

@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropDownIcon from '@src/components/icons/ArrowDropDown';
 import { useTranslation } from 'react-i18next';
 import {
 	CountryCode,

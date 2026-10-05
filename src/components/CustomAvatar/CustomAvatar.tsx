@@ -49,10 +49,10 @@ const CustomAvatar: React.FC<Props> = ({
 
 	return (
 		<Styled.StyledAvatar
-			// MuiAvatar-root: kept for the stylesheets elsewhere in the app that
-			// still size or space avatars with that selector
+			// customAvatar: lets stylesheets elsewhere in the app size or space
+			// avatars
 			className={cn(
-				'MuiAvatar-root items-center justify-center bg-[#e0e2e8] text-[1.25rem] leading-none font-semibold text-white',
+				'customAvatar items-center justify-center bg-[#e0e2e8] text-[1.25rem] leading-none font-semibold text-white',
 				className
 			)}
 			$isLight={isLight}

@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { SearchOutlined } from '@mui/icons-material';
+import { Search as SearchOutlined } from '@src/components/icons';
 import * as Styled from './SearchBar.styles';
 import { Spinner } from '@src/components/ui/spinner';
 import { useTranslation } from 'react-i18next';

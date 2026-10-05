@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from '@src/components/icons/Sell';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Tag } from '@src/types/tags';

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Styled from './Notifications.styles';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@src/components/icons/Close';
 import { Button } from '@src/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';

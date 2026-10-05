@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button } from '@src/components/ui/button';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import FiberManualRecordIcon from '@src/components/icons/FiberManualRecord';
 import { keyframes } from 'styled-components';
 
 const blinker = keyframes`
@@ -38,7 +38,7 @@ export const CancelButton = styled(Button).attrs(iconButtonAttrs)`
 			background-color: rgba(255, 0, 0, 0.2) !important;
 		}
 
-		.MuiSvgIcon-root {
+		.app-icon {
 			color: red !important;
 			height: 20px;
 			width: 20px;
@@ -63,7 +63,7 @@ export const SendButton = styled(Button).attrs(iconButtonAttrs)`
 			background-color: rgba(0, 255, 0, 0.2) !important;
 		}
 
-		.MuiSvgIcon-root {
+		.app-icon {
 			color: green !important;
 			height: 20px;
 			width: 20px;

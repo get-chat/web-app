@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { download } from '@src/helpers/DownloadHelper';
-import DownloadIcon from '@mui/icons-material/Download';
-import MarkChatReadIcon from '@mui/icons-material/MarkChatRead';
+import DownloadIcon from '@src/components/icons/Download';
+import MarkChatReadIcon from '@src/components/icons/MarkChatRead';
 import { Message, MessageType } from '@src/types/messages';
 import {
 	generateAudioLink,

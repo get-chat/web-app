@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import DoneAll from '@mui/icons-material/DoneAll';
-import WarningIcon from '@mui/icons-material/Warning';
-import SellIcon from '@mui/icons-material/Sell';
+import DoneAll from '@src/components/icons/DoneAll';
+import WarningIcon from '@src/components/icons/Warning';
+import SellIcon from '@src/components/icons/Sell';
 import Moment from 'react-moment';
 import { Checkbox } from '@src/components/ui/checkbox';
 
@@ -197,7 +197,7 @@ export const LastMessage = styled.div`
 		margin-right: 5px;
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: rgba(0, 0, 45, 0.3) !important;
 		height: 0.8em;
 		width: 0.8em;
@@ -239,7 +239,7 @@ export const TimeLeftIconWrapper = styled.div`
 	align-items: center;
 	background-color: rgba(0, 0, 0, 0.2);
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 11px !important;
 		width: 11px !important;
 		color: #fff !important;
@@ -255,7 +255,7 @@ export const ResolvedIndicator = styled.div`
 	align-items: center;
 	background-color: #2e7d33;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 13px !important;
 		width: 13px !important;
 		color: #fff !important;
@@ -289,7 +289,7 @@ export const FailedMessagesIndicator = styled.div`
 	top: 3px;
 	left: 8px;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		height: 22px;
 		width: 22px;
 		color: red !important;

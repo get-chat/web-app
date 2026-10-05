@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import * as Styled from './CreateUserDialog.styles';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
+import ContentCopyIcon from '@src/components/icons/ContentCopy';
+import MarkEmailReadIcon from '@src/components/icons/MarkEmailRead';
 import { Trans, useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changeUserPassword, createUser } from '@src/api/usersApi';

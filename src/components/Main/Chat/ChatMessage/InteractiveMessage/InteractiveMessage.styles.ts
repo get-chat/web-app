@@ -8,7 +8,7 @@ export const Caption = styled.div`
 	color: rgba(0, 0, 45, 0.6);
 	gap: 5px;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: rgba(0, 0, 45, 0.4) !important;
 		width: 0.6em;
 		height: 0.6em;

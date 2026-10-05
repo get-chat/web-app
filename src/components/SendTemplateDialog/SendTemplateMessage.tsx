@@ -29,9 +29,9 @@ import {
 	FORM_VALIDATION_ERROR,
 	InvalidTemplateParamException,
 } from '@src/Constants';
-import PublishIcon from '@mui/icons-material/Publish';
-import LinkIcon from '@mui/icons-material/Link';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import PublishIcon from '@src/components/icons/Publish';
+import LinkIcon from '@src/components/icons/Link';
+import AttachFileIcon from '@src/components/icons/AttachFile';
 import { AxiosError } from 'axios';
 import { Template } from '@src/types/templates';
 import { createMedia } from '@src/api/mediaApi';

@@ -44,7 +44,7 @@ export const HeaderRight = styled.div`
 	align-items: center;
 	justify-content: space-between;
 
-	> .MuiSvgIcon-root {
+	> .app-icon {
 		margin-right: 2vw;
 		font-size: 24px !important;
 	}

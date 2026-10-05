@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DoneAll } from '@mui/icons-material';
+import { DoneAll } from '@src/components/icons';
 import {
 	PanelTransitionStyleProps,
 	sidePanelTransition,
@@ -85,7 +85,7 @@ export const SubSectionTitle = styled.div`
 	flex-direction: row;
 	align-items: center;
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		margin-right: 5px;
 		height: 0.7em !important;
 		width: 0.7em !important;

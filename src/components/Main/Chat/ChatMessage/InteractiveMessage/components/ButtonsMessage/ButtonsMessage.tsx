@@ -1,5 +1,5 @@
 import React from 'react';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyIcon from '@src/components/icons/Reply';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';

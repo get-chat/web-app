@@ -5,8 +5,8 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { ArrowBack } from '@mui/icons-material';
-import DialpadIcon from '@mui/icons-material/Dialpad';
+import { ArrowBack } from '@src/components/icons';
+import DialpadIcon from '@src/components/icons/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
 	getCountryFromWaId,

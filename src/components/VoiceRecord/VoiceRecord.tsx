@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import CloseIcon from '@src/components/icons/Close';
+import FiberManualRecordIcon from '@src/components/icons/FiberManualRecord';
 import { displaySeconds } from '@src/helpers/Helpers';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from '@src/components/icons/Check';
 import VoiceRecorder from '../../VoiceRecorder';
 import {
 	EVENT_TOPIC_DISPLAY_ERROR,

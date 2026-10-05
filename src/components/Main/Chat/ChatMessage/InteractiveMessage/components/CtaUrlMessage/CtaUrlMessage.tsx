@@ -1,6 +1,6 @@
 import PrintMessage from '@src/components/PrintMessage';
 import React from 'react';
-import LaunchIcon from '@mui/icons-material/Launch';
+import LaunchIcon from '@src/components/icons/OpenInNew';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import * as Styled from './CtaUrlMessage.styles';

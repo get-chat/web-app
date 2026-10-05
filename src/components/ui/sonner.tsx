@@ -1,8 +1,8 @@
 import * as React from 'react';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
+import CheckCircleOutlineIcon from '@src/components/icons/CheckCircle';
+import ErrorOutlineIcon from '@src/components/icons/Error';
+import InfoOutlinedIcon from '@src/components/icons/Info';
+import ReportProblemOutlinedIcon from '@src/components/icons/Warning';
 import { Toaster as Sonner, type ToasterProps } from 'sonner';
 import { Spinner } from '@src/components/ui/spinner';
 

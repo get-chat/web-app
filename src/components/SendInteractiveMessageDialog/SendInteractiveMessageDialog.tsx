@@ -6,8 +6,8 @@ import {
 	InteractiveParameter,
 } from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@src/components/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@src/components/icons/KeyboardArrowUp';
 import {
 	Button as ReplyButton,
 	CarouselCard,

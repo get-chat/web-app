@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@src/components/icons/Close';
 import Moment from 'react-moment';
 import {
 	ATTACHMENT_TYPE_IMAGE,
@@ -7,7 +7,7 @@ import {
 	CALENDAR_NORMAL,
 	EVENT_TOPIC_CHAT_MESSAGE,
 } from '@src/Constants';
-import { GetApp } from '@mui/icons-material';
+import { Download as GetApp } from '@src/components/icons';
 import { useTranslation } from 'react-i18next';
 import Image from '../Image';
 import PreviewMediaZoom from './PreviewMediaZoom';

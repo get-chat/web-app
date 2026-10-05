@@ -23,7 +23,7 @@ import {
 } from '@src/components/ui/dropdown-menu';
 import { Spinner } from '@src/components/ui/spinner';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MoreVertIcon from '@src/components/icons/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
 import {
 	containsLetters,
@@ -49,7 +49,7 @@ import ChangePasswordDialog from '../../ChangePasswordDialog';
 import CreateUserDialog from '@src/components/CreateUserDialog';
 import SearchMessageResult from '../../SearchMessageResult/SearchMessageResult';
 import { isMobile, isMobileOnly } from 'react-device-detect';
-import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from '@src/components/icons/Chat';
 import StartChat from '../../StartChat';
 import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
@@ -59,7 +59,7 @@ import Notifications from './Notifications';
 import {
 	Notifications as NotificationsIcon,
 	QrCode,
-} from '@mui/icons-material';
+} from '@src/components/icons';
 import { getObjLength } from '@src/helpers/ObjectHelper';
 import { getHubURL } from '@src/helpers/URLHelper';
 import RetryFailedMessages from './RetryFailedMessages';
@@ -76,23 +76,23 @@ import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
-import SellIcon from '@mui/icons-material/Sell';
+import SellIcon from '@src/components/icons/Sell';
 import { AxiosError } from 'axios';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { addChats, setChats } from '@src/store/reducers/chatsReducer';
-import PasswordIcon from '@mui/icons-material/Password';
-import CloudSyncIcon from '@mui/icons-material/CloudSync';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import LogoutIcon from '@mui/icons-material/Logout';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import DateRangeIcon from '@mui/icons-material/DateRange';
-import SettingsIcon from '@mui/icons-material/Settings';
+import PasswordIcon from '@src/components/icons/Password';
+import CloudSyncIcon from '@src/components/icons/CloudSync';
+import AdminPanelSettingsIcon from '@src/components/icons/AdminPanelSettings';
+import PersonAddAltIcon from '@src/components/icons/PersonAdd';
+import LogoutIcon from '@src/components/icons/Logout';
+import UnfoldMoreIcon from '@src/components/icons/UnfoldMore';
+import DateRangeIcon from '@src/components/icons/DateRange';
+import SettingsIcon from '@src/components/icons/Settings';
 import FilterOption from '@src/components/FilterOption';
-import PersonIcon from '@mui/icons-material/Person';
-import GroupIcon from '@mui/icons-material/Group';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
+import PersonIcon from '@src/components/icons/Person';
+import GroupIcon from '@src/components/icons/Group';
+import FilterListIcon from '@src/components/icons/FilterList';
+import MarkChatUnreadIcon from '@src/components/icons/MarkChatUnread';
 import DateRangeDialog from '@src/components/DateRangeDialog';
 import {
 	convertDateToUnixTimestamp,

@@ -1,7 +1,7 @@
 import React, { useId, useRef, useState } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import AddIcon from '@src/components/icons/Add';
+import CloseIcon from '@src/components/icons/Close';
+import CloudUploadIcon from '@src/components/icons/CloudUpload';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { CarouselCard } from '@src/types/messages';

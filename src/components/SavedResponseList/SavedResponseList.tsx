@@ -11,8 +11,8 @@ import {
 	DialogTitle,
 } from '@src/components/ui/dialog';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
-import SendIcon from '@mui/icons-material/Send';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SendIcon from '@src/components/icons/Send';
+import DeleteOutlineIcon from '@src/components/icons/Delete';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';

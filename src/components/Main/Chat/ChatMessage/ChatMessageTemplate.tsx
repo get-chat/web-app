@@ -2,7 +2,7 @@ import React from 'react';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageVideo from './ChatMessageVideo';
 import ChatMessageDocument from './ChatMessageDocument';
-import SmsIcon from '@mui/icons-material/Sms';
+import SmsIcon from '@src/components/icons/Sms';
 import {
 	insertTemplateComponentParameters,
 	sortTemplateComponents,
@@ -10,8 +10,8 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import PrintMessage from '@src/components/PrintMessage';
-import LaunchIcon from '@mui/icons-material/Launch';
-import PhoneIcon from '@mui/icons-material/Phone';
+import LaunchIcon from '@src/components/icons/OpenInNew';
+import PhoneIcon from '@src/components/icons/Call';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
 import { Message } from '@src/types/messages';

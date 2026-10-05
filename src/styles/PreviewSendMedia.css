@@ -24,7 +24,7 @@
 	font-weight: 600;
 }
 
-.previewSendMedia__header .MuiSvgIcon-root {
+.previewSendMedia__header .app-icon {
 	color: rgba(255, 255, 255, 0.7) !important;
 	margin-right: 20px;
 	cursor: pointer;
@@ -98,7 +98,7 @@
 	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
 }
 
-.previewSendMedia__footer__send .MuiSvgIcon-root {
+.previewSendMedia__footer__send .app-icon {
 	color: white !important;
 }
 
@@ -138,7 +138,7 @@
 	justify-content: center;
 }
 
-.previewSendMedia__footer__thumbnail__iconWrapper .MuiSvgIcon-root {
+.previewSendMedia__footer__thumbnail__iconWrapper .app-icon {
 	height: 1.5em;
 	width: 1.5em;
 }
@@ -165,7 +165,7 @@
 	background-color: rgba(0, 0, 45, 0.4) !important;
 }
 
-.previewSendMedia__footer__thumbnail__delete .MuiSvgIcon-root {
+.previewSendMedia__footer__thumbnail__delete .app-icon {
 	height: 0.6em;
 	width: 0.6em;
 	color: white !important;
@@ -184,7 +184,7 @@
 	cursor: pointer;
 }
 
-.previewSendMedia__footer__addMore .MuiSvgIcon-root {
+.previewSendMedia__footer__addMore .app-icon {
 	color: var(--color-primary) !important;
 	height: 1.25em;
 	width: 1.25em;

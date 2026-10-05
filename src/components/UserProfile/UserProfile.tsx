@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowBack } from '@mui/icons-material';
+import { ArrowBack } from '@src/components/icons';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { useTranslation } from 'react-i18next';

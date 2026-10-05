@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import ShareIcon from '@mui/icons-material/Share';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import ShareIcon from '@src/components/icons/Share';
+import OpenInNewIcon from '@src/components/icons/OpenInNew';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { Message } from '@src/types/messages';

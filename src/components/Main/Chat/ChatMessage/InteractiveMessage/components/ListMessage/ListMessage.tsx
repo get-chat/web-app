@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import FormatListBulletedIcon from '@src/components/icons/FormatListBulleted';
+import KeyboardArrowDownIcon from '@src/components/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@src/components/icons/KeyboardArrowUp';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';

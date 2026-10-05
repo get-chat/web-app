@@ -31,7 +31,7 @@ export const CountryTrigger = styled(Field)`
 		color: rgba(0, 0, 0, 0.87);
 	}
 
-	.MuiSvgIcon-root {
+	.app-icon {
 		color: rgba(0, 0, 0, 0.54);
 	}
 `;

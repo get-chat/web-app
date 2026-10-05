@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from '@src/components/icons/Chat';
 import CustomAvatar from '@src/components/CustomAvatar';
 
 export const Root = styled.div`

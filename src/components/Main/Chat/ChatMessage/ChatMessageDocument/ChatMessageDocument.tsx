@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import InsertDriveFileIcon from '@src/components/icons/Draft';
 
 import styles from './ChatMessageDocument.pcss';
 import { Message } from '@src/types/messages';

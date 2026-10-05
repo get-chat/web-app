@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, MouseEvent } from 'react';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@src/components/icons/Close';
 import * as Styled from './FilterOption.styles';
 
 interface Props {
