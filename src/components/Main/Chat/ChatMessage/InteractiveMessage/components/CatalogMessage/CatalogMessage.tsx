@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
 import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
-import * as Styled from './CatalogMessage.styles';
+import InteractiveMessageText from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageText';
 
 const CatalogMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
@@ -11,21 +11,7 @@ const CatalogMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 
 	return (
 		<>
-			{header && (
-				<Styled.Header>
-					<PrintMessage linkify message={header.text} />
-				</Styled.Header>
-			)}
-			{body && (
-				<Styled.Body>
-					<PrintMessage linkify message={body.text} />
-				</Styled.Body>
-			)}
-			{footer && (
-				<Styled.Footer>
-					<PrintMessage linkify message={footer.text} />
-				</Styled.Footer>
-			)}
+			<InteractiveMessageText header={header} body={body} footer={footer} />
 			{action?.name === 'catalog_message' && (
 				<InteractiveMessageButton href={action?.parameters?.url} disabled>
 					{t('View catalog')}

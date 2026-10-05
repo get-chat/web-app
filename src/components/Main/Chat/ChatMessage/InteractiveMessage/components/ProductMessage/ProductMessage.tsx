@@ -2,14 +2,10 @@ import React, { memo } from 'react';
 import { Trans } from 'react-i18next';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
-import {
-	Actions,
-	Header,
-	Body,
-	Footer,
-	List,
-	Item,
-} from './ProductMessage.styles';
+import InteractiveMessageText from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageText';
+
+// Sections, and the products within each, 5px apart
+const listClassName = 'm-0 list-none p-0 [&>li+li]:mt-1.25';
 
 const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
@@ -20,14 +16,14 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 
 	return (
 		<>
-			<Actions>
+			<div className="mb-1.25 flex flex-col justify-center gap-1.25 border-b border-[#ccc] pb-1.25">
 				{action.sections ? (
-					<List>
+					<ul className={listClassName}>
 						{action.sections.map((section, idx) => (
-							<Item key={idx}>
+							<li key={idx}>
 								<div>{section.title}</div>
 								{section.product_items && (
-									<List>
+									<ul className={listClassName}>
 										{section.product_items.map(
 											({
 												product_retailer_id,
@@ -46,11 +42,11 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 												</li>
 											)
 										)}
-									</List>
+									</ul>
 								)}
-							</Item>
+							</li>
 						))}
-					</List>
+					</ul>
 				) : (
 					<>
 						<div>
@@ -75,22 +71,13 @@ const ProductMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 						</div>
 					</>
 				)}
-			</Actions>
-			{header && (
-				<Header>
-					<PrintMessage linkify message={header.text} />
-				</Header>
-			)}
-			{body && (
-				<Body>
-					<PrintMessage linkify message={body.text} />
-				</Body>
-			)}
-			{footer && (
-				<Footer>
-					<PrintMessage linkify message={footer.text} />
-				</Footer>
-			)}
+			</div>
+			<InteractiveMessageText
+				header={header}
+				body={body}
+				footer={footer}
+				headerClassName="font-normal"
+			/>
 		</>
 	);
 };
