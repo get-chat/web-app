@@ -142,7 +142,7 @@ Views are styled with [Tailwind CSS](https://tailwindcss.com) v4, configured in 
 - **Icons** are [Material Symbols](https://fonts.google.com/icons) (Rounded, filled), generated into `src/components/icons/`. To add one, put its name (e.g. `more_vert`) in `src/components/icons/icons.json`, run `node scripts/generate-icons.mjs` and import it from `@src/components/icons/MoreVert`.
 - **Combine classes** with `cn()` from `src/lib/utils`. Use `cva` for a component with variants (see the files in `src/components/ui/`), and extract a small component instead of repeating a long class list.
 - **Use the theme tokens** instead of raw values:
-  - colours: `primary`, `foreground`, `muted-foreground`, `ink` (the app's navy, used with an opacity such as `text-ink/60`), `gray-light`, `gray-lighter`, `destructive`, `chat-bg`, `chat-icon`, `chat-icon-dark`, `selection`, `menu-*`
+  - colours: `primary`, `foreground`, `muted-foreground`, `ink` (the app's navy, used with an opacity such as `text-ink/60`), `gray-light`, `gray-lighter`, `destructive`, `destructive-dark`, `chat-bg`, `chat-icon`, `chat-icon-dark`, `selection`, `menu-*`
   - shadows: `shadow-sm`, `shadow-md`, `shadow-lg`
   - breakpoints are the app's own: `max-md:` is the single-column phone layout (up to 750px), `max-sm:` a small phone (up to 500px), `2xl:` from 1501px
   - spacing uses Tailwind's scale, where 1 step is 4px and fractions are fine (`py-1.25` is 5px)

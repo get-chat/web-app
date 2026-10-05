@@ -1,75 +1,60 @@
 import React from 'react';
-import Moment from 'react-moment';
 import { Trans } from 'react-i18next';
 import SellIcon from '@src/components/icons/Sell';
+import ChatEvent from '@src/components/ChatEvent';
 import { ChatTagging } from '@src/types/messages';
-import {
-	Container,
-	Content,
-	Wrapper,
-	Title,
-	Timestamp,
-} from './ChatTaggingEvent.styles';
+
+// The tag icon sits in the sentence; `!` beats the icon's unlayered 24px size
+const tagIconClass = 'mr-0.75! size-4!';
 
 interface Props {
 	data: ChatTagging;
 }
 
 const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
-	const dateFormat = 'H:mm';
-
 	return (
-		<Container>
-			<Content>
-				<Wrapper>
-					<Title>
-						{data.done_by ? (
-							<div>
-								<Trans
-									values={{
-										postProcess: 'sprintf',
-										sprintf: {
-											username: data.done_by.username,
-											tag: data.tag?.name,
-										},
-									}}
-								>
-									<span className="bold">%(username)s</span> has {data.action}{' '}
-									tag:{' '}
-									<SellIcon
-										style={{
-											fill: data.tag?.web_inbox_color,
-										}}
-									/>
-									<span className="bold">%(tag)s</span>.
-								</Trans>
-							</div>
-						) : (
-							<div>
-								<Trans
-									values={{
-										postProcess: 'sprintf',
-										sprintf: { tag: data.tag?.name },
-									}}
-								>
-									A tag was {data.action}:{' '}
-									<SellIcon
-										style={{
-											fill: data.tag?.web_inbox_color,
-										}}
-									/>
-									<span className="bold">%(tag)s</span>.
-								</Trans>
-							</div>
-						)}
-					</Title>
-				</Wrapper>
-
-				<Timestamp>
-					<Moment date={data.timestamp} format={dateFormat} unix />
-				</Timestamp>
-			</Content>
-		</Container>
+		<ChatEvent timestamp={data.timestamp}>
+			{data.done_by ? (
+				<div>
+					<Trans
+						values={{
+							postProcess: 'sprintf',
+							sprintf: {
+								username: data.done_by.username,
+								tag: data.tag?.name,
+							},
+						}}
+					>
+						<span className="bold">%(username)s</span> has {data.action} tag:{' '}
+						<SellIcon
+							className={tagIconClass}
+							style={{
+								fill: data.tag?.web_inbox_color,
+							}}
+						/>
+						<span className="bold">%(tag)s</span>.
+					</Trans>
+				</div>
+			) : (
+				<div>
+					<Trans
+						values={{
+							postProcess: 'sprintf',
+							sprintf: { tag: data.tag?.name },
+						}}
+					>
+						A tag was {data.action}:{' '}
+						<SellIcon
+							className={tagIconClass}
+							style={{
+								fill: data.tag?.web_inbox_color,
+							}}
+						/>
+						<span className="bold">%(tag)s</span>.
+					</Trans>
+				</div>
+			)}
+		</ChatEvent>
 	);
 };
 
