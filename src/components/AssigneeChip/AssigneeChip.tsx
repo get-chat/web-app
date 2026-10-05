@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import GroupIcon from '@src/components/icons/Group';
 import PersonIcon from '@src/components/icons/Person';
-import ExpandMoreIcon from '@src/components/icons/KeyboardArrowDown';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
 import CheckIcon from '@src/components/icons/Check';
@@ -19,7 +17,11 @@ import {
 } from '@src/components/ui/dropdown-menu';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { cn } from '@src/lib/utils';
-import * as Styled from './AssigneeChip.styles';
+import ChatChip, {
+	ChatChipAvatar,
+	ChatChipChevron,
+	ChatChipLabel,
+} from '@src/components/ChatChip';
 
 export type AssigneeType = 'user' | 'group';
 
@@ -33,6 +35,7 @@ interface Props {
 	assignedGroupId?: number;
 	isActionable?: boolean;
 	onAction?: (userId?: number | null, groupId?: number | null) => void;
+	className?: string;
 }
 
 // Users / Groups headings of the menu
@@ -49,6 +52,7 @@ const AssigneeChip: React.FC<Props> = ({
 	assignedGroupId,
 	isActionable = false,
 	onAction,
+	className,
 }) => {
 	const { t } = useTranslation();
 
@@ -58,7 +62,8 @@ const AssigneeChip: React.FC<Props> = ({
 	});
 
 	// Controlled so the chip can carry the "menuOpen" class, which keeps an
-	// empty chip visible in the chat list while its menu is open
+	// empty chip visible in the chat list while its menu is open (assigneeChip
+	// and menuOpen are hooks for ChatListItem's styles)
 	const [isMenuOpen, setMenuOpen] = useState(false);
 
 	const hideMenu = () => {
@@ -76,15 +81,12 @@ const AssigneeChip: React.FC<Props> = ({
 	};
 
 	const chip = (
-		<Styled.Container
-			className={isMenuOpen ? 'menuOpen' : ''}
-			$isClickable={isActionable}
-			role={isActionable ? 'button' : undefined}
-			tabIndex={isActionable ? 0 : undefined}
+		<ChatChip
+			className={cn('assigneeChip', isMenuOpen && 'menuOpen', className)}
+			isClickable={isActionable}
 		>
-			<Styled.Avatar
-				as={CustomAvatar}
-				$unassigned={!Boolean(name)}
+			<ChatChipAvatar
+				className={cn(!name && 'bg-black/5 [&_.app-icon]:text-black/60!')}
 				generateBgColorBy={name}
 			>
 				{assigneeType === 'group' ? (
@@ -94,21 +96,17 @@ const AssigneeChip: React.FC<Props> = ({
 				) : (
 					<PersonIcon />
 				)}
-			</Styled.Avatar>
+			</ChatChipAvatar>
 
 			{(!dense || name) && (
-				<Styled.Name $isWider={isActionable && !!secondaryName}>
+				<ChatChipLabel isWide={isActionable && !!secondaryName}>
 					{name ?? (!dense ? t('Unassigned') : '')}
 					{!dense && secondaryName && ', ' + secondaryName}
-				</Styled.Name>
+				</ChatChipLabel>
 			)}
 
-			{isActionable && (
-				<Styled.ActionIcon>
-					<ExpandMoreIcon />
-				</Styled.ActionIcon>
-			)}
-		</Styled.Container>
+			{isActionable && <ChatChipChevron />}
+		</ChatChip>
 	);
 
 	if (!isActionable) {

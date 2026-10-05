@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import * as Styled from './TagsChip.styles';
 import { useAppSelector } from '@src/store/hooks';
 import { Tag } from '@src/types/tags';
 import SellIcon from '@src/components/icons/Sell';
@@ -9,8 +8,11 @@ import SettingsIcon from '@src/components/icons/Settings';
 import AddIcon from '@src/components/icons/Add';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
-import CustomAvatar from '@src/components/CustomAvatar';
-import ExpandMoreIcon from '@src/components/icons/KeyboardArrowDown';
+import ChatChip, {
+	ChatChipAvatar,
+	ChatChipChevron,
+	ChatChipLabel,
+} from '@src/components/ChatChip';
 import CheckIcon from '@src/components/icons/Check';
 import useTags from '@src/hooks/useTags';
 import CreateTagControl from '@src/components/CreateTagControl/CreateTagControl';
@@ -22,17 +24,19 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from '@src/components/ui/dropdown-menu';
+import { cn } from '@src/lib/utils';
 
 interface Props {
 	waId: string | undefined;
 	showChatTagsList: () => void;
+	className?: string;
 }
 
 // Selected / Available headings of the menu
 const menuHeaderClassName =
 	'flex items-center gap-[5px] [&_svg]:size-[13px]! [&_svg]:text-menu-muted!';
 
-const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
+const TagsChip: React.FC<Props> = ({ waId, showChatTagsList, className }) => {
 	const tags = useAppSelector((state) => state.tags.value);
 	const currentChatTags = useAppSelector(
 		(state) => state.currentChatTags.value
@@ -45,6 +49,9 @@ const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
 	});
 	const { t } = useTranslation();
 
+	// The chip's icon takes the colour of the first tag
+	const firstTagColor = currentChatTags[0]?.web_inbox_color;
+
 	const isTagSelected = (tag: Tag): boolean => {
 		return currentChatTags.some((t) => t.id === tag.id);
 	};
@@ -52,27 +59,28 @@ const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Styled.Container $isClickable={true} role="button" tabIndex={0}>
-					<Styled.Avatar
-						as={CustomAvatar}
-						$iconColor={currentChatTags[0]?.web_inbox_color}
+				<ChatChip className={cn('bg-ink/6', className)} isClickable>
+					<ChatChipAvatar
+						className={
+							firstTagColor
+								? 'bg-white'
+								: 'bg-inherit [&_.app-icon]:text-black/60!'
+						}
 					>
-						<SellIcon />
-					</Styled.Avatar>
+						<SellIcon style={{ color: firstTagColor }} />
+					</ChatChipAvatar>
 
-					<Styled.Label>
+					<ChatChipLabel>
 						{currentChatTags.length > 0
 							? currentChatTags
 									.slice(0, 3)
 									.map((tag) => tag.name)
 									.join(', ')
 							: 'Tags'}
-					</Styled.Label>
+					</ChatChipLabel>
 
-					<Styled.ActionIcon>
-						<ExpandMoreIcon />
-					</Styled.ActionIcon>
-				</Styled.Container>
+					<ChatChipChevron />
+				</ChatChip>
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent

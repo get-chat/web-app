@@ -213,12 +213,15 @@ const ChatHeader: React.FC<Props> = ({
 
 			<div className="flex justify-between">
 				{chat && (
-					// The chips' own styled-components background is unlayered, hence
-					// the `!` here
-					<div className="mr-[5px] flex items-center justify-center gap-2.5 max-sm:hidden [&_.assigneeChip]:bg-chat-bg! [&_.tagsChip]:bg-chat-bg!">
-						<TagsChip waId={waId} showChatTagsList={showChatTags} />
+					<div className="mr-[5px] flex items-center justify-center gap-2.5 max-sm:hidden">
+						<TagsChip
+							className="bg-chat-bg"
+							waId={waId}
+							showChatTagsList={showChatTags}
+						/>
 
 						<AssigneeChip
+							className="bg-chat-bg"
 							assigneeType="user"
 							name={chat.assigned_to_user?.username}
 							secondaryName={chat.assigned_group?.name}
