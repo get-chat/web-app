@@ -60,9 +60,41 @@
 	--color-selection: var(--selection);
 
 	/* App-specific tokens from index.css */
+	--color-gray-light: var(--gray-light);
+	--color-gray-lighter: var(--gray-lighter);
 	--color-chat-bg: var(--chat-bg);
 	--color-chat-icon: var(--chat-icon);
 	--color-chat-icon-dark: var(--chat-icon-dark);
+}
+
+/*
+ * Breakpoints: Tailwind's names, set to the app's own layout widths, so
+ * `max-md:` is the single-column (phone) layout and `max-sm:` a small phone.
+ */
+@theme {
+	--breakpoint-sm: 501px;
+	--breakpoint-md: 751px;
+	--breakpoint-lg: 1025px;
+	--breakpoint-xl: 1280px;
+	/* Above this the app stops filling the whole window */
+	--breakpoint-2xl: 1501px;
+
+	/* The app's navy ink, used at different opacities: text-ink/60, bg-ink/5 */
+	--color-ink: rgb(0 0 45);
+}
+
+/*
+ * The app's shadows, as Tailwind's shadow-sm/md/lg. `static` keeps the
+ * variables in the CSS even when no utility uses them, for the legacy styles
+ * that read var(--shadow-md).
+ */
+@theme static {
+	--shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06),
+		0 1px 3px rgba(16, 24, 40, 0.08);
+	--shadow-md: 0 2px 4px -2px rgba(16, 24, 40, 0.06),
+		0 4px 12px -2px rgba(16, 24, 40, 0.12);
+	--shadow-lg: 0 2px 6px rgba(0, 0, 45, 0.06),
+		0 24px 48px -12px rgba(0, 0, 45, 0.18);
 }
 
 @theme {

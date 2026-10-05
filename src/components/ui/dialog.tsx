@@ -125,7 +125,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
 		<div
 			data-slot="dialog-header"
 			className={cn(
-				'flex shrink-0 flex-col gap-1.5 px-5 pt-[15px] pb-2.5 text-left max-[750px]:px-[15px]',
+				'flex shrink-0 flex-col gap-1.5 px-5 pt-[15px] pb-2.5 text-left max-md:px-[15px]',
 				className
 			)}
 			{...props}
@@ -139,7 +139,7 @@ function DialogBody({ className, ...props }: React.ComponentProps<'div'>) {
 		<div
 			data-slot="dialog-body"
 			className={cn(
-				'min-h-0 flex-1 overflow-y-auto px-5 py-[5px] max-[750px]:px-[15px]',
+				'min-h-0 flex-1 overflow-y-auto px-5 py-[5px] max-md:px-[15px]',
 				className
 			)}
 			{...props}
@@ -184,7 +184,7 @@ function DialogTitle({
 		<DialogPrimitive.Title
 			data-slot="dialog-title"
 			className={cn(
-				'pr-8 text-lg leading-snug font-semibold max-[750px]:text-base',
+				'pr-8 text-lg leading-snug font-semibold max-md:text-base',
 				className
 			)}
 			{...props}

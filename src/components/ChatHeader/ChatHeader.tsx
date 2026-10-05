@@ -126,11 +126,11 @@ const ChatHeader: React.FC<Props> = ({
 
 	return (
 		<div
-			className="flex h-(--header-height) items-center border-l border-[lightgray] bg-[#6843301f] px-[15px] max-[750px]:z-1 max-[750px]:border-l-0 max-[750px]:px-2.5 max-[750px]:py-1 max-[750px]:shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)]"
+			className="flex h-(--header-height) items-center border-l border-[lightgray] bg-[#6843301f] px-[15px] max-md:z-1 max-md:border-l-0 max-md:px-2.5 max-md:py-1 max-md:shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)]"
 			onDrop={(event) => event.preventDefault()}
 		>
 			{!isChatOnly && (
-				<div className="min-[501px]:hidden">
+				<div className="sm:hidden">
 					<Button
 						variant="ghost"
 						color="neutral"
@@ -189,7 +189,7 @@ const ChatHeader: React.FC<Props> = ({
 
 							<div className="-mt-px flex items-center gap-2.5 text-[12px]">
 								{person.wa_id && !isUserActionsRestricted && (
-									<span className="text-chat-icon max-[500px]:hidden">
+									<span className="text-chat-icon max-sm:hidden">
 										{addPlus(person.wa_id)}
 									</span>
 								)}
@@ -215,7 +215,7 @@ const ChatHeader: React.FC<Props> = ({
 				{chat && (
 					// The chips' own styled-components background is unlayered, hence
 					// the `!` here
-					<div className="mr-[5px] flex items-center justify-center gap-2.5 max-[500px]:hidden [&_.assigneeChip]:bg-chat-bg! [&_.tagsChip]:bg-chat-bg!">
+					<div className="mr-[5px] flex items-center justify-center gap-2.5 max-sm:hidden [&_.assigneeChip]:bg-chat-bg! [&_.tagsChip]:bg-chat-bg!">
 						<TagsChip waId={waId} showChatTagsList={showChatTags} />
 
 						<AssigneeChip

@@ -330,7 +330,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 									color="neutral"
 									size="none"
 									onClick={() => deleteByIndex(file[0])}
-									className="previewSendMedia__footer__thumbnail__delete rounded-full max-[750px]:p-2.5!"
+									className="previewSendMedia__footer__thumbnail__delete rounded-full max-md:p-2.5!"
 								>
 									<CloseIcon />
 								</Button>
@@ -365,7 +365,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 						variant="ghost"
 						color="neutral"
 						size="none"
-						className="previewSendMedia__footer__send rounded-full max-[750px]:p-2.5! [&_svg]:size-6"
+						className="previewSendMedia__footer__send rounded-full max-md:p-2.5! [&_svg]:size-6"
 						onClick={send}
 					>
 						<Send />

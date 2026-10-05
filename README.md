@@ -133,6 +133,23 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - Open `/src/i18n.js` and add the new language to `resources` object in `init` options by importing the JSON translation output.
 
+## Styling
+
+Views are styled with [Tailwind CSS](https://tailwindcss.com) v4, configured in `src/styles/tailwind.css`. The styled-components files (`*.styles.ts`) and the global CSS files in `src/styles/` are being migrated to Tailwind, one component at a time.
+
+- **Don't add styled-components.** When you rework a component that still has a `.styles.ts` file, move its styles into Tailwind classes.
+- **UI components** live in `src/components/ui/` (buttons, dialogs, inputs, selects, menus, tooltips...). They are built on [shadcn/ui](https://ui.shadcn.com) and are our own code: change their look there, not with overrides where they are used.
+- **Icons** are [Material Symbols](https://fonts.google.com/icons) (Rounded, filled), generated into `src/components/icons/`. To add one, put its name (e.g. `more_vert`) in `src/components/icons/icons.json`, run `node scripts/generate-icons.mjs` and import it from `@src/components/icons/MoreVert`.
+- **Combine classes** with `cn()` from `src/lib/utils`. Use `cva` for a component with variants (see the files in `src/components/ui/`), and extract a small component instead of repeating a long class list.
+- **Use the theme tokens** instead of raw values:
+  - colours: `primary`, `foreground`, `muted-foreground`, `ink` (the app's navy, used with an opacity such as `text-ink/60`), `gray-light`, `gray-lighter`, `destructive`, `chat-bg`, `chat-icon`, `chat-icon-dark`, `selection`, `menu-*`
+  - shadows: `shadow-sm`, `shadow-md`, `shadow-lg`
+  - breakpoints are the app's own: `max-md:` is the single-column phone layout (up to 750px), `max-sm:` a small phone (up to 500px), `2xl:` from 1501px
+  - spacing uses Tailwind's scale, where 1 step is 4px and fractions are fine (`py-1.25` is 5px)
+  - arbitrary values (`w-[310px]`) are fine for one-off measurements
+- **Cascade:** Tailwind's utilities live in CSS cascade layers, so the remaining global CSS and styled-components win over them. Use the `!` suffix (`size-4!`) only to beat such a rule, and remove it once that rule is gone.
+- Don't use the `dark:` variant; the app has no dark mode. `src/styles/App.css` still defines legacy `.mt-1`–`.mr-3` helpers (in 5px steps) that override Tailwind's classes of the same names.
+
 ## Query Parameters
 
 - `lng`: Changes the language of the page. The value used must be Alpha-2 code. Please see the following directory for currently supported languages: https://github.com/get-chat/web-app/tree/master/src/locales
