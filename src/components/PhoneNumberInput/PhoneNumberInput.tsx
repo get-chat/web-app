@@ -10,8 +10,7 @@ import {
 } from 'libphonenumber-js';
 import { getFlagEmoji } from '@src/helpers/PhoneNumberHelper';
 import SearchBar from '@src/components/SearchBar/SearchBar';
-import * as Styled from './PhoneNumberInput.styles';
-import { FieldError, FieldLabel } from '@src/components/ui/field';
+import { Field, FieldError, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
 import {
 	InputGroup,
@@ -255,7 +254,9 @@ const PhoneNumberInput: React.FC<Props> = ({
 			const isSelected = option.country === country;
 
 			return (
-				<Styled.OptionButton
+				// A row of the countries list, like MUI's MenuItem
+				<button
+					className="flex min-h-9 w-full cursor-pointer items-center border-0 bg-transparent px-4 py-1.5 text-left [font:inherit] text-[1rem] text-inherit outline-none! hover:bg-black/4 focus-visible:bg-black/4 aria-selected:bg-(--color-primary-transparent) aria-selected:hover:bg-(--color-primary-transparent-darker) aria-selected:focus-visible:bg-(--color-primary-transparent-darker)"
 					key={option.country}
 					type="button"
 					role="option"
@@ -266,16 +267,14 @@ const PhoneNumberInput: React.FC<Props> = ({
 						closeMenu();
 					}}
 				>
-					<Styled.Option>
-						<span className="PhoneNumberInput__flag">
+					<span className="flex w-full items-center gap-2.5">
+						<span className="text-[18px] leading-none">
 							{getFlagEmoji(option.country)}
 						</span>
-						<span className="PhoneNumberInput__name">{option.name}</span>
-						<span className="PhoneNumberInput__code">
-							+{option.callingCode}
-						</span>
-					</Styled.Option>
-				</Styled.OptionButton>
+						<span className="flex-1 truncate">{option.name}</span>
+						<span className="text-black/55">+{option.callingCode}</span>
+					</span>
+				</button>
 			);
 		});
 		// handleCountryChange / closeMenu only call state setters, so their
@@ -315,24 +314,33 @@ const PhoneNumberInput: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Row>
+		<div className="flex w-full items-start gap-3">
 			<Popover
 				open={isMenuOpen}
 				onOpenChange={(isOpen) => !isOpen && closeMenu()}
 			>
 				<PopoverAnchor asChild>
-					<Styled.CountryControl ref={countryAnchorRef}>
-						<Styled.CountryTrigger className="gap-1.5">
+					<div className="w-30 shrink-0" ref={countryAnchorRef}>
+						<Field className="w-full gap-1.5">
 							<FieldLabel htmlFor={`${id}-country`}>{t('Code')}</FieldLabel>
-							<InputGroup onClick={toggleMenu}>
+							{/* Opens the countries list: no text caret */}
+							<InputGroup
+								className="cursor-pointer caret-transparent"
+								onClick={toggleMenu}
+							>
 								{selectedOption && (
-									<InputGroupAddon align="inline-start">
-										<span className="PhoneNumberInput__flag">
+									<InputGroupAddon
+										align="inline-start"
+										className="cursor-pointer"
+									>
+										{/* Full colour, not dimmed like the rest of the addon */}
+										<span className="text-[16px] leading-none text-black/87">
 											{getFlagEmoji(selectedOption.country)}
 										</span>
 									</InputGroupAddon>
 								)}
 								<InputGroupInput
+									className="cursor-pointer"
 									ref={countryInputRef}
 									id={`${id}-country`}
 									value={selectedOption ? `+${selectedOption.callingCode}` : ''}
@@ -340,12 +348,12 @@ const PhoneNumberInput: React.FC<Props> = ({
 									aria-haspopup="listbox"
 									aria-expanded={isMenuOpen}
 								/>
-								<InputGroupAddon align="inline-end">
+								<InputGroupAddon align="inline-end" className="cursor-pointer">
 									<ArrowDropDownIcon className="size-6" />
 								</InputGroupAddon>
 							</InputGroup>
-						</Styled.CountryTrigger>
-					</Styled.CountryControl>
+						</Field>
+					</div>
 				</PopoverAnchor>
 
 				<PopoverContent
@@ -371,16 +379,18 @@ const PhoneNumberInput: React.FC<Props> = ({
 						}
 					}}
 				>
-					<Styled.SearchHeader>
+					<div className="shrink-0 px-3 py-2.5">
 						<SearchBar
+							className="p-0"
 							value={search}
 							onChange={setSearch}
 							placeholder={t('Search country')}
 							autoFocus
 						/>
-					</Styled.SearchHeader>
+					</div>
 
-					<Styled.OptionsScroller>
+					{/* Only the options scroll; the rounded popover clips the scrollbar */}
+					<div className="max-h-80 overflow-y-auto">
 						<div
 							role="listbox"
 							aria-label={t('Code')}
@@ -389,15 +399,15 @@ const PhoneNumberInput: React.FC<Props> = ({
 							{optionItems}
 
 							{filteredOptions.length === 0 && (
-								<Styled.NoResults>{t('No results')}</Styled.NoResults>
+								<div className="px-4 py-2 text-black/55">{t('No results')}</div>
 							)}
 						</div>
-					</Styled.OptionsScroller>
+					</div>
 				</PopoverContent>
 			</Popover>
 
-			<Styled.NationalNumberField
-				className="gap-1.5"
+			<Field
+				className="min-w-0 flex-1 gap-1.5"
 				data-invalid={!!error || undefined}
 			>
 				<FieldLabel htmlFor={`${id}-national-number`}>
@@ -416,8 +426,8 @@ const PhoneNumberInput: React.FC<Props> = ({
 					}}
 				/>
 				{error && <FieldError>{t('Enter a valid phone number')}</FieldError>}
-			</Styled.NationalNumberField>
-		</Styled.Row>
+			</Field>
+		</div>
 	);
 };
 
