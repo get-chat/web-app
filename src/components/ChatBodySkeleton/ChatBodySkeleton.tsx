@@ -1,6 +1,12 @@
 import React, { Fragment, memo, useMemo } from 'react';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
-import * as Styled from './ChatBodySkeleton.styles';
+import { Skeleton } from '@src/components/ui/skeleton';
+import { messageBubbleTailClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
+import { cn } from '@src/lib/utils';
+
+// Mirrors .chat__message__dateContainer and the assignment/tagging event
+// rows: a centred pill, for events with a timestamp below
+const centeredRowClassName = 'flex flex-col items-center';
 
 type BubbleSpec = { width: string; height: number };
 
@@ -96,39 +102,88 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 	const rows = useMemo(generateRows, []);
 
 	return (
-		<Styled.Container
+		/*
+		 * Overlays .chat__body inside .chat__body__outer without taking part in
+		 * its layout, so it never affects the body's height or scrollbar.
+		 * Transparent: the bubbles sit over .chat's own wallpaper and dissolve
+		 * while the loaded messages fade in underneath (.chat__body--appearing
+		 * in Chat.css). No z-index on purpose: as the last positioned sibling
+		 * it already paints above the body's content, and a positive one
+		 * would lift it above the loading screen while that fades out. It
+		 * mirrors the body's padding, border and scrollbar gutter, so the
+		 * bubbles line up with the messages beneath; when the body is shorter
+		 * than the pattern, the top rows are clipped rather than squeezed.
+		 */
+		<div
 			aria-hidden
 			data-test-id="chat-body-skeleton"
-			$isExiting={isExiting}
+			className={cn(
+				'pointer-events-none absolute inset-0 flex flex-col justify-end overflow-hidden p-(--chat-body-padding) [scrollbar-gutter:stable] *:shrink-0',
+				isExiting && 'motion-safe:animate-[fade-out_0.25s_ease-out_forwards]'
+			)}
+			// The body's border, invisible: a shorthand from Chat.css, so the
+			// colour has to follow it, which classes can't guarantee
+			style={{
+				borderLeft: 'var(--chat-body-border-left)',
+				borderLeftColor: 'transparent',
+			}}
 			onAnimationEnd={onAnimationEnd}
 		>
 			{rows.map((row, index) => {
 				switch (row.kind) {
 					case 'date':
 						return (
-							<Styled.CenteredRow $isDate key={index}>
-								<Styled.Pill style={{ width: 96, height: 29 }} />
-							</Styled.CenteredRow>
+							<div
+								className={cn(centeredRowClassName, 'mx-2.5 mt-5 mb-7.5')}
+								key={index}
+							>
+								<Skeleton
+									variant="rounded"
+									className="rounded-[15px]"
+									style={{ width: 96, height: 29 }}
+								/>
+							</div>
 						);
 					case 'event':
 						return (
-							<Styled.CenteredRow key={index}>
-								<Styled.Pill style={{ width: row.width, height: row.height }} />
-								<Styled.EventTimestamp style={{ width: 32 }} />
-							</Styled.CenteredRow>
+							<div className={cn(centeredRowClassName, 'mb-6.25')} key={index}>
+								<Skeleton
+									variant="rounded"
+									className="rounded-[15px]"
+									style={{ width: row.width, height: row.height }}
+								/>
+								<Skeleton
+									variant="text"
+									className="mt-1.25 text-[x-small]"
+									style={{ width: 32 }}
+								/>
+							</div>
 						);
 					case 'group':
 						return (
 							<Fragment key={index}>
-								<Styled.SenderName
-									$isOutgoing={row.isOutgoing}
+								{/* Mirrors the sender name above a message group */}
+								<Skeleton
+									variant="text"
+									className={cn(
+										'mx-2.5 mt-0 mb-0.5 text-[x-small]',
+										row.isOutgoing && 'self-end'
+									)}
 									style={{ width: row.nameWidth }}
 								/>
 								{row.bubbles.map((bubble, bubbleIndex) => (
-									<Styled.Bubble
+									// Mirrors a message bubble: its radius, the overlap
+									// within a group and the tail on the group's first
+									<Skeleton
 										key={bubbleIndex}
-										$isOutgoing={row.isOutgoing}
-										$isFirstInGroup={bubbleIndex === 0}
+										variant="rounded"
+										className={cn(
+											'relative mb-6.25 max-w-[70%] rounded-[12px]',
+											row.isOutgoing && 'ml-auto',
+											bubbleIndex === 0
+												? messageBubbleTailClassName(row.isOutgoing)
+												: '-mt-5.5'
+										)}
 										style={{ width: bubble.width, height: bubble.height }}
 									/>
 								))}
@@ -136,7 +191,7 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 						);
 				}
 			})}
-		</Styled.Container>
+		</div>
 	);
 };
 
