@@ -22,7 +22,7 @@ const ChatChip: React.FC<ChatChipProps> = ({
 		role={isClickable ? 'button' : undefined}
 		tabIndex={isClickable ? 0 : undefined}
 		className={cn(
-			'relative flex h-4.75 items-center rounded-[10px] bg-gray-light text-[12px] outline-none select-none focus-visible:shadow-[0_0_0_2px_var(--color-primary)]',
+			'relative flex h-4.75 items-center rounded-[10px] bg-gray-light text-[12px] outline-none! select-none',
 			isClickable ? 'cursor-pointer' : 'cursor-default',
 			className
 		)}
