@@ -4,10 +4,16 @@ import { Emoji, NimblePicker } from 'emoji-mart';
 import { EMOJI_SET, EMOJI_SHEET_SIZE } from '@src/Constants';
 import data from 'emoji-mart/data/facebook.json';
 import { Message } from '@src/types/messages';
-import { Popover, PopoverAnchor } from '@src/components/ui/popover';
-import { useCenteredOverAnchor } from '@src/components/QuickReactionsMenu/useCenteredOverAnchor';
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverContent,
+} from '@src/components/ui/popover';
+import {
+	overMessageShadowClassName,
+	useCenteredOverAnchor,
+} from '@src/components/QuickReactionsMenu/useCenteredOverAnchor';
 import { cn } from '@src/lib/utils';
-import * as Styled from './ReactionsEmojiPicker.styles';
 
 interface Props {
 	message: Message | undefined;
@@ -43,12 +49,14 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 			onOpenChange={(isOpen) => !isOpen && setAnchorElement(undefined)}
 		>
 			<PopoverAnchor virtualRef={virtualRef} />
-			<Styled.Content
+			<PopoverContent
 				ref={contentRef}
 				{...contentProps}
-				// No transition, as before
 				className={cn(
 					contentProps.className,
+					overMessageShadowClassName,
+					'w-[427px] overflow-y-auto rounded-[10px] p-0',
+					// No transition, as before
 					'data-[state=closed]:animate-none data-[state=open]:animate-none'
 				)}
 				// Focus the panel, not the first thing in it, as MUI's Menu did
@@ -57,7 +65,7 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 					contentRef.current?.focus();
 				}}
 			>
-				<Styled.EmojiPickerContainer>
+				<div className="relative">
 					<NimblePicker
 						set={EMOJI_SET}
 						sheetSize={EMOJI_SHEET_SIZE}
@@ -66,8 +74,8 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 						emojiSize={32}
 						onSelect={handleEmojiSelect}
 					/>
-				</Styled.EmojiPickerContainer>
-			</Styled.Content>
+				</div>
+			</PopoverContent>
 		</Popover>
 	);
 };

@@ -3,6 +3,10 @@ import { useRef } from 'react';
 // MUI Popover's marginThreshold: how close to the viewport edge it may go
 const VIEWPORT_MARGIN = 16;
 
+/** The soft shadow of the popovers shown over a message */
+export const overMessageShadowClassName =
+	'shadow-[0_4px_10px_-6px_rgba(0,0,45,0.4)]';
+
 const clamp = (start: number, size: number, viewportSize: number) =>
 	Math.max(
 		VIEWPORT_MARGIN,
@@ -57,8 +61,10 @@ export function useCenteredOverAnchor(anchorElement: HTMLElement | undefined) {
 			align: 'start',
 			sideOffset: 0,
 			avoidCollisions: false,
-			// Grow from the middle, as MUI's did
-			className: 'origin-center',
+			// Grow from the middle, as MUI's did, and stay within the viewport
+			// margins
+			className:
+				'origin-center max-h-[calc(100dvh-32px)] max-w-[calc(100vw-32px)]',
 		},
 	} as const;
 }
