@@ -74,9 +74,9 @@ export const ChatChipLabel: React.FC<ChatChipLabelProps> = ({
 	</span>
 );
 
-/** The chevron of a chip that opens a menu */
+/** The chevron of a chip that opens a menu, shaded on hover like MUI's IconButton */
 export const ChatChipChevron: React.FC = () => (
-	<span className="-ml-0.5 flex size-4.75 items-center justify-center rounded-full [&_.app-icon]:mx-0.75 [&_.app-icon]:size-[0.6em]! [&_.app-icon]:text-(--default-text-color)!">
+	<span className="-ml-0.5 flex size-4.75 items-center justify-center rounded-full transition-[background-color] duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-black/4 [&_.app-icon]:mx-0.75 [&_.app-icon]:size-[0.6em]! [&_.app-icon]:text-(--default-text-color)!">
 		<ExpandMoreIcon />
 	</span>
 );
