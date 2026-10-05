@@ -86,9 +86,19 @@ function Tooltip({
 	);
 }
 
+function isFocusVisible(element: Element) {
+	try {
+		return element.matches(':focus-visible');
+	} catch {
+		// Environments without :focus-visible support (jsdom)
+		return true;
+	}
+}
+
 function TooltipTrigger({
 	onTouchStart,
 	onTouchEnd,
+	onFocus,
 	...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
 	const touch = React.useContext(TooltipTouchContext);
@@ -96,6 +106,12 @@ function TooltipTrigger({
 	return (
 		<TooltipPrimitive.Trigger
 			data-slot="tooltip-trigger"
+			// Like MUI, open on keyboard focus only: not when focus comes back to
+			// a menu's trigger after the menu closes, or from a click
+			onFocus={(event) => {
+				onFocus?.(event);
+				if (!isFocusVisible(event.currentTarget)) event.preventDefault();
+			}}
 			onTouchStart={(event) => {
 				onTouchStart?.(event);
 				touch?.onTouchStart();

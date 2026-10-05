@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, ClickAwayListener } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
@@ -11,6 +10,8 @@ import {
 	Outer,
 } from './InteractiveMessageList.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 
 export interface InteractiveParameter {
 	key: string;
@@ -422,9 +423,10 @@ const InteractiveMessageList: React.FC<Props> = ({
 						{availableInteractiveMessages.map((item, index) => (
 							<Item key={index}>
 								<Button
+									variant="ghost"
+									color="neutral"
+									size="none"
 									onClick={() => onSelect(item)}
-									// @ts-ignore
-									color="black"
 								>
 									<div>
 										<h4>{t(item.title)}</h4>

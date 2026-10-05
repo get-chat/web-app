@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from '@src/lib/utils';
+import { cn, stopEscape } from '@src/lib/utils';
 import CheckIcon from '@mui/icons-material/Check';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
@@ -47,6 +47,7 @@ function DropdownMenuContent({
 	className,
 	sideOffset = 6,
 	collisionPadding = 16,
+	onKeyDown,
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Content>) {
 	return (
@@ -55,6 +56,7 @@ function DropdownMenuContent({
 				data-slot="dropdown-menu-content"
 				sideOffset={sideOffset}
 				collisionPadding={collisionPadding}
+				onKeyDown={stopEscape(onKeyDown)}
 				className={cn(
 					menuSurface,
 					'max-h-(--radix-dropdown-menu-content-available-height) origin-(--radix-dropdown-menu-content-transform-origin)',

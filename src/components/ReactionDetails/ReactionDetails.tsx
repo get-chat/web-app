@@ -5,6 +5,8 @@ import Moment from 'react-moment';
 import { CALENDAR_SHORT } from '@src/Constants';
 import { Message } from '@src/types/messages';
 import { getSenderName } from '@src/helpers/MessageHelper';
+import { Popover, PopoverAnchor } from '@src/components/ui/popover';
+import { useCenteredOverAnchor } from '@src/components/QuickReactionsMenu/useCenteredOverAnchor';
 import * as Styled from './ReactionDetails.styles';
 
 export type Props = {
@@ -24,37 +26,46 @@ const ReactionDetails: React.FC<Props> = ({
 		reactionsHistory,
 	});
 
+	const { virtualRef, contentRef, contentProps } =
+		useCenteredOverAnchor(anchorElement);
+
 	return (
-		<Styled.StyledMenu
-			anchorEl={anchorElement}
-			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
+		<Popover
 			open={Boolean(anchorElement)}
-			onClose={() => setAnchorElement(undefined)}
-			elevation={0}
-			disableAutoFocusItem={true}
+			onOpenChange={(isOpen) => !isOpen && setAnchorElement(undefined)}
 		>
-			<Styled.ReactionsContainer>
-				{reactions
-					?.filter((item) => !!item.waba_payload?.reaction?.emoji)
-					.map((reaction) => (
-						<Styled.ReactionItem key={reaction.id}>
-							<Styled.SenderName>{getSenderName(reaction)}</Styled.SenderName>
-							<Styled.Timestamp>
-								<Moment
-									date={reaction.waba_payload?.timestamp}
-									calendar={CALENDAR_SHORT}
-									unix
+			<PopoverAnchor virtualRef={virtualRef} />
+			<Styled.Content
+				ref={contentRef}
+				{...contentProps}
+				// Focus the panel, not the first thing in it, as MUI's Menu did
+				onOpenAutoFocus={(event: Event) => {
+					event.preventDefault();
+					contentRef.current?.focus();
+				}}
+			>
+				<Styled.ReactionsContainer>
+					{reactions
+						?.filter((item) => !!item.waba_payload?.reaction?.emoji)
+						.map((reaction) => (
+							<Styled.ReactionItem key={reaction.id}>
+								<Styled.SenderName>{getSenderName(reaction)}</Styled.SenderName>
+								<Styled.Timestamp>
+									<Moment
+										date={reaction.waba_payload?.timestamp}
+										calendar={CALENDAR_SHORT}
+										unix
+									/>
+								</Styled.Timestamp>
+								<PrintMessage
+									message={reaction.waba_payload?.reaction?.emoji ?? ''}
+									smallEmoji
 								/>
-							</Styled.Timestamp>
-							<PrintMessage
-								message={reaction.waba_payload?.reaction?.emoji ?? ''}
-								smallEmoji
-							/>
-						</Styled.ReactionItem>
-					))}
-			</Styled.ReactionsContainer>
-		</Styled.StyledMenu>
+							</Styled.ReactionItem>
+						))}
+				</Styled.ReactionsContainer>
+			</Styled.Content>
+		</Popover>
 	);
 };
 

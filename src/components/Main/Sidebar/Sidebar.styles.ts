@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { IconButton, MenuItem } from '@mui/material';
+import { Button } from '@src/components/ui/button';
+import { DropdownMenuItem } from '@src/components/ui/dropdown-menu';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import CustomAvatar from '@src/components/CustomAvatar';
 
@@ -50,13 +51,12 @@ export const HeaderRight = styled.div`
 `;
 
 /* Hidden on narrow screens where the header runs out of room; the
-options menu keeps an Admin panel entry there. The cast restores MUI's
-polymorphic typing (component="a" + href) lost through styled(). */
-export const AdminPanelButton = styled(IconButton)`
+options menu keeps an Admin panel entry there. */
+export const AdminPanelButton = styled(Button)`
 	@media only screen and (max-width: 1024px) {
 		display: none !important;
 	}
-` as typeof IconButton;
+`;
 
 export const LoadingMore = styled.div`
 	position: absolute;
@@ -104,13 +104,9 @@ export const NoResults = styled.span`
 	word-break: break-word;
 `;
 
-export const MessageList = styled.div`
-	.MuiListItem-root {
-		padding: 0;
-	}
-`;
+export const MessageList = styled.div``;
 
-export const RefreshMenuItem = styled(MenuItem)`
+export const RefreshMenuItem = styled(DropdownMenuItem)`
 	display: none !important;
 
 	@media only screen and (max-width: 750px) {
@@ -165,7 +161,7 @@ export const ChatsCount = styled.div`
 	display: flex;
 	align-items: center;
 
-	& > .MuiCircularProgress-root {
+	& > [data-slot='spinner'] {
 		margin-top: -1px;
 		margin-right: 8px;
 		word-wrap: normal;

@@ -1,7 +1,11 @@
 import React, { useContext, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+} from '@src/components/ui/dialog';
+import { Button } from '@src/components/ui/button';
 import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -70,30 +74,38 @@ const ContactsModal: React.FC<Props> = ({
 	};
 
 	return (
-		<Dialog open={open} onClose={handleClose} fullWidth>
-			<Styled.StyledDialogTitle>{t('Send contacts')}</Styled.StyledDialogTitle>
-			<Styled.StyledDialogContent>
-				<Contacts
-					isSelectionModeEnabled={true}
-					selectedContacts={selectedContacts}
-					onSelect={handleSelect}
-					noContactsContent={
-						<Styled.NoContactsContent>
-							<Trans>
-								To be able to share contacts, you need to use one of our Contact
-								Providers.{' '}
-								<a href={getHubURL(config?.API_BASE_URL ?? '')}>Click here</a>{' '}
-								to go to our integrations page.
-							</Trans>
-						</Styled.NoContactsContent>
-					}
-				/>
-			</Styled.StyledDialogContent>
-			{selectedContacts.length > 0 && (
-				<DialogActions>
-					<Button onClick={handleSendMessage}>{t('Send')}</Button>
-				</DialogActions>
-			)}
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<Styled.StyledDialogTitle>
+						{t('Send contacts')}
+					</Styled.StyledDialogTitle>
+				</DialogHeader>
+				<Styled.StyledDialogBody>
+					<Contacts
+						isSelectionModeEnabled={true}
+						selectedContacts={selectedContacts}
+						onSelect={handleSelect}
+						noContactsContent={
+							<Styled.NoContactsContent>
+								<Trans>
+									To be able to share contacts, you need to use one of our
+									Contact Providers.{' '}
+									<a href={getHubURL(config?.API_BASE_URL ?? '')}>Click here</a>{' '}
+									to go to our integrations page.
+								</Trans>
+							</Styled.NoContactsContent>
+						}
+					/>
+				</Styled.StyledDialogBody>
+				{selectedContacts.length > 0 && (
+					<DialogFooter>
+						<Button variant="ghost" color="primary" onClick={handleSendMessage}>
+							{t('Send')}
+						</Button>
+					</DialogFooter>
+				)}
+			</DialogContent>
 		</Dialog>
 	);
 };

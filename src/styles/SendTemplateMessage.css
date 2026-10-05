@@ -15,17 +15,6 @@
 	margin-bottom: 10px;
 }
 
-.sendTemplateMessage__section .MuiAlert-root {
-	margin-bottom: 10px;
-}
-
-.sendTemplateMessage__section
-	.MuiButtonBase-root:not(
-		.sendTemplateMessage__section__provideFileChoices .MuiButtonBase-root
-	) {
-	margin-right: 10px;
-}
-
 .sendTemplateMessage__section__fileType {
 	margin-bottom: 15px;
 	font-size: 16px;
@@ -88,10 +77,6 @@
 .templateMessage__buttons--button + .templateMessage__buttons--button {
 	border-top: 1px solid #ebebeb;
 	padding-top: 10px;
-}
-
-.templateMessagesDialogErrors .MuiAlert-root {
-	margin-bottom: 5px !important;
 }
 
 .sendTemplateMessage__component__header__preview {

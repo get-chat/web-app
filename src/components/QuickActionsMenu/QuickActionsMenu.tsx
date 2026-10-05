@@ -5,7 +5,7 @@ import useNavigateList from 'react-use-navigate-list';
 import { useTranslation } from 'react-i18next';
 import { QuickActionType } from '@src/components/QuickActionItem/QuickActionType';
 import { isEmptyString } from '@src/helpers/Helpers';
-import { ClickAwayListener } from '@mui/material';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import * as Styled from './QuickActionsMenu.styles';
 
 export type Props = {
@@ -115,7 +115,9 @@ const QuickActionsMenu: React.FC<Props> = ({
 						type="text"
 						placeholder={t('Search quick actions')}
 						value={commandInput}
-						onChange={(e) => setCommandInput(e.target.value)}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setCommandInput(e.target.value)
+						}
 						onKeyDown={handleSearchInputKeyDown}
 						onKeyUp={handleSearchInputKeyUp}
 						// @ts-ignore
@@ -125,7 +127,7 @@ const QuickActionsMenu: React.FC<Props> = ({
 				<Styled.Results
 					// @ts-ignore
 					ref={resultsRef}
-					onKeyDown={(e) => e.preventDefault()}
+					onKeyDown={(e: React.KeyboardEvent) => e.preventDefault()}
 					tabIndex={0}
 				>
 					{data.map((item, index) => (

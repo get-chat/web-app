@@ -5,7 +5,6 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { Button, IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import DialpadIcon from '@mui/icons-material/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,6 +22,7 @@ import PhoneNumberInput from '@src/components/PhoneNumberInput';
 import { useAppSelector } from '@src/store/hooks';
 import { Recipient } from '@src/types/persons';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -121,9 +121,9 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 			onAnimationEnd={onAnimationEnd}
 		>
 			<Styled.ContactsHeader>
-				<IconButton onClick={onHide} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
 					<ArrowBack />
-				</IconButton>
+				</Button>
 
 				<h3>{t('New chat')}</h3>
 			</Styled.ContactsHeader>
@@ -132,11 +132,7 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 				<Styled.StartByPhoneNumber
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
-					<Styled.StyledListItem
-						// @ts-ignore
-						button
-						style={{ padding: 0 }}
-					>
+					<Styled.StyledListItem type="button">
 						<Styled.StartByPhoneNumberInner data-test-id="start-new-chat">
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
@@ -158,11 +154,10 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 							onEnter={handleStartByPhone}
 						/>
 						<Button
+							variant="solid"
 							color="primary"
-							variant="contained"
-							size="small"
-							fullWidth
-							disableElevation
+							size="sm"
+							className="w-full"
 							onClick={handleStartByPhone}
 							data-test-id="start-chat-by-phone"
 						>

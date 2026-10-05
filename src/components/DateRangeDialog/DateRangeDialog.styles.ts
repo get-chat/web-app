@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FormControl } from '@mui/material';
+import { Field } from '@src/components/ui/field';
 
 export const CalendarContainer = styled.div`
 	border-radius: 10px;
@@ -16,14 +16,8 @@ export const WeekStartDaySelectorContainer = styled.div`
 	margin: 15px 15px 0;
 `;
 
-export const FormControlStyled = styled(FormControl)`
-	min-width: 135px !important;
-
-	.MuiFormLabel-root {
-		background-color: #fff !important;
-	}
-
-	.MuiSelect-select {
-		padding: 8px 32px 8px 10px !important;
-	}
+export const FormControlStyled = styled(Field)`
+	width: auto;
+	min-width: 135px;
+	gap: 6px;
 `;

@@ -54,10 +54,11 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 								canRetry(data) &&
 								retryMessage && (
 									<Styled.RetryButton
-										color="inherit"
-										fullWidth
-										size="small"
-										variant="outlined"
+										variant="outline"
+										color="neutral"
+										size="sm"
+										// MUI's color="inherit": paint with the text colour
+										className="w-full [--btn:currentColor]"
 										onClick={() => retryMessage?.(data)}
 									>
 										{t('Retry')}

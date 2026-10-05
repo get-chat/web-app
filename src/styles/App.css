@@ -178,83 +178,6 @@
 	color: red;
 }
 
-.MuiAlert-root {
-	border-radius: 12px !important;
-}
-
-.MuiAlert-root .MuiButton-root {
-	font-weight: 600;
-}
-
-.MuiButton-label:not(.MuiAlert-root .MuiButton-label) {
-	text-transform: none;
-}
-
-.MuiAlert-action {
-	padding: 2px 0 0 16px !important;
-}
-
-.MuiAlert-message a {
-	font-weight: 600;
-	text-decoration: underline;
-}
-
-.MuiAlert-filled a {
-	color: white;
-}
-
-.MuiListItem-root {
-	font-size: 14px !important;
-}
-
-.MuiButton-contained {
-	box-shadow: none !important;
-}
-
-.MuiTab-root {
-	text-transform: none !important;
-}
-
-.MuiTabScrollButton-root.Mui-disabled {
-	opacity: 0.3 !important;
-}
-
-.MuiDivider-root {
-	border-color: rgba(0, 0, 45, 0.05) !important;
-}
-
-.MuiPaper-rounded {
-	border-radius: 12px !important;
-}
-
-.MuiDialogTitle-root {
-	padding: 15px 20px 10px 20px !important;
-}
-
-.MuiDialogTitle-root .MuiTypography-root {
-	font-size: 18px !important;
-}
-
-.MuiDialogContent-root:not(.MuiDialogContent-root.noPadding) {
-	padding: 5px 20px !important;
-}
-
-.MuiDialogActions-root {
-	padding: 10px !important;
-}
-
-.MuiDialogContentText-root {
-	font-size: 15px !important;
-}
-
-.MuiDialogActions-root .MuiButton-label {
-	font-size: 15px !important;
-}
-
-.MuiAlertTitle-root {
-	font-weight: 600 !important;
-}
-
 .app__mediaPreview {
 	position: absolute;
 	display: flex;
@@ -408,30 +331,6 @@ h3 .emoji-mart-emoji {
 
 	.app__mediaPreview__header {
 		padding: 4px 10px;
-	}
-
-	.MuiIconButton-root:not(.chatFooterGlobal .MuiIconButton-root) {
-		padding: 10px !important;
-	}
-
-	.MuiDialogTitle-root .MuiTypography-root {
-		font-size: 16px !important;
-	}
-
-	.MuiDialog-paper {
-		margin: 16px !important;
-	}
-
-	.MuiDialog-paperScrollPaper {
-		max-height: calc(100% - 32px) !important;
-	}
-
-	.MuiDialogTitle-root {
-		padding: 15px 15px 10px 15px !important;
-	}
-
-	.MuiDialogContent-root:not(.MuiDialogContent-root.noPadding) {
-		padding: 5px 15px !important;
 	}
 
 	.app__mediaPreview__container {

@@ -83,8 +83,8 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 								</Styled.RefreshText>
 								<Styled.RefreshButton
 									color="primary"
-									variant="contained"
-									size="small"
+									variant="solid"
+									size="sm"
 									onClick={() => {
 										window.location.reload();
 									}}

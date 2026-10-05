@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@src/lib/utils';
+import { cn, stopEscape } from '@src/lib/utils';
 import CheckIcon from '@mui/icons-material/Check';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -80,6 +80,7 @@ function SelectContent({
 	children,
 	position = 'item-aligned',
 	align = 'center',
+	onKeyDown,
 	...props
 }: React.ComponentProps<typeof SelectPrimitive.Content>) {
 	return (
@@ -94,6 +95,7 @@ function SelectContent({
 				)}
 				position={position}
 				align={align}
+				onKeyDown={stopEscape(onKeyDown)}
 				{...props}
 			>
 				<SelectScrollUpButton />

@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Backdrop, CircularProgress, Fade, TextField } from '@mui/material';
-import Button from '@mui/material/Button';
 import {
 	createSearchParams,
 	useLocation,
@@ -40,6 +38,10 @@ import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import SetPasswordForm from './SetPasswordForm';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import { Spinner } from '@src/components/ui/spinner';
 
 const Login: React.FC = () => {
 	const config = useContext(AppConfigContext);
@@ -323,187 +325,187 @@ const Login: React.FC = () => {
 
 	return (
 		<Styled.LoginWrapper>
-			<Fade in={true}>
-				<Styled.LoginColumn>
-					<Styled.LogoWrapper>
-						<Styled.Logo
-							src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
-							alt="Logo"
+			<Styled.LoginColumn className="animate-in duration-225 fade-in-0">
+				<Styled.LogoWrapper>
+					<Styled.Logo
+						src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
+						alt="Logo"
+					/>
+				</Styled.LogoWrapper>
+
+				<Styled.LoginBody>
+					{storedURLs.length > 1 && (
+						<Styled.InboxUrl>
+							<h3>{t('Your current inbox')}</h3>
+							<div>
+								{prepareURLForDisplay(api.defaults.baseURL ?? '')}
+								<a
+									href="#"
+									className="ml-1"
+									onClick={() => setInboxSelectorVisible(true)}
+								>
+									{t('Change')}
+								</a>
+							</div>
+						</Styled.InboxUrl>
+					)}
+
+					<h2>{activationCode ? t('Set your password') : t('Welcome')}</h2>
+					<p>
+						{activationCode
+							? t('Choose a password to finish activating your account.')
+							: sessionUser
+							? t('Pick up where you left off')
+							: t('Please log in to start')}
+					</p>
+
+					{activationCode && (
+						<SetPasswordForm
+							code={activationCode}
+							username={activatedUsername}
+							onPasswordSet={onPasswordSet}
+							onInvalidCode={onInvalidActivationCode}
 						/>
-					</Styled.LogoWrapper>
+					)}
 
-					<Styled.LoginBody>
-						{storedURLs.length > 1 && (
-							<Styled.InboxUrl>
-								<h3>{t('Your current inbox')}</h3>
-								<div>
-									{prepareURLForDisplay(api.defaults.baseURL ?? '')}
-									<a
-										href="#"
-										className="ml-1"
-										onClick={() => setInboxSelectorVisible(true)}
-									>
-										{t('Change')}
-									</a>
-								</div>
-							</Styled.InboxUrl>
-						)}
-
-						<h2>{activationCode ? t('Set your password') : t('Welcome')}</h2>
-						<p>
-							{activationCode
-								? t('Choose a password to finish activating your account.')
-								: sessionUser
-								? t('Pick up where you left off')
-								: t('Please log in to start')}
-						</p>
-
-						{activationCode && (
-							<SetPasswordForm
-								code={activationCode}
-								username={activatedUsername}
-								onPasswordSet={onPasswordSet}
-								onInvalidCode={onInvalidActivationCode}
-							/>
-						)}
-
-						{!activationCode && sessionUser && (
-							<>
-								<Styled.SessionCard
-									data-testid="continue-with-session"
-									focusRipple
-									onClick={continueWithSession}
+					{!activationCode && sessionUser && (
+						<>
+							<Styled.SessionCard
+								data-testid="continue-with-session"
+								onClick={continueWithSession}
+							>
+								<CustomAvatar
+									src={
+										sessionUser.profile?.large_avatar ??
+										sessionUser.profile?.avatar
+									}
+									generateBgColorBy={sessionUser.username}
 								>
-									<CustomAvatar
-										src={
-											sessionUser.profile?.large_avatar ??
-											sessionUser.profile?.avatar
-										}
-										generateBgColorBy={sessionUser.username}
-									>
-										{generateInitialsHelper(sessionUser.username)}
-									</CustomAvatar>
-									<Styled.SessionCardInfo>
-										<Styled.SessionCardLabel>
-											{t('Continue as')}
-										</Styled.SessionCardLabel>
-										<Styled.SessionCardName>
-											{[sessionUser.first_name, sessionUser.last_name]
-												.filter(Boolean)
-												.join(' ') || sessionUser.username}
-										</Styled.SessionCardName>
-									</Styled.SessionCardInfo>
-									<Styled.SessionCardArrow />
-								</Styled.SessionCard>
+									{generateInitialsHelper(sessionUser.username)}
+								</CustomAvatar>
+								<Styled.SessionCardInfo>
+									<Styled.SessionCardLabel>
+										{t('Continue as')}
+									</Styled.SessionCardLabel>
+									<Styled.SessionCardName>
+										{[sessionUser.first_name, sessionUser.last_name]
+											.filter(Boolean)
+											.join(' ') || sessionUser.username}
+									</Styled.SessionCardName>
+								</Styled.SessionCardInfo>
+								<Styled.SessionCardArrow />
+							</Styled.SessionCard>
 
-								<Styled.OrDivider>
-									{t('or log in with another account')}
-								</Styled.OrDivider>
-							</>
-						)}
+							<Styled.OrDivider>
+								{t('or log in with another account')}
+							</Styled.OrDivider>
+						</>
+					)}
 
-						{!activationCode && isAccountActivated && !loginError && (
-							<Styled.LoginAlert severity="success">
-								{t(
-									'Your account has been activated. Please log in to continue.'
-								)}
-							</Styled.LoginAlert>
-						)}
+					{!activationCode && isAccountActivated && !loginError && (
+						<Styled.LoginAlert severity="success">
+							{t('Your account has been activated. Please log in to continue.')}
+						</Styled.LoginAlert>
+					)}
 
-						{!activationCode && loginError && (
-							<Styled.LoginAlert severity="error">
-								{t(loginError)}
-							</Styled.LoginAlert>
-						)}
+					{!activationCode && loginError && (
+						<Styled.LoginAlert severity="error">
+							{t(loginError)}
+						</Styled.LoginAlert>
+					)}
 
-						{!activationCode && is360dialogLoginEnabled(config) && (
-							<>
-								<Styled.SSOLoginButton
-									data-testid="login-with-360dialog"
-									type="button"
-									size="large"
-									variant="contained"
-									fullWidth
-									disableElevation
-									onClick={doLoginWith360dialog}
-								>
-									<img src={dialog360Icon} alt="" />
-									{t('Login with 360dialog')}
-								</Styled.SSOLoginButton>
-								<Styled.OrDivider>{t('or')}</Styled.OrDivider>
-							</>
-						)}
+					{!activationCode && is360dialogLoginEnabled(config) && (
+						<>
+							<Styled.SSOLoginButton
+								data-testid="login-with-360dialog"
+								type="button"
+								size="lg"
+								variant="solid"
+								color="primary"
+								className="w-full"
+								onClick={doLoginWith360dialog}
+							>
+								<img src={dialog360Icon} alt="" />
+								{t('Login with 360dialog')}
+							</Styled.SSOLoginButton>
+							<Styled.OrDivider>{t('or')}</Styled.OrDivider>
+						</>
+					)}
 
-						{!activationCode && (
-							<form onSubmit={doLogin}>
-								<TextField
-									variant="standard"
-									data-testid="username"
+					{!activationCode && (
+						<form onSubmit={doLogin}>
+							<Field data-testid="username" className="gap-1">
+								<FieldLabel htmlFor="login-username">
+									{t('Username')}
+								</FieldLabel>
+								<Input
+									id="login-username"
+									variant="underline"
 									value={username}
 									onChange={(e) => setUsername(e.target.value)}
-									label={t('Username')}
 									autoComplete="username"
-									size="medium"
-									fullWidth={true}
 								/>
-								<TextField
-									variant="standard"
-									data-testid="password"
+							</Field>
+							<Field data-testid="password" className="gap-1">
+								<FieldLabel htmlFor="login-password">
+									{t('Password')}
+								</FieldLabel>
+								<Input
+									id="login-password"
+									variant="underline"
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
 									type="password"
-									label={t('Password')}
 									autoComplete="current-password"
-									size="medium"
-									fullWidth={true}
 								/>
-								<Button
-									data-testid="submit"
-									type="submit"
-									size="large"
-									variant="outlined"
-									color="primary"
-									fullWidth
-									disableElevation
-								>
-									{t('Log in')}
-								</Button>
-							</form>
-						)}
+							</Field>
+							<Button
+								data-testid="submit"
+								type="submit"
+								size="lg"
+								variant="outline"
+								color="primary"
+								className="w-full"
+							>
+								{t('Log in')}
+							</Button>
+						</form>
+					)}
 
-						{!activationCode && (
-							<Styled.AdminPanelRow>
-								<Styled.AdminPanelLink
-									href={getHubURL(config?.API_BASE_URL ?? '')}
-								>
-									{t('Admin panel')}
-									<OpenInNewRoundedIcon />
-								</Styled.AdminPanelLink>
-							</Styled.AdminPanelRow>
-						)}
+					{!activationCode && (
+						<Styled.AdminPanelRow>
+							<Styled.AdminPanelLink
+								href={getHubURL(config?.API_BASE_URL ?? '')}
+							>
+								{t('Admin panel')}
+								<OpenInNewRoundedIcon />
+							</Styled.AdminPanelLink>
+						</Styled.AdminPanelRow>
+					)}
 
-						{isValidatingToken && (
-							<Styled.ValidatingToken>
-								<h2>{t('Welcome')}</h2>
-								<p>{t('We are validating your session, please wait.')}</p>
-							</Styled.ValidatingToken>
-						)}
-					</Styled.LoginBody>
+					{isValidatingToken && (
+						<Styled.ValidatingToken>
+							<h2>{t('Welcome')}</h2>
+							<p>{t('We are validating your session, please wait.')}</p>
+						</Styled.ValidatingToken>
+					)}
+				</Styled.LoginBody>
 
-					<Styled.VersionWrapper>
-						<Styled.Version>Version: {packageJson?.version}</Styled.Version>
-					</Styled.VersionWrapper>
-				</Styled.LoginColumn>
-			</Fade>
+				<Styled.VersionWrapper>
+					<Styled.Version>Version: {packageJson?.version}</Styled.Version>
+				</Styled.VersionWrapper>
+			</Styled.LoginColumn>
 
 			<InboxSelectorDialog
 				isVisible={isInboxSelectorVisible}
 				setVisible={setInboxSelectorVisible}
 			/>
 
-			<Backdrop className="login__backdrop" open={isLoggingIn}>
-				<CircularProgress color="inherit" />
-			</Backdrop>
+			{isLoggingIn && (
+				<div className="login__backdrop fixed inset-0 z-[1300] flex animate-in items-center justify-center bg-black/50 text-white fade-in-0">
+					<Spinner size={40} />
+				</div>
+			)}
 		</Styled.LoginWrapper>
 	);
 };

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
 import ReplyIcon from '@mui/icons-material/Reply';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import { CarouselCard } from '@src/types/messages';
 import * as Styled from './CarouselMessage.styles';
 
@@ -49,28 +49,21 @@ const CarouselMessage: React.FC<InteractiveMessageProps> = ({
 							)}
 							<Styled.CardActions>
 								{card.action?.name === 'cta_url' && (
-									<Button
-										color="primary"
-										fullWidth
-										startIcon={<LaunchIcon />}
+									<InteractiveMessageButton
 										href={card.action?.parameters?.url}
 										disabled
 									>
+										<LaunchIcon />
 										{card.action?.parameters?.display_text}
-									</Button>
+									</InteractiveMessageButton>
 								)}
 								{card.action?.buttons &&
 									Array.isArray(card.action.buttons) &&
 									card.action.buttons.map(({ reply }, buttonIndex) => (
-										<Button
-											key={buttonIndex}
-											color="primary"
-											fullWidth
-											startIcon={<ReplyIcon />}
-											disabled
-										>
+										<InteractiveMessageButton key={buttonIndex} disabled>
+											<ReplyIcon />
 											{reply?.title}
-										</Button>
+										</InteractiveMessageButton>
 									))}
 							</Styled.CardActions>
 						</Styled.Card>

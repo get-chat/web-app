@@ -22,6 +22,6 @@
 	background-color: white;
 }
 
-.chatAssignment .MuiFormControl-root {
+.chatAssignment [data-slot='field'] {
 	margin-bottom: 15px;
 }

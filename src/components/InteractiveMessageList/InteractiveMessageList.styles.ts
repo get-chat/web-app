@@ -23,18 +23,21 @@ export const Item = styled.div`
 	flex-direction: row;
 	font-size: 14px;
 
-	& > .MuiButton-root {
+	/* MUI's medium text button, left-aligned and wrapping its two lines */
+	& > [data-slot='button'] {
 		width: 100%;
 		justify-content: flex-start;
+		padding: 6px 8px;
+		border-radius: 10px;
+		font-weight: 600;
+		line-height: 1.75;
+		white-space: normal;
+		text-align: left;
+		color: var(--chat-icon-dark);
 	}
 
 	& .chat__message {
 		margin-bottom: 0;
-	}
-
-	& .MuiButton-text {
-		text-align: left;
-		color: var(--chat-icon-dark);
 	}
 `;
 

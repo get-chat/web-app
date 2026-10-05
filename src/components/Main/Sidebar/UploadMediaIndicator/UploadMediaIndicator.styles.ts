@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Alert from '@mui/material/Alert';
+import { Alert } from '@src/components/ui/alert';
 
 export const Wrapper = styled.div<{ $isMobile?: boolean }>`
 	display: flex;
@@ -18,7 +18,7 @@ export const Wrapper = styled.div<{ $isMobile?: boolean }>`
 `;
 
 export const StyledAlert = styled(Alert)<{ $isMobile?: boolean }>`
-	& .MuiLinearProgress-root {
+	& [data-slot='progress'] {
 		height: 3px;
 		margin-top: 10px;
 	}

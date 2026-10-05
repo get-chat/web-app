@@ -34,7 +34,7 @@ export const ProgressContainer = styled.div`
 	width: 100%;
 	max-width: 400px;
 
-	.MuiLinearProgress-root {
+	[data-slot='progress'] {
 		height: 3px;
 	}
 `;
@@ -49,7 +49,7 @@ export const Details = styled.div`
 	justify-content: center;
 	align-items: center;
 
-	.MuiCircularProgress-root {
+	[data-slot='spinner'] {
 		margin: 10px;
 	}
 `;

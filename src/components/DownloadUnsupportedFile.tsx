@@ -1,12 +1,14 @@
 import React from 'react';
+import { Button } from '@src/components/ui/button';
 import {
-	Button,
 	Dialog,
-	DialogActions,
+	DialogBody,
 	DialogContent,
-	DialogContentText,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
-} from '@mui/material';
+} from '@src/components/ui/dialog';
 import { useTranslation } from 'react-i18next';
 import UnsupportedFileClass from '@src/UnsupportedFileClass';
 
@@ -29,25 +31,29 @@ const DownloadUnsupportedFile: React.FC<Props> = ({ data, open, setOpen }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={close}>
-			<DialogTitle>{t('Unsupported file type')}</DialogTitle>
-
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
 			<DialogContent>
-				<DialogContentText>
-					{t(
-						'This file type is not supported, however you can still download it.'
-					)}
-				</DialogContentText>
-			</DialogContent>
+				<DialogHeader>
+					<DialogTitle>{t('Unsupported file type')}</DialogTitle>
+				</DialogHeader>
 
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-				<Button onClick={download} color="primary">
-					{t('Download')}
-				</Button>
-			</DialogActions>
+				<DialogBody>
+					<DialogDescription>
+						{t(
+							'This file type is not supported, however you can still download it.'
+						)}
+					</DialogDescription>
+				</DialogBody>
+
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+					<Button variant="ghost" color="primary" onClick={download}>
+						{t('Download')}
+					</Button>
+				</DialogFooter>
+			</DialogContent>
 		</Dialog>
 	);
 };

@@ -1,17 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
 import * as Styled from './ChangePasswordDialog.styles';
-import {
-	Button,
-	DialogTitle,
-	DialogContent,
-	DialogActions,
-	TextField,
-} from '@mui/material';
-import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changePassword } from '@src/api/authApi';
-import Alert from '@mui/material/Alert';
+import { Alert, AlertTitle } from '@src/components/ui/alert';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
 
 interface Props {
 	open: boolean;
@@ -20,6 +22,8 @@ interface Props {
 
 const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 	const { t } = useTranslation();
+
+	const id = useId();
 
 	const [currentPassword, setCurrentPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
@@ -92,69 +96,86 @@ const ChangePasswordDialog: React.FC<Props> = ({ open, setOpen }) => {
 	};
 
 	return (
-		<Styled.StyledDialog open={open} onClose={close} fullWidth>
-			<DialogTitle>{t('Change password')}</DialogTitle>
-			<DialogContent>
-				<Styled.FieldsContainer>
-					<TextField
-						variant="standard"
-						value={currentPassword}
-						onChange={(event) => setCurrentPassword(event.target.value)}
-						label={t('Current password')}
-						type="password"
-						autoComplete="current-password"
-						autoFocus
-						fullWidth
-					/>
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
+			<Styled.StyledDialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>{t('Change password')}</DialogTitle>
+				</DialogHeader>
+				<DialogBody>
+					<Styled.FieldsContainer>
+						<Field className="gap-1.5">
+							<FieldLabel htmlFor={`${id}-current-password`}>
+								{t('Current password')}
+							</FieldLabel>
+							<Input
+								id={`${id}-current-password`}
+								variant="underline"
+								value={currentPassword}
+								onChange={(event) => setCurrentPassword(event.target.value)}
+								type="password"
+								autoComplete="current-password"
+								autoFocus
+							/>
+						</Field>
 
-					<TextField
-						variant="standard"
-						value={newPassword}
-						onChange={(event) => setNewPassword(event.target.value)}
-						label={t('New password')}
-						type="password"
-						autoComplete="new-password"
-						fullWidth
-					/>
+						<Field className="gap-1.5">
+							<FieldLabel htmlFor={`${id}-new-password`}>
+								{t('New password')}
+							</FieldLabel>
+							<Input
+								id={`${id}-new-password`}
+								variant="underline"
+								value={newPassword}
+								onChange={(event) => setNewPassword(event.target.value)}
+								type="password"
+								autoComplete="new-password"
+							/>
+						</Field>
 
-					<TextField
-						variant="standard"
-						value={newPasswordRepeat}
-						onChange={(event) => setNewPasswordRepeat(event.target.value)}
-						label={t('New password (repeat)')}
-						type="password"
-						autoComplete="new-password"
-						fullWidth
-					/>
-				</Styled.FieldsContainer>
-				{errors.length > 0 && !isSuccess && (
-					<Alert severity="error">
-						<AlertTitle>{t('Error')}</AlertTitle>
-						{errors.map((message) => (
-							<div key={message}>{t(message)}</div>
-						))}
-					</Alert>
-				)}
-				{isSuccess && (
-					<Alert severity="success">
-						<AlertTitle>{t('Success')}</AlertTitle>
-						{t('Changed password successfully')}
-					</Alert>
-				)}
-			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-				<Button
-					onClick={handleChangePassword}
-					color="primary"
-					disabled={isRequesting || isSuccess}
-				>
-					{t('Change')}
-				</Button>
-			</DialogActions>
-		</Styled.StyledDialog>
+						<Field className="gap-1.5">
+							<FieldLabel htmlFor={`${id}-new-password-repeat`}>
+								{t('New password (repeat)')}
+							</FieldLabel>
+							<Input
+								id={`${id}-new-password-repeat`}
+								variant="underline"
+								value={newPasswordRepeat}
+								onChange={(event) => setNewPasswordRepeat(event.target.value)}
+								type="password"
+								autoComplete="new-password"
+							/>
+						</Field>
+					</Styled.FieldsContainer>
+					{errors.length > 0 && !isSuccess && (
+						<Alert severity="error">
+							<AlertTitle>{t('Error')}</AlertTitle>
+							{errors.map((message) => (
+								<div key={message}>{t(message)}</div>
+							))}
+						</Alert>
+					)}
+					{isSuccess && (
+						<Alert severity="success">
+							<AlertTitle>{t('Success')}</AlertTitle>
+							{t('Changed password successfully')}
+						</Alert>
+					)}
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+					<Button
+						variant="ghost"
+						color="primary"
+						onClick={handleChangePassword}
+						disabled={isRequesting || isSuccess}
+					>
+						{t('Change')}
+					</Button>
+				</DialogFooter>
+			</Styled.StyledDialogContent>
+		</Dialog>
 	);
 };
 

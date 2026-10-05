@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import {
-	Button,
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	TextField,
-} from '@mui/material';
 import '../styles/CreateTemplate.css';
-import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@src/components/ui/select';
+import { Textarea } from '@src/components/ui/textarea';
 
 function CreateTemplate() {
 	const [language, setLanguage] = useState('en_US');
@@ -16,58 +18,67 @@ function CreateTemplate() {
 
 	const createTemplate = () => {};
 
-	const handleLanguageChange = (event: SelectChangeEvent) => {
-		setLanguage(event.target.value);
+	const handleLanguageChange = (value: string) => {
+		setLanguage(value);
 	};
 
-	const handleCategoryChange = (event: SelectChangeEvent) => {
-		setCategory(event.target.value);
+	const handleCategoryChange = (value: string) => {
+		setCategory(value);
 	};
 
 	return (
 		<div className="createTemplate">
 			<h3>Create a template</h3>
 
-			<TextField
-				label="Name"
-				variant="outlined"
-				size="medium"
-				fullWidth={true}
-			/>
+			{/* mb-[15px]: CreateTemplate.css spaced MUI's FormControls */}
+			<Field className="mb-[15px]">
+				<FieldLabel htmlFor="create-template-name">Name</FieldLabel>
+				<Input id="create-template-name" size="lg" />
+			</Field>
 
-			<FormControl variant="outlined" fullWidth={true}>
-				<InputLabel>Language</InputLabel>
-				<Select
-					variant="standard"
-					onChange={handleLanguageChange}
-					label="Language"
-					value={language}
-				>
-					<MenuItem value={'en_US'}>en_US</MenuItem>
+			<Field className="mb-[15px]">
+				<FieldLabel htmlFor="create-template-language">Language</FieldLabel>
+				<Select value={language} onValueChange={handleLanguageChange}>
+					<SelectTrigger
+						id="create-template-language"
+						variant="underline"
+						className="w-full"
+					>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="en_US">en_US</SelectItem>
+					</SelectContent>
 				</Select>
-			</FormControl>
+			</Field>
 
-			<FormControl variant="outlined" fullWidth={true}>
-				<InputLabel>Category</InputLabel>
-				<Select
-					variant="standard"
-					onChange={handleCategoryChange}
-					label="Category"
-					value={category}
-				>
-					<MenuItem value={'AUTO_REPLY'}>AUTO_REPLY</MenuItem>
+			<Field className="mb-[15px]">
+				<FieldLabel htmlFor="create-template-category">Category</FieldLabel>
+				<Select value={category} onValueChange={handleCategoryChange}>
+					<SelectTrigger
+						id="create-template-category"
+						variant="underline"
+						className="w-full"
+					>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value="AUTO_REPLY">AUTO_REPLY</SelectItem>
+					</SelectContent>
 				</Select>
-			</FormControl>
+			</Field>
 
-			<TextField
-				label="Body"
-				multiline
-				variant="outlined"
-				size="medium"
-				fullWidth={true}
-			/>
+			<Field className="mb-[15px]">
+				<FieldLabel htmlFor="create-template-body">Body</FieldLabel>
+				<Textarea id="create-template-body" />
+			</Field>
 
-			<Button fullWidth={true} onClick={createTemplate}>
+			<Button
+				variant="ghost"
+				color="primary"
+				className="w-full"
+				onClick={createTemplate}
+			>
 				Create
 			</Button>
 		</div>

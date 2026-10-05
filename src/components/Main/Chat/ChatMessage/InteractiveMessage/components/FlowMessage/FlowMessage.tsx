@@ -1,7 +1,7 @@
 import PrintMessage from '@src/components/PrintMessage';
-import { Button } from '@mui/material';
 import React from 'react';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import * as Styled from './FlowMessage.styles';
 
 const FlowMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
@@ -25,14 +25,9 @@ const FlowMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 				</Styled.Footer>
 			)}
 			{action?.name === 'flow' && (
-				<Button
-					color="primary"
-					fullWidth
-					href={action?.parameters?.url}
-					disabled
-				>
+				<InteractiveMessageButton href={action?.parameters?.url} disabled>
 					{action?.parameters?.flow_cta}
-				</Button>
+				</InteractiveMessageButton>
 			)}
 		</>
 	);

@@ -1,5 +1,4 @@
-import React, { MouseEvent, TouchEvent, useMemo } from 'react';
-import { Tooltip } from '@mui/material';
+import React, { KeyboardEvent, MouseEvent, TouchEvent, useMemo } from 'react';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { handleDragOver } from '@src/helpers/FileHelper';
@@ -23,6 +22,7 @@ import {
 import { getMessageCaption } from '@src/helpers/MessageHelper';
 import { MessageType } from '@src/types/messages';
 import DoneIcon from '@mui/icons-material/Done';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 
 const ChatListItem = (props: any) => {
 	const { isReadOnly, isSelectionModeEnabled } = useAppSelector(
@@ -60,6 +60,16 @@ const ChatListItem = (props: any) => {
 		event.preventDefault();
 	};
 
+	// Keyboard activation of the row, as MUI's ListItemButton did. Only for
+	// keys pressed on the row itself, not on the controls inside it.
+	const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+		if (event.target !== event.currentTarget) return;
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			handleClick();
+		}
+	};
+
 	const tooltip = useMemo(() => {
 		if (!data.assigned_to_user && !data.assigned_group) return;
 
@@ -94,7 +104,12 @@ const ChatListItem = (props: any) => {
 	}, [data.assigned_to_user, data.assigned_group]);
 
 	return (
-		<Styled.ListItem onClick={handleClick}>
+		<Styled.ListItem
+			role="button"
+			tabIndex={0}
+			onClick={handleClick}
+			onKeyDown={handleKeyDown}
+		>
 			<Styled.Wrapper
 				id={data.wa_id}
 				className={`
@@ -199,10 +214,10 @@ const ChatListItem = (props: any) => {
 							)}
 
 							{!isExpired && timeLeft && (
-								<Tooltip
+								<SimpleTooltip
 									title={t('This chat will expire in %s', timeLeft)}
-									placement="top"
-									disableInteractive
+									side="top"
+									disableHoverableContent
 								>
 									<Styled.TimeLeft>
 										<Styled.TimeLeftIconWrapper>
@@ -210,19 +225,19 @@ const ChatListItem = (props: any) => {
 										</Styled.TimeLeftIconWrapper>
 										<span>{timeLeft}</span>
 									</Styled.TimeLeft>
-								</Tooltip>
+								</SimpleTooltip>
 							)}
 
 							{data.contact.resolved && (
-								<Tooltip
+								<SimpleTooltip
 									title={t('Resolved')}
-									placement="top"
-									disableInteractive
+									side="top"
+									disableHoverableContent
 								>
 									<Styled.ResolvedIndicator>
 										<DoneIcon />
 									</Styled.ResolvedIndicator>
-								</Tooltip>
+								</SimpleTooltip>
 							)}
 						</Styled.NameWrapper>
 
@@ -248,7 +263,10 @@ const ChatListItem = (props: any) => {
 							<Styled.DateTagWrapper>
 								{data.tags?.length > 0 && (
 									<Styled.Tags>
-										<Tooltip title={generateTagNames()} disableInteractive>
+										<SimpleTooltip
+											title={generateTagNames()}
+											disableHoverableContent
+										>
 											<div>
 												{data.tags.slice(0, 3).map((tagItem, tagIndex) => (
 													<Styled.TagIcon
@@ -259,7 +277,7 @@ const ChatListItem = (props: any) => {
 													/>
 												))}
 											</div>
-										</Tooltip>
+										</SimpleTooltip>
 									</Styled.Tags>
 								)}
 
@@ -281,12 +299,12 @@ const ChatListItem = (props: any) => {
 
 				{hasFailedMessages() && (
 					<Styled.FailedMessagesIndicator>
-						<Tooltip
+						<SimpleTooltip
 							title={t('This chat has failed messages!')}
-							disableInteractive
+							disableHoverableContent
 						>
 							<Styled.ErrorIcon />
-						</Tooltip>
+						</SimpleTooltip>
 					</Styled.FailedMessagesIndicator>
 				)}
 			</Styled.Wrapper>

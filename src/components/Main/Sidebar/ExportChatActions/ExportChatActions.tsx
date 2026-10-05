@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import * as Styled from './ExportChatActions.styles';
@@ -37,15 +37,16 @@ const ExportChatActions: React.FC<Props> = ({
 			</Styled.Recipients>
 
 			<Styled.Actions>
-				<Button color="secondary" onClick={onCancel}>
+				<Button variant="ghost" color="secondary" onClick={onCancel}>
 					{t('Cancel')}
 				</Button>
 
-				<Button color="primary" onClick={onShowDateRange}>
+				<Button variant="ghost" color="primary" onClick={onShowDateRange}>
 					{t('Export by date')}
 				</Button>
 
 				<Button
+					variant="ghost"
 					color="primary"
 					onClick={onExport}
 					disabled={selectedChats.length === 0 && selectedTags.length === 0}

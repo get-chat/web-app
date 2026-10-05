@@ -69,11 +69,7 @@ const RetryFailedMessages: React.FC<Props> = ({
 
 	return (
 		<Styled.Wrapper>
-			<Styled.RetryAlert
-				severity="error"
-				elevation={0}
-				$sending={isSendingPendingMessages}
-			>
+			<Styled.RetryAlert severity="error" $sending={isSendingPendingMessages}>
 				Failed to send messages to {generateFailedReceiversString()}.
 				<br />
 				<Styled.RetryLink href="#" onClick={resendMessage}>

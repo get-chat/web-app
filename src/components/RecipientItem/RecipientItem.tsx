@@ -48,7 +48,21 @@ const RecipientItem: React.FC<Props> = ({
 
 	return (
 		<Styled.Wrapper>
-			<Styled.StyledListItemButton onClick={handleClick}>
+			<Styled.StyledListItemButton
+				role="button"
+				tabIndex={0}
+				onClick={handleClick}
+				onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+					// Only for the row itself, the checkbox handles its own keys
+					if (
+						event.target === event.currentTarget &&
+						(event.key === 'Enter' || event.key === ' ')
+					) {
+						event.preventDefault();
+						handleClick();
+					}
+				}}
+			>
 				<Styled.Container>
 					{isSelectionModeEnabled && (
 						<Styled.SelectionCheckbox checked={isSelected} color="primary" />

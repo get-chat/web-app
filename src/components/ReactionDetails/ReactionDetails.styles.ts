@@ -1,12 +1,15 @@
 import styled from 'styled-components';
-import { Menu } from '@mui/material';
+import { PopoverContent } from '@src/components/ui/popover';
 
-export const StyledMenu = styled(Menu)`
-	& .MuiPaper-root {
-		box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
-		border-radius: 10px !important;
-		padding: 5px 10px;
-	}
+// The vertical padding includes the 8px of the list MUI's Menu put inside
+export const Content = styled(PopoverContent)`
+	width: auto;
+	max-width: calc(100vw - 32px);
+	max-height: calc(100dvh - 32px);
+	overflow-y: auto;
+	box-shadow: 0 4px 10px -6px rgba(0, 0, 45, 0.4);
+	border-radius: 10px;
+	padding: 13px 10px;
 `;
 
 export const ReactionsContainer = styled.div`

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import GroupIcon from '@mui/icons-material/Group';
@@ -22,6 +21,7 @@ import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import PrintMessage from '@src/components/PrintMessage';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
 
 interface Props extends PanelTransitionProps {
 	contactProvidersData: { [key: string]: any };
@@ -70,9 +70,14 @@ const ContactDetails: React.FC<Props> = ({
 			onAnimationEnd={onAnimationEnd}
 		>
 			<Styled.Header>
-				<IconButton onClick={hideContactDetails} size="large">
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-xl"
+					onClick={hideContactDetails}
+				>
 					<CloseIcon />
-				</IconButton>
+				</Button>
 				<h3>{t('Contact Details')}</h3>
 			</Styled.Header>
 

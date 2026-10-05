@@ -1,12 +1,28 @@
 import styled from 'styled-components';
-import { IconButton } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 import {
 	footerPanelTransition,
 	PanelTransitionStyleProps,
 } from '@src/styles/panelTransitions';
 
-export const SendButton = styled(IconButton)`
+// MUI's small IconButton (5px padding) around a 20px icon: a 30px circle,
+// 40px on mobile where App.css gave every IconButton 10px of padding
+const iconButtonAttrs = {
+	variant: 'ghost',
+	color: 'neutral',
+	size: 'icon-sm',
+} as const;
+
+export const SendButton = styled(Button).attrs(iconButtonAttrs)`
 	align-self: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+
+	@media only screen and (max-width: 750px) {
+		width: 40px;
+		height: 40px;
+	}
 
 	.MuiSvgIcon-root {
 		height: 20px;
@@ -15,8 +31,16 @@ export const SendButton = styled(IconButton)`
 	}
 `;
 
-export const DeleteButton = styled(IconButton)`
+export const DeleteButton = styled(Button).attrs(iconButtonAttrs)`
 	align-self: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+
+	@media only screen and (max-width: 750px) {
+		width: 40px;
+		height: 40px;
+	}
 
 	.MuiSvgIcon-root {
 		height: 20px;

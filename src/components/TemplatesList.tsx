@@ -4,7 +4,8 @@ import {
 	isTemplateApproved,
 	sortTemplateComponents,
 } from '../helpers/TemplateMessageHelper';
-import { Button, Tooltip } from '@mui/material';
+import { Button } from '@src/components/ui/button';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import SendIcon from '@mui/icons-material/Send';
 import { SendButton } from '@src/components/SavedResponseList/SavedResponseList.styles';
 import { getObjLength } from '../helpers/ObjectHelper';
@@ -47,14 +48,13 @@ const TemplatesList: React.FC<Props> = ({
 				<div className="templateMessages__actions">
 					<div className="templateMessages__create">
 						{displayRegisterTemplate && (
-							<Button
-								// @ts-ignore
-								color="black"
-								href="https://hub.360dialog.com/dashboard/home"
-								target="_blank"
-								size="small"
-							>
-								{t('Register new template')}
+							<Button asChild variant="ghost" color="neutral" size="sm">
+								<a
+									href="https://hub.360dialog.com/dashboard/home"
+									target="_blank"
+								>
+									{t('Register new template')}
+								</a>
 							</Button>
 						)}
 					</div>
@@ -113,18 +113,17 @@ const TemplatesList: React.FC<Props> = ({
 							</div>
 						</StyledChatMessage.ChatMessage>
 						{isTemplateApproved(template[1]) && (
-							<Tooltip title={customSelectButtonTitle ?? t('Send')}>
+							<SimpleTooltip title={customSelectButtonTitle ?? t('Send')}>
 								<SendButton
 									aria-label={customSelectButtonTitle ?? t('Send')}
 									onClick={() => {
 										console.log('Selected template', template[1]);
 										onClick?.(template[1]);
 									}}
-									size="small"
 								>
 									<SendIcon />
 								</SendButton>
-							</Tooltip>
+							</SimpleTooltip>
 						)}
 					</div>
 				))}

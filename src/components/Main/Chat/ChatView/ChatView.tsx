@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../../styles/Chat.css';
-import { CircularProgress, ClickAwayListener, Zoom } from '@mui/material';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
+import { Spinner } from '@src/components/ui/spinner';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import ChatBodySkeleton from '@src/components/ChatBodySkeleton';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -2100,29 +2101,31 @@ const ChatView: React.FC<Props> = (props) => {
 				</div>
 			)}
 
-			<Zoom
-				in={
-					isLoaded &&
+			{/* Stays mounted like MUI's Zoom did; zooms in each time it shows */}
+			<div
+				className={
+					'chat__body__dateIndicator ' +
+					(isLoaded &&
 					!isLoadingMoreMessages &&
 					// Not while the loading skeleton is still cross-fading away
 					// (it paints above this indicator)
 					!skeletonTransition.isMounted &&
 					fixedDateIndicatorText !== undefined &&
 					fixedDateIndicatorText.trim().length > 0
+						? 'animate-in zoom-in duration-225'
+						: 'hidden')
 				}
 			>
-				<div className="chat__body__dateIndicator">
-					<MessageDateIndicator text={fixedDateIndicatorText} />
-				</div>
-			</Zoom>
+				<MessageDateIndicator text={fixedDateIndicatorText} />
+			</div>
 
-			<Zoom in={isLoadingMoreMessages} unmountOnExit>
-				<div className="chat__body__loadingMore">
+			{isLoadingMoreMessages && (
+				<div className="chat__body__loadingMore animate-in zoom-in duration-225">
 					<div className="chat__body__loadingMore__wrapper">
-						<CircularProgress size={28} />
+						<Spinner size={28} className="text-primary" />
 					</div>
 				</div>
-			</Zoom>
+			)}
 
 			<div className="chat__body__outer">
 				<div

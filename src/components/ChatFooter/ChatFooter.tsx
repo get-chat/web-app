@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Grow, Tooltip, Zoom } from '@mui/material';
 import {
 	ArrowDownward,
 	AttachFile,
@@ -41,6 +40,9 @@ import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricte
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
+import { Badge } from '@src/components/ui/badge';
+import { cn } from '@src/lib/utils';
 import {
 	ActionIcon,
 	ActionSeparator,
@@ -378,7 +380,7 @@ const ChatFooter: React.FC<Props> = ({
 	const ACCEPT_DOCUMENT = '*.*';
 
 	return (
-		<Container onDrop={(event) => event.preventDefault()}>
+		<Container onDrop={(event: React.DragEvent) => event.preventDefault()}>
 			{isQuickActionsMenuVisible && (
 				<QuickActionsMenu
 					input={translateHTMLInputToText(input).trim()}
@@ -443,11 +445,17 @@ const ChatFooter: React.FC<Props> = ({
 								contentEditable="true"
 								onFocus={handleFocus}
 								onMouseUp={handleMouseUp}
-								onPaste={(event) => handlePaste(event)}
-								onCopy={(event) => handleCopy(event)}
-								onDrop={(event) => event.preventDefault()}
+								onPaste={(event: React.ClipboardEvent<HTMLElement>) =>
+									handlePaste(event)
+								}
+								onCopy={(event: React.ClipboardEvent<HTMLDivElement>) =>
+									handleCopy(event)
+								}
+								onDrop={(event: React.DragEvent) => event.preventDefault()}
 								spellCheck="true"
-								onInput={(event) => handleEditableChange(event)}
+								onInput={(event: React.FormEvent<HTMLDivElement>) =>
+									handleEditableChange(event)
+								}
 								onKeyDown={(e: React.KeyboardEvent) => {
 									if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
 								}}
@@ -466,157 +474,158 @@ const ChatFooter: React.FC<Props> = ({
 
 			<ActionsRow>
 				<ActionsRowLeft>
-					<Tooltip
+					<SimpleTooltip
 						title={t('Quick Actions')}
-						placement="top"
-						disableInteractive
+						side="top"
+						disableHoverableContent
 					>
 						<CommandActionIcon
 							className={isQuickActionsMenuVisible ? 'active' : ''}
 							onClick={displayQuickActionsMenu}
-							size="small"
 						>
 							<KeyboardCommandKeyIcon />
 						</CommandActionIcon>
-					</Tooltip>
+					</SimpleTooltip>
 
 					{!(isUserActionsRestricted && isExpired) && <ActionSeparator />}
 
 					{!isUserActionsRestricted && (
-						<Tooltip title={t('Templates')} placement="top" disableInteractive>
+						<SimpleTooltip
+							title={t('Templates')}
+							side="top"
+							disableHoverableContent
+						>
 							<ActionIcon
 								data-test-id="templates-button"
 								onClick={toggleTemplateMessages}
 								className={isTemplatesVisible ? 'active' : ''}
-								size="small"
 							>
 								<SmsIcon />
 							</ActionIcon>
-						</Tooltip>
+						</SimpleTooltip>
 					)}
 
 					{!isExpired && !isUserActionsRestricted && (
-						<Tooltip
+						<SimpleTooltip
 							title={t('Interactive Messages')}
-							placement="top"
-							disableInteractive
-							className={isAttachmentOptionsVisible ? 'desktopOnly' : ''}
+							side="top"
+							disableHoverableContent
 						>
 							<ActionIcon
 								onClick={toggleInteractiveMessages}
-								className={isInteractiveMessagesVisible ? 'active' : ''}
-								size="small"
+								className={cn(
+									isAttachmentOptionsVisible && 'desktopOnly',
+									isInteractiveMessagesVisible && 'active'
+								)}
 							>
 								<TryIcon />
 							</ActionIcon>
-						</Tooltip>
+						</SimpleTooltip>
 					)}
 
 					{!isExpired && (
-						<Tooltip
+						<SimpleTooltip
 							title={t('Quick Replies')}
-							placement="top"
-							className={isAttachmentOptionsVisible ? 'desktopOnly' : ''}
-							disableInteractive
+							side="top"
+							disableHoverableContent
 						>
 							<ActionIcon
 								onClick={toggleSavedResponses}
-								className={isSavedResponsesVisible ? 'active' : ''}
-								size="small"
+								className={cn(
+									isAttachmentOptionsVisible && 'desktopOnly',
+									isSavedResponsesVisible && 'active'
+								)}
 							>
 								<NotesIcon />
 							</ActionIcon>
-						</Tooltip>
+						</SimpleTooltip>
 					)}
 
 					{!isExpired && <ActionSeparator />}
 
 					{!isExpired && (
-						<Tooltip title={t('Emoji')} placement="top" disableInteractive>
+						<SimpleTooltip
+							title={t('Emoji')}
+							side="top"
+							disableHoverableContent
+						>
 							<ActionIcon
 								className={isEmojiPickerVisible ? 'active' : ''}
 								onClick={toggleEmojiPicker}
-								size="small"
 							>
 								<InsertEmoticon />
 							</ActionIcon>
-						</Tooltip>
+						</SimpleTooltip>
 					)}
 
 					{!isExpired && (
 						<AttachmentContainer
 							className={isAttachmentOptionsVisible ? 'open' : ''}
 						>
-							<Tooltip
+							<SimpleTooltip
 								title={t('Attachment')}
-								placement="top"
-								disableInteractive
+								side="top"
+								disableHoverableContent
 							>
 								<ActionIcon
 									className={isAttachmentOptionsVisible ? 'active' : ''}
-									size="small"
 									onClick={() =>
 										setAttachmentOptionsVisible(!isAttachmentOptionsVisible)
 									}
 								>
 									<AttachFile />
 								</ActionIcon>
-							</Tooltip>
+							</SimpleTooltip>
 
-							<Grow in={isAttachmentOptionsVisible} unmountOnExit>
-								<AttachmentOptions>
-									<Tooltip
+							{isAttachmentOptionsVisible && (
+								<AttachmentOptions className="animate-grow-in">
+									<SimpleTooltip
 										title={t('Images & Videos')}
-										placement="top"
-										disableInteractive
+										side="top"
+										disableHoverableContent
 									>
 										<AttachmentOptionImageAndVideo
 											onClick={() =>
 												handleAttachmentClick(ACCEPT_IMAGE_AND_VIDEO)
 											}
-											size="small"
 										>
 											<ImageIcon />
 										</AttachmentOptionImageAndVideo>
-									</Tooltip>
+									</SimpleTooltip>
 
-									<Tooltip
+									<SimpleTooltip
 										title={t('Documents')}
-										placement="top"
-										disableInteractive
+										side="top"
+										disableHoverableContent
 									>
 										<AttachmentOptionDocument
 											onClick={() => handleAttachmentClick(ACCEPT_DOCUMENT)}
-											size="small"
 										>
 											<InsertDriveFileIcon />
 										</AttachmentOptionDocument>
-									</Tooltip>
+									</SimpleTooltip>
 
-									<Tooltip
+									<SimpleTooltip
 										title={t('Contacts')}
-										placement="top"
-										disableInteractive
+										side="top"
+										disableHoverableContent
 									>
-										<ActionIcon onClick={openContactsModal} size="small">
+										<ActionIcon onClick={openContactsModal}>
 											<ContactsIcon />
 										</ActionIcon>
-									</Tooltip>
+									</SimpleTooltip>
 
-									<Tooltip
+									<SimpleTooltip
 										title={t('Location')}
-										placement="top"
-										disableInteractive
+										side="top"
+										disableHoverableContent
 									>
-										<ActionIcon
-											onClick={() => setLocationModalVisible(true)}
-											size="small"
-										>
+										<ActionIcon onClick={() => setLocationModalVisible(true)}>
 											<LocationOnIcon />
 										</ActionIcon>
-									</Tooltip>
+									</SimpleTooltip>
 								</AttachmentOptions>
-							</Grow>
+							)}
 						</AttachmentContainer>
 					)}
 				</ActionsRowLeft>
@@ -631,28 +640,30 @@ const ChatFooter: React.FC<Props> = ({
 					</div>
 
 					{!isExpired && !hasInput() && !isRecording && (
-						<Tooltip title={t('Voice')} placement="top" disableInteractive>
+						<SimpleTooltip
+							title={t('Voice')}
+							side="top"
+							disableHoverableContent
+						>
 							<ActionIcon
 								onClick={() =>
 									PubSub.publish(EVENT_TOPIC_REQUEST_MIC_PERMISSION, 'chat')
 								}
-								size="small"
 							>
 								<MicIcon />
 							</ActionIcon>
-						</Tooltip>
+						</SimpleTooltip>
 					)}
 
 					{hasInput() && (
-						<Tooltip title={t('Send')} placement="top" disableInteractive>
+						<SimpleTooltip title={t('Send')} side="top" disableHoverableContent>
 							<ActionIcon
-								onClick={(e) => sendMessage(true, e)}
+								onClick={(e: React.MouseEvent) => sendMessage(true, e)}
 								data-test-id="send-message-button"
-								size="small"
 							>
 								<Send />
 							</ActionIcon>
-						</Tooltip>
+						</SimpleTooltip>
 					)}
 				</ActionsRowRight>
 			</ActionsRow>
@@ -678,22 +689,26 @@ const ChatFooter: React.FC<Props> = ({
 				/>
 			</div>
 
-			<Zoom in={isScrollButtonVisible}>
-				<ScrollButtonWrapper
-					color="primary"
-					overlap="rectangular"
-					badgeContent={currentNewMessages}
-					invisible={currentNewMessages === 0}
-					anchorOrigin={{
-						vertical: 'top',
-						horizontal: 'left',
-					}}
-				>
-					<ScrollButton onClick={handleScrollButtonClick} size="small">
-						<ArrowDownward />
-					</ScrollButton>
-				</ScrollButtonWrapper>
-			</Zoom>
+			{/* Stays mounted like MUI's Zoom did; zooms in each time it shows */}
+			<ScrollButtonWrapper
+				className={
+					isScrollButtonVisible ? 'animate-in zoom-in duration-225' : 'hidden!'
+				}
+			>
+				<ScrollButton onClick={handleScrollButtonClick}>
+					<ArrowDownward />
+				</ScrollButton>
+				{currentNewMessages !== 0 && (
+					<Badge
+						variant="solid"
+						color="primary"
+						size="sm"
+						className="absolute top-[3px] left-[3px] z-1 min-w-5 -translate-x-1/2 -translate-y-1/2"
+					>
+						{currentNewMessages > 99 ? '99+' : currentNewMessages}
+					</Badge>
+				)}
+			</ScrollButtonWrapper>
 		</Container>
 	);
 };

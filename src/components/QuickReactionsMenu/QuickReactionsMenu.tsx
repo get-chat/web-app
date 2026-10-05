@@ -2,6 +2,8 @@ import React from 'react';
 import PrintMessage from '@src/components/PrintMessage';
 import AddIcon from '@mui/icons-material/Add';
 import { Message } from '@src/types/messages';
+import { Popover, PopoverAnchor } from '@src/components/ui/popover';
+import { useCenteredOverAnchor } from './useCenteredOverAnchor';
 import * as Styled from './QuickReactionsMenu.styles';
 
 interface Props {
@@ -25,40 +27,49 @@ const QuickReactionsMenu: React.FC<Props> = ({
 		setAnchorElement(undefined);
 	};
 
+	const { virtualRef, contentRef, contentProps } =
+		useCenteredOverAnchor(anchorElement);
+
 	return (
-		<Styled.StyledMenu
-			anchorEl={anchorElement}
-			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
+		<Popover
 			open={Boolean(anchorElement)}
-			onClose={() => setAnchorElement(undefined)}
-			elevation={0}
-			disableAutoFocusItem={true}
+			onOpenChange={(isOpen) => !isOpen && setAnchorElement(undefined)}
 		>
-			<Styled.ReactionsContainer>
-				{EMOJIS.map((emoji) => (
+			<PopoverAnchor virtualRef={virtualRef} />
+			<Styled.Content
+				ref={contentRef}
+				{...contentProps}
+				// Focus the panel, not the first thing in it, as MUI's Menu did
+				onOpenAutoFocus={(event: Event) => {
+					event.preventDefault();
+					contentRef.current?.focus();
+				}}
+			>
+				<Styled.ReactionsContainer>
+					{EMOJIS.map((emoji) => (
+						<div
+							key={emoji}
+							onClick={() => {
+								if (message?.waba_payload?.id) {
+									onReaction(message.waba_payload.id, emoji);
+								}
+								hide();
+							}}
+						>
+							<PrintMessage message={emoji} smallEmoji />
+						</div>
+					))}
 					<div
-						key={emoji}
 						onClick={() => {
-							if (message?.waba_payload?.id) {
-								onReaction(message.waba_payload.id, emoji);
-							}
+							setEmojiPickerAnchorElement(anchorElement);
 							hide();
 						}}
 					>
-						<PrintMessage message={emoji} smallEmoji />
+						<AddIcon />
 					</div>
-				))}
-				<div
-					onClick={() => {
-						setEmojiPickerAnchorElement(anchorElement);
-						hide();
-					}}
-				>
-					<AddIcon />
-				</div>
-			</Styled.ReactionsContainer>
-		</Styled.StyledMenu>
+				</Styled.ReactionsContainer>
+			</Styled.Content>
+		</Popover>
 	);
 };
 

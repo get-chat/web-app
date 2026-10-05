@@ -213,8 +213,8 @@ const ChatHeader: React.FC<Props> = ({
 
 			<div className="flex justify-between">
 				{chat && (
-					// The chips are still MUI and set their own background with
-					// !important, hence the `!` here
+					// The chips' own styled-components background is unlayered, hence
+					// the `!` here
 					<div className="mr-[5px] flex items-center justify-center gap-2.5 max-[500px]:hidden [&_.assigneeChip]:bg-chat-bg! [&_.tagsChip]:bg-chat-bg!">
 						<TagsChip waId={waId} showChatTagsList={showChatTags} />
 

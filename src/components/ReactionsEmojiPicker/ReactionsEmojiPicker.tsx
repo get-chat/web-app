@@ -4,6 +4,9 @@ import { Emoji, NimblePicker } from 'emoji-mart';
 import { EMOJI_SET, EMOJI_SHEET_SIZE } from '@src/Constants';
 import data from 'emoji-mart/data/facebook.json';
 import { Message } from '@src/types/messages';
+import { Popover, PopoverAnchor } from '@src/components/ui/popover';
+import { useCenteredOverAnchor } from '@src/components/QuickReactionsMenu/useCenteredOverAnchor';
+import { cn } from '@src/lib/utils';
 import * as Styled from './ReactionsEmojiPicker.styles';
 
 interface Props {
@@ -31,28 +34,41 @@ const ReactionsEmojiPicker: React.FC<Props> = ({
 		hide();
 	};
 
+	const { virtualRef, contentRef, contentProps } =
+		useCenteredOverAnchor(anchorElement);
+
 	return (
-		<Styled.StyledMenu
-			transitionDuration={0}
-			anchorEl={anchorElement}
-			anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
-			transformOrigin={{ vertical: 'center', horizontal: 'center' }}
+		<Popover
 			open={Boolean(anchorElement)}
-			onClose={() => setAnchorElement(undefined)}
-			elevation={0}
-			disableAutoFocusItem={true}
+			onOpenChange={(isOpen) => !isOpen && setAnchorElement(undefined)}
 		>
-			<Styled.EmojiPickerContainer>
-				<NimblePicker
-					set={EMOJI_SET}
-					sheetSize={EMOJI_SHEET_SIZE}
-					data={data}
-					showPreview={false}
-					emojiSize={32}
-					onSelect={handleEmojiSelect}
-				/>
-			</Styled.EmojiPickerContainer>
-		</Styled.StyledMenu>
+			<PopoverAnchor virtualRef={virtualRef} />
+			<Styled.Content
+				ref={contentRef}
+				{...contentProps}
+				// No transition, as before
+				className={cn(
+					contentProps.className,
+					'data-[state=closed]:animate-none data-[state=open]:animate-none'
+				)}
+				// Focus the panel, not the first thing in it, as MUI's Menu did
+				onOpenAutoFocus={(event: Event) => {
+					event.preventDefault();
+					contentRef.current?.focus();
+				}}
+			>
+				<Styled.EmojiPickerContainer>
+					<NimblePicker
+						set={EMOJI_SET}
+						sheetSize={EMOJI_SHEET_SIZE}
+						data={data}
+						showPreview={false}
+						emojiSize={32}
+						onSelect={handleEmojiSelect}
+					/>
+				</Styled.EmojiPickerContainer>
+			</Styled.Content>
+		</Popover>
 	);
 };
 

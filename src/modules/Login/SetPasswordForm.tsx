@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { Button, TextField } from '@mui/material';
+import React, { useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { setPasswordWithActivationCode } from '@src/api/authApi';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldDescription, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
 import * as Styled from './Login.styles';
 
 interface Props {
@@ -22,6 +24,8 @@ const SetPasswordForm: React.FC<Props> = ({
 	onInvalidCode,
 }) => {
 	const { t } = useTranslation();
+
+	const idPrefix = useId();
 
 	const [password, setPassword] = useState('');
 	const [passwordRepeat, setPasswordRepeat] = useState('');
@@ -81,50 +85,59 @@ const SetPasswordForm: React.FC<Props> = ({
 			{username && (
 				// Read-only rather than disabled, so a password manager files the
 				// new password under this username
-				<TextField
-					variant="standard"
-					value={username}
-					label={t('Username')}
-					autoComplete="username"
-					InputProps={{ readOnly: true }}
-					size="medium"
-					fullWidth
-				/>
+				<Field className="gap-1">
+					<FieldLabel htmlFor={`${idPrefix}-username`}>
+						{t('Username')}
+					</FieldLabel>
+					<Input
+						id={`${idPrefix}-username`}
+						variant="underline"
+						value={username}
+						autoComplete="username"
+						readOnly
+					/>
+				</Field>
 			)}
-			<TextField
-				variant="standard"
-				data-testid="new-password"
-				value={password}
-				onChange={(event) => setPassword(event.target.value)}
-				type="password"
-				label={t('Password')}
-				helperText={t(
-					'At least 8 characters. Avoid common and entirely numeric passwords.'
-				)}
-				autoComplete="new-password"
-				autoFocus
-				size="medium"
-				fullWidth
-			/>
-			<TextField
-				variant="standard"
-				data-testid="new-password-repeat"
-				value={passwordRepeat}
-				onChange={(event) => setPasswordRepeat(event.target.value)}
-				type="password"
-				label={t('Password (repeat)')}
-				autoComplete="new-password"
-				size="medium"
-				fullWidth
-			/>
+			<Field data-testid="new-password" className="gap-1">
+				<FieldLabel htmlFor={`${idPrefix}-password`}>
+					{t('Password')}
+				</FieldLabel>
+				<Input
+					id={`${idPrefix}-password`}
+					variant="underline"
+					value={password}
+					onChange={(event) => setPassword(event.target.value)}
+					type="password"
+					aria-describedby={`${idPrefix}-password-description`}
+					autoComplete="new-password"
+					autoFocus
+				/>
+				<FieldDescription id={`${idPrefix}-password-description`}>
+					{t(
+						'At least 8 characters. Avoid common and entirely numeric passwords.'
+					)}
+				</FieldDescription>
+			</Field>
+			<Field data-testid="new-password-repeat" className="gap-1">
+				<FieldLabel htmlFor={`${idPrefix}-password-repeat`}>
+					{t('Password (repeat)')}
+				</FieldLabel>
+				<Input
+					id={`${idPrefix}-password-repeat`}
+					variant="underline"
+					value={passwordRepeat}
+					onChange={(event) => setPasswordRepeat(event.target.value)}
+					type="password"
+					autoComplete="new-password"
+				/>
+			</Field>
 			<Button
 				data-testid="set-password-submit"
 				type="submit"
-				size="large"
-				variant="contained"
+				size="lg"
+				variant="solid"
 				color="primary"
-				fullWidth
-				disableElevation
+				className="w-full"
 				disabled={isSubmitting}
 			>
 				{t('Set password')}

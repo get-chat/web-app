@@ -1,18 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-	Button,
-	CircularProgress,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	SelectChangeEvent,
-} from '@mui/material';
 import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
@@ -25,6 +11,28 @@ import {
 	fetchChatAssignment,
 	updateChatAssignment,
 } from '@src/api/chatAssignmentApi';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@src/components/ui/select';
+import { Spinner } from '@src/components/ui/spinner';
+
+// Text under the dialog's description, styled like it
+const messageClassName = 'text-sm text-muted-foreground';
 
 interface Props {
 	open: boolean;
@@ -110,8 +118,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 		}
 	};
 
-	const handleUserChange = (event: SelectChangeEvent) => {
-		const userId = event.target.value;
+	const handleUserChange = (userId: string) => {
 		setTempAssignedToUser(userId);
 
 		// Set group automatically, if assigned group was blank
@@ -121,8 +128,8 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 		}
 	};
 
-	const handleGroupChange = (event: SelectChangeEvent) => {
-		setTempAssignedGroup(event.target.value);
+	const handleGroupChange = (groupId: string) => {
+		setTempAssignedGroup(groupId);
 	};
 
 	const canChangeUserAssigment = useMemo(
@@ -137,115 +144,142 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 	);
 
 	return (
-		<Dialog open={open} onClose={close} className="chatAssignmentWrapper">
-			<DialogTitle>Assign chat</DialogTitle>
-			<DialogContent className="chatAssignment">
-				{isAdmin && (
-					<div className="chatAssignmentWrapper__main_message">
-						<DialogContentText>
-							{t('You can assign this chat to a user or a group.')}
-						</DialogContentText>
-					</div>
-				)}
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Assign chat</DialogTitle>
+				</DialogHeader>
+				<DialogBody className="chatAssignment">
+					{isAdmin && (
+						<div className="chatAssignmentWrapper__main_message">
+							<DialogDescription>
+								{t('You can assign this chat to a user or a group.')}
+							</DialogDescription>
+						</div>
+					)}
 
-				{!isAdmin && (
-					<div className="chatAssignmentWrapper__message">
-						{canChangeUserAssigment ? (
-							<DialogContentText>
-								{t(
-									'You can assign this chat to yourself and unassign from yourself.'
-								)}
-							</DialogContentText>
-						) : (
-							<DialogContentText>
-								{t(
-									'This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.'
-								)}
-							</DialogContentText>
-						)}
-					</div>
-				)}
+					{!isAdmin && (
+						<div className="chatAssignmentWrapper__message">
+							{canChangeUserAssigment ? (
+								<DialogDescription>
+									{t(
+										'You can assign this chat to yourself and unassign from yourself.'
+									)}
+								</DialogDescription>
+							) : (
+								<DialogDescription>
+									{t(
+										'This chat is already assigned to another user. You can change the assignment of this chat only if the current person will unassign themselves or someone with admin access will clear the assignment.'
+									)}
+								</DialogDescription>
+							)}
+						</div>
+					)}
 
-				<FormControl
-					variant="standard"
-					fullWidth={true}
-					disabled={!canChangeUserAssigment}
-				>
-					<InputLabel id="assign-user-select-label">User</InputLabel>
-					<Select
-						variant="standard"
-						labelId="assign-user-select-label"
-						id="assign-user-select"
-						value={tempAssignedToUser}
-						onChange={handleUserChange}
+					<Field
+						className="mb-[15px] gap-1"
+						data-disabled={!canChangeUserAssigment}
 					>
-						<MenuItem value="null">{t('Unassigned')}</MenuItem>
-						{sortUsers(users).map((user) => (
-							<MenuItem
-								key={user.id?.toString()}
-								value={user.id?.toString()}
-								disabled={isAdmin ? false : user.id !== currentUser?.id}
+						<FieldLabel htmlFor="assign-user-select">User</FieldLabel>
+						<Select
+							value={tempAssignedToUser ?? ''}
+							onValueChange={handleUserChange}
+							disabled={!canChangeUserAssigment}
+						>
+							<SelectTrigger
+								id="assign-user-select"
+								variant="underline"
+								className="w-full"
 							>
-								{prepareUserLabel(user)}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="null">{t('Unassigned')}</SelectItem>
+								{sortUsers(users).map((user) => (
+									<SelectItem
+										key={user.id?.toString()}
+										value={user.id?.toString()}
+										disabled={isAdmin ? false : user.id !== currentUser?.id}
+									>
+										{prepareUserLabel(user)}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</Field>
 
-				{!isAdmin && (
-					<div className="chatAssignmentWrapper__message">
-						{canChangeGroupAssigment ? (
-							<DialogContentText>
-								{t('You can assign this chat to a group.')}
-							</DialogContentText>
-						) : (
-							<DialogContentText>
-								{t(
-									'This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.'
-								)}
-							</DialogContentText>
-						)}
+					{!isAdmin && (
+						<div className="chatAssignmentWrapper__message">
+							{/* Plain text, not a second DialogDescription: the dialog
+							    points at one description */}
+							{canChangeGroupAssigment ? (
+								<p className={messageClassName}>
+									{t('You can assign this chat to a group.')}
+								</p>
+							) : (
+								<p className={messageClassName}>
+									{t(
+										'This chat is already assigned to a group. You can change the assignment of this chat only if someone with admin access will clear the assignment.'
+									)}
+								</p>
+							)}
+						</div>
+					)}
+
+					<Field
+						className="mb-[15px] gap-1"
+						data-disabled={!canChangeGroupAssigment}
+					>
+						<FieldLabel htmlFor="assign-group-select">Group</FieldLabel>
+						<Select
+							// Can be undefined when the chosen user has no group; ''
+							// shows an empty field, as MUI did
+							value={tempAssignedGroup ?? ''}
+							onValueChange={handleGroupChange}
+							disabled={!canChangeGroupAssigment}
+						>
+							<SelectTrigger
+								id="assign-group-select"
+								variant="underline"
+								className="w-full"
+							>
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="null">{t('Unassigned')}</SelectItem>
+								{sortGroups(groups)?.map((group) => (
+									<SelectItem
+										key={group.id.toString()}
+										value={group.id.toString()}
+									>
+										{group.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</Field>
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						Close
+					</Button>
+					{(canChangeUserAssigment || canChangeGroupAssigment) && (
+						<Button
+							variant="ghost"
+							color="primary"
+							onClick={doUpdateChatAssignment}
+						>
+							{t('Update')}
+						</Button>
+					)}
+				</DialogFooter>
+
+				{isLoading && (
+					<div className="chatAssignmentWrapper__loading">
+						<Spinner size={28} className="text-primary" />
 					</div>
 				)}
-
-				<FormControl
-					variant="standard"
-					fullWidth={true}
-					disabled={!canChangeGroupAssigment}
-				>
-					<InputLabel id="assign-group-select-label">Group</InputLabel>
-					<Select
-						variant="standard"
-						labelId="assign-group-select-label"
-						id="assign-group-select"
-						value={tempAssignedGroup}
-						onChange={handleGroupChange}
-					>
-						<MenuItem value="null">{t('Unassigned')}</MenuItem>
-						{sortGroups(groups)?.map((group) => (
-							<MenuItem key={group.id.toString()} value={group.id.toString()}>
-								{group.name}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					Close
-				</Button>
-				{(canChangeUserAssigment || canChangeGroupAssigment) && (
-					<Button color="primary" onClick={doUpdateChatAssignment}>
-						{t('Update')}
-					</Button>
-				)}
-			</DialogActions>
-
-			{isLoading && (
-				<div className="chatAssignmentWrapper__loading">
-					<CircularProgress size={28} />
-				</div>
-			)}
 		</Dialog>
 	);
 };

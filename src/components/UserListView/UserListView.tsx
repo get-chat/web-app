@@ -1,7 +1,6 @@
 import * as Styled from './UserListView.styles';
 import { useTranslation } from 'react-i18next';
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, IconButton, Switch } from '@mui/material';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,6 +15,9 @@ import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import { useAppSelector } from '@src/store/hooks';
 import { getUserRoleLabel, sortUsers } from '@src/helpers/UserHelper';
 import CreateUserDialog from '@src/components/CreateUserDialog';
+import { Button } from '@src/components/ui/button';
+import { Spinner } from '@src/components/ui/spinner';
+import { Switch } from '@src/components/ui/switch';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -120,9 +122,9 @@ const UserListView: React.FC<Props> = ({
 	return (
 		<Styled.Container $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 			<Styled.Header>
-				<IconButton onClick={onHide} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
 					<CloseIcon />
-				</IconButton>
+				</Button>
 
 				<h3>{t('Users')}</h3>
 			</Styled.Header>
@@ -130,11 +132,12 @@ const UserListView: React.FC<Props> = ({
 				<Styled.Actions>
 					{canCreateUsers && (
 						<Styled.CreateUserButton
-							fullWidth
-							startIcon={<PersonAddAltIcon />}
+							variant="ghost"
+							color="neutral"
 							onClick={() => setCreateUserDialogVisible(true)}
 							data-test-id="users-create-user-button"
 						>
+							<PersonAddAltIcon />
 							{t('Create new user')}
 						</Styled.CreateUserButton>
 					)}
@@ -151,7 +154,7 @@ const UserListView: React.FC<Props> = ({
 
 			{isLoading ? (
 				<Styled.LoadingContainer>
-					<CircularProgress />
+					<Spinner size={40} className="text-primary" />
 				</Styled.LoadingContainer>
 			) : error ? (
 				<Styled.Description>{t(error)}</Styled.Description>
@@ -183,7 +186,10 @@ const UserListView: React.FC<Props> = ({
 									</Styled.UserAvailabilityLabel>
 									{canChangeAvailability && (
 										<Switch
-											color={user.profile.is_available ? 'success' : 'warning'}
+											// MUI's success green when on; the margins keep MUI's
+											// footprint inside the pill
+											color="success"
+											className="my-[9px] mr-3"
 											checked={user.profile.is_available}
 											onClick={() =>
 												toggleUserAvailability(

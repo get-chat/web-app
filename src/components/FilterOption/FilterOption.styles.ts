@@ -1,8 +1,17 @@
 import styled from 'styled-components';
-import { ButtonBase, IconButton } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 
-export const Container = styled(ButtonBase)<{ $isActive?: boolean }>`
+export const Container = styled.div.attrs({
+	role: 'button',
+	tabIndex: 0,
+})<{ $isActive?: boolean }>`
 	&& {
+		position: relative;
+		justify-content: center;
+		cursor: pointer;
+		user-select: none;
+		outline: 0;
+		-webkit-tap-highlight-color: transparent;
 		background-color: ${({ $isActive }) =>
 			$isActive ? 'var(--color-primary) !important' : 'white !important'};
 		border-radius: 10px !important;
@@ -16,6 +25,10 @@ export const Container = styled(ButtonBase)<{ $isActive?: boolean }>`
 		margin-right: 5px !important;
 		color: ${({ $isActive }) => ($isActive ? 'white' : 'inherit')};
 
+		&:focus-visible {
+			box-shadow: 0 0 0 2px rgba(101, 203, 172, 0.5);
+		}
+
 		.MuiSvgIcon-root {
 			height: 12px !important;
 			width: 12px !important;
@@ -28,11 +41,12 @@ export const Label = styled.div`
 	margin: 0 5px;
 `;
 
-export const ActionIcon = styled(IconButton)`
+export const ActionIcon = styled(Button)`
 	&& {
 		height: 19px !important;
 		width: 19px !important;
 		margin-left: -2px !important;
+		border-radius: 50%;
 
 		.MuiSvgIcon-root {
 			color: white !important;

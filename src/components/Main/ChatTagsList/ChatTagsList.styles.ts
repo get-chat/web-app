@@ -1,10 +1,8 @@
 import styled from 'styled-components';
-import { Dialog } from '@mui/material';
+import { DialogContent } from '@src/components/ui/dialog';
 
-export const DialogWrapper = styled(Dialog)`
-	position: relative;
-
-	.MuiListItem-root {
+export const DialogWrapper = styled(DialogContent)`
+	[data-slot='item'] {
 		border-radius: 10px;
 		margin-top: 5px;
 	}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import LinearProgress from '@mui/material/LinearProgress';
+import { Progress } from '@src/components/ui/progress';
 import * as Styled from './LoadingScreen.styles';
 import { useTranslation } from 'react-i18next';
-import Alert from '@mui/material/Alert';
+import { Alert } from '@src/components/ui/alert';
 import packageJson from '../../../../package.json';
-import { CircularProgress } from '@mui/material';
+import { Spinner } from '@src/components/ui/spinner';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
@@ -43,13 +43,11 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 			)}
 
 			<Styled.ProgressContainer>
-				{!isInitialResourceFailed && (
-					<LinearProgress variant="determinate" value={loadingProgress} />
-				)}
+				{!isInitialResourceFailed && <Progress value={loadingProgress} />}
 			</Styled.ProgressContainer>
 
 			<Styled.Details>
-				<CircularProgress size={20} />
+				<Spinner size={20} className="text-primary" />
 				{t(loadingComponent ?? '')}
 			</Styled.Details>
 
@@ -61,7 +59,7 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 
 			{isInitialResourceFailed && (
 				<>
-					<Alert severity="warning" variant="filled">
+					<Alert severity="warning" variant="filled" className="w-auto">
 						{t('Something went wrong, this will be fixed automatically')}
 					</Alert>
 

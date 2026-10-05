@@ -26,7 +26,7 @@ const BusinessProfileAvatar: React.FC<Props> = ({
 				onClick={onClick}
 			/>
 			{(isRefreshingSettings || isUploadingProfilePhoto) && (
-				<Styled.StyledCircularProgress size={40} />
+				<Styled.StyledSpinner size={40} className="text-primary" />
 			)}
 		</Styled.Container>
 	);

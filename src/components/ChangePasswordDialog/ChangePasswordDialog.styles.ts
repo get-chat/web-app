@@ -1,12 +1,12 @@
 import styled from 'styled-components';
-import { Dialog } from '@mui/material';
+import { DialogContent } from '@src/components/ui/dialog';
 
-export const StyledDialog = styled(Dialog)`
-	.MuiFormControl-root {
+export const StyledDialogContent = styled(DialogContent)`
+	[data-slot='field'] {
 		margin-bottom: 10px;
 	}
 
-	.MuiAlert-root {
+	[data-slot='alert'] {
 		margin: 10px 0;
 	}
 `;

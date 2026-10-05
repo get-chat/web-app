@@ -1,5 +1,4 @@
 import React from 'react';
-import { ListItem } from '@mui/material';
 import ContactProviderHeader from '../ContactProviderHeader';
 import * as Styled from '@src/components/ContactView/Contact.styles';
 import { Person } from '@src/types/persons';
@@ -30,7 +29,8 @@ const PersonView: React.FC<Props> = ({
 
 	return (
 		<Styled.ContactWrapper>
-			<ListItem button>
+			{/* Was MUI's ListItem button: its padding and hover */}
+			<div className="relative flex w-full items-center px-4 py-2 text-left transition-colors hover:bg-black/4">
 				<Styled.ContactContainer onClick={handleClick}>
 					<Styled.AvatarWrapper>
 						<Styled.StyledCustomAvatar
@@ -51,7 +51,7 @@ const PersonView: React.FC<Props> = ({
 						)}
 					</Styled.ContactInfo>
 				</Styled.ContactContainer>
-			</ListItem>
+			</div>
 		</Styled.ContactWrapper>
 	);
 };

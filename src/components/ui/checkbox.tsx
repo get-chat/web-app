@@ -18,6 +18,7 @@ const checkboxVariants = cva(
 				primary: '[--control:var(--primary)]',
 				secondary: '[--control:var(--color-secondary)]',
 				destructive: '[--control:var(--destructive)]',
+				success: '[--control:#2e7d32]',
 				selection: '[--control:var(--selection)]',
 			},
 			size: {

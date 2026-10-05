@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 
 export const Container = styled.div`
 	background-color: #ffbdbd;
@@ -46,5 +46,5 @@ export const Code = styled.span`
 `;
 
 export const RetryButton = styled(Button)`
-	margin-top: 10px !important;
+	margin-top: 10px;
 `;

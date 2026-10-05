@@ -36,12 +36,8 @@ export const SearchInputContainer = styled.div.attrs({
 		color: var(--lighter-text-color);
 	}
 
-	> .MuiCircularProgress-root {
-		padding: 10px;
-	}
-
 	> .MuiSvgIcon-root,
-	> .MuiCircularProgress-root {
+	> [data-slot='spinner'] {
 		position: absolute;
 		left: 10px;
 		margin-top: auto;

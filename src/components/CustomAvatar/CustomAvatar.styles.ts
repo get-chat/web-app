@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { Avatar } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import { Avatar } from '@src/components/ui/avatar';
 
 export const StyledAvatar = styled(Avatar)<{ $isLight?: boolean }>`
 	&& {
@@ -13,5 +14,13 @@ export const StyledAvatar = styled(Avatar)<{ $isLight?: boolean }>`
 							color: #fff !important;
 						}
 				  `}
+	}
+`;
+
+// MUI Avatar's fallback person icon: 75% of the avatar
+export const FallbackIcon = styled(PersonIcon)`
+	&& {
+		width: 75%;
+		height: 75%;
 	}
 `;

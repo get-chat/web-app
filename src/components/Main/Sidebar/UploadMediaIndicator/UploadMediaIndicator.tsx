@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinearProgress } from '@mui/material';
+import { Progress } from '@src/components/ui/progress';
 import { useTranslation } from 'react-i18next';
 import * as Styled from './UploadMediaIndicator.styles';
 
@@ -12,9 +12,9 @@ const UploadMediaIndicator: React.FC<Props> = ({ isMobile = false }) => {
 
 	return (
 		<Styled.Wrapper $isMobile={isMobile}>
-			<Styled.StyledAlert severity="info" elevation={0}>
+			<Styled.StyledAlert severity="info">
 				<div>{t('Uploading a media file. Please wait...')}</div>
-				<LinearProgress variant="indeterminate" />
+				<Progress />
 			</Styled.StyledAlert>
 		</Styled.Wrapper>
 	);

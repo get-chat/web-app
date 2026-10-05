@@ -2,7 +2,7 @@ import React from 'react';
 import useContacts from '@src/components/Contacts/useContacts';
 import SearchBar from '@src/components/SearchBar/SearchBar';
 import RecipientItem from '@src/components/RecipientItem';
-import { CircularProgress } from '@mui/material';
+import { Spinner } from '@src/components/ui/spinner';
 import { Trans, useTranslation } from 'react-i18next';
 import * as Styled from './Contacts.styles';
 import { Recipient } from '@src/types/persons';
@@ -63,7 +63,7 @@ const Contacts: React.FC<Props> = ({
 
 				{isVerifying && (
 					<Styled.BodyLoading>
-						<CircularProgress color="inherit" />
+						<Spinner size={40} />
 					</Styled.BodyLoading>
 				)}
 

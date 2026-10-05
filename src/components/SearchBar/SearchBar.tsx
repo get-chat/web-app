@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import { SearchOutlined } from '@mui/icons-material';
 import * as Styled from './SearchBar.styles';
-import { CircularProgress } from '@mui/material';
+import { Spinner } from '@src/components/ui/spinner';
 import { useTranslation } from 'react-i18next';
 
 export type Props = {
@@ -36,7 +36,7 @@ const SearchBar: React.FC<Props> = ({
 	return (
 		<Styled.SearchContainer>
 			<Styled.SearchInputContainer $isFocusStyleEnabled={isFocusStyleEnabled}>
-				{isLoading ? <CircularProgress /> : <SearchOutlined />}
+				{isLoading ? <Spinner className="text-primary" /> : <SearchOutlined />}
 				<Styled.SearchInput
 					placeholder={placeholder ?? t('Search')}
 					type="text"

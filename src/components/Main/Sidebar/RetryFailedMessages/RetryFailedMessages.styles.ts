@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
-import { Alert } from '@mui/material';
+import { Alert } from '@src/components/ui/alert';
 
 export const Wrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 
-	.MuiAlert-root {
+	[data-slot='alert'] {
 		border-radius: 0 !important;
 	}
 `;
@@ -25,5 +25,6 @@ export const LastAttempt = styled.div`
 `;
 
 export const RetryLink = styled.a`
+	align-self: flex-start;
 	font-weight: bold;
 `;

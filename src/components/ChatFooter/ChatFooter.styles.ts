@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Badge, Fab, IconButton } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 
 export const Container = styled.div.attrs({
 	className: 'container chatFooterGlobal',
@@ -48,7 +48,15 @@ export const ActionSeparator = styled.div`
 	margin: 0 5px;
 `;
 
-export const ActionIcon = styled(IconButton)`
+// MUI's small IconButton (5px padding) around a 20px icon: a 30px circle
+export const ActionIcon = styled(Button).attrs({
+	variant: 'ghost',
+	color: 'neutral',
+	size: 'icon-sm',
+} as const)`
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
 	transition: all ease-in 0.2s;
 
 	&.active {
@@ -81,10 +89,6 @@ export const Footer = styled.div`
 		height: auto !important;
 		align-items: normal;
 		flex-direction: column;
-	}
-
-	> .MuiIconButton-root {
-		padding: 10px !important;
 	}
 
 	> form {
@@ -185,21 +189,30 @@ export const AttachmentOptions = styled.div`
 	}
 `;
 
-export const ScrollButtonWrapper = styled(Badge)`
-	position: absolute !important;
+// Holds the scroll button and its unread count badge, as MUI's Badge did
+export const ScrollButtonWrapper = styled.span`
+	position: absolute;
+	display: inline-flex;
 	bottom: 112px;
 	right: 20px;
-
-	.MuiBadge-anchorOriginTopLeftRectangle {
-		top: 3px;
-		left: 3px;
-	}
+	/* MUI's Fab layer, so the button floats over the messages */
+	z-index: 1050;
 `;
 
-export const ScrollButton = styled(Fab)`
+// MUI's small Fab: a raised round 40px button
+export const ScrollButton = styled(Button).attrs({
+	variant: 'ghost',
+	color: 'neutral',
+	size: 'icon-lg',
+} as const)`
+	border-radius: 50%;
 	background-color: white !important;
+	box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+		0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 
 	.MuiSvgIcon-root {
+		width: 24px;
+		height: 24px;
 		color: var(--color-primary-light) !important;
 	}
 `;

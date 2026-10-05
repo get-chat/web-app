@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../../styles/PreviewSendMedia.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { ButtonBase, IconButton, TextField } from '@mui/material';
 import Send from '@mui/icons-material/Send';
 import AddIcon from '@mui/icons-material/Add';
 import {
@@ -33,6 +32,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import ChosenFileClass from '@src/ChosenFileClass';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
 
 interface Props {
 	data: ChosenFileList | undefined;
@@ -58,6 +60,8 @@ const PreviewSendMedia: React.FC<Props> = ({
 	}>({});
 	const [currentCaption, setCurrentCaption] = useState('');
 	const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
+
+	const captionInputId = React.useId();
 
 	const forceUpdate = useForceUpdate();
 
@@ -266,14 +270,17 @@ const PreviewSendMedia: React.FC<Props> = ({
 				(chosenFile.attachmentType === ATTACHMENT_TYPE_IMAGE ||
 					chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO) && (
 					<div className="previewSendMedia__caption">
-						<TextField
-							variant="standard"
-							value={currentCaption}
-							onChange={(e) => setCurrentCaption(e.target.value)}
-							label={t('Add a caption...')}
-							size="medium"
-							fullWidth={true}
-						/>
+						<Field className="gap-1">
+							<FieldLabel htmlFor={captionInputId}>
+								{t('Add a caption...')}
+							</FieldLabel>
+							<Input
+								id={captionInputId}
+								variant="underline"
+								value={currentCaption}
+								onChange={(e) => setCurrentCaption(e.target.value)}
+							/>
+						</Field>
 					</div>
 				)}
 
@@ -318,18 +325,23 @@ const PreviewSendMedia: React.FC<Props> = ({
 									)}
 								</span>
 
-								<IconButton
+								{/* Sized by its padding in PreviewSendMedia.css */}
+								<Button
+									variant="ghost"
+									color="neutral"
+									size="none"
 									onClick={() => deleteByIndex(file[0])}
-									className="previewSendMedia__footer__thumbnail__delete"
-									size="large"
+									className="previewSendMedia__footer__thumbnail__delete rounded-full max-[750px]:p-2.5!"
 								>
 									<CloseIcon />
-								</IconButton>
+								</Button>
 							</span>
 						);
 					})}
 
-					<ButtonBase
+					<Button
+						variant="unstyled"
+						size="none"
 						className="previewSendMedia__footer__addMoreWrapper"
 						onClick={() => fileInput.current?.click()}
 					>
@@ -337,7 +349,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 							<AddIcon />
 							<span>{t('Add more')}</span>
 						</div>
-					</ButtonBase>
+					</Button>
 
 					<div className="hidden">
 						<FileInput
@@ -349,13 +361,16 @@ const PreviewSendMedia: React.FC<Props> = ({
 				</div>
 
 				<div className="previewSendMedia__footer__sendWrapper">
-					<IconButton
-						className="previewSendMedia__footer__send"
+					{/* Sized by its padding in PreviewSendMedia.css */}
+					<Button
+						variant="ghost"
+						color="neutral"
+						size="none"
+						className="previewSendMedia__footer__send rounded-full max-[750px]:p-2.5! [&_svg]:size-6"
 						onClick={send}
-						size="large"
 					>
 						<Send />
-					</IconButton>
+					</Button>
 				</div>
 			</div>
 

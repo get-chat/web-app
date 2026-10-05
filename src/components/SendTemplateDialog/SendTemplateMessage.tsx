@@ -1,9 +1,16 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Button, ButtonBase, InputAdornment, TextField } from '@mui/material';
+import React, { ChangeEvent, useEffect, useId, useRef, useState } from 'react';
 import '../../styles/SendTemplateMessage.css';
 import FileInput from '../FileInput';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import { Alert, AlertTitle } from '@src/components/ui/alert';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+} from '@src/components/ui/input-group';
+import { Textarea } from '@src/components/ui/textarea';
 import {
 	componentHasMediaFormat,
 	generateFinalTemplateParams,
@@ -46,6 +53,8 @@ const SendTemplateMessage: React.FC<Props> = ({
 	sendButtonInnerRef,
 }) => {
 	const { t } = useTranslation();
+
+	const idPrefix = useId();
 
 	const template = data;
 
@@ -259,26 +268,30 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 									{!provideFileBy && (
 										<div className="sendTemplateMessage__section__provideFileChoices">
-											<ButtonBase
-												component="div"
+											<Button
+												type="button"
+												variant="unstyled"
+												size="none"
 												onClick={() =>
 													setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
 												}
-												className="sendTemplateMessage__section__provideFileChoices__choice"
+												className="sendTemplateMessage__section__provideFileChoices__choice whitespace-normal"
 											>
 												<PublishIcon />
 												<span>{t('Upload a file')}</span>
-											</ButtonBase>
-											<ButtonBase
-												component="div"
+											</Button>
+											<Button
+												type="button"
+												variant="unstyled"
+												size="none"
 												onClick={() =>
 													setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
 												}
-												className="sendTemplateMessage__section__provideFileChoices__choice"
+												className="sendTemplateMessage__section__provideFileChoices__choice whitespace-normal"
 											>
 												<LinkIcon />
 												<span>{t('Enter a link to file')}</span>
-											</ButtonBase>
+											</Button>
 										</div>
 									)}
 
@@ -286,11 +299,15 @@ const SendTemplateMessage: React.FC<Props> = ({
 										<div>
 											{headerFileURL && (
 												<div>
-													<Alert severity="success">
+													<Alert severity="success" className="mb-[10px]">
 														<AlertTitle>
 															{t('Uploaded successfully')}
 														</AlertTitle>
-														<a href={headerFileURL} target="_blank">
+														<a
+															href={headerFileURL}
+															target="_blank"
+															className="font-semibold break-all underline"
+														>
 															{headerFileURL}
 														</a>
 													</Alert>
@@ -308,12 +325,13 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 											<div className="sendTemplateMessage__section__uploadWrapper">
 												<Button
-													variant="contained"
+													variant="solid"
 													color="primary"
+													className="mr-[10px]"
 													onClick={() => headerFileInput.current?.click()}
 													disabled={isUploading}
-													startIcon={<PublishIcon />}
 												>
+													<PublishIcon fontSize="small" />
 													{getUploadLabel(
 														comp.format ?? '',
 														Boolean(headerFileURL)
@@ -322,8 +340,9 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 												{headerFileURL && (
 													<Button
-														variant="contained"
+														variant="solid"
 														color="secondary"
+														className="mr-[10px]"
 														onClick={() => setHeaderFileURL('')}
 													>
 														{t('Delete')}
@@ -333,7 +352,9 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 											<div className="sendTemplateMessage__section__provideFileOtherChoice">
 												<Button
+													variant="ghost"
 													color="secondary"
+													className="mr-[10px]"
 													onClick={() =>
 														setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
 													}
@@ -346,21 +367,27 @@ const SendTemplateMessage: React.FC<Props> = ({
 
 									{provideFileBy === FILE_PROVIDE_TYPE_FILE_URL && (
 										<div>
-											<TextField
-												variant="standard"
-												value={headerFileURL}
-												onChange={(event) =>
-													setHeaderFileURL(event.target.value)
-												}
-												label={t('Link to file')}
-												type="text"
-												autoFocus
-												fullWidth
-											/>
+											<Field className="gap-1">
+												<FieldLabel htmlFor={`${idPrefix}-file-url`}>
+													{t('Link to file')}
+												</FieldLabel>
+												<Input
+													id={`${idPrefix}-file-url`}
+													variant="underline"
+													value={headerFileURL}
+													onChange={(event) =>
+														setHeaderFileURL(event.target.value)
+													}
+													type="text"
+													autoFocus
+												/>
+											</Field>
 
 											<div className="sendTemplateMessage__section__provideFileOtherChoice">
 												<Button
+													variant="ghost"
 													color="secondary"
+													className="mr-[10px]"
 													onClick={() =>
 														setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
 													}
@@ -376,23 +403,35 @@ const SendTemplateMessage: React.FC<Props> = ({
 							{comp.text}
 							<div>
 								{getTemplateParams(comp.text).map((param, paramIndex) => (
-									<TextField
-										variant="standard"
-										multiline
-										value={
-											params[compIndex]
-												? params[compIndex][extractParameterKey(param) ?? '']
-														?.text
-												: ''
-										}
-										onChange={(event) =>
-											updateParam(event, compIndex, extractParameterKey(param))
-										}
-										className="templateMessage__param"
+									<Field
+										className="templateMessage__param gap-1"
 										key={paramIndex}
-										label={extractParameterKey(param)}
-										fullWidth={true}
-									/>
+									>
+										<FieldLabel
+											htmlFor={`${idPrefix}-${compIndex}-param-${paramIndex}`}
+										>
+											{extractParameterKey(param)}
+										</FieldLabel>
+										<Textarea
+											id={`${idPrefix}-${compIndex}-param-${paramIndex}`}
+											variant="underline"
+											rows={1}
+											className="min-h-0 resize-none py-1"
+											value={
+												params[compIndex]
+													? params[compIndex][extractParameterKey(param) ?? '']
+															?.text ?? ''
+													: ''
+											}
+											onChange={(event) =>
+												updateParam(
+													event,
+													compIndex,
+													extractParameterKey(param)
+												)
+											}
+										/>
+									</Field>
 								))}
 							</div>
 						</div>
@@ -401,36 +440,41 @@ const SendTemplateMessage: React.FC<Props> = ({
 							<div className="templateMessage__buttons">
 								{comp.buttons?.map((button: any, idx: number) => (
 									<div className="templateMessage__buttons--button" key={idx}>
-										<Button color="primary" variant="outlined" disabled>
+										<Button
+											variant="outline"
+											color="primary"
+											className="mr-[10px]"
+											disabled
+										>
 											{button.text}
 										</Button>
 
 										{getTemplateParams(button.url).map((param, paramIndex) => (
-											<TextField
+											<InputGroup
 												key={paramIndex}
-												InputProps={{
-													startAdornment: (
-														<InputAdornment position="start">
-															{button.url.replace(/\{\{[\d]+\}\}/g, '')}
-														</InputAdornment>
-													),
-												}}
-												variant="standard"
-												onChange={(event) =>
-													updateParam(
-														event,
-														compIndex,
-														extractParameterKey(param)
-													)
-												}
-												value={
-													params[compIndex]
-														? params[compIndex][
-																extractParameterKey(param) ?? ''
-														  ]?.text
-														: ''
-												}
-											/>
+												variant="underline"
+												className="inline-flex w-auto align-bottom"
+											>
+												<InputGroupAddon align="inline-start">
+													{button.url.replace(/\{\{[\d]+\}\}/g, '')}
+												</InputGroupAddon>
+												<InputGroupInput
+													onChange={(event) =>
+														updateParam(
+															event,
+															compIndex,
+															extractParameterKey(param)
+														)
+													}
+													value={
+														params[compIndex]
+															? params[compIndex][
+																	extractParameterKey(param) ?? ''
+															  ]?.text ?? ''
+															: ''
+													}
+												/>
+											</InputGroup>
 										))}
 									</div>
 								))}
@@ -441,6 +485,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 			))}
 			<Button
 				ref={sendButtonInnerRef}
+				variant="ghost"
 				onClick={sendAfterCheck}
 				className="hidden"
 			>

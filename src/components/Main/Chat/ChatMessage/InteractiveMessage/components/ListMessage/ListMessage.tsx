@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button } from '@mui/material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import * as Styled from './ListMessage.styles';
 
 const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
@@ -35,17 +35,13 @@ const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 			)}
 
 			{action?.button && (
-				<Button
-					variant="text"
-					fullWidth
-					startIcon={<FormatListBulletedIcon />}
-					endIcon={
-						isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />
-					}
+				<InteractiveMessageButton
 					onClick={() => setExpanded((prevState) => !prevState)}
 				>
+					<FormatListBulletedIcon />
 					{action.button}
-				</Button>
+					{isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+				</InteractiveMessageButton>
 			)}
 
 			{isSectionsVisible && sections && Array.isArray(sections) && (

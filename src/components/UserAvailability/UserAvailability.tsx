@@ -1,10 +1,10 @@
-import { Switch } from '@mui/material';
 import * as Styled from './UserAvailability.styles';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { AxiosError } from 'axios';
 import { updateUserAvailability } from '@src/api/usersApi';
 import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
+import { Switch } from '@src/components/ui/switch';
 
 const UserAvailability = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
@@ -48,7 +48,10 @@ const UserAvailability = () => {
 					event.stopPropagation();
 					toggleUserAvailability();
 				}}
-				color={isUserAvailable ? 'success' : 'warning'}
+				// MUI's success green when on (its warning colour only showed when
+				// on too, which never happens); the margins keep MUI's footprint
+				color="success"
+				className="my-[9px] mr-3"
 			/>
 		</Styled.Container>
 	);

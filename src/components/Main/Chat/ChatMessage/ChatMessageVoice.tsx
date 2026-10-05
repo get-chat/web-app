@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { IconButton } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import HeadsetIcon from '@mui/icons-material/Headset';
@@ -20,6 +19,7 @@ import {
 	hasAnyAudio,
 } from '@src/helpers/MessageHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import { Button } from '@src/components/ui/button';
 
 interface Props {
 	data: Message;
@@ -136,13 +136,20 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 	return (
 		<div className="chat__voiceWrapper">
 			<div className="chat__voice">
-				<IconButton onClick={playVoice} size="large">
+				{/* MUI's large IconButton with the 6px padding Chat.css gave it */}
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="none"
+					className="mr-[5px] rounded-full p-1.5"
+					onClick={playVoice}
+				>
 					{isPlaying ? (
 						<PauseIcon style={playIconStyles} />
 					) : (
 						<PlayArrowIcon style={playIconStyles} />
 					)}
-				</IconButton>
+				</Button>
 				<input
 					ref={range}
 					dir="ltr"

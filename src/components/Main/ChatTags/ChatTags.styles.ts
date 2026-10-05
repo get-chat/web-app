@@ -15,7 +15,7 @@ export const LoadingOverlay = styled.div`
 export const TagsContainer = styled.div`
 	margin-top: 12px;
 
-	.MuiChip-root {
+	[data-slot='badge'] {
 		margin-top: 5px;
 		margin-right: 5px;
 	}

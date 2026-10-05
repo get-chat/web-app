@@ -7,20 +7,22 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { Button } from '@src/components/ui/button';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import {
-	CircularProgress,
-	ClickAwayListener,
-	Collapse,
-	Divider,
-	Fade,
-	IconButton,
-	Link,
-	ListItemIcon,
-	Menu,
-	MenuItem,
-	Tooltip,
-	Zoom,
-} from '@mui/material';
+	Collapsible,
+	CollapsibleContent,
+} from '@src/components/ui/collapsible';
+import {
+	AnchoredDropdownMenu,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@src/components/ui/dropdown-menu';
+import { Spinner } from '@src/components/ui/spinner';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
 import {
@@ -214,9 +216,7 @@ const Sidebar: React.FC<Props> = ({
 	} = useChatFilters();
 
 	const { waId } = useParams();
-	const [anchorEl, setAnchorEl] = useState<(EventTarget & Element) | null>(
-		null
-	);
+	const [isMenuVisible, setMenuVisible] = useState(false);
 
 	const { handleCheckSettingsRefreshStatus, profilePhoto } = useSettings();
 
@@ -350,17 +350,13 @@ const Sidebar: React.FC<Props> = ({
 	};
 
 	const exportChats = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		dispatch(setSelectionModeEnabled(true));
 		dispatch(setExportChat(true));
 	};
 
-	const displayMenu = (event: MouseEvent) => {
-		setAnchorEl(event.currentTarget);
-	};
-
 	const hideMenu = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 	};
 
 	const abortControllerRef = useRef<AbortController | null>(null);
@@ -920,34 +916,34 @@ const Sidebar: React.FC<Props> = ({
 	};
 
 	const displayEditBusinessProfile = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		setBusinessProfileVisible(true);
 	};
 
 	const goToSettings = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		if (window.AndroidWebInterface) {
 			window.AndroidWebInterface.goToSettings();
 		}
 	};
 
 	const showChangePassword = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		setChangePasswordDialogVisible(true);
 	};
 
 	const showCreateUser = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		setCreateUserDialogVisible(true);
 	};
 
 	const showOpenInWhatsApp = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		setOpenInWhatsAppDialogVisible(true);
 	};
 
 	const showChatTagsList = () => {
-		setAnchorEl(null);
+		setMenuVisible(false);
 		setChatTagsListVisible(true);
 	};
 
@@ -982,15 +978,15 @@ const Sidebar: React.FC<Props> = ({
 		<Styled.Sidebar $isHidden={isChatOnly}>
 			<Styled.Header>
 				<Styled.SessionContainer>
-					<Tooltip title={t('Business Profile')} disableInteractive>
+					<SimpleTooltip title={t('Business Profile')} disableHoverableContent>
 						<div>
 							<Styled.BusinessAvatar
 								onClick={() => setBusinessProfileVisible(true)}
 								profilePhoto={profilePhoto}
 							/>
 						</div>
-					</Tooltip>
-					<Tooltip title={currentUser?.username} disableInteractive>
+					</SimpleTooltip>
+					<SimpleTooltip title={currentUser?.username} disableHoverableContent>
 						<div>
 							<Styled.UserAvatar
 								generateBgColorBy={currentUser?.username}
@@ -1001,52 +997,129 @@ const Sidebar: React.FC<Props> = ({
 									: ''}
 							</Styled.UserAvatar>
 						</div>
-					</Tooltip>
+					</SimpleTooltip>
 				</Styled.SessionContainer>
 
 				<Styled.HeaderRight>
 					{!isReadOnly && !isUserActionsRestricted && (
-						<Tooltip title={t('New chat')} disableInteractive>
-							<IconButton
+						<SimpleTooltip title={t('New chat')} disableHoverableContent>
+							<Button
+								variant="ghost"
+								color="neutral"
+								size="icon-xl"
 								onClick={displayContacts}
 								data-test-id="new-chat"
-								size="large"
 							>
 								<ChatIcon />
-							</IconButton>
-						</Tooltip>
+							</Button>
+						</SimpleTooltip>
 					)}
-					<Tooltip title={t('Notifications')} disableInteractive>
-						<IconButton onClick={displayNotifications} size="large">
-							<NotificationsIcon />
-						</IconButton>
-					</Tooltip>
-					<Tooltip title={t('Users')} disableInteractive>
-						<IconButton onClick={displayUserList} size="large">
-							<GroupIcon />
-						</IconButton>
-					</Tooltip>
-					{currentUser?.profile?.role === 'admin' && (
-						<Tooltip title={t('Admin panel')} disableInteractive>
-							<Styled.AdminPanelButton
-								component="a"
-								href={getHubURL(config?.API_BASE_URL ?? '')}
-								target="_blank"
-								size="large"
-							>
-								<AdminPanelSettingsIcon />
-							</Styled.AdminPanelButton>
-						</Tooltip>
-					)}
-					<Tooltip title={t('Options')} disableInteractive>
-						<IconButton
-							onClick={displayMenu}
-							data-test-id="options"
-							size="large"
+					<SimpleTooltip title={t('Notifications')} disableHoverableContent>
+						<Button
+							variant="ghost"
+							color="neutral"
+							size="icon-xl"
+							onClick={displayNotifications}
 						>
-							<MoreVertIcon />
-						</IconButton>
-					</Tooltip>
+							<NotificationsIcon />
+						</Button>
+					</SimpleTooltip>
+					<SimpleTooltip title={t('Users')} disableHoverableContent>
+						<Button
+							variant="ghost"
+							color="neutral"
+							size="icon-xl"
+							onClick={displayUserList}
+						>
+							<GroupIcon />
+						</Button>
+					</SimpleTooltip>
+					{currentUser?.profile?.role === 'admin' && (
+						<SimpleTooltip title={t('Admin panel')} disableHoverableContent>
+							<Styled.AdminPanelButton
+								asChild
+								variant="ghost"
+								color="neutral"
+								size="icon-xl"
+							>
+								<a href={getHubURL(config?.API_BASE_URL ?? '')} target="_blank">
+									<AdminPanelSettingsIcon />
+								</a>
+							</Styled.AdminPanelButton>
+						</SimpleTooltip>
+					)}
+					<DropdownMenu open={isMenuVisible} onOpenChange={setMenuVisible}>
+						<SimpleTooltip title={t('Options')} disableHoverableContent>
+							<DropdownMenuTrigger asChild>
+								<Button
+									variant="ghost"
+									color="neutral"
+									size="icon-xl"
+									data-test-id="options"
+								>
+									<MoreVertIcon />
+								</Button>
+							</DropdownMenuTrigger>
+						</SimpleTooltip>
+						<DropdownMenuContent align="end">
+							<Styled.RefreshMenuItem onSelect={() => window.location.reload()}>
+								{t('Refresh')}
+							</Styled.RefreshMenuItem>
+							{!isReadOnly && (
+								<DropdownMenuItem onSelect={showChangePassword}>
+									<PasswordIcon />
+									{t('Change password')}
+								</DropdownMenuItem>
+							)}
+							<DropdownMenuItem onSelect={forceClearContactProvidersData}>
+								<CloudSyncIcon />
+								{t('Refresh contacts')}
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onSelect={showOpenInWhatsApp}>
+								<QrCode />
+								{t('Open in WhatsApp')}
+							</DropdownMenuItem>
+							{/*<DropdownMenuSeparator />
+							<DropdownMenuItem onSelect={exportChats}>
+								<FileDownloadIcon />
+								{t('Export chats')}
+							</DropdownMenuItem>*/}
+							{currentUser?.profile?.role === 'admin' && (
+								<DropdownMenuSeparator />
+							)}
+							{currentUser?.profile?.role === 'admin' && !isReadOnly && (
+								<DropdownMenuItem
+									onSelect={showCreateUser}
+									data-test-id="create-user-button"
+								>
+									<PersonAddAltIcon />
+									{t('Create new user')}
+								</DropdownMenuItem>
+							)}
+							{currentUser?.profile?.role === 'admin' && (
+								<DropdownMenuItem asChild>
+									<a
+										href={getHubURL(config?.API_BASE_URL ?? '')}
+										target="_blank"
+									>
+										<AdminPanelSettingsIcon />
+										{t('Admin panel')}
+									</a>
+								</DropdownMenuItem>
+							)}
+							{isMobile && (
+								<DropdownMenuItem onSelect={goToSettings}>
+									{t('Settings (App Only)')}
+								</DropdownMenuItem>
+							)}
+							<DropdownMenuSeparator />
+							<DropdownMenuItem onSelect={logOut} data-test-id="logout-button">
+								<LogoutIcon />
+								{t('Logout')}
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</Styled.HeaderRight>
 			</Styled.Header>
 
@@ -1085,67 +1158,72 @@ const Sidebar: React.FC<Props> = ({
 				}}
 			>
 				<Styled.SearchOrFilterGroup $isExpanded={isForceDisplayFilters}>
-					<Collapse in={Boolean(isAnyActiveFilter || keyword)}>
-						<Styled.FilterGroup $isActive={true}>
-							{filterUnread && (
-								<FilterOption
-									icon={<MarkChatUnreadIcon />}
-									label={t('Unread')}
-									onClick={() => setFilterUnread(false)}
-									isActive
-								/>
-							)}
-							{filterAssignedToMe && (
-								<FilterOption
-									icon={<PersonIcon />}
-									label={t('Assigned to me')}
-									onClick={() => setFilterAssignedToMe(false)}
-									isActive
-								/>
-							)}
-							{filterAssignedGroupId && (
-								<FilterOption
-									icon={<GroupIcon />}
-									label={groups[filterAssignedGroupId]?.name ?? t('Unknown')}
-									onClick={() => setFilterAssignedGroupId(undefined)}
-									isActive
-								/>
-							)}
-							{filterTagId && (
-								<FilterOption
-									icon={<SellIcon />}
-									label={
-										tags?.filter((item) => item.id === filterTagId)?.[0]
-											?.name ?? t('Unknown')
-									}
-									onClick={() => dispatch(setFilterTagId(undefined))}
-									isActive
-								/>
-							)}
-							{filterStartDate && (
-								<FilterOption
-									icon={<DateRangeIcon />}
-									label={formatDateRangeFilters(filterStartDate, filterEndDate)}
-									onClick={() => {
-										setFilterStartDate(undefined);
-										setFilterEndDate(undefined);
-									}}
-									isActive
-								/>
-							)}
-							{Object.entries(dynamicFilters).map((item) => (
-								<FilterOption
-									key={item[0]}
-									icon={<FilterListIcon />}
-									label={`${item[0].slice(CHAT_FILTER_PREFIX.length)}: ${
-										item[1]
-									}`}
-									onClick={() => removeDynamicFilter(item[0])}
-									isActive
-								/>
-							))}
-						</Styled.FilterGroup>
-					</Collapse>
+					<Collapsible open={Boolean(isAnyActiveFilter || keyword)}>
+						<CollapsibleContent>
+							<Styled.FilterGroup $isActive={true}>
+								{filterUnread && (
+									<FilterOption
+										icon={<MarkChatUnreadIcon />}
+										label={t('Unread')}
+										onClick={() => setFilterUnread(false)}
+										isActive
+									/>
+								)}
+								{filterAssignedToMe && (
+									<FilterOption
+										icon={<PersonIcon />}
+										label={t('Assigned to me')}
+										onClick={() => setFilterAssignedToMe(false)}
+										isActive
+									/>
+								)}
+								{filterAssignedGroupId && (
+									<FilterOption
+										icon={<GroupIcon />}
+										label={groups[filterAssignedGroupId]?.name ?? t('Unknown')}
+										onClick={() => setFilterAssignedGroupId(undefined)}
+										isActive
+									/>
+								)}
+								{filterTagId && (
+									<FilterOption
+										icon={<SellIcon />}
+										label={
+											tags?.filter((item) => item.id === filterTagId)?.[0]
+												?.name ?? t('Unknown')
+										}
+										onClick={() => dispatch(setFilterTagId(undefined))}
+										isActive
+									/>
+								)}
+								{filterStartDate && (
+									<FilterOption
+										icon={<DateRangeIcon />}
+										label={formatDateRangeFilters(
+											filterStartDate,
+											filterEndDate
+										)}
+										onClick={() => {
+											setFilterStartDate(undefined);
+											setFilterEndDate(undefined);
+										}}
+										isActive
+									/>
+								)}
+								{Object.entries(dynamicFilters).map((item) => (
+									<FilterOption
+										key={item[0]}
+										icon={<FilterListIcon />}
+										label={`${item[0].slice(CHAT_FILTER_PREFIX.length)}: ${
+											item[1]
+										}`}
+										onClick={() => removeDynamicFilter(item[0])}
+										isActive
+									/>
+								))}
+							</Styled.FilterGroup>
+						</CollapsibleContent>
+					</Collapsible>
 
 					<SearchBar
 						value={keyword}
@@ -1155,8 +1233,8 @@ const Sidebar: React.FC<Props> = ({
 						isFocusStyleEnabled={false}
 					/>
 
-					<Collapse in={isForceDisplayFilters}>
-						<>
+					<Collapsible open={isForceDisplayFilters}>
+						<CollapsibleContent>
 							<Styled.FilterGroup $isAll={true}>
 								{!filterUnread && (
 									<FilterOption
@@ -1201,7 +1279,9 @@ const Sidebar: React.FC<Props> = ({
 
 							{(keyword || isAnyActiveFilter) && (
 								<Styled.ChatsCount>
-									{isLoadingChats && <CircularProgress size={14} />}
+									{isLoadingChats && (
+										<Spinner size={14} className="text-primary" />
+									)}
 									{isLoadingChats ? (
 										t('Loading chats')
 									) : (
@@ -1217,65 +1297,58 @@ const Sidebar: React.FC<Props> = ({
 									)}
 								</Styled.ChatsCount>
 							)}
-						</>
-					</Collapse>
+						</CollapsibleContent>
+					</Collapsible>
 
-					<Menu
+					<AnchoredDropdownMenu
 						anchorEl={tagsMenuAnchorEl}
-						open={Boolean(tagsMenuAnchorEl)}
 						onClose={() => setTagsMenuAnchorEl(undefined)}
-						elevation={3}
+						align="start"
 					>
 						{tags &&
 							tags.slice(0, 10).map((tag: Tag) => (
-								<MenuItem
-									onClick={() => {
+								<DropdownMenuItem
+									onSelect={() => {
 										dispatch(setFilterTagId(tag.id));
 										setTagsMenuAnchorEl(undefined);
 									}}
 									key={tag.id}
 								>
-									<ListItemIcon>
-										<SellIcon
-											style={{
-												fill: tag.web_inbox_color,
-											}}
-										/>
-									</ListItemIcon>
+									<SellIcon
+										style={{
+											fill: tag.web_inbox_color,
+										}}
+									/>
 									{tag.name}
-								</MenuItem>
+								</DropdownMenuItem>
 							))}
-						<Divider />
+						<DropdownMenuSeparator />
 						{tags && tags.length > 10 && (
-							<MenuItem
-								onClick={() => {
+							<DropdownMenuItem
+								onSelect={() => {
 									showChatTagsList();
 									setTagsMenuAnchorEl(undefined);
 								}}
 							>
-								<ListItemIcon>
-									<UnfoldMoreIcon />
-								</ListItemIcon>
+								<UnfoldMoreIcon />
 								{t('More')}
-							</MenuItem>
+							</DropdownMenuItem>
 						)}
-						<MenuItem
-							component={Link}
-							href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
-							target="_blank"
-						>
-							<ListItemIcon>
+						<DropdownMenuItem asChild>
+							<a
+								href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
+								target="_blank"
+							>
 								<SettingsIcon />
-							</ListItemIcon>
-							{t('Manage tags')}
-						</MenuItem>
-					</Menu>
+								{t('Manage tags')}
+							</a>
+						</DropdownMenuItem>
+					</AnchoredDropdownMenu>
 
-					<Menu
+					<AnchoredDropdownMenu
 						anchorEl={groupsMenuAnchorEl}
-						open={Boolean(groupsMenuAnchorEl)}
 						onClose={() => setGroupsMenuAnchorEl(undefined)}
-						elevation={3}
+						align="start"
 					>
 						{groups &&
 							Object.values(groups)
@@ -1285,17 +1358,17 @@ const Sidebar: React.FC<Props> = ({
 									)
 								)
 								.map((group: Group) => (
-									<MenuItem
-										onClick={() => {
+									<DropdownMenuItem
+										onSelect={() => {
 											setFilterAssignedGroupId(group.id);
 											setGroupsMenuAnchorEl(undefined);
 										}}
 										key={group.id}
 									>
 										{group.name}
-									</MenuItem>
+									</DropdownMenuItem>
 								))}
-					</Menu>
+					</AnchoredDropdownMenu>
 
 					{/* Filter or export by date range */}
 					<DateRangeDialog
@@ -1420,15 +1493,13 @@ const Sidebar: React.FC<Props> = ({
 					)}
 			</Styled.ResultsContainer>
 
-			<Fade in={isLoadingMoreChats} unmountOnExit>
-				<Styled.LoadingMore>
-					<Zoom in={isLoadingMoreChats}>
-						<Styled.LoadingMoreWrapper>
-							<CircularProgress size={28} />
-						</Styled.LoadingMoreWrapper>
-					</Zoom>
+			{isLoadingMoreChats && (
+				<Styled.LoadingMore className="animate-in fade-in-0">
+					<Styled.LoadingMoreWrapper className="animate-in zoom-in-95 fade-in-0">
+						<Spinner size={28} className="text-primary" />
+					</Styled.LoadingMoreWrapper>
 				</Styled.LoadingMore>
-			</Fade>
+			)}
 
 			{contactsTransition.isMounted && (
 				<StartChat
@@ -1467,78 +1538,6 @@ const Sidebar: React.FC<Props> = ({
 					chats={chats}
 				/>
 			)}
-
-			<Menu
-				anchorEl={anchorEl}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				open={Boolean(anchorEl)}
-				onClose={hideMenu}
-				elevation={3}
-			>
-				<Styled.RefreshMenuItem onClick={() => window.location.reload()}>
-					{t('Refresh')}
-				</Styled.RefreshMenuItem>
-				{!isReadOnly && (
-					<MenuItem onClick={showChangePassword}>
-						<ListItemIcon>
-							<PasswordIcon />
-						</ListItemIcon>
-						{t('Change password')}
-					</MenuItem>
-				)}
-				<MenuItem onClick={forceClearContactProvidersData}>
-					<ListItemIcon>
-						<CloudSyncIcon />
-					</ListItemIcon>
-					{t('Refresh contacts')}
-				</MenuItem>
-				<Divider />
-				<MenuItem onClick={showOpenInWhatsApp}>
-					<ListItemIcon>
-						<QrCode />
-					</ListItemIcon>
-					{t('Open in WhatsApp')}
-				</MenuItem>
-				{/*<Divider />
-				<MenuItem onClick={exportChats}>
-					<ListItemIcon>
-						<FileDownloadIcon />
-					</ListItemIcon>
-					{t('Export chats')}
-				</MenuItem>*/}
-				{currentUser?.profile?.role === 'admin' && <Divider />}
-				{currentUser?.profile?.role === 'admin' && !isReadOnly && (
-					<MenuItem onClick={showCreateUser} data-test-id="create-user-button">
-						<ListItemIcon>
-							<PersonAddAltIcon />
-						</ListItemIcon>
-						{t('Create new user')}
-					</MenuItem>
-				)}
-				{currentUser?.profile?.role === 'admin' && (
-					<MenuItem
-						component={Link}
-						href={getHubURL(config?.API_BASE_URL ?? '')}
-						target="_blank"
-					>
-						<ListItemIcon>
-							<AdminPanelSettingsIcon />
-						</ListItemIcon>
-						{t('Admin panel')}
-					</MenuItem>
-				)}
-				{isMobile && (
-					<MenuItem onClick={goToSettings}>{t('Settings (App Only)')}</MenuItem>
-				)}
-				<Divider />
-				<MenuItem onClick={logOut} data-test-id="logout-button">
-					<ListItemIcon>
-						<LogoutIcon />
-					</ListItemIcon>
-					{t('Logout')}
-				</MenuItem>
-			</Menu>
 
 			<ChangePasswordDialog
 				open={isChangePasswordDialogVisible}

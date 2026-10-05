@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button, IconButton } from '@mui/material';
 import { ArrowBack } from '@mui/icons-material';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
@@ -7,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import * as Styled from '../Main/Sidebar/BusinessProfile/BusinessProfile.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -30,9 +30,9 @@ const UserProfile: React.FC<Props> = ({
 			onAnimationEnd={onAnimationEnd}
 		>
 			<Styled.Header>
-				<IconButton onClick={onHide} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
 					<ArrowBack />
-				</IconButton>
+				</Button>
 
 				<h3>{t('Profile')}</h3>
 			</Styled.Header>
@@ -67,8 +67,9 @@ const UserProfile: React.FC<Props> = ({
 							{!isReadOnly && (
 								<Styled.ChangePasswordContainer>
 									<Button
-										onClick={() => setChangePasswordDialogVisible(true)}
+										variant="ghost"
 										color="secondary"
+										onClick={() => setChangePasswordDialogVisible(true)}
 									>
 										{t('Change password')}
 									</Button>

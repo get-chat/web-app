@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { ListItemIcon, Menu, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { download } from '@src/helpers/DownloadHelper';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -9,6 +8,10 @@ import {
 	generateAudioLink,
 	generateVideoLink,
 } from '@src/helpers/MessageHelper';
+import {
+	AnchoredDropdownMenu,
+	DropdownMenuItem,
+} from '@src/components/ui/dropdown-menu';
 
 interface Props {
 	optionsChatMessage?: Message | undefined;
@@ -76,44 +79,34 @@ const ChatMessageOptionsMenu: React.FC<Props> = ({
 	};
 
 	return (
-		<Menu
+		<AnchoredDropdownMenu
 			anchorEl={menuAnchorEl}
-			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-			open={Boolean(menuAnchorEl)}
 			onClose={hideMenu}
-			elevation={3}
-			disableAutoFocusItem={true}
+			align="end"
 		>
-			{/*<MenuItem>Delete</MenuItem>*/}
+			{/*<DropdownMenuItem>Delete</DropdownMenuItem>*/}
 
 			{optionsChatMessage &&
 				optionsChatMessage.waba_payload?.type === MessageType.text &&
 				optionsChatMessage.from_us && (
-					<MenuItem onClick={handleCreateSavedResponse}>
-						<ListItemIcon>
-							<MarkChatReadIcon />
-						</ListItemIcon>
+					<DropdownMenuItem onSelect={handleCreateSavedResponse}>
+						<MarkChatReadIcon />
 						{t('Save as quick reply')}
-					</MenuItem>
+					</DropdownMenuItem>
 				)}
 			{hasVideo && (
-				<MenuItem onClick={downloadVideo}>
-					<ListItemIcon>
-						<DownloadIcon />
-					</ListItemIcon>
+				<DropdownMenuItem onSelect={downloadVideo}>
+					<DownloadIcon />
 					{t('Download')}
-				</MenuItem>
+				</DropdownMenuItem>
 			)}
 			{hasAudio && (
-				<MenuItem onClick={downloadAudio}>
-					<ListItemIcon>
-						<DownloadIcon />
-					</ListItemIcon>
+				<DropdownMenuItem onSelect={downloadAudio}>
+					<DownloadIcon />
 					{t('Download')}
-				</MenuItem>
+				</DropdownMenuItem>
 			)}
-		</Menu>
+		</AnchoredDropdownMenu>
 	);
 };
 

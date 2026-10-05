@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TextField } from '@mui/material';
+import { Field } from '@src/components/ui/field';
 
 export const Row = styled.div`
 	display: flex;
@@ -13,11 +13,12 @@ export const CountryControl = styled.div`
 	flex-shrink: 0;
 `;
 
-export const CountryTrigger = styled(TextField)`
+export const CountryTrigger = styled(Field)`
 	width: 100%;
 
-	.MuiInputBase-root,
-	.MuiInputBase-input {
+	[data-slot='input-group'],
+	[data-slot='input-group-addon'],
+	input {
 		cursor: pointer;
 		caret-color: transparent;
 	}
@@ -35,8 +36,9 @@ export const CountryTrigger = styled(TextField)`
 	}
 `;
 
-export const NationalNumberField = styled(TextField)`
+export const NationalNumberField = styled(Field)`
 	flex: 1;
+	min-width: 0;
 `;
 
 export const Option = styled.span`
@@ -62,6 +64,37 @@ export const Option = styled.span`
 	}
 `;
 
+// A row of the countries list, like MUI's MenuItem
+export const OptionButton = styled.button`
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 36px;
+	padding: 6px 16px;
+	border: 0;
+	background: transparent;
+	font: inherit;
+	font-size: 1rem;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	outline: none;
+
+	&:hover,
+	&:focus-visible {
+		background-color: rgba(0, 0, 0, 0.04);
+	}
+
+	&[aria-selected='true'] {
+		background-color: var(--color-primary-transparent);
+	}
+
+	&[aria-selected='true']:hover,
+	&[aria-selected='true']:focus-visible {
+		background-color: var(--color-primary-transparent-darker);
+	}
+`;
+
 // Fixed header of the dropdown — sits above the scrollable options.
 export const SearchHeader = styled.div`
 	padding: 10px 12px;
@@ -72,7 +105,7 @@ export const SearchHeader = styled.div`
 	}
 `;
 
-// Only the options list scrolls; the rounded Paper clips its scrollbar.
+// Only the options list scrolls; the rounded popover clips its scrollbar.
 export const OptionsScroller = styled.div`
 	max-height: 320px;
 	overflow-y: auto;

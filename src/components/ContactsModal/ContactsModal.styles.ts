@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { DialogTitle, DialogContent } from '@mui/material';
+import { DialogBody, DialogTitle } from '@src/components/ui/dialog';
 
 export const StyledDialogTitle = styled(DialogTitle)`
 	&& {
@@ -9,11 +9,9 @@ export const StyledDialogTitle = styled(DialogTitle)`
 	}
 `;
 
-export const StyledDialogContent = styled(DialogContent).attrs({
-	className: 'MuiDialogContent-root noPadding',
-})`
+export const StyledDialogBody = styled(DialogBody)`
 	&& {
-		padding: 0 !important;
+		padding: 0;
 		flex: 1;
 		display: flex;
 		flex-direction: column;

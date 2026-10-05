@@ -1,13 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	IconButton,
-	Tooltip,
-} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { displaySeconds } from '@src/helpers/Helpers';
@@ -20,7 +11,17 @@ import {
 } from '@src/Constants';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
-import Button from '@mui/material/Button';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import * as Styled from './VoiceRecord.styles';
@@ -31,7 +32,7 @@ interface Props {
 	sendHandledChosenFiles: (data: ChosenFileList) => void;
 }
 
-let timerIntervalId: NodeJS.Timer;
+let timerIntervalId: ReturnType<typeof setInterval>;
 
 const VoiceRecord: React.FC<Props> = ({
 	voiceRecordCase,
@@ -197,36 +198,47 @@ const VoiceRecord: React.FC<Props> = ({
 
 	return (
 		<Styled.Container>
-			<Tooltip title={t('Cancel')} placement="top" disableInteractive>
-				<Styled.CancelButton onClick={stopVoiceRecord} size="small">
+			<SimpleTooltip title={t('Cancel')} side="top" disableHoverableContent>
+				<Styled.CancelButton onClick={stopVoiceRecord}>
 					<CloseIcon />
 				</Styled.CancelButton>
-			</Tooltip>
+			</SimpleTooltip>
 
 			<Styled.RecordIcon />
 			<Styled.Timer>{displaySeconds(timer)}</Styled.Timer>
 
-			<Tooltip title={t('Send')} placement="top" disableInteractive>
-				<Styled.SendButton onClick={sendVoiceRecord} size="small">
+			<SimpleTooltip title={t('Send')} side="top" disableHoverableContent>
+				<Styled.SendButton onClick={sendVoiceRecord}>
 					<DoneIcon />
 				</Styled.SendButton>
-			</Tooltip>
+			</SimpleTooltip>
 
-			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>{t('Oops!')}</DialogTitle>
+			<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
 				<DialogContent>
-					<DialogContentText>
-						{t('You must open the inbox in a new tab to access this feature.')}
-					</DialogContentText>
+					<DialogHeader>
+						<DialogTitle>{t('Oops!')}</DialogTitle>
+					</DialogHeader>
+					<DialogBody>
+						<DialogDescription>
+							{t(
+								'You must open the inbox in a new tab to access this feature.'
+							)}
+						</DialogDescription>
+					</DialogBody>
+					<DialogFooter>
+						<Button variant="ghost" color="secondary" onClick={handleClose}>
+							{t('Close')}
+						</Button>
+						<Button
+							variant="ghost"
+							color="primary"
+							onClick={goToInbox}
+							autoFocus
+						>
+							{t('Go to inbox')}
+						</Button>
+					</DialogFooter>
 				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="secondary">
-						{t('Close')}
-					</Button>
-					<Button onClick={goToInbox} color="primary" autoFocus>
-						{t('Go to inbox')}
-					</Button>
-				</DialogActions>
 			</Dialog>
 		</Styled.Container>
 	);

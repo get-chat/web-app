@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 import {
 	overlayPanelTransition,
 	PanelTransitionStyleProps,
@@ -54,14 +54,20 @@ export const Actions = styled.div`
 export const CreateUserButton = styled(Button)`
 	&& {
 		justify-content: flex-start;
+		gap: 8px;
+		width: 100%;
+		height: auto;
 		padding: 11px 15px;
 		font-size: 14px;
 		color: var(--default-text-color);
 		background-color: white;
 		border: 1px solid var(--gray-light);
 
-		.MuiButton-startIcon {
-			color: var(--color-primary);
+		.MuiSvgIcon-root {
+			width: 20px;
+			height: 20px;
+			/* App.css greys every MUI icon outside MUI buttons */
+			color: var(--color-primary) !important;
 		}
 
 		&:hover {
@@ -69,7 +75,7 @@ export const CreateUserButton = styled(Button)`
 			box-shadow: inset 0 0 0 1px var(--color-primary), var(--shadow-md);
 		}
 	}
-` as typeof Button;
+`;
 
 export const Hint = styled.div`
 	display: flex;

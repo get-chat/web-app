@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ChatMessageImage from '../ChatMessageImage';
 import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
-import { Tooltip } from '@mui/material';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { Message } from '@src/types/messages';
 import {
@@ -69,15 +69,16 @@ const ChatMessageReferral: React.FC<Props> = ({
 					)}
 				</div>
 				<Styled.ReferralBody onClick={goToSourceURL}>
-					<Tooltip
+					<SimpleTooltip
 						title={referral.source_id}
-						placement="top-start"
-						disableInteractive
+						side="top"
+						align="start"
+						disableHoverableContent
 					>
 						<h4>
 							<PrintMessage message={referral.headline} linkify={true} />
 						</h4>
-					</Tooltip>
+					</SimpleTooltip>
 					<Styled.ReferralTextBody>
 						<PrintMessage message={referral.body} linkify={true} />
 					</Styled.ReferralTextBody>

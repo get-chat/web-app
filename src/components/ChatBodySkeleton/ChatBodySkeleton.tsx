@@ -107,14 +107,14 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 					case 'date':
 						return (
 							<Styled.CenteredRow $isDate key={index}>
-								<Styled.Pill width={96} height={29} />
+								<Styled.Pill style={{ width: 96, height: 29 }} />
 							</Styled.CenteredRow>
 						);
 					case 'event':
 						return (
 							<Styled.CenteredRow key={index}>
-								<Styled.Pill width={row.width} height={row.height} />
-								<Styled.EventTimestamp width={32} />
+								<Styled.Pill style={{ width: row.width, height: row.height }} />
+								<Styled.EventTimestamp style={{ width: 32 }} />
 							</Styled.CenteredRow>
 						);
 					case 'group':
@@ -122,15 +122,14 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 							<Fragment key={index}>
 								<Styled.SenderName
 									$isOutgoing={row.isOutgoing}
-									width={row.nameWidth}
+									style={{ width: row.nameWidth }}
 								/>
 								{row.bubbles.map((bubble, bubbleIndex) => (
 									<Styled.Bubble
 										key={bubbleIndex}
 										$isOutgoing={row.isOutgoing}
 										$isFirstInGroup={bubbleIndex === 0}
-										width={bubble.width}
-										height={bubble.height}
+										style={{ width: bubble.width, height: bubble.height }}
 									/>
 								))}
 							</Fragment>

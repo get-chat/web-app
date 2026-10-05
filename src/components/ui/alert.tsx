@@ -15,7 +15,7 @@ import { Button } from '@src/components/ui/button';
  * MUI's variant="standard" is "soft" here.
  */
 const alertVariants = cva(
-	'relative flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-sm',
+	'relative flex w-full items-start gap-3 rounded-[12px] border px-4 py-3 text-sm [&_a]:font-semibold [&_a]:underline',
 	{
 		variants: {
 			severity: {
@@ -30,7 +30,7 @@ const alertVariants = cva(
 				outline:
 					'border-(--alert)/50 bg-background text-foreground [&_[data-slot=alert-icon]_svg]:text-(color:--alert)!',
 				filled:
-					'border-transparent bg-(--alert) text-white [&_svg]:text-white! [&_[data-slot=alert-description]]:text-white/90',
+					'border-transparent bg-(--alert) text-white [&_a]:text-white [&_svg]:text-white! [&_[data-slot=alert-description]]:text-white/90',
 			},
 		},
 		defaultVariants: {

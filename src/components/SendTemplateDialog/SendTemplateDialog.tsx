@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
 import SendTemplateMessage from '@src/components/SendTemplateDialog/SendTemplateMessage';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import DialogActions from '@mui/material/DialogActions';
-import { Button } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
+import { Alert, AlertTitle } from '@src/components/ui/alert';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
 import { useTranslation } from 'react-i18next';
 import { generateTemplateMessagePayload } from '@src/helpers/ChatHelper';
 import PubSub from 'pubsub-js';
@@ -41,7 +44,7 @@ const SendTemplateDialog: React.FC<Props> = ({
 	const [errors, setErrors] = useState<string[]>();
 	const [sentTemplateMessage, setSentTemplateMessage] = useState<Template>();
 
-	const dialogContentRef = useRef<HTMLDivElement>();
+	const dialogContentRef = useRef<HTMLDivElement>(null);
 	const sendButtonRef = useRef<HTMLButtonElement>();
 
 	useEffect(() => {
@@ -123,43 +126,48 @@ const SendTemplateDialog: React.FC<Props> = ({
 	}
 
 	return (
-		<Dialog open={isVisible} onClose={close}>
-			<DialogTitle>{t('Send a template message')}</DialogTitle>
-			<DialogContent ref={dialogContentRef}>
-				<SendTemplateMessage
-					data={chosenTemplate}
-					send={(template: Template) => sendAction(template)}
-					setSending={setSending}
-					setErrors={setErrors}
-					// @ts-ignore
-					sendButtonInnerRef={sendButtonRef}
-				/>
+		<Dialog open={isVisible} onOpenChange={(isOpen) => !isOpen && close()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>{t('Send a template message')}</DialogTitle>
+				</DialogHeader>
+				<DialogBody ref={dialogContentRef}>
+					<SendTemplateMessage
+						data={chosenTemplate}
+						send={(template: Template) => sendAction(template)}
+						setSending={setSending}
+						setErrors={setErrors}
+						// @ts-ignore
+						sendButtonInnerRef={sendButtonRef}
+					/>
 
-				{errors && (
-					<div className="templateMessagesDialogErrors">
-						{errors.map((err: any, index) => (
-							<Alert key={index} severity="error">
-								<AlertTitle>{err.title}</AlertTitle>
-								{err.details}
-							</Alert>
-						))}
-					</div>
-				)}
+					{errors && (
+						<div className="templateMessagesDialogErrors">
+							{errors.map((err: any, index) => (
+								<Alert key={index} severity="error" className="mb-[5px]">
+									<AlertTitle>{err.title}</AlertTitle>
+									{err.details}
+								</Alert>
+							))}
+						</div>
+					)}
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+					<Button
+						variant="ghost"
+						color="primary"
+						onClick={sendByRef}
+						disabled={isSending}
+						autoFocus
+						data-test-id="send-template-message-button"
+					>
+						{t('Send')}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-				<Button
-					onClick={sendByRef}
-					color="primary"
-					disabled={isSending}
-					autoFocus
-					data-test-id="send-template-message-button"
-				>
-					{t('Send')}
-				</Button>
-			</DialogActions>
 		</Dialog>
 	);
 };

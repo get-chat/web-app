@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Styled from './SearchMessage.styles';
-import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
@@ -16,6 +15,7 @@ import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
 import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
 
 export type Props = {
 	initialKeyword: string;
@@ -135,9 +135,9 @@ const SearchMessage: React.FC<Props> = ({
 			onAnimationEnd={onAnimationEnd}
 		>
 			<Styled.Header>
-				<IconButton onClick={close} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={close}>
 					<CloseIcon />
-				</IconButton>
+				</Button>
 
 				<h3>{t('Search For Messages')}</h3>
 			</Styled.Header>

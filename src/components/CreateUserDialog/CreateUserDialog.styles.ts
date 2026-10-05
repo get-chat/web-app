@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import { Dialog } from '@mui/material';
+import { DialogContent } from '@src/components/ui/dialog';
 
-export const StyledDialog = styled(Dialog)`
-	.MuiAlert-root {
+export const StyledDialogContent = styled(DialogContent)`
+	[data-slot='alert'] {
 		margin-top: 10px;
 	}
 `;

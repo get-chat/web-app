@@ -1,13 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-	Button,
-	FormControl,
-	IconButton,
-	InputLabel,
-	MenuItem,
-	Select,
-	TextField,
-} from '@mui/material';
+import React, { useContext, useEffect, useId, useRef, useState } from 'react';
 import { ArrowBack, QrCode } from '@mui/icons-material';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
@@ -30,6 +21,20 @@ import {
 import api from '@src/api/axiosInstance';
 import { setState } from '@src/store/reducers/UIReducer';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import { Textarea } from '@src/components/ui/textarea';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@src/components/ui/select';
+
+// Radix's Select doesn't allow an empty value, "None" maps back to ''
+const VERTICAL_NONE = '__none__';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -57,6 +62,8 @@ const BusinessProfile: React.FC<Props> = ({
 	const isAdmin = currentUser?.profile?.role === 'admin';
 
 	const { t } = useTranslation();
+
+	const id = useId();
 
 	const [isLoaded, setLoaded] = useState(false);
 	const [isUpdating, setUpdating] = useState(false);
@@ -224,9 +231,9 @@ const BusinessProfile: React.FC<Props> = ({
 			onAnimationEnd={onAnimationEnd}
 		>
 			<Styled.Header>
-				<IconButton onClick={onHide} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
 					<ArrowBack />
-				</IconButton>
+				</Button>
 				<h3>{t('Business Profile')}</h3>
 			</Styled.Header>
 
@@ -273,7 +280,11 @@ const BusinessProfile: React.FC<Props> = ({
 								/>
 
 								{profilePhoto && isAdmin && !isReadOnly && (
-									<Button onClick={doDeleteProfilePhoto} color="secondary">
+									<Button
+										variant="ghost"
+										color="secondary"
+										onClick={doDeleteProfilePhoto}
+									>
 										Delete profile photo
 									</Button>
 								)}
@@ -281,32 +292,38 @@ const BusinessProfile: React.FC<Props> = ({
 
 							<form onSubmit={updateBusinessProfile}>
 								<div>
-									<TextField
-										variant="standard"
-										value={phoneNumber ? `+${phoneNumber}` : ''}
-										label={t('Phone number')}
-										size="medium"
-										fullWidth={true}
-										InputProps={{
-											readOnly: !isAdmin || isReadOnly,
-										}}
-										disabled={true}
-									/>
+									<Field className="gap-1.5" data-disabled>
+										<FieldLabel htmlFor={`${id}-phone-number`}>
+											{t('Phone number')}
+										</FieldLabel>
+										<Input
+											id={`${id}-phone-number`}
+											variant="underline"
+											value={phoneNumber ? `+${phoneNumber}` : ''}
+											readOnly={!isAdmin || isReadOnly}
+											disabled={true}
+										/>
+									</Field>
 
-									<TextField
-										variant="standard"
-										value={about}
-										onChange={(e) => setAbout(e.target.value)}
-										label={t('About')}
-										size="medium"
-										multiline={true}
-										fullWidth={true}
-										InputProps={{
-											readOnly: !isAdmin || isReadOnly,
-										}}
-										disabled={isUpdating}
-										error={Boolean(aboutError)}
-									/>
+									<Field
+										className="gap-1.5"
+										data-disabled={isUpdating || undefined}
+										data-invalid={Boolean(aboutError) || undefined}
+									>
+										<FieldLabel htmlFor={`${id}-about`}>
+											{t('About')}
+										</FieldLabel>
+										<Textarea
+											id={`${id}-about`}
+											variant="underline"
+											className="min-h-9"
+											value={about}
+											onChange={(e) => setAbout(e.target.value)}
+											readOnly={!isAdmin || isReadOnly}
+											disabled={isUpdating}
+											aria-invalid={Boolean(aboutError) || undefined}
+										/>
+									</Field>
 
 									{Boolean(aboutError) && (
 										<Styled.FieldErrorMessage>
@@ -314,76 +331,104 @@ const BusinessProfile: React.FC<Props> = ({
 										</Styled.FieldErrorMessage>
 									)}
 
-									<TextField
-										variant="standard"
-										value={address}
-										onChange={(e) => setAddress(e.target.value)}
-										label={t('Address')}
-										size="medium"
-										fullWidth={true}
-										InputProps={{
-											readOnly: !isAdmin || isReadOnly,
-										}}
-										disabled={isUpdating}
-									/>
-									<TextField
-										variant="standard"
-										value={description}
-										onChange={(e) => setDescription(e.target.value)}
-										label={t('Description')}
-										size="medium"
-										fullWidth={true}
-										InputProps={{
-											readOnly: !isAdmin || isReadOnly,
-										}}
-										disabled={isUpdating}
-									/>
-									<TextField
-										variant="standard"
-										value={email}
-										onChange={(e) => setEmail(e.target.value)}
-										label={t('E-mail')}
-										size="medium"
-										fullWidth={true}
-										InputProps={{
-											readOnly: !isAdmin || isReadOnly,
-										}}
-										disabled={isUpdating}
-									/>
-
-									<FormControl
-										variant="standard"
-										fullWidth={true}
-										disabled={!isAdmin || isReadOnly || isUpdating}
+									<Field
+										className="gap-1.5"
+										data-disabled={isUpdating || undefined}
 									>
-										<InputLabel id="vertical-label">{t('Vertical')}</InputLabel>
-										<Select
-											variant="standard"
-											value={vertical}
-											onChange={(event) => setVertical(event.target.value)}
-											labelId="vertical-label"
-										>
-											<MenuItem value="">{t('None')}</MenuItem>
+										<FieldLabel htmlFor={`${id}-address`}>
+											{t('Address')}
+										</FieldLabel>
+										<Input
+											id={`${id}-address`}
+											variant="underline"
+											value={address}
+											onChange={(e) => setAddress(e.target.value)}
+											readOnly={!isAdmin || isReadOnly}
+											disabled={isUpdating}
+										/>
+									</Field>
+									<Field
+										className="gap-1.5"
+										data-disabled={isUpdating || undefined}
+									>
+										<FieldLabel htmlFor={`${id}-description`}>
+											{t('Description')}
+										</FieldLabel>
+										<Input
+											id={`${id}-description`}
+											variant="underline"
+											value={description}
+											onChange={(e) => setDescription(e.target.value)}
+											readOnly={!isAdmin || isReadOnly}
+											disabled={isUpdating}
+										/>
+									</Field>
+									<Field
+										className="gap-1.5"
+										data-disabled={isUpdating || undefined}
+									>
+										<FieldLabel htmlFor={`${id}-email`}>
+											{t('E-mail')}
+										</FieldLabel>
+										<Input
+											id={`${id}-email`}
+											variant="underline"
+											value={email}
+											onChange={(e) => setEmail(e.target.value)}
+											readOnly={!isAdmin || isReadOnly}
+											disabled={isUpdating}
+										/>
+									</Field>
 
-											{verticalOptions.map((verticalOption) => (
-												<MenuItem
-													key={verticalOption.value}
-													value={verticalOption.value}
-												>
-													{t(verticalOption.label)}
-												</MenuItem>
-											))}
+									<Field
+										className="gap-1.5"
+										data-disabled={
+											!isAdmin || isReadOnly || isUpdating || undefined
+										}
+									>
+										<FieldLabel htmlFor={`${id}-vertical`}>
+											{t('Vertical')}
+										</FieldLabel>
+										<Select
+											value={vertical || VERTICAL_NONE}
+											onValueChange={(value) =>
+												setVertical(value === VERTICAL_NONE ? '' : value)
+											}
+											disabled={!isAdmin || isReadOnly || isUpdating}
+										>
+											<SelectTrigger
+												id={`${id}-vertical`}
+												variant="underline"
+												className="w-full"
+											>
+												<SelectValue />
+											</SelectTrigger>
+											<SelectContent>
+												<SelectItem value={VERTICAL_NONE}>
+													{t('None')}
+												</SelectItem>
+
+												{verticalOptions.map((verticalOption) => (
+													<SelectItem
+														key={verticalOption.value}
+														value={verticalOption.value}
+													>
+														{t(verticalOption.label)}
+													</SelectItem>
+												))}
+											</SelectContent>
 										</Select>
-									</FormControl>
+									</Field>
 								</div>
 
 								{isAdmin && !isReadOnly && (
 									<Styled.SubSectionAction>
 										<Button
 											type="submit"
-											disabled={isUpdating}
+											variant="ghost"
 											color="primary"
-											size="large"
+											size="lg"
+											disabled={isUpdating}
 										>
 											{t('Update')}
 										</Button>

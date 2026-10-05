@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Styled from './Contact.styles';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
-import { ListItem } from '@mui/material';
 import { Contact } from '@src/types/contacts';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
@@ -35,7 +34,8 @@ const ContactView: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 
 	return (
 		<Styled.ContactWrapper>
-			<ListItem button>
+			{/* Was MUI's ListItem button: its padding and hover */}
+			<div className="relative flex w-full items-center px-4 py-2 text-left transition-colors hover:bg-black/4">
 				<Styled.ContactContainer onClick={handleClick}>
 					<Styled.AvatarWrapper>
 						<Styled.StyledCustomAvatar src={data.avatar}>
@@ -70,7 +70,7 @@ const ContactView: React.FC<Props> = ({ data, verifyPhoneNumber }) => {
 						)}
 					</Styled.ContactInfo>
 				</Styled.ContactContainer>
-			</ListItem>
+			</div>
 
 			{phoneNumbersVisible && (
 				<Styled.PhoneNumbersChoices>

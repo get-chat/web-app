@@ -1,5 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
-import { Skeleton } from '@mui/material';
+import { Skeleton } from '@src/components/ui/skeleton';
 import { messageBubbleTail } from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
 import { PanelTransitionStyleProps } from '@src/styles/panelTransitions';
 
@@ -76,22 +76,25 @@ export const CenteredRow = styled.div<{
 		`}
 `;
 
-/* The doubled ampersands (&&) outweigh MUI's own .MuiSkeleton-rounded
-border-radius, which otherwise wins the cascade against these rules */
-export const Pill = styled(Skeleton).attrs({ variant: 'rounded' })`
+/* The doubled ampersands (&&) date from MUI's Skeleton, whose own
+border-radius rules they had to outweigh. The ui Skeleton's classes sit in a
+cascade layer and lose to these rules anyway; the && is harmless */
+export const Pill = styled(Skeleton).attrs({ variant: 'rounded' as const })`
 	&& {
 		border-radius: 15px;
 	}
 `;
 
 /* Mirrors Timestamp of the assignment/tagging event views */
-export const EventTimestamp = styled(Skeleton).attrs({ variant: 'text' })`
+export const EventTimestamp = styled(Skeleton).attrs({
+	variant: 'text' as const,
+})`
 	margin-top: 5px;
 	font-size: x-small;
 `;
 
 /* Mirrors SenderName in ChatMessage.styles.ts */
-export const SenderName = styled(Skeleton).attrs({ variant: 'text' })<{
+export const SenderName = styled(Skeleton).attrs({ variant: 'text' as const })<{
 	$isOutgoing?: boolean;
 }>`
 	margin: 0 10px 2px;
@@ -106,7 +109,7 @@ export const SenderName = styled(Skeleton).attrs({ variant: 'text' })<{
 
 /* Mirrors ChatMessage in ChatMessage.styles.ts: radius, the grouping
 overlap (-22px) and the tail on a group's first bubble */
-export const Bubble = styled(Skeleton).attrs({ variant: 'rounded' })<{
+export const Bubble = styled(Skeleton).attrs({ variant: 'rounded' as const })<{
 	$isOutgoing?: boolean;
 	$isFirstInGroup?: boolean;
 }>`

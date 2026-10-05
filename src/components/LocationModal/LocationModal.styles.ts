@@ -1,11 +1,4 @@
 import styled from 'styled-components';
-import { DialogContent, DialogTitle } from '@mui/material';
-
-export const StyledDialogTitle = styled(DialogTitle)``;
-
-export const StyledDialogContent = styled(DialogContent)`
-	padding: 0 !important;
-`;
 
 export const MapWrapper = styled.div`
 	position: relative;

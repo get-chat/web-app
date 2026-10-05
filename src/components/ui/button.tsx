@@ -100,6 +100,9 @@ function Button({
 
 	return (
 		<button
+			// Like MUI's ButtonBase: a button in a form doesn't submit it
+			// unless it says type="submit"
+			type="button"
 			{...sharedProps}
 			disabled={disabled || loading}
 			aria-busy={loading || undefined}

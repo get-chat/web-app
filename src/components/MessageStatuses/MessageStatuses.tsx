@@ -1,5 +1,4 @@
 import React from 'react';
-import { Divider, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useTranslation } from 'react-i18next';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
@@ -20,6 +19,8 @@ import {
 import { findTemplate } from '@src/helpers/TemplateMessageHelper';
 import * as Styled from './MessageStatuses.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { Button } from '@src/components/ui/button';
+import { Separator } from '@src/components/ui/separator';
 
 interface Props extends PanelTransitionProps {
 	message?: Message;
@@ -42,9 +43,9 @@ const MessageStatuses: React.FC<Props> = ({
 	return (
 		<Styled.Container $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
 			<Styled.Header>
-				<IconButton onClick={close} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={close}>
 					<CloseIcon />
-				</IconButton>
+				</Button>
 
 				<h3>{t('Message Information')}</h3>
 			</Styled.Header>
@@ -105,7 +106,7 @@ const MessageStatuses: React.FC<Props> = ({
 							)}
 							{message.waba_statuses?.delivered && (
 								<>
-									<Divider />
+									<Separator className="bg-[rgba(0,0,45,0.05)]" />
 									<Styled.SubSection>
 										<Styled.SubSectionTitle>
 											<DoneAll color="inherit" />
@@ -122,7 +123,7 @@ const MessageStatuses: React.FC<Props> = ({
 							)}
 							{message.waba_statuses?.read && (
 								<>
-									<Divider />
+									<Separator className="bg-[rgba(0,0,45,0.05)]" />
 									<Styled.SubSection>
 										<Styled.SubSectionTitle>
 											<Styled.BlueIcon color="inherit" />

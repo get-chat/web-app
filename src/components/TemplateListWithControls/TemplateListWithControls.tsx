@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import Alert from '@mui/material/Alert';
+import { Alert } from '@src/components/ui/alert';
 import TemplatesList from '../TemplatesList';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';

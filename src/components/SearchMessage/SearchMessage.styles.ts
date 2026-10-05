@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ListItem } from '@mui/material';
 import {
 	PanelTransitionStyleProps,
 	sidePanelTransition,
@@ -49,10 +48,6 @@ export const Body = styled.div`
 	display: flex;
 	flex-direction: column;
 	overflow-y: auto;
-
-	.MuiListItem-root {
-		padding: 0;
-	}
 `;
 
 export const MessageResult = styled.div`

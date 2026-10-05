@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CircularProgress } from '@mui/material';
+import { Spinner } from '@src/components/ui/spinner';
 
 export const Container = styled.div.attrs({
 	className: 'BusinessProfileAvatarContainer',
@@ -10,7 +10,7 @@ export const Container = styled.div.attrs({
 	position: relative;
 `;
 
-export const StyledCircularProgress = styled(CircularProgress)`
+export const StyledSpinner = styled(Spinner)`
 	position: absolute;
 	pointer-events: none;
 `;

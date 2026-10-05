@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React, { KeyboardEvent, MouseEvent } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import * as Styled from './FilterOption.styles';
 
@@ -17,15 +17,27 @@ const FilterOption: React.FC<Props> = ({
 }) => {
 	return (
 		<Styled.Container
-			// @ts-ignore
-			component="div"
 			onClick={onClick}
+			onKeyDown={(event: KeyboardEvent<HTMLDivElement>) => {
+				// Keyboard activation, as MUI's ButtonBase did for a div
+				if (event.target === event.currentTarget) {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();
+						onClick(event as unknown as MouseEvent);
+					}
+				}
+			}}
 			$isActive={isActive}
 		>
 			{icon}
 			<Styled.Label>{label}</Styled.Label>
 			{isActive && (
-				<Styled.ActionIcon size="small">
+				<Styled.ActionIcon
+					type="button"
+					variant="ghost"
+					color="neutral"
+					size="icon-sm"
+				>
 					<CloseIcon />
 				</Styled.ActionIcon>
 			)}

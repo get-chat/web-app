@@ -1,8 +1,8 @@
 import React from 'react';
-import { Button } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import * as Styled from './ButtonsMessage.styles';
 
 const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
@@ -28,15 +28,10 @@ const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 			{action?.buttons && Array.isArray(action?.buttons) && (
 				<Styled.Actions>
 					{action?.buttons.map(({ reply }, index: number) => (
-						<Button
-							key={index}
-							color="primary"
-							fullWidth
-							startIcon={<ReplyIcon />}
-							disabled
-						>
+						<InteractiveMessageButton key={index} disabled>
+							<ReplyIcon />
 							{reply?.title}
-						</Button>
+						</InteractiveMessageButton>
 					))}
 				</Styled.Actions>
 			)}

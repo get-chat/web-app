@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import ButtonBase from '@mui/material/ButtonBase';
+import { Alert } from '@src/components/ui/alert';
+import { Button } from '@src/components/ui/button';
 import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
 
 export const LoginWrapper = styled.div.attrs({
@@ -73,16 +72,18 @@ export const LoginBody = styled.div`
 		text-transform: none;
 		font-size: 15px;
 		font-weight: 600;
+		height: auto;
+		line-height: 1.75;
 		padding-block: 10px;
 	}
 
-	.MuiFormControl-root {
+	[data-slot='field'] {
 		margin-bottom: 15px;
 	}
 
 	/* A <p>, so the card's centred paragraph style above would apply to it */
-	.MuiFormHelperText-root {
-		margin: 4px 0 0;
+	[data-slot='field-description'] {
+		margin: 0;
 		text-align: left;
 	}
 `;
@@ -152,9 +153,13 @@ export const AdminPanelLink = styled.a`
 	}
 `;
 
-export const SessionCard = styled(ButtonBase)`
+export const SessionCard = styled.button.attrs({ type: 'button' })`
 	width: 100%;
-	font-family: inherit;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
 	display: flex !important;
 	align-items: center !important;
 	gap: 12px;
@@ -252,6 +257,8 @@ export const SSOLoginButton = styled(Button)`
 	text-transform: none !important;
 	font-size: 15px !important;
 	font-weight: 600 !important;
+	height: auto !important;
+	line-height: 1.75 !important;
 	padding-block: 9px !important;
 
 	img {
@@ -290,8 +297,4 @@ export const Version = styled.div`
 	letter-spacing: 0.02em;
 	color: var(--lighter-text-color);
 	opacity: 0.8;
-`;
-
-export const Backdrop = styled.div`
-	color: #fff;
 `;

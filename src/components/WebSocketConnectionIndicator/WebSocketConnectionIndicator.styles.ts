@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { Button } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 
 export const Container = styled.div`
 	display: flex;
@@ -60,6 +60,7 @@ export const RefreshButton = styled(Button)`
 	background-color: white !important;
 	color: var(--red) !important;
 	padding: 2px 10px !important;
+	height: auto !important;
 	&:hover {
 		box-shadow: none !important;
 		background-color: rgba(255, 255, 255, 0.85) !important;

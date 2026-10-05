@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Alert from '@mui/material/Alert';
+import { Alert } from '@src/components/ui/alert';
 
 export const Container = styled.div`
 	display: flex;
@@ -38,6 +38,7 @@ export const StyledAlert = styled(Alert)`
 
 	a {
 		font-weight: 600;
+		text-decoration: underline;
 	}
 `;
 

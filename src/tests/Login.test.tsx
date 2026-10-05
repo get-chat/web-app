@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MemoryRouter } from 'react-router-dom';
 import { TestProviders } from '@src/__mocks__/test-utils';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import { TooltipProvider } from '@src/components/ui/tooltip';
 import * as URLHelper from '@src/helpers/URLHelper';
 import Login from '@src/modules/Login';
 
@@ -61,7 +61,7 @@ describe('Login Component - Successful Login', () => {
 describe('Login Component - Login with 360dialog', () => {
 	const renderWithConfig = (config: object, initialEntries = ['/']) =>
 		render(
-			<ThemeProvider theme={createTheme()}>
+			<TooltipProvider>
 				<AppConfigContext.Provider
 					// @ts-ignore
 					value={config}
@@ -70,7 +70,7 @@ describe('Login Component - Login with 360dialog', () => {
 						<Login />
 					</MemoryRouter>
 				</AppConfigContext.Provider>
-			</ThemeProvider>
+			</TooltipProvider>
 		);
 
 	it('is visible by default (enabled unless explicitly disabled)', () => {

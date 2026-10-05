@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { IconButton } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { keyframes } from 'styled-components';
 
@@ -19,8 +19,18 @@ export const Container = styled.div`
 	box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);
 `;
 
-export const CancelButton = styled(IconButton)`
+// MUI's small IconButton (5px padding) around a 20px icon: a 30px circle
+const iconButtonAttrs = {
+	variant: 'ghost',
+	color: 'neutral',
+	size: 'icon-sm',
+} as const;
+
+export const CancelButton = styled(Button).attrs(iconButtonAttrs)`
 	&& {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
 		background-color: transparent !important;
 		margin-right: 20px !important;
 
@@ -42,8 +52,11 @@ export const CancelButton = styled(IconButton)`
 	}
 `;
 
-export const SendButton = styled(IconButton)`
+export const SendButton = styled(Button).attrs(iconButtonAttrs)`
 	&& {
+		width: 30px;
+		height: 30px;
+		border-radius: 50%;
 		background-color: transparent !important;
 
 		&:hover {

@@ -1,17 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import {
-	Button,
-	CircularProgress,
-	Dialog,
-	DialogActions,
-	TextField,
-} from '@mui/material';
+import React, { useContext, useEffect, useId, useRef, useState } from 'react';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import { useTranslation } from 'react-i18next';
 import { AxiosResponse } from 'axios';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { loadGoogleMaps } from '@src/helpers/GoogleMapsHelper';
 import { MessageType } from '@src/types/messages';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import { Spinner } from '@src/components/ui/spinner';
 import * as Styled from './LocationModal.styles';
 
 interface Props {
@@ -51,6 +56,8 @@ const LocationModal: React.FC<Props> = ({
 }) => {
 	const config = useContext(AppConfigContext);
 	const { t } = useTranslation();
+
+	const idPrefix = useId();
 
 	const mapCanvasRef = useRef<HTMLDivElement>(null);
 	const mapRef = useRef<any>(null);
@@ -281,73 +288,93 @@ const LocationModal: React.FC<Props> = ({
 	};
 
 	return (
-		<Dialog open={open} onClose={handleClose} fullWidth>
-			<Styled.StyledDialogTitle>{t('Send location')}</Styled.StyledDialogTitle>
-			<Styled.StyledDialogContent>
-				<Styled.MapWrapper>
-					{/* Google Maps owns this element's DOM; keep it childless */}
-					<Styled.MapCanvas ref={mapCanvasRef} />
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>{t('Send location')}</DialogTitle>
+				</DialogHeader>
+				<DialogBody>
+					<Styled.MapWrapper>
+						{/* Google Maps owns this element's DOM; keep it childless */}
+						<Styled.MapCanvas ref={mapCanvasRef} />
 
-					{isMapLoading && !mapError && (
-						<Styled.MapOverlay>
-							<CircularProgress size={28} />
-						</Styled.MapOverlay>
+						{isMapLoading && !mapError && (
+							<Styled.MapOverlay>
+								<Spinner size={28} className="text-primary" />
+							</Styled.MapOverlay>
+						)}
+
+						{mapError && (
+							<Styled.MapOverlay>
+								{t('The map could not be loaded. Please try again later.')}
+							</Styled.MapOverlay>
+						)}
+					</Styled.MapWrapper>
+
+					<Styled.CurrentLocationRow>
+						<Button
+							variant="ghost"
+							color="primary"
+							size="sm"
+							onClick={useCurrentLocation}
+							disabled={isLocating || mapError}
+						>
+							{isLocating ? (
+								<Spinner size={16} />
+							) : (
+								<MyLocationIcon fontSize="small" />
+							)}
+							{t('Use my current location')}
+						</Button>
+					</Styled.CurrentLocationRow>
+
+					{position && (
+						<Styled.Coordinates>
+							{position.lat.toFixed(6)}, {position.lng.toFixed(6)}
+						</Styled.Coordinates>
 					)}
 
-					{mapError && (
-						<Styled.MapOverlay>
-							{t('The map could not be loaded. Please try again later.')}
-						</Styled.MapOverlay>
-					)}
-				</Styled.MapWrapper>
-
-				<Styled.CurrentLocationRow>
-					<Button
-						color="primary"
-						size="small"
-						startIcon={
-							isLocating ? <CircularProgress size={16} /> : <MyLocationIcon />
-						}
-						onClick={useCurrentLocation}
-						disabled={isLocating || mapError}
-					>
-						{t('Use my current location')}
+					<Styled.Fields>
+						<Field className="gap-1">
+							<FieldLabel htmlFor={`${idPrefix}-name`}>
+								{t('Location name (optional)')}
+							</FieldLabel>
+							<Input
+								id={`${idPrefix}-name`}
+								variant="underline"
+								size="sm"
+								value={name}
+								onChange={(event) => setName(event.target.value)}
+							/>
+						</Field>
+						<Field className="gap-1">
+							<FieldLabel htmlFor={`${idPrefix}-address`}>
+								{t('Address (optional)')}
+							</FieldLabel>
+							<Input
+								id={`${idPrefix}-address`}
+								variant="underline"
+								size="sm"
+								value={address}
+								onChange={(event) => setAddress(event.target.value)}
+							/>
+						</Field>
+					</Styled.Fields>
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={handleClose}>
+						{t('Cancel')}
 					</Button>
-				</Styled.CurrentLocationRow>
-
-				{position && (
-					<Styled.Coordinates>
-						{position.lat.toFixed(6)}, {position.lng.toFixed(6)}
-					</Styled.Coordinates>
-				)}
-
-				<Styled.Fields>
-					<TextField
-						value={name}
-						onChange={(event) => setName(event.target.value)}
-						label={t('Location name (optional)')}
-						size="small"
-						variant="standard"
-						fullWidth
-					/>
-					<TextField
-						value={address}
-						onChange={(event) => setAddress(event.target.value)}
-						label={t('Address (optional)')}
-						size="small"
-						variant="standard"
-						fullWidth
-					/>
-				</Styled.Fields>
-			</Styled.StyledDialogContent>
-			<DialogActions>
-				<Button onClick={handleClose} color="secondary">
-					{t('Cancel')}
-				</Button>
-				<Button onClick={handleSend} disabled={!position || isSending}>
-					{isSending ? t('Sending...') : t('Send')}
-				</Button>
-			</DialogActions>
+					<Button
+						variant="ghost"
+						color="primary"
+						onClick={handleSend}
+						disabled={!position || isSending}
+					>
+						{isSending ? t('Sending...') : t('Send')}
+					</Button>
+				</DialogFooter>
+			</DialogContent>
 		</Dialog>
 	);
 };

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from '@src/components/ui/button';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import {
-	Button,
-	ClickAwayListener,
 	Dialog,
-	DialogActions,
+	DialogBody,
 	DialogContent,
-	DialogContentText,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
-	Tooltip,
-} from '@mui/material';
+} from '@src/components/ui/dialog';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useTranslation } from 'react-i18next';
@@ -149,7 +151,7 @@ const SavedResponseList: React.FC<Props> = ({
 									</div>
 								</StyledChatMessage.ChatMessage>
 
-								<Tooltip title={t('Send')}>
+								<SimpleTooltip title={t('Send')}>
 									<Styled.SendButton
 										aria-label={t('Send')}
 										onClick={() => {
@@ -157,44 +159,47 @@ const SavedResponseList: React.FC<Props> = ({
 											// Close the panel as soon as a response is sent
 											closePanel();
 										}}
-										size="small"
 									>
 										<SendIcon />
 									</Styled.SendButton>
-								</Tooltip>
-								<Tooltip title={t('Delete')}>
+								</SimpleTooltip>
+								<SimpleTooltip title={t('Delete')}>
 									<Styled.DeleteButton
 										aria-label={t('Delete')}
 										onClick={() => attemptToDelete(savedResponse.id)}
-										size="small"
 									>
 										<DeleteOutlineIcon />
 									</Styled.DeleteButton>
-								</Tooltip>
+								</SimpleTooltip>
 							</div>
 						))}
 					</div>
 				</div>
 
-				<Dialog open={open} onClose={handleClose}>
-					<DialogTitle>{t('Oops!')}</DialogTitle>
+				<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
 					<DialogContent>
-						<DialogContentText>
-							{t('Are you sure you want to delete this quick reply?')}
-						</DialogContentText>
+						<DialogHeader>
+							<DialogTitle>{t('Oops!')}</DialogTitle>
+						</DialogHeader>
+						<DialogBody>
+							<DialogDescription>
+								{t('Are you sure you want to delete this quick reply?')}
+							</DialogDescription>
+						</DialogBody>
+						<DialogFooter>
+							<Button variant="ghost" color="secondary" onClick={handleClose}>
+								{t('No')}
+							</Button>
+							<Button
+								variant="ghost"
+								color="primary"
+								onClick={handleDeleteSavedResponse}
+								autoFocus
+							>
+								{t('Yes')}
+							</Button>
+						</DialogFooter>
 					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose} color="secondary">
-							{t('No')}
-						</Button>
-						<Button
-							onClick={handleDeleteSavedResponse}
-							color="primary"
-							autoFocus
-						>
-							{t('Yes')}
-						</Button>
-					</DialogActions>
 				</Dialog>
 			</Styled.Outer>
 		</ClickAwayListener>

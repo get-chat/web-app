@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import ButtonsMessage from './components/ButtonsMessage';
 import ListMessage from './components/ListMessage';
 import ProductMessage from './components/ProductMessage';
-import { Button } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PrintMessage from '@src/components/PrintMessage';
 import CtaUrlMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CtaUrlMessage/CtaUrlMessage';
@@ -13,6 +12,7 @@ import FlowMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessag
 import NfmReply from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/NfmReply';
 import CatalogMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CatalogMessage';
 import CarouselMessage from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/CarouselMessage';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import { Message } from '@src/types/messages';
 import * as Styled from './InteractiveMessage.styles';
 
@@ -101,14 +101,10 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 						</Styled.Body>
 					)}
 					{action?.name === 'send_location' && (
-						<Button
-							variant="text"
-							fullWidth
-							startIcon={<LocationOnIcon />}
-							disabled
-						>
+						<InteractiveMessageButton disabled>
+							<LocationOnIcon />
 							Send location
-						</Button>
+						</InteractiveMessageButton>
 					)}
 				</>
 			)}

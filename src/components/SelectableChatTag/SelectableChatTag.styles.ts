@@ -1,8 +1,12 @@
 import styled from 'styled-components';
-import { ListItem } from '@mui/material';
-
-export const StyledListItem = styled(ListItem)`
-	padding: 0 !important;
+// Was MUI's ListItem
+export const StyledListItem = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 0;
+	text-align: left;
 `;
 
 export const TagContainer = styled.div<{ $isSelected?: boolean }>`

@@ -10,6 +10,6 @@
 	text-align: center;
 }
 
-.createTemplate .MuiFormControl-root {
+.createTemplate [data-slot='field'] {
 	margin-bottom: 15px;
 }

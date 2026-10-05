@@ -25,11 +25,7 @@ export const Actions = styled.div`
 	flex-direction: row;
 	justify-content: flex-end;
 
-	.MuiButton-text {
+	[data-slot='button'] {
 		color: white;
-	}
-
-	.MuiButton-root:first-of-type .MuiButton-label {
-		opacity: 0.75;
 	}
 `;

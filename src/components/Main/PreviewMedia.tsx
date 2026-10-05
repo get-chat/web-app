@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, Tooltip, Zoom as ZoomTransition } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Moment from 'react-moment';
 import {
@@ -18,6 +17,11 @@ import CustomAvatar from '@src/components/CustomAvatar';
 import { download } from '@src/helpers/DownloadHelper';
 import { useAppDispatch } from '@src/store/hooks';
 import PreviewMediaModel from '@src/api/models/PreviewMediaModel';
+import { Button } from '@src/components/ui/button';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
+
+// MUI's large IconButton, 44px on mobile as App.css made it
+const headerButtonClassName = 'max-[750px]:size-11';
 
 interface Props {
 	data: PreviewMediaModel;
@@ -70,15 +74,17 @@ const PreviewMedia: React.FC<Props> = ({ data }) => {
 	return (
 		<div className="app__mediaPreview">
 			<div className="app__mediaPreview__header">
-				<Tooltip title={t('Close')} disableInteractive>
-					<IconButton
-						className="app__mediaPreview__close"
+				<SimpleTooltip title={t('Close')} disableHoverableContent>
+					<Button
+						variant="ghost"
+						color="neutral"
+						size="icon-xl"
+						className={`app__mediaPreview__close ${headerButtonClassName}`}
 						onClick={hideImageOrVideoPreview}
-						size="large"
 					>
 						<CloseIcon />
-					</IconButton>
-				</Tooltip>
+					</Button>
+				</SimpleTooltip>
 
 				<CustomAvatar generateBgColorBy={data.senderName}>
 					{data.initials}
@@ -91,36 +97,40 @@ const PreviewMedia: React.FC<Props> = ({ data }) => {
 					</span>
 				</div>
 
-				<Tooltip title={t('Download')} disableInteractive>
-					<IconButton
+				<SimpleTooltip title={t('Download')} disableHoverableContent>
+					<Button
+						variant="ghost"
+						color="neutral"
+						size="icon-xl"
+						className={headerButtonClassName}
 						onClick={() => download({ source: data.source })}
-						size="large"
 					>
 						<GetApp />
-					</IconButton>
-				</Tooltip>
+					</Button>
+				</SimpleTooltip>
 			</div>
 
-			<ZoomTransition in={true}>
-				<div className="app__mediaPreview__container" onClick={handleClick}>
-					{data.type === ATTACHMENT_TYPE_IMAGE && (
-						<Image
-							className="app__mediaPreview__image"
-							src={data.source}
-							alt="Preview"
-							onClick={() => setZoomEnabled(true)}
-						/>
-					)}
-					{data.type === ATTACHMENT_TYPE_VIDEO && (
-						<video
-							className="app__mediaPreview__video"
-							src={data.source}
-							controls
-							autoPlay={true}
-						/>
-					)}
-				</div>
-			</ZoomTransition>
+			<div
+				className="app__mediaPreview__container animate-in zoom-in duration-225"
+				onClick={handleClick}
+			>
+				{data.type === ATTACHMENT_TYPE_IMAGE && (
+					<Image
+						className="app__mediaPreview__image"
+						src={data.source}
+						alt="Preview"
+						onClick={() => setZoomEnabled(true)}
+					/>
+				)}
+				{data.type === ATTACHMENT_TYPE_VIDEO && (
+					<video
+						className="app__mediaPreview__video"
+						src={data.source}
+						controls
+						autoPlay={true}
+					/>
+				)}
+			</div>
 
 			{isZoomEnabled && data.type === ATTACHMENT_TYPE_IMAGE && (
 				<PreviewMediaZoom

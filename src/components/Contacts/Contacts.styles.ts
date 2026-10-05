@@ -1,17 +1,9 @@
 import styled from 'styled-components';
-import { ListItem } from '@mui/material';
-
-const StyledListItem = styled(ListItem)``;
-
 export const ContactsBody = styled.div`
 	position: relative;
 	flex: 1 1;
 	overflow-x: hidden;
 	overflow-y: auto;
-
-	${StyledListItem} {
-		padding: 0;
-	}
 `;
 
 export const BodyHint = styled.span`

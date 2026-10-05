@@ -2,7 +2,6 @@ import React from 'react';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageVideo from './ChatMessageVideo';
 import ChatMessageDocument from './ChatMessageDocument';
-import { Button } from '@mui/material';
 import SmsIcon from '@mui/icons-material/Sms';
 import {
 	insertTemplateComponentParameters,
@@ -18,6 +17,13 @@ import { Template } from '@src/types/templates';
 import { Message } from '@src/types/messages';
 import { getHeaderFileLink } from '@src/helpers/MessageHelper';
 import MissingContent from './MissingContent';
+import { Button } from '@src/components/ui/button';
+
+// MUI's full-width text button, long labels wrapping; Chat.css gives the
+// label its light blue, the icon follows it (`!` because App.css colours every
+// MUI icon grey)
+const templateButton =
+	'h-auto min-h-9 w-full py-1.5 text-center font-semibold whitespace-normal [&_svg]:size-5! [&_svg]:text-current!';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -161,15 +167,30 @@ const ChatMessageTemplate: React.FC<Props> = ({
 															break;
 													}
 
-													return (
+													const link = href ?? button.url;
+
+													// Like MUI, a link only when there is somewhere to go
+													return link ? (
 														<Button
-															href={href ?? button.url}
-															target="_blank"
+															asChild
 															key={buttonIndex}
-															startIcon={getIconByType(button.type)}
+															variant="ghost"
 															color="primary"
-															fullWidth={true}
+															className={templateButton}
 														>
+															<a href={link} target="_blank">
+																{getIconByType(button.type)}
+																{button.text}
+															</a>
+														</Button>
+													) : (
+														<Button
+															key={buttonIndex}
+															variant="ghost"
+															color="primary"
+															className={templateButton}
+														>
+															{getIconByType(button.type)}
 															{button.text}
 														</Button>
 													);

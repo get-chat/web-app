@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ButtonBase } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import CustomAvatar from '@src/components/CustomAvatar';
 
@@ -37,17 +36,34 @@ export const Name = styled.div`
 	font-weight: 600;
 `;
 
-export const MessageButton = styled(ButtonBase)`
+// Was MUI's ButtonBase: a bare button
+export const MessageButton = styled.button.attrs({ type: 'button' })`
 	flex: 1;
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	justify-content: center;
-	border-radius: 4px !important;
-	padding: 3px 5px !important;
-	margin-bottom: 5px !important;
+	position: relative;
+	border: 0;
+	border-radius: 4px;
+	margin: 0 0 5px;
+	padding: 3px 5px;
+	background: transparent;
+	font: inherit;
+	color: inherit;
+	text-align: inherit;
+	cursor: pointer;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	outline: 0;
+	transition: background-color 150ms;
 
-	.MuiTouchRipple-child {
-		background-color: red;
+	&:hover {
+		background-color: rgba(0, 0, 45, 0.04);
+	}
+
+	&:focus-visible {
+		box-shadow: 0 0 0 3px rgba(101, 203, 172, 0.3);
 	}
 `;
 

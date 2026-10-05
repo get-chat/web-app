@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@src/lib/utils';
+import { cn, stopEscape } from '@src/lib/utils';
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
@@ -15,7 +15,8 @@ import { Button } from '@src/components/ui/button';
  * MUI's), `fullScreen` becomes size="full", and `fullWidth` is the default.
  * There is no close (X) button unless `showCloseButton` is set, as in MUI.
  *
- * z-[1300] is MUI's modal layer, so these and MUI's dialogs stack correctly.
+ * z-[1300] is MUI's modal layer. Paddings and type sizes are the app's own,
+ * from its former global MUI overrides.
  */
 const dialogContentVariants = cva(
 	'fixed top-[50%] left-[50%] z-[1300] flex max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] flex-col overflow-hidden rounded-xl bg-background shadow-lg outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
@@ -82,6 +83,7 @@ function DialogContent({
 	size,
 	children,
 	showCloseButton = false,
+	onKeyDown,
 	...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> &
 	VariantProps<typeof dialogContentVariants> & {
@@ -95,6 +97,7 @@ function DialogContent({
 				data-slot="dialog-content"
 				data-size={size ?? 'sm'}
 				className={cn(dialogContentVariants({ size }), className)}
+				onKeyDown={stopEscape(onKeyDown)}
 				{...props}
 			>
 				{children}
@@ -122,7 +125,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
 		<div
 			data-slot="dialog-header"
 			className={cn(
-				'flex shrink-0 flex-col gap-1.5 px-6 pt-6 pb-2 text-left',
+				'flex shrink-0 flex-col gap-1.5 px-5 pt-[15px] pb-2.5 text-left max-[750px]:px-[15px]',
 				className
 			)}
 			{...props}
@@ -135,7 +138,10 @@ function DialogBody({ className, ...props }: React.ComponentProps<'div'>) {
 	return (
 		<div
 			data-slot="dialog-body"
-			className={cn('min-h-0 flex-1 overflow-y-auto px-6 py-2', className)}
+			className={cn(
+				'min-h-0 flex-1 overflow-y-auto px-5 py-[5px] max-[750px]:px-[15px]',
+				className
+			)}
 			{...props}
 		/>
 	);
@@ -153,7 +159,7 @@ function DialogFooter({
 		<div
 			data-slot="dialog-footer"
 			className={cn(
-				'flex shrink-0 flex-col-reverse gap-2 px-6 pt-2 pb-6 sm:flex-row sm:justify-end',
+				'flex shrink-0 flex-col-reverse gap-2 p-2.5 sm:flex-row sm:justify-end',
 				className
 			)}
 			{...props}
@@ -177,7 +183,10 @@ function DialogTitle({
 	return (
 		<DialogPrimitive.Title
 			data-slot="dialog-title"
-			className={cn('pr-8 text-lg leading-snug font-semibold', className)}
+			className={cn(
+				'pr-8 text-lg leading-snug font-semibold max-[750px]:text-base',
+				className
+			)}
 			{...props}
 		/>
 	);
@@ -190,7 +199,7 @@ function DialogDescription({
 	return (
 		<DialogPrimitive.Description
 			data-slot="dialog-description"
-			className={cn('text-sm text-muted-foreground', className)}
+			className={cn('text-[15px] text-muted-foreground', className)}
 			{...props}
 		/>
 	);

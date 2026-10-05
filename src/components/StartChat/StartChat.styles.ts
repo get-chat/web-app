@@ -1,11 +1,31 @@
 import styled from 'styled-components';
-import { ListItem } from '@mui/material';
 import {
 	overlayPanelTransition,
 	PanelTransitionStyleProps,
 } from '@src/styles/panelTransitions';
 
-export const StyledListItem = styled(ListItem)``;
+// A clickable list row, like MUI's ListItem button it replaces
+export const StyledListItem = styled.button`
+	display: flex;
+	align-items: center;
+	position: relative;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font: inherit;
+	/* App.css gave every MUI ListItem 14px */
+	font-size: 14px;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+	&:focus-visible {
+		outline: none;
+		background-color: var(--color-primary-transparent-darker);
+	}
+`;
 
 export const ContactsContainer = styled.div<PanelTransitionStyleProps>`
 	display: flex;

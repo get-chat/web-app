@@ -1,8 +1,8 @@
 import PrintMessage from '@src/components/PrintMessage';
-import { Button } from '@mui/material';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import * as Styled from './CatalogMessage.styles';
 
 const CatalogMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
@@ -27,14 +27,9 @@ const CatalogMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 				</Styled.Footer>
 			)}
 			{action?.name === 'catalog_message' && (
-				<Button
-					color="primary"
-					fullWidth
-					href={action?.parameters?.url}
-					disabled
-				>
+				<InteractiveMessageButton href={action?.parameters?.url} disabled>
 					{t('View catalog')}
-				</Button>
+				</InteractiveMessageButton>
 			)}
 		</>
 	);

@@ -1,11 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-	InputAdornment,
-	MenuItem,
-	MenuList,
-	Popover,
-	TextField,
-} from '@mui/material';
+import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useTranslation } from 'react-i18next';
 import {
@@ -18,6 +11,18 @@ import {
 import { getFlagEmoji } from '@src/helpers/PhoneNumberHelper';
 import SearchBar from '@src/components/SearchBar/SearchBar';
 import * as Styled from './PhoneNumberInput.styles';
+import { FieldError, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupInput,
+} from '@src/components/ui/input-group';
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverContent,
+} from '@src/components/ui/popover';
 
 interface CountryOption {
 	country: CountryCode;
@@ -97,6 +102,8 @@ const PhoneNumberInput: React.FC<Props> = ({
 }) => {
 	const { t, i18n } = useTranslation();
 
+	const id = useId();
+
 	const options = useMemo(
 		() => buildCountryOptions(i18n.language),
 		[i18n.language]
@@ -110,11 +117,20 @@ const PhoneNumberInput: React.FC<Props> = ({
 	const [isMenuOpen, setMenuOpen] = useState(false);
 	const userSelectedCountryRef = useRef(false);
 	const countryAnchorRef = useRef<HTMLDivElement>(null);
+	const countryInputRef = useRef<HTMLInputElement>(null);
 
-	// Only toggles visibility. The search is cleared after the close animation
-	// finishes (Popover onExited) so the list doesn't visibly re-expand while the
-	// menu is animating out.
+	// Only toggles visibility. The search is cleared when the menu opens again
+	// rather than on close, so the list doesn't visibly re-expand while the menu
+	// is animating out.
 	const closeMenu = () => setMenuOpen(false);
+
+	// Clicking the field while the menu is open closes it, as MUI's backdrop did
+	const toggleMenu = () => {
+		if (!isMenuOpen) {
+			setSearch('');
+		}
+		setMenuOpen(!isMenuOpen);
+	};
 
 	// Apply the default country once it becomes available (the inbox number is
 	// loaded asynchronously), unless the user has already picked one.
@@ -227,15 +243,24 @@ const PhoneNumberInput: React.FC<Props> = ({
 	};
 
 	// Prebuild the rows so opening the menu doesn't rebuild ~245 elements each
-	// render. Ripple is disabled to keep mounting the list light (the biggest
-	// cost when the menu opens/closes).
-	const optionItems = useMemo(
-		() =>
-			filteredOptions.map((option) => (
-				<MenuItem
+	// render.
+	const optionItems = useMemo(() => {
+		// Like MUI's MenuList, only the selected row (or the first one) is in the
+		// tab order; the arrow keys move between rows
+		const hasSelected = filteredOptions.some(
+			(option) => option.country === country
+		);
+
+		return filteredOptions.map((option, index) => {
+			const isSelected = option.country === country;
+
+			return (
+				<Styled.OptionButton
 					key={option.country}
-					selected={option.country === country}
-					disableRipple
+					type="button"
+					role="option"
+					aria-selected={isSelected}
+					tabIndex={isSelected || (!hasSelected && index === 0) ? 0 : -1}
 					onClick={() => {
 						handleCountryChange(option.country);
 						closeMenu();
@@ -250,88 +275,149 @@ const PhoneNumberInput: React.FC<Props> = ({
 							+{option.callingCode}
 						</span>
 					</Styled.Option>
-				</MenuItem>
-			)),
+				</Styled.OptionButton>
+			);
+		});
 		// handleCountryChange / closeMenu only call state setters, so their
 		// captured closures stay valid across renders.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[filteredOptions, country]
-	);
+	}, [filteredOptions, country]);
+
+	// MUI MenuList's keyboard navigation: arrows wrap around, Home/End jump
+	const handleOptionsKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+		const items = Array.from(
+			event.currentTarget.querySelectorAll<HTMLElement>('[role="option"]')
+		);
+		if (items.length === 0) return;
+
+		const index = items.indexOf(document.activeElement as HTMLElement);
+		let nextIndex: number | undefined;
+
+		switch (event.key) {
+			case 'ArrowDown':
+				nextIndex = (index + 1) % items.length;
+				break;
+			case 'ArrowUp':
+				nextIndex = index <= 0 ? items.length - 1 : index - 1;
+				break;
+			case 'Home':
+				nextIndex = 0;
+				break;
+			case 'End':
+				nextIndex = items.length - 1;
+				break;
+		}
+
+		if (nextIndex !== undefined) {
+			event.preventDefault();
+			items[nextIndex].focus();
+		}
+	};
 
 	return (
 		<Styled.Row>
-			<Styled.CountryControl ref={countryAnchorRef}>
-				<Styled.CountryTrigger
-					variant="standard"
-					label={t('Code')}
-					InputLabelProps={{ shrink: true }}
-					value={selectedOption ? `+${selectedOption.callingCode}` : ''}
-					onClick={() => setMenuOpen(true)}
-					InputProps={{
-						readOnly: true,
-						startAdornment: selectedOption ? (
-							<InputAdornment position="start">
-								<span className="PhoneNumberInput__flag">
-									{getFlagEmoji(selectedOption.country)}
-								</span>
-							</InputAdornment>
-						) : null,
-						endAdornment: (
-							<InputAdornment position="end">
-								<ArrowDropDownIcon />
-							</InputAdornment>
-						),
-					}}
-				/>
-			</Styled.CountryControl>
-
 			<Popover
 				open={isMenuOpen}
-				anchorEl={countryAnchorRef.current}
-				onClose={closeMenu}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-				transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-				elevation={3}
-				disableScrollLock
-				TransitionProps={{ onExited: () => setSearch('') }}
-				// The Paper clips its rounded corners; the search stays fixed at the
-				// top while only the options list below scrolls.
-				PaperProps={{ sx: { width: 320, overflow: 'hidden' } }}
+				onOpenChange={(isOpen) => !isOpen && closeMenu()}
 			>
-				<Styled.SearchHeader>
-					<SearchBar
-						value={search}
-						onChange={setSearch}
-						placeholder={t('Search country')}
-						autoFocus
-					/>
-				</Styled.SearchHeader>
+				<PopoverAnchor asChild>
+					<Styled.CountryControl ref={countryAnchorRef}>
+						<Styled.CountryTrigger className="gap-1.5">
+							<FieldLabel htmlFor={`${id}-country`}>{t('Code')}</FieldLabel>
+							<InputGroup variant="underline" onClick={toggleMenu}>
+								{selectedOption && (
+									<InputGroupAddon align="inline-start">
+										<span className="PhoneNumberInput__flag">
+											{getFlagEmoji(selectedOption.country)}
+										</span>
+									</InputGroupAddon>
+								)}
+								<InputGroupInput
+									ref={countryInputRef}
+									id={`${id}-country`}
+									value={selectedOption ? `+${selectedOption.callingCode}` : ''}
+									readOnly
+									aria-haspopup="listbox"
+									aria-expanded={isMenuOpen}
+								/>
+								<InputGroupAddon align="inline-end">
+									<ArrowDropDownIcon className="size-6" />
+								</InputGroupAddon>
+							</InputGroup>
+						</Styled.CountryTrigger>
+					</Styled.CountryControl>
+				</PopoverAnchor>
 
-				<Styled.OptionsScroller>
-					<MenuList autoFocusItem={false} disablePadding>
-						{optionItems}
+				<PopoverContent
+					side="bottom"
+					align="start"
+					// The search stays fixed at the top while only the options list
+					// below scrolls
+					className="flex w-80 flex-col overflow-hidden p-0"
+					// The field toggles the menu itself
+					onInteractOutside={(event) => {
+						if (countryAnchorRef.current?.contains(event.target as Node)) {
+							event.preventDefault();
+						}
+					}}
+					// Return focus to the field, unless the user moved it elsewhere
+					onCloseAutoFocus={(event) => {
+						event.preventDefault();
+						if (
+							!document.activeElement ||
+							document.activeElement === document.body
+						) {
+							countryInputRef.current?.focus();
+						}
+					}}
+				>
+					<Styled.SearchHeader>
+						<SearchBar
+							value={search}
+							onChange={setSearch}
+							placeholder={t('Search country')}
+							autoFocus
+						/>
+					</Styled.SearchHeader>
 
-						{filteredOptions.length === 0 && (
-							<Styled.NoResults>{t('No results')}</Styled.NoResults>
-						)}
-					</MenuList>
-				</Styled.OptionsScroller>
+					<Styled.OptionsScroller>
+						<div
+							role="listbox"
+							aria-label={t('Code')}
+							onKeyDown={handleOptionsKeyDown}
+						>
+							{optionItems}
+
+							{filteredOptions.length === 0 && (
+								<Styled.NoResults>{t('No results')}</Styled.NoResults>
+							)}
+						</div>
+					</Styled.OptionsScroller>
+				</PopoverContent>
 			</Popover>
 
 			<Styled.NationalNumberField
-				variant="standard"
-				label={t('Phone number')}
-				value={nationalNumber}
-				autoFocus={autoFocus}
-				error={!!error}
-				helperText={error ? t('Enter a valid phone number') : undefined}
-				onChange={(event) => handleNationalChange(event.target.value)}
-				onKeyDown={(event) => {
-					if (event.key === 'Enter') {
-						onEnter?.();
-					}
-				}}
-			/>
+				className="gap-1.5"
+				data-invalid={!!error || undefined}
+			>
+				<FieldLabel htmlFor={`${id}-national-number`}>
+					{t('Phone number')}
+				</FieldLabel>
+				<Input
+					id={`${id}-national-number`}
+					variant="underline"
+					value={nationalNumber}
+					autoFocus={autoFocus}
+					aria-invalid={!!error || undefined}
+					onChange={(event) => handleNationalChange(event.target.value)}
+					onKeyDown={(event) => {
+						if (event.key === 'Enter') {
+							onEnter?.();
+						}
+					}}
+				/>
+				{error && <FieldError>{t('Enter a valid phone number')}</FieldError>}
+			</Styled.NationalNumberField>
 		</Styled.Row>
 	);
 };

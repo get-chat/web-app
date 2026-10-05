@@ -16,6 +16,7 @@ const switchVariants = cva(
 				primary: '[--control:var(--primary)]',
 				secondary: '[--control:var(--color-secondary)]',
 				destructive: '[--control:var(--destructive)]',
+				success: '[--control:#2e7d32]',
 				selection: '[--control:var(--selection)]',
 			},
 			// Any size works: set --switch-w and --switch-h

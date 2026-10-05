@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as Styled from './Notifications.styles';
 import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from '@mui/material';
+import { Button } from '@src/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
@@ -45,9 +45,9 @@ const Notifications: React.FC<Props> = ({
 			onAnimationEnd={onAnimationEnd}
 		>
 			<Styled.Header>
-				<IconButton onClick={onHide} size="large">
+				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
 					<CloseIcon />
-				</IconButton>
+				</Button>
 
 				<h3>{t('Notifications')}</h3>
 			</Styled.Header>

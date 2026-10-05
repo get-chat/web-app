@@ -1,14 +1,32 @@
 import styled from 'styled-components';
-import { Checkbox, ListItemButton } from '@mui/material';
 import CustomAvatar from '@src/components/CustomAvatar';
+import { Checkbox } from '@src/components/ui/checkbox';
 
 export const Wrapper = styled.div`
 	background-color: white;
 `;
 
-export const StyledListItemButton = styled(ListItemButton)`
-	padding: 0 !important;
-	margin: 0 !important;
+// A clickable list row, like MUI's ListItemButton it replaces. A div, not a
+// button, because the selection checkbox inside is a button itself.
+export const StyledListItemButton = styled.div`
+	display: flex;
+	align-items: center;
+	position: relative;
+	min-width: 0;
+	padding: 0;
+	margin: 0;
+	text-align: left;
+	cursor: pointer;
+	outline: none;
+	transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.04);
+	}
+
+	&:focus-visible {
+		background-color: rgba(0, 0, 0, 0.12);
+	}
 `;
 
 export const StyledCustomAvatar = styled(CustomAvatar)``;
@@ -81,4 +99,7 @@ export const Choice = styled.div`
 	}
 `;
 
-export const SelectionCheckbox = styled(Checkbox)``;
+// The margins keep the room MUI's padded checkbox took
+export const SelectionCheckbox = styled(Checkbox)`
+	margin: 0 12px;
+`;

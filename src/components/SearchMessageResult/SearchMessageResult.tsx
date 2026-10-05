@@ -3,7 +3,6 @@ import * as Styled from './SearchMessageResult.styles';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '@src/Constants';
 import ChatMessageTypeIcon from '../Main/Chat/ChatMessage/ChatMessageTypeIcon';
-import { ListItem } from '@mui/material';
 import PrintMessage from '../PrintMessage';
 import {
 	getMessageCaption,
@@ -30,7 +29,19 @@ const SearchMessageResult: React.FC<Props> = ({
 	const data = messageData;
 
 	return (
-		<ListItem button onClick={() => onClick(data)}>
+		<Styled.Result
+			role="button"
+			tabIndex={0}
+			onClick={() => onClick(data)}
+			onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+				// Activate with the keyboard, as MUI's ListItem button did
+				if (event.target !== event.currentTarget) return;
+				if (event.key === 'Enter' || event.key === ' ') {
+					event.preventDefault();
+					onClick(data);
+				}
+			}}
+		>
 			<Styled.MessageContainer>
 				<Styled.MessageHeader>
 					<Moment
@@ -67,7 +78,7 @@ const SearchMessageResult: React.FC<Props> = ({
 					/>
 				</Styled.MessageBody>
 			</Styled.MessageContainer>
-		</ListItem>
+		</Styled.Result>
 	);
 };
 

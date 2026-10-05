@@ -3,10 +3,23 @@ import DoneAll from '@mui/icons-material/DoneAll';
 import WarningIcon from '@mui/icons-material/Warning';
 import SellIcon from '@mui/icons-material/Sell';
 import Moment from 'react-moment';
-import { Checkbox, ListItemButton } from '@mui/material';
+import { Checkbox } from '@src/components/ui/checkbox';
 
-export const ListItem = styled(ListItemButton)`
-	padding: 0 !important;
+// Was MUI's ListItemButton
+export const ListItem = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 0;
+	text-align: left;
+	cursor: pointer;
+	user-select: none;
+	outline: none;
+
+	&:focus-visible > * {
+		background-color: var(--gray-lighter);
+	}
 `;
 
 export const Wrapper = styled.div`
@@ -65,7 +78,7 @@ export const Item = styled.div`
 	flex: 1 1;
 	padding: 10px 15px;
 
-	.MuiAvatar-root {
+	.mainAvatar {
 		align-self: center;
 		height: 50px;
 		width: 50px;
@@ -80,9 +93,10 @@ export const AvatarWrapper = styled.div`
 	position: relative;
 `;
 
+// Takes the room of MUI's 42px checkbox (and its margins) around an 18px box
 export const Selection = styled(Checkbox)`
-	margin-left: -10px !important;
-	margin-right: 5px !important;
+	margin-left: 2px;
+	margin-right: 17px;
 `;
 
 export const NameWrapper = styled.div`

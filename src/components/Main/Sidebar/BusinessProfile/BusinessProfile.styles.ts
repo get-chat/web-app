@@ -55,13 +55,14 @@ export const Section = styled.div`
 		text-align: center;
 	}
 
-	span:not(.MuiButton-label):not(.MuiCircularProgress-root),
+	/* Plain text spans only, not the parts of the form controls */
+	span:not([data-slot]),
 	.subSection > div {
 		font-size: 14px;
 		color: rgba(0, 0, 45, 0.6);
 	}
 
-	.MuiFormControl-root {
+	[data-slot='field'] {
 		margin-bottom: 20px;
 	}
 `;
@@ -90,7 +91,7 @@ export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
 	flex-direction: column;
 	gap: 15px;
 
-	.MuiButton-root {
+	[data-slot='button'] {
 		margin-bottom: 15px;
 	}
 
@@ -98,7 +99,8 @@ export const AvatarContainer = styled.div<{ $enabled?: boolean }>`
 		margin-bottom: 15px;
 	}
 
-	.MuiAvatar-root {
+	.MuiAvatar-root,
+	[data-slot='avatar'] {
 		height: 200px;
 		width: 200px;
 		font-size: 5rem !important;

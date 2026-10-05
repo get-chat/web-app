@@ -1,9 +1,4 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import { Button, TextField } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import {
@@ -20,6 +15,17 @@ import {
 	Message,
 } from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Textarea } from '@src/components/ui/textarea';
 import ListSectionsEditor from './ListSectionsEditor';
 import ReplyButtonsEditor from './ReplyButtonsEditor';
 import CarouselCardsEditor, {
@@ -57,6 +63,8 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	const [isShowingAdvanced, setIsShowingAdvanced] = useState(false);
 
 	const { t } = useTranslation();
+
+	const idPrefix = useId();
 
 	useEffect(() => {
 		if (isVisible) {
@@ -283,30 +291,35 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			);
 		}
 
+		const inputId = `${idPrefix}-${parameter.key}`;
+		const isInvalid =
+			isShowErrors && parameter.required
+				? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
+				: false;
+
 		return (
 			<TextFieldWrapper key={parameter.key}>
-				<TextField
-					variant="standard"
-					value={getNestedValue(payload, parameter.key)}
-					onChange={(e) =>
-						setPayload((prevState: any) =>
-							setNestedValue(prevState, parameter.key, e.target.value)
-						)
-					}
-					label={t(parameter.placeholder || keyToLabel(parameter.key))}
-					size="small"
-					multiline={true}
-					fullWidth={true}
-					required={parameter.required}
-					inputProps={
-						parameter.maxLength ? { maxLength: parameter.maxLength } : undefined
-					}
-					error={
-						isShowErrors && parameter.required
-							? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
-							: false
-					}
-				/>
+				<Field data-invalid={isInvalid || undefined} className="gap-1">
+					<FieldLabel htmlFor={inputId}>
+						{t(parameter.placeholder || keyToLabel(parameter.key))}
+						{parameter.required && ' *'}
+					</FieldLabel>
+					<Textarea
+						id={inputId}
+						variant="underline"
+						rows={1}
+						className="min-h-0 resize-none py-1"
+						value={getNestedValue(payload, parameter.key) ?? ''}
+						onChange={(e) =>
+							setPayload((prevState: any) =>
+								setNestedValue(prevState, parameter.key, e.target.value)
+							)
+						}
+						required={parameter.required}
+						maxLength={parameter.maxLength || undefined}
+						aria-invalid={isInvalid || undefined}
+					/>
+				</Field>
 				{parameter.description && (
 					<HelperText
 						dangerouslySetInnerHTML={{
@@ -319,99 +332,108 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	};
 
 	return (
-		<Dialog open={isVisible} onClose={close}>
-			<DialogTitle>
-				{t(describedInteractive?.title ?? 'Send an interactive message')}
-			</DialogTitle>
-			<DialogContent>
-				{describedInteractive && (
-					<Container>
-						<div>
-							<Description
-								dangerouslySetInnerHTML={{
-									__html: t(describedInteractive.description),
-								}}
-							/>
-							{describedInteractive.warning && (
-								<StyledAlert severity="warning">
-									<div
-										dangerouslySetInnerHTML={{
-											__html: t(describedInteractive.warning),
-										}}
-									/>
-								</StyledAlert>
-							)}
+		<Dialog open={isVisible} onOpenChange={(isOpen) => !isOpen && close()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>
+						{t(describedInteractive?.title ?? 'Send an interactive message')}
+					</DialogTitle>
+				</DialogHeader>
+				<DialogBody>
+					{describedInteractive && (
+						<Container>
 							<div>
+								<Description
+									dangerouslySetInnerHTML={{
+										__html: t(describedInteractive.description),
+									}}
+								/>
+								{describedInteractive.warning && (
+									<StyledAlert severity="warning">
+										<div
+											dangerouslySetInnerHTML={{
+												__html: t(describedInteractive.warning),
+											}}
+										/>
+									</StyledAlert>
+								)}
+								<div>
+									{payload &&
+										describedInteractive.parameters
+											.filter((parameter) => !parameter.advanced)
+											.map((parameter) => renderInput(parameter))}
+								</div>
+
 								{payload &&
-									describedInteractive.parameters
-										.filter((parameter) => !parameter.advanced)
-										.map((parameter) => renderInput(parameter))}
+									describedInteractive.parameters.filter(
+										(parameter) => parameter.advanced
+									).length > 0 && (
+										<AdvancedToggle
+											onClick={() =>
+												setIsShowingAdvanced((prevState) => !prevState)
+											}
+										>
+											{isShowingAdvanced ? (
+												<KeyboardArrowUpIcon />
+											) : (
+												<KeyboardArrowDownIcon />
+											)}
+											{t(
+												isShowingAdvanced
+													? 'Hide advanced settings'
+													: 'Show advanced settings'
+											)}
+										</AdvancedToggle>
+									)}
+								<Advanced
+									style={{ display: isShowingAdvanced ? 'block' : 'none' }}
+								>
+									{payload &&
+										describedInteractive.parameters
+											.filter((parameter) => parameter.advanced)
+											.map((parameter) => renderInput(parameter))}
+								</Advanced>
+
+								{describedInteractive.info && (
+									<StyledAlert severity="info">
+										<div
+											dangerouslySetInnerHTML={{
+												__html: t(describedInteractive.info),
+											}}
+										/>
+									</StyledAlert>
+								)}
 							</div>
 
-							{payload &&
-								describedInteractive.parameters.filter(
-									(parameter) => parameter.advanced
-								).length > 0 && (
-									<AdvancedToggle
-										onClick={() =>
-											setIsShowingAdvanced((prevState) => !prevState)
-										}
-									>
-										{isShowingAdvanced ? (
-											<KeyboardArrowUpIcon />
-										) : (
-											<KeyboardArrowDownIcon />
-										)}
-										{t(
-											isShowingAdvanced
-												? 'Hide advanced settings'
-												: 'Show advanced settings'
-										)}
-									</AdvancedToggle>
-								)}
-							<Advanced
-								style={{ display: isShowingAdvanced ? 'block' : 'none' }}
-							>
-								{payload &&
-									describedInteractive.parameters
-										.filter((parameter) => parameter.advanced)
-										.map((parameter) => renderInput(parameter))}
-							</Advanced>
-
-							{describedInteractive.info && (
-								<StyledAlert severity="info">
-									<div
-										dangerouslySetInnerHTML={{
-											__html: t(describedInteractive.info),
-										}}
-									/>
-								</StyledAlert>
-							)}
-						</div>
-
-						<div>
-							<PreviewTitle>{t('Preview')}</PreviewTitle>
-							<PreviewContainer>
-								{messageData && (
-									<ChatMessage
-										data={messageData}
-										disableMediaPreview
-										isInfoClickable={false}
-									/>
-								)}
-							</PreviewContainer>
-						</div>
-					</Container>
-				)}
+							<div>
+								<PreviewTitle>{t('Preview')}</PreviewTitle>
+								<PreviewContainer>
+									{messageData && (
+										<ChatMessage
+											data={messageData}
+											disableMediaPreview
+											isInfoClickable={false}
+										/>
+									)}
+								</PreviewContainer>
+							</div>
+						</Container>
+					)}
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+					<Button
+						variant="ghost"
+						color="primary"
+						onClick={checkAndSend}
+						autoFocus
+					>
+						{t('Send')}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-				<Button onClick={checkAndSend} color="primary" autoFocus>
-					{t('Send')}
-				</Button>
-			</DialogActions>
 		</Dialog>
 	);
 };
