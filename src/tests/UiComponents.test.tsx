@@ -5,6 +5,11 @@ import { Avatar, AvatarFallback } from '@src/components/ui/avatar';
 import { Badge } from '@src/components/ui/badge';
 import { Button } from '@src/components/ui/button';
 import { Checkbox } from '@src/components/ui/checkbox';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
+import {
+	AnchoredDropdownMenu,
+	DropdownMenuItem,
+} from '@src/components/ui/dropdown-menu';
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -212,5 +217,45 @@ describe('UI components', () => {
 		expect(screen.getByText('BA')).toBeInTheDocument();
 		expect(screen.getByRole('button', { name: 'Berkay' })).toBeInTheDocument();
 		expect(screen.getByText('Hidden part')).toBeInTheDocument();
+	});
+
+	test('ClickAwayListener: only clicks outside the child count', () => {
+		jest.useFakeTimers();
+		const onClickAway = jest.fn();
+		render(
+			<>
+				<ClickAwayListener onClickAway={onClickAway}>
+					<div>Inside</div>
+				</ClickAwayListener>
+				<div>Outside</div>
+			</>
+		);
+		jest.runOnlyPendingTimers();
+		jest.useRealTimers();
+
+		fireEvent.click(screen.getByText('Inside'));
+		expect(onClickAway).not.toHaveBeenCalled();
+		fireEvent.click(screen.getByText('Outside'));
+		expect(onClickAway).toHaveBeenCalledTimes(1);
+	});
+
+	test('AnchoredDropdownMenu: open while anchorEl is set', () => {
+		const anchor = document.createElement('button');
+		document.body.appendChild(anchor);
+		const onClose = jest.fn();
+		const { rerender } = render(
+			<AnchoredDropdownMenu anchorEl={undefined} onClose={onClose}>
+				<DropdownMenuItem>Copy</DropdownMenuItem>
+			</AnchoredDropdownMenu>
+		);
+		expect(screen.queryByRole('menuitem')).not.toBeInTheDocument();
+
+		rerender(
+			<AnchoredDropdownMenu anchorEl={anchor} onClose={onClose}>
+				<DropdownMenuItem>Copy</DropdownMenuItem>
+			</AnchoredDropdownMenu>
+		);
+		fireEvent.click(screen.getByRole('menuitem', { name: 'Copy' }));
+		expect(onClose).toHaveBeenCalled();
 	});
 });

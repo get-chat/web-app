@@ -66,6 +66,62 @@ function DropdownMenuContent({
 	);
 }
 
+/**
+ * For menus opened from code, like MUI's `<Menu anchorEl={...}>`: the menu is
+ * open while `anchorEl` is set, positions itself against that element and
+ * calls `onClose` when dismissed. Put the items straight inside. When the
+ * opening button is in the same component, prefer DropdownMenu with a
+ * DropdownMenuTrigger around that button.
+ */
+function AnchoredDropdownMenu({
+	anchorEl,
+	onClose,
+	modal,
+	children,
+	...contentProps
+}: Omit<React.ComponentProps<typeof DropdownMenuContent>, 'children'> & {
+	anchorEl?: Element | null;
+	onClose: () => void;
+	modal?: boolean;
+	children?: React.ReactNode;
+}) {
+	// Keep the last anchor so focus can go back to it after closing
+	const lastAnchor = React.useRef<Element | null>(null);
+	if (anchorEl) lastAnchor.current = anchorEl;
+	const rect = anchorEl?.getBoundingClientRect();
+
+	return (
+		<DropdownMenuPrimitive.Root
+			open={Boolean(anchorEl)}
+			onOpenChange={(open) => !open && onClose()}
+			modal={modal}
+		>
+			<DropdownMenuPrimitive.Trigger asChild>
+				<span
+					aria-hidden
+					style={{
+						position: 'fixed',
+						pointerEvents: 'none',
+						left: rect?.left ?? 0,
+						top: rect?.top ?? 0,
+						width: rect?.width ?? 0,
+						height: rect?.height ?? 0,
+					}}
+				/>
+			</DropdownMenuPrimitive.Trigger>
+			<DropdownMenuContent
+				onCloseAutoFocus={(event) => {
+					event.preventDefault();
+					(lastAnchor.current as HTMLElement | null)?.focus?.();
+				}}
+				{...contentProps}
+			>
+				{children}
+			</DropdownMenuContent>
+		</DropdownMenuPrimitive.Root>
+	);
+}
+
 function DropdownMenuGroup({
 	...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {
@@ -241,6 +297,7 @@ function DropdownMenuSubContent({
 }
 
 export {
+	AnchoredDropdownMenu,
 	DropdownMenu,
 	DropdownMenuPortal,
 	DropdownMenuTrigger,

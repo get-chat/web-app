@@ -138,4 +138,49 @@ function TooltipContent({
 	);
 }
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+/**
+ * MUI's `<Tooltip title={...}>` in one piece: wraps `children` (which must
+ * accept a ref, like a DOM element) and shows nothing when `title` is empty,
+ * as MUI does. placement → `side` + `align`, disableInteractive →
+ * disableHoverableContent.
+ */
+function SimpleTooltip({
+	title,
+	side,
+	align,
+	contentClassName,
+	children,
+	...props
+}: Omit<React.ComponentProps<typeof Tooltip>, 'children'> & {
+	title: React.ReactNode;
+	side?: React.ComponentProps<typeof TooltipContent>['side'];
+	align?: React.ComponentProps<typeof TooltipContent>['align'];
+	contentClassName?: string;
+	children: React.ReactElement;
+}) {
+	if (
+		title === undefined ||
+		title === null ||
+		title === '' ||
+		title === false
+	) {
+		return children;
+	}
+
+	return (
+		<Tooltip {...props}>
+			<TooltipTrigger asChild>{children}</TooltipTrigger>
+			<TooltipContent side={side} align={align} className={contentClassName}>
+				{title}
+			</TooltipContent>
+		</Tooltip>
+	);
+}
+
+export {
+	SimpleTooltip,
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+	TooltipProvider,
+};

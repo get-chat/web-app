@@ -10,8 +10,10 @@ import { Button } from '@src/components/ui/button';
  * Replaces MUI's Dialog. The parts carry their own padding like MUI's, so
  * DialogTitle → DialogHeader + DialogTitle, DialogContent → DialogBody (the
  * part that scrolls), DialogContentText → DialogDescription and DialogActions →
- * DialogFooter. MUI's `onClose` becomes `onOpenChange`, `maxWidth`/`fullScreen`
- * become `size` on DialogContent, and `fullWidth` is the default here.
+ * DialogFooter. MUI's `onClose` becomes `onOpenChange`, `maxWidth` becomes
+ * `size` on DialogContent with the same names and widths (default "sm", like
+ * MUI's), `fullScreen` becomes size="full", and `fullWidth` is the default.
+ * There is no close (X) button unless `showCloseButton` is set, as in MUI.
  *
  * z-[1300] is MUI's modal layer, so these and MUI's dialogs stack correctly.
  */
@@ -20,16 +22,16 @@ const dialogContentVariants = cva(
 	{
 		variants: {
 			size: {
-				xs: 'sm:max-w-xs',
-				sm: 'sm:max-w-sm',
-				md: 'sm:max-w-lg',
-				lg: 'sm:max-w-2xl',
-				xl: 'sm:max-w-4xl',
+				xs: 'sm:max-w-[444px]',
+				sm: 'sm:max-w-[600px]',
+				md: 'sm:max-w-[900px]',
+				lg: 'sm:max-w-[1200px]',
+				xl: 'sm:max-w-[1536px]',
 				full: 'h-dvh max-h-none max-w-none rounded-none',
 			},
 		},
 		defaultVariants: {
-			size: 'md',
+			size: 'sm',
 		},
 	}
 );
@@ -79,7 +81,7 @@ function DialogContent({
 	overlayClassName,
 	size,
 	children,
-	showCloseButton = true,
+	showCloseButton = false,
 	...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> &
 	VariantProps<typeof dialogContentVariants> & {
@@ -91,7 +93,7 @@ function DialogContent({
 			<DialogOverlay className={overlayClassName} />
 			<DialogPrimitive.Content
 				data-slot="dialog-content"
-				data-size={size ?? 'md'}
+				data-size={size ?? 'sm'}
 				className={cn(dialogContentVariants({ size }), className)}
 				{...props}
 			>

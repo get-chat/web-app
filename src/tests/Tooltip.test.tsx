@@ -1,6 +1,7 @@
 import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import {
+	SimpleTooltip,
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
@@ -51,6 +52,19 @@ describe('Tooltip on touch devices', () => {
 		fireEvent.touchEnd(trigger);
 		act(() => jest.advanceTimersByTime(2000));
 
+		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+	});
+
+	test('SimpleTooltip renders only the child when the title is empty', () => {
+		render(
+			<TooltipProvider>
+				<SimpleTooltip title="">
+					<button type="button">Plain</button>
+				</SimpleTooltip>
+			</TooltipProvider>
+		);
+		fireEvent.touchStart(screen.getByText('Plain'));
+		act(() => jest.advanceTimersByTime(800));
 		expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
 	});
 });
