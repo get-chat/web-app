@@ -1,3 +1,5 @@
+// First, so the cascade layer order it declares comes before any other CSS
+import '@src/styles/tailwind.css';
 import { createRoot } from 'react-dom/client';
 
 import App from '@src/App';

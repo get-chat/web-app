@@ -81,7 +81,26 @@ module.exports = (isDevelopment) => {
 					exclude: '/node_modules/',
 				},
 				{
+					// Tailwind entry point; runs through Tailwind's own PostCSS
+					// plugin only, not the postcss.config.js chain used by .pcss
+					test: /tailwind\.css$/i,
+					use: [
+						styleLoader,
+						{ loader: 'css-loader', options: { importLoaders: 1 } },
+						{
+							loader: 'postcss-loader',
+							options: {
+								postcssOptions: {
+									config: false,
+									plugins: ['@tailwindcss/postcss'],
+								},
+							},
+						},
+					],
+				},
+				{
 					test: /\.css$/i,
+					exclude: /tailwind\.css$/i,
 					use: [
 						styleLoader,
 						{

@@ -62,15 +62,18 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-button,
-input,
-optgroup,
-select,
-textarea {
-	margin: 0;
-	font-family: inherit;
-	font-size: inherit;
-	line-height: inherit;
+/* Layered so Tailwind utilities (see tailwind.css) can override it */
+@layer base {
+	button,
+	input,
+	optgroup,
+	select,
+	textarea {
+		margin: 0;
+		font-family: inherit;
+		font-size: inherit;
+		line-height: inherit;
+	}
 }
 
 input[type='text'],
@@ -78,9 +81,12 @@ textarea {
 	line-height: 1.5rem;
 }
 
-svg {
-	overflow: hidden;
-	vertical-align: middle;
+/* Layered so Tailwind utilities (see tailwind.css) can override it */
+@layer base {
+	svg {
+		overflow: hidden;
+		vertical-align: middle;
+	}
 }
 
 :focus-visible {

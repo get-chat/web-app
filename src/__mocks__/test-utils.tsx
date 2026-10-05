@@ -2,6 +2,7 @@ import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MemoryRouter } from 'react-router-dom';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
+import { TooltipProvider } from '@src/components/ui/tooltip';
 
 const theme = createTheme();
 
@@ -16,7 +17,9 @@ export const TestProviders = ({ children }: { children: React.ReactNode }) => (
 			// @ts-ignore
 			value={mockConfig}
 		>
-			<MemoryRouter>{children}</MemoryRouter>
+			<TooltipProvider>
+				<MemoryRouter>{children}</MemoryRouter>
+			</TooltipProvider>
 		</AppConfigContext.Provider>
 	</ThemeProvider>
 );
