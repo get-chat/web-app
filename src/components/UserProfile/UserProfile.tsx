@@ -1,12 +1,15 @@
 import React from 'react';
-import { ArrowBack } from '@src/components/icons';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
-import * as Styled from '../Main/Sidebar/BusinessProfile/BusinessProfile.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import { Button } from '@src/components/ui/button';
+import ProfilePanel, {
+	ProfileSection,
+	ProfileSectionHeader,
+	profileTextClass,
+} from '@src/components/ProfilePanel';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -25,61 +28,54 @@ const UserProfile: React.FC<Props> = ({
 	const { t } = useTranslation();
 
 	return (
-		<Styled.BusinessProfileContainer
-			$isExiting={isExiting}
+		<ProfilePanel
+			title={t('Profile')}
+			onHide={onHide}
+			isExiting={isExiting}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.Header>
-				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
-					<ArrowBack />
-				</Button>
+			<ProfileSection>
+				{currentUser && (
+					<div>
+						<ProfileSectionHeader title={t('Personal Profile')} />
 
-				<h3>{t('Profile')}</h3>
-			</Styled.Header>
-
-			<Styled.Body>
-				<Styled.Section>
-					{currentUser && (
-						<div>
-							<Styled.SectionHeader>
-								<h5>{t('Personal Profile')}</h5>
-							</Styled.SectionHeader>
-
-							<Styled.AvatarContainer>
-								<CustomAvatar
-									src={
-										currentUser?.profile?.large_avatar ??
-										currentUser?.profile?.avatar
-									}
-									generateBgColorBy={currentUser.username}
-								>
-									{generateInitialsHelper(currentUser.username)}
-								</CustomAvatar>
-							</Styled.AvatarContainer>
-
-							<Styled.UsernameContainer>
-								<h3>{currentUser.username}</h3>
-								<span>
-									{currentUser.first_name + ' ' + currentUser.last_name}
-								</span>
-							</Styled.UsernameContainer>
-
-							{!isReadOnly && (
-								<Styled.ChangePasswordContainer>
-									<Button
-										variant="ghost"
-										color="secondary"
-										onClick={() => setChangePasswordDialogVisible(true)}
-									>
-										{t('Change password')}
-									</Button>
-								</Styled.ChangePasswordContainer>
-							)}
+						<div className="flex flex-col items-center justify-center">
+							<CustomAvatar
+								className="size-50 text-[5rem]/none"
+								src={
+									currentUser?.profile?.large_avatar ??
+									currentUser?.profile?.avatar
+								}
+								generateBgColorBy={currentUser.username}
+							>
+								{generateInitialsHelper(currentUser.username)}
+							</CustomAvatar>
 						</div>
-					)}
-				</Styled.Section>
-			</Styled.Body>
-		</Styled.BusinessProfileContainer>
+
+						<div className="mt-3.75 flex flex-col items-center gap-1.25">
+							<h3 className="text-center font-normal">
+								{currentUser.username}
+							</h3>
+							<span className={profileTextClass}>
+								{currentUser.first_name + ' ' + currentUser.last_name}
+							</span>
+						</div>
+
+						{!isReadOnly && (
+							<div className="mt-2.5 flex justify-center">
+								<Button
+									variant="ghost"
+									color="secondary"
+									onClick={() => setChangePasswordDialogVisible(true)}
+								>
+									{t('Change password')}
+								</Button>
+							</div>
+						)}
+					</div>
+				)}
+			</ProfileSection>
+		</ProfilePanel>
 	);
 };
 

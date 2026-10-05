@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useId, useRef, useState } from 'react';
-import { ArrowBack, QrCode } from '@src/components/icons';
+import { QrCode } from '@src/components/icons';
 import FileInput from '../../../FileInput';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -11,7 +11,6 @@ import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { AxiosError } from 'axios';
 import PubSub from 'pubsub-js';
 import { EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO } from '@src/Constants';
-import * as Styled from './BusinessProfile.styles';
 import {
 	deleteProfilePhoto,
 	fetchBusinessProfileSettings,
@@ -22,6 +21,12 @@ import api from '@src/api/axiosInstance';
 import { setState } from '@src/store/reducers/UIReducer';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import { Button } from '@src/components/ui/button';
+import { cn } from '@src/lib/utils';
+import ProfilePanel, {
+	ProfileSection,
+	ProfileSectionHeader,
+	profileTextClass,
+} from '@src/components/ProfilePanel';
 import { Field, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
 import { Textarea } from '@src/components/ui/textarea';
@@ -226,216 +231,205 @@ const BusinessProfile: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.BusinessProfileContainer
-			$isExiting={isExiting}
+		<ProfilePanel
+			title={t('Business Profile')}
+			onHide={onHide}
+			isExiting={isExiting}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.Header>
-				<Button variant="ghost" color="neutral" size="icon-xl" onClick={onHide}>
-					<ArrowBack />
-				</Button>
-				<h3>{t('Business Profile')}</h3>
-			</Styled.Header>
+			{storedURLs.length > 1 && (
+				<ProfileSection>
+					<ProfileSectionHeader title={t('Your current inbox')} />
+					{prepareURLForDisplay(api.defaults.baseURL ?? '')}
+					<a
+						href="#"
+						className="ml-1 text-(--color-secondary)"
+						onClick={() => setInboxSelectorVisible(true)}
+					>
+						{t('Change')}
+					</a>
+				</ProfileSection>
+			)}
 
-			<Styled.Body>
-				{storedURLs.length > 1 && (
-					<Styled.Section>
-						<Styled.SectionHeader>
-							<h5>{t('Your current inbox')}</h5>
-						</Styled.SectionHeader>
-						{prepareURLForDisplay(api.defaults.baseURL ?? '')}
-						<Styled.ChangeInboxLink
-							href="#"
-							className="ml-1"
-							onClick={() => setInboxSelectorVisible(true)}
-						>
-							{t('Change')}
-						</Styled.ChangeInboxLink>
-					</Styled.Section>
-				)}
+			<ProfileSection>
+				<ProfileSectionHeader
+					title={t('Business Profile')}
+					action={<QrCode onClick={showOpenInWhatsApp} />}
+				/>
 
-				<Styled.Section>
-					<Styled.SectionHeader>
-						<h5>{t('Business Profile')}</h5>
-						<QrCode onClick={showOpenInWhatsApp} />
-					</Styled.SectionHeader>
+				{!isLoaded && <span className={profileTextClass}>{t('Loading')}</span>}
 
-					{!isLoaded && <span>{t('Loading')}</span>}
+				{isLoaded && (
+					<div>
+						<div className="mt-3.75 flex flex-col items-center justify-center gap-7.5 pb-3.75">
+							<FileInput
+								innerRef={fileInput}
+								handleSelectedFiles={(file: FileList) =>
+									doUpdateProfilePhoto(file)
+								}
+								accept="image/jpeg, image/png"
+								multiple={false}
+							/>
 
-					{isLoaded && (
-						<Styled.SubSection>
-							<Styled.AvatarContainer $enabled={isAdmin}>
-								<FileInput
-									innerRef={fileInput}
-									handleSelectedFiles={(file: FileList) =>
-										doUpdateProfilePhoto(file)
+							<BusinessProfileAvatar
+								className={cn(
+									'size-50 text-[5rem]/none transition-opacity duration-100 ease-linear',
+									isAdmin && 'cursor-pointer hover:opacity-75'
+								)}
+								onClick={handleBusinessProfileAvatarClick}
+								profilePhoto={profilePhoto}
+							/>
+
+							{profilePhoto && isAdmin && !isReadOnly && (
+								<Button
+									variant="ghost"
+									color="secondary"
+									onClick={doDeleteProfilePhoto}
+								>
+									Delete profile photo
+								</Button>
+							)}
+						</div>
+
+						<form onSubmit={updateBusinessProfile}>
+							<div>
+								<Field className="mb-5 gap-1.5" data-disabled>
+									<FieldLabel htmlFor={`${id}-phone-number`}>
+										{t('Phone number')}
+									</FieldLabel>
+									<Input
+										id={`${id}-phone-number`}
+										value={phoneNumber ? `+${phoneNumber}` : ''}
+										readOnly={!isAdmin || isReadOnly}
+										disabled={true}
+									/>
+								</Field>
+
+								<Field
+									className="mb-5 gap-1.5"
+									data-disabled={isUpdating || undefined}
+									data-invalid={Boolean(aboutError) || undefined}
+								>
+									<FieldLabel htmlFor={`${id}-about`}>{t('About')}</FieldLabel>
+									<Textarea
+										id={`${id}-about`}
+										className="min-h-9"
+										value={about}
+										onChange={(e) => setAbout(e.target.value)}
+										readOnly={!isAdmin || isReadOnly}
+										disabled={isUpdating}
+										aria-invalid={Boolean(aboutError) || undefined}
+									/>
+								</Field>
+
+								{Boolean(aboutError) && (
+									<div className="-mt-2.5 mb-5 text-[13px] text-destructive-dark">
+										{t(aboutError ?? '')}
+									</div>
+								)}
+
+								<Field
+									className="mb-5 gap-1.5"
+									data-disabled={isUpdating || undefined}
+								>
+									<FieldLabel htmlFor={`${id}-address`}>
+										{t('Address')}
+									</FieldLabel>
+									<Input
+										id={`${id}-address`}
+										value={address}
+										onChange={(e) => setAddress(e.target.value)}
+										readOnly={!isAdmin || isReadOnly}
+										disabled={isUpdating}
+									/>
+								</Field>
+								<Field
+									className="mb-5 gap-1.5"
+									data-disabled={isUpdating || undefined}
+								>
+									<FieldLabel htmlFor={`${id}-description`}>
+										{t('Description')}
+									</FieldLabel>
+									<Input
+										id={`${id}-description`}
+										value={description}
+										onChange={(e) => setDescription(e.target.value)}
+										readOnly={!isAdmin || isReadOnly}
+										disabled={isUpdating}
+									/>
+								</Field>
+								<Field
+									className="mb-5 gap-1.5"
+									data-disabled={isUpdating || undefined}
+								>
+									<FieldLabel htmlFor={`${id}-email`}>{t('E-mail')}</FieldLabel>
+									<Input
+										id={`${id}-email`}
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										readOnly={!isAdmin || isReadOnly}
+										disabled={isUpdating}
+									/>
+								</Field>
+
+								<Field
+									className="mb-5 gap-1.5"
+									data-disabled={
+										!isAdmin || isReadOnly || isUpdating || undefined
 									}
-									accept="image/jpeg, image/png"
-									multiple={false}
-								/>
-
-								<BusinessProfileAvatar
-									onClick={handleBusinessProfileAvatarClick}
-									profilePhoto={profilePhoto}
-								/>
-
-								{profilePhoto && isAdmin && !isReadOnly && (
-									<Button
-										variant="ghost"
-										color="secondary"
-										onClick={doDeleteProfilePhoto}
-									>
-										Delete profile photo
-									</Button>
-								)}
-							</Styled.AvatarContainer>
-
-							<form onSubmit={updateBusinessProfile}>
-								<div>
-									<Field className="gap-1.5" data-disabled>
-										<FieldLabel htmlFor={`${id}-phone-number`}>
-											{t('Phone number')}
-										</FieldLabel>
-										<Input
-											id={`${id}-phone-number`}
-											value={phoneNumber ? `+${phoneNumber}` : ''}
-											readOnly={!isAdmin || isReadOnly}
-											disabled={true}
-										/>
-									</Field>
-
-									<Field
-										className="gap-1.5"
-										data-disabled={isUpdating || undefined}
-										data-invalid={Boolean(aboutError) || undefined}
-									>
-										<FieldLabel htmlFor={`${id}-about`}>
-											{t('About')}
-										</FieldLabel>
-										<Textarea
-											id={`${id}-about`}
-											className="min-h-9"
-											value={about}
-											onChange={(e) => setAbout(e.target.value)}
-											readOnly={!isAdmin || isReadOnly}
-											disabled={isUpdating}
-											aria-invalid={Boolean(aboutError) || undefined}
-										/>
-									</Field>
-
-									{Boolean(aboutError) && (
-										<Styled.FieldErrorMessage>
-											{t(aboutError ?? '')}
-										</Styled.FieldErrorMessage>
-									)}
-
-									<Field
-										className="gap-1.5"
-										data-disabled={isUpdating || undefined}
-									>
-										<FieldLabel htmlFor={`${id}-address`}>
-											{t('Address')}
-										</FieldLabel>
-										<Input
-											id={`${id}-address`}
-											value={address}
-											onChange={(e) => setAddress(e.target.value)}
-											readOnly={!isAdmin || isReadOnly}
-											disabled={isUpdating}
-										/>
-									</Field>
-									<Field
-										className="gap-1.5"
-										data-disabled={isUpdating || undefined}
-									>
-										<FieldLabel htmlFor={`${id}-description`}>
-											{t('Description')}
-										</FieldLabel>
-										<Input
-											id={`${id}-description`}
-											value={description}
-											onChange={(e) => setDescription(e.target.value)}
-											readOnly={!isAdmin || isReadOnly}
-											disabled={isUpdating}
-										/>
-									</Field>
-									<Field
-										className="gap-1.5"
-										data-disabled={isUpdating || undefined}
-									>
-										<FieldLabel htmlFor={`${id}-email`}>
-											{t('E-mail')}
-										</FieldLabel>
-										<Input
-											id={`${id}-email`}
-											value={email}
-											onChange={(e) => setEmail(e.target.value)}
-											readOnly={!isAdmin || isReadOnly}
-											disabled={isUpdating}
-										/>
-									</Field>
-
-									<Field
-										className="gap-1.5"
-										data-disabled={
-											!isAdmin || isReadOnly || isUpdating || undefined
+								>
+									<FieldLabel htmlFor={`${id}-vertical`}>
+										{t('Vertical')}
+									</FieldLabel>
+									<Select
+										value={vertical || VERTICAL_NONE}
+										onValueChange={(value) =>
+											setVertical(value === VERTICAL_NONE ? '' : value)
 										}
+										disabled={!isAdmin || isReadOnly || isUpdating}
 									>
-										<FieldLabel htmlFor={`${id}-vertical`}>
-											{t('Vertical')}
-										</FieldLabel>
-										<Select
-											value={vertical || VERTICAL_NONE}
-											onValueChange={(value) =>
-												setVertical(value === VERTICAL_NONE ? '' : value)
-											}
-											disabled={!isAdmin || isReadOnly || isUpdating}
-										>
-											<SelectTrigger id={`${id}-vertical`} className="w-full">
-												<SelectValue />
-											</SelectTrigger>
-											<SelectContent>
-												<SelectItem value={VERTICAL_NONE}>
-													{t('None')}
+										<SelectTrigger id={`${id}-vertical`} className="w-full">
+											<SelectValue />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value={VERTICAL_NONE}>{t('None')}</SelectItem>
+
+											{verticalOptions.map((verticalOption) => (
+												<SelectItem
+													key={verticalOption.value}
+													value={verticalOption.value}
+												>
+													{t(verticalOption.label)}
 												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
+								</Field>
+							</div>
 
-												{verticalOptions.map((verticalOption) => (
-													<SelectItem
-														key={verticalOption.value}
-														value={verticalOption.value}
-													>
-														{t(verticalOption.label)}
-													</SelectItem>
-												))}
-											</SelectContent>
-										</Select>
-									</Field>
+							{isAdmin && !isReadOnly && (
+								<div className="flex justify-end">
+									<Button
+										type="submit"
+										variant="ghost"
+										color="primary"
+										size="lg"
+										disabled={isUpdating}
+									>
+										{t('Update')}
+									</Button>
 								</div>
-
-								{isAdmin && !isReadOnly && (
-									<Styled.SubSectionAction>
-										<Button
-											type="submit"
-											variant="ghost"
-											color="primary"
-											size="lg"
-											disabled={isUpdating}
-										>
-											{t('Update')}
-										</Button>
-									</Styled.SubSectionAction>
-								)}
-							</form>
-						</Styled.SubSection>
-					)}
-				</Styled.Section>
-			</Styled.Body>
+							)}
+						</form>
+					</div>
+				)}
+			</ProfileSection>
 
 			<InboxSelectorDialog
 				isVisible={isInboxSelectorVisible}
 				setVisible={setInboxSelectorVisible}
 			/>
-		</Styled.BusinessProfileContainer>
+		</ProfilePanel>
 	);
 };
 
