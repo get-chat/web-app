@@ -21,7 +21,7 @@ import { Button } from '@src/components/ui/button';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { cn } from '@src/lib/utils';
 
-// MUI's large IconButton, 44px on mobile as App.css made it
+// MUI's large IconButton, 44px on mobile like the app's other IconButtons
 const headerButtonClassName = 'max-md:size-11';
 
 const mediaClassName =

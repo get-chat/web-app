@@ -135,9 +135,9 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 ## Styling
 
-Views are styled with [Tailwind CSS](https://tailwindcss.com) v4, configured in `src/styles/tailwind.css`. The global CSS files in `src/styles/` are still being migrated to Tailwind.
+Views are styled with [Tailwind CSS](https://tailwindcss.com) v4, configured in `src/styles/tailwind.css`, which also holds the app's few global defaults (body font, icons, scrollbars, focus outline) in its base layer.
 
-- **Style components with Tailwind classes.** Don't add CSS-in-JS or new rules to the global stylesheets; when you rework markup that a global stylesheet styles, move those styles into classes.
+- **Style components with Tailwind classes.** Don't add CSS-in-JS or global rules; the base layer is only for defaults that apply to every element of a kind.
 - **UI components** live in `src/components/ui/` (buttons, dialogs, inputs, selects, menus, tooltips...). They are built on [shadcn/ui](https://ui.shadcn.com) and are our own code: change their look there, not with overrides where they are used.
 - **Icons** are [Material Symbols](https://fonts.google.com/icons) (Rounded, filled), generated into `src/components/icons/`. To add one, put its name (e.g. `more_vert`) in `src/components/icons/icons.json`, run `node scripts/generate-icons.mjs` and import it from `@src/components/icons/MoreVert`.
 - **Combine classes** with `cn()` from `src/lib/utils`. Use `cva` for a component with variants (see the files in `src/components/ui/`), and extract a small component instead of repeating a long class list.
@@ -148,11 +148,10 @@ Views are styled with [Tailwind CSS](https://tailwindcss.com) v4, configured in 
   - spacing uses Tailwind's scale, where 1 step is 4px and fractions are fine (`py-1.25` is 5px)
   - arbitrary values (`w-[310px]`) are fine for one-off measurements
 - **Fading pages and large containers:** use `animate-fade-in` / `animate-fade-out` (opacity only). tw-animate's `animate-in`/`animate-out` also animate `transform`, which makes `position: fixed` content inside (overlays, the loading screen) shrink to the container while the animation runs. They're fine for small elements, e.g. `animate-in zoom-in-95`.
-- **Cascade:** Tailwind's utilities live in CSS cascade layers, so the remaining global CSS wins over them. Use the `!` suffix (`size-4!`) only to beat such a rule, and remove it once that rule is gone. A `!` utility even beats a global rule's `!important`.
+- **Cascade:** utilities beat the base layer, so a class overrides a global default without `!`. Third-party stylesheets (`EmojiPicker.css`, react-date-range's CSS) are unlayered and win over utilities; use the `!` suffix (`size-4!`) only to beat them. A `!` utility even beats their `!important`.
 - **`cn()` and keyword values:** `cn()` resolves conflicting classes, but it can't tell some arbitrary values apart: write `text-[length:x-small]`, not `text-[x-small]`, or a text colour after it removes it. New theme values that it must know about (like `shadow-menu`) go in `src/lib/utils.ts`.
 - **Underscores in arbitrary selectors** become spaces: target `.chat__message` as `[&_.chat\_\_message]` in JSX, or better, put the classes on the element itself.
 - Don't use the `dark:` variant; the app has no dark mode.
-- `src/styles/App.css` still defines legacy helpers named like Tailwind classes, and they win: `.mt-1`–`.mr-3` (in 5px steps instead of 4px), and `.hidden`, which is `!important`, so `hidden max-md:flex` never shows. Write `md:hidden` instead.
 
 ## Query Parameters
 

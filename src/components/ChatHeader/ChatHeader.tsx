@@ -48,7 +48,7 @@ import {
 } from '@src/components/ui/tooltip';
 import { cn } from '@src/lib/utils';
 
-// Brown header icons; `!` because App.css colours every MUI icon grey
+// Brown header icons
 const headerIconButton = 'text-black/54 [&_svg]:text-chat-icon!';
 
 interface Props {

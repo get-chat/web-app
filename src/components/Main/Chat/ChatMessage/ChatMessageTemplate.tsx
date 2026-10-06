@@ -19,9 +19,8 @@ import { getHeaderFileLink } from '@src/helpers/MessageHelper';
 import MissingContent from './MissingContent';
 import { Button } from '@src/components/ui/button';
 
-// MUI's full-width text button, long labels wrapping; Chat.css gives the
-// label its light blue, the icon follows it (`!` because App.css colours every
-// MUI icon grey)
+// MUI's full-width text button, long labels wrapping; the bubble gives the
+// label its light blue, and the icon follows it
 const templateButton =
 	'h-auto min-h-9 w-full py-1.5 text-center font-semibold whitespace-normal [&_svg]:size-5! [&_svg]:text-current!';
 

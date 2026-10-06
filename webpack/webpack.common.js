@@ -86,7 +86,15 @@ module.exports = (isDevelopment) => {
 					test: /tailwind\.css$/i,
 					use: [
 						styleLoader,
-						{ loader: 'css-loader', options: { importLoaders: 1 } },
+						{
+							loader: 'css-loader',
+							options: {
+								importLoaders: 1,
+								// Root-relative urls point to the public folder, as in
+								// the rule below
+								url: { filter: (url) => !url.startsWith('/') },
+							},
+						},
 						{
 							loader: 'postcss-loader',
 							options: {

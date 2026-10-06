@@ -1,15 +1,15 @@
 /*
- * Tailwind entry point: the app's styles, together with the global
- * stylesheets in this folder that are still being migrated.
+ * The app's styles: Tailwind, the theme, and the few global defaults the
+ * app builds on (fonts, icons, scrollbars, focus outlines), in `@layer base`.
  *
- * Preflight (Tailwind's global reset) is deliberately left out: it would
- * restyle the headings, buttons and lists the global stylesheets rely on. Add
- * it back (`@import 'tailwindcss';`) once they are gone.
+ * Preflight (Tailwind's global reset) is deliberately left out: the app was
+ * built on the browser's own defaults for headings, lists, buttons and
+ * images.
  *
- * Everything here lives in cascade layers, and unlayered CSS always beats
- * layered CSS. The global stylesheets are unlayered, so on a conflicting
- * property they win over a Tailwind utility. Use the `!` suffix
- * (`bg-chat-bg!`) to override them.
+ * Everything here lives in cascade layers, and utilities beat the base
+ * layer, so style components with classes. Third-party stylesheets (the
+ * emoji picker, the date range picker) are unlayered and win over
+ * utilities; a `!` utility (`size-4!`) beats them, even their `!important`.
  */
 @layer theme, base, components, utilities;
 
@@ -49,7 +49,7 @@
 	--color-menu-muted: var(--menu-muted);
 	--color-selection: var(--selection);
 
-	/* App-specific tokens from index.css */
+	/* App-specific tokens, defined below */
 	--color-gray-light: var(--gray-light);
 	--color-gray-lighter: var(--gray-lighter);
 	--color-chat-bg: var(--chat-bg);
@@ -281,7 +281,38 @@
 	}
 }
 
-/* shadcn tokens, mapped onto the existing palette in index.css */
+/* The app's palette and measurements */
+:root {
+	--color-primary: #65cbac;
+	--color-primary-transparent: rgba(0, 150, 136, 0.05);
+	--color-primary-transparent-darker: rgba(0, 150, 136, 0.08);
+	--color-primary-light: #86e7c9;
+	--color-secondary: #e33e7f;
+	--gray-light: #eaecf2;
+	--gray-lighter: #f2f3f6;
+	--default-text-color: #212329;
+	--lighter-text-color: rgb(90, 92, 105);
+	--shadow-light: rgba(0, 0, 45, 0.08);
+	--header-height: 56px;
+	--font-family: 'Inter', 'Roboto', 'Helvetica Neue', -apple-system,
+		BlinkMacSystemFont, 'Arial', sans-serif;
+	--wrapper-border-radius: 15px;
+	--chat-bg: #e8e0dc;
+	--chat-bg-image: url('/pattern.svg');
+	--chat-icon: #774e3a;
+	--chat-icon-dark: #5e3826;
+	--red: #fa1313;
+	--red-dark: #961414;
+}
+
+/* The inbox window loses its rounded corners once it fills the screen */
+@media only screen and (max-width: 1500px) {
+	:root {
+		--wrapper-border-radius: 0;
+	}
+}
+
+/* shadcn tokens, mapped onto the app's palette */
 :root {
 	--radius: 10px;
 	--background: #fff;
@@ -327,6 +358,138 @@
 		background-color: transparent;
 		color: inherit;
 		font: inherit;
+	}
+}
+
+/* The app's global defaults */
+@layer base {
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	* {
+		margin: 0;
+		scrollbar-width: thin;
+		scrollbar-color: rgba(0, 0, 45, 0.2) transparent;
+	}
+
+	html,
+	body {
+		overflow: hidden;
+		height: 100%;
+	}
+
+	body {
+		font-family: var(--font-family);
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 1.5;
+		color: var(--default-text-color);
+		text-align: left;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5 {
+		font-weight: 600;
+	}
+
+	a,
+	div {
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	a {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	button,
+	input,
+	optgroup,
+	select,
+	textarea {
+		font-family: inherit;
+		font-size: inherit;
+		line-height: inherit;
+	}
+
+	input[type='text'],
+	textarea {
+		line-height: 1.5rem;
+	}
+
+	code {
+		font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+			monospace;
+	}
+
+	:focus-visible {
+		outline: 2px solid rgba(101, 203, 172, 0.8);
+		outline-offset: 2px;
+	}
+
+	/* Thin, rounded scrollbars on a transparent track */
+	::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		border-radius: 999px;
+		background: rgba(0, 0, 45, 0.2);
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background: rgba(0, 0, 45, 0.35);
+	}
+
+	svg {
+		overflow: hidden;
+		vertical-align: middle;
+	}
+
+	/*
+	 * Icons from src/components/icons, sized and coloured like MUI's
+	 * SvgIcon: 1em square at 24px (20px small, 35px large), grey
+	 */
+	.app-icon {
+		display: inline-block;
+		flex-shrink: 0;
+		width: 1em;
+		height: 1em;
+		font-size: 1.5rem;
+		color: #6f7385;
+		fill: currentColor;
+		user-select: none;
+		transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.app-icon--small {
+		font-size: 1.25rem;
+	}
+
+	.app-icon--large {
+		font-size: 2.1875rem;
+	}
+
+	.app-icon--inherit {
+		font-size: inherit;
+	}
+
+	:is(h1, h2, h3) .emoji-mart-emoji {
+		vertical-align: middle;
 	}
 }
 

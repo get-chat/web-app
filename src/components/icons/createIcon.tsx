@@ -13,7 +13,8 @@ export type IconComponent = React.FC<IconProps>;
 /**
  * Builds an icon component from Material Symbols path data (24px grid drawn on
  * a 960 unit viewBox). Sizing and colour come from the `app-icon` classes in
- * src/styles/index.css: 1em square, 24px font size, `fill: currentColor`.
+ * the base layer of src/styles/tailwind.css: 1em square, 24px font size,
+ * grey, `fill: currentColor`.
  */
 export function createIcon(paths: string[], name: string): IconComponent {
 	const Icon: IconComponent = ({

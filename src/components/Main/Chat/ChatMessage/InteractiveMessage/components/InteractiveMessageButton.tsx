@@ -5,7 +5,7 @@ import { cn } from '@src/lib/utils';
 /*
  * The full-width, centred text button (MUI's `<Button fullWidth>`) shown in
  * interactive message bubbles. `!` on the colours: the bubble colours every
- * link light blue and App.css colours every MUI icon grey.
+ * link light blue.
  *
  * With an `href` it is a link, as with MUI. A link can't be `disabled`, so a
  * disabled one gets aria-disabled and the disabled look by hand, like MUI's.

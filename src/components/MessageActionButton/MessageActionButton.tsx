@@ -9,7 +9,7 @@ interface Props extends React.ComponentProps<typeof Button> {
 /**
  * The round icon button next to a quick reply or template in the panels
  * above the chat footer. MUI's small IconButton (5px padding) around a 20px
- * icon: a 30px circle, 40px on mobile where App.css gave every IconButton
+ * icon: a 30px circle, 40px on mobile, where the app gave every IconButton
  * 10px of padding.
  */
 const MessageActionButton: React.FC<Props> = ({

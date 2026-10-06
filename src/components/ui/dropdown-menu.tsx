@@ -15,8 +15,7 @@ import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui';
 const menuSurface =
 	'z-[1300] min-w-48 overflow-x-hidden overflow-y-auto rounded-[12px] bg-popover py-1.5 text-popover-foreground shadow-menu outline-none! data-[state=closed]:animate-menu-out data-[state=open]:animate-menu-in';
 
-// `!` on the icon colour: App.css colours every MUI icon grey. Icons that set
-// their own text colour keep it.
+// Menu icons in the menu grey, unless they set their own text colour
 const menuItem =
 	"relative flex h-8 cursor-pointer items-center gap-3.5 px-4 text-sm outline-none! select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-40 data-[highlighted]:bg-menu-hover data-[inset]:pl-[49px] [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='text-'])]:text-menu-icon! [&_svg:not([class*='size-'])]:size-[19px]!";
 
