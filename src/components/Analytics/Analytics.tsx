@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 import fileDownload from 'js-file-download';
 import { Alert } from '@src/components/ui/alert';
 import { Button } from '@src/components/ui/button';
-import { Skeleton } from '@src/components/ui/skeleton';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import ArrowBackIcon from '@src/components/icons/ArrowBack';
 import BarChartIcon from '@src/components/icons/BarChart';
@@ -27,6 +26,7 @@ import {
 	toUnix,
 } from './analyticsHelpers';
 import AnalyticsFilterBar from './AnalyticsFilterBar';
+import AnalyticsSkeleton from './AnalyticsSkeleton';
 import ConversationsCard from './ConversationsCard';
 import KpiCards from './KpiCards';
 import MessagesCard from './MessagesCard';
@@ -200,22 +200,7 @@ const Analytics: React.FC<Props> = ({ onClose, isExiting, onAnimationEnd }) => {
 							{t('Analytics could not be loaded.')}
 						</Alert>
 					) : !data ? (
-						// Blank cards in the page's layout, pulsing
-						<>
-							<div className="grid grid-cols-4 gap-4 max-xl:grid-cols-2 max-sm:grid-cols-1">
-								{[0, 1, 2, 3].map((index) => (
-									<Skeleton
-										key={index}
-										variant="rectangular"
-										className="h-36 rounded-xl bg-white shadow-sm"
-									/>
-								))}
-							</div>
-							<Skeleton
-								variant="rectangular"
-								className="h-96 rounded-xl bg-white shadow-sm"
-							/>
-						</>
+						<AnalyticsSkeleton />
 					) : isEmpty ? (
 						<div className="flex flex-col items-center gap-2 rounded-xl bg-white px-5 py-16 text-center shadow-sm">
 							<BarChartIcon className="size-12 text-ink/20" />
