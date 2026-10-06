@@ -38,6 +38,8 @@ const Kpi: React.FC<KpiProps> = ({
 	const { t, i18n } = useTranslation();
 	const change = getChange(kpi.value, kpi.previous);
 	const isGood = change !== null && change < 0 === Boolean(isLowerBetter);
+	// Each card's own gradient; useId's colons don't work in url(#…)
+	const fillId = `sparkline-fill-${React.useId().replace(/\W/g, '')}`;
 
 	return (
 		<Card className="gap-1 overflow-hidden pb-0">
@@ -82,10 +84,27 @@ const Kpi: React.FC<KpiProps> = ({
 			>
 				<AreaChart
 					data={kpi.series.map((value) => ({ value }))}
-					// Room for half the stroke, so the peaks and the baseline at the
-					// card's bottom edge aren't clipped
-					margin={{ top: 2, right: 0, bottom: 1, left: 0 }}
+					// Room above the peaks for the whole hover dot (radius 4 and its
+					// ring); the line runs to the card's edges otherwise
+					margin={{ top: 8, right: 0, bottom: 4, left: 0 }}
+					// Decorative (aria-hidden): not focusable, so clicking it shows
+					// no focus ring
+					accessibilityLayer={false}
 				>
+					<defs>
+						<linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
+							<stop
+								offset="0%"
+								stopColor="var(--color-value)"
+								stopOpacity={0.5}
+							/>
+							<stop
+								offset="100%"
+								stopColor="var(--color-value)"
+								stopOpacity={0}
+							/>
+						</linearGradient>
+					</defs>
 					<Area
 						dataKey="value"
 						type="linear"
@@ -93,8 +112,7 @@ const Kpi: React.FC<KpiProps> = ({
 						strokeWidth={2}
 						strokeLinejoin="round"
 						strokeLinecap="round"
-						fill="var(--color-value)"
-						fillOpacity={0.1}
+						fill={`url(#${fillId})`}
 						connectNulls
 						isAnimationActive={false}
 					/>
