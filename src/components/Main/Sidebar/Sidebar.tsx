@@ -22,6 +22,7 @@ import {
 	DropdownMenuTrigger,
 } from '@src/components/ui/dropdown-menu';
 import { Spinner } from '@src/components/ui/spinner';
+import LoadingMoreIndicator from '@src/components/LoadingMoreIndicator';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import MoreVertIcon from '@src/components/icons/MoreVert';
 import ChatListItem from '@src/components/ChatListItem';
@@ -1546,9 +1547,7 @@ const Sidebar: React.FC<Props> = ({
 
 			{isLoadingMoreChats && (
 				<div className="absolute right-1.25 bottom-0 left-0 z-1 flex animate-fade-in justify-center bg-linear-to-t from-white to-white/0 pb-5">
-					<div className="animate-in rounded-[40px] bg-white px-2.5 pt-2.5 pb-1 shadow-md fade-in-0 zoom-in-95">
-						<Spinner size={28} className="text-primary" />
-					</div>
+					<LoadingMoreIndicator className="animate-in fade-in-0 zoom-in-95" />
 				</div>
 			)}
 

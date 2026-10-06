@@ -3,7 +3,7 @@ import { zoomTransition } from '@src/styles/zoomTransition';
 import { cn } from '@src/lib/utils';
 import ScrollToBottomButton from '@src/components/ScrollToBottomButton';
 import { ClickAwayListener } from '@src/components/ui/click-away-listener';
-import { Spinner } from '@src/components/ui/spinner';
+import LoadingMoreIndicator from '@src/components/LoadingMoreIndicator';
 import ChatMessage from '../ChatMessage/ChatMessage';
 import ChatBodySkeleton from '@src/components/ChatBodySkeleton';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -2134,9 +2134,7 @@ const ChatView: React.FC<Props> = (props) => {
 					zoomTransition(isLoadingMoreMessages)
 				)}
 			>
-				<div className="w-auto rounded-[40px] bg-white px-2.5 pt-2.5 pb-1 shadow-md">
-					<Spinner size={28} className="text-primary" />
-				</div>
+				<LoadingMoreIndicator />
 			</div>
 
 			{/* The positioning context for the loading skeleton over the body */}
