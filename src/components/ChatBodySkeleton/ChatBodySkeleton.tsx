@@ -154,7 +154,7 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 								/>
 								<Skeleton
 									variant="text"
-									className="mt-1.25 text-[x-small]"
+									className="mt-1.25 text-[length:x-small]"
 									style={{ width: 32 }}
 								/>
 							</div>
@@ -166,7 +166,7 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 								<Skeleton
 									variant="text"
 									className={cn(
-										'mx-2.5 mt-0 mb-0.5 text-[x-small]',
+										'mx-2.5 mt-0 mb-0.5 text-[length:x-small]',
 										row.isOutgoing && 'self-end'
 									)}
 									style={{ width: row.nameWidth }}

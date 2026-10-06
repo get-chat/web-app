@@ -34,7 +34,7 @@ const ChatMessageReferral: React.FC<Props> = ({
 	return (
 		<div>
 			<div
-				className="mb-1.25 block cursor-pointer text-[x-small] text-ink/60"
+				className="mb-1.25 block cursor-pointer text-[length:x-small] text-ink/60"
 				onClick={goToSourceURL}
 			>
 				<ReviewsIcon className="mr-1.25 size-[0.6em]! text-ink/40!" />

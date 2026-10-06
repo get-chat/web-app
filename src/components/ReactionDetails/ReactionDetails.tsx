@@ -65,7 +65,7 @@ const ReactionDetails: React.FC<Props> = ({
 								<div className="truncate text-[12px]">
 									{getSenderName(reaction)}
 								</div>
-								<div className="mb-1.25 text-[x-small] text-ink/60">
+								<div className="mb-1.25 text-[length:x-small] text-ink/60">
 									<Moment
 										date={reaction.waba_payload?.timestamp}
 										calendar={CALENDAR_SHORT}

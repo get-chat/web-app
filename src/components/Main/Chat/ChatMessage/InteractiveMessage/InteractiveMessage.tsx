@@ -42,7 +42,7 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 
 	return (
 		<>
-			<div className="mb-1.25 flex items-center gap-1.25 text-[x-small] text-ink/60">
+			<div className="mb-1.25 flex items-center gap-1.25 text-[length:x-small] text-ink/60">
 				<TouchAppIcon className="size-[0.6em]! text-ink/40!" />{' '}
 				{t('Interactive message')}
 			</div>

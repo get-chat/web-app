@@ -75,7 +75,7 @@ const MessageStatuses: React.FC<Props> = ({
 											<div className="text-[14px]">
 												{getSenderName(reaction)}
 											</div>
-											<div className="mb-1.25 text-[x-small] text-ink/60">
+											<div className="mb-1.25 text-[length:x-small] text-ink/60">
 												<Moment
 													date={getMessageTimestamp(reaction)}
 													calendar={CALENDAR_SHORT}
