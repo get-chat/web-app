@@ -131,7 +131,7 @@ const ContactDetails: React.FC<Props> = ({
 						</div>
 
 						{currentChatTags && currentChatTags.length > 0 && (
-							<div className="mt-[12px]">
+							<div className="mt-3">
 								{currentChatTags.map((tag, index) => (
 									<div
 										className="mr-2.5 inline-block cursor-pointer"
@@ -151,7 +151,7 @@ const ContactDetails: React.FC<Props> = ({
 						)}
 
 						{(chat?.assigned_to_user || chat?.assigned_group) && (
-							<div className="mt-[12px] rounded-[10px] border-2 border-gray-light px-2.5 py-1.25 text-[14px]">
+							<div className="mt-3 rounded-[10px] border-2 border-gray-light px-2.5 py-1.25 text-[14px]">
 								{chat?.assigned_to_user && (
 									<div className="py-1.25">
 										<PersonIcon className={assigneeIconClassName} />
@@ -199,7 +199,7 @@ const ContactDetails: React.FC<Props> = ({
 									key={index + '_' + providerData.contact_provider.id}
 								>
 									<div className="text-[16px]">
-										<div className="mb-[12px] inline-block rounded-[16px] bg-gray-light px-2.5 py-1.25 text-ink/80 [&_img]:mr-[4px] [&_img]:size-4 [&_img]:align-middle">
+										<div className="mb-3 inline-block rounded-[16px] bg-gray-light px-2.5 py-1.25 text-ink/80 [&_img]:mr-1 [&_img]:size-4 [&_img]:align-middle">
 											{providerData.contact_provider.type === 'google' && (
 												<img
 													src={googleLogo}
@@ -217,7 +217,7 @@ const ContactDetails: React.FC<Props> = ({
 										</div>
 									</div>
 
-									<div className="mb-[8px]">
+									<div className="mb-2">
 										<div className="text-[14px]">{t('Phone number')}</div>
 										<div className="text-[14px] text-ink/60">
 											{providerData.phone_numbers?.map(
@@ -230,7 +230,7 @@ const ContactDetails: React.FC<Props> = ({
 															<span>{addPlus(phoneNumber.phone_number)}</span>
 														</a>
 														{phoneNumber.description && (
-															<span className="ml-1">
+															<span className="ml-1.25">
 																({phoneNumber.description})
 															</span>
 														)}
@@ -241,7 +241,7 @@ const ContactDetails: React.FC<Props> = ({
 									</div>
 
 									{Boolean(providerData.email_addresses?.length ?? 0 > 0) && (
-										<div className="mb-[8px]">
+										<div className="mb-2">
 											<div className="text-[14px]">{t('E-mail')}</div>
 											<div className="text-[14px] text-ink/60">
 												{providerData.email_addresses?.map(
@@ -254,7 +254,7 @@ const ContactDetails: React.FC<Props> = ({
 																{emailAddress.email_address}
 															</a>
 															{emailAddress.description && (
-																<span className="ml-1">
+																<span className="ml-1.25">
 																	({emailAddress.description})
 																</span>
 															)}

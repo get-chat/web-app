@@ -24,8 +24,7 @@ import CreateTagControl from '@src/components/CreateTagControl/CreateTagControl'
 // chips were
 const chipClassName = 'mt-1.25 mr-1.25 text-foreground';
 
-// mt-[12px], not mt-3: App.css's legacy .mt-3 would win and make it 15px
-const sectionClassName = 'mt-[12px]';
+const sectionClassName = 'mt-3';
 
 interface Props {
 	open: boolean;
@@ -93,9 +92,7 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 									))}
 								</div>
 							) : (
-								<div className="mt-[4px] text-[15px] text-ink/60">
-									{t('Empty')}
-								</div>
+								<div className="mt-1 text-[15px] text-ink/60">{t('Empty')}</div>
 							)}
 						</div>
 					)}
@@ -124,9 +121,7 @@ const ChatTags: React.FC<Props> = ({ open, setOpen, waId }) => {
 									))}
 								</div>
 							) : (
-								<div className="mt-[4px] text-[15px] text-ink/60">
-									{t('Empty')}
-								</div>
+								<div className="mt-1 text-[15px] text-ink/60">{t('Empty')}</div>
 							)}
 						</div>
 					)}

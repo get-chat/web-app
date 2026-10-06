@@ -1307,7 +1307,7 @@ const Sidebar: React.FC<Props> = ({
 							{(keyword || isAnyActiveFilter) && (
 								<div className="flex items-center px-3.75 pt-3.75 text-[12px] font-semibold text-ink/50">
 									{isLoadingChats && (
-										<Spinner size={14} className="-mt-px mr-2 text-primary" />
+										<Spinner size={14} className="-mt-px mr-2.5 text-primary" />
 									)}
 									{isLoadingChats ? (
 										t('Loading chats')

@@ -28,7 +28,7 @@ const RefreshTokenErrorPage: React.FC = () => {
 				{t(reason)}
 			</Alert>
 
-			<div className="mt-3">
+			<div className="mt-3.75">
 				<Button
 					variant="ghost"
 					color="primary"

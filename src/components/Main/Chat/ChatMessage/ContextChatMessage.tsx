@@ -21,7 +21,7 @@ const ContextChatMessage: React.FC<Props> = ({
 	return (
 		<div
 			// A quote of the message this one replies to
-			className="-mx-1.5 -mt-px mb-[4px] flex cursor-pointer rounded-[4px] border-l-4 border-primary bg-ink/6 text-[12px] [&_.chatMessageTypeLabel]:font-semibold"
+			className="-mx-1.5 -mt-px mb-1 flex cursor-pointer rounded-[4px] border-l-4 border-primary bg-ink/6 text-[12px] [&_.chatMessageTypeLabel]:font-semibold"
 			onClick={() =>
 				goToMessageId?.(
 					contextMessage.id,

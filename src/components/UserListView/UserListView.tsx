@@ -210,7 +210,7 @@ const UserListView: React.FC<Props> = ({
 											// MUI's success green when on; the margins keep MUI's
 											// footprint inside the pill
 											color="success"
-											className="my-[9px] mr-3"
+											className="my-[9px] mr-3.75"
 											checked={user.profile.is_available}
 											onClick={() =>
 												toggleUserAvailability(

@@ -48,10 +48,7 @@ const SelectableChatTag: React.FC<Props> = ({ data }) => {
 				{/* m-3: the room MUI's 42px checkbox took around its box */}
 				<Checkbox checked={isSelected} color="primary" className="m-3" />
 				<div className="ml-2.5 flex flex-1 truncate font-semibold">
-					<SellIcon
-						className="mr-[8px]"
-						style={{ fill: data.web_inbox_color }}
-					/>
+					<SellIcon className="mr-2" style={{ fill: data.web_inbox_color }} />
 					{data.name}
 				</div>
 			</div>

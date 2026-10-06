@@ -54,7 +54,7 @@ export const messageBubbleClassName = ({
 
 /** An image, video or map inside a bubble, reaching out to its edges */
 export const messageMediaClassName =
-	'-mx-1.5 -mt-px mb-[4px] block h-[150px] w-[250px] cursor-pointer rounded-[8px] border-none object-cover';
+	'-mx-1.5 -mt-px mb-1 block h-[150px] w-[250px] cursor-pointer rounded-[8px] border-none object-cover';
 
 /**
  * A message's status tick (sent, delivered, read, failed), sized by its

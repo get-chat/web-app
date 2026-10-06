@@ -130,7 +130,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="wordBreakWord mt-1 text-[12px] text-ink/60"
+											className="wordBreakWord mt-1.25 text-[12px] text-ink/60"
 										/>
 									)}
 

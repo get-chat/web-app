@@ -42,7 +42,7 @@ const ChatMessageReferral: React.FC<Props> = ({
 				<br />
 			</div>
 
-			<div className="-mx-1.5 -mt-px mb-[4px] overflow-hidden rounded-[6px] bg-ink/10">
+			<div className="-mx-1.5 -mt-px mb-1 overflow-hidden rounded-[6px] bg-ink/10">
 				<div>
 					{(referral.image || referral.image_url) && (
 						<ChatMessageImage

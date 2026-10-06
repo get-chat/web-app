@@ -297,7 +297,7 @@ const LocationModal: React.FC<Props> = ({
 					<DialogTitle>{t('Send location')}</DialogTitle>
 				</DialogHeader>
 				<DialogBody>
-					<div className="relative mt-[8px] h-80 w-full overflow-hidden rounded-[10px] bg-ink/6">
+					<div className="relative mt-2 h-80 w-full overflow-hidden rounded-[10px] bg-ink/6">
 						{/* Google Maps owns this element's DOM; keep it childless */}
 						<div className="size-full" ref={mapCanvasRef} />
 

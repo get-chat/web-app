@@ -56,7 +56,7 @@ const UserAvailability = () => {
 				// MUI's success green when on (its warning colour only showed when
 				// on too, which never happens); the margins keep MUI's footprint
 				color="success"
-				className="my-[9px] mr-3"
+				className="my-[9px] mr-3.75"
 			/>
 		</div>
 	);

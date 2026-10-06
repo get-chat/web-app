@@ -243,7 +243,7 @@ const BusinessProfile: React.FC<Props> = ({
 					{prepareURLForDisplay(api.defaults.baseURL ?? '')}
 					<a
 						href="#"
-						className="ml-1 text-(--color-secondary)"
+						className="ml-1.25 text-(--color-secondary)"
 						onClick={() => setInboxSelectorVisible(true)}
 					>
 						{t('Change')}

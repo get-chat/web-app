@@ -50,8 +50,7 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 					<DialogTitle>{t('Tags')}</DialogTitle>
 				</DialogHeader>
 				<DialogBody>
-					{/* mb-[12px], not mb-3: App.css's legacy .mb-3 would win */}
-					<div className="mb-[12px]">{t('You can filter chats by tags.')}</div>
+					<div className="mb-3">{t('You can filter chats by tags.')}</div>
 
 					{tags && (
 						<div>
@@ -82,7 +81,7 @@ const ChatTagsList: React.FC<Props> = ({ open, setOpen }) => {
 						</div>
 					)}
 
-					<div className="mt-[12px]">
+					<div className="mt-3">
 						<Button asChild variant="link" color="primary" size="none">
 							<a
 								href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}

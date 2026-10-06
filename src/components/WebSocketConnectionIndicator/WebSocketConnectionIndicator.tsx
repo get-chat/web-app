@@ -74,7 +74,7 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 						<div className="mt-3.75 flex items-start gap-3.75">
 							<div
 								className={cn(
-									'mb-[8px] px-2 py-1 text-[12px] font-semibold',
+									'mb-2 px-2 py-1 text-[12px] font-semibold',
 									// After a while, the advice turns into a stronger one
 									showCacheSuggestion &&
 										'rounded-[10px] bg-destructive-dark transition-all duration-500 ease-[ease]'

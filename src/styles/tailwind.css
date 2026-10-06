@@ -10,11 +10,6 @@
  * layered CSS. The global stylesheets are unlayered, so on a conflicting
  * property they win over a Tailwind utility. Use the `!` suffix
  * (`bg-chat-bg!`) to override them.
- *
- * App.css still defines its own spacing helpers named like Tailwind utilities
- * (`.mt-1` to `.mr-3`, in 5px steps instead of 4px). Being unlayered, they win
- * over Tailwind's classes of the same name, so avoid those twelve names in
- * migrated code until the helpers are removed.
  */
 @layer theme, base, components, utilities;
 

@@ -183,7 +183,7 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 					style={{
 						backgroundColor: '#ff9a10',
 					}}
-					className="mr-[4px] ml-3.75 [&_.app-icon]:text-white!"
+					className="mr-1 ml-3.75 [&_.app-icon]:text-white!"
 				>
 					{data.waba_payload?.voice?.id !== undefined ? (
 						<span>{generateInitialsHelper(getSenderName(data))}</span>

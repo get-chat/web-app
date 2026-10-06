@@ -314,7 +314,7 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 						<div className="mt-1.25 text-[13px] font-medium text-muted-foreground">
 							{t('Activation link')}
 						</div>
-						<div className="mt-[8px] flex items-center gap-1.25 rounded-[8px] bg-gray-lighter py-1.25 pr-1.25 pl-3">
+						<div className="mt-2 flex items-center gap-1.25 rounded-[8px] bg-gray-lighter py-1.25 pr-1.25 pl-3">
 							<div className="flex-1 text-[13px] break-all text-foreground">
 								{createdUser.activation_url}
 							</div>
