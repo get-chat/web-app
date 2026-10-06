@@ -1,15 +1,15 @@
 /*
- * Tailwind entry point, used by shadcn/ui components while the app migrates
- * away from MUI and styled-components.
+ * Tailwind entry point: the app's styles, together with the global
+ * stylesheets in this folder that are still being migrated.
  *
  * Preflight (Tailwind's global reset) is deliberately left out: it would
- * restyle every heading, button and list that hasn't been migrated yet. Add it
- * back (`@import 'tailwindcss';`) once MUI is gone.
+ * restyle the headings, buttons and lists the global stylesheets rely on. Add
+ * it back (`@import 'tailwindcss';`) once they are gone.
  *
  * Everything here lives in cascade layers, and unlayered CSS always beats
- * layered CSS. The existing global stylesheets, MUI (Emotion) and
- * styled-components are all unlayered, so on a conflicting property they win
- * over a Tailwind utility. Use the `!` suffix (`bg-chat-bg!`) to override them.
+ * layered CSS. The global stylesheets are unlayered, so on a conflicting
+ * property they win over a Tailwind utility. Use the `!` suffix
+ * (`bg-chat-bg!`) to override them.
  *
  * App.css still defines its own spacing helpers named like Tailwind utilities
  * (`.mt-1` to `.mr-3`, in 5px steps instead of 4px). Being unlayered, they win

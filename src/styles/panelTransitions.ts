@@ -12,10 +12,6 @@ export interface PanelTransitionProps {
 	onAnimationEnd?: React.AnimationEventHandler<HTMLElement>;
 }
 
-export interface PanelTransitionStyleProps {
-	$isExiting?: boolean;
-}
-
 /*
  * Put the returned classes on the panel's root; the keyframes live in
  * tailwind.css. Without motion (prefers-reduced-motion) there is no
