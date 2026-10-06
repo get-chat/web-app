@@ -3,7 +3,6 @@ import DoneIcon from '@src/components/icons/Check';
 import ErrorIcon from '@src/components/icons/Error';
 import AccessTimeIcon from '@src/components/icons/Schedule';
 import Moment from 'react-moment';
-import '../../../../styles/InputRange.css';
 import NoteIcon from '@src/components/icons/StickyNote2';
 import ExpandMoreIcon from '@src/components/icons/KeyboardArrowDown';
 import MessageDateIndicator from '../MessageDateIndicator';

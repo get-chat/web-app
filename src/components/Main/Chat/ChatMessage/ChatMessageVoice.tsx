@@ -134,9 +134,9 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 	};
 
 	return (
-		<div className="chat__voiceWrapper">
-			<div className="chat__voice">
-				{/* MUI's large IconButton with the 6px padding Chat.css gave it */}
+		<div className="-mx-1 flex flex-col">
+			<div className="flex items-center">
+				{/* MUI's large IconButton with a 6px padding */}
 				<Button
 					variant="ghost"
 					color="neutral"
@@ -154,7 +154,7 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 					ref={range}
 					dir="ltr"
 					type="range"
-					className="chat__voice__range"
+					className="voice-range box-border block h-[21px] border-none outline-none!"
 					min="0"
 					max="100"
 					value={progress}
@@ -183,7 +183,7 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 					style={{
 						backgroundColor: '#ff9a10',
 					}}
-					className="audioMessageAvatar"
+					className="mr-[4px] ml-3.75 [&_.app-icon]:text-white!"
 				>
 					{data.waba_payload?.voice?.id !== undefined ? (
 						<span>{generateInitialsHelper(getSenderName(data))}</span>
@@ -192,7 +192,7 @@ const ChatMessageVoice: React.FC<Props> = ({ data }) => {
 					)}
 				</CustomAvatar>
 			</div>
-			<span ref={duration} className="chat__voice__duration">
+			<span ref={duration} className="ml-[55px] text-[length:x-small]">
 				{currentDuration}
 			</span>
 		</div>

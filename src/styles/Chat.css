@@ -193,44 +193,6 @@ video.chat__media {
 	border-radius: 50px;
 }
 
-.chat__voice {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-}
-
-.chat__voiceWrapper {
-	display: flex;
-	flex-direction: column;
-	margin: 0 -4px;
-}
-
-.chat__voice > .customAvatar.audioMessageAvatar .app-icon {
-	color: white !important;
-}
-
-.chat__voice > .customAvatar {
-	margin: 0 4px 0 15px;
-}
-
-.chat__voice__duration {
-	font-size: x-small;
-	margin-left: 55px;
-}
-
-.chat__voice__range {
-	box-sizing: border-box;
-	display: block;
-	height: 21px;
-	background-color: initial !important;
-	border: none;
-	outline: none;
-	/*-webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;*/
-	margin-left: 5px;
-}
-
 a.chat__document {
 	color: #4a4a4a;
 	border-radius: 6px;

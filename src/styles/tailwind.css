@@ -307,3 +307,60 @@
 		font: inherit;
 	}
 }
+
+/*
+ * The voice message player's progress bar: a native range input, whose track
+ * and thumb are only reachable through vendor pseudo-elements
+ */
+@utility voice-range {
+	width: 100%;
+	margin: 5px 0;
+	background-color: transparent;
+	-webkit-appearance: none;
+
+	&:focus {
+		outline: none;
+	}
+
+	&::-webkit-slider-runnable-track {
+		width: 100%;
+		height: 3px;
+		border: 0.2px solid rgba(1, 1, 1, 0);
+		border-radius: 1.3px;
+		background: rgba(0, 0, 45, 0.1);
+		cursor: pointer;
+	}
+
+	&:focus::-webkit-slider-runnable-track {
+		background: #e6e6e6;
+	}
+
+	&::-webkit-slider-thumb {
+		width: 13px;
+		height: 13px;
+		margin-top: -5.2px;
+		border: 1.8px solid rgba(0, 0, 30, 0);
+		border-radius: 7px;
+		background: #30b6f6;
+		cursor: pointer;
+		-webkit-appearance: none;
+	}
+
+	&::-moz-range-track {
+		width: 100%;
+		height: 3px;
+		border: 0.2px solid rgba(1, 1, 1, 0);
+		border-radius: 1.3px;
+		background: rgba(0, 0, 45, 0.1);
+		cursor: pointer;
+	}
+
+	&::-moz-range-thumb {
+		width: 13px;
+		height: 13px;
+		border: 1.8px solid rgba(0, 0, 30, 0);
+		border-radius: 7px;
+		background: #30b6f6;
+		cursor: pointer;
+	}
+}
