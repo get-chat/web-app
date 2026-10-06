@@ -1212,10 +1212,10 @@ const Sidebar: React.FC<Props> = ({
 						onChange={(_keyword) => search(_keyword)}
 						placeholder={t('Search, filter by tags, time, etc.')}
 						onFocus={() => setFiltersVisible(true)}
-						isFocusStyleEnabled={false}
 						className="bg-transparent py-0"
-						// White like the filter chips once the area turns grey
-						fieldClassName={cn(isForceDisplayFilters && 'bg-white shadow-sm')}
+						// Stays visible on the grey area while a filter is applied;
+						// focusing it adds the usual outline and glow
+						fieldClassName={cn(isForceDisplayFilters && 'bg-white')}
 					/>
 
 					<Collapsible open={isForceDisplayFilters}>
@@ -1423,7 +1423,18 @@ const Sidebar: React.FC<Props> = ({
 				</div>
 			</ClickAwayListener>
 
-			{/* The list and its loading overlay, above the availability footer */}
+			{isUserAvailabilityFeatureEnabled && (
+				// Shares the search area's background, which turns grey while
+				// the filters show, so the two read as one section
+				<UserAvailability
+					className={cn(
+						'transition-[background-color] duration-200 ease-in',
+						isForceDisplayFilters ? 'bg-gray-light' : 'bg-white'
+					)}
+				/>
+			)}
+
+			{/* The list, and its loading overlay anchored to its bottom */}
 			<div className="relative flex min-h-0 flex-1 flex-col">
 				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
 					{isSelectionModeEnabled && (
@@ -1525,9 +1536,6 @@ const Sidebar: React.FC<Props> = ({
 					</div>
 				)}
 			</div>
-
-			{/* Always at the bottom of the sidebar, below the list */}
-			{isUserAvailabilityFeatureEnabled && <UserAvailability />}
 
 			{contactsTransition.isMounted && (
 				<StartChat

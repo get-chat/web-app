@@ -7,7 +7,12 @@ import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
 import { Switch } from '@src/components/ui/switch';
 import { cn } from '@src/lib/utils';
 
-const UserAvailability: React.FC = () => {
+interface Props {
+	/** Classes for the area around the card, e.g. its background */
+	className?: string;
+}
+
+const UserAvailability: React.FC<Props> = ({ className }) => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const { t } = useTranslation();
 
@@ -29,10 +34,9 @@ const UserAvailability: React.FC = () => {
 	};
 
 	return (
-		// The sidebar's footer, grey like its header: a rounded status card,
-		// tinted green when the user is active and amber when not; the whole
-		// card toggles
-		<div className="border-t border-ink/6 bg-gray-light p-3">
+		// A rounded status card inset in the sidebar, tinted green when the
+		// user is active and amber when not; the whole card toggles
+		<div className={cn('px-3 pt-1 pb-3', className)}>
 			<div
 				className={cn(
 					'flex cursor-pointer items-center gap-3 rounded-xl py-2.5 pr-2.5 pl-3.5 ring-1 transition-[background-color,box-shadow] duration-200 ease-in-out ring-inset',
