@@ -167,63 +167,92 @@ const UserListView: React.FC<Props> = ({
 				</div>
 			) : (
 				<div className="relative flex-1 overflow-x-hidden overflow-y-auto">
-					{sortUsers(users).map((user) => (
-						<div
-							key={user.id}
-							className="flex items-center justify-between gap-2.5 px-3.75 py-2.5"
-						>
-							<div className="flex items-center gap-2.5 overflow-hidden text-[14px] font-semibold text-ellipsis whitespace-nowrap">
-								<CustomAvatar generateBgColorBy={user.username}>
-									{generateInitialsHelper(user.username)}
-								</CustomAvatar>
+					{sortUsers(users).map((user) => {
+						const isAvailable = user.profile.is_available;
+						const switchId = `user-availability-${user.id}`;
+						// Role and email, unless the username already is the email
+						const details = [
+							t(getUserRoleLabel(user.profile?.role)),
+							user.email !== user.username && user.email,
+						]
+							.filter(Boolean)
+							.join(' · ');
+
+						return (
+							<div
+								key={user.id}
+								className="flex items-center gap-3 px-3.75 py-2.5"
+							>
+								<span className="relative shrink-0">
+									<CustomAvatar generateBgColorBy={user.username}>
+										{generateInitialsHelper(user.username)}
+									</CustomAvatar>
+									{isUserAvailabilityFeatureEnabled && (
+										// Presence dot on the avatar's corner
+										<span
+											className={cn(
+												'absolute right-0 bottom-0 size-3 rounded-full ring-2 ring-white transition-[background-color] duration-200',
+												isAvailable ? 'bg-success' : 'bg-warning-strong'
+											)}
+										/>
+									)}
+								</span>
+
 								<div className="flex min-w-0 flex-1 flex-col">
 									<div className="truncate text-[14px] font-semibold text-foreground">
 										{user.username}
 									</div>
-									{user.email && (
-										<div className="truncate text-[13px] font-normal text-foreground">
-											{user.email}
+									<div
+										className="truncate text-[12px] text-muted-foreground"
+										title={user.email || undefined}
+									>
+										{details}
+									</div>
+								</div>
+
+								{isUserAvailabilityFeatureEnabled &&
+									(canChangeAvailability ? (
+										<div className="flex shrink-0 items-center gap-2">
+											<label
+												htmlFor={switchId}
+												className={cn(
+													'cursor-pointer text-[12px] font-medium',
+													isAvailable ? 'text-success' : 'text-muted-foreground'
+												)}
+											>
+												{isAvailable ? t('Active') : t('Inactive')}
+											</label>
+											<Switch
+												id={switchId}
+												color="success"
+												size="sm"
+												checked={isAvailable}
+												onClick={() =>
+													toggleUserAvailability(user.id, isAvailable)
+												}
+											/>
 										</div>
-									)}
-									<div className="truncate text-[12px] font-medium text-muted-foreground">
-										{t(getUserRoleLabel(user.profile?.role))}
-									</div>
-								</div>
+									) : (
+										<span
+											className={cn(
+												'inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-0.5 text-[12px] font-medium',
+												isAvailable
+													? 'bg-success-soft text-success'
+													: 'bg-warning-soft text-warning'
+											)}
+										>
+											<span
+												className={cn(
+													'size-1.5 rounded-full',
+													isAvailable ? 'bg-success' : 'bg-warning-strong'
+												)}
+											/>
+											{isAvailable ? t('Active') : t('Inactive')}
+										</span>
+									))}
 							</div>
-							{isUserAvailabilityFeatureEnabled && (
-								<div
-									className={cn(
-										'flex shrink-0 items-center justify-between gap-2.5 rounded-[20px] text-[14px] transition-[background-color] duration-200 ease-in-out',
-										canChangeAvailability
-											? 'w-[140px] py-0 pr-0 pl-3.75'
-											: 'px-3.75 py-1',
-										user.profile.is_available
-											? 'bg-success-soft text-success'
-											: 'bg-warning-soft text-warning'
-									)}
-								>
-									<div className="truncate">
-										{user.profile.is_available ? t('Active') : t('Inactive')}
-									</div>
-									{canChangeAvailability && (
-										<Switch
-											// MUI's success green when on; the margins keep MUI's
-											// footprint inside the pill
-											color="success"
-											className="my-[9px] mr-3.75"
-											checked={user.profile.is_available}
-											onClick={() =>
-												toggleUserAvailability(
-													user.id,
-													user.profile.is_available
-												)
-											}
-										/>
-									)}
-								</div>
-							)}
-						</div>
-					))}
+						);
+					})}
 				</div>
 			)}
 
