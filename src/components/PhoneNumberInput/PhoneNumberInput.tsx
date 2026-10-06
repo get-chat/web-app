@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
-import ArrowDropDownIcon from '@src/components/icons/ArrowDropDown';
+import KeyboardArrowDownIcon from '@src/components/icons/KeyboardArrowDown';
 import { useTranslation } from 'react-i18next';
 import {
 	CountryCode,
@@ -349,7 +349,8 @@ const PhoneNumberInput: React.FC<Props> = ({
 									aria-expanded={isMenuOpen}
 								/>
 								<InputGroupAddon align="inline-end" className="cursor-pointer">
-									<ArrowDropDownIcon className="size-6" />
+									{/* The chevron of the app's other dropdowns (SelectTrigger) */}
+									<KeyboardArrowDownIcon className="size-5 text-muted-foreground" />
 								</InputGroupAddon>
 							</InputGroup>
 						</Field>
