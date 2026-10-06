@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-	ArrowDownward,
 	AttachFile,
 	Mood as InsertEmoticon,
 	Send,
@@ -42,13 +41,11 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { Badge } from '@src/components/ui/badge';
-import { zoomTransition } from '@src/styles/zoomTransition';
 import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
 
 interface Props {
 	waId: string | undefined;
-	currentNewMessages: number;
 	isExpired: boolean;
 	input: string;
 	setInput: (value: string) => void;
@@ -63,8 +60,6 @@ interface Props {
 	accept: string;
 	setAccept: (value: string) => void;
 	sendHandledChosenFiles: (files: ChosenFileList) => void;
-	isScrollButtonVisible: boolean;
-	handleScrollButtonClick: () => void;
 	processCommand: (text: string) => void;
 }
 
@@ -101,7 +96,6 @@ const ActionSeparator: React.FC = () => (
 
 const ChatFooter: React.FC<Props> = ({
 	waId,
-	currentNewMessages,
 	isExpired,
 	input,
 	setInput,
@@ -110,8 +104,6 @@ const ChatFooter: React.FC<Props> = ({
 	accept,
 	setAccept,
 	sendHandledChosenFiles,
-	isScrollButtonVisible,
-	handleScrollButtonClick,
 	processCommand,
 }) => {
 	const { t } = useTranslation();
@@ -724,36 +716,6 @@ const ChatFooter: React.FC<Props> = ({
 					}}
 				/>
 			</div>
-
-			{/* Holds the scroll button and its unread count badge, as MUI's Badge
-			did, on MUI's Fab layer so it floats over the messages */}
-			<span
-				className={cn(
-					'absolute right-5 bottom-28 z-1050 inline-flex',
-					zoomTransition(isScrollButtonVisible)
-				)}
-			>
-				{/* MUI's small Fab: a raised round 40px button */}
-				<Button
-					variant="ghost"
-					color="neutral"
-					size="icon-lg"
-					className="rounded-full bg-white! shadow-[0px_3px_5px_-1px_rgba(0,0,0,0.2),0px_6px_10px_0px_rgba(0,0,0,0.14),0px_1px_18px_0px_rgba(0,0,0,0.12)] [&_.app-icon]:size-6! [&_.app-icon]:text-(--color-primary-light)!"
-					onClick={handleScrollButtonClick}
-				>
-					<ArrowDownward />
-				</Button>
-				{currentNewMessages !== 0 && (
-					<Badge
-						variant="solid"
-						color="primary"
-						size="sm"
-						className="absolute top-[3px] left-[3px] z-1 min-w-5 -translate-x-1/2 -translate-y-1/2"
-					>
-						{currentNewMessages > 99 ? '99+' : currentNewMessages}
-					</Badge>
-				)}
-			</span>
 		</div>
 	);
 };

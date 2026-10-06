@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { zoomTransition } from '@src/styles/zoomTransition';
 import { cn } from '@src/lib/utils';
+import ScrollToBottomButton from '@src/components/ScrollToBottomButton';
 import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import { Spinner } from '@src/components/ui/spinner';
 import ChatMessage from '../ChatMessage/ChatMessage';
@@ -2225,6 +2226,12 @@ const ChatView: React.FC<Props> = (props) => {
 					<div className="flex-[0_0_5px]" />
 				</div>
 
+				<ScrollToBottomButton
+					isVisible={isScrollButtonVisible}
+					newMessageCount={currentNewMessages}
+					onClick={handleScrollButtonClick}
+				/>
+
 				{/* Overlays the chat body without taking layout space (so it can
 			never affect the body's height or scrollbar) and cross-fades away
 			once the loaded messages render underneath */}
@@ -2325,7 +2332,6 @@ const ChatView: React.FC<Props> = (props) => {
 			{!isReadOnly && (
 				<ChatFooter
 					waId={waId}
-					currentNewMessages={currentNewMessages}
 					isExpired={isExpired}
 					input={input}
 					setInput={setInput}
@@ -2334,8 +2340,6 @@ const ChatView: React.FC<Props> = (props) => {
 					accept={accept}
 					sendHandledChosenFiles={sendHandledChosenFiles}
 					setAccept={setAccept}
-					isScrollButtonVisible={isScrollButtonVisible}
-					handleScrollButtonClick={handleScrollButtonClick}
 					processCommand={processCommand}
 				/>
 			)}
