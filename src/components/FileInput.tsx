@@ -1,5 +1,4 @@
 import React, { MutableRefObject, Ref } from 'react';
-import '../styles/FileInput.css';
 
 interface Props {
 	innerRef: Ref<HTMLInputElement | undefined>;
@@ -16,7 +15,7 @@ const FileInput: React.FC<Props> = ({
 }) => {
 	return (
 		<input
-			className="fileInput"
+			className="hidden"
 			// @ts-ignore
 			ref={innerRef}
 			type="file"

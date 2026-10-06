@@ -1,6 +1,5 @@
 import React from 'react';
 import { ATTACHMENT_TYPE_IMAGE } from '@src/Constants';
-import '../../../../styles/ContextChatMessage.css';
 import ChatMessageShortContent from './ChatMessageShortContent';
 import { Message, MessageType } from '@src/types/messages';
 import {
@@ -21,7 +20,8 @@ const ContextChatMessage: React.FC<Props> = ({
 }) => {
 	return (
 		<div
-			className="chat__message__context"
+			// A quote of the message this one replies to
+			className="-mx-1.5 -mt-px mb-[4px] flex cursor-pointer rounded-[4px] border-l-4 border-primary bg-ink/6 text-[12px] [&_.chatMessageTypeLabel]:font-semibold"
 			onClick={() =>
 				goToMessageId?.(
 					contextMessage.id,
@@ -29,12 +29,13 @@ const ContextChatMessage: React.FC<Props> = ({
 				)
 			}
 		>
-			<div className="chat__message__context__info">
-				<span className="chat__message__context__info__sender">
+			<div className="flex flex-1 flex-col px-2.5 py-1.25">
+				<span className="font-semibold text-primary">
 					{getSenderName(contextMessage)}
 				</span>
 
-				<span className="chat__message__context__info__message">
+				{/* The reply arrow keeps the smaller size App.css gives .replyIcon */}
+				<span className="line-clamp-3 text-ellipsis text-ink/60 [&_.app-icon]:mr-0.75 [&_.app-icon:not(.replyIcon)]:size-[0.8em]!">
 					<ChatMessageShortContent
 						type={contextMessage.waba_payload?.type ?? MessageType.none}
 						template={contextMessage.waba_payload?.template}
@@ -50,8 +51,9 @@ const ContextChatMessage: React.FC<Props> = ({
 			</div>
 
 			{contextMessage.waba_payload?.type === ATTACHMENT_TYPE_IMAGE && (
-				<div className="chat__message__context__preview">
+				<div className="ml-0.75">
 					<img
+						className="block h-full min-h-12 w-12 rounded-r-[4px] object-cover"
 						src={generateImageLink(contextMessage)}
 						alt={getMessageCaption(contextMessage)}
 					/>

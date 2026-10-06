@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import '../../styles/ChatAssignment.css';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
@@ -149,9 +148,9 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 				<DialogHeader>
 					<DialogTitle>Assign chat</DialogTitle>
 				</DialogHeader>
-				<DialogBody className="chatAssignment">
+				<DialogBody>
 					{isAdmin && (
-						<div className="chatAssignmentWrapper__main_message">
+						<div className="mb-6">
 							<DialogDescription>
 								{t('You can assign this chat to a user or a group.')}
 							</DialogDescription>
@@ -159,7 +158,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 					)}
 
 					{!isAdmin && (
-						<div className="chatAssignmentWrapper__message">
+						<div className="mb-1.25">
 							{canChangeUserAssigment ? (
 								<DialogDescription>
 									{t(
@@ -205,7 +204,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 					</Field>
 
 					{!isAdmin && (
-						<div className="chatAssignmentWrapper__message">
+						<div className="mb-1.25">
 							{/* Plain text, not a second DialogDescription: the dialog
 							    points at one description */}
 							{canChangeGroupAssigment ? (
@@ -267,7 +266,7 @@ const ChatAssignment: React.FC<Props> = ({ open, setOpen, waId }) => {
 				</DialogFooter>
 
 				{isLoading && (
-					<div className="chatAssignmentWrapper__loading">
+					<div className="absolute inset-0 flex items-center justify-center bg-white">
 						<Spinner size={28} className="text-primary" />
 					</div>
 				)}

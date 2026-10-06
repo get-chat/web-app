@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../../styles/SidebarContactResult.css';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import CustomAvatar from '@src/components/CustomAvatar';
@@ -22,9 +21,13 @@ const SidebarContactResult: React.FC<Props> = ({ contactData, chatData }) => {
 				<CustomAvatar generateBgColorBy={getChatContactName(chatData)}>
 					{generateInitialsHelper(getChatContactName(chatData))}
 				</CustomAvatar>
-				<div className="sidebarContactResult__info">
-					<h2>{getChatContactName(chatData)}</h2>
-					<p className="sidebarContactResult__info__status">{t('Status')}</p>
+				<div className="ml-3.75">
+					<h2 className="mb-[3px] text-[16px] font-normal">
+						{getChatContactName(chatData)}
+					</h2>
+					<p className="mb-0 w-[220px] max-w-full truncate text-[14px] text-muted-foreground">
+						{t('Status')}
+					</p>
 				</div>
 			</div>
 		</Link>
