@@ -76,7 +76,7 @@ const RetryFailedMessages: React.FC<Props> = ({
 			>
 				Failed to send messages to {generateFailedReceiversString()}.
 				<br />
-				<a href="#" className="self-start" onClick={resendMessage}>
+				<a href="#" onClick={resendMessage}>
 					{t('Click to retry.')}
 				</a>
 				<br />

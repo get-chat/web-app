@@ -87,7 +87,9 @@ function Alert({
 			)}
 			<div
 				data-slot="alert-content"
-				className="flex min-w-0 flex-1 flex-col gap-0.5 py-0.5"
+				// A block, not a flex column: text and inline elements (a bold name
+				// from <Trans>) flow as one paragraph, as in MUI's Alert
+				className="min-w-0 flex-1 py-0.5"
 			>
 				{children}
 			</div>
@@ -119,7 +121,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
 	return (
 		<div
 			data-slot="alert-title"
-			className={cn('font-semibold tracking-tight', className)}
+			className={cn('mb-0.5 font-semibold tracking-tight', className)}
 			{...props}
 		/>
 	);
