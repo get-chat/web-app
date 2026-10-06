@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../../../styles/Chat.css';
+import { cn } from '@src/lib/utils';
 import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import { Spinner } from '@src/components/ui/spinner';
 import ChatMessage from '../ChatMessage/ChatMessage';
@@ -1086,7 +1086,7 @@ const ChatView: React.FC<Props> = (props) => {
 		// plays from the first frame of a newly appended message
 		addedNodes.forEach((node) => {
 			if (node instanceof HTMLElement && node.id?.startsWith('message_')) {
-				node.classList.add('chat__message__outer--appear');
+				node.classList.add('origin-bottom', 'motion-safe:animate-message-in');
 			}
 		});
 
@@ -1126,11 +1126,12 @@ const ChatView: React.FC<Props> = (props) => {
 					behavior: 'smooth',
 				});
 
-				child.classList.add('blink');
+				// Dims its bubble for a moment (see ChatMessage)
+				child.setAttribute('data-blink', '');
 
 				setTimeout(function () {
 					if (child) {
-						child.classList.remove('blink');
+						child.removeAttribute('data-blink');
 					}
 				}, 1000);
 			}
@@ -2070,12 +2071,18 @@ const ChatView: React.FC<Props> = (props) => {
 
 	return (
 		<div
-			className={
-				'chat' +
-				(waId ? ' chatOpen' : '') +
-				(chatViewTransition.isExiting ? ' chatExiting' : '') +
-				(props.isChatOnly ? ' chatFullWidth' : '')
-			}
+			className={cn(
+				// The chat body's frame; ChatBodySkeleton mirrors it with these
+				'relative flex flex-[0.7] flex-col bg-chat-bg bg-(image:--chat-bg-image) bg-repeat [--chat-body-border-left:1px_solid_rgba(0,0,45,0.05)] [--chat-body-padding:10px_20px_0_20px]',
+				'max-md:absolute max-md:inset-0 max-md:[--chat-body-border-left:none] max-md:[--chat-body-padding:10px_10px_0_10px]',
+				props.isChatOnly && 'flex-1',
+				// Fades in when a chat is opened and out when it is closed;
+				// switching chats doesn't replay it. On phones only an open
+				// chat shows.
+				waId ? 'motion-safe:animate-[fade-in_0.15s_ease-out]' : 'max-md:hidden',
+				chatViewTransition.isExiting &&
+					'pointer-events-none motion-safe:animate-[fade-out_0.15s_ease-in_forwards]'
+			)}
 			onDrop={(event) => handleDrop(event)}
 			onDragOver={(event) => handleDragOver(event)}
 			onAnimationEnd={chatViewTransition.handleAnimationEnd}
@@ -2095,7 +2102,7 @@ const ChatView: React.FC<Props> = (props) => {
 
 			{/* FOR TESTING QUEUE */}
 			{isLocalHost() && pendingMessages.length > 0 && (
-				<div className="pendingMessagesIndicator">
+				<div className="absolute top-[75px] left-5 z-5 rounded-[10px] bg-white px-2.5 py-1.5 text-[12px] shadow-md">
 					<div>{isSendingPendingMessages.toString()}</div>
 					<div>{pendingMessages.length}</div>
 				</div>
@@ -2103,41 +2110,46 @@ const ChatView: React.FC<Props> = (props) => {
 
 			{/* Stays mounted like MUI's Zoom did; zooms in each time it shows */}
 			<div
-				className={
-					'chat__body__dateIndicator ' +
-					(isLoaded &&
-					!isLoadingMoreMessages &&
-					// Not while the loading skeleton is still cross-fading away
-					// (it paints above this indicator)
-					!skeletonTransition.isMounted &&
-					fixedDateIndicatorText !== undefined &&
-					fixedDateIndicatorText.trim().length > 0
+				className={cn(
+					'pointer-events-none absolute top-0 right-2.5 left-2.5 z-8 mt-12',
+					isLoaded &&
+						!isLoadingMoreMessages &&
+						// Not while the loading skeleton is still cross-fading away
+						// (it paints above this indicator)
+						!skeletonTransition.isMounted &&
+						fixedDateIndicatorText !== undefined &&
+						fixedDateIndicatorText.trim().length > 0
 						? 'animate-in zoom-in duration-225'
-						: 'hidden')
-				}
+						: 'hidden'
+				)}
 			>
 				<MessageDateIndicator text={fixedDateIndicatorText} isFixed />
 			</div>
 
 			{isLoadingMoreMessages && (
-				<div className="chat__body__loadingMore animate-in zoom-in duration-225">
-					<div className="chat__body__loadingMore__wrapper">
+				<div className="absolute top-0 right-0 left-0 z-9 mt-16 flex animate-in justify-center zoom-in duration-225">
+					<div className="w-auto rounded-[40px] bg-white p-2.5 shadow-md">
 						<Spinner size={28} className="text-primary" />
 					</div>
 				</div>
 			)}
 
-			<div className="chat__body__outer">
+			{/* The positioning context for the loading skeleton over the body */}
+			<div className="relative flex min-h-0 flex-1 flex-col">
 				<div
 					id="chat-body"
-					className={
-						'chat__body' +
-						(skeletonTransition.isExiting ? ' chat__body--appearing' : '')
-					}
+					className={cn(
+						// The stable gutter keeps message widths from jumping when a
+						// scrollbar appears, and the skeleton aligned with the messages
+						'relative flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto p-(--chat-body-padding) [border-left:var(--chat-body-border-left)] [scrollbar-gutter:stable]',
+						// Fades in under the skeleton as it fades out
+						skeletonTransition.isExiting &&
+							'motion-safe:animate-[fade-in_0.25s_ease-out]'
+					)}
 					ref={messagesContainer}
 					onDrop={(event) => event.preventDefault()}
 				>
-					<div className="chat__empty" />
+					<div className="flex-auto" />
 
 					{Object.entries(messages).map((message, index) => {
 						// Ignoring reaction messages
@@ -2206,7 +2218,7 @@ const ChatView: React.FC<Props> = (props) => {
 						);
 					})}
 
-					<div className="chat__body__empty" />
+					<div className="flex-[0_0_5px]" />
 				</div>
 
 				{/* Overlays the chat body without taking layout space (so it can
@@ -2325,9 +2337,11 @@ const ChatView: React.FC<Props> = (props) => {
 			)}
 
 			{!waId && (
-				<div className="chat__default">
-					<h2>{t('Hey')}</h2>
-					<p>{t('Choose a contact to start a conversation')}</p>
+				<div className="absolute inset-0 z-100 flex flex-col items-center justify-center border-l border-ink/5 bg-gray-light p-7.5">
+					<h2 className="text-[40px] text-muted-foreground">{t('Hey')}</h2>
+					<p className="mb-0 text-[18px] text-muted-foreground">
+						{t('Choose a contact to start a conversation')}
+					</p>
 				</div>
 			)}
 

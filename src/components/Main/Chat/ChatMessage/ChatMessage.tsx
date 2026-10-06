@@ -179,14 +179,18 @@ const ChatMessage: React.FC<Props> = ({
 					)}
 
 					<div
-						className={messageBubbleClassName({
-							type: data.waba_payload?.type ?? MessageType.none,
-							isOutgoing: data.from_us,
-							hasMedia: hasMediaToPreview(data),
-							hasReaction: reactions.length > 0,
-							isSenderHidden: !displaySender && !displayDate,
-							isFirstInGroup: displaySender || displayDate,
-						})}
+						className={cn(
+							messageBubbleClassName({
+								type: data.waba_payload?.type ?? MessageType.none,
+								isOutgoing: data.from_us,
+								hasMedia: hasMediaToPreview(data),
+								hasReaction: reactions.length > 0,
+								isSenderHidden: !displaySender && !displayDate,
+								isFirstInGroup: displaySender || displayDate,
+							}),
+							// Dimmed while ChatView points at it (data-blink on the row)
+							'group-data-blink/message:opacity-30'
+						)}
 					>
 						{isActionsEnabled && (
 							<div

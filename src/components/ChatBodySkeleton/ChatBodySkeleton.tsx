@@ -103,16 +103,16 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 
 	return (
 		/*
-		 * Overlays .chat__body inside .chat__body__outer without taking part in
-		 * its layout, so it never affects the body's height or scrollbar.
-		 * Transparent: the bubbles sit over .chat's own wallpaper and dissolve
-		 * while the loaded messages fade in underneath (.chat__body--appearing
-		 * in Chat.css). No z-index on purpose: as the last positioned sibling
-		 * it already paints above the body's content, and a positive one
-		 * would lift it above the loading screen while that fades out. It
-		 * mirrors the body's padding, border and scrollbar gutter, so the
-		 * bubbles line up with the messages beneath; when the body is shorter
-		 * than the pattern, the top rows are clipped rather than squeezed.
+		 * Overlays the chat body, inside its positioning context, without
+		 * taking part in its layout, so it never affects the body's height or
+		 * scrollbar. Transparent: the bubbles sit over the chat view's own
+		 * wallpaper and dissolve while the loaded messages fade in underneath.
+		 * No z-index on purpose: as the last positioned sibling it already
+		 * paints above the body's content, and a positive one would lift it
+		 * above the loading screen while that fades out. It mirrors the body's
+		 * padding, border and scrollbar gutter, so the bubbles line up with
+		 * the messages beneath; when the body is shorter than the pattern, the
+		 * top rows are clipped rather than squeezed.
 		 */
 		<div
 			aria-hidden
@@ -121,7 +121,7 @@ const ChatBodySkeleton: React.FC<PanelTransitionProps> = ({
 				'pointer-events-none absolute inset-0 flex flex-col justify-end overflow-hidden p-(--chat-body-padding) [scrollbar-gutter:stable] *:shrink-0',
 				isExiting && 'motion-safe:animate-[fade-out_0.25s_ease-out_forwards]'
 			)}
-			// The body's border, invisible: a shorthand from Chat.css, so the
+			// The body's border, invisible: a shorthand set by ChatView, so the
 			// colour has to follow it, which classes can't guarantee
 			style={{
 				borderLeft: 'var(--chat-body-border-left)',

@@ -134,6 +134,9 @@
 	--animate-blink: blink 2s linear infinite;
 	/* A message's status ticks change by swapping icons, so the new one pops in */
 	--animate-status-in: status-in 0.3s ease-out;
+	/* A message arriving in an open chat grows up from its row's bottom edge,
+	never painting outside the row (that would flash the body's scrollbar) */
+	--animate-message-in: message-in 0.3s ease-out;
 	--animate-progress-indeterminate: progress-indeterminate 1.4s
 		cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
@@ -257,6 +260,17 @@
 	@keyframes blink {
 		50% {
 			opacity: 0.3;
+		}
+	}
+
+	@keyframes message-in {
+		from {
+			opacity: 0;
+			transform: scaleY(0.92);
+		}
+		to {
+			opacity: 1;
+			transform: none;
 		}
 	}
 
