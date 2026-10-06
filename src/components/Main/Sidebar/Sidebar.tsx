@@ -1,5 +1,4 @@
 import React, {
-	MouseEvent,
 	useEffect,
 	useLayoutEffect,
 	useContext,
@@ -988,6 +987,7 @@ const Sidebar: React.FC<Props> = ({
 			filterUnread
 	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
+	const activeFilterTag = tags?.find((item) => item.id === filterTagId);
 
 	return (
 		<div
@@ -1207,73 +1207,6 @@ const Sidebar: React.FC<Props> = ({
 						isForceDisplayFilters ? 'bg-gray-light' : 'bg-white'
 					)}
 				>
-					<Collapsible open={Boolean(isAnyActiveFilter || keyword)}>
-						<CollapsibleContent>
-							<div className="mb-0.5 px-3.75">
-								{filterUnread && (
-									<FilterOption
-										icon={<MarkChatUnreadIcon />}
-										label={t('Unread')}
-										onClick={() => setFilterUnread(false)}
-										isActive
-									/>
-								)}
-								{filterAssignedToMe && (
-									<FilterOption
-										icon={<PersonIcon />}
-										label={t('Assigned to me')}
-										onClick={() => setFilterAssignedToMe(false)}
-										isActive
-									/>
-								)}
-								{filterAssignedGroupId && (
-									<FilterOption
-										icon={<GroupIcon />}
-										label={groups[filterAssignedGroupId]?.name ?? t('Unknown')}
-										onClick={() => setFilterAssignedGroupId(undefined)}
-										isActive
-									/>
-								)}
-								{filterTagId && (
-									<FilterOption
-										icon={<SellIcon />}
-										label={
-											tags?.filter((item) => item.id === filterTagId)?.[0]
-												?.name ?? t('Unknown')
-										}
-										onClick={() => dispatch(setFilterTagId(undefined))}
-										isActive
-									/>
-								)}
-								{filterStartDate && (
-									<FilterOption
-										icon={<DateRangeIcon />}
-										label={formatDateRangeFilters(
-											filterStartDate,
-											filterEndDate
-										)}
-										onClick={() => {
-											setFilterStartDate(undefined);
-											setFilterEndDate(undefined);
-										}}
-										isActive
-									/>
-								)}
-								{Object.entries(dynamicFilters).map((item) => (
-									<FilterOption
-										key={item[0]}
-										icon={<FilterListIcon />}
-										label={`${item[0].slice(CHAT_FILTER_PREFIX.length)}: ${
-											item[1]
-										}`}
-										onClick={() => removeDynamicFilter(item[0])}
-										isActive
-									/>
-								))}
-							</div>
-						</CollapsibleContent>
-					</Collapsible>
-
 					<SearchBar
 						value={keyword}
 						onChange={(_keyword) => search(_keyword)}
@@ -1281,50 +1214,89 @@ const Sidebar: React.FC<Props> = ({
 						onFocus={() => setFiltersVisible(true)}
 						isFocusStyleEnabled={false}
 						className="bg-transparent py-0"
+						// White like the filter chips once the area turns grey
+						fieldClassName={cn(isForceDisplayFilters && 'bg-white shadow-sm')}
 					/>
 
 					<Collapsible open={isForceDisplayFilters}>
 						<CollapsibleContent>
-							<div className="mt-1.25 px-3.75">
-								{!filterUnread && (
-									<FilterOption
-										icon={<MarkChatUnreadIcon />}
-										label={t('Unread')}
-										onClick={() => setFilterUnread(true)}
-									/>
-								)}
-								{!filterAssignedToMe && (
-									<FilterOption
-										icon={<PersonIcon />}
-										label={t('Assigned to me')}
-										onClick={() => setFilterAssignedToMe(true)}
-									/>
-								)}
+							{/* One chip per filter, which turns mint while applied */}
+							<div className="mt-2.5 flex flex-wrap gap-1.5 px-3.75">
+								<FilterOption
+									icon={<MarkChatUnreadIcon />}
+									label={t('Unread')}
+									isActive={filterUnread}
+									onClick={() => setFilterUnread(!filterUnread)}
+									onClear={() => setFilterUnread(false)}
+								/>
+								<FilterOption
+									icon={<PersonIcon />}
+									label={t('Assigned to me')}
+									isActive={filterAssignedToMe}
+									onClick={() => setFilterAssignedToMe(!filterAssignedToMe)}
+									onClear={() => setFilterAssignedToMe(false)}
+								/>
 								<FilterOption
 									icon={<GroupIcon />}
-									label={t('Assigned group')}
-									onClick={(event: MouseEvent) => {
-										if (event.currentTarget instanceof Element) {
-											setGroupsMenuAnchorEl(event.currentTarget);
-										}
-									}}
+									label={
+										filterAssignedGroupId
+											? groups[filterAssignedGroupId]?.name ?? t('Unknown')
+											: t('Assigned group')
+									}
+									isActive={Boolean(filterAssignedGroupId)}
+									onClick={(event) =>
+										setGroupsMenuAnchorEl(event.currentTarget)
+									}
+									onClear={() => setFilterAssignedGroupId(undefined)}
 								/>
-								{tags?.length > 0 && (
+								{(tags?.length > 0 || Boolean(filterTagId)) && (
 									<FilterOption
-										icon={<SellIcon />}
-										label={t('Tag')}
-										onClick={(event: MouseEvent) => {
-											if (event.currentTarget instanceof Element) {
-												setTagsMenuAnchorEl(event.currentTarget);
-											}
-										}}
+										icon={
+											<SellIcon
+												style={
+													filterTagId
+														? { fill: activeFilterTag?.web_inbox_color }
+														: undefined
+												}
+											/>
+										}
+										label={
+											filterTagId
+												? activeFilterTag?.name ?? t('Unknown')
+												: t('Tag')
+										}
+										isActive={Boolean(filterTagId)}
+										onClick={(event) =>
+											setTagsMenuAnchorEl(event.currentTarget)
+										}
+										onClear={() => dispatch(setFilterTagId(undefined))}
 									/>
 								)}
 								<FilterOption
 									icon={<DateRangeIcon />}
-									label={t('Time')}
+									label={
+										filterStartDate
+											? formatDateRangeFilters(filterStartDate, filterEndDate)
+											: t('Time')
+									}
+									isActive={Boolean(filterStartDate)}
 									onClick={() => setDateRangeDialogVisible(true)}
+									onClear={() => {
+										setFilterStartDate(undefined);
+										setFilterEndDate(undefined);
+									}}
 								/>
+								{/* Filters from the URL (cf_...), which have no chip of their own */}
+								{Object.entries(dynamicFilters).map(([key, value]) => (
+									<FilterOption
+										key={key}
+										icon={<FilterListIcon />}
+										label={`${key.slice(CHAT_FILTER_PREFIX.length)}: ${value}`}
+										isActive
+										onClick={() => removeDynamicFilter(key)}
+										onClear={() => removeDynamicFilter(key)}
+									/>
+								))}
 							</div>
 
 							{(keyword || isAnyActiveFilter) && (
@@ -1451,105 +1423,111 @@ const Sidebar: React.FC<Props> = ({
 				</div>
 			</ClickAwayListener>
 
-			{isUserAvailabilityFeatureEnabled && <UserAvailability />}
+			{/* The list and its loading overlay, above the availability footer */}
+			<div className="relative flex min-h-0 flex-1 flex-col">
+				<div className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-white">
+					{isSelectionModeEnabled && (
+						<>
+							{tags && (
+								<>
+									<SectionTitle>{t('Tags')}</SectionTitle>
+									<div>
+										{tags.map((tag) => (
+											<SelectableChatTag key={tag.id} data={tag} />
+										))}
+									</div>
+								</>
+							)}
+						</>
+					)}
 
-			<div className="flex flex-1 flex-col overflow-y-auto bg-white">
-				{isSelectionModeEnabled && (
-					<>
-						{tags && (
+					{(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) && (
+						<SectionTitle>{t('Chats')}</SectionTitle>
+					)}
+
+					{!isLoadingChats &&
+						searchedKeyword.trim().length === 0 &&
+						!isAnyActiveFilter &&
+						filteredChatsCount === 0 && (
+							<span className="block px-3.75 py-2.5 text-[14px] [word-break:break-word] text-ink/60">
+								<span>{t("You don't have any chats yet.")}</span>
+							</span>
+						)}
+
+					{filteredChatsCount > 0 && (
+						<div
+							className={cn(
+								'flex-1 overflow-y-auto',
+								(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) &&
+									'flex-none overflow-y-hidden'
+							)}
+							ref={chatListRef}
+						>
+							<ViewportList
+								viewportRef={chatListRef}
+								items={filteredChats}
+								overscan={5}
+							>
+								{(item) => (
+									<ChatListItem
+										key={item.wa_id}
+										chatData={item}
+										keyword={searchedKeyword}
+										contactProvidersData={contactProvidersData}
+										filterAssignedToMe={filterAssignedToMe}
+										filterAssignedGroupId={filterAssignedGroupId}
+									/>
+								)}
+							</ViewportList>
+						</div>
+					)}
+
+					{searchedKeyword.trim().length > 0 &&
+						getObjLength(contactResults) > 0 && (
 							<>
-								<SectionTitle>{t('Tags')}</SectionTitle>
+								<SectionTitle>{t('Contacts')}</SectionTitle>
 								<div>
-									{tags.map((tag) => (
-										<SelectableChatTag key={tag.id} data={tag} />
+									{Object.entries(contactResults).map((contactResult) => (
+										<SidebarContactResult
+											key={contactResult[0]}
+											contactData={contactResult[1]}
+											chatData={chats[contactResult[0]]}
+										/>
 									))}
 								</div>
 							</>
 						)}
-					</>
-				)}
 
-				{(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) && (
-					<SectionTitle>{t('Chats')}</SectionTitle>
-				)}
-
-				{!isLoadingChats &&
-					searchedKeyword.trim().length === 0 &&
-					!isAnyActiveFilter &&
-					filteredChatsCount === 0 && (
-						<span className="block px-3.75 py-2.5 text-[14px] [word-break:break-word] text-ink/60">
-							<span>{t("You don't have any chats yet.")}</span>
-						</span>
-					)}
-
-				{filteredChatsCount > 0 && (
-					<div
-						className={cn(
-							'flex-1 overflow-y-auto',
-							(searchedKeyword.trim().length > 0 || isSelectionModeEnabled) &&
-								'flex-none overflow-y-hidden'
+					{searchedKeyword.trim().length > 0 &&
+						getObjLength(chatMessages) > 0 && (
+							<>
+								<SectionTitle>{t('Messages')}</SectionTitle>
+								<div>
+									{Object.entries(chatMessages).map((message) => (
+										<SearchMessageResult
+											key={message[0]}
+											messageData={message[1]}
+											keyword={searchedKeyword}
+											displaySender={true}
+											onClick={(chatMessage: Message) =>
+												goToMessage(chatMessage)
+											}
+										/>
+									))}
+								</div>
+							</>
 						)}
-						ref={chatListRef}
-					>
-						<ViewportList
-							viewportRef={chatListRef}
-							items={filteredChats}
-							overscan={5}
-						>
-							{(item) => (
-								<ChatListItem
-									key={item.wa_id}
-									chatData={item}
-									keyword={searchedKeyword}
-									contactProvidersData={contactProvidersData}
-									filterAssignedToMe={filterAssignedToMe}
-									filterAssignedGroupId={filterAssignedGroupId}
-								/>
-							)}
-						</ViewportList>
+				</div>
+
+				{isLoadingMoreChats && (
+					<div className="absolute right-1.25 bottom-0 left-0 z-1 flex animate-fade-in justify-center bg-linear-to-t from-white to-white/0 pb-5">
+						<LoadingMoreIndicator className="animate-in fade-in-0 zoom-in-95" />
 					</div>
 				)}
-
-				{searchedKeyword.trim().length > 0 &&
-					getObjLength(contactResults) > 0 && (
-						<>
-							<SectionTitle>{t('Contacts')}</SectionTitle>
-							<div>
-								{Object.entries(contactResults).map((contactResult) => (
-									<SidebarContactResult
-										key={contactResult[0]}
-										contactData={contactResult[1]}
-										chatData={chats[contactResult[0]]}
-									/>
-								))}
-							</div>
-						</>
-					)}
-
-				{searchedKeyword.trim().length > 0 &&
-					getObjLength(chatMessages) > 0 && (
-						<>
-							<SectionTitle>{t('Messages')}</SectionTitle>
-							<div>
-								{Object.entries(chatMessages).map((message) => (
-									<SearchMessageResult
-										key={message[0]}
-										messageData={message[1]}
-										keyword={searchedKeyword}
-										displaySender={true}
-										onClick={(chatMessage: Message) => goToMessage(chatMessage)}
-									/>
-								))}
-							</div>
-						</>
-					)}
 			</div>
 
-			{isLoadingMoreChats && (
-				<div className="absolute right-1.25 bottom-0 left-0 z-1 flex animate-fade-in justify-center bg-linear-to-t from-white to-white/0 pb-5">
-					<LoadingMoreIndicator className="animate-in fade-in-0 zoom-in-95" />
-				</div>
-			)}
+			{/* Always at the bottom of the sidebar, below the list */}
+			{isUserAvailabilityFeatureEnabled && <UserAvailability />}
 
 			{contactsTransition.isMounted && (
 				<StartChat

@@ -1279,6 +1279,9 @@ msgstr "Düğmeyi kaldır"
 msgid "Remove card"
 msgstr "Kartı kaldır"
 
+msgid "Remove filter"
+msgstr "Filtreyi kaldır"
+
 msgid "Remove option"
 msgstr "Seçeneği kaldır"
 

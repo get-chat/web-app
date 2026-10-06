@@ -72,6 +72,9 @@
 	/* The app's navy ink, used at different opacities: text-ink/60, bg-ink/5 */
 	--color-ink: rgb(0 0 45);
 
+	/* Deep teal for text and icons on primary tints (bg-primary/25...) */
+	--color-primary-deep: #17604c;
+
 	/* Status pairs: text on a soft background (active/resolved, inactive) */
 	--color-success: #2e7d33;
 	--color-success-soft: #c9e4cb;

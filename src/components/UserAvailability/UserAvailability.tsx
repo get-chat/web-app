@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { AxiosError } from 'axios';
@@ -6,7 +7,7 @@ import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
 import { Switch } from '@src/components/ui/switch';
 import { cn } from '@src/lib/utils';
 
-const UserAvailability = () => {
+const UserAvailability: React.FC = () => {
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const { t } = useTranslation();
 
@@ -28,36 +29,54 @@ const UserAvailability = () => {
 	};
 
 	return (
-		<div
-			className={cn(
-				'flex cursor-pointer items-center justify-between py-2.5 pr-1.5 pl-3.75 transition-[background-color] duration-200 ease-in-out',
-				isUserAvailable
-					? 'bg-success-soft text-success'
-					: 'bg-warning-soft text-warning'
-			)}
-			onClick={toggleUserAvailability}
-		>
-			<div>
-				<div className="text-[14px] font-semibold">
-					{isUserAvailable
-						? t('You are active now.')
-						: t('You are inactive now.')}
+		// The sidebar's footer, grey like its header: a rounded status card,
+		// tinted green when the user is active and amber when not; the whole
+		// card toggles
+		<div className="border-t border-ink/6 bg-gray-light p-3">
+			<div
+				className={cn(
+					'flex cursor-pointer items-center gap-3 rounded-xl py-2.5 pr-2.5 pl-3.5 ring-1 transition-[background-color,box-shadow] duration-200 ease-in-out ring-inset',
+					isUserAvailable
+						? 'bg-success-soft/70 text-success ring-success/15 hover:bg-success-soft'
+						: 'bg-warning-soft/70 text-warning ring-warning/15 hover:bg-warning-soft'
+				)}
+				onClick={toggleUserAvailability}
+			>
+				{/* Presence dot: a soft pulsing halo while active */}
+				<span className="relative flex size-2.5 shrink-0">
+					{isUserAvailable && (
+						<span className="absolute inset-0 rounded-full bg-success opacity-60 motion-safe:animate-ping" />
+					)}
+					<span
+						className={cn(
+							'relative size-2.5 rounded-full transition-[background-color] duration-200',
+							isUserAvailable ? 'bg-success' : 'bg-warning-strong'
+						)}
+					/>
+				</span>
+
+				<div className="min-w-0 flex-1">
+					<div className="truncate text-[13px] leading-tight font-semibold">
+						{isUserAvailable
+							? t('You are active now.')
+							: t('You are inactive now.')}
+					</div>
+					<div className="truncate text-[12px] leading-tight opacity-75">
+						{t('Click to toggle your status.')}
+					</div>
 				</div>
-				<div className="text-[12px] font-medium">
-					{t('Click to toggle your status.')}
-				</div>
+
+				<Switch
+					checked={isUserAvailable}
+					onClick={(event) => {
+						event.stopPropagation();
+						toggleUserAvailability();
+					}}
+					// Green when on; when off, a deeper shade of the card's amber
+					color="success"
+					className="data-[state=unchecked]:bg-warning-strong"
+				/>
 			</div>
-			<Switch
-				checked={isUserAvailable}
-				onClick={(event) => {
-					event.stopPropagation();
-					toggleUserAvailability();
-				}}
-				// Green when on; when off, a deeper shade of the bar's warning
-				// yellow. The margins keep MUI's footprint.
-				color="success"
-				className="my-[9px] mr-3.75 data-[state=unchecked]:bg-warning-strong"
-			/>
 		</div>
 	);
 };
