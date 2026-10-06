@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import InsertDriveFileIcon from '@src/components/icons/Draft';
 
-import styles from './ChatMessageDocument.pcss';
 import { Message } from '@src/types/messages';
 import { getHeaderFileLink } from '@src/helpers/MessageHelper';
 
@@ -15,7 +14,9 @@ const ChatMessageDocument: FC<ChatMessageDocumentProps> = ({ data }) => {
 
 	return (
 		<a
-			className={styles.documentMessage}
+			// A grey card reaching to the bubble's edges, like the other media.
+			// `!` on the text colour: the bubble colours every link light blue.
+			className="-mx-1.5 -mt-px mb-1 flex rounded-[6px] bg-[rgba(0,0,45,0.05)] px-1.5 py-2.5 text-[#4a4a4a]! hover:bg-[rgba(0,0,45,0.08)]"
 			href={
 				data.waba_payload?.document?.link ?? getHeaderFileLink(data, 'document')
 			}
@@ -23,7 +24,7 @@ const ChatMessageDocument: FC<ChatMessageDocumentProps> = ({ data }) => {
 			target="_blank"
 		>
 			<InsertDriveFileIcon fontSize="small" />
-			<span className={styles.documentMessageFilename}>
+			<span className="ml-1.25">
 				{data.waba_payload?.document?.caption ??
 					data.waba_payload?.document?.filename ??
 					t('Document')}

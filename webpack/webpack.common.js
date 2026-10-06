@@ -82,7 +82,7 @@ module.exports = (isDevelopment) => {
 				},
 				{
 					// Tailwind entry point; runs through Tailwind's own PostCSS
-					// plugin only, not the postcss.config.js chain used by .pcss
+					// plugin
 					test: /tailwind\.css$/i,
 					use: [
 						styleLoader,
@@ -120,37 +120,6 @@ module.exports = (isDevelopment) => {
 									// resolving them as modules at build time
 									filter: (url) => !url.startsWith('/'),
 								},
-							},
-						},
-					],
-				},
-				{
-					test: /\.pcss/,
-					use: [
-						{
-							loader: styleLoader,
-						},
-						{
-							loader: 'css-loader',
-							options: {
-								importLoaders: 1,
-								modules: true,
-							},
-						},
-						{
-							loader: 'postcss-loader',
-						},
-					],
-				},
-
-				{
-					test: /\.modules.css$/i,
-					use: [
-						styleLoader,
-						{
-							loader: 'css-loader',
-							options: {
-								modules: true,
 							},
 						},
 					],

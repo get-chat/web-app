@@ -7,7 +7,6 @@ export { default as Add } from './Add';
 export { default as AdminPanelSettings } from './AdminPanelSettings';
 export { default as ArrowBack } from './ArrowBack';
 export { default as ArrowDownward } from './ArrowDownward';
-export { default as ArrowDropDown } from './ArrowDropDown';
 export { default as ArrowForward } from './ArrowForward';
 export { default as AssignmentTurnedIn } from './AssignmentTurnedIn';
 export { default as AttachFile } from './AttachFile';
