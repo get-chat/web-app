@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { zoomTransition } from '@src/styles/zoomTransition';
 import { cn } from '@src/lib/utils';
 import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import { Spinner } from '@src/components/ui/spinner';
@@ -2108,31 +2109,34 @@ const ChatView: React.FC<Props> = (props) => {
 				</div>
 			)}
 
-			{/* Stays mounted like MUI's Zoom did; zooms in each time it shows */}
 			<div
 				className={cn(
 					'pointer-events-none absolute top-0 right-2.5 left-2.5 z-8 mt-12',
-					isLoaded &&
-						!isLoadingMoreMessages &&
-						// Not while the loading skeleton is still cross-fading away
-						// (it paints above this indicator)
-						!skeletonTransition.isMounted &&
-						fixedDateIndicatorText !== undefined &&
-						fixedDateIndicatorText.trim().length > 0
-						? 'animate-in zoom-in duration-225'
-						: 'hidden'
+					zoomTransition(
+						isLoaded &&
+							!isLoadingMoreMessages &&
+							// Not while the loading skeleton is still cross-fading away
+							// (it paints above this indicator)
+							!skeletonTransition.isMounted &&
+							fixedDateIndicatorText !== undefined &&
+							fixedDateIndicatorText.trim().length > 0
+					)
 				)}
 			>
 				<MessageDateIndicator text={fixedDateIndicatorText} isFixed />
 			</div>
 
-			{isLoadingMoreMessages && (
-				<div className="absolute top-0 right-0 left-0 z-9 mt-16 flex animate-in justify-center zoom-in duration-225">
-					<div className="w-auto rounded-[40px] bg-white p-2.5 shadow-md">
-						<Spinner size={28} className="text-primary" />
-					</div>
+			{/* Stays mounted, so it can shrink away once loading has finished */}
+			<div
+				className={cn(
+					'absolute top-0 right-0 left-0 z-9 mt-[63px] flex justify-center',
+					zoomTransition(isLoadingMoreMessages)
+				)}
+			>
+				<div className="w-auto rounded-[40px] bg-white px-2.5 pt-2.5 pb-1 shadow-md">
+					<Spinner size={28} className="text-primary" />
 				</div>
-			)}
+			</div>
 
 			{/* The positioning context for the loading skeleton over the body */}
 			<div className="relative flex min-h-0 flex-1 flex-col">

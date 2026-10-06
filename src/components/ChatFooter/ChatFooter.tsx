@@ -42,6 +42,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { Badge } from '@src/components/ui/badge';
+import { zoomTransition } from '@src/styles/zoomTransition';
 import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
 
@@ -724,13 +725,12 @@ const ChatFooter: React.FC<Props> = ({
 				/>
 			</div>
 
-			{/* Stays mounted like MUI's Zoom did; zooms in each time it shows */}
 			{/* Holds the scroll button and its unread count badge, as MUI's Badge
 			did, on MUI's Fab layer so it floats over the messages */}
 			<span
 				className={cn(
 					'absolute right-5 bottom-28 z-1050 inline-flex',
-					isScrollButtonVisible ? 'animate-in zoom-in duration-225' : 'hidden!'
+					zoomTransition(isScrollButtonVisible)
 				)}
 			>
 				{/* MUI's small Fab: a raised round 40px button */}
