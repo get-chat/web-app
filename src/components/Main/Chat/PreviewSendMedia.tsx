@@ -296,7 +296,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 							<span key={file[0]} className="group/thumb relative">
 								<span
 									className={cn(
-										'mx-px flex size-[75px] cursor-pointer items-center justify-center border-3 border-transparent',
+										'mx-px flex size-[75px] cursor-pointer items-center justify-center rouned-md border-3 border-transparent',
 										chosenFile === file[1] &&
 											'border-white shadow-[0_4px_6px_-6px_rgba(0,0,45,0.4)]'
 									)}
@@ -348,7 +348,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 						className="ml-1"
 						onClick={() => fileInput.current?.click()}
 					>
-						<div className="flex size-[75px] cursor-pointer flex-col items-center justify-center rounded-md bg-white text-[12px] text-primary [&_.app-icon]:mb-0.75 [&_.app-icon]:size-[1.25em]! [&_.app-icon]:text-primary!">
+						<div className="flex size-[75px] cursor-pointer flex-col items-center justify-center bg-white text-[12px] text-primary [&_.app-icon]:mb-0.75 [&_.app-icon]:size-[1.25em]! [&_.app-icon]:text-primary!">
 							<AddIcon />
 							<span>{t('Add more')}</span>
 						</div>
