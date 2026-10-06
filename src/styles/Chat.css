@@ -659,10 +659,6 @@ messages fade in over the chat wallpaper */
 		display: none;
 	}
 
-	.chat__message {
-		max-width: 90%;
-	}
-
 	.templateMessagesOuter {
 		border-left: none;
 	}

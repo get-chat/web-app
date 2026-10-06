@@ -17,7 +17,8 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
-import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
+import { cn } from '@src/lib/utils';
+import { messageBubbleClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
 import { MessageType } from '@src/types/messages';
 import MessageActionButton from '@src/components/MessageActionButton';
 import SearchBar from '@src/components/SearchBar';
@@ -141,16 +142,20 @@ const SavedResponseList: React.FC<Props> = ({
 
 						{savedResponses.map((savedResponse) => (
 							<div key={savedResponse.id} className="savedResponseWrapper">
-								<StyledChatMessage.ChatMessage
-									$type={MessageType.text}
-									$isOutgoing={true}
-									className="chat__savedResponse"
+								<div
+									className={cn(
+										messageBubbleClassName({
+											type: MessageType.text,
+											isOutgoing: true,
+										}),
+										'chat__savedResponse'
+									)}
 								>
 									{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
 									<div className="savedResponse__message">
 										{savedResponse.text}
 									</div>
-								</StyledChatMessage.ChatMessage>
+								</div>
 
 								<SimpleTooltip title={t('Send')}>
 									<MessageActionButton

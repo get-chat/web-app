@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
-import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
+import { messageBubbleClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
 import { MessageType } from '@src/types/messages';
 
 interface Props {
@@ -85,9 +85,11 @@ const TemplatesList: React.FC<Props> = ({
 
 				{Object.entries(templates).map((template) => (
 					<div key={template[0]} className="templateMessageWrapper">
-						<StyledChatMessage.ChatMessage
-							$type={MessageType.template}
-							$isOutgoing={true}
+						<div
+							className={messageBubbleClassName({
+								type: MessageType.template,
+								isOutgoing: true,
+							})}
 						>
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
 							<div className="templateMessage__message">
@@ -111,7 +113,7 @@ const TemplatesList: React.FC<Props> = ({
 									)
 								)}
 							</div>
-						</StyledChatMessage.ChatMessage>
+						</div>
 						{isTemplateApproved(template[1]) && (
 							<SimpleTooltip title={customSelectButtonTitle ?? t('Send')}>
 								<MessageActionButton
