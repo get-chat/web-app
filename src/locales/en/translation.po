@@ -1492,3 +1492,192 @@ msgstr ""
 
 msgid "The password is too similar to the email address."
 msgstr ""
+
+msgid "Back to inbox"
+msgstr ""
+
+msgid "Analytics"
+msgstr ""
+
+msgid "Export CSV"
+msgstr ""
+
+msgid "Analytics could not be loaded."
+msgstr ""
+
+msgid "No conversations in this period"
+msgstr ""
+
+msgid "Nothing matches these filters. Try a longer period or fewer filters."
+msgstr ""
+
+msgid "Try a longer period."
+msgstr ""
+
+msgid "Show last 30 days"
+msgstr ""
+
+msgid "Reset filters"
+msgstr ""
+
+msgid "Last 7 days"
+msgstr ""
+
+msgid "Last 30 days"
+msgstr ""
+
+msgid "All agents"
+msgstr ""
+
+msgid "%d agents"
+msgstr ""
+
+msgid "All groups"
+msgstr ""
+
+msgid "%d groups"
+msgstr ""
+
+msgid "All tags"
+msgstr ""
+
+msgid "%d tags"
+msgstr ""
+
+msgid "All statuses"
+msgstr ""
+
+msgid "Open only"
+msgstr ""
+
+msgid "Resolved only"
+msgstr ""
+
+msgid "Custom range…"
+msgstr ""
+
+msgid "Filtered by"
+msgstr ""
+
+msgid "Clear all"
+msgstr ""
+
+msgid "Agent"
+msgstr ""
+
+msgid "Conversations answered"
+msgstr ""
+
+msgid "Conversations where an agent sent at least one reply"
+msgstr ""
+
+msgid "Split by"
+msgstr ""
+
+msgid "By agent"
+msgstr ""
+
+msgid "By group"
+msgstr ""
+
+msgid "By tag"
+msgstr ""
+
+msgid "Conversations"
+msgstr ""
+
+msgid "Share of total"
+msgstr ""
+
+msgid "Avg. first response"
+msgstr ""
+
+msgid "Avg. resolution"
+msgstr ""
+
+msgid "Click a row to filter the whole page."
+msgstr ""
+
+msgid "No conversations were answered in this period."
+msgstr ""
+
+msgid "No data for the previous period"
+msgstr ""
+
+msgid "vs previous period"
+msgstr ""
+
+msgid "Messages sent"
+msgstr ""
+
+msgid "Outgoing messages, without the ones that failed"
+msgstr ""
+
+msgid "Time from the customer's first message to the first agent reply"
+msgstr ""
+
+msgid "Time from a conversation opening to it being resolved"
+msgstr ""
+
+msgid "Marketing"
+msgstr ""
+
+msgid "Utility"
+msgstr ""
+
+msgid "Authentication"
+msgstr ""
+
+msgid "Service"
+msgstr ""
+
+msgid "Deleted templates"
+msgstr ""
+
+msgid "Messages sent by category"
+msgstr ""
+
+msgid "Outgoing messages, by WhatsApp conversation category"
+msgstr ""
+
+msgid "Inbox only"
+msgstr ""
+
+msgid "Marketing, Utility and Authentication messages are templates; Service messages are free-form replies within the 24-hour window."
+msgstr ""
+
+msgid "Average"
+msgstr ""
+
+msgid "Median"
+msgstr ""
+
+msgid "First response time"
+msgstr ""
+
+msgid "How long customers waited for the first reply"
+msgstr ""
+
+msgid "Waited %s"
+msgstr ""
+
+msgid "Resolution time"
+msgstr ""
+
+msgid "Time from open to resolved, per hour"
+msgstr ""
+
+msgid "Time from open to resolved, per day"
+msgstr ""
+
+msgid "Conversations per tag"
+msgstr ""
+
+msgid "Conversations in the period, by their current tags"
+msgstr ""
+
+msgid "No group"
+msgstr ""
+
+msgid "Untagged"
+msgstr ""

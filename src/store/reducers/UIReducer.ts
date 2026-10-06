@@ -6,6 +6,7 @@ interface UIState {
 	isMessageStatusesVisible: boolean;
 	isContactDetailsVisible: boolean;
 	isSearchMessagesVisible: boolean;
+	isAnalyticsVisible: boolean;
 	isSelectionModeEnabled: boolean;
 	isExportChat: boolean;
 	loadingProgress: number;
@@ -44,6 +45,7 @@ const initialState: UIState = {
 	isMessageStatusesVisible: false,
 	isContactDetailsVisible: false,
 	isSearchMessagesVisible: false,
+	isAnalyticsVisible: false,
 	isSelectionModeEnabled: false,
 	isExportChat: false,
 	loadingProgress: 0,

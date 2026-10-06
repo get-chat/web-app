@@ -1518,3 +1518,192 @@ msgstr "Şifre, soyada çok benziyor."
 
 msgid "The password is too similar to the email address."
 msgstr "Şifre, e-posta adresine çok benziyor."
+
+msgid "Back to inbox"
+msgstr "Gelen kutusuna dön"
+
+msgid "Analytics"
+msgstr "Analizler"
+
+msgid "Export CSV"
+msgstr "CSV olarak dışa aktar"
+
+msgid "Analytics could not be loaded."
+msgstr "Analizler yüklenemedi."
+
+msgid "No conversations in this period"
+msgstr "Bu dönemde görüşme yok"
+
+msgid "Nothing matches these filters. Try a longer period or fewer filters."
+msgstr "Bu filtrelere uyan bir şey yok. Daha uzun bir dönem veya daha az filtre deneyin."
+
+msgid "Try a longer period."
+msgstr "Daha uzun bir dönem deneyin."
+
+msgid "Show last 30 days"
+msgstr "Son 30 günü göster"
+
+msgid "Reset filters"
+msgstr "Filtreleri sıfırla"
+
+msgid "Last 7 days"
+msgstr "Son 7 gün"
+
+msgid "Last 30 days"
+msgstr "Son 30 gün"
+
+msgid "All agents"
+msgstr "Tüm temsilciler"
+
+msgid "%d agents"
+msgstr "%d temsilci"
+
+msgid "All groups"
+msgstr "Tüm gruplar"
+
+msgid "%d groups"
+msgstr "%d grup"
+
+msgid "All tags"
+msgstr "Tüm etiketler"
+
+msgid "%d tags"
+msgstr "%d etiket"
+
+msgid "All statuses"
+msgstr "Tüm durumlar"
+
+msgid "Open only"
+msgstr "Yalnızca açık"
+
+msgid "Resolved only"
+msgstr "Yalnızca çözülmüş"
+
+msgid "Custom range…"
+msgstr "Özel aralık…"
+
+msgid "Filtered by"
+msgstr "Filtre"
+
+msgid "Clear all"
+msgstr "Tümünü temizle"
+
+msgid "Agent"
+msgstr "Temsilci"
+
+msgid "Conversations answered"
+msgstr "Yanıtlanan görüşmeler"
+
+msgid "Conversations where an agent sent at least one reply"
+msgstr "Bir temsilcinin en az bir yanıt gönderdiği görüşmeler"
+
+msgid "Split by"
+msgstr "Ayrıştır"
+
+msgid "By agent"
+msgstr "Temsilciye göre"
+
+msgid "By group"
+msgstr "Gruba göre"
+
+msgid "By tag"
+msgstr "Etikete göre"
+
+msgid "Conversations"
+msgstr "Görüşmeler"
+
+msgid "Share of total"
+msgstr "Toplamdaki payı"
+
+msgid "Avg. first response"
+msgstr "Ort. ilk yanıt"
+
+msgid "Avg. resolution"
+msgstr "Ort. çözüm"
+
+msgid "Click a row to filter the whole page."
+msgstr "Tüm sayfayı filtrelemek için bir satıra tıklayın."
+
+msgid "No conversations were answered in this period."
+msgstr "Bu dönemde hiçbir görüşme yanıtlanmadı."
+
+msgid "No data for the previous period"
+msgstr "Önceki döneme ait veri yok"
+
+msgid "vs previous period"
+msgstr "önceki döneme göre"
+
+msgid "Messages sent"
+msgstr "Gönderilen mesajlar"
+
+msgid "Outgoing messages, without the ones that failed"
+msgstr "Giden mesajlar, gönderilemeyenler hariç"
+
+msgid "Time from the customer's first message to the first agent reply"
+msgstr "Müşterinin ilk mesajından temsilcinin ilk yanıtına kadar geçen süre"
+
+msgid "Time from a conversation opening to it being resolved"
+msgstr "Bir görüşmenin açılmasından çözülmesine kadar geçen süre"
+
+msgid "Marketing"
+msgstr "Pazarlama"
+
+msgid "Utility"
+msgstr "Hizmet bildirimi"
+
+msgid "Authentication"
+msgstr "Kimlik doğrulama"
+
+msgid "Service"
+msgstr "Hizmet"
+
+msgid "Deleted templates"
+msgstr "Silinmiş şablonlar"
+
+msgid "Messages sent by category"
+msgstr "Kategoriye göre gönderilen mesajlar"
+
+msgid "Outgoing messages, by WhatsApp conversation category"
+msgstr "WhatsApp görüşme kategorisine göre giden mesajlar"
+
+msgid "Inbox only"
+msgstr "Yalnızca Inbox"
+
+msgid "Marketing, Utility and Authentication messages are templates; Service messages are free-form replies within the 24-hour window."
+msgstr "Pazarlama, Hizmet bildirimi ve Kimlik doğrulama mesajları şablondur; Hizmet mesajları 24 saatlik pencere içindeki serbest yanıtlardır."
+
+msgid "Average"
+msgstr "Ortalama"
+
+msgid "Median"
+msgstr "Medyan"
+
+msgid "First response time"
+msgstr "İlk yanıt süresi"
+
+msgid "How long customers waited for the first reply"
+msgstr "Müşterilerin ilk yanıtı ne kadar beklediği"
+
+msgid "Waited %s"
+msgstr "Bekleme: %s"
+
+msgid "Resolution time"
+msgstr "Çözüm süresi"
+
+msgid "Time from open to resolved, per hour"
+msgstr "Açılıştan çözüme kadar geçen süre, saatlik"
+
+msgid "Time from open to resolved, per day"
+msgstr "Açılıştan çözüme kadar geçen süre, günlük"
+
+msgid "Conversations per tag"
+msgstr "Etikete göre görüşmeler"
+
+msgid "Conversations in the period, by their current tags"
+msgstr "Dönemdeki görüşmeler, mevcut etiketlerine göre"
+
+msgid "No group"
+msgstr "Grup yok"
+
+msgid "Untagged"
+msgstr "Etiketsiz"

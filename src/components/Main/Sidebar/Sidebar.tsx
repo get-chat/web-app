@@ -57,6 +57,7 @@ import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
 import {
+	BarChart as BarChartIcon,
 	Notifications as NotificationsIcon,
 	QrCode,
 } from '@src/components/icons';
@@ -949,6 +950,16 @@ const Sidebar: React.FC<Props> = ({
 		setOpenInWhatsAppDialogVisible(true);
 	};
 
+	// The analytics view takes the focus, so the closing menu mustn't give it
+	// back to its button underneath (that would also show the button's tooltip)
+	const isOpeningAnalytics = useRef(false);
+
+	const showAnalytics = () => {
+		isOpeningAnalytics.current = true;
+		setMenuVisible(false);
+		dispatch(setState({ isAnalyticsVisible: true }));
+	};
+
 	const showChatTagsList = () => {
 		setMenuVisible(false);
 		setChatTagsListVisible(true);
@@ -1078,7 +1089,15 @@ const Sidebar: React.FC<Props> = ({
 								</Button>
 							</DropdownMenuTrigger>
 						</SimpleTooltip>
-						<DropdownMenuContent align="end">
+						<DropdownMenuContent
+							align="end"
+							onCloseAutoFocus={(event) => {
+								if (isOpeningAnalytics.current) {
+									isOpeningAnalytics.current = false;
+									event.preventDefault();
+								}
+							}}
+						>
 							{/* Phones only: there is no browser reload button there */}
 							<DropdownMenuItem
 								className="md:hidden"
@@ -1108,6 +1127,13 @@ const Sidebar: React.FC<Props> = ({
 							</DropdownMenuItem>*/}
 							{currentUser?.profile?.role === 'admin' && (
 								<DropdownMenuSeparator />
+							)}
+							{/* The analytics API is for admins only */}
+							{currentUser?.profile?.role === 'admin' && (
+								<DropdownMenuItem onSelect={showAnalytics}>
+									<BarChartIcon />
+									{t('Analytics')}
+								</DropdownMenuItem>
 							)}
 							{currentUser?.profile?.role === 'admin' && !isReadOnly && (
 								<DropdownMenuItem

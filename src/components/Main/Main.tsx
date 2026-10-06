@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, lazy, useContext, useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import ChatView from './Chat/ChatView';
 import { toast } from 'sonner';
@@ -97,6 +97,9 @@ import { setIsUserAvailabilityFeatureEnabled } from '@src/store/reducers/isUserA
 import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
 import { WabaWebhookWabaPayload } from '@src/types/webhook';
 
+// Loaded on first open: its charting library isn't needed for the inbox
+const Analytics = lazy(() => import('@src/components/Analytics'));
+
 function useQuery() {
 	return new URLSearchParams(useLocation().search);
 }
@@ -116,6 +119,7 @@ const Main: React.FC = () => {
 		isMessageStatusesVisible,
 		isContactDetailsVisible,
 		isSearchMessagesVisible,
+		isAnalyticsVisible,
 		activationCode,
 	} = useAppSelector((state) => state.UI);
 	const previewMediaObject = useAppSelector(
@@ -160,6 +164,7 @@ const Main: React.FC = () => {
 		isMessageStatusesVisible
 	);
 	const loadingScreenTransition = useUnmountTransition(loadingProgress < 100);
+	const analyticsTransition = useUnmountTransition(isAnalyticsVisible);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const query = useQuery();
@@ -1153,6 +1158,10 @@ const Main: React.FC = () => {
 				'max-2xl:h-screen max-2xl:w-screen max-2xl:max-w-none max-md:[display:inherit] max-md:rounded-none',
 				isMaximize &&
 					'h-screen w-screen max-w-none rounded-none shadow-none outline-none',
+				// Analytics covers the window only. Not always: the loading screen
+				// and the media preview are meant to cover the whole page. (Before
+				// the iPad classes, whose absolute positioning works for it too.)
+				analyticsTransition.isMounted && 'relative',
 				isIPad13 && 'absolute! inset-0! size-full!'
 			)}
 		>
@@ -1228,6 +1237,16 @@ const Main: React.FC = () => {
 					open={isChatTagsListVisible}
 					setOpen={setChatTagsListVisible}
 				/>
+			)}
+
+			{analyticsTransition.isMounted && (
+				<Suspense>
+					<Analytics
+						onClose={() => dispatch(setState({ isAnalyticsVisible: false }))}
+						isExiting={analyticsTransition.isExiting}
+						onAnimationEnd={analyticsTransition.handleAnimationEnd}
+					/>
+				</Suspense>
 			)}
 
 			{previewMediaObject && <PreviewMedia data={previewMediaObject} />}
