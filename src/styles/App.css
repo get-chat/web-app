@@ -30,41 +30,6 @@
 	background: rgba(0, 0, 45, 0.35);
 }
 
-.app {
-	display: grid;
-	place-items: center;
-	background: radial-gradient(
-			110% 80% at 50% 0%,
-			rgba(101, 203, 172, 0.12) 0%,
-			rgba(101, 203, 172, 0) 60%
-		),
-		linear-gradient(0deg, rgb(240, 241, 246) 45%, rgb(206, 210, 226) 100%);
-	height: 100vh;
-}
-
-.app__body {
-	/*position: relative;*/
-	z-index: 1;
-	display: flex;
-	background-color: var(--gray-light);
-	height: calc(100vh - 40px);
-	width: 90vw;
-	outline: 1px solid rgba(255, 255, 255, 0.75);
-	box-shadow: var(--shadow-lg);
-	max-width: 1500px;
-	border-radius: var(--wrapper-border-radius);
-	overflow: hidden;
-}
-
-.app__body.maximized {
-	height: 100vh;
-	width: 100vw;
-	max-width: none;
-	border-radius: 0;
-	outline: none;
-	box-shadow: none;
-}
-
 /* Layered so Tailwind utilities (see tailwind.css) can override it */
 @layer base {
 	h1,
@@ -86,16 +51,6 @@
 	}
 }
 
-.absoluteFullscreen {
-	position: absolute !important;
-	left: 0 !important;
-	right: 0 !important;
-	top: 0 !important;
-	bottom: 0 !important;
-	height: 100% !important;
-	width: 100% !important;
-}
-
 /*
  * Default icon colour. The repeated class keeps this exactly as specific as the
  * MUI-era rule it replaces (10 classes), so other icon colour rules still only
@@ -105,126 +60,8 @@
 	color: #6f7385;
 }
 
-.app__mediaPreview {
-	position: absolute;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	/*justify-content: center;*/
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(255, 255, 255, 0.8);
-	-webkit-backdrop-filter: blur(12px);
-	backdrop-filter: blur(12px);
-	z-index: 99;
-}
-
-.app__mediaPreview__header {
-	height: var(--header-height);
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	padding: 4px 15px;
-	background-color: white;
-	box-shadow: var(--shadow-md);
-}
-
-.app_imagePreview__header__senderInfo {
-	flex: 1 1;
-	padding-left: 15px;
-}
-
-.app_imagePreview__header__senderInfo > h3 {
-	font-size: 16px;
-	margin-bottom: 0;
-}
-
-.app_imagePreview__header__senderInfo > span {
-	font-size: 12px;
-	color: rgba(0, 0, 45, 0.6);
-	margin-top: 0 !important;
-	display: block;
-}
-
-.app__mediaPreview__header .customAvatar {
-	margin-left: 5px;
-}
-
-.app__mediaPreview__container {
-	flex: 1 1;
-	/*noinspection CssInvalidPropertyValue*/
-	width: -webkit-fill-available;
-	width: -moz-available;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	align-content: center;
-	overflow: hidden;
-	padding: 30px;
-}
-
-.app__mediaPreview__image {
-	cursor: zoom-in;
-}
-
-.app__mediaPreview__image,
-.app__mediaPreview__video {
-	background-color: white;
-	max-height: 100%;
-	max-width: 100%;
-	align-self: center;
-	border-radius: 10px;
-}
-
-.app__mediaPreview__zoom {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(255, 255, 255, 0.8);
-	transition: transform 300ms cubic-bezier(0.1, 0.82, 0.25, 1) 0s;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: zoom-out;
-	padding: 20px;
-	transform: scale(2);
-}
-
-.app__mediaPreview__zoom > img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
 h1 .emoji-mart-emoji,
 h2 .emoji-mart-emoji,
 h3 .emoji-mart-emoji {
 	vertical-align: middle;
-}
-
-@media only screen and (max-width: 1500px) {
-	.app__body {
-		height: 100vh;
-		width: 100vw;
-		max-width: none;
-	}
-}
-
-@media only screen and (max-width: 750px) {
-	.app__body {
-		display: inherit;
-		border-radius: 0;
-	}
-
-	.app__mediaPreview__header {
-		padding: 4px 10px;
-	}
-
-	.app__mediaPreview__container {
-		padding: 10px;
-	}
 }

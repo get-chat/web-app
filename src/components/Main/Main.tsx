@@ -1146,11 +1146,15 @@ const Main: React.FC = () => {
 
 	return (
 		<div
-			className={
-				'app__body animate-fade-in' +
-				(isIPad13 ? ' absoluteFullscreen' : '') +
-				(isMaximize ? ' maximized' : '')
-			}
+			className={cn(
+				// A floating window over the page background; it fills the
+				// screen below 1500px, and on phones lays out as a grid
+				'z-1 flex h-[calc(100vh-40px)] w-[90vw] max-w-[1500px] animate-fade-in overflow-hidden rounded-(--wrapper-border-radius) bg-gray-light shadow-lg outline outline-[rgba(255,255,255,0.75)]',
+				'max-2xl:h-screen max-2xl:w-screen max-2xl:max-w-none max-md:[display:inherit] max-md:rounded-none',
+				isMaximize &&
+					'h-screen w-screen max-w-none rounded-none shadow-none outline-none',
+				isIPad13 && 'absolute! inset-0! size-full!'
+			)}
 		>
 			{isTemplatesReady && (
 				<Sidebar

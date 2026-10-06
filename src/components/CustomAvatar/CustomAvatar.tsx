@@ -50,10 +50,8 @@ const CustomAvatar: React.FC<Props> = ({
 
 	return (
 		<Avatar
-			// customAvatar: lets stylesheets elsewhere in the app size or space
-			// avatars
 			className={cn(
-				'customAvatar items-center justify-center bg-[#e0e2e8] text-[1.25rem] leading-none font-semibold text-white',
+				'items-center justify-center bg-[#e0e2e8] text-[1.25rem] leading-none font-semibold text-white',
 				// Grey initials on the light default background; on a colour,
 				// white icons
 				isLight ? 'text-[#6e7383]!' : '[&_.app-icon]:text-white!',

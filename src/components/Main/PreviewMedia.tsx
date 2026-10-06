@@ -19,9 +19,13 @@ import { useAppDispatch } from '@src/store/hooks';
 import PreviewMediaModel from '@src/api/models/PreviewMediaModel';
 import { Button } from '@src/components/ui/button';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
+import { cn } from '@src/lib/utils';
 
 // MUI's large IconButton, 44px on mobile as App.css made it
 const headerButtonClassName = 'max-md:size-11';
+
+const mediaClassName =
+	'max-h-full max-w-full self-center rounded-[10px] bg-white';
 
 interface Props {
 	data: PreviewMediaModel;
@@ -61,38 +65,35 @@ const PreviewMedia: React.FC<Props> = ({ data }) => {
 		dispatch(setPreviewMediaObject(undefined));
 	};
 
+	// Clicking around the media, not on it, closes the preview
 	const handleClick = (event: React.MouseEvent) => {
-		if (
-			(event.target as Element).className?.includes(
-				'app__mediaPreview__container'
-			)
-		) {
+		if (event.target === event.currentTarget) {
 			hideImageOrVideoPreview();
 		}
 	};
 
 	return (
-		<div className="app__mediaPreview">
-			<div className="app__mediaPreview__header">
+		<div className="absolute inset-0 z-99 flex flex-col items-center bg-white/80 backdrop-blur-[12px]">
+			<div className="flex h-(--header-height) w-full items-center justify-between bg-white px-3.75 py-1 shadow-md max-md:px-2.5">
 				<SimpleTooltip title={t('Close')} disableHoverableContent>
 					<Button
 						variant="ghost"
 						color="neutral"
 						size="icon-xl"
-						className={`app__mediaPreview__close ${headerButtonClassName}`}
+						className={headerButtonClassName}
 						onClick={hideImageOrVideoPreview}
 					>
 						<CloseIcon />
 					</Button>
 				</SimpleTooltip>
 
-				<CustomAvatar generateBgColorBy={data.senderName}>
+				<CustomAvatar className="ml-1.25" generateBgColorBy={data.senderName}>
 					{data.initials}
 				</CustomAvatar>
 
-				<div className="app_imagePreview__header__senderInfo">
-					<h3>{data.senderName}</h3>
-					<span>
+				<div className="flex-[1_1] pl-3.75">
+					<h3 className="mb-0 text-[16px]">{data.senderName}</h3>
+					<span className="block text-[12px] text-ink/60">
 						<Moment calendar={CALENDAR_NORMAL} date={data.timestamp} unix />
 					</span>
 				</div>
@@ -111,12 +112,12 @@ const PreviewMedia: React.FC<Props> = ({ data }) => {
 			</div>
 
 			<div
-				className="app__mediaPreview__container animate-in zoom-in duration-225"
+				className="flex w-[-webkit-fill-available] w-[-moz-available] flex-[1_1] animate-in content-center items-center justify-center overflow-hidden p-7.5 zoom-in duration-225 max-md:p-2.5"
 				onClick={handleClick}
 			>
 				{data.type === ATTACHMENT_TYPE_IMAGE && (
 					<Image
-						className="app__mediaPreview__image"
+						className={cn(mediaClassName, 'cursor-zoom-in')}
 						src={data.source}
 						alt="Preview"
 						onClick={() => setZoomEnabled(true)}
@@ -124,7 +125,7 @@ const PreviewMedia: React.FC<Props> = ({ data }) => {
 				)}
 				{data.type === ATTACHMENT_TYPE_VIDEO && (
 					<video
-						className="app__mediaPreview__video"
+						className={mediaClassName}
 						src={data.source}
 						controls
 						autoPlay={true}

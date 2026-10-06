@@ -73,7 +73,13 @@ const PreviewMediaZoom: React.FC<Props> = ({ src, onClick }) => {
 	}, [zoomView]);
 
 	return (
-		<div className="app__mediaPreview__zoom" ref={zoomView} onClick={onClick}>
+		<div
+			// Shown at twice the size; moving over it pans by setting
+			// `transform` inline, so the scale is a transform too
+			className="absolute inset-0 flex cursor-zoom-out items-center justify-center bg-white/80 p-5 [transform:scale(2)] [transition:transform_300ms_cubic-bezier(0.1,0.82,0.25,1)_0s] [&>img]:max-h-full [&>img]:max-w-full"
+			ref={zoomView}
+			onClick={onClick}
+		>
 			<Image src={src} alt="Preview" />
 		</div>
 	);
