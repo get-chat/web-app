@@ -12,7 +12,7 @@ import { Slot } from 'radix-ui';
  * Like Button, `color` only sets `--badge`, which `variant` paints.
  */
 const badgeVariants = cva(
-	"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,background-color,box-shadow] outline-none! focus-visible:ring-[3px] focus-visible:ring-(--badge)/30 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[1.15em]! [a&,button&]:cursor-pointer",
+	"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent font-medium whitespace-nowrap transition-[color,background-color,box-shadow] outline-none! focus-visible:ring-[3px] focus-visible:ring-(--badge)/30 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[1.15em]! [&_svg:not([class*='size-'])]:[font-size:inherit]! [a&,button&]:cursor-pointer",
 	{
 		variants: {
 			variant: {
@@ -33,7 +33,8 @@ const badgeVariants = cva(
 			size: {
 				sm: 'h-5 px-1.5 text-[11px]',
 				default: 'h-6 px-2.5 text-xs',
-				lg: 'h-8 px-3 text-sm',
+				// MUI's medium Chip: regular 13px text, the icon close to the edge
+				lg: 'h-8 gap-1.5 px-3 text-[13px] font-normal has-[>svg:first-child]:pl-2.5',
 			},
 		},
 		defaultVariants: {
@@ -85,7 +86,7 @@ function Badge({
 							onClick={onDelete}
 							className="-my-1 flex cursor-pointer items-center rounded-full opacity-60 outline-none! hover:opacity-100 focus-visible:opacity-100 [&_svg]:text-current!"
 						>
-							<CancelIcon />
+							<CancelIcon className="size-[18px]!" />
 						</button>
 					)}
 				</>

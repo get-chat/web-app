@@ -40,7 +40,6 @@ import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
 import { SimpleTooltip } from '@src/components/ui/tooltip';
-import { Badge } from '@src/components/ui/badge';
 import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
 
