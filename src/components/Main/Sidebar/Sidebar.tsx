@@ -153,7 +153,9 @@ const CHAT_LIST_SCROLL_OFFSET = 2000;
 /** Heading of a group in the results list (Tags, Chats, Contacts, Messages) */
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({
 	children,
-}) => <h3 className="px-3.75 py-2.5 font-normal text-primary">{children}</h3>;
+}) => (
+	<h3 className="px-3.75 py-2.5 font-bold text-sm text-primary">{children}</h3>
+);
 
 interface Props {
 	isLoaded: boolean;
