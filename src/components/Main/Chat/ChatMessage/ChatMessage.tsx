@@ -117,6 +117,10 @@ const ChatMessage: React.FC<Props> = ({
 
 	const echoOriginLabel = getEchoOriginLabel(data);
 
+	// Error details show only while the message has no delivery status
+	const hasErrorDetails =
+		!hasAnyStatus(data) && Boolean(data.waba_payload?.errors?.length);
+
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
@@ -329,10 +333,12 @@ const ChatMessage: React.FC<Props> = ({
 								linkify={true}
 							/>
 						) : (
-							'\u00A0'
+							// An empty line for the time to sit on, unless the error
+							// details below take that place
+							!hasErrorDetails && '\u00A0'
 						)}
 
-						{!hasAnyStatus(data) && (
+						{hasErrorDetails && (
 							<ChatMessageErrors data={data} retryMessage={retryMessage} />
 						)}
 
