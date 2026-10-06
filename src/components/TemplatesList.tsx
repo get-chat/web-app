@@ -13,6 +13,14 @@ import { useTranslation } from 'react-i18next';
 import useTemplates from '@src/hooks/useTemplates';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
+import { cn } from '@src/lib/utils';
+import {
+	footerPanelBoxClassName,
+	footerPanelBubbleClassName,
+	footerPanelEmptyClassName,
+	footerPanelItemClassName,
+	footerPanelListClassName,
+} from '@src/styles/footerPanelClassNames';
 import { messageBubbleClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
 import { MessageType } from '@src/types/messages';
 
@@ -43,12 +51,21 @@ const TemplatesList: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="templateMessagesWrapper">
-			<div className="templateMessages" data-testid="template-messages">
-				<div className="templateMessages__actions">
-					<div className="templateMessages__create">
+		<div className={footerPanelBoxClassName}>
+			<div
+				className={cn(footerPanelListClassName, 'max-md:max-h-[200px]')}
+				data-testid="template-messages"
+			>
+				<div className="mb-2.5 flex items-center justify-between border-b border-ink/10 pb-2.5 max-md:flex-col">
+					<div>
 						{displayRegisterTemplate && (
-							<Button asChild variant="ghost" color="neutral" size="sm">
+							<Button
+								asChild
+								variant="ghost"
+								color="neutral"
+								size="sm"
+								className="text-[13px] leading-[1.2rem] font-semibold text-chat-icon-dark"
+							>
 								<a
 									href="https://hub.360dialog.com/dashboard/home"
 									target="_blank"
@@ -59,13 +76,19 @@ const TemplatesList: React.FC<Props> = ({
 						)}
 					</div>
 
-					<div className="templateMessages__refresh">
+					<div className="px-1.25 py-0.75 text-[13px] text-chat-icon max-md:text-center">
 						{isRefreshingTemplates ? (
 							<span>Refreshing templates...</span>
 						) : (
 							<>
-								<span>{t('Not seeing your new templates?')}</span>
-								<a onClick={doRefreshTemplates} href="#">
+								<span className="mr-1.25">
+									{t('Not seeing your new templates?')}
+								</span>
+								<a
+									className="inline-block text-[13px] leading-[1.2rem] font-semibold text-chat-icon-dark"
+									onClick={doRefreshTemplates}
+									href="#"
+								>
 									{t('Click here to refresh')}
 								</a>
 							</>
@@ -74,7 +97,7 @@ const TemplatesList: React.FC<Props> = ({
 				</div>
 
 				{getObjLength(templates) === 0 && (
-					<div className="templateMessages__emptyInfo mt-3">
+					<div className={footerPanelEmptyClassName}>
 						{isTemplatesFailed ? (
 							<span>{t("Template messages couldn't be loaded.")}</span>
 						) : (
@@ -84,15 +107,18 @@ const TemplatesList: React.FC<Props> = ({
 				)}
 
 				{Object.entries(templates).map((template) => (
-					<div key={template[0]} className="templateMessageWrapper">
+					<div key={template[0]} className={footerPanelItemClassName}>
 						<div
-							className={messageBubbleClassName({
-								type: MessageType.template,
-								isOutgoing: true,
-							})}
+							className={cn(
+								messageBubbleClassName({
+									type: MessageType.template,
+									isOutgoing: true,
+								}),
+								footerPanelBubbleClassName
+							)}
 						>
 							{/*<span className={"templateMessage__status " + template[1].status}>{template[1].status}</span>*/}
-							<div className="templateMessage__message">
+							<div className="break-all">
 								<h4>
 									{template[1].name}
 									{getTemplateLanguageCode(template[1].language) && (
@@ -105,7 +131,7 @@ const TemplatesList: React.FC<Props> = ({
 								{sortTemplateComponents(template[1].components ?? []).map(
 									(comp: any, index: number) => (
 										<div key={index}>
-											<span className="templateType bold lowercase">
+											<span className="bold lowercase text-ink/60">
 												{comp.type}:
 											</span>{' '}
 											{comp.text ?? comp.format ?? JSON.stringify(comp.buttons)}

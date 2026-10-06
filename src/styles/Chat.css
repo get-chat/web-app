@@ -396,138 +396,6 @@ messages fade in over the chat wallpaper */
 	flex: 1 1 auto;
 }
 
-.chat .templateMessagesOuter,
-.savedResponsesOuter,
-.interactiveMessagesOuter {
-	padding: 0 10px 10px 10px;
-	border-left: 1px solid lightgray;
-}
-
-.templateMessagesOuter .searchBar__search {
-	background-color: rgba(0, 0, 45, 0.17);
-	border-radius: 10px 10px 0 0;
-}
-
-.templateMessagesOuter__items {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin-bottom: 15px;
-}
-
-.templateMessagesWrapper,
-.savedResponsesWrapper,
-.interactiveMessagesWrapper {
-	overflow: hidden;
-	background-color: #6843301f;
-	/*background-color: rgba(0, 0, 0, 0.05);*/
-	border-radius: 10px; /*0 0 10px 10px;*/
-	/*box-shadow: 0 4px 5px -6px rgba(0, 0, 45, 0.4);*/
-}
-
-.templateMessages,
-.savedResponses,
-.interactiveMessages {
-	flex: 1 1;
-	max-height: 290px;
-	overflow-y: auto;
-	padding: 15px;
-}
-
-.templateMessages__emptyInfo,
-.savedResponses__emptyInfo {
-	font-size: 15px;
-	color: var(--chat-icon);
-}
-
-.templateMessages__actions {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 10px;
-	border-bottom: 1px solid rgba(0, 0, 45, 0.1);
-	padding-bottom: 10px;
-}
-
-.templateMessages__actions a {
-	line-height: 1.2rem !important;
-}
-
-.templateMessages__create a {
-	color: var(--chat-icon-dark);
-	font-weight: 600;
-	font-size: 13px;
-}
-
-.templateMessages__refresh {
-	font-size: 13px;
-	padding: 3px 5px;
-	color: var(--chat-icon);
-}
-
-.templateMessages__refresh > span:first-child {
-	margin-right: 5px;
-}
-
-.templateMessages__refresh a {
-	font-size: 13px !important;
-	font-weight: 600;
-	display: inline-block;
-	color: var(--chat-icon-dark);
-}
-
-.templateMessages .templateMessageWrapper,
-.savedResponses .savedResponseWrapper {
-	margin-bottom: 10px !important;
-}
-
-.templateMessages .templateMessageWrapper:last-child,
-.savedResponses .savedResponseWrapper:last-child {
-	margin-bottom: 0 !important;
-}
-
-.templateMessages .templateMessageWrapper .chat__message,
-.savedResponses .savedResponseWrapper .chat__message {
-	margin-bottom: 0 !important;
-	align-self: center;
-}
-
-.templateMessageWrapper,
-.savedResponseWrapper {
-	display: flex;
-}
-
-.templateMessageWrapper > button,
-.savedResponseWrapper > button {
-	margin-left: 15px;
-}
-
-.templateMessage__message,
-.savedResponse__message {
-	word-break: break-all;
-}
-
-.templateMessage__status {
-	display: block;
-	font-size: 12px;
-	font-weight: 600;
-	margin-bottom: 5px;
-	text-align: end;
-}
-
-.rejected {
-	color: #ff0015;
-}
-
-.submitted {
-	color: #ffaa00;
-}
-
-.approved {
-	color: #48bc00;
-}
-
 .chat__default {
 	position: absolute;
 	display: flex;
@@ -575,25 +443,6 @@ messages fade in over the chat wallpaper */
 	/*text-transform: uppercase;*/
 }
 
-.typeBox .emoji-mart-emoji {
-	background-color: transparent !important;
-	display: inline-block;
-	vertical-align: top;
-	-webkit-user-select: text;
-	-moz-user-select: text;
-	-ms-user-select: text;
-	user-select: text;
-}
-
-/*.chat__message .emoji-mart-emoji {
-    margin-top: -3px;
-    margin-bottom: -4px !important;
-}*/
-
-.templateType {
-	color: rgba(0, 0, 45, 0.6);
-}
-
 .pendingMessagesIndicator {
 	position: absolute;
 	top: 75px;
@@ -619,22 +468,5 @@ messages fade in over the chat wallpaper */
 
 	.chat:not(.chatOpen) {
 		display: none;
-	}
-
-	.templateMessagesOuter {
-		border-left: none;
-	}
-
-	.templateMessages {
-		max-height: 200px;
-	}
-
-	.templateMessages__actions {
-		flex-direction: column;
-	}
-
-	.templateMessages__refresh {
-		flex-direction: column;
-		text-align: center;
 	}
 }

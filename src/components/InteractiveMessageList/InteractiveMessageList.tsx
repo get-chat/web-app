@@ -4,6 +4,12 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { isIndianPhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import {
+	footerPanelBoxClassName,
+	footerPanelClassName,
+	footerPanelListClassName,
+} from '@src/styles/footerPanelClassNames';
+import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
 import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 
@@ -410,10 +416,11 @@ const InteractiveMessageList: React.FC<Props> = ({
 
 	return (
 		<ClickAwayListener onClickAway={closePanel}>
-			{/* interactiveMessagesOuter and interactiveMessages: styled in Chat.css */}
-			<div className="interactiveMessagesOuter" onAnimationEnd={onAnimationEnd}>
-				<div className="interactiveMessagesWrapper">
-					<div className="interactiveMessages flex flex-col gap-2.5">
+			<div className={footerPanelClassName} onAnimationEnd={onAnimationEnd}>
+				<div className={footerPanelBoxClassName}>
+					<div
+						className={cn(footerPanelListClassName, 'flex flex-col gap-2.5')}
+					>
 						{availableInteractiveMessages.map((item, index) => (
 							<div className="flex text-[14px]" key={index}>
 								<Button

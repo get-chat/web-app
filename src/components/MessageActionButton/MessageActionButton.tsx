@@ -22,7 +22,8 @@ const MessageActionButton: React.FC<Props> = ({
 		color="neutral"
 		size="icon-sm"
 		className={cn(
-			'size-7.5 self-center rounded-full max-md:size-10 [&_.app-icon]:size-5!',
+			// Spaced from the bubble or the button before it
+			'ml-3.75 size-7.5 self-center rounded-full max-md:size-10 [&_.app-icon]:size-5!',
 			tone === 'delete'
 				? '[&_.app-icon]:text-(--color-secondary)!'
 				: '[&_.app-icon]:text-chat-icon-dark!',

@@ -18,6 +18,14 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
 import { cn } from '@src/lib/utils';
+import {
+	footerPanelBoxClassName,
+	footerPanelBubbleClassName,
+	footerPanelClassName,
+	footerPanelEmptyClassName,
+	footerPanelItemClassName,
+	footerPanelListClassName,
+} from '@src/styles/footerPanelClassNames';
 import { messageBubbleClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
 import { MessageType } from '@src/types/messages';
 import MessageActionButton from '@src/components/MessageActionButton';
@@ -115,9 +123,8 @@ const SavedResponseList: React.FC<Props> = ({
 				if (!open) closePanel();
 			}}
 		>
-			{/* savedResponsesOuter and the classes inside: styled in Chat.css */}
-			<div className="savedResponsesOuter" onAnimationEnd={onAnimationEnd}>
-				<div className="savedResponsesWrapper">
+			<div className={footerPanelClassName} onAnimationEnd={onAnimationEnd}>
+				<div className={footerPanelBoxClassName}>
 					{/* The search sits on the chat background, without its own */}
 					<div className="flex flex-col [&_.app-icon]:text-chat-icon! [&_.searchBar\_\_inputContainer]:bg-transparent [&_input::placeholder]:text-chat-icon!">
 						<SearchBar
@@ -131,9 +138,9 @@ const SavedResponseList: React.FC<Props> = ({
 							isFocusStyleEnabled={false}
 						/>
 					</div>
-					<div className="savedResponses">
+					<div className={footerPanelListClassName}>
 						{savedResponses.length === 0 && (
-							<div className="savedResponses__emptyInfo mt-3">
+							<div className={footerPanelEmptyClassName}>
 								{search
 									? t('No quick reply found.')
 									: t('No quick replies have been saved yet.')}
@@ -141,20 +148,18 @@ const SavedResponseList: React.FC<Props> = ({
 						)}
 
 						{savedResponses.map((savedResponse) => (
-							<div key={savedResponse.id} className="savedResponseWrapper">
+							<div key={savedResponse.id} className={footerPanelItemClassName}>
 								<div
 									className={cn(
 										messageBubbleClassName({
 											type: MessageType.text,
 											isOutgoing: true,
 										}),
-										'chat__savedResponse'
+										footerPanelBubbleClassName
 									)}
 								>
 									{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
-									<div className="savedResponse__message">
-										{savedResponse.text}
-									</div>
+									<div className="break-all">{savedResponse.text}</div>
 								</div>
 
 								<SimpleTooltip title={t('Send')}>

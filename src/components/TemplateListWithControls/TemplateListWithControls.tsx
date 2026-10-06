@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import { footerPanelClassName } from '@src/styles/footerPanelClassNames';
 
 export type Props = {
 	onSelect: (template: Template) => void;
@@ -18,10 +19,9 @@ const TemplateListWithControls = forwardRef<HTMLDivElement, Props>(
 		const { isLoadingTemplates } = useAppSelector((state) => state.UI);
 
 		return (
-			// templateMessagesOuter: styled in Chat.css
 			<div
 				ref={ref}
-				className="templateMessagesOuter"
+				className={footerPanelClassName}
 				onAnimationEnd={onAnimationEnd}
 			>
 				{/*<SearchBar />*/}
