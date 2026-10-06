@@ -1519,3 +1519,192 @@ msgstr "Hasło jest zbyt podobne do nazwiska."
 
 msgid "The password is too similar to the email address."
 msgstr "Hasło jest zbyt podobne do adresu e-mail."
+
+msgid "Back to inbox"
+msgstr "Wróć do skrzynki"
+
+msgid "Analytics"
+msgstr "Analityka"
+
+msgid "Export CSV"
+msgstr "Eksportuj CSV"
+
+msgid "Analytics could not be loaded."
+msgstr "Nie udało się wczytać analityki."
+
+msgid "No conversations in this period"
+msgstr "Brak rozmów w tym okresie"
+
+msgid "Nothing matches these filters. Try a longer period or fewer filters."
+msgstr "Nic nie pasuje do tych filtrów. Wybierz dłuższy okres lub mniej filtrów."
+
+msgid "Try a longer period."
+msgstr "Wybierz dłuższy okres."
+
+msgid "Show last 30 days"
+msgstr "Pokaż ostatnie 30 dni"
+
+msgid "Reset filters"
+msgstr "Resetuj filtry"
+
+msgid "Last 7 days"
+msgstr "Ostatnie 7 dni"
+
+msgid "Last 30 days"
+msgstr "Ostatnie 30 dni"
+
+msgid "All agents"
+msgstr "Wszyscy agenci"
+
+msgid "%d agents"
+msgstr "Agenci: %d"
+
+msgid "All groups"
+msgstr "Wszystkie grupy"
+
+msgid "%d groups"
+msgstr "Grupy: %d"
+
+msgid "All tags"
+msgstr "Wszystkie tagi"
+
+msgid "%d tags"
+msgstr "Tagi: %d"
+
+msgid "All statuses"
+msgstr "Wszystkie statusy"
+
+msgid "Open only"
+msgstr "Tylko otwarte"
+
+msgid "Resolved only"
+msgstr "Tylko rozwiązane"
+
+msgid "Custom range…"
+msgstr "Własny zakres…"
+
+msgid "Filtered by"
+msgstr "Filtrowane według"
+
+msgid "Clear all"
+msgstr "Wyczyść wszystko"
+
+msgid "Agent"
+msgstr "Agent"
+
+msgid "Conversations answered"
+msgstr "Odpowiedziane rozmowy"
+
+msgid "Conversations where an agent sent at least one reply"
+msgstr "Rozmowy, w których agent wysłał co najmniej jedną odpowiedź"
+
+msgid "Split by"
+msgstr "Podziel według"
+
+msgid "By agent"
+msgstr "Według agenta"
+
+msgid "By group"
+msgstr "Według grupy"
+
+msgid "By tag"
+msgstr "Według tagu"
+
+msgid "Conversations"
+msgstr "Rozmowy"
+
+msgid "Share of total"
+msgstr "Udział w całości"
+
+msgid "Avg. first response"
+msgstr "Śr. pierwsza odpowiedź"
+
+msgid "Avg. resolution"
+msgstr "Śr. rozwiązanie"
+
+msgid "Click a row to filter the whole page."
+msgstr "Kliknij wiersz, aby przefiltrować całą stronę."
+
+msgid "No conversations were answered in this period."
+msgstr "W tym okresie nie odpowiedziano na żadną rozmowę."
+
+msgid "No data for the previous period"
+msgstr "Brak danych z poprzedniego okresu"
+
+msgid "vs previous period"
+msgstr "wobec poprzedniego okresu"
+
+msgid "Messages sent"
+msgstr "Wysłane wiadomości"
+
+msgid "Outgoing messages, without the ones that failed"
+msgstr "Wiadomości wychodzące, bez tych, których nie udało się wysłać"
+
+msgid "Time from the customer's first message to the first agent reply"
+msgstr "Czas od pierwszej wiadomości klienta do pierwszej odpowiedzi agenta"
+
+msgid "Time from a conversation opening to it being resolved"
+msgstr "Czas od otwarcia rozmowy do jej rozwiązania"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Utility"
+msgstr "Użytkowe"
+
+msgid "Authentication"
+msgstr "Uwierzytelnianie"
+
+msgid "Service"
+msgstr "Obsługa"
+
+msgid "Deleted templates"
+msgstr "Usunięte szablony"
+
+msgid "Messages sent by category"
+msgstr "Wysłane wiadomości według kategorii"
+
+msgid "Outgoing messages, by WhatsApp conversation category"
+msgstr "Wiadomości wychodzące według kategorii rozmów WhatsApp"
+
+msgid "Inbox only"
+msgstr "Tylko Inbox"
+
+msgid "Marketing, Utility and Authentication messages are templates; Service messages are free-form replies within the 24-hour window."
+msgstr "Wiadomości marketingowe, użytkowe i uwierzytelniające to szablony; wiadomości obsługi to dowolne odpowiedzi w 24-godzinnym oknie."
+
+msgid "Average"
+msgstr "Średnia"
+
+msgid "Median"
+msgstr "Mediana"
+
+msgid "First response time"
+msgstr "Czas pierwszej odpowiedzi"
+
+msgid "How long customers waited for the first reply"
+msgstr "Jak długo klienci czekali na pierwszą odpowiedź"
+
+msgid "Waited %s"
+msgstr "Czas oczekiwania: %s"
+
+msgid "Resolution time"
+msgstr "Czas rozwiązania"
+
+msgid "Time from open to resolved, per hour"
+msgstr "Czas od otwarcia do rozwiązania, na godzinę"
+
+msgid "Time from open to resolved, per day"
+msgstr "Czas od otwarcia do rozwiązania, na dzień"
+
+msgid "Conversations per tag"
+msgstr "Rozmowy według tagu"
+
+msgid "Conversations in the period, by their current tags"
+msgstr "Rozmowy w okresie, według ich obecnych tagów"
+
+msgid "No group"
+msgstr "Bez grupy"
+
+msgid "Untagged"
+msgstr "Bez tagu"

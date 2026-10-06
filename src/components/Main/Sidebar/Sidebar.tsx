@@ -57,6 +57,7 @@ import SelectableChatTag from '../../SelectableChatTag';
 import { clearUserSession } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
 import {
+	BarChart as BarChartIcon,
 	Notifications as NotificationsIcon,
 	QrCode,
 } from '@src/components/icons';
@@ -949,6 +950,16 @@ const Sidebar: React.FC<Props> = ({
 		setOpenInWhatsAppDialogVisible(true);
 	};
 
+	// The notifications panel covers the options button, so the closing menu
+	// mustn't give the focus back to it (that would show its tooltip on top)
+	const isOpeningNotifications = useRef(false);
+
+	const showNotifications = () => {
+		isOpeningNotifications.current = true;
+		setMenuVisible(false);
+		setNotificationsVisible(true);
+	};
+
 	const showChatTagsList = () => {
 		setMenuVisible(false);
 		setChatTagsListVisible(true);
@@ -961,10 +972,6 @@ const Sidebar: React.FC<Props> = ({
 	const cancelSelection = () => {
 		dispatch(setSelectionModeEnabled(false));
 		dispatch(setState({ selectedTags: [], selectedChats: [] }));
-	};
-
-	const displayNotifications = () => {
-		setNotificationsVisible(true);
 	};
 
 	const displayUserList = () => {
@@ -1028,16 +1035,6 @@ const Sidebar: React.FC<Props> = ({
 							</Button>
 						</SimpleTooltip>
 					)}
-					<SimpleTooltip title={t('Notifications')} disableHoverableContent>
-						<Button
-							variant="ghost"
-							color="neutral"
-							size="icon-xl"
-							onClick={displayNotifications}
-						>
-							<NotificationsIcon />
-						</Button>
-					</SimpleTooltip>
 					<SimpleTooltip title={t('Users')} disableHoverableContent>
 						<Button
 							variant="ghost"
@@ -1048,6 +1045,19 @@ const Sidebar: React.FC<Props> = ({
 							<GroupIcon />
 						</Button>
 					</SimpleTooltip>
+					{/* The analytics API is for admins only */}
+					{currentUser?.profile?.role === 'admin' && (
+						<SimpleTooltip title={t('Analytics')} disableHoverableContent>
+							<Button
+								variant="ghost"
+								color="neutral"
+								size="icon-xl"
+								onClick={() => dispatch(setState({ isAnalyticsVisible: true }))}
+							>
+								<BarChartIcon />
+							</Button>
+						</SimpleTooltip>
+					)}
 					{currentUser?.profile?.role === 'admin' && (
 						<SimpleTooltip title={t('Admin panel')} disableHoverableContent>
 							{/* Hidden where the header runs out of room; the options menu
@@ -1078,13 +1088,25 @@ const Sidebar: React.FC<Props> = ({
 								</Button>
 							</DropdownMenuTrigger>
 						</SimpleTooltip>
-						<DropdownMenuContent align="end">
+						<DropdownMenuContent
+							align="end"
+							onCloseAutoFocus={(event) => {
+								if (isOpeningNotifications.current) {
+									isOpeningNotifications.current = false;
+									event.preventDefault();
+								}
+							}}
+						>
 							{/* Phones only: there is no browser reload button there */}
 							<DropdownMenuItem
 								className="md:hidden"
 								onSelect={() => window.location.reload()}
 							>
 								{t('Refresh')}
+							</DropdownMenuItem>
+							<DropdownMenuItem onSelect={showNotifications}>
+								<NotificationsIcon />
+								{t('Notifications')}
 							</DropdownMenuItem>
 							{!isReadOnly && (
 								<DropdownMenuItem onSelect={showChangePassword}>

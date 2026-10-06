@@ -1474,3 +1474,192 @@ msgstr "A senha é muito parecida com o sobrenome."
 
 msgid "The password is too similar to the email address."
 msgstr "A senha é muito parecida com o endereço de e-mail."
+
+msgid "Back to inbox"
+msgstr "Voltar para a caixa de entrada"
+
+msgid "Analytics"
+msgstr "Análises"
+
+msgid "Export CSV"
+msgstr "Exportar CSV"
+
+msgid "Analytics could not be loaded."
+msgstr "Não foi possível carregar as análises."
+
+msgid "No conversations in this period"
+msgstr "Nenhuma conversa neste período"
+
+msgid "Nothing matches these filters. Try a longer period or fewer filters."
+msgstr "Nada corresponde a esses filtros. Tente um período maior ou menos filtros."
+
+msgid "Try a longer period."
+msgstr "Tente um período maior."
+
+msgid "Show last 30 days"
+msgstr "Mostrar últimos 30 dias"
+
+msgid "Reset filters"
+msgstr "Redefinir filtros"
+
+msgid "Last 7 days"
+msgstr "Últimos 7 dias"
+
+msgid "Last 30 days"
+msgstr "Últimos 30 dias"
+
+msgid "All agents"
+msgstr "Todos os agentes"
+
+msgid "%d agents"
+msgstr "%d agentes"
+
+msgid "All groups"
+msgstr "Todos os grupos"
+
+msgid "%d groups"
+msgstr "%d grupos"
+
+msgid "All tags"
+msgstr "Todas as marcações"
+
+msgid "%d tags"
+msgstr "%d marcações"
+
+msgid "All statuses"
+msgstr "Todos os status"
+
+msgid "Open only"
+msgstr "Somente abertas"
+
+msgid "Resolved only"
+msgstr "Somente resolvidas"
+
+msgid "Custom range…"
+msgstr "Período personalizado…"
+
+msgid "Filtered by"
+msgstr "Filtrado por"
+
+msgid "Clear all"
+msgstr "Limpar tudo"
+
+msgid "Agent"
+msgstr "Agente"
+
+msgid "Conversations answered"
+msgstr "Conversas respondidas"
+
+msgid "Conversations where an agent sent at least one reply"
+msgstr "Conversas em que um agente enviou pelo menos uma resposta"
+
+msgid "Split by"
+msgstr "Dividir por"
+
+msgid "By agent"
+msgstr "Por agente"
+
+msgid "By group"
+msgstr "Por grupo"
+
+msgid "By tag"
+msgstr "Por marcação"
+
+msgid "Conversations"
+msgstr "Conversas"
+
+msgid "Share of total"
+msgstr "Parcela do total"
+
+msgid "Avg. first response"
+msgstr "Média 1ª resposta"
+
+msgid "Avg. resolution"
+msgstr "Média de resolução"
+
+msgid "Click a row to filter the whole page."
+msgstr "Clique em uma linha para filtrar a página inteira."
+
+msgid "No conversations were answered in this period."
+msgstr "Nenhuma conversa foi respondida neste período."
+
+msgid "No data for the previous period"
+msgstr "Sem dados do período anterior"
+
+msgid "vs previous period"
+msgstr "vs. período anterior"
+
+msgid "Messages sent"
+msgstr "Mensagens enviadas"
+
+msgid "Outgoing messages, without the ones that failed"
+msgstr "Mensagens enviadas, sem as que falharam"
+
+msgid "Time from the customer's first message to the first agent reply"
+msgstr "Tempo desde a primeira mensagem do cliente até a primeira resposta de um agente"
+
+msgid "Time from a conversation opening to it being resolved"
+msgstr "Tempo desde a abertura de uma conversa até sua resolução"
+
+msgid "Marketing"
+msgstr "Marketing"
+
+msgid "Utility"
+msgstr "Utilidade"
+
+msgid "Authentication"
+msgstr "Autenticação"
+
+msgid "Service"
+msgstr "Serviço"
+
+msgid "Deleted templates"
+msgstr "Modelos excluídos"
+
+msgid "Messages sent by category"
+msgstr "Mensagens enviadas por categoria"
+
+msgid "Outgoing messages, by WhatsApp conversation category"
+msgstr "Mensagens enviadas, por categoria de conversa do WhatsApp"
+
+msgid "Inbox only"
+msgstr "Somente Inbox"
+
+msgid "Marketing, Utility and Authentication messages are templates; Service messages are free-form replies within the 24-hour window."
+msgstr "Mensagens de Marketing, Utilidade e Autenticação são modelos; mensagens de Serviço são respostas livres dentro da janela de 24 horas."
+
+msgid "Average"
+msgstr "Média"
+
+msgid "Median"
+msgstr "Mediana"
+
+msgid "First response time"
+msgstr "Tempo da primeira resposta"
+
+msgid "How long customers waited for the first reply"
+msgstr "Quanto tempo os clientes esperaram pela primeira resposta"
+
+msgid "Waited %s"
+msgstr "Esperou %s"
+
+msgid "Resolution time"
+msgstr "Tempo de resolução"
+
+msgid "Time from open to resolved, per hour"
+msgstr "Tempo da abertura à resolução, por hora"
+
+msgid "Time from open to resolved, per day"
+msgstr "Tempo da abertura à resolução, por dia"
+
+msgid "Conversations per tag"
+msgstr "Conversas por marcação"
+
+msgid "Conversations in the period, by their current tags"
+msgstr "Conversas no período, pelas marcações atuais"
+
+msgid "No group"
+msgstr "Sem grupo"
+
+msgid "Untagged"
+msgstr "Sem marcação"
