@@ -445,7 +445,11 @@ const Login: React.FC = () => {
 								className={cn(loginSubmitClassName, 'mt-0 py-[9px]')}
 								onClick={doLoginWith360dialog}
 							>
-								<img className="mr-2 size-[18px]" src={dialog360Icon} alt="" />
+								<img
+									className="mr-[8px] size-[18px]"
+									src={dialog360Icon}
+									alt=""
+								/>
 								{t('Login with 360dialog')}
 							</Button>
 							<div className={orDividerClassName}>{t('or')}</div>

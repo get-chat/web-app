@@ -1,7 +1,7 @@
 // Shared by the login card's forms (Login and SetPasswordForm)
 
 export const loginTitleClassName =
-	'm-0 mb-1 text-center text-[24px] font-bold tracking-[-0.01em]';
+	'm-0 mb-[4px] text-center text-[24px] font-bold tracking-[-0.01em]';
 
 export const loginSubtitleClassName =
 	'm-0 mb-5 text-center text-muted-foreground';
