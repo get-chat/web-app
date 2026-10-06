@@ -91,7 +91,13 @@ function AnchoredDropdownMenu({
 	// Keep the last anchor so focus can go back to it after closing
 	const lastAnchor = React.useRef<Element | null>(null);
 	if (anchorEl) lastAnchor.current = anchorEl;
-	const rect = anchorEl?.getBoundingClientRect();
+	// While closing (anchorEl already cleared), the menu plays its exit
+	// animation where it was: keep the anchor's last position instead of
+	// falling back to the window's top left corner. Frozen rather than
+	// re-measured, as the anchor may change once an item is picked.
+	const lastRect = React.useRef<DOMRect | undefined>(undefined);
+	if (anchorEl) lastRect.current = anchorEl.getBoundingClientRect();
+	const rect = lastRect.current;
 
 	return (
 		<DropdownMenuPrimitive.Root
