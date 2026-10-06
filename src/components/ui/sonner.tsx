@@ -21,7 +21,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
 				success: <CheckCircleOutlineIcon className="size-[18px]!" />,
 				info: <InfoOutlinedIcon className="size-[18px]!" />,
 				warning: <ReportProblemOutlinedIcon className="size-[18px]!" />,
-				error: <ErrorOutlineIcon className="size-[18px]!" />,
+				// As in shadcn's toast: only errors get a coloured icon
+				error: <ErrorOutlineIcon className="size-[18px]! text-destructive" />,
 				loading: <Spinner />,
 			}}
 			style={
