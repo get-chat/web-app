@@ -1053,6 +1053,18 @@ msgstr "Hızlı yanıtlarda ara"
 msgid "No quick reply found."
 msgstr "Hiç hızlı yanıt bulunamadı."
 
+msgid "Availability"
+msgstr "Müsaitlik"
+
+msgid "While you are active, new chats can be assigned to you automatically."
+msgstr "Aktif olduğun sürece yeni sohbetler sana otomatik olarak atanabilir."
+
+msgid "When you become inactive, your chats may be unassigned or passed to an active teammate, depending on your inbox settings."
+msgstr "Aktif olmadığında, gelen kutusu ayarlarına bağlı olarak sohbetlerinin ataması kaldırılabilir veya aktif bir ekip arkadaşına aktarılabilir."
+
+msgid "You are set as active when you log in and as inactive when you log out. Admins can also change your status."
+msgstr "Giriş yaptığında aktif, çıkış yaptığında ise aktif değil olarak işaretlenirsin. Yöneticiler de durumunu değiştirebilir."
+
 msgid "You are active now."
 msgstr "Şu anda aktifsin."
 

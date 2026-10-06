@@ -1028,6 +1028,18 @@ msgstr ""
 msgid "No quick reply found."
 msgstr ""
 
+msgid "Availability"
+msgstr ""
+
+msgid "While you are active, new chats can be assigned to you automatically."
+msgstr ""
+
+msgid "When you become inactive, your chats may be unassigned or passed to an active teammate, depending on your inbox settings."
+msgstr ""
+
+msgid "You are set as active when you log in and as inactive when you log out. Admins can also change your status."
+msgstr ""
+
 msgid "You are active now."
 msgstr ""
 

@@ -1055,6 +1055,18 @@ msgstr "Szukaj szybkich odpowiedzi"
 msgid "No quick reply found."
 msgstr "Nie znaleziono żadnej szybkiej odpowiedzi."
 
+msgid "Availability"
+msgstr "Dostępność"
+
+msgid "While you are active, new chats can be assigned to you automatically."
+msgstr "Gdy jesteś aktywny(a), nowe czaty mogą być Ci przypisywane automatycznie."
+
+msgid "When you become inactive, your chats may be unassigned or passed to an active teammate, depending on your inbox settings."
+msgstr "Gdy staniesz się nieaktywny(a), Twoje czaty mogą przestać być Ci przypisane lub zostać przekazane aktywnej osobie z zespołu, zależnie od ustawień skrzynki odbiorczej."
+
+msgid "You are set as active when you log in and as inactive when you log out. Admins can also change your status."
+msgstr "Po zalogowaniu otrzymujesz status aktywny, a po wylogowaniu – nieaktywny. Administratorzy również mogą zmienić Twój status."
+
 msgid "You are active now."
 msgstr "Jesteś teraz aktywny(a)."
 
