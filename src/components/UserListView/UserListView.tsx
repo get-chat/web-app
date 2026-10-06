@@ -57,6 +57,19 @@ const UserListView: React.FC<Props> = ({
 	}, []);
 
 	useEffect(() => {
+		const handleKey = (event: KeyboardEvent) => {
+			// Not when it closed the create user dialog: Radix marks the Escapes
+			// it handles
+			if (event.key === 'Escape' && !event.defaultPrevented) {
+				onHide();
+			}
+		};
+
+		document.addEventListener('keydown', handleKey);
+		return () => document.removeEventListener('keydown', handleKey);
+	}, [onHide]);
+
+	useEffect(() => {
 		const onUserAvailabilityEvent = function (
 			msg: string,
 			data: UserAvailabilityEvent

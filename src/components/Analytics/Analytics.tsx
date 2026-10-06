@@ -112,6 +112,19 @@ const Analytics: React.FC<Props> = ({ onClose, isExiting, onAnimationEnd }) => {
 	// closes and the keyboard starts here
 	useEffect(() => rootRef.current?.focus(), []);
 
+	useEffect(() => {
+		const handleKey = (event: KeyboardEvent) => {
+			// Not when it closed one of the view's menus or dialogs: Radix marks
+			// the Escapes it handles
+			if (event.key === 'Escape' && !event.defaultPrevented) {
+				onClose();
+			}
+		};
+
+		document.addEventListener('keydown', handleKey);
+		return () => document.removeEventListener('keydown', handleKey);
+	}, [onClose]);
+
 	return (
 		<div
 			ref={rootRef}
@@ -187,17 +200,21 @@ const Analytics: React.FC<Props> = ({ onClose, isExiting, onAnimationEnd }) => {
 							{t('Analytics could not be loaded.')}
 						</Alert>
 					) : !data ? (
+						// Blank cards in the page's layout, pulsing
 						<>
 							<div className="grid grid-cols-4 gap-4 max-xl:grid-cols-2 max-sm:grid-cols-1">
 								{[0, 1, 2, 3].map((index) => (
 									<Skeleton
 										key={index}
-										variant="rounded"
-										className="h-36 rounded-xl"
+										variant="rectangular"
+										className="h-36 rounded-xl bg-white shadow-sm"
 									/>
 								))}
 							</div>
-							<Skeleton variant="rounded" className="h-96 rounded-xl" />
+							<Skeleton
+								variant="rectangular"
+								className="h-96 rounded-xl bg-white shadow-sm"
+							/>
 						</>
 					) : isEmpty ? (
 						<div className="flex flex-col items-center gap-2 rounded-xl bg-white px-5 py-16 text-center shadow-sm">

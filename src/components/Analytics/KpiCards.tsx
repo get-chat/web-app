@@ -82,13 +82,17 @@ const Kpi: React.FC<KpiProps> = ({
 			>
 				<AreaChart
 					data={kpi.series.map((value) => ({ value }))}
-					margin={{ top: 2, right: 0, bottom: 0, left: 0 }}
+					// Room for half the stroke, so the peaks and the baseline at the
+					// card's bottom edge aren't clipped
+					margin={{ top: 2, right: 0, bottom: 1, left: 0 }}
 				>
 					<Area
 						dataKey="value"
 						type="linear"
 						stroke="var(--color-value)"
 						strokeWidth={2}
+						strokeLinejoin="round"
+						strokeLinecap="round"
 						fill="var(--color-value)"
 						fillOpacity={0.1}
 						connectNulls
