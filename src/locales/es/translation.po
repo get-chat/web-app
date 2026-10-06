@@ -1291,6 +1291,9 @@ msgstr "Eliminar botón"
 msgid "Remove card"
 msgstr "Eliminar tarjeta"
 
+msgid "Remove"
+msgstr "Quitar"
+
 msgid "Remove filter"
 msgstr "Quitar filtro"
 

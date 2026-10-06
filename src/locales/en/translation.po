@@ -1265,6 +1265,9 @@ msgstr ""
 msgid "Remove card"
 msgstr ""
 
+msgid "Remove"
+msgstr ""
+
 msgid "Remove filter"
 msgstr ""
 

@@ -1292,6 +1292,9 @@ msgstr "Usuń przycisk"
 msgid "Remove card"
 msgstr "Usuń kartę"
 
+msgid "Remove"
+msgstr "Usuń"
+
 msgid "Remove filter"
 msgstr "Usuń filtr"
 

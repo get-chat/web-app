@@ -146,6 +146,20 @@ export const isAudioMimeTypeSupported = (mimeType: string | undefined) => {
     return new Blob(byteArrays, {type: contentType});
 }*/
 
+/** A file size for people: 820 B, 34 KB, 1.2 MB */
+export const formatFileSize = (bytes: number | undefined) => {
+	if (bytes === undefined || !Number.isFinite(bytes)) return '';
+	const units = ['B', 'KB', 'MB', 'GB'];
+	let size = bytes;
+	let unit = 0;
+	while (size >= 1024 && unit < units.length - 1) {
+		size /= 1024;
+		unit++;
+	}
+	const rounded = unit === 0 || size >= 10 ? Math.round(size) : size.toFixed(1);
+	return `${rounded} ${units[unit]}`;
+};
+
 export const handleDragOver = (event: DragEvent) => {
 	event.preventDefault();
 };
