@@ -8,19 +8,22 @@ interface Props {
 	timestamp?: number;
 	/** The copy floating at the top of the chat while it scrolls */
 	isFixed?: boolean;
+	className?: string;
 }
 
 const MessageDateIndicator: React.FC<Props> = ({
 	text,
 	timestamp,
 	isFixed = false,
+	className,
 }) => {
 	return (
 		// The class names are hooks for ChatView, which finds the dates by them
 		<div
 			className={cn(
 				'chat__message__dateContainer mx-2.5 mt-5 mb-7.5 flex items-center justify-center',
-				isFixed && 'mb-0'
+				isFixed && 'mb-0',
+				className
 			)}
 		>
 			<span

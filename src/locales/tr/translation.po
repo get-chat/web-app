@@ -102,6 +102,9 @@ msgstr "Oturumunu doğruluyoruz, lütfen bekle."
 msgid "Please log in to start"
 msgstr "Lütfen başlamak için giriş yap"
 
+msgid "Search for messages in this chat"
+msgstr "Bu sohbetteki mesajlarda ara"
+
 msgid "Search For Messages"
 msgstr "Mesajlarda ara"
 

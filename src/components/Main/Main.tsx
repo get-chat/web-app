@@ -1192,6 +1192,7 @@ const Main: React.FC = () => {
 				<SearchMessage
 					initialKeyword={searchMessagesInitialKeyword}
 					setInitialKeyword={setSearchMessagesInitialKeyword}
+					contactProvidersData={contactProvidersData}
 					isExiting={searchMessagesTransition.isExiting}
 					onAnimationEnd={searchMessagesTransition.handleAnimationEnd}
 				/>

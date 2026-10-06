@@ -102,6 +102,9 @@ msgstr "Estamos validando sua sessão, aguarde."
 msgid "Please log in to start"
 msgstr "Faça login para começar"
 
+msgid "Search for messages in this chat"
+msgstr "Pesquise mensagens neste chat"
+
 msgid "Search For Messages"
 msgstr "Pesquisar mensagens"
 

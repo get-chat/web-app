@@ -102,6 +102,9 @@ msgstr ""
 msgid "Please log in to start"
 msgstr ""
 
+msgid "Search for messages in this chat"
+msgstr ""
+
 msgid "Search For Messages"
 msgstr ""
 
