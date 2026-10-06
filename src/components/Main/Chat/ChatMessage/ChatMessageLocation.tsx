@@ -4,6 +4,8 @@ import OpenInNewIcon from '@src/components/icons/OpenInNew';
 import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { Message } from '@src/types/messages';
+import { messageMediaClassName } from './messageBubble';
+import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
 
 // Chat.css sizes these icons in em, which would grow with the icon's own
@@ -43,9 +45,9 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 	};
 
 	return (
-		<div className="chat__location">
+		<div className="flex flex-col">
 			<iframe
-				className="chat__location__iframe"
+				className={messageMediaClassName}
 				width="250"
 				height="150"
 				loading="lazy"
@@ -55,16 +57,14 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 			/>
 
 			{location?.name && (
-				<div className="chat__message__location__name">{location.name}</div>
+				<div className="mt-1.25 font-semibold">{location.name}</div>
 			)}
 			{location?.address && (
-				<div className="chat__message__location__address">
-					{location.address}
-				</div>
+				<div className="mb-2.5 text-[12px] text-ink/50">{location.address}</div>
 			)}
 			{location?.url && (
 				<a
-					className="chat__message__location__url"
+					className="mb-2.5 max-w-[250px] truncate text-[12px] text-primary! hover:underline"
 					href={location.url}
 					target="_blank"
 					rel="noopener noreferrer"
@@ -73,13 +73,14 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 				</a>
 			)}
 
-			<div className="chat__message__location__actions">
+			<div className="flex justify-center gap-2">
 				<Button
 					asChild
 					variant="ghost"
 					color="primary"
 					size="sm"
-					className={`chat__message__location__open ${actionButton}`}
+					// The icon follows the label's colour
+					className={cn(actionButton, '[&_.app-icon]:text-inherit!')}
 				>
 					<a href={mapURL} target="_blank" rel="noopener noreferrer">
 						<OpenInNewIcon />
@@ -91,7 +92,10 @@ const ChatMessageLocation: React.FC<Props> = ({ data }) => {
 					variant="outline"
 					color="primary"
 					size="sm"
-					className={`chat__message__location__share ${actionButton}`}
+					className={cn(
+						actionButton,
+						'self-center justify-self-center [&_.app-icon]:text-primary!'
+					)}
 					onClick={share}
 				>
 					<ShareIcon />

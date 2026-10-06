@@ -54,21 +54,21 @@ const ChatMessageTemplate: React.FC<Props> = ({
 	const { isTemplatesFailed } = useAppSelector((state) => state.UI);
 
 	return (
-		<div className="chat__template">
-			<span className="chat__templateHeader">
-				<SmsIcon />
+		<div className="[&_a]:text-light-blue [&_button]:text-light-blue">
+			<span className="mb-1.25 block text-[length:x-small] text-ink/60">
+				<SmsIcon className="mr-1.25 size-[0.6em]! text-ink/40!" />
 				{t('Template message')}
 				<br />
 			</span>
 
-			<div className="chat__templateContent">
+			<div>
 				{templateData !== undefined ? (
 					<div>
 						{sortTemplateComponents(templateData.components ?? []).map(
 							(component: any, index: number) => (
 								<div key={index}>
 									{component.type === 'HEADER' && (
-										<div className="chat__templateContent__header">
+										<div className="flex flex-col [&_img]:self-center">
 											{component.format === 'IMAGE' && (
 												<ChatMessageImage
 													data={data}
@@ -118,7 +118,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="chat__templateContent__body wordBreakWord"
+											className="wordBreakWord"
 										/>
 									)}
 
@@ -130,12 +130,12 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="chat__templateContent__footer wordBreakWord mt-1"
+											className="wordBreakWord mt-1 text-[12px] text-ink/60"
 										/>
 									)}
 
 									{component.type === 'BUTTONS' && (
-										<div className="chat__templateContent__buttons">
+										<div className="mt-2.5">
 											{component.buttons.map(
 												(button: any, buttonIndex: number) => {
 													let href: string;

@@ -52,7 +52,11 @@ import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import MissingContent from './MissingContent';
 import DoneAllIcon from '@src/components/icons/DoneAll';
-import { messageBubbleClassName } from './messageBubble';
+import {
+	messageBubbleClassName,
+	messageMediaClassName,
+	statusIconClassName,
+} from './messageBubble';
 import { cn } from '@src/lib/utils';
 
 // The round buttons beside a message, shown while it is hovered
@@ -165,7 +169,10 @@ const ChatMessage: React.FC<Props> = ({
 
 					{data.waba_payload?.type === MessageType.sticker && (
 						<img
-							className="chat__media chat__sticker"
+							className={cn(
+								messageMediaClassName,
+								'mb-[22px] w-auto cursor-default object-contain'
+							)}
 							src={generateStickerLink(data)}
 							alt={getMessageCaption(data) ?? ''}
 						/>
@@ -326,10 +333,8 @@ const ChatMessage: React.FC<Props> = ({
 						)}
 
 						<span
-							className={cn(
-								'chat__message__info',
-								data.from_us && 'cursor-pointer'
-							)}
+							// The time and status, floating at the bubble's bottom right
+							className={cn('float-right', data.from_us && 'cursor-pointer')}
 							onClick={() => {
 								if (data.from_us && isInfoClickable) {
 									const clonedMessage = clone(data) as Message;
@@ -340,7 +345,7 @@ const ChatMessage: React.FC<Props> = ({
 								}
 							}}
 						>
-							<span className="chat__timestamp">
+							<span className="ml-2.5 text-[length:x-small] text-ink/60">
 								<Moment
 									date={getMessageTimestamp(data)}
 									format={dateFormat}
@@ -352,7 +357,7 @@ const ChatMessage: React.FC<Props> = ({
 								<>
 									{isPending(data) && (
 										<AccessTimeIcon
-											className="chat__iconPending"
+											className={statusIconClassName(false)}
 											color="inherit"
 											style={iconStyles}
 										/>
@@ -360,7 +365,7 @@ const ChatMessage: React.FC<Props> = ({
 
 									{isJustSent(data) && (
 										<DoneIcon
-											className="chat__iconDone"
+											className={statusIconClassName()}
 											color="inherit"
 											style={iconStyles}
 										/>
@@ -370,7 +375,8 @@ const ChatMessage: React.FC<Props> = ({
 										<DoneAllIcon
 											// Grey, light blue once read
 											className={cn(
-												'chat__iconDoneAll fill-[#8990b4]! transition-[fill] duration-300 ease-[ease]',
+												statusIconClassName(),
+												'fill-[#8990b4]! transition-[fill] duration-300 ease-[ease]',
 												isRead(data) && 'fill-light-blue!'
 											)}
 											color="inherit"
@@ -382,7 +388,7 @@ const ChatMessage: React.FC<Props> = ({
 
 							{data.is_failed && !hasAnyStatus(data) && (
 								<ErrorIcon
-									className="chat__iconError"
+									className={cn(statusIconClassName(), '[&_*]:fill-[red]')}
 									color="inherit"
 									style={iconStyles}
 								/>

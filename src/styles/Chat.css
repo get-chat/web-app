@@ -54,14 +54,6 @@ ChatView, which keeps the last chat rendered until animationend. */
 	}
 }
 
-.chat__message__failed__info {
-	font-size: 12px;
-	color: red;
-	text-align: right;
-	margin-top: -25px;
-	margin-bottom: 25px;
-}
-
 .blink .chat__message {
 	opacity: 0.3;
 }
@@ -90,214 +82,6 @@ from the bottom edge stays within the box. */
 	.chat__message__outer--appear {
 		animation: none;
 	}
-}
-
-.chat__media,
-.chat__location__iframe {
-	border-radius: 8px;
-	display: block;
-	margin: -1px -6px 4px -6px;
-	height: 150px;
-	width: 250px;
-	/*max-width: 250px;*/
-	object-fit: cover;
-	cursor: pointer;
-	border: none !important;
-}
-
-.chat__location {
-	display: flex;
-	flex-direction: column;
-}
-
-.chat__message__location__name {
-	margin-top: 5px;
-	font-weight: 600;
-}
-
-.chat__message__location__address {
-	font-size: 12px;
-	color: rgba(0, 0, 45, 0.5);
-	margin-bottom: 10px;
-}
-
-.chat__message__location__url {
-	font-size: 12px;
-	color: var(--color-primary) !important;
-	max-width: 250px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	margin-bottom: 10px;
-}
-
-.chat__message__location__url:hover {
-	text-decoration: underline;
-}
-
-.chat__message__location__actions {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	gap: 8px;
-}
-
-.chat__message__location__share {
-	align-self: center;
-	justify-self: center;
-}
-
-.chat__message__location__share .app-icon {
-	color: var(--color-primary) !important;
-	height: 0.8em;
-	width: 0.8em;
-}
-
-.chat__message__location__open .app-icon {
-	/* Follow the button label color */
-	color: inherit !important;
-	height: 0.8em;
-	width: 0.8em;
-}
-
-video.chat__media {
-	background-color: #b5b5b5;
-}
-
-.chat__sticker {
-	width: auto;
-	object-fit: contain;
-	margin-bottom: 22px;
-	cursor: default !important;
-}
-
-.outgoing .chat__sticker {
-	margin-left: auto;
-}
-
-.chat__videoWrapper {
-	align-self: center;
-	position: relative;
-	cursor: pointer;
-	display: table;
-	width: fit-content;
-}
-
-.chat__videoWrapper > .chat__videoWrapper__iconWrapper {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	padding: 10px;
-	background-color: rgba(0, 0, 45, 0.4);
-	border-radius: 50px;
-}
-
-a.chat__document {
-	color: #4a4a4a;
-	border-radius: 6px;
-	margin: -1px -6px 4px -6px;
-	background-color: rgba(0, 0, 45, 0.05);
-	padding: 10px 6px;
-	display: flex;
-}
-
-a.chat__document:hover {
-	background-color: rgba(0, 0, 45, 0.08);
-}
-
-.chat__document .chat__document__filename {
-	margin-left: 5px;
-}
-
-.chat__template a,
-.chat__template button {
-	color: var(--color-light-blue);
-}
-
-.chat__templateHeader {
-	display: block;
-	font-size: x-small;
-	color: rgba(0, 0, 45, 0.6);
-	margin-bottom: 5px;
-}
-
-.chat__templateHeader .app-icon {
-	color: rgba(0, 0, 45, 0.4) !important;
-	width: 0.6em;
-	height: 0.6em;
-	margin-right: 5px;
-}
-
-.chat__templateContent__buttons {
-	margin-top: 10px;
-}
-
-.chat__templateContent__header {
-	display: flex;
-	flex-direction: column;
-}
-
-.chat__templateContent__header img {
-	align-self: center;
-}
-
-.chat__templateContent__footer {
-	font-size: 12px;
-	color: rgba(0, 0, 45, 0.6);
-}
-
-.chat__message__info {
-	float: right;
-}
-
-.chat__timestamp {
-	color: rgba(0, 0, 45, 0.6);
-	margin-left: 10px;
-	font-size: x-small;
-}
-
-.chat__iconPending,
-.chat__iconDone,
-.chat__iconDoneAll,
-.chat__iconError {
-	height: 10px;
-	width: 10px;
-	margin-left: 5px;
-}
-
-/* Status changes swap one icon for another, so animate the icons in.
-The pending icon is excluded: it is always the initial status, appearing
-only together with the message itself, and its element remounts (and
-would animate again) when the pending message is replaced by the
-stored one. */
-.chat__iconDone,
-.chat__iconDoneAll,
-.chat__iconError {
-	animation: chatStatusIconAppear 0.3s ease-out;
-}
-
-@keyframes chatStatusIconAppear {
-	from {
-		opacity: 0;
-		transform: scale(0.5);
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.chat__iconDone,
-	.chat__iconDoneAll,
-	.chat__iconError {
-		animation: none;
-	}
-}
-
-.chat__iconError * {
-	fill: red;
 }
 
 /* Positioning context for the loading skeleton, which overlays the
@@ -382,16 +166,6 @@ messages fade in over the chat wallpaper */
 	pointer-events: none;
 }
 
-.chat__body__dateIndicator .chat__message__dateContainer {
-	margin-bottom: 0 !important;
-}
-
-.chat__body__dateIndicator .chat__message__dateContainer__indicator {
-	pointer-events: auto;
-	background-color: white;
-	box-shadow: 0 6px 10px -6px rgb(185, 152, 136);
-}
-
 .chat__empty {
 	flex: 1 1 auto;
 }
@@ -421,26 +195,6 @@ messages fade in over the chat wallpaper */
 	font-size: 18px;
 	color: var(--lighter-text-color);
 	margin-bottom: 0;
-}
-
-.chat__message__dateContainer {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 20px 10px 30px 10px;
-}
-
-.chat__message__dateContainer__indicator {
-	font-size: 12px;
-	border-radius: 15px;
-	padding: 6px 10px;
-	box-shadow: 0 4px 5px -6px rgb(185, 152, 136);
-	background-color: rgba(255, 255, 255, 0.65);
-	-webkit-backdrop-filter: blur(8px);
-	backdrop-filter: blur(8px);
-	color: var(--chat-icon);
-	font-weight: 600;
-	/*text-transform: uppercase;*/
 }
 
 .pendingMessagesIndicator {

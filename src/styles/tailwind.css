@@ -132,6 +132,8 @@
 	--animate-skeleton: skeleton 2s ease-in-out 0.5s infinite;
 	/* The recording dot of the voice recorder */
 	--animate-blink: blink 2s linear infinite;
+	/* A message's status ticks change by swapping icons, so the new one pops in */
+	--animate-status-in: status-in 0.3s ease-out;
 	--animate-progress-indeterminate: progress-indeterminate 1.4s
 		cubic-bezier(0.65, 0, 0.35, 1) infinite;
 
@@ -255,6 +257,17 @@
 	@keyframes blink {
 		50% {
 			opacity: 0.3;
+		}
+	}
+
+	@keyframes status-in {
+		from {
+			opacity: 0;
+			transform: scale(0.5);
+		}
+		to {
+			opacity: 1;
+			transform: none;
 		}
 	}
 }

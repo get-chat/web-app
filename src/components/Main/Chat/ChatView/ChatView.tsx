@@ -2116,7 +2116,7 @@ const ChatView: React.FC<Props> = (props) => {
 						: 'hidden')
 				}
 			>
-				<MessageDateIndicator text={fixedDateIndicatorText} />
+				<MessageDateIndicator text={fixedDateIndicatorText} isFixed />
 			</div>
 
 			{isLoadingMoreMessages && (

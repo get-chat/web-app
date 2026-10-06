@@ -51,3 +51,15 @@ export const messageBubbleClassName = ({
 			'bg-[#f4f0d7]!',
 		isFirstInGroup && messageBubbleTailClassName(isOutgoing)
 	);
+
+/** An image, video or map inside a bubble, reaching out to its edges */
+export const messageMediaClassName =
+	'-mx-1.5 -mt-px mb-[4px] block h-[150px] w-[250px] cursor-pointer rounded-[8px] border-none object-cover';
+
+/**
+ * A message's status tick (sent, delivered, read, failed), sized by its
+ * font size. All but the pending one pop in, since a status change swaps
+ * the icon.
+ */
+export const statusIconClassName = (isAnimated = true) =>
+	cn('ml-1.25', isAnimated && 'motion-safe:animate-status-in');

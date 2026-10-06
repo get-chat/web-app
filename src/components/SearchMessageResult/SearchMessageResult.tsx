@@ -1,6 +1,7 @@
 import React from 'react';
 import { DoneAll, Check as Done } from '@src/components/icons';
 import { cn } from '@src/lib/utils';
+import { statusIconClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
 import Moment from 'react-moment';
 import { CALENDAR_NORMAL } from '@src/Constants';
 import ChatMessageTypeIcon from '../Main/Chat/ChatMessage/ChatMessageTypeIcon';
@@ -65,7 +66,7 @@ const SearchMessageResult: React.FC<Props> = ({
 								{isDeliveredOrRead(data) ? (
 									<DoneAll
 										className={cn(
-											'chat__iconDoneAll',
+											statusIconClassName(),
 											isRead(data) && '[&_*]:fill-light-blue'
 										)}
 									/>
