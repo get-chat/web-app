@@ -53,10 +53,10 @@ const UserAvailability = () => {
 					event.stopPropagation();
 					toggleUserAvailability();
 				}}
-				// MUI's success green when on (its warning colour only showed when
-				// on too, which never happens); the margins keep MUI's footprint
+				// Green when on; when off, a deeper shade of the bar's warning
+				// yellow. The margins keep MUI's footprint.
 				color="success"
-				className="my-[9px] mr-3.75"
+				className="my-[9px] mr-3.75 data-[state=unchecked]:bg-warning-strong"
 			/>
 		</div>
 	);

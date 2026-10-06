@@ -77,6 +77,8 @@
 	--color-success-soft: #c9e4cb;
 	--color-warning: #644916;
 	--color-warning-soft: #f5d597;
+	/* A deeper shade of warning-soft, for controls on it */
+	--color-warning-strong: #e6b155;
 }
 
 /*
