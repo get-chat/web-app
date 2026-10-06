@@ -348,7 +348,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 						className="ml-1"
 						onClick={() => fileInput.current?.click()}
 					>
-						<div className="flex size-[75px] cursor-pointer flex-col items-center justify-center bg-white text-[12px] text-primary [&_.app-icon]:mb-0.75 [&_.app-icon]:size-[1.25em]! [&_.app-icon]:text-primary!">
+						<div className="flex size-[75px] cursor-pointer flex-col items-center justify-center rounded-md bg-white text-[12px] text-primary [&_.app-icon]:mb-0.75 [&_.app-icon]:size-[1.25em]! [&_.app-icon]:text-primary!">
 							<AddIcon />
 							<span>{t('Add more')}</span>
 						</div>
