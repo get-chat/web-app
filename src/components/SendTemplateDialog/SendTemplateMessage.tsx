@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useEffect, useId, useRef, useState } from 'react';
-import '../../styles/SendTemplateMessage.css';
 import FileInput from '../FileInput';
 import { Alert, AlertTitle } from '@src/components/ui/alert';
 import { Button } from '@src/components/ui/button';
@@ -44,6 +43,15 @@ interface Props {
 	send: (data: Template) => void;
 	sendButtonInnerRef: React.Ref<HTMLButtonElement>;
 }
+
+// The uploaded header image or video
+const headerMediaClassName = 'h-auto w-full rounded-[8px] object-cover';
+
+// The two ways of providing the header's file: upload or link
+const choiceClassName =
+	'flex flex-1 cursor-pointer flex-col items-center justify-start rounded-[10px] px-2.5 py-1.25 whitespace-normal';
+const choiceIconClassName = 'mb-2.5 size-[50px]!';
+const choiceLabelClassName = 'text-center font-semibold text-muted-foreground';
 
 const SendTemplateMessage: React.FC<Props> = ({
 	data,
@@ -235,30 +243,38 @@ const SendTemplateMessage: React.FC<Props> = ({
 	};
 
 	return (
-		<div className="sendTemplateMessage">
-			<h4 className="sendTemplateMessage__title">{template.name}</h4>
+		<div>
+			<h4 className="mb-5 break-all">{template.name}</h4>
 
 			{template.components?.map((comp, compIndex) => (
-				<div key={compIndex} className="sendTemplateMessage__component">
-					<div className="sendTemplateMessage__section">
-						<h6>{comp.type}</h6>
+				<div key={compIndex}>
+					<div className="mb-2.5 rounded-[10px] bg-ink/3 px-5 py-3.75 max-md:px-3.75">
+						<h6 className="mb-1.25 text-ink/50">{comp.type}</h6>
 						<div>
 							{componentHasMediaFormat(comp) && (
 								<div>
-									<div className="sendTemplateMessage__section__fileType">
+									<div className="mb-3.75 flex justify-center text-[16px] font-semibold text-primary">
 										{t('Type: %s', comp.format?.toLowerCase())}
 									</div>
 
 									{headerFileURL && (
-										<div className="sendTemplateMessage__section__headerImage__preview">
+										<div className="mx-auto mb-5 flex w-50 items-center justify-center rounded-[8px] border border-[#ebebeb]">
 											{comp.format === 'IMAGE' && (
-												<img src={headerFileURL} alt="header" />
+												<img
+													className={headerMediaClassName}
+													src={headerFileURL}
+													alt="header"
+												/>
 											)}
 											{comp.format === 'VIDEO' && (
-												<video src={headerFileURL} controls />
+												<video
+													className={headerMediaClassName}
+													src={headerFileURL}
+													controls
+												/>
 											)}
 											{comp.format === 'DOCUMENT' && (
-												<div className="sendTemplateMessage__section__headerImage__preview__document">
+												<div className="flex h-[190px] w-35 flex-col items-center justify-center rounded-[8px]">
 													<AttachFileIcon />
 													<span>{t('Document')}</span>
 												</div>
@@ -267,7 +283,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 									)}
 
 									{!provideFileBy && (
-										<div className="sendTemplateMessage__section__provideFileChoices">
+										<div className="mt-2.5 flex">
 											<Button
 												type="button"
 												variant="unstyled"
@@ -275,10 +291,12 @@ const SendTemplateMessage: React.FC<Props> = ({
 												onClick={() =>
 													setProvideFileBy(FILE_PROVIDE_TYPE_UPLOAD)
 												}
-												className="sendTemplateMessage__section__provideFileChoices__choice whitespace-normal"
+												className={choiceClassName}
 											>
-												<PublishIcon />
-												<span>{t('Upload a file')}</span>
+												<PublishIcon className={choiceIconClassName} />
+												<span className={choiceLabelClassName}>
+													{t('Upload a file')}
+												</span>
 											</Button>
 											<Button
 												type="button"
@@ -287,10 +305,12 @@ const SendTemplateMessage: React.FC<Props> = ({
 												onClick={() =>
 													setProvideFileBy(FILE_PROVIDE_TYPE_FILE_URL)
 												}
-												className="sendTemplateMessage__section__provideFileChoices__choice whitespace-normal"
+												className={choiceClassName}
 											>
-												<LinkIcon />
-												<span>{t('Enter a link to file')}</span>
+												<LinkIcon className={choiceIconClassName} />
+												<span className={choiceLabelClassName}>
+													{t('Enter a link to file')}
+												</span>
 											</Button>
 										</div>
 									)}
@@ -323,7 +343,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 												}
 											/>
 
-											<div className="sendTemplateMessage__section__uploadWrapper">
+											<div className="flex justify-center">
 												<Button
 													variant="solid"
 													color="primary"
@@ -350,7 +370,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 												)}
 											</div>
 
-											<div className="sendTemplateMessage__section__provideFileOtherChoice">
+											<div className="mt-7.5 flex justify-center">
 												<Button
 													variant="ghost"
 													color="secondary"
@@ -383,7 +403,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 												/>
 											</Field>
 
-											<div className="sendTemplateMessage__section__provideFileOtherChoice">
+											<div className="mt-7.5 flex justify-center">
 												<Button
 													variant="ghost"
 													color="secondary"
@@ -403,10 +423,7 @@ const SendTemplateMessage: React.FC<Props> = ({
 							{comp.text}
 							<div>
 								{getTemplateParams(comp.text).map((param, paramIndex) => (
-									<Field
-										className="templateMessage__param gap-1"
-										key={paramIndex}
-									>
+									<Field className="mt-2.5! gap-1" key={paramIndex}>
 										<FieldLabel
 											htmlFor={`${idPrefix}-${compIndex}-param-${paramIndex}`}
 										>
@@ -436,9 +453,9 @@ const SendTemplateMessage: React.FC<Props> = ({
 						</div>
 
 						{comp.type === 'BUTTONS' && (
-							<div className="templateMessage__buttons">
+							<div className="flex flex-col gap-2.5 [&>*+*]:border-t [&>*+*]:border-[#ebebeb] [&>*+*]:pt-2.5">
 								{comp.buttons?.map((button: any, idx: number) => (
-									<div className="templateMessage__buttons--button" key={idx}>
+									<div key={idx}>
 										<Button
 											variant="outline"
 											color="primary"
