@@ -281,6 +281,7 @@ const PreviewSendMedia: React.FC<Props> = ({
 							</FieldLabel>
 							<Input
 								id={captionInputId}
+								className="bg-white"
 								value={currentCaption}
 								onChange={(e) => setCurrentCaption(e.target.value)}
 							/>
@@ -363,8 +364,9 @@ const PreviewSendMedia: React.FC<Props> = ({
 				</div>
 
 				<div className="absolute top-0 right-12.5 -mt-[33px] max-md:right-5">
+					{/* Stays green on hover, as it did with MUI */}
 					<Button
-						variant="ghost"
+						variant="unstyled"
 						color="neutral"
 						size="none"
 						className="rounded-full bg-[#09e85e] p-5 shadow-[0_4px_10px_-6px_rgba(0,0,45,0.4)] max-md:p-2.5 [&_.app-icon]:text-white! [&_svg]:size-6"
