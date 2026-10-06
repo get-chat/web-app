@@ -5,7 +5,12 @@ import { setPasswordWithActivationCode } from '@src/api/authApi';
 import { Button } from '@src/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
-import * as Styled from './Login.styles';
+import { Alert } from '@src/components/ui/alert';
+import {
+	loginAlertClassName,
+	loginFieldClassName,
+	loginSubmitClassName,
+} from './loginClassNames';
 
 interface Props {
 	code: string;
@@ -75,17 +80,17 @@ const SetPasswordForm: React.FC<Props> = ({
 	return (
 		<form onSubmit={submit}>
 			{errors.length > 0 && (
-				<Styled.LoginAlert severity="error">
+				<Alert className={loginAlertClassName} severity="error">
 					{errors.map((message) => (
 						<div key={message}>{t(message)}</div>
 					))}
-				</Styled.LoginAlert>
+				</Alert>
 			)}
 
 			{username && (
 				// Read-only rather than disabled, so a password manager files the
 				// new password under this username
-				<Field className="gap-1">
+				<Field className={loginFieldClassName}>
 					<FieldLabel htmlFor={`${idPrefix}-username`}>
 						{t('Username')}
 					</FieldLabel>
@@ -97,7 +102,7 @@ const SetPasswordForm: React.FC<Props> = ({
 					/>
 				</Field>
 			)}
-			<Field data-testid="new-password" className="gap-1">
+			<Field data-testid="new-password" className={loginFieldClassName}>
 				<FieldLabel htmlFor={`${idPrefix}-password`}>
 					{t('Password')}
 				</FieldLabel>
@@ -116,7 +121,7 @@ const SetPasswordForm: React.FC<Props> = ({
 					)}
 				</FieldDescription>
 			</Field>
-			<Field data-testid="new-password-repeat" className="gap-1">
+			<Field data-testid="new-password-repeat" className={loginFieldClassName}>
 				<FieldLabel htmlFor={`${idPrefix}-password-repeat`}>
 					{t('Password (repeat)')}
 				</FieldLabel>
@@ -134,7 +139,7 @@ const SetPasswordForm: React.FC<Props> = ({
 				size="lg"
 				variant="solid"
 				color="primary"
-				className="w-full"
+				className={loginSubmitClassName}
 				disabled={isSubmitting}
 			>
 				{t('Set password')}

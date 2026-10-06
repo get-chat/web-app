@@ -27,7 +27,17 @@ import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import InboxSelectorDialog from '@src/components/InboxSelectorDialog';
 import { AxiosError } from 'axios';
 import { fetchSessionToken, login, logout } from '@src/api/authApi';
-import * as Styled from './Login.styles';
+import ArrowForwardRoundedIcon from '@src/components/icons/ArrowForward';
+import { Alert } from '@src/components/ui/alert';
+import { cn } from '@src/lib/utils';
+import {
+	loginAlertClassName,
+	loginFieldClassName,
+	loginSubmitClassName,
+	loginSubtitleClassName,
+	loginTitleClassName,
+	orDividerClassName,
+} from './loginClassNames';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 import { fetchCurrentUser, updateUserAvailability } from '@src/api/usersApi';
@@ -324,34 +334,40 @@ const Login: React.FC = () => {
 	};
 
 	return (
-		<Styled.LoginWrapper>
-			<Styled.LoginColumn className="animate-fade-in">
-				<Styled.LogoWrapper>
-					<Styled.Logo
+		<div
+			id="login"
+			className="absolute top-0 left-0 flex size-full overflow-y-auto bg-[radial-gradient(480px_320px_at_50%_16%,rgba(101,203,172,0.16),transparent_70%),linear-gradient(180deg,var(--gray-lighter),#e9ecf2)] p-6 max-md:bg-white max-md:bg-none max-md:p-0"
+		>
+			<div className="m-auto flex w-full max-w-[450px] animate-fade-in flex-col items-center">
+				<div className="mb-5 flex justify-center max-md:mt-10">
+					<img
+						className="size-16"
 						src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
 						alt="Logo"
 					/>
-				</Styled.LogoWrapper>
+				</div>
 
-				<Styled.LoginBody>
+				<div className="relative w-full rounded-[15px] border border-white/80 bg-white px-8 pt-7.5 pb-6.5 shadow-[0_24px_48px_-24px_rgba(0,0,45,0.35),0_1px_2px_rgba(0,0,45,0.06)] max-md:rounded-none max-md:border-none max-md:shadow-none">
 					{storedURLs.length > 1 && (
-						<Styled.InboxUrl>
+						<div className="mt-0 mb-3.75 text-center text-[12px]">
 							<h3>{t('Your current inbox')}</h3>
 							<div>
 								{prepareURLForDisplay(api.defaults.baseURL ?? '')}
 								<a
 									href="#"
-									className="ml-1"
+									className="ml-1 text-(--color-secondary)"
 									onClick={() => setInboxSelectorVisible(true)}
 								>
 									{t('Change')}
 								</a>
 							</div>
-						</Styled.InboxUrl>
+						</div>
 					)}
 
-					<h2>{activationCode ? t('Set your password') : t('Welcome')}</h2>
-					<p>
+					<h2 className={loginTitleClassName}>
+						{activationCode ? t('Set your password') : t('Welcome')}
+					</h2>
+					<p className={loginSubtitleClassName}>
 						{activationCode
 							? t('Choose a password to finish activating your account.')
 							: sessionUser
@@ -370,11 +386,14 @@ const Login: React.FC = () => {
 
 					{!activationCode && sessionUser && (
 						<>
-							<Styled.SessionCard
+							<button
+								type="button"
+								className="group/session m-0 flex w-full cursor-pointer items-center gap-3 rounded-[10px] border border-[rgba(101,203,172,0.5)] bg-white px-4 py-3 text-left [font:inherit] text-inherit shadow-[0_2px_10px_-4px_rgba(101,203,172,0.4)] transition-[border-color,background-color,box-shadow] duration-250 ease-[ease] [-webkit-tap-highlight-color:transparent] hover:border-primary hover:bg-(--color-primary-transparent) hover:shadow-[0_4px_16px_-6px_rgba(101,203,172,0.7)] focus-visible:outline-primary! motion-reduce:transition-none"
 								data-testid="continue-with-session"
 								onClick={continueWithSession}
 							>
 								<CustomAvatar
+									className="size-11 text-[18px]/none"
 									src={
 										sessionUser.profile?.large_avatar ??
 										sessionUser.profile?.avatar
@@ -383,58 +402,59 @@ const Login: React.FC = () => {
 								>
 									{generateInitialsHelper(sessionUser.username)}
 								</CustomAvatar>
-								<Styled.SessionCardInfo>
-									<Styled.SessionCardLabel>
+								<div className="flex min-w-0 flex-1 flex-col gap-0.5">
+									<div className="text-[12px] text-muted-foreground">
 										{t('Continue as')}
-									</Styled.SessionCardLabel>
-									<Styled.SessionCardName>
+									</div>
+									<div className="truncate text-[15px] font-semibold text-[var(--text-color,#212329)]">
 										{[sessionUser.first_name, sessionUser.last_name]
 											.filter(Boolean)
 											.join(' ') || sessionUser.username}
-									</Styled.SessionCardName>
-								</Styled.SessionCardInfo>
-								<Styled.SessionCardArrow />
-							</Styled.SessionCard>
+									</div>
+								</div>
+								{/* Nudges right on hover; ! beats the icons' own fill transition */}
+								<ArrowForwardRoundedIcon className="shrink-0 text-primary! transition-transform! duration-350! ease-[cubic-bezier(0.34,1.56,0.64,1)]! group-hover/session:translate-x-1 motion-reduce:transition-none! motion-reduce:group-hover/session:translate-x-0" />
+							</button>
 
-							<Styled.OrDivider>
+							<div className={orDividerClassName}>
 								{t('or log in with another account')}
-							</Styled.OrDivider>
+							</div>
 						</>
 					)}
 
 					{!activationCode && isAccountActivated && !loginError && (
-						<Styled.LoginAlert severity="success">
+						<Alert className={loginAlertClassName} severity="success">
 							{t('Your account has been activated. Please log in to continue.')}
-						</Styled.LoginAlert>
+						</Alert>
 					)}
 
 					{!activationCode && loginError && (
-						<Styled.LoginAlert severity="error">
+						<Alert className={loginAlertClassName} severity="error">
 							{t(loginError)}
-						</Styled.LoginAlert>
+						</Alert>
 					)}
 
 					{!activationCode && is360dialogLoginEnabled(config) && (
 						<>
-							<Styled.SSOLoginButton
+							<Button
 								data-testid="login-with-360dialog"
 								type="button"
 								size="lg"
 								variant="solid"
 								color="primary"
-								className="w-full"
+								className={cn(loginSubmitClassName, 'mt-0 py-[9px]')}
 								onClick={doLoginWith360dialog}
 							>
-								<img src={dialog360Icon} alt="" />
+								<img className="mr-2 size-[18px]" src={dialog360Icon} alt="" />
 								{t('Login with 360dialog')}
-							</Styled.SSOLoginButton>
-							<Styled.OrDivider>{t('or')}</Styled.OrDivider>
+							</Button>
+							<div className={orDividerClassName}>{t('or')}</div>
 						</>
 					)}
 
 					{!activationCode && (
 						<form onSubmit={doLogin}>
-							<Field data-testid="username" className="gap-1">
+							<Field data-testid="username" className={loginFieldClassName}>
 								<FieldLabel htmlFor="login-username">
 									{t('Username')}
 								</FieldLabel>
@@ -445,7 +465,7 @@ const Login: React.FC = () => {
 									autoComplete="username"
 								/>
 							</Field>
-							<Field data-testid="password" className="gap-1">
+							<Field data-testid="password" className={loginFieldClassName}>
 								<FieldLabel htmlFor="login-password">
 									{t('Password')}
 								</FieldLabel>
@@ -463,7 +483,7 @@ const Login: React.FC = () => {
 								size="lg"
 								variant="outline"
 								color="primary"
-								className="w-full"
+								className={loginSubmitClassName}
 							>
 								{t('Log in')}
 							</Button>
@@ -471,28 +491,33 @@ const Login: React.FC = () => {
 					)}
 
 					{!activationCode && (
-						<Styled.AdminPanelRow>
-							<Styled.AdminPanelLink
+						<div className="mt-[18px] flex justify-center">
+							<a
+								className="inline-flex items-center gap-1 text-[13px] text-muted-foreground no-underline transition-colors duration-200 ease-[ease] hover:text-foreground focus-visible:rounded-[4px] focus-visible:outline-primary! motion-reduce:transition-none [&_svg]:text-[15px]!"
 								href={getHubURL(config?.API_BASE_URL ?? '')}
 							>
 								{t('Admin panel')}
 								<OpenInNewRoundedIcon />
-							</Styled.AdminPanelLink>
-						</Styled.AdminPanelRow>
+							</a>
+						</div>
 					)}
 
 					{isValidatingToken && (
-						<Styled.ValidatingToken>
-							<h2>{t('Welcome')}</h2>
-							<p>{t('We are validating your session, please wait.')}</p>
-						</Styled.ValidatingToken>
+						<div className="absolute inset-0 flex flex-col items-center justify-center rounded-[15px] bg-white">
+							<h2 className={loginTitleClassName}>{t('Welcome')}</h2>
+							<p className={loginSubtitleClassName}>
+								{t('We are validating your session, please wait.')}
+							</p>
+						</div>
 					)}
-				</Styled.LoginBody>
+				</div>
 
-				<Styled.VersionWrapper>
-					<Styled.Version>Version: {packageJson?.version}</Styled.Version>
-				</Styled.VersionWrapper>
-			</Styled.LoginColumn>
+				<div className="mt-5 flex justify-center max-md:mb-5">
+					<div className="text-[11px] tracking-[0.02em] text-muted-foreground opacity-80">
+						Version: {packageJson?.version}
+					</div>
+				</div>
+			</div>
 
 			<InboxSelectorDialog
 				isVisible={isInboxSelectorVisible}
@@ -504,7 +529,7 @@ const Login: React.FC = () => {
 					<Spinner size={40} />
 				</div>
 			)}
-		</Styled.LoginWrapper>
+		</div>
 	);
 };
 
