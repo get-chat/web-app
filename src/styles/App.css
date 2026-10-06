@@ -86,26 +86,6 @@
 	}
 }
 
-.hidden {
-	display: none !important;
-}
-
-.bold {
-	font-weight: 600;
-}
-
-.lowercase {
-	text-transform: lowercase;
-}
-
-.uppercase {
-	text-transform: uppercase;
-}
-
-.cursorPointer {
-	cursor: pointer;
-}
-
 .absoluteFullscreen {
 	position: absolute !important;
 	left: 0 !important;
@@ -220,30 +200,6 @@
 	max-height: 100%;
 }
 
-.wordBreakAll {
-	word-break: break-all;
-}
-
-.wordBreakWord {
-	word-break: break-word;
-}
-
-.searchOccurrence {
-	font-weight: 600;
-	color: var(--color-primary);
-}
-
-.replyIcon {
-	height: 0.6em !important;
-	width: 0.6em !important;
-	vertical-align: middle;
-	margin-top: -3px;
-}
-
-.activeIconButton .app-icon {
-	color: var(--color-primary) !important;
-}
-
 h1 .emoji-mart-emoji,
 h2 .emoji-mart-emoji,
 h3 .emoji-mart-emoji {
@@ -258,22 +214,10 @@ h3 .emoji-mart-emoji {
 	}
 }
 
-.mobileOnly {
-	display: none;
-}
-
 @media only screen and (max-width: 750px) {
 	.app__body {
 		display: inherit;
 		border-radius: 0;
-	}
-
-	.mobileOnly {
-		display: inherit;
-	}
-
-	.desktopOnly {
-		display: none !important;
 	}
 
 	.app__mediaPreview__header {

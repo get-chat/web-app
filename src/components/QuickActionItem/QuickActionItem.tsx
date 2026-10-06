@@ -31,7 +31,7 @@ const QuickActionItem: React.FC<Props> = ({ item, isSelected, itemProps }) => {
 				)}
 				<span
 					className={cn(
-						'bold overflow-hidden',
+						'font-semibold overflow-hidden',
 						item.isStatic &&
 							'rounded-[4px] border-2 border-white bg-gray-light px-1 py-0.5'
 					)}

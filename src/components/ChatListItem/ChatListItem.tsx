@@ -32,7 +32,7 @@ import { cn } from '@src/lib/utils';
 const nameClassName = 'line-clamp-1 text-ellipsis break-all';
 
 // The last message, cut to one line, with its dimmed type and reply icons.
-// The reply arrow keeps the smaller size App.css gives .replyIcon.
+// The reply arrow keeps its own smaller size.
 const lastMessageClassName = cn(
 	'mr-1.25 line-clamp-1 text-ellipsis break-all',
 	'[&_.app-icon]:mr-1.25 [&_.app-icon]:-ml-0.5 [&_.app-icon]:text-ink/30! [&_.app-icon:not(.replyIcon)]:size-[0.8em]!',
@@ -102,7 +102,7 @@ const ChatListItem = (props: any) => {
 								sprintf: [data.assigned_to_user.username],
 							}}
 						>
-							Assigned to: <span className="bold">%s</span>
+							Assigned to: <span className="font-semibold">%s</span>
 						</Trans>
 					</div>
 				)}
@@ -114,7 +114,7 @@ const ChatListItem = (props: any) => {
 								sprintf: [data.assigned_group.name],
 							}}
 						>
-							Assigned group: <span className="bold">%s</span>
+							Assigned group: <span className="font-semibold">%s</span>
 						</Trans>
 					</div>
 				)}

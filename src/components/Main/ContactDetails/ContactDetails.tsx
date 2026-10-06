@@ -142,7 +142,7 @@ const ContactDetails: React.FC<Props> = ({
 											className="mr-1.25 align-baseline"
 											style={{ fill: tag.web_inbox_color }}
 										/>
-										<span className="bold inline-block max-w-[150px] truncate">
+										<span className="font-semibold inline-block max-w-[150px] truncate">
 											{tag.name}
 										</span>
 									</div>
@@ -161,7 +161,7 @@ const ContactDetails: React.FC<Props> = ({
 												sprintf: [chat?.assigned_to_user.username],
 											}}
 										>
-											Assigned to: <span className="bold">%s</span>
+											Assigned to: <span className="font-semibold">%s</span>
 										</Trans>
 									</div>
 								)}
@@ -175,7 +175,7 @@ const ContactDetails: React.FC<Props> = ({
 												sprintf: [chat?.assigned_group.name],
 											}}
 										>
-											Assigned group: <span className="bold">%s</span>
+											Assigned group: <span className="font-semibold">%s</span>
 										</Trans>
 									</div>
 								)}

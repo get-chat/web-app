@@ -104,7 +104,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 													)}
 													as="div"
 													linkify={true}
-													className="bold wordBreakWord"
+													className="font-semibold [word-break:break-word]"
 												/>
 											)}
 										</div>
@@ -118,7 +118,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="wordBreakWord"
+											className="[word-break:break-word]"
 										/>
 									)}
 
@@ -130,7 +130,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="wordBreakWord mt-1.25 text-[12px] text-ink/60"
+											className="[word-break:break-word] mt-1.25 text-[12px] text-ink/60"
 										/>
 									)}
 

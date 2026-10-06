@@ -548,7 +548,7 @@ const ChatFooter: React.FC<Props> = ({
 							<FooterActionButton
 								onClick={toggleInteractiveMessages}
 								isActive={isInteractiveMessagesVisible}
-								className={cn(isAttachmentOptionsVisible && 'desktopOnly')}
+								className={cn(isAttachmentOptionsVisible && 'max-md:hidden')}
 							>
 								<TryIcon />
 							</FooterActionButton>
@@ -564,7 +564,7 @@ const ChatFooter: React.FC<Props> = ({
 							<FooterActionButton
 								onClick={toggleSavedResponses}
 								isActive={isSavedResponsesVisible}
-								className={cn(isAttachmentOptionsVisible && 'desktopOnly')}
+								className={cn(isAttachmentOptionsVisible && 'max-md:hidden')}
 							>
 								<NotesIcon />
 							</FooterActionButton>

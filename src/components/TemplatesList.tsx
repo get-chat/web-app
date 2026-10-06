@@ -131,7 +131,7 @@ const TemplatesList: React.FC<Props> = ({
 								{sortTemplateComponents(template[1].components ?? []).map(
 									(comp: any, index: number) => (
 										<div key={index}>
-											<span className="bold lowercase text-ink/60">
+											<span className="font-semibold lowercase text-ink/60">
 												{comp.type}:
 											</span>{' '}
 											{comp.text ?? comp.format ?? JSON.stringify(comp.buttons)}

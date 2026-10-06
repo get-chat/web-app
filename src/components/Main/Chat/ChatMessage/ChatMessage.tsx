@@ -318,7 +318,7 @@ const ChatMessage: React.FC<Props> = ({
 						data.waba_payload?.button?.text ??
 						data.waba_payload?.interactive?.button_reply?.title ? (
 							<PrintMessage
-								className="wordBreakWord"
+								className="[word-break:break-word]"
 								message={
 									data.waba_payload?.text?.body ??
 									getMessageCaption(data) ??

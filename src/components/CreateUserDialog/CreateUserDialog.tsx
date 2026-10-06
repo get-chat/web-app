@@ -280,7 +280,8 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 									sprintf: [createdUser.username],
 								}}
 							>
-								The user <span className="bold">%s</span> has been created.
+								The user <span className="font-semibold">%s</span> has been
+								created.
 							</Trans>
 						</Alert>
 
@@ -296,7 +297,8 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 										sprintf: [createdUser.email],
 									}}
 								>
-									Activation e-mail sent to <span className="bold">%s</span>.
+									Activation e-mail sent to{' '}
+									<span className="font-semibold">%s</span>.
 								</Trans>
 							</Alert>
 						) : (

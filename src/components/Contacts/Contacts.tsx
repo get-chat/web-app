@@ -75,7 +75,7 @@ const Contacts: React.FC<Props> = ({
 							}}
 						>
 							No persons or contacts found for{' '}
-							<span className="searchOccurrence">%s</span>
+							<span className="font-semibold text-primary">%s</span>
 						</Trans>
 					</span>
 				)}

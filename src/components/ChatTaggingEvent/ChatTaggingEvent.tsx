@@ -25,14 +25,15 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 							},
 						}}
 					>
-						<span className="bold">%(username)s</span> has {data.action} tag:{' '}
+						<span className="font-semibold">%(username)s</span> has{' '}
+						{data.action} tag:{' '}
 						<SellIcon
 							className={tagIconClass}
 							style={{
 								fill: data.tag?.web_inbox_color,
 							}}
 						/>
-						<span className="bold">%(tag)s</span>.
+						<span className="font-semibold">%(tag)s</span>.
 					</Trans>
 				</div>
 			) : (
@@ -50,7 +51,7 @@ const ChatTaggingEvent: React.FC<Props> = ({ data }) => {
 								fill: data.tag?.web_inbox_color,
 							}}
 						/>
-						<span className="bold">%(tag)s</span>.
+						<span className="font-semibold">%(tag)s</span>.
 					</Trans>
 				</div>
 			)}

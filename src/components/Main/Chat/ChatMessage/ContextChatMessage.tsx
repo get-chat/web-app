@@ -34,7 +34,7 @@ const ContextChatMessage: React.FC<Props> = ({
 					{getSenderName(contextMessage)}
 				</span>
 
-				{/* The reply arrow keeps the smaller size App.css gives .replyIcon */}
+				{/* The reply arrow keeps its own smaller size */}
 				<span className="line-clamp-3 text-ellipsis text-ink/60 [&_.app-icon]:mr-0.75 [&_.app-icon:not(.replyIcon)]:size-[0.8em]!">
 					<ChatMessageShortContent
 						type={contextMessage.waba_payload?.type ?? MessageType.none}

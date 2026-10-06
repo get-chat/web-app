@@ -20,7 +20,8 @@ const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 							sprintf: [data.done_by?.username ?? 'a user'],
 						}}
 					>
-						<span className="bold">%s</span> has changed chat assignments.
+						<span className="font-semibold">%s</span> has changed chat
+						assignments.
 					</Trans>
 				</div>
 			) : (
@@ -35,7 +36,7 @@ const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 							sprintf: [data.assigned_to_user_set.username],
 						}}
 					>
-						assigned to user: <span className="bold">%s</span>
+						assigned to user: <span className="font-semibold">%s</span>
 					</Trans>
 				</div>
 			)}
@@ -48,7 +49,7 @@ const ChatAssignmentEventView: React.FC<Props> = ({ data }) => {
 							sprintf: [data.assigned_group_set.name],
 						}}
 					>
-						assigned to group: <span className="bold">%s</span>
+						assigned to group: <span className="font-semibold">%s</span>
 					</Trans>
 				</div>
 			)}

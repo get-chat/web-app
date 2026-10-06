@@ -88,7 +88,11 @@ const ChatMessageShortContent: React.FC<Props> = ({
 
 	return (
 		<div className={className}>
-			{isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
+			{isLastMessageFromUs && (
+				// replyIcon: the list and the reply quote size the other icons
+				// here, but not this one
+				<ReplyIcon className="replyIcon -mt-0.75 size-[0.6em]! align-middle" />
+			)}
 			<ChatMessageTypeIcon type={type} />
 			{print()}
 		</div>

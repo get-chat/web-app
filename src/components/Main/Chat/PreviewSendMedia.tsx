@@ -264,7 +264,9 @@ const PreviewSendMedia: React.FC<Props> = ({
 					!chosenFile.isPDF && (
 						<div>
 							{chosenFile.attachmentType},{' '}
-							<span className="searchOccurrence">{chosenFile.file?.name}</span>
+							<span className="font-semibold text-primary">
+								{chosenFile.file?.name}
+							</span>
 						</div>
 					)}
 			</div>
