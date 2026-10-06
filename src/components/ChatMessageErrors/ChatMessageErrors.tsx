@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Message } from '@src/types/messages';
 import { canRetry } from '@src/helpers/MessageHelper';
-import * as Styled from './ChatMessageErrors.styles';
+import { Button } from '@src/components/ui/button';
 
 interface Props {
 	data: Message;
@@ -20,50 +20,53 @@ const ChatMessageErrors: React.FC<Props> = ({ data, retryMessage }) => {
 					const details =
 						error.details ?? error.error_data?.details ?? error.message;
 					return (
-						<Styled.Container key={index}>
+						// Links take the colour of the text around them
+						<div
+							key={index}
+							className="rounded-[10px] bg-[#ffbdbd] p-2.5 text-[#953434] [&_a]:font-semibold [&_a]:underline"
+						>
 							{error.recommendation && (
-								<Styled.Recommendation>
+								<div className="mb-1.5 text-destructive-dark">
 									<Linkify options={{ target: '_blank' }}>
 										{t(error.recommendation)}
 									</Linkify>
-								</Styled.Recommendation>
+								</div>
 							)}
 
-							<Styled.Error>
+							<div>
 								<h5>{t('Details')}</h5>
-								<Styled.ErrorTitle>
+								<div className="text-[13px]">
 									{t(error.title ?? error.type ?? 'Error')}{' '}
-									<Styled.Code>
+									<span className="font-light">
 										{error.code && t('(Code: %d)', Number(error.code))}
-									</Styled.Code>
-								</Styled.ErrorTitle>
-								<Styled.ErrorDetails>
-									{details && t(details)}
-								</Styled.ErrorDetails>
+									</span>
+								</div>
+								<div className="text-[12px]">{details && t(details)}</div>
 								{error.href && (
-									<Styled.ErrorLink>
+									<div className="text-[13px]">
 										<a href={error.href} target="_blank">
 											{t('Click here for more information.')}
 										</a>
-									</Styled.ErrorLink>
+									</div>
 								)}
-							</Styled.Error>
+							</div>
 
 							{data.from_us &&
 								data.is_failed &&
 								canRetry(data) &&
 								retryMessage && (
-									<Styled.RetryButton
-										color="inherit"
-										fullWidth
-										size="small"
-										variant="outlined"
+									<Button
+										variant="outline"
+										color="neutral"
+										size="sm"
+										// MUI's color="inherit": paint with the text colour
+										className="mt-2.5 w-full [--btn:currentColor]"
 										onClick={() => retryMessage?.(data)}
 									>
 										{t('Retry')}
-									</Styled.RetryButton>
+									</Button>
 								)}
-						</Styled.Container>
+						</div>
 					);
 				})}
 		</>

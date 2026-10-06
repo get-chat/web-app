@@ -1,11 +1,11 @@
 import React, { forwardRef } from 'react';
-import Alert from '@mui/material/Alert';
+import { Alert } from '@src/components/ui/alert';
 import TemplatesList from '../TemplatesList';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
-import * as Styled from './TemplateListWithControls.styles';
+import { footerPanelClassName } from '@src/styles/footerPanelClassNames';
 
 export type Props = {
 	onSelect: (template: Template) => void;
@@ -14,14 +14,14 @@ export type Props = {
 // The forwarded ref exposes the panel's root element, so the render
 // site can wrap it in a ClickAwayListener
 const TemplateListWithControls = forwardRef<HTMLDivElement, Props>(
-	({ onSelect, isExiting, onAnimationEnd }, ref) => {
+	({ onSelect, onAnimationEnd }, ref) => {
 		const { t } = useTranslation();
 		const { isLoadingTemplates } = useAppSelector((state) => state.UI);
 
 		return (
-			<Styled.Outer
+			<div
 				ref={ref}
-				$isExiting={isExiting}
+				className={footerPanelClassName}
 				onAnimationEnd={onAnimationEnd}
 			>
 				{/*<SearchBar />*/}
@@ -35,7 +35,7 @@ const TemplateListWithControls = forwardRef<HTMLDivElement, Props>(
 						customSelectButtonTitle={undefined}
 					/>
 				)}
-			</Styled.Outer>
+			</div>
 		);
 	}
 );

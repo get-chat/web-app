@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import LaunchIcon from '@mui/icons-material/Launch';
-import ReplyIcon from '@mui/icons-material/Reply';
+import LaunchIcon from '@src/components/icons/OpenInNew';
+import ReplyIcon from '@src/components/icons/Reply';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
 import { CarouselCard } from '@src/types/messages';
-import * as Styled from './CarouselMessage.styles';
+
+// The card's image or video fills its media area
+const mediaClassName = 'block size-full object-cover';
 
 const CarouselMessage: React.FC<InteractiveMessageProps> = ({
 	interactive,
@@ -19,65 +21,66 @@ const CarouselMessage: React.FC<InteractiveMessageProps> = ({
 		if (!link) return null;
 
 		return (
-			<Styled.CardMedia>
+			<div className="h-[110px] bg-ink/5">
 				{header?.type === 'video' ? (
-					<video src={link} controls preload="metadata" />
+					<video
+						className={mediaClassName}
+						src={link}
+						controls
+						preload="metadata"
+					/>
 				) : (
-					<img src={link} alt="" />
+					<img className={mediaClassName} src={link} alt="" />
 				)}
-			</Styled.CardMedia>
+			</div>
 		);
 	};
 
 	return (
-		<Styled.Message>
+		<div className="flex flex-col gap-1.25">
 			{body && (
-				<Styled.Body>
+				<div className="font-normal">
 					<PrintMessage linkify message={body.text} />
-				</Styled.Body>
+				</div>
 			)}
 
 			{cards && Array.isArray(cards) && (
-				<Styled.Cards>
+				<div className="flex gap-2 overflow-x-auto pb-1.25">
 					{cards.map((card, cardIndex) => (
-						<Styled.Card key={cardIndex}>
+						<div
+							className="flex w-50 shrink-0 flex-col overflow-hidden rounded-[10px] border border-ink/10"
+							key={cardIndex}
+						>
 							{renderMedia(card)}
 							{card.body?.text && (
-								<Styled.CardBody>
+								<div className="px-2 py-1.25 text-[0.9em] whitespace-pre-wrap">
 									<PrintMessage linkify message={card.body.text} />
-								</Styled.CardBody>
+								</div>
 							)}
-							<Styled.CardActions>
+							<div className="mt-auto flex flex-col">
 								{card.action?.name === 'cta_url' && (
-									<Button
-										color="primary"
-										fullWidth
-										startIcon={<LaunchIcon />}
+									<InteractiveMessageButton
 										href={card.action?.parameters?.url}
 										disabled
 									>
+										<LaunchIcon />
 										{card.action?.parameters?.display_text}
-									</Button>
+									</InteractiveMessageButton>
 								)}
 								{card.action?.buttons &&
 									Array.isArray(card.action.buttons) &&
 									card.action.buttons.map(({ reply }, buttonIndex) => (
-										<Button
-											key={buttonIndex}
-											color="primary"
-											fullWidth
-											startIcon={<ReplyIcon />}
-											disabled
-										>
+										<InteractiveMessageButton key={buttonIndex} disabled>
+											<ReplyIcon />
 											{reply?.title}
-										</Button>
+										</InteractiveMessageButton>
 									))}
-							</Styled.CardActions>
-						</Styled.Card>
+							</div>
+						</div>
 					))}
-				</Styled.Cards>
+				</div>
 			)}
-		</Styled.Message>
+		</div>
 	);
 };
 

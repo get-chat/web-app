@@ -1,6 +1,6 @@
 import React from 'react';
 import CustomAvatar from '@src/components/CustomAvatar';
-import * as Styled from './BusinessProfileAvatar.styles';
+import { Spinner } from '@src/components/ui/spinner';
 import { useAppSelector } from '@src/store/hooks';
 
 interface Props {
@@ -19,16 +19,19 @@ const BusinessProfileAvatar: React.FC<Props> = ({
 	);
 
 	return (
-		<Styled.Container>
+		<div className="relative flex items-center justify-center">
 			<CustomAvatar
 				className={className}
 				src={profilePhoto ? 'data:image/png;base64,' + profilePhoto : undefined}
 				onClick={onClick}
 			/>
 			{(isRefreshingSettings || isUploadingProfilePhoto) && (
-				<Styled.StyledCircularProgress size={40} />
+				<Spinner
+					size={40}
+					className="pointer-events-none absolute text-primary"
+				/>
 			)}
-		</Styled.Container>
+		</div>
 	);
 };
 

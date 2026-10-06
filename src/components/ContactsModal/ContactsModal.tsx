@@ -1,7 +1,13 @@
 import React, { useContext, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Button } from '@src/components/ui/button';
 import { Trans, useTranslation } from 'react-i18next';
 import { getHubURL } from '@src/helpers/URLHelper';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
@@ -9,7 +15,6 @@ import Contacts from '@src/components/Contacts';
 import { AxiosResponse } from 'axios';
 import { MessageType } from '@src/types/messages';
 import { Recipient } from '@src/types/persons';
-import * as Styled from './ContactsModal.styles';
 
 interface Props {
 	open: boolean;
@@ -70,30 +75,43 @@ const ContactsModal: React.FC<Props> = ({
 	};
 
 	return (
-		<Dialog open={open} onClose={handleClose} fullWidth>
-			<Styled.StyledDialogTitle>{t('Send contacts')}</Styled.StyledDialogTitle>
-			<Styled.StyledDialogContent>
-				<Contacts
-					isSelectionModeEnabled={true}
-					selectedContacts={selectedContacts}
-					onSelect={handleSelect}
-					noContactsContent={
-						<Styled.NoContactsContent>
-							<Trans>
-								To be able to share contacts, you need to use one of our Contact
-								Providers.{' '}
-								<a href={getHubURL(config?.API_BASE_URL ?? '')}>Click here</a>{' '}
-								to go to our integrations page.
-							</Trans>
-						</Styled.NoContactsContent>
-					}
-				/>
-			</Styled.StyledDialogContent>
-			{selectedContacts.length > 0 && (
-				<DialogActions>
-					<Button onClick={handleSendMessage}>{t('Send')}</Button>
-				</DialogActions>
-			)}
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle className="flex items-center justify-between">
+						{t('Send contacts')}
+					</DialogTitle>
+				</DialogHeader>
+				<DialogBody className="flex min-h-50 flex-1 flex-col p-0">
+					<Contacts
+						isSelectionModeEnabled={true}
+						selectedContacts={selectedContacts}
+						onSelect={handleSelect}
+						noContactsContent={
+							<div className="px-3.75 py-2.5 text-center font-normal">
+								<Trans>
+									To be able to share contacts, you need to use one of our
+									Contact Providers.{' '}
+									<a
+										className="text-light-blue"
+										href={getHubURL(config?.API_BASE_URL ?? '')}
+									>
+										Click here
+									</a>{' '}
+									to go to our integrations page.
+								</Trans>
+							</div>
+						}
+					/>
+				</DialogBody>
+				{selectedContacts.length > 0 && (
+					<DialogFooter>
+						<Button variant="ghost" color="primary" onClick={handleSendMessage}>
+							{t('Send')}
+						</Button>
+					</DialogFooter>
+				)}
+			</DialogContent>
 		</Dialog>
 	);
 };

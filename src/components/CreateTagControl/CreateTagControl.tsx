@@ -6,11 +6,13 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import * as Styled from './CreateTagControl.styles';
-import { CircularProgress, IconButton, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@src/components/icons/Add';
 import { useTranslation } from 'react-i18next';
 import { Tag } from '@src/types/tags';
+import { Button } from '@src/components/ui/button';
+import { Input } from '@src/components/ui/input';
+import { Spinner } from '@src/components/ui/spinner';
+import { cn } from '@src/lib/utils';
 
 export const TAG_COLOR_PALETTE = [
 	'#E53935',
@@ -29,12 +31,11 @@ interface Props {
 	doCreateTag: (name: string, color: string) => Promise<Tag>;
 	// Rendered while the form is collapsed; call openForm to reveal the form.
 	trigger: (openForm: () => void) => ReactNode;
-	// The MUI Menu hijacks keydown for typeahead navigation; stop it there.
+	// A dropdown menu uses keydown for typeahead and arrow-key navigation;
+	// stop it there when the form is inside one.
 	stopMenuKeyDownPropagation?: boolean;
 }
 
-// forwardRef so the component can safely be a direct child of a MUI Menu,
-// whose MenuList may clone children and pass a ref for focus management.
 const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 	({ doCreateTag, trigger, stopMenuKeyDownPropagation }, ref) => {
 		const { t } = useTranslation();
@@ -90,53 +91,58 @@ const CreateTagControl = forwardRef<HTMLDivElement, Props>(
 		}
 
 		return (
-			<Styled.CreateTagForm
+			<div
 				ref={ref}
+				className="flex min-w-60 flex-col gap-2 px-3 pt-1.5 pb-2.5"
+				// Lets a menu around the form tell that a key was pressed in it
+				data-slot="create-tag-form"
 				onKeyDown={
 					stopMenuKeyDownPropagation
-						? (event) => event.stopPropagation()
+						? (event: KeyboardEvent) => event.stopPropagation()
 						: undefined
 				}
 			>
-				<Styled.CreateTagInputRow>
-					<TextField
-						inputRef={inputRef}
+				<div className="flex items-center gap-1.5">
+					<Input
+						ref={inputRef}
 						value={name}
 						onChange={(event) => setName(event.target.value)}
 						onKeyDown={handleKeyDown}
 						placeholder={t('Tag name')}
-						size="small"
-						variant="standard"
-						fullWidth
+						size="sm"
 						disabled={isSaving}
 					/>
-					<IconButton
-						size="small"
+					<Button
+						variant="ghost"
 						color="primary"
+						size="icon-sm"
 						onClick={handleCreate}
 						disabled={!name.trim() || isSaving}
 						aria-label={t('Create tag')}
 					>
 						{isSaving ? (
-							<CircularProgress size={16} />
+							<Spinner size={16} className="text-primary" />
 						) : (
 							<AddIcon fontSize="small" />
 						)}
-					</IconButton>
-				</Styled.CreateTagInputRow>
-				<Styled.ColorSwatchRow>
+					</Button>
+				</div>
+				<div className="flex flex-wrap items-center gap-1.5">
 					{TAG_COLOR_PALETTE.map((swatch) => (
-						<Styled.ColorSwatch
+						<button
 							key={swatch}
 							type="button"
-							$color={swatch}
-							$isSelected={swatch === color}
+							className={cn(
+								'size-5 cursor-pointer rounded-full border-2 p-0 shadow-[0_0_0_1px_rgba(0,0,0,0.15)] transition-transform duration-100 ease-in-out hover:scale-110',
+								swatch === color ? 'border-foreground' : 'border-transparent'
+							)}
+							style={{ backgroundColor: swatch }}
 							onClick={() => setColor(swatch)}
 							aria-label={swatch}
 						/>
 					))}
-				</Styled.ColorSwatchRow>
-			</Styled.CreateTagForm>
+				</div>
+			</div>
 		);
 	}
 );

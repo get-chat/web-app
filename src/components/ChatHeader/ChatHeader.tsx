@@ -1,19 +1,10 @@
-import React, { MouseEvent, useContext, useEffect, useState } from 'react';
-import {
-	Divider,
-	IconButton,
-	ListItemIcon,
-	Menu,
-	MenuItem,
-	Skeleton,
-	Tooltip,
-} from '@mui/material';
-import { ArrowBack, MoreVert, Search } from '@mui/icons-material';
+import React, { useContext, useEffect, useState } from 'react';
+import { ArrowBack, MoreVert, Search } from '@src/components/icons';
 import { EVENT_TOPIC_FORCE_REFRESH_CHAT } from '@src/Constants';
 import PubSub from 'pubsub-js';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
-import WarningIcon from '@mui/icons-material/Warning';
+import WarningIcon from '@src/components/icons/Warning';
 import { isMobileOnly } from 'react-device-detect';
 import {
 	getDisplayAssignmentAndTaggingHistory,
@@ -23,24 +14,42 @@ import { useTranslation } from 'react-i18next';
 import PrintMessage from '../PrintMessage';
 import AssigneeChip from '@src/components/AssigneeChip';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import SellIcon from '@mui/icons-material/Sell';
-import EventNoteIcon from '@mui/icons-material/EventNote';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import CloseIcon from '@mui/icons-material/Close';
-import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import AssignmentTurnedInIcon from '@src/components/icons/AssignmentTurnedIn';
+import SellIcon from '@src/components/icons/Sell';
+import EventNoteIcon from '@src/components/icons/EventNote';
+import AccountBoxIcon from '@src/components/icons/AccountBox';
+import CloseIcon from '@src/components/icons/Close';
+import SettingsBackupRestoreIcon from '@src/components/icons/SettingsBackupRestore';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
-import * as Styled from './ChatHeader.styles';
 import { Person } from '@src/types/persons';
 import { isPersonExpired } from '@src/helpers/PersonHelper';
 import TagsChip from '@src/components/TagsChip';
 import { AxiosError } from 'axios';
 import { updateResolved } from '@src/api/chatsApi';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from '@src/components/icons/Check';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
+import CustomAvatar from '@src/components/CustomAvatar';
+import { Button } from '@src/components/ui/button';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@src/components/ui/dropdown-menu';
+import { Skeleton } from '@src/components/ui/skeleton';
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@src/components/ui/tooltip';
+import { cn } from '@src/lib/utils';
+
+// Brown header icons
+const headerIconButton = 'text-black/54 [&_svg]:text-chat-icon!';
 
 interface Props {
 	chat?: Chat;
@@ -70,7 +79,6 @@ const ChatHeader: React.FC<Props> = ({
 	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const { t } = useTranslation();
-	const [anchorEl, setAnchorEl] = useState<Element>();
 
 	const [isResolved, setIsResolved] = useState(false);
 
@@ -80,16 +88,6 @@ const ChatHeader: React.FC<Props> = ({
 
 	const { partialUpdateChatAssignment } = useChatAssignmentAPI();
 
-	const displayMenu = (event: MouseEvent) => {
-		if (event.currentTarget instanceof Element) {
-			setAnchorEl(event.currentTarget);
-		}
-	};
-
-	const hideMenu = () => {
-		setAnchorEl(undefined);
-	};
-
 	const showSearchMessages = () => {
 		dispatch(setState({ isSearchMessagesVisible: true }));
 	};
@@ -98,34 +96,24 @@ const ChatHeader: React.FC<Props> = ({
 		dispatch(setState({ isContactDetailsVisible: true }));
 	};
 
-	const showContactDetailsAndHideMenu = () => {
-		showContactDetails();
-		hideMenu();
-	};
-
-	const showChatAssignmentAndHideMenu = () => {
+	const showChatAssignment = () => {
 		dispatch(setState({ isChatAssignmentVisible: true }));
-		hideMenu();
 	};
 
-	const showChatTagsAndHideMenu = () => {
+	const showChatTags = () => {
 		setChatTagsVisible(true);
-		hideMenu();
 	};
 
 	const toggleAssignmentAndTaggingHistory = () => {
 		setDisplayAssignmentAndTaggingHistory(
 			!getDisplayAssignmentAndTaggingHistory()
 		);
-		hideMenu();
 
 		// Force refresh chat
 		PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
 	};
 
 	const updateResolvedCall = async (resolved: boolean) => {
-		hideMenu();
-
 		try {
 			const data = await updateResolved(waId, {
 				resolved: resolved,
@@ -136,40 +124,47 @@ const ChatHeader: React.FC<Props> = ({
 		}
 	};
 
-	const closeChatAndHideMenu = () => {
-		closeChat();
-		hideMenu();
-	};
-
 	return (
-		<Styled.Header onDrop={(event) => event.preventDefault()}>
+		<div
+			className="flex h-(--header-height) items-center border-l border-[lightgray] bg-[#6843301f] px-[15px] max-md:z-1 max-md:border-l-0 max-md:px-2.5 max-md:py-1 max-md:shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)]"
+			onDrop={(event) => event.preventDefault()}
+		>
 			{!isChatOnly && (
-				<Styled.MobileOnly>
-					<Styled.BackButton onClick={closeChat} size="large">
+				<div className="sm:hidden">
+					<Button
+						variant="ghost"
+						color="neutral"
+						size="icon-xl"
+						className={cn(headerIconButton, 'mr-[5px]')}
+						onClick={closeChat}
+					>
 						<ArrowBack />
-					</Styled.BackButton>
-				</Styled.MobileOnly>
+					</Button>
+				</div>
 			)}
 
-			<Styled.Clickable
+			<div
+				className={cn(
+					'flex flex-1 items-center overflow-hidden text-ellipsis whitespace-nowrap',
+					person && 'cursor-pointer'
+				)}
 				onClick={person ? showContactDetails : undefined}
-				$isLoading={!person}
 			>
 				{!person ? (
 					<>
-						<Skeleton variant="circular" width={40} height={40} />
-						<Styled.HeaderInfo>
-							<Skeleton variant="text" width={140} sx={{ fontSize: 16 }} />
-							<Skeleton variant="text" width={100} sx={{ fontSize: 12 }} />
-						</Styled.HeaderInfo>
+						<Skeleton variant="circular" className="size-10" />
+						<div className="pl-[15px]">
+							<Skeleton className="w-[140px] text-[16px]" />
+							<Skeleton className="w-[100px] text-[12px]" />
+						</div>
 					</>
 				) : (
 					<>
-						<Styled.Avatar
+						<CustomAvatar
+							className={cn(isPersonExpired(person) && '[&_img]:grayscale')}
 							src={extractAvatarFromContactProviderData(
 								contactProvidersData[waId]
 							)}
-							$isExpired={isPersonExpired(person)}
 							generateBgColorBy={
 								!isPersonExpired(person)
 									? person.waba_payload?.profile?.name
@@ -177,11 +172,12 @@ const ChatHeader: React.FC<Props> = ({
 							}
 						>
 							{person.initials}
-						</Styled.Avatar>
+						</CustomAvatar>
 
-						<Styled.HeaderInfo>
+						<div className="pl-[15px]">
 							<PrintMessage
 								as="h3"
+								className="mb-0 text-base text-chat-icon-dark [&_.emoji-mart-emoji]:size-4!"
 								message={
 									contactProvidersData[waId]?.[0]?.name ??
 									person.waba_payload?.profile?.name ??
@@ -191,36 +187,41 @@ const ChatHeader: React.FC<Props> = ({
 								}
 							/>
 
-							<Styled.SubRow>
+							<div className="-mt-px flex items-center gap-2.5 text-[12px]">
 								{person.wa_id && !isUserActionsRestricted && (
-									<Styled.WaId $desktopOnly>
+									<span className="text-chat-icon max-sm:hidden">
 										{addPlus(person.wa_id)}
-									</Styled.WaId>
+									</span>
 								)}
 
 								{isPersonExpired(person) && (
-									<Styled.ExpiredIndicator>
+									<span className="rounded-[10px] bg-chat-icon px-[5px] text-white">
 										{t('Expired')}
-									</Styled.ExpiredIndicator>
+									</span>
 								)}
 
 								{isResolved && (
-									<Styled.ResolvedIndicator>
+									<span className="rounded-[10px] bg-success-soft px-[5px] text-success">
 										{t('Resolved')}
-									</Styled.ResolvedIndicator>
+									</span>
 								)}
-							</Styled.SubRow>
-						</Styled.HeaderInfo>
+							</div>
+						</div>
 					</>
 				)}
-			</Styled.Clickable>
+			</div>
 
-			<Styled.HeaderRight>
+			<div className="flex justify-between">
 				{chat && (
-					<Styled.AssigneeActions>
-						<TagsChip waId={waId} showChatTagsList={showChatTagsAndHideMenu} />
+					<div className="mr-[5px] flex items-center justify-center gap-2.5 max-sm:hidden">
+						<TagsChip
+							className="bg-chat-bg"
+							waId={waId}
+							showChatTagsList={showChatTags}
+						/>
 
 						<AssigneeChip
+							className="bg-chat-bg"
 							assigneeType="user"
 							name={chat.assigned_to_user?.username}
 							secondaryName={chat.assigned_group?.name}
@@ -231,95 +232,92 @@ const ChatHeader: React.FC<Props> = ({
 								partialUpdateChatAssignment(waId, userId, groupId);
 							}}
 						/>
-					</Styled.AssigneeActions>
+					</div>
 				)}
 
 				{isMobileOnly && hasFailedMessages && (
-					<Tooltip
-						title={t('Failed to send some messages!')}
-						disableInteractive
-					>
-						<IconButton onClick={closeChat} size="large">
-							<WarningIcon className="error" />
-						</IconButton>
+					<Tooltip disableHoverableContent>
+						<TooltipTrigger asChild>
+							<Button
+								variant="ghost"
+								color="neutral"
+								size="icon-xl"
+								className={headerIconButton}
+								onClick={closeChat}
+							>
+								<WarningIcon className="error" />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							{t('Failed to send some messages!')}
+						</TooltipContent>
 					</Tooltip>
 				)}
-				<IconButton onClick={showSearchMessages} size="large">
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-xl"
+					className={headerIconButton}
+					onClick={showSearchMessages}
+				>
 					<Search />
-				</IconButton>
-				<IconButton onClick={displayMenu} size="large">
-					<MoreVert />
-				</IconButton>
-			</Styled.HeaderRight>
+				</Button>
 
-			<Menu
-				anchorEl={anchorEl}
-				anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-				transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-				open={Boolean(anchorEl)}
-				onClose={hideMenu}
-				elevation={3}
-			>
-				<MenuItem onClick={showContactDetailsAndHideMenu}>
-					<ListItemIcon>
-						<AccountBoxIcon />
-					</ListItemIcon>
-					{t('Contact details')}
-				</MenuItem>
-				{!isReadOnly && (
-					<>
-						<Divider />
-						{!isResolved && (
-							<MenuItem onClick={() => updateResolvedCall(true)}>
-								<ListItemIcon>
-									<DoneIcon />
-								</ListItemIcon>
-								{t('Mark as resolved')}
-							</MenuItem>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button
+							variant="ghost"
+							color="neutral"
+							size="icon-xl"
+							className={headerIconButton}
+						>
+							<MoreVert />
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						<DropdownMenuItem onSelect={showContactDetails}>
+							<AccountBoxIcon />
+							{t('Contact details')}
+						</DropdownMenuItem>
+						{!isReadOnly && (
+							<>
+								<DropdownMenuSeparator />
+								{isResolved ? (
+									<DropdownMenuItem onSelect={() => updateResolvedCall(false)}>
+										<SettingsBackupRestoreIcon />
+										{t('Mark as unresolved')}
+									</DropdownMenuItem>
+								) : (
+									<DropdownMenuItem onSelect={() => updateResolvedCall(true)}>
+										<DoneIcon />
+										{t('Mark as resolved')}
+									</DropdownMenuItem>
+								)}
+								<DropdownMenuSeparator />
+								<DropdownMenuItem onSelect={showChatAssignment}>
+									<AssignmentTurnedInIcon />
+									{t('Assign chat')}
+								</DropdownMenuItem>
+								<DropdownMenuItem onSelect={showChatTags}>
+									<SellIcon />
+									{t('Change tags')}
+								</DropdownMenuItem>
+							</>
 						)}
-						{isResolved && (
-							<MenuItem onClick={() => updateResolvedCall(false)}>
-								<ListItemIcon>
-									<SettingsBackupRestoreIcon />
-								</ListItemIcon>
-								{t('Mark as unresolved')}
-							</MenuItem>
-						)}
-					</>
-				)}
-				{!isReadOnly && <Divider />}
-				{!isReadOnly && (
-					<MenuItem onClick={showChatAssignmentAndHideMenu}>
-						<ListItemIcon>
-							<AssignmentTurnedInIcon />
-						</ListItemIcon>
-						{t('Assign chat')}
-					</MenuItem>
-				)}
-				{!isReadOnly && (
-					<MenuItem onClick={showChatTagsAndHideMenu}>
-						<ListItemIcon>
-							<SellIcon />
-						</ListItemIcon>
-						{t('Change tags')}
-					</MenuItem>
-				)}
-				<Divider />
-				<MenuItem onClick={toggleAssignmentAndTaggingHistory}>
-					<ListItemIcon>
-						<EventNoteIcon />
-					</ListItemIcon>
-					{t('Toggle event history')}
-				</MenuItem>
-				<Divider />
-				<MenuItem onClick={closeChatAndHideMenu}>
-					<ListItemIcon>
-						<CloseIcon />
-					</ListItemIcon>
-					{t('Close view')}
-				</MenuItem>
-			</Menu>
-		</Styled.Header>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem onSelect={toggleAssignmentAndTaggingHistory}>
+							<EventNoteIcon />
+							{t('Toggle event history')}
+						</DropdownMenuItem>
+						<DropdownMenuSeparator />
+						<DropdownMenuItem onSelect={closeChat}>
+							<CloseIcon />
+							{t('Close view')}
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
+		</div>
 	);
 };
 

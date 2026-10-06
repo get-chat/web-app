@@ -1,7 +1,7 @@
 import React from 'react';
 import ChatMessageTypeIcon from './ChatMessageTypeIcon';
 import ChatMessageTypeLabel from './ChatMessageTypeLabel';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyIcon from '@src/components/icons/Reply';
 import PrintMessage from '../../../PrintMessage';
 import {
 	findTemplate,
@@ -21,6 +21,7 @@ interface Props {
 	isLastMessageFromUs: boolean;
 	template?: Template | undefined;
 	reaction?: Reaction | undefined;
+	className?: string;
 }
 
 const ChatMessageShortContent: React.FC<Props> = ({
@@ -32,6 +33,7 @@ const ChatMessageShortContent: React.FC<Props> = ({
 	isLastMessageFromUs,
 	template,
 	reaction,
+	className,
 }) => {
 	const templates = useAppSelector((state) => state.templates.value);
 	const { t } = useTranslation();
@@ -85,8 +87,12 @@ const ChatMessageShortContent: React.FC<Props> = ({
 	};
 
 	return (
-		<div>
-			{isLastMessageFromUs && <ReplyIcon className="replyIcon" />}
+		<div className={className}>
+			{isLastMessageFromUs && (
+				// replyIcon: the list and the reply quote size the other icons
+				// here, but not this one
+				<ReplyIcon className="replyIcon -mt-0.75 size-[0.6em]! align-middle" />
+			)}
 			<ChatMessageTypeIcon type={type} />
 			{print()}
 		</div>

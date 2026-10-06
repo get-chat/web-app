@@ -1,15 +1,20 @@
 import React, { ReactNode } from 'react';
-import * as Styled from './MissingContent.styles';
+import { Alert } from '@src/components/ui/alert';
 
 interface Props {
 	children: ReactNode | ReactNode[];
 }
 
+/** A compact warning pill, sized to its text, shown in place of content */
 const MissingContent: React.FC<Props> = ({ children }) => {
 	return (
-		<Styled.StyledAlert severity="warning" variant="filled">
+		<Alert
+			severity="warning"
+			variant="filled"
+			className="w-max px-2 py-0.5 font-medium"
+		>
 			{children}
-		</Styled.StyledAlert>
+		</Alert>
 	);
 };
 

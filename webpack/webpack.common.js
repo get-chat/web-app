@@ -81,7 +81,34 @@ module.exports = (isDevelopment) => {
 					exclude: '/node_modules/',
 				},
 				{
+					// Tailwind entry point; runs through Tailwind's own PostCSS
+					// plugin
+					test: /tailwind\.css$/i,
+					use: [
+						styleLoader,
+						{
+							loader: 'css-loader',
+							options: {
+								importLoaders: 1,
+								// Root-relative urls point to the public folder, as in
+								// the rule below
+								url: { filter: (url) => !url.startsWith('/') },
+							},
+						},
+						{
+							loader: 'postcss-loader',
+							options: {
+								postcssOptions: {
+									config: false,
+									plugins: ['@tailwindcss/postcss'],
+								},
+							},
+						},
+					],
+				},
+				{
 					test: /\.css$/i,
+					exclude: /tailwind\.css$/i,
 					use: [
 						styleLoader,
 						{
@@ -93,37 +120,6 @@ module.exports = (isDevelopment) => {
 									// resolving them as modules at build time
 									filter: (url) => !url.startsWith('/'),
 								},
-							},
-						},
-					],
-				},
-				{
-					test: /\.pcss/,
-					use: [
-						{
-							loader: styleLoader,
-						},
-						{
-							loader: 'css-loader',
-							options: {
-								importLoaders: 1,
-								modules: true,
-							},
-						},
-						{
-							loader: 'postcss-loader',
-						},
-					],
-				},
-
-				{
-					test: /\.modules.css$/i,
-					use: [
-						styleLoader,
-						{
-							loader: 'css-loader',
-							options: {
-								modules: true,
 							},
 						},
 					],

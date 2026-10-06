@@ -1,16 +1,27 @@
-import React from 'react';
-import CustomAvatar from '@src/components/CustomAvatar';
+import React, { useState } from 'react';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
-import GroupIcon from '@mui/icons-material/Group';
-import PersonIcon from '@mui/icons-material/Person';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Divider, ListItemIcon, MenuItem, Tooltip } from '@mui/material';
+import GroupIcon from '@src/components/icons/Group';
+import PersonIcon from '@src/components/icons/Person';
 import { useTranslation } from 'react-i18next';
 import useAssigneeChip from '@src/components/AssigneeChip/useAssigneeChip';
-import CheckIcon from '@mui/icons-material/Check';
+import CheckIcon from '@src/components/icons/Check';
 import { prepareUserLabel, sortUsers } from '@src/helpers/UserHelper';
 import { sortGroups } from '@src/helpers/GroupsHelper';
-import * as Styled from './AssigneeChip.styles';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@src/components/ui/dropdown-menu';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
+import { cn } from '@src/lib/utils';
+import ChatChip, {
+	ChatChipAvatar,
+	ChatChipChevron,
+	ChatChipLabel,
+} from '@src/components/ChatChip';
 
 export type AssigneeType = 'user' | 'group';
 
@@ -24,7 +35,12 @@ interface Props {
 	assignedGroupId?: number;
 	isActionable?: boolean;
 	onAction?: (userId?: number | null, groupId?: number | null) => void;
+	className?: string;
 }
+
+// Users / Groups headings of the menu
+const menuHeaderClassName =
+	'flex items-center gap-[5px] [&_svg]:size-[13px]! [&_svg]:text-menu-muted!';
 
 const AssigneeChip: React.FC<Props> = ({
 	assigneeType,
@@ -36,14 +52,22 @@ const AssigneeChip: React.FC<Props> = ({
 	assignedGroupId,
 	isActionable = false,
 	onAction,
+	className,
 }) => {
 	const { t } = useTranslation();
 
-	const { menuAnchorEl, displayMenu, hideMenu, users, groups } =
-		useAssigneeChip({
-			assigneeType,
-			isActionable,
-		});
+	const { users, groups } = useAssigneeChip({
+		assigneeType,
+		isActionable,
+	});
+
+	// Controlled so the chip can carry data-menu-open, which keeps an empty
+	// chip visible in the chat list while its menu is open
+	const [isMenuOpen, setMenuOpen] = useState(false);
+
+	const hideMenu = () => {
+		setMenuOpen(false);
+	};
 
 	const selectUser = (userId?: number | null) => {
 		onAction?.(userId);
@@ -55,135 +79,100 @@ const AssigneeChip: React.FC<Props> = ({
 		hideMenu();
 	};
 
-	return (
-		<>
-			<Tooltip
-				placement="top"
-				title={tooltip}
-				disableInteractive
-				PopperProps={{ style: { zIndex: 1 } }}
+	const chip = (
+		<ChatChip
+			className={className}
+			isClickable={isActionable}
+			data-menu-open={isMenuOpen || undefined}
+		>
+			<ChatChipAvatar
+				className={cn(!name && 'bg-black/5 [&_.app-icon]:text-black/60!')}
+				generateBgColorBy={name}
 			>
-				<Styled.Container
-					className={`
-          ${Boolean(menuAnchorEl) ? 'menuOpen' : ''}
-        `}
-					$isClickable={isActionable}
-					onClick={isActionable ? displayMenu : undefined}
-				>
-					<Styled.Avatar
-						as={CustomAvatar}
-						unassigned={!Boolean(name)}
-						generateBgColorBy={name}
-					>
-						{assigneeType === 'group' ? (
-							<GroupIcon />
-						) : name ? (
-							generateInitialsHelper(name)
-						) : (
-							<PersonIcon />
-						)}
-					</Styled.Avatar>
+				{assigneeType === 'group' ? (
+					<GroupIcon />
+				) : name ? (
+					generateInitialsHelper(name)
+				) : (
+					<PersonIcon />
+				)}
+			</ChatChipAvatar>
 
-					{(!dense || name) && (
-						<Styled.Name $isWider={isActionable && !!secondaryName}>
-							{name ?? (!dense ? t('Unassigned') : '')}
-							{!dense && secondaryName && ', ' + secondaryName}
-						</Styled.Name>
-					)}
-
-					{isActionable && (
-						<Styled.ActionIcon size="small">
-							<ExpandMoreIcon />
-						</Styled.ActionIcon>
-					)}
-				</Styled.Container>
-			</Tooltip>
-
-			{isActionable && (
-				<Styled.StyledMenu
-					anchorEl={menuAnchorEl}
-					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-					transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-					open={Boolean(menuAnchorEl)}
-					onClose={hideMenu}
-					elevation={3}
-				>
-					<Styled.MenuHeader>
-						<PersonIcon /> {t('Users')}
-					</Styled.MenuHeader>
-
-					<MenuItem
-						className="menuItem menuItemDefault"
-						onClick={() => selectUser(null)}
-						selected={!assignedUserId}
-					>
-						{!assignedUserId && (
-							<ListItemIcon>
-								<CheckIcon />
-							</ListItemIcon>
-						)}
-						{t('Unassigned')}
-					</MenuItem>
-
-					{sortUsers(users).map((user) => (
-						<MenuItem
-							className={`menuItem ${
-								user.id !== assignedUserId ? 'menuItemDefault' : ''
-							}`}
-							key={user.id}
-							value={user.id}
-							onClick={() => selectUser(user.id)}
-							selected={user.id === assignedUserId}
-						>
-							{user.id === assignedUserId && (
-								<ListItemIcon>
-									<CheckIcon />
-								</ListItemIcon>
-							)}
-							{prepareUserLabel(user)}
-						</MenuItem>
-					))}
-
-					<Divider />
-
-					<Styled.MenuHeader>
-						<GroupIcon /> {t('Groups')}
-					</Styled.MenuHeader>
-
-					<MenuItem
-						className="menuItem menuItemDefault"
-						onClick={() => selectGroup(null)}
-						selected={!assignedGroupId}
-					>
-						{!assignedGroupId && (
-							<ListItemIcon>
-								<CheckIcon />
-							</ListItemIcon>
-						)}
-						{t('Unassigned')}
-					</MenuItem>
-
-					{sortGroups(groups).map((group) => (
-						<MenuItem
-							className={`menuItem ${
-								group.id !== assignedGroupId ? 'menuItemDefault' : ''
-							}`}
-							key={group.id}
-							value={group.id}
-							onClick={() => selectGroup(group.id)}
-							selected={group.id === assignedGroupId}
-						>
-							{group.id === assignedGroupId && (
-								<ListItemIcon>
-									<CheckIcon />
-								</ListItemIcon>
-							)}
-							{group.name}
-						</MenuItem>
-					))}
-				</Styled.StyledMenu>
+			{(!dense || name) && (
+				<ChatChipLabel isWide={isActionable && !!secondaryName}>
+					{name ?? (!dense ? t('Unassigned') : '')}
+					{!dense && secondaryName && ', ' + secondaryName}
+				</ChatChipLabel>
 			)}
-		</>
+
+			{isActionable && <ChatChipChevron />}
+		</ChatChip>
+	);
+
+	if (!isActionable) {
+		return (
+			<SimpleTooltip title={tooltip} side="top" disableHoverableContent>
+				{chip}
+			</SimpleTooltip>
+		);
+	}
+
+	return (
+		<DropdownMenu open={isMenuOpen} onOpenChange={setMenuOpen}>
+			<SimpleTooltip title={tooltip} side="top" disableHoverableContent>
+				<DropdownMenuTrigger asChild>{chip}</DropdownMenuTrigger>
+			</SimpleTooltip>
+
+			<DropdownMenuContent align="end">
+				<DropdownMenuLabel className={menuHeaderClassName}>
+					<PersonIcon /> {t('Users')}
+				</DropdownMenuLabel>
+
+				<DropdownMenuItem
+					className={cn(!assignedUserId && 'bg-menu-active')}
+					onSelect={() => selectUser(null)}
+				>
+					{!assignedUserId && <CheckIcon />}
+					{t('Unassigned')}
+				</DropdownMenuItem>
+
+				{sortUsers(users).map((user) => (
+					<DropdownMenuItem
+						className={cn(user.id === assignedUserId && 'bg-menu-active')}
+						key={user.id}
+						onSelect={() => selectUser(user.id)}
+					>
+						{user.id === assignedUserId && <CheckIcon />}
+						{prepareUserLabel(user)}
+					</DropdownMenuItem>
+				))}
+
+				<DropdownMenuSeparator />
+
+				<DropdownMenuLabel className={menuHeaderClassName}>
+					<GroupIcon /> {t('Groups')}
+				</DropdownMenuLabel>
+
+				<DropdownMenuItem
+					className={cn(!assignedGroupId && 'bg-menu-active')}
+					onSelect={() => selectGroup(null)}
+				>
+					{!assignedGroupId && <CheckIcon />}
+					{t('Unassigned')}
+				</DropdownMenuItem>
+
+				{sortGroups(groups).map((group) => (
+					<DropdownMenuItem
+						className={cn(group.id === assignedGroupId && 'bg-menu-active')}
+						key={group.id}
+						onSelect={() => selectGroup(group.id)}
+					>
+						{group.id === assignedGroupId && <CheckIcon />}
+						{group.name}
+					</DropdownMenuItem>
+				))}
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 };
 

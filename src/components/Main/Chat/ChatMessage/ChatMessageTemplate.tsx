@@ -2,8 +2,7 @@ import React from 'react';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageVideo from './ChatMessageVideo';
 import ChatMessageDocument from './ChatMessageDocument';
-import { Button } from '@mui/material';
-import SmsIcon from '@mui/icons-material/Sms';
+import SmsIcon from '@src/components/icons/Sms';
 import {
 	insertTemplateComponentParameters,
 	sortTemplateComponents,
@@ -11,13 +10,19 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import PrintMessage from '@src/components/PrintMessage';
-import LaunchIcon from '@mui/icons-material/Launch';
-import PhoneIcon from '@mui/icons-material/Phone';
+import LaunchIcon from '@src/components/icons/OpenInNew';
+import PhoneIcon from '@src/components/icons/Call';
 import { useAppSelector } from '@src/store/hooks';
 import { Template } from '@src/types/templates';
 import { Message } from '@src/types/messages';
 import { getHeaderFileLink } from '@src/helpers/MessageHelper';
 import MissingContent from './MissingContent';
+import { Button } from '@src/components/ui/button';
+
+// MUI's full-width text button, long labels wrapping; the bubble gives the
+// label its light blue, and the icon follows it
+const templateButton =
+	'h-auto min-h-9 w-full py-1.5 text-center font-semibold whitespace-normal [&_svg]:size-5! [&_svg]:text-current!';
 
 const getIconByType = (type: string) => {
 	switch (type) {
@@ -48,21 +53,21 @@ const ChatMessageTemplate: React.FC<Props> = ({
 	const { isTemplatesFailed } = useAppSelector((state) => state.UI);
 
 	return (
-		<div className="chat__template">
-			<span className="chat__templateHeader">
-				<SmsIcon />
+		<div className="[&_a]:text-light-blue [&_button]:text-light-blue">
+			<span className="mb-1.25 block text-[length:x-small] text-ink/60">
+				<SmsIcon className="mr-1.25 size-[0.6em]! text-ink/40!" />
 				{t('Template message')}
 				<br />
 			</span>
 
-			<div className="chat__templateContent">
+			<div>
 				{templateData !== undefined ? (
 					<div>
 						{sortTemplateComponents(templateData.components ?? []).map(
 							(component: any, index: number) => (
 								<div key={index}>
 									{component.type === 'HEADER' && (
-										<div className="chat__templateContent__header">
+										<div className="flex flex-col [&_img]:self-center">
 											{component.format === 'IMAGE' && (
 												<ChatMessageImage
 													data={data}
@@ -98,7 +103,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 													)}
 													as="div"
 													linkify={true}
-													className="bold wordBreakWord"
+													className="font-semibold [word-break:break-word]"
 												/>
 											)}
 										</div>
@@ -112,7 +117,7 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="chat__templateContent__body wordBreakWord"
+											className="[word-break:break-word]"
 										/>
 									)}
 
@@ -124,12 +129,12 @@ const ChatMessageTemplate: React.FC<Props> = ({
 											)}
 											as="div"
 											linkify={true}
-											className="chat__templateContent__footer wordBreakWord mt-1"
+											className="[word-break:break-word] mt-1.25 text-[12px] text-ink/60"
 										/>
 									)}
 
 									{component.type === 'BUTTONS' && (
-										<div className="chat__templateContent__buttons">
+										<div className="mt-2.5">
 											{component.buttons.map(
 												(button: any, buttonIndex: number) => {
 													let href: string;
@@ -161,15 +166,30 @@ const ChatMessageTemplate: React.FC<Props> = ({
 															break;
 													}
 
-													return (
+													const link = href ?? button.url;
+
+													// Like MUI, a link only when there is somewhere to go
+													return link ? (
 														<Button
-															href={href ?? button.url}
-															target="_blank"
+															asChild
 															key={buttonIndex}
-															startIcon={getIconByType(button.type)}
+															variant="ghost"
 															color="primary"
-															fullWidth={true}
+															className={templateButton}
 														>
+															<a href={link} target="_blank">
+																{getIconByType(button.type)}
+																{button.text}
+															</a>
+														</Button>
+													) : (
+														<Button
+															key={buttonIndex}
+															variant="ghost"
+															color="primary"
+															className={templateButton}
+														>
+															{getIconByType(button.type)}
 															{button.text}
 														</Button>
 													);

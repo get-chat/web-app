@@ -10,7 +10,10 @@ stages:
 
 
 variables:
-  NODE_IMAGE: node:18-alpine
+  # Tailwind's native bindings (@tailwindcss/oxide, lightningcss) need Node 20+:
+  # on older Node, pnpm silently skips them and the build fails with "Cannot
+  # find native binding". Keep in line with `engines.node` in package.json.
+  NODE_IMAGE: node:22-alpine
   PLAYWRIGHT_IMAGE: mcr.microsoft.com/playwright:v1.56.0-jammy
 
   PNPM_STORE_DIR: .pnpm-store

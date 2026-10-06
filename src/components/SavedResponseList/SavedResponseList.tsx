@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { Button } from '@src/components/ui/button';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 import {
-	Button,
-	ClickAwayListener,
 	Dialog,
-	DialogActions,
+	DialogBody,
 	DialogContent,
-	DialogContentText,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
 	DialogTitle,
-	Tooltip,
-} from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+} from '@src/components/ui/dialog';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
+import SendIcon from '@src/components/icons/Send';
+import DeleteOutlineIcon from '@src/components/icons/Delete';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import useSavedResponses from '@src/components/SavedResponseList/useSavedResponses';
-import * as StyledChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage.styles';
+import { cn } from '@src/lib/utils';
+import {
+	footerPanelBoxClassName,
+	footerPanelBubbleClassName,
+	footerPanelClassName,
+	footerPanelEmptyClassName,
+	footerPanelItemClassName,
+	footerPanelListClassName,
+} from '@src/styles/footerPanelClassNames';
+import { messageBubbleClassName } from '@src/components/Main/Chat/ChatMessage/messageBubble';
 import { MessageType } from '@src/types/messages';
-import * as Styled from './SavedResponseList.styles';
+import MessageActionButton from '@src/components/MessageActionButton';
 import SearchBar from '@src/components/SearchBar';
 import { fetchSavedResponses } from '@src/api/savedResponsesApi';
 import { SavedResponse } from '@src/types/savedResponses';
@@ -29,7 +40,6 @@ export type Props = {
 
 const SavedResponseList: React.FC<Props> = ({
 	sendCustomTextMessage,
-	isExiting,
 	onAnimationEnd,
 }) => {
 	const { t } = useTranslation();
@@ -113,9 +123,10 @@ const SavedResponseList: React.FC<Props> = ({
 				if (!open) closePanel();
 			}}
 		>
-			<Styled.Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
-				<div className="savedResponsesWrapper">
-					<Styled.SearchContainer>
+			<div className={footerPanelClassName} onAnimationEnd={onAnimationEnd}>
+				<div className={footerPanelBoxClassName}>
+					{/* The search sits on the chat background, without its own */}
+					<div className="flex flex-col [&_.app-icon]:text-chat-icon! [&_.searchBar\_\_inputContainer]:bg-transparent [&_input::placeholder]:text-chat-icon!">
 						<SearchBar
 							value={search}
 							onChange={(text) => {
@@ -126,10 +137,10 @@ const SavedResponseList: React.FC<Props> = ({
 							placeholder={t('Search quick replies')}
 							isFocusStyleEnabled={false}
 						/>
-					</Styled.SearchContainer>
-					<div className="savedResponses">
+					</div>
+					<div className={footerPanelListClassName}>
 						{savedResponses.length === 0 && (
-							<div className="savedResponses__emptyInfo mt-3">
+							<div className={footerPanelEmptyClassName}>
 								{search
 									? t('No quick reply found.')
 									: t('No quick replies have been saved yet.')}
@@ -137,66 +148,72 @@ const SavedResponseList: React.FC<Props> = ({
 						)}
 
 						{savedResponses.map((savedResponse) => (
-							<div key={savedResponse.id} className="savedResponseWrapper">
-								<StyledChatMessage.ChatMessage
-									$type={MessageType.text}
-									$isOutgoing={true}
-									className="chat__savedResponse"
+							<div key={savedResponse.id} className={footerPanelItemClassName}>
+								<div
+									className={cn(
+										messageBubbleClassName({
+											type: MessageType.text,
+											isOutgoing: true,
+										}),
+										footerPanelBubbleClassName
+									)}
 								>
 									{/*<span className={"templateMessage__status " + savedResponse[1].status}>{savedResponse[1].status}</span>*/}
-									<div className="savedResponse__message">
-										{savedResponse.text}
-									</div>
-								</StyledChatMessage.ChatMessage>
+									<div className="break-all">{savedResponse.text}</div>
+								</div>
 
-								<Tooltip title={t('Send')}>
-									<Styled.SendButton
+								<SimpleTooltip title={t('Send')}>
+									<MessageActionButton
 										aria-label={t('Send')}
 										onClick={() => {
 											sendCustomTextMessage(savedResponse.text);
 											// Close the panel as soon as a response is sent
 											closePanel();
 										}}
-										size="small"
 									>
 										<SendIcon />
-									</Styled.SendButton>
-								</Tooltip>
-								<Tooltip title={t('Delete')}>
-									<Styled.DeleteButton
+									</MessageActionButton>
+								</SimpleTooltip>
+								<SimpleTooltip title={t('Delete')}>
+									<MessageActionButton
+										tone="delete"
 										aria-label={t('Delete')}
 										onClick={() => attemptToDelete(savedResponse.id)}
-										size="small"
 									>
 										<DeleteOutlineIcon />
-									</Styled.DeleteButton>
-								</Tooltip>
+									</MessageActionButton>
+								</SimpleTooltip>
 							</div>
 						))}
 					</div>
 				</div>
 
-				<Dialog open={open} onClose={handleClose}>
-					<DialogTitle>{t('Oops!')}</DialogTitle>
+				<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
 					<DialogContent>
-						<DialogContentText>
-							{t('Are you sure you want to delete this quick reply?')}
-						</DialogContentText>
+						<DialogHeader>
+							<DialogTitle>{t('Oops!')}</DialogTitle>
+						</DialogHeader>
+						<DialogBody>
+							<DialogDescription>
+								{t('Are you sure you want to delete this quick reply?')}
+							</DialogDescription>
+						</DialogBody>
+						<DialogFooter>
+							<Button variant="ghost" color="secondary" onClick={handleClose}>
+								{t('No')}
+							</Button>
+							<Button
+								variant="ghost"
+								color="primary"
+								onClick={handleDeleteSavedResponse}
+								autoFocus
+							>
+								{t('Yes')}
+							</Button>
+						</DialogFooter>
 					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose} color="secondary">
-							{t('No')}
-						</Button>
-						<Button
-							onClick={handleDeleteSavedResponse}
-							color="primary"
-							autoFocus
-						>
-							{t('Yes')}
-						</Button>
-					</DialogActions>
 				</Dialog>
-			</Styled.Outer>
+			</div>
 		</ClickAwayListener>
 	);
 };

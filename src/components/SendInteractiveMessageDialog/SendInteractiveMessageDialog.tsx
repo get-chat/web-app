@@ -1,9 +1,4 @@
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import { Button, TextField } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useId, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ChatMessage from '@src/components/Main/Chat/ChatMessage/ChatMessage';
 import {
@@ -11,8 +6,8 @@ import {
 	InteractiveParameter,
 } from '@src/components/InteractiveMessageList/InteractiveMessageList';
 import { isEmptyString } from '@src/helpers/Helpers';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@src/components/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@src/components/icons/KeyboardArrowUp';
 import {
 	Button as ReplyButton,
 	CarouselCard,
@@ -20,23 +15,29 @@ import {
 	Message,
 } from '@src/types/messages';
 import { fromInteractive } from '@src/helpers/MessageHelper';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Textarea } from '@src/components/ui/textarea';
 import ListSectionsEditor from './ListSectionsEditor';
 import ReplyButtonsEditor from './ReplyButtonsEditor';
 import CarouselCardsEditor, {
 	getCardMediaLink,
 	MIN_CAROUSEL_CARDS,
 } from './CarouselCardsEditor';
-import {
-	Advanced,
-	AdvancedToggle,
-	Container,
-	Description,
-	HelperText,
-	PreviewContainer,
-	PreviewTitle,
-	StyledAlert,
-	TextFieldWrapper,
-} from './SendInteractiveMessageDialog.styles';
+import { Alert } from '@src/components/ui/alert';
+
+// The notes under the description; their translated HTML may hold links.
+// Smaller text, but the line height of the Alert's own text-sm.
+const noteClassName =
+	'mt-3.75 px-2.5 py-1 text-[12px]/[calc(1.25/0.875)] [&_a]:font-semibold [&_a]:underline';
 
 export type Props = {
 	isVisible: boolean;
@@ -57,6 +58,8 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	const [isShowingAdvanced, setIsShowingAdvanced] = useState(false);
 
 	const { t } = useTranslation();
+
+	const idPrefix = useId();
 
 	useEffect(() => {
 		if (isVisible) {
@@ -283,135 +286,149 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 			);
 		}
 
+		const inputId = `${idPrefix}-${parameter.key}`;
+		const isInvalid =
+			isShowErrors && parameter.required
+				? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
+				: false;
+
 		return (
-			<TextFieldWrapper key={parameter.key}>
-				<TextField
-					variant="standard"
-					value={getNestedValue(payload, parameter.key)}
-					onChange={(e) =>
-						setPayload((prevState: any) =>
-							setNestedValue(prevState, parameter.key, e.target.value)
-						)
-					}
-					label={t(parameter.placeholder || keyToLabel(parameter.key))}
-					size="small"
-					multiline={true}
-					fullWidth={true}
-					required={parameter.required}
-					inputProps={
-						parameter.maxLength ? { maxLength: parameter.maxLength } : undefined
-					}
-					error={
-						isShowErrors && parameter.required
-							? isEmptyString(getNestedValue(payload, parameter.key) ?? '')
-							: false
-					}
-				/>
+			<div className="mt-2.5" key={parameter.key}>
+				<Field data-invalid={isInvalid || undefined} className="gap-1">
+					<FieldLabel htmlFor={inputId}>
+						{t(parameter.placeholder || keyToLabel(parameter.key))}
+						{parameter.required && ' *'}
+					</FieldLabel>
+					<Textarea
+						id={inputId}
+						rows={1}
+						className="min-h-9 resize-none"
+						value={getNestedValue(payload, parameter.key) ?? ''}
+						onChange={(e) =>
+							setPayload((prevState: any) =>
+								setNestedValue(prevState, parameter.key, e.target.value)
+							)
+						}
+						required={parameter.required}
+						maxLength={parameter.maxLength || undefined}
+						aria-invalid={isInvalid || undefined}
+					/>
+				</Field>
 				{parameter.description && (
-					<HelperText
+					<div
+						className="mt-1.25 text-[12px] text-[#6f7385] [&_a]:text-primary"
 						dangerouslySetInnerHTML={{
 							__html: t(parameter.description),
 						}}
 					/>
 				)}
-			</TextFieldWrapper>
+			</div>
 		);
 	};
 
 	return (
-		<Dialog open={isVisible} onClose={close}>
-			<DialogTitle>
-				{t(describedInteractive?.title ?? 'Send an interactive message')}
-			</DialogTitle>
-			<DialogContent>
-				{describedInteractive && (
-					<Container>
-						<div>
-							<Description
-								dangerouslySetInnerHTML={{
-									__html: t(describedInteractive.description),
-								}}
-							/>
-							{describedInteractive.warning && (
-								<StyledAlert severity="warning">
-									<div
-										dangerouslySetInnerHTML={{
-											__html: t(describedInteractive.warning),
-										}}
-									/>
-								</StyledAlert>
-							)}
+		<Dialog open={isVisible} onOpenChange={(isOpen) => !isOpen && close()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>
+						{t(describedInteractive?.title ?? 'Send an interactive message')}
+					</DialogTitle>
+				</DialogHeader>
+				<DialogBody>
+					{describedInteractive && (
+						<div className="flex flex-col gap-7.5">
 							<div>
+								<div
+									className="text-[14px] max-md:text-[12px]"
+									dangerouslySetInnerHTML={{
+										__html: t(describedInteractive.description),
+									}}
+								/>
+								{describedInteractive.warning && (
+									<Alert className={noteClassName} severity="warning">
+										<div
+											dangerouslySetInnerHTML={{
+												__html: t(describedInteractive.warning),
+											}}
+										/>
+									</Alert>
+								)}
+								<div>
+									{payload &&
+										describedInteractive.parameters
+											.filter((parameter) => !parameter.advanced)
+											.map((parameter) => renderInput(parameter))}
+								</div>
+
 								{payload &&
-									describedInteractive.parameters
-										.filter((parameter) => !parameter.advanced)
-										.map((parameter) => renderInput(parameter))}
+									describedInteractive.parameters.filter(
+										(parameter) => parameter.advanced
+									).length > 0 && (
+										<div
+											className="mt-7.5 cursor-pointer text-[14px] font-semibold text-[#6f7385]"
+											onClick={() =>
+												setIsShowingAdvanced((prevState) => !prevState)
+											}
+										>
+											{isShowingAdvanced ? (
+												<KeyboardArrowUpIcon />
+											) : (
+												<KeyboardArrowDownIcon />
+											)}
+											{t(
+												isShowingAdvanced
+													? 'Hide advanced settings'
+													: 'Show advanced settings'
+											)}
+										</div>
+									)}
+								<div style={{ display: isShowingAdvanced ? 'block' : 'none' }}>
+									{payload &&
+										describedInteractive.parameters
+											.filter((parameter) => parameter.advanced)
+											.map((parameter) => renderInput(parameter))}
+								</div>
+
+								{describedInteractive.info && (
+									<Alert className={noteClassName} severity="info">
+										<div
+											dangerouslySetInnerHTML={{
+												__html: t(describedInteractive.info),
+											}}
+										/>
+									</Alert>
+								)}
 							</div>
 
-							{payload &&
-								describedInteractive.parameters.filter(
-									(parameter) => parameter.advanced
-								).length > 0 && (
-									<AdvancedToggle
-										onClick={() =>
-											setIsShowingAdvanced((prevState) => !prevState)
-										}
-									>
-										{isShowingAdvanced ? (
-											<KeyboardArrowUpIcon />
-										) : (
-											<KeyboardArrowDownIcon />
-										)}
-										{t(
-											isShowingAdvanced
-												? 'Hide advanced settings'
-												: 'Show advanced settings'
-										)}
-									</AdvancedToggle>
-								)}
-							<Advanced
-								style={{ display: isShowingAdvanced ? 'block' : 'none' }}
-							>
-								{payload &&
-									describedInteractive.parameters
-										.filter((parameter) => parameter.advanced)
-										.map((parameter) => renderInput(parameter))}
-							</Advanced>
-
-							{describedInteractive.info && (
-								<StyledAlert severity="info">
-									<div
-										dangerouslySetInnerHTML={{
-											__html: t(describedInteractive.info),
-										}}
-									/>
-								</StyledAlert>
-							)}
+							<div>
+								<div className="mb-2.5 text-[18px]">{t('Preview')}</div>
+								<div className="min-w-75 overflow-y-auto rounded-[10px] bg-chat-bg bg-(image:--chat-bg-image) bg-repeat p-2.5 max-md:min-w-auto [&_.chat\_\_message]:my-0!">
+									{messageData && (
+										<ChatMessage
+											data={messageData}
+											disableMediaPreview
+											isInfoClickable={false}
+										/>
+									)}
+								</div>
+							</div>
 						</div>
-
-						<div>
-							<PreviewTitle>{t('Preview')}</PreviewTitle>
-							<PreviewContainer>
-								{messageData && (
-									<ChatMessage
-										data={messageData}
-										disableMediaPreview
-										isInfoClickable={false}
-									/>
-								)}
-							</PreviewContainer>
-						</div>
-					</Container>
-				)}
+					)}
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+					<Button
+						variant="ghost"
+						color="primary"
+						onClick={checkAndSend}
+						autoFocus
+					>
+						{t('Send')}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-				<Button onClick={checkAndSend} color="primary" autoFocus>
-					{t('Send')}
-				</Button>
-			</DialogActions>
 		</Dialog>
 	);
 };

@@ -1,9 +1,7 @@
 import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MemoryRouter } from 'react-router-dom';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-
-const theme = createTheme();
+import { TooltipProvider } from '@src/components/ui/tooltip';
 
 const mockConfig = {
 	API_BASE_URL: 'http://test-api.com',
@@ -11,12 +9,12 @@ const mockConfig = {
 };
 
 export const TestProviders = ({ children }: { children: React.ReactNode }) => (
-	<ThemeProvider theme={theme}>
-		<AppConfigContext.Provider
-			// @ts-ignore
-			value={mockConfig}
-		>
+	<AppConfigContext.Provider
+		// @ts-ignore
+		value={mockConfig}
+	>
+		<TooltipProvider>
 			<MemoryRouter>{children}</MemoryRouter>
-		</AppConfigContext.Provider>
-	</ThemeProvider>
+		</TooltipProvider>
+	</AppConfigContext.Provider>
 );

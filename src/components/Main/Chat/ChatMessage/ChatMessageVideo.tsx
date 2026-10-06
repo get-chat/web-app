@@ -1,5 +1,7 @@
 import React from 'react';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { messageMediaClassName } from './messageBubble';
+import { cn } from '@src/lib/utils';
+import PlayArrowIcon from '@src/components/icons/PlayArrow';
 
 interface Props {
 	source: string;
@@ -14,15 +16,19 @@ const ChatMessageVideo: React.FC<Props> = ({
 }) => {
 	return (
 		<div
-			className="chat__videoWrapper"
+			className="relative table w-fit cursor-pointer self-center"
 			onClick={onPreview}
 			onContextMenu={(e) => {
 				onOptionsClick?.(e);
 				e.preventDefault();
 			}}
 		>
-			<video className="chat__media" src={source} preload="none" />
-			<span className="chat__videoWrapper__iconWrapper">
+			<video
+				className={cn(messageMediaClassName, 'bg-[#b5b5b5]')}
+				src={source}
+				preload="none"
+			/>
+			<span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[50px] bg-ink/40 p-2.5">
 				<PlayArrowIcon
 					fontSize={'large'}
 					style={{ fill: 'white', fontSize: 40 }}

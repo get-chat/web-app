@@ -4,7 +4,8 @@ import { prepareWaId } from '@src/helpers/PhoneNumberHelper';
 import { getChatPath } from '@src/helpers/RouteHelper';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { Message } from '@src/types/messages';
-import * as Styled from './ContactsMessage.styles';
+import ChatIcon from '@src/components/icons/Chat';
+import CustomAvatar from '@src/components/CustomAvatar';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
 interface Props {
@@ -23,44 +24,51 @@ const ContactsMessage: React.FC<Props> = ({ data }) => {
 	};
 
 	return (
-		<Styled.Root>
+		// The contacts, 5px apart
+		<div className="relative min-w-[180px] [&>*+*]:mt-1.25">
 			{contacts?.map((contact: any, contactIndex: number) => (
-				<Styled.Item key={contactIndex}>
-					<Styled.Header>
+				<div key={contactIndex}>
+					<div className="flex items-center py-1.25">
 						<>
-							<Styled.Avatar generateBgColorBy={contact.name?.formatted_name}>
+							<CustomAvatar
+								className="mr-2.5 size-[35px]"
+								generateBgColorBy={contact.name?.formatted_name}
+							>
 								{generateInitialsHelper(contact.name?.formatted_name ?? '')}
-							</Styled.Avatar>
-							<Styled.Name key={contactIndex}>
+							</CustomAvatar>
+							<div className="font-semibold" key={contactIndex}>
 								{contact.name?.formatted_name ?? ''}
-							</Styled.Name>
+							</div>
 						</>
-					</Styled.Header>
-					<Styled.Footer>
+					</div>
+					<div className="my-1.25 flex flex-col items-stretch">
 						{contact.phones?.map((phoneObj: any, phoneObjIndex: number) => (
-							<Styled.MessageButton
+							// Was MUI's ButtonBase: a bare button
+							<button
+								type="button"
+								className="relative m-0 mb-1.25 flex flex-1 cursor-pointer items-center justify-center rounded-[4px] border-0 bg-transparent px-1.25 py-0.75 [font:inherit] text-inherit outline-none! transition-[background-color] duration-150 select-none [-webkit-tap-highlight-color:transparent] [text-align:inherit] hover:bg-ink/4 focus-visible:shadow-[0_0_0_3px_rgba(101,203,172,0.3)]"
 								key={phoneObjIndex}
 								onClick={() => handleClick(phoneObj.wa_id)}
 							>
-								<Styled.MessageButtonIcon />
-								<Styled.PhoneNumberContainer>
+								<ChatIcon className="size-[0.8em]! text-primary!" />
+								<div className="ml-3.75 flex flex-col items-start">
 									{phoneObj?.type && (
-										<Styled.PhoneNumberType>
+										<div className="text-[12px] text-ink/60">
 											{phoneObj.type}
-										</Styled.PhoneNumberType>
+										</div>
 									)}
 									{!isUserActionsRestricted && (
-										<Styled.PhoneNumber>
+										<div className="text-primary">
 											{phoneObj.phone ?? phoneObj.wa_id}
-										</Styled.PhoneNumber>
+										</div>
 									)}
-								</Styled.PhoneNumberContainer>
-							</Styled.MessageButton>
+								</div>
+							</button>
 						))}
-					</Styled.Footer>
-				</Styled.Item>
+					</div>
+				</div>
 			))}
-		</Styled.Root>
+		</div>
 	);
 };
 

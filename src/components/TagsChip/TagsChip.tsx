@@ -1,32 +1,46 @@
-import React, { MouseEvent, useContext, useState } from 'react';
-import * as Styled from './TagsChip.styles';
-import { Divider, Link, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import React, { useContext } from 'react';
 import { useAppSelector } from '@src/store/hooks';
 import { Tag } from '@src/types/tags';
-import SellIcon from '@mui/icons-material/Sell';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import SellIcon from '@src/components/icons/Sell';
+import UnfoldMoreIcon from '@src/components/icons/UnfoldMore';
 import { getHubURL } from '@src/helpers/URLHelper';
-import SettingsIcon from '@mui/icons-material/Settings';
-import AddIcon from '@mui/icons-material/Add';
+import SettingsIcon from '@src/components/icons/Settings';
+import AddIcon from '@src/components/icons/Add';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { useTranslation } from 'react-i18next';
-import CustomAvatar from '@src/components/CustomAvatar';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CheckIcon from '@mui/icons-material/Check';
+import ChatChip, {
+	ChatChipAvatar,
+	ChatChipChevron,
+	ChatChipLabel,
+} from '@src/components/ChatChip';
+import CheckIcon from '@src/components/icons/Check';
 import useTags from '@src/hooks/useTags';
 import CreateTagControl from '@src/components/CreateTagControl/CreateTagControl';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@src/components/ui/dropdown-menu';
+import { cn } from '@src/lib/utils';
 
 interface Props {
 	waId: string | undefined;
 	showChatTagsList: () => void;
+	className?: string;
 }
 
-const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
+// Selected / Available headings of the menu
+const menuHeaderClassName =
+	'flex items-center gap-[5px] [&_svg]:size-[13px]! [&_svg]:text-menu-muted!';
+
+const TagsChip: React.FC<Props> = ({ waId, showChatTagsList, className }) => {
 	const tags = useAppSelector((state) => state.tags.value);
 	const currentChatTags = useAppSelector(
 		(state) => state.currentChatTags.value
 	);
-	const [tagsMenuAnchorEl, setTagsMenuAnchorEl] = useState<Element>();
 	const config = useContext(AppConfigContext);
 
 	const { doDeleteChatTagging, doCreateChatTagging, doCreateTag } = useTags({
@@ -35,141 +49,139 @@ const TagsChip: React.FC<Props> = ({ waId, showChatTagsList }) => {
 	});
 	const { t } = useTranslation();
 
+	// The chip's icon takes the colour of the first tag
+	const firstTagColor = currentChatTags[0]?.web_inbox_color;
+
 	const isTagSelected = (tag: Tag): boolean => {
 		return currentChatTags.some((t) => t.id === tag.id);
 	};
 
 	return (
-		<>
-			<Styled.Container
-				$isClickable={true}
-				onClick={(event: MouseEvent) => {
-					if (event.currentTarget instanceof Element) {
-						setTagsMenuAnchorEl(event.currentTarget);
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<ChatChip className={cn('bg-ink/6', className)} isClickable>
+					<ChatChipAvatar
+						className={
+							firstTagColor
+								? 'bg-white'
+								: 'bg-inherit [&_.app-icon]:text-black/60!'
+						}
+					>
+						<SellIcon style={{ color: firstTagColor }} />
+					</ChatChipAvatar>
+
+					<ChatChipLabel>
+						{currentChatTags.length > 0
+							? currentChatTags
+									.slice(0, 3)
+									.map((tag) => tag.name)
+									.join(', ')
+							: 'Tags'}
+					</ChatChipLabel>
+
+					<ChatChipChevron />
+				</ChatChip>
+			</DropdownMenuTrigger>
+
+			<DropdownMenuContent
+				align="start"
+				onEscapeKeyDown={(event) => {
+					// Escape in the new tag form only closes the form, as with MUI
+					if (
+						event.target instanceof Element &&
+						event.target.closest('[data-slot="create-tag-form"]')
+					) {
+						event.preventDefault();
 					}
 				}}
 			>
-				<Styled.Avatar
-					as={CustomAvatar}
-					iconColor={currentChatTags[0]?.web_inbox_color}
-				>
-					<SellIcon />
-				</Styled.Avatar>
-
-				<Styled.Label>
-					{currentChatTags.length > 0
-						? currentChatTags
-								.slice(0, 3)
-								.map((tag) => tag.name)
-								.join(', ')
-						: 'Tags'}
-				</Styled.Label>
-
-				<Styled.ActionIcon size="small">
-					<ExpandMoreIcon />
-				</Styled.ActionIcon>
-			</Styled.Container>
-
-			<Menu
-				anchorEl={tagsMenuAnchorEl}
-				open={Boolean(tagsMenuAnchorEl)}
-				onClose={() => setTagsMenuAnchorEl(undefined)}
-				elevation={3}
-			>
-				<Styled.MenuHeader>
+				<DropdownMenuLabel className={menuHeaderClassName}>
 					<CheckIcon /> {t('Selected')}
-				</Styled.MenuHeader>
+				</DropdownMenuLabel>
 
-				{currentChatTags.map((tag, index) => (
-					<Styled.TagMenuItem
-						onClick={() => {
+				{currentChatTags.map((tag) => (
+					<DropdownMenuItem
+						className="bg-menu-active"
+						onSelect={(event) => {
+							// The menu stays open, so several tags can be changed
+							event.preventDefault();
 							doDeleteChatTagging(tag);
-							//setTagsMenuAnchorEl(undefined);
 						}}
-						selected={true}
 						key={tag.id}
-						$isSelected={true}
 					>
-						<ListItemIcon>
-							<SellIcon
-								style={{
-									fill: tag.web_inbox_color,
-								}}
-							/>
-						</ListItemIcon>
+						<SellIcon
+							style={{
+								fill: tag.web_inbox_color,
+							}}
+						/>
 						{tag.name}
-					</Styled.TagMenuItem>
+					</DropdownMenuItem>
 				))}
 
-				{currentChatTags.length > 0 && <Divider />}
+				{currentChatTags.length > 0 && <DropdownMenuSeparator />}
 
-				<Styled.MenuHeader>
+				<DropdownMenuLabel className={menuHeaderClassName}>
 					<SellIcon /> {t('Available')}
-				</Styled.MenuHeader>
+				</DropdownMenuLabel>
 
 				{tags &&
 					tags
 						.filter((item) => !isTagSelected(item))
 						.slice(0, 10)
 						.map((tag) => (
-							<Styled.TagMenuItem
-								onClick={() => {
+							<DropdownMenuItem
+								onSelect={(event) => {
+									// The menu stays open, so several tags can be changed
+									event.preventDefault();
 									doCreateChatTagging(tag);
-									//setTagsMenuAnchorEl(undefined);
 								}}
 								key={tag.id}
 							>
-								<ListItemIcon>
-									<SellIcon
-										style={{
-											fill: tag.web_inbox_color,
-										}}
-									/>
-								</ListItemIcon>
+								<SellIcon
+									style={{
+										fill: tag.web_inbox_color,
+									}}
+								/>
 								{tag.name}
-							</Styled.TagMenuItem>
+							</DropdownMenuItem>
 						))}
-				<Divider />
+				<DropdownMenuSeparator />
 
 				<CreateTagControl
 					doCreateTag={doCreateTag}
 					stopMenuKeyDownPropagation
 					trigger={(openForm) => (
-						<MenuItem onClick={openForm}>
-							<ListItemIcon>
-								<AddIcon />
-							</ListItemIcon>
+						<DropdownMenuItem
+							onSelect={(event) => {
+								// Keep the menu open: the form replaces this item
+								event.preventDefault();
+								openForm();
+							}}
+						>
+							<AddIcon />
 							{t('Create new tag')}
-						</MenuItem>
+						</DropdownMenuItem>
 					)}
 				/>
 
-				<Divider />
+				<DropdownMenuSeparator />
 				{tags && tags.length > 10 && (
-					<MenuItem
-						onClick={() => {
-							showChatTagsList();
-							setTagsMenuAnchorEl(undefined);
-						}}
-					>
-						<ListItemIcon>
-							<UnfoldMoreIcon />
-						</ListItemIcon>
+					<DropdownMenuItem onSelect={showChatTagsList}>
+						<UnfoldMoreIcon />
 						{t('More')}
-					</MenuItem>
+					</DropdownMenuItem>
 				)}
-				<MenuItem
-					component={Link}
-					href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
-					target="_blank"
-				>
-					<ListItemIcon>
+				<DropdownMenuItem asChild className="text-inherit no-underline">
+					<a
+						href={getHubURL(config?.API_BASE_URL ?? '') + 'main/tag/'}
+						target="_blank"
+					>
 						<SettingsIcon />
-					</ListItemIcon>
-					{t('Manage tags')}
-				</MenuItem>
-			</Menu>
-		</>
+						{t('Manage tags')}
+					</a>
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 };
 

@@ -1,17 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	IconButton,
-	Tooltip,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import CloseIcon from '@src/components/icons/Close';
+import FiberManualRecordIcon from '@src/components/icons/FiberManualRecord';
 import { displaySeconds } from '@src/helpers/Helpers';
-import DoneIcon from '@mui/icons-material/Done';
+import DoneIcon from '@src/components/icons/Check';
 import VoiceRecorder from '../../VoiceRecorder';
 import {
 	EVENT_TOPIC_DISPLAY_ERROR,
@@ -20,10 +11,24 @@ import {
 } from '@src/Constants';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
-import Button from '@mui/material/Button';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { useTranslation } from 'react-i18next';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
-import * as Styled from './VoiceRecord.styles';
+import { cn } from '@src/lib/utils';
+
+// MUI's small IconButton (5px padding) around a 20px icon: a 30px circle
+const actionClassName =
+	'size-7.5 rounded-full bg-transparent focus-visible:bg-transparent [&_.app-icon]:size-5!';
 
 interface Props {
 	voiceRecordCase: 'chat';
@@ -31,7 +36,7 @@ interface Props {
 	sendHandledChosenFiles: (data: ChosenFileList) => void;
 }
 
-let timerIntervalId: NodeJS.Timer;
+let timerIntervalId: ReturnType<typeof setInterval>;
 
 const VoiceRecord: React.FC<Props> = ({
 	voiceRecordCase,
@@ -196,39 +201,70 @@ const VoiceRecord: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Container>
-			<Tooltip title={t('Cancel')} placement="top" disableInteractive>
-				<Styled.CancelButton onClick={stopVoiceRecord} size="small">
+		<div className="flex items-center justify-between rounded-[20px] bg-white shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)]">
+			<SimpleTooltip title={t('Cancel')} side="top" disableHoverableContent>
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-sm"
+					className={cn(
+						actionClassName,
+						'mr-5 hover:bg-[rgba(255,0,0,0.2)] max-md:mr-2.5 [&_.app-icon]:text-[red]!'
+					)}
+					onClick={stopVoiceRecord}
+				>
 					<CloseIcon />
-				</Styled.CancelButton>
-			</Tooltip>
+				</Button>
+			</SimpleTooltip>
 
-			<Styled.RecordIcon />
-			<Styled.Timer>{displaySeconds(timer)}</Styled.Timer>
+			<FiberManualRecordIcon className="mr-0.5 animate-blink text-[red]!" />
+			<span className="mr-5 min-w-12 text-center text-[14px] font-semibold text-ink/82 max-md:mr-2.5">
+				{displaySeconds(timer)}
+			</span>
 
-			<Tooltip title={t('Send')} placement="top" disableInteractive>
-				<Styled.SendButton onClick={sendVoiceRecord} size="small">
+			<SimpleTooltip title={t('Send')} side="top" disableHoverableContent>
+				<Button
+					variant="ghost"
+					color="neutral"
+					size="icon-sm"
+					className={cn(
+						actionClassName,
+						'hover:bg-[rgba(0,255,0,0.2)] [&_.app-icon]:text-[green]!'
+					)}
+					onClick={sendVoiceRecord}
+				>
 					<DoneIcon />
-				</Styled.SendButton>
-			</Tooltip>
+				</Button>
+			</SimpleTooltip>
 
-			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>{t('Oops!')}</DialogTitle>
+			<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
 				<DialogContent>
-					<DialogContentText>
-						{t('You must open the inbox in a new tab to access this feature.')}
-					</DialogContentText>
+					<DialogHeader>
+						<DialogTitle>{t('Oops!')}</DialogTitle>
+					</DialogHeader>
+					<DialogBody>
+						<DialogDescription>
+							{t(
+								'You must open the inbox in a new tab to access this feature.'
+							)}
+						</DialogDescription>
+					</DialogBody>
+					<DialogFooter>
+						<Button variant="ghost" color="secondary" onClick={handleClose}>
+							{t('Close')}
+						</Button>
+						<Button
+							variant="ghost"
+							color="primary"
+							onClick={goToInbox}
+							autoFocus
+						>
+							{t('Go to inbox')}
+						</Button>
+					</DialogFooter>
 				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose} color="secondary">
-						{t('Close')}
-					</Button>
-					<Button onClick={goToInbox} color="primary" autoFocus>
-						{t('Go to inbox')}
-					</Button>
-				</DialogActions>
 			</Dialog>
-		</Styled.Container>
+		</div>
 	);
 };
 

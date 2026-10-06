@@ -133,6 +133,53 @@ You can find the full list of languages codes in 639-1 at https://en.wikipedia.o
 
 - Open `/src/i18n.js` and add the new language to `resources` object in `init` options by importing the JSON translation output.
 
+## Styling
+
+Views are styled with [Tailwind CSS](https://tailwindcss.com) v4 and our own [shadcn/ui](https://ui.shadcn.com)-based components. Tailwind is configured in `src/styles/tailwind.css`, which also holds the theme tokens and the app's few global defaults (body font, icons, scrollbars, focus outline) in its base layer. There is no CSS-in-JS and no other global stylesheet besides two third-party overrides.
+
+### Building UI
+
+- **Style components with Tailwind classes** on the elements themselves. Don't add CSS-in-JS or global rules; the base layer is only for defaults that apply to every element of a kind.
+- **Use the UI components** in `src/components/ui/` (button, dialog, dropdown-menu, select, input, field, switch, checkbox, badge, tooltip, popover, alert, avatar, skeleton, spinner...). They are our own code, styled after the app's original MUI look: change their look there, not with overrides where they are used. Each file's header comment says what it replaces and how its props map from MUI.
+- **Variants:** components take `variant` (the shape) and `color` (the hue), e.g. `<Button variant="ghost" color="neutral" size="icon-lg">`. To add a colour or size, add one line to the component's `cva` variants.
+- **Combine classes** with `cn()` from `src/lib/utils`. Use `cva` for a component with variants, and extract a small component instead of repeating a long class list.
+- **Adding a shadcn component:** run `pnpm dlx shadcn@latest add <name>` (configured by `components.json`), then:
+  - check `package.json` and the new file's imports: the CLI has rewritten the `cn` import to a bare `"cn"` and installed an unrelated npm package of that name, and skipped dependencies;
+  - replace lucide icons with ours (see Icons);
+  - restyle it to match the app's existing components and tokens;
+  - give any default svg size the icon exclusion described under Icons.
+
+### Icons
+
+- Icons are [Material Symbols](https://fonts.google.com/icons) (Rounded, filled), generated into `src/components/icons/`. To add one, put its name (e.g. `more_vert`) in `src/components/icons/icons.json`, run `node scripts/generate-icons.mjs` and import it from `@src/components/icons/MoreVert`.
+- Every icon is an `svg.app-icon`: 1em square at a 24px font size (`fontSize="small"` is 20px), grey (`#6f7385`), filled with `currentColor`.
+- Size and colour an icon with classes on it (`<SendIcon className="size-5 text-primary" />`) or from a parent (`[&_.app-icon]:size-5 [&_.app-icon]:text-white`).
+- In a UI component, a default size for svgs must skip app icons, or it will shrink every icon placed inside: write `[&_svg:not(.app-icon):not([class*='size-'])]:size-4`. To size icons relative to the component's text, also set `[font-size:inherit]` on them (an icon's `em` is its own 24px otherwise).
+
+### Theme
+
+Use the theme tokens instead of raw values:
+
+- colours: `primary`, `foreground`, `muted-foreground`, `ink` (the app's navy, used with an opacity such as `text-ink/60`), `gray-light`, `gray-lighter`, `destructive`, `destructive-dark`, `success`/`success-soft`, `warning`/`warning-soft`/`warning-strong`, `chat-bg`, `chat-icon`, `chat-icon-dark`, `selection`, `menu-*`
+- shadows: `shadow-sm`, `shadow-md`, `shadow-lg`, `shadow-menu`
+- breakpoints are the app's own: `max-md:` is the single-column phone layout (up to 750px), `max-sm:` a small phone (up to 500px), `2xl:` from 1501px
+- spacing uses Tailwind's scale, where 1 step is 4px and fractions are fine (`py-1.25` is 5px)
+- arbitrary values (`w-[310px]`) are fine for one-off measurements
+- Don't use the `dark:` variant; the app has no dark mode.
+
+### Motion and layering
+
+- **Fading pages and large containers:** use `animate-fade-in` / `animate-fade-out` (opacity only). tw-animate's `animate-in`/`animate-out` also animate `transform`, which makes `position: fixed` content inside (overlays, the loading screen) shrink to the container while the animation runs. They're fine for small elements, e.g. `animate-in zoom-in-95`.
+- **Showing and hiding:** for a component that mounts and unmounts with an exit animation, use `useUnmountTransition` (`src/hooks`) with the classes in `src/styles/panelTransitions.ts`. For an element that stays mounted and should grow and shrink (MUI's Zoom), use `zoomTransition(isVisible)` from `src/styles/zoomTransition.ts`. Avoid toggling `hidden` alone: it can't animate out.
+- **z-index:** dialogs, menus, popovers and tooltips are portals on `z-[1300]` and above. Elements inside a view should use a small z-index within that view (the chat body's overlays use 5–10). Don't give in-flow elements large values like MUI's 1050: they float over panels and overlays elsewhere in the app.
+
+### Cascade and gotchas
+
+- **Preflight (Tailwind's reset) is off.** The app relies on the browser's defaults for headings, lists, buttons and images, so set sizes and margins explicitly. The UI components get a small reset through their `data-slot` attribute (see `tailwind.css`).
+- **Cascade:** utilities beat the base layer, so a class overrides a global default without `!`. Third-party stylesheets (`EmojiPicker.css`, react-date-range's CSS) are unlayered and win over utilities; use the `!` suffix (`size-4!`) only to beat them. A `!` utility even beats their `!important`.
+- **`cn()` and keyword values:** `cn()` resolves conflicting classes, but it can't tell some arbitrary values apart: write `text-[length:x-small]`, not `text-[x-small]`, or a text colour after it removes it. Write `text-[11px]/none`, not `leading-none text-[11px]`, when the line height must survive a merge. New theme values that it must know about (like `shadow-menu`) go in `src/lib/utils.ts`.
+- **Underscores in arbitrary values and selectors** become spaces: target `.chat__message` as `[&_.chat\_\_message]` in JSX, or better, put the classes on the element itself. Some BEM-like class names (`chat__message`, `chat__message__outer`...) remain as hooks for scripts and tests, not for styling.
+
 ## Query Parameters
 
 - `lng`: Changes the language of the page. The value used must be Alpha-2 code. Please see the following directory for currently supported languages: https://github.com/get-chat/web-app/tree/master/src/locales

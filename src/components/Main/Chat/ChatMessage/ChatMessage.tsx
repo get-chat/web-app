@@ -1,14 +1,13 @@
 import React from 'react';
-import DoneIcon from '@mui/icons-material/Done';
-import ErrorIcon from '@mui/icons-material/Error';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import DoneIcon from '@src/components/icons/Check';
+import ErrorIcon from '@src/components/icons/Error';
+import AccessTimeIcon from '@src/components/icons/Schedule';
 import Moment from 'react-moment';
-import '../../../../styles/InputRange.css';
-import NoteIcon from '@mui/icons-material/Note';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import NoteIcon from '@src/components/icons/StickyNote2';
+import ExpandMoreIcon from '@src/components/icons/KeyboardArrowDown';
 import MessageDateIndicator from '../MessageDateIndicator';
 import ContextChatMessage from './ContextChatMessage';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyIcon from '@src/components/icons/Reply';
 import ChatMessageVideo from './ChatMessageVideo';
 import ChatMessageImage from './ChatMessageImage';
 import ChatMessageDocument from './ChatMessageDocument';
@@ -29,7 +28,7 @@ import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { useAppDispatch } from '@src/store/hooks';
 import ChatMessageErrors from '@src/components/ChatMessageErrors';
 import { clone } from '@src/helpers/ObjectHelper';
-import { InsertEmoticon } from '@mui/icons-material';
+import { Mood as InsertEmoticon } from '@src/components/icons';
 import useReactions from '@src/hooks/useReactions';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Template } from '@src/types/templates';
@@ -52,7 +51,20 @@ import {
 import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import MissingContent from './MissingContent';
-import * as Styled from './ChatMessage.styles';
+import DoneAllIcon from '@src/components/icons/DoneAll';
+import {
+	messageBubbleClassName,
+	messageMediaClassName,
+	statusIconClassName,
+} from './messageBubble';
+import { cn } from '@src/lib/utils';
+
+// The round buttons beside a message, shown while it is hovered
+const actionClassName =
+	'z-3 flex size-6.25 cursor-pointer items-center justify-center rounded-[35px] bg-[rgba(100,86,82,0.4)] transition-all duration-200 ease-out hover:bg-[rgba(100,86,82,0.65)] [&_.app-icon]:size-4.5! [&_.app-icon]:text-white!';
+
+// Each reaction in the pill below a message, and the count after them
+const reactionClassName = 'flex items-center gap-1.25 text-[12px] font-medium';
 
 interface Props {
 	data: Message;
@@ -105,6 +117,10 @@ const ChatMessage: React.FC<Props> = ({
 
 	const echoOriginLabel = getEchoOriginLabel(data);
 
+	// Error details show only while the message has no delivery status
+	const hasErrorDetails =
+		!hasAnyStatus(data) && Boolean(data.waba_payload?.errors?.length);
+
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
@@ -122,10 +138,10 @@ const ChatMessage: React.FC<Props> = ({
 	const dateFormat = 'H:mm';
 
 	return (
-		<Styled.ChatMessageOuter
+		// chat__message__outer: a hook for ChatView and Chat.css
+		<div
 			id={'message_' + data.id}
-			$isOutgoing={data.from_us}
-			$type={data.waba_payload?.type}
+			className="chat__message__outer group/message"
 		>
 			{displayDate && (
 				<MessageDateIndicator timestamp={getMessageTimestamp(data)} />
@@ -140,65 +156,82 @@ const ChatMessage: React.FC<Props> = ({
 			{!data.assignment_event && !data.tagging_event && (
 				<div>
 					{(displaySender || displayDate) && (
-						<Styled.SenderName $isOutgoing={data.from_us}>
+						<div
+							className={cn(
+								'chat__name mx-2.5 mt-0 mb-0.5 block text-[length:x-small] font-semibold text-ink/75 [&_.emoji-mart-emoji]:size-3! [&_.emoji-mart-emoji]:align-middle',
+								data.from_us && 'text-right'
+							)}
+						>
 							{data.from_us
 								? echoOriginLabel
 									? t(echoOriginLabel)
 									: getSenderName(data)
 								: contactProvidersData?.[data.waba_payload?.wa_id ?? '']?.[0]
 										?.name ?? getSenderName(data)}
-						</Styled.SenderName>
+						</div>
 					)}
 
 					{data.waba_payload?.type === MessageType.sticker && (
 						<img
-							className="chat__media chat__sticker"
+							className={cn(
+								messageMediaClassName,
+								'mb-[22px] w-auto cursor-default object-contain'
+							)}
 							src={generateStickerLink(data)}
 							alt={getMessageCaption(data) ?? ''}
 						/>
 					)}
 
-					<Styled.ChatMessage
-						$type={data.waba_payload?.type ?? MessageType.none}
-						$isOutgoing={data.from_us}
-						$isReceived={data.from_us && isRead(data)}
-						$hasMedia={hasMediaToPreview(data)}
-						$hasReaction={reactions.length > 0}
-						$isSenderHidden={!displaySender && !displayDate}
-						$isFirstInGroup={displaySender || displayDate}
-						$isFailed={data.is_failed}
+					<div
+						className={cn(
+							messageBubbleClassName({
+								type: data.waba_payload?.type ?? MessageType.none,
+								isOutgoing: data.from_us,
+								hasMedia: hasMediaToPreview(data),
+								hasReaction: reactions.length > 0,
+								isSenderHidden: !displaySender && !displayDate,
+								isFirstInGroup: displaySender || displayDate,
+							}),
+							// Dimmed while ChatView points at it (data-blink on the row)
+							'group-data-blink/message:opacity-30'
+						)}
 					>
 						{isActionsEnabled && (
-							<Styled.Actions
-								$isRight={!data.from_us}
-								$isNonText={data.waba_payload?.type !== MessageType.text}
-								$isExpired={!!isExpired}
+							<div
+								className={cn(
+									'absolute top-1 -mx-2.5 flex gap-1.25 opacity-0 transition-all duration-500 group-hover/message:opacity-100',
+									data.from_us
+										? 'left-0 -translate-x-full'
+										: 'right-0 translate-x-full'
+								)}
 							>
 								{!isExpired && (
-									<Styled.Action
+									<div
+										className={actionClassName}
 										onClick={(event) => onQuickReactionsClick?.(event, data)}
 									>
 										<InsertEmoticon />
-									</Styled.Action>
+									</div>
 								)}
 
 								{((data.from_us &&
 									data.waba_payload?.type === MessageType.text) ||
 									data.waba_payload?.type === MessageType.audio) && (
-									<Styled.Action
+									<div
+										className={actionClassName}
 										onClick={(event) => onOptionsClick?.(event, data)}
 									>
 										<ExpandMoreIcon />
-									</Styled.Action>
+									</div>
 								)}
-							</Styled.Actions>
+							</div>
 						)}
 
 						{data.context?.forwarded && (
-							<Styled.Forwarded>
-								<ReplyIcon />
+							<div className="mb-1.25 flex justify-center text-[12px] text-ink/50">
+								<ReplyIcon className="mr-1.25 size-[0.7em]! -scale-x-100 text-ink/30!" />
 								<span>{t('Forwarded')}</span>
-							</Styled.Forwarded>
+							</div>
 						)}
 
 						{data.context && (
@@ -289,7 +322,7 @@ const ChatMessage: React.FC<Props> = ({
 						data.waba_payload?.button?.text ??
 						data.waba_payload?.interactive?.button_reply?.title ? (
 							<PrintMessage
-								className="wordBreakWord"
+								className="[word-break:break-word]"
 								message={
 									data.waba_payload?.text?.body ??
 									getMessageCaption(data) ??
@@ -300,15 +333,18 @@ const ChatMessage: React.FC<Props> = ({
 								linkify={true}
 							/>
 						) : (
-							'\u00A0'
+							// An empty line for the time to sit on, unless the error
+							// details below take that place
+							!hasErrorDetails && '\u00A0'
 						)}
 
-						{!hasAnyStatus(data) && (
+						{hasErrorDetails && (
 							<ChatMessageErrors data={data} retryMessage={retryMessage} />
 						)}
 
 						<span
-							className="chat__message__info"
+							// The time and status, floating at the bubble's bottom right
+							className={cn('float-right', data.from_us && 'cursor-pointer')}
 							onClick={() => {
 								if (data.from_us && isInfoClickable) {
 									const clonedMessage = clone(data) as Message;
@@ -319,7 +355,7 @@ const ChatMessage: React.FC<Props> = ({
 								}
 							}}
 						>
-							<span className="chat__timestamp">
+							<span className="ml-2.5 text-[length:x-small] text-ink/60">
 								<Moment
 									date={getMessageTimestamp(data)}
 									format={dateFormat}
@@ -331,7 +367,7 @@ const ChatMessage: React.FC<Props> = ({
 								<>
 									{isPending(data) && (
 										<AccessTimeIcon
-											className="chat__iconPending"
+											className={statusIconClassName(false)}
 											color="inherit"
 											style={iconStyles}
 										/>
@@ -339,15 +375,20 @@ const ChatMessage: React.FC<Props> = ({
 
 									{isJustSent(data) && (
 										<DoneIcon
-											className="chat__iconDone"
+											className={statusIconClassName()}
 											color="inherit"
 											style={iconStyles}
 										/>
 									)}
 
 									{isDeliveredOrRead(data) && (
-										<Styled.DoneAllIcon
-											className="chat__iconDoneAll"
+										<DoneAllIcon
+											// Grey, light blue once read
+											className={cn(
+												statusIconClassName(),
+												'fill-[#8990b4]! transition-[fill] duration-300 ease-[ease]',
+												isRead(data) && 'fill-light-blue!'
+											)}
 											color="inherit"
 											style={iconStyles}
 										/>
@@ -357,7 +398,7 @@ const ChatMessage: React.FC<Props> = ({
 
 							{data.is_failed && !hasAnyStatus(data) && (
 								<ErrorIcon
-									className="chat__iconError"
+									className={cn(statusIconClassName(), '[&_*]:fill-[red]')}
 									color="inherit"
 									style={iconStyles}
 								/>
@@ -365,27 +406,34 @@ const ChatMessage: React.FC<Props> = ({
 						</span>
 
 						{reactionsWithCount && reactionsWithCount.length > 0 && (
-							<Styled.Reactions
+							<div
+								className="absolute left-1.25 flex h-[23px] cursor-pointer items-center gap-1.25 rounded-[12px] border border-chat-bg bg-white px-1.25 text-[15px] shadow-[0_3px_5px_-6px_rgba(0,0,45,0.4)]"
 								onClick={(event) => onReactionDetailsClick?.(event, data)}
 							>
 								{reactionsWithCount.map((item) => (
-									<Styled.Reaction key={item.emoji}>
+									<div
+										className={cn(
+											reactionClassName,
+											'[&_.emoji-mart-emoji]:size-[15px]! [&_.printMessage>span]:flex'
+										)}
+										key={item.emoji}
+									>
 										<PrintMessage message={item.emoji} />
-									</Styled.Reaction>
+									</div>
 								))}
 								{reactionsWithCount.length > 1 && (
-									<Styled.ReactionCount>
+									<span className={cn(reactionClassName, 'opacity-50')}>
 										{reactionsWithCount.length}
-									</Styled.ReactionCount>
+									</span>
 								)}
-							</Styled.Reactions>
+							</div>
 						)}
 
 						<div style={{ clear: 'both' }} />
-					</Styled.ChatMessage>
+					</div>
 				</div>
 			)}
-		</Styled.ChatMessageOuter>
+		</div>
 	);
 };
 

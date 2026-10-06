@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
 import { useTranslation } from 'react-i18next';
 import { DateRangePicker, RangeKeyDict } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { Button } from '@src/components/ui/button';
 import {
-	Button,
-	DialogActions,
-	InputLabel,
-	MenuItem,
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import {
 	Select,
-	SelectChangeEvent,
-} from '@mui/material';
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@src/components/ui/select';
 // @ts-ignore
 import * as rdrLocales from 'react-date-range/dist/locale';
 import i18next from 'i18next';
@@ -21,7 +28,6 @@ import {
 	getUserPreferences,
 	storeUserPreference,
 } from '@src/helpers/StorageHelper';
-import * as Styled from './DateRangeDialog.styles';
 
 interface Props {
 	open: boolean;
@@ -100,8 +106,8 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 		close();
 	};
 
-	const handleWeekStartDayChange = (event: SelectChangeEvent) => {
-		const day = parseInt(event.target.value ?? '1');
+	const handleWeekStartDayChange = (value: string) => {
+		const day = parseInt(value ?? '1');
 		if (currentUser) {
 			const currentPreferences = getUserPreferences()?.[currentUser.id];
 			currentPreferences.weekStartsOn = day;
@@ -112,42 +118,53 @@ const DateRangeDialog: React.FC<Props> = ({ open, setOpen, onDone }) => {
 	};
 
 	return (
-		<Dialog open={open} onClose={close}>
-			<Styled.CalendarContainer>
-				<DateRangePicker
-					ranges={[dateRange]}
-					onChange={handleChange}
-					minDate={minDate}
-					maxDate={maxDate}
-					locale={rdrLocales[i18next.resolvedLanguage]}
-					staticRanges={customStaticRanges}
-					inputRanges={[]}
-				/>
-			</Styled.CalendarContainer>
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
+			<DialogContent aria-describedby={undefined} className="w-auto">
+				<DialogTitle className="sr-only">{t('Export by date')}</DialogTitle>
+				<DialogBody className="p-0">
+					<div className="rounded-[10px] bg-gray-light shadow-[0_6px_6px_-6px_rgba(0,0,45,0.2)] [&_.rdrStaticRange]:border-none!">
+						<DateRangePicker
+							ranges={[dateRange]}
+							onChange={handleChange}
+							minDate={minDate}
+							maxDate={maxDate}
+							locale={rdrLocales[i18next.resolvedLanguage]}
+							staticRanges={customStaticRanges}
+							inputRanges={[]}
+						/>
+					</div>
 
-			<Styled.WeekStartDaySelectorContainer>
-				<Styled.FormControlStyled>
-					<InputLabel id="select-label">{t('Start week on')}</InputLabel>
-					<Select
-						labelId="select-label"
-						value={weekStartsOn.toString()}
-						onChange={handleWeekStartDayChange}
-					>
-						<MenuItem value="6">{t('Saturday')}</MenuItem>
-						<MenuItem value="0">{t('Sunday')}</MenuItem>
-						<MenuItem value="1">{t('Monday')}</MenuItem>
-					</Select>
-				</Styled.FormControlStyled>
-			</Styled.WeekStartDaySelectorContainer>
+					<div className="mx-3.75 mt-3.75 flex">
+						<Field className="w-auto min-w-[135px] gap-1.5">
+							<FieldLabel htmlFor="week-start-day-select">
+								{t('Start week on')}
+							</FieldLabel>
+							<Select
+								value={weekStartsOn.toString()}
+								onValueChange={handleWeekStartDayChange}
+							>
+								<SelectTrigger id="week-start-day-select" className="w-full">
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="6">{t('Saturday')}</SelectItem>
+									<SelectItem value="0">{t('Sunday')}</SelectItem>
+									<SelectItem value="1">{t('Monday')}</SelectItem>
+								</SelectContent>
+							</Select>
+						</Field>
+					</div>
+				</DialogBody>
 
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-				<Button onClick={apply} color="primary">
-					{t('Done')}
-				</Button>
-			</DialogActions>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+					<Button variant="ghost" color="primary" onClick={apply}>
+						{t('Done')}
+					</Button>
+				</DialogFooter>
+			</DialogContent>
 		</Dialog>
 	);
 };

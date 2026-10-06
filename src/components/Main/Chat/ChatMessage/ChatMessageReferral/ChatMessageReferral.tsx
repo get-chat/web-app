@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import ChatMessageImage from '../ChatMessageImage';
 import ChatMessageVideo from '../ChatMessageVideo';
 import PrintMessage from '../../../../PrintMessage';
-import { Tooltip } from '@mui/material';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 import { ATTACHMENT_TYPE_IMAGE, ATTACHMENT_TYPE_VIDEO } from '@src/Constants';
 import { Message } from '@src/types/messages';
 import {
 	generateReferralImageLink,
 	generateReferralVideoLink,
 } from '@src/helpers/MessageHelper';
-import * as Styled from './ChatMessageReferral.styles';
+import ReviewsIcon from '@src/components/icons/Reviews';
 
 interface Props {
 	data: Message;
@@ -33,17 +33,19 @@ const ChatMessageReferral: React.FC<Props> = ({
 
 	return (
 		<div>
-			<Styled.Header onClick={goToSourceURL}>
-				<Styled.HeaderIcon />
+			<div
+				className="mb-1.25 block cursor-pointer text-[length:x-small] text-ink/60"
+				onClick={goToSourceURL}
+			>
+				<ReviewsIcon className="mr-1.25 size-[0.6em]! text-ink/40!" />
 				{t('Message via ' + (referral.source_type ?? 'referral'))}
 				<br />
-			</Styled.Header>
+			</div>
 
-			<Styled.ReferralContainer>
+			<div className="-mx-1.5 -mt-px mb-1 overflow-hidden rounded-[6px] bg-ink/10">
 				<div>
 					{(referral.image || referral.image_url) && (
 						<ChatMessageImage
-							className={Styled.ReferralMedia}
 							data={referral}
 							source={generateReferralImageLink(data)}
 							onPreview={() =>
@@ -68,24 +70,23 @@ const ChatMessageReferral: React.FC<Props> = ({
 						/>
 					)}
 				</div>
-				<Styled.ReferralBody onClick={goToSourceURL}>
-					<Tooltip
+				<div className="cursor-pointer px-2.5 py-1.25" onClick={goToSourceURL}>
+					<SimpleTooltip
 						title={referral.source_id}
-						placement="top-start"
-						disableInteractive
+						side="top"
+						align="start"
+						disableHoverableContent
 					>
 						<h4>
 							<PrintMessage message={referral.headline} linkify={true} />
 						</h4>
-					</Tooltip>
-					<Styled.ReferralTextBody>
+					</SimpleTooltip>
+					<div className="text-[12px] [&_.emoji-mart-emoji]:size-3">
 						<PrintMessage message={referral.body} linkify={true} />
-					</Styled.ReferralTextBody>
-					<Styled.ReferralSourceURL>
-						{referral.source_url}
-					</Styled.ReferralSourceURL>
-				</Styled.ReferralBody>
-			</Styled.ReferralContainer>
+					</div>
+					<div className="text-[12px] text-ink/60">{referral.source_url}</div>
+				</div>
+			</div>
 		</div>
 	);
 };

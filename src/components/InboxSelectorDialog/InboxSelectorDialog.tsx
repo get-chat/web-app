@@ -1,7 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import { useTranslation } from 'react-i18next';
 import {
 	getApiBaseURLsMergedWithConfig,
@@ -9,9 +6,16 @@ import {
 	storeCurrentApiBaseURL,
 } from '@src/helpers/StorageHelper';
 import { prepareURLForDisplay } from '@src/helpers/URLHelper';
-import { Button, DialogActions, ListItemButton } from '@mui/material';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
-import * as Styled from './InboxSelectorDialog.styles';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
 
 interface Props {
 	isVisible: boolean;
@@ -56,29 +60,38 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	};
 
 	return (
-		<Dialog open={isVisible} onClose={close}>
-			<DialogTitle>{t('Select an inbox')}</DialogTitle>
-			<DialogContent>
-				<Styled.ListWrapper>
-					<Styled.List>
+		<Dialog open={isVisible} onOpenChange={(isOpen) => !isOpen && close()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>{t('Select an inbox')}</DialogTitle>
+				</DialogHeader>
+				<DialogBody>
+					<div className="h-75 max-h-full overflow-y-auto rounded-[10px] bg-gray-lighter">
 						{urls.map((item, index) => (
-							<ListItemButton key={index} onClick={() => onSelect(item)}>
+							<button
+								key={index}
+								type="button"
+								className="flex w-full cursor-pointer items-center border-0 bg-transparent px-4 py-2 text-left font-[inherit] text-inherit outline-none! transition-colors hover:bg-black/4 focus-visible:bg-black/12"
+								onClick={() => onSelect(item)}
+							>
 								<div>
 									<div>{prepareURLForDisplay(item)}</div>
 									{item === current && (
-										<Styled.Current>{t('Your current inbox')}</Styled.Current>
+										<div className="text-[12px] text-primary">
+											{t('Your current inbox')}
+										</div>
 									)}
 								</div>
-							</ListItemButton>
+							</button>
 						))}
-					</Styled.List>
-				</Styled.ListWrapper>
+					</div>
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-			</DialogActions>
 		</Dialog>
 	);
 };

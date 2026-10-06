@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Image from '../../../Image';
+import { messageMediaClassName } from './messageBubble';
+import { cn } from '@src/lib/utils';
 import { useTranslation } from 'react-i18next';
 import MissingContent from '@src/components/Main/Chat/ChatMessage/MissingContent';
 
@@ -36,7 +38,7 @@ const ChatMessageImage: React.FC<Props> = ({
 
 	return (
 		<Image
-			className={'chat__media' + (className ? ' ' + className : '')}
+			className={cn(messageMediaClassName, className)}
 			src={source}
 			alt={data.caption}
 			onClick={onPreview}

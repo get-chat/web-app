@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContactProviderHeader from '@src/components/ContactProviderHeader';
-import * as Styled from './RecipientItem.styles';
+import CustomAvatar from '@src/components/CustomAvatar';
+import { Checkbox } from '@src/components/ui/checkbox';
 import { Recipient } from '@src/types/persons';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 
@@ -47,60 +48,79 @@ const RecipientItem: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Wrapper>
-			<Styled.StyledListItemButton onClick={handleClick}>
-				<Styled.Container>
+		<div className="bg-white">
+			{/* A div, not a button: the selection checkbox inside is a button */}
+			<div
+				role="button"
+				className="relative m-0 flex min-w-0 cursor-pointer items-center p-0 text-left outline-none! transition-[background-color] duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-black/4 focus-visible:bg-black/12"
+				tabIndex={0}
+				onClick={handleClick}
+				onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+					// Only for the row itself, the checkbox handles its own keys
+					if (
+						event.target === event.currentTarget &&
+						(event.key === 'Enter' || event.key === ' ')
+					) {
+						event.preventDefault();
+						handleClick();
+					}
+				}}
+			>
+				<div className="flex flex-1 cursor-pointer items-center px-3.75 py-2.5">
 					{isSelectionModeEnabled && (
-						<Styled.SelectionCheckbox checked={isSelected} color="primary" />
+						// The margins keep the room MUI's padded checkbox took
+						<Checkbox className="mx-3" checked={isSelected} color="primary" />
 					)}
 
-					<Styled.AvatarWrapper>
-						<Styled.StyledCustomAvatar
+					<div className="relative">
+						<CustomAvatar
+							className="size-12.5 self-baseline"
 							src={data.avatar}
 							generateBgColorBy={data.name}
 						>
 							{data.initials}
-						</Styled.StyledCustomAvatar>
+						</CustomAvatar>
 
 						{data.provider !== undefined && (
 							<ContactProviderHeader type={data.provider} />
 						)}
-					</Styled.AvatarWrapper>
+					</div>
 
-					<Styled.Info>
-						<Styled.Name>{data.name}</Styled.Name>
+					<div className="ml-3.75 flex flex-1 flex-col">
+						<div className="text-[14px] font-semibold">{data.name}</div>
 
 						{!(data.phone_numbers?.length > 0) && (
-							<Styled.MissingPhoneNumber>
+							<div className="text-[12px] text-ink/40">
 								{t('There is no phone number')}
-							</Styled.MissingPhoneNumber>
+							</div>
 						)}
 						{data.phone_numbers?.length > 0 && !isUserActionsRestricted && (
-							<Styled.PhoneNumber>
+							<div className="text-[14px] text-primary">
 								{data.phone_numbers[0]?.phone_number}
-							</Styled.PhoneNumber>
+							</div>
 						)}
-					</Styled.Info>
-				</Styled.Container>
-			</Styled.StyledListItemButton>
+					</div>
+				</div>
+			</div>
 
 			{!isSelectionModeEnabled && isPhoneNumbersVisible && (
-				<Styled.PhoneNumbersContainer>
-					<Styled.PhoneNumbersTitle>
+				<div className="bg-(--color-primary-transparent) px-3.75 py-2.5">
+					<div className="text-[12px] text-primary">
 						{t('Choose a phone number')}
-					</Styled.PhoneNumbersTitle>
+					</div>
 					{!isUserActionsRestricted &&
 						data.phone_numbers?.map((phoneNumber, index) => (
-							<Styled.Choice
+							<div
+								className="mt-1.25 mr-2.5 inline-block cursor-pointer rounded-[15px] bg-white px-2.5 py-1.25 text-[14px] text-primary shadow-[0_4px_5px_-6px_rgba(0,0,45,0.4)] transition-shadow duration-300 ease-[ease] hover:shadow-[0_4px_10px_-6px_rgba(0,0,45,0.4)]"
 								key={index}
 								onClick={() => goToChat(phoneNumber.phone_number)}
 							>
 								{phoneNumber.phone_number}
-							</Styled.Choice>
+							</div>
 						))}
-				</Styled.PhoneNumbersContainer>
+				</div>
 			)}
-		</Styled.Wrapper>
+		</div>
 	);
 };
 

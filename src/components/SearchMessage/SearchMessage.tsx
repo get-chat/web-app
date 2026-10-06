@@ -1,7 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as Styled from './SearchMessage.styles';
-import { IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import PubSub from 'pubsub-js';
 import { useParams } from 'react-router-dom';
 import { isMobileOnly } from 'react-device-detect';
@@ -16,6 +13,7 @@ import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
 import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import SidePanel from '@src/components/SidePanel';
 
 export type Props = {
 	initialKeyword: string;
@@ -130,21 +128,16 @@ const SearchMessage: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.SearchMessageContainer
-			$isExiting={isExiting}
+		<SidePanel
+			title={t('Search For Messages')}
+			titleClassName="text-[16px]"
+			onClose={close}
+			isExiting={isExiting}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.Header>
-				<IconButton onClick={close} size="large">
-					<CloseIcon />
-				</IconButton>
-
-				<h3>{t('Search For Messages')}</h3>
-			</Styled.Header>
-
 			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
 
-			<Styled.Body>
+			<div className="relative flex flex-1 flex-col overflow-y-auto bg-white">
 				{Object.entries(results).map((message) => (
 					<SearchMessageResult
 						key={message[0]}
@@ -154,8 +147,8 @@ const SearchMessage: React.FC<Props> = ({
 						displaySender={false}
 					/>
 				))}
-			</Styled.Body>
-		</Styled.SearchMessageContainer>
+			</div>
+		</SidePanel>
 	);
 };
 

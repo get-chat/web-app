@@ -1,14 +1,22 @@
-import React, { useRef, useState } from 'react';
-import { Button, CircularProgress, IconButton, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import CloseIcon from '@mui/icons-material/Close';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import React, { useId, useRef, useState } from 'react';
+import AddIcon from '@src/components/icons/Add';
+import CloseIcon from '@src/components/icons/Close';
+import CloudUploadIcon from '@src/components/icons/CloudUpload';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { CarouselCard } from '@src/types/messages';
 import { isEmptyString } from '@src/helpers/Helpers';
 import { createMedia } from '@src/api/mediaApi';
-import * as Styled from './CarouselCardsEditor.styles';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import { Spinner } from '@src/components/ui/spinner';
+import { Textarea } from '@src/components/ui/textarea';
+import {
+	editorCardClassName,
+	editorClassName,
+	editorRowClassName,
+} from './editorClassNames';
 
 // Limits imposed by the WhatsApp Business API for media carousel messages
 export const MIN_CAROUSEL_CARDS = 2;
@@ -38,6 +46,8 @@ const CarouselCardsEditor: React.FC<Props> = ({
 	isShowErrors,
 }) => {
 	const { t } = useTranslation();
+
+	const idPrefix = useId();
 
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	// The card the file picker was opened for; becomes the uploading card
@@ -129,114 +139,140 @@ const CarouselCardsEditor: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.Container>
-			{cards.map((card, cardIndex) => (
-				<Styled.Card key={cardIndex}>
-					<Styled.CardHeader>
-						{t('Card %s', { postProcess: 'sprintf', sprintf: [cardIndex + 1] })}
-						<IconButton
-							size="small"
-							aria-label={t('Remove card')}
-							disabled={cards.length <= MIN_CAROUSEL_CARDS || isUploading}
-							onClick={() => onChange(cards.filter((_, i) => i !== cardIndex))}
-						>
-							<CloseIcon fontSize="small" />
-						</IconButton>
-					</Styled.CardHeader>
+		<div className={editorClassName}>
+			{cards.map((card, cardIndex) => {
+				const cardId = `${idPrefix}-card-${cardIndex}`;
+				const isDisplayTextInvalid =
+					isShowErrors &&
+					isEmptyString(card.action?.parameters?.display_text ?? '');
+				const isUrlInvalid =
+					isShowErrors && isEmptyString(card.action?.parameters?.url ?? '');
 
-					<Styled.FieldRow>
-						<Button
-							size="small"
-							startIcon={
-								uploadingCardIndex === cardIndex ? (
-									<CircularProgress size={16} />
+				return (
+					<div className={editorCardClassName} key={cardIndex}>
+						<div className="flex items-center justify-between text-[12px] text-ink/50">
+							{t('Card %s', {
+								postProcess: 'sprintf',
+								sprintf: [cardIndex + 1],
+							})}
+							<Button
+								variant="ghost"
+								color="neutral"
+								size="icon-sm"
+								aria-label={t('Remove card')}
+								disabled={cards.length <= MIN_CAROUSEL_CARDS || isUploading}
+								onClick={() =>
+									onChange(cards.filter((_, i) => i !== cardIndex))
+								}
+							>
+								<CloseIcon fontSize="small" />
+							</Button>
+						</div>
+
+						<div className={editorRowClassName}>
+							<Button
+								variant="ghost"
+								color="primary"
+								size="sm"
+								disabled={isUploading}
+								onClick={() => {
+									uploadTargetIndexRef.current = cardIndex;
+									fileInputRef.current?.click();
+								}}
+							>
+								{uploadingCardIndex === cardIndex ? (
+									<Spinner size={16} />
 								) : (
-									<CloudUploadIcon />
-								)
-							}
-							disabled={isUploading}
-							onClick={() => {
-								uploadTargetIndexRef.current = cardIndex;
-								fileInputRef.current?.click();
-							}}
-						>
-							{t(
-								isEmptyString(getCardMediaLink(card))
-									? 'Upload image or video'
-									: 'Replace media'
+									<CloudUploadIcon fontSize="small" />
+								)}
+								{t(
+									isEmptyString(getCardMediaLink(card))
+										? 'Upload image or video'
+										: 'Replace media'
+								)}
+							</Button>
+							{isShowErrors && isEmptyString(getCardMediaLink(card)) && (
+								<span className="self-center text-[12px] text-[#d32f2f]">
+									{t('Media is required')}
+								</span>
 							)}
-						</Button>
-						{isShowErrors && isEmptyString(getCardMediaLink(card)) && (
-							<Styled.ErrorText>{t('Media is required')}</Styled.ErrorText>
-						)}
-					</Styled.FieldRow>
+						</div>
 
-					<Styled.FieldRow>
-						<TextField
-							variant="standard"
-							size="small"
-							fullWidth
-							multiline
-							label={t('Card body')}
-							value={card.body?.text ?? ''}
-							inputProps={{ maxLength: CARD_BODY_MAX_LENGTH }}
-							onChange={(e) =>
-								replaceCard(cardIndex, {
-									...card,
-									body: { text: e.target.value },
-								})
-							}
-						/>
-					</Styled.FieldRow>
+						<div className={editorRowClassName}>
+							<Field className="gap-1">
+								<FieldLabel htmlFor={`${cardId}-body`}>
+									{t('Card body')}
+								</FieldLabel>
+								<Textarea
+									id={`${cardId}-body`}
+									rows={1}
+									className="min-h-9 resize-none"
+									value={card.body?.text ?? ''}
+									maxLength={CARD_BODY_MAX_LENGTH}
+									onChange={(e) =>
+										replaceCard(cardIndex, {
+											...card,
+											body: { text: e.target.value },
+										})
+									}
+								/>
+							</Field>
+						</div>
 
-					<Styled.FieldRow>
-						<TextField
-							variant="standard"
-							size="small"
-							fullWidth
-							label={t('Button text')}
-							value={card.action?.parameters?.display_text ?? ''}
-							required
-							error={
-								isShowErrors &&
-								isEmptyString(card.action?.parameters?.display_text ?? '')
-							}
-							inputProps={{ maxLength: BUTTON_LABEL_MAX_LENGTH }}
-							onChange={(e) =>
-								replaceCard(
-									cardIndex,
-									setActionParameter(card, 'display_text', e.target.value)
-								)
-							}
-						/>
-						<TextField
-							variant="standard"
-							size="small"
-							fullWidth
-							label={t('Button URL')}
-							value={card.action?.parameters?.url ?? ''}
-							required
-							error={
-								isShowErrors &&
-								isEmptyString(card.action?.parameters?.url ?? '')
-							}
-							onChange={(e) =>
-								replaceCard(
-									cardIndex,
-									setActionParameter(card, 'url', e.target.value)
-								)
-							}
-						/>
-					</Styled.FieldRow>
-				</Styled.Card>
-			))}
+						<div className={editorRowClassName}>
+							<Field
+								data-invalid={isDisplayTextInvalid || undefined}
+								className="gap-1"
+							>
+								<FieldLabel htmlFor={`${cardId}-display-text`}>
+									{t('Button text')} *
+								</FieldLabel>
+								<Input
+									id={`${cardId}-display-text`}
+									size="sm"
+									value={card.action?.parameters?.display_text ?? ''}
+									required
+									aria-invalid={isDisplayTextInvalid || undefined}
+									maxLength={BUTTON_LABEL_MAX_LENGTH}
+									onChange={(e) =>
+										replaceCard(
+											cardIndex,
+											setActionParameter(card, 'display_text', e.target.value)
+										)
+									}
+								/>
+							</Field>
+							<Field data-invalid={isUrlInvalid || undefined} className="gap-1">
+								<FieldLabel htmlFor={`${cardId}-url`}>
+									{t('Button URL')} *
+								</FieldLabel>
+								<Input
+									id={`${cardId}-url`}
+									size="sm"
+									value={card.action?.parameters?.url ?? ''}
+									required
+									aria-invalid={isUrlInvalid || undefined}
+									onChange={(e) =>
+										replaceCard(
+											cardIndex,
+											setActionParameter(card, 'url', e.target.value)
+										)
+									}
+								/>
+							</Field>
+						</div>
+					</div>
+				);
+			})}
 
 			<Button
-				size="small"
-				startIcon={<AddIcon />}
+				variant="ghost"
+				color="primary"
+				size="sm"
 				disabled={cards.length >= MAX_CAROUSEL_CARDS}
 				onClick={() => onChange([...cards, emptyCard()])}
 			>
+				<AddIcon fontSize="small" />
 				{t('Add card')}
 			</Button>
 
@@ -247,7 +283,7 @@ const CarouselCardsEditor: React.FC<Props> = ({
 				style={{ display: 'none' }}
 				onChange={uploadMedia}
 			/>
-		</Styled.Container>
+		</div>
 	);
 };
 

@@ -1,44 +1,25 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyIcon from '@src/components/icons/Reply';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
-import * as Styled from './ButtonsMessage.styles';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
+import InteractiveMessageText from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageText';
 
 const ButtonsMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
 
 	return (
 		<>
-			{header && (
-				<Styled.Header>
-					<PrintMessage linkify message={header.text} />
-				</Styled.Header>
-			)}
-			{body && (
-				<Styled.Body>
-					<PrintMessage linkify message={body.text} />
-				</Styled.Body>
-			)}
-			{footer && (
-				<Styled.Footer>
-					<PrintMessage linkify message={footer.text} />
-				</Styled.Footer>
-			)}
+			<InteractiveMessageText header={header} body={body} footer={footer} />
 			{action?.buttons && Array.isArray(action?.buttons) && (
-				<Styled.Actions>
+				<div className="flex flex-col items-center justify-center gap-1.25">
 					{action?.buttons.map(({ reply }, index: number) => (
-						<Button
-							key={index}
-							color="primary"
-							fullWidth
-							startIcon={<ReplyIcon />}
-							disabled
-						>
+						<InteractiveMessageButton key={index} disabled>
+							<ReplyIcon />
 							{reply?.title}
-						</Button>
+						</InteractiveMessageButton>
 					))}
-				</Styled.Actions>
+				</div>
 			)}
 		</>
 	);

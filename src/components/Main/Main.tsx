@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import ChatView from './Chat/ChatView';
-import { Button, Fade, Snackbar } from '@mui/material';
+import { toast } from 'sonner';
 import PubSub from 'pubsub-js';
 import axios, { AxiosError } from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SearchMessage from '../SearchMessage';
 import ContactDetails from './ContactDetails';
 import LoadingScreen from './LoadingScreen';
-import Alert from '@mui/material/Alert';
 import 'url-search-params-polyfill';
 import {
 	CONTACTS_TEMP_LIMIT,
@@ -54,12 +53,12 @@ import {
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import useUnmountTransition from '@src/hooks/useUnmountTransition';
+import { cn } from '@src/lib/utils';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
 	setSearchMessagesVisible,
 	setState,
 } from '@src/store/reducers/UIReducer';
-import { SnackbarCloseReason } from '@mui/material/Snackbar/Snackbar';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { setNewMessages } from '@src/store/reducers/newMessagesReducer';
 import {
@@ -131,21 +130,11 @@ const Main: React.FC = () => {
 
 	const { waId } = useParams();
 
-	const [checked, setChecked] = useState(false);
 	const [isTemplatesReady, setTemplatesReady] = useState(false);
-	const [isSuccessVisible, setSuccessVisible] = useState(false);
-	const [successMessage, setSuccessMessage] = useState('');
-	const [infoMessage, setInfoMessage] = useState('');
-	const [isInfoVisible, setInfoVisible] = useState(false);
-	const [isErrorVisible, setErrorVisible] = useState(false);
-	const [errorMessage, setErrorMessage] = useState('');
 	const [isChatTagsVisible, setChatTagsVisible] = useState(false);
 	const [isChatTagsListVisible, setChatTagsListVisible] = useState(false);
 	const [isDownloadUnsupportedFileVisible, setDownloadUnsupportedFileVisible] =
 		useState(false);
-	const [infoClickAction, setInfoClickAction] = useState<(() => void) | null>(
-		null
-	);
 
 	const [searchMessagesInitialKeyword, setSearchMessagesInitialKeyword] =
 		useState('');
@@ -170,6 +159,7 @@ const Main: React.FC = () => {
 	const messageStatusesTransition = useUnmountTransition(
 		isMessageStatusesVisible
 	);
+	const loadingScreenTransition = useUnmountTransition(loadingProgress < 100);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const query = useQuery();
@@ -208,67 +198,53 @@ const Main: React.FC = () => {
 		dispatch(setState({ loadingComponent: value }));
 	};
 
+	// Fixed ids: like the single Snackbar of each kind before, a new message
+	// replaces the one on screen instead of stacking
 	const displaySuccess = (message: string) => {
-		setSuccessMessage(message);
-		setSuccessVisible(true);
+		toast.success(t(message), {
+			id: 'main-success',
+			duration: 6000,
+			position: 'bottom-right',
+		});
 	};
 
 	const displayInfo = (
 		message: string,
 		onClickInfo: (() => void) | null = null
 	) => {
-		setInfoMessage(message);
-		setInfoVisible(true);
-		setInfoClickAction(() => onClickInfo);
+		toast.info(t(message), {
+			id: 'main-info',
+			duration: 6000,
+			position: 'bottom-right',
+			action: onClickInfo
+				? {
+						label: t('Display'),
+						onClick: (event) => {
+							// Keep the toast open, as the Snackbar stayed open
+							event.preventDefault();
+							onClickInfo();
+						},
+				  }
+				: undefined,
+		});
+	};
+
+	const displayCustomError = (error: string) => {
+		toast.error(t(error), {
+			id: 'main-error',
+			duration: 6000,
+			position: 'bottom-left',
+		});
 	};
 
 	const displayError = (error: AxiosError | any) => {
 		if (!axios.isCancel(error)) {
-			setErrorMessage(
+			displayCustomError(
 				error.response?.data?.reason ??
 					error.response?.data?.detail ??
 					'An error has occurred.'
 			);
-			setErrorVisible(true);
 		}
-	};
-
-	const displayCustomError = (error: string) => {
-		setErrorMessage(error);
-		setErrorVisible(true);
-	};
-
-	const handleSuccessClose = (
-		event: React.SyntheticEvent<any> | Event,
-		reason?: string
-	) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-
-		setSuccessVisible(false);
-	};
-
-	const handleInfoClose = (
-		event: React.SyntheticEvent<any> | Event,
-		reason?: string
-	) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-
-		setInfoVisible(false);
-	};
-
-	const handleErrorClose = (
-		event: any,
-		reason?: string | SnackbarCloseReason
-	) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-
-		setErrorVisible(false);
 	};
 
 	const goToChatByWaId = (_waId: string) => {
@@ -910,7 +886,6 @@ const Main: React.FC = () => {
 	}, [isBlurred]);
 
 	useEffect(() => {
-		setChecked(true);
 		dispatch(setWaId(waId));
 
 		return () => {
@@ -1170,161 +1145,119 @@ const Main: React.FC = () => {
 	};
 
 	return (
-		<Fade in={checked}>
-			<div
-				className={
-					'app__body' +
-					(isIPad13 ? ' absoluteFullscreen' : '') +
-					(isMaximize ? ' maximized' : '')
-				}
-			>
-				{isTemplatesReady && (
-					<Sidebar
-						isLoaded={loadingProgress >= 100}
-						displayNotification={displayNotification}
-						contactProvidersData={contactProvidersData}
-						isChatOnly={isChatOnly}
-						setChatTagsListVisible={setChatTagsListVisible}
-					/>
-				)}
+		<div
+			className={cn(
+				// A floating window over the page background; it fills the
+				// screen below 1500px, and on phones lays out as a grid
+				'z-1 flex h-[calc(100vh-40px)] w-[90vw] max-w-[1500px] animate-fade-in overflow-hidden rounded-(--wrapper-border-radius) bg-gray-light shadow-lg outline outline-[rgba(255,255,255,0.75)]',
+				'max-2xl:h-screen max-2xl:w-screen max-2xl:max-w-none max-md:[display:inherit] max-md:rounded-none',
+				isMaximize &&
+					'h-screen w-screen max-w-none rounded-none shadow-none outline-none',
+				isIPad13 && 'absolute! inset-0! size-full!'
+			)}
+		>
+			{isTemplatesReady && (
+				<Sidebar
+					isLoaded={loadingProgress >= 100}
+					displayNotification={displayNotification}
+					contactProvidersData={contactProvidersData}
+					isChatOnly={isChatOnly}
+					setChatTagsListVisible={setChatTagsListVisible}
+				/>
+			)}
 
-				{isTemplatesReady && (
-					<ChatView
-						createSavedResponse={handleCreateSavedResponse}
-						contactProvidersData={contactProvidersData}
-						retrieveContactData={resolveContact}
-						displayNotification={displayNotification}
-						isChatOnly={isChatOnly}
-						setChatTagsVisible={setChatTagsVisible}
-						searchMessagesByKeyword={searchMessagesByKeyword}
-						setMessageWithStatuses={setMessageWithStatuses}
-					/>
-				)}
+			{isTemplatesReady && (
+				<ChatView
+					createSavedResponse={handleCreateSavedResponse}
+					contactProvidersData={contactProvidersData}
+					retrieveContactData={resolveContact}
+					displayNotification={displayNotification}
+					isChatOnly={isChatOnly}
+					setChatTagsVisible={setChatTagsVisible}
+					searchMessagesByKeyword={searchMessagesByKeyword}
+					setMessageWithStatuses={setMessageWithStatuses}
+				/>
+			)}
 
-				{searchMessagesTransition.isMounted && (
-					<SearchMessage
-						initialKeyword={searchMessagesInitialKeyword}
-						setInitialKeyword={setSearchMessagesInitialKeyword}
-						isExiting={searchMessagesTransition.isExiting}
-						onAnimationEnd={searchMessagesTransition.handleAnimationEnd}
-					/>
-				)}
+			{searchMessagesTransition.isMounted && (
+				<SearchMessage
+					initialKeyword={searchMessagesInitialKeyword}
+					setInitialKeyword={setSearchMessagesInitialKeyword}
+					isExiting={searchMessagesTransition.isExiting}
+					onAnimationEnd={searchMessagesTransition.handleAnimationEnd}
+				/>
+			)}
 
-				{contactDetailsTransition.isMounted && (
-					<ContactDetails
-						contactProvidersData={contactProvidersData}
-						retrieveContactData={resolveContact}
-						isExiting={contactDetailsTransition.isExiting}
-						onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
-					/>
-				)}
+			{contactDetailsTransition.isMounted && (
+				<ContactDetails
+					contactProvidersData={contactProvidersData}
+					retrieveContactData={resolveContact}
+					isExiting={contactDetailsTransition.isExiting}
+					onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
+				/>
+			)}
 
-				{messageStatusesTransition.isMounted && (
-					<MessageStatuses
-						message={messageWithStatuses}
-						isExiting={messageStatusesTransition.isExiting}
-						onAnimationEnd={messageStatusesTransition.handleAnimationEnd}
-					/>
-				)}
+			{messageStatusesTransition.isMounted && (
+				<MessageStatuses
+					message={messageWithStatuses}
+					isExiting={messageStatusesTransition.isExiting}
+					onAnimationEnd={messageStatusesTransition.handleAnimationEnd}
+				/>
+			)}
 
-				{isChatAssignmentVisible && (
-					<ChatAssignment
-						waId={waId ?? ''}
-						open={isChatAssignmentVisible}
-						setOpen={(value: boolean) =>
-							dispatch(setState({ isChatAssignmentVisible: value }))
-						}
-					/>
-				)}
+			{isChatAssignmentVisible && (
+				<ChatAssignment
+					waId={waId ?? ''}
+					open={isChatAssignmentVisible}
+					setOpen={(value: boolean) =>
+						dispatch(setState({ isChatAssignmentVisible: value }))
+					}
+				/>
+			)}
 
-				{isChatTagsVisible && (
-					<ChatTags
-						waId={waId}
-						open={isChatTagsVisible}
-						setOpen={setChatTagsVisible}
-					/>
-				)}
+			{isChatTagsVisible && (
+				<ChatTags
+					waId={waId}
+					open={isChatTagsVisible}
+					setOpen={setChatTagsVisible}
+				/>
+			)}
 
-				{isChatTagsListVisible && (
-					<ChatTagsList
-						open={isChatTagsListVisible}
-						setOpen={setChatTagsListVisible}
-					/>
-				)}
+			{isChatTagsListVisible && (
+				<ChatTagsList
+					open={isChatTagsListVisible}
+					setOpen={setChatTagsListVisible}
+				/>
+			)}
 
-				{previewMediaObject && <PreviewMedia data={previewMediaObject} />}
+			{previewMediaObject && <PreviewMedia data={previewMediaObject} />}
 
-				{isDownloadUnsupportedFileVisible && (
-					<DownloadUnsupportedFile
-						open={isDownloadUnsupportedFileVisible}
-						setOpen={setDownloadUnsupportedFileVisible}
-						data={unsupportedFile}
-					/>
-				)}
+			{isDownloadUnsupportedFileVisible && (
+				<DownloadUnsupportedFile
+					open={isDownloadUnsupportedFileVisible}
+					setOpen={setDownloadUnsupportedFileVisible}
+					data={unsupportedFile}
+				/>
+			)}
 
-				<Fade in={loadingProgress < 100} timeout={{ exit: 1000 }} unmountOnExit>
-					<div className="loadingScreenOuter">
-						<LoadingScreen isHideLogo={isHideLogo} />
-					</div>
-				</Fade>
-
-				<Snackbar
-					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-					open={isSuccessVisible}
-					autoHideDuration={6000}
-					onClose={handleSuccessClose}
+			{loadingScreenTransition.isMounted && (
+				<div
+					className={cn(
+						'loadingScreenOuter',
+						loadingScreenTransition.isExiting
+							? 'animate-[fade-out_1s_cubic-bezier(0.4,0,0.2,1)_forwards]'
+							: 'animate-fade-in'
+					)}
+					onAnimationEnd={loadingScreenTransition.handleAnimationEnd}
 				>
-					<Alert
-						onClose={(event) => handleSuccessClose(event)}
-						severity="success"
-						elevation={4}
-					>
-						{t(successMessage)}
-					</Alert>
-				</Snackbar>
+					<LoadingScreen isHideLogo={isHideLogo} />
+				</div>
+			)}
 
-				<Snackbar
-					anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-					open={isInfoVisible}
-					autoHideDuration={6000}
-					onClose={handleInfoClose}
-				>
-					<Alert
-						onClose={(event) => handleInfoClose(event)}
-						severity="info"
-						elevation={4}
-						action={
-							!!infoClickAction && (
-								<Button
-									color="secondary"
-									size="small"
-									onClick={() => infoClickAction?.()}
-								>
-									{t('Display')}
-								</Button>
-							)
-						}
-					>
-						{t(infoMessage)}
-					</Alert>
-				</Snackbar>
-
-				<Snackbar
-					anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-					open={isErrorVisible}
-					autoHideDuration={6000}
-					onClose={handleErrorClose}
-				>
-					<Alert onClose={handleErrorClose} severity="error" elevation={4}>
-						{t(errorMessage)}
-					</Alert>
-				</Snackbar>
-
-				{isUploadingMedia && isMobileOnly && (
-					<UploadMediaIndicator isMobile={true} />
-				)}
-			</div>
-		</Fade>
+			{isUploadingMedia && isMobileOnly && (
+				<UploadMediaIndicator isMobile={true} />
+			)}
+		</div>
 	);
 };
 

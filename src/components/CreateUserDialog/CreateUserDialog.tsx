@@ -1,23 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as Styled from './CreateUserDialog.styles';
-import {
-	Button,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-	FormControl,
-	FormHelperText,
-	IconButton,
-	InputLabel,
-	MenuItem,
-	Select,
-	SelectChangeEvent,
-	TextField,
-	Tooltip,
-} from '@mui/material';
-import Alert from '@mui/material/Alert';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import ContentCopyIcon from '@src/components/icons/ContentCopy';
+import MarkEmailReadIcon from '@src/components/icons/MarkEmailRead';
 import { Trans, useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
 import { changeUserPassword, createUser } from '@src/api/usersApi';
@@ -27,6 +10,31 @@ import {
 	UserRole,
 } from '@src/types/users';
 import { USER_ROLE_LABELS } from '@src/helpers/UserHelper';
+import { Alert } from '@src/components/ui/alert';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@src/components/ui/dialog';
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldLabel,
+} from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@src/components/ui/select';
+import { SimpleTooltip } from '@src/components/ui/tooltip';
 
 interface Props {
 	open: boolean;
@@ -36,6 +44,9 @@ interface Props {
 }
 
 // Usernames are validated by the API too, only alphanumeric characters are allowed
+// Two fields side by side, stacked on narrow screens
+const fieldsRowClassName = 'flex gap-3.75 max-[601px]:flex-col';
+
 const USERNAME_PATTERN = /^[A-Za-z0-9]+$/;
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -102,6 +113,8 @@ const parseApiError = (
 
 const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 	const { t } = useTranslation();
+
+	const id = useId();
 
 	const [username, setUsername] = useState('');
 	const [firstName, setFirstName] = useState('');
@@ -250,219 +263,298 @@ const CreateUserDialog: React.FC<Props> = ({ open, setOpen, onCreated }) => {
 	};
 
 	return (
-		<Styled.StyledDialog open={open} onClose={handleClose} fullWidth>
-			<DialogTitle>
-				{createdUser ? t('User created') : t('Create new user')}
-			</DialogTitle>
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
+			<DialogContent aria-describedby={undefined}>
+				<DialogHeader>
+					<DialogTitle>
+						{createdUser ? t('User created') : t('Create new user')}
+					</DialogTitle>
+				</DialogHeader>
 
-			{createdUser ? (
-				<DialogContent>
-					<Alert severity="success">
-						<Trans
-							values={{
-								postProcess: 'sprintf',
-								sprintf: [createdUser.username],
-							}}
-						>
-							The user <span className="bold">%s</span> has been created.
-						</Trans>
-					</Alert>
-
-					{createdUser.activation_email_sent ? (
-						<Alert
-							severity="info"
-							icon={<MarkEmailReadIcon fontSize="inherit" />}
-						>
+				{createdUser ? (
+					<DialogBody>
+						<Alert className="mt-2.5" severity="success">
 							<Trans
 								values={{
 									postProcess: 'sprintf',
-									sprintf: [createdUser.email],
+									sprintf: [createdUser.username],
 								}}
 							>
-								Activation e-mail sent to <span className="bold">%s</span>.
+								The user <span className="font-semibold">%s</span> has been
+								created.
 							</Trans>
 						</Alert>
-					) : (
-						<Alert severity="info">
+
+						{createdUser.activation_email_sent ? (
+							<Alert
+								className="mt-2.5"
+								severity="info"
+								icon={<MarkEmailReadIcon />}
+							>
+								<Trans
+									values={{
+										postProcess: 'sprintf',
+										sprintf: [createdUser.email],
+									}}
+								>
+									Activation e-mail sent to{' '}
+									<span className="font-semibold">%s</span>.
+								</Trans>
+							</Alert>
+						) : (
+							<Alert className="mt-2.5" severity="info">
+								{isAppRole
+									? t(
+											'App integrations are not e-mailed. Use the activation link below to get their API token.'
+									  )
+									: t(
+											'No activation e-mail was sent, so the user needs the activation link below from you.'
+									  )}
+							</Alert>
+						)}
+
+						<div className="mt-1.25 text-[13px] font-medium text-muted-foreground">
+							{t('Activation link')}
+						</div>
+						<div className="mt-2 flex items-center gap-1.25 rounded-[8px] bg-gray-lighter py-1.25 pr-1.25 pl-3">
+							<div className="flex-1 text-[13px] break-all text-foreground">
+								{createdUser.activation_url}
+							</div>
+							<SimpleTooltip title={t('Copy')}>
+								<Button
+									variant="ghost"
+									color="neutral"
+									size="icon-sm"
+									onClick={copyActivationLink}
+								>
+									<ContentCopyIcon className="size-5" />
+								</Button>
+							</SimpleTooltip>
+						</div>
+
+						<Alert className="mt-2.5" severity="warning">
 							{isAppRole
 								? t(
-										'App integrations are not e-mailed. Use the activation link below to get their API token.'
+										'This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again.'
+								  )
+								: createdUser.activation_email_sent
+								? t(
+										'This link is shown only once. Keep it in case the e-mail does not arrive.'
 								  )
 								: t(
-										'No activation e-mail was sent, so the user needs the activation link below from you.'
+										'This link is shown only once. The account is ready to be used after the link is opened.'
 								  )}
 						</Alert>
-					)}
 
-					<Styled.SectionLabel>{t('Activation link')}</Styled.SectionLabel>
-					<Styled.ActivationLinkContainer>
-						<Styled.ActivationLink>
-							{createdUser.activation_url}
-						</Styled.ActivationLink>
-						<Tooltip title={t('Copy')}>
-							<IconButton onClick={copyActivationLink} size="small">
-								<ContentCopyIcon fontSize="small" />
-							</IconButton>
-						</Tooltip>
-					</Styled.ActivationLinkContainer>
-
-					<Alert severity="warning">
-						{isAppRole
-							? t(
-									'This link is shown only once. Opening it activates the user and returns the API token, which cannot be retrieved with this link again.'
-							  )
-							: createdUser.activation_email_sent
-							? t(
-									'This link is shown only once. Keep it in case the e-mail does not arrive.'
-							  )
-							: t(
-									'This link is shown only once. The account is ready to be used after the link is opened.'
-							  )}
-					</Alert>
-
-					{warnings.length > 0 && (
-						<Alert severity="warning">
-							{warnings.map((message) => (
-								<div key={message}>{t(message)}</div>
-							))}
-						</Alert>
-					)}
-				</DialogContent>
-			) : (
-				<DialogContent>
-					<Styled.FieldsContainer>
-						<TextField
-							variant="standard"
-							value={username}
-							onChange={(event) => setUsername(event.target.value)}
-							label={t('Username')}
-							error={Boolean(fieldErrors.username)}
-							helperText={
-								fieldErrors.username
-									? t(fieldErrors.username)
-									: t('Only letters and numbers are allowed.')
-							}
-							autoComplete="off"
-							autoFocus
-							required
-							fullWidth
-						/>
-
-						<Styled.FieldsRow>
-							<TextField
-								variant="standard"
-								value={firstName}
-								onChange={(event) => setFirstName(event.target.value)}
-								label={t('First name')}
-								error={Boolean(fieldErrors.first_name)}
-								helperText={fieldErrors.first_name && t(fieldErrors.first_name)}
-								autoComplete="off"
-								fullWidth
-							/>
-
-							<TextField
-								variant="standard"
-								value={lastName}
-								onChange={(event) => setLastName(event.target.value)}
-								label={t('Last name')}
-								error={Boolean(fieldErrors.last_name)}
-								helperText={fieldErrors.last_name && t(fieldErrors.last_name)}
-								autoComplete="off"
-								fullWidth
-							/>
-						</Styled.FieldsRow>
-
-						<TextField
-							variant="standard"
-							value={email}
-							onChange={(event) => setEmail(event.target.value)}
-							label={t('E-mail')}
-							type="email"
-							error={Boolean(fieldErrors.email)}
-							helperText={fieldErrors.email && t(fieldErrors.email)}
-							autoComplete="off"
-							fullWidth
-						/>
-
-						<FormControl variant="standard" fullWidth>
-							<InputLabel id="create-user-role-select-label">
-								{t('Role')}
-							</InputLabel>
-							<Select
-								variant="standard"
-								labelId="create-user-role-select-label"
-								id="create-user-role-select"
-								value={role}
-								onChange={(event: SelectChangeEvent) =>
-									setRole(event.target.value as UserRole)
-								}
-							>
-								{Object.entries(USER_ROLE_LABELS).map(([value, label]) => (
-									<MenuItem key={value} value={value}>
-										{t(label)}
-									</MenuItem>
+						{warnings.length > 0 && (
+							<Alert className="mt-2.5" severity="warning">
+								{warnings.map((message) => (
+									<div key={message}>{t(message)}</div>
 								))}
-							</Select>
-							<FormHelperText>{t(ROLE_DESCRIPTIONS[role])}</FormHelperText>
-						</FormControl>
-
-						{!isAppRole && (
-							<>
-								<Styled.FieldsRow>
-									<TextField
-										variant="standard"
-										value={password}
-										onChange={(event) => setPassword(event.target.value)}
-										label={t('Password')}
-										type="password"
-										error={Boolean(fieldErrors.password)}
-										autoComplete="new-password"
-										fullWidth
-									/>
-
-									<TextField
-										variant="standard"
-										value={passwordRepeat}
-										onChange={(event) => setPasswordRepeat(event.target.value)}
-										label={t('Password (repeat)')}
-										type="password"
-										error={Boolean(fieldErrors.password)}
-										autoComplete="new-password"
-										fullWidth
-									/>
-								</Styled.FieldsRow>
-
-								<FormHelperText error={Boolean(fieldErrors.password)}>
-									{fieldErrors.password
-										? t(fieldErrors.password)
-										: t(
-												'Optional. Leave it empty if the user will sign in with 360dialog.'
-										  )}
-								</FormHelperText>
-							</>
+							</Alert>
 						)}
-					</Styled.FieldsContainer>
+					</DialogBody>
+				) : (
+					<DialogBody>
+						<div className="flex flex-col gap-3.75">
+							<Field
+								className="gap-1.5"
+								data-invalid={Boolean(fieldErrors.username) || undefined}
+							>
+								<FieldLabel htmlFor={`${id}-username`}>
+									{`${t('Username')} *`}
+								</FieldLabel>
+								<Input
+									id={`${id}-username`}
+									value={username}
+									onChange={(event) => setUsername(event.target.value)}
+									aria-invalid={Boolean(fieldErrors.username) || undefined}
+									autoComplete="off"
+									autoFocus
+									required
+								/>
+								{fieldErrors.username ? (
+									<FieldError>{t(fieldErrors.username)}</FieldError>
+								) : (
+									<FieldDescription>
+										{t('Only letters and numbers are allowed.')}
+									</FieldDescription>
+								)}
+							</Field>
 
-					{error && <Alert severity="error">{t(error)}</Alert>}
-				</DialogContent>
-			)}
+							<div className={fieldsRowClassName}>
+								<Field
+									className="gap-1.5"
+									data-invalid={Boolean(fieldErrors.first_name) || undefined}
+								>
+									<FieldLabel htmlFor={`${id}-first-name`}>
+										{t('First name')}
+									</FieldLabel>
+									<Input
+										id={`${id}-first-name`}
+										value={firstName}
+										onChange={(event) => setFirstName(event.target.value)}
+										aria-invalid={Boolean(fieldErrors.first_name) || undefined}
+										autoComplete="off"
+									/>
+									{fieldErrors.first_name && (
+										<FieldError>{t(fieldErrors.first_name)}</FieldError>
+									)}
+								</Field>
 
-			<DialogActions>
-				<Button onClick={close} color="secondary" disabled={isRequesting}>
-					{createdUser ? t('Close') : t('Cancel')}
-				</Button>
-				{!createdUser && (
-					<Button
-						onClick={handleCreate}
-						color="primary"
-						disabled={isRequesting}
-						data-test-id="create-user-submit-button"
-					>
-						{t('Create')}
-					</Button>
+								<Field
+									className="gap-1.5"
+									data-invalid={Boolean(fieldErrors.last_name) || undefined}
+								>
+									<FieldLabel htmlFor={`${id}-last-name`}>
+										{t('Last name')}
+									</FieldLabel>
+									<Input
+										id={`${id}-last-name`}
+										value={lastName}
+										onChange={(event) => setLastName(event.target.value)}
+										aria-invalid={Boolean(fieldErrors.last_name) || undefined}
+										autoComplete="off"
+									/>
+									{fieldErrors.last_name && (
+										<FieldError>{t(fieldErrors.last_name)}</FieldError>
+									)}
+								</Field>
+							</div>
+
+							<Field
+								className="gap-1.5"
+								data-invalid={Boolean(fieldErrors.email) || undefined}
+							>
+								<FieldLabel htmlFor={`${id}-email`}>{t('E-mail')}</FieldLabel>
+								<Input
+									id={`${id}-email`}
+									value={email}
+									onChange={(event) => setEmail(event.target.value)}
+									type="email"
+									aria-invalid={Boolean(fieldErrors.email) || undefined}
+									autoComplete="off"
+								/>
+								{fieldErrors.email && (
+									<FieldError>{t(fieldErrors.email)}</FieldError>
+								)}
+							</Field>
+
+							<Field className="gap-1.5">
+								<FieldLabel htmlFor="create-user-role-select">
+									{t('Role')}
+								</FieldLabel>
+								<Select
+									value={role}
+									onValueChange={(value) => setRole(value as UserRole)}
+								>
+									<SelectTrigger
+										id="create-user-role-select"
+										className="w-full"
+									>
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										{Object.entries(USER_ROLE_LABELS).map(([value, label]) => (
+											<SelectItem key={value} value={value}>
+												{t(label)}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+								<FieldDescription>
+									{t(ROLE_DESCRIPTIONS[role])}
+								</FieldDescription>
+							</Field>
+
+							{!isAppRole && (
+								<>
+									<div className={fieldsRowClassName}>
+										<Field
+											className="gap-1.5"
+											data-invalid={Boolean(fieldErrors.password) || undefined}
+										>
+											<FieldLabel htmlFor={`${id}-password`}>
+												{t('Password')}
+											</FieldLabel>
+											<Input
+												id={`${id}-password`}
+												value={password}
+												onChange={(event) => setPassword(event.target.value)}
+												type="password"
+												aria-invalid={
+													Boolean(fieldErrors.password) || undefined
+												}
+												autoComplete="new-password"
+											/>
+										</Field>
+
+										<Field
+											className="gap-1.5"
+											data-invalid={Boolean(fieldErrors.password) || undefined}
+										>
+											<FieldLabel htmlFor={`${id}-password-repeat`}>
+												{t('Password (repeat)')}
+											</FieldLabel>
+											<Input
+												id={`${id}-password-repeat`}
+												value={passwordRepeat}
+												onChange={(event) =>
+													setPasswordRepeat(event.target.value)
+												}
+												type="password"
+												aria-invalid={
+													Boolean(fieldErrors.password) || undefined
+												}
+												autoComplete="new-password"
+											/>
+										</Field>
+									</div>
+
+									{fieldErrors.password ? (
+										<FieldError>{t(fieldErrors.password)}</FieldError>
+									) : (
+										<FieldDescription>
+											{t(
+												'Optional. Leave it empty if the user will sign in with 360dialog.'
+											)}
+										</FieldDescription>
+									)}
+								</>
+							)}
+						</div>
+
+						{error && (
+							<Alert className="mt-2.5" severity="error">
+								{t(error)}
+							</Alert>
+						)}
+					</DialogBody>
 				)}
-			</DialogActions>
-		</Styled.StyledDialog>
+
+				<DialogFooter>
+					<Button
+						variant="ghost"
+						color="secondary"
+						onClick={close}
+						disabled={isRequesting}
+					>
+						{createdUser ? t('Close') : t('Cancel')}
+					</Button>
+					{!createdUser && (
+						<Button
+							variant="ghost"
+							color="primary"
+							onClick={handleCreate}
+							disabled={isRequesting}
+							data-test-id="create-user-submit-button"
+						>
+							{t('Create')}
+						</Button>
+					)}
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	);
 };
 

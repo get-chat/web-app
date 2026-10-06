@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { isIPad13 } from 'react-device-detect';
+import { cn } from '@src/lib/utils';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { ApplicationContext } from '@src/contexts/ApplicationContext';
 import AppRoutes from '@src/AppRoutes';
@@ -52,7 +53,17 @@ const AppBody: React.FC = () => {
 
 	return (
 		<div
-			className={'app' + (isIPad13 ? ' absoluteFullscreen' : '')}
+			className={cn(
+				// The page behind the inbox: a soft green glow at the top over a
+				// grey gradient
+				'grid h-screen place-items-center bg-[radial-gradient(110%_80%_at_50%_0%,rgba(101,203,172,0.12)_0%,rgba(101,203,172,0)_60%),linear-gradient(0deg,rgb(240,241,246)_45%,rgb(206,210,226)_100%)]',
+				// Prepared alternative, not in use yet: a fine dot grid over a soft
+				// white glow at the top and a grey-blue gradient. To switch, replace
+				// the bg-[...] class above with this one.
+				// '[background:radial-gradient(circle,rgba(0,0,45,0.18)_1px,transparent_1.5px)_0_0/22px_22px,radial-gradient(110%_80%_at_50%_0%,rgba(255,255,255,0.12),transparent_60%),linear-gradient(0deg,rgb(240,241,246)_45%,rgb(207,213,238))]',
+				// iPads: fill the positioned container exactly
+				isIPad13 && 'absolute! inset-0! size-full!'
+			)}
 			style={bgColor ? { background: '#' + bgColor } : undefined}
 		>
 			{!isLoading && (

@@ -1,8 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, DialogActions } from '@mui/material';
-import DialogContent from '@mui/material/DialogContent';
-import * as Styled from './OpenInWhatsAppDialog.styles';
+import { Button } from '@src/components/ui/button';
+import {
+	Dialog,
+	DialogBody,
+	DialogContent,
+	DialogFooter,
+	DialogTitle,
+} from '@src/components/ui/dialog';
 import { QRCodeSVG } from 'qrcode.react';
 import BusinessProfileAvatar from '@src/components/BusinessProfileAvatar';
 import { useAppSelector } from '@src/store/hooks';
@@ -27,30 +32,37 @@ const OpenInWhatsAppDialog: React.FC<Props> = ({
 	};
 
 	return (
-		<Styled.StyledDialog open={open} onClose={close} fullWidth>
-			<DialogContent>
-				<Styled.ContentWrapper>
-					<BusinessProfileAvatar profilePhoto={profilePhoto} />
-					<Styled.ContentTitle>
-						{t('Scan this code to start a WhatsApp chat with this number.')}
-					</Styled.ContentTitle>
-					<a href={`https://wa.me/${phoneNumber}`} target="_blank">
-						<Styled.QRContainer>
-							<QRCodeSVG
-								value={`https://wa.me/${phoneNumber}`}
-								size={200}
-								bgColor={'var(--gray-lighter)'}
-							/>
-						</Styled.QRContainer>
-					</a>
-				</Styled.ContentWrapper>
+		<Dialog open={open} onOpenChange={(isOpen) => !isOpen && close()}>
+			{/* overflow-visible: the avatar sticks out over the top edge */}
+			<DialogContent aria-describedby={undefined} className="overflow-visible">
+				<DialogTitle className="sr-only">{t('Open in WhatsApp')}</DialogTitle>
+				<DialogBody>
+					<div className="flex flex-col items-center">
+						<BusinessProfileAvatar
+							className="fixed -mt-2.5 size-25 outline-5 outline-white [&_img]:[-webkit-user-drag:none]"
+							profilePhoto={profilePhoto}
+						/>
+						<div className="mt-15 mb-5 text-[16px]">
+							{t('Scan this code to start a WhatsApp chat with this number.')}
+						</div>
+						<a href={`https://wa.me/${phoneNumber}`} target="_blank">
+							<div className="rounded-[20px] bg-gray-lighter p-5">
+								<QRCodeSVG
+									value={`https://wa.me/${phoneNumber}`}
+									size={200}
+									bgColor={'var(--gray-lighter)'}
+								/>
+							</div>
+						</a>
+					</div>
+				</DialogBody>
+				<DialogFooter>
+					<Button variant="ghost" color="secondary" onClick={close}>
+						{t('Close')}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-			<DialogActions>
-				<Button onClick={close} color="secondary">
-					{t('Close')}
-				</Button>
-			</DialogActions>
-		</Styled.StyledDialog>
+		</Dialog>
 	);
 };
 

@@ -1,8 +1,9 @@
 import React from 'react';
-import * as Styled from './WebSocketConnectionIndicator.styles';
 import { useTranslation } from 'react-i18next';
-import ReportIcon from '@mui/icons-material/Report';
+import ReportIcon from '@src/components/icons/Report';
 import { useAppSelector } from '@src/store/hooks';
+import { Button } from '@src/components/ui/button';
+import { cn } from '@src/lib/utils';
 
 interface Props {}
 
@@ -41,20 +42,20 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 	}, [isWebSocketDisconnected, webSocketDisconnectionCode]);
 
 	return (
-		<Styled.Container>
-			<ReportIcon />
+		<div className="flex items-start gap-3.75 bg-destructive p-3.75 text-white">
+			<ReportIcon className="size-12! text-white!" />
 			<div>
-				<Styled.Title>
+				<div className="text-[16px] font-semibold">
 					{t('Connection error')}{' '}
 					{!isBrowserOffline &&
 						isWebSocketDisconnected &&
 						webSocketDisconnectionCode && (
-							<Styled.TitleCode>
+							<span className="font-normal opacity-75">
 								{t('(Code: %d)', webSocketDisconnectionCode ?? 0)}
-							</Styled.TitleCode>
+							</span>
 						)}
-				</Styled.Title>
-				<Styled.Details>
+				</div>
+				<div className="text-[14px]">
 					{isBrowserOffline ? (
 						<>
 							{t(
@@ -70,33 +71,38 @@ const WebSocketConnectionIndicator: React.FC<Props> = () => {
 					)}
 
 					{isWebSocketDisconnected && !isBrowserOffline && (
-						<>
-							<Styled.RefreshContainer>
-								<Styled.RefreshText $highlight={showCacheSuggestion}>
-									{showCacheSuggestion
-										? t(
-												'Please try refreshing the page. If the problem persists, clearing your browser cache may help.'
-										  )
-										: t(
-												'If the issue persists, you can try refreshing the page manually.'
-										  )}
-								</Styled.RefreshText>
-								<Styled.RefreshButton
-									color="primary"
-									variant="contained"
-									size="small"
-									onClick={() => {
-										window.location.reload();
-									}}
-								>
-									{t('Refresh')}
-								</Styled.RefreshButton>
-							</Styled.RefreshContainer>
-						</>
+						<div className="mt-3.75 flex items-start gap-3.75">
+							<div
+								className={cn(
+									'mb-2 px-2 py-1 text-[12px] font-semibold',
+									// After a while, the advice turns into a stronger one
+									showCacheSuggestion &&
+										'rounded-[10px] bg-destructive-dark transition-all duration-500 ease-[ease]'
+								)}
+							>
+								{showCacheSuggestion
+									? t(
+											'Please try refreshing the page. If the problem persists, clearing your browser cache may help.'
+									  )
+									: t(
+											'If the issue persists, you can try refreshing the page manually.'
+									  )}
+							</div>
+							<Button
+								variant="unstyled"
+								size="sm"
+								className="h-auto bg-white px-2.5 py-0.5 text-destructive hover:bg-white/85"
+								onClick={() => {
+									window.location.reload();
+								}}
+							>
+								{t('Refresh')}
+							</Button>
+						</div>
 					)}
-				</Styled.Details>
+				</div>
 			</div>
-		</Styled.Container>
+		</div>
 	);
 };
 

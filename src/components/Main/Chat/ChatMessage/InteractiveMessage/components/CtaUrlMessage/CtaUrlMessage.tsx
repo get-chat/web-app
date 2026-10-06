@@ -1,40 +1,21 @@
 import PrintMessage from '@src/components/PrintMessage';
-import { Button } from '@mui/material';
 import React from 'react';
-import LaunchIcon from '@mui/icons-material/Launch';
+import LaunchIcon from '@src/components/icons/OpenInNew';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
-import * as Styled from './CtaUrlMessage.styles';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
+import InteractiveMessageText from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageText';
 
 const CtaUrlMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const { header, body, footer, action } = interactive ?? {};
 
 	return (
 		<>
-			{header && (
-				<Styled.Header>
-					<PrintMessage linkify message={header.text} />
-				</Styled.Header>
-			)}
-			{body && (
-				<Styled.Body>
-					<PrintMessage linkify message={body.text} />
-				</Styled.Body>
-			)}
-			{footer && (
-				<Styled.Footer>
-					<PrintMessage linkify message={footer.text} />
-				</Styled.Footer>
-			)}
+			<InteractiveMessageText header={header} body={body} footer={footer} />
 			{action?.name === 'cta_url' && (
-				<Button
-					color="primary"
-					fullWidth
-					startIcon={<LaunchIcon />}
-					href={action?.parameters?.url}
-					disabled
-				>
+				<InteractiveMessageButton href={action?.parameters?.url} disabled>
+					<LaunchIcon />
 					{action?.parameters?.display_text}
-				</Button>
+				</InteractiveMessageButton>
 			)}
 		</>
 	);

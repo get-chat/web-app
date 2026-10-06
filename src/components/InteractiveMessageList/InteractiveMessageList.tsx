@@ -1,16 +1,17 @@
 import React from 'react';
-import { Button, ClickAwayListener } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { isIndianPhoneNumber } from '@src/helpers/PhoneNumberHelper';
-import {
-	List,
-	Item,
-	Description,
-	Outer,
-} from './InteractiveMessageList.styles';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import {
+	footerPanelBoxClassName,
+	footerPanelClassName,
+	footerPanelListClassName,
+} from '@src/styles/footerPanelClassNames';
+import { cn } from '@src/lib/utils';
+import { Button } from '@src/components/ui/button';
+import { ClickAwayListener } from '@src/components/ui/click-away-listener';
 
 export interface InteractiveParameter {
 	key: string;
@@ -389,7 +390,6 @@ interface Props extends PanelTransitionProps {
 
 const InteractiveMessageList: React.FC<Props> = ({
 	onSelect,
-	isExiting,
 	onAnimationEnd,
 }) => {
 	const { t } = useTranslation();
@@ -416,30 +416,36 @@ const InteractiveMessageList: React.FC<Props> = ({
 
 	return (
 		<ClickAwayListener onClickAway={closePanel}>
-			<Outer $isExiting={isExiting} onAnimationEnd={onAnimationEnd}>
-				<div className="interactiveMessagesWrapper">
-					<List>
+			<div className={footerPanelClassName} onAnimationEnd={onAnimationEnd}>
+				<div className={footerPanelBoxClassName}>
+					<div
+						className={cn(footerPanelListClassName, 'flex flex-col gap-2.5')}
+					>
 						{availableInteractiveMessages.map((item, index) => (
-							<Item key={index}>
+							<div className="flex text-[14px]" key={index}>
 								<Button
+									variant="ghost"
+									color="neutral"
+									size="none"
+									// MUI's medium text button, left-aligned and wrapping
+									className="w-full justify-start rounded-[10px] px-2 py-1.5 text-left leading-[1.75] font-semibold whitespace-normal text-chat-icon-dark"
 									onClick={() => onSelect(item)}
-									// @ts-ignore
-									color="black"
 								>
 									<div>
 										<h4>{t(item.title)}</h4>
-										<Description
+										<div
+											className="text-[12px] text-chat-icon"
 											dangerouslySetInnerHTML={{
 												__html: t(item.description),
 											}}
 										/>
 									</div>
 								</Button>
-							</Item>
+							</div>
 						))}
-					</List>
+					</div>
 				</div>
-			</Outer>
+			</div>
 		</ClickAwayListener>
 	);
 };

@@ -5,7 +5,6 @@ import googleLogo from '../../assets/images/ic-google.png';
 import whatsappLogo from '../../assets/images/ic-whatsapp.png';
 // @ts-ignore
 import hubspotLogo from '../../assets/images/ic-hubspot.png';
-import * as Styled from './ContactProviderHeader.styles';
 
 interface Props {
 	type: string;
@@ -13,11 +12,12 @@ interface Props {
 
 const ContactProviderHeader: React.FC<Props> = ({ type }) => {
 	return (
-		<Styled.Wrapper>
+		// A badge with the provider's logo, on the corner of an avatar
+		<div className="absolute -right-0.75 -bottom-0.75 flex rounded-[10px] bg-white p-0.75 shadow-[0_1px_3px_var(--shadow-light)] [&>img]:size-[13px] [&>img]:align-middle">
 			{type === 'whatsapp' && <img src={whatsappLogo} />}
 			{type === 'google' && <img src={googleLogo} />}
 			{type === 'hubspot' && <img src={hubspotLogo} />}
-		</Styled.Wrapper>
+		</div>
 	);
 };
 

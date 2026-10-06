@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import '../../../styles/PreviewSendMedia.css';
-import CloseIcon from '@mui/icons-material/Close';
-import { ButtonBase, IconButton, TextField } from '@mui/material';
-import Send from '@mui/icons-material/Send';
-import AddIcon from '@mui/icons-material/Add';
+import { cn } from '@src/lib/utils';
+import CloseIcon from '@src/components/icons/Close';
+import Send from '@src/components/icons/Send';
+import AddIcon from '@src/components/icons/Add';
 import {
 	ATTACHMENT_TYPE_AUDIO,
 	ATTACHMENT_TYPE_DOCUMENT,
@@ -18,8 +17,8 @@ import {
 	handleDragOver,
 	prepareSelectedFiles,
 } from '@src/helpers/FileHelper';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import InsertDriveFileIcon from '@src/components/icons/Draft';
+import AudiotrackIcon from '@src/components/icons/MusicNote';
 
 // @ts-ignore
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -33,6 +32,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import ChosenFileClass from '@src/ChosenFileClass';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
+import { Button } from '@src/components/ui/button';
+import { Field, FieldLabel } from '@src/components/ui/field';
+import { Input } from '@src/components/ui/input';
 
 interface Props {
 	data: ChosenFileList | undefined;
@@ -40,6 +42,9 @@ interface Props {
 	sendHandledChosenFiles: (data: ChosenFileList) => void;
 	setPreviewSendMediaVisible: (value: boolean) => void;
 }
+
+// The image, video or PDF being previewed
+const previewClassName = 'max-h-full max-w-full rounded-[10px]';
 
 const PreviewSendMedia: React.FC<Props> = ({
 	data,
@@ -58,6 +63,8 @@ const PreviewSendMedia: React.FC<Props> = ({
 	}>({});
 	const [currentCaption, setCurrentCaption] = useState('');
 	const [isDragOverlayVisible, setDragOverlayVisible] = useState(false);
+
+	const captionInputId = React.useId();
 
 	const forceUpdate = useForceUpdate();
 
@@ -213,22 +220,25 @@ const PreviewSendMedia: React.FC<Props> = ({
 
 	return (
 		<div
-			className="previewSendMedia"
+			className="absolute top-14 right-0 bottom-0 left-0 z-150 flex flex-col overflow-hidden bg-[#e6e6e6]"
 			/*onDragEnter={() => setDragOverlayVisible(true)}*/
 			onDrop={(event) => handleSelectedFiles(getDroppedFiles(event))}
 			onDragOver={(event) => handleDragOver(event)}
 		>
-			<div className="previewSendMedia__header">
-				<CloseIcon onClick={hidePreview} />
+			<div className="box-border flex h-[49px] flex-none items-center bg-[#00bfa5] px-6.25 text-[18px] font-semibold text-white max-md:px-5">
+				<CloseIcon
+					className="mr-5 cursor-pointer text-white/70!"
+					onClick={hidePreview}
+				/>
 				<span>{t('Preview')}</span>
 			</div>
 
-			<div className="previewSendMedia__preview">
-				<div className="previewSendMedia__preview__wrapper">
+			<div className="relative m-6.25 flex flex-1 items-center justify-center">
+				<div className="absolute top-0 flex size-full items-center justify-center">
 					{chosenFile &&
 						chosenFile.attachmentType === ATTACHMENT_TYPE_IMAGE && (
 							<img
-								className="previewSendMedia__preview__image"
+								className={previewClassName}
 								src={chosenFile.fileURL}
 								alt="Preview"
 							/>
@@ -236,16 +246,13 @@ const PreviewSendMedia: React.FC<Props> = ({
 					{chosenFile &&
 						chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO && (
 							<video
-								className="previewSendMedia__preview__video"
+								className={previewClassName}
 								src={chosenFile.fileURL}
 								controls={true}
 							/>
 						)}
 					{chosenFile && chosenFile.isPDF && (
-						<Document
-							className="previewSendMedia__preview__pdf"
-							file={chosenFile.fileURL}
-						>
+						<Document className={previewClassName} file={chosenFile.fileURL}>
 							<Page pageNumber={1} scale={0.75} />
 						</Document>
 					)}
@@ -257,7 +264,9 @@ const PreviewSendMedia: React.FC<Props> = ({
 					!chosenFile.isPDF && (
 						<div>
 							{chosenFile.attachmentType},{' '}
-							<span className="searchOccurrence">{chosenFile.file?.name}</span>
+							<span className="font-semibold text-primary">
+								{chosenFile.file?.name}
+							</span>
 						</div>
 					)}
 			</div>
@@ -265,37 +274,38 @@ const PreviewSendMedia: React.FC<Props> = ({
 			{chosenFile &&
 				(chosenFile.attachmentType === ATTACHMENT_TYPE_IMAGE ||
 					chosenFile.attachmentType === ATTACHMENT_TYPE_VIDEO) && (
-					<div className="previewSendMedia__caption">
-						<TextField
-							variant="standard"
-							value={currentCaption}
-							onChange={(e) => setCurrentCaption(e.target.value)}
-							label={t('Add a caption...')}
-							size="medium"
-							fullWidth={true}
-						/>
+					<div className="px-35 py-10 max-2xl:px-7.5 max-md:px-5">
+						<Field className="gap-1">
+							<FieldLabel htmlFor={captionInputId}>
+								{t('Add a caption...')}
+							</FieldLabel>
+							<Input
+								id={captionInputId}
+								className="bg-white"
+								value={currentCaption}
+								onChange={(e) => setCurrentCaption(e.target.value)}
+							/>
+						</Field>
 					</div>
 				)}
 
-			<div className="previewSendMedia__footer">
-				<div className="previewSendMedia__footer__inner">
+			<div className="relative bg-[#d9d9d9]">
+				<div className="flex items-center justify-center overflow-x-auto p-6.25">
 					{Object.entries(currentData).map((file: any) => {
 						return (
-							<span
-								key={file[0]}
-								className="previewSendMedia__footer__thumbnailOuter"
-							>
+							<span key={file[0]} className="group/thumb relative">
 								<span
-									className={
-										'previewSendMedia__footer__thumbnail' +
-										(chosenFile === file[1] ? ' chosenFile' : '')
-									}
+									className={cn(
+										'mx-px flex size-[75px] cursor-pointer items-center justify-center rouned-md border-3 border-transparent',
+										chosenFile === file[1] &&
+											'border-white shadow-[0_4px_6px_-6px_rgba(0,0,45,0.4)]'
+									)}
 									onClick={() => changePreview(file[0])}
 								>
 									{(file[1].attachmentType === ATTACHMENT_TYPE_IMAGE ||
 										file[1].attachmentType === ATTACHMENT_TYPE_VIDEO) && (
 										<img
-											className="previewSendMedia__footer__thumbnail__image"
+											className="size-full bg-white object-cover"
 											src={
 												file[1].attachmentType === ATTACHMENT_TYPE_IMAGE
 													? file[1].fileURL
@@ -306,38 +316,43 @@ const PreviewSendMedia: React.FC<Props> = ({
 									)}
 
 									{file[1].attachmentType === ATTACHMENT_TYPE_DOCUMENT && (
-										<span className="previewSendMedia__footer__thumbnail__iconWrapper">
+										<span className="flex size-full items-center justify-center bg-gray-light [&_.app-icon]:size-[1.5em]!">
 											<InsertDriveFileIcon />
 										</span>
 									)}
 
 									{file[1].attachmentType === ATTACHMENT_TYPE_AUDIO && (
-										<span className="previewSendMedia__footer__thumbnail__iconWrapper">
+										<span className="flex size-full items-center justify-center bg-gray-light [&_.app-icon]:size-[1.5em]!">
 											<AudiotrackIcon />
 										</span>
 									)}
 								</span>
 
-								<IconButton
+								{/* Shown while the thumbnail is hovered */}
+								<Button
+									variant="ghost"
+									color="neutral"
+									size="none"
 									onClick={() => deleteByIndex(file[0])}
-									className="previewSendMedia__footer__thumbnail__delete"
-									size="large"
+									className="absolute top-2 right-2 hidden! rounded-full bg-ink/20 p-0.5 group-hover/thumb:[display:initial]! hover:bg-ink/40 max-md:p-2.5 [&_.app-icon]:size-[0.6em]! [&_.app-icon]:text-white!"
 								>
 									<CloseIcon />
-								</IconButton>
+								</Button>
 							</span>
 						);
 					})}
 
-					<ButtonBase
-						className="previewSendMedia__footer__addMoreWrapper"
+					<Button
+						variant="unstyled"
+						size="none"
+						className="ml-1"
 						onClick={() => fileInput.current?.click()}
 					>
-						<div className="previewSendMedia__footer__addMore">
+						<div className="flex size-[75px] cursor-pointer flex-col items-center justify-center bg-white text-[12px] text-primary [&_.app-icon]:mb-0.75 [&_.app-icon]:size-[1.25em]! [&_.app-icon]:text-primary!">
 							<AddIcon />
 							<span>{t('Add more')}</span>
 						</div>
-					</ButtonBase>
+					</Button>
 
 					<div className="hidden">
 						<FileInput
@@ -348,23 +363,26 @@ const PreviewSendMedia: React.FC<Props> = ({
 					</div>
 				</div>
 
-				<div className="previewSendMedia__footer__sendWrapper">
-					<IconButton
-						className="previewSendMedia__footer__send"
+				<div className="absolute top-0 right-12.5 -mt-[33px] max-md:right-5">
+					{/* Stays green on hover, as it did with MUI */}
+					<Button
+						variant="unstyled"
+						color="neutral"
+						size="none"
+						className="rounded-full bg-[#09e85e] p-5 shadow-[0_4px_10px_-6px_rgba(0,0,45,0.4)] max-md:p-2.5 [&_.app-icon]:text-white! [&_svg]:size-6"
 						onClick={send}
-						size="large"
 					>
 						<Send />
-					</IconButton>
+					</Button>
 				</div>
 			</div>
 
 			{isDragOverlayVisible && (
 				<div
-					className="previewSendMedia__dragOverlay"
+					className="absolute inset-0 z-151 bg-white/75 p-25"
 					onDragLeave={() => setDragOverlayVisible(false)}
 				>
-					<div className="previewSendMedia__dragOverlay__innerWrapper">
+					<div className="flex size-full items-center justify-center text-primary">
 						{t('Drag and drop here')}
 					</div>
 				</div>

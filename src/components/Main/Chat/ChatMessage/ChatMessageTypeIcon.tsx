@@ -1,14 +1,14 @@
 import React from 'react';
-import VideocamIcon from '@mui/icons-material/Videocam';
-import MicIcon from '@mui/icons-material/Mic';
-import AudiotrackIcon from '@mui/icons-material/Audiotrack';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import NoteIcon from '@mui/icons-material/Note';
-import SmsIcon from '@mui/icons-material/Sms';
-import TouchAppIcon from '@mui/icons-material/TouchApp';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import ContactsIcon from '@mui/icons-material/Contacts';
+import VideocamIcon from '@src/components/icons/Videocam';
+import MicIcon from '@src/components/icons/Mic';
+import AudiotrackIcon from '@src/components/icons/MusicNote';
+import InsertDriveFileIcon from '@src/components/icons/Draft';
+import NoteIcon from '@src/components/icons/StickyNote2';
+import SmsIcon from '@src/components/icons/Sms';
+import TouchAppIcon from '@src/components/icons/TouchApp';
+import PhotoCameraIcon from '@src/components/icons/PhotoCamera';
+import LocationOnIcon from '@src/components/icons/LocationOn';
+import ContactsIcon from '@src/components/icons/Contacts';
 import { MessageType } from '@src/types/messages';
 
 interface Props {

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { Button } from '@mui/material';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import FormatListBulletedIcon from '@src/components/icons/FormatListBulleted';
+import KeyboardArrowDownIcon from '@src/components/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@src/components/icons/KeyboardArrowUp';
 import PrintMessage from '@src/components/PrintMessage';
 import InteractiveMessageProps from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageProps';
-import * as Styled from './ListMessage.styles';
+import InteractiveMessageButton from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageButton';
+import InteractiveMessageText from '@src/components/Main/Chat/ChatMessage/InteractiveMessage/components/InteractiveMessageText';
+
+// The sections, and the options within each
+const listClassName = 'm-0 flex w-full list-none flex-col gap-1.25 p-0';
 
 const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const [isExpanded, setExpanded] = useState(false);
@@ -17,44 +20,33 @@ const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 	const isSectionsVisible = !action?.button || isExpanded;
 
 	return (
-		<Styled.Message>
-			{header && (
-				<Styled.Header>
-					<PrintMessage linkify message={header.text} />
-				</Styled.Header>
-			)}
-			{body && (
-				<Styled.Body>
-					<PrintMessage linkify message={body.text} />
-				</Styled.Body>
-			)}
-			{footer && (
-				<Styled.Footer>
-					<PrintMessage linkify message={footer.text} />
-				</Styled.Footer>
-			)}
+		<div className="flex flex-col gap-1.25">
+			<InteractiveMessageText
+				header={header}
+				body={body}
+				footer={footer}
+				footerClassName="mb-1.25"
+			/>
 
 			{action?.button && (
-				<Button
-					variant="text"
-					fullWidth
-					startIcon={<FormatListBulletedIcon />}
-					endIcon={
-						isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />
-					}
+				<InteractiveMessageButton
 					onClick={() => setExpanded((prevState) => !prevState)}
 				>
+					<FormatListBulletedIcon />
 					{action.button}
-				</Button>
+					{isExpanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+				</InteractiveMessageButton>
 			)}
 
 			{isSectionsVisible && sections && Array.isArray(sections) && (
-				<Styled.Actions>
-					<Styled.List>
+				<div className="flex flex-col">
+					<ul className={listClassName}>
 						{sections.map(({ title, rows }, sectionIndex) => (
 							<li key={sectionIndex}>
-								<Styled.Title>{title}</Styled.Title>
-								<Styled.List>
+								<h3 className="m-0 border-b border-[#ccc] text-[1em]">
+									{title}
+								</h3>
+								<ul className={listClassName}>
 									{rows.map(
 										(
 											{
@@ -69,17 +61,19 @@ const ListMessage: React.FC<InteractiveMessageProps> = ({ interactive }) => {
 										) => (
 											<li key={rowIndex}>
 												<p>{title}</p>
-												<Styled.Description>{description}</Styled.Description>
+												<p className="m-0 text-[0.8em] opacity-50">
+													{description}
+												</p>
 											</li>
 										)
 									)}
-								</Styled.List>
+								</ul>
 							</li>
 						))}
-					</Styled.List>
-				</Styled.Actions>
+					</ul>
+				</div>
 			)}
-		</Styled.Message>
+		</div>
 	);
 };
 

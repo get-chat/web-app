@@ -5,9 +5,8 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { Button, IconButton } from '@mui/material';
-import { ArrowBack } from '@mui/icons-material';
-import DialpadIcon from '@mui/icons-material/Dialpad';
+import { ArrowBack } from '@src/components/icons';
+import DialpadIcon from '@src/components/icons/Dialpad';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
 	getCountryFromWaId,
@@ -17,12 +16,17 @@ import { getChatPath } from '@src/helpers/RouteHelper';
 import { useTranslation } from 'react-i18next';
 import { generateCancelToken } from '@src/helpers/ApiHelper';
 import { CancelTokenSource } from 'axios';
-import * as Styled from './StartChat.styles';
 import Contacts from '@src/components/Contacts';
 import PhoneNumberInput from '@src/components/PhoneNumberInput';
 import { useAppSelector } from '@src/store/hooks';
 import { Recipient } from '@src/types/persons';
-import { PanelTransitionProps } from '@src/styles/panelTransitions';
+import {
+	overlayPanelAnimation,
+	PanelTransitionProps,
+} from '@src/styles/panelTransitions';
+import PanelHeader from '@src/components/PanelHeader';
+import { cn } from '@src/lib/utils';
+import { Button } from '@src/components/ui/button';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -116,36 +120,40 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 	};
 
 	return (
-		<Styled.ContactsContainer
-			$isExiting={isExiting}
+		<div
+			className={cn(
+				'absolute inset-0 z-10 flex flex-col bg-white',
+				overlayPanelAnimation(isExiting)
+			)}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<Styled.ContactsHeader>
-				<IconButton onClick={onHide} size="large">
-					<ArrowBack />
-				</IconButton>
+			<PanelHeader
+				title={t('New chat')}
+				icon={<ArrowBack />}
+				onClose={onHide}
+			/>
 
-				<h3>{t('New chat')}</h3>
-			</Styled.ContactsHeader>
-
-			<Styled.StartByPhoneNumberWrapper>
-				<Styled.StartByPhoneNumber
+			<div className="bg-white">
+				<div
+					className="bg-(--color-primary-transparent) text-primary"
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}
 				>
-					<Styled.StyledListItem
-						// @ts-ignore
-						button
-						style={{ padding: 0 }}
+					<button
+						type="button"
+						className="relative flex w-full cursor-pointer items-center border-0 bg-transparent p-0 text-left text-[14px] text-inherit transition-[background-color] duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] outline-none! hover:bg-(--color-primary-transparent-darker) focus-visible:bg-(--color-primary-transparent-darker)"
 					>
-						<Styled.StartByPhoneNumberInner data-test-id="start-new-chat">
+						<div
+							className="flex-1 px-3.75 py-5 [&_.app-icon]:mr-2.5 [&_.app-icon]:size-[0.8em]! [&_.app-icon]:text-primary!"
+							data-test-id="start-new-chat"
+						>
 							<DialpadIcon />
 							<span>{t('Start a chat with a phone number')}</span>
-						</Styled.StartByPhoneNumberInner>
-					</Styled.StyledListItem>
-				</Styled.StartByPhoneNumber>
+						</div>
+					</button>
+				</div>
 
 				{isPhoneNumberFormVisible && (
-					<Styled.FormWrapper>
+					<div className="flex flex-col gap-3 px-3.75 py-2.5">
 						<PhoneNumberInput
 							defaultCountry={defaultCountry}
 							autoFocus
@@ -158,22 +166,21 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 							onEnter={handleStartByPhone}
 						/>
 						<Button
+							variant="solid"
 							color="primary"
-							variant="contained"
-							size="small"
-							fullWidth
-							disableElevation
+							size="sm"
+							className="w-full"
 							onClick={handleStartByPhone}
 							data-test-id="start-chat-by-phone"
 						>
 							{t('Start')}
 						</Button>
-					</Styled.FormWrapper>
+					</div>
 				)}
-			</Styled.StartByPhoneNumberWrapper>
+			</div>
 
 			{contactsElement}
-		</Styled.ContactsContainer>
+		</div>
 	);
 };
 
