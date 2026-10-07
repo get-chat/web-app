@@ -143,7 +143,7 @@ function TooltipContent({
 				side={side}
 				sideOffset={sideOffset ?? (isOpenedByTouch ? 24 : 14)}
 				className={cn(
-					'z-[1500] max-w-[300px] origin-(--radix-tooltip-content-transform-origin) animate-grow-in rounded-[4px] bg-[rgba(97,97,97,0.92)] px-2 py-1 text-[11px] leading-[1.4em] font-medium break-words text-white data-[state=closed]:animate-grow-out data-[touch]:px-4 data-[touch]:py-2 data-[touch]:text-sm data-[touch]:leading-[calc(32/14)]',
+					'z-[1500] max-w-[300px] origin-(--radix-tooltip-content-transform-origin) animate-grow-in rounded-[8px] bg-[rgba(97,97,97,0.92)] px-2 py-1 text-[11px] leading-[1.4em] font-medium break-words text-white data-[state=closed]:animate-grow-out data-[touch]:px-4 data-[touch]:py-2 data-[touch]:text-sm data-[touch]:leading-[calc(32/14)]',
 					className
 				)}
 				{...props}

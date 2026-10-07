@@ -12,6 +12,7 @@ interface Props extends PanelTransitionProps {
 	onClose: () => void;
 	className?: string;
 	titleClassName?: string;
+	headerClassName?: string;
 	children: React.ReactNode;
 }
 
@@ -26,6 +27,7 @@ const SidePanel: React.FC<Props> = ({
 	onAnimationEnd,
 	className,
 	titleClassName,
+	headerClassName,
 	children,
 }) => (
 	<div
@@ -36,7 +38,12 @@ const SidePanel: React.FC<Props> = ({
 		)}
 		onAnimationEnd={onAnimationEnd}
 	>
-		<div className="flex h-(--header-height) items-center bg-gray-light px-3.75 py-1 max-md:px-2.5">
+		<div
+			className={cn(
+				'flex h-(--header-height) items-center bg-gray-light px-3.75 py-1 max-md:px-2.5',
+				headerClassName
+			)}
+		>
 			<Button variant="ghost" color="neutral" size="icon-xl" onClick={onClose}>
 				<CloseIcon />
 			</Button>

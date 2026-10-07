@@ -11,18 +11,23 @@ import { fetchMessages } from '@src/api/messagesApi';
 import { prepareMessageList } from '@src/helpers/MessageHelper';
 import { EVENT_TOPIC_GO_TO_MSG_ID } from '@src/Constants';
 import SearchBar from '@src/components/SearchBar';
-import SearchMessageResult from '@src/components/SearchMessageResult/SearchMessageResult';
+import SearchMessageBubble from './SearchMessageBubble';
+import MessageDateIndicator from '@src/components/Main/Chat/MessageDateIndicator';
+import { getMessageTimestamp } from '@src/helpers/MessageHelper';
+import moment from 'moment';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import SidePanel from '@src/components/SidePanel';
 
 export type Props = {
 	initialKeyword: string;
 	setInitialKeyword: (_keyword: string) => void;
+	contactProvidersData?: { [key: string]: any };
 } & PanelTransitionProps;
 
 const SearchMessage: React.FC<Props> = ({
 	initialKeyword,
 	setInitialKeyword,
+	contactProvidersData,
 	isExiting,
 	onAnimationEnd,
 }) => {
@@ -33,6 +38,8 @@ const SearchMessage: React.FC<Props> = ({
 	const [results, setResults] = useState<ChatMessageList>({});
 	const [keyword, setKeyword] = useState('');
 	const [isLoading, setLoading] = useState(false);
+	// The keyword the current results are for
+	const [searchedKeyword, setSearchedKeyword] = useState('');
 
 	const timer = useRef<NodeJS.Timeout>();
 
@@ -96,6 +103,7 @@ const SearchMessage: React.FC<Props> = ({
 
 		if (keyword.trim().length === 0) {
 			setResults({});
+			setSearchedKeyword('');
 			return false;
 		}
 
@@ -112,6 +120,7 @@ const SearchMessage: React.FC<Props> = ({
 			);
 			const preparedMessages = prepareMessageList(data.results);
 			setResults(preparedMessages);
+			setSearchedKeyword(keyword);
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -127,26 +136,76 @@ const SearchMessage: React.FC<Props> = ({
 		}
 	};
 
+	const messages = Object.values(results);
+	const hasNoResults =
+		!isLoading &&
+		messages.length === 0 &&
+		keyword.trim().length > 0 &&
+		searchedKeyword === keyword;
+
+	// A small note on the wallpaper, like the chat's date chips
+	const note = (text: string) => (
+		<div className="m-auto rounded-[15px] bg-white/65 px-3 py-1.5 text-center text-[12px] font-semibold text-chat-icon shadow-[0_4px_5px_-6px_rgb(185,152,136)] backdrop-blur-[8px]">
+			{text}
+		</div>
+	);
+
 	return (
 		<SidePanel
 			title={t('Search For Messages')}
 			titleClassName="text-[16px]"
+			// The chat's look: its wallpaper throughout, and a header tinted
+			// like the chat header next to it
+			className="bg-chat-bg bg-(image:--chat-bg-image) bg-repeat"
+			headerClassName="bg-[#6843301f] [&_svg]:text-chat-icon!"
 			onClose={close}
 			isExiting={isExiting}
 			onAnimationEnd={onAnimationEnd}
 		>
-			<SearchBar value={keyword} onChange={setKeyword} isLoading={isLoading} />
+			{/* On the wallpaper, shaped like the chat's message box */}
+			<SearchBar
+				value={keyword}
+				onChange={setKeyword}
+				isLoading={isLoading}
+				autoFocus
+				className="flex-none bg-transparent px-3 pt-3 pb-1"
+				fieldClassName="h-10 rounded-[12px] bg-white shadow-[var(--shadow-sm),0_0_0_1px_rgba(94,56,38,0.06)]"
+			/>
 
-			<div className="relative flex flex-1 flex-col overflow-y-auto bg-white">
-				{Object.entries(results).map((message) => (
-					<SearchMessageResult
-						key={message[0]}
-						messageData={message[1]}
-						keyword={keyword}
-						onClick={goToMessage}
-						displaySender={false}
-					/>
-				))}
+			{/* Results drawn like the chat: its wallpaper, bubbles and dates */}
+			<div className="relative flex min-h-0 flex-1 flex-col overflow-y-auto px-4 py-3">
+				{keyword.trim().length === 0 &&
+					note(t('Search for messages in this chat'))}
+				{hasNoResults && note(t('No results'))}
+
+				{messages.map((message, index) => {
+					const day = moment
+						.unix(getMessageTimestamp(message) ?? 0)
+						.format('YYYY-MM-DD');
+					const previous = messages[index - 1];
+					const isNewDay =
+						!previous ||
+						moment
+							.unix(getMessageTimestamp(previous) ?? 0)
+							.format('YYYY-MM-DD') !== day;
+
+					return (
+						<React.Fragment key={message.id}>
+							{isNewDay && (
+								<MessageDateIndicator
+									className="mx-0 mt-2 mb-3"
+									timestamp={getMessageTimestamp(message)}
+								/>
+							)}
+							<SearchMessageBubble
+								message={message}
+								keyword={searchedKeyword}
+								onClick={goToMessage}
+								contactProvidersData={contactProvidersData}
+							/>
+						</React.Fragment>
+					);
+				})}
 			</div>
 		</SidePanel>
 	);

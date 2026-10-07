@@ -16,6 +16,8 @@ export type Props = {
 	// search bar sits on a surface that treatment clashes with
 	isFocusStyleEnabled?: boolean;
 	className?: string;
+	/** Classes for the field itself (the rounded box around the input) */
+	fieldClassName?: string;
 };
 
 // The leading search icon or spinner, laid over the input's left padding
@@ -31,6 +33,7 @@ const SearchBar: React.FC<Props> = ({
 	autoFocus,
 	isFocusStyleEnabled = true,
 	className,
+	fieldClassName,
 }) => {
 	const { t } = useTranslation();
 
@@ -51,7 +54,8 @@ const SearchBar: React.FC<Props> = ({
 				className={cn(
 					'searchBar__inputContainer relative flex h-8.75 w-full items-center rounded-[10px] bg-gray-light transition-[background-color,box-shadow] duration-150 ease-out',
 					isFocusStyleEnabled &&
-						'focus-within:bg-white focus-within:shadow-[0_0_0_1px_var(--color-primary),0_0_0_4px_rgba(101,203,172,0.2)]'
+						'focus-within:bg-white focus-within:shadow-[0_0_0_1px_var(--color-primary),0_0_0_4px_rgba(101,203,172,0.2)]',
+					fieldClassName
 				)}
 			>
 				{isLoading ? (

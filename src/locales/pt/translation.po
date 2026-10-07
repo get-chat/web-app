@@ -102,6 +102,9 @@ msgstr "Estamos validando sua sessão, aguarde."
 msgid "Please log in to start"
 msgstr "Faça login para começar"
 
+msgid "Search for messages in this chat"
+msgstr "Pesquise mensagens neste chat"
+
 msgid "Search For Messages"
 msgstr "Pesquisar mensagens"
 
@@ -1010,6 +1013,18 @@ msgstr "Procurar respostas rápidas"
 msgid "No quick reply found."
 msgstr "Nenhuma resposta rápida encontrada."
 
+msgid "Availability"
+msgstr "Disponibilidade"
+
+msgid "While you are active, new chats can be assigned to you automatically."
+msgstr "Enquanto você estiver ativo, novos chats podem ser atribuídos a você automaticamente."
+
+msgid "When you become inactive, your chats may be unassigned or passed to an active teammate, depending on your inbox settings."
+msgstr "Quando você fica inativo, seus chats podem ser desatribuídos ou passados para um colega ativo, dependendo das configurações da sua caixa de entrada."
+
+msgid "You are set as active when you log in and as inactive when you log out. Admins can also change your status."
+msgstr "Você é marcado como ativo ao fazer login e como inativo ao sair. Os administradores também podem alterar seu status."
+
 msgid "You are active now."
 msgstr "Você está ativo agora."
 
@@ -1234,6 +1249,12 @@ msgstr "Remover botão"
 
 msgid "Remove card"
 msgstr "Remover cartão"
+
+msgid "Remove"
+msgstr "Remover"
+
+msgid "Remove filter"
+msgstr "Remover filtro"
 
 msgid "Remove option"
 msgstr "Remover opção"
