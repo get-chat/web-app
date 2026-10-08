@@ -59,6 +59,7 @@ import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import { cn } from '@src/lib/utils';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
+	advanceLoadingProgress,
 	setSearchMessagesVisible,
 	setState,
 } from '@src/store/reducers/UIReducer';
@@ -185,9 +186,7 @@ const Main: React.FC = () => {
 	const [isMaximize] = useState(query.get('maximize') === '1');
 
 	const setProgress = (value: number) => {
-		if (value > loadingProgress) {
-			dispatch(setState({ loadingProgress: value }));
-		}
+		dispatch(advanceLoadingProgress(value));
 	};
 
 	const logOutForActivation = async () => {

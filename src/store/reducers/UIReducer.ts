@@ -113,6 +113,13 @@ export const UISlice = createSlice({
 			}
 			return state;
 		},
+		// The initial load's progress only moves forward. Decided here, against
+		// the current value: a caller comparing with the value of its own render
+		// saw a stale one after logout and login (still 100 from the previous
+		// session), so no step was ever dispatched
+		advanceLoadingProgress: (state, action: PayloadAction<number>) => {
+			state.loadingProgress = Math.max(state.loadingProgress, action.payload);
+		},
 		setState: (state, action: PayloadAction<Partial<UIState>>) => {
 			return { ...state, ...action.payload };
 		},
@@ -125,6 +132,7 @@ export const {
 	setSelectionModeEnabled,
 	setExportChat,
 	toggleState,
+	advanceLoadingProgress,
 	setState,
 } = UISlice.actions;
 
