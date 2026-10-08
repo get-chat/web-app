@@ -1702,3 +1702,126 @@ msgstr ""
 
 msgid "Untagged"
 msgstr ""
+
+msgid "Find an inbox"
+msgstr ""
+
+msgid "No inboxes found"
+msgstr ""
+
+msgid "Current inbox"
+msgstr ""
+
+msgid "Switch inbox"
+msgstr ""
+
+msgid "Your inboxes"
+msgstr ""
+
+msgid "Inbox ID"
+msgstr ""
+
+msgid "Copy inbox ID"
+msgstr ""
+
+msgid "Inbox ID copied"
+msgstr ""
+
+msgid "Open %s"
+msgstr ""
+
+msgid "Confirm it's you to open this inbox. You only need to do this once on this device."
+msgstr ""
+
+msgid "Password of %s"
+msgstr ""
+
+msgid "Incorrect password."
+msgstr ""
+
+msgid "Open inbox"
+msgstr ""
+
+msgid "Choose an inbox"
+msgstr ""
+
+msgid "Your account has access to more than one inbox. You can switch between them at any time."
+msgstr ""
+
+msgid "Log in with another account"
+msgstr ""
+
+msgid "Create your account"
+msgstr ""
+
+msgid "Choose a username and a password to accept your invite."
+msgstr ""
+
+msgid "Repeat the password"
+msgstr ""
+
+msgid "Create account and join"
+msgstr ""
+
+msgid "Log in and join"
+msgstr ""
+
+msgid "Already have an account?"
+msgstr ""
+
+msgid "New here?"
+msgstr ""
+
+msgid "Create an account"
+msgstr ""
+
+msgid "Ignore the invite"
+msgstr ""
+
+msgid "You now have access to %s"
+msgstr ""
+
+msgid "The passwords do not match."
+msgstr ""
+
+msgid "Not now"
+msgstr ""
+
+msgid "Accept invite"
+msgstr ""
+
+msgid "You're invited to an inbox"
+msgstr ""
+
+msgid "You've joined %s"
+msgstr ""
+
+msgid "It is now next to your other inboxes, at the top of the sidebar."
+msgstr ""
+
+msgid "Accept to add it to your account. You can switch between your inboxes at any time."
+msgstr ""
+
+msgid "Accepting as"
+msgstr ""
+
+msgid "Use another account"
+msgstr ""
+
+msgid "Stay in %s"
+msgstr ""
+
+msgid "This invite link has expired or was already used. Ask the inbox admin for a new one."
+msgstr ""
+
+msgid "This invite is for another account. Use that account to accept it."
+msgstr ""
+
+msgid "You already have access to this inbox."
+msgstr ""
+
+msgid "Log in to accept it, or create an account if you are new."
+msgstr ""
+
+msgid "This username is taken. If it is yours, log in instead."
+msgstr ""

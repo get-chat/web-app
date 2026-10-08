@@ -38,6 +38,8 @@ interface UIState {
 	activatedUsername: string | undefined;
 	// The code of an activation link, while its user is choosing a password
 	activationCode: string | undefined;
+	// The code of an invite into an inbox (MT 3.6), until accepted or dismissed
+	inviteCode: string | undefined;
 }
 
 const initialState: UIState = {
@@ -74,6 +76,7 @@ const initialState: UIState = {
 	isAccountActivated: false,
 	activatedUsername: undefined,
 	activationCode: undefined,
+	inviteCode: undefined,
 };
 
 const closeSections = (state: Draft<UIState>) => {

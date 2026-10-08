@@ -140,7 +140,7 @@ Views are styled with [Tailwind CSS](https://tailwindcss.com) v4 and our own [sh
 ### Building UI
 
 - **Style components with Tailwind classes** on the elements themselves. Don't add CSS-in-JS or global rules; the base layer is only for defaults that apply to every element of a kind.
-- **Use the UI components** in `src/components/ui/` (button, dialog, dropdown-menu, select, input, field, switch, checkbox, badge, tooltip, popover, alert, avatar, skeleton, spinner...). They are our own code, styled after the app's original MUI look: change their look there, not with overrides where they are used. Each file's header comment says what it replaces and how its props map from MUI.
+- **Use the UI components** in `src/components/ui/` (button, dialog, dropdown-menu, select, input, field, switch, checkbox, badge, tooltip, popover, command, alert, avatar, skeleton, spinner...). They are our own code, styled after the app's original MUI look: change their look there, not with overrides where they are used. Each file's header comment says what it replaces and how its props map from MUI.
 - **Variants:** components take `variant` (the shape) and `color` (the hue), e.g. `<Button variant="ghost" color="neutral" size="icon-lg">`. To add a colour or size, add one line to the component's `cva` variants.
 - **Combine classes** with `cn()` from `src/lib/utils`. Use `cva` for a component with variants, and extract a small component instead of repeating a long class list.
 - **Adding a shadcn component:** run `pnpm dlx shadcn@latest add <name>` (configured by `components.json`), then:

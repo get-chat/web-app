@@ -1684,3 +1684,126 @@ msgstr "Sem grupo"
 
 msgid "Untagged"
 msgstr "Sem marcação"
+
+msgid "Find an inbox"
+msgstr "Encontrar uma caixa de entrada"
+
+msgid "No inboxes found"
+msgstr "Nenhuma caixa de entrada encontrada"
+
+msgid "Current inbox"
+msgstr "Caixa de entrada atual"
+
+msgid "Switch inbox"
+msgstr "Trocar de caixa de entrada"
+
+msgid "Your inboxes"
+msgstr "Suas caixas de entrada"
+
+msgid "Inbox ID"
+msgstr "ID da caixa de entrada"
+
+msgid "Copy inbox ID"
+msgstr "Copiar o ID da caixa de entrada"
+
+msgid "Inbox ID copied"
+msgstr "ID da caixa de entrada copiado"
+
+msgid "Open %s"
+msgstr "Abrir %s"
+
+msgid "Confirm it's you to open this inbox. You only need to do this once on this device."
+msgstr "Confirme que é você para abrir esta caixa de entrada. Você só precisa fazer isso uma vez neste dispositivo."
+
+msgid "Password of %s"
+msgstr "Senha de %s"
+
+msgid "Incorrect password."
+msgstr "Senha incorreta."
+
+msgid "Open inbox"
+msgstr "Abrir caixa de entrada"
+
+msgid "Choose an inbox"
+msgstr "Escolha uma caixa de entrada"
+
+msgid "Your account has access to more than one inbox. You can switch between them at any time."
+msgstr "Sua conta tem acesso a mais de uma caixa de entrada. Você pode alternar entre elas a qualquer momento."
+
+msgid "Log in with another account"
+msgstr "Entrar com outra conta"
+
+msgid "Create your account"
+msgstr "Crie sua conta"
+
+msgid "Choose a username and a password to accept your invite."
+msgstr "Escolha um nome de usuário e uma senha para aceitar seu convite."
+
+msgid "Repeat the password"
+msgstr "Repita a senha"
+
+msgid "Create account and join"
+msgstr "Criar conta e entrar"
+
+msgid "Log in and join"
+msgstr "Entrar e participar"
+
+msgid "Already have an account?"
+msgstr "Já tem uma conta?"
+
+msgid "New here?"
+msgstr "Novo por aqui?"
+
+msgid "Create an account"
+msgstr "Criar uma conta"
+
+msgid "Ignore the invite"
+msgstr "Ignorar o convite"
+
+msgid "You now have access to %s"
+msgstr "Agora você tem acesso a %s"
+
+msgid "The passwords do not match."
+msgstr "As senhas não coincidem."
+
+msgid "Not now"
+msgstr "Agora não"
+
+msgid "Accept invite"
+msgstr "Aceitar convite"
+
+msgid "You're invited to an inbox"
+msgstr "Você foi convidado para uma caixa de entrada"
+
+msgid "You've joined %s"
+msgstr "Você entrou em %s"
+
+msgid "It is now next to your other inboxes, at the top of the sidebar."
+msgstr "Agora ela está ao lado das suas outras caixas de entrada, no topo da barra lateral."
+
+msgid "Accept to add it to your account. You can switch between your inboxes at any time."
+msgstr "Aceite para adicioná-la à sua conta. Você pode alternar entre suas caixas de entrada a qualquer momento."
+
+msgid "Accepting as"
+msgstr "Aceitando como"
+
+msgid "Use another account"
+msgstr "Usar outra conta"
+
+msgid "Stay in %s"
+msgstr "Ficar em %s"
+
+msgid "This invite link has expired or was already used. Ask the inbox admin for a new one."
+msgstr "Este link de convite expirou ou já foi usado. Peça um novo ao administrador da caixa de entrada."
+
+msgid "This invite is for another account. Use that account to accept it."
+msgstr "Este convite é para outra conta. Use essa conta para aceitá-lo."
+
+msgid "You already have access to this inbox."
+msgstr "Você já tem acesso a esta caixa de entrada."
+
+msgid "Log in to accept it, or create an account if you are new."
+msgstr "Entre para aceitá-lo ou crie uma conta se você for novo."
+
+msgid "This username is taken. If it is yours, log in instead."
+msgstr "Este nome de usuário já existe. Se for seu, entre com ele."

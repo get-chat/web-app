@@ -1,6 +1,8 @@
 export interface LoginRequest {
 	username: string;
 	password: string;
+	// Id of the inbox to log into, needed for accounts in several inboxes
+	tenant?: string;
 }
 
 export interface LoginResponse {

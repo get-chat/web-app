@@ -34,6 +34,13 @@ const AppBody: React.FC = () => {
 			);
 		}
 
+		// An invite link into an inbox (/app/?invite=<code>): accepted on the
+		// login card, or in the app when somebody is logged in already
+		const inviteCode = params.get('invite');
+		if (inviteCode) {
+			dispatch(setState({ inviteCode }));
+		}
+
 		if (params.get('account_activated') === '1') {
 			dispatch(
 				setState({

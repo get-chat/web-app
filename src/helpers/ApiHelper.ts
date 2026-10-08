@@ -1,6 +1,7 @@
 import {
 	clearContactProvidersData,
 	clearMessageDrafts,
+	clearTenantSession,
 	clearToken,
 	getStorage,
 	STORAGE_TAG_TOKEN,
@@ -64,7 +65,9 @@ export const clearUserSession = (
 ) => {
 	clearToken();
 	clearContactProvidersData();
+	// Before the tenant session: it names the inboxes whose drafts to clear
 	clearMessageDrafts();
+	clearTenantSession();
 
 	let path;
 

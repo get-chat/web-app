@@ -14,6 +14,12 @@ const STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME = 'contact_providers_data_time';
 const STORAGE_TAG_CURRENT_API_BASE_URL = 'current_api_base_url';
 const STORAGE_TAG_API_BASE_URLS = 'api_base_urls';
 const STORAGE_TAG_MESSAGE_DRAFTS = 'message_drafts';
+// Multi-tenant inboxes (MT 3.6): the inbox the stored token belongs to, the
+// tokens of the account's inboxes this device has opened, and the inbox each
+// username used last (where a login lands)
+const STORAGE_TAG_CURRENT_TENANT = 'current_tenant';
+const STORAGE_TAG_TENANT_TOKENS = 'tenant_tokens';
+const STORAGE_TAG_LAST_TENANTS = 'last_tenants';
 
 const getLocalStorage = () => {
 	try {
@@ -64,6 +70,63 @@ export const storeToken = (token: string) => {
 
 export const clearToken = () => {
 	getStorage().removeItem(STORAGE_TAG_TOKEN);
+};
+
+const getJSONObject = (tag: string): { [key: string]: string } => {
+	try {
+		const data = getStorage()?.getItem(tag);
+		return data ? JSON.parse(data) ?? {} : {};
+	} catch (e) {
+		console.warn(e);
+		return {};
+	}
+};
+
+export const getCurrentTenantId = (): string | undefined =>
+	getStorage()?.getItem(STORAGE_TAG_CURRENT_TENANT) ?? undefined;
+
+export const storeCurrentTenantId = (tenantId: string) => {
+	// Drafts are kept per inbox. The first inbox known on this device adopts
+	// the drafts written before inboxes were told apart.
+	if (!getCurrentTenantId()) {
+		const legacyDrafts = getStorage()?.getItem(STORAGE_TAG_MESSAGE_DRAFTS);
+		const draftsTag = getMessageDraftsTag(tenantId);
+		if (legacyDrafts && !getStorage()?.getItem(draftsTag)) {
+			getStorage()?.setItem(draftsTag, legacyDrafts);
+		}
+		getStorage()?.removeItem(STORAGE_TAG_MESSAGE_DRAFTS);
+	}
+	getStorage()?.setItem(STORAGE_TAG_CURRENT_TENANT, tenantId);
+};
+
+export const getTenantToken = (tenantId: string): string | undefined =>
+	getJSONObject(STORAGE_TAG_TENANT_TOKENS)[tenantId];
+
+export const storeTenantToken = (tenantId: string, token: string) => {
+	const tokens = getJSONObject(STORAGE_TAG_TENANT_TOKENS);
+	tokens[tenantId] = token;
+	getStorage()?.setItem(STORAGE_TAG_TENANT_TOKENS, JSON.stringify(tokens));
+};
+
+export const removeTenantToken = (tenantId: string) => {
+	const tokens = getJSONObject(STORAGE_TAG_TENANT_TOKENS);
+	delete tokens[tenantId];
+	getStorage()?.setItem(STORAGE_TAG_TENANT_TOKENS, JSON.stringify(tokens));
+};
+
+// Logout: the tokens go, the inbox each username used last stays
+export const clearTenantSession = () => {
+	getStorage()?.removeItem(STORAGE_TAG_CURRENT_TENANT);
+	getStorage()?.removeItem(STORAGE_TAG_TENANT_TOKENS);
+};
+
+export const getLastTenantId = (username: string): string | undefined =>
+	getJSONObject(STORAGE_TAG_LAST_TENANTS)[username];
+
+export const storeLastTenantId = (username: string, tenantId: string) => {
+	const lastTenants = getJSONObject(STORAGE_TAG_LAST_TENANTS);
+	lastTenants[username] = tenantId;
+	getStorage()?.setItem(STORAGE_TAG_LAST_TENANTS, JSON.stringify(lastTenants));
 };
 
 export const getApiBaseURLs = (): string[] => {
@@ -207,9 +270,15 @@ interface MessageDrafts {
 	[waId: string]: string;
 }
 
+// One set of drafts per inbox: the same contact can be in two of them
+const getMessageDraftsTag = (tenantId = getCurrentTenantId()) =>
+	tenantId
+		? `${STORAGE_TAG_MESSAGE_DRAFTS}:${tenantId}`
+		: STORAGE_TAG_MESSAGE_DRAFTS;
+
 export const getMessageDrafts = (): MessageDrafts => {
 	try {
-		const data = getStorage()?.getItem(STORAGE_TAG_MESSAGE_DRAFTS);
+		const data = getStorage()?.getItem(getMessageDraftsTag());
 		return data ? JSON.parse(data) : {};
 	} catch (e) {
 		console.warn(e);
@@ -231,7 +300,7 @@ export const storeMessageDraft = (waId: string, draft: string) => {
 			// Remove empty drafts
 			delete drafts[waId];
 		}
-		getStorage()?.setItem(STORAGE_TAG_MESSAGE_DRAFTS, JSON.stringify(drafts));
+		getStorage()?.setItem(getMessageDraftsTag(), JSON.stringify(drafts));
 	} catch (e) {
 		if (isQuotaExceededError(e)) {
 			console.warn(
@@ -246,12 +315,21 @@ export const removeMessageDraft = (waId: string) => {
 	try {
 		const drafts = getMessageDrafts();
 		delete drafts[waId];
-		getStorage()?.setItem(STORAGE_TAG_MESSAGE_DRAFTS, JSON.stringify(drafts));
+		getStorage()?.setItem(getMessageDraftsTag(), JSON.stringify(drafts));
 	} catch (e) {
 		console.warn(e);
 	}
 };
 
+// The drafts of every inbox this device has opened
 export const clearMessageDrafts = () => {
+	const tenantIds = new Set([
+		...Object.keys(getJSONObject(STORAGE_TAG_TENANT_TOKENS)),
+		getCurrentTenantId(),
+	]);
 	getStorage()?.removeItem(STORAGE_TAG_MESSAGE_DRAFTS);
+	tenantIds.forEach(
+		(tenantId) =>
+			tenantId && getStorage()?.removeItem(getMessageDraftsTag(tenantId))
+	);
 };

@@ -14,6 +14,7 @@ export const useAppSelector = jest.fn((selector) =>
 		templates: { value: {} },
 		savedResponses: { value: {} },
 		previewMediaObject: { value: null },
+		inboxes: { tenants: [], currentTenantId: undefined, generation: 0 },
 	})
 );
 export const useAppDispatch = () => jest.fn();
