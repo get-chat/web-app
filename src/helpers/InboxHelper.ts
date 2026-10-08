@@ -1,6 +1,10 @@
 import { AxiosError } from 'axios';
 import { fetchSessionToken } from '@src/api/authApi';
-import { fetchTenants, switchSessionTenant } from '@src/api/tenantsApi';
+import {
+	acceptInvite,
+	fetchTenants,
+	switchSessionTenant,
+} from '@src/api/tenantsApi';
 import { fetchCurrentUser, updateUserAvailability } from '@src/api/usersApi';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
@@ -11,28 +15,36 @@ import {
 	storeCurrentTenantId,
 	storeTenantToken,
 } from '@src/helpers/StorageHelper';
-import { Tenant } from '@src/types/tenants';
+import { AcceptInviteRequest, Tenant } from '@src/types/tenants';
 
 /*
  * Multi-tenant inboxes (MT 3.6, backend inbox#1154). One account can be a
  * member of several inboxes, and an auth token belongs to one of them. The
  * backend gives no token for another inbox in exchange for a token (decision
  * D11: a leaked token must not open every inbox), so the app gets one with:
- *   1. the token this device stored when it opened that inbox before;
+ *   1. a token at hand: one an accepted invite just gave, else the one this
+ *      device saved for the account and inbox before;
  *   2. the backend session, if this browser has one of the same account (a
  *      "Login with 360dialog" or admin panel login): it is switched to the
  *      inbox and gives its token;
  *   3. otherwise the password, once per inbox and device.
  */
 
-const getUsername = async (token: string) => {
+// Whether `token` opens the backend as `username`. 'rejected' is the backend
+// saying no (401/403) or answering as another account; a network error or a
+// server error is 'unknown', and such a token is not thrown away.
+const checkToken = async (
+	token: string,
+	username: string
+): Promise<'valid' | 'rejected' | 'unknown'> => {
 	try {
 		const user = await fetchCurrentUser({
 			headers: { Authorization: `Token ${token}` },
 		});
-		return user.username;
+		return user.username === username ? 'valid' : 'rejected';
 	} catch (error: any | AxiosError) {
-		return undefined;
+		const status = error?.response?.status;
+		return status === 401 || status === 403 ? 'rejected' : 'unknown';
 	}
 };
 
@@ -48,7 +60,7 @@ const getSessionToken = async () => {
 // colleague's admin panel login on a shared machine
 const getTokenFromSession = async (tenantId: string, username: string) => {
 	const sessionToken = await getSessionToken();
-	if (!sessionToken || (await getUsername(sessionToken)) !== username) {
+	if (!sessionToken || (await checkToken(sessionToken, username)) !== 'valid') {
 		return undefined;
 	}
 	try {
@@ -60,20 +72,39 @@ const getTokenFromSession = async (tenantId: string, username: string) => {
 	return getSessionToken();
 };
 
-// A token for the inbox without asking for the password, if there is a way
+// A token for the inbox without asking for the password, if there is a way.
+// `token`: one at hand already (an accepted invite's), checked like a saved
+// one, so an unusable token ends in the password step instead of a logout.
 export const getTokenWithoutPassword = async (
 	tenantId: string,
-	username: string
+	username: string,
+	token?: string
 ) => {
-	const storedToken = getTenantToken(tenantId);
-	if (storedToken) {
-		if ((await getUsername(storedToken)) === username) {
-			return storedToken;
+	const saved = getTenantToken(username, tenantId);
+	const candidates = saved === token ? [token] : [token, saved];
+	for (const candidate of candidates) {
+		if (!candidate) continue;
+		const result = await checkToken(candidate, username);
+		if (result === 'valid') {
+			return candidate;
 		}
-		// Revoked, or the membership was switched off
-		removeTenantToken(tenantId);
+		if (result === 'rejected') {
+			// Revoked, or the membership was switched off
+			removeTenantToken(candidate);
+		}
 	}
 	return getTokenFromSession(tenantId, username);
+};
+
+// Accepts an invite and keeps the new membership's token right away,
+// replacing any saved for the inbox before: for an account without a password
+// it may be the only way into it. Backends before inbox!1117 send none.
+export const acceptInviteKeepingToken = async (data: AcceptInviteRequest) => {
+	const accepted = await acceptInvite(data);
+	if (accepted.token) {
+		storeTenantToken(accepted.username, accepted.tenant.id, accepted.token);
+	}
+	return accepted;
 };
 
 // The current inbox among the account's. Tokens from logins that named no
@@ -97,14 +128,14 @@ const findCurrentTenant = async (tenants: Tenant[]) => {
 	}
 };
 
-// The account's inboxes and which one this is, remembering the token as that
-// inbox's
-export const loadTenants = async (token: string) => {
+// The account's inboxes and which one this is, remembering the token as the
+// account's for that inbox
+export const loadTenants = async (token: string, username: string) => {
 	const { tenants } = await fetchTenants();
 	const current = await findCurrentTenant(tenants);
 	if (current) {
 		storeCurrentTenantId(current.id);
-		storeTenantToken(current.id, token);
+		storeTenantToken(username, current.id, token);
 	}
 	return { tenants, currentTenantId: current?.id };
 };

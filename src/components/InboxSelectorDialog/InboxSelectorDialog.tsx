@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-	clearTenantSession,
+	clearCurrentTenant,
+	clearTenantTokens,
 	getApiBaseURLsMergedWithConfig,
 	getCurrentApiBaseURL,
 	storeCurrentApiBaseURL,
@@ -54,8 +55,9 @@ const InboxSelectorDialog: React.FC<Props> = ({ isVisible, setVisible }) => {
 	const onSelect = (url: string) => {
 		if (url !== current) {
 			storeCurrentApiBaseURL(url);
-			// The inboxes of the multi-tenant switcher belong to the other host
-			clearTenantSession();
+			// The inboxes and their tokens belong to the other host
+			clearCurrentTenant();
+			clearTenantTokens();
 			location.reload();
 		} else {
 			close();

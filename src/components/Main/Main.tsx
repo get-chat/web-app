@@ -928,9 +928,9 @@ const Main: React.FC = () => {
 		};
 	}, [newMessages]);
 
-	const retrieveTenants = async () => {
+	const retrieveTenants = async (username: string) => {
 		try {
-			dispatch(setTenants(await loadTenants(getToken())));
+			dispatch(setTenants(await loadTenants(getToken(), username)));
 		} catch (error) {
 			// Backends before MT 3.6 have no inbox list: no switcher then
 			console.error('Error in retrieveTenants', error);
@@ -987,7 +987,7 @@ const Main: React.FC = () => {
 			dispatch(setIsUserAvailable(data.profile?.is_available ?? false));
 
 			// In the background: the inbox switcher, for accounts in several
-			retrieveTenants();
+			retrieveTenants(data.username);
 
 			const role = data.profile?.role;
 

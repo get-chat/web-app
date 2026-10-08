@@ -14,7 +14,8 @@ export const storeCurrentTenantId = jest.fn();
 export const getTenantToken = jest.fn(() => undefined);
 export const storeTenantToken = jest.fn();
 export const removeTenantToken = jest.fn();
-export const clearTenantSession = jest.fn();
+export const clearCurrentTenant = jest.fn();
+export const clearTenantTokens = jest.fn();
 export const getLastTenantId = jest.fn(() => undefined);
 export const storeLastTenantId = jest.fn();
 

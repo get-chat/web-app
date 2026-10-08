@@ -16,7 +16,9 @@ const STORAGE_TAG_API_BASE_URLS = 'api_base_urls';
 const STORAGE_TAG_MESSAGE_DRAFTS = 'message_drafts';
 // Multi-tenant inboxes (MT 3.6): the inbox the stored token belongs to, the
 // tokens of the account's inboxes this device has opened, and the inbox each
-// username used last (where a login lands)
+// username used last (where a login lands). The tokens outlive a logout: for
+// an account that logs in with 360dialog only, the token an accepted invite
+// gave may be the only way back into that inbox.
 const STORAGE_TAG_CURRENT_TENANT = 'current_tenant';
 const STORAGE_TAG_TENANT_TOKENS = 'tenant_tokens';
 const STORAGE_TAG_LAST_TENANTS = 'last_tenants';
@@ -99,25 +101,74 @@ export const storeCurrentTenantId = (tenantId: string) => {
 	getStorage()?.setItem(STORAGE_TAG_CURRENT_TENANT, tenantId);
 };
 
-export const getTenantToken = (tenantId: string): string | undefined =>
-	getJSONObject(STORAGE_TAG_TENANT_TOKENS)[tenantId];
+// Per username, then per inbox: two accounts on one browser can be members of
+// the same inbox, and neither may overwrite or drop the other's token
+type TenantTokens = { [username: string]: { [tenantId: string]: string } };
 
-export const storeTenantToken = (tenantId: string, token: string) => {
-	const tokens = getJSONObject(STORAGE_TAG_TENANT_TOKENS);
-	tokens[tenantId] = token;
-	getStorage()?.setItem(STORAGE_TAG_TENANT_TOKENS, JSON.stringify(tokens));
+const getTenantTokens = (): TenantTokens => {
+	try {
+		const data = JSON.parse(
+			getStorage()?.getItem(STORAGE_TAG_TENANT_TOKENS) ?? '{}'
+		);
+		// Skips the flat { tenantId: token } of the first builds
+		return Object.fromEntries(
+			Object.entries(data ?? {}).filter(
+				([, tokens]) => tokens && typeof tokens === 'object'
+			)
+		) as TenantTokens;
+	} catch (e) {
+		console.warn(e);
+		return {};
+	}
 };
 
-export const removeTenantToken = (tenantId: string) => {
-	const tokens = getJSONObject(STORAGE_TAG_TENANT_TOKENS);
-	delete tokens[tenantId];
+const storeTenantTokens = (tokens: TenantTokens) =>
 	getStorage()?.setItem(STORAGE_TAG_TENANT_TOKENS, JSON.stringify(tokens));
+
+export const getTenantToken = (
+	username: string,
+	tenantId: string
+): string | undefined => getTenantTokens()[username]?.[tenantId];
+
+// Replaces the token saved before for this account and inbox, e.g. one that an
+// invite back into the inbox (after access was switched off) has invalidated
+export const storeTenantToken = (
+	username: string,
+	tenantId: string,
+	token: string
+) => {
+	// No account to keep it for (no current user yet)
+	if (!username) return;
+	const tokens = getTenantTokens();
+	tokens[username] = { ...tokens[username], [tenantId]: token };
+	storeTenantTokens(tokens);
 };
 
-// Logout: the tokens go, the inbox each username used last stays
-export const clearTenantSession = () => {
-	getStorage()?.removeItem(STORAGE_TAG_CURRENT_TENANT);
+// Only for a token the backend rejected (401/403, or another account's),
+// wherever it is saved
+export const removeTenantToken = (token: string) => {
+	const tokens = getTenantTokens();
+	Object.values(tokens).forEach((byTenant) =>
+		Object.keys(byTenant).forEach((tenantId) => {
+			if (byTenant[tenantId] === token) delete byTenant[tenantId];
+		})
+	);
+	storeTenantTokens(tokens);
+};
+
+// Switching to another API host (the legacy switcher): these tokens are the
+// other host's
+export const clearTenantTokens = () =>
 	getStorage()?.removeItem(STORAGE_TAG_TENANT_TOKENS);
+
+// Every inbox a token was saved for, of any account
+const getTenantIdsWithTokens = () =>
+	Object.values(getTenantTokens()).flatMap((byTenant) => Object.keys(byTenant));
+
+// Logout: which inbox the app is in. The inboxes' tokens and the inbox each
+// username used last stay.
+export const clearCurrentTenant = () => {
+	getStorage()?.removeItem(STORAGE_TAG_CURRENT_TENANT);
 };
 
 export const getLastTenantId = (username: string): string | undefined =>
@@ -324,7 +375,7 @@ export const removeMessageDraft = (waId: string) => {
 // The drafts of every inbox this device has opened
 export const clearMessageDrafts = () => {
 	const tenantIds = new Set([
-		...Object.keys(getJSONObject(STORAGE_TAG_TENANT_TOKENS)),
+		...getTenantIdsWithTokens(),
 		getCurrentTenantId(),
 	]);
 	getStorage()?.removeItem(STORAGE_TAG_MESSAGE_DRAFTS);

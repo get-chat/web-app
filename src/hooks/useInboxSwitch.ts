@@ -53,8 +53,15 @@ const useInboxSwitch = () => {
 			}
 		}
 
+		// From here on, answers to requests sent for the previous inbox are
+		// dropped. Before anything of the new inbox is written: a late 401 for
+		// the old inbox would otherwise log out and drop the new inbox's token
+		// (clearUserSession removes the rejected token, read as the current
+		// one).
+		startNewInboxGeneration();
+
 		storeToken(token);
-		storeTenantToken(tenant.id, token);
+		storeTenantToken(username, tenant.id, token);
 		storeCurrentTenantId(tenant.id);
 		if (username) storeLastTenantId(username, tenant.id);
 		window.AndroidWebInterface?.registerUserToken(token);
@@ -68,26 +75,35 @@ const useInboxSwitch = () => {
 		// The contacts of the address books connected to an inbox
 		clearContactProvidersData();
 		toast.dismiss();
-		startNewInboxGeneration();
 		dispatch(resetInboxState());
 		navigate({ pathname: '/main', search: location.search });
 	};
 
-	// Opens the inbox if a token is at hand, else the caller asks for the
-	// password and calls switchWithPassword
-	const switchTo = async (tenant: Tenant): Promise<SwitchResult> => {
-		if (
-			hasFailedMessages &&
-			!window.confirm(
-				t(
-					'There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?'
-				)
+	// Unsent messages are lost when the app leaves the inbox
+	const confirmLeaving = () =>
+		!hasFailedMessages ||
+		window.confirm(
+			t(
+				'There are unsent messages in the chat. If you continue, they will be deleted. Are you sure you want to continue?'
 			)
-		) {
+		);
+
+	// Opens the inbox if a token is at hand, else the caller asks for the
+	// password and calls switchWithPassword. `token`: one known already (an
+	// accepted invite's); it is checked first, like a saved one.
+	const switchTo = async (
+		tenant: Tenant,
+		knownToken?: string
+	): Promise<SwitchResult> => {
+		if (!confirmLeaving()) {
 			return 'cancelled';
 		}
 
-		const token = await getTokenWithoutPassword(tenant.id, username);
+		const token = await getTokenWithoutPassword(
+			tenant.id,
+			username,
+			knownToken
+		);
 		if (!token) {
 			return 'needsPassword';
 		}

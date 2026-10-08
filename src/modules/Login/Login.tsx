@@ -45,8 +45,10 @@ import {
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
 import { fetchCurrentUser } from '@src/api/usersApi';
-import { acceptInvite } from '@src/api/tenantsApi';
-import { setAvailableOnEntry } from '@src/helpers/InboxHelper';
+import {
+	acceptInviteKeepingToken,
+	setAvailableOnEntry,
+} from '@src/helpers/InboxHelper';
 import InboxList, {
 	getInboxTitle,
 } from '@src/components/InboxSwitcher/InboxList';
@@ -254,14 +256,20 @@ const Login: React.FC = () => {
 	};
 
 	// `tenant`: the inbox the token belongs to, when the login named one
-	const completeLogin = async (token: string, tenant?: Tenant) => {
+	// `account`: the username the backend named, when it differs from what was
+	// typed (an accepted invite answers with it)
+	const completeLogin = async (
+		token: string,
+		tenant?: Tenant,
+		account = username
+	) => {
 		// Store token in local storage
 		storeToken(token);
 
 		if (tenant) {
 			storeCurrentTenantId(tenant.id);
-			storeTenantToken(tenant.id, token);
-			storeLastTenantId(username, tenant.id);
+			storeTenantToken(account, tenant.id, token);
+			storeLastTenantId(account, tenant.id);
 		}
 
 		// Android web interface
@@ -341,10 +349,19 @@ const Login: React.FC = () => {
 
 	// Logs into one of the account's inboxes; whether it worked (else the
 	// error is shown)
-	const loginToTenant = async (tenant: Tenant) => {
+	// `token`: one at hand already (an accepted invite's), else the password
+	// gets one
+	const loginToTenant = async (
+		tenant: Tenant,
+		token?: string,
+		account?: string
+	) => {
 		try {
-			const data = await login({ username, password, tenant: tenant.id });
-			await completeLogin(data.token, tenant);
+			await completeLogin(
+				token ?? (await login({ username, password, tenant: tenant.id })).token,
+				tenant,
+				account
+			);
 			return true;
 		} catch (error: any | AxiosError) {
 			console.error(error);
@@ -383,14 +400,18 @@ const Login: React.FC = () => {
 	const loginAcceptingInvite = async () => {
 		setLoginError('');
 		let tenant: Tenant;
+		let token: string | undefined;
+		let account: string;
 		try {
-			const accepted = await acceptInvite({
+			const accepted = await acceptInviteKeepingToken({
 				code: inviteCode!,
 				username,
 				password,
 				new_account: isCreatingAccount || undefined,
 			});
 			tenant = accepted.tenant;
+			token = accepted.token;
+			account = accepted.username;
 		} catch (error: any | AxiosError) {
 			setLoggingIn(false);
 			const data = error.response?.data ?? {};
@@ -404,7 +425,9 @@ const Login: React.FC = () => {
 		}
 
 		dispatch(setState({ inviteCode: undefined }));
-		if (await loginToTenant(tenant)) {
+		// The invite's token opens the inbox; older backends send none, then
+		// the password does
+		if (await loginToTenant(tenant, token, account)) {
 			toast.success(
 				t('You now have access to %s', {
 					postProcess: 'sprintf',

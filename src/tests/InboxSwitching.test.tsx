@@ -93,6 +93,7 @@ describe('Login of an account in several inboxes', () => {
 		);
 		expect(storage.storeCurrentTenantId).toHaveBeenCalledWith(SALES.id);
 		expect(storage.storeTenantToken).toHaveBeenCalledWith(
+			'agent',
 			SALES.id,
 			'token-of-bbbb2222'
 		);
@@ -203,21 +204,21 @@ describe('Message drafts', () => {
 
 	it('of every inbox go on logout', () => {
 		storage.storeCurrentTenantId(SUPPORT.id);
-		storage.storeTenantToken(SUPPORT.id, 'a');
+		storage.storeTenantToken('agent', SUPPORT.id, 'a');
 		storage.storeMessageDraft('1', 'support draft');
 		storage.storeCurrentTenantId(SALES.id);
-		storage.storeTenantToken(SALES.id, 'b');
+		storage.storeTenantToken('agent', SALES.id, 'b');
 		storage.storeMessageDraft('1', 'sales draft');
 
 		storage.clearMessageDrafts();
-		storage.clearTenantSession();
+		storage.clearCurrentTenant();
 
 		expect(
 			Object.keys(window.localStorage).filter((key) =>
 				key.startsWith('message_drafts')
 			)
 		).toEqual([]);
-		expect(storage.getTenantToken(SALES.id)).toBeUndefined();
+		expect(storage.getCurrentTenantId()).toBeUndefined();
 	});
 });
 

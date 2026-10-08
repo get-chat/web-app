@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AxiosError } from 'axios';
-import { acceptInvite } from '@src/api/tenantsApi';
 import { Alert } from '@src/components/ui/alert';
 import { Button } from '@src/components/ui/button';
 import {
@@ -10,7 +9,10 @@ import {
 	DialogDescription,
 	DialogTitle,
 } from '@src/components/ui/dialog';
-import { loadTenants } from '@src/helpers/InboxHelper';
+import {
+	acceptInviteKeepingToken,
+	loadTenants,
+} from '@src/helpers/InboxHelper';
 import { getToken } from '@src/helpers/StorageHelper';
 import useInboxSwitch from '@src/hooks/useInboxSwitch';
 import useLogout from '@src/hooks/useLogout';
@@ -66,6 +68,7 @@ const AcceptInviteDialog: React.FC = () => {
 	const [isBusy, setBusy] = useState(false);
 	const [error, setError] = useState('');
 	const [joinedTenant, setJoinedTenant] = useState<Tenant>();
+	const [joinedToken, setJoinedToken] = useState<string>();
 	const [passwordTenant, setPasswordTenant] = useState<Tenant>();
 
 	// A new invite starts afresh; not on closing, so the dialog keeps its
@@ -73,6 +76,7 @@ const AcceptInviteDialog: React.FC = () => {
 	useEffect(() => {
 		if (inviteCode) {
 			setJoinedTenant(undefined);
+			setJoinedToken(undefined);
 			setError('');
 		}
 	}, [inviteCode]);
@@ -84,13 +88,24 @@ const AcceptInviteDialog: React.FC = () => {
 		setBusy(true);
 		setError('');
 		try {
-			const { tenant } = await acceptInvite({ code: inviteCode });
+			const { tenant, token } = await acceptInviteKeepingToken({
+				code: inviteCode,
+			});
 			setJoinedTenant(tenant);
-			// The new inbox joins the switcher
-			dispatch(setTenants(await loadTenants(getToken())));
+			setJoinedToken(token);
 		} catch (error: any | AxiosError) {
 			console.error(error);
 			setError(getInviteError(error?.response?.data));
+			setBusy(false);
+			return;
+		}
+
+		// The new inbox joins the switcher. Accepted either way: a failure
+		// here only leaves the list as it was until the next load.
+		try {
+			dispatch(setTenants(await loadTenants(getToken(), username)));
+		} catch (error) {
+			console.error(error);
 		} finally {
 			setBusy(false);
 		}
@@ -100,7 +115,9 @@ const AcceptInviteDialog: React.FC = () => {
 		if (!joinedTenant) return;
 		setBusy(true);
 		try {
-			const result = await switchTo(joinedTenant);
+			// The invite's token opens the inbox; without one (older
+			// backends), or if it no longer works, the usual ways
+			const result = await switchTo(joinedTenant, joinedToken);
 			if (result === 'needsPassword') {
 				setPasswordTenant(joinedTenant);
 				close();

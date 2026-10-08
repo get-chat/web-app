@@ -29,4 +29,8 @@ export interface AcceptInviteRequest {
 export interface AcceptInviteResponse {
 	username: string;
 	tenant: Tenant;
+	// The new membership's Auth Token, for that inbox only. For an account
+	// that logs in with 360dialog only it may be the one way into the inbox,
+	// so it is kept. Absent from backends before inbox!1117.
+	token?: string;
 }
