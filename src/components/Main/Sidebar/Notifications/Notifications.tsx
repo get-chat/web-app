@@ -45,7 +45,7 @@ const Notifications: React.FC<Props> = ({
 	return (
 		<div
 			className={cn(
-				'absolute inset-0 flex flex-col bg-white',
+				'absolute inset-0 z-10 flex flex-col bg-white',
 				overlayPanelAnimation(isExiting)
 			)}
 			onAnimationEnd={onAnimationEnd}
