@@ -10,7 +10,11 @@ import OpenInNewRoundedIcon from '@src/components/icons/OpenInNew';
 import {
 	clearToken,
 	getApiBaseURLsMergedWithConfig,
+	getLastTenantId,
 	getToken,
+	storeCurrentTenantId,
+	storeLastTenantId,
+	storeTenantToken,
 	storeToken,
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
@@ -40,8 +44,18 @@ import {
 } from './loginClassNames';
 import { fetchBase } from '@src/api/healthApi';
 import api from '@src/api/axiosInstance';
-import { fetchCurrentUser, updateUserAvailability } from '@src/api/usersApi';
-import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
+import { fetchCurrentUser } from '@src/api/usersApi';
+import {
+	acceptInviteKeepingToken,
+	setAvailableOnEntry,
+} from '@src/helpers/InboxHelper';
+import InboxList, {
+	getInboxTitle,
+} from '@src/components/InboxSwitcher/InboxList';
+import InviteHero from '@src/components/InboxSwitcher/InviteHero';
+import { getInviteError } from '@src/components/InboxSwitcher/AcceptInviteDialog';
+import { Tenant } from '@src/types/tenants';
+import { toast } from 'sonner';
 import { User } from '@src/types/users';
 import CustomAvatar from '@src/components/CustomAvatar';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
@@ -75,12 +89,20 @@ const Login: React.FC = () => {
 		(state) => state.UI.activatedUsername
 	);
 	const activationCode = useAppSelector((state) => state.UI.activationCode);
+	// An invite into an inbox: logging in (or creating an account) accepts it
+	const inviteCode = useAppSelector((state) => state.UI.inviteCode);
 
 	const [username, setUsername] = useState(activatedUsername ?? '');
 	const [password, setPassword] = useState('');
 	const [isLoggingIn, setLoggingIn] = useState(false);
 	const [isValidatingToken, setValidatingToken] = useState(false);
 	const [loginError, setLoginError] = useState('');
+	// An account in several inboxes picks one after the password was checked
+	const [tenantChoice, setTenantChoice] = useState<Tenant[]>();
+	const [openingTenantId, setOpeningTenantId] = useState<string>();
+	// Invite only: a new account accepts it
+	const [isCreatingAccount, setCreatingAccount] = useState(false);
+	const [passwordRepeat, setPasswordRepeat] = useState('');
 
 	const [isInboxSelectorVisible, setInboxSelectorVisible] = useState(false);
 	const [storedURLs] = useState(getApiBaseURLsMergedWithConfig(config));
@@ -233,36 +255,31 @@ const Login: React.FC = () => {
 		}
 	};
 
-	const completeLogin = async (token: string) => {
+	// `tenant`: the inbox the token belongs to, when the login named one
+	// `account`: the username the backend named, when it differs from what was
+	// typed (an accepted invite answers with it)
+	const completeLogin = async (
+		token: string,
+		tenant?: Tenant,
+		account = username
+	) => {
 		// Store token in local storage
 		storeToken(token);
+
+		if (tenant) {
+			storeCurrentTenantId(tenant.id);
+			storeTenantToken(account, tenant.id, token);
+			storeLastTenantId(account, tenant.id);
+		}
 
 		// Android web interface
 		if (window.AndroidWebInterface) {
 			window.AndroidWebInterface.registerUserToken(token ?? '');
 		}
 
-		// Check if the user availability feature set is enabled (backend
-		// setting, requires the token stored above)
-		try {
-			const { feature_set_enabled } = await fetchUserAvailabilitySettings();
-
-			if (feature_set_enabled) {
-				// Get current user id
-				const userData = await fetchCurrentUser();
-
-				// Set as available on login
-				if (userData.profile && !userData.profile.is_available) {
-					await updateUserAvailability(userData.id, { is_available: true });
-				}
-			}
-		} catch (error: any | AxiosError) {
-			// Accounts without a profile (e.g. superadmin) get a 404 here
-			// but can still use the app; Main handles them the same way
-			if (error?.response?.status !== 404) {
-				throw error;
-			}
-		}
+		// Set as available on login, if the user availability feature set is
+		// enabled (backend setting, requires the token stored above)
+		await setAvailableOnEntry();
 
 		// Redirect to main route
 		navigate(
@@ -280,13 +297,41 @@ const Login: React.FC = () => {
 			return false;
 		}
 
+		if (inviteCode && isCreatingAccount && password !== passwordRepeat) {
+			setLoginError('The passwords do not match.');
+			return false;
+		}
+
 		// Display the loading animation
 		setLoggingIn(true);
+
+		if (inviteCode) {
+			await loginAcceptingInvite();
+			return;
+		}
 
 		try {
 			const data = await login({ username, password });
 			await completeLogin(data.token);
 		} catch (error: any | AxiosError) {
+			// The account is in several inboxes: the inbox it used last on this
+			// device, else the user picks one
+			const tenants: Tenant[] | undefined =
+				error.response?.status === 400
+					? error.response.data?.tenants
+					: undefined;
+			if (tenants?.length) {
+				const lastTenant = tenants.find(
+					(tenant) => tenant.id === getLastTenantId(username)
+				);
+				if (lastTenant && (await loginToTenant(lastTenant))) {
+					return;
+				}
+				setLoggingIn(false);
+				setTenantChoice(tenants);
+				return;
+			}
+
 			// Hide the loading animation
 			setLoggingIn(false);
 			setLoginError('');
@@ -299,6 +344,98 @@ const Login: React.FC = () => {
 					setLoginError('An error has occurred. Please try again later.');
 				}
 			}
+		}
+	};
+
+	// Logs into one of the account's inboxes; whether it worked (else the
+	// error is shown)
+	// `token`: one at hand already (an accepted invite's), else the password
+	// gets one
+	const loginToTenant = async (
+		tenant: Tenant,
+		token?: string,
+		account?: string
+	) => {
+		try {
+			await completeLogin(
+				token ?? (await login({ username, password, tenant: tenant.id })).token,
+				tenant,
+				account
+			);
+			return true;
+		} catch (error: any | AxiosError) {
+			console.error(error);
+			setLoginError(
+				error.response?.data?.reason ??
+					'An error has occurred. Please try again later.'
+			);
+			return false;
+		}
+	};
+
+	const chooseTenant = async (tenant: Tenant) => {
+		setLoginError('');
+		setOpeningTenantId(tenant.id);
+		if (!(await loginToTenant(tenant))) {
+			setOpeningTenantId(undefined);
+		}
+	};
+
+	const isLoginForm = !activationCode && !tenantChoice;
+
+	const dismissInvite = () => {
+		dispatch(setState({ inviteCode: undefined }));
+		setCreatingAccount(false);
+		setLoginError('');
+	};
+
+	const leaveTenantChoice = () => {
+		setTenantChoice(undefined);
+		setPassword('');
+		setLoginError('');
+	};
+
+	// Accepts the invite with the account in the form (or a new one), then
+	// logs into the inbox it opened
+	const loginAcceptingInvite = async () => {
+		setLoginError('');
+		let tenant: Tenant;
+		let token: string | undefined;
+		let account: string;
+		try {
+			const accepted = await acceptInviteKeepingToken({
+				code: inviteCode!,
+				username,
+				password,
+				new_account: isCreatingAccount || undefined,
+			});
+			tenant = accepted.tenant;
+			token = accepted.token;
+			account = accepted.username;
+		} catch (error: any | AxiosError) {
+			setLoggingIn(false);
+			const data = error.response?.data ?? {};
+			if (data.code) {
+				// Invalid, expired or used: what is left is a regular login
+				dispatch(setState({ inviteCode: undefined }));
+				setCreatingAccount(false);
+			}
+			setLoginError(getInviteError(data));
+			return;
+		}
+
+		dispatch(setState({ inviteCode: undefined }));
+		// The invite's token opens the inbox; older backends send none, then
+		// the password does
+		if (await loginToTenant(tenant, token, account)) {
+			toast.success(
+				t('You now have access to %s', {
+					postProcess: 'sprintf',
+					sprintf: [getInboxTitle(tenant)],
+				})
+			);
+		} else {
+			setLoggingIn(false);
 		}
 	};
 
@@ -364,12 +501,30 @@ const Login: React.FC = () => {
 						</div>
 					)}
 
+					{isLoginForm && inviteCode && <InviteHero className="mt-1 mb-4" />}
+
 					<h2 className={loginTitleClassName}>
-						{activationCode ? t('Set your password') : t('Welcome')}
+						{activationCode
+							? t('Set your password')
+							: tenantChoice
+							? t('Choose an inbox')
+							: inviteCode
+							? isCreatingAccount
+								? t('Create your account')
+								: t("You're invited to an inbox")
+							: t('Welcome')}
 					</h2>
-					<p className={loginSubtitleClassName}>
+					<p className={cn(loginSubtitleClassName, 'text-balance')}>
 						{activationCode
 							? t('Choose a password to finish activating your account.')
+							: tenantChoice
+							? t(
+									'Your account has access to more than one inbox. You can switch between them at any time.'
+							  )
+							: inviteCode
+							? isCreatingAccount
+								? t('Choose a username and a password to accept your invite.')
+								: t('Log in to accept it, or create an account if you are new.')
 							: sessionUser
 							? t('Pick up where you left off')
 							: t('Please log in to start')}
@@ -384,7 +539,7 @@ const Login: React.FC = () => {
 						/>
 					)}
 
-					{!activationCode && sessionUser && (
+					{isLoginForm && !isCreatingAccount && sessionUser && (
 						<>
 							<button
 								type="button"
@@ -434,7 +589,8 @@ const Login: React.FC = () => {
 						</Alert>
 					)}
 
-					{!activationCode && is360dialogLoginEnabled(config) && (
+					{/* Not with an invite: the round trip would lose it */}
+					{isLoginForm && !inviteCode && is360dialogLoginEnabled(config) && (
 						<>
 							<Button
 								data-testid="login-with-360dialog"
@@ -452,7 +608,32 @@ const Login: React.FC = () => {
 						</>
 					)}
 
-					{!activationCode && (
+					{!activationCode && tenantChoice && (
+						<>
+							<div className="overflow-hidden rounded-[12px] border border-gray-light">
+								<InboxList
+									tenants={tenantChoice}
+									pendingTenantId={openingTenantId}
+									onSelect={chooseTenant}
+									listClassName="max-h-[min(340px,50vh)]"
+								/>
+							</div>
+							<div className="mt-4 flex justify-center">
+								<Button
+									variant="link"
+									color="secondary"
+									size="none"
+									className="text-[13px]"
+									disabled={!!openingTenantId}
+									onClick={leaveTenantChoice}
+								>
+									{t('Log in with another account')}
+								</Button>
+							</div>
+						</>
+					)}
+
+					{isLoginForm && (
 						<form onSubmit={doLogin}>
 							<Field data-testid="username" className={loginFieldClassName}>
 								<FieldLabel htmlFor="login-username">
@@ -474,20 +655,72 @@ const Login: React.FC = () => {
 									value={password}
 									onChange={(e) => setPassword(e.target.value)}
 									type="password"
-									autoComplete="current-password"
+									autoComplete={
+										isCreatingAccount ? 'new-password' : 'current-password'
+									}
 								/>
 							</Field>
+							{isCreatingAccount && (
+								<Field className={loginFieldClassName}>
+									<FieldLabel htmlFor="login-password-repeat">
+										{t('Repeat the password')}
+									</FieldLabel>
+									<Input
+										id="login-password-repeat"
+										value={passwordRepeat}
+										onChange={(e) => setPasswordRepeat(e.target.value)}
+										type="password"
+										autoComplete="new-password"
+									/>
+								</Field>
+							)}
 							<Button
 								data-testid="submit"
 								type="submit"
 								size="lg"
-								variant="outline"
+								variant={inviteCode ? 'solid' : 'outline'}
 								color="primary"
 								className={loginSubmitClassName}
 							>
-								{t('Log in')}
+								{!inviteCode
+									? t('Log in')
+									: isCreatingAccount
+									? t('Create account and join')
+									: t('Log in and join')}
 							</Button>
 						</form>
+					)}
+
+					{isLoginForm && inviteCode && (
+						<div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[13px] text-muted-foreground">
+							<span>
+								{isCreatingAccount
+									? t('Already have an account?')
+									: t('New here?')}{' '}
+								<Button
+									variant="link"
+									color="secondary"
+									size="none"
+									className="text-[13px]"
+									onClick={() => {
+										setCreatingAccount(!isCreatingAccount);
+										setLoginError('');
+									}}
+								>
+									{isCreatingAccount ? t('Log in') : t('Create an account')}
+								</Button>
+							</span>
+							<span aria-hidden>·</span>
+							<Button
+								variant="link"
+								color="neutral"
+								size="none"
+								className="text-[13px] text-muted-foreground"
+								onClick={dismissInvite}
+							>
+								{t('Ignore the invite')}
+							</Button>
+						</div>
 					)}
 
 					{!activationCode && (
@@ -505,7 +738,7 @@ const Login: React.FC = () => {
 					{isValidatingToken && (
 						<div className="absolute inset-0 flex flex-col items-center justify-center rounded-[15px] bg-white">
 							<h2 className={loginTitleClassName}>{t('Welcome')}</h2>
-							<p className={loginSubtitleClassName}>
+							<p className={cn(loginSubtitleClassName, 'text-balance')}>
 								{t('We are validating your session, please wait.')}
 							</p>
 						</div>

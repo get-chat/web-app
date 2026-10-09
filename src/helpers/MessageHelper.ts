@@ -13,6 +13,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
 import { generateUniqueID } from '@src/helpers/Helpers';
+import { getCurrentTenantId } from '@src/helpers/StorageHelper';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
@@ -354,8 +355,15 @@ export const generateReferralVideoLink = (message: Message) => {
 	}
 };
 
+// An <img> sends no token: on an instance whose inboxes share one host, the
+// link names the inbox the media belongs to (MT 3.7)
 const generateMediaLink = (id: string | number | undefined) => {
-	return id ? `${window.config.API_BASE_URL}media/${id}` : undefined;
+	if (!id) return undefined;
+	const tenantId = getCurrentTenantId();
+	return (
+		`${window.config.API_BASE_URL}media/${id}` +
+		(tenantId ? `?tenant=${encodeURIComponent(tenantId)}` : '')
+	);
 };
 
 export const generateImageLink = (

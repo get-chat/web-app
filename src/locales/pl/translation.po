@@ -1729,3 +1729,126 @@ msgstr "Bez grupy"
 
 msgid "Untagged"
 msgstr "Bez tagu"
+
+msgid "Find an inbox"
+msgstr "Znajdź skrzynkę odbiorczą"
+
+msgid "No inboxes found"
+msgstr "Nie znaleziono skrzynek odbiorczych"
+
+msgid "Current inbox"
+msgstr "Bieżąca skrzynka odbiorcza"
+
+msgid "Switch inbox"
+msgstr "Przełącz skrzynkę odbiorczą"
+
+msgid "Your inboxes"
+msgstr "Twoje skrzynki odbiorcze"
+
+msgid "Inbox ID"
+msgstr "ID skrzynki odbiorczej"
+
+msgid "Copy inbox ID"
+msgstr "Kopiuj ID skrzynki odbiorczej"
+
+msgid "Inbox ID copied"
+msgstr "Skopiowano ID skrzynki odbiorczej"
+
+msgid "Open %s"
+msgstr "Otwórz %s"
+
+msgid "Confirm it's you to open this inbox. You only need to do this once on this device."
+msgstr "Potwierdź, że to Ty, aby otworzyć tę skrzynkę odbiorczą. Na tym urządzeniu wystarczy to zrobić raz."
+
+msgid "Password of %s"
+msgstr "Hasło użytkownika %s"
+
+msgid "Incorrect password."
+msgstr "Nieprawidłowe hasło."
+
+msgid "Open inbox"
+msgstr "Otwórz skrzynkę odbiorczą"
+
+msgid "Choose an inbox"
+msgstr "Wybierz skrzynkę odbiorczą"
+
+msgid "Your account has access to more than one inbox. You can switch between them at any time."
+msgstr "Twoje konto ma dostęp do więcej niż jednej skrzynki odbiorczej. Możesz przełączać się między nimi w dowolnym momencie."
+
+msgid "Log in with another account"
+msgstr "Zaloguj się na inne konto"
+
+msgid "Create your account"
+msgstr "Utwórz konto"
+
+msgid "Choose a username and a password to accept your invite."
+msgstr "Wybierz nazwę użytkownika i hasło, aby przyjąć zaproszenie."
+
+msgid "Repeat the password"
+msgstr "Powtórz hasło"
+
+msgid "Create account and join"
+msgstr "Utwórz konto i dołącz"
+
+msgid "Log in and join"
+msgstr "Zaloguj się i dołącz"
+
+msgid "Already have an account?"
+msgstr "Masz już konto?"
+
+msgid "New here?"
+msgstr "Jesteś tu nowy?"
+
+msgid "Create an account"
+msgstr "Utwórz konto"
+
+msgid "Ignore the invite"
+msgstr "Zignoruj zaproszenie"
+
+msgid "You now have access to %s"
+msgstr "Masz teraz dostęp do %s"
+
+msgid "The passwords do not match."
+msgstr "Hasła nie są takie same."
+
+msgid "Not now"
+msgstr "Nie teraz"
+
+msgid "Accept invite"
+msgstr "Przyjmij zaproszenie"
+
+msgid "You're invited to an inbox"
+msgstr "Masz zaproszenie do skrzynki odbiorczej"
+
+msgid "You've joined %s"
+msgstr "Dołączono do %s"
+
+msgid "It is now next to your other inboxes, at the top of the sidebar."
+msgstr "Jest teraz obok Twoich pozostałych skrzynek odbiorczych, na górze paska bocznego."
+
+msgid "Accept to add it to your account. You can switch between your inboxes at any time."
+msgstr "Przyjmij, aby dodać ją do swojego konta. Możesz przełączać się między skrzynkami odbiorczymi w dowolnym momencie."
+
+msgid "Accepting as"
+msgstr "Akceptujesz jako"
+
+msgid "Use another account"
+msgstr "Użyj innego konta"
+
+msgid "Stay in %s"
+msgstr "Zostań w %s"
+
+msgid "This invite link has expired or was already used. Ask the inbox admin for a new one."
+msgstr "Ten link z zaproszeniem wygasł lub został już użyty. Poproś administratora skrzynki odbiorczej o nowy."
+
+msgid "This invite is for another account. Use that account to accept it."
+msgstr "To zaproszenie jest dla innego konta. Użyj tamtego konta, aby je przyjąć."
+
+msgid "You already have access to this inbox."
+msgstr "Masz już dostęp do tej skrzynki odbiorczej."
+
+msgid "Log in to accept it, or create an account if you are new."
+msgstr "Zaloguj się, aby je przyjąć, lub utwórz konto, jeśli jesteś tu nowy."
+
+msgid "This username is taken. If it is yours, log in instead."
+msgstr "Ta nazwa użytkownika jest zajęta. Jeśli należy do Ciebie, zaloguj się."

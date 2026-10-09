@@ -1728,3 +1728,126 @@ msgstr "Grup yok"
 
 msgid "Untagged"
 msgstr "Etiketsiz"
+
+msgid "Find an inbox"
+msgstr "Inbox ara"
+
+msgid "No inboxes found"
+msgstr "Inbox bulunamadı"
+
+msgid "Current inbox"
+msgstr "Şu anki inbox"
+
+msgid "Switch inbox"
+msgstr "Inbox değiştir"
+
+msgid "Your inboxes"
+msgstr "Inbox'ların"
+
+msgid "Inbox ID"
+msgstr "Inbox ID'si"
+
+msgid "Copy inbox ID"
+msgstr "Inbox ID'sini kopyala"
+
+msgid "Inbox ID copied"
+msgstr "Inbox ID'si kopyalandı"
+
+msgid "Open %s"
+msgstr "%s aç"
+
+msgid "Confirm it's you to open this inbox. You only need to do this once on this device."
+msgstr "Bu inbox'ı açmak için sen olduğunu doğrula. Bu cihazda bunu yalnızca bir kez yapman gerekiyor."
+
+msgid "Password of %s"
+msgstr "%s şifresi"
+
+msgid "Incorrect password."
+msgstr "Şifre yanlış."
+
+msgid "Open inbox"
+msgstr "Inbox'ı aç"
+
+msgid "Choose an inbox"
+msgstr "Bir inbox seç"
+
+msgid "Your account has access to more than one inbox. You can switch between them at any time."
+msgstr "Hesabının birden fazla inbox'a erişimi var. Aralarında istediğin zaman geçiş yapabilirsin."
+
+msgid "Log in with another account"
+msgstr "Başka bir hesapla giriş yap"
+
+msgid "Create your account"
+msgstr "Hesabını oluştur"
+
+msgid "Choose a username and a password to accept your invite."
+msgstr "Davetini kabul etmek için bir kullanıcı adı ve şifre seç."
+
+msgid "Repeat the password"
+msgstr "Şifreyi tekrarla"
+
+msgid "Create account and join"
+msgstr "Hesap oluştur ve katıl"
+
+msgid "Log in and join"
+msgstr "Giriş yap ve katıl"
+
+msgid "Already have an account?"
+msgstr "Zaten bir hesabın var mı?"
+
+msgid "New here?"
+msgstr "Yeni misin?"
+
+msgid "Create an account"
+msgstr "Hesap oluştur"
+
+msgid "Ignore the invite"
+msgstr "Daveti yok say"
+
+msgid "You now have access to %s"
+msgstr "Artık %s erişimin var"
+
+msgid "The passwords do not match."
+msgstr "Şifreler eşleşmiyor."
+
+msgid "Not now"
+msgstr "Şimdi değil"
+
+msgid "Accept invite"
+msgstr "Daveti kabul et"
+
+msgid "You're invited to an inbox"
+msgstr "Bir inbox'a davet edildin"
+
+msgid "You've joined %s"
+msgstr "%s inbox'ına katıldın"
+
+msgid "It is now next to your other inboxes, at the top of the sidebar."
+msgstr "Artık kenar çubuğunun üstünde, diğer inbox'larının yanında."
+
+msgid "Accept to add it to your account. You can switch between your inboxes at any time."
+msgstr "Hesabına eklemek için kabul et. Inbox'ların arasında istediğin zaman geçiş yapabilirsin."
+
+msgid "Accepting as"
+msgstr "Kabul eden hesap"
+
+msgid "Use another account"
+msgstr "Başka bir hesap kullan"
+
+msgid "Stay in %s"
+msgstr "%s içinde kal"
+
+msgid "This invite link has expired or was already used. Ask the inbox admin for a new one."
+msgstr "Bu davet bağlantısının süresi dolmuş ya da zaten kullanılmış. Inbox yöneticisinden yenisini iste."
+
+msgid "This invite is for another account. Use that account to accept it."
+msgstr "Bu davet başka bir hesap için. Kabul etmek için o hesabı kullan."
+
+msgid "You already have access to this inbox."
+msgstr "Bu inbox'a zaten erişimin var."
+
+msgid "Log in to accept it, or create an account if you are new."
+msgstr "Kabul etmek için giriş yap ya da yeniysen bir hesap oluştur."
+
+msgid "This username is taken. If it is yours, log in instead."
+msgstr "Bu kullanıcı adı alınmış. Senin ise giriş yap."

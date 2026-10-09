@@ -26,6 +26,9 @@ import {
 } from '@src/Constants';
 import PreviewMedia from './PreviewMedia';
 import { getToken } from '@src/helpers/StorageHelper';
+import { loadTenants } from '@src/helpers/InboxHelper';
+import { setTenants } from '@src/store/reducers/inboxesReducer';
+import AcceptInviteDialog from '@src/components/InboxSwitcher/AcceptInviteDialog';
 import ChatAssignment from './ChatAssignment';
 import ChatTags from './ChatTags';
 import ChatTagsList from './ChatTagsList';
@@ -56,6 +59,7 @@ import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import { cn } from '@src/lib/utils';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
+	advanceLoadingProgress,
 	setSearchMessagesVisible,
 	setState,
 } from '@src/store/reducers/UIReducer';
@@ -182,9 +186,7 @@ const Main: React.FC = () => {
 	const [isMaximize] = useState(query.get('maximize') === '1');
 
 	const setProgress = (value: number) => {
-		if (value > loadingProgress) {
-			dispatch(setState({ loadingProgress: value }));
-		}
+		dispatch(advanceLoadingProgress(value));
 	};
 
 	const logOutForActivation = async () => {
@@ -926,6 +928,15 @@ const Main: React.FC = () => {
 		};
 	}, [newMessages]);
 
+	const retrieveTenants = async (username: string) => {
+		try {
+			dispatch(setTenants(await loadTenants(getToken(), username)));
+		} catch (error) {
+			// Backends before MT 3.6 have no inbox list: no switcher then
+			console.error('Error in retrieveTenants', error);
+		}
+	};
+
 	// ** 2 **
 	const listUsers = async () => {
 		setLoadingComponent('Users');
@@ -974,6 +985,9 @@ const Main: React.FC = () => {
 			const data = await fetchCurrentUser();
 			dispatch(setCurrentUser(data));
 			dispatch(setIsUserAvailable(data.profile?.is_available ?? false));
+
+			// In the background: the inbox switcher, for accounts in several
+			retrieveTenants(data.username);
 
 			const role = data.profile?.role;
 
@@ -1251,6 +1265,11 @@ const Main: React.FC = () => {
 			)}
 
 			{previewMediaObject && <PreviewMedia data={previewMediaObject} />}
+
+			{/* An invite link opened while logged in, once the app has loaded.
+			    Mounted without one too: it still owns the password step after
+			    the invite is done */}
+			{loadingProgress >= 100 && <AcceptInviteDialog />}
 
 			{isDownloadUnsupportedFileVisible && (
 				<DownloadUnsupportedFile

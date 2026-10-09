@@ -54,7 +54,6 @@ import StartChat from '../../StartChat';
 import useUnmountTransition from '@src/hooks/useUnmountTransition';
 import { clearContactProvidersData } from '@src/helpers/StorageHelper';
 import SelectableChatTag from '../../SelectableChatTag';
-import { clearUserSession } from '@src/helpers/ApiHelper';
 import Notifications from './Notifications';
 import {
 	BarChart as BarChartIcon,
@@ -72,8 +71,6 @@ import {
 	handleChatAssignmentEvent,
 } from '@src/helpers/SidebarHelper';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
-import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
-import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import { setChatsCount } from '@src/store/reducers/chatsCountReducer';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -143,10 +140,10 @@ import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionInd
 import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
+import InboxSwitcher from '@src/components/InboxSwitcher';
+import useLogout from '@src/hooks/useLogout';
 import UserAvailability from '@src/components/UserAvailability';
 import UserListView from '@src/components/UserListView';
-import { updateUserAvailability } from '@src/api/usersApi';
-import { logout } from '@src/api/authApi';
 
 const CHAT_LIST_SCROLL_OFFSET = 2000;
 
@@ -193,6 +190,9 @@ const Sidebar: React.FC<Props> = ({
 	const isUserActionsRestricted = useIsUserActionsRestricted();
 	const isUserAvailable = useAppSelector(
 		(state) => state.isUserAvailable.value
+	);
+	const hasSeveralInboxes = useAppSelector(
+		(state) => state.inboxes.tenants.length > 1
 	);
 	const isUserAvailabilityFeatureEnabled = useAppSelector(
 		(state) => state.isUserAvailabilityFeatureEnabled.value
@@ -316,41 +316,16 @@ const Sidebar: React.FC<Props> = ({
 
 	const [missingChats, setMissingChats] = useState<string[]>([]);
 
-	const [originalDocumentTitle, setOriginalDocumentTitle] = useState('');
-
 	const timer = useRef<NodeJS.Timeout>();
 
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 
+	const logOutUser = useLogout();
+
 	const logOut = async () => {
-		// Set as unavailable on logout
-		if (isUserAvailabilityFeatureEnabled && isUserAvailable && !!currentUser) {
-			try {
-				await updateUserAvailability(currentUser.id, { is_available: false });
-			} catch (error: any | AxiosError) {
-				console.error(error);
-			}
-		}
-
-		// Clear the backend session too, not just the local token. Otherwise a
-		// stale session lingers: the login page then shows "Continue as" and,
-		// on a "Login with 360dialog" retry, takes the sso_switch path (which
-		// depends on 360dialog's currently broken authx logout) instead of a
-		// clean login. Best effort — ignored if there is no session to clear.
-		try {
-			await logout();
-		} catch (error: any | AxiosError) {
-			console.error(error);
-		}
-
-		clearUserSession(undefined, undefined, navigate);
-
-		// TODO: Consider calling it in clearUserSession method
-		dispatch(setCurrentUser(undefined));
-		dispatch(setTemplates({}));
-
+		await logOutUser();
 		hideMenu();
 	};
 
@@ -372,7 +347,9 @@ const Sidebar: React.FC<Props> = ({
 	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
-		setOriginalDocumentTitle(document.title);
+		// Restored on unmount (logout, inbox switch): the number is prepended
+		// on every mount
+		const originalDocumentTitle = document.title;
 
 		return () => {
 			document.title = originalDocumentTitle;
@@ -998,6 +975,8 @@ const Sidebar: React.FC<Props> = ({
 				isChatOnly && 'hidden'
 			)}
 		>
+			{hasSeveralInboxes && <InboxSwitcher />}
+
 			<div className="flex h-(--header-height) items-center justify-between bg-gray-light px-3.75 py-1 max-md:px-2.5">
 				<div className="relative flex">
 					<SimpleTooltip title={t('Business Profile')} disableHoverableContent>

@@ -1,8 +1,11 @@
 import {
 	clearContactProvidersData,
 	clearMessageDrafts,
+	clearCurrentTenant,
 	clearToken,
 	getStorage,
+	getToken,
+	removeTenantToken,
 	STORAGE_TAG_TOKEN,
 } from './StorageHelper';
 import axios, {
@@ -62,9 +65,16 @@ export const clearUserSession = (
 	nextLocation: Location | undefined,
 	navigate: NavigateFunction | undefined
 ) => {
+	// The backend rejected the token: it goes from the saved inbox tokens
+	// too. Any other way out keeps them (see StorageHelper)
+	const token = getToken();
+	if (errorCase === 'invalidToken' && token) {
+		removeTenantToken(token);
+	}
 	clearToken();
 	clearContactProvidersData();
 	clearMessageDrafts();
+	clearCurrentTenant();
 
 	let path;
 
