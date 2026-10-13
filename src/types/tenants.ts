@@ -6,6 +6,21 @@ export interface Tenant {
 	phone_number: string;
 }
 
+// The inbox of the request (GC-72). Read-only: everything can be read, but
+// no message can be sent; 360dialog removes the inbox on remove_at unless
+// the channel is upgraded.
+export interface CurrentTenant extends Tenant {
+	access_mode: 'full' | 'read_only';
+	read_only_reason:
+		| 'trial_ended'
+		| 'not_premium'
+		| 'channel_terminated'
+		| 'removed'
+		| null;
+	upgrade_url: string | null;
+	remove_at: string | null;
+}
+
 export interface TenantListResponse {
 	tenants: Tenant[];
 }

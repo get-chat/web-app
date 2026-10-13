@@ -43,6 +43,9 @@ import { useTranslation } from 'react-i18next';
 import { AppConfigContext } from '@src/contexts/AppConfigContext';
 import { setTemplates } from '@src/store/reducers/templatesReducer';
 import { setCurrentUser } from '@src/store/reducers/currentUserReducer';
+import { setCurrentTenant } from '@src/store/reducers/currentTenantReducer';
+import { fetchCurrentTenant } from '@src/api/tenantsApi';
+import TenantAccessBanner from '@src/components/TenantAccessBanner';
 import { setTags } from '@src/store/reducers/tagsReducer';
 import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
@@ -430,8 +433,14 @@ const Main: React.FC = () => {
 			PubSub.publish(EVENT_TOPIC_FORCE_REFRESH_CHAT, true);
 		};
 
+		// A missed websocket event must not keep a stale access mode
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === 'visible') retrieveCurrentTenant();
+		};
+
 		window.addEventListener('offline', handleBrowserOffline);
 		window.addEventListener('online', handleBrowserOnline);
+		document.addEventListener('visibilitychange', handleVisibilityChange);
 
 		const onUnsupportedFileEvent = function (msg: string, data: any) {
 			setUnsupportedFile(data);
@@ -451,6 +460,7 @@ const Main: React.FC = () => {
 		return () => {
 			window.removeEventListener('offline', handleBrowserOffline);
 			window.removeEventListener('online', handleBrowserOnline);
+			document.removeEventListener('visibilitychange', handleVisibilityChange);
 			PubSub.unsubscribe(displayErrorEventToken);
 			PubSub.unsubscribe(unsupportedFileEventToken);
 		};
@@ -822,6 +832,11 @@ const Main: React.FC = () => {
 
 					PubSub.publish(EVENT_TOPIC_USER_AVAILABILITY, userAvailability);
 				}
+
+				// The inbox became read-only, or full again
+				if (wabaPayload?.tenant_access) {
+					retrieveCurrentTenant();
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -928,6 +943,16 @@ const Main: React.FC = () => {
 		};
 	}, [newMessages]);
 
+	// The inbox's access mode (GC-72); refetched whenever it may have changed
+	const retrieveCurrentTenant = async () => {
+		try {
+			dispatch(setCurrentTenant(await fetchCurrentTenant()));
+		} catch (error) {
+			// Backends before GC-72 have no such endpoint: full access then
+			console.error('Error in retrieveCurrentTenant', error);
+		}
+	};
+
 	const retrieveTenants = async (username: string) => {
 		try {
 			dispatch(setTenants(await loadTenants(getToken(), username)));
@@ -988,6 +1013,7 @@ const Main: React.FC = () => {
 
 			// In the background: the inbox switcher, for accounts in several
 			retrieveTenants(data.username);
+			retrieveCurrentTenant();
 
 			const role = data.profile?.role;
 
@@ -1168,8 +1194,8 @@ const Main: React.FC = () => {
 			className={cn(
 				// A floating window over the page background; it fills the
 				// screen below 1500px, and on phones lays out as a grid
-				'z-1 flex h-[calc(100vh-40px)] w-[90vw] max-w-[1500px] animate-fade-in overflow-hidden rounded-(--wrapper-border-radius) bg-gray-light shadow-lg outline outline-[rgba(255,255,255,0.75)]',
-				'max-2xl:h-screen max-2xl:w-screen max-2xl:max-w-none max-md:[display:inherit] max-md:rounded-none',
+				'z-1 flex flex-col h-[calc(100vh-40px)] w-[90vw] max-w-[1500px] animate-fade-in overflow-hidden rounded-(--wrapper-border-radius) bg-gray-light shadow-lg outline outline-[rgba(255,255,255,0.75)]',
+				'max-2xl:h-screen max-2xl:w-screen max-2xl:max-w-none max-md:rounded-none',
 				isMaximize &&
 					'h-screen w-screen max-w-none rounded-none shadow-none outline-none',
 				// Analytics covers the window only. Not always: the loading screen
@@ -1179,55 +1205,60 @@ const Main: React.FC = () => {
 				isIPad13 && 'absolute! inset-0! size-full!'
 			)}
 		>
-			{isTemplatesReady && (
-				<Sidebar
-					isLoaded={loadingProgress >= 100}
-					displayNotification={displayNotification}
-					contactProvidersData={contactProvidersData}
-					isChatOnly={isChatOnly}
-					setChatTagsListVisible={setChatTagsListVisible}
-				/>
-			)}
+			<TenantAccessBanner />
 
-			{isTemplatesReady && (
-				<ChatView
-					createSavedResponse={handleCreateSavedResponse}
-					contactProvidersData={contactProvidersData}
-					retrieveContactData={resolveContact}
-					displayNotification={displayNotification}
-					isChatOnly={isChatOnly}
-					setChatTagsVisible={setChatTagsVisible}
-					searchMessagesByKeyword={searchMessagesByKeyword}
-					setMessageWithStatuses={setMessageWithStatuses}
-				/>
-			)}
+			{/* The window's columns; the panels cover them on phones */}
+			<div className="relative flex min-h-0 flex-1">
+				{isTemplatesReady && (
+					<Sidebar
+						isLoaded={loadingProgress >= 100}
+						displayNotification={displayNotification}
+						contactProvidersData={contactProvidersData}
+						isChatOnly={isChatOnly}
+						setChatTagsListVisible={setChatTagsListVisible}
+					/>
+				)}
 
-			{searchMessagesTransition.isMounted && (
-				<SearchMessage
-					initialKeyword={searchMessagesInitialKeyword}
-					setInitialKeyword={setSearchMessagesInitialKeyword}
-					contactProvidersData={contactProvidersData}
-					isExiting={searchMessagesTransition.isExiting}
-					onAnimationEnd={searchMessagesTransition.handleAnimationEnd}
-				/>
-			)}
+				{isTemplatesReady && (
+					<ChatView
+						createSavedResponse={handleCreateSavedResponse}
+						contactProvidersData={contactProvidersData}
+						retrieveContactData={resolveContact}
+						displayNotification={displayNotification}
+						isChatOnly={isChatOnly}
+						setChatTagsVisible={setChatTagsVisible}
+						searchMessagesByKeyword={searchMessagesByKeyword}
+						setMessageWithStatuses={setMessageWithStatuses}
+					/>
+				)}
 
-			{contactDetailsTransition.isMounted && (
-				<ContactDetails
-					contactProvidersData={contactProvidersData}
-					retrieveContactData={resolveContact}
-					isExiting={contactDetailsTransition.isExiting}
-					onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
-				/>
-			)}
+				{searchMessagesTransition.isMounted && (
+					<SearchMessage
+						initialKeyword={searchMessagesInitialKeyword}
+						setInitialKeyword={setSearchMessagesInitialKeyword}
+						contactProvidersData={contactProvidersData}
+						isExiting={searchMessagesTransition.isExiting}
+						onAnimationEnd={searchMessagesTransition.handleAnimationEnd}
+					/>
+				)}
 
-			{messageStatusesTransition.isMounted && (
-				<MessageStatuses
-					message={messageWithStatuses}
-					isExiting={messageStatusesTransition.isExiting}
-					onAnimationEnd={messageStatusesTransition.handleAnimationEnd}
-				/>
-			)}
+				{contactDetailsTransition.isMounted && (
+					<ContactDetails
+						contactProvidersData={contactProvidersData}
+						retrieveContactData={resolveContact}
+						isExiting={contactDetailsTransition.isExiting}
+						onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
+					/>
+				)}
+
+				{messageStatusesTransition.isMounted && (
+					<MessageStatuses
+						message={messageWithStatuses}
+						isExiting={messageStatusesTransition.isExiting}
+						onAnimationEnd={messageStatusesTransition.handleAnimationEnd}
+					/>
+				)}
+			</div>
 
 			{isChatAssignmentVisible && (
 				<ChatAssignment
