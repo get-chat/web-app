@@ -2,6 +2,7 @@ import api from '@src/api/axiosInstance';
 import {
 	AcceptInviteRequest,
 	AcceptInviteResponse,
+	CurrentTenant,
 	Tenant,
 	TenantListResponse,
 } from '@src/types/tenants';
@@ -9,6 +10,12 @@ import {
 // The inboxes the account behind the token is a member of
 export const fetchTenants = async () => {
 	const response = await api.get<TenantListResponse>('/users/current/tenants/');
+	return response.data;
+};
+
+// The inbox of the token, with its access mode (GC-72)
+export const fetchCurrentTenant = async () => {
+	const response = await api.get<CurrentTenant>('/tenants/current/');
 	return response.data;
 };
 

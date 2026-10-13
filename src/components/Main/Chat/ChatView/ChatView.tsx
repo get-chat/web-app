@@ -82,6 +82,8 @@ import axios, { AxiosError, CancelTokenSource } from 'axios';
 import { setPreviewMediaObject } from '@src/store/reducers/previewMediaObjectReducer';
 import { flushSync } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
+import useIsTenantReadOnly from '@src/hooks/useIsTenantReadOnly';
+import { TenantReadOnlyFooter } from '@src/components/TenantAccessBanner';
 import SendTemplateDialog from '@src/components/SendTemplateDialog';
 import useChatAssignmentAPI from '@src/hooks/api/useChatAssignmentAPI';
 import useUnmountTransition from '@src/hooks/useUnmountTransition';
@@ -155,6 +157,7 @@ const ChatView: React.FC<Props> = (props) => {
 		isSavedResponsesVisible,
 		isInteractiveMessagesVisible,
 	} = useAppSelector((state) => state.UI);
+	const isTenantReadOnly = useIsTenantReadOnly();
 
 	// Footer panel animations are currently turned off (isEnabled: false)
 	// but stay wired; see the note on footer panels in panelTransitions.ts
@@ -1220,6 +1223,22 @@ const ChatView: React.FC<Props> = (props) => {
 	const [reactionDetailsAnchorEl, setReactionDetailsAnchorEl] =
 		useState<HTMLElement>();
 
+	// What was open to send from closes when the inbox becomes read-only
+	useEffect(() => {
+		if (!isTenantReadOnly) return;
+		dispatch(
+			setState({
+				isTemplatesVisible: false,
+				isSavedResponsesVisible: false,
+				isInteractiveMessagesVisible: false,
+			})
+		);
+		setSendTemplateDialogVisible(false);
+		setSendInteractiveDialogVisible(false);
+		setQuickReactionAnchorEl(undefined);
+		setReactionsEmojiPickerAnchorEl(undefined);
+	}, [isTenantReadOnly]);
+
 	const displayOptionsMenu = (
 		event: React.MouseEvent<Element | MouseEvent>,
 		chatMessage: Message
@@ -2209,9 +2228,12 @@ const ChatView: React.FC<Props> = (props) => {
 									displayDate={willDisplayDate}
 									isExpired={isExpired}
 									goToMessageId={goToMessageId}
-									retryMessage={retryMessage}
+									// A read-only inbox offers nothing that sends
+									retryMessage={isTenantReadOnly ? undefined : retryMessage}
 									onOptionsClick={displayOptionsMenu}
-									onQuickReactionsClick={displayQuickReactions}
+									onQuickReactionsClick={
+										isTenantReadOnly ? undefined : displayQuickReactions
+									}
 									onReactionDetailsClick={displayReactionDetails}
 									contactProvidersData={props.contactProvidersData}
 									setMessageWithStatuses={props.setMessageWithStatuses}
@@ -2327,7 +2349,9 @@ const ChatView: React.FC<Props> = (props) => {
 				/>
 			)}
 
-			{!isReadOnly && (
+			{isTenantReadOnly && <TenantReadOnlyFooter />}
+
+			{!isReadOnly && !isTenantReadOnly && (
 				<ChatFooter
 					waId={waId}
 					isExpired={isExpired}

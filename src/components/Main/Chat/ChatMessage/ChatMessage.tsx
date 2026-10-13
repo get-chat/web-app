@@ -205,10 +205,10 @@ const ChatMessage: React.FC<Props> = ({
 										: 'right-0 translate-x-full'
 								)}
 							>
-								{!isExpired && (
+								{!isExpired && onQuickReactionsClick && (
 									<div
 										className={actionClassName}
-										onClick={(event) => onQuickReactionsClick?.(event, data)}
+										onClick={(event) => onQuickReactionsClick(event, data)}
 									>
 										<InsertEmoticon />
 									</div>

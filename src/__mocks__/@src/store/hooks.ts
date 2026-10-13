@@ -10,6 +10,7 @@ export const useAppSelector = jest.fn((selector) =>
 		pendingMessages: { value: [] },
 		newMessages: { value: {} },
 		currentUser: { value: { id: 1, username: 'testuser' } },
+		currentTenant: { value: undefined },
 		users: { value: {} },
 		templates: { value: {} },
 		savedResponses: { value: {} },

@@ -277,6 +277,8 @@ export interface LegacyWabaWebhookWabaPayload {
 	chat_tagging?: ChatTagging;
 	chat_resolved?: ChatResolvedEvent;
 	user_availability?: UserAvailabilityEvent;
+	// The inbox's access mode changed (GC-72)
+	tenant_access?: object;
 }
 
 export interface ChatTagging {

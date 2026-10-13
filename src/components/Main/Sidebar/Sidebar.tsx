@@ -137,6 +137,7 @@ import { PersonList } from '@src/types/persons';
 import { store } from '@src/store';
 import useSettings from '@src/hooks/useSettings';
 import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionIndicator';
+import useIsTenantReadOnly from '@src/hooks/useIsTenantReadOnly';
 import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
 import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
@@ -188,6 +189,7 @@ const Sidebar: React.FC<Props> = ({
 	} = useAppSelector((state) => state.UI);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const isUserActionsRestricted = useIsUserActionsRestricted();
+	const isTenantReadOnly = useIsTenantReadOnly();
 	const isUserAvailable = useAppSelector(
 		(state) => state.isUserAvailable.value
 	);
@@ -1004,7 +1006,7 @@ const Sidebar: React.FC<Props> = ({
 				</div>
 
 				<div className="flex items-center justify-between">
-					{!isReadOnly && !isUserActionsRestricted && (
+					{!isReadOnly && !isUserActionsRestricted && !isTenantReadOnly && (
 						<SimpleTooltip title={t('New chat')} disableHoverableContent>
 							<Button
 								variant="ghost"
@@ -1548,7 +1550,7 @@ const Sidebar: React.FC<Props> = ({
 
 			{isUploadingMedia && !isMobileOnly && <UploadMediaIndicator />}
 
-			{hasFailedMessages && (
+			{hasFailedMessages && !isTenantReadOnly && (
 				<RetryFailedMessages
 					isSendingPendingMessages={isSendingPendingMessages}
 					contactProvidersData={contactProvidersData}
