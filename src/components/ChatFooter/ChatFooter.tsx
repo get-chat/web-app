@@ -476,7 +476,7 @@ const ChatFooter: React.FC<Props> = ({
 									<span className="font-semibold whitespace-nowrap text-chat-icon-dark">
 										{t('Utility message')}
 									</span>
-									<span className="min-w-0 flex-1 truncate text-[#736054]">
+									<span className="min-w-0 flex-1 leading-4 text-pretty text-[#736054]">
 										{t('No promotions. Billed at the utility rate.')}
 									</span>
 									<SimpleTooltip

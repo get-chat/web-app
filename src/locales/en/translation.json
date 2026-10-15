@@ -618,5 +618,6 @@
 	"Type an update, like an order or booking change": "",
 	"Send an update without a template": "",
 	"Send utility message": "",
-	"Sent as a utility message: keep it to an update the customer expects, with no promotions.": ""
+	"Sent as a utility message: keep it to an update the customer expects, with no promotions.": "",
+	"Utility messages can be up to %s characters long.": ""
 }

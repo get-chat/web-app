@@ -36,6 +36,9 @@ import {
 } from '@src/helpers/StorageHelper';
 import { useTranslation } from 'react-i18next';
 
+// Meta's limit for a Direct Send message body (regular texts allow 4,096)
+const DIRECT_SEND_MAX_BODY_LENGTH = 1024;
+
 interface Props {
 	waId: string | undefined;
 	isLoaded: boolean;
@@ -144,6 +147,21 @@ const useChat = ({
 			const preparedInput = decode(translateHTMLInputToText(input).trim());
 
 			if (preparedInput === '') {
+				return false;
+			}
+
+			// Direct Send bodies are capped by Meta; checked before queueing
+			// clears the composer, as the refusal would only come later
+			if (
+				isDirectSendMode &&
+				preparedInput.length > DIRECT_SEND_MAX_BODY_LENGTH
+			) {
+				window.displayCustomError(
+					t('Utility messages can be up to %s characters long.', {
+						postProcess: 'sprintf',
+						sprintf: [DIRECT_SEND_MAX_BODY_LENGTH],
+					})
+				);
 				return false;
 			}
 

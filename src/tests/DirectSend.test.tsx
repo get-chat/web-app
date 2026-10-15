@@ -109,6 +109,23 @@ describe('useChat - utility messages', () => {
 		});
 	});
 
+	it('keeps a utility message over 1,024 characters in the composer', async () => {
+		const { result } = renderHook(() => useChat(useChatProps(true)));
+		const tooLong = 'a'.repeat(1025);
+		act(() => result.current.setInput(tooLong));
+		await act(async () => {
+			await result.current.sendMessage(true, {
+				preventDefault: jest.fn(),
+			} as any);
+		});
+
+		expect(window.displayCustomError).toHaveBeenCalledWith(
+			'Utility messages can be up to %s characters long.'
+		);
+		expect(result.current.input).toBe(tooLong);
+		expect(mockDispatch).not.toHaveBeenCalled();
+	});
+
 	it('keeps regular messages unchanged', async () => {
 		(createMessage as jest.Mock).mockResolvedValue({
 			status: 202,

@@ -1862,7 +1862,7 @@ msgid "The utility message was not sent."
 msgstr "El mensaje de utilidad no se envió."
 
 msgid "Not utility"
-msgstr "No es de utilidad"
+msgstr "No cuentan como utilidad"
 
 msgid "Send a utility message"
 msgstr "Enviar un mensaje de utilidad"
@@ -1914,3 +1914,6 @@ msgstr "Enviar mensaje de utilidad"
 
 msgid "Sent as a utility message: keep it to an update the customer expects, with no promotions."
 msgstr "Se envía como mensaje de utilidad: limítalo a una actualización que el cliente espera, sin promociones."
+
+msgid "Utility messages can be up to %s characters long."
+msgstr "Los mensajes de utilidad pueden tener hasta %s caracteres."

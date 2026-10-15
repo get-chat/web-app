@@ -45,7 +45,7 @@ const DirectSendDialog: React.FC<Props> = ({ open, onCancel, onContinue }) => {
 			<div className="mb-2 text-[12px] font-semibold text-ink/75">
 				{isAllowed ? t('Utility') : t('Not utility')}
 			</div>
-			<ul className="flex flex-col gap-1.5">
+			<ul className="flex flex-col gap-1.5 p-0">
 				{items.map((item) => (
 					<li key={item} className="flex items-start gap-2 text-[13px]">
 						{isAllowed ? (

@@ -1260,6 +1260,7 @@ const ChatView: React.FC<Props> = (props) => {
 	useEffect(() => {
 		if (!isExpired) {
 			setDirectSendMode(false);
+			setDirectSendDialogVisible(false);
 		}
 	}, [isExpired]);
 
@@ -1276,7 +1277,9 @@ const ChatView: React.FC<Props> = (props) => {
 	const confirmDirectSend = () => {
 		storeDirectSendAcknowledged();
 		setDirectSendDialogVisible(false);
-		setDirectSendMode(true);
+		if (isExpired) {
+			setDirectSendMode(true);
+		}
 	};
 
 	const stopDirectSend = () => {

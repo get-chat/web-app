@@ -1888,3 +1888,6 @@ msgstr ""
 
 msgid "Sent as a utility message: keep it to an update the customer expects, with no promotions."
 msgstr ""
+
+msgid "Utility messages can be up to %s characters long."
+msgstr ""

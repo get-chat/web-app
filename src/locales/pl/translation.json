@@ -604,7 +604,7 @@
 	"Utility messages are not available on this inbox yet.": "Wiadomości użytkowe nie są jeszcze dostępne w tej skrzynce.",
 	"The utility message was not sent: %s": "Wiadomość użytkowa nie została wysłana: %s",
 	"The utility message was not sent.": "Wiadomość użytkowa nie została wysłana.",
-	"Not utility": "Nie użytkowe",
+	"Not utility": "Nieużytkowe",
 	"Send a utility message": "Wyślij wiadomość użytkową",
 	"The customer care window is closed, but you can still send a utility message: an update about something the customer did or asked for. No template is needed, WhatsApp creates one from your text.": "Okno obsługi klienta jest zamknięte, ale nadal możesz wysłać wiadomość użytkową: aktualizację dotyczącą czegoś, co klient zrobił lub o co poprosił. Szablon nie jest potrzebny, WhatsApp utworzy go z Twojego tekstu.",
 	"Order, delivery and booking updates": "Aktualizacje zamówień, dostaw i rezerwacji",
@@ -621,5 +621,6 @@
 	"Type an update, like an order or booking change": "Wpisz aktualizację, np. zmianę zamówienia lub rezerwacji",
 	"Send an update without a template": "Wyślij aktualizację bez szablonu",
 	"Send utility message": "Wyślij wiadomość użytkową",
-	"Sent as a utility message: keep it to an update the customer expects, with no promotions.": "Wysyłane jako wiadomość użytkowa: ogranicz się do aktualizacji, której klient oczekuje, bez promocji."
+	"Sent as a utility message: keep it to an update the customer expects, with no promotions.": "Wysyłane jako wiadomość użytkowa: ogranicz się do aktualizacji, której klient oczekuje, bez promocji.",
+	"Utility messages can be up to %s characters long.": "Wiadomości użytkowe mogą mieć maksymalnie %s znaków."
 }
