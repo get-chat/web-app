@@ -34,6 +34,7 @@ import {
 	removeMessageDraft,
 	storeMessageDraft,
 } from '@src/helpers/StorageHelper';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
 	waId: string | undefined;
@@ -41,6 +42,8 @@ interface Props {
 	setExpired: (value: boolean) => void;
 	handleIfUnauthorized: (error: AxiosError) => void;
 	MESSAGES_PER_PAGE: number;
+	// The composer sends utility messages (Direct Send)
+	isDirectSendMode?: boolean;
 }
 
 const useChat = ({
@@ -49,7 +52,9 @@ const useChat = ({
 	setExpired,
 	handleIfUnauthorized,
 	MESSAGES_PER_PAGE,
+	isDirectSendMode = false,
 }: Props) => {
+	const { t } = useTranslation();
 	const currentUser = useAppSelector((state) => state.currentUser.value);
 	const users = useAppSelector((state) => state.users.value);
 	const templates = useAppSelector((state) => state.templates.value);
@@ -144,17 +149,25 @@ const useChat = ({
 
 			console.log('You typed: ', preparedInput);
 
-			requestBody = {
-				wa_id: waId,
-				type: MessageType.text,
-				text: {
-					body: preparedInput,
-					// Render a link preview on the recipient's device
-					...(containsPreviewableURL(preparedInput)
-						? { preview_url: true }
-						: {}),
-				},
-			};
+			requestBody = isDirectSendMode
+				? {
+						wa_id: waId,
+						type: MessageType.text,
+						// Direct Send renders no link previews
+						text: { body: preparedInput },
+						category: 'utility',
+				  }
+				: {
+						wa_id: waId,
+						type: MessageType.text,
+						text: {
+							body: preparedInput,
+							// Render a link preview on the recipient's device
+							...(containsPreviewableURL(preparedInput)
+								? { preview_url: true }
+								: {}),
+						},
+				  };
 		} else if (customPayload) {
 			// Resend payload is being sent
 			requestBody = customPayload;
@@ -190,6 +203,9 @@ const useChat = ({
 		} catch (error: any | AxiosError) {
 			if (error.response) {
 				const status = error.response.status;
+				if (requestBody.category) {
+					handleRefusedDirectSend(status, error.response.data);
+				}
 				// Switch to expired mode if status code is 453
 				if (status === 453) {
 					setExpired(true);
@@ -205,6 +221,38 @@ const useChat = ({
 
 		// Close emoji picker
 		PubSub.publish(EVENT_TOPIC_EMOJI_PICKER_VISIBILITY, false);
+	};
+
+	// A refused utility message would otherwise vanish without a word: its
+	// text left the composer when it was queued
+	const handleRefusedDirectSend = (status: number, responseData: any) => {
+		// Errors relayed from the message gateway arrive as a JSON string
+		let data = responseData;
+		if (typeof data === 'string') {
+			try {
+				data = JSON.parse(data);
+			} catch {
+				data = { reason: data };
+			}
+		}
+
+		if (status === 453) {
+			// Backends without Direct Send ignore `category`
+			window.displayCustomError(
+				t('Utility messages are not available on this inbox yet.')
+			);
+		} else if (status >= 400 && status < 500 && status !== 401) {
+			const reason =
+				data?.reason ??
+				Object.values(data ?? {})
+					.flat()
+					.find((value) => typeof value === 'string');
+			window.displayCustomError(
+				reason
+					? t('The utility message was not sent: %s', reason)
+					: t('The utility message was not sent.')
+			);
+		}
 	};
 
 	const handleFailedMessage = (requestBody: CreateMessageRequest) => {
@@ -390,6 +438,7 @@ const useChat = ({
 		sendMessage,
 		queueMessage,
 		handleFailedMessage,
+		handleRefusedDirectSend,
 	};
 };
 

@@ -1,5 +1,7 @@
 import React from 'react';
 import TouchAppIcon from '@src/components/icons/TouchApp';
+import ReceiptLongIcon from '@src/components/icons/ReceiptLong';
+import { isDirectSendMessage } from '@src/helpers/MessageHelper';
 import { useTranslation } from 'react-i18next';
 import ButtonsMessage from './components/ButtonsMessage';
 import ListMessage from './components/ListMessage';
@@ -43,8 +45,17 @@ const InteractiveMessage: React.FC<Props> = ({ data }) => {
 	return (
 		<>
 			<div className="mb-1.25 flex items-center gap-1.25 text-[length:x-small] text-ink/60">
-				<TouchAppIcon className="size-[0.6em]! text-ink/40!" />{' '}
-				{t('Interactive message')}
+				{isDirectSendMessage(data) ? (
+					<>
+						<ReceiptLongIcon className="size-[0.6em]! text-ink/40!" />{' '}
+						{t('Utility message')}
+					</>
+				) : (
+					<>
+						<TouchAppIcon className="size-[0.6em]! text-ink/40!" />{' '}
+						{t('Interactive message')}
+					</>
+				)}
 			</div>
 
 			{type === InteractiveMessageTypes.list_reply && (

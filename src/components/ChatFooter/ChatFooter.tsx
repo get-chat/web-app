@@ -12,6 +12,8 @@ import ContactsIcon from '@src/components/icons/Contacts';
 import LocationOnIcon from '@src/components/icons/LocationOn';
 import NotesIcon from '@src/components/icons/Notes';
 import MicIcon from '@src/components/icons/Mic';
+import ReceiptLongIcon from '@src/components/icons/ReceiptLong';
+import CloseIcon from '@src/components/icons/Close';
 // @ts-ignore
 import { Emoji, NimblePicker } from 'emoji-mart';
 import 'emoji-mart/css/emoji-mart.css';
@@ -60,6 +62,10 @@ interface Props {
 	setAccept: (value: string) => void;
 	sendHandledChosenFiles: (files: ChosenFileList) => void;
 	processCommand: (text: string) => void;
+	// Direct Send: the composer sends utility messages while the window is closed
+	isDirectSendMode?: boolean;
+	onStartDirectSend?: () => void;
+	onStopDirectSend?: () => void;
 }
 
 interface FooterActionButtonProps extends React.ComponentProps<typeof Button> {
@@ -104,6 +110,9 @@ const ChatFooter: React.FC<Props> = ({
 	setAccept,
 	sendHandledChosenFiles,
 	processCommand,
+	isDirectSendMode = false,
+	onStartDirectSend,
+	onStopDirectSend,
 }) => {
 	const { t } = useTranslation();
 
@@ -116,6 +125,13 @@ const ChatFooter: React.FC<Props> = ({
 	} = useAppSelector((state) => state.UI);
 
 	const isUserActionsRestricted = useIsUserActionsRestricted();
+
+	// Utility messages are offered wherever templates are
+	const isDirectSendAvailable =
+		isExpired && !isUserActionsRestricted && !!onStartDirectSend;
+	// Nothing can be typed: the window is closed and no utility message is
+	// being written
+	const isLocked = isExpired && !isDirectSendMode;
 
 	const fileInput = useRef<HTMLInputElement>(null);
 	const editable = useRef<HTMLDivElement>(null);
@@ -171,13 +187,13 @@ const ChatFooter: React.FC<Props> = ({
 
 	useEffect(() => {
 		// Workaround for focused input for expired chats
-		if (isExpired) {
+		if (isLocked) {
 			editable.current?.blur();
 		}
 
 		// Focus on the message input when chat is loaded
 		const eventToken = PubSub.subscribe(EVENT_TOPIC_FOCUS_MESSAGE_INPUT, () => {
-			if (!isExpired) {
+			if (!isLocked) {
 				editable.current?.focus();
 			}
 		});
@@ -185,7 +201,13 @@ const ChatFooter: React.FC<Props> = ({
 		return () => {
 			PubSub.unsubscribe(eventToken);
 		};
-	}, [editable.current, isExpired]);
+	}, [editable.current, isLocked]);
+
+	useEffect(() => {
+		if (isDirectSendMode) {
+			editable.current?.focus();
+		}
+	}, [isDirectSendMode]);
 
 	useEffect(() => {
 		const preparedInput = translateHTMLInputToText(input).trim();
@@ -361,7 +383,7 @@ const ChatFooter: React.FC<Props> = ({
 	};
 
 	const handleMouseUp = () => {
-		if (isExpired) {
+		if (isLocked) {
 			displayQuickActionsMenu();
 		}
 	};
@@ -432,60 +454,107 @@ const ChatFooter: React.FC<Props> = ({
 				<div
 					className={cn(
 						'flex max-h-100 justify-between px-2.5 transition-all duration-500 ease-out',
-						isExpired ? 'h-auto! flex-col [align-items:normal]' : 'items-center'
+						isLocked ? 'h-auto! flex-col [align-items:normal]' : 'items-center'
 					)}
 				>
-					<form className="flex flex-1">
+					<form className="flex min-w-0 flex-1">
 						<div
 							className={cn(
-								'relative mb-1.25 h-auto flex-1 overflow-hidden rounded-[12px] border-none transition-[box-shadow,background-color] duration-200 ease-out focus:border-none focus:outline-none',
-								isExpired
+								'relative mb-1.25 h-auto min-w-0 flex-1 overflow-hidden rounded-[12px] border-none transition-[box-shadow,background-color] duration-200 ease-out focus:border-none focus:outline-none',
+								isLocked
 									? 'bg-[#f2edea] shadow-none'
 									: 'bg-white shadow-[var(--shadow-sm),0_0_0_1px_rgba(94,56,38,0.06)] focus-within:shadow-[var(--shadow-sm),0_0_0_1px_var(--color-primary),0_0_0_4px_rgba(101,203,172,0.2)]'
 							)}
 						>
-							{translateHTMLInputToText(input).trim() === '' && (
+							{isDirectSendMode && (
+								// Business-initiated yellow, like the bubble it will become
 								<div
-									className={cn(
-										'absolute z-0 w-full truncate py-2 pr-6.25 pl-3.75',
-										isExpired ? 'text-[#736054]' : 'text-[#9c8173]'
-									)}
+									className="flex animate-grow-in items-center gap-1.5 border-b border-[#e8e1bd] bg-[#f4f0d7] py-1 pr-1 pl-3.75 text-[12px]"
+									data-test-id="direct-send-strip"
 								>
-									{isExpired ? (
-										<span>
-											{t(
-												'This chat has expired. You need to answer with template messages.'
-											)}
-										</span>
-									) : (
-										<span>{t('Type a message')}</span>
-									)}
+									<ReceiptLongIcon className="size-4! text-chat-icon!" />
+									<span className="font-semibold whitespace-nowrap text-chat-icon-dark">
+										{t('Utility message')}
+									</span>
+									<span className="min-w-0 flex-1 truncate text-[#736054]">
+										{t('No promotions. Billed at the utility rate.')}
+									</span>
+									<SimpleTooltip
+										title={t('Back to regular messages')}
+										side="top"
+										disableHoverableContent
+									>
+										<Button
+											type="button"
+											variant="ghost"
+											color="neutral"
+											size="icon-xs"
+											className="rounded-full"
+											aria-label={t('Back to regular messages')}
+											onClick={onStopDirectSend}
+										>
+											<CloseIcon className="size-4! text-chat-icon!" />
+										</Button>
+									</SimpleTooltip>
 								</div>
 							)}
-							<div
-								// The transparent outline beats the app's global
-								// :focus-visible one
-								className="relative z-100 max-h-[250px] min-h-[26px] w-full overflow-y-auto px-3.75 py-2 [word-break:break-word] [outline:1px_solid_transparent]! max-md:max-h-40"
-								id="typeBox__editable"
-								ref={editable}
-								contentEditable="true"
-								onFocus={handleFocus}
-								onMouseUp={handleMouseUp}
-								onPaste={(event: React.ClipboardEvent<HTMLElement>) =>
-									handlePaste(event)
-								}
-								onCopy={(event: React.ClipboardEvent<HTMLDivElement>) =>
-									handleCopy(event)
-								}
-								onDrop={(event: React.DragEvent) => event.preventDefault()}
-								spellCheck="true"
-								onInput={(event: React.FormEvent<HTMLDivElement>) =>
-									handleEditableChange(event)
-								}
-								onKeyDown={(e: React.KeyboardEvent) => {
-									if (e.keyCode === 13 && !e.shiftKey) sendMessage(true, e);
-								}}
-							/>
+							<div className="relative">
+								{translateHTMLInputToText(input).trim() === '' && (
+									<div
+										className={cn(
+											'absolute z-0 w-full truncate py-2 pr-6.25 pl-3.75',
+											isLocked ? 'text-[#736054]' : 'text-[#9c8173]'
+										)}
+									>
+										{isLocked ? (
+											<span>
+												{isDirectSendAvailable
+													? t(
+															'Window closed. Reply with a template or a utility message.'
+													  )
+													: t(
+															'This chat has expired. You need to answer with template messages.'
+													  )}
+											</span>
+										) : isDirectSendMode ? (
+											<span>
+												{t('Type an update, like an order or booking change')}
+											</span>
+										) : (
+											<span>{t('Type a message')}</span>
+										)}
+									</div>
+								)}
+								<div
+									// The transparent outline beats the app's global
+									// :focus-visible one
+									className="relative z-100 max-h-[250px] min-h-[26px] w-full overflow-y-auto px-3.75 py-2 [word-break:break-word] [outline:1px_solid_transparent]! max-md:max-h-40"
+									id="typeBox__editable"
+									ref={editable}
+									contentEditable="true"
+									onFocus={handleFocus}
+									onMouseUp={handleMouseUp}
+									onPaste={(event: React.ClipboardEvent<HTMLElement>) =>
+										handlePaste(event)
+									}
+									onCopy={(event: React.ClipboardEvent<HTMLDivElement>) =>
+										handleCopy(event)
+									}
+									onDrop={(event: React.DragEvent) => event.preventDefault()}
+									spellCheck="true"
+									onInput={(event: React.FormEvent<HTMLDivElement>) =>
+										handleEditableChange(event)
+									}
+									onKeyDown={(e: React.KeyboardEvent) => {
+										if (e.keyCode === 13 && !e.shiftKey) {
+											e.preventDefault();
+											// A draft left over in a closed window waits for a
+											// template or utility message instead of failing
+											if (!isLocked) sendMessage(true, e);
+										}
+									}}
+								/>
+							</div>
 						</div>
 						<button
 							onClick={(e: React.MouseEvent) => sendMessage(true, e)}
@@ -513,7 +582,7 @@ const ChatFooter: React.FC<Props> = ({
 						</FooterActionButton>
 					</SimpleTooltip>
 
-					{!(isUserActionsRestricted && isExpired) && <ActionSeparator />}
+					{!(isUserActionsRestricted && isLocked) && <ActionSeparator />}
 
 					{!isUserActionsRestricted && (
 						<SimpleTooltip
@@ -531,7 +600,30 @@ const ChatFooter: React.FC<Props> = ({
 						</SimpleTooltip>
 					)}
 
-					{!isExpired && !isUserActionsRestricted && (
+					{isLocked && isDirectSendAvailable && <ActionSeparator />}
+
+					{isLocked && isDirectSendAvailable && (
+						<SimpleTooltip
+							title={t('Send an update without a template')}
+							side="top"
+							disableHoverableContent
+						>
+							<Button
+								type="button"
+								variant="unstyled"
+								size="none"
+								// A labelled pill: the one way to write while the window is closed
+								className="h-7.5 gap-1.5 rounded-full bg-white pr-3 pl-2.5 text-[13px] font-semibold text-chat-icon-dark shadow-[0_1px_2px_rgba(94,56,38,0.12),0_0_0_1px_rgba(94,56,38,0.06)] hover:bg-[#fbf9ef] active:bg-[#f4f0d7]"
+								onClick={onStartDirectSend}
+								data-test-id="direct-send-button"
+							>
+								<ReceiptLongIcon className="size-4.5! text-chat-icon!" />
+								{t('Utility message')}
+							</Button>
+						</SimpleTooltip>
+					)}
+
+					{!isLocked && !isUserActionsRestricted && (
 						<SimpleTooltip
 							title={t('Interactive Messages')}
 							side="top"
@@ -563,9 +655,9 @@ const ChatFooter: React.FC<Props> = ({
 						</SimpleTooltip>
 					)}
 
-					{!isExpired && <ActionSeparator />}
+					{!isLocked && <ActionSeparator />}
 
-					{!isExpired && (
+					{!isLocked && (
 						<SimpleTooltip
 							title={t('Emoji')}
 							side="top"
@@ -682,8 +774,12 @@ const ChatFooter: React.FC<Props> = ({
 						</SimpleTooltip>
 					)}
 
-					{hasInput() && (
-						<SimpleTooltip title={t('Send')} side="top" disableHoverableContent>
+					{hasInput() && !isLocked && (
+						<SimpleTooltip
+							title={isDirectSendMode ? t('Send utility message') : t('Send')}
+							side="top"
+							disableHoverableContent
+						>
 							<FooterActionButton
 								onClick={(e: React.MouseEvent) => sendMessage(true, e)}
 								data-test-id="send-message-button"

@@ -1807,3 +1807,66 @@ msgstr "Entre para aceitá-lo ou crie uma conta se você for novo."
 
 msgid "This username is taken. If it is yours, log in instead."
 msgstr "Este nome de usuário já existe. Se for seu, entre com ele."
+
+msgid "Utility messages are not available on this inbox yet."
+msgstr "As mensagens de utilidade ainda não estão disponíveis nesta caixa de entrada."
+
+msgid "The utility message was not sent: %s"
+msgstr "A mensagem de utilidade não foi enviada: %s"
+
+msgid "The utility message was not sent."
+msgstr "A mensagem de utilidade não foi enviada."
+
+msgid "Not utility"
+msgstr "Não é de utilidade"
+
+msgid "Send a utility message"
+msgstr "Enviar uma mensagem de utilidade"
+
+msgid "The customer care window is closed, but you can still send a utility message: an update about something the customer did or asked for. No template is needed, WhatsApp creates one from your text."
+msgstr "A janela de atendimento ao cliente está fechada, mas você ainda pode enviar uma mensagem de utilidade: uma atualização sobre algo que o cliente fez ou pediu. Não é preciso um modelo, o WhatsApp cria um a partir do seu texto."
+
+msgid "Order, delivery and booking updates"
+msgstr "Atualizações de pedidos, entregas e reservas"
+
+msgid "Payment, account and security notices"
+msgstr "Avisos de pagamento, conta e segurança"
+
+msgid "Answers to something the customer asked for"
+msgstr "Respostas a algo que o cliente pediu"
+
+msgid "Offers, discounts and promotions"
+msgstr "Ofertas, descontos e promoções"
+
+msgid "Newsletters and announcements"
+msgstr "Boletins e anúncios"
+
+msgid "Asking the customer to buy or come back"
+msgstr "Pedir ao cliente que compre ou volte"
+
+msgid "WhatsApp reviews utility messages. Promotional content can get them suspended for this whole inbox. Each one is billed at the utility rate."
+msgstr "O WhatsApp revisa as mensagens de utilidade. Conteúdo promocional pode suspendê-las para toda esta caixa de entrada. Cada uma é cobrada pela tarifa de utilidade."
+
+msgid "Utility message"
+msgstr "Mensagem de utilidade"
+
+msgid "No promotions. Billed at the utility rate."
+msgstr "Sem promoções. Cobrada pela tarifa de utilidade."
+
+msgid "Back to regular messages"
+msgstr "Voltar para mensagens normais"
+
+msgid "Window closed. Reply with a template or a utility message."
+msgstr "Janela fechada. Responda com um modelo ou uma mensagem de utilidade."
+
+msgid "Type an update, like an order or booking change"
+msgstr "Digite uma atualização, como uma mudança em um pedido ou reserva"
+
+msgid "Send an update without a template"
+msgstr "Envie uma atualização sem modelo"
+
+msgid "Send utility message"
+msgstr "Enviar mensagem de utilidade"
+
+msgid "Sent as a utility message: keep it to an update the customer expects, with no promotions."
+msgstr "Enviada como mensagem de utilidade: limite-se a uma atualização que o cliente espera, sem promoções."

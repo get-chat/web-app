@@ -1851,3 +1851,66 @@ msgstr "Kabul etmek için giriş yap ya da yeniysen bir hesap oluştur."
 
 msgid "This username is taken. If it is yours, log in instead."
 msgstr "Bu kullanıcı adı alınmış. Senin ise giriş yap."
+
+msgid "Utility messages are not available on this inbox yet."
+msgstr "Fayda mesajları bu gelen kutusunda henüz kullanılamıyor."
+
+msgid "The utility message was not sent: %s"
+msgstr "Fayda mesajı gönderilmedi: %s"
+
+msgid "The utility message was not sent."
+msgstr "Fayda mesajı gönderilmedi."
+
+msgid "Not utility"
+msgstr "Fayda değil"
+
+msgid "Send a utility message"
+msgstr "Fayda mesajı gönder"
+
+msgid "The customer care window is closed, but you can still send a utility message: an update about something the customer did or asked for. No template is needed, WhatsApp creates one from your text."
+msgstr "Müşteri hizmetleri penceresi kapandı, ancak yine de bir fayda mesajı gönderebilirsin: müşterinin yaptığı ya da istediği bir şeyle ilgili bir güncelleme. Taslak gerekmez, WhatsApp metninden bir taslak oluşturur."
+
+msgid "Order, delivery and booking updates"
+msgstr "Sipariş, teslimat ve rezervasyon güncellemeleri"
+
+msgid "Payment, account and security notices"
+msgstr "Ödeme, hesap ve güvenlik bildirimleri"
+
+msgid "Answers to something the customer asked for"
+msgstr "Müşterinin istediği bir şeye yanıtlar"
+
+msgid "Offers, discounts and promotions"
+msgstr "Teklifler, indirimler ve promosyonlar"
+
+msgid "Newsletters and announcements"
+msgstr "Bültenler ve duyurular"
+
+msgid "Asking the customer to buy or come back"
+msgstr "Müşteriden satın almasını ya da geri dönmesini istemek"
+
+msgid "WhatsApp reviews utility messages. Promotional content can get them suspended for this whole inbox. Each one is billed at the utility rate."
+msgstr "WhatsApp fayda mesajlarını inceler. Tanıtım içeriği, bu gelen kutusunun tamamı için askıya alınmalarına yol açabilir. Her biri fayda ücretinden faturalandırılır."
+
+msgid "Utility message"
+msgstr "Fayda mesajı"
+
+msgid "No promotions. Billed at the utility rate."
+msgstr "Tanıtım yok. Fayda ücretinden faturalandırılır."
+
+msgid "Back to regular messages"
+msgstr "Normal mesajlara dön"
+
+msgid "Window closed. Reply with a template or a utility message."
+msgstr "Pencere kapandı. Bir taslak ya da fayda mesajıyla yanıt ver."
+
+msgid "Type an update, like an order or booking change"
+msgstr "Sipariş ya da rezervasyon değişikliği gibi bir güncelleme yaz"
+
+msgid "Send an update without a template"
+msgstr "Taslak olmadan güncelleme gönder"
+
+msgid "Send utility message"
+msgstr "Fayda mesajı gönder"
+
+msgid "Sent as a utility message: keep it to an update the customer expects, with no promotions."
+msgstr "Fayda mesajı olarak gönderilir: müşterinin beklediği bir güncellemeyle sınırla, tanıtım ekleme."
