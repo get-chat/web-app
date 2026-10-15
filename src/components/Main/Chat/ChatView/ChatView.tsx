@@ -68,13 +68,19 @@ import {
 	getUniqueSender,
 	prepareMessageList,
 	prepareReactions,
+	DIRECT_SEND_INTERACTIVE_TYPES,
 } from '@src/helpers/MessageHelper';
 import { isLocalHost } from '@src/helpers/URLHelper';
 import {
 	getFirstPendingMessageToSend,
 	hasFailedPendingMessages,
 } from '@src/helpers/PendingMessagesHelper';
-import { getDisplayAssignmentAndTaggingHistory } from '@src/helpers/StorageHelper';
+import {
+	getDisplayAssignmentAndTaggingHistory,
+	isDirectSendAcknowledged,
+	storeDirectSendAcknowledged,
+} from '@src/helpers/StorageHelper';
+import DirectSendDialog from '@src/components/DirectSendDialog';
 import { useTranslation } from 'react-i18next';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { ErrorBoundary } from '@sentry/react';
@@ -198,6 +204,10 @@ const ChatView: React.FC<Props> = (props) => {
 
 	const [isLoaded, setLoaded] = useState(false);
 	const [isExpired, setExpired] = useState(false);
+	// Direct Send: the composer writes utility messages while the window is closed
+	const [isDirectSendMode, setDirectSendMode] = useState(false);
+	const [isDirectSendDialogVisible, setDirectSendDialogVisible] =
+		useState(false);
 
 	const handleIfUnauthorized = (error: AxiosError) => {
 		if (error.response?.status === 401) {
@@ -224,12 +234,14 @@ const ChatView: React.FC<Props> = (props) => {
 		sendMessage,
 		queueMessage,
 		handleFailedMessage,
+		handleRefusedDirectSend,
 	} = useChat({
 		waId,
 		isLoaded,
 		setExpired,
 		handleIfUnauthorized,
 		MESSAGES_PER_PAGE,
+		isDirectSendMode,
 	});
 
 	const [isLoadingMoreMessages, setLoadingMoreMessages] = useState(false);
@@ -492,6 +504,9 @@ const ChatView: React.FC<Props> = (props) => {
 
 		setPreviewSendMediaVisible(false);
 		setPreviewSendMediaData(undefined);
+
+		setDirectSendMode(false);
+		setDirectSendDialogVisible(false);
 
 		dispatch(setPreviewMediaObject(undefined));
 
@@ -1237,7 +1252,40 @@ const ChatView: React.FC<Props> = (props) => {
 		setSendInteractiveDialogVisible(false);
 		setQuickReactionAnchorEl(undefined);
 		setReactionsEmojiPickerAnchorEl(undefined);
+		setDirectSendMode(false);
+		setDirectSendDialogVisible(false);
 	}, [isTenantReadOnly]);
+
+	// A reply from the customer reopens the window: back to regular messages
+	useEffect(() => {
+		if (!isExpired) {
+			setDirectSendMode(false);
+			setDirectSendDialogVisible(false);
+		}
+	}, [isExpired]);
+
+	const startDirectSend = () => {
+		dispatch(setState({ isTemplatesVisible: false }));
+		if (isDirectSendAcknowledged()) {
+			setDirectSendMode(true);
+		} else {
+			// The guidelines come first, once per device
+			setDirectSendDialogVisible(true);
+		}
+	};
+
+	const confirmDirectSend = () => {
+		storeDirectSendAcknowledged();
+		setDirectSendDialogVisible(false);
+		if (isExpired) {
+			setDirectSendMode(true);
+		}
+	};
+
+	const stopDirectSend = () => {
+		setDirectSendMode(false);
+		dispatch(setState({ isInteractiveMessagesVisible: false }));
+	};
 
 	const displayOptionsMenu = (
 		event: React.MouseEvent<Element | MouseEvent>,
@@ -1770,6 +1818,7 @@ const ChatView: React.FC<Props> = (props) => {
 				wa_id: waId,
 				type: MessageType.interactive,
 				interactive: interactiveMessage,
+				...(isDirectSendMode ? { category: 'utility' } : {}),
 			};
 		}
 
@@ -1795,6 +1844,10 @@ const ChatView: React.FC<Props> = (props) => {
 		} catch (error: any | AxiosError) {
 			if (error.response) {
 				const status = error.response.status;
+
+				if ((requestBody as CreateMessageRequest).category) {
+					handleRefusedDirectSend(status, error.response.data);
+				}
 
 				if (status === 453) {
 					setExpired(true);
@@ -2319,6 +2372,9 @@ const ChatView: React.FC<Props> = (props) => {
 						// Close the panel as soon as a message type is picked
 						dispatch(setState({ isInteractiveMessagesVisible: false }));
 					}}
+					allowedTypes={
+						isDirectSendMode ? DIRECT_SEND_INTERACTIVE_TYPES : undefined
+					}
 					isExiting={interactiveMessagesTransition.isExiting}
 					onAnimationEnd={interactiveMessagesTransition.handleAnimationEnd}
 				/>
@@ -2339,6 +2395,13 @@ const ChatView: React.FC<Props> = (props) => {
 				onSend={(interactiveMessage) =>
 					sendInteractiveMessage(true, interactiveMessage)
 				}
+				isDirectSend={isDirectSendMode}
+			/>
+
+			<DirectSendDialog
+				open={isDirectSendDialogVisible}
+				onCancel={() => setDirectSendDialogVisible(false)}
+				onContinue={confirmDirectSend}
 			/>
 
 			{savedResponsesTransition.isMounted && (
@@ -2363,6 +2426,9 @@ const ChatView: React.FC<Props> = (props) => {
 					sendHandledChosenFiles={sendHandledChosenFiles}
 					setAccept={setAccept}
 					processCommand={processCommand}
+					isDirectSendMode={isDirectSendMode}
+					onStartDirectSend={startDirectSend}
+					onStopDirectSend={stopDirectSend}
 				/>
 			)}
 

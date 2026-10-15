@@ -1852,3 +1852,69 @@ msgstr "Zaloguj się, aby je przyjąć, lub utwórz konto, jeśli jesteś tu now
 
 msgid "This username is taken. If it is yours, log in instead."
 msgstr "Ta nazwa użytkownika jest zajęta. Jeśli należy do Ciebie, zaloguj się."
+
+msgid "Utility messages are not available on this inbox yet."
+msgstr "Wiadomości użytkowe nie są jeszcze dostępne w tej skrzynce."
+
+msgid "The utility message was not sent: %s"
+msgstr "Wiadomość użytkowa nie została wysłana: %s"
+
+msgid "The utility message was not sent."
+msgstr "Wiadomość użytkowa nie została wysłana."
+
+msgid "Not utility"
+msgstr "Nieużytkowe"
+
+msgid "Send a utility message"
+msgstr "Wyślij wiadomość użytkową"
+
+msgid "The customer care window is closed, but you can still send a utility message: an update about something the customer did or asked for. No template is needed, WhatsApp creates one from your text."
+msgstr "Okno obsługi klienta jest zamknięte, ale nadal możesz wysłać wiadomość użytkową: aktualizację dotyczącą czegoś, co klient zrobił lub o co poprosił. Szablon nie jest potrzebny, WhatsApp utworzy go z Twojego tekstu."
+
+msgid "Order, delivery and booking updates"
+msgstr "Aktualizacje zamówień, dostaw i rezerwacji"
+
+msgid "Payment, account and security notices"
+msgstr "Powiadomienia o płatnościach, koncie i bezpieczeństwie"
+
+msgid "Answers to something the customer asked for"
+msgstr "Odpowiedzi na prośby klienta"
+
+msgid "Offers, discounts and promotions"
+msgstr "Oferty, rabaty i promocje"
+
+msgid "Newsletters and announcements"
+msgstr "Newslettery i ogłoszenia"
+
+msgid "Asking the customer to buy or come back"
+msgstr "Zachęcanie klienta do zakupu lub powrotu"
+
+msgid "WhatsApp reviews utility messages. Promotional content can get them suspended for this whole inbox. Each one is billed at the utility rate."
+msgstr "WhatsApp sprawdza wiadomości użytkowe. Treści promocyjne mogą spowodować ich zablokowanie dla całej skrzynki. Każda jest rozliczana według stawki za wiadomości użytkowe."
+
+msgid "Utility message"
+msgstr "Wiadomość użytkowa"
+
+msgid "No promotions. Billed at the utility rate."
+msgstr "Bez promocji. Rozliczane według stawki za wiadomości użytkowe."
+
+msgid "Back to regular messages"
+msgstr "Wróć do zwykłych wiadomości"
+
+msgid "Window closed. Reply with a template or a utility message."
+msgstr "Okno zamknięte. Odpowiedz szablonem lub wiadomością użytkową."
+
+msgid "Type an update, like an order or booking change"
+msgstr "Wpisz aktualizację, np. zmianę zamówienia lub rezerwacji"
+
+msgid "Send an update without a template"
+msgstr "Wyślij aktualizację bez szablonu"
+
+msgid "Send utility message"
+msgstr "Wyślij wiadomość użytkową"
+
+msgid "Sent as a utility message: keep it to an update the customer expects, with no promotions."
+msgstr "Wysyłane jako wiadomość użytkowa: ogranicz się do aktualizacji, której klient oczekuje, bez promocji."
+
+msgid "Utility messages can be up to %s characters long."
+msgstr "Wiadomości użytkowe mogą mieć maksymalnie %s znaków."

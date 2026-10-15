@@ -69,6 +69,7 @@ export { default as Publish } from './Publish';
 export { default as QrCode } from './QrCode';
 export { default as RadioButtonChecked } from './RadioButtonChecked';
 export { default as RadioButtonUnchecked } from './RadioButtonUnchecked';
+export { default as ReceiptLong } from './ReceiptLong';
 export { default as Remove } from './Remove';
 export { default as Reply } from './Reply';
 export { default as Report } from './Report';

@@ -47,7 +47,9 @@ import {
 	isPending,
 	isRead,
 	isUnsupportedMessageType,
+	isDirectSendMessage,
 } from '@src/helpers/MessageHelper';
+import ReceiptLongIcon from '@src/components/icons/ReceiptLong';
 import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
 import MissingContent from './MissingContent';
@@ -116,6 +118,7 @@ const ChatMessage: React.FC<Props> = ({
 	});
 
 	const echoOriginLabel = getEchoOriginLabel(data);
+	const isDirectSend = isDirectSendMessage(data);
 
 	// Error details show only while the message has no delivery status
 	const hasErrorDetails =
@@ -191,6 +194,7 @@ const ChatMessage: React.FC<Props> = ({
 								hasReaction: reactions.length > 0,
 								isSenderHidden: !displaySender && !displayDate,
 								isFirstInGroup: displaySender || displayDate,
+								isBusinessInitiated: isDirectSend,
 							}),
 							// Dimmed while ChatView points at it (data-blink on the row)
 							'group-data-blink/message:opacity-30'
@@ -249,6 +253,13 @@ const ChatMessage: React.FC<Props> = ({
 									onOptionsClick?.(e, data)
 								}
 							/>
+						)}
+
+						{isDirectSend && data.waba_payload?.type === MessageType.text && (
+							<span className="mb-1.25 flex items-center gap-1.25 text-[length:x-small] text-ink/60">
+								<ReceiptLongIcon className="size-[0.6em]! text-ink/40!" />
+								{t('Utility message')}
+							</span>
 						)}
 
 						{data.waba_payload?.type === MessageType.image && (

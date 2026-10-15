@@ -1825,3 +1825,69 @@ msgstr ""
 
 msgid "This username is taken. If it is yours, log in instead."
 msgstr ""
+
+msgid "Utility messages are not available on this inbox yet."
+msgstr ""
+
+msgid "The utility message was not sent: %s"
+msgstr ""
+
+msgid "The utility message was not sent."
+msgstr ""
+
+msgid "Not utility"
+msgstr ""
+
+msgid "Send a utility message"
+msgstr ""
+
+msgid "The customer care window is closed, but you can still send a utility message: an update about something the customer did or asked for. No template is needed, WhatsApp creates one from your text."
+msgstr ""
+
+msgid "Order, delivery and booking updates"
+msgstr ""
+
+msgid "Payment, account and security notices"
+msgstr ""
+
+msgid "Answers to something the customer asked for"
+msgstr ""
+
+msgid "Offers, discounts and promotions"
+msgstr ""
+
+msgid "Newsletters and announcements"
+msgstr ""
+
+msgid "Asking the customer to buy or come back"
+msgstr ""
+
+msgid "WhatsApp reviews utility messages. Promotional content can get them suspended for this whole inbox. Each one is billed at the utility rate."
+msgstr ""
+
+msgid "Utility message"
+msgstr ""
+
+msgid "No promotions. Billed at the utility rate."
+msgstr ""
+
+msgid "Back to regular messages"
+msgstr ""
+
+msgid "Window closed. Reply with a template or a utility message."
+msgstr ""
+
+msgid "Type an update, like an order or booking change"
+msgstr ""
+
+msgid "Send an update without a template"
+msgstr ""
+
+msgid "Send utility message"
+msgstr ""
+
+msgid "Sent as a utility message: keep it to an update the customer expects, with no promotions."
+msgstr ""
+
+msgid "Utility messages can be up to %s characters long."
+msgstr ""

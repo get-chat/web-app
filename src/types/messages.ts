@@ -32,8 +32,13 @@ export interface CreateMessageRequest {
 	document?: Document;
 	reaction?: Reaction;
 	location?: Location;
+	// Direct Send (L3-13364): a Utility message without a template, allowed
+	// while the customer care window is closed
+	category?: DirectSendCategory;
 	pending_message_unique_id?: string;
 }
+
+export type DirectSendCategory = 'utility';
 
 export interface CreateMessageResponse {
 	reason: string;
@@ -104,6 +109,8 @@ export interface MessageWabaPayload {
 	errors?: ChatMessageError[];
 	referral?: any;
 	context?: WabaPayloadContext;
+	// Set on outgoing Direct Send messages
+	category?: DirectSendCategory;
 }
 
 export interface ChatMessageError {

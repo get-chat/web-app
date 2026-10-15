@@ -26,6 +26,8 @@ interface MessageBubbleOptions {
 	isSenderHidden?: boolean;
 	/** The first of its sender group: carries the tail */
 	isFirstInGroup?: boolean;
+	/** Sent outside the customer care window, like a template (Direct Send) */
+	isBusinessInitiated?: boolean;
 }
 
 /**
@@ -39,6 +41,7 @@ export const messageBubbleClassName = ({
 	hasReaction,
 	isSenderHidden,
 	isFirstInGroup,
+	isBusinessInitiated,
 }: MessageBubbleOptions) =>
 	cn(
 		'chat__message relative mb-6.25 max-w-[70%] rounded-[12px] bg-white px-2.5 py-1.25 text-[14px] shadow-[0_1px_1px_rgba(94,56,38,0.1),0_2px_6px_-2px_rgba(94,56,38,0.12)] transition-opacity duration-1000 ease-[ease] [&_.printMessage]:whitespace-pre-line [&_a]:text-light-blue [&_img]:bg-ink/10',
@@ -46,8 +49,10 @@ export const messageBubbleClassName = ({
 		isSenderHidden ? '-mt-5.5' : 'mt-0',
 		hasReaction && 'mb-10.5',
 		isOutgoing && 'ml-auto bg-[#dcf8c6]',
-		// Templates and interactive messages are yellow on either side
-		(type === MessageType.template || type === MessageType.interactive) &&
+		// Templates, interactive and utility messages are yellow on either side
+		(type === MessageType.template ||
+			type === MessageType.interactive ||
+			isBusinessInitiated) &&
 			'bg-[#f4f0d7]!',
 		isFirstInGroup && messageBubbleTailClassName(isOutgoing)
 	);

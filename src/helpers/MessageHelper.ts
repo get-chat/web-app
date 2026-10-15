@@ -194,6 +194,13 @@ export const getMessageEchoOrigin = (
 	message.echo_origin ??
 	(message.waba_payload?.is_echo ? MessageEchoOrigin.api : undefined);
 
+// Direct Send (L3-13364): a Utility message sent without a template
+export const isDirectSendMessage = (message: Message) =>
+	message.waba_payload?.category === 'utility';
+
+// The interactive messages Direct Send supports
+export const DIRECT_SEND_INTERACTIVE_TYPES = ['button', 'cta_url'];
+
 // Untranslated label; callers are expected to pass it through t()
 export const getEchoOriginLabel = (message: Message) => {
 	const echoOrigin = getMessageEchoOrigin(message);

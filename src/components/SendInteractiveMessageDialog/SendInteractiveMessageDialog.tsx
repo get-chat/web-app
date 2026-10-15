@@ -33,6 +33,7 @@ import CarouselCardsEditor, {
 	MIN_CAROUSEL_CARDS,
 } from './CarouselCardsEditor';
 import { Alert } from '@src/components/ui/alert';
+import ReceiptLongIcon from '@src/components/icons/ReceiptLong';
 
 // The notes under the description; their translated HTML may hold links.
 // Smaller text, but the line height of the Alert's own text-sm.
@@ -44,6 +45,8 @@ export type Props = {
 	setVisible: (visible: boolean) => void;
 	describedInteractive?: DescribedInteractive;
 	onSend: (interactiveMessage: any) => void;
+	// Sent as a utility message (Direct Send)
+	isDirectSend?: boolean;
 };
 
 const SendInteractiveMessageDialog: React.FC<Props> = ({
@@ -51,6 +54,7 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 	setVisible,
 	describedInteractive,
 	onSend,
+	isDirectSend = false,
 }) => {
 	const [payload, setPayload] = useState<any>({});
 	const [messageData, setMessageData] = useState<Message | null>(null);
@@ -73,9 +77,14 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 
 	useEffect(() => {
 		if (payload) {
-			setMessageData(fromInteractive({ ...payload }));
+			const message = fromInteractive({ ...payload });
+			// Previewed as the utility message it will be sent as
+			if (isDirectSend && message.waba_payload) {
+				message.waba_payload.category = 'utility';
+			}
+			setMessageData(message);
 		}
-	}, [payload]);
+	}, [payload, isDirectSend]);
 
 	const close = () => {
 		setVisible(false);
@@ -344,6 +353,17 @@ const SendInteractiveMessageDialog: React.FC<Props> = ({
 										__html: t(describedInteractive.description),
 									}}
 								/>
+								{isDirectSend && (
+									<Alert
+										className={noteClassName}
+										severity="neutral"
+										icon={<ReceiptLongIcon />}
+									>
+										{t(
+											'Sent as a utility message: keep it to an update the customer expects, with no promotions.'
+										)}
+									</Alert>
+								)}
 								{describedInteractive.warning && (
 									<Alert className={noteClassName} severity="warning">
 										<div

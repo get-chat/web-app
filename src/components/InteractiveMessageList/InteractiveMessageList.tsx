@@ -386,10 +386,13 @@ interface Props extends PanelTransitionProps {
 	// The send dialog itself is rendered by ChatView, so the panel can
 	// close on selection without unmounting the dialog
 	onSelect: (describedInteractive: DescribedInteractive) => void;
+	// Only these `interactive.type`s, e.g. the ones utility messages support
+	allowedTypes?: string[];
 }
 
 const InteractiveMessageList: React.FC<Props> = ({
 	onSelect,
+	allowedTypes,
 	onAnimationEnd,
 }) => {
 	const { t } = useTranslation();
@@ -411,7 +414,8 @@ const InteractiveMessageList: React.FC<Props> = ({
 
 	const availableInteractiveMessages = INTERACTIVE_MESSAGES.filter(
 		(item) =>
-			item.payload.type !== 'address_message' || isAddressMessageAvailable
+			(item.payload.type !== 'address_message' || isAddressMessageAvailable) &&
+			(!allowedTypes || allowedTypes.includes(item.payload.type))
 	);
 
 	return (

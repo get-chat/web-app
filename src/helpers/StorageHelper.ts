@@ -14,6 +14,7 @@ const STORAGE_TAG_CONTACT_PROVIDERS_DATA_TIME = 'contact_providers_data_time';
 const STORAGE_TAG_CURRENT_API_BASE_URL = 'current_api_base_url';
 const STORAGE_TAG_API_BASE_URLS = 'api_base_urls';
 const STORAGE_TAG_MESSAGE_DRAFTS = 'message_drafts';
+const STORAGE_TAG_DIRECT_SEND_ACKNOWLEDGED = 'direct_send_acknowledged';
 // Multi-tenant inboxes (MT 3.6): the inbox the stored token belongs to, the
 // tokens of the account's inboxes this device has opened, and the inbox each
 // username used last (where a login lands). The tokens outlive a logout: for
@@ -264,6 +265,14 @@ export const setDisplayAssignmentAndTaggingHistory = (willDisplay: boolean) => {
 		willDisplay
 	);
 };
+
+// Whether the utility message guidelines were confirmed on this device. Kept
+// out of the user preferences, which the chat filters overwrite as a whole.
+export const isDirectSendAcknowledged = () =>
+	getStorage().getItem(STORAGE_TAG_DIRECT_SEND_ACKNOWLEDGED) === 'true';
+
+export const storeDirectSendAcknowledged = () =>
+	getStorage().setItem(STORAGE_TAG_DIRECT_SEND_ACKNOWLEDGED, 'true');
 
 export const getContactProvidersData = () => {
 	clearContactProvidersDataIfExpired();
