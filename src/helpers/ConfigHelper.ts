@@ -17,6 +17,12 @@ export const is360dialogLoginEnabled = (config: AppConfig | null) =>
 		config?.APP_IS_360DIALOG_LOGIN_ENABLED?.toLowerCase().trim() ?? ''
 	);
 
+// Offers utility messages (Direct Send) in closed chats. Disabled by default
+// (opt-in): Meta enables Direct Send per WhatsApp Business Account and offers
+// no way to check it, so it stays hidden until an instance is known to have it.
+export const isDirectSendEnabled = (config: AppConfig | null) =>
+	isFlagEnabled(config?.APP_IS_DIRECT_SEND_ENABLED);
+
 export const isRegularUserActionsRestricted = (
 	config: AppConfig | null,
 	currentUser: User | null | undefined
