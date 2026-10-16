@@ -12,6 +12,9 @@ import {
 	isDirectSendMessage,
 } from '@src/helpers/MessageHelper';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
+import { useIsDirectSendEnabled } from '@src/hooks/useIsDirectSendEnabled';
+import { isDirectSendEnabled } from '@src/helpers/ConfigHelper';
+import { AppConfig } from '@src/config/application';
 import { Message, MessageType } from '@src/types/messages';
 
 jest.mock('@src/api/messagesApi', () => ({
@@ -54,6 +57,10 @@ jest.mock('@src/store/hooks', () => ({
 
 jest.mock('@src/hooks/useIsUserActionsRestricted', () => ({
 	useIsUserActionsRestricted: jest.fn(() => false),
+}));
+
+jest.mock('@src/hooks/useIsDirectSendEnabled', () => ({
+	useIsDirectSendEnabled: jest.fn(() => true),
 }));
 
 // Heavy or CommonJS-only pieces of the composer, irrelevant here
@@ -286,9 +293,22 @@ const renderFooter = (
 	);
 
 describe('ChatFooter - utility messages', () => {
-	beforeEach(() =>
-		(useIsUserActionsRestricted as jest.Mock).mockReturnValue(false)
-	);
+	beforeEach(() => {
+		(useIsUserActionsRestricted as jest.Mock).mockReturnValue(false);
+		(useIsDirectSendEnabled as jest.Mock).mockReturnValue(true);
+	});
+
+	it('is hidden unless the instance enables it', () => {
+		(useIsDirectSendEnabled as jest.Mock).mockReturnValue(false);
+		renderFooter({});
+
+		expect(screen.queryByText('Utility message')).not.toBeInTheDocument();
+		expect(
+			screen.getByText(
+				'This chat has expired. You need to answer with template messages.'
+			)
+		).toBeInTheDocument();
+	});
 
 	it('offers a utility message while the window is closed', async () => {
 		const onStartDirectSend = jest.fn();
@@ -370,5 +390,23 @@ describe('InteractiveMessageList - utility messages', () => {
 		expect(
 			screen.queryByText('Send location request message')
 		).not.toBeInTheDocument();
+	});
+});
+
+describe('APP_IS_DIRECT_SEND_ENABLED', () => {
+	it('is off unless explicitly enabled', () => {
+		for (const [value, enabled] of [
+			[undefined, false],
+			['', false],
+			['false', false],
+			['true', true],
+			['1', true],
+		] as const) {
+			expect(
+				isDirectSendEnabled({
+					APP_IS_DIRECT_SEND_ENABLED: value,
+				} as AppConfig)
+			).toBe(enabled);
+		}
 	});
 });

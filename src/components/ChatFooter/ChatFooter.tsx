@@ -38,6 +38,7 @@ import QuickActionsMenu from '@src/components/QuickActionsMenu';
 import KeyboardCommandKeyIcon from '@src/components/icons/KeyboardCommandKey';
 import useChatFooter from '@src/components/ChatFooter/useChatFooter';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
+import { useIsDirectSendEnabled } from '@src/hooks/useIsDirectSendEnabled';
 import ChosenFileList from '@src/interfaces/ChosenFileList';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState, toggleState } from '@src/store/reducers/UIReducer';
@@ -126,9 +127,14 @@ const ChatFooter: React.FC<Props> = ({
 
 	const isUserActionsRestricted = useIsUserActionsRestricted();
 
-	// Utility messages are offered wherever templates are
+	// Utility messages are offered wherever templates are, on instances that
+	// enable them
+	const isDirectSendEnabled = useIsDirectSendEnabled();
 	const isDirectSendAvailable =
-		isExpired && !isUserActionsRestricted && !!onStartDirectSend;
+		isDirectSendEnabled &&
+		isExpired &&
+		!isUserActionsRestricted &&
+		!!onStartDirectSend;
 	// Nothing can be typed: the window is closed and no utility message is
 	// being written
 	const isLocked = isExpired && !isDirectSendMode;
