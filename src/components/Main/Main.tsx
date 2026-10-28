@@ -1,4 +1,11 @@
-import React, { Suspense, lazy, useContext, useEffect, useState } from 'react';
+import React, {
+	Suspense,
+	lazy,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import Sidebar from './Sidebar/Sidebar';
 import ChatView from './Chat/ChatView';
 import { toast } from 'sonner';
@@ -59,6 +66,8 @@ import {
 import { setGroups } from '@src/store/reducers/groupsReducer';
 import useResolveContacts from '@src/hooks/useResolveContacts';
 import useUnmountTransition from '@src/hooks/useUnmountTransition';
+import useLoadBranding from '@src/hooks/useLoadBranding';
+import { getLogoUrl } from '@src/helpers/BrandingHelper';
 import { cn } from '@src/lib/utils';
 import MessageStatuses from '@src/components/MessageStatuses';
 import {
@@ -134,6 +143,13 @@ const Main: React.FC = () => {
 	);
 	const newMessages = useAppSelector((state) => state.newMessages.value);
 	const currentUser = useAppSelector((state) => state.currentUser.value);
+
+	// The active inbox's branding: Main mounts afresh for every inbox
+	useLoadBranding();
+	const branding = useAppSelector((state) => state.branding.value);
+	// Read when a notification shows: the websocket handler outlives renders
+	const brandingRef = useRef(branding);
+	brandingRef.current = branding;
 
 	const dispatch = useAppDispatch();
 
@@ -293,7 +309,7 @@ const Main: React.FC = () => {
 					// eslint-disable-next-line no-unused-vars
 					const notification = new Notification(title, {
 						body: body,
-						icon: process.env.REACT_APP_LOGO_URL ?? '/logo.png',
+						icon: getLogoUrl(brandingRef.current),
 						tag: chatWaId + timeString,
 					});
 

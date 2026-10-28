@@ -62,6 +62,8 @@ import { generateInitialsHelper } from '@src/helpers/Helpers';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import SetPasswordForm from './SetPasswordForm';
+import useLoadBranding from '@src/hooks/useLoadBranding';
+import { getLogoUrl } from '@src/helpers/BrandingHelper';
 import { Button } from '@src/components/ui/button';
 import { Field, FieldLabel } from '@src/components/ui/field';
 import { Input } from '@src/components/ui/input';
@@ -91,6 +93,10 @@ const Login: React.FC = () => {
 	const activationCode = useAppSelector((state) => state.UI.activationCode);
 	// An invite into an inbox: logging in (or creating an account) accepts it
 	const inviteCode = useAppSelector((state) => state.UI.inviteCode);
+
+	// The instance's branding, or a migrated inbox's on its old address
+	useLoadBranding();
+	const branding = useAppSelector((state) => state.branding.value);
 
 	const [username, setUsername] = useState(activatedUsername ?? '');
 	const [password, setPassword] = useState('');
@@ -477,11 +483,7 @@ const Login: React.FC = () => {
 		>
 			<div className="m-auto flex w-full max-w-[450px] animate-fade-in flex-col items-center">
 				<div className="mb-5 flex justify-center max-md:mt-10">
-					<img
-						className="size-16"
-						src={process.env.REACT_APP_LOGO_URL ?? '/logo.png'}
-						alt="Logo"
-					/>
+					<img className="size-16" src={getLogoUrl(branding)} alt="Logo" />
 				</div>
 
 				<div className="relative w-full rounded-[15px] border border-white/80 bg-white px-8 pt-7.5 pb-6.5 shadow-[0_24px_48px_-24px_rgba(0,0,45,0.35),0_1px_2px_rgba(0,0,45,0.06)] max-md:rounded-none max-md:border-none max-md:shadow-none">

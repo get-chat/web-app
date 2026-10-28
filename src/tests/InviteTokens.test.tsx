@@ -56,6 +56,7 @@ const withState = (ui: object) =>
 				currentTenantId: SUPPORT.id,
 				generation: 0,
 			},
+			branding: { value: undefined },
 		})
 	);
 

@@ -19,6 +19,7 @@ import phoneNumberReducer from '@src/store/reducers/phoneNumberReducer';
 import isUserAvailableReducer from '@src/store/reducers/isUserAvailableReducer';
 import isUserAvailabilityFeatureEnabledReducer from '@src/store/reducers/isUserAvailabilityFeatureEnabledReducer';
 import inboxesReducer from '@src/store/reducers/inboxesReducer';
+import brandingReducer from '@src/store/reducers/brandingReducer';
 
 const rootReducer = {
 	UI: UIReducer,
@@ -42,6 +43,7 @@ const rootReducer = {
 	isUserAvailable: isUserAvailableReducer,
 	isUserAvailabilityFeatureEnabled: isUserAvailabilityFeatureEnabledReducer,
 	inboxes: inboxesReducer,
+	branding: brandingReducer,
 };
 
 export default rootReducer;
