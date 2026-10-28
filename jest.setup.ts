@@ -16,6 +16,11 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 	disconnect: jest.fn(),
 }));
 
+// Fetched by the login page and Main on mount (MT 5.3); no backend in tests
+jest.mock('./src/api/brandingApi', () => ({
+	fetchBranding: jest.fn().mockResolvedValue(undefined),
+}));
+
 jest.mock('./src/VoiceRecorder', () => ({
 	__esModule: true,
 	default: jest.fn().mockImplementation(() => ({

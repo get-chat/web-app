@@ -140,7 +140,10 @@ import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionInd
 import useIsTenantReadOnly from '@src/hooks/useIsTenantReadOnly';
 import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
-import { setPhoneNumber } from '@src/store/reducers/phoneNumberReducer';
+import {
+	clearPhoneNumber,
+	setPhoneNumber,
+} from '@src/store/reducers/phoneNumberReducer';
 import InboxSwitcher from '@src/components/InboxSwitcher';
 import useLogout from '@src/hooks/useLogout';
 import UserAvailability from '@src/components/UserAvailability';
@@ -349,12 +352,10 @@ const Sidebar: React.FC<Props> = ({
 	const abortControllerRef = useRef<AbortController | null>(null);
 
 	useEffect(() => {
-		// Restored on unmount (logout, inbox switch): the number is prepended
-		// on every mount
-		const originalDocumentTitle = document.title;
-
+		// The page title shows the number (useBrandingInDocument) until the
+		// inbox is left: logout or a switch
 		return () => {
-			document.title = originalDocumentTitle;
+			dispatch(clearPhoneNumber());
 		};
 	}, []);
 
@@ -852,8 +853,6 @@ const Sidebar: React.FC<Props> = ({
 
 			if (phoneNumber) {
 				dispatch(setPhoneNumber(phoneNumber));
-
-				document.title = `+${phoneNumber} - ${document.title}`;
 			}
 		} catch (error) {
 			console.error(error);

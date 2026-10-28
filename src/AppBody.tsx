@@ -9,6 +9,7 @@ import { setReadOnly, setState } from '@src/store/reducers/UIReducer';
 import { isReadOnlyConfig } from '@src/helpers/ConfigHelper';
 import useAppInit from '@src/hooks/useAppInit';
 import { getURLParams } from '@src/helpers/URLHelper';
+import useBrandingInDocument from '@src/hooks/useBrandingInDocument';
 
 const AppBody: React.FC = () => {
 	const [bgColor] = useState(getURLParams().get('bg_color'));
@@ -16,6 +17,8 @@ const AppBody: React.FC = () => {
 	const { isLoading, config } = useAppInit();
 
 	const dispatch = useAppDispatch();
+
+	useBrandingInDocument();
 
 	// Read before the router mounts: it navigates /app -> /main -> /main/login
 	// without the query string, so the login page can no longer see these

@@ -5,6 +5,7 @@ import { Alert } from '@src/components/ui/alert';
 import packageJson from '../../../../package.json';
 import { Spinner } from '@src/components/ui/spinner';
 import { useAppSelector } from '@src/store/hooks';
+import { getDarkLogoUrl } from '@src/helpers/BrandingHelper';
 
 interface Props {
 	isHideLogo: boolean;
@@ -15,6 +16,7 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 
 	const { loadingProgress, loadingComponent, isInitialResourceFailed } =
 		useAppSelector((state) => state.UI);
+	const branding = useAppSelector((state) => state.branding.value);
 
 	const [isLongTransactionInfoVisible, setLongTransactionInfoVisible] =
 		useState(false);
@@ -38,11 +40,7 @@ const LoadingScreen: React.FC<Props> = ({ isHideLogo }) => {
 		>
 			{!isHideLogo && (
 				<div className="mb-12.5 flex w-full max-w-100 justify-center">
-					<img
-						className="size-20"
-						src={process.env.REACT_APP_LOGO_BLACK_URL ?? '/logoblack.svg'}
-						alt="Logo"
-					/>
+					<img className="size-20" src={getDarkLogoUrl(branding)} alt="Logo" />
 				</div>
 			)}
 

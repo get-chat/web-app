@@ -13,13 +13,15 @@ const createReducer = (reducers: typeof rootReducer) => {
 	type State = ReturnType<typeof appReducer>;
 
 	// Switching inboxes resets every slice but the inbox list and what
-	// belongs to the app rather than to an inbox
+	// belongs to the app rather than to an inbox. The branding stays until the
+	// new inbox's arrives, so the title and logo do not flash the default.
 	const reducer: Reducer<State> = (state, action) => {
 		if (state && resetInboxState.match(action)) {
-			const { inboxes, UI } = state;
+			const { inboxes, UI, branding } = state;
 			return appReducer(
 				{
 					inboxes,
+					branding,
 					UI: {
 						...appReducer(undefined, action).UI,
 						isReadOnly: UI.isReadOnly,
