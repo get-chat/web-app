@@ -118,14 +118,13 @@ import { fetchChat, fetchChats } from '@src/api/chatsApi';
 import { PaginatedResponse } from '@src/types/common';
 import { Chat, ChatList } from '@src/types/chats';
 import {
-	getChatContactName,
+	getChatContactProfileName,
 	getLastIncomingMessageTimestamp,
 	getLastMessageTimestamp,
 	setChatContactName,
 } from '@src/helpers/ChatHelper';
 import {
 	getMessageTimestamp,
-	getSenderName,
 	prepareMessageList,
 } from '@src/helpers/MessageHelper';
 import { Message } from '@src/types/messages';
@@ -471,12 +470,15 @@ const Sidebar: React.FC<Props> = ({
 							// Update name and initials on incoming message if name is missing
 							const chat = nextState[chatKey];
 							if (chat) {
-								const chatName = getChatContactName(chat);
+								// The profile name only: a saved name must not end up in it
+								const chatName = getChatContactProfileName(chat);
+								const senderName =
+									chatMessage.contact?.waba_payload?.profile?.name;
 								if (!containsLetters(chatName)) {
 									// Update sidebar chat name
 									const updatedChat = setChatContactName(
 										nextState[chatKey],
-										getSenderName(chatMessage)
+										senderName
 									);
 
 									if (updatedChat) {
@@ -485,10 +487,7 @@ const Sidebar: React.FC<Props> = ({
 
 									// Check if current chat
 									if (waId === chatMessageWaId) {
-										PubSub.publish(
-											EVENT_TOPIC_UPDATE_PERSON_NAME,
-											getSenderName(chatMessage)
-										);
+										PubSub.publish(EVENT_TOPIC_UPDATE_PERSON_NAME, senderName);
 									}
 								}
 							}

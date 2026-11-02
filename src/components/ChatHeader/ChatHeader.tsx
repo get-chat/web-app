@@ -24,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
 import { Chat } from '@src/types/chats';
 import { Person } from '@src/types/persons';
-import { isPersonExpired } from '@src/helpers/PersonHelper';
+import { getPersonName, isPersonExpired } from '@src/helpers/PersonHelper';
 import TagsChip from '@src/components/TagsChip';
 import { AxiosError } from 'axios';
 import { updateResolved } from '@src/api/chatsApi';
@@ -166,9 +166,7 @@ const ChatHeader: React.FC<Props> = ({
 								contactProvidersData[waId]
 							)}
 							generateBgColorBy={
-								!isPersonExpired(person)
-									? person.waba_payload?.profile?.name
-									: undefined
+								!isPersonExpired(person) ? getPersonName(person) : undefined
 							}
 						>
 							{person.initials}
@@ -180,7 +178,7 @@ const ChatHeader: React.FC<Props> = ({
 								className="mb-0 text-base text-chat-icon-dark [&_.emoji-mart-emoji]:size-4!"
 								message={
 									contactProvidersData[waId]?.[0]?.name ??
-									person.waba_payload?.profile?.name ??
+									getPersonName(person) ??
 									(person.wa_id && !isUserActionsRestricted
 										? addPlus(person.wa_id)
 										: '')

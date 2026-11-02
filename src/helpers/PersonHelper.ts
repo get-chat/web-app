@@ -1,5 +1,45 @@
-import { Person } from '@src/types/persons';
+import { ContactSavedName, Person, PersonList } from '@src/types/persons';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
+
+/**
+ * The name to show for a contact: the one the business saved for it in the
+ * WhatsApp Business app address book (Coexistence), else the contact's own
+ * WhatsApp profile name.
+ */
+export const getPersonName = (person: Partial<Person> | undefined | null) =>
+	person?.saved_name || person?.waba_payload?.profile?.name;
+
+/**
+ * Applies a `contact_saved_name` WebSocket event to a locally held contact: the
+ * saved name and the `initials` the API recomputed for it. Returns the contact
+ * itself when the event does not concern it.
+ */
+export const applyContactSavedName = <T extends Partial<Person>>(
+	target: T,
+	updates: ContactSavedName[]
+): T => {
+	const update = updates.find((item) => item.wa_id === target.wa_id);
+	return update
+		? { ...target, saved_name: update.saved_name, initials: update.initials }
+		: target;
+};
+
+/**
+ * applyContactSavedName() over a list, returning the list itself when no
+ * contact in it changed so that holders do not re-render for nothing.
+ */
+export const applyContactSavedNames = (
+	persons: PersonList,
+	updates: ContactSavedName[]
+): PersonList => {
+	let isChanged = false;
+	const nextPersons: PersonList = {};
+	Object.entries(persons).forEach(([key, person]) => {
+		nextPersons[key] = applyContactSavedName(person, updates);
+		isChanged ||= nextPersons[key] !== person;
+	});
+	return isChanged ? nextPersons : persons;
+};
 
 /**
  * POSIX timestamp (seconds) after which a non-template message to this contact

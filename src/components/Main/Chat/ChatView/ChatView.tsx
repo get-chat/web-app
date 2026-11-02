@@ -33,6 +33,7 @@ import {
 	EVENT_TOPIC_SEND_TEMPLATE_MESSAGE_ERROR,
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
+	EVENT_TOPIC_CONTACT_SAVED_NAME,
 } from '@src/Constants';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import ChatFooter from '@src/components/ChatFooter';
@@ -127,10 +128,11 @@ import {
 } from '@src/types/messages';
 import { retrievePerson } from '@src/api/personsApi';
 import {
+	applyContactSavedName,
 	isPersonExpired,
 	mergeMessagingWindow,
 } from '@src/helpers/PersonHelper';
-import { Person } from '@src/types/persons';
+import { ContactSavedName, Person } from '@src/types/persons';
 import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
 import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
 import { createMedia } from '@src/api/mediaApi';
@@ -260,6 +262,8 @@ const ChatView: React.FC<Props> = (props) => {
 	});
 
 	const [person, setPerson] = useState<Person>();
+	// The last `contact_saved_name` event about this chat, see onContactSavedName
+	const pendingSavedNamesRef = useRef<ContactSavedName[]>([]);
 	const [chat, setChat] = useState<Chat>();
 
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
@@ -994,6 +998,32 @@ const ChatView: React.FC<Props> = (props) => {
 		};
 	}, [person]);
 
+	useEffect(() => {
+		const onContactSavedName = function (
+			msg: string,
+			data: ContactSavedName[]
+		) {
+			// While the person is loading, the response may predate this event:
+			// keep it for doRetrievePerson() to apply
+			if (data.some((item) => item.wa_id === waId)) {
+				pendingSavedNamesRef.current = data;
+			}
+			setPerson((prevState) =>
+				prevState ? applyContactSavedName(prevState, data) : prevState
+			);
+		};
+
+		const contactSavedNameEventToken = PubSub.subscribe(
+			EVENT_TOPIC_CONTACT_SAVED_NAME,
+			onContactSavedName
+		);
+
+		return () => {
+			pendingSavedNamesRef.current = [];
+			PubSub.unsubscribe(contactSavedNameEventToken);
+		};
+	}, [waId]);
+
 	const isLastMessageVisible = () => {
 		const element = messagesContainer.current;
 		if (!element) return false;
@@ -1329,7 +1359,7 @@ const ChatView: React.FC<Props> = (props) => {
 				waId ?? '',
 				abortControllerRef.current?.signal
 			);
-			setPerson(data);
+			setPerson(applyContactSavedName(data, pendingSavedNamesRef.current));
 			setExpired(isPersonExpired(data));
 
 			// PersonView information is loaded, now load messages

@@ -13,6 +13,7 @@ import {
 import { parseIntSafely } from '@src/helpers/IntegerHelper';
 import ReactionList from '@src/interfaces/ReactionList';
 import { generateUniqueID } from '@src/helpers/Helpers';
+import { getPersonName } from '@src/helpers/PersonHelper';
 import { getCurrentTenantId } from '@src/helpers/StorageHelper';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 import { Template } from '@src/types/templates';
@@ -181,7 +182,7 @@ export const getSenderName = (message: Message) => {
 		}
 	}
 
-	return !message.from_us ? message.contact?.waba_payload?.profile?.name : 'Us';
+	return !message.from_us ? getPersonName(message.contact) : 'Us';
 };
 
 // echo_origin only exists on messages delivered via echo webhook events; a

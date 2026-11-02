@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { CHAT_KEY_PREFIX } from '@src/Constants';
 import { ChatList } from '@src/types/chats';
+import { ContactSavedName } from '@src/types/persons';
 
 interface ChatsState {
 	value: ChatList;
@@ -82,6 +83,22 @@ const chatsSlice = createSlice({
 				state.value = { ...state.value };
 			}
 		},
+		setChatSavedNames: (state, action: PayloadAction<ContactSavedName[]>) => {
+			let isChanged = false;
+			action.payload.forEach(({ wa_id, saved_name, initials }) => {
+				const existingChat = state.value[CHAT_KEY_PREFIX + wa_id];
+				if (existingChat) {
+					existingChat.contact.saved_name = saved_name;
+					existingChat.contact.initials = initials;
+					isChanged = true;
+				}
+			});
+
+			if (isChanged) {
+				// Trigger update
+				state.value = { ...state.value };
+			}
+		},
 	},
 });
 
@@ -92,6 +109,7 @@ export const {
 	setChatAssignment,
 	setChatTagging,
 	setChatResolved,
+	setChatSavedNames,
 } = chatsSlice.actions;
 
 export default chatsSlice.reducer;
