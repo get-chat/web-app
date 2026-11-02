@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { AxiosError, AxiosResponse } from 'axios';
-import { CONTACTS_TEMP_LIMIT } from '@src/Constants';
+import PubSub from 'pubsub-js';
+import {
+	CONTACTS_TEMP_LIMIT,
+	EVENT_TOPIC_CONTACT_SAVED_NAME,
+} from '@src/Constants';
 import { fetchContacts } from '@src/api/contactsApi';
 import { Contact } from '@src/types/contacts';
 import { fetchPersons } from '@src/api/personsApi';
-import { PersonList, Recipient } from '@src/types/persons';
-import { generateInitialsHelper } from '@src/helpers/Helpers';
+import { ContactSavedName, PersonList, Recipient } from '@src/types/persons';
+import {
+	applyContactSavedNames,
+	getPersonName,
+} from '@src/helpers/PersonHelper';
 
 const useContacts = () => {
 	const [keyword, setKeyword] = useState('');
@@ -25,6 +32,24 @@ const useContacts = () => {
 	}, []);
 
 	useEffect(() => {
+		const onContactSavedName = function (
+			msg: string,
+			data: ContactSavedName[]
+		) {
+			setPersons((prevState) => applyContactSavedNames(prevState, data));
+		};
+
+		const contactSavedNameEventToken = PubSub.subscribe(
+			EVENT_TOPIC_CONTACT_SAVED_NAME,
+			onContactSavedName
+		);
+
+		return () => {
+			PubSub.unsubscribe(contactSavedNameEventToken);
+		};
+	}, []);
+
+	useEffect(() => {
 		const contactsAsRecipients: Recipient[] = contacts.map(
 			(item) =>
 				({
@@ -39,8 +64,8 @@ const useContacts = () => {
 		const personsAsRecipients: Recipient[] = Object.values(persons).map(
 			(item) =>
 				({
-					name: item.waba_payload?.profile?.name,
-					initials: generateInitialsHelper(item.waba_payload?.profile?.name),
+					name: getPersonName(item),
+					initials: item.initials,
 					phone_numbers: [
 						{
 							phone_number: item.wa_id,

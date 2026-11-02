@@ -34,6 +34,7 @@ export const EVENT_TOPIC_FOCUS_MESSAGE_INPUT = 'focus_message_input';
 export const EVENT_TOPIC_RELOAD_BUSINESS_PROFILE_PHOTO =
 	'reload_business_profile_photo';
 export const EVENT_TOPIC_USER_AVAILABILITY = 'user_availability';
+export const EVENT_TOPIC_CONTACT_SAVED_NAME = 'contact_saved_name';
 
 export const WS_EVENT_TYPE_WABA = 'waba_webhook';
 export const WS_EVENT_TYPE_GETCHAT = 'getchat_webhook';

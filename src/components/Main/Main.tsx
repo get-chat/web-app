@@ -28,6 +28,7 @@ import {
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 	EVENT_TOPIC_USER_AVAILABILITY,
+	EVENT_TOPIC_CONTACT_SAVED_NAME,
 	WS_EVENT_TYPE_GETCHAT,
 	WS_EVENT_TYPE_WABA,
 } from '@src/Constants';
@@ -54,13 +55,17 @@ import { setCurrentTenant } from '@src/store/reducers/currentTenantReducer';
 import { fetchCurrentTenant } from '@src/api/tenantsApi';
 import TenantAccessBanner from '@src/components/TenantAccessBanner';
 import { setTags } from '@src/store/reducers/tagsReducer';
-import { prepareContactProvidersData } from '@src/helpers/ContactProvidersHelper';
+import {
+	applyContactSavedNamesToProviders,
+	prepareContactProvidersData,
+} from '@src/helpers/ContactProvidersHelper';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setUsers } from '@src/store/reducers/usersReducer';
 import { setSavedResponses } from '@src/store/reducers/savedResponsesReducer';
 import {
 	setChatAssignment,
 	setChatResolved,
+	setChatSavedNames,
 	setChatTagging,
 } from '@src/store/reducers/chatsReducer';
 import { setGroups } from '@src/store/reducers/groupsReducer';
@@ -103,6 +108,7 @@ import {
 } from '@src/helpers/MessageHelper';
 import { processCloudApiWebhookPayload } from '@src/helpers/CloudApiWebhookHelper';
 import { getChatPath } from '@src/helpers/RouteHelper';
+import { getPersonName } from '@src/helpers/PersonHelper';
 import { fetchContacts } from '@src/api/contactsApi';
 import api from '@src/api/axiosInstance';
 import { setWaId } from '@src/store/reducers/waIdReducer';
@@ -797,8 +803,7 @@ const Main: React.FC = () => {
 						displayInfo(
 							t(
 								'A new chat has been assigned to you: %s',
-								prepared.contact?.waba_payload?.profile?.name ||
-									prepared.customer_wa_id
+								getPersonName(prepared.contact) || prepared.customer_wa_id
 							),
 							() => {
 								navigate(getChatPath(prepared.customer_wa_id));
@@ -847,6 +852,18 @@ const Main: React.FC = () => {
 					}
 
 					PubSub.publish(EVENT_TOPIC_USER_AVAILABILITY, userAvailability);
+				}
+
+				// The WhatsApp Business app address book (Coexistence) changed the
+				// saved name of chats
+				const contactSavedNames = wabaPayload?.contact_saved_name;
+
+				if (contactSavedNames) {
+					dispatch(setChatSavedNames(contactSavedNames));
+					setContactProvidersData((prevState: { [key: string]: any }) =>
+						applyContactSavedNamesToProviders(prevState, contactSavedNames)
+					);
+					PubSub.publish(EVENT_TOPIC_CONTACT_SAVED_NAME, contactSavedNames);
 				}
 
 				// The inbox became read-only, or full again

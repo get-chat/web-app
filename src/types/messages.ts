@@ -1,7 +1,7 @@
 import { Tag } from '@src/types/tags';
 import { Template } from '@src/types/templates';
 import { User, UserAvailabilityEvent } from '@src/types/users';
-import { Person } from '@src/types/persons';
+import { ContactSavedName, Person } from '@src/types/persons';
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
 import UserAvailability from '@src/components/UserAvailability';
 
@@ -284,6 +284,7 @@ export interface LegacyWabaWebhookWabaPayload {
 	chat_tagging?: ChatTagging;
 	chat_resolved?: ChatResolvedEvent;
 	user_availability?: UserAvailabilityEvent;
+	contact_saved_name?: ContactSavedName[];
 	// The inbox's access mode changed (GC-72)
 	tenant_access?: object;
 }

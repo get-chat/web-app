@@ -11,13 +11,17 @@ import { User } from '@src/types/users';
 import { MessageType } from '@src/types/messages';
 import { makeMutable } from '@src/helpers/DataHelper';
 import { getTemplateLanguageCode } from '@src/helpers/TemplateMessageHelper';
-import { isPersonExpired } from '@src/helpers/PersonHelper';
+import { getPersonName, isPersonExpired } from '@src/helpers/PersonHelper';
 
 export const isChatExpired = (chat: Chat | undefined) =>
 	isPersonExpired(chat?.contact);
 
 export const getChatContactName = (chat: Chat | undefined) =>
-	chat?.contact.waba_payload.profile.name;
+	getPersonName(chat?.contact);
+
+// The contact's own WhatsApp profile name, the one setChatContactName() sets
+export const getChatContactProfileName = (chat: Chat | undefined) =>
+	chat?.contact.waba_payload?.profile?.name;
 
 export const setChatContactName = (
 	chat: Chat | undefined,

@@ -8,6 +8,7 @@ import googleLogo from '../../../assets/images/ic-google.png';
 // @ts-ignore
 import hubspotLogo from '../../../assets/images/ic-hubspot.png';
 import { extractAvatarFromContactProviderData } from '@src/helpers/Helpers';
+import { getPersonName } from '@src/helpers/PersonHelper';
 import { addPlus, isPhoneNumber } from '@src/helpers/PhoneNumberHelper';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import { Trans, useTranslation } from 'react-i18next';
@@ -84,7 +85,7 @@ const ContactDetails: React.FC<Props> = ({
 									true
 								)}
 								className="mb-3.75 size-50 text-[5rem]/none"
-								generateBgColorBy={contactData.waba_payload?.profile?.name}
+								generateBgColorBy={getPersonName(contactData)}
 							>
 								{contactData.initials}
 							</CustomAvatar>
@@ -95,7 +96,7 @@ const ContactDetails: React.FC<Props> = ({
 							className="text-center text-[20px] font-semibold [&_.emoji-mart-emoji]:size-5!"
 							message={
 								contactProvidersData[contactData.wa_id ?? '']?.[0]?.name ??
-								contactData.waba_payload?.profile?.name
+								getPersonName(contactData)
 							}
 						/>
 

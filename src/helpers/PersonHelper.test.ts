@@ -1,4 +1,7 @@
 import {
+	applyContactSavedName,
+	applyContactSavedNames,
+	getPersonName,
 	isPersonExpired,
 	mergeMessagingWindow,
 } from '@src/helpers/PersonHelper';
@@ -141,5 +144,97 @@ describe('mergeMessagingWindow', () => {
 		} as Person);
 
 		expect(merged.messaging_window_origin).toBeNull();
+	});
+});
+
+/**
+ * A Coexistence inbox receives the WhatsApp Business app address book, and a
+ * chat shows the name the business saved for the number over the one the
+ * contact picked for their own profile.
+ */
+describe('getPersonName', () => {
+	const person = buildPerson({ last_message_timestamp: nowInSeconds() });
+
+	it('prefers the saved name', () => {
+		expect(getPersonName({ ...person, saved_name: 'Konrad (Supplier)' })).toBe(
+			'Konrad (Supplier)'
+		);
+	});
+
+	it('falls back to the profile name without a saved name', () => {
+		expect(getPersonName(person)).toBe('Konrad');
+		expect(getPersonName({ ...person, saved_name: null })).toBe('Konrad');
+		expect(getPersonName({ ...person, saved_name: '' })).toBe('Konrad');
+	});
+
+	it('tolerates a missing person', () => {
+		expect(getPersonName(undefined)).toBeUndefined();
+	});
+});
+
+describe('applyContactSavedName', () => {
+	const person = buildPerson({ last_message_timestamp: nowInSeconds() });
+
+	it('applies the saved name and initials of an event about the contact', () => {
+		expect(
+			applyContactSavedName(person, [
+				{
+					wa_id: '905383192532',
+					saved_name: 'Jane Doe',
+					name: 'Jane Doe',
+					initials: 'JD',
+				},
+			])
+		).toEqual({
+			...person,
+			saved_name: 'Jane Doe',
+			initials: 'JD',
+		});
+	});
+
+	it('returns the contact itself for an event about other contacts', () => {
+		expect(
+			applyContactSavedName(person, [
+				{
+					wa_id: '491711234567',
+					saved_name: 'Jane Doe',
+					name: 'Jane Doe',
+					initials: 'JD',
+				},
+			])
+		).toBe(person);
+	});
+});
+
+describe('applyContactSavedNames', () => {
+	const persons = {
+		'0': buildPerson({ last_message_timestamp: nowInSeconds() }),
+	};
+
+	it('updates the matching contact of a list', () => {
+		const next = applyContactSavedNames(persons, [
+			{
+				wa_id: '905383192532',
+				saved_name: 'Jane Doe',
+				name: 'Jane Doe',
+				initials: 'JD',
+			},
+		]);
+
+		expect(next['0'].saved_name).toBe('Jane Doe');
+		expect(next['0'].initials).toBe('JD');
+	});
+
+	it('returns the list itself when nothing in it changed', () => {
+		expect(
+			applyContactSavedNames(persons, [
+				{
+					wa_id: '491711234567',
+					saved_name: 'Jane Doe',
+					name: 'Jane Doe',
+					initials: 'JD',
+				},
+			])
+		).toBe(persons);
 	});
 });

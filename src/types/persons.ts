@@ -7,6 +7,12 @@ export interface Person {
 	// Null for username-only (BSUID) contacts.
 	phone_number?: string | null;
 	waba_payload: ContactWabaPayload;
+	// The name the business saved for this number in the WhatsApp Business app
+	// address book (Coexistence). Read-only; null when it saved none.
+	// Read it via getPersonName() rather than the profile name directly.
+	saved_name?: string | null;
+	// Of the name getPersonName() shows: the API computes them from the saved
+	// name when there is one
 	initials: string;
 	last_message_timestamp: number;
 	// POSIX timestamp (seconds) after which a non-template message is rejected
@@ -19,6 +25,17 @@ export interface Person {
 	// `referral_conversion` for a Click-to-WhatsApp (CTWA) ad. Null when unknown.
 	messaging_window_origin?: string | null;
 	resolved: boolean;
+}
+
+// A chat whose saved name the WhatsApp Business app address book (Coexistence)
+// changed. A null `saved_name` means the business removed the entry.
+export interface ContactSavedName {
+	wa_id: string;
+	saved_name: string | null;
+	// What the API now shows for the contact (`/contacts/` `name`), and its
+	// initials: the profile name's again once the saved name is gone
+	name: string;
+	initials: string;
 }
 
 export interface FetchPersonsRequest {
