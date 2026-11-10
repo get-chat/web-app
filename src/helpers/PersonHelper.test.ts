@@ -1,7 +1,9 @@
 import {
+	applyContactMarketingPreference,
 	applyContactSavedName,
 	applyContactSavedNames,
 	getPersonName,
+	isMarketingTemplateBlocked,
 	isPersonExpired,
 	mergeMessagingWindow,
 } from '@src/helpers/PersonHelper';
@@ -236,5 +238,67 @@ describe('applyContactSavedNames', () => {
 				},
 			])
 		).toBe(persons);
+	});
+});
+
+/**
+ * `contact_marketing_preference` WebSocket events: the customer stopped or
+ * resumed marketing messages, and the chat header and the template dialog
+ * follow live.
+ */
+describe('applyContactMarketingPreference', () => {
+	const person = { wa_id: '905383192532', marketing_opt_out: false };
+
+	it('applies a stop to the contact it concerns', () => {
+		expect(
+			applyContactMarketingPreference(person, [
+				{ wa_id: '905383192532', marketing_opt_out: true },
+			])
+		).toEqual({ wa_id: '905383192532', marketing_opt_out: true });
+	});
+
+	it('returns the contact itself when the event changes nothing', () => {
+		expect(
+			applyContactMarketingPreference(person, [
+				{ wa_id: '491711234567', marketing_opt_out: true },
+			])
+		).toBe(person);
+		expect(
+			applyContactMarketingPreference(person, [
+				{ wa_id: '905383192532', marketing_opt_out: false },
+			])
+		).toBe(person);
+	});
+});
+
+describe('isMarketingTemplateBlocked', () => {
+	const optedOut = { marketing_opt_out: true };
+
+	it('blocks marketing templates to opted-out contacts', () => {
+		expect(
+			isMarketingTemplateBlocked(optedOut, { category: 'MARKETING' })
+		).toBe(true);
+		expect(
+			isMarketingTemplateBlocked(optedOut, { category: 'marketing' })
+		).toBe(true);
+	});
+
+	it('lets other categories and other contacts through', () => {
+		expect(isMarketingTemplateBlocked(optedOut, { category: 'UTILITY' })).toBe(
+			false
+		);
+		expect(
+			isMarketingTemplateBlocked(
+				{ marketing_opt_out: false },
+				{
+					category: 'MARKETING',
+				}
+			)
+		).toBe(false);
+		// Backends without the field
+		expect(isMarketingTemplateBlocked({}, { category: 'MARKETING' })).toBe(
+			false
+		);
+		expect(isMarketingTemplateBlocked(optedOut, undefined)).toBe(false);
 	});
 });

@@ -619,5 +619,9 @@
 	"Send an update without a template": "Taslak olmadan güncelleme gönder",
 	"Send utility message": "Hizmet bildirimi gönder",
 	"Sent as a utility message: keep it to an update the customer expects, with no promotions.": "Hizmet bildirimi olarak gönderilir: müşterinin beklediği bir güncellemeyle sınırla, tanıtım ekleme.",
-	"Utility messages can be up to %s characters long.": "Hizmet bildirimleri en fazla %s karakter olabilir."
+	"Utility messages can be up to %s characters long.": "Hizmet bildirimleri en fazla %s karakter olabilir.",
+	"No marketing": "Pazarlama kapalı",
+	"This customer stopped marketing messages from your business in WhatsApp. Marketing templates are not delivered to them; other messages still are.": "Bu müşteri WhatsApp'ta işletmenden gelen pazarlama mesajlarını durdurdu. Pazarlama taslakları ona teslim edilmez; diğer mesajlar edilmeye devam eder.",
+	"This customer stopped marketing messages": "Bu müşteri pazarlama mesajlarını durdurdu",
+	"WhatsApp will not deliver this marketing template to them. Use a utility template, or reply while the customer care window is open.": "WhatsApp bu pazarlama taslağını ona teslim etmeyecek. Bir hizmet bildirimi taslağı kullan ya da müşteri hizmetleri penceresi açıkken yanıt ver."
 }

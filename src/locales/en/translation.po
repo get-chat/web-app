@@ -1891,3 +1891,15 @@ msgstr ""
 
 msgid "Utility messages can be up to %s characters long."
 msgstr ""
+
+msgid "No marketing"
+msgstr ""
+
+msgid "This customer stopped marketing messages from your business in WhatsApp. Marketing templates are not delivered to them; other messages still are."
+msgstr ""
+
+msgid "This customer stopped marketing messages"
+msgstr ""
+
+msgid "WhatsApp will not deliver this marketing template to them. Use a utility template, or reply while the customer care window is open."
+msgstr ""

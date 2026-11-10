@@ -26,6 +26,7 @@ import { Chat } from '@src/types/chats';
 import { Person } from '@src/types/persons';
 import { getPersonName, isPersonExpired } from '@src/helpers/PersonHelper';
 import TagsChip from '@src/components/TagsChip';
+import MarketingOptOutBadge from '@src/components/MarketingOptOutBadge';
 import { AxiosError } from 'axios';
 import { updateResolved } from '@src/api/chatsApi';
 import DoneIcon from '@src/components/icons/Check';
@@ -203,6 +204,8 @@ const ChatHeader: React.FC<Props> = ({
 										{t('Resolved')}
 									</span>
 								)}
+
+								{person.marketing_opt_out && <MarketingOptOutBadge />}
 							</div>
 						</div>
 					</>

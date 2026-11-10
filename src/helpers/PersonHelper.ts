@@ -1,4 +1,10 @@
-import { ContactSavedName, Person, PersonList } from '@src/types/persons';
+import {
+	ContactMarketingPreference,
+	ContactSavedName,
+	Person,
+	PersonList,
+} from '@src/types/persons';
+import { Template } from '@src/types/templates';
 import { getUnixTimestamp } from '@src/helpers/DateHelper';
 
 /**
@@ -40,6 +46,32 @@ export const applyContactSavedNames = (
 	});
 	return isChanged ? nextPersons : persons;
 };
+
+/**
+ * Applies a `contact_marketing_preference` WebSocket event to a locally held
+ * contact. Returns the contact itself when the event does not change it.
+ */
+export const applyContactMarketingPreference = <T extends Partial<Person>>(
+	target: T,
+	updates: ContactMarketingPreference[]
+): T => {
+	const update = updates.find((item) => item.wa_id === target.wa_id);
+	return update && update.marketing_opt_out !== target.marketing_opt_out
+		? { ...target, marketing_opt_out: update.marketing_opt_out }
+		: target;
+};
+
+/**
+ * Whether WhatsApp will not deliver this template to the contact: it is a
+ * MARKETING one and the contact stopped marketing messages. Meta accepts the
+ * send and fails it afterwards with 131050.
+ */
+export const isMarketingTemplateBlocked = (
+	person: Partial<Person> | undefined | null,
+	template: Pick<Template, 'category'> | undefined | null
+) =>
+	Boolean(person?.marketing_opt_out) &&
+	template?.category?.toUpperCase() === 'MARKETING';
 
 /**
  * POSIX timestamp (seconds) after which a non-template message to this contact

@@ -34,8 +34,10 @@ import {
 	EVENT_TOPIC_SENT_TEMPLATE_MESSAGE,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 	EVENT_TOPIC_CONTACT_SAVED_NAME,
+	EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE,
 } from '@src/Constants';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
+import usePersonUpdateEvent from '@src/hooks/usePersonUpdateEvent';
 import ChatFooter from '@src/components/ChatFooter';
 import ChatHeader from '@src/components/ChatHeader';
 import ChatMessageOptionsMenu from '../ChatMessage/ChatMessageOptionsMenu';
@@ -128,11 +130,16 @@ import {
 } from '@src/types/messages';
 import { retrievePerson } from '@src/api/personsApi';
 import {
+	applyContactMarketingPreference,
 	applyContactSavedName,
 	isPersonExpired,
 	mergeMessagingWindow,
 } from '@src/helpers/PersonHelper';
-import { ContactSavedName, Person } from '@src/types/persons';
+import {
+	ContactMarketingPreference,
+	ContactSavedName,
+	Person,
+} from '@src/types/persons';
 import { fetchChatTaggingEvents } from '@src/api/chatTaggingApi';
 import { fetchChatAssignmentEvents } from '@src/api/chatAssignmentApi';
 import { createMedia } from '@src/api/mediaApi';
@@ -262,8 +269,6 @@ const ChatView: React.FC<Props> = (props) => {
 	});
 
 	const [person, setPerson] = useState<Person>();
-	// The last `contact_saved_name` event about this chat, see onContactSavedName
-	const pendingSavedNamesRef = useRef<ContactSavedName[]>([]);
 	const [chat, setChat] = useState<Chat>();
 
 	const [isScrollButtonVisible, setScrollButtonVisible] = useState(false);
@@ -998,31 +1003,22 @@ const ChatView: React.FC<Props> = (props) => {
 		};
 	}, [person]);
 
-	useEffect(() => {
-		const onContactSavedName = function (
-			msg: string,
-			data: ContactSavedName[]
-		) {
-			// While the person is loading, the response may predate this event:
-			// keep it for doRetrievePerson() to apply
-			if (data.some((item) => item.wa_id === waId)) {
-				pendingSavedNamesRef.current = data;
-			}
-			setPerson((prevState) =>
-				prevState ? applyContactSavedName(prevState, data) : prevState
-			);
-		};
-
-		const contactSavedNameEventToken = PubSub.subscribe(
+	// `contact_saved_name` and `contact_marketing_preference` events about this
+	// chat, applied live and to the person while it loads
+	const personUpdateEvents = [
+		usePersonUpdateEvent<ContactSavedName>(
 			EVENT_TOPIC_CONTACT_SAVED_NAME,
-			onContactSavedName
-		);
-
-		return () => {
-			pendingSavedNamesRef.current = [];
-			PubSub.unsubscribe(contactSavedNameEventToken);
-		};
-	}, [waId]);
+			waId,
+			setPerson,
+			applyContactSavedName
+		),
+		usePersonUpdateEvent<ContactMarketingPreference>(
+			EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE,
+			waId,
+			setPerson,
+			applyContactMarketingPreference
+		),
+	];
 
 	const isLastMessageVisible = () => {
 		const element = messagesContainer.current;
@@ -1354,12 +1350,19 @@ const ChatView: React.FC<Props> = (props) => {
 	};
 
 	const doRetrievePerson = async (loadMessages: boolean) => {
+		// The response reflects every event received until now
+		personUpdateEvents.forEach((events) => events.resetPending());
 		try {
 			const data = await retrievePerson(
 				waId ?? '',
 				abortControllerRef.current?.signal
 			);
-			setPerson(applyContactSavedName(data, pendingSavedNamesRef.current));
+			setPerson(
+				personUpdateEvents.reduce(
+					(prepared, events) => events.applyPending(prepared),
+					data
+				)
+			);
 			setExpired(isPersonExpired(data));
 
 			// PersonView information is loaded, now load messages
@@ -2414,6 +2417,7 @@ const ChatView: React.FC<Props> = (props) => {
 				isVisible={isSendTemplateDialogVisible}
 				setVisible={setSendTemplateDialogVisible}
 				chosenTemplate={chosenTemplate}
+				person={person}
 				onSend={(templateMessage) => sendTemplateMessage(true, templateMessage)}
 				sendCallback={() => dispatch(setState({ isTemplatesVisible: false }))}
 			/>

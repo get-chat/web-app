@@ -1917,3 +1917,15 @@ msgstr "Hizmet bildirimi olarak gönderilir: müşterinin beklediği bir güncel
 
 msgid "Utility messages can be up to %s characters long."
 msgstr "Hizmet bildirimleri en fazla %s karakter olabilir."
+
+msgid "No marketing"
+msgstr "Pazarlama kapalı"
+
+msgid "This customer stopped marketing messages from your business in WhatsApp. Marketing templates are not delivered to them; other messages still are."
+msgstr "Bu müşteri WhatsApp'ta işletmenden gelen pazarlama mesajlarını durdurdu. Pazarlama taslakları ona teslim edilmez; diğer mesajlar edilmeye devam eder."
+
+msgid "This customer stopped marketing messages"
+msgstr "Bu müşteri pazarlama mesajlarını durdurdu"
+
+msgid "WhatsApp will not deliver this marketing template to them. Use a utility template, or reply while the customer care window is open."
+msgstr "WhatsApp bu pazarlama taslağını ona teslim etmeyecek. Bir hizmet bildirimi taslağı kullan ya da müşteri hizmetleri penceresi açıkken yanıt ver."
