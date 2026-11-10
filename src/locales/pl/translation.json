@@ -622,5 +622,9 @@
 	"Send an update without a template": "Wyślij aktualizację bez szablonu",
 	"Send utility message": "Wyślij wiadomość użytkową",
 	"Sent as a utility message: keep it to an update the customer expects, with no promotions.": "Wysyłane jako wiadomość użytkowa: ogranicz się do aktualizacji, której klient oczekuje, bez promocji.",
-	"Utility messages can be up to %s characters long.": "Wiadomości użytkowe mogą mieć maksymalnie %s znaków."
+	"Utility messages can be up to %s characters long.": "Wiadomości użytkowe mogą mieć maksymalnie %s znaków.",
+	"No marketing": "Bez marketingu",
+	"This customer stopped marketing messages from your business in WhatsApp. Marketing templates are not delivered to them; other messages still are.": "Ten klient wyłączył w WhatsApp wiadomości marketingowe od Twojej firmy. Szablony marketingowe nie są mu dostarczane; pozostałe wiadomości tak.",
+	"This customer stopped marketing messages": "Ten klient wyłączył wiadomości marketingowe",
+	"WhatsApp will not deliver this marketing template to them. Use a utility template, or reply while the customer care window is open.": "WhatsApp nie dostarczy mu tego szablonu marketingowego. Użyj szablonu użytkowego lub odpowiedz, gdy okno obsługi klienta jest otwarte."
 }

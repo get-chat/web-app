@@ -20,11 +20,15 @@ import {
 import { Template } from '@src/types/templates';
 import { CreateMessageRequest } from '@src/types/messages';
 import { makeMutable } from '@src/helpers/DataHelper';
+import { isMarketingTemplateBlocked } from '@src/helpers/PersonHelper';
+import { Person } from '@src/types/persons';
 
 export type Props = {
 	isVisible: boolean;
 	setVisible: (visible: boolean) => void;
 	chosenTemplate?: Template;
+	// The recipient, to warn when WhatsApp will not deliver the template
+	person?: Person;
 	onSend: (template: Template) => void;
 	sendCallback?: () => void;
 	selectTemplateCallback?: () => void;
@@ -34,6 +38,7 @@ const SendTemplateDialog: React.FC<Props> = ({
 	isVisible,
 	setVisible,
 	chosenTemplate,
+	person,
 	onSend,
 	sendCallback,
 	selectTemplateCallback,
@@ -132,6 +137,22 @@ const SendTemplateDialog: React.FC<Props> = ({
 					<DialogTitle>{t('Send a template message')}</DialogTitle>
 				</DialogHeader>
 				<DialogBody ref={dialogContentRef}>
+					{/* Warn only: Meta accepts the send and fails it with 131050 */}
+					{isMarketingTemplateBlocked(person, chosenTemplate) && (
+						<Alert
+							severity="warning"
+							className="mb-4"
+							data-test-id="marketing-opt-out-warning"
+						>
+							<AlertTitle>
+								{t('This customer stopped marketing messages')}
+							</AlertTitle>
+							{t(
+								'WhatsApp will not deliver this marketing template to them. Use a utility template, or reply while the customer care window is open.'
+							)}
+						</Alert>
+					)}
+
 					<SendTemplateMessage
 						data={chosenTemplate}
 						send={(template: Template) => sendAction(template)}

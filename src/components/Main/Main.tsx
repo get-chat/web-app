@@ -29,6 +29,7 @@ import {
 	EVENT_TOPIC_UNSUPPORTED_FILE,
 	EVENT_TOPIC_USER_AVAILABILITY,
 	EVENT_TOPIC_CONTACT_SAVED_NAME,
+	EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE,
 	WS_EVENT_TYPE_GETCHAT,
 	WS_EVENT_TYPE_WABA,
 } from '@src/Constants';
@@ -864,6 +865,16 @@ const Main: React.FC = () => {
 						applyContactSavedNamesToProviders(prevState, contactSavedNames)
 					);
 					PubSub.publish(EVENT_TOPIC_CONTACT_SAVED_NAME, contactSavedNames);
+				}
+
+				// Customers stopped or resumed marketing messages
+				const marketingPreferences = wabaPayload?.contact_marketing_preference;
+
+				if (marketingPreferences) {
+					PubSub.publish(
+						EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE,
+						marketingPreferences
+					);
 				}
 
 				// The inbox became read-only, or full again

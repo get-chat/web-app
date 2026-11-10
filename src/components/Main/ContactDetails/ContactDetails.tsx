@@ -14,6 +14,7 @@ import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricte
 import { Trans, useTranslation } from 'react-i18next';
 import { setFilterTagId } from '@src/store/reducers/filterTagIdReducer';
 import CustomAvatar from '@src/components/CustomAvatar';
+import MarketingOptOutBadge from '@src/components/MarketingOptOutBadge';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import SellIcon from '@src/components/icons/Sell';
 import { setState } from '@src/store/reducers/UIReducer';
@@ -130,6 +131,12 @@ const ContactDetails: React.FC<Props> = ({
 								t('Never')
 							)}
 						</div>
+
+						{contactData.marketing_opt_out && (
+							<div className="mt-3">
+								<MarketingOptOutBadge size="default" isDescribed />
+							</div>
+						)}
 
 						{currentChatTags && currentChatTags.length > 0 && (
 							<div className="mt-3">

@@ -1917,3 +1917,15 @@ msgstr "Se envía como mensaje de utilidad: limítalo a una actualización que e
 
 msgid "Utility messages can be up to %s characters long."
 msgstr "Los mensajes de utilidad pueden tener hasta %s caracteres."
+
+msgid "No marketing"
+msgstr "Sin marketing"
+
+msgid "This customer stopped marketing messages from your business in WhatsApp. Marketing templates are not delivered to them; other messages still are."
+msgstr "Este cliente dejó de recibir mensajes de marketing de tu empresa en WhatsApp. Las plantillas de marketing no se le entregan; los demás mensajes sí."
+
+msgid "This customer stopped marketing messages"
+msgstr "Este cliente dejó de recibir mensajes de marketing"
+
+msgid "WhatsApp will not deliver this marketing template to them. Use a utility template, or reply while the customer care window is open."
+msgstr "WhatsApp no le entregará esta plantilla de marketing. Usa una plantilla de utilidad o responde mientras la ventana de atención al cliente esté abierta."

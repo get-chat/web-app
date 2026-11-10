@@ -25,6 +25,16 @@ export interface Person {
 	// `referral_conversion` for a Click-to-WhatsApp (CTWA) ad. Null when unknown.
 	messaging_window_origin?: string | null;
 	resolved: boolean;
+	// The customer stopped marketing messages from this business in WhatsApp
+	// (or a marketing template to them failed with 131050). Read-only: WhatsApp
+	// does not deliver MARKETING templates to them, everything else still is.
+	marketing_opt_out?: boolean;
+}
+
+// A chat whose customer stopped or resumed marketing messages
+export interface ContactMarketingPreference {
+	wa_id: string;
+	marketing_opt_out: boolean;
 }
 
 // A chat whose saved name the WhatsApp Business app address book (Coexistence)

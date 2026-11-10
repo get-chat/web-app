@@ -29,6 +29,8 @@ const badgeVariants = cva(
 				destructive: '[--badge:var(--destructive)] [--badge-fg:#fff]',
 				neutral: '[--badge:var(--muted-foreground)] [--badge-fg:#fff]',
 				selection: '[--badge:var(--selection)] [--badge-fg:#fff]',
+				warning:
+					'[--badge:var(--color-warning)] [--badge-fg:var(--color-warning-soft)]',
 			},
 			size: {
 				sm: 'h-5 px-1.5 text-[11px]',
@@ -37,6 +39,15 @@ const badgeVariants = cva(
 				lg: 'h-8 gap-1.5 px-3 text-[13px] font-normal has-[>svg:first-child]:pl-2.5',
 			},
 		},
+		compoundVariants: [
+			// The warning hue is a dark brown: its 12% tint is too faint, so soft
+			// warning badges use the theme's warning-soft, like warning banners
+			{
+				variant: 'soft',
+				color: 'warning',
+				className: 'bg-warning-soft [a&,button&]:hover:bg-warning-strong',
+			},
+		],
 		defaultVariants: {
 			variant: 'soft',
 			color: 'neutral',

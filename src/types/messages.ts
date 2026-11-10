@@ -1,7 +1,11 @@
 import { Tag } from '@src/types/tags';
 import { Template } from '@src/types/templates';
 import { User, UserAvailabilityEvent } from '@src/types/users';
-import { ContactSavedName, Person } from '@src/types/persons';
+import {
+	ContactMarketingPreference,
+	ContactSavedName,
+	Person,
+} from '@src/types/persons';
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
 import UserAvailability from '@src/components/UserAvailability';
 
@@ -285,6 +289,8 @@ export interface LegacyWabaWebhookWabaPayload {
 	chat_resolved?: ChatResolvedEvent;
 	user_availability?: UserAvailabilityEvent;
 	contact_saved_name?: ContactSavedName[];
+	// Customers stopped or resumed marketing messages
+	contact_marketing_preference?: ContactMarketingPreference[];
 	// The inbox's access mode changed (GC-72)
 	tenant_access?: object;
 }
