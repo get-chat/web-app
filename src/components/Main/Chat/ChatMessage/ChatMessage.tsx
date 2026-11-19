@@ -52,6 +52,13 @@ import {
 import ReceiptLongIcon from '@src/components/icons/ReceiptLong';
 import { Message, MessageType } from '@src/types/messages';
 import { generateInitialsHelper } from '@src/helpers/Helpers';
+import {
+	getGroupParticipantColor,
+	getGroupParticipantName,
+	getMessageGroupParticipant,
+} from '@src/helpers/WhatsAppGroupHelper';
+import { addPlus } from '@src/helpers/PhoneNumberHelper';
+import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
 import MissingContent from './MissingContent';
 import DoneAllIcon from '@src/components/icons/DoneAll';
 import {
@@ -120,6 +127,13 @@ const ChatMessage: React.FC<Props> = ({
 	const echoOriginLabel = getEchoOriginLabel(data);
 	const isDirectSend = isDirectSendMessage(data);
 
+	// An inbound WhatsApp group message names its participant, not the group
+	const groupParticipant = getMessageGroupParticipant(data);
+	const isUserActionsRestricted = useIsUserActionsRestricted();
+	const senderName = groupParticipant
+		? getGroupParticipantName(groupParticipant)
+		: getSenderName(data);
+
 	// Error details show only while the message has no delivery status
 	const hasErrorDetails =
 		!hasAnyStatus(data) && Boolean(data.waba_payload?.errors?.length);
@@ -127,8 +141,8 @@ const ChatMessage: React.FC<Props> = ({
 	const onPreview = (type: string, source: string) => {
 		if (!disableMediaPreview) {
 			const previewData = new PreviewMediaModel(
-				getSenderName(data),
-				generateInitialsHelper(getSenderName(data)),
+				senderName,
+				generateInitialsHelper(senderName),
 				type,
 				source,
 				getMessageTimestamp(data) ?? -1
@@ -165,12 +179,34 @@ const ChatMessage: React.FC<Props> = ({
 								data.from_us && 'text-right'
 							)}
 						>
-							{data.from_us
-								? echoOriginLabel
-									? t(echoOriginLabel)
-									: getSenderName(data)
-								: contactProvidersData?.[data.waba_payload?.wa_id ?? '']?.[0]
-										?.name ?? getSenderName(data)}
+							{groupParticipant ? (
+								<>
+									<span
+										className="font-semibold"
+										style={{
+											color: getGroupParticipantColor(groupParticipant),
+										}}
+									>
+										{senderName}
+									</span>
+									{groupParticipant.name &&
+										groupParticipant.wa_id &&
+										!isUserActionsRestricted && (
+											<span className="ml-1.5 text-ink/45 tabular-nums">
+												{addPlus(groupParticipant.wa_id)}
+											</span>
+										)}
+								</>
+							) : data.from_us ? (
+								echoOriginLabel ? (
+									t(echoOriginLabel)
+								) : (
+									getSenderName(data)
+								)
+							) : (
+								contactProvidersData?.[data.waba_payload?.wa_id ?? '']?.[0]
+									?.name ?? getSenderName(data)
+							)}
 						</div>
 					)}
 

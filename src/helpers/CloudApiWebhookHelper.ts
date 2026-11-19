@@ -1,6 +1,12 @@
 import ChatMessageList from '@src/interfaces/ChatMessageList';
-import { MessageEchoOrigin, WebhookMessageStatus } from '@src/types/messages';
+import {
+	Message,
+	MessageEchoOrigin,
+	MessageWabaPayload,
+	WebhookMessageStatus,
+} from '@src/types/messages';
 import { WabaWebhookWabaPayload } from '@src/types/webhook';
+import { ContactWabaPayload } from '@src/types/contacts';
 import {
 	fromIncomingMessageWabaPayload,
 	generateMessageInternalId,
@@ -26,6 +32,34 @@ const findEchoOrigin = (payload: WabaWebhookWabaPayload): MessageEchoOrigin => {
 	return origin;
 };
 
+/**
+ * A WhatsApp group message belongs to the group's chat (wa_id = group_id),
+ * not to the participant who sent it (`from`, contacts[]), who becomes its
+ * group_participant instead.
+ */
+const fromIncomingGroupMessage = (
+	message: Message,
+	wabaPayload: MessageWabaPayload,
+	contacts: ContactWabaPayload[] | undefined
+): Message => {
+	const contact =
+		contacts?.find(
+			(item) =>
+				(wabaPayload.from && item.wa_id === wabaPayload.from) ||
+				(wabaPayload.from_user_id && item.user_id === wabaPayload.from_user_id)
+		) ?? (contacts?.length === 1 ? contacts[0] : undefined);
+
+	return {
+		...message,
+		customer_wa_id: wabaPayload.group_id ?? message.customer_wa_id,
+		group_participant: message.group_participant ?? {
+			wa_id: wabaPayload.from,
+			user_id: wabaPayload.from_user_id,
+			name: contact?.profile?.name,
+		},
+	};
+};
+
 export const processCloudApiWebhookPayload = (
 	payload: WabaWebhookWabaPayload
 ): WebhookResult => {
@@ -38,7 +72,10 @@ export const processCloudApiWebhookPayload = (
 			const incomingMessages = change?.value?.messages;
 			if (incomingMessages) {
 				incomingMessages.forEach((msg) => {
-					messages[msg.id] = fromIncomingMessageWabaPayload(msg);
+					const message = fromIncomingMessageWabaPayload(msg);
+					messages[msg.id] = msg.group_id
+						? fromIncomingGroupMessage(message, msg, change.value.contacts)
+						: message;
 				});
 			}
 
@@ -61,7 +98,17 @@ export const processCloudApiWebhookPayload = (
 		incomingMessages.forEach((message) => {
 			const messageKey =
 				message.waba_payload?.id ?? generateMessageInternalId(message.id);
-			messages[messageKey] = message;
+			const groupId = message.waba_payload?.group_id;
+			messages[messageKey] = groupId
+				? {
+						...message,
+						customer_wa_id: groupId,
+						// The envelope's version knows the sender's profile name
+						group_participant:
+							message.group_participant ??
+							messages[messageKey]?.group_participant,
+				  }
+				: message;
 		});
 	}
 

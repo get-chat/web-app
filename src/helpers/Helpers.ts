@@ -1,8 +1,6 @@
 // @ts-ignore
 import dompurify from 'dompurify';
 import { getObjLength } from './ObjectHelper';
-// @ts-ignore
-import htmlToFormattedText from 'html-to-formatted-text';
 import ChatMessageList from '@src/interfaces/ChatMessageList';
 import { getMessageTimestamp } from '@src/helpers/MessageHelper';
 
@@ -34,9 +32,100 @@ export const translateHTMLInputToText = (html: string) => {
 	});
 
 	// Convert it to plain text
-	result = htmlToFormattedText(result);
+	return composerHtmlToText(result);
+};
 
-	return result;
+// Elements that sit on lines of their own in the composer
+const BLOCK_TAGS = new Set([
+	'p',
+	'div',
+	'hr',
+	'title',
+	'h1',
+	'h2',
+	'h3',
+	'h4',
+	'h5',
+	'h6',
+	'ol',
+	'ul',
+	'li',
+	'pre',
+	'table',
+	'tr',
+	'th',
+	'td',
+	'blockquote',
+	'header',
+	'footer',
+	'nav',
+	'section',
+	'summary',
+	'aside',
+	'article',
+	'address',
+]);
+
+const SKIPPED_TAGS = new Set(['script', 'style', 'template']);
+
+// The text keeps the HTML encoding of the input (callers decode it), only
+// non-breaking spaces become plain ones
+const encodeText = (text: string) =>
+	text
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/\u00a0/g, ' ');
+
+// Turns the composer's HTML into the lines it shows: every <br> ends a line,
+// so "a<br><br>b" keeps its empty line, while a block only starts a new line
+// when the current one has text, so "<div>a</div><div>b</div>" is two lines
+// and the <br> the browser leaves at the end of a block adds none
+const composerHtmlToText = (html: string) => {
+	const template = document.createElement('template');
+	template.innerHTML = html;
+
+	const lines: string[] = [];
+	let line = '';
+	let lineHasContent = false;
+
+	const endLine = () => {
+		lines.push(line);
+		line = '';
+		lineHasContent = false;
+	};
+
+	const walk = (parent: Node) => {
+		parent.childNodes.forEach((node) => {
+			if (node.nodeType === Node.TEXT_NODE) {
+				const text = node.nodeValue ?? '';
+				if (text) {
+					line += encodeText(text);
+					lineHasContent = true;
+				}
+				return;
+			}
+
+			if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+			const tag = (node as Element).localName;
+			if (tag === 'br') {
+				endLine();
+				return;
+			}
+			if (SKIPPED_TAGS.has(tag)) return;
+
+			const isBlock = BLOCK_TAGS.has(tag);
+			if (isBlock && lineHasContent) endLine();
+			walk(node);
+			if (isBlock && lineHasContent) endLine();
+		});
+	};
+
+	walk(template.content);
+	if (lineHasContent) endLine();
+
+	return lines.join('\n').replace(/^\n+|\n+$/g, '');
 };
 
 export const generateInitialsHelper = (name: string | undefined | null) => {

@@ -37,6 +37,7 @@ export const EVENT_TOPIC_USER_AVAILABILITY = 'user_availability';
 export const EVENT_TOPIC_CONTACT_SAVED_NAME = 'contact_saved_name';
 export const EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE =
 	'contact_marketing_preference';
+export const EVENT_TOPIC_WHATSAPP_GROUP_UPDATE = 'whatsapp_group_update';
 
 export const WS_EVENT_TYPE_WABA = 'waba_webhook';
 export const WS_EVENT_TYPE_GETCHAT = 'getchat_webhook';

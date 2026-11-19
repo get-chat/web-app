@@ -1,5 +1,6 @@
 import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
 import { Person } from '@src/types/persons';
+import { WhatsAppGroupDetail } from '@src/types/whatsappGroups';
 
 interface UIState {
 	isReadOnly: boolean;
@@ -21,6 +22,9 @@ interface UIState {
 	selectedTags: number[];
 	selectedChats: string[];
 	chosenContact: Person | undefined;
+	// The WhatsApp group of the open chat, when it is one: what the chat API
+	// stores, plus the live participants once fetched
+	currentWhatsAppGroup: WhatsAppGroupDetail | undefined;
 	isChatAssignmentVisible: boolean;
 	isInitialResourceFailed: boolean;
 	isUploadRecipientsCSVVisible: boolean;
@@ -62,6 +66,7 @@ const initialState: UIState = {
 	selectedTags: [],
 	selectedChats: [],
 	chosenContact: undefined,
+	currentWhatsAppGroup: undefined,
 	isChatAssignmentVisible: false,
 	isInitialResourceFailed: false,
 	isUploadRecipientsCSVVisible: false,

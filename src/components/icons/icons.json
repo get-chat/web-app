@@ -83,5 +83,9 @@
 	"touch_app",
 	"unfold_more",
 	"videocam",
-	"warning"
+	"warning",
+	"edit",
+	"group_add",
+	"groups",
+	"person_remove"
 ]

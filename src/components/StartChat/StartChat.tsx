@@ -27,6 +27,7 @@ import {
 import PanelHeader from '@src/components/PanelHeader';
 import { cn } from '@src/lib/utils';
 import { Button } from '@src/components/ui/button';
+import CreateGroupEntry from '@src/components/WhatsAppGroups/CreateGroupEntry';
 
 interface Props extends PanelTransitionProps {
 	onHide: () => void;
@@ -134,6 +135,14 @@ const StartChat: React.FC<Props> = ({ onHide, isExiting, onAnimationEnd }) => {
 			/>
 
 			<div className="bg-white">
+				<CreateGroupEntry
+					className="border-b border-ink/10"
+					onCreated={(waId) => {
+						navigate(`${getChatPath(waId)}${location.search}`);
+						onHide();
+					}}
+				/>
+
 				<div
 					className="bg-(--color-primary-transparent) text-primary"
 					onClick={() => setPhoneNumberFormVisible((prevState) => !prevState)}

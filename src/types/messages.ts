@@ -7,7 +7,10 @@ import {
 	Person,
 } from '@src/types/persons';
 import { ChatAssignmentEvent } from '@src/types/chatAssignment';
-import UserAvailability from '@src/components/UserAvailability';
+import {
+	GroupParticipantRef,
+	WhatsAppGroupUpdateEvent,
+} from '@src/types/whatsappGroups';
 
 export interface FetchMessagesRequest {
 	wa_id?: string;
@@ -70,6 +73,8 @@ export interface Message {
 	// Client-side only: set for messages delivered via message echo webhook
 	// events (sent outside get.chat), derived from the webhook change field
 	echo_origin?: MessageEchoOrigin;
+	// Who sent an inbound WhatsApp group message (null otherwise)
+	group_participant?: GroupParticipantRef | null;
 }
 
 // Where an echoed outgoing message was sent from, based on the webhook
@@ -86,6 +91,8 @@ export interface MessageWabaPayload {
 	// Business-Scoped User ID of the sender; the only sender identifier present
 	// when the contact hides their phone number (BSUID-only contacts).
 	from_user_id?: string;
+	// Set on WhatsApp group messages: `from` is then the participant
+	group_id?: string;
 	type: MessageType;
 	timestamp: string;
 	to?: string;
@@ -293,6 +300,8 @@ export interface LegacyWabaWebhookWabaPayload {
 	contact_marketing_preference?: ContactMarketingPreference[];
 	// The inbox's access mode changed (GC-72)
 	tenant_access?: object;
+	// A WhatsApp group was created, changed, suspended or deleted
+	whatsapp_group_update?: WhatsAppGroupUpdateEvent;
 }
 
 export interface ChatTagging {

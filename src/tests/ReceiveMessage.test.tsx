@@ -12,9 +12,6 @@ const { mockSubscribe } = require('pubsub-js');
 // Mock VoiceRecord component
 jest.mock('@src/components/VoiceRecord/VoiceRecord');
 
-// Mock html-to-formatted-text
-jest.mock('html-to-formatted-text');
-
 // Mock API
 jest.mock('@src/api/chatsApi');
 jest.mock('@src/api/messagesApi');
