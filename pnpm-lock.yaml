@@ -172,9 +172,6 @@ importers:
       emoji-tree:
         specifier: ^1.1.2
         version: 1.1.2
-      html-to-formatted-text:
-        specifier: ^2.7.0
-        version: 2.7.0
       i18next:
         specifier: ^22.0.6
         version: 22.5.1
@@ -5438,9 +5435,6 @@ packages:
   html-parse-stringify@3.1.0:
     resolution: {integrity: sha512-E0oAXcELOtsXe+BmpJ2EZyedbldPpriV5vICzEuo6xjC/D1lDukOI7KrpfQGF2Qc4wWEy0nk3bFORS2K5ZAhFQ==, tarball: https://registry.npmjs.org/html-parse-stringify/-/html-parse-stringify-3.1.0.tgz}
 
-  html-to-formatted-text@2.7.0:
-    resolution: {integrity: sha512-dwAWKPVKf9LeNSQ3FBok3Z6PqNtino2o828/O5MMg9NHMBDmUZXAG5omFyptB4ouBasiE0C0B2WUMAs+BVKQAQ==, tarball: https://registry.npmjs.org/html-to-formatted-text/-/html-to-formatted-text-2.7.0.tgz}
-
   html-webpack-plugin@4.5.2:
     resolution: {integrity: sha512-q5oYdzjKUIPQVjOosjgvCHQOv9Ett9CYYHlgvJeXG0qQvdSojnBq4vAdQBwn1+yGveAwHCoe/rMR86ozX3+c2A==, tarball: https://registry.npmjs.org/html-webpack-plugin/-/html-webpack-plugin-4.5.2.tgz}
     engines: {node: '>=6.9'}
@@ -8449,9 +8443,6 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==, tarball: https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz}
     engines: {node: '>=8'}
-
-  striptags@3.1.1:
-    resolution: {integrity: sha512-3HVl+cOkJOlNUDAYdoCAfGx/fzUzG53YvJAl3RYlTvAcBdPqSp1Uv4wrmHymm7oEypTijSQqcqplW8cz0/r/YA==, tarball: https://registry.npmjs.org/striptags/-/striptags-3.1.1.tgz}
 
   strtok3@6.3.0:
     resolution: {integrity: sha512-fZtbhtvI9I48xDSywd/somNqgUHl2L2cstmXCCif0itOf96jeW18MBSyrLuNicYQVkvpOxkZtkzujiTJ9LW5Jw==, tarball: https://registry.npmjs.org/strtok3/-/strtok3-6.3.0.tgz}
@@ -15155,10 +15146,6 @@ snapshots:
     dependencies:
       void-elements: 3.1.0
 
-  html-to-formatted-text@2.7.0:
-    dependencies:
-      striptags: 3.1.1
-
   html-webpack-plugin@4.5.2(webpack@5.76.0):
     dependencies:
       '@types/html-minifier-terser': 5.1.2
@@ -18825,8 +18812,6 @@ snapshots:
   strip-json-comments@2.0.1: {}
 
   strip-json-comments@3.1.1: {}
-
-  striptags@3.1.1: {}
 
   strtok3@6.3.0:
     dependencies:
