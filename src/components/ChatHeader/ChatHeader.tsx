@@ -48,6 +48,12 @@ import {
 	TooltipTrigger,
 } from '@src/components/ui/tooltip';
 import { cn } from '@src/lib/utils';
+import GroupsIcon from '@src/components/icons/Groups';
+import {
+	getJoinApprovalModeLabel,
+	getWhatsAppGroupParticipantCount,
+	getWhatsAppGroupStatusLabel,
+} from '@src/helpers/WhatsAppGroupHelper';
 
 // Brown header icons
 const headerIconButton = 'text-black/54 [&_svg]:text-chat-icon!';
@@ -75,11 +81,21 @@ const ChatHeader: React.FC<Props> = ({
 
 	const dispatch = useAppDispatch();
 
-	const { isReadOnly, hasFailedMessages } = useAppSelector((state) => state.UI);
+	const { t } = useTranslation();
+
+	const { isReadOnly, hasFailedMessages, currentWhatsAppGroup } =
+		useAppSelector((state) => state.UI);
+
+	// A WhatsApp group chat: its subject is the contact's name
+	const isWhatsAppGroup = Boolean(chat?.is_group);
+	const whatsAppGroup = isWhatsAppGroup ? currentWhatsAppGroup : undefined;
+	const participantCount = getWhatsAppGroupParticipantCount(whatsAppGroup);
+	const groupStatusLabel = getWhatsAppGroupStatusLabel(
+		whatsAppGroup?.status,
+		t
+	);
 
 	const isUserActionsRestricted = useIsUserActionsRestricted();
-
-	const { t } = useTranslation();
 
 	const [isResolved, setIsResolved] = useState(false);
 
@@ -163,14 +179,22 @@ const ChatHeader: React.FC<Props> = ({
 					<>
 						<CustomAvatar
 							className={cn(isPersonExpired(person) && '[&_img]:grayscale')}
-							src={extractAvatarFromContactProviderData(
-								contactProvidersData[waId]
-							)}
+							src={
+								isWhatsAppGroup
+									? undefined
+									: extractAvatarFromContactProviderData(
+											contactProvidersData[waId]
+									  )
+							}
 							generateBgColorBy={
 								!isPersonExpired(person) ? getPersonName(person) : undefined
 							}
 						>
-							{person.initials}
+							{isWhatsAppGroup ? (
+								<GroupsIcon className="size-6!" />
+							) : (
+								person.initials
+							)}
 						</CustomAvatar>
 
 						<div className="pl-[15px]">
@@ -187,11 +211,34 @@ const ChatHeader: React.FC<Props> = ({
 							/>
 
 							<div className="-mt-px flex items-center gap-2.5 text-[12px]">
-								{person.wa_id && !isUserActionsRestricted && (
-									<span className="text-chat-icon max-sm:hidden">
-										{addPlus(person.wa_id)}
+								{whatsAppGroup && (
+									<span className="truncate text-chat-icon">
+										{participantCount !== undefined &&
+											t('%d participant', {
+												count: participantCount,
+												postProcess: 'sprintf',
+												sprintf: [participantCount],
+											}) + ' · '}
+										{getJoinApprovalModeLabel(
+											whatsAppGroup.join_approval_mode,
+											t
+										)}
 									</span>
 								)}
+
+								{groupStatusLabel && (
+									<span className="rounded-[10px] bg-destructive px-[5px] text-white">
+										{groupStatusLabel}
+									</span>
+								)}
+
+								{!isWhatsAppGroup &&
+									person.wa_id &&
+									!isUserActionsRestricted && (
+										<span className="text-chat-icon max-sm:hidden">
+											{addPlus(person.wa_id)}
+										</span>
+									)}
 
 								{isPersonExpired(person) && (
 									<span className="rounded-[10px] bg-chat-icon px-[5px] text-white">
@@ -277,8 +324,8 @@ const ChatHeader: React.FC<Props> = ({
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
 						<DropdownMenuItem onSelect={showContactDetails}>
-							<AccountBoxIcon />
-							{t('Contact details')}
+							{isWhatsAppGroup ? <GroupsIcon /> : <AccountBoxIcon />}
+							{isWhatsAppGroup ? t('Group info') : t('Contact details')}
 						</DropdownMenuItem>
 						{!isReadOnly && (
 							<>

@@ -35,11 +35,19 @@ import {
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
 	EVENT_TOPIC_CONTACT_SAVED_NAME,
 	EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE,
+	EVENT_TOPIC_WHATSAPP_GROUP_UPDATE,
 } from '@src/Constants';
 import TemplateListWithControls from '@src/components/TemplateListWithControls';
 import usePersonUpdateEvent from '@src/hooks/usePersonUpdateEvent';
 import ChatFooter from '@src/components/ChatFooter';
 import ChatHeader from '@src/components/ChatHeader';
+import useRefreshWhatsAppGroup from '@src/hooks/useRefreshWhatsAppGroup';
+import {
+	canSendToWhatsAppGroup,
+	getWhatsAppGroupComposerNotice,
+	isWhatsAppGroupReadable,
+} from '@src/helpers/WhatsAppGroupHelper';
+import { WhatsAppGroupUpdateEvent } from '@src/types/whatsappGroups';
 import ChatMessageOptionsMenu from '../ChatMessage/ChatMessageOptionsMenu';
 import moment from 'moment';
 import PubSub from 'pubsub-js';
@@ -171,8 +179,10 @@ const ChatView: React.FC<Props> = (props) => {
 		isTemplatesVisible,
 		isSavedResponsesVisible,
 		isInteractiveMessagesVisible,
+		currentWhatsAppGroup,
 	} = useAppSelector((state) => state.UI);
 	const isTenantReadOnly = useIsTenantReadOnly();
+	const refreshWhatsAppGroup = useRefreshWhatsAppGroup();
 
 	// Footer panel animations are currently turned off (isEnabled: false)
 	// but stay wired; see the note on footer panels in panelTransitions.ts
@@ -502,6 +512,7 @@ const ChatView: React.FC<Props> = (props) => {
 		// Clear values for next route
 		setPerson(undefined);
 		setChat(undefined);
+		dispatch(setState({ currentWhatsAppGroup: undefined }));
 		setMessages({});
 		setReactions({});
 		setHasOlderMessagesToLoad(true);
@@ -545,6 +556,48 @@ const ChatView: React.FC<Props> = (props) => {
 	useEffect(() => {
 		dispatch(setState({ chosenContact: person }));
 	}, [person]);
+
+	// A WhatsApp group chat: its group, kept with the live participants it
+	// already has, and then refreshed with them while it is active
+	useEffect(() => {
+		const group = chat?.is_group ? chat.whatsapp_group ?? undefined : undefined;
+		const previous = currentWhatsAppGroup;
+		dispatch(
+			setState({
+				currentWhatsAppGroup: group
+					? { ...(previous?.id === group.id ? previous : {}), ...group }
+					: undefined,
+			})
+		);
+		if (group && isWhatsAppGroupReadable(group)) {
+			refreshWhatsAppGroup(group.id);
+		}
+	}, [chat]);
+
+	useEffect(() => {
+		const onWhatsAppGroupUpdate = (
+			msg: string,
+			data: WhatsAppGroupUpdateEvent
+		) => {
+			if (
+				waId &&
+				(data.wa_id === waId || data.id === chat?.whatsapp_group?.id)
+			) {
+				retrieveChat();
+				// The header's name is the person's: the subject may have changed
+				doRetrievePerson(false);
+			}
+		};
+
+		const token = PubSub.subscribe(
+			EVENT_TOPIC_WHATSAPP_GROUP_UPDATE,
+			onWhatsAppGroupUpdate
+		);
+
+		return () => {
+			PubSub.unsubscribe(token);
+		};
+	}, [waId, chat]);
 
 	const getNewMessagesCount = () => {
 		return waId ? newMessages[waId]?.newMessages ?? 0 : 0;
@@ -2176,6 +2229,12 @@ const ChatView: React.FC<Props> = (props) => {
 	let lastPrintedDate: moment.Moment | undefined;
 	let lastSenderWaId: string | undefined;
 
+	// A group that is being created, suspended or deleted takes no messages
+	const whatsAppGroupNotice =
+		chat?.is_group && !canSendToWhatsAppGroup(chat.whatsapp_group)
+			? getWhatsAppGroupComposerNotice(chat.whatsapp_group?.status, t)
+			: undefined;
+
 	return (
 		<div
 			className={cn(
@@ -2448,7 +2507,13 @@ const ChatView: React.FC<Props> = (props) => {
 
 			{isTenantReadOnly && <TenantReadOnlyFooter />}
 
-			{!isReadOnly && !isTenantReadOnly && (
+			{!isReadOnly && !isTenantReadOnly && whatsAppGroupNotice && (
+				<div className="border-l border-[lightgray] bg-[#f2edea] px-5 py-3.75 text-center text-[14px] text-[#736054]">
+					{whatsAppGroupNotice}
+				</div>
+			)}
+
+			{!isReadOnly && !isTenantReadOnly && !whatsAppGroupNotice && (
 				<ChatFooter
 					waId={waId}
 					isExpired={isExpired}
@@ -2461,8 +2526,10 @@ const ChatView: React.FC<Props> = (props) => {
 					setAccept={setAccept}
 					processCommand={processCommand}
 					isDirectSendMode={isDirectSendMode}
-					onStartDirectSend={startDirectSend}
+					// Groups take text, media and templates only
+					onStartDirectSend={chat?.is_group ? undefined : startDirectSend}
 					onStopDirectSend={stopDirectSend}
+					isWhatsAppGroup={Boolean(chat?.is_group)}
 				/>
 			)}
 

@@ -228,3 +228,116 @@ describe('processCloudApiWebhookPayload - message echoes', () => {
 		expect(messages['getchatId_' + echoMessage.id]).toBeDefined();
 	});
 });
+
+describe('processCloudApiWebhookPayload - WhatsApp group messages', () => {
+	const GROUP_ID = 'Y2FwaV9ncm91cDoxNzA1NTU1MDEzOToxMjAzNjM0MDQ2OTQyMzM4MjAZD';
+
+	const groupMessage = {
+		id: 'wamid.GROUP',
+		from: '34612448190',
+		group_id: GROUP_ID,
+		type: 'text',
+		timestamp: '1763500000',
+		text: { body: 'Hi all, thanks for setting this up.' },
+	};
+
+	const buildGroupPayload = (
+		message: any,
+		contacts: any[],
+		extra: object = {}
+	): WabaWebhookWabaPayload =>
+		({
+			object: 'whatsapp_business_account',
+			entry: [
+				{
+					id: 'WABA_TEST_0001',
+					changes: [
+						{
+							field: 'messages',
+							value: {
+								messaging_product: 'whatsapp',
+								contacts,
+								messages: [message],
+							},
+						},
+					],
+				},
+			],
+			...extra,
+		} as unknown as WabaWebhookWabaPayload);
+
+	it('files the message under the group chat and keeps its sender', () => {
+		const { messages } = processCloudApiWebhookPayload(
+			buildGroupPayload(groupMessage, [
+				{ wa_id: '34612448190', profile: { name: 'María López' } },
+			])
+		);
+
+		const message = messages['wamid.GROUP'];
+		expect(message.customer_wa_id).toBe(GROUP_ID);
+		expect(message.from_us).toBe(false);
+		expect(message.group_participant).toEqual({
+			wa_id: '34612448190',
+			user_id: undefined,
+			name: 'María López',
+		});
+	});
+
+	it('picks the sender among several contacts, by wa_id or user_id', () => {
+		const contacts = [
+			{ wa_id: '4915122348812', profile: { name: 'Jonas Weber' } },
+			{
+				wa_id: '',
+				user_id: 'US.123456789',
+				profile: { name: 'Priya Nair' },
+			},
+		];
+
+		const byUserId = processCloudApiWebhookPayload(
+			buildGroupPayload(
+				{ ...groupMessage, from: undefined, from_user_id: 'US.123456789' },
+				contacts
+			)
+		).messages['wamid.GROUP'];
+
+		expect(byUserId.customer_wa_id).toBe(GROUP_ID);
+		expect(byUserId.group_participant?.name).toBe('Priya Nair');
+		expect(byUserId.group_participant?.user_id).toBe('US.123456789');
+	});
+
+	it('leaves 1:1 messages under the sender', () => {
+		const { messages } = processCloudApiWebhookPayload(
+			buildGroupPayload({ ...groupMessage, group_id: undefined }, [])
+		);
+
+		expect(messages['wamid.GROUP'].customer_wa_id).toBe('34612448190');
+		expect(messages['wamid.GROUP'].group_participant).toBeUndefined();
+	});
+
+	it('keeps the group chat and the sender name for the serialized message', () => {
+		const serialized = {
+			id: '0b6b4f6e-0000-0000-0000-000000000001',
+			waba_payload: groupMessage,
+			// An older backend could still file it under the participant
+			customer_wa_id: '34612448190',
+			from_us: false,
+			received: false,
+			tags: [],
+			chat_tags: [],
+			is_failed: false,
+		};
+
+		const { messages } = processCloudApiWebhookPayload(
+			buildGroupPayload(
+				groupMessage,
+				[{ wa_id: '34612448190', profile: { name: 'María López' } }],
+				{ incoming_messages: [serialized] }
+			)
+		);
+
+		const message = messages['wamid.GROUP'];
+		expect(message.id).toBe(serialized.id);
+		expect(message.customer_wa_id).toBe(GROUP_ID);
+		expect(message.group_participant?.name).toBe('María López');
+	});
+});

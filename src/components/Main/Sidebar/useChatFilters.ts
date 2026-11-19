@@ -80,6 +80,10 @@ const useChatFilters = () => {
 	const [filterUnread, setFilterUnread] = useState<boolean>(
 		initialUserPreference?.filters?.filterUnread || false
 	);
+	// WhatsApp group chats only
+	const [filterIsGroup, setFilterIsGroup] = useState<boolean>(
+		initialUserPreference?.filters?.filterIsGroup || false
+	);
 
 	const isMounted = useRef(false);
 
@@ -143,6 +147,8 @@ const useChatFilters = () => {
 			setFilterEndDate(parseDateFilter(FilterQueryParams.MESSAGES_BEFORE_TIME));
 
 			setFilterUnread(searchParams.get(FilterQueryParams.UNREAD) === '1');
+
+			setFilterIsGroup(searchParams.get(FilterQueryParams.IS_GROUP) === '1');
 		}
 	}, [hasAnyFilterQueryParam]);
 
@@ -157,6 +163,7 @@ const useChatFilters = () => {
 					filterStartDate: filterStartDate?.getTime(),
 					filterEndDate: filterEndDate?.getTime(),
 					filterUnread: filterUnread,
+					filterIsGroup: filterIsGroup,
 				},
 				dynamicFilters: dynamicFilters,
 			});
@@ -171,6 +178,7 @@ const useChatFilters = () => {
 		filterStartDate,
 		filterEndDate,
 		filterUnread,
+		filterIsGroup,
 	]);
 
 	const location = useLocation();
@@ -187,6 +195,7 @@ const useChatFilters = () => {
 				[FilterQueryParams.MESSAGES_SINCE_TIME]: formatDate(filterStartDate),
 				[FilterQueryParams.MESSAGES_BEFORE_TIME]: formatDate(filterEndDate),
 				[FilterQueryParams.UNREAD]: filterUnread ? 1 : null,
+				[FilterQueryParams.IS_GROUP]: filterIsGroup ? 1 : null,
 			};
 
 			// Combine with dynamic filters to update URL
@@ -222,6 +231,7 @@ const useChatFilters = () => {
 		filterStartDate,
 		filterEndDate,
 		filterUnread,
+		filterIsGroup,
 	]);
 
 	const removeDynamicFilter = (key: string) => {
@@ -249,6 +259,8 @@ const useChatFilters = () => {
 		setFilterEndDate,
 		filterUnread,
 		setFilterUnread,
+		filterIsGroup,
+		setFilterIsGroup,
 	};
 };
 

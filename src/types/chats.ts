@@ -2,6 +2,7 @@ import { Tag } from '@src/types/tags';
 import { Message } from '@src/types/messages';
 import { User } from '@src/types/users';
 import { Person } from '@src/types/persons';
+import { WhatsAppGroup } from '@src/types/whatsappGroups';
 
 export interface Chat {
 	contact: Person;
@@ -15,6 +16,9 @@ export interface Chat {
 	assigned_to_user?: User;
 	assigned_group: any;
 	tags: Tag[];
+	// A WhatsApp group chat: wa_id is the group id, the contact's name its subject
+	is_group?: boolean;
+	whatsapp_group?: WhatsAppGroup | null;
 }
 
 export interface FetchChatsParams {
@@ -27,6 +31,7 @@ export interface FetchChatsParams {
 	messages_since_time?: number;
 	messages_before_time?: number;
 	unread?: boolean;
+	is_group?: boolean;
 	blocked?: boolean;
 	reported?: boolean;
 	message_has_referral?: boolean;

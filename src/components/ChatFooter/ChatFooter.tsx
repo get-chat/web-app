@@ -67,6 +67,8 @@ interface Props {
 	isDirectSendMode?: boolean;
 	onStartDirectSend?: () => void;
 	onStopDirectSend?: () => void;
+	// A WhatsApp group takes text, media and templates only
+	isWhatsAppGroup?: boolean;
 }
 
 interface FooterActionButtonProps extends React.ComponentProps<typeof Button> {
@@ -114,6 +116,7 @@ const ChatFooter: React.FC<Props> = ({
 	isDirectSendMode = false,
 	onStartDirectSend,
 	onStopDirectSend,
+	isWhatsAppGroup = false,
 }) => {
 	const { t } = useTranslation();
 
@@ -527,7 +530,11 @@ const ChatFooter: React.FC<Props> = ({
 												{t('Type an update, like an order or booking change')}
 											</span>
 										) : (
-											<span>{t('Type a message')}</span>
+											<span>
+												{isWhatsAppGroup
+													? t('Message the group')
+													: t('Type a message')}
+											</span>
 										)}
 									</div>
 								)}
@@ -629,7 +636,7 @@ const ChatFooter: React.FC<Props> = ({
 						</SimpleTooltip>
 					)}
 
-					{!isLocked && !isUserActionsRestricted && (
+					{!isLocked && !isUserActionsRestricted && !isWhatsAppGroup && (
 						<SimpleTooltip
 							title={t('Interactive Messages')}
 							side="top"
@@ -728,27 +735,31 @@ const ChatFooter: React.FC<Props> = ({
 										</FooterActionButton>
 									</SimpleTooltip>
 
-									<SimpleTooltip
-										title={t('Contacts')}
-										side="top"
-										disableHoverableContent
-									>
-										<FooterActionButton onClick={openContactsModal}>
-											<ContactsIcon />
-										</FooterActionButton>
-									</SimpleTooltip>
-
-									<SimpleTooltip
-										title={t('Location')}
-										side="top"
-										disableHoverableContent
-									>
-										<FooterActionButton
-											onClick={() => setLocationModalVisible(true)}
+									{!isWhatsAppGroup && (
+										<SimpleTooltip
+											title={t('Contacts')}
+											side="top"
+											disableHoverableContent
 										>
-											<LocationOnIcon />
-										</FooterActionButton>
-									</SimpleTooltip>
+											<FooterActionButton onClick={openContactsModal}>
+												<ContactsIcon />
+											</FooterActionButton>
+										</SimpleTooltip>
+									)}
+
+									{!isWhatsAppGroup && (
+										<SimpleTooltip
+											title={t('Location')}
+											side="top"
+											disableHoverableContent
+										>
+											<FooterActionButton
+												onClick={() => setLocationModalVisible(true)}
+											>
+												<LocationOnIcon />
+											</FooterActionButton>
+										</SimpleTooltip>
+									)}
 								</div>
 							)}
 						</div>

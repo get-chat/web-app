@@ -8,6 +8,7 @@ enum FilterQueryParams {
 	MESSAGES_SINCE_TIME = 'cf_messages_since_time',
 	MESSAGES_BEFORE_TIME = 'cf_messages_before_time',
 	UNREAD = 'cf_unread',
+	IS_GROUP = 'cf_is_group',
 }
 
 export default FilterQueryParams;

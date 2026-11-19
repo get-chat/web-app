@@ -30,6 +30,7 @@ import {
 	EVENT_TOPIC_USER_AVAILABILITY,
 	EVENT_TOPIC_CONTACT_SAVED_NAME,
 	EVENT_TOPIC_CONTACT_MARKETING_PREFERENCE,
+	EVENT_TOPIC_WHATSAPP_GROUP_UPDATE,
 	WS_EVENT_TYPE_GETCHAT,
 	WS_EVENT_TYPE_WABA,
 } from '@src/Constants';
@@ -119,6 +120,7 @@ import { setIsUserAvailable } from '@src/store/reducers/isUserAvailableReducer';
 import { setIsUserAvailabilityFeatureEnabled } from '@src/store/reducers/isUserAvailabilityFeatureEnabledReducer';
 import { fetchUserAvailabilitySettings } from '@src/api/settingsApi';
 import { WabaWebhookWabaPayload } from '@src/types/webhook';
+import GroupInfo from '@src/components/WhatsAppGroups/GroupInfo';
 
 // Loaded on first open: its charting library isn't needed for the inbox
 const Analytics = lazy(() => import('@src/components/Analytics'));
@@ -144,6 +146,7 @@ const Main: React.FC = () => {
 		isSearchMessagesVisible,
 		isAnalyticsVisible,
 		activationCode,
+		currentWhatsAppGroup,
 	} = useAppSelector((state) => state.UI);
 	const previewMediaObject = useAppSelector(
 		(state) => state.previewMediaObject.value
@@ -881,6 +884,17 @@ const Main: React.FC = () => {
 				if (wabaPayload?.tenant_access) {
 					retrieveCurrentTenant();
 				}
+
+				// A WhatsApp group was created, changed, suspended or deleted: the
+				// chat list, the open chat and its group info panel refresh it
+				const whatsAppGroupUpdate = wabaPayload?.whatsapp_group_update;
+
+				if (whatsAppGroupUpdate) {
+					PubSub.publish(
+						EVENT_TOPIC_WHATSAPP_GROUP_UPDATE,
+						whatsAppGroupUpdate
+					);
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -1286,14 +1300,20 @@ const Main: React.FC = () => {
 					/>
 				)}
 
-				{contactDetailsTransition.isMounted && (
-					<ContactDetails
-						contactProvidersData={contactProvidersData}
-						retrieveContactData={resolveContact}
-						isExiting={contactDetailsTransition.isExiting}
-						onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
-					/>
-				)}
+				{contactDetailsTransition.isMounted &&
+					(currentWhatsAppGroup ? (
+						<GroupInfo
+							isExiting={contactDetailsTransition.isExiting}
+							onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
+						/>
+					) : (
+						<ContactDetails
+							contactProvidersData={contactProvidersData}
+							retrieveContactData={resolveContact}
+							isExiting={contactDetailsTransition.isExiting}
+							onAnimationEnd={contactDetailsTransition.handleAnimationEnd}
+						/>
+					))}
 
 				{messageStatusesTransition.isMounted && (
 					<MessageStatuses

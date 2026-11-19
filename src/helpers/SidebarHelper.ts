@@ -35,9 +35,15 @@ export const filterChat = (
 	filterTagId?: number,
 	filterAssignedToMe?: boolean,
 	filterAssignedGroupId?: number,
-	filterUnread?: boolean
+	filterUnread?: boolean,
+	filterIsGroup?: boolean
 ) => {
 	if (!currentUser) return true;
+
+	// Combined with the filters below
+	if (filterIsGroup && !chat.is_group) {
+		return false;
+	}
 
 	if (filterTagId) {
 		return isChatIncludingTagId(chat, filterTagId);

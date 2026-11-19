@@ -216,7 +216,9 @@ export const getUniqueSender = (message: Message) => {
 	return (
 		message.sender?.username ??
 		// ':' cannot appear in usernames, so echo groups can never collide with one
-		(echoOrigin ? 'echo:' + echoOrigin : message.waba_payload?.from)
+		(echoOrigin
+			? 'echo:' + echoOrigin
+			: message.waba_payload?.from ?? message.group_participant?.user_id)
 	);
 };
 

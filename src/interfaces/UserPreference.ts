@@ -6,6 +6,7 @@ export interface UserPreference {
 		filterStartDate?: number;
 		filterEndDate?: number;
 		filterUnread?: boolean;
+		filterIsGroup?: boolean;
 	};
 	dynamicFilters?: { [key: string]: any };
 	weekStartsOn?: number;

@@ -23,6 +23,8 @@ export interface ContactWabaPayload {
 		name: string;
 	};
 	wa_id: string;
+	// Business-Scoped User ID, on Cloud API webhook contacts
+	user_id?: string;
 }
 
 export interface ResolveContactResponse {

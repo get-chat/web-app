@@ -27,6 +27,12 @@ import SellIcon from '@src/components/icons/Sell';
 import WarningIcon from '@src/components/icons/Warning';
 import Moment from 'react-moment';
 import { cn } from '@src/lib/utils';
+import GroupsIcon from '@src/components/icons/Groups';
+import {
+	getGroupParticipantName,
+	getMessageGroupParticipant,
+	getWhatsAppGroupStatusLabel,
+} from '@src/helpers/WhatsAppGroupHelper';
 
 // The contact name, cut to one line
 const nameClassName = 'line-clamp-1 text-ellipsis break-all';
@@ -125,6 +131,13 @@ const ChatListItem = (props: any) => {
 	const isActive = waId === data.wa_id;
 	const isSelectedRow = isSelectionModeEnabled && isSelected;
 
+	// A WhatsApp group: a group avatar, its state, and who wrote last
+	const isWhatsAppGroup = Boolean(data.is_group);
+	const groupStatusLabel = isWhatsAppGroup
+		? getWhatsAppGroupStatusLabel(data.whatsapp_group?.status, t)
+		: undefined;
+	const lastMessageParticipant = getMessageGroupParticipant(data.last_message);
+
 	const assigneeChipProps = {
 		tooltip,
 		assignedUserId: data.assigned_to_user?.id,
@@ -173,16 +186,24 @@ const ChatListItem = (props: any) => {
 					<div className="relative">
 						<CustomAvatar
 							className="size-12.5 self-center"
-							src={extractAvatarFromContactProviderData(
-								props.contactProvidersData[data.wa_id]
-							)}
+							src={
+								isWhatsAppGroup
+									? undefined
+									: extractAvatarFromContactProviderData(
+											props.contactProvidersData[data.wa_id]
+									  )
+							}
 							generateBgColorBy={
 								!isExpired ? getChatContactName(data) : undefined
 							}
 						>
 							{/* Same initials source as ChatHeader and the other avatar
 						render sites, so the same contact gets the same avatar */}
-							{data.contact.initials}
+							{isWhatsAppGroup ? (
+								<GroupsIcon className="size-7!" />
+							) : (
+								data.contact.initials
+							)}
 						</CustomAvatar>
 
 						{newMessagesForChat > 0 && (
@@ -255,6 +276,12 @@ const ChatListItem = (props: any) => {
 								</SimpleTooltip>
 							)}
 
+							{groupStatusLabel && (
+								<span className="rounded-[10px] bg-destructive px-[5px] text-[11px] font-semibold text-white">
+									{groupStatusLabel}
+								</span>
+							)}
+
 							{data.contact.resolved && (
 								<SimpleTooltip
 									title={t('Resolved')}
@@ -269,7 +296,13 @@ const ChatListItem = (props: any) => {
 						</div>
 
 						<div className="flex items-baseline justify-between text-[14px] text-ink/70">
-							<div className="flex-1">
+							<div className="min-w-0 flex-1">
+								{lastMessageParticipant && (
+									// Who wrote last in the group, before what they wrote
+									<span className="float-left mr-1 max-w-[45%] truncate font-semibold text-ink/80">
+										{getGroupParticipantName(lastMessageParticipant)}:
+									</span>
+								)}
 								<ChatMessageShortContent
 									className={lastMessageClassName}
 									type={
@@ -323,7 +356,7 @@ const ChatListItem = (props: any) => {
 					</div>
 				</div>
 
-				{!isUserActionsRestricted && (
+				{!isUserActionsRestricted && !isWhatsAppGroup && (
 					// Shown while the row is hovered, except on narrow screens
 					<span className="absolute right-3.75 bottom-px ml-1.25 text-[10px] text-ink/65 opacity-0 transition-opacity duration-100 ease-[ease] group-hover/chat:opacity-100 max-md:group-hover/chat:hidden">
 						{addPlus(data.wa_id)}

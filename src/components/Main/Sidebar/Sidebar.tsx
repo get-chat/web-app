@@ -38,6 +38,7 @@ import {
 	EVENT_TOPIC_GO_TO_MSG_ID,
 	EVENT_TOPIC_NEW_CHAT_MESSAGES,
 	EVENT_TOPIC_UPDATE_PERSON_NAME,
+	EVENT_TOPIC_WHATSAPP_GROUP_UPDATE,
 } from '@src/Constants';
 import { useNavigate, useParams } from 'react-router-dom';
 import SearchBar from '../../SearchBar';
@@ -89,6 +90,7 @@ import SettingsIcon from '@src/components/icons/Settings';
 import FilterOption from '@src/components/FilterOption';
 import PersonIcon from '@src/components/icons/Person';
 import GroupIcon from '@src/components/icons/Group';
+import GroupsIcon from '@src/components/icons/Groups';
 import FilterListIcon from '@src/components/icons/FilterList';
 import MarkChatUnreadIcon from '@src/components/icons/MarkChatUnread';
 import DateRangeDialog from '@src/components/DateRangeDialog';
@@ -139,6 +141,7 @@ import WebSocketConnectionIndicator from '@src/components/WebSocketConnectionInd
 import useIsTenantReadOnly from '@src/hooks/useIsTenantReadOnly';
 import OpenInWhatsAppDialog from '@src/components/OpenInWhatsAppDialog';
 import { fetchWhatsAppAccounts } from '@src/api/whatsAppAccountsApi';
+import { WhatsAppGroupUpdateEvent } from '@src/types/whatsappGroups';
 import {
 	clearPhoneNumber,
 	setPhoneNumber,
@@ -227,6 +230,8 @@ const Sidebar: React.FC<Props> = ({
 		setFilterEndDate,
 		filterUnread,
 		setFilterUnread,
+		filterIsGroup,
+		setFilterIsGroup,
 	} = useChatFilters();
 
 	const { waId } = useParams();
@@ -257,10 +262,12 @@ const Sidebar: React.FC<Props> = ({
 				filterTagId,
 				filterAssignedToMe,
 				filterAssignedGroupId,
-				filterUnread
+				filterUnread,
+				filterIsGroup
 			);
 		});
 	}, [
+		filterIsGroup,
 		chats,
 		currentUser,
 		newMessages,
@@ -399,6 +406,7 @@ const Sidebar: React.FC<Props> = ({
 		filterStartDate,
 		filterEndDate,
 		filterUnread,
+		filterIsGroup,
 	]);
 
 	useEffect(() => {
@@ -612,6 +620,34 @@ const Sidebar: React.FC<Props> = ({
 	}, [missingChats]);
 
 	useEffect(() => {
+		// A WhatsApp group changed (created, renamed, suspended...): refresh its
+		// row, or add it once it exists
+		const onWhatsAppGroupUpdate = function (
+			msg: string,
+			data: WhatsAppGroupUpdateEvent
+		) {
+			if (data.wa_id && keyword.trim().length === 0) {
+				retrieveChat(data.wa_id);
+			}
+		};
+
+		const token = PubSub.subscribe(
+			EVENT_TOPIC_WHATSAPP_GROUP_UPDATE,
+			onWhatsAppGroupUpdate
+		);
+
+		return () => {
+			PubSub.unsubscribe(token);
+		};
+	}, [
+		chats,
+		keyword,
+		filterAssignedToMe,
+		filterAssignedGroupId,
+		filterIsGroup,
+	]);
+
+	useEffect(() => {
 		const chatsContainerCopy = chatListRef.current;
 
 		// To optimize scroll event
@@ -709,6 +745,7 @@ const Sidebar: React.FC<Props> = ({
 					messages_before_time: messageBeforeTime,
 					messages_since_time: messagesSinceTime,
 					unread: filterUnread ? true : undefined,
+					is_group: filterIsGroup ? true : undefined,
 				},
 				dynamicFilters,
 				abortControllerRef.current?.signal
@@ -811,6 +848,10 @@ const Sidebar: React.FC<Props> = ({
 			setMissingChats((prevState) =>
 				prevState.filter((item) => item !== chatWaId)
 			);
+
+			if (filterIsGroup && !data.is_group) {
+				return;
+			}
 
 			// Don't display chat if tab case is "me" and chat is not assigned to user
 			if (filterAssignedToMe) {
@@ -963,7 +1004,8 @@ const Sidebar: React.FC<Props> = ({
 			filterAssignedGroupId ||
 			filterTagId ||
 			filterStartDate ||
-			filterUnread
+			filterUnread ||
+			filterIsGroup
 	);
 	const isForceDisplayFilters = isFiltersVisible || isAnyActiveFilter;
 	const activeFilterTag = tags?.find((item) => item.id === filterTagId);
@@ -1203,6 +1245,13 @@ const Sidebar: React.FC<Props> = ({
 						<CollapsibleContent>
 							{/* One chip per filter, which turns mint while applied */}
 							<div className="mt-2.5 flex flex-wrap gap-1.5 px-3.75">
+								<FilterOption
+									icon={<GroupsIcon />}
+									label={t('Groups')}
+									isActive={filterIsGroup}
+									onClick={() => setFilterIsGroup(!filterIsGroup)}
+									onClear={() => setFilterIsGroup(false)}
+								/>
 								<FilterOption
 									icon={<MarkChatUnreadIcon />}
 									label={t('Unread')}
