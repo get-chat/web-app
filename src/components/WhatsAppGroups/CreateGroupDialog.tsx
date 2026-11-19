@@ -108,9 +108,12 @@ const CreateGroupDialog: React.FC<Props> = ({ open, onClose, onCreated }) => {
 		trimmedSubject.length <= WHATSAPP_GROUP_SUBJECT_MAX_LENGTH &&
 		description.length <= WHATSAPP_GROUP_DESCRIPTION_MAX_LENGTH;
 
-	// A fresh form each time it opens
+	// A fresh form each time it opens. Closed while the group is created, it
+	// stops waiting: the chat list shows the group once it exists.
 	useEffect(() => {
-		if (open) {
+		if (!open) {
+			setCreatingGroup(undefined);
+		} else {
 			setSubject('');
 			setDescription('');
 			setJoinMode('approval_required');

@@ -1922,7 +1922,7 @@ msgstr ""
 msgid "Invite template"
 msgstr ""
 
-msgid "There is no approved template yet. Add the \"Group invite link\" template from the template library first."
+msgid "There is no approved group invite template yet. Add the \"Group invite link\" template from the template library first."
 msgstr ""
 
 msgid "Sent as a 1:1 template to each contact. They join the group once they tap its link."

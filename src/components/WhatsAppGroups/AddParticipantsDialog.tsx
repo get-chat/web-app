@@ -54,7 +54,7 @@ import {
 interface Props {
 	group: WhatsAppGroupDetail;
 	onClose: () => void;
-	onInvited: () => void;
+	onInvited?: () => void;
 }
 
 interface Invitee {
@@ -62,11 +62,18 @@ interface Invitee {
 	name?: string;
 }
 
-/** The invite template to offer first: a group invite one if there is any */
+/**
+ * A template made from Meta's "Group invite link" library template: the only
+ * kind the invite can send, as its body takes nothing but the group id.
+ */
+export const isGroupInviteTemplate = (template: Template) =>
+	[template.library_template_name, template.name].some((name) =>
+		name?.toLowerCase().includes('group_invite')
+	);
+
+/** The invite template to offer first, if there is any */
 export const pickDefaultInviteTemplate = (templates: Template[]) =>
-	templates.find((template) =>
-		template.name.toLowerCase().includes('group_invite')
-	) ?? templates[0];
+	templates.find(isGroupInviteTemplate);
 
 /**
  * Invites people to a WhatsApp group: WhatsApp has no "add participant", so
@@ -84,8 +91,12 @@ const AddParticipantsDialog: React.FC<Props> = ({
 	const businessNumber = useAppSelector((state) => state.phoneNumber.value);
 	const { keyword, setKeyword, isLoading, unifiedList } = useContacts();
 
+	// Approved group invite templates: any other would be refused
 	const approvedTemplates = useMemo(
-		() => Object.values(templates).filter(isTemplateApproved),
+		() =>
+			Object.values(templates).filter(
+				(item) => isTemplateApproved(item) && isGroupInviteTemplate(item)
+			),
 		[templates]
 	);
 	const [templateKey, setTemplateKey] = useState(() => {
@@ -172,7 +183,7 @@ const AddParticipantsDialog: React.FC<Props> = ({
 						sprintf: [sent.length],
 					})
 				);
-				onInvited();
+				onInvited?.();
 			}
 			if (failed.length > 0) {
 				// Keep the ones that failed, to retry or drop
@@ -337,7 +348,7 @@ const AddParticipantsDialog: React.FC<Props> = ({
 						{approvedTemplates.length === 0 ? (
 							<div className="rounded-[12px] bg-warning-soft px-3.5 py-3 text-[13px] text-ink/75">
 								{t(
-									'There is no approved template yet. Add the "Group invite link" template from the template library first.'
+									'There is no approved group invite template yet. Add the "Group invite link" template from the template library first.'
 								)}
 							</div>
 						) : (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Moment from 'react-moment';
 import SidePanel from '@src/components/SidePanel';
@@ -24,7 +24,7 @@ import { cn } from '@src/lib/utils';
 import { PanelTransitionProps } from '@src/styles/panelTransitions';
 import { useAppDispatch, useAppSelector } from '@src/store/hooks';
 import { setState } from '@src/store/reducers/UIReducer';
-import useRefreshWhatsAppGroup from '@src/hooks/useRefreshWhatsAppGroup';
+import useIsTenantReadOnly from '@src/hooks/useIsTenantReadOnly';
 import {
 	approveWhatsAppGroupJoinRequests,
 	deleteWhatsAppGroup,
@@ -43,7 +43,6 @@ import {
 	WHATSAPP_GROUP_DESCRIPTION_MAX_LENGTH,
 	WHATSAPP_GROUP_SUBJECT_MAX_LENGTH,
 	canApproveJoinRequests,
-	isWhatsAppGroupReadable,
 	canSendToWhatsAppGroup,
 	getGroupParticipantKey,
 	getGroupParticipantName,
@@ -57,8 +56,6 @@ import {
 } from '@src/helpers/WhatsAppGroupHelper';
 import { addPlus } from '@src/helpers/PhoneNumberHelper';
 import { useIsUserActionsRestricted } from '@src/hooks/useIsUserActionsRestricted';
-import PubSub from 'pubsub-js';
-import { EVENT_TOPIC_WHATSAPP_GROUP_UPDATE } from '@src/Constants';
 import ConfirmDialog from './ConfirmDialog';
 import AddParticipantsDialog from './AddParticipantsDialog';
 
@@ -276,7 +273,8 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 	const group = useAppSelector((state) => state.UI.currentWhatsAppGroup);
 	const isReadOnly = useAppSelector((state) => state.UI.isReadOnly);
 	const businessNumber = useAppSelector((state) => state.phoneNumber.value);
-	const refresh = useRefreshWhatsAppGroup();
+	const isTenantReadOnly = useIsTenantReadOnly();
+	const isUserActionsRestricted = useIsUserActionsRestricted();
 
 	const [confirmation, setConfirmation] = useState<Confirmation>();
 	const [isAddParticipantsOpen, setAddParticipantsOpen] = useState(false);
@@ -284,20 +282,15 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 	const [isUploadingPicture, setUploadingPicture] = useState(false);
 	const pictureInput = useRef<HTMLInputElement>(null);
 
-	const groupId = group?.id;
-
-	// Fresh participants and join requests whenever the panel opens. A
-	// suspended group is read too: that is how a lifted suspension shows.
-	useEffect(() => {
-		if (groupId && isWhatsAppGroupReadable(group)) refresh(groupId);
-	}, [groupId]);
-
 	const close = () => dispatch(setState({ isContactDetailsVisible: false }));
 
 	if (!group) return null;
 
 	const isActive = canSendToWhatsAppGroup(group);
-	const canManage = isActive && !isReadOnly;
+	// Read-only inboxes (GC-72) and restricted users change nothing
+	const canChange =
+		!isReadOnly && !isTenantReadOnly && !isUserActionsRestricted;
+	const canManage = isActive && canChange;
 	const statusLabel = getWhatsAppGroupStatusLabel(group.status, t);
 	const participantCount = getWhatsAppGroupParticipantCount(group);
 	const maxParticipants = getWhatsAppGroupMaxParticipants(group);
@@ -307,26 +300,16 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 	const showError = (error: any, fallback: string) =>
 		window.displayCustomError(getWhatsAppGroupErrorMessage(error, fallback));
 
-	// The chat list and the open chat read the group again, as on the
-	// whatsapp_group_update websocket event (which may come late or never)
-	const publishUpdate = (status = group.status) =>
-		PubSub.publish(EVENT_TOPIC_WHATSAPP_GROUP_UPDATE, {
-			id: group.id,
-			wa_id: group.wa_id,
-			status,
-		});
-
-	// Applies stored-field changes right away, then reloads the live parts
-	const applyAndRefresh = (changes: Partial<WhatsAppGroupDetail> = {}) => {
+	// Shows a change right away. The group is read again from WhatsApp once,
+	// when its whatsapp_group_update event comes (ChatView).
+	const applyChanges = (changes: Partial<WhatsAppGroupDetail> = {}) => {
 		dispatch(setState({ currentWhatsAppGroup: { ...group, ...changes } }));
-		refresh(group.id);
-		publishUpdate();
 	};
 
 	const saveField = async (field: 'subject' | 'description', value: string) => {
 		try {
 			const updated = await updateWhatsAppGroup(group.id, { [field]: value });
-			applyAndRefresh(updated);
+			applyChanges(updated);
 		} catch (error) {
 			showError(error, t('The group could not be updated.'));
 			throw error;
@@ -366,7 +349,7 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 					result.failed.map((item) => item.error).join('\n')
 				);
 			}
-			applyAndRefresh({
+			applyChanges({
 				join_requests: joinRequests.filter(
 					(request) =>
 						!ids.includes(request.join_request_id) ||
@@ -400,7 +383,7 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 				await removeWhatsAppGroupParticipants(group.id, [
 					wa_id ? { wa_id } : { user_id: user_id ?? '' },
 				]);
-				applyAndRefresh({
+				applyChanges({
 					participants: group.participants?.filter(
 						(item) => item !== confirmation.participant
 					),
@@ -411,10 +394,10 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 				});
 			} else if (confirmation.type === 'reset_link') {
 				const { invite_link } = await resetWhatsAppGroupInviteLink(group.id);
-				applyAndRefresh({ invite_link });
+				applyChanges({ invite_link });
 			} else {
 				await deleteWhatsAppGroup(group.id);
-				publishUpdate('deleted');
+				applyChanges({ status: 'deleted' });
 				window.displaySuccess(
 					t('The group is being deleted. Its chat stays readable.')
 				);
@@ -771,7 +754,7 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 					</Section>
 				)}
 
-				{!isReadOnly &&
+				{canChange &&
 					group.status !== 'deleted' &&
 					group.status !== 'creating' && (
 						<Section>
@@ -828,7 +811,6 @@ const GroupInfo: React.FC<PanelTransitionProps> = ({
 				<AddParticipantsDialog
 					group={group}
 					onClose={() => setAddParticipantsOpen(false)}
-					onInvited={() => refresh(group.id)}
 				/>
 			)}
 		</SidePanel>

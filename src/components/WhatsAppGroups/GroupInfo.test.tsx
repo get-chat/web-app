@@ -2,6 +2,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { TestProviders } from '@src/__mocks__/test-utils';
 import GroupInfo from './GroupInfo';
+import {
+	isGroupInviteTemplate,
+	pickDefaultInviteTemplate,
+} from './AddParticipantsDialog';
 import { WhatsAppGroupDetail } from '@src/types/whatsappGroups';
 import {
 	canApproveJoinRequests,
@@ -47,12 +51,16 @@ const buildGroup = (
 	join_requests: Array.from({ length: joinRequests }, (_, i) => joinRequest(i)),
 });
 
-const renderWithGroup = (group: WhatsAppGroupDetail) => {
+const renderWithGroup = (
+	group: WhatsAppGroupDetail,
+	tenantAccessMode = 'read_write'
+) => {
 	useAppSelector.mockImplementation((selector: (state: any) => any) =>
 		selector({
 			UI: { currentWhatsAppGroup: group, isReadOnly: false },
 			phoneNumber: { value: undefined },
 			currentUser: { value: { id: 1, username: 'admin' } },
+			currentTenant: { value: { access_mode: tenantAccessMode } },
 		})
 	);
 	return render(
@@ -116,6 +124,19 @@ describe('GroupInfo', () => {
 		expect(byTestId('approve-all')).toBeDisabled();
 	});
 
+	it('changes nothing in a read-only inbox', () => {
+		renderWithGroup(buildGroup(3, 2), 'read_only');
+
+		expect(byTestId('add-participants')).toBeDisabled();
+		screen
+			.getAllByLabelText('Approve')
+			.forEach((button) => expect(button).toBeDisabled());
+		screen
+			.getAllByLabelText('Reject')
+			.forEach((button) => expect(button).toBeDisabled());
+		expect(screen.queryByText('Delete group')).not.toBeInTheDocument();
+	});
+
 	it('approves one by one, but not all, when only one place is left', () => {
 		renderWithGroup(buildGroup(7, 2));
 
@@ -147,5 +168,37 @@ describe('Group participant colour', () => {
 			)
 		);
 		expect(colours.size).toBeGreaterThan(1);
+	});
+});
+
+describe('invite templates', () => {
+	const template = (overrides: object) => ({
+		name: 'welcome',
+		category: 'UTILITY',
+		language: 'en',
+		components: [],
+		status: 'approved',
+		...overrides,
+	});
+
+	it('offers only templates made from the group invite library template', () => {
+		expect(isGroupInviteTemplate(template({ name: 'welcome' }))).toBe(false);
+		expect(
+			isGroupInviteTemplate(
+				template({
+					name: 'join_us',
+					library_template_name: 'group_invite_link',
+				})
+			)
+		).toBe(true);
+		expect(isGroupInviteTemplate(template({ name: 'group_invite_en' }))).toBe(
+			true
+		);
+	});
+
+	it('preselects nothing when there is no group invite template', () => {
+		expect(pickDefaultInviteTemplate([template({ name: 'promo' })])).toBe(
+			undefined
+		);
 	});
 });

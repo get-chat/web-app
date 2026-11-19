@@ -562,14 +562,17 @@ const ChatView: React.FC<Props> = (props) => {
 	useEffect(() => {
 		const group = chat?.is_group ? chat.whatsapp_group ?? undefined : undefined;
 		const previous = currentWhatsAppGroup;
+		const isSameGroup = previous?.id === group?.id;
 		dispatch(
 			setState({
 				currentWhatsAppGroup: group
-					? { ...(previous?.id === group.id ? previous : {}), ...group }
+					? { ...(isSameGroup ? previous : {}), ...group }
 					: undefined,
 			})
 		);
-		if (group && isWhatsAppGroupReadable(group)) {
+		// Live parts once per group opened; afterwards on its update events.
+		// A suspended group is read too: that is how a lifted suspension shows.
+		if (group && !isSameGroup && isWhatsAppGroupReadable(group)) {
 			refreshWhatsAppGroup(group.id);
 		}
 	}, [chat]);
@@ -586,6 +589,10 @@ const ChatView: React.FC<Props> = (props) => {
 				retrieveChat();
 				// The header's name is the person's: the subject may have changed
 				doRetrievePerson(false);
+				// Participants, join requests or the status changed
+				if (chat?.whatsapp_group?.id) {
+					refreshWhatsAppGroup(chat.whatsapp_group.id);
+				}
 			}
 		};
 

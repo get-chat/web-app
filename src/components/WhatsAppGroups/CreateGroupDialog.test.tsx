@@ -119,6 +119,42 @@ describe('CreateGroupDialog', () => {
 		jest.useRealTimers();
 	});
 
+	it('stops waiting, and opens nothing, once closed while the group is created', async () => {
+		jest.useFakeTimers();
+		const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+		mockCreate.mockResolvedValue(group());
+		mockFetch.mockResolvedValue(
+			group({ status: 'active', group_id: 'G1', wa_id: 'G1' })
+		);
+		const onCreated = jest.fn();
+		const { rerender } = render(
+			<TestProviders>
+				<CreateGroupDialog open onClose={jest.fn()} onCreated={onCreated} />
+			</TestProviders>
+		);
+
+		await user.type(subjectInput(), 'Acme onboarding');
+		await user.click(submitButton());
+		expect(await screen.findByText('Creating group…')).toBeInTheDocument();
+
+		rerender(
+			<TestProviders>
+				<CreateGroupDialog
+					open={false}
+					onClose={jest.fn()}
+					onCreated={onCreated}
+				/>
+			</TestProviders>
+		);
+		await act(async () => {
+			jest.advanceTimersByTime(10000);
+		});
+
+		expect(mockFetch).not.toHaveBeenCalled();
+		expect(onCreated).not.toHaveBeenCalled();
+		jest.useRealTimers();
+	});
+
 	it('shows the API error when creating fails', async () => {
 		mockCreate.mockRejectedValue({
 			response: { data: { detail: 'This number cannot create groups.' } },
