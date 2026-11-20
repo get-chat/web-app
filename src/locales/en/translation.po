@@ -2129,7 +2129,7 @@ msgstr ""
 msgid "Groups are only available on the Cloud API."
 msgstr ""
 
-msgid "Groups are only available to Official Business Accounts (green tick)."
+msgid "Groups are only available to Official Business Accounts (blue checkmark)."
 msgstr ""
 
 msgid "Groups are not available for numbers that also use the WhatsApp Business app (Coexistence)."
