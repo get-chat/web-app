@@ -168,7 +168,7 @@ export const getEligibilityReasonText = (
 			return t('Groups are only available on the Cloud API.');
 		case 'not_oba':
 			return t(
-				'Groups are only available to Official Business Accounts (green tick).'
+				'Groups are only available to Official Business Accounts (blue checkmark).'
 			);
 		case 'coexistence':
 			return t(
